@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Design
             {
                 if (c.Site != null && c.Site.DesignMode)
                 {
-                    // We only emit Size/Location information for controls that are sited and not inherrited readonly.
+                    // We only emit Size/Location information for controls that are sited and not inherited readonly.
                     InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(c)[typeof(InheritanceAttribute)];
 
                     if (ia != null && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)

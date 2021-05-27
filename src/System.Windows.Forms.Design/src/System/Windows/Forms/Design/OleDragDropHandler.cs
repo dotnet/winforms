@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
         // This is a bit that we stuff into the DoDragDrop
         // to indicate that the thing that is being dragged should only
         // be allowed to be moved in the current DropTarget (e.g. parent designer).
-        // We use this for interited components that can be modified (e.g. location/size) changed
+        // We use this for inherited components that can be modified (e.g. location/size) changed
         // but not removed from their parent.
         //
         protected const int AllowLocalMoveOnly = 0x04000000;
@@ -568,7 +568,7 @@ namespace System.Windows.Forms.Design
 
             DragDropEffects allowedEffects = DragDropEffects.Copy | DragDropEffects.None | DragDropEffects.Move;
 
-            // check to see if any of the components are inherhited. if so, don't allow them to be moved.
+            // check to see if any of the components are inherited. if so, don't allow them to be moved.
             // We replace DragDropEffects.Move with a local bit called AllowLocalMoveOnly which means it
             // can be moved around on the current dropsource/target, but not to another target.  Since only
             // we understand this bit, other drop targets will not allow the move to occur
