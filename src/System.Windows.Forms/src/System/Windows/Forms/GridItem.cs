@@ -49,7 +49,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If this item is a GridItemType.Property GridItem, this retreives the
         ///  System.ComponentModel.PropertyDescriptor that is associated with this GridItem.
-        ///  This can be used to retrieve infomration such as property Type, Name, or
+        ///  This can be used to retrieve information such as property Type, Name, or
         ///  TypeConverter.
         /// </summary>
         public abstract PropertyDescriptor? PropertyDescriptor { get; }
