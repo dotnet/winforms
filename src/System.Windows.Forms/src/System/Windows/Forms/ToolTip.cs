@@ -676,7 +676,7 @@ namespace System.Windows.Forms
 
         private void TopLevelDestroyed(object sender, EventArgs eventargs)
         {
-            DestoyAllRegions();
+            DestroyAllRegions();
             DestroyHandle();
         }
 
@@ -792,7 +792,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DestoyAllRegions()
+        private void DestroyAllRegions()
         {
             Control[] ctls = new Control[_tools.Keys.Count];
             _tools.Keys.CopyTo(ctls, 0);
