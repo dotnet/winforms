@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Layout
         // value are sorted. While Array.Sort() was documented as not a being stable sort,
         // we need to preserve the order of same elements as it used to be with the old algorithm since
         // some customers are putting more than one control in the same TableLayout cell
-        // and we rely on this order to resovle the conflict
+        // and we rely on this order to resolve the conflict
 
         private static int GetMedian(int low, int hi)
         {
