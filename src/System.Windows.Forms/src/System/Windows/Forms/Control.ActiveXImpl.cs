@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms
                 internal class SafeIUnknown : SafeHandle
                 {
                     /// <summary>
-                    ///  Wrap an incomoing unknown or get the unknown for the CCW (COM-callable wrapper).
+                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
                     /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr)
                         : this(obj, addRefIntPtr, Guid.Empty)
@@ -1537,7 +1537,7 @@ namespace System.Windows.Forms
                     }
 
                     /// <summary>
-                    ///  Wrap an incomoing unknown or get the unknown for the CCW (COM-callable wrapper).
+                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
                     ///  If an iid is supplied, QI for the interface and wrap that unknonwn instead.
                     /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr, Guid iid)
