@@ -654,7 +654,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the mimimum size of the auto-scroll.
+        ///  Gets or sets the minimum size of the auto-scroll.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

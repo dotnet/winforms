@@ -2117,7 +2117,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            // If we are changing Height, check if its greater than minimun else ... make it equal to the minimum
+            // If we are changing Height, check if its greater than minimum else ... make it equal to the minimum
             if ((specified & BoundsSpecified.Height) != BoundsSpecified.None && Orientation == Orientation.Horizontal)
             {
                 if (height < Panel1MinSize + SplitterWidthInternal + Panel2MinSize)
@@ -2126,7 +2126,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // If we are changing Width, check if its greater than minimun else ... make it equal to the minimum
+            // If we are changing Width, check if its greater than minimum else ... make it equal to the minimum
             if ((specified & BoundsSpecified.Width) != BoundsSpecified.None && Orientation == Orientation.Vertical)
             {
                 if (width < Panel1MinSize + SplitterWidthInternal + Panel2MinSize)
