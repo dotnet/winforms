@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This can be called to determine the current grid spacing and mode.
         ///  It is sensitive to what modifier keys the user currently has down and
-        ///  will either return the current grid snap dimensons, or a 1x1 point
+        ///  will either return the current grid snap dimensions, or a 1x1 point
         ///  indicating no snap.
         /// </summary>
         private Size CurrentGridSize

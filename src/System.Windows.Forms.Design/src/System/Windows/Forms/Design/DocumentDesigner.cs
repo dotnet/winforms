@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
         private ToolboxItemCreatorCallback toolboxCreator;
 
         /// <summary>
-        ///  Property shadow for ContainerControl's AutoScaleDimenions.  We shadow here so it
+        ///  Property shadow for ContainerControl's AutoScaleDimensions.  We shadow here so it
         ///  always returns the CurrentAutoScaleDimensions for the control. This way the control's
         ///  state always adapts to the current font / monitor.
         /// </summary>
