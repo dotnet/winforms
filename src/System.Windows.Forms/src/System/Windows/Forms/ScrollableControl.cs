@@ -621,7 +621,7 @@ namespace System.Windows.Forms
             // adjusting the scrollbars COULD adjust the display area, and
             // thus require a new layout. The result is that when you
             // affect a control's layout, we are forced to layout twice. There
-            // isn't any noticible flicker, but this could be a perf problem...
+            // isn't any noticeable flicker, but this could be a perf problem...
             if (levent is not null && levent.AffectedControl is not null && AutoScroll)
             {
                 base.OnLayout(levent);
