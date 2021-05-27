@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                                 if (!adornerWindow.WndProcProxy(ref m, pt.X, pt.Y))
                                 {
-                                    // We did the work, stop the message propogation
+                                    // We did the work, stop the message propagation
                                     return true;
                                 }
                             }
