@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly bool _ctrlDrag; // Are we in a ctrl-drag?
 
         /// <summary>
-        ///  Internal constructor called that only takes a service provider.  Here it is assumed that all painting will be done to the AdornerWindow and that there are no target controsl to exclude from snapping.
+        ///  Internal constructor called that only takes a service provider.  Here it is assumed that all painting will be done to the AdornerWindow and that there are no target controls to exclude from snapping.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider) : this(serviceProvider, null, null, null, false, false)
         {

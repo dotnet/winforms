@@ -355,7 +355,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only conrols which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
+        ///  Returns IEnumerable of all windows which need to be themed when running inside VS We don't know how to do theming here but we know which windows need to be themed.  The two ScrollableControls that hold the designer and the tray need to be themed, all of the children of the designed form should not be themed. The tray contains only controls which are not visible in the user app but are visible inside VS. As a result, we want to theme all windows within the tray but only the top window for the designer pane.
         /// </summary>
         IEnumerable IContainsThemedScrollbarWindows.ThemedScrollbarWindows()
         {
