@@ -1610,7 +1610,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TranparentToolStrip so that it picks up the itemColor.
+        ///  Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TransparentToolStrip so that it picks up the itemColor.
         /// </summary>
         public class TransparentToolStrip : ToolStrip
         {

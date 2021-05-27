@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The key here is to set the appropriate TransparetWindow style.
+            ///  The key here is to set the appropriate TransparentWindow style.
             /// </summary>
             protected override CreateParams CreateParams
             {
