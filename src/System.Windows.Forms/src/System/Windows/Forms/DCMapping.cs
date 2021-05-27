@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 RegionType originalRegionType;
                 if (!hOriginalClippingRegion.IsNull)
                 {
-                    // Get the origninal clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
+                    // Get the original clipping region so we can determine its type (we'll check later if we've restored the region back properly.)
                     RECT originalClipRect = new RECT();
                     originalRegionType = Gdi32.GetRgnBox(hOriginalClippingRegion, ref originalClipRect);
                     Debug.Assert(
