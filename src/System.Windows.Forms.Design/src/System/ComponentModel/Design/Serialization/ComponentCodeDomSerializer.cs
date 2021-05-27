@@ -240,17 +240,17 @@ namespace System.ComponentModel.Design.Serialization
                                     // We need to generate the field declaration.  See if there is a modifiers property on
                                     // the object.  If not, look for a DefaultModifies, and finally assume it's private.
                                     CodeMemberField field = new CodeMemberField(typeName, name);
-                                    PropertyDescriptor modifersProp = props["Modifiers"];
+                                    PropertyDescriptor modifiersProp = props["Modifiers"];
                                     MemberAttributes fieldAttrs;
 
-                                    if (modifersProp is null)
+                                    if (modifiersProp is null)
                                     {
-                                        modifersProp = props["DefaultModifiers"];
+                                        modifiersProp = props["DefaultModifiers"];
                                     }
 
-                                    if (modifersProp != null && modifersProp.PropertyType == typeof(MemberAttributes))
+                                    if (modifiersProp != null && modifiersProp.PropertyType == typeof(MemberAttributes))
                                     {
-                                        fieldAttrs = (MemberAttributes)modifersProp.GetValue(value);
+                                        fieldAttrs = (MemberAttributes)modifiersProp.GetValue(value);
                                     }
                                     else
                                     {
