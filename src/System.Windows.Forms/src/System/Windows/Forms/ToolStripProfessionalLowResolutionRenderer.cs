@@ -78,7 +78,7 @@ namespace System.Windows.Forms
 
             // connecting pixels
 
-            // top left conntecting pixel - always drawn
+            // top left connecting pixel - always drawn
             g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, 1, 1, 1));
 
             if (oddWidth)
@@ -87,14 +87,14 @@ namespace System.Windows.Forms
                 g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(bounds.Width - 2, 1, 1, 1));
             }
 
-            // bottom conntecting pixels - drawn only if height is odd
+            // bottom connecting pixels - drawn only if height is odd
             if (oddHeight)
             {
                 // bottom left
                 g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, bounds.Height - 2, 1, 1));
             }
 
-            // top and bottom right conntecting pixel - drawn only if height and width are odd
+            // top and bottom right connecting pixel - drawn only if height and width are odd
             if (oddHeight && oddWidth)
             {
                 // bottom right
