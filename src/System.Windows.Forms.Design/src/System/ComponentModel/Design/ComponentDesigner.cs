@@ -31,7 +31,7 @@ namespace System.ComponentModel.Design
         public virtual DesignerActionListCollection ActionLists => _actionLists ??= new DesignerActionListCollection();
 
         /// <summary>
-        ///  Retrieves a list of associated components. These are components that should be incluced in a cut or copy
+        ///  Retrieves a list of associated components. These are components that should be included in a cut or copy
         ///  operation on this component.
         /// </summary>
         public virtual ICollection AssociatedComponents => Array.Empty<IComponent>();

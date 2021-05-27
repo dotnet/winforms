@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Retrieves a list of associated components. These are components that should be incluced
+        ///  Retrieves a list of associated components. These are components that should be included
         ///  in a cut or copy operation on this component.
         /// </summary>
         public override ICollection AssociatedComponents
