@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Gets the requsted service type.
+        ///  Gets the requested service type.
         /// </summary>
         protected override object GetService(Type serviceType)
         {

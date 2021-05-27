@@ -935,7 +935,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  Returns an instance of the rquested service.
+            ///  Returns an instance of the requested service.
             /// </summary>
             protected object GetService(Type serviceType)
             {
