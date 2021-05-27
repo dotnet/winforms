@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Layout
         ///  Typically the padding is accounted for in either the DisplayRectangle calculation
         ///  and/or the GetPreferredSize calculation of a control.
         ///
-        ///  NOTE:  LayoutEngines should never read this property.  Padding gets incorperated into
+        ///  NOTE:  LayoutEngines should never read this property.  Padding gets incorporated into
         ///  layout by modifying what the control reports for preferred size.
         internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding)
         {
