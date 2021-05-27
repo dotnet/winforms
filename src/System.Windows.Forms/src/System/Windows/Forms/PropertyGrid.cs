@@ -2844,7 +2844,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  We forward messages from several of our children
-        ///  to our mouse move so we can put up the spliter over their borders
+        ///  to our mouse move so we can put up the splitter over their borders
         /// </summary>
         private void OnChildMouseMove(object sender, MouseEventArgs me)
         {
@@ -2859,7 +2859,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  We forward messages from several of our children
-        ///  to our mouse move so we can put up the spliter over their borders
+        ///  to our mouse move so we can put up the splitter over their borders
         /// </summary>
         private void OnChildMouseDown(object sender, MouseEventArgs me)
         {

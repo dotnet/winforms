@@ -2022,7 +2022,7 @@ namespace System.Windows.Forms
                 _callBaseVersion = true;
             }
 
-            //IF the CTL == typeof(SpliterPanel) find the NEXT Control... so that we know
+            //IF the CTL == typeof(SplitterPanel) find the NEXT Control... so that we know
             // we can focus the NEXT control within this SPLITCONTAINER....
             else
             {
