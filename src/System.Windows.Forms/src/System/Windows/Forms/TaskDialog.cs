@@ -1090,7 +1090,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe void Navigate(TaskDialogPage page)
         {
-            // We allow to nagivate the dialog even if the previous navigation did
+            // We allow to navigate the dialog even if the previous navigation did
             // not complete yet, as this seems to work in the native implementation.
             DenyIfDialogNotUpdatable(checkWaitingForNavigation: false);
 
