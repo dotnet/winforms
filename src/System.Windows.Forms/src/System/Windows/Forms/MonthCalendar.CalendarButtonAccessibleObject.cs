@@ -103,7 +103,7 @@ namespace System.Windows.Forms
                     // of normalized coords - eg. on a 1024x768 screen,
                     // y pixel 0 corresponds to range 0 to 85.333,
                     // y pixel 1 corresponds to range 85.333 to 170.666,
-                    // y pixel 2 correpsonds to range 170.666 to 256 - and so on.
+                    // y pixel 2 corresponds to range 170.666 to 256 - and so on.
                     // Doing basic scaling math - (x-top)*65536/Width - gets us the start of the range.
                     // However, because int math is used, this can end up being rounded into the wrong
                     // pixel. For example, if we wanted pixel 1, we'd get 85.333, but that comes out as
