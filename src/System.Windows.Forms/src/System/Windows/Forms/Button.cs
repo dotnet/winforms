@@ -343,7 +343,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Lets a control process mnmemonic characters. Inheriting classes can
+        ///  Lets a control process mnemonic characters. Inheriting classes can
         ///  override this to add extra functionality, but should not forget to call
         ///  base.ProcessMnemonic(charCode); to ensure basic functionality
         ///  remains unchanged.
