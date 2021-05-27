@@ -1610,7 +1610,7 @@ namespace System.Windows.Forms
             // Remember this since EndEdit() below will clear it
             int saveAddNew = _addNewPos;
 
-            // Commit any uncomitted list changes now
+            // Commit any uncommitted list changes now
             EndEdit();
 
             // We just committed a new item; mimic DataView and fire an ItemAdded event for it here
