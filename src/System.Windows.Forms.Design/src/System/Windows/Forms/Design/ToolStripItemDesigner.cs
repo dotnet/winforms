@@ -913,7 +913,7 @@ namespace System.Windows.Forms.Design
                         windowService.Invalidate();
                     }
 
-                    // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionServive from new Component
+                    // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                     ISelectionService selSvc = (ISelectionService)newItem.Site.GetService(typeof(ISelectionService));
                     if (selSvc != null)
                     {

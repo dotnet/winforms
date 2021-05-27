@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void OnCreateHandle()
         {
-            // Don't call base unless our inheritance serivce is already running.
+            // Don't call base unless our inheritance service is already running.
             if (inheritanceService != null)
             {
                 base.OnCreateHandle();
