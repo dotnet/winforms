@@ -4595,7 +4595,7 @@ namespace System.Windows.Forms
 
         protected override void OnHandleCreated(EventArgs e)
         {
-            // don't persist flipViewToLargeIconAndSmallIcon accross handle recreations...
+            // don't persist flipViewToLargeIconAndSmallIcon across handle recreations...
             FlipViewToLargeIconAndSmallIcon = false;
 
             base.OnHandleCreated(e);
