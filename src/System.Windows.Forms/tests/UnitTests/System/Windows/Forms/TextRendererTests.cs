@@ -833,7 +833,7 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<TextFormatFlags, Size> TextRenderer_MeasureText_ApplyState_TestData
             => new TheoryData<TextFormatFlags, Size>
             {
-                // State application doesn't practially impact size measurements, but we still want to have a regession test
+                // State application doesn't practically impact size measurements, but we still want to have a regession test
                 // here in case something sneaks in.
                 { TextFormatFlags.Default, new Size(57, 13) },
                 { TextFormatFlags.PreserveGraphicsTranslateTransform, new Size(57, 13) },
