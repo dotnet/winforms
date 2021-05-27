@@ -506,7 +506,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                             }
 
-                            // Regarless, apply statements.  Either we created them or we got them
+                            // Regardless, apply statements.  Either we created them or we got them
                             // out of the cache.
                             statements.AddRange(entry.Statements);
 
