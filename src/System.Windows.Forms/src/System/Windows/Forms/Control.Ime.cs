@@ -322,7 +322,7 @@ namespace System.Windows.Forms
                 Debug.Indent();
 
                 // WM_CHAR is not send after WM_IME_CHAR when the composition has been closed by either, changing the conversion mode or
-                // dissasociating the IME (for instance when loosing focus and conversion is forced to complete).
+                // dissociating the IME (for instance when loosing focus and conversion is forced to complete).
                 if (ImeWmCharsToIgnore != ImeCharsToIgnoreDisabled)
                 {
                     Properties.SetInteger(s_imeWmCharsToIgnoreProperty, value);
