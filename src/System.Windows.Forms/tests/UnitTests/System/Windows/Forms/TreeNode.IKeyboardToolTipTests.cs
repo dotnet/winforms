@@ -245,7 +245,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_TreeNodeAfterExpanedNode_ReturnsExpected(bool showNodeToolTips)
+        public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_TreeNodeAfterExpandedNode_ReturnsExpected(bool showNodeToolTips)
         {
             List<TreeNode> treeNodesList = GetHierarchyNodes();
             using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
@@ -264,7 +264,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_TreeNodeAfterExpanedSubNode_ReturnsExpected(bool showNodeToolTips)
+        public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_TreeNodeAfterExpandedSubNode_ReturnsExpected(bool showNodeToolTips)
         {
             List<TreeNode> treeNodesList = GetHierarchyNodes();
             using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
-        public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ExpanedSubTreeNode_ReturnsExpected(bool showNodeToolTips)
+        public void TreeNodeIKeyboardToolTip_InvokeGetNeighboringToolsRectangles_ExpandedSubTreeNode_ReturnsExpected(bool showNodeToolTips)
         {
             List<TreeNode> treeNodesList = GetHierarchyNodes();
             using var treeView = new TreeView() { ShowNodeToolTips = showNodeToolTips };
