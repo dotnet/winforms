@@ -32,7 +32,7 @@ internal static partial class Interop
             object? /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
 
             /// <summary>
-            ///  Gets the runtime ID of an elemenent. This should be unique
+            ///  Gets the runtime ID of an element. This should be unique
             ///  among elements on a desktop.
             /// </summary>
             /// <remarks>
