@@ -666,7 +666,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Determines if the designer needs to be reloaded.  It does this
         ///  by examining the code dom tree for changes.  This does not check
-        ///  for outside infleuences; the caller should already think a reload
+        ///  for outside influences; the caller should already think a reload
         ///  is needed -- this is just a last optimization.
         /// </summary>
         protected override bool IsReloadNeeded()
