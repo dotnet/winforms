@@ -1603,7 +1603,7 @@ namespace System.Windows.Forms.Layout
             containerInfo.Valid = false;
         }
 
-        //we make sure that our conatinerInfo never returns null. If there is no
+        //we make sure that our containerInfo never returns null. If there is no
         //existing containerInfo, instantiate a new one and store it in the property
         //store.
         internal static ContainerInfo GetContainerInfo(IArrangedElement container)
