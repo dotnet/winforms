@@ -16,7 +16,7 @@ internal partial class Interop
         {
             /// <summary>
             ///  Hides the property at the given dispid from the properties window
-            ///  implmentors should can return E_NOTIMPL to show all properties that
+            ///  implementers should can return E_NOTIMPL to show all properties that
             ///  are otherwise browsable.
             /// </summary>
             [PreserveSig]
