@@ -864,8 +864,8 @@ namespace System.ComponentModel.Design
             }
 
             // when we get closing event as a result of an activation change, pre-populate e.Cancel based on why we're exiting.
-            // - if it's a modal window that's owned by VS dont exit
-            // - if it's a window that's owned by the toolstrip dropdown dont exit
+            // - if it's a modal window that's owned by VS don't exit
+            // - if it's a window that's owned by the toolstrip dropdown don't exit
             else if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange || e.CloseReason == ToolStripDropDownCloseReason.AppClicked)
             {
                 IntPtr hwndActivating = User32.GetActiveWindow();

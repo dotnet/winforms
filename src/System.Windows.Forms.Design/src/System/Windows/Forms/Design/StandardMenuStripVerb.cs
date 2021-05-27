@@ -78,7 +78,7 @@ namespace System.Windows.Forms.Design
                 new string[]{SR.StandardMenuHelp, SR.StandardMenuContents, SR.StandardMenuIndex, SR.StandardMenuSearch, "-", SR.StandardMenuAbout }
             };
 
-            // build the static menu items image list that maps one-one with above menuItems structure. this is required so that the in LOCALIZED build we dont use the Localized item string.
+            // build the static menu items image list that maps one-one with above menuItems structure. this is required so that the in LOCALIZED build we don't use the Localized item string.
             string[][] menuItemImageNames = new string[][]
             {
                 new string[]{"","new", "open", "-", "save", "", "-", "print", "printPreview", "-", ""},
@@ -274,7 +274,7 @@ namespace System.Windows.Forms.Design
             //
             string[] menuItemNames = new string[] { SR.StandardMenuNew, SR.StandardMenuOpen, SR.StandardMenuSave, SR.StandardMenuPrint, "-", SR.StandardToolCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardToolHelp };
 
-            // build a image list mapping one-one the above menuItems list... this is required so that the in LOCALIZED build we dont use the Localized item string.
+            // build a image list mapping one-one the above menuItems list... this is required so that the in LOCALIZED build we don't use the Localized item string.
             string[] menuItemImageNames = new string[] { "new", "open", "save", "print", "-", "cut", "copy", "paste", "-", "help" };
             Debug.Assert(host != null, "can't create standard menu without designer _host.");
 

@@ -646,7 +646,7 @@ namespace System.ComponentModel.Design
 
                 PaintArrow(g, _dropDownRectangle);
 
-                // If we dont' use mnemonic, set formatFlag to NoPrefix as this will show ampersand.
+                // If we don't use mnemonic, set formatFlag to NoPrefix as this will show ampersand.
                 if (!UseMnemonic)
                 {
                     formatFlags |= TextFormatFlags.NoPrefix;

@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms.Design
                                     if (nestedContainer != null)
                                     {
                                         control = nestedContainer.Owner as Control;
-                                        selectedComponents[i] = control; // set this so that we dont have to re-do this logic in the BringToFront case down.
+                                        selectedComponents[i] = control; // set this so that we don't have to re-do this logic in the BringToFront case down.
                                     }
                                 }
                             }
@@ -1532,7 +1532,7 @@ namespace System.Windows.Forms.Design
                     {
                         IComponent selection = targetSelection as IComponent;
                         ControlDesigner controlDesigner = host.GetDesigner(selection) as ControlDesigner;
-                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again
+                        // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again
                         // through component tray since here we select only Components. Hence only
                         // components that have ComponentDesigners should be selected via the ComponentTray.
                         while (controlDesigner != null)

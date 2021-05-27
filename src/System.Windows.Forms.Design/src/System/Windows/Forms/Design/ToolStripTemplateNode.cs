@@ -469,7 +469,7 @@ namespace System.Windows.Forms.Design
             //For Right Button we show the DesignerContextMenu...
             if (e.Button == MouseButtons.Right)
             {
-                //Dont show the DesignerContextMenu if there is any active templateNode.
+                // Don't show the DesignerContextMenu if there is any active templateNode.
                 if (KeyboardService != null && KeyboardService.TemplateNodeActive)
                 {
                     return;
@@ -1957,7 +1957,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
             {
-                // DONT CALL THE BASE AS IT DOESNT ALLOW US TO RENDER THE DROPDOWN BUTTON ....
+                // DON'T CALL THE BASE AS IT DOESNT ALLOW US TO RENDER THE DROPDOWN BUTTON ....
                 //base.OnRenderSplitButtonBackground(e);
                 Graphics g = e.Graphics;
                 if (e.Item is ToolStripSplitButton splitButton)

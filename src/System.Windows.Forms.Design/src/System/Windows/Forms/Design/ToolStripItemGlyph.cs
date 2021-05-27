@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Control host dont draw on Invalidation...
+        ///  Control host don't draw on Invalidation...
         /// </summary>
         public override void Paint(PaintEventArgs pe)
         {

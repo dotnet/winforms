@@ -2180,9 +2180,9 @@ namespace System.Windows.Forms.Design
                         DefWndProc(ref m);
                     }
 
-                    // For some reason we dont always get an NCPAINT with the WM_NCACTIVATE usually this repros with
+                    // For some reason we don't always get an NCPAINT with the WM_NCACTIVATE usually this repros with
                     // themes on.... this can happen when someone calls RedrawWindow without the flags to send an
-                    // NCPAINT.  So that we dont double process this event, our calls to redraw window should not have
+                    // NCPAINT.  So that we don't double process this event, our calls to redraw window should not have
                     // RDW_ERASENOW | RDW_UPDATENOW.
                     if (OverlayService != null)
                     {

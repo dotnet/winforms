@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Design
             set => _contextMenuShownByKeyBoard = value;
         }
 
-        // When Copy (Through Control + Drag) this boolean is set to true.  Problem is that during copy the DesignerUtils creates new components and as a result the ToolStripMenuItemDesigner and ToolStripDesigners get the "ComponentAdding/ComponentAdded" events where they try to parent the components.  We dont need to "parent" in case of control + drag.
+        // When Copy (Through Control + Drag) this boolean is set to true.  Problem is that during copy the DesignerUtils creates new components and as a result the ToolStripMenuItemDesigner and ToolStripDesigners get the "ComponentAdding/ComponentAdded" events where they try to parent the components.  We don't need to "parent" in case of control + drag.
         internal bool CopyInProgress
         {
             get => _copyInProgress;
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // When the TemplateNode gets selected ... we dont set in the SelectionService.SelectedComponents since we want to blank out the propertygrid ... so we keep the selected cache here.
+        // When the TemplateNode gets selected ... we don't set in the SelectionService.SelectedComponents since we want to blank out the propertygrid ... so we keep the selected cache here.
         internal object SelectedDesignerControl
         {
             get => _currentSelection;
@@ -616,14 +616,14 @@ namespace System.Windows.Forms.Design
                 if (parent != null)
                 {
                     parent.ResumeLayout();
-                    // Since the Glyphs dont get correct bounds as the ToolStrip Layout is suspended .. force Glyph Updates.
+                    // Since the Glyphs don't get correct bounds as the ToolStrip Layout is suspended .. force Glyph Updates.
                     BehaviorService behaviorService = (BehaviorService)_provider.GetService(typeof(BehaviorService));
                     if (behaviorService != null)
                     {
                         behaviorService.SyncSelection();
                     }
 
-                    // For ContextMenuStrip; since its not a control .. we dont get called on GetGlyphs directly through the BehaviorService So we need this internal call to push the glyphs on the SelectionManager
+                    // For ContextMenuStrip; since its not a control .. we don't get called on GetGlyphs directly through the BehaviorService So we need this internal call to push the glyphs on the SelectionManager
                     if (host.GetDesigner(item) is ToolStripItemDesigner designer)
                     {
                         ToolStripDropDown dropDown = designer.GetFirstDropDown(item);
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            // We dont want to WRAP around for items on toolStrip Overflow, if the currentSelection is the  topMost item on the Overflow, but select the one on the PARENT toolStrip.
+                            // We don't want to WRAP around for items on toolStrip Overflow, if the currentSelection is the  topMost item on the Overflow, but select the one on the PARENT toolStrip.
                             if (parentToMoveOn is ToolStripOverflow)
                             {
                                 ToolStripItem firstItem = GetNextItem(parentToMoveOn, null, ArrowDirection.Down);
@@ -1846,7 +1846,7 @@ namespace System.Windows.Forms.Design
                                     if (targetSelection != null)
                                     {
                                         ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
+                                        // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                         while (controlDesigner != null)
                                         {
                                             // if the targetSelection from the Tray is a control .. try the next one.
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms.Design
                                         if (targetSelection != null)
                                         {
                                             ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                            // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
+                                            // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                             while (controlDesigner != null)
                                             {
                                                 // if the targetSelection from the Tray is a control .. try the next one.

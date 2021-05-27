@@ -436,7 +436,7 @@ namespace System.Windows.Forms.Design
 
         public static void InvalidateSelection(ArrayList originalSelComps, ToolStripItem nextSelection, IServiceProvider provider, bool shiftPressed)
         {
-            // if we are not selecting a ToolStripItem then return (dont invalidate).
+            // if we are not selecting a ToolStripItem then return (don't invalidate).
             if (nextSelection is null || provider is null)
             {
                 return;

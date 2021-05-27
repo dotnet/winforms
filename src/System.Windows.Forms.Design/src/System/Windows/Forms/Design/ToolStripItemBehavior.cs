@@ -59,13 +59,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void ClearInsertionMark(ToolStripItem item)
         {
-            // Dont paint if cursor hasnt moved.
+            // Don't paint if cursor hasnt moved.
             if (ToolStripDesigner.s_lastCursorPosition != Point.Empty && ToolStripDesigner.s_lastCursorPosition == Cursor.Position)
             {
                 return;
             }
 
-            // Dont paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
+            // Don't paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
             if (keyService != null && keyService.TemplateNodeActive)
             {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms.Design
                     // Heres the scenario ....
                     // DOWN 1 - selects the ITEM
                     // DOWN 2 - ITEM goes into INSITU....
-                    // DOUBLE CLICK - dont show code..
+                    // DOUBLE CLICK - don't show code..
                     // Open INSITU after the double click time
                     if (selectedItem is ToolStripMenuItem)
                     {
@@ -889,13 +889,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void PaintInsertionMark(ToolStripItem item)
         {
-            // Dont paint if cursor hasnt moved.
+            // Don't paint if cursor hasnt moved.
             if (ToolStripDesigner.s_lastCursorPosition != Point.Empty && ToolStripDesigner.s_lastCursorPosition == Cursor.Position)
             {
                 return;
             }
 
-            // Dont paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
+            // Don't paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
             if (keyService != null && keyService.TemplateNodeActive)
             {
