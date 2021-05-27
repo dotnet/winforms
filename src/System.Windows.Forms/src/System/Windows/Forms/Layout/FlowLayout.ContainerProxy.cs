@@ -147,7 +147,7 @@ namespace System.Windows.Forms.Layout
                         Point pt = new Point(newBounds.X, newBounds.Y);
                         if (IsVertical)
                         {
-                            // We need to treat Vertical a litte differently. It really helps if you draw this out.
+                            // We need to treat Vertical a little differently. It really helps if you draw this out.
                             // Remember that when we layout BottomUp, we first layout TopDown, then call this method.
                             // When we layout TopDown we layout in flipped rectangles. I.e. x becomes y, y becomes x,
                             // height becomes width, width becomes height. We do our layout, then when we eventually
