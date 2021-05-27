@@ -429,7 +429,7 @@ namespace System.Windows.Forms.Design
                     // This means we have a valid node and we just changed some properties.
                     index = MenuItem.DropDownItems.IndexOf(commitedEditorNode);
                     ToolStripItem editedItem = MenuItem.DropDownItems[index + 1];
-                    // Remove TemplatENode
+                    // Remove TemplateNode
                     MenuItem.DropDown.Items.Remove(commitedEditorNode);
                     // Get rid of the templateNode...
                     if (commitedTemplateNode != null)
