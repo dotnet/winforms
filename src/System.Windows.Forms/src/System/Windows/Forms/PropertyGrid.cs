@@ -3455,7 +3455,7 @@ namespace System.Windows.Forms
                 {
                     if (currentSelection.Site is null) //The component is not logically sited...so clear the PropertyGrid Selection..
                     {
-                        //Setting to null... actually will clear off the state information so that ProperyGrid is in sane State.
+                        //Setting to null... actually will clear off the state information so that PropertyGrid is in sane State.
                         SelectedObject = null;
                         return;
                     }

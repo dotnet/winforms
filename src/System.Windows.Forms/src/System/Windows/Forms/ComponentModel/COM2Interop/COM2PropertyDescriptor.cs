@@ -663,7 +663,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Creates a converter Object, first by looking for a ctor with a Com2ProeprtyDescriptor
+        ///  Creates a converter Object, first by looking for a ctor with a Com2PropertyDescriptor
         ///  parameter, then using the default ctor if it is not found.
         /// </summary>
         private Com2DataTypeToManagedDataTypeConverter CreateOleTypeConverter(Type t)

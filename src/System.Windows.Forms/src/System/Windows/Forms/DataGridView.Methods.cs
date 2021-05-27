@@ -1553,7 +1553,7 @@ namespace System.Windows.Forms
             // 2. Delete all the currently bound columns.
             // 3. Sort the cloned columns in order of their DisplayIndex.
             // 4. Add the new data bound columns. Here are the rules:
-            //      a. if the cloned collection contains (possible multiple) columns with DataProperyHame == current data field,
+            //      a. if the cloned collection contains (possible multiple) columns with DataPropertyHame == current data field,
             //          add the first cloned column that maps to the data field.
             //      b. other wise add the new bound column.
             // 5. Add the remaining cloned columns in the order of their DisplayIndex.

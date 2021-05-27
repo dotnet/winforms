@@ -11478,7 +11478,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Updates the binding manager bindings when the binding proeprty changes.
+        ///  Updates the binding manager bindings when the binding property changes.
         ///  We have the code here, rather than in PropertyChanged, so we don't pull
         ///  in the data assembly if it's not used.
         /// </summary>

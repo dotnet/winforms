@@ -82,7 +82,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             string name = null;
 
-            // does IVsPerPropretyBrowsing supply us a name?
+            // does IVsPerPropertyBrowsing supply us a name?
             if (component is VSSDK.IVsPerPropertyBrowsing)
             {
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the given dispid matches the dispid that the Object would like to specify
-        ///  as its identification proeprty (Name, ID, etc).
+        ///  as its identification property (Name, ID, etc).
         /// </summary>
         internal bool IsNameDispId(object obj, DispatchID dispid)
         {
