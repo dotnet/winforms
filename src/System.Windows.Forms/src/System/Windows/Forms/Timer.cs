@@ -189,7 +189,7 @@ namespace System.Windows.Forms
             // The timer that owns the window
             private readonly Timer _owner;
 
-            // The current id -- this is usally the same as TimerID but we also
+            // The current id -- this is usually the same as TimerID but we also
             // use it as a flag of when our timer is running.
             private IntPtr _timerID;
 
