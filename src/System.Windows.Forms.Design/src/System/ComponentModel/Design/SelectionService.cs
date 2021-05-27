@@ -346,7 +346,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Determines if the component is currently selected.  This is faster than getting the entire list of selelected components.
+        ///  Determines if the component is currently selected.  This is faster than getting the entire list of selected components.
         /// </summary>
         bool ISelectionService.GetComponentSelected(object component)
         {

@@ -2011,7 +2011,7 @@ namespace System.Windows.Forms.Design
                     Pen selectborderPen;
                     if (splitButtonSelected)
                     {
-                        //DrawSeleted Boder
+                        //DrawSelected Boder
                         selectborderPen = new Pen(selectedBorderColor);
                     }
                     else
