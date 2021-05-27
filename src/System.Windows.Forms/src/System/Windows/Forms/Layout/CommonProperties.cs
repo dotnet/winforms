@@ -620,7 +620,7 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         ///  Helper method for xGetAnchor / xSetAnchor.
-        ///  We store anchor DefualtAnchor as None and vice versa.
+        ///  We store anchor DefaultAnchor as None and vice versa.
         ///  We either had to do this or map Dock.None to DefaultAnchor (Dock and Anchor share the same section
         ///  in LayoutState.) Mapping DefaultAnchor to 0 is nicer because we do not need to allocate anything in
         ///  the PropertyStore to get a 0 back from PropertyStore.GetInteger().

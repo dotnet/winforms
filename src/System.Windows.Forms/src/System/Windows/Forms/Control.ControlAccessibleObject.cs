@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             ///  We need to intercept first-child / last-child navigation from the container's
             ///  client object, and next-sibling / previous-sibling navigation from each child's
             ///  non-client object. All other navigation operations must be allowed to fall back
-            ///  on the system's deafult behavior (provided by OLEACC.DLL).
+            ///  on the system's default behavior (provided by OLEACC.DLL).
             ///
             ///  When combined with the re-ordering behavior of GetSysChildOrder() above, this
             ///  allows us to present the end user with the illusion of accessible objects in

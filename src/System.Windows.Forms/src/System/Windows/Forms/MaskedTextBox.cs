@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
                 {
                     // We need to temporarily create an edit control to get the default password character.
                     // We cannot use this control because we would have to reset the native control's password char to use
-                    // the defult one so we can get it; this would change the text displayed in the box (even for a short time)
+                    // the default one so we can get it; this would change the text displayed in the box (even for a short time)
                     // opening a sec hole.
 
                     TextBox txtBox = new TextBox
