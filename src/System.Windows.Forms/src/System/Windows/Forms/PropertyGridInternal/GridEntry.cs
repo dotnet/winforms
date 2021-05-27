@@ -2137,7 +2137,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
                 // so when we change the visual style (such as changing Windows theme),
-                // we need to recaculate outlineRect
+                // we need to recalculate outlineRect
                 if (!_lastPaintWithExplorerStyle)
                 {
                     _outlineRect = Rectangle.Empty;
@@ -2152,7 +2152,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
                 // so when we change the visual style (such as changing Windows theme),
-                // we need to recaculate outlineRect
+                // we need to recalculate outlineRect
                 if (_lastPaintWithExplorerStyle)
                 {
                     _outlineRect = Rectangle.Empty;
