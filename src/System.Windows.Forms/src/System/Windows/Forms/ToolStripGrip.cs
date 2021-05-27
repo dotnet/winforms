@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                 {
                     if (value)
                     {
-                        // dont let grips move the toolstrip
+                        // don't let grips move the toolstrip
                         if (ParentInternal.ToolStripPanelRow is null)
                         {
                             return;
@@ -209,7 +209,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // sometimes we dont get mouseup in DT.   Release now.
+                    // sometimes we don't get mouseup in DT.   Release now.
                     MovingToolStrip = false;
                 }
             }

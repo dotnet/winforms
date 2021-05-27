@@ -135,7 +135,7 @@ namespace System.Windows.Forms
 
                         if (IsOnDropDown)
                         {
-                            // we gotta make sure that we dont collide with the existing menu.
+                            // we gotta make sure that we don't collide with the existing menu.
                             Rectangle bounds = GetDropDownBounds(dropDownDirection);
                             Rectangle ownerItemBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
                             Rectangle intersectionBetweenChildAndParent = Rectangle.Intersect(bounds, ownerItemBounds);
@@ -379,7 +379,7 @@ namespace System.Windows.Forms
             // calculate the offset from the upper left hand corner of the item.
             dropDownBounds = DropDownDirectionToDropDownBounds(dropDownDirection, dropDownBounds);
 
-            // we should make sure we dont obscure the owner item.
+            // we should make sure we don't obscure the owner item.
             Rectangle itemScreenBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
 
             if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Height > 1)
@@ -635,7 +635,7 @@ namespace System.Windows.Forms
 
             Debug.Fail("Why are we here");
 
-            // dont expect it to come to this but just in case here are the real defaults.
+            // don't expect it to come to this but just in case here are the real defaults.
             if (IsOnDropDown)
             {
                 return (rightToLeft == RightToLeft.Yes) ? ToolStripDropDownDirection.Left : ToolStripDropDownDirection.Right;

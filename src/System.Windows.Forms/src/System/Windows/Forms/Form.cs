@@ -2214,7 +2214,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
 
             // If DialogResult.OK and the value == Visible then this code has been called either through
-            // ShowDialog( ) or explicit Hide( ) by the user. So dont go through this function again.
+            // ShowDialog( ) or explicit Hide( ) by the user. So don't go through this function again.
             // This will avoid flashing during closing the dialog;
             if (value == Visible && dialogResult == DialogResult.OK)
             {
@@ -5704,7 +5704,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // we dont want to be redundantly called as we could merge in two control menus.
+            // we don't want to be redundantly called as we could merge in two control menus.
             formStateEx[FormStateExInUpdateMdiControlStrip] = 1;
 
             try

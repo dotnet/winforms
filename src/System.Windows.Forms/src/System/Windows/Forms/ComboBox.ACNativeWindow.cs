@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                 {
                     if (s_ACWindows[acHandle] is null)
                     {
-                        s_ACWindows.Remove(acHandle); //if an external handle got destroyed, dont let it stop us.
+                        s_ACWindows.Remove(acHandle); //if an external handle got destroyed, don't let it stop us.
                     }
                 }
 

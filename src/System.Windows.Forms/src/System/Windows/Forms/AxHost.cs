@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms
                     TransitionUpTo(OC_INPLACE);
                     // it is possible that we were hidden while in place activating, in which case we don't
                     // really have a handle now because the act of hiding could have destroyed it
-                    // so, just call ourselves again recursively, and if we dont't have a handle, we will
+                    // so, just call ourselves again recursively, and if we don't have a handle, we will
                     // just take the "axState[fNeedOwnWindow]" path above...
                     if (axState[fNeedOwnWindow])
                     {

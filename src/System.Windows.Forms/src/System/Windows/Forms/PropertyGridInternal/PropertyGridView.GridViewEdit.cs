@@ -352,7 +352,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             protected override void SetVisibleCore(bool value)
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:Visible(" + (value.ToString()) + ")");
-                // make sure we dont' have the mouse captured if
+                // make sure we don't have the mouse captured if
                 // we're going invisible
                 if (value == false && HookMouseDown)
                 {

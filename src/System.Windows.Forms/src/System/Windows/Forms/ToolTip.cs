@@ -876,7 +876,7 @@ namespace System.Windows.Forms
         {
             // When the toplevelControl is a form and is Modal, the Handle of the tooltip is released
             // before we come here. In such a case the tool wont get deleted from the tooltip.
-            // So we dont check "Handle" in the handlesCreate but check it only foe Non-Nodal dialogs later
+            // So we don't check "Handle" in the handlesCreate but check it only foe Non-Nodal dialogs later
             bool handlesCreated = ctl.IsHandleCreated
                                 && _topLevelControl is not null
                                 && _topLevelControl.IsHandleCreated

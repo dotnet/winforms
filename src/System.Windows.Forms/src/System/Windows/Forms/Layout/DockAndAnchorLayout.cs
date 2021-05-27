@@ -581,7 +581,7 @@ namespace System.Windows.Forms.Layout
             if (anchor && !measureOnly)
             {
                 // In the case of anchor, where we currently are defines the preferred size,
-                // so dont recalculate the positions of everything.
+                // so don't recalculate the positions of everything.
                 LayoutAnchoredControls(container);
             }
 

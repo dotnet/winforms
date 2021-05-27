@@ -279,7 +279,7 @@ namespace System.Windows.Forms
 
             if (parent.LayoutStyle != ToolStripLayoutStyle.HorizontalStackWithOverflow || parent.LayoutStyle != ToolStripLayoutStyle.VerticalStackWithOverflow)
             {
-                // we dont actually know what size to make it, so just keep it a stock size.
+                // we don't actually know what size to make it, so just keep it a stock size.
                 constrainingSize.Width = SeparatorHeight;
                 constrainingSize.Height = SeparatorHeight;
             }
@@ -303,7 +303,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         protected override void OnFontChanged(EventArgs e)
         {
-            // Perf: dont call base, we dont care if the font changes
+            // Perf: don't call base, we don't care if the font changes
             RaiseEvent(s_fontChangedEvent, e);
         }
 

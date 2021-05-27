@@ -549,14 +549,14 @@ namespace System.Windows.Forms
         {
             get
             {
-                // since we dont support DefaultLayout go directly against the CommonProperties
+                // since we don't support DefaultLayout go directly against the CommonProperties
                 return CommonProperties.xGetAnchor(this);
             }
             set
             {
                 if (value != Anchor)
                 {
-                    // since we dont support DefaultLayout go directly against the CommonProperties
+                    // since we don't support DefaultLayout go directly against the CommonProperties
                     CommonProperties.xSetAnchor(this, value);
                     if (ParentInternal is not null)
                     {
@@ -575,7 +575,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                // since we dont support DefaultLayout go directly against the CommonProperties
+                // since we don't support DefaultLayout go directly against the CommonProperties
                 return CommonProperties.xGetDock(this);
             }
             set
@@ -584,7 +584,7 @@ namespace System.Windows.Forms
 
                 if (value != Dock)
                 {
-                    // since we dont support DefaultLayout go directly against the CommonProperties
+                    // since we don't support DefaultLayout go directly against the CommonProperties
                     CommonProperties.xSetDock(this, value);
                     if (ParentInternal is not null)
                     {
@@ -961,7 +961,7 @@ namespace System.Windows.Forms
 
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
-            // in this case the parent is telling us to refresh our bounds - dont
+            // in this case the parent is telling us to refresh our bounds - don't
             // call PerformLayout
             SetBounds(bounds);
         }
@@ -1747,7 +1747,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  if the item is selected we return true.
         ///
-        ///  FAQ: Why dont we have a Hot or MouseIsOver property?
+        ///  FAQ: Why don't we have a Hot or MouseIsOver property?
         ///  After going through the scenarios, we've decided NOT to add a separate MouseIsOver or Hot flag to ToolStripItem. The thing to use is 'Selected'.
         ///  Why?  While the selected thing can be different than the moused over item, the selected item is ALWAYS the one you want to paint differently
         ///
@@ -2212,7 +2212,7 @@ namespace System.Windows.Forms
 
                     break;
                 case ToolStripItemEventType.MouseMove:
-                    // Disabled items typically dont get mouse move
+                    // Disabled items typically don't get mouse move
                     // but they should be allowed to re-order if the ALT key is pressed
                     if (!Enabled && ParentInternal is not null)
                     {
@@ -2264,7 +2264,7 @@ namespace System.Windows.Forms
         private Font GetOwnerFont() => Owner?.Font;
 
         /// <summary>
-        ///  We dont want a public settable property and usually owner will work
+        ///  We don't want a public settable property and usually owner will work
         ///  except for things like the overflow button
         /// </summary>
         public ToolStrip GetCurrentParent() => Parent;
@@ -2449,7 +2449,7 @@ namespace System.Windows.Forms
                     // this is the case where we got a mouse enter, but ShouldSelectItem
                     // returned false.
                     // typically occus when a window first opens - we get a mouse enter on the item
-                    // the cursor is hovering over - but we dont actually want to change selection to it.
+                    // the cursor is hovering over - but we don't actually want to change selection to it.
                     Select();
                 }
             }
@@ -3042,7 +3042,7 @@ namespace System.Windows.Forms
 
             if (Owner is not null && Owner.IsCurrentlyDragging)
             {
-                // make sure we dont select during a drag operation.
+                // make sure we don't select during a drag operation.
                 return;
             }
 
@@ -3137,7 +3137,7 @@ namespace System.Windows.Forms
 
             if (!_state[s_stateContstructing])
             {
-                // Dont fire while we're in the base constructor as the inherited
+                // Don't fire while we're in the base constructor as the inherited
                 // class may not have had a chance to initialize yet.
 
                 if (_bounds != oldBounds)

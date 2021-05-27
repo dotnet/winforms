@@ -120,7 +120,7 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            // dont call TextBox.GPS because it will grow and shrink as the text changes.
+            // don't call TextBox.GPS because it will grow and shrink as the text changes.
             Rectangle bounds = CommonProperties.GetSpecifiedBounds(TextBox);
             return new Size(bounds.Width, TextBox.PreferredHeight);
         }

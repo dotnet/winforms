@@ -56,7 +56,7 @@ namespace System.Windows.Forms
                     return s_lowRes;
                 }
 
-                // dont cache if we're in low resolution.
+                // don't cache if we're in low resolution.
                 s_lowRes = BitsPerPixel <= 8;
                 s_lowResSettingValid = true;
                 return s_lowRes;

@@ -373,7 +373,7 @@ namespace System.Resources
         {
             object result = null;
             string mimeTypeName = dataNodeInfo.MimeType;
-            // default behavior: if we dont have a type name, it's a string
+            // default behavior: if we don't have a type name, it's a string
             string typeName =
                 string.IsNullOrEmpty(dataNodeInfo.TypeName)
                     ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), _typeNameConverter)
@@ -513,7 +513,7 @@ namespace System.Resources
             // so someone could have modified it.
             if (shouldSerialize || FileRefFullPath is not null)
             {
-                // if we dont have a datanodeinfo it could be either
+                // if we don't have a datanodeinfo it could be either
                 // a direct object OR a fileref
                 if (FileRefFullPath is not null)
                 {
@@ -565,12 +565,12 @@ namespace System.Resources
             }
             else if (_nodeInfo is not null)
             {
-                // we dont have a fileref, try to resolve the type of the datanode
+                // we don't have a fileref, try to resolve the type of the datanode
                 result = _nodeInfo.TypeName;
                 // if typename is null, the default is just a string
                 if (string.IsNullOrEmpty(result))
                 {
-                    // we still dont know... do we have a mimetype? if yes, our only option is to
+                    // we still don't know... do we have a mimetype? if yes, our only option is to
                     // deserialize to know what we're dealing with... very inefficient...
                     if (!string.IsNullOrEmpty(_nodeInfo.MimeType))
                     {

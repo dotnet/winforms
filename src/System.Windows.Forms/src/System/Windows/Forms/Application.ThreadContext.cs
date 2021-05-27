@@ -82,7 +82,7 @@ namespace System.Windows.Forms
 #if DEBUG
             private int _debugModalCounter;
 #endif
-            // We need to set this flag if we have started the ModalMessageLoop so that we dont create the ThreadWindows
+            // We need to set this flag if we have started the ModalMessageLoop so that we don't create the ThreadWindows
             // when the ComponentManager calls on us (as IMSOComponent) during the OnEnterState.
             private bool _ourModalLoop;
 

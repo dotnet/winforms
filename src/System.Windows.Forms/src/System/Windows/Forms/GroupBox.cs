@@ -637,7 +637,7 @@ namespace System.Windows.Forms
             if (factor.Width != 1F && factor.Height != 1F)
             {
                 // Make sure when we're scaling by non-unity to clear the font cache
-                // as the font has likely changed, but we dont know it yet as OnFontChanged has yet to
+                // as the font has likely changed, but we don't know it yet as OnFontChanged has yet to
                 // be called on us by our parent.
                 _fontHeight = -1;
                 _cachedFont = null;

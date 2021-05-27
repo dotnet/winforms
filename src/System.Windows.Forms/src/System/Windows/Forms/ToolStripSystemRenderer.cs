@@ -309,7 +309,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                // do some fixup so that we dont paint from end to end.
+                // do some fixup so that we don't paint from end to end.
                 Color backColor = e.ToolStrip.BackColor;
                 FillBackground(g, bounds, backColor);
 
@@ -505,7 +505,7 @@ namespace System.Windows.Forms
             bool rightToLeft = (splitButton.RightToLeft == RightToLeft.Yes);
             Color arrowColor = splitButton.Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
 
-            // in right to left - we need to swap the parts so we dont draw  v][ toolStripSplitButton
+            // in right to left - we need to swap the parts so we don't draw  v][ toolStripSplitButton
             VisualStyleElement splitButtonDropDownPart = (rightToLeft) ? VisualStyleElement.ToolBar.SplitButton.Normal : VisualStyleElement.ToolBar.SplitButtonDropDown.Normal;
             VisualStyleElement splitButtonPart = (rightToLeft) ? VisualStyleElement.ToolBar.DropDownButton.Normal : VisualStyleElement.ToolBar.SplitButton.Normal;
 
@@ -528,7 +528,7 @@ namespace System.Windows.Forms
                 Rectangle splitButtonBounds = splitButton.ButtonBounds;
                 if (rightToLeft)
                 {
-                    // scoot to the left so we dont draw double shadow like so: ][
+                    // scoot to the left so we don't draw double shadow like so: ][
                     splitButtonBounds.Inflate(2, 0);
                 }
 
@@ -750,7 +750,7 @@ namespace System.Windows.Forms
 
         private static void RenderLabelInternal(ToolStripItemRenderEventArgs e)
         {
-            // dont call RenderItemInternal, as we NEVER want to paint hot.
+            // don't call RenderItemInternal, as we NEVER want to paint hot.
             ToolStripItem item = e.Item;
             Graphics g = e.Graphics;
 

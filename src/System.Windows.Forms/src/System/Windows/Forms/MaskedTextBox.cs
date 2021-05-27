@@ -651,7 +651,7 @@ namespace System.Windows.Forms
             set
             {
                 //
-                // We dont' do anything if:
+                // We don't do anything if:
                 // 1.  IsNullOrEmpty( value )->[Reset control] && this.flagState[IS_NULL_MASK]==>Already Reset.
                 // 2. !IsNullOrEmpty( value )->[Set control] && !this.flagState[IS_NULL_MASK][control is set] && [value is the same]==>No need to update.
                 //

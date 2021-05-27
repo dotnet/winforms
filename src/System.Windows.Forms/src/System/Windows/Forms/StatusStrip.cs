@@ -170,7 +170,7 @@ namespace System.Windows.Forms
                 {
                     if (DesignMode)
                     {
-                        return true;  // we dont care about the state of VS.
+                        return true;  // we don't care about the state of VS.
                     }
 
                     IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
             {
                 bool rightToLeft = ((Orientation == Orientation.Horizontal) && (RightToLeft == RightToLeft.Yes));
 
-                // shove all items that dont fit one pixel outside the displayed region
+                // shove all items that don't fit one pixel outside the displayed region
                 Rectangle displayRect = DisplayRectangle;
                 Point noMansLand = displayRect.Location;
                 noMansLand.X += ClientSize.Width + 1;
@@ -513,7 +513,7 @@ namespace System.Windows.Forms
                     TableLayoutSettings.RowStyles[0].Height = Math.Max(0, DisplayRectangle.Height);
                     TableLayoutSettings.ColumnCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
 
-                    // dont remove the extra column styles, just set them back to autosize.
+                    // don't remove the extra column styles, just set them back to autosize.
                     for (int i = DisplayedItems.Count; i < TableLayoutSettings.ColumnStyles.Count; i++)
                     {
                         TableLayoutSettings.ColumnStyles[i].SizeType = SizeType.AutoSize;
@@ -562,7 +562,7 @@ namespace System.Windows.Forms
 
                     TableLayoutSettings.RowCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
 
-                    // dont remove the extra column styles, just set them back to autosize.
+                    // don't remove the extra column styles, just set them back to autosize.
                     for (int i = DisplayedItems.Count; i < TableLayoutSettings.RowStyles.Count; i++)
                     {
                         TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;

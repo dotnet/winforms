@@ -769,7 +769,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Since office images dont scoot one px we have to override all painting but enabled = false;
+                // Since office images don't scoot one px we have to override all painting but enabled = false;
                 if (e.Item.ImageScaling == ToolStripItemImageScaling.None)
                 {
                     e.Graphics.DrawImage(image, imageRect, new Rectangle(Point.Empty, imageRect.Size), GraphicsUnit.Pixel);
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // dont paint background effects
+            // don't paint background effects
             e.Handled = true;
 
             RenderBackgroundGradient(e.Graphics, toolStripPanel, ColorTable.ToolStripPanelGradientBegin, ColorTable.ToolStripPanelGradientEnd);
@@ -822,7 +822,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // dont paint background effects
+            // don't paint background effects
             e.Handled = true;
 
             e.Graphics.Clear(ColorTable.ToolStripContentPanelGradientEnd);

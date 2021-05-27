@@ -2755,7 +2755,7 @@ namespace System.Windows.Forms
             }
 
             flags &= TextFormatSupportedFlags;
-            // Dont use passed in graphics so we can optimze measurement
+            // Don't use passed in graphics so we can optimze measurement
             Size requiredSize = TextRenderer.MeasureText(text, font, new Size(maxWidth, int.MaxValue), flags);
             widthTruncated = (requiredSize.Width > maxWidth);
             return requiredSize.Height;
@@ -2800,7 +2800,7 @@ namespace System.Windows.Forms
             Size textSize;
             do
             {
-                // Dont use passed in graphics so we can optimze measurement
+                // Don't use passed in graphics so we can optimze measurement
                 textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, int.MaxValue), flags);
                 if ((float)(textSize.Width / textSize.Height) <= maxRatio || textSize.Width > (int)maxWidth)
                 {
@@ -2832,7 +2832,7 @@ namespace System.Windows.Forms
             }
 
             flags &= TextFormatSupportedFlags;
-            // Dont use passed in graphics so we can optimze measurement
+            // Don't use passed in graphics so we can optimze measurement
             return TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue), flags);
         }
 
@@ -2857,7 +2857,7 @@ namespace System.Windows.Forms
                 Size textSize;
                 do
                 {
-                    // Dont use passed in graphics so we can optimze measurement
+                    // Don't use passed in graphics so we can optimze measurement
                     textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, maxHeight), flags);
                     if (textSize.Height > maxHeight || textSize.Width > (int)maxWidth)
                     {

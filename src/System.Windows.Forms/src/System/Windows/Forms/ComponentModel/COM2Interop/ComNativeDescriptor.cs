@@ -309,7 +309,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             //
             Com2Properties propsInfo = (Com2Properties)nativeProps[component];
 
-            // if we dont' have one, create one and set it up
+            // if we don't have one, create one and set it up
             //
             if (propsInfo is null || !propsInfo.CheckValid())
             {

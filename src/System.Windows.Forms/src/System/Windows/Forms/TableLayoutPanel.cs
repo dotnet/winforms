@@ -90,7 +90,7 @@ namespace System.Windows.Forms
             {
                 _tableLayoutSettings.CellBorderStyle = value;
 
-                // PERF: dont turn on ResizeRedraw unless we know we need it.
+                // PERF: don't turn on ResizeRedraw unless we know we need it.
                 if (value != TableLayoutPanelCellBorderStyle.None)
                 {
                     SetStyle(ControlStyles.ResizeRedraw, true);

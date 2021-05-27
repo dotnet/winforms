@@ -372,7 +372,7 @@ namespace System.Windows.Forms
                 if (!IsDisposed)
                 {
                     // Since this is called thru the OnResize (and Layout) which is triggered by SetExtent if the TabControl is hosted as
-                    // a ActiveX control, so check if this is ActiveX and dont force Handle Creation here as the native code breaks in this case.
+                    // a ActiveX control, so check if this is ActiveX and don't force Handle Creation here as the native code breaks in this case.
                     if (!IsActiveX)
                     {
                         if (!IsHandleCreated)

@@ -2701,7 +2701,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsActiveX => GetExtendedState(ExtendedStates.IsActiveX);
 
-        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we dont return the parent
+        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we don't return the parent
         // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
         // Hence we have a new internal property IsContainerControl which returns false for all Everett control, but
         // this property is overidden in SplitContainer to return true so that we skip the SplitContainer
@@ -3157,7 +3157,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  This property is required by certain controls (TabPage) to render its transparency using theming API.
-        ///  We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
+        ///  We don't want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
         /// </summary>
         internal virtual bool RenderTransparencyWithVisualStyles => false;
 
@@ -3643,7 +3643,7 @@ namespace System.Windows.Forms
                 // the second represent keyboard cues.  "F" is the UICuesStates.FocusMask,
                 // "F0" is the UICuesStates.KeyboardMask
 
-                // We check here if we have cached state.  If we dont, we need to initialize ourself.
+                // We check here if we have cached state.  If we don't, we need to initialize ourself.
                 // We do this by checking "MenuAccessKeysUnderlined" - we show if this returns true.
 
                 // If MenuAccessKeysUnderlined returns false, we have to manually call CHANGEUISTATE on the topmost control
@@ -6423,7 +6423,7 @@ namespace System.Windows.Forms
         ///  of that thread. The callback is then invoked using that ExecutionContext (which includes info like the
         ///  compressed security stack).
         ///
-        ///  NOTE: The one part of the ExecutionContext that we DONT want applied to the callback is its SyncContext,
+        ///  NOTE: The one part of the ExecutionContext that we DON'T want applied to the callback is its SyncContext,
         ///  since this is the SyncContext of the other thread. So we grab the SyncContext of OUR thread, and pass
         ///  this through to the callback to use instead.
         ///
@@ -8662,7 +8662,7 @@ namespace System.Windows.Forms
             }
 
             // We need to use themeing painting for certain controls (like TabPage) when they parent other controls.
-            // But we dont want to to this always as this causes serious preformance (at Runtime and DesignTime)
+            // But we don't want to to this always as this causes serious preformance (at Runtime and DesignTime)
             // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
             if (Application.RenderWithVisualStyles && parent.RenderTransparencyWithVisualStyles)
             {
@@ -9503,13 +9503,13 @@ namespace System.Windows.Forms
 
             if (keyCode != Keys.F10 && keyCode != Keys.Menu && keyCode != Keys.Tab)
             {
-                return;  // PERF: dont WM_QUERYUISTATE if we dont have to.
+                return;  // PERF: don't WM_QUERYUISTATE if we don't have to.
             }
 
             Control topMostParent = null;
             User32.UISF current = unchecked((User32.UISF)(long)User32.SendMessageW(this, User32.WM.QUERYUISTATE));
 
-            // dont trust when a control says the accelerators are showing.
+            // don't trust when a control says the accelerators are showing.
             // make sure the topmost parent agrees with this as we could be in a mismatched state.
             if (current == 0 /*accelerator and focus cues are showing*/)
             {
@@ -10357,7 +10357,7 @@ namespace System.Windows.Forms
             if (!minSize.IsEmpty)
             {
                 minSize -= adornmentSize;
-                minSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we dont go below 0.
+                minSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we don't go below 0.
                                         factor.Width,
                                         factor.Height) + adornmentSize;
             }
@@ -10365,12 +10365,12 @@ namespace System.Windows.Forms
             if (!maxSize.IsEmpty)
             {
                 maxSize -= adornmentSize;
-                maxSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we dont go below 0.
+                maxSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we don't go below 0.
                                         factor.Width,
                                         factor.Height) + adornmentSize;
             }
 
-            // Apply the min/max size constraints - dont call ApplySizeConstraints
+            // Apply the min/max size constraints - don't call ApplySizeConstraints
             // as MinimumSize/MaximumSize are currently cleared out.
             Size maximumSize = LayoutUtils.ConvertZeroToUnbounded(maxSize);
             Size scaledSize = LayoutUtils.IntersectSizes(rawScaledBounds.Size, maximumSize);
@@ -12802,7 +12802,7 @@ namespace System.Windows.Forms
 
             User32.UIS cmd = (User32.UIS)PARAM.LOWORD(m.WParam);
 
-            // if we're initializing, dont bother updating the uiCuesState/Firing the event.
+            // if we're initializing, don't bother updating the uiCuesState/Firing the event.
 
             if (cmd == User32.UIS.INITIALIZE)
             {

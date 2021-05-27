@@ -2399,7 +2399,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Since this method is used by Reflection .. dont change the "signature"
+            // Since this method is used by Reflection .. don't change the "signature"
             internal void ViewChangedInternal()
             {
                 ViewChanged();

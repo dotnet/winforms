@@ -1318,7 +1318,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  In Everett we used to TAB around the PrintPreviewDialog. Now since the PageCounter is added into the ToolStrip we dont
+        ///  In Everett we used to TAB around the PrintPreviewDialog. Now since the PageCounter is added into the ToolStrip we don't
         ///  This is breaking from Everett.
         /// </summary>
         protected override bool ProcessTabKey(bool forward)

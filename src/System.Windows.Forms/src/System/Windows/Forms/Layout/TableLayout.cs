@@ -269,7 +269,7 @@ namespace System.Windows.Forms.Layout
 
             // PERF: Optimizing nested table layouts.
             // The problem:  TableLayout asks for GPS(0,0) GPS(1,0) GPS(0,1) and GPS(w,0) and GPS(w,h).
-            // if the table layout is nested, this becomes pretty nasty, as we dont cache row, column
+            // if the table layout is nested, this becomes pretty nasty, as we don't cache row, column
             // assignments in preferred size.
             // GPS(0,1) GPS(1,0) should return same as GPS(0,0)- if that's already cached return it.
             float oldWidth = -1f;
@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms.Layout
                         {
                             TableLayoutStyle style = (TableLayoutStyle)styles[i];
 
-                            // cast to int / (take the floor) so we know we dont accidentally go over our limit.
+                            // cast to int / (take the floor) so we know we don't accidentally go over our limit.
                             // the rest will be distributed later.
                             int stripSize = (int)(style.Size * totalPercentAllocatedSpace / totalPercent);
                             usedSpace -= strip.MinSize; // back out the size we thought we were allocating before.
@@ -1912,7 +1912,7 @@ namespace System.Windows.Forms.Layout
                 get
                 {
                     Debug.Assert(ChildInfoValid, "Fetched invalid information");
-                    // we only get this in a cached scenario - so we dont have to worry about caching it.
+                    // we only get this in a cached scenario - so we don't have to worry about caching it.
                     LayoutInfo[] fixedChildren = new LayoutInfo[_countFixedChildren];
                     if (HasChildWithAbsolutePositioning)
                     {

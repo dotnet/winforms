@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         private IntPtr _targetWindowHandle = IntPtr.Zero;
         private IntPtr _nativeMenuHandle = IntPtr.Zero;
 
-        // Keep checked images shared between menu items, but per thread so we dont have locking issues in GDI+
+        // Keep checked images shared between menu items, but per thread so we don't have locking issues in GDI+
         [ThreadStatic]
         private static Image t_indeterminateCheckedImage;
 
@@ -150,7 +150,7 @@ namespace System.Windows.Forms
 
                 if (textFields.Length >= 2)
                 {
-                    // We dont care about the shortcut here, the OS is going to
+                    // We don't care about the shortcut here, the OS is going to
                     // handle it for us by sending a WM_(SYS)COMMAND during TranslateAccelerator
                     // Just display whatever the OS would have.
                     ShowShortcutKeys = true;

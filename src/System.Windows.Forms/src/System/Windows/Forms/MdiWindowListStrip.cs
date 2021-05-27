@@ -156,7 +156,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                // this is an invisible toolstrip dont even bother doing layout.
+                // this is an invisible toolstrip don't even bother doing layout.
                 ResumeLayout(false);
                 MergeItem.DropDown.ResumeLayout(false);
             }

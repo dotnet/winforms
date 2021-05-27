@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property is overridden to allow the AutoScroll to be set on all the panels when
         ///  The autoScroll on SplitContainer is shown.
-        ///  Here we dont set the base value ... but set autoscroll for panels.
+        ///  Here we don't set the base value ... but set autoscroll for panels.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
@@ -2422,7 +2422,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool ProcessTabKey(bool forward)
         {
-            //Dont Focus the Splitter if TabStop == False or if the Splitter is Fixed !!
+            // Don't Focus the Splitter if TabStop == False or if the Splitter is Fixed !!
             if (!TabStop || IsSplitterFixed)
             {
                 return base.ProcessTabKey(forward);

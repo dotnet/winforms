@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms
 
                     break;
                 case WM.KILLFOCUS:
-                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
+                    // Consider - If we don't have a childwndproc, then we don't get here, so we don't
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode)
                     {
@@ -1694,7 +1694,7 @@ namespace System.Windows.Forms
                     break;
                 case WM.SETFOCUS:
 
-                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
+                    // Consider - If we don't have a childwndproc, then we don't get here, so we don't
                     // set the status. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode)
                     {

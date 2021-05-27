@@ -910,7 +910,7 @@ namespace System.Windows.Forms
                     {
                         if (toolStrip.IsDropDown)
                         {
-                            // We dont want to process someone else's context menu (e.g. button1 and button2 have context menus)
+                            // We don't want to process someone else's context menu (e.g. button1 and button2 have context menus)
                             // button2's context menu should not be processed if button1 is the one we're processing.
 
                             ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
@@ -1038,7 +1038,7 @@ namespace System.Windows.Forms
             // we need to compare against char instead.
             if ((char)keyData == ' ')
             {
-                // Dont process system menu
+                // Don't process system menu
                 ModalMenuFilter.MenuKeyToggle = false;
             }
             else if ((char)keyData == '-')
@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] attempting to set focus to menustrip");
 
-                        // If we've alt-tabbed away dont snap/restore focus.
+                        // If we've alt-tabbed away don't snap/restore focus.
                         IntPtr topmostParentOfMenu = User32.GetAncestor(menuStripToActivate, User32.GA.ROOT);
                         IntPtr foregroundWindow = User32.GetForegroundWindow();
 
@@ -1443,7 +1443,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // Performance: if we dont have the toolstrip in our merge history, bail.
+                // Performance: if we don't have the toolstrip in our merge history, bail.
                 if (!foundToolStrip)
                 {
                     return false;

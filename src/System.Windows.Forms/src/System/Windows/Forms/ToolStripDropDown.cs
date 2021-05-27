@@ -1771,7 +1771,7 @@ namespace System.Windows.Forms
                     {
                         // Add opening event.
                         // Snap the foreground window BEFORE calling any user events so they
-                        // dont have a chance to activate something else. This covers the case
+                        // don't have a chance to activate something else. This covers the case
                         // where someone handles the opening event and throws up a messagebox.
                         IntPtr foregroundWindow = User32.GetForegroundWindow();
 
@@ -1928,7 +1928,7 @@ namespace System.Windows.Forms
                                 }
 
                                 // Fire OnClosed.
-                                // if you make VisibleChanged throw you dont get closed. Sorry.
+                                // if you make VisibleChanged throw you don't get closed. Sorry.
                                 var closedEventArgs = new ToolStripDropDownClosedEventArgs(reason);
                                 OnClosed(closedEventArgs);
 

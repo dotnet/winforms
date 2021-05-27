@@ -45,7 +45,7 @@ namespace System.Windows.Forms
             get { return options[optionsFillWhenSelected]; }
         }
 
-        // this is a renderer override, so return null so we dont get into an infinite loop.
+        // this is a renderer override, so return null so we don't get into an infinite loop.
         internal override ToolStripRenderer RendererOverride
         {
             get { return null; }

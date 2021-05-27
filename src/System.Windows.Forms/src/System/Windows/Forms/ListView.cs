@@ -735,7 +735,7 @@ namespace System.Windows.Forms
                 }
 
                 // We can do this 'cuz the viewStyle enums are the same values as the actual LVS styles
-                // this new check since the value for LV_VIEW_TILE == LVS_SINGLESEL; so dont OR that value since
+                // this new check since the value for LV_VIEW_TILE == LVS_SINGLESEL; so don't OR that value since
                 // LV_VIEW_TILE is not a STYLE but should be Send via a SENDMESSAGE.
                 if (viewStyle != View.Tile)
                 {
@@ -5922,7 +5922,7 @@ namespace System.Windows.Forms
             int y = PARAM.SignedHIWORD(m.LParam);
             OnMouseDown(new MouseEventArgs(button, clicks, x, y, 0));
 
-            //If Validation is cancelled dont fire any events through the Windows ListView's message loop...
+            //If Validation is cancelled don't fire any events through the Windows ListView's message loop...
             if (!ValidationCancelled)
             {
                 if (CheckBoxes)

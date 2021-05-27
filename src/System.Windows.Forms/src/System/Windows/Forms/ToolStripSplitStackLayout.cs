@@ -313,7 +313,7 @@ namespace System.Windows.Forms
                     itemSize = item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
                 }
 
-                // if it turns out we dont need the overflow (because there are no Overflow.Always items and the width of everything
+                // if it turns out we don't need the overflow (because there are no Overflow.Always items and the width of everything
                 // in the overflow is less than the width of the overflow button then reset the placement of the as needed items to
                 // main.
                 if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow))
@@ -472,7 +472,7 @@ namespace System.Windows.Forms
                     itemSize = item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
                 }
 
-                // if it turns out we dont need the overflow (because there are no Overflow.Always items and the height of everything
+                // if it turns out we don't need the overflow (because there are no Overflow.Always items and the height of everything
                 // in the overflow is less than the width of the overflow button then reset the placement of the as needed items to
                 // main.
                 if (!needOverflow && (item.Overflow == ToolStripItemOverflow.AsNeeded && item.Placement == ToolStripItemPlacement.Overflow))
@@ -558,7 +558,7 @@ namespace System.Windows.Forms
 
         private void SetItemLocation(ToolStripItem item, Point itemLocation, Size itemSize)
         {
-            // make sure that things that dont fit within the display rectangle aren't laid out.
+            // make sure that things that don't fit within the display rectangle aren't laid out.
             if ((item.Placement == ToolStripItemPlacement.Main) && !(item is ToolStripOverflowButton))
             {
                 // overflow buttons can be placed outside the display rect.

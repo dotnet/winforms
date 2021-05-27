@@ -238,7 +238,7 @@ namespace System.Windows.Forms
             if (_owner is ToolStripDropDown dropDown)
             {
                 // If we're on a dropdown, we can only add non-control host items
-                // as we dont want anything on a dropdown to get keyboard messages in the Internet.
+                // as we don't want anything on a dropdown to get keyboard messages in the Internet.
 
                 if (dropDown.OwnerItem == value)
                 {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
             // Step 0 - Arg validation
             if ((key is null) || (key.Length == 0))
             {
-                return -1; // we dont support empty or null keys.
+                return -1; // we don't support empty or null keys.
             }
 
             // step 1 - check the last cached item
@@ -417,7 +417,7 @@ namespace System.Windows.Forms
                         ToolStripItemEventArgs e = new ToolStripItemEventArgs(item);
                         _owner.OnItemRemoved(e);
 
-                        // dont fire the ItemRemoved event for Overflow
+                        // don't fire the ItemRemoved event for Overflow
                         // it would fire constantly.... instead clear any state if the item
                         // is really being removed from the master collection.
                         if (parent is not null && parent != _owner)

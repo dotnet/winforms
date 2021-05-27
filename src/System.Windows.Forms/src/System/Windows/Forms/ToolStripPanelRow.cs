@@ -400,7 +400,7 @@ namespace System.Windows.Forms
                     CachedBoundsMode = true;
                     try
                     {
-                        // dont layout in the constructor that's just tacky.
+                        // don't layout in the constructor that's just tacky.
                         bool parentNeedsLayout = LayoutEngine.Layout(this, e);
                     }
                     finally
@@ -490,7 +490,7 @@ namespace System.Windows.Forms
                     if (cachedBounds.Width > minSize.Width)
                     {
                         spaceToFree -= (cachedBounds.Width - minSize.Width);
-                        // make sure we dont take more space than we need - if spaceToFree is less than 0, add back in.
+                        // make sure we don't take more space than we need - if spaceToFree is less than 0, add back in.
                         cachedBounds.Width = (spaceToFree < 0) ? minSize.Width + -spaceToFree : minSize.Width;
 
                         // we're not reperforming a layout, so we need to adjust the next cell
@@ -584,7 +584,7 @@ namespace System.Windows.Forms
                     if (cachedBounds.Height > minSize.Height)
                     {
                         spaceToFree -= (cachedBounds.Height - minSize.Height);
-                        // make sure we dont take more space than we need - if spaceToFree is less than 0, add back in.
+                        // make sure we don't take more space than we need - if spaceToFree is less than 0, add back in.
                         cachedBounds.Height = (spaceToFree < 0) ? minSize.Height + -spaceToFree : minSize.Height;
 
                         // we're not reperforming a layout, so we need to adjust the next cell
@@ -712,7 +712,7 @@ namespace System.Windows.Forms
         // Sets the bounds for an element.
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
-            // in this case the parent is telling us to refresh our bounds - dont
+            // in this case the parent is telling us to refresh our bounds - don't
             // call PerformLayout
             SetBounds(bounds);
         }

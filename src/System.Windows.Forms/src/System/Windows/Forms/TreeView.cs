@@ -756,7 +756,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            // The TreeView shows up the state imageList after sending this message even if the nodes dont have any stateImageIndex set.
+                            // The TreeView shows up the state imageList after sending this message even if the nodes don't have any stateImageIndex set.
                             // In order to avoid that we refresh nodes which would "reset" the images to none.
                             // This causes flicker but gives us the right behavior
                             RefreshNodes();
@@ -2721,7 +2721,7 @@ namespace System.Windows.Forms
             // comes back up.
             OnMouseDown(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
 
-            //If Validation is cancelled dont fire any events through the Windows TreeView's message loop...
+            //If Validation is cancelled don't fire any events through the Windows TreeView's message loop...
             if (!ValidationCancelled)
             {
                 DefWndProc(ref m);
@@ -3191,7 +3191,7 @@ namespace System.Windows.Forms
                 case (int)User32.WM.NCCALCSIZE:
                 case (int)User32.WM.WINDOWPOSCHANGED:
                 case (int)User32.WM.SIZE:
-                    // While we are changing size of treeView to avoid the scrollbar; dont respond to the window-sizing messages.
+                    // While we are changing size of treeView to avoid the scrollbar; don't respond to the window-sizing messages.
                     if (treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs])
                     {
                         DefWndProc(ref m);
@@ -3457,7 +3457,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            // in this case we dont have a selected node.  The base
+                            // in this case we don't have a selected node.  The base
                             // will ensure we're constrained to the client area.
                             base.WndProc(ref m);
                         }
