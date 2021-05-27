@@ -13,7 +13,7 @@ using static Interop;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the relatd control based on the new mouse location and the resize Rules.
+    ///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the related control based on the new mouse location and the resize Rules.
     /// </summary>
     internal class ResizeBehavior : Behavior
     {
