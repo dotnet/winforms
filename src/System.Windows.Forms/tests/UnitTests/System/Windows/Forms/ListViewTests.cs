@@ -4302,7 +4302,7 @@ namespace System.Windows.Forms.Tests
         {
             foreach (View view in Enum.GetValues(typeof(View)))
             {
-                foreach (bool showGrops in new[] { true, false })
+                foreach (bool showGroups in new[] { true, false })
                 {
                     foreach (bool focused in new[] { true, false })
                     {
@@ -4311,7 +4311,7 @@ namespace System.Windows.Forms.Tests
                             // Updating Focused property of ListViewItem always calls RaiseAutomationEvent.
                             // If ListViewItem is focused and selected then RaiseAutomationEvent is also called.
                             int expectedCallCount = focused && selected ? 2 : 1;
-                            yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
+                            yield return new object[] { view, showGroups, focused, selected, expectedCallCount };
                         }
                     }
                 }
@@ -4354,7 +4354,7 @@ namespace System.Windows.Forms.Tests
                     continue;
                 }
 
-                foreach (bool showGrops in new[] { true, false })
+                foreach (bool showGroups in new[] { true, false })
                 {
                     foreach (bool focused in new[] { true, false })
                     {
@@ -4363,7 +4363,7 @@ namespace System.Windows.Forms.Tests
                             // Updating Focused property of ListViewItem always calls RaiseAutomationEvent.
                             // If ListViewItem is focused and selected then RaiseAutomationEvent is also called.
                             int expectedCallCount = focused && selected ? 2 : 1;
-                            yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
+                            yield return new object[] { view, showGroups, focused, selected, expectedCallCount };
                         }
                     }
                 }
