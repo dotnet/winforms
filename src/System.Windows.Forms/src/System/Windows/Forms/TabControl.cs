@@ -2108,7 +2108,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The tab's window procedure.  Inheritng classes can override this
+        ///  The tab's window procedure.  Inheriting classes can override this
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the tab continues to function properly.
         /// </summary>

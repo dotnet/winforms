@@ -940,7 +940,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The edits window procedure.  Inheritng classes can override this
+        ///  The edits window procedure.  Inheriting classes can override this
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>

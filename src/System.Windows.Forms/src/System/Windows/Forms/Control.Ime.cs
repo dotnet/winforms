@@ -836,7 +836,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Unfocused TopMostParent = " + topMostWinformsParent);
 
                 // We need to reset the PropagatingImeMode to force reinitialization when the winforms component gets focused again;
-                // this enables inheritting the propagating mode from an unmanaged application hosting a winforms component.
+                // this enables inheriting the propagating mode from an unmanaged application hosting a winforms component.
                 // But before leaving the winforms container we need to set the IME to the propagating IME mode since the focused control
                 // may not support IME which would leave the IME disabled.
                 // See the PropagatingImeMode property

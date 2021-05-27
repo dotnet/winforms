@@ -1054,7 +1054,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool causedByFontChanged = false)
         {
-            // If we're inhieriting our scaling from our parent, Scale is really easy:  just do the
+            // If we're inheriting our scaling from our parent, Scale is really easy:  just do the
             // base class implementation.
             if (AutoScaleMode == AutoScaleMode.Inherit)
             {

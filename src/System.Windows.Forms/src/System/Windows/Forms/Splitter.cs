@@ -856,7 +856,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inherriting classes should override this method to respond to the
+        ///  Inheriting classes should override this method to respond to the
         ///  splitterMoving event. This event occurs while the splitter is
         ///  being moved by the user.
         /// </summary>
@@ -871,7 +871,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inherriting classes should override this method to respond to the
+        ///  Inheriting classes should override this method to respond to the
         ///  splitterMoved event. This event occurs when the user finishes
         ///  moving the splitter.
         /// </summary>
