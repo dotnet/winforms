@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is called when creating a window.  Inheriting classes can ovveride
+        ///  This is called when creating a window.  Inheriting classes can override
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.

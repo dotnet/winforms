@@ -741,7 +741,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the text in the Label. Since we can have multiline support
-        ///  this property just overides the base to pluck in the Multiline editor.
+        ///  this property just overrides the base to pluck in the Multiline editor.
         /// </summary>
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         SettingsBindable(true)]

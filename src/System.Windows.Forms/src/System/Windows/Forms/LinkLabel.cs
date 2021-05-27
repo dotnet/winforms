@@ -1781,7 +1781,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Performs the work of setting the bounds of this control. Inheriting classes
-        ///  can overide this function to add size restrictions. Inheriting classes must call
+        ///  can override this function to add size restrictions. Inheriting classes must call
         ///  base.setBoundsCore to actually cause the bounds of the control to change.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
