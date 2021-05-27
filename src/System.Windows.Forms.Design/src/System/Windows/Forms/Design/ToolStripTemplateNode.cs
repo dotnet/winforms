@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Intercept invokation of specific commands and keys
+        ///  Intercept invocation of specific commands and keys
         /// </summary>
         public bool OverrideInvoke(MenuCommand cmd)
         {
@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Intercept invokation of specific commands and keys
+        ///  Intercept invocation of specific commands and keys
         /// </summary>
         public bool OverrideStatus(MenuCommand cmd)
         {
