@@ -603,7 +603,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is called when the user double clicks on a component.  The typical
         ///  behavior is to create an event handler for the component's default event
-        ///  and nativagate to the handler.
+        ///  and delegate (?) to the handler.
         /// </summary>
         public virtual void OnMouseDoubleClick(IComponent component)
         {
