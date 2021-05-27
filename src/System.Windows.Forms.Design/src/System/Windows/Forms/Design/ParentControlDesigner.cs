@@ -1316,7 +1316,7 @@ namespace System.Windows.Forms.Design
                     updatedRect.Width = ((dragRect.X + dragRect.Width) / gridSize.Width) * gridSize.Width - updatedRect.X;
                     updatedRect.Height = ((dragRect.Y + dragRect.Height) / gridSize.Height) * gridSize.Height - updatedRect.Y;
 
-                    // ASURT 71552 <subhag> Added so that if the updated dimnesion is smaller than grid dimension then snap that dimension to
+                    // ASURT 71552 <subhag> Added so that if the updated dimension is smaller than grid dimension then snap that dimension to
                     // the grid dimension
                     //
                     if (updatedRect.Width < gridSize.Width)
