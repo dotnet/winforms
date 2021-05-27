@@ -392,7 +392,7 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detatch.
+                // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detach.
                 Disposed?.Invoke(this, EventArgs.Empty);
 
                 // Destroying the host also destroys all components. In most cases destroying the root component will destroy its designer which also kills the view. So, we destroy the view below last (remember, this view is a "view container" so we are destroying the innermost view first and then destroying our own view).
