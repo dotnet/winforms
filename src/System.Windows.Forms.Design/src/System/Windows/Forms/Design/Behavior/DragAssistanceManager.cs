@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design.Behavior
         // These are created in our init() method (so we don't have to recreate them for every mousemove). These arrays represent the closest distance to any snap point on our target control.  Once these are calculated - we can: 1) remove anything > than snapDistance and 2) determine the smallest distanceoverall
         private int[] _verticalDistances;
         private int[] _horizontalDistances;
-        //T hese are cleared and populated on every mouse move.  These lists contain all the new vertical and horizontal lines we need to draw.  At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays.  This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line.  HA.
+        // These are cleared and populated on every mouse move.  These lists contain all the new vertical and horizontal lines we need to draw.  At the end of each mouse move - these lines are stored off in the vertLines and horzLines arrays.  This way - we can keep track of old snap lines and can avoid erasing and redrawing the same line.  HA.
         private readonly ArrayList _tempVertLines = new ArrayList();
         private readonly ArrayList _tempHorzLines = new ArrayList();
         private Line[] _vertLines = Array.Empty<Line>();
