@@ -2132,7 +2132,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         public virtual void PaintOutline(Graphics g, Rectangle r)
         {
             // draw tree-view glyphs as triangles on Vista and Windows afterword
-            // when Vistual style is enabled
+            // when Visual style is enabled
             if (GridEntryHost.IsExplorerTreeSupported)
             {
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
