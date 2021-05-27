@@ -130,7 +130,7 @@ namespace System.Windows.Forms.Layout
             /// </summary>
             protected virtual bool IsVertical => false;
             /// <summary>
-            ///  Used when you want to translate from right to left, but preserve Margin.Righ
+            ///  Used when you want to translate from right to left, but preserve Margin.Right
             ///  and Margin.Left.
             /// </summary>
             protected Rectangle RTLTranslateNoMarginSwap(Rectangle bounds)
