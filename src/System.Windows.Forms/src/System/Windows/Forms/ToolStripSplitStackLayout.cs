@@ -320,7 +320,7 @@ namespace System.Windows.Forms
                 {
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
-                    { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
+                    { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we don't need it to overflow", item)); }
 #endif
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
@@ -480,7 +480,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
                     {
-                        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item));
+                        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we don't need it to overflow", item));
                     }
 #endif
                     item.SetPlacement(ToolStripItemPlacement.Main);

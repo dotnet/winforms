@@ -318,7 +318,7 @@ namespace System.Windows.Forms
                             cell = Row.Cells[index] as ToolStripPanelCell;
                         }
 
-                        Debug.Assert(cell is not null, "Dont expect cell to be null here, what's going on?");
+                        Debug.Assert(cell is not null, "Don't expect cell to be null here, what's going on?");
 
                         if (cell is not null)
                         {
