@@ -137,7 +137,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Flag used to avoid re-entrancy during WM_IME_NOTFIY message processing - see WmImeNotify().
+        ///  Flag used to avoid re-entrancy during WM_IME_NOTIFY message processing - see WmImeNotify().
         ///  Also to avoid raising the ImeModeChanged event more than once during the process of changing the ImeMode.
         /// </summary>
         internal int DisableImeModeChangedCount
