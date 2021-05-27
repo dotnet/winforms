@@ -747,7 +747,7 @@ namespace System.Windows.Forms
                         DataGridView.NewRowIndex == Index &&
                         !value)
                     {
-                        // the 'new' row cannot be made invisble.
+                        // the 'new' row cannot be made invisible.
                         throw new InvalidOperationException(SR.DataGridViewBand_NewRowCannotBeInvisible);
                     }
 

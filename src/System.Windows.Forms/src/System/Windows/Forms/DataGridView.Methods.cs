@@ -15368,7 +15368,7 @@ namespace System.Windows.Forms
                                     Debug.Assert(DataConnection is not null);
                                     Debug.Assert(DataConnection.CurrencyManager is not null);
                                     Debug.Assert(DataConnection.CurrencyManager.Position == _ptCurrentCell.Y);
-                                    // the row associated with the currency manager's position cannot be made invisble.
+                                    // the row associated with the currency manager's position cannot be made invisible.
                                     throw new InvalidOperationException(SR.DataGridView_CurrencyManagerRowCannotBeInvisible);
                                 }
 
