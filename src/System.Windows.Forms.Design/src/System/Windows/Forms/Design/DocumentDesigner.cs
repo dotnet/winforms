@@ -803,7 +803,7 @@ namespace System.Windows.Forms.Design
                     cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                 }
 
-                // We must do the ineritance scan early, but not so early that we haven't hooked events
+                // We must do the inheritance scan early, but not so early that we haven't hooked events
                 // to handle invisible components.  We also use the variable "inheritanceService"
                 // as a check in OnCreateHandle -- we cannot call base.OnCreateHandle if we have
                 // not done an inheritance scan yet, because this will cause the base control
