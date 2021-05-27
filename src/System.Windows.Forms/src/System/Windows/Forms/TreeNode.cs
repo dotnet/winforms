@@ -1629,7 +1629,7 @@ namespace System.Windows.Forms
                 switch (entry.Name)
                 {
                     case "PropBag":
-                        // this would throw a InvalidaCastException if improper cast, thus validating the serializationInfo for OwnerDrawPropertyBag
+                        // this would throw a InvalidCastException if improper cast, thus validating the serializationInfo for OwnerDrawPropertyBag
                         propBag = (OwnerDrawPropertyBag)serializationInfo.GetValue(entry.Name, typeof(OwnerDrawPropertyBag));
                         break;
                     case nameof(Text):
