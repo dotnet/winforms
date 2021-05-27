@@ -571,7 +571,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns a specific AccessibleObbject associated w/ the objectID
+        ///  Returns a specific AccessibleObject associated w/ the objectID
         /// </summary>
         protected virtual AccessibleObject GetAccessibilityObjectById(int objectId)
         {
