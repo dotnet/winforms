@@ -14,7 +14,7 @@ namespace System.ComponentModel.Design.Serialization
         protected enum ReloadOptions
         {
             /// <summary>
-            ///  Peform the default behavior.
+            ///  Perform the default behavior.
             /// </summary>
             Default = 0x00,
 
