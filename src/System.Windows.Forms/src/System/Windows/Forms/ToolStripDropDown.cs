@@ -1436,7 +1436,7 @@ namespace System.Windows.Forms
                         // escape should cancel auto expansion
                         OwnerToolStrip.MenuAutoExpand = false;
                         // When the control cannot be select (TabStop), we can press "Tab" to
-                        // navigate inside the owner toolstip. Otherwise, press "Tab" will leave
+                        // navigate inside the owner toolstrip. Otherwise, press "Tab" will leave
                         // the owner toolstrip so it should exit the menu mode.
                         if (OwnerToolStrip.CanSelect)
                         {
