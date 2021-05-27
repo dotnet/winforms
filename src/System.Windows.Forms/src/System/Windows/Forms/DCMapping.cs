@@ -59,7 +59,7 @@ namespace System.Windows.Forms
             {
                 var hOriginalClippingRegion = new Gdi32.RegionScope(hdc);
 
-                // Shift the viewpoint origint by coordinates specified in "bounds".
+                // Shift the viewpoint origin by coordinates specified in "bounds".
                 var lastViewPort = new Point();
                 success = Gdi32.SetViewportOrgEx(
                     hdc,
