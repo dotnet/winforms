@@ -945,20 +945,20 @@ namespace System.Windows.Forms.Tests
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
             }
 
-            AccessibleObject listViewItemaAccessibleObject = listViewItem.AccessibilityObject;
+            AccessibleObject listViewItemAccessibleObject = listViewItem.AccessibilityObject;
 
-            Assert.Equal(ToggleState.Off, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
             Assert.False(listViewItem.Checked);
 
-            listViewItemaAccessibleObject.Toggle();
+            listViewItemAccessibleObject.Toggle();
 
-            Assert.Equal(ToggleState.On, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.On, listViewItemAccessibleObject.ToggleState);
             Assert.True(listViewItem.Checked);
 
             // toggle again
-            listViewItemaAccessibleObject.Toggle();
+            listViewItemAccessibleObject.Toggle();
 
-            Assert.Equal(ToggleState.Off, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
             Assert.False(listViewItem.Checked);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
