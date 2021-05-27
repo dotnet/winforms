@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(ownerControl.IsHandleCreated);
             Assert.Equal(IntPtr.Zero, controlAccessibleObject.HandleInternal);
 
-            // force the owner contrl to create its handle
+            // force the owner control to create its handle
             ownerControl.CreateControl();
 
             Assert.True(ownerControl.IsHandleCreated);
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(ownerControl.IsHandleCreated);
             Assert.Equal(IntPtr.Zero, accessibleObject.HandleInternal);
 
-            // force the owner contrl to create its handle
+            // force the owner control to create its handle
             ownerControl.CreateControl();
 
             Assert.True(ownerControl.IsHandleCreated);
