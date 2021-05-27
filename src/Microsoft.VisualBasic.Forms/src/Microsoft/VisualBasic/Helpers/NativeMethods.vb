@@ -107,7 +107,7 @@ Namespace Microsoft.VisualBasic.CompilerServices
             '   DWORDLONG ullAvailPageFile;         Size of available memory to committed (ullTotalPageFile max).
             '   DWORDLONG ullTotalVirtual;          Total size of user potion of virtual address space of calling process.
             '   DWORDLONG ullAvailVirtual;          Total size of unreserved and uncommitted memory in virtual address space.
-            '   DWORDLONG ullAvailExtendedVirtual;  Total size of unreserved and uncommitted memory in extended portion of virual address.
+            '   DWORDLONG ullAvailExtendedVirtual;  Total size of unreserved and uncommitted memory in extended portion of virtual address.
             '} MEMORYSTATUSEX, *LPMEMORYSTATUSEX;
 
             Friend dwLength As UInt32
