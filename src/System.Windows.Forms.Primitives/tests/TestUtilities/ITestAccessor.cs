@@ -8,7 +8,7 @@ namespace System
     ///  Interface for accessing internals from tests.
     /// </summary>
     /// <remarks>
-    ///  A non generic representation of the acessor functionality is needed to
+    ///  A non generic representation of the accessor functionality is needed to
     ///  allow dynamically creating arbitrary <see cref="TestAccessor{T}"/> from
     ///  helper methods.
     /// </remarks>
