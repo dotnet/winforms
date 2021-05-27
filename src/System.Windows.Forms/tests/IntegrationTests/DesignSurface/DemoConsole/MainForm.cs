@@ -177,7 +177,7 @@ namespace TestConsole
                             Button b3 = surface.CreateControl<Button>(new Size(200, 40), new Point(22, 22));
                             b1.Text = "I'm the first Button";
                             b2.Text = "I'm the second Button";
-                            b3.Text = "I'm the third Button (belonging to the BroupBox)";
+                            b3.Text = "I'm the third Button (belonging to the GroupBox)";
                             GroupBox gb = surface.CreateControl<GroupBox>(new Size(300, 180), new Point(100, 200));
                             b3.Parent = gb;
                             b3.BackColor = Color.LightGray;
