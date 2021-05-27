@@ -932,7 +932,7 @@ namespace System.Windows.Forms.Design
 #if UNUSED
         /// <summary>
         ///  This should never be called.  It is a placeholder for
-        ///  menu items that we temporarially want to disable.
+        ///  menu items that we temporarily want to disable.
         /// </summary>
         private void OnMenuNever(object sender, EventArgs e) {
             Debug.Fail("This menu item should never be invoked.");
