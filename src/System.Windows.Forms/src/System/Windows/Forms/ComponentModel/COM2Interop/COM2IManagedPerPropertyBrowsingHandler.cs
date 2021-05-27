@@ -111,7 +111,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     else
                     {
-                        // somethings odd
+                        // something's odd
                         Debug.Fail("No dot in class name?");
                         continue;
                     }
