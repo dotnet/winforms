@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called when the designer is intialized.  This allows the designer to provide some meaningful default
+        ///  Called when the designer is initialized.  This allows the designer to provide some meaningful default
         ///  values in the component.  The default implementation of this sets the components's default property to
         ///  it's name, if that property is a string.
         /// </summary>

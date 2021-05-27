@@ -1606,7 +1606,7 @@ namespace System.Windows.Forms.Design
                 MenuItem.ShowDropDown();
                 ShowOwnerDropDown(MenuItem);
 
-                // Every time you intitalize the dropDown Reset Glyphs
+                // Every time you initialize the dropDown Reset Glyphs
                 ResetGlyphs(MenuItem);
 
                 if (!IsOnContextMenu && !dummyItemAdded)

@@ -776,7 +776,7 @@ namespace System.Windows.Forms.Design
                 // M3.2 CONTROL ARRAY IS CUT
 
                 // Create the view for this component. We first create the designer frame so we can provide
-                // the overlay and split window services, and then later on we initilaize the frame with
+                // the overlay and split window services, and then later on we initialize the frame with
                 // the designer view.
                 //
                 frame = new DesignerFrame(component.Site);
