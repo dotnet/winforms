@@ -401,7 +401,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Timer_Dispose_NotStarted_Succcess()
+        public void Timer_Dispose_NotStarted_Success()
         {
             using var timer = new Timer();
             timer.Dispose();
@@ -413,7 +413,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Timer_Dispose_Started_Succcess()
+        public void Timer_Dispose_Started_Success()
         {
             using var timer = new Timer();
             timer.Start();
@@ -427,7 +427,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Timer_Dispose_Stopped_Succcess()
+        public void Timer_Dispose_Stopped_Success()
         {
             using var timer = new Timer();
             timer.Start();

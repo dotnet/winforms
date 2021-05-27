@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AxHost_InvokeEditMode_Invoke_Sucess()
+        public void AxHost_InvokeEditMode_Invoke_Success()
         {
             using var control = new SubAxHost(EmptyClsidString);
             control.InvokeEditMode();
@@ -1771,7 +1771,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(InvokeEditMode_Site_TestData))]
-        public void AxHost_InvokeEditMode_InvokeWithSite_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        public void AxHost_InvokeEditMode_InvokeWithSite_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -1822,7 +1822,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteWithParent_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithParent_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             using var parent = new Control();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -1876,7 +1876,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedNoSelectionStyleProperty_Sucess(bool componentSelected)
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedNoSelectionStyleProperty_Success(bool componentSelected)
         {
             using var control = new SubAxHost(WebBrowserClsidString);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
@@ -1931,7 +1931,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedInvalidSelectionStyleProperty_Sucess(bool componentSelected)
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedInvalidSelectionStyleProperty_Success(bool componentSelected)
         {
             using var control = new InvalidSelectionStyleAxHost(WebBrowserClsidString);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
@@ -1988,7 +1988,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStyleProperty_Sucess(bool componentSelected)
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStyleProperty_Success(bool componentSelected)
         {
             using var control = new ValidSelectionStyleAxHost(WebBrowserClsidString);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
@@ -2046,7 +2046,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(InvokeEditMode_Site_TestData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteWithHandle_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithHandle_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -2110,7 +2110,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(InvokeEditMode_SiteWithParent_TestData))]
-        public void AxHost_InvokeEditMode_InvokeWithSiteWithParentWithHandle_Sucess(bool designMode, object selectionService, int expectedCallCount)
+        public void AxHost_InvokeEditMode_InvokeWithSiteWithParentWithHandle_Success(bool designMode, object selectionService, int expectedCallCount)
         {
             using var parent = new Control();
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -2179,7 +2179,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, 2)]
         [InlineData(false, 0)]
-        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStylePropertyWithHandle_Sucess(bool componentSelected, int expectedSelectionStyle)
+        public void AxHost_InvokeEditMode_InvokeWithSiteDesignModeWithComponentSelectedValidSelectionStylePropertyWithHandle_Success(bool componentSelected, int expectedSelectionStyle)
         {
             using var control = new ValidSelectionStyleAxHost(WebBrowserClsidString);
             var mockSelectionService = new Mock<ISelectionService>(MockBehavior.Strict);
