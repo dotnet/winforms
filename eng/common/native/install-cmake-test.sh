@@ -46,7 +46,7 @@ while (($# > 0)); do
       ;;
     --help)
       echo "Common settings:"
-      echo "  --baseuri <value>        Base file directory or Url wrom which to acquire tool archives"
+      echo "  --baseuri <value>        Base file directory or Url from which to acquire tool archives"
       echo "  --installpath <value>    Base directory to install native tool to"
       echo "  --clean                  Don't install the tool, just clean up the current install of the tool"
       echo "  --force                  Force install of tools even if they previously exist"
