@@ -275,7 +275,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the Veritcal Scroll bar for this ScrollableControl.
+        ///  Gets the Vertical Scroll bar for this ScrollableControl.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ScrollableControlVerticalScrollDescr))]
