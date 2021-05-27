@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Draws the splitter line at the requested location. Should only be called
-        ///  by drawSpltBar.
+        ///  by drawSplitBar.
         /// </summary>
         private void DrawSplitHelper(int splitSize)
         {
