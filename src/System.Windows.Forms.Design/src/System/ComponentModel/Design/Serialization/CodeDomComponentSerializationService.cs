@@ -1620,7 +1620,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     object instance = ((IDesignerSerializationManager)_manager).GetInstance(name);
 
-                    // If an object is retrived from the current container as a result of GetInstance(), we need to make sure and fully deserialize it before returning it.  To do this, we will force a resolve on this name and not interfere the next time GetInstance() is called with this component.  This will force the component to completely deserialize.
+                    // If an object is retrieved from the current container as a result of GetInstance(), we need to make sure and fully deserialize it before returning it.  To do this, we will force a resolve on this name and not interfere the next time GetInstance() is called with this component.  This will force the component to completely deserialize.
                     if (_resolveNameEventHandler != null && instance != null && !_resolved.ContainsKey(name) &&
                         _manager.PreserveNames && _manager.Container != null && _manager.Container.Components[name] != null)
                     {
