@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  Just forwards to TryCalculatePreferredSizeRow. This will layout elements from the start index to the end
         ///  index. RowBounds was computed by a call to measure row and is used for alignment/boxstretch.
-        ///  See the ElementProxy class for an explaination of the elementProxy parameter.
+        ///  See the ElementProxy class for an explanation of the elementProxy parameter.
         /// </summary>
         private void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
         {
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Layout
         ///  Just forwards to TryCalculatePreferredSizeRow. breakIndex is the index of the first control not to
         ///  fit in the displayRectangle. The returned Size is the size required to layout the
         ///  controls from startIndex up to but not including breakIndex. See the ElementProxy
-        ///  class for an explaination of the elementProxy parameter.
+        ///  class for an explanation of the elementProxy parameter.
         /// </summary>
         private Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
         {
