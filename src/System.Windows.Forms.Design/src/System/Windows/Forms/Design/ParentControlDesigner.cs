@@ -30,8 +30,8 @@ namespace System.Windows.Forms.Design
         private Control _pendingRemoveControl;                              // we've gotten an OnComponentRemoving, and are waiting for OnComponentRemove
         private IComponentChangeService _componentChangeSvc;
         private DragAssistanceManager _dragManager;                         //used to apply snaplines when dragging a new tool rect on the designer's surface
-        private ToolboxSnapDragDropEventArgs _toolboxSnapDragDropEventArgs; //used to store extra info about a beh. svc. dragdrop from the toolbx
-        private ToolboxItemSnapLineBehavior _toolboxItemSnapLineBehavior;   //this is our generic snapline box for dragging comps from the toolbx
+        private ToolboxSnapDragDropEventArgs _toolboxSnapDragDropEventArgs; //used to store extra info about a beh. svc. dragdrop from the toolbox
+        private ToolboxItemSnapLineBehavior _toolboxItemSnapLineBehavior;   //this is our generic snapline box for dragging comps from the toolbox
         private Graphics _graphics;                                         //graphics object of the adornerwindow (via BehaviorService)
 
         // Services that we keep around for the duration of a drag.  you should always check
