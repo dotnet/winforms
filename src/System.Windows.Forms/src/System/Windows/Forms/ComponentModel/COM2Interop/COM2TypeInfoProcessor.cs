@@ -301,7 +301,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Resolves a value type for a property from a TYPEDESC.  Value types can be
         ///  user defined, which and may be aliased into other type infos.  This function
-        ///  will recusively walk the ITypeInfos to resolve the type to a clr Type.
+        ///  will recursively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
         private unsafe static Type GetValueTypeFromTypeDesc(in TYPEDESC typeDesc, ITypeInfo typeInfo, object[] typeData)
         {
