@@ -163,7 +163,7 @@ namespace System.Windows.Forms
             {
                 scaledListItemStartPosition = LogicalToDeviceUnits(defaultListItemStartPos);
 
-                // height inlude 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number
+                // height include 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number
                 // that might helps us in positioning control in the center for list items.
                 scaledListItemBordersHeight = 2 * LogicalToDeviceUnits(defaultListItemBorderHeight);
                 scaledListItemPaddingBuffer = LogicalToDeviceUnits(defaultListItemPaddingBuffer);
