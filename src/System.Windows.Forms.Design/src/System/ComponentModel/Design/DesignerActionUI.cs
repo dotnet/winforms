@@ -488,7 +488,7 @@ namespace System.ComponentModel.Design
             }
 
             object primarySelection = _selSvc.PrimarySelection;
-            //verfiy that we have obtained a valid component with designer actions
+            //verify that we have obtained a valid component with designer actions
             if (primarySelection is null || !_componentToGlyph.Contains(primarySelection))
             {
                 return false;
