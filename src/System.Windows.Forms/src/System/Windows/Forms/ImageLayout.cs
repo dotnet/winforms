@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         Tile,
 
         /// <summary>
-        ///  The image is centred within the controls client rectangle.
+        ///  The image is centered within the controls client rectangle.
         /// </summary>
         Center,
 
