@@ -280,7 +280,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             /// <summary>
             ///  Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse
-            ///  Messages so we can send drag notifcations.
+            ///  Messages so we can send drag notifications.
             /// </summary>
             internal void StartDragNotification() => ProcessingDrag = true;
 
