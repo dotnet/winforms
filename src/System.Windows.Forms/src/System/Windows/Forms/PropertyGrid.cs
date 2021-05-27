@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UseTextForAccessibility, false);
 
             // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue.
-            // So, recalculate static variables everytime property grid initialized.
+            // So, recalculate static variables every time property grid initialized.
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
                 RescaleConstants();
