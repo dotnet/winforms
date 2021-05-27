@@ -1979,7 +1979,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Converts byte offset to unicode offsets.
-        ///  When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
+        ///  When processing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
         ///  as opposed to RICHEDIT which does it always as character positions.
         ///  This method is used when handling the WM_GETSEL message.
         /// </summary>
@@ -2027,7 +2027,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Converts unicode offset to byte offsets.
-        ///  When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
+        ///  When processing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
         ///  as opposed to RICHEDIT which does it always as character positions.
         ///  This method is used when handling the WM_SETSEL message.
         /// </summary>
