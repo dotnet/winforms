@@ -476,7 +476,7 @@ namespace System.ComponentModel.Design.Serialization
                 delegator.Manager.PreserveNames = recycleInstances;
                 delegator.Manager.ValidateRecycledTypes = validateRecycledTypes;
                 ArrayList objects = null;
-                // recreate resouces
+                // recreate resources
                 if (_resourceStream != null)
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
