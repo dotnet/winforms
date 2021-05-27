@@ -788,7 +788,7 @@ namespace System.Windows.Forms
             UpdateEditText();
         }
 
-        // This is not a breaking change -- Even though this control previously autosized to hieght,
+        // This is not a breaking change -- Even though this control previously autosized to height,
         // it didn't actually have an AutoSize property.  The new AutoSize property enables the
         // smarter behavior.
         internal override Size GetPreferredSizeCore(Size proposedConstraints)

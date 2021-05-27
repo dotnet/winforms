@@ -235,7 +235,7 @@ namespace System.Windows.Forms.Layout
                 // Position the element (if applicable).
                 if (!measureOnly)
                 {
-                    // If measureOnly = false, rowBounds.Height = measured row hieght
+                    // If measureOnly = false, rowBounds.Height = measured row height
                     // (otherwise its the remaining displayRect of the container)
 
                     Rectangle cellBounds = new Rectangle(location, new Size(requiredSize.Width, rowBounds.Height));
