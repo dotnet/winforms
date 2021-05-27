@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collection edtior with.");
+            Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
         }
 
         internal EditorServiceContext(ComponentDesigner designer, PropertyDescriptor prop, string newVerbText) : this(designer, prop)
