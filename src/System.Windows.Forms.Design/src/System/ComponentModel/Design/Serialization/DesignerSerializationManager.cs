@@ -139,7 +139,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This property determines the behavior of the CreateInstance method and only applies if RecyleInstances is true.  If true, and  an existing instance is found for the given name, it will only be returned if the two types match.  If false, the instance will be returned even if the two types do not match.  This is useful for "morphing" one type of object to another if they have similar properties but share no common parent or interface. The default value of this property is true.
+        ///  This property determines the behavior of the CreateInstance method and only applies if RecycleInstances is true.  If true, and  an existing instance is found for the given name, it will only be returned if the two types match.  If false, the instance will be returned even if the two types do not match.  This is useful for "morphing" one type of object to another if they have similar properties but share no common parent or interface. The default value of this property is true.
         /// </summary>
         public bool ValidateRecycledTypes
         {
