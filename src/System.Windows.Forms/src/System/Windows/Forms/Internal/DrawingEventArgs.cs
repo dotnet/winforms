@@ -102,14 +102,14 @@ namespace System.Windows.Forms
                 Debug.Assert(!_hdc.IsNull);
 
                 // We need to manually unset the palette here so this scope shouldn't be disposed
-                var palleteScope = Gdi32.SelectPaletteScope.HalftonePalette(
+                var paletteScope = Gdi32.SelectPaletteScope.HalftonePalette(
                     _hdc,
                     forceBackground: false,
                     realizePalette: false);
 
-                GC.SuppressFinalize(palleteScope);
+                GC.SuppressFinalize(paletteScope);
 
-                _oldPalette = palleteScope.HPalette;
+                _oldPalette = paletteScope.HPalette;
 
                 _graphics = Graphics.FromHdcInternal((IntPtr)_hdc);
                 _graphics.PageUnit = GraphicsUnit.Pixel;
