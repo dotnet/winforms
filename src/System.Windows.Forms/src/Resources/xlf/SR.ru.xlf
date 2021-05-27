@@ -4765,7 +4765,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">Загруженные сборки</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4774,7 +4774,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------

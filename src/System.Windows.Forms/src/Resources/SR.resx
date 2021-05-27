@@ -2863,12 +2863,12 @@ just-in-time (JIT) debugging instead of this dialog box.
   <data name="ExDlgMsgLoadedAssembliesSection" xml:space="preserve">
     <value>Loaded Assemblies</value>
   </data>
-  <data name="ExDlgMsgSectionSeperator" xml:space="preserve">
+  <data name="ExDlgMsgSectionSeparator" xml:space="preserve">
     <value>
 ************** {0} **************
 </value>
   </data>
-  <data name="ExDlgMsgSeperator" xml:space="preserve">
+  <data name="ExDlgMsgSeparator" xml:space="preserve">
     <value>----------------------------------------
 </value>
   </data>
