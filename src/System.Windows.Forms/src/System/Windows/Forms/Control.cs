@@ -8885,7 +8885,7 @@ namespace System.Windows.Forms
         ///  True = Validation was cancelled, control is invalid, reject its new value
         ///
         ///  NOTE: This is the lowest possible level of validation. It does not account
-        ///  for the context in which the validation is occuring, eg. change of focus
+        ///  for the context in which the validation is occurring, eg. change of focus
         ///  between controls in a container. Stuff like that is handled by the caller.
         /// </summary>
         internal bool PerformControlValidation(bool bulkValidation)
