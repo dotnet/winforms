@@ -128,7 +128,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate()
         {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Rectangle rect)
         {
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Region r)
         {

@@ -396,19 +396,19 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate() => _adornerWindow.InvalidateAdornerWindow();
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Rectangle rect) => _adornerWindow.InvalidateAdornerWindow(rect);
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Region r) => _adornerWindow.InvalidateAdornerWindow(r);
