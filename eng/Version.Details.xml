@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- 
-Dependencies registred here by Name and Uri will be updated by Maestro via darc update-dependencies 
+Dependencies registered here by Name and Uri will be updated by Maestro via darc update-dependencies 
   They will be updated either in eng/Versions.props (most) or in global.json (for example: Microsoft.DotNet.Arcade.Sdk) 
 Note: if the Uri is a new place, you will need to add a subscription from that place to us in the appropriate channel 
   And you can check these with "darc get-dependencies <dash dash>target-repo "winforms" 
