@@ -502,7 +502,7 @@ Decade cell:
 
 ### Accessibility actions
 
-Here are descibed accessibility actions of supported patterns.
+Here are described accessibility actions of supported patterns.
 :point_up: The "Focus" action has unexpected behavior, because when you call it from Inspect,
 the testing form loses focus. Then the form gets focus, in this case,
 MonthCalendar.OnGotFocus handler works, that raises accessibility focus event for the focused cell accessible object.
