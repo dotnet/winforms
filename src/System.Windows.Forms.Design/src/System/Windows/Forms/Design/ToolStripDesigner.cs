@@ -411,7 +411,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Handy way of gettting our ToolStrip
+        ///  Handy way of getting our ToolStrip
         /// </summary>
         protected ToolStrip ToolStrip
         {
