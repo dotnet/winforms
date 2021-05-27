@@ -1285,7 +1285,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                // If it is the left button, start a rubber band drag to laso controls.
+                // If it is the left button, start a rubber band drag to lasso controls.
                 if (e.Button == MouseButtons.Left)
                 {
                     mouseDragStart = new Point(e.X, e.Y);
