@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The contextMenuStrip associated with this control. The contextMenuStrip
         ///  will be shown when the user right clicks the mouse on the control.
-        ///  Note: if a context menu is also assigned, it will take precidence over this property.
+        ///  Note: if a context menu is also assigned, it will take precedence over this property.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]

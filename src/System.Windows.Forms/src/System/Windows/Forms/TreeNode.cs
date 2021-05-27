@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // let imagekey take precidence
+            // let imagekey take precedence
             if (imageKey is not null)
             {
                 ImageKey = imageKey;
@@ -1681,7 +1681,7 @@ namespace System.Windows.Forms
                 ImageIndex = imageIndex;
             }
 
-            // let selectedimagekey take precidence
+            // let selectedimagekey take precedence
             if (selectedImageKey is not null)
             {
                 SelectedImageKey = selectedImageKey;
@@ -1691,7 +1691,7 @@ namespace System.Windows.Forms
                 SelectedImageIndex = selectedImageIndex;
             }
 
-            // let stateimagekey take precidence
+            // let stateimagekey take precedence
             if (stateImageKey is not null)
             {
                 StateImageKey = stateImageKey;
