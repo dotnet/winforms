@@ -4161,7 +4161,7 @@ namespace System.Windows.Forms
             Invalidate();
             ArrangeIcons(alignStyle);
 
-            // Any newly added items shoul dhave the correct location.
+            // Any newly added items should have the correct location.
             // UpdateListViewItemsLocations();
 
             // Update sorted order
