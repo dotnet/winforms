@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         foreach (CodeStatement element in statements)
                         {
-                            // We create the resource manager ouselves here because it's not just a straight parse of the code. Do special parsing of the resources statement
+                            // We create the resource manager ourselves here because it's not just a straight parse of the code. Do special parsing of the resources statement
                             if (element is CodeVariableDeclarationStatement statement)
                             {
                                 TraceWarningIf(!statement.Name.Equals(ResourceManagerName), "WARNING: Resource manager serializer being invoked to deserialize a collection we didn't create.");
