@@ -127,7 +127,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This Function gets the object from the givem object. The input is an arrayList returned as an Object.
+        ///  This Function gets the object from the given object. The input is an arrayList returned as an Object.
         ///  The output is a arraylist which contains the individual objects that need to be created.
         /// </summary>
         protected virtual IList GetObjectsFromInstance(object instance) => new ArrayList { instance };
