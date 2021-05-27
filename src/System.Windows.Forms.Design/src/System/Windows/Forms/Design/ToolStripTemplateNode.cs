@@ -677,7 +677,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This Internal function is called from the ToolStripItemDesigner to relinquish the resources used by the EditorToolStrip. This Fucntion disposes the ToolStrip and its components and also clears the event handlers associated.
+        ///  This Internal function is called from the ToolStripItemDesigner to relinquish the resources used by the EditorToolStrip. This Function disposes the ToolStrip and its components and also clears the event handlers associated.
         /// </summary>
         internal void CloseEditor()
         {
