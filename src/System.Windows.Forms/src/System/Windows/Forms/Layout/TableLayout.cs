@@ -257,7 +257,7 @@ namespace System.Windows.Forms.Layout
         ///  GetPreferredSize:  Called on the container to determine the size that best fits its contents.
         ///  Container: IArrangedElement to determine preferredSize (could be table layout panel but doesnt have to be - eg. ToolStrip)
         ///  ProposedContstraints: the suggested size that the table layout should fit into.  If either argument is 0,
-        ///             TableLayout pretends it's unconstrained for perfomance reasons.
+        ///             TableLayout pretends it's unconstrained for performance reasons.
         ///
         ///  Summary of Algorithm:
         ///  Similar to LayoutCore.  Row/Column assignments are NOT cached.  TableLayout uses AGGRESSIVE

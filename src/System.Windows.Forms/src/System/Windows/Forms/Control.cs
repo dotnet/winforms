@@ -8662,7 +8662,7 @@ namespace System.Windows.Forms
             }
 
             // We need to use themeing painting for certain controls (like TabPage) when they parent other controls.
-            // But we don't want to to this always as this causes serious preformance (at Runtime and DesignTime)
+            // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
             // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
             if (Application.RenderWithVisualStyles && parent.RenderTransparencyWithVisualStyles)
             {
