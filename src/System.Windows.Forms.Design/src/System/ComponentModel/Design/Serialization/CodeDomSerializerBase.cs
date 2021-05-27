@@ -541,7 +541,7 @@ namespace System.ComponentModel.Design.Serialization
                 manager.Context.Push(statement);
                 try
                 {
-                    // Perf: is -> as changes, change ordering based on possibility of occurance
+                    // Perf: is -> as changes, change ordering based on possibility of occurrence
                     // Please excuse the bad formatting, but I think it is more readable this way than nested indenting.
                     if (statement is CodeAssignStatement cas)
                     {
@@ -879,7 +879,7 @@ namespace System.ComponentModel.Design.Serialization
             object result = expression;
             using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeExpression)))
             {
-                // Perf: is -> as changes, change ordering based on possibility of occurance
+                // Perf: is -> as changes, change ordering based on possibility of occurrence
                 // If you are adding to this, use as instead of is + cast and order new expressions in order of frequency in typical user code.
                 CodePropertyReferenceExpression propertyReferenceEx;
                 CodeTypeReferenceExpression typeReferenceEx;
