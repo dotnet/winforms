@@ -736,7 +736,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Usually IComponent things are sited and this notification will be
                 // fired automatically by the PropertyDescriptor.  However, for non-IComponent sub objects
-                // or sub objects that are non-sited sub components, we need to manuall fire
+                // or sub objects that are non-sited sub components, we need to manually fire
                 // the notification.
                 //
                 bool needChangeNotify = !(obj is IComponent) || ((IComponent)obj).Site is null;
