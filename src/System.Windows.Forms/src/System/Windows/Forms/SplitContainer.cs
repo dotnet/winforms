@@ -965,7 +965,7 @@ namespace System.Windows.Forms
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
-        ///  Overides the Control.OnGotFocus to Invalidate...
+        ///  Overrides the Control.OnGotFocus to Invalidate...
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
