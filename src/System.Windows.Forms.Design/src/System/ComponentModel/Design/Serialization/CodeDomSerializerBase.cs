@@ -836,7 +836,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        TraceErrorIf(!(array is Array), "Array resovled to something other than an array: {0}", (array is null ? "(null)" : array.GetType().Name));
+                        TraceErrorIf(!(array is Array), "Array resolved to something other than an array: {0}", (array is null ? "(null)" : array.GetType().Name));
                         TraceErrorIf(!indexesOK, "Indexes to array could not be converted to int32.");
                     }
                 }
