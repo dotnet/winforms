@@ -7,7 +7,7 @@ using System.CodeDom;
 namespace System.ComponentModel.Design.Serialization
 {
     /// <summary>
-    ///  The root context is added by a type code dom serailizier to provide a
+    ///  The root context is added by a type code dom serializer to provide a
     ///  definiton of the "root" object.
     /// </summary>
     public sealed class RootContext
