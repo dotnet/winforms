@@ -830,7 +830,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets or gets the visiblity state of the help pane.
+        ///  Sets or gets the visibility state of the help pane.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(true)]
@@ -1545,7 +1545,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets or gets the visiblity state of the toolStrip.
+        ///  Sets or gets the visibility state of the toolStrip.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(true)]
