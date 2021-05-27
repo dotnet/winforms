@@ -2107,7 +2107,7 @@ namespace System.Windows.Forms.Design
                 // If a control fails to get pasted; then we should remember its associatedComponents
                 // so that they are not pasted.
                 // Refer VsWhidbey : 477583
-                ICollection associatedCompsOfFailedContol = null;
+                ICollection associatedCompsOfFailedControl = null;
 
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 Debug.Assert(!CompModSwitches.CommonDesignerServices.Enabled || host != null, "IDesignerHost not found");
@@ -2280,10 +2280,10 @@ namespace System.Windows.Forms.Design
                                 {
                                     bool foundAssociatedControl = false;
                                     // If we have failed to add a control in this Paste operation ...
-                                    if (associatedCompsOfFailedContol != null)
+                                    if (associatedCompsOfFailedControl != null)
                                     {
                                         // then don't add its children controls.
-                                        foreach (Component comp in associatedCompsOfFailedContol)
+                                        foreach (Component comp in associatedCompsOfFailedControl)
                                         {
                                             if (comp == obj as Component)
                                             {
@@ -2347,7 +2347,7 @@ namespace System.Windows.Forms.Design
                                         if (!((IOleDragClient)designer).AddComponent(curComp, name, createdItems))
                                         {
                                             //cache the associatedComponents only for FAILED control.
-                                            associatedCompsOfFailedContol = designerComps;
+                                            associatedCompsOfFailedControl = designerComps;
                                             // now we will jump out of the using block and call trans.Dispose()
                                             // which in turn calls trans.Cancel for an uncommitted transaction,
                                             // We want to cancel the transaction because otherwise we'll have
