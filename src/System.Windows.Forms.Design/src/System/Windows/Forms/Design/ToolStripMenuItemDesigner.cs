@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design
         // Make Selection service a class level member.. used a lot.
         private ISelectionService _selectionService;
 
-        // DesignerTrnasaction used for removing Items
+        // DesignerTransaction used for removing Items
         private DesignerTransaction _pendingTransaction;
         private bool fireComponentChanged;
         //indicates that we are adding new MenuItem ..
@@ -1812,18 +1812,18 @@ namespace System.Windows.Forms.Design
             if (!IsOnContextMenu)
             {
                 ToolStrip mainStrip = GetMainToolStrip();
-                if (_designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner && mainStripDesigner.InsertTansaction != null)
+                if (_designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner && mainStripDesigner.InsertTransaction != null)
                 {
                     if (commit)
                     {
-                        mainStripDesigner.InsertTansaction.Commit();
+                        mainStripDesigner.InsertTransaction.Commit();
                     }
                     else
                     {
-                        mainStripDesigner.InsertTansaction.Cancel();
+                        mainStripDesigner.InsertTransaction.Cancel();
                     }
 
-                    mainStripDesigner.InsertTansaction = null;
+                    mainStripDesigner.InsertTransaction = null;
                 }
             }
             else
@@ -1860,11 +1860,11 @@ namespace System.Windows.Forms.Design
                 if (!IsOnContextMenu)
                 {
                     ToolStrip mainStrip = GetMainToolStrip();
-                    if (_designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner && !mainStripDesigner.EditingCollection && mainStripDesigner.InsertTansaction is null)
+                    if (_designerHost.GetDesigner(mainStrip) is ToolStripDesigner mainStripDesigner && !mainStripDesigner.EditingCollection && mainStripDesigner.InsertTransaction is null)
                     {
                         componentAddingFired = true;
                         Debug.Assert(_designerHost != null, "Why didn't we get a designer host?");
-                        mainStripDesigner.InsertTansaction = _designerHost.CreateTransaction(SR.ToolStripInsertingIntoDropDownTransaction);
+                        mainStripDesigner.InsertTransaction = _designerHost.CreateTransaction(SR.ToolStripInsertingIntoDropDownTransaction);
                     }
                 }
                 else  //we are on ContextMenuStrip, ToolStripDropDown or ToolStripDropDownMenu....

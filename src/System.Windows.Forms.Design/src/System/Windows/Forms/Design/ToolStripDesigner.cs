@@ -334,7 +334,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is the insert Transaction. Now insert can happen at Main Menu level or the DropDown Level. This transaction is used to keep both in sync.
         /// </summary>
-        public DesignerTransaction InsertTansaction
+        public DesignerTransaction InsertTransaction
         {
             get => _insertMenuItemTransaction;
             set => _insertMenuItemTransaction = value;
