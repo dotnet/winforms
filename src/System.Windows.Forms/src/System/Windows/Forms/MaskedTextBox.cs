@@ -1880,7 +1880,7 @@ namespace System.Windows.Forms
                     //    e.Handled = true;
                     //    return;
 
-                    // Note: Ctrl-Insert (Copy -Shortcut.CtrlIns) and Shft-Insert (Paste - Shortcut.ShiftIns) are
+                    // Note: Ctrl-Insert (Copy -Shortcut.CtrlIns) and Shift-Insert (Paste - Shortcut.ShiftIns) are
                     // handled by the base class and behavior depend on ShortcutsEnabled property.
 
                     // Special cases: usually cases where the native edit control would modify the mask.
