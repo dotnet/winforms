@@ -2139,7 +2139,7 @@ namespace System.Windows.Forms
         ///  however possible for another form higher in the parent chain
         ///  to serve in that role.  The logical container of this
         ///  control determines the set of logical sibling control.
-        ///  In general this property exists only to enable some speficic
+        ///  In general this property exists only to enable some specific
         ///  behaviours of ActiveX controls and should in general not be set
         ///  by the user.
         /// </summary>
