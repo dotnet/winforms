@@ -65,7 +65,7 @@ namespace System.Windows.Forms
                 item.ImageScaling = ToolStripItemImageScaling.SizeToFit;
             }
 
-            // set up the sytem menu
+            // set up the system menu
 
             _system.Image = GetTargetWindowIcon();
             _system.Visible = GetTargetWindowIconVisibility();
