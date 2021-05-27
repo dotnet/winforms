@@ -637,7 +637,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This is called when the mouse momentarially hovers over the
+        ///  This is called when the mouse momentarily hovers over the
         ///  view for the given component.
         /// </summary>
         public virtual void OnMouseHover(IComponent component)
