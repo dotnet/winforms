@@ -1456,7 +1456,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        // All expression evaluation happens above.  This codepath indicates that we got some sort of junk in the evalualtor,  or that someone assigned result to a value without breaking out of the loop.
+                        // All expression evaluation happens above.  This codepath indicates that we got some sort of junk in the evaluator,  or that someone assigned result to a value without breaking out of the loop.
                         Debug.Fail("Unrecognized expression type: " + result.GetType().Name);
                         break;
                     }
