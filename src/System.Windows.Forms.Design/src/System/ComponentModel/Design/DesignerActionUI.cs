@@ -711,7 +711,7 @@ namespace System.ComponentModel.Design
 
         bool _cancelClose;
         /// <summary>
-        ///  This shows the actual chrome paenl that is created by the DesignerActionBehavior object.
+        ///  This shows the actual chrome panel that is created by the DesignerActionBehavior object.
         /// </summary>
         internal void ShowDesignerActionPanel(IComponent relatedComponent, DesignerActionPanel panel, DesignerActionGlyph glyph)
         {
