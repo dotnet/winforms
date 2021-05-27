@@ -2713,7 +2713,7 @@ namespace System.Windows.Forms
             // Required to put the TreeView in sane-state for painting proper highlighting of selectedNodes.
             // If the user shows the ContextMenu bu overriding the WndProc( ), then the treeview
             // goes into the weird state where the high-light gets locked to the node on which the ContextMenu was shown.
-            // So we need to get the native TREEIVEW out of this weird state.
+            // So we need to get the native TREEVIEW out of this weird state.
             User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
 
             // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
