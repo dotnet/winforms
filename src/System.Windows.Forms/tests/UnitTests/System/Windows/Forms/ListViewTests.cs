@@ -4514,7 +4514,7 @@ namespace System.Windows.Forms.Tests
             uint keyCode = (uint)key;
             uint lParam = (0x00000001 | keyCode << 16);
 
-            // If control doesn't have selected items noone will be focused.
+            // If control doesn't have selected items none will be focused.
             User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
             Assert.Empty(control.SelectedIndices);
             Assert.Null(control.FocusedItem);
