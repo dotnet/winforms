@@ -497,7 +497,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  By default, tabs will automatically size themselves to fit their icon, if any, and their label.
-        ///  However, the tab size can be explicity set by setting this property.
+        ///  However, the tab size can be explicitly set by setting this property.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]

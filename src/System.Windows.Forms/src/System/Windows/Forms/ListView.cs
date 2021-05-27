@@ -4588,7 +4588,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // If font changes and we have headers, they need to be expicitly invalidated
+            // If font changes and we have headers, they need to be explicitly invalidated
             //
             InvalidateColumnHeaders();
         }
