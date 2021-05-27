@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms
                     // Valid values are 0x0 to 0x4
                     SourceGenerated.EnumValidator.Validate(value);
 
-                    // Check if the value is either center, strech or zoom;
+                    // Check if the value is either center, stretch or zoom;
                     if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch)
                     {
                         SetStyle(ControlStyles.ResizeRedraw, true);
