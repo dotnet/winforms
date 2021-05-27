@@ -229,7 +229,7 @@ namespace System.Windows.Forms
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
                         COMDLG_FILTERSPEC extension;
-                        extension.pszSpec = tokens[i];// This may be a semicolon delimeted list of extensions (that's ok)
+                        extension.pszSpec = tokens[i];// This may be a semicolon delimited list of extensions (that's ok)
                         extension.pszName = tokens[i - 1];
                         extensions.Add(extension);
                     }
