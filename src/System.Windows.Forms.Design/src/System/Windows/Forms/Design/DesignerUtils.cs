@@ -627,7 +627,7 @@ namespace System.Windows.Forms.Design
                     }
                     else if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Right) != 0)
                     {
-                        // e.Offset.X is positive when we snao to right
+                        // e.Offset.X is positive when we snap to right
                         newBounds.X -= e.Offset.X;
                     }
                 }

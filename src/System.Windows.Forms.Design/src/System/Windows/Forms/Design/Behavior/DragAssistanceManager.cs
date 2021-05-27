@@ -801,7 +801,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void StoreSnapLine(SnapLine snapLine, Rectangle dragBounds)
         {
             Rectangle bounds = (Rectangle)_snapLineToBounds[snapLine];
-            // In order for CombineSnapelines to work correctly, we have to determine the type first
+            // In order for CombineSnaplines to work correctly, we have to determine the type first
             LineType type = LineType.Standard;
             if (IsMarginOrPaddingSnapLine(snapLine))
             {
