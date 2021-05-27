@@ -2233,7 +2233,7 @@ namespace System.Windows.Forms
             }
 
             // For non-auto tips (those showned through the show(.) methods, we need to
-            // dissassociate them from the tip control.
+            // disassociate them from the tip control.
             if ((tt.TipType & TipInfo.Type.Auto) == 0)
             {
                 _tools.Remove(control);
