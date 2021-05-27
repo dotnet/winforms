@@ -1787,7 +1787,7 @@ namespace System.Windows.Forms
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             // we cache too much state to try and optimize this (regions, etc)... it is best
-            // to always relayout here... If we want to resurect this code in the future,
+            // to always relayout here... If we want to resurrect this code in the future,
             // remember that we need to handle a word wrapped top aligned text that
             // will become newly exposed (and therefore layed out) when we resize...
             InvalidateTextLayout();
