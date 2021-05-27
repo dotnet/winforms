@@ -705,7 +705,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  This method is called in response to a component changing, adding or removing event to indicate
         ///  that the designer is about to be modified.  Those interested in implementing source code
         ///  control may do so by overriding this method.  A call to OnModifying does not mean that the
-        ///  Modified property will later be set to true; it is merly an intention to do so.
+        ///  Modified property will later be set to true; it is merely an intention to do so.
         /// </summary>
         protected virtual void OnModifying()
         { }
