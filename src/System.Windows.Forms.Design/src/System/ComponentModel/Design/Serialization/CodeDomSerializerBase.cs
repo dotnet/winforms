@@ -2696,7 +2696,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 finally
                 {
-                    Debug.Assert(manager.Context.Current == inheritance, "Sombody messed up our context stack.");
+                    Debug.Assert(manager.Context.Current == inheritance, "Somebody messed up our context stack.");
                     manager.Context.Pop();
                 }
             }
