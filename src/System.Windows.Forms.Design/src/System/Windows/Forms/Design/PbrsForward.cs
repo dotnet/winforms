@@ -80,7 +80,7 @@ namespace System.Windows.Forms.Design
 
             // Here lets query for the ISupportInSituService.
             // If we find the service then ask if it has a designer which is interested
-            // in getting the keychars by querring the IgnoreMessages.
+            // in getting the keychars by querying the IgnoreMessages.
             if ((m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
                || (m.Msg >= (int)User32.WM.IME_STARTCOMPOSITION && m.Msg <= (int)User32.WM.IME_COMPOSITION))
             {
