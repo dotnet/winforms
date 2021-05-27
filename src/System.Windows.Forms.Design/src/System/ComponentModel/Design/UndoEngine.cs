@@ -186,7 +186,7 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         ///  This virtual method creates a new instance of an  UndoUnit class.  The default implementation just returns a new instance of UndoUnit.  Those providing their own UndoEngine can derive from UndoUnit to customize the actions it performs.  This is also a handy way to connect UndoEngine into an existing undo stack.
-        ///  If the primary parameter is set to true, the undo unit will eventually be passed to either the AddUndoUnit or DiscardUndoUnit methods.  If the primary parameter is false, the undo unit is part of a nested transaction and will never be passed to AddUndoUnit or DiscardUndoUnit; only the encompasing unit will be passed, because the undo engine will either include or exclude the contents of the nested unit when it is closed.
+        ///  If the primary parameter is set to true, the undo unit will eventually be passed to either the AddUndoUnit or DiscardUndoUnit methods.  If the primary parameter is false, the undo unit is part of a nested transaction and will never be passed to AddUndoUnit or DiscardUndoUnit; only the encompassing unit will be passed, because the undo engine will either include or exclude the contents of the nested unit when it is closed.
         /// </summary>
         protected virtual UndoUnit CreateUndoUnit(string name, bool primary)
         {
