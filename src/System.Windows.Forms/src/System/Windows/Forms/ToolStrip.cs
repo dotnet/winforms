@@ -2447,7 +2447,7 @@ namespace System.Windows.Forms
             {
                 // we prefer the case where the angle is smaller than
                 // the case where the hypotenuse is smaller.  The only
-                // scenarios where that is not the case is when the hypoteneuse
+                // scenarios where that is not the case is when the hypotenuse
                 // winner is clearly closer than the angle winner.
 
                 //   [a.winner]                       |       [s]
