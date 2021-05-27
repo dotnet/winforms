@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Design
             {
                 Control parent = controls[i].Parent;
 
-                // Suspend parent layout so that we don't continously re-arrange components
+                // Suspend parent layout so that we don't continuously re-arrange components
                 // while we move.
                 //
                 if (parent != null)
@@ -275,7 +275,7 @@ namespace System.Windows.Forms.Design
 
                 Control parent = controls[i].Parent;
 
-                // Suspend parent layout so that we don't continously re-arrange components
+                // Suspend parent layout so that we don't continuously re-arrange components
                 // while we move.
                 //
                 if (parent != null)

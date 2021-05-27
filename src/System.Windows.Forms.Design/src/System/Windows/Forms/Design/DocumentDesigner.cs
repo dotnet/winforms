@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms.Design
                     if (componentTray != null)
                     {
                         // Suspend the layout of the tray through the loading
-                        // process. This way, we won't continuosly try to layout
+                        // process. This way, we won't continuously try to layout
                         // components in auto arrange mode. We will instead let
                         // the controls restore themselves to their persisted state
                         // and then let auto-arrange kick in once.
