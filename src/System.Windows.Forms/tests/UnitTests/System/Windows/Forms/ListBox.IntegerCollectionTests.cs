@@ -868,7 +868,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_Clear_InvokeEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_Clear_InvokeEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             var collection = new ListBox.IntegerCollection(owner);
@@ -903,7 +903,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_Clear_InvokeCustomTabOffsetsEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_Clear_InvokeCustomTabOffsetsEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             ListBox.IntegerCollection collection = owner.CustomTabOffsets;
@@ -938,7 +938,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_Clear_InvokeNotEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_Clear_InvokeNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             var collection = new ListBox.IntegerCollection(owner);
@@ -974,7 +974,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_Clear_InvokeCustomTabOffsetNotEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_Clear_InvokeCustomTabOffsetNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             ListBox.IntegerCollection collection = owner.CustomTabOffsets;
@@ -2065,7 +2065,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_IListClear_InvokeEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_IListClear_InvokeEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
@@ -2100,7 +2100,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_IListClear_InvokeCustomTabOffsetsEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_IListClear_InvokeCustomTabOffsetsEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = owner.CustomTabOffsets;
@@ -2135,7 +2135,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_IListClear_InvokeNotEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_IListClear_InvokeNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
@@ -2171,7 +2171,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_IListClear_InvokeCustomTabOffsetNotEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_IListClear_InvokeCustomTabOffsetNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = owner.CustomTabOffsets;

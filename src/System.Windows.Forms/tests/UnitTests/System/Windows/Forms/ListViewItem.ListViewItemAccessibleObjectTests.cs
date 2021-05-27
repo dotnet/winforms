@@ -250,7 +250,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_FragmentNavigate_Sibling_TestData))]
-        public void ListViewItemAccessibleObject_FragmentNavigate_PreviousSibling_ReturnExpected_IfHanleIsCreated(View view, bool virtualMode, bool showGroups)
+        public void ListViewItemAccessibleObject_FragmentNavigate_PreviousSibling_ReturnExpected_IfHandleIsCreated(View view, bool virtualMode, bool showGroups)
         {
             using ListView listView = GetListViewWithData(view, true, virtualMode, showGroups);
 

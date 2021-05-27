@@ -440,7 +440,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
         }
 
-        public static IEnumerable<object[]> ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHanlde_TestData()
+        public static IEnumerable<object[]> ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHandle_TestData()
         {
             yield return new object[] { ComboBoxStyle.DropDown, new Size(50, 20), "Some test text for testing", 0 };
             yield return new object[] { ComboBoxStyle.DropDown, new Size(50, 20), "Some test text for testing", 15 };
@@ -450,8 +450,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHanlde_TestData))]
-        public void ComboBoxUiaTextProvider_GetPositionFromChar_ReturnsEmpty_WithoutHanlde(ComboBoxStyle dropDownStyle, Size size, string text, int charIndex)
+        [MemberData(nameof(ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHandle_TestData))]
+        public void ComboBoxUiaTextProvider_GetPositionFromChar_ReturnsEmpty_WithoutHandle(ComboBoxStyle dropDownStyle, Size size, string text, int charIndex)
         {
             using (new NoAssertContext())
             {
