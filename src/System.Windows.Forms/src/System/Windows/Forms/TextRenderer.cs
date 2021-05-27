@@ -542,7 +542,7 @@ namespace System.Windows.Forms
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             // Applying state may not impact text size measurements. Rather than risk missing some
-            // case we'll apply as we have historically to avoid suprise regressions.
+            // case we'll apply as we have historically to avoid surprise regressions.
             using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
             using var hfont = GdiCache.GetHFONT(font, quality, hdc);
             return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
