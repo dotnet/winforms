@@ -288,7 +288,7 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            // we check wether or not we're in a transaction, if we are, we only the refresh at the end of the transaction to avoid flicker.
+            // we check whether or not we're in a transaction, if we are, we only the refresh at the end of the transaction to avoid flicker.
             if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 bool hostIsClosingTransaction = false;
