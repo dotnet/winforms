@@ -46,7 +46,7 @@ internal partial class Interop
 
             /// <summary>
             ///  Determines if the given (usually current) value for a property is the default.  If it is not default,
-            ///  the property will be shown as bold in the browser to indcate that it has been modified from the default.
+            ///  the property will be shown as bold in the browser to indicate that it has been modified from the default.
             /// </summary>
             [PreserveSig]
             HRESULT HasDefaultValue(
