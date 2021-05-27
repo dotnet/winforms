@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(ComboBoxStyle.DropDown, 2)]
         [InlineData(ComboBoxStyle.Simple, 0)]
         [InlineData(ComboBoxStyle.Simple, 2)]
-        public void ComboBoxUiaTextProvider_LineScroll_DoesntWork_WitoutHandle(ComboBoxStyle dropDownStyle, int newLine)
+        public void ComboBoxUiaTextProvider_LineScroll_DoesntWork_WithoutHandle(ComboBoxStyle dropDownStyle, int newLine)
         {
             using (new NoAssertContext())
             {

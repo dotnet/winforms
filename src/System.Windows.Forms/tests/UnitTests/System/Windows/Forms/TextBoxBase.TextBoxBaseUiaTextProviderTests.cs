@@ -898,7 +898,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(2)]
-        public void TextBoxBaseUiaTextProvider_LineScroll_DoesntWork_WitoutHandle(int expectedLine)
+        public void TextBoxBaseUiaTextProvider_LineScroll_DoesntWork_WithoutHandle(int expectedLine)
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase
             {
