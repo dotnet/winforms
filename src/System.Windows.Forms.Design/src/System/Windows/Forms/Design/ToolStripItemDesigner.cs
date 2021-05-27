@@ -890,7 +890,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 FireComponentChanged(dropDownItem);
-                // Add the Glyph for the DropDown ... We are responsible for the Glyh Addition since BodyGlyphs for DropDownItems are added by us.
+                // Add the Glyph for the DropDown ... We are responsible for the Glyph Addition since BodyGlyphs for DropDownItems are added by us.
                 if (newItem.IsOnDropDown && ownerItemDesigner != null)
                 {
                     ownerItemDesigner.RemoveItemBodyGlyph(newItem);

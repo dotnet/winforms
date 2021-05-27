@@ -13,7 +13,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  The behavior for the glpyh that covers the items themselves.  This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
+    ///  The behavior for the glyph that covers the items themselves.  This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
     /// </summary>
     internal class ToolStripItemBehavior : Behavior.Behavior
     {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            // Don't paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
+            // Don't paint any "MouseOver" glyphs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
             if (keyService != null && keyService.TemplateNodeActive)
             {
@@ -424,7 +424,7 @@ namespace System.Windows.Forms.Design
                         {
                             if (glyphItem.IsOnDropDown && ToolStripDesigner.s_shiftState)
                             {
-                                //Invalidate glyh only if we are in ShiftState...
+                                //Invalidate glyph only if we are in ShiftState...
                                 ToolStripDesigner.s_shiftState = false;
                                 if (bSvc != null)
                                 {
@@ -895,7 +895,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            // Don't paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
+            // Don't paint any "MouseOver" glyphs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
             if (keyService != null && keyService.TemplateNodeActive)
             {

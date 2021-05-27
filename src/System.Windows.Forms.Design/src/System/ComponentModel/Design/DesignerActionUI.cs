@@ -207,7 +207,7 @@ namespace System.ComponentModel.Design
                         }
                     }
 
-                    //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyoh.
+                    //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyph.
                     if (dag is null)
                     {
                         //if the related comp is a control, then this shortcut will be off its bounds

@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design.Behavior
         internal const int CONTROLOVERLAP_X = 5;                    // number of pixels the anchor should be offset to the left of the control's upper-right
         internal const int CONTROLOVERLAP_Y = 2;                    // number of pixels the anchor overlaps the control in the y-direction
 
-        private Rectangle _alternativeBounds = Rectangle.Empty;     // if !empty, this represents the bounds of the tray control this gyph is related to
+        private Rectangle _alternativeBounds = Rectangle.Empty;     // if !empty, this represents the bounds of the tray control this glyph is related to
         private Rectangle _bounds;                                  // the bounds of our glyph
         private readonly Adorner? _adorner;                         // A ptr back to our adorner - so when we decide to change state, we can invalidate
         private readonly Control? _alternativeParent;               // if this is valid - then the glyph will invalidate itself here instead of on the adorner

@@ -1827,7 +1827,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragDrop(DragEventArgs de)
         {
             base.OnDragDrop(de);
-            // There is a "drop region" before firstItem which is not included in the "ToolStrip Item glyhs" so if the drop point falls in this drop region we should insert the items at the head instead of the tail of the toolStrip.
+            // There is a "drop region" before firstItem which is not included in the "ToolStrip Item glyphs" so if the drop point falls in this drop region we should insert the items at the head instead of the tail of the toolStrip.
             bool dropAtHead = false;
             ToolStrip parentToolStrip = ToolStrip;
             var offset = new Point(de.X, de.Y);
