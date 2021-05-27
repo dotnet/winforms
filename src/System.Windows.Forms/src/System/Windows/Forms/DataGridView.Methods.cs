@@ -19456,7 +19456,7 @@ namespace System.Windows.Forms
             Point pt = PointToScreen(Location);
             int step = newValue - oldValue;
 
-            // horizontal scrool left
+            // horizontal scroll left
             if (pt.X < 0 && step < 0)
             {
                 Invalidate(new Rectangle(new Point(-pt.X, ColumnHeadersHeight),
@@ -19467,21 +19467,21 @@ namespace System.Windows.Forms
             pt.Y += Height;
             Rectangle rect = Screen.GetBounds(pt);
 
-            // horizontal scrool right
+            // horizontal scroll right
             if (pt.X > rect.Right && step > 0)
             {
                 Invalidate(new Rectangle(new Point(ClientSize.Width - (pt.X - rect.Right) - step, ColumnHeadersHeight),
                                          new Size(step, ClientSize.Height)));
             }
 
-            // vertical scrool up
+            // vertical scroll up
             if (pt.Y < 0 && step < 0)
             {
                 Invalidate(new Rectangle(new Point(0, -pt.Y),
                                          new Size(-step, ClientSize.Width)));
             }
 
-            // vertical scrool down
+            // vertical scroll down
             if (pt.Y > rect.Bottom && step > 0)
             {
                 Invalidate(new Rectangle(new Point(0, ColumnHeadersHeight),
