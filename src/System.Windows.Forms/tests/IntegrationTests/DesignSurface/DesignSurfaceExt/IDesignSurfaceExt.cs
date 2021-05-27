@@ -19,7 +19,7 @@ namespace DesignSurfaceExt
         void UseGridWithoutSnapping(System.Drawing.Size gridSize);
         void UseNoGuides();
 
-        //- method usefull to create control without the ToolBox facility
+        //- method useful to create control without the ToolBox facility
         TControl CreateRootComponent<TControl>(Size controlSize)
             where TControl : Control, IComponent;
 
