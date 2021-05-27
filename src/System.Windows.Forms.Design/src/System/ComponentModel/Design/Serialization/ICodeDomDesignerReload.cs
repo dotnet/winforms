@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  If ICodeDomDesignerReload is implemented on a CodeDomProvider that is in use by the designer, ShouldReloadDesigner will be called
         ///  before a reload occurs.  Reloads generally occur when a user switches from design view to code view, modifies the code, and switches
         ///  back to design view.  ShouldReloadDesigner allows the CodeDomProvider implementation to decide if code that is relevant to the designer
-        ///  has been modified -- ususally this is the code that the designer generated when the user saved or went to code view.
+        ///  has been modified -- usually this is the code that the designer generated when the user saved or went to code view.
         /// </summary>
         bool ShouldReloadDesigner(CodeCompileUnit newTree);
     }
