@@ -2232,7 +2232,7 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)screen.WorkingArea.Width);
             }
 
-            // For non-auto tips (those showned through the show(.) methods, we need to
+            // For non-auto tips (those shown through the show(.) methods, we need to
             // disassociate them from the tip control.
             if ((tt.TipType & TipInfo.Type.Auto) == 0)
             {
