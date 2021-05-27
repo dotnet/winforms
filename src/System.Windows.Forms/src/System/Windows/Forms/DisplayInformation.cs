@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                 if (s_bitsPerPixel == 0)
                 {
                     // we used to iterate through all screens, but
-                    // for some reason unused screens can temparily appear
+                    // for some reason unused screens can temporarily appear
                     // in the AllScreens collection - we would honor the display
                     // setting of an unused screen.
                     // According to EnumDisplayMonitors, a primary screen check should be sufficient
