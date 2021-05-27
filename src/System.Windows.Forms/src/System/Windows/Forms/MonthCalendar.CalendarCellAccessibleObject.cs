@@ -88,7 +88,7 @@ namespace System.Windows.Forms
                         culture.DateTimeFormat.CalendarWeekRule, _monthCalendarAccessibleObject.FirstDayOfWeek);
 
                     // Used string.Format here to get the correct value from resources
-                    // that should be cosistent with the rest resources values
+                    // that should be consistent with the rest resources values
                     return string.Format(SR.MonthCalendarWeekNumberDescription, weekNumber)
                         + $", {cellDate.ToString("dddd", culture)}";
                 }
