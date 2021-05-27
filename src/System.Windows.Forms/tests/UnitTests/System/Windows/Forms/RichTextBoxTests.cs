@@ -1938,7 +1938,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void RichTextBox_MaxLength_GetWithHandle_ReturnsExpecte()
+        public void RichTextBox_MaxLength_GetWithHandle_ReturnsExpected()
         {
             using var control = new RichTextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -8153,7 +8153,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Find_String_TestData))]
-        public void RichTextBox_Find_StringWithHandle_ReturnsExpectedd(string text, string str, int expected)
+        public void RichTextBox_Find_StringWithHandle_ReturnsExpected(string text, string str, int expected)
         {
             using var control = new RichTextBox
             {
@@ -8176,7 +8176,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Find_String_RichTextBoxFinds_TestData))]
-        public void RichTextBox_Find_StringRichTextBoxFindsWithHandle_ReturnsExpectedd(string text, string str, RichTextBoxFinds options, int expected)
+        public void RichTextBox_Find_StringRichTextBoxFindsWithHandle_ReturnsExpected(string text, string str, RichTextBoxFinds options, int expected)
         {
             using var control = new RichTextBox
             {
@@ -8199,7 +8199,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Find_String_Int_RichTextBoxFinds_TestData))]
-        public void RichTextBox_Find_StringIntRichTextBoxFindsWithHandle_ReturnsExpectedd(string text, string str, int start, RichTextBoxFinds options, int expected)
+        public void RichTextBox_Find_StringIntRichTextBoxFindsWithHandle_ReturnsExpected(string text, string str, int start, RichTextBoxFinds options, int expected)
         {
             using var control = new RichTextBox
             {
@@ -8222,7 +8222,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Find_String_Int_Int_RichTextBoxFinds_TestData))]
-        public void RichTextBox_Find_StringIntIntRichTextBoxFindsWithHandle_ReturnsExpectedd(string text, string str, int start, int end, RichTextBoxFinds options, int expected)
+        public void RichTextBox_Find_StringIntIntRichTextBoxFindsWithHandle_ReturnsExpected(string text, string str, int start, int end, RichTextBoxFinds options, int expected)
         {
             using var control = new RichTextBox
             {

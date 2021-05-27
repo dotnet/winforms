@@ -1034,7 +1034,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(Equals_TestData))]
-        public void DataGridViewCellStyle_Equals_Invoke_ReturnsExpecte(DataGridViewCellStyle style, object other, bool expected, bool? expectedEqualHashCode = null)
+        public void DataGridViewCellStyle_Equals_Invoke_ReturnsExpected(DataGridViewCellStyle style, object other, bool expected, bool? expectedEqualHashCode = null)
         {
             if (other is DataGridViewCellStyle)
             {

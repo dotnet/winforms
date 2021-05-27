@@ -1624,7 +1624,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBase_MaxLength_GetWithHandle_ReturnsExpecte()
+        public void TextBoxBase_MaxLength_GetWithHandle_ReturnsExpected()
         {
             using var control = new TextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -1762,7 +1762,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBase_Modified_GetWithHandle_ReturnsExpecte()
+        public void TextBoxBase_Modified_GetWithHandle_ReturnsExpected()
         {
             using var control = new TextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -2264,7 +2264,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBase_ReadOnly_GetWithHandle_ReturnsExpecte()
+        public void TextBoxBase_ReadOnly_GetWithHandle_ReturnsExpected()
         {
             using var control = new TextBox();
             Assert.NotEqual(IntPtr.Zero, control.Handle);

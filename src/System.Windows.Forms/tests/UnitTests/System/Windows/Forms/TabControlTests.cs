@@ -3961,7 +3961,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabControl_GetToolTipText_Invoke_ReturnsExpectd()
+        public void TabControl_GetToolTipText_Invoke_ReturnsExpected()
         {
             using var control = new SubTabControl();
             using var item = new TabPage
