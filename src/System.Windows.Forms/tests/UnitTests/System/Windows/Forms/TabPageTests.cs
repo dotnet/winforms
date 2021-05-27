@@ -3813,7 +3813,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabPage_GetTabPageOfComponent_InvokeTabPageInHierachy_ReturnsExpected()
+        public void TabPage_GetTabPageOfComponent_InvokeTabPageInHierarchy_ReturnsExpected()
         {
             using var grandparent = new TabPage();
             using var parent = new Control
@@ -3830,7 +3830,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TabPage_GetTabPageOfComponent_InvokeNoTabPageInHierachy_ReturnsNull()
+        public void TabPage_GetTabPageOfComponent_InvokeNoTabPageInHierarchy_ReturnsNull()
         {
             using var grandparent = new Control();
             using var parent = new Control
