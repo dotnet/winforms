@@ -3387,7 +3387,7 @@ namespace System.Windows.Forms
         {
             SetToolStripState(STATE_DRAGGING, true);
             ClearAllSelections();
-            UpdateToolTip(null); // supress the tooltip.
+            UpdateToolTip(null); // suppress the tooltip.
             ((EventHandler)Events[s_eventBeginDrag])?.Invoke(this, e);
         }
 
