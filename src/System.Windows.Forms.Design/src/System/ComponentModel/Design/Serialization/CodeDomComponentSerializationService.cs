@@ -934,7 +934,7 @@ namespace System.ComponentModel.Design.Serialization
                     // First we check to see if the statements table contains an OrderedCodeStatementCollection for this name.  If it does this means we have not resolved this name yet, so we grab its OrderedCodeStatementCollection and deserialize that, along with any default properties and design-time properties.
                     // If it doesn't contain an OrderedCodeStatementsCollection this means one of two things:
                     // 1. We already resolved this name and shoved an instance in there.  In this case we just return the instance
-                    // 2. There are no statements corresponding to this name, but there might be expressions that have never been deserialized, so we check for that and deserailize those.
+                    // 2. There are no statements corresponding to this name, but there might be expressions that have never been deserialized, so we check for that and deserialize those.
                     if (_statementsTable[name] is OrderedCodeStatementCollection statements)
                     {
                         _objectState[name] = null;
