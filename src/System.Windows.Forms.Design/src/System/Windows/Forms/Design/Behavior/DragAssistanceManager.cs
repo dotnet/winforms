@@ -232,7 +232,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                 distances[i] = smallestDelta;
                 int pri = (int)((SnapLine)snapLines[i]).Priority;
-                //save off this delta for the overall smallest delta! Need to check the priority here as well if the distance is the same. E.g. smallestDistance so far is 1, for a Low snapline. We now find another distance of -1, for a Medium snapline. The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) would not set smallestDistance to -1, since the ABSOLUTE values are the same. Since the return value is used to phycially move the control, we would move the control in the direction of the Low snapline, but draw the Medium snapline in the opposite direction.
+                //save off this delta for the overall smallest delta! Need to check the priority here as well if the distance is the same. E.g. smallestDistance so far is 1, for a Low snapline. We now find another distance of -1, for a Medium snapline. The old check if (Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) would not set smallestDistance to -1, since the ABSOLUTE values are the same. Since the return value is used to physically move the control, we would move the control in the direction of the Low snapline, but draw the Medium snapline in the opposite direction.
                 if ((Math.Abs(smallestDelta) < Math.Abs(smallestDistance)) ||
                     ((Math.Abs(smallestDelta) == Math.Abs(smallestDistance)) && (pri > highestPriority)))
                 {
