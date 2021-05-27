@@ -1373,7 +1373,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // See if this is a dialog message -- this is for handling any native dialogs that are launched from
-                        // winforms code.  This can happen with ActiveX controls that launch dialogs specificially
+                        // winforms code.  This can happen with ActiveX controls that launch dialogs specifically
 
                         // First, get the first top-level window in the hierarchy.
                         IntPtr hwndRoot = User32.GetAncestor(msg.hwnd, User32.GA.ROOT);
