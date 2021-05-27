@@ -1519,7 +1519,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws a standard selection grab handle with the given dimensions. Grab
         ///  handles are used by components to indicate to the user that they can
-        ///  be directly maniupulated.
+        ///  be directly manipulated.
         /// </summary>
         public static void DrawGrabHandle(Graphics graphics, Rectangle rectangle, bool primary, bool enabled)
         {
