@@ -965,7 +965,7 @@ namespace System.ComponentModel.Design
                         if (items.Length > 0 && items[0] is IComponent && ((IComponent)items[0]).Site != null)
                         {
                             // here we bail now because we don't want to do the "undo" manually,
-                            // we're part of a trasaction, we've added item, the rollback will be
+                            // we're part of a transaction, we've added item, the rollback will be
                             // handled by the undo engine because the component in the collection are sited
                             // doing it here kills perf because the undo of the transaction has to roll back the remove and then
                             // rollback the add. This is useless and is only needed for non sited component or other classes
