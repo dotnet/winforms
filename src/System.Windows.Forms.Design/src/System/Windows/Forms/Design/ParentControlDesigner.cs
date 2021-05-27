@@ -2150,7 +2150,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void OnMouseDragMove(int x, int y)
         {
-            //if we puhsed a snapline behavior during a drag operation - make sure we have popped it
+            //if we pushed a snapline behavior during a drag operation - make sure we have popped it
             //if we're now receiving mouse move messages.
             if (_toolboxItemSnapLineBehavior != null && _toolboxItemSnapLineBehavior.IsPushed)
             {
