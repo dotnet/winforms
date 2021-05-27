@@ -58,12 +58,12 @@ namespace System.Windows.Forms.Layout
         void PerformLayout(IArrangedElement affectedElement, string propertyName);
 
         /// <summary>
-        ///  Returns the element's parent container (on a control, this forwands to Parent)
+        ///  Returns the element's parent container (on a control, this forwards to Parent)
         /// </summary>
         IArrangedElement Container { get; }
 
         /// <summary>
-        ///  Returns the element's children (on a control, this forwands to Controls)
+        ///  Returns the element's children (on a control, this forwards to Controls)
         /// </summary>
         ArrangedElementCollection Children { get; }
     }
