@@ -603,8 +603,8 @@ namespace System.Windows.Forms.Design
         ///  Panel1 and Panel2.  These panels are exposed through read only Panel1 and Panel2 properties on the
         ///  SplitContainer class. SplitContainer's designer calls EnableDesignTime for each panel, which allows other
         ///  components to be dropped on them.  But, in order for the contents of Panel1 and Panel2 to be saved,
-        ///  SplitContainer itself needed to expose the panels as public properties. The child paramter is the control
-        ///  to enable.  The name paramter is the name of this control as exposed to the end user.  Names need to be
+        ///  SplitContainer itself needed to expose the panels as public properties. The child parameter is the control
+        ///  to enable.  The name parameter is the name of this control as exposed to the end user.  Names need to be
         ///  unique within a control designer, but do not have to be unique to other control designer's children. This
         ///  method returns true if the child control could be enabled for design time, or false if the hosting
         ///  infrastructure does not support it.  To support this feature, the hosting infrastructure must expose the

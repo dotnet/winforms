@@ -990,7 +990,7 @@ namespace System.ComponentModel.Design.Serialization
                                         }
                                     }
 
-                                    // Technically, the paramters are not OK.  Our special case above, if successful, would have produced a "result" object for us.
+                                    // Technically, the parameters are not OK.  Our special case above, if successful, would have produced a "result" object for us.
                                     paramsOk = false;
                                     break;
                                 }
