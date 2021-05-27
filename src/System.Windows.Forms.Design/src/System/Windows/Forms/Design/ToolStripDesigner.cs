@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Checks if there is a seleciton of the ToolStrip or one of it's items.
+        ///  Checks if there is a selection of the ToolStrip or one of it's items.
         /// </summary>
         private bool IsToolStripOrItemSelected
         {

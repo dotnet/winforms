@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design
 
         private ArrayList controls; // List of items in the tray in the order of their layout.
         private SelectionUIHandler dragHandler; // the thing responsible for handling mouse drags
-        private ISelectionUIService selectionUISvc; // selectiuon UI; we use this a lot
+        private ISelectionUIService selectionUISvc; // selection UI; we use this a lot
         private IToolboxService toolboxService; // cached for drag/drop
 
         /// <summary>

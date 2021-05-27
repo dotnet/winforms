@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  We override our selectino rules to make the document non-sizeable.
+        ///  We override our selection rules to make the document non-sizeable.
         /// </summary>
         public override SelectionRules SelectionRules
         {

@@ -50,7 +50,7 @@ namespace System.ComponentModel.Design
         internal static readonly TraceSwitch DropDownVisibilityDebug;
 #endif
         /// <summary>
-        ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelecteionService, as well as spin-up the DesignerActionService.
+        ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelectionService, as well as spin-up the DesignerActionService.
         /// </summary>
         public DesignerActionUI(IServiceProvider serviceProvider, Adorner containerAdorner)
         {

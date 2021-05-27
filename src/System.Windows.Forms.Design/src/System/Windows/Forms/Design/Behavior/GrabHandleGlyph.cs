@@ -10,7 +10,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The GrabHandleGlyph represents the 8 handles of our new seleciton model.
+    ///  The GrabHandleGlyph represents the 8 handles of our new selection model.
     ///  Note that the pen and brush are created once per instance of this class and re-used in our painting logic
     ///  for perf reasons.
     /// </summary>
