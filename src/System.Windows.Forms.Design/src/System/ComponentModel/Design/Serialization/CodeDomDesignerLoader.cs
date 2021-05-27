@@ -1145,7 +1145,7 @@ namespace System.ComponentModel.Design.Serialization
             b.Replace('`', '_');
             baseName = b.ToString();
 
-            // Now hash up all of the member variable names using a case insensitve hash.
+            // Now hash up all of the member variable names using a case insensitive hash.
             CodeTypeDeclaration type = _documentType;
             Hashtable memberHash = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
 
