@@ -234,7 +234,7 @@ namespace System.Drawing.Design
         ///  names and the values are property values.  This dictionary becomes read-only
         ///  after the toolbox item has been locked.
         ///  Values in the properties dictionary are validated through ValidateProperty
-        ///  and default values are obtained from GetDefalutProperty.
+        ///  and default values are obtained from GetDefaultProperty.
         /// </summary>
         public IDictionary Properties
         {

@@ -303,7 +303,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Adds the default mask descriptors to the mask description list.
-        /// We need to add the deafult descriptors explicitly because the DiscoverMaskDescriptors method only adds
+        /// We need to add the default descriptors explicitly because the DiscoverMaskDescriptors method only adds
         /// public descriptors and these are internal.
         /// </summary>
         private void AddDefaultMaskDescriptors(CultureInfo culture)
