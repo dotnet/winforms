@@ -1099,7 +1099,7 @@ Decade cell:
 - [x] **Case:** Change the Today date (set `TodayDate` of a MonthCalendar)
 </br>**Expected:** Nothing happens
 - [x] **Case:** Click on a gray date cell (of the next or previous calendars)
-</br>**Expected:** The monthCalendar shanges the display range. Its accessibility tree rebuilds.
+</br>**Expected:** The monthCalendar changes the display range. Its accessibility tree rebuilds.
 - [x] **Case:** Size of the control is changed that the control changes calendars count
 </br>**Expected:** The accessibility tree is rebuilt. ElementProviderFromPoint returns visible items correctly
 - [x] **Case:** A calendar of a MonthCalendar has non-full rows
@@ -1186,7 +1186,7 @@ Invisible calendars are not accessible. Invisible dates of partial calendars are
 - [x] **Case:** Change the Today date (set `TodayDate` of a MonthCalendar)
 </br>**Expected:** Nothing happens
 - [x] **Case:** Click on a gray month cell (of the next or previous calendars)
-</br>**Expected:** The monthCalendar shanges the display range. It accessibility tree rebuilds.
+</br>**Expected:** The monthCalendar changes the display range. It accessibility tree rebuilds.
 - [x] **Case:** Size of the control is changed that the control changes calendars count
 </br>**Expected:** The accessibility tree is rebuilt. ElementProviderFromPoint returns visible items correctly
 - [x] **Case:** A calendar of a MonthCalendar has non-full rows
@@ -1245,7 +1245,7 @@ Invisible calendars are not accessible. Invisible dates of partial calendars are
 - [x] **Case:** Change the Today date (set `TodayDate` of a MonthCalendar)
 </br>**Expected:** Nothing happens
 - [x] **Case:** Click on a gray year cell (of the next or previous calendars)
-</br>**Expected:** The monthCalendar shanges the display range. It accessibility tree rebuilds.
+</br>**Expected:** The monthCalendar changes the display range. It accessibility tree rebuilds.
 - [x] **Case:** Size of the control is changed that the control changes calendars count
 </br>**Expected:** The accessibility tree is rebuilt. ElementProviderFromPoint returns visible items correctly
 - [x] **Case:** A calendar of a MonthCalendar has non-full rows
@@ -1304,7 +1304,7 @@ Invisible calendars are not accessible. Invisible dates of partial calendars are
 - [x] **Case:** Change the Today date (set `TodayDate` of a MonthCalendar)
 </br>**Expected:** Nothing happens
 - [x] **Case:** Click on a gray decade cell (of the next or previous calendars)
-</br>**Expected:** The monthCalendar shanges the display range. It accessibility tree rebuilds.
+</br>**Expected:** The monthCalendar changes the display range. It accessibility tree rebuilds.
 - [x] **Case:** Size of the control is changed that the control changes calendars count
 </br>**Expected:** The accessibility tree is rebuilt. ElementProviderFromPoint returns visible items correctly
 - [x] **Case:** A calendar of a MonthCalendar has non-full rows
