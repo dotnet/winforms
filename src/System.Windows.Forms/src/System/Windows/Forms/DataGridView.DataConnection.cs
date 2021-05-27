@@ -965,7 +965,7 @@ namespace System.Windows.Forms
                 UnWireEvents();
 
                 // Set the currency manager to null so if someone would want to resurect this data grid view data connection
-                // we would not unwire the events from the curency manager twice.
+                // we would not unwire the events from the currency manager twice.
                 // (NOTE: resurecting a disposed data grid view data connection is not allowed.)
                 //
                 CurrencyManager = null;
