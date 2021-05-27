@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
+        ///  Retrieves the selection service, which this service uses while selecting the toolStrip Item.
         /// </summary>
         private IDesignerHost Host
         {
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
+        ///  Retrieves the selection service, which this service uses while selecting the toolStrip Item.
         /// </summary>
         private ISelectionService SelectionService
         {
