@@ -993,7 +993,7 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_propImage, null);
                 }
 
-                //Dipose the tooltip if one present..
+                //Dispose the tooltip if one present..
                 if (_textToolTip is not null)
                 {
                     _textToolTip.Dispose();
