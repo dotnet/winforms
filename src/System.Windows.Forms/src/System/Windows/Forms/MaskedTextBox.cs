@@ -2147,7 +2147,7 @@ namespace System.Windows.Forms
             Debug.Assert(text is not null, "text is null.");
 
             // Clone the MaskedTextProvider so text properties are not modified until the paste operation is
-            // completed.  This is needed in case one of these properties is retreived in a MaskedInputRejected
+            // completed.  This is needed in case one of these properties is retrieved in a MaskedInputRejected
             // event handler (clipboard text is attempted to be set into the input text char by char).
 
             MaskedTextProvider clonedProvider = (MaskedTextProvider)maskedTextProvider.Clone();
