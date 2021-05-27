@@ -4208,7 +4208,7 @@ namespace System.Windows.Forms.Design
 
                 /// <summary>
                 /// Updates this status object  with the state from the given item,
-                /// and saves teh selection version.
+                /// and saves the selection version.
                 /// </summary>
                 internal void SaveState(CommandSetItem item, int version)
                 {

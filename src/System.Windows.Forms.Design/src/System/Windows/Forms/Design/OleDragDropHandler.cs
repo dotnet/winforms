@@ -860,7 +860,7 @@ namespace System.Windows.Forms.Design
 
                     // now we need to offset the components locations from the drop mouse
                     // point to the parent, since their current locations are relative
-                    // the the mouse pointer
+                    // the mouse pointer
                     if (components != null && components.Length > 0)
                     {
                         Debug.Assert(container != null, "Didn't get a container from the site!");

@@ -2441,7 +2441,7 @@ namespace System.Windows.Forms.Design
         private bool ShouldSerializeAllowItemReorder() => (bool)ShadowProperties[nameof(AllowItemReorder)];
 
         /// <summary>
-        ///  This is the method that gets called when the Designer has to show thwe InSitu Edit Node,
+        ///  This is the method that gets called when the Designer has to show the InSitu Edit Node,
         /// </summary>
         internal void ShowEditNode(bool clicked)
         {

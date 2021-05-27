@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
         public static int DEFAULTROWCOUNT = 2;
         public static int DEFAULTCOLUMNCOUNT = 2;
 
-        //size of the col/row grab handle glyphs for teh table layout panel
+        //size of the col/row grab handle glyphs for the table layout panel
         public static int RESIZEGLYPHSIZE = ScaleLogicalToDeviceUnitsX(4);
 
         //default value for Form padding if it has not been set in the designer (usability study request)

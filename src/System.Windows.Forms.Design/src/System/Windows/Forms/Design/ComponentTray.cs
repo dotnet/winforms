@@ -2720,7 +2720,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Clears teh adorner of glyphs.
+            ///  Clears the adorner of glyphs.
             /// </summary>
             public void Dispose()
             {

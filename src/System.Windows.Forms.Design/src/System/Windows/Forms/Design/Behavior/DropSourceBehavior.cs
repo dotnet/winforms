@@ -605,7 +605,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 if (clearDragImageRect != dragImageRect)
                 {
-                    // To avoid flashing, we only want to clear the drag images if the the dragimagerect is different than the last time we got here. I.e. if we keep dragging over an area where we are  not allowed to  drop, then we only have to clear the dragimages once.
+                    // To avoid flashing, we only want to clear the drag images if the dragimagerect is different than the last time we got here. I.e. if we keep dragging over an area where we are  not allowed to  drop, then we only have to clear the dragimages once.
                     ClearAllDragImages();
                     clearDragImageRect = dragImageRect;
                 }
