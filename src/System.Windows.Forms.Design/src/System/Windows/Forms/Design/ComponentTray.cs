@@ -2772,7 +2772,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to respond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseDoubleClick(MouseEventArgs e)
             {
@@ -2785,7 +2785,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to respond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseDown(MouseEventArgs e)
             {
@@ -2798,7 +2798,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to respond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseMove(MouseEventArgs e)
             {
@@ -2811,7 +2811,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to respond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseUp(MouseEventArgs e)
             {
