@@ -696,7 +696,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Process a command key.
-        ///  Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
+        ///  Native "EDIT" control does not support "Select All" shortcut represented by Ctrl-A keys, when in multiline mode,
         ///  Winforms TextBox supports this in .NET.
         /// </summary>
         /// <param name="m">The current windows message.</param>

@@ -17,132 +17,132 @@ namespace System.Windows.Forms
         None = 0,
 
         /// <summary>
-        ///  The shorcut keys CTRL+A.
+        ///  The shortcut keys CTRL+A.
         /// </summary>
         CtrlA = Keys.Control + Keys.A,
 
         /// <summary>
-        ///  The shorcut keys CTRL+B.
+        ///  The shortcut keys CTRL+B.
         /// </summary>
         CtrlB = Keys.Control + Keys.B,
 
         /// <summary>
-        ///  The shorcut keys CTRL+C.
+        ///  The shortcut keys CTRL+C.
         /// </summary>
         CtrlC = Keys.Control + Keys.C,
 
         /// <summary>
-        ///  The shorcut keys CTRL+D.
+        ///  The shortcut keys CTRL+D.
         /// </summary>
         CtrlD = Keys.Control + Keys.D,
 
         /// <summary>
-        ///  The shorcut keys CTRL+E.
+        ///  The shortcut keys CTRL+E.
         /// </summary>
         CtrlE = Keys.Control + Keys.E,
 
         /// <summary>
-        ///  The shorcut keys CTRL+F.
+        ///  The shortcut keys CTRL+F.
         /// </summary>
         CtrlF = Keys.Control + Keys.F,
 
         /// <summary>
-        ///  The shorcut keys CTRL+G.
+        ///  The shortcut keys CTRL+G.
         /// </summary>
         CtrlG = Keys.Control + Keys.G,
 
         /// <summary>
-        ///  The shorcut keys CTRL+H.
+        ///  The shortcut keys CTRL+H.
         /// </summary>
         CtrlH = Keys.Control + Keys.H,
 
         /// <summary>
-        ///  The shorcut keys CTRL+I.
+        ///  The shortcut keys CTRL+I.
         /// </summary>
         CtrlI = Keys.Control + Keys.I,
 
         /// <summary>
-        ///  The shorcut keys CTRL+J.
+        ///  The shortcut keys CTRL+J.
         /// </summary>
         CtrlJ = Keys.Control + Keys.J,
 
         /// <summary>
-        ///  The shorcut keys CTRL+K.
+        ///  The shortcut keys CTRL+K.
         /// </summary>
         CtrlK = Keys.Control + Keys.K,
 
         /// <summary>
-        ///  The shorcut keys CTRL+L.
+        ///  The shortcut keys CTRL+L.
         /// </summary>
         CtrlL = Keys.Control + Keys.L,
 
         /// <summary>
-        ///  The shorcut keys CTRL+M.
+        ///  The shortcut keys CTRL+M.
         /// </summary>
         CtrlM = Keys.Control + Keys.M,
 
         /// <summary>
-        ///  The shorcut keys CTRL+N.
+        ///  The shortcut keys CTRL+N.
         /// </summary>
         CtrlN = Keys.Control + Keys.N,
 
         /// <summary>
-        ///  The shorcut keys CTRL+O.
+        ///  The shortcut keys CTRL+O.
         /// </summary>
         CtrlO = Keys.Control + Keys.O,
 
         /// <summary>
-        ///  The shorcut keys CTRL+P.
+        ///  The shortcut keys CTRL+P.
         /// </summary>
         CtrlP = Keys.Control + Keys.P,
 
         /// <summary>
-        ///  The shorcut keys CTRL+Q.
+        ///  The shortcut keys CTRL+Q.
         /// </summary>
         CtrlQ = Keys.Control + Keys.Q,
 
         /// <summary>
-        ///  The shorcut keys CTRL+R.
+        ///  The shortcut keys CTRL+R.
         /// </summary>
         CtrlR = Keys.Control + Keys.R,
 
         /// <summary>
-        ///  The shorcut keys CTRL+S.
+        ///  The shortcut keys CTRL+S.
         /// </summary>
         CtrlS = Keys.Control + Keys.S,
 
         /// <summary>
-        ///  The shorcut keys CTRL+T.
+        ///  The shortcut keys CTRL+T.
         /// </summary>
         CtrlT = Keys.Control + Keys.T,
 
         /// <summary>
-        ///  The shorcut keys CTRL+U
+        ///  The shortcut keys CTRL+U
         /// </summary>
         CtrlU = Keys.Control + Keys.U,
 
         /// <summary>
-        ///  The shorcut keys CTRL+V.
+        ///  The shortcut keys CTRL+V.
         /// </summary>
         CtrlV = Keys.Control + Keys.V,
 
         /// <summary>
-        ///  The shorcut keys CTRL+W.
+        ///  The shortcut keys CTRL+W.
         /// </summary>
         CtrlW = Keys.Control + Keys.W,
 
         /// <summary>
-        ///  The shorcut keys CTRL+X.
+        ///  The shortcut keys CTRL+X.
         /// </summary>
         CtrlX = Keys.Control + Keys.X,
 
         /// <summary>
-        ///  The shorcut keys CTRL+Y.
+        ///  The shortcut keys CTRL+Y.
         /// </summary>
         CtrlY = Keys.Control + Keys.Y,
 
         /// <summary>
-        ///  The shorcut keys CTRL+Z.
+        ///  The shortcut keys CTRL+Z.
         /// </summary>
         CtrlZ = Keys.Control + Keys.Z,
 
