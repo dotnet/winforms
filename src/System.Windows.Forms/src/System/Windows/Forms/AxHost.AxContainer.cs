@@ -253,7 +253,7 @@ namespace System.Windows.Forms
                     {
                         if (onlyNext || onlyPrev)
                         {
-                            Debug.Fail("GC_WCH_FONLYNEXT or FONLYPREV used with CONTANER or CONATINED");
+                            Debug.Fail("GC_WCH_FONLYNEXT or FONLYPREV used with CONTANER or CONTAINED");
                             throw E_INVALIDARG;
                         }
                     }
