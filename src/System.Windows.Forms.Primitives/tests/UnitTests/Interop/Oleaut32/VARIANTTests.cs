@@ -705,7 +705,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(NULL_TestData))]
-        public void VARIANT_ToObject_NULL_Sucess(IntPtr data)
+        public void VARIANT_ToObject_NULL_Success(IntPtr data)
         {
             using var variant = new VARIANT
             {
@@ -720,7 +720,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(NULL_TestData))]
-        public void VARIANT_ToObject_NULLBYREFData_Sucess(IntPtr data)
+        public void VARIANT_ToObject_NULLBYREFData_Success(IntPtr data)
         {
             using var variant = new VARIANT
             {
@@ -734,7 +734,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         }
 
         [StaFact]
-        public void VARIANT_ToObject_NULLBYREFNoData_Sucess()
+        public void VARIANT_ToObject_NULLBYREFNoData_Success()
         {
             using var variant = new VARIANT
             {
@@ -751,7 +751,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(EMPTY_TestData))]
-        public void VARIANT_ToObject_EMPTY_Sucess(IntPtr data)
+        public void VARIANT_ToObject_EMPTY_Success(IntPtr data)
         {
             using var variant = new VARIANT
             {
@@ -766,7 +766,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(EMPTY_TestData))]
-        public void VARIANT_ToObject_EMPTYBYREFData_Sucess(IntPtr data)
+        public void VARIANT_ToObject_EMPTYBYREFData_Success(IntPtr data)
         {
             using var variant = new VARIANT
             {
@@ -790,7 +790,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
         }
 
         [StaFact]
-        public void VARIANT_ToObject_EMPTYBYREFNoData_Sucess()
+        public void VARIANT_ToObject_EMPTYBYREFNoData_Success()
         {
             using var variant = new VARIANT
             {
