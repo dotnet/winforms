@@ -2045,7 +2045,7 @@ namespace System.Windows.Forms.Design
                     int currentIndexOfEditor = MenuItem.DropDown.Items.IndexOf(typeHereNode);
                     if (currentIndexOfEditor >= 0 && currentIndexOfEditor < MenuItem.DropDown.Items.Count - 1)
                     {
-                        // we now know the editor is there, but isnt currently at the end of the line. lets add it.
+                        // we now know the editor is there, but isn't currently at the end of the line. lets add it.
                         MenuItem.DropDown.ItemAdded -= new ToolStripItemEventHandler(OnItemAdded);
                         MenuItem.DropDown.SuspendLayout();
                         MenuItem.DropDown.Items.Remove(typeHereNode);
