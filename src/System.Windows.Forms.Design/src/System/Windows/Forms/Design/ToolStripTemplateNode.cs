@@ -13,7 +13,7 @@ using static Interop;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swaped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
+    ///  This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swapped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
     /// </summary>
     internal class ToolStripTemplateNode : IMenuStatusHandler
     {
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         private ToolStripLabel _centerLabel;
         // SplitButton reAdded for ToolStrip specific TemplateNode
         private ToolStripSplitButton _addItemButton;
-        //swaped in text...
+        //swapped in text...
         private ToolStripControlHost _centerTextBox;
 
         //reqd as rtb does accept Enter..
