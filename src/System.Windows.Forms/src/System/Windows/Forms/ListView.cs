@@ -6564,7 +6564,7 @@ namespace System.Windows.Forms
                             // this event twice, once with newState, oldState, and again with
                             // oldState, newState.
                             // Changing this affects the behaviour as the control never
-                            // fires the event on a Deselct of an Items from multiple selections.
+                            // fires the event on a Deselect of an Items from multiple selections.
                             // So leave it as it is...
                             if (newState != oldState)
                             {
