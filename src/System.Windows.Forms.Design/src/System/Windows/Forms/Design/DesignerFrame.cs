@@ -15,7 +15,7 @@ using static Interop;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  This class implements our design time document. This is the outer window that encompases a designer. It maintains a control hierarchy that looks like this:
+    ///  This class implements our design time document. This is the outer window that encompasses a designer. It maintains a control hierarchy that looks like this:
     ///  DesignerFrame
     ///  ScrollableControl
     ///  Designer
