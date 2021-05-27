@@ -450,7 +450,7 @@ namespace System.Windows.Forms
 
             // STEP 1 remove empty space in the row.
 
-            // since layout sisuspended, we'll need to watch changes to the margin
+            // since layout is suspended, we'll need to watch changes to the margin
             // as a result of calling FreeSpaceFromRow.
             int[] margins = new int[Cells.Count];
             for (int i = 0; i < Cells.Count; i++)
@@ -544,7 +544,7 @@ namespace System.Windows.Forms
 
             // STEP 1 remove empty space in the row.
 
-            // since layout sisuspended, we'll need to watch changes to the margin
+            // since layout is suspended, we'll need to watch changes to the margin
             // as a result of calling FreeSpaceFromRow.
             int[] margins = new int[Cells.Count];
             for (int i = 0; i < Cells.Count; i++)
