@@ -789,7 +789,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 private void OnResolveName(object sender, ResolveNameEventArgs e)
                 {
-                    //note: this recursionguard does not fix the problem, but rathar avoids a stack overflow which will bring down VS and cause loss of data.
+                    //note: this recursionguard does not fix the problem, but rather avoids a stack overflow which will bring down VS and cause loss of data.
                     if (_nameResolveGuard.ContainsKey(e.Name))
                     {
                         return;
