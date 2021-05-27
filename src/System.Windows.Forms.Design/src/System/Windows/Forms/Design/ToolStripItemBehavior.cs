@@ -419,7 +419,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        //End Implmentation
+                        //End Implementation
                         else
                         {
                             if (glyphItem.IsOnDropDown && ToolStripDesigner.s_shiftState)

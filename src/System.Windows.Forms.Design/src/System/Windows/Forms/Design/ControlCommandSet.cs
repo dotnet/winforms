@@ -1396,7 +1396,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is called when the selection has changed.  Anyone using CommandSetItems
         ///  that need to update their status based on selection changes should override
-        ///  this and update their own commands at this time.  The base implementaion
+        ///  this and update their own commands at this time.  The base implementation
         ///  runs through all base commands and calls UpdateStatus on them.
         /// </summary>
         protected override void OnUpdateCommandStatus()
