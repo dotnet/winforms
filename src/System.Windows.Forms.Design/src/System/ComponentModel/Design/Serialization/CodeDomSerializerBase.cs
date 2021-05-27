@@ -2097,7 +2097,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  is a name for the given object.  If the expression service returns a valid name, it checks to see if
         ///  there is a '.' in the name.  This indicates that the expression service found this object as the return
         ///  value of a read only property on another object.  If there is a '.', GetExpression will split the reference
-        ///  into sub-parts.  The leftmost part is a name that will be evalulated via manager.GetInstance.  For each
+        ///  into sub-parts.  The leftmost part is a name that will be evaluated via manager.GetInstance.  For each
         ///  subsequent part, a property reference expression will be built.  The final expression will then be returned.
         ///  If the object did not have an expression set, or the object was not found in the reference service, null will
         ///  be returned from GetExpression, indicating there is no existing expression for the object.
