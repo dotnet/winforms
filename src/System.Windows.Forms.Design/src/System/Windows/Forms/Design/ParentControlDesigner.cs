@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Design
 
                     _drawGrid = value;
 
-                    //invalidate the cotnrol to remove or draw the grid based on the new value
+                    //invalidate the control to remove or draw the grid based on the new value
                     Control control = Control;
                     if (control != null)
                     {

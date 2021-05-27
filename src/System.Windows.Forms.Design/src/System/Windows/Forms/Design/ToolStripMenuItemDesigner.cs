@@ -742,7 +742,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This Function is called by EnterInSituEdit where in we Swap the typeHereNode by  the TemplateNode (the Insitu Editor). Since the TemplateNode had a EditorToolStrip we can just HOST that ToolStrip as a ToolStripContorlHost and add it to the DropDown.
+        ///  This Function is called by EnterInSituEdit where in we Swap the typeHereNode by  the TemplateNode (the Insitu Editor). Since the TemplateNode had a EditorToolStrip we can just HOST that ToolStrip as a ToolStripControlHost and add it to the DropDown.
         /// </summary>
         private void CreateDummyMenuItem(ToolStripItem item, string text, Image image)
         {
