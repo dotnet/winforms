@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             {
                 InTransition = false;
 
-                // we should roolup if the current item has changed and is selected.
+                // we should rollup if the current item has changed and is selected.
                 bool rollup = forceClose || (CurrentItem is not null && CurrentItem != lastSelected && CurrentItem.Selected);
                 if (rollup && lastSelected is not null && lastSelected.HasDropDownItems)
                 {
