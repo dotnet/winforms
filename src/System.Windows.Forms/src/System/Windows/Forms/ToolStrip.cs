@@ -3276,7 +3276,7 @@ namespace System.Windows.Forms
             if (TabStop)
             {
                 // ToolBar in tab-order parity
-                //  this means we want the toolstrip in the normal tab order - which means it shouldnt wrap.
+                //  this means we want the toolstrip in the normal tab order - which means it shouldn't wrap.
                 //  First tab gets you into the toolstrip, second tab moves you on your way outside the container.
                 //  arrow keys would continue to wrap.
                 return false;
@@ -3801,7 +3801,7 @@ namespace System.Windows.Forms
                 // can't create a 0x0 bmp.
 
                 // Supporting RoundedEdges...
-                // we've got a concept of a region that we shouldnt paint (the TransparentRegion as specified in the Renderer).
+                // we've got a concept of a region that we shouldn't paint (the TransparentRegion as specified in the Renderer).
                 // in order to support this we're going to intersect that region with the clipping region.
                 // this new region will be excluded during the guts of OnPaint, and restored at the end of OnPaint.
                 if (transparentRegion is not null)
