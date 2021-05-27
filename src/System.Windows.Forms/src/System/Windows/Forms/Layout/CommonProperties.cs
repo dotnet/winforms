@@ -253,7 +253,7 @@ namespace System.Windows.Forms.Layout
         }
 
         ///  SetPadding
-        ///  Sets the padding (interior space) for an element. See GetPadding for more detiails.
+        ///  Sets the padding (interior space) for an element. See GetPadding for more details.
         ///  NOTE: It is the callers responsibility to do layout.  See Control.Padding for details.
         internal static void SetPadding(IArrangedElement element, Padding value)
         {
