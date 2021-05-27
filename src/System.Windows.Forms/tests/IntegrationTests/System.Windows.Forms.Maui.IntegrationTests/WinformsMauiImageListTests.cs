@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
     /// <summary>
     ///  This class runs a maui executable, which contains one or more scenarios.
     ///
-    ///  We want to be able to represent each scenario as a seperate xUnit test, but it's not
+    ///  We want to be able to represent each scenario as a separate xUnit test, but it's not
     ///  possible to run them independently. The workaround is to have a MauiTestRunner execute all
     ///  the scenarios once and store the results, then feed the scenario names in as member data.
     ///
