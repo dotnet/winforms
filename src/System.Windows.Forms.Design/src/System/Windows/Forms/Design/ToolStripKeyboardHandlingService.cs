@@ -1537,7 +1537,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // pupulates a list of our custom commands to be added to menu command service.
+        // populates a list of our custom commands to be added to menu command service.
         private void PopulateNewCommands()
         {
             if (_newCommands is null)
