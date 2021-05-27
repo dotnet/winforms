@@ -4732,7 +4732,7 @@ namespace System.Windows.Forms
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            // don't save the list view items state when in virtual mode : it is the responsability of the
+            // don't save the list view items state when in virtual mode : it is the responsibility of the
             // user to cache the list view items in virtual mode
             if (!Disposing && !VirtualMode)
             {
