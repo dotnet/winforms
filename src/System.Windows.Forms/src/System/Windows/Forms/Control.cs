@@ -11012,7 +11012,7 @@ namespace System.Windows.Forms
                 {
                     // We do not do this in the OnPropertyChanged event for visible
                     // Lots of things could cause us to become visible, including a
-                    // parent window.  We do not want to indescriminiately layout
+                    // parent window.  We do not want to indiscriminately layout
                     // due to this, but we do want to layout if the user changed
                     // our visibility.
                     using (new LayoutTransaction(_parent, this, PropertyNames.Visible))
