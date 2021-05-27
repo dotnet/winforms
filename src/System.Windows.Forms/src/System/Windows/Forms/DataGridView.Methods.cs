@@ -28709,7 +28709,7 @@ namespace System.Windows.Forms
                 if (!SetCurrentCellAddressCore(-1, -1, true, true, false))
                 {
                     // Just cancel operation silently instead of throwing InvalidOperationException
-                    // 'finally' below resets this.dataGridViewOper[OperationinSort] to false
+                    // 'finally' below resets this.dataGridViewOper[OperationInSort] to false
                     return;
                 }
 
