@@ -2010,7 +2010,7 @@ namespace System.Windows.Forms
             {
                 if (IsDirty() || ocxState is null)
                 {
-                    Debug.Assert(!axState[disposed], "we chould not be asking for the object when we are axState[disposed]...");
+                    Debug.Assert(!axState[disposed], "we could not be asking for the object when we are axState[disposed]...");
                     ocxState = CreateNewOcxState(ocxState);
                 }
 
