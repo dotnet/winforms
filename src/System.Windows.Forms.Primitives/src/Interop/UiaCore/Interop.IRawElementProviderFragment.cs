@@ -37,7 +37,7 @@ internal static partial class Interop
             /// </summary>
             /// <remarks>
             ///  Proxy implementations should return null for the top-level proxy which
-            ///  correpsonds to the HWND; and should return an array which starts
+            ///  corresponds to the HWND; and should return an array which starts
             ///  with AutomationInteropProvider.AppendRuntimeId, followed by values
             ///  which are then unique within that proxy's HWNDs.
             /// </remarks>
