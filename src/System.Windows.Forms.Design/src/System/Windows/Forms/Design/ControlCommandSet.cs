@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms.Design
                                                 if (controlsProp != null)
                                                 {
                                                     // For a perf improvement, we will
-                                                    // call OnComponentChanging only once per parent to make sure we do not do unnecessaru serialization for Undo
+                                                    // call OnComponentChanging only once per parent to make sure we do not do unnecessary serialization for Undo
                                                     //this makes bulk operations way faster (see bug 532657)
 
                                                     parentList.Add(parent);
