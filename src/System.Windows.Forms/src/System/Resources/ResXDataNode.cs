@@ -321,7 +321,7 @@ namespace System.Resources
                 catch (Exception ex)
                 {
                     // Some custom type converters will throw in ConvertTo(string)
-                    // to indicate that this object should be serialized through ISeriazable
+                    // to indicate that this object should be serialized through ISerializable
                     // instead of as a string. This is semi-wrong, but something we will have to
                     // live with to allow user created Cursors to be serializable.
                     if (ClientUtils.IsCriticalException(ex))
