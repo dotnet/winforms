@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void PropertyGridToolStripButtonAccessibleObjec_SelectionItemPatternSupported_ReturnsExpected()
+        public void PropertyGridToolStripButtonAccessibleObject_SelectionItemPatternSupported_ReturnsExpected()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;

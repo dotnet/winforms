@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
     public class ToolStripSeparator_ToolStripSeparatorAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
-        public void ToolStripSeparatorAccessibleObect_Ctor_Default()
+        public void ToolStripSeparatorAccessibleObject_Ctor_Default()
         {
             using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
             ToolStripSeparatorAccessibleObject accessibleObject = new ToolStripSeparatorAccessibleObject(toolStripSeparator);
@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripSeparatorAccessibleObect_ControlType_IsSeparator_IfAccessibleRoleIsDefault()
+        public void ToolStripSeparatorAccessibleObject_ControlType_IsSeparator_IfAccessibleRoleIsDefault()
         {
             using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
             // AccessibleRole is not set = Default
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripSeparatorAccessibleObect_Role_IsSeparator_ByDefault()
+        public void ToolStripSeparatorAccessibleObject_Role_IsSeparator_ByDefault()
         {
             using ToolStripSeparator toolStripSeparator = new ToolStripSeparator();
             // AccessibleRole is not set = Default
