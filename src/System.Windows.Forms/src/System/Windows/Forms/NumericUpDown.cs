@@ -832,7 +832,7 @@ namespace System.Windows.Forms
                 numDigits = maxDigits - 1;
             }
 
-            // e.g., if the lagest digit is 7, and we can have 3 digits, the widest string would be "777"
+            // e.g., if the largest digit is 7, and we can have 3 digits, the widest string would be "777"
             for (int i = 0; i < numDigits; i++)
             {
                 testNumber = testNumber * baseSize + digit;
