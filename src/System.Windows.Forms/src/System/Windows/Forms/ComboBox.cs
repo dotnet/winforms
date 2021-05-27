@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // SelectionLength can be negtive...
+                // SelectionLength can be negative...
                 Select(SelectionStart, value);
             }
         }
