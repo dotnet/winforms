@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms.Design
         {
             if (sender is ToolStripDropDownItem ddi)
             {
-                //Invaliate the ToolStripWindow.... for clearing the dropDowns
+                //Invalidate the ToolStripWindow.... for clearing the dropDowns
                 if (_toolStripAdornerWindowService != null)
                 {
                     if (rootControlGlyph != null && _toolStripAdornerWindowService.DropDownAdorner.Glyphs.Contains(rootControlGlyph))
