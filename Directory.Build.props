@@ -21,7 +21,7 @@
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
 
-  <!-- Allow SourceLink to work for strongly types resource files (SR) by embeddeding generated files into the PDBs -->
+  <!-- Allow SourceLink to work for strongly types resource files (SR) by embedding generated files into the PDBs -->
   <PropertyGroup>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
   </PropertyGroup>
