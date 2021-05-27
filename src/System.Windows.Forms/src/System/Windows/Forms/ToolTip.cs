@@ -2067,7 +2067,7 @@ namespace System.Windows.Forms
 
             // Set the max possible size of the tooltip to the size we received.
             // This prevents the operating system from drawing incorrect rectangles
-            // when determing the correct display rectangle
+            // when determining the correct display rectangle
             // Set the MaxWidth only if user has changed the width.
             if (currentTooltipSize != r.Size)
             {
