@@ -3646,7 +3646,7 @@ namespace System.Windows.Forms
                 _childDropDown.AssignHandle(_dropDownHandle);
 
                 // Reset the child list accessible object in case the the DDL is recreated.
-                // For instance when dialog window containging the ComboBox is reopened.
+                // For instance when dialog window containing the ComboBox is reopened.
                 _childListAccessibleObject = null;
             }
         }
