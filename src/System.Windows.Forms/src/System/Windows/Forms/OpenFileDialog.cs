@@ -20,8 +20,6 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionOpenFileDialog))]
     public sealed partial class OpenFileDialog : FileDialog
     {
-        private static Guid CLSID_FileOpenDialog = new Guid("DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7");
-
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box displays a
         ///  warning if the user specifies a file name that does not exist.
@@ -145,7 +143,7 @@ namespace System.Windows.Forms
         private protected override IFileDialog CreateVistaDialog()
         {
             HRESULT hr = Ole32.CoCreateInstance(
-                ref CLSID_FileOpenDialog,
+                ref CLSID.FileOpenDialog,
                 IntPtr.Zero,
                 Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
                 ref NativeMethods.ActiveX.IID_IUnknown,
