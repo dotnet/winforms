@@ -1240,7 +1240,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The ShowLines property determines whether or not the tooltips willbe displayed on the nodes
+        ///  The ShowLines property determines whether or not the tooltips will be displayed on the nodes
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
