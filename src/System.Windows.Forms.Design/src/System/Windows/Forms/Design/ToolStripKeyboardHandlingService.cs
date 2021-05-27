@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
         private object _ownerItemAfterCut; // This value is set only of the ToolStripMenuItem is cut and now we need to reopen the dropDown which was closed in the previous CUT operation.
 
         /// <summary>
-        ///  This creates a service for handling the keyboard navigation at desgin time.
+        ///  This creates a service for handling the keyboard navigation at design time.
         /// </summary>
         public ToolStripKeyboardHandlingService(IServiceProvider serviceProvider)
         {
