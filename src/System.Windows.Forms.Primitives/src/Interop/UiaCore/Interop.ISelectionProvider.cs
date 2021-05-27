@@ -32,7 +32,7 @@ internal static partial class Interop
             ///  Indicates whether the control allows more than one element to be selected
             /// </summary>
             /// <returns>Boolean indicating whether the control allows more than one element to be selected</returns>
-            /// <remarks>If this is false, then the control is a single-select ccntrol</remarks>
+            /// <remarks>If this is false, then the control is a single-select control</remarks>
             BOOL CanSelectMultiple { get; }
 
             /// <summary>
