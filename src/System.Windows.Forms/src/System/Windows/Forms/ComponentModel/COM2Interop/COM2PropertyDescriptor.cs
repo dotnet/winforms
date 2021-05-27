@@ -103,7 +103,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private bool inAttrQuery;
 
         /// <summary>
-        ///  Our event signitures.
+        ///  Our event signatures.
         /// </summary>
         private static readonly object EventGetBaseAttributes = new object();
         private static readonly object EventGetDynamicAttributes = new object();
