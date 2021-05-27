@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            //this will represent the list of componets we just cleared
+            //this will represent the list of components we just cleared
             ArrayList compsRemoved = new ArrayList(_designerActionLists.Count);
             foreach (DictionaryEntry entry in _designerActionLists)
             {

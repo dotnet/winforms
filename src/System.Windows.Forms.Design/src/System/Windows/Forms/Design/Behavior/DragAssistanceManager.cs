@@ -59,14 +59,14 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Internal constructor that takes the service provider and the list of dragCompoents.
+        ///  Internal constructor that takes the service provider and the list of dragComponents.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider, ArrayList dragComponents) : this(serviceProvider, null, dragComponents, null, false, false)
         {
         }
 
         /// <summary>
-        ///  Internal constructor that takes the service provider, the list of dragCompoents, and a boolean
+        ///  Internal constructor that takes the service provider, the list of dragComponents, and a boolean
         ///  indicating that we are resizing.
         /// </summary>
         internal DragAssistanceManager(IServiceProvider serviceProvider, ArrayList dragComponents, bool resizing) : this(serviceProvider, null, dragComponents, null, resizing, false)
