@@ -555,7 +555,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else if (statement is CodeCommentStatement)
                         {
-                            // do nothing for comments.  This just supresses the debug warning
+                            // do nothing for comments.  This just suppresses the debug warning
                         }
                         else
                         {
