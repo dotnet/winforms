@@ -219,7 +219,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // we do nothing in repsonse to a set, since we calculate the value above.
+                // we do nothing in response to a set, since we calculate the value above.
             }
         }
 
