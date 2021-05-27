@@ -400,7 +400,7 @@ namespace System.ComponentModel.Design
                 components = Array.Empty<object>();
             }
 
-            // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifer keys.  This creates the "Auto" selection type for us by default.
+            // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifier keys.  This creates the "Auto" selection type for us by default.
             if (fAuto)
             {
                 fToggle = (Control.ModifierKeys & (Keys.Control | Keys.Shift)) > 0;
