@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // Only incriment if we have not removed the item
+                    // Only increment if we have not removed the item
                     currentIndex++;
                 }
             }
