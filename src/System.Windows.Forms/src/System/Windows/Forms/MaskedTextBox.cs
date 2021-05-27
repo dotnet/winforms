@@ -53,7 +53,7 @@ namespace System.Windows.Forms
         // Values to track changes in IME composition string (if any).  Having const variables is a bit more efficient
         // than having an enum (which creates a class).
         private const byte imeConversionNone = 0;  // no conversion has been performed in the composition string.
-        private const byte imeConversionUpdate = 1;  // the char being composed has been updated but not coverted yet.
+        private const byte imeConversionUpdate = 1;  // the char being composed has been updated but not converted yet.
         private const byte imeConversionCompleted = 2;  // the char being composed has been fully converted.
 
         /////////  Instance fields
