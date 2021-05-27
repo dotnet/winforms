@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///  This is similar to ArrayList except that it also
-    ///  mantains a bit-flag based state element for each item
+    ///  maintains a bit-flag based state element for each item
     ///  in the array.
     ///
     ///  The methods to enumerate, count and get data support
