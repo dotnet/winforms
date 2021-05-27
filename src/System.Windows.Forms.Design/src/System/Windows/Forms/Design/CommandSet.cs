@@ -2349,7 +2349,7 @@ namespace System.Windows.Forms.Design
                                             //cache the associatedComponents only for FAILED control.
                                             associatedCompsOfFailedContol = designerComps;
                                             // now we will jump out of the using block and call trans.Dispose()
-                                            // which in turn calls trans.Cancel for an uncommited transaction,
+                                            // which in turn calls trans.Cancel for an uncommitted transaction,
                                             // We want to cancel the transaction because otherwise we'll have
                                             // un-parented controls
                                             return;
