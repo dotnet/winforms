@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Design.Behavior
             ///  This class knows how to hook all the messages to a given process/thread.
             ///
             ///  On any mouse clicks, it asks the designer what to do with the message, that is to eat it or propagate
-            ///  it to the control it was meant for.   This allows us to synchrounously process mouse messages when
+            ///  it to the control it was meant for.   This allows us to synchronously process mouse messages when
             ///  the AdornerWindow itself may be pumping messages.
             /// </summary>
             private class MouseHook
