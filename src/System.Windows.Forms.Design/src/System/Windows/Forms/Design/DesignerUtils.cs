@@ -704,7 +704,7 @@ namespace System.Windows.Forms.Design
                 // by doing the pointer math
                 byte* maxAddr = (byte*)(pPixels + pixels);
 
-                // now run through the pixels only modifyng the A byte
+                // now run through the pixels only modifying the A byte
                 for (byte* addr = (byte*)(pPixels) + 3; addr < maxAddr; addr += 4)
                 {
                     // the new value is just an index into our precomputed value array from above.
