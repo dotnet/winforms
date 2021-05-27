@@ -1726,7 +1726,7 @@ namespace System.Windows.Forms
                     private readonly VTABLE _vtbl;
 
                     /// <summary>
-                    ///  Call IConnectioinPoint.Advise using Delegate.Invoke on the v-table slot.
+                    ///  Call IConnectionPoint.Advise using Delegate.Invoke on the v-table slot.
                     /// </summary>
                     public bool Advise(IntPtr punkEventSink, out uint pdwCookie)
                     {
