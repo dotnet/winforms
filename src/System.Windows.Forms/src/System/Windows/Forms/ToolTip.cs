@@ -913,7 +913,7 @@ namespace System.Windows.Forms
 
                     _window = null;
 
-                    // Unhook the DeactiveEvent. Find the Form for associated Control and hook
+                    // Unhook the DeactivateEvent. Find the Form for associated Control and hook
                     // up to the Deactivated event to Hide the Shown tooltip
                     if (TopLevelControl is Form baseFrom)
                     {
