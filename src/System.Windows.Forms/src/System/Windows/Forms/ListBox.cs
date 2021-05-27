@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         public const int NoMatches = LB_ERR;
 
         /// <summary>
-        ///  The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
+        ///  The default item height for an owner-draw ListBox. The ListBox's non-ownerdraw
         ///  item height is 13 for the default font on Windows.
         /// </summary>
         public const int DefaultItemHeight = 13;
