@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         readonly int bitDepth;
 
-        private static readonly object syncLock = new object();//used to lock this class before sync'ing to SystemEvents
+        private static readonly object syncLock = new object();//used to lock this class before syncing to SystemEvents
 
         private static int desktopChangedCount = -1;//static counter of desktop size changes
 
