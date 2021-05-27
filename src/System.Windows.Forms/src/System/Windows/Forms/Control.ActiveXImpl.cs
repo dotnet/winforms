@@ -1538,7 +1538,7 @@ namespace System.Windows.Forms
 
                     /// <summary>
                     ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
-                    ///  If an iid is supplied, QI for the interface and wrap that unknonwn instead.
+                    ///  If an iid is supplied, QI for the interface and wrap that unknown instead.
                     /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr, Guid iid)
                         : base(IntPtr.Zero, true)
