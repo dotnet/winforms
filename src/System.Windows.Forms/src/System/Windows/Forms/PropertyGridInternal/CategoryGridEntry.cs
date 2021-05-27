@@ -161,7 +161,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // we want to make sure that we return 0 for property depth here instead of
                 PropertyGridView gridHost = GridEntryHost;
 
-                // we call base.PropertyDepth here because we don't want the subratction to happen.
+                // we call base.PropertyDepth here because we don't want the subtraction to happen.
                 return 1 + gridHost.GetOutlineIconSize() + OutlineIconPadding + (base.PropertyDepth * gridHost.GetDefaultOutlineIndent());
             }
         }
