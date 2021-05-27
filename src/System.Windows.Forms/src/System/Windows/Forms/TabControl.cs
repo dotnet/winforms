@@ -538,7 +538,7 @@ namespace System.Windows.Forms
         ///  This private property is set by the TabPageCollection when the user calls "InsertItem".
         ///  The problem is when InsertItem is called then we add this item to the ControlsCollection (in addition to the TabPageCollection)
         ///  to keep both the collections is sync. But the controlCollection.Add is overriden to again ADD the item to the TabPageCollection.
-        ///  So we keep this flag in order to avoid repeatd addition (only during insert)
+        ///  So we keep this flag in order to avoid repeated addition (only during insert)
         ///  When the Add ends ... we reset this flag.
         /// </summary>
         private bool InsertingItem
