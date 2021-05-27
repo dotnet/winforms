@@ -3856,7 +3856,7 @@ namespace System.Windows.Forms
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.ScrollBars))
                     {
                         // Before changing the value of this.scrollBars, we scroll to the top-left cell to
-                        // avoid inconsitent state of scrollbars.
+                        // avoid inconsistent state of scrollbars.
                         DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                         int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
 
