@@ -452,7 +452,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Initializes the Unicode string varible that will be assigned to the edit box
+        ///  Initializes the Unicode string variable that will be assigned to the edit box
         /// </summary>
         private void InitUnicode()
         {
