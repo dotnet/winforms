@@ -3076,7 +3076,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Debug.Fail("no implemented persitance interfaces on object");
+                Debug.Fail("no implemented persistence interfaces on object");
                 throw new InvalidOperationException(SR.UnableToInitComponent);
             }
 
