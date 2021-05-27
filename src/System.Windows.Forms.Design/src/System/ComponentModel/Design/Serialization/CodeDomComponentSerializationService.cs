@@ -1090,7 +1090,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(resolved || (!resolved && !canInvokeManager)))
                         {
                             manager.ReportError(new CodeDomSerializerException(string.Format(SR.CodeDomComponentSerializationServiceDeserializationError, name), manager));
-                            Debug.Fail("No statements or instance for name and no lone experssions: " + name);
+                            Debug.Fail("No statements or instance for name and no lone expressions: " + name);
                         }
                     }
 
