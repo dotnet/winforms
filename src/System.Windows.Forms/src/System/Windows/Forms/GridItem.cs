@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         public abstract GridItem? Parent { get; }
 
         /// <summary>
-        ///  If this item is a GridItemType.Property GridItem, this retreives the
+        ///  If this item is a GridItemType.Property GridItem, this retrieves the
         ///  System.ComponentModel.PropertyDescriptor that is associated with this GridItem.
         ///  This can be used to retrieve information such as property Type, Name, or
         ///  TypeConverter.
@@ -61,12 +61,12 @@ namespace System.Windows.Forms
         public abstract object? Value { get; }
 
         /// <summary>
-        ///  Retreives whether the given property is expandable.
+        ///  Retrieves whether the given property is expandable.
         /// </summary>
         public virtual bool Expandable => false;
 
         /// <summary>
-        ///  Retreives or sets whether the GridItem is in an expanded state.
+        ///  Retrieves or sets whether the GridItem is in an expanded state.
         /// </summary>
         public virtual bool Expanded
         {

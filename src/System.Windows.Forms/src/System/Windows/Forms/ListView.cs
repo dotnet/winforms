@@ -802,7 +802,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retreives the group which currently has the user focus.  This is the
+        ///  Retrieves the group which currently has the user focus.  This is the
         ///  group that's drawn with the dotted focus rectangle around it.
         ///  Returns null if no group is currently focused.
         /// </summary>
@@ -820,7 +820,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retreives the item which currently has the user focus.  This is the
+        ///  Retrieves the item which currently has the user focus.  This is the
         ///  item that's drawn with the dotted focus rectangle around it.
         ///  Returns null if no item is currently focused.
         /// </summary>

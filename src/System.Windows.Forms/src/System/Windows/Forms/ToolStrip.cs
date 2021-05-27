@@ -795,7 +795,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retreives the current display rectangle. The display rectangle
+        ///  Retrieves the current display rectangle. The display rectangle
         ///  is the virtual display area that is used to layout components.
         ///  The position and dimensions of the Form's display rectangle
         ///  change during autoScroll.
