@@ -526,7 +526,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the full path of this node.
         ///  The path consists of the labels of each of the nodes from the root to this node,
-        ///  each separated by the pathSeperator.
+        ///  each separated by the pathSeparator.
         /// </summary>
         [Browsable(false)]
         public string FullPath
