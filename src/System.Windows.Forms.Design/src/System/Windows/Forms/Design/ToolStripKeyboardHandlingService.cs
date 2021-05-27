@@ -202,7 +202,7 @@ namespace System.Windows.Forms.Design
             get => _selectionService;
         }
 
-        // When the ToolStripTemplateNode becomes active, the ToolStripKeyBoardHandlingService shouldnt process any MenuCommands...
+        // When the ToolStripTemplateNode becomes active, the ToolStripKeyBoardHandlingService shouldn't process any MenuCommands...
         internal bool TemplateNodeActive
         {
             get => _templateNodeActive;

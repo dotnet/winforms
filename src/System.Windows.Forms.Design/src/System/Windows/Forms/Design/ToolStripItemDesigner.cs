@@ -724,7 +724,7 @@ namespace System.Windows.Forms.Design
             }
 
             base.InitializeNewComponent(defaultValues);
-            // ComboBoxes and TextBoxes shouldnt have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
+            // ComboBoxes and TextBoxes shouldn't have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
             if (Component is ToolStripTextBox || Component is ToolStripComboBox)
             {
                 PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];

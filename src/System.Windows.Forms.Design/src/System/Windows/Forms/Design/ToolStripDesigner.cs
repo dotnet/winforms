@@ -585,7 +585,7 @@ namespace System.Windows.Forms.Design
                 ToolStripItemDesigner designer = _host.GetDesigner(component) as ToolStripItemDesigner;
                 try
                 {
-                    // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldnt do this. Also we shouldn't set the TEXT if we are creating a dummyItem.
+                    // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldn't do this. Also we shouldn't set the TEXT if we are creating a dummyItem.
                     if (!string.IsNullOrEmpty(text))
                     {
                         designer.InternalCreate = true;

@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
         private MiniToolStripRenderer _renderer;
         // This is the Type that the user has selected for the new Item
         private Type _itemType;
-        //Get the ToolStripKeyBoardService to notify that the TemplateNode is Active and so it shouldnt process the KeyMessages.
+        //Get the ToolStripKeyBoardService to notify that the TemplateNode is Active and so it shouldn't process the KeyMessages.
         private ToolStripKeyboardHandlingService _toolStripKeyBoardService;
 
         //Cached ISelectionService

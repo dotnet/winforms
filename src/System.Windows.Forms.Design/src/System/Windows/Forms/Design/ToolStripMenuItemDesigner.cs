@@ -803,7 +803,7 @@ namespace System.Windows.Forms.Design
                 ToolStripItemDesigner designer = _designerHost.GetDesigner(newItem) as ToolStripItemDesigner;
                 try
                 {
-                    // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldnt do this.
+                    // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldn't do this.
                     designer.InternalCreate = true;
                     if (designer is ComponentDesigner)
                     {
@@ -877,7 +877,7 @@ namespace System.Windows.Forms.Design
                 ToolStripItemDesigner designer = _designerHost.GetDesigner(newItem) as ToolStripItemDesigner;
                 try
                 {
-                    // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldnt do this.
+                    // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldn't do this.
                     if (!string.IsNullOrEmpty(newText) || addingDummyItem)
                     {
                         designer.InternalCreate = true;
@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms.Design
         // Invalidate the BehaviorService if the location changed.
         private void DropDownLocationChanged(object sender, EventArgs e)
         {
-            // this shoulnt get fired manytimes.. only in certain case... but in those cases its needed to REFRESH THE ENTIRE adornerWindow.
+            // this shouldn't get fired manytimes.. only in certain case... but in those cases its needed to REFRESH THE ENTIRE adornerWindow.
             ToolStripDropDown dropDown = sender as ToolStripDropDown;
             if (dropDown.Visible)
             {
