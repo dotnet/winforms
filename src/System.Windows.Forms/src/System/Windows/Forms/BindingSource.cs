@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms
         internal virtual bool ShouldSerializeAllowNew() => _allowNewIsSet;
 
         /// <summary>
-        ///  Hooks property changed events for the NEW current item, if nececssary
+        ///  Hooks property changed events for the NEW current item, if necessary
         /// </summary>
         private void HookItemChangedEventsForNewCurrent()
         {

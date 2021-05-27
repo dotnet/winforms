@@ -212,7 +212,7 @@ namespace System.Windows.Forms
 
         protected internal override bool ProcessMnemonic(char charCode)
         {
-            // checking IsMnemonic is not necesssary - toolstrip does this for us.
+            // checking IsMnemonic is not necessary - toolstrip does this for us.
             if (HasDropDownItems)
             {
                 Select();
