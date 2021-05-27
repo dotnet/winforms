@@ -27,7 +27,7 @@ internal static partial class Interop
             /// <summary>
             ///  Request that the control initiate its action.
             ///  Should return immediately without blocking.
-            ///  There is no way to determine what happened, when it happend, or whether
+            ///  There is no way to determine what happened, when it happened, or whether
             ///  anything happened at all.
             /// </summary>
             void Invoke();
