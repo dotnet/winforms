@@ -1851,7 +1851,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(LanguageOption_CustomGetLangOptions_TestData))]
-        public void RichTextBox_LanguageOption_CustomGetLangOptionst_ReturnsExpected(IntPtr result, RichTextBoxLanguageOptions expected)
+        public void RichTextBox_LanguageOption_CustomGetLangOptions_ReturnsExpected(IntPtr result, RichTextBoxLanguageOptions expected)
         {
             using var control = new CustomGetLangOptionsRichTextBox
             {
