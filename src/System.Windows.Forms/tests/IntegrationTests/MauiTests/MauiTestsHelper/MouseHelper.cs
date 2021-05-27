@@ -59,7 +59,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 int vscreenLeft = GetSystemMetrics(SystemMetric.SM_XVIRTUALSCREEN);
                 int vscreenTop = GetSystemMetrics(SystemMetric.SM_YVIRTUALSCREEN);
 
-                const int DesktopNormilizedMax = 65536;
+                const int DesktopNormalizedMax = 65536;
 
                 // Absolute input requires that input is in 'normalized' coords - with the entire
                 // desktop being (0,0)...(65535,65536). Need to convert input x,y coords to this
@@ -81,8 +81,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 // The key ting here is that unlike points in coordinate geometry, pixels take up
                 // space, so are often better treated like rectangles - and if you want to target
                 // a particular pixel, target its rectangle's midpoint, not its edge.
-                x = ((x - vscreenLeft) * DesktopNormilizedMax) / vscreenWidth + DesktopNormilizedMax / (vscreenWidth * 2);
-                y = ((y - vscreenTop) * DesktopNormilizedMax) / vscreenHeight + DesktopNormilizedMax / (vscreenHeight * 2);
+                x = ((x - vscreenLeft) * DesktopNormalizedMax) / vscreenWidth + DesktopNormalizedMax / (vscreenWidth * 2);
+                y = ((y - vscreenTop) * DesktopNormalizedMax) / vscreenHeight + DesktopNormalizedMax / (vscreenHeight * 2);
 
                 flags |= MOUSEEVENTF.VIRTUALDESK;
             }
