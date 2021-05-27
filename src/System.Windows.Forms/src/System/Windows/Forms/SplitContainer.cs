@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Reize SplitContainer
+        ///  Resize SplitContainer
         /// </summary>
         private void ResizeSplitContainer()
         {
