@@ -1514,7 +1514,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // Some DataGridViewTextBoxColumn columns need to be appened.
+                        // Some DataGridViewTextBoxColumn columns need to be appended.
                         while (value > Columns.Count)
                         {
                             int currentColumnCount = Columns.Count;
@@ -3437,7 +3437,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // Some rows need to be appened.
+                    // Some rows need to be appended.
                     if (Columns.Count == 0)
                     {
                         // There are no columns yet, we simply create a single DataGridViewTextBoxColumn.

@@ -15152,7 +15152,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(AllowUserToAddRowsInternal);
                 // First time the 'new' row gets edited.
-                // It becomes a regular row and a new 'new' row is appened.
+                // It becomes a regular row and a new 'new' row is appended.
                 NewRowIndex = -1;
                 AddNewRow(true /*createdByEditing*/);
             }
