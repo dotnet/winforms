@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Design.Behavior
         // These are SnapLines that represent our target control.
         private readonly ArrayList _targetVerticalSnapLines = new ArrayList();
         private readonly ArrayList _targetHorizontalSnapLines = new ArrayList();
-        // This is a list of all the different type of SnapLines our target controlhas.  When compiling our global SnapLine lists, if we see a SnapLineTypethat doesn't exist on our target - we can safely ignore it
+        // This is a list of all the different type of SnapLines our target control has.  When compiling our global SnapLine lists, if we see a SnapLineTypethat doesn't exist on our target - we can safely ignore it
         private readonly ArrayList _targetSnapLineTypes = new ArrayList();
         // These are created in our init() method (so we don't have to recreate them for every mousemove). These arrays represent the closest distance to any snap point on our target control.  Once these are calculated - we can: 1) remove anything > than snapDistance and 2) determine the smallest distanceoverall
         private int[] _verticalDistances;
