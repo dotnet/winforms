@@ -371,7 +371,7 @@ namespace System.Windows.Forms
             get
             {
                 // DropShadows are only supported on TopMost windows
-                // due to the flakeyness of the way it's implemented in the OS. (Non toplevel
+                // due to the flakiness of the way it's implemented in the OS. (Non toplevel
                 // windows can have parts of the shadow disappear because another window can get
                 // sandwiched between the SysShadow window and the dropdown.)
                 return dropShadowEnabled && TopMost && DisplayInformation.IsDropShadowEnabled;
