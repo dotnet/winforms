@@ -660,7 +660,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    // Reset the flag since we are exiting out of a ModalMesaageLoop..
+                    // Reset the flag since we are exiting out of a ModalMessageLoop..
                     _ourModalLoop = wasOurLoop;
                 }
 
