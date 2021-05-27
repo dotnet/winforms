@@ -1668,7 +1668,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  This is a serialzation manager that can load assemblies and search for types and provide a resource manager from our serialization store.
+            ///  This is a serialization manager that can load assemblies and search for types and provide a resource manager from our serialization store.
             /// </summary>
             private class LocalDesignerSerializationManager : DesignerSerializationManager
             {
@@ -1676,7 +1676,7 @@ namespace System.ComponentModel.Design.Serialization
                 private bool? _typeSvcAvailable;
 
                 /// <summary>
-                ///  Creates a new serilalization manager.
+                ///  Creates a new serialization manager.
                 /// </summary>
                 internal LocalDesignerSerializationManager(CodeDomSerializationStore store, IServiceProvider provider) : base(provider)
                 {

@@ -478,7 +478,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                         //
                                         // cache the statements for future usage if possible. We only do this for the main serialization manager, not
-                                        // for any other seriallization managers that may be calling us for undo or clipboard functions.
+                                        // for any other serialization managers that may be calling us for undo or clipboard functions.
                                         if (correctManager && cache != null && cache.Enabled)
                                         {
                                             cache[value] = entry;

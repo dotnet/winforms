@@ -432,7 +432,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  The default implementation of Serialize performs the following tasks:
         ///  •    Context Seeding.  The serialization context will be “seeded” with data including the RootContext, and CodeTypeDeclaration.
         ///  •    Member Serialization.  Next Serialize will walk all of the members and call SerializeToExpression.  Because serialization is done opportunistically in SerializeToExpression, this ensures that we do not serialize twice.
-        ///  •    Root Seralization.  Finally, the root object is serialized and its statements are added to the statement collection.
+        ///  •    Root Serialization.  Finally, the root object is serialized and its statements are added to the statement collection.
         ///  •    Statement Integration.  After all objects have been serialized the Serialize method orders the statements and adds them to a method returned from GetInitializeMethod.  Finally, a constructor is fabricated that calls all of the methods returned from GetInitializeMethod (this step is skipped for cases when GetInitializeMethod returns a constructor.
         /// </summary>
         public virtual CodeTypeDeclaration Serialize(IDesignerSerializationManager manager, object root, ICollection members)
