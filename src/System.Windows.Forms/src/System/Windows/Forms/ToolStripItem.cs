@@ -2448,7 +2448,7 @@ namespace System.Windows.Forms
                 {
                     // this is the case where we got a mouse enter, but ShouldSelectItem
                     // returned false.
-                    // typically occus when a window first opens - we get a mouse enter on the item
+                    // typically occurs when a window first opens - we get a mouse enter on the item
                     // the cursor is hovering over - but we don't actually want to change selection to it.
                     Select();
                 }
