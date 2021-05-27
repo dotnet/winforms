@@ -132,7 +132,7 @@ Tests are built and executed by file name convention
   
 #### Theory tests
 
-Quite often there may be multiple tests that test exectly the same functionality but with different input parameters (e.g. `null`, `""`, `" "` for a `string` argument). 
+Quite often there may be multiple tests that test exactly the same functionality but with different input parameters (e.g. `null`, `""`, `" "` for a `string` argument). 
 In such cases instead of creating multiple tests it is preferred to have a theory test, which is in another words a data-driven test.
 
 When writing theories note the following:
