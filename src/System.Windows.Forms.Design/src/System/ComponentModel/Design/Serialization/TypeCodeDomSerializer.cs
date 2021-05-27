@@ -190,7 +190,7 @@ namespace System.ComponentModel.Design.Serialization
                     Trace("--------------------------------------------------------------------");
                     // Deserialize design time properties for the root component.
                     DeserializePropertiesFromResources(manager, rootObject, s_designTimeFilter);
-                    // sort by the order so we deserialize in the same order the objects were decleared in.
+                    // sort by the order so we deserialize in the same order the objects were declared in.
                     OrderedCodeStatementCollection[] statementArray = new OrderedCodeStatementCollection[_statementTable.Count];
                     _statementTable.Values.CopyTo(statementArray, 0);
                     Array.Sort(statementArray, StatementOrderComparer.s_default);
