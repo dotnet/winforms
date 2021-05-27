@@ -326,7 +326,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    // This control has no discernable MSAA name - return an empty string to indiciate 'nameless'.
+                    // This control has no discernable MSAA name - return an empty string to indicate 'nameless'.
                     return null;
                 }
             }
