@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     ///  in the middle. This is a composite control. The user can drag and drop this control from Toolbox.
     ///  Controls can be added to the right panel and the left panel. The Orientation can be either Horizontal or Vertical.
     ///  The Controls inside the Panels would be redrawn with the new Orientation.
-    ///  With this control the user need be aware of docking, z-order of the controls. The controls get parented when thry are
+    ///  With this control the user need be aware of docking, z-order of the controls. The controls get parented when they are
     ///  dropped on the SpitContainer.
     /// </summary>
     [DefaultEvent(nameof(SplitterMoved))]
