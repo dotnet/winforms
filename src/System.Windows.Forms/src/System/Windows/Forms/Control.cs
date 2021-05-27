@@ -6734,7 +6734,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Determines if charCode is the mnemonic character in text.
-        ///  The mnemonic character is the character imediately following the first
+        ///  The mnemonic character is the character immediately following the first
         ///  instance of "&amp;" in text
         /// </summary>
         public static bool IsMnemonic(char charCode, string text)
