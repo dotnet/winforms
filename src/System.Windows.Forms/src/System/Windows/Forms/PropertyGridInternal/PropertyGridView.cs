@@ -1782,7 +1782,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // control is a top=level window. standard way of setparent on the control is prohibited for top-level controls.
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
-            // We are not touching this for this relase. We may revisit it in next release.
+            // We are not touching this for this release. We may revisit it in next release.
             User32.SetWindowLong(_dropDownHolder, User32.GWL.HWNDPARENT, new HandleRef(this, Handle));
             _dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
             User32.ShowWindow(_dropDownHolder, User32.SW.SHOWNA);
