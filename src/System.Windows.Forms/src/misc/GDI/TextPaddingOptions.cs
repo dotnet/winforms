@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Internal
 
         // Adds padding to the text bounding box (inflating the bounding box).
         // This is to render text similar to GDI+.
-        // Implies GlypOverhangPadding.
+        // Implies GlyphOverhangPadding.
         LeftAndRightPadding = 0x00000002
     }
 }
