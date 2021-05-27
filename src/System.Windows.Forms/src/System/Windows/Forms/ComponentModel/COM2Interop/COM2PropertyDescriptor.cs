@@ -37,7 +37,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private bool readOnly;
 
         /// <summary>
-        ///  The resoved native type -> clr type
+        ///  The resolved native type -> clr type
         /// </summary>
         private readonly Type propertyType;
 
