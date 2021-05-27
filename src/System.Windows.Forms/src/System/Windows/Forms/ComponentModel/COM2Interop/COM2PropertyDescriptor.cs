@@ -785,7 +785,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             catch (Exception ex)
                             {
-                                Debug.Fail("Failed to create edtior of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString());
+                                Debug.Fail("Failed to create editor of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString());
                             }
                         }
                     }
