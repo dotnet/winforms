@@ -1759,7 +1759,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Ensures the the node's StateImageIndex value is properly set.
+        ///  Ensures the node's StateImageIndex value is properly set.
         /// </summary>
         private void EnsureStateImageValue()
         {

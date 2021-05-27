@@ -3033,7 +3033,7 @@ namespace System.Windows.Forms
 
                 // If we failed to load because of protected
                 // text then return protect event was fired so no
-                // exception is required for the the error
+                // exception is required for the error
                 if (GetProtectedError())
                 {
                     return;

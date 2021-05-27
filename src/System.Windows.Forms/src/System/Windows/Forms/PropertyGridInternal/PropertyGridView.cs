@@ -4109,7 +4109,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     entries = newEntries;
                 }
 
-                // from that point, replace the children with tne new children.
+                // from that point, replace the children with the new children.
                 GridEntryCollection children = parent.Children;
                 int childCount = children.Count;
 

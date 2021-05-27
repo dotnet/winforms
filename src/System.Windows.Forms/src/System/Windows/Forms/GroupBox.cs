@@ -247,7 +247,7 @@ namespace System.Windows.Forms
             get => base.Text;
             set
             {
-                // the GroupBox controls immediately draws when teh WM_SETTEXT comes through, but
+                // the GroupBox controls immediately draws when the WM_SETTEXT comes through, but
                 // does so in the wrong font, so we suspend that behavior, and then
                 // invalidate.
                 bool suspendRedraw = Visible;

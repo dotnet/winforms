@@ -1083,7 +1083,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    // The second half of the the modalEnabled flag above.  Here, if we were previously
+                    // The second half of the modalEnabled flag above.  Here, if we were previously
                     // enabled, make sure that's still the case.
                     if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm).IsTrue() != modalEnabled)
                     {

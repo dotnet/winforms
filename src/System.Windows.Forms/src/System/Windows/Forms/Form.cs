@@ -708,7 +708,7 @@ namespace System.Windows.Forms
 
                 // In Windows Theme, the FixedDialog tend to have a small Icon.
                 // So to make this behave uniformly with other styles, we need to make
-                // the call to UpdateIcon after the the form styles have been updated.
+                // the call to UpdateIcon after the form styles have been updated.
                 if (formState[FormStateIconSet] == 0)
                 {
                     UpdateWindowIcon(false);
@@ -2538,7 +2538,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the the user attempts to change the input language for the
+        ///  Occurs when the user attempts to change the input language for the
         ///  form.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -4022,7 +4022,7 @@ namespace System.Windows.Forms
                 ApplyAutoScaling();
             }
 
-            // Also, at this time we can now locate the form the the correct
+            // Also, at this time we can now locate the form the correct
             // area of the screen.  We must do this after applying any
             // autoscaling.
             //
@@ -4693,7 +4693,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Resets the form's icon the the default value.
+        ///  Resets the form's icon the default value.
         /// </summary>
         private void ResetIcon()
         {

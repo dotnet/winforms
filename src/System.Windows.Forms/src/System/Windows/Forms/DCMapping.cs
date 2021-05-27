@@ -11,7 +11,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  DCMapping is used to change the mapping and clip region of the the specified device context to the given
+    ///  DCMapping is used to change the mapping and clip region of the specified device context to the given
     ///  bounds. When the DCMapping is disposed, the original mapping and clip rectangle are restored.
     ///
     ///  Example:

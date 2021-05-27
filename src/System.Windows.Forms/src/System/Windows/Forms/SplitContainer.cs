@@ -390,7 +390,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This property determines whether the the splitter can move.
+        ///  This property determines whether the splitter can move.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(false)]
