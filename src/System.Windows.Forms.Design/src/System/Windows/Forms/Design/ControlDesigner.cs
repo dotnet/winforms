@@ -430,7 +430,7 @@ namespace System.Windows.Forms.Design
             => m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
 
         /// <summary>
-        ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the
+        ///  Determines if the this designer can be parented to the specified designer -- generally this means if the
         ///  control for this designer can be parented into the given ParentControlDesigner's designer.
         /// </summary>
         public virtual bool CanBeParentedTo(IDesigner parentDesigner)

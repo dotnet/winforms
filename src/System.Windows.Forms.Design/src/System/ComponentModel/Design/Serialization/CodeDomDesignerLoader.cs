@@ -630,7 +630,7 @@ namespace System.ComponentModel.Design.Serialization
             LoaderHost.AddService(typeof(INameCreationService), this);
             LoaderHost.AddService(typeof(IDesignerSerializationService), this);
 
-            // The code dom desinger loader requires a working ITypeResolutionService to
+            // The code dom designer loader requires a working ITypeResolutionService to
             // function.  See if someone added one already, and if not, provide
             // our own.
             if (GetService(typeof(ITypeResolutionService)) is null)

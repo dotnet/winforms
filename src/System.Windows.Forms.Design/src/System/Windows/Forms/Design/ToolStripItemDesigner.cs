@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  ToolStripEditorManager used this internal property to  set the the desinger's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
+        ///  ToolStripEditorManager used this internal property to  set the the designer's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
         /// </summary>
         internal bool IsEditorActive
         {

@@ -97,7 +97,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns true when the designer is in the process of loading.
         ///  Clients that are sinking notifications from the designer often
-        ///  want to ignore them while the desingner is loading
+        ///  want to ignore them while the designer is loading
         ///  and only respond to them if they result from user interatcions.
         /// </summary>
         public override bool Loading => _loadDependencyCount > 0 || _loading;

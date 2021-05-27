@@ -9,7 +9,7 @@ namespace System.ComponentModel.Design.Serialization
     /// <summary>
     ///  Implement this interface on a CodeDomProvider to optimize reloading in the designer.  When the designer
     ///  goes to reparse a file, it will reparse the top level of the file, and then pass the new CodeCompileUnit to
-    ///  the ShouldReloadDesigner method, which returns true if the desinger should be reloaded.  Reloading generally occurs
+    ///  the ShouldReloadDesigner method, which returns true if the designer should be reloaded.  Reloading generally occurs
     ///  when the code inside the methods that the designer has generated, such as InitializeComponent have changed.  Otherwise,
     ///  it is unnecessary to take the performance hit of reloading the designer.
     /// </summary>

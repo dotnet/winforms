@@ -896,7 +896,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Determines if the this designer can parent to the specified desinger --
+        ///  Determines if the this designer can parent to the specified designer --
         ///  generally this means if the control for this designer can parent the
         ///  given ControlDesigner's control.
         /// </summary>
@@ -906,7 +906,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Determines if the this designer can parent to the specified desinger --
+        ///  Determines if the this designer can parent to the specified designer --
         ///  generally this means if the control for this designer can parent the
         ///  given ControlDesigner's control.
         /// </summary>
