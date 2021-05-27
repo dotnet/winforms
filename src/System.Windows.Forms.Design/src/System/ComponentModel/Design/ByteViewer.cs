@@ -78,7 +78,7 @@ namespace System.ComponentModel.Design
             SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
-        // Stole this code from  XmlSanner
+        // Stole this code from  XmlScanner
         private static int AnalizeByteOrderMark(byte[] buffer, int index)
         {
             int c1 = buffer[index + 0] << 8 | buffer[index + 1];
@@ -387,7 +387,7 @@ namespace System.ComponentModel.Design
             return _displayMode;
         }
 
-        // Stole this code from  XmlSanner
+        // Stole this code from  XmlScanner
         private static int GetEncodingIndex(int c1)
         {
             switch (c1)
