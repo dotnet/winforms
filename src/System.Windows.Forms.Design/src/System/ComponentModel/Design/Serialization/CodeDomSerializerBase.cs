@@ -2400,7 +2400,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            // see if this thing is serialiable
+            // see if this thing is serializable
             if (GetReflectionTypeHelper(manager, value).IsSerializable && !(value is IComponent && ((IComponent)value).Site != null))
             {
                 CodeExpression expression = SerializeToResourceExpression(manager, value);
