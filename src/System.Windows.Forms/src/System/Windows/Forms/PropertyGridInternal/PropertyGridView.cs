@@ -3012,7 +3012,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            // if the focus isn't goint to a child of the view
+            // if the focus isn't going to a child of the view
             if (!Commit())
             {
                 Edit.Focus();
