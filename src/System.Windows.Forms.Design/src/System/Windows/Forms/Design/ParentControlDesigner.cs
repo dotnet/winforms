@@ -379,7 +379,7 @@ namespace System.Windows.Forms.Design
             // Ex: we want to add padding on a form to the insides of the borders and below the titlebar.
             Point offset = GetOffsetToClientArea();
 
-            //the desplay rectangle should be the client area combined with the padding value
+            //the display rectangle should be the client area combined with the padding value
             Rectangle displayRectangle = Control.DisplayRectangle;
             displayRectangle.X += offset.X;//offset for non-client area
             displayRectangle.Y += offset.Y;//offset for non-client area
