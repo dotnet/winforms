@@ -13,7 +13,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
     // NB: doesn't require thread affinity
     public class VisualStyleRendererTests : IClassFixture<ThreadExceptionFixture>
     {
-        public static IEnumerable<object[]> Ctor_VisualStyleEement_TestData()
+        public static IEnumerable<object[]> Ctor_VisualStyleElement_TestData()
         {
             yield return new object[] { VisualStyleElement.Button.PushButton.Hot };
             yield return new object[] { VisualStyleElement.Button.PushButton.Normal };
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_VisualStyleEement_TestData))]
+        [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
         public void VisualStyleRenderer_Ctor_String_Int_Int(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(element.ClassName, element.Part, element.State);
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_VisualStyleEement_TestData))]
+        [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
         public void VisualStyleRenderer_Ctor_VisualStyleElement(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(element);
@@ -513,7 +513,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_VisualStyleEement_TestData))]
+        [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
         public void VisualStyleRenderer_SetParameters_InvokeStringIntInt_Success(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
@@ -534,7 +534,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [MemberData(nameof(Ctor_VisualStyleEement_TestData))]
+        [MemberData(nameof(Ctor_VisualStyleElement_TestData))]
         public void VisualStyleRenderer_SetParameters_InvokeVisualStyleElement_Success(VisualStyleElement element)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Hot);
