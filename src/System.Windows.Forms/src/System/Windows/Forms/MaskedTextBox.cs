@@ -2615,7 +2615,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the control's text to the formatted text obtained from the underlying MaskedTextProvider.
         ///  TextChanged is raised always, this assumes the display or the output text changed.
-        ///  The caret position is lost (unless cached somewhere else like when lossing the focus).
+        ///  The caret position is lost (unless cached somewhere else like when losing the focus).
         ///  This is the common way of changing the text in the control.
         /// </summary>
         private void SetText()
