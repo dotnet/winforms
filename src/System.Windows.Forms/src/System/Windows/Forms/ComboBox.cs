@@ -2540,7 +2540,7 @@ namespace System.Windows.Forms
                     NativeAdd(item);
                 }
 
-                // Now udpate the current selection.
+                // Now update the current selection.
                 //
                 if (_selectedIndex >= 0)
                 {
