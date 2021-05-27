@@ -6918,7 +6918,7 @@ namespace System.Windows.Forms
 
         protected override AccessibleObject GetAccessibilityObjectById(int objectId)
         {
-            // decrement the objectId because in our implementation of AccessibilityClient notitification objectId's are 1 - based.
+            // decrement the objectId because in our implementation of AccessibilityClient notification objectId's are 1 - based.
             // 0 == NativeMethods.CHILDID_SELF corresponds to the AccessibleObject itself
             return AccessibilityObject.GetChild(objectId - 1);
         }
