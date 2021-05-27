@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         CenterImage = 3,
 
         /// <summary>
-        ///  The size of image is increased or decresed maintaining the aspect ratio.
+        ///  The size of image is increased or decreased maintaining the aspect ratio.
         /// </summary>
         Zoom = 4
     }
