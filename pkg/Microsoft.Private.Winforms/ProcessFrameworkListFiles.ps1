@@ -10,7 +10,7 @@ Param(
 )
 
 $assemblies = @( );
-# this isn't expicitly present in the list
+# this isn't explicitly present in the list
 $assemblies += 'System.Drawing.Common.dll';
 
 [xml] $xmlDoc = Get-Content -Path $NuspecFile -Force;
