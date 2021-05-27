@@ -4053,7 +4053,7 @@ namespace System.Windows.Forms
                 // So in the event that the user has set the on load event
                 // in their application, we should go ahead and invalidate
                 // the controls in their collection so that we paint properly.
-                // This seems to manifiest itself in changes to the window caption,
+                // This seems to manifest itself in changes to the window caption,
                 // and changes to the control box and help.
 
                 foreach (Control c in Controls)
