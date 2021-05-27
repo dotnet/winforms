@@ -6383,7 +6383,7 @@ namespace System.Windows.Forms
         ///  follow up the control's parent chain until it finds a control or form that does
         ///  have a window handle.  If no appropriate handle can be found, invoke will throw
         ///  an exception.  Exceptions that are raised during the call will be
-        ///  propapgated back to the caller.
+        ///  propagated back to the caller.
         ///
         ///  There are five functions on a control that are safe to call from any
         ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
@@ -6402,7 +6402,7 @@ namespace System.Windows.Forms
         ///  follow up the control's parent chain until it finds a control or form that does
         ///  have a window handle.  If no appropriate handle can be found, invoke will throw
         ///  an exception.  Exceptions that are raised during the call will be
-        ///  propapgated back to the caller.
+        ///  propagated back to the caller.
         ///
         ///  There are five functions on a control that are safe to call from any
         ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
