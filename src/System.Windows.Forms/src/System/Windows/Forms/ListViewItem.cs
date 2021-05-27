@@ -32,8 +32,8 @@ namespace System.Windows.Forms
         private static readonly BitVector32.Section s_stateSelectedSection = BitVector32.CreateSection(1);
         private static readonly BitVector32.Section s_stateImageMaskSet = BitVector32.CreateSection(1, s_stateSelectedSection);
         private static readonly BitVector32.Section s_stateWholeRowOneStyleSection = BitVector32.CreateSection(1, s_stateImageMaskSet);
-        private static readonly BitVector32.Section s_avedStateImageIndexSection = BitVector32.CreateSection(15, s_stateWholeRowOneStyleSection);
-        private static readonly BitVector32.Section s_subItemCountSection = BitVector32.CreateSection(MaxSubItems, s_avedStateImageIndexSection);
+        private static readonly BitVector32.Section s_savedStateImageIndexSection = BitVector32.CreateSection(15, s_stateWholeRowOneStyleSection);
+        private static readonly BitVector32.Section s_subItemCountSection = BitVector32.CreateSection(MaxSubItems, s_savedStateImageIndexSection);
 
         private int indentCount;
         private Point position = new Point(-1, -1);
@@ -644,7 +644,7 @@ namespace System.Windows.Forms
             {
                 // State goes from zero to 15, but we need a negative
                 // number, so we store + 1.
-                return state[s_avedStateImageIndexSection] - 1;
+                return state[s_savedStateImageIndexSection] - 1;
             }
             set
             {
@@ -652,7 +652,7 @@ namespace System.Windows.Forms
                 state[s_stateImageMaskSet] = (value == ImageList.Indexer.DefaultIndex ? 0 : 1);
 
                 // push in the actual value
-                state[s_avedStateImageIndexSection] = value + 1;
+                state[s_savedStateImageIndexSection] = value + 1;
             }
         }
 
