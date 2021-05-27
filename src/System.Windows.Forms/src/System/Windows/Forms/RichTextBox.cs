@@ -3709,7 +3709,7 @@ namespace System.Windows.Forms
                 case User32.WM.RBUTTONUP:
                     //since RichEdit eats up the WM_CONTEXTMENU message, we need to force DefWndProc
                     //to spit out this message again on receiving WM_RBUTTONUP message. By setting UserMouse
-                    //style to true, we effectily let the WmMouseUp method in Control.cs to generate
+                    //style to true, we effectively let the WmMouseUp method in Control.cs to generate
                     //the WM_CONTEXTMENU message for us.
                     bool oldStyle = GetStyle(ControlStyles.UserMouse);
                     SetStyle(ControlStyles.UserMouse, true);
