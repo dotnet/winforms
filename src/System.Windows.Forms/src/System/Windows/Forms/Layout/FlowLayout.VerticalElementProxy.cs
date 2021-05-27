@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Layout
     {
         /// <summary>
         ///  VerticalElementProxy swaps Top/Left, Bottom/Right, and other properties
-        ///  so that the same code path used for horizantal flow can be applied to
+        ///  so that the same code path used for horizontal flow can be applied to
         ///  vertical flow.
         /// </summary>
         private class VerticalElementProxy : ElementProxy
