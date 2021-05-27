@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Design
     internal class MaskPropertyEditor : UITypeEditor
     {
         /// <summary>
-        /// Gets the mask property value fromt the MaskDesignerDialog.
+        /// Gets the mask property value from the MaskDesignerDialog.
         /// The IUIService is used to show the mask designer dialog within VS so it doesn't get blocked if focus
         /// is moved to another app.
         /// </summary>
