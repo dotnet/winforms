@@ -442,7 +442,7 @@ namespace System.ComponentModel.Design.Serialization
                                 // see CodeDomSerializerBase.cs::GetExpression for usage
 
                                 // This entry will only be used if the valid bit is set.
-                                // This is useful because we still need to setup depedency relationships
+                                // This is useful because we still need to setup dependency relationships
                                 // between components even if they are not cached.  See VSWhidbey 263053.
                                 bool correctManager = manager == mainManager;
                                 entry.Valid = correctManager && CanCacheComponent(manager, value, props);
