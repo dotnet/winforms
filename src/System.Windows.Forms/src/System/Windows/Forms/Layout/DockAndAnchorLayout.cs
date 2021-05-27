@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         ///  Gets the bounds of the element after growing to newSize (note that depending on
-        ///  anchoring the element may grow to the left/updwards rather than to the
+        ///  anchoring the element may grow to the left/upwards rather than to the
         ///  right/downwards. i.e., it may be translated.)
         /// </summary>
         private static Rectangle GetGrowthBounds(IArrangedElement element, Size newSize)
