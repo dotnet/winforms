@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design.Behavior
             _behaviorService = (BehaviorService)serviceProvider.GetService(typeof(BehaviorService));
             if (_behaviorService is null)
             {
-                Debug.Fail("Could not get the BehaviorService from ContainerSelectroBehavior!");
+                Debug.Fail("Could not get the BehaviorService from ContainerSelectorBehavior!");
                 return;
             }
 
