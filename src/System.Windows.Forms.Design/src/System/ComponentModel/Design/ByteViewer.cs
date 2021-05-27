@@ -276,7 +276,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Establishes the display mode for the control based on the contents of the buffer.
         ///  This is based on the following algorithm:
-        ///  * Count number of zeros, prinables and other characters in the half of the dataBuffer
+        ///  * Count number of zeros, printables and other characters in the half of the dataBuffer
         ///  * Base on the following table establish the mode:
         ///  - 80% Characters or digits -> ANSI
         ///  - 80% Valid Unicode chars -> Unicode
