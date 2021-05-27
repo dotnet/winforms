@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected static readonly Color DefaultMonthBackColor = SystemColors.Window;
         /// <summary>
-        ///  Specifies the default trailing forground color. This field is read-only.
+        ///  Specifies the default trailing foreground color. This field is read-only.
         /// </summary>
         protected static readonly Color DefaultTrailingForeColor = SystemColors.GrayText;
 

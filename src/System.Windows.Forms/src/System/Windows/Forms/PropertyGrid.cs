@@ -526,7 +526,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The forground color for the hot commands region.
+        ///  The foreground color for the hot commands region.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))]
@@ -794,7 +794,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The forground color for the help region.
+        ///  The foreground color for the help region.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridHelpForeColorDesc))]
