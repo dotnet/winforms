@@ -518,7 +518,7 @@ namespace System.Windows.Forms.Design
                 rectangle.Height = 5;
 
             // Copy of ControlPaint.DrawReversibleFrame, see VSWhidbey 581670
-            // If ControlPaint ever gets overrloaded, we should replace the code below by calling it:
+            // If ControlPaint ever gets overloaded, we should replace the code below by calling it:
             // ControlPaint.DrawReversibleFrame(handle, rectangle, backColor, FrameStyle.Thick);
 
             // ------ Duplicate code----------------------------------------------------------
