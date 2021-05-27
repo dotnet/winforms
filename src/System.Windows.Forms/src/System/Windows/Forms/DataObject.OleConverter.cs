@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Uses HGLOBALs and retrieves the specified format from the bound IComDatabject.
+            ///  Uses HGLOBALs and retrieves the specified format from the bound IComDataObject.
             /// </summary>
             private object GetDataFromOleHGLOBAL(string format, out bool done)
             {
