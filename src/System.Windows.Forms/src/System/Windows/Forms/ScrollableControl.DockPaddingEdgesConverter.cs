@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Gets or ssets the padding width for all edges of a docked control.
+            ///  Gets or sets the padding width for all edges of a docked control.
             /// </summary>
             [RefreshProperties(RefreshProperties.All)]
             [SRDescription(nameof(SR.PaddingAllDescr))]
