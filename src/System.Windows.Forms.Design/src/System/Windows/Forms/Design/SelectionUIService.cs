@@ -175,7 +175,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void EndMouseDrag(Point position)
         {
-            // it's possible for us to be destroyed in a drag -- e.g. if this is the tray's selectionuiservice and the last item is dragged out, so check diposed first
+            // it's possible for us to be destroyed in a drag -- e.g. if this is the tray's selectionuiservice and the last item is dragged out, so check disposed first
             if (IsDisposed)
             {
                 return;
