@@ -567,7 +567,7 @@ namespace System.Windows.Forms
                     if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] && _dataConnectionState[DATACONNECTIONSTATE_didNotDeleteRowFromDataGridView])
                     {
                         // we received a ListChangedType.ItemAdded while we were deleting rows from the back end
-                        // and we stil haven't removed a row from the data grid view
+                        // and we still haven't removed a row from the data grid view
                         // System.Data.DataView started an AddNew transaction as a result of deleting rows
                         // mark the state as itemAddedInDeleteOperation
                         _dataConnectionState[DATACONNECTIONSTATE_itemAddedInDeleteOperation] = true;
