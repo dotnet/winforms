@@ -192,7 +192,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 MultiPropertyDescriptorGridEntry[] newEntries = null;
                 int newPos = 0;
 
-                // first scan the list and move any parentesized properties to the front.
+                // first scan the list and move any parenthesized properties to the front.
                 for (int i = 0; i < entries.Length; i++)
                 {
                     if (entries[i].ParensAroundName)

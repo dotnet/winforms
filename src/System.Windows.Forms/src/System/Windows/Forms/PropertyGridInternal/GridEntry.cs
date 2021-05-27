@@ -2673,7 +2673,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             PropertyDescriptor[] newProps = null;
             int newPos = 0;
 
-            // first scan the list and move any parentesized properties to the front.
+            // first scan the list and move any parenthesized properties to the front.
             for (int i = 0; i < props.Length; i++)
             {
                 if (((ParenthesizePropertyNameAttribute)props[i].Attributes[typeof(ParenthesizePropertyNameAttribute)]).NeedParenthesis)
