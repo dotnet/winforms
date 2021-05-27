@@ -461,7 +461,7 @@ namespace System.Windows.Forms
 
         /// <summary> we can only shift selection when we're not focused (someone mousing over us)
         ///  or we are focused and one of our toolstripcontrolhosts do not have focus.
-        ///  SCENARIO: put focus in combo box, move the mouse over another item... selectioni
+        ///  SCENARIO: put focus in combo box, move the mouse over another item... selection
         ///  should not shift until the combobox relinquishes its focus.
         /// </summary>
         internal bool CanHotTrack

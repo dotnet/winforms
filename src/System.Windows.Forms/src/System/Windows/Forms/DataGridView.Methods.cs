@@ -3331,7 +3331,7 @@ namespace System.Windows.Forms
                                                                    true,  /*setAnchorCellAddress*/
                                                                    false, /*validateCurrentCell*/
                                                                    false,  /*throughMouseClick*/
-                                                                   true /*clearSelecttion*/,
+                                                                   true /*clearSelection*/,
                                                                    false /*forceCurrentCellSelection (unused)*/);
                                 }
                             }
