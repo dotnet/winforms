@@ -453,7 +453,7 @@ namespace System.Windows.Forms
                     // problems because the callback delegate for the subclassed
                     // WndProc might already have been freed).
                     //
-                    // Therefore, we neeed to catch all exceptions in the
+                    // Therefore, we need to catch all exceptions in the
                     // native -> managed transition, and when one occurs, call
                     // Application.OnThreadException().
                     //
