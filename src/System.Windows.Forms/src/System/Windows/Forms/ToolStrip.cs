@@ -3857,7 +3857,7 @@ namespace System.Windows.Forms
                                 // check if our item buffer is large enough to handle.
                                 if (!LayoutUtils.AreWidthAndHeightLarger(bitmapSize, itemSize))
                                 {
-                                    // the cached HDC isnt big enough for this item.  make it bigger.
+                                    // the cached HDC isn't big enough for this item.  make it bigger.
                                     _largestDisplayedItemSize = itemSize;
                                     bitmapSize = itemSize;
                                     // dispose the old graphics - create a new, bigger one.

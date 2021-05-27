@@ -587,7 +587,7 @@ namespace System.Windows.Forms
                 {
                     IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
 
-                    // if the main window isnt maximized - we should paint a resize grip.
+                    // if the main window isn't maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
                     if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd).IsTrue())
                     {

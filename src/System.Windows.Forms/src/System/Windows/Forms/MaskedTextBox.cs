@@ -1997,7 +1997,7 @@ namespace System.Windows.Forms
                     if (ImeModeConversion.InputLanguageTable == ImeModeConversion.KoreanTable)
                     {
                         // Korean IMEs complete composition when a character has been fully converted, so the composition string
-                        // is only one-character long; once composed we block the IME if there ins't more room in the test string.
+                        // is only one-character long; once composed we block the IME if there isn't more room in the test string.
 
                         int editPos = maskedTextProvider.FindUnassignedEditPositionFrom(caretTestPos, forward);
                         if (editPos == MaskedTextProvider.InvalidIndex)

@@ -256,7 +256,7 @@ namespace System.Windows.Forms
                 if (item is not null && !(item is ToolStripControlHost))
                 {
                     // verify the place where we've clicked is a place where we have to do "fake" focus
-                    // e.g. an item that isnt a control.
+                    // e.g. an item that isn't a control.
                     KeyboardActive = true;
                 }
             }

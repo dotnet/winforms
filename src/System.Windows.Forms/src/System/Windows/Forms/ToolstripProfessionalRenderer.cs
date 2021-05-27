@@ -953,7 +953,7 @@ namespace System.Windows.Forms
         ///  (2)gradient from beginning to middle of width firstGradientWidth
         ///  (3)gradient from middle to end of width secondGradientWidth
         ///
-        ///  if there isnt enough room to do (2) and (3) it merges into a single gradient from beginning to end.
+        ///  if there isn't enough room to do (2) and (3) it merges into a single gradient from beginning to end.
         /// </summary>
         private void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal)
         {

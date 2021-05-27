@@ -781,7 +781,7 @@ namespace System.Windows.Forms
                     default:
                         if (modifiers == Keys.Shift)
                         {
-                            // Shift + somekey isnt a valid modifier either
+                            // Shift + somekey isn't a valid modifier either
                             return false;
                         }
 

@@ -47,7 +47,7 @@ namespace System.Windows.Forms
                                 IntPtr rootHwnd = User32.GetAncestor(_ownerToolStrip, User32.GA.ROOT);
                                 if (rootHwnd == m.HWnd || User32.IsChild(rootHwnd, m.HWnd).IsTrue())
                                 {
-                                    // Only RestoreFocus if the hwnd is a child of the root window and isnt on the toolstrip.
+                                    // Only RestoreFocus if the hwnd is a child of the root window and isn't on the toolstrip.
                                     RestoreFocusInternal();
                                 }
                             }
