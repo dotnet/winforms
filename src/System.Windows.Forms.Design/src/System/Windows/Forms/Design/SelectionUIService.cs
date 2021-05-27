@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Inheriting classes should override this method to handle this event. Call base.OnDoiubleClick to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event. Call base.OnDoubleClick to send this event to any registered event listeners.
         /// </summary>
         protected override void OnDoubleClick(EventArgs devent)
         {
