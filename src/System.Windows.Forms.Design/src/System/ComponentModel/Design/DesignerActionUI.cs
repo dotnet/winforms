@@ -36,7 +36,7 @@ namespace System.ComponentModel.Design
         private readonly IWin32Window _mainParentWindow;
         internal DesignerActionToolStripDropDown designerActionHost;
 
-        private readonly MenuCommand _cmdShowDesignerActions; //used to respond to the Alt+Shft+F10 command
+        private readonly MenuCommand _cmdShowDesignerActions; //used to respond to the Alt+Shift+F10 command
         private bool _inTransaction;
         private IComponent _relatedComponentTransaction;
         private DesignerActionGlyph _relatedGlyphTransaction;
