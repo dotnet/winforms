@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design.Serialization
                     Trace("No valid context.  We can only serialize if this is an array.");
                 }
 
-                // If we have a target expression see if we can create a delta for the collection. We want to do this only if the propery the collection is associated with is inherited, and if the collection is not an array.
+                // If we have a target expression see if we can create a delta for the collection. We want to do this only if the property the collection is associated with is inherited, and if the collection is not an array.
                 if (value is ICollection collection)
                 {
                     ICollection subset = collection;
