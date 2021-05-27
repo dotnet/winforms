@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Design
                 designMaskedTextBox.RejectInputOnFirstFailure = maskedTextBox.RejectInputOnFirstFailure;
                 designMaskedTextBox.CutCopyMaskFormat = maskedTextBox.CutCopyMaskFormat;
                 designMaskedTextBox.Culture = maskedTextBox.Culture;
-                // designMaskedTextBox.TextMaskFormat = maskedTextBox.TextMaskFormat; - Not relevant since it is to be used programatically only.
+                // designMaskedTextBox.TextMaskFormat = maskedTextBox.TextMaskFormat; - Not relevant since it is to be used programmatically only.
             }
 
             // Some constant properties at design time.
