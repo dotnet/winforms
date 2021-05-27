@@ -21,7 +21,7 @@ internal static partial class Interop
             DATE = 0x00000001,
 
             /// <summary>
-            /// Represents MCGIF_RECT cosnt.
+            /// Represents MCGIF_RECT const.
             /// </summary>
             RECT = 0x00000002,
 
