@@ -3613,7 +3613,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // This auto upgraged v1 client to per-process doublebuffering logic
+        // This auto upgraded v1 client to per-process doublebuffering logic
         private BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
 
         /// <summary>
