@@ -607,7 +607,7 @@ namespace System.Windows.Forms
             // If we still have windows allocated, we must sling them to userDefWindowProc
             // or else they will AV if they get a message after the managed code has been
             // removed.  In debug builds, we assert and give the "ToString" of the native
-            // window. In retail we just detatch the window proc and let it go.  Note that
+            // window. In retail we just detach the window proc and let it go.  Note that
             // we cannot call DestroyWindow because this API will fail if called from
             // an incorrect thread.
 
