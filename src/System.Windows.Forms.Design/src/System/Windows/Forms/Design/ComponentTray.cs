@@ -364,7 +364,7 @@ namespace System.Windows.Forms.Design
 
             //Reset the autoscroll position before auto arranging.
             //This way, when OnLayout gets fired after this, we won't
-            //have to move every component again.  Note that sync'ing
+            //have to move every component again.  Note that syncing
             //the selection will automatically select & scroll into view
             //the right components
             AutoScrollPosition = new Point(0, 0);
