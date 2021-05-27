@@ -373,7 +373,7 @@ namespace System.Windows.Forms.Design
 
                 // We do not break if we find it here.  The vector is already setup
                 // to have all controls in the current tabbing order, and child controls
-                // are always after their parents.  If we broke, we wouldn't necessarially
+                // are always after their parents.  If we broke, we wouldn't necessarily
                 // find the appropriate child.
                 //
                 if (rc.Contains(x, y))
