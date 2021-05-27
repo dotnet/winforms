@@ -110,7 +110,7 @@ namespace System.Windows.Forms
 #if DEBUG
                             if (DebugLayoutTraceSwitch.TraceVerbose)
                             {
-                                Debug.WriteLine("SendNextItemToOverflow to fres space for " + item.ToString());
+                                Debug.WriteLine("SendNextItemToOverflow to free space for " + item.ToString());
                             }
 #endif
                             int spaceRecovered = SendNextItemToOverflow((currentWidth + overflowWidth) - displayRectangle.Width, true);
