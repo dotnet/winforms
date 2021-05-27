@@ -3080,7 +3080,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.UnableToInitComponent);
             }
 
-            // Otherwise, we have state to deperist from:
+            // Otherwise, we have state to depersist from:
             switch (ocxState.Type)
             {
                 case STG_STREAM:
