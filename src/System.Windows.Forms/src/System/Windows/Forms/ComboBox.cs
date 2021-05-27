@@ -3085,7 +3085,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  This event is fired when the edit portion of a combobox is about to display altered text.
-        ///  This event is NOT fired if the TEXT property is programatically changed.
+        ///  This event is NOT fired if the TEXT property is programmatically changed.
         /// </summary>
         protected virtual void OnTextUpdate(EventArgs e)
         {

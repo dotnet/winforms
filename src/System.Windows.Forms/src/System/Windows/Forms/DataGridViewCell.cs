@@ -4137,7 +4137,7 @@ namespace System.Windows.Forms
 
                         if (OwningRow.Index == DataGridView.CurrentCellAddress.Y)
                         {
-                            // The user programatically changed a value in the current row.
+                            // The user programmatically changed a value in the current row.
                             // The DataGridView already opened a transaction for the current row.
                             // All is left to do is to mark the current row in the DataGridView as being dirty.
                             DataGridView.IsCurrentRowDirtyInternal = true;

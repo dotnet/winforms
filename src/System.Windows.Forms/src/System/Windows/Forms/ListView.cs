@@ -5548,7 +5548,7 @@ namespace System.Windows.Forms
         //
         // ComCtl32 list view uses a selection mark to keep track of selection state - iMark.
         // ComCtl32 list view updates iMark only when the user hovers over the item.
-        // This means that if we programatically set the selection item, then the list view will not update
+        // This means that if we programmatically set the selection item, then the list view will not update
         // its selection mark.
         // So we explicitly set the selection mark.
         //

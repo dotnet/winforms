@@ -497,7 +497,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Allows the host application to provide an object that the contained html
-        ///  pages can access programatically in script.  The object specified here
+        ///  pages can access programmatically in script.  The object specified here
         ///  will be accessible in script as the "window.external" object via IDispatch
         ///  COM interop. Maps to an implementation of the IDocUIHandler.GetExternal event.
         /// </summary>
