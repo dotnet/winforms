@@ -192,7 +192,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Creates an instance of the specified type.  The default implementation will create the object.  If the object implements IComponent and only requires an empty or IContainer style constructor, this will search for IDesignerHost and create through the host.  Otherwise it will use reflection.  If addToContainer is true, this will add to the container using this class's Conainer property, using the name provided if it is not null.
+        ///  Creates an instance of the specified type.  The default implementation will create the object.  If the object implements IComponent and only requires an empty or IContainer style constructor, this will search for IDesignerHost and create through the host.  Otherwise it will use reflection.  If addToContainer is true, this will add to the container using this class's Container property, using the name provided if it is not null.
         /// </summary>
         protected virtual object CreateInstance(Type type, ICollection arguments, string name, bool addToContainer)
         {
