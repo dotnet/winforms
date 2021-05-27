@@ -1090,9 +1090,9 @@ namespace System.Windows.Forms.Tests
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            var actualValie = (int)(long)SendMessageW(comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETFIRSTVISIBLELINE);
+            var actualValue = (int)(long)SendMessageW(comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETFIRSTVISIBLELINE);
 
-            Assert.Equal(actualValie, provider.FirstVisibleLine);
+            Assert.Equal(actualValue, provider.FirstVisibleLine);
         }
 
         [WinFormsTheory]
@@ -1104,9 +1104,9 @@ namespace System.Windows.Forms.Tests
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            var actualValie = (int)(long)SendMessageW(comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETLINECOUNT);
+            var actualValue = (int)(long)SendMessageW(comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETLINECOUNT);
 
-            Assert.Equal(actualValie, provider.LinesCount);
+            Assert.Equal(actualValue, provider.LinesCount);
         }
 
         [WinFormsTheory]
