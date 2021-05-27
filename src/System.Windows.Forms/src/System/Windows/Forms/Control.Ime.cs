@@ -1287,8 +1287,8 @@ namespace System.Windows.Forms
 
     /////////////////////////////////////////////////////////  ImeModeConversion structure /////////////////////////////////////////////////////////
     /// <summary>
-    ///  Helper class that provides information about IME convertion mode.  Convertion mode refers to how IME interprets input like
-    ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME convertion window appropriately.
+    ///  Helper class that provides information about IME conversion mode.  Conversion mode refers to how IME interprets input like
+    ///  ALPHANUMERIC or HIRAGANA and depending on its value the IME enables/disables the IME conversion window appropriately.
     /// </summary>
     public struct ImeModeConversion
     {
@@ -1432,7 +1432,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Dictionary of ImeMode and corresponding convertion flags.
+        ///  Dictionary of ImeMode and corresponding conversion flags.
         /// </summary>
         public static Dictionary<ImeMode, ImeModeConversion> ImeModeConversionBits
         {

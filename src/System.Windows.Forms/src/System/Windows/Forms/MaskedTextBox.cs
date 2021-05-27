@@ -52,9 +52,9 @@ namespace System.Windows.Forms
 
         // Values to track changes in IME composition string (if any).  Having const variables is a bit more efficient
         // than having an enum (which creates a class).
-        private const byte imeConvertionNone = 0;  // no convertion has been performed in the composition string.
-        private const byte imeConvertionUpdate = 1;  // the char being composed has been updated but not coverted yet.
-        private const byte imeConvertionCompleted = 2;  // the char being composed has been fully converted.
+        private const byte imeConversionNone = 0;  // no conversion has been performed in the composition string.
+        private const byte imeConversionUpdate = 1;  // the char being composed has been updated but not coverted yet.
+        private const byte imeConversionCompleted = 2;  // the char being composed has been fully converted.
 
         /////////  Instance fields
 
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         // Bit mask - Determines when the Korean IME composition string is completed so converted character can be processed.
         private static readonly int IME_ENDING_COMPOSITION = BitVector32.CreateMask();
 
-        // Bit mask - Determines when the Korean IME is completing a composition, used when forcing convertion.
+        // Bit mask - Determines when the Korean IME is completing a composition, used when forcing conversion.
         private static readonly int IME_COMPLETING = BitVector32.CreateMask(IME_ENDING_COMPOSITION);
 
         // Used for handling characters that have a modifier (Ctrl-A, Shift-Del...).
@@ -2775,26 +2775,26 @@ namespace System.Windows.Forms
 
             if (ImeModeConversion.InputLanguageTable == ImeModeConversion.KoreanTable)
             {
-                byte imeConvertionType = imeConvertionNone;
+                byte imeConversionType = imeConversionNone;
 
                 // Check if there's an update to the composition string:
                 if ((m.LParam.ToInt32() & (int)Imm32.GCS.COMPSTR) != 0)
                 {
                     // The character in the composition has been updated but not yet converted.
-                    imeConvertionType = imeConvertionUpdate;
+                    imeConversionType = imeConversionUpdate;
                 }
                 else if ((m.LParam.ToInt32() & (int)Imm32.GCS.RESULTSTR) != 0)
                 {
                     // The character(s) in the composition has been fully converted.
-                    imeConvertionType = imeConvertionCompleted;
+                    imeConversionType = imeConversionCompleted;
                 }
 
                 // Process any update in the composition string.
-                if (imeConvertionType != imeConvertionNone)
+                if (imeConversionType != imeConversionNone)
                 {
                     if (flagState[IME_ENDING_COMPOSITION])
                     {
-                        // If IME is completing the convertion, we don't want to process further characters.
+                        // If IME is completing the conversion, we don't want to process further characters.
                         return flagState[IME_COMPLETING];
                     }
                 }
