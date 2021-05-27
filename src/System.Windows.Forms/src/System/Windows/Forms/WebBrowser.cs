@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Specifies whether the WebBrowser control will receive drop notifcations.
+        ///  Specifies whether the WebBrowser control will receive drop notifications.
         ///  Maps to IWebBrowser2:RegisterAsDropTarget.
         ///  Note that this does not mean that the WebBrowser control integrates with
         ///  Windows Forms drag/drop i.e. the DragDrop event does not fire.  It does
