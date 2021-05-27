@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Layout
                             // height becomes width, width becomes height. We do our layout, then when we eventually
                             // set the bounds of the child elements, we flip back. Thus, x will eventually
                             // become y. We need to adjust for scrolling - but only in the y direction -
-                            // and since x becomes y, we adjust x. But since AutoScrollPoisition has not been swapped,
+                            // and since x becomes y, we adjust x. But since AutoScrollPosition has not been swapped,
                             // we need to use its Y coordinate when offsetting.
 
                             pt.Offset(ptScroll.Y, 0);
