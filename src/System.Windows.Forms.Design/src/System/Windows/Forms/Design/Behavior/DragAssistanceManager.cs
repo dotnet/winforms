@@ -1029,7 +1029,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Called by the DropSourceBehavior after it finished drawing its' draging images so that we can draw our lines on top of everything.
+        ///  Called by the DropSourceBehavior after it finished drawing its' dragging images so that we can draw our lines on top of everything.
         /// </summary>
         internal void RenderSnapLinesInternal()
         {

@@ -970,7 +970,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Used when draggin a new tool rect on the designer's surface -
+        ///  Used when dragging a new tool rect on the designer's surface -
         ///  this will return some generic snaplines Allowing the rect to
         ///  snap to existing control edges on the surface.
         /// </summary>
