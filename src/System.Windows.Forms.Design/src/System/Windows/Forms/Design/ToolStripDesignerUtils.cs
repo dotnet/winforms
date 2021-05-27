@@ -222,25 +222,25 @@ namespace System.Windows.Forms.Design
 
         private static ToolStripItemDesignerAvailability GetDesignerVisibility(ToolStrip toolStrip)
         {
-            ToolStripItemDesignerAvailability visiblity;
+            ToolStripItemDesignerAvailability visibility;
             if (toolStrip is StatusStrip)
             {
-                visiblity = ToolStripItemDesignerAvailability.StatusStrip;
+                visibility = ToolStripItemDesignerAvailability.StatusStrip;
             }
             else if (toolStrip is MenuStrip)
             {
-                visiblity = ToolStripItemDesignerAvailability.MenuStrip;
+                visibility = ToolStripItemDesignerAvailability.MenuStrip;
             }
             else if (toolStrip is ToolStripDropDownMenu)
             {
-                visiblity = ToolStripItemDesignerAvailability.ContextMenuStrip;
+                visibility = ToolStripItemDesignerAvailability.ContextMenuStrip;
             }
             else
             {
-                visiblity = ToolStripItemDesignerAvailability.ToolStrip;
+                visibility = ToolStripItemDesignerAvailability.ToolStrip;
             }
 
-            return visiblity;
+            return visibility;
         }
 
         public static Type[] GetCustomItemTypes(IComponent component, IServiceProvider serviceProvider)
@@ -294,8 +294,8 @@ namespace System.Windows.Forms.Design
                         }
 
                         // if the visibility matches the current toolstrip type,  add it to the list of possible types to create.
-                        ToolStripItemDesignerAvailabilityAttribute visiblityAttribute = (ToolStripItemDesignerAvailabilityAttribute)TypeDescriptor.GetAttributes(t)[typeof(ToolStripItemDesignerAvailabilityAttribute)];
-                        if (visiblityAttribute != null && ((visiblityAttribute.ItemAdditionVisibility & currentToolStripVisibility) == currentToolStripVisibility))
+                        ToolStripItemDesignerAvailabilityAttribute visibilityAttribute = (ToolStripItemDesignerAvailabilityAttribute)TypeDescriptor.GetAttributes(t)[typeof(ToolStripItemDesignerAvailabilityAttribute)];
+                        if (visibilityAttribute != null && ((visibilityAttribute.ItemAdditionVisibility & currentToolStripVisibility) == currentToolStripVisibility))
                         {
                             bool isStockType = false;
                             // PERF: consider a dictionary - but this list will usually be 3-7 items.
