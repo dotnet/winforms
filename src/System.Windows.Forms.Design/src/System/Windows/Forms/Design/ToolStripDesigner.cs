@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
         private ToolStripKeyboardHandlingService _keyboardHandlingService;
         private bool _parentNotVisible; //sync the parent visibility (used for ToolStripPanels)
         private bool _dontCloseOverflow; //When an item is added to the ToolStrip through the templateNode which is on the Overflow; we should not close the overflow (to avoid flicker)
-        private bool _addingDummyItem; //When the dummyItem is added the toolStrip might resize (as in the Vertival Layouts). In this case we don't want the Resize to cause SyncSelection and Layouts.
+        private bool _addingDummyItem; //When the dummyItem is added the toolStrip might resize (as in the Vertical Layouts). In this case we don't want the Resize to cause SyncSelection and Layouts.
 
         /// <summary>
         ///  Adds designer actions to the ActionLists collection.
