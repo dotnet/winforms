@@ -546,7 +546,7 @@ namespace System.Windows.Forms.Layout
                     }
 
                     //try to layout the absolutely positioned element as if it were non-absolutely positioned.
-                    //In this way we can tell whether this element overlapps with others or fits on the table.
+                    //In this way we can tell whether this element overlaps with others or fits on the table.
                     AdvanceUntilFits(maxColumns, reservationGrid, fixedElement, out colStop);
 
                     //we have exceeded the row limit. just return
