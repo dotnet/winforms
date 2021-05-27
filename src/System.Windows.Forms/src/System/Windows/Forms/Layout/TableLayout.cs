@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms.Layout
                     {
                         case SizeType.Absolute:
                             totalAbsoluteAndAutoSizeAllocatedSpace += strip.MinSize;
-                            // We gaurantee a strip will be exactly abs pixels
+                            // We guarantee a strip will be exactly abs pixels
                             Debug.Assert((strip.MinSize == style.Size), "absolutely sized strip's size should be set before we call ApplyStyles");
                             break;
                         case SizeType.Percent:
@@ -1409,7 +1409,7 @@ namespace System.Windows.Forms.Layout
 
                 Rectangle elementBounds = LayoutUtils.AlignAndStretch(GetElementSize(element, cellBounds.Size), cellBounds, anchorStyles);
 
-                // If the element was not BoxStretch.Both, AlignAndStretch does not gaurantee
+                // If the element was not BoxStretch.Both, AlignAndStretch does not guarantee
                 // that the element has been clipped to the cell bounds.
                 elementBounds.Width = Math.Min(cellBounds.Width, elementBounds.Width);
                 elementBounds.Height = Math.Min(cellBounds.Height, elementBounds.Height);

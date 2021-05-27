@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Layout
             {
                 // Controls measured earlier than a control which couldn't be fit to constraints may
                 // shift around with the new bounds. We need to make a 2nd pass through the
-                // controls using these bounds which are gauranteed to fit.
+                // controls using these bounds which are guaranteed to fit.
                 measureBounds.Size = prefSize;
                 prefSize = TryCalculatePreferredSize(container, measureBounds, /* measureOnly = */ true);
             }
