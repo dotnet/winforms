@@ -6184,7 +6184,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -6218,7 +6218,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -6230,7 +6230,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -6432,7 +6432,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -6468,7 +6468,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -26124,7 +26124,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RealeaseMouse()
+        private void ReleaseMouse()
         {
             Cursor.Clip = Rectangle.Empty;
             Capture = false;
@@ -26362,7 +26362,7 @@ namespace System.Windows.Forms
                 Invalidate(Rectangle.Union(_layout.TopLeftHeader, _layout.ColumnHeaders));
             }
 
-            RealeaseMouse();
+            ReleaseMouse();
         }
 
         // Re-initializes all state that is related to tracking keyboard operations
