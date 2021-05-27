@@ -964,7 +964,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static ImeMode GetImeMode(IntPtr handle)
         {
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Insise ImeContext.GetImeMode(" + handle + ")");
+            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside ImeContext.GetImeMode(" + handle + ")");
             Debug.Indent();
 
             IntPtr inputContext = IntPtr.Zero;
