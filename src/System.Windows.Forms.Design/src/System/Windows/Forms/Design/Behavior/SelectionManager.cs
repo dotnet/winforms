@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potention DragBehavior.
+    ///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potential DragBehavior.
     /// </summary>
     internal sealed class SelectionManager : IDisposable
     {
