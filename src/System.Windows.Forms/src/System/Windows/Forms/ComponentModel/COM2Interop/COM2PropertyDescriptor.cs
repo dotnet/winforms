@@ -327,7 +327,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the attributes are valid.  Asks any clients if they
-        ///  would like attributes requeried.
+        ///  would like attributes required.
         /// </summary>
         protected bool AttributesValid
         {
@@ -438,7 +438,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the property display name is valid
-        ///  asks clients if they would like display name requeried.
+        ///  asks clients if they would like display name required.
         /// </summary>
         protected bool DisplayNameValid
         {
@@ -524,7 +524,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the read only state is valid.
-        ///  Asks clients if they would like read-only requeried.
+        ///  Asks clients if they would like read-only required.
         /// </summary>
         protected bool ReadOnlyValid
         {
