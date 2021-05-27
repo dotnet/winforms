@@ -946,7 +946,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    // Also suspend the rooot component's parent.
+                    // Also suspend the root component's parent.
                     Control root = host.RootComponent as Control;
                     if (root != null)
                     {
