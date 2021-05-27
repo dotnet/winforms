@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Internal
     internal enum TextPaddingOptions
     {
         // Add some extra points to account for some glyphs overhanging (like for letter f in some fonts or
-        // when italized).
+        // when italicized).
         // For an illustration, type letter f in Wordpad and make it 72-point "Times New Roman" italic
         // observe that the lower left part of the letter is clipped.  Also, try selecting the letter,
         // both the lower-left and the upper-right parts are clipped.
