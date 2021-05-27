@@ -4454,7 +4454,7 @@ namespace System.Windows.Forms
                 Bitmap b;
                 int i;
 
-                // we manage the buttons as a seperate list so the toobar doesn't flash
+                // we manage the buttons as a separate list so the toobar doesn't flash
                 ArrayList buttonList;
 
                 if (fullRebuild)
