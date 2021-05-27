@@ -1439,7 +1439,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Finds the first item after the given index that matches the given string.
-        ///  The strings must match excatly, except for differences in casing.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s, int startIndex)
         {
