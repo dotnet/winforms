@@ -3027,7 +3027,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Empty(actualEditToolTipText);
             Assert.Empty(actualButtonsToolTipText);
-            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
 
             string text = "Some test text";
             toolTip.SetToolTip(upDownBase, text); // Invokes UpDownBase's SetToolTip inside

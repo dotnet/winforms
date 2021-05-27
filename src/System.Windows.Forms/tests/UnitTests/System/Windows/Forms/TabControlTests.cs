@@ -5691,7 +5691,7 @@ namespace System.Windows.Forms.Tests
             string actual = tabControl._controlTipText;
 
             Assert.Empty(actual);
-            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
 
             string text = "Some test text";
             toolTip.SetToolTip(control, text); // Invokes TabControl's SetToolTip inside

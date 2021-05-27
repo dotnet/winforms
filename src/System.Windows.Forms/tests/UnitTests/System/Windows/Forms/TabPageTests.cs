@@ -4922,7 +4922,7 @@ namespace System.Windows.Forms.Tests
             using ToolTip toolTip = new ToolTip();
             control.CreateControl();
 
-            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the tooltip native window Handle
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the tooltip native window Handle
 
             string text = "Some test text";
             toolTip.SetToolTip(control, text);
@@ -5020,7 +5020,7 @@ namespace System.Windows.Forms.Tests
             control.ToolTipText = text;
             control.CreateControl();
 
-            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the tooltip native window Handle
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the tooltip native window Handle
 
             toolTip.SetToolTip(control, text);
             ToolTip internalToolTip = control.TestAccessor().Dynamic._internalToolTip;
