@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  A three-dimensional border on all four edges and fill the middle of
-        ///  the rectangle with the color defeined for three-dimensional controls.
+        ///  the rectangle with the color defined for three-dimensional controls.
         /// </summary>
         All = Left | Top | Right | Bottom | Middle,
     }
