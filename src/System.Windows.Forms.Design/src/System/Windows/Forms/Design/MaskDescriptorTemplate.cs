@@ -247,8 +247,8 @@ namespace System.Windows.Forms.Design
                     break;
 
                 //case "zh-TW":  // Chinese (Taiwan).
-                case "zh-CHT":  // Tradicional Chinese.
-                case "zh-Hant":  // New name of Tradictional Chinese.
+                case "zh-CHT":  // Traditional Chinese.
+                case "zh-Hant":  // New name of Traditional Chinese.
                     // Phone Number.
                     maskDescriptors.Add(new MaskDescriptorTemplate("(00)9000-0000", "電話號碼", "01 2345678", null, culture));
                     // Mobile Phone Number.
