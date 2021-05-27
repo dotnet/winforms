@@ -4573,7 +4573,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(Keys.Down)]
         [InlineData(Keys.Up)]
-        public unsafe void ListView_VirtualMode_WmReflectNotify_LVN_KEYDOWN_WithGroups_DoenstFocusGroups(Keys key)
+        public unsafe void ListView_VirtualMode_WmReflectNotify_LVN_KEYDOWN_WithGroups_DoesNotFocusGroups(Keys key)
         {
             using ListView control = new ListView
             {
@@ -4612,7 +4612,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
-        public unsafe void ListView_VirtualMode_WmReflectNotify_LVN_KEYDOWN_EnabledCheckBoxes_WithoutGroups_DoenstCheckItems(bool checkedItem)
+        public unsafe void ListView_VirtualMode_WmReflectNotify_LVN_KEYDOWN_EnabledCheckBoxes_WithoutGroups_DoesNotCheckItems(bool checkedItem)
         {
             using ListView control = new ListView
             {
