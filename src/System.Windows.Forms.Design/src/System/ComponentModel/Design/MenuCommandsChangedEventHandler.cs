@@ -5,7 +5,7 @@
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  This event is thown by the MenuCommandService when a shortcut
+    ///  This event is thrown by the MenuCommandService when a shortcut
     ///  is either added or removed to/from the related object.
     /// </summary>
     public delegate void MenuCommandsChangedEventHandler(object sender, MenuCommandsChangedEventArgs e);
