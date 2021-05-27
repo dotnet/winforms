@@ -589,7 +589,7 @@ namespace System.Windows.Forms
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         {
-                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit verticallu within the DRect", item));
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit vertically within the DRect", item));
                         }
 #endif
 
