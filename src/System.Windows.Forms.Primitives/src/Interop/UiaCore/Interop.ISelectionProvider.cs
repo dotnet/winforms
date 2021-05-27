@@ -13,7 +13,7 @@ internal static partial class Interop
         ///  The interface representing containers that manage selection.
         /// </summary>
         /// <remarks>
-        ///  Client code uses this public interface; server implementers implent the
+        ///  Client code uses this public interface; server implementers implement the
         ///  ISelectionProvider public interface instead.
         /// </remarks>
         [ComImport]
