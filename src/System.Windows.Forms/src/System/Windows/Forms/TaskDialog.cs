@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         private TaskDialogPage? _boundPage;
 
         /// <summary>
-        ///   A qeueue of <see cref="TaskDialogPage"/>s that have been bound by
+        ///   A queue of <see cref="TaskDialogPage"/>s that have been bound by
         ///   navigating the dialog, but don't yet reflect the state of the
         ///   native dialog because the corresponding
         ///   <see cref="ComCtl32.TDN.NAVIGATED"/> notification was
