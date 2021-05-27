@@ -637,7 +637,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  The number of rows currently being displayed in
-        ///  the tab strip.  This is most commonly used when the Multline property
+        ///  the tab strip.  This is most commonly used when the Multiline property
         ///  is 'true' and you want to know how many rows the tabs are currently
         ///  taking up.
         /// </summary>
