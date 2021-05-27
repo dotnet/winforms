@@ -1980,7 +1980,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Everytime we add Item .. the TemplateNode needs to go at the end if its not there.
+        ///  Every time we add Item .. the TemplateNode needs to go at the end if its not there.
         /// </summary>
         private void OnItemAdded(object sender, ToolStripItemEventArgs e)
         {
