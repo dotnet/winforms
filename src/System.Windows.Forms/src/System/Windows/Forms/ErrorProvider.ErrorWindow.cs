@@ -222,7 +222,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  This is called when an error icon is flashing, and the view needs to be updatd.
+            ///  This is called when an error icon is flashing, and the view needs to be updated.
             /// </summary>
             private void OnTimer(object sender, EventArgs e)
             {
