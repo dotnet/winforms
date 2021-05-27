@@ -403,7 +403,7 @@ namespace System.Windows.Forms
 
             // We baked the "default default" margin and min size into CommonProperties
             // so that in the common case the PropertyStore would be empty.  If, however,
-            // someone overrides these Default* methads, we need to write the default
+            // someone overrides these Default* methods, we need to write the default
             // value into the PropertyStore in the ctor.
 
             if (DefaultMargin != CommonProperties.DefaultMargin)
