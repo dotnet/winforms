@@ -981,7 +981,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Occurs when the document hosted in the web browser control is fully loaded.
-        ///  This is conceptially similar to Form.Load().  You need to wait until this event fires
+        ///  This is conceptually similar to Form.Load().  You need to wait until this event fires
         ///  before doing anything that manipulates the html page, ex. reading the Document
         ///  property of the webbrowser control. Maps to DWebBrowserEvents2:DocumentComplete.
         /// </summary>
