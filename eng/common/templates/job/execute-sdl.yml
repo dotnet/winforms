@@ -6,7 +6,7 @@ parameters:
   # 'continueOnError', the parameter value is not correctly picked up.
   # This can also be remedied by the caller (post-build.yml) if it does not use a nested parameter
   sdlContinueOnError: false                                    # optional: determines whether to continue the build if the step errors;
-  downloadArtifacts: true                                      # optional: determines if the artifacts should be dowloaded
+  downloadArtifacts: true                                      # optional: determines if the artifacts should be downloaded
   dependsOn: ''                                                # Optional: dependencies of the job
   artifactNames: ''                                            # Optional: patterns supplied to DownloadBuildArtifacts
                                                                # Usage:
