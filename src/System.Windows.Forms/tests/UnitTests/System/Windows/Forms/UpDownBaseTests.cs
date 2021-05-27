@@ -2228,15 +2228,15 @@ namespace System.Windows.Forms.Tests
         {
             foreach (bool enabled in new bool[] { true, false })
             {
-                foreach (BorderStyle borderStlye in Enum.GetValues(typeof(BorderStyle)))
+                foreach (BorderStyle borderStyle in Enum.GetValues(typeof(BorderStyle)))
                 {
                     foreach (Color backColor in new Color[] { Color.Red, Color.Empty })
                     {
-                        yield return new object[] { new Size(100, 200), enabled, borderStlye, backColor };
-                        yield return new object[] { new Size(10, 10), enabled, borderStlye, backColor };
-                        yield return new object[] { new Size(9, 10), enabled, borderStlye, backColor };
-                        yield return new object[] { new Size(10, 9), enabled, borderStlye, backColor };
-                        yield return new object[] { new Size(9, 9), enabled, borderStlye, backColor };
+                        yield return new object[] { new Size(100, 200), enabled, borderStyle, backColor };
+                        yield return new object[] { new Size(10, 10), enabled, borderStyle, backColor };
+                        yield return new object[] { new Size(9, 10), enabled, borderStyle, backColor };
+                        yield return new object[] { new Size(10, 9), enabled, borderStyle, backColor };
+                        yield return new object[] { new Size(9, 9), enabled, borderStyle, backColor };
                     }
                 }
             }
@@ -2244,7 +2244,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(OnPaint_TestData))]
-        public void UpDownBase_OnPaint_Invoke_CallsPaint(Size size, bool enabled, BorderStyle borderStlye, Color backColor)
+        public void UpDownBase_OnPaint_Invoke_CallsPaint(Size size, bool enabled, BorderStyle borderStyle, Color backColor)
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
@@ -2254,7 +2254,7 @@ namespace System.Windows.Forms.Tests
             {
                 Size = size,
                 Enabled = enabled,
-                BorderStyle = borderStlye,
+                BorderStyle = borderStyle,
                 BackColor = backColor
             };
             int callCount = 0;
@@ -2280,7 +2280,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(OnPaint_TestData))]
-        public void UpDownBase_OnPaint_InvokeWithHandle_CallsPaint(Size size, bool enabled, BorderStyle borderStlye, Color backColor)
+        public void UpDownBase_OnPaint_InvokeWithHandle_CallsPaint(Size size, bool enabled, BorderStyle borderStyle, Color backColor)
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
@@ -2290,7 +2290,7 @@ namespace System.Windows.Forms.Tests
             {
                 Size = size,
                 Enabled = enabled,
-                BorderStyle = borderStlye,
+                BorderStyle = borderStyle,
                 BackColor = backColor
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
