@@ -4127,7 +4127,7 @@ namespace System.Windows.Forms
                         {
                             // As a result of pushing the value in the back end, the data grid view row and/or data grid view cell
                             // became disconnected from the DataGridView.
-                            // Return true because the operation succeded.
+                            // Return true because the operation succeeded.
                             // However, because the row which was edited became disconnected  from the DataGridView,
                             // do not mark the current row in the data grid view as being dirty.
                             // And because the data grid view cell which was edited became disconnected from the data grid view
