@@ -3047,7 +3047,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // this allows the edits to be selected with two clicks instead of 3 (select row, double click).
             //
             long timeStamp = DateTime.Now.Ticks;
-            int delta = (int)((timeStamp - _rowSelectTime) / 10000); // make it milleseconds
+            int delta = (int)((timeStamp - _rowSelectTime) / 10000); // make it milliseconds
 
             if (delta < SystemInformation.DoubleClickTime)
             {
