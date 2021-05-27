@@ -18,10 +18,10 @@ For more information about breaking changes, see the [Porting guide][porting-gui
 
 ## Please note
 
-:warning: This repository contains only implemenations for Windows Forms for [.NET platform](https://github.com/dotnet/core).<br />
+:warning: This repository contains only implementations for Windows Forms for [.NET platform](https://github.com/dotnet/core).<br />
 It does not contain either:
 * The .NET Framework variant of Windows Forms. Issues with .NET Framework, including Windows Forms, should be filed on the [Developer Community](https://developercommunity.visualstudio.com/spaces/61/index.html) or [Product Support](https://support.microsoft.com/en-us/contactus?ws=support) websites. They should not be filed on this repository.
-* The Windows Forms Designer implemenations. Issues with the Designer should be filed via VS Feedback tool (top right handside icon in Visual Studio).
+* The Windows Forms Designer implementations. Issues with the Designer should be filed via VS Feedback tool (top right handside icon in Visual Studio).
 
 
 # How can I contribute?
