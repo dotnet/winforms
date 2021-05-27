@@ -2827,7 +2827,7 @@ namespace System.Windows.Forms
 
                             if (subitem > 0 || (state & (CDIS.SELECTED | CDIS.GRAYED | CDIS.HOT | CDIS.DISABLED)) == 0)
                             {
-                                // we only propogate colors if we're displaying things normally
+                                // we only propagate colors if we're displaying things normally
                                 // the user can override this method to do all kinds of other bad things if they
                                 // want to though - but we don't support that.
                                 subItemForeColor = item.SubItems[subitem].ForeColor;
