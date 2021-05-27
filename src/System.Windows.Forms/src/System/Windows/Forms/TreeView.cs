@@ -3302,7 +3302,7 @@ namespace System.Windows.Forms
                     // highlight to a node when the user clicks on its checkbox.
                     if ((tvhip.flags & TVHT.ONITEMSTATEICON) != 0)
                     {
-                        //We do not pass the Message to the Control .. so fire MouseDowm ...
+                        //We do not pass the Message to the Control .. so fire MouseDown ...
                         OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         if (!ValidationCancelled && CheckBoxes)
                         {
