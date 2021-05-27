@@ -272,7 +272,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Get/sets the stream for the html document.
-        ///  Uses the IPersisteStreamInit interface on the HtmlDocument to set/retrieve the html stream.
+        ///  Uses the IPersistStreamInit interface on the HtmlDocument to set/retrieve the html stream.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
