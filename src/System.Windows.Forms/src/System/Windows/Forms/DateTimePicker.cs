@@ -1637,7 +1637,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Overrided wndProc
+        ///  Overridden wndProc
         /// </summary>
         protected override void WndProc(ref Message m)
         {

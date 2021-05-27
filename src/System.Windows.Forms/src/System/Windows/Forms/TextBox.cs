@@ -576,7 +576,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Overrideen to focus the text on first focus.
+        ///  Overridden to focus the text on first focus.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
