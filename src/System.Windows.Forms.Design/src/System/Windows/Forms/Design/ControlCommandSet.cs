@@ -541,7 +541,7 @@ namespace System.Windows.Forms.Design
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                     if (host != null)
                     {
-                        //This will exluded components in the ComponentTray, but that's okay, they are not resizable to begin with.
+                        //This will excluded components in the ComponentTray, but that's okay, they are not resizable to begin with.
                         ControlDesigner des = host.GetDesigner(comp) as ControlDesigner;
                         if (des != null && ((des.SelectionRules & SelectionRules.Locked) == 0))
                         {
