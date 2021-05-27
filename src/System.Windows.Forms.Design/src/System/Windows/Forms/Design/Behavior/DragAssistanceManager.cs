@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines into the DragBehavior.  At the beginning of a DragBehavior this class is instantiated and at every mouse move this class is called and given the opportunity to adjust the position of the drag.  The DragAssistanceManager needs to work as fast as possible - so not to interupt a drag operation.  Because of this, this class has many global variables that are re-used, in hopes to limit the # of allocations per mouse move / drag operation.  Also, for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
+    ///  The DragAssistanceManager, for lack of a better name, is responsible for integrating SnapLines into the DragBehavior.  At the beginning of a DragBehavior this class is instantiated and at every mouse move this class is called and given the opportunity to adjust the position of the drag.  The DragAssistanceManager needs to work as fast as possible - so not to interrupt a drag operation.  Because of this, this class has many global variables that are re-used, in hopes to limit the # of allocations per mouse move / drag operation.  Also, for loops are used extensively (instead of foreach calls) to eliminate the creation of an enumerator.
     /// </summary>
     internal sealed class DragAssistanceManager
     {
