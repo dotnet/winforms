@@ -3271,7 +3271,7 @@ namespace System.Windows.Forms
                 if (oldValue != RightToLeft)
                 {
                     // Setting RTL on a container does not cause the container to change size.
-                    // Only the children need to have thier layout updated.
+                    // Only the children need to have their layout updated.
                     using (new LayoutTransaction(this, this, PropertyNames.RightToLeft))
                     {
                         OnRightToLeftChanged(EventArgs.Empty);
