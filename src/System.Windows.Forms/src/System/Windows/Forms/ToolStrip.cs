@@ -475,7 +475,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // if the toolstrip itself contains focus we can definately hottrack.
+                    // if the toolstrip itself contains focus we can definitely hottrack.
                     return true;
                 }
             }
