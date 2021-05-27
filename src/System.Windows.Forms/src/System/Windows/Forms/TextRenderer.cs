@@ -305,7 +305,7 @@ namespace System.Windows.Forms
             if (text.IsEmpty || foreColor == Color.Transparent)
                 return;
 
-            // This MUST come before retreiving the HDC, which locks the Graphics object
+            // This MUST come before retrieving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
@@ -334,7 +334,7 @@ namespace System.Windows.Forms
             Gdi32.HDC hdc = e.HDC;
             if (hdc.IsNull)
             {
-                // This MUST come before retreiving the HDC, which locks the Graphics object
+                // This MUST come before retrieving the HDC, which locks the Graphics object
                 Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(e.GraphicsInternal);
 
                 using var graphicsHdc = new DeviceContextHdcScope(e.GraphicsInternal, applyGraphicsState: false);
@@ -538,7 +538,7 @@ namespace System.Windows.Forms
             if (text.IsEmpty)
                 return Size.Empty;
 
-            // This MUST come before retreiving the HDC, which locks the Graphics object
+            // This MUST come before retrieving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             // Applying state may not impact text size measurements. Rather than risk missing some
