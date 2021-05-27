@@ -3003,7 +3003,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Processes the WM_KILLFOCUS message. Updates control's text replacing promp chars with space.
+        ///  Processes the WM_KILLFOCUS message. Updates control's text replacing prompt chars with space.
         /// </summary>
         private void WmKillFocus()
         {
