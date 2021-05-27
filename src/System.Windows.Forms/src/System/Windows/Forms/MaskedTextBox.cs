@@ -2002,7 +2002,7 @@ namespace System.Windows.Forms
                         int editPos = maskedTextProvider.FindUnassignedEditPositionFrom(caretTestPos, forward);
                         if (editPos == MaskedTextProvider.InvalidIndex)
                         {
-                            ImeComplete();  // Force completion of compostion.
+                            ImeComplete();  // Force completion of composition.
                         }
                     }
                 }
