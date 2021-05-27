@@ -515,7 +515,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    // Rearrage text/image to prevent overlay.  Pack text into maxBounds - space reserved for image.
+                    // Rearrange text/image to prevent overlay.  Pack text into maxBounds - space reserved for image.
                     Size maxTextSize = LayoutUtils.SubAlignedRegion(maxBounds.Size, ImageSize, textImageRelation);
                     Size textSize = GetTextSize(maxTextSize);
                     Rectangle maxCombinedBounds = maxBounds;
