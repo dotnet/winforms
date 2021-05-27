@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Layout
             Rectangle displayRectangle = container.DisplayRectangle;
             if (CommonProperties.GetAutoSize(container) && ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)))
             {
-                // we haven't set oursleves to the preferred size yet. proceeding will
+                // we haven't set ourselves to the preferred size yet. proceeding will
                 // just set all the control widths to zero. let's return here
                 return;
             }

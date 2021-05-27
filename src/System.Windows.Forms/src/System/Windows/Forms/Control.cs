@@ -5460,7 +5460,7 @@ namespace System.Windows.Forms
         ///  Attempts to find a control Object that we can use to marshal
         ///  calls.  We must marshal calls to a control with a window
         ///  handle, so we traverse up the parent chain until we find one.
-        ///  Failing that, we just return ouselves.
+        ///  Failing that, we just return ourselves.
         /// </summary>
         private Control FindMarshalingControl()
         {
