@@ -320,7 +320,7 @@ namespace System.Windows.Forms
 
                             if (lpmsg->hwnd != _control.Handle && lpmsg->IsMouseMessage())
                             {
-                                // Must translate message coordniates over to our HWND.  We first try
+                                // Must translate message coordinates over to our HWND.  We first try
                                 IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
                                 var pt = new Point
                                 {
