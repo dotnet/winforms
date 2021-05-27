@@ -128,7 +128,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         ///  Get a faux type which is generated from the metadata, which is
-        ///  looked up on the target framerwork assembly. Be careful to not use mix
+        ///  looked up on the target framework assembly. Be careful to not use mix
         ///  this type with runtime types in comparisons!
         /// </summary>
         protected static Type GetReflectionTypeFromTypeHelper(IDesignerSerializationManager manager, Type type)
