@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            // Get the x and y coordniates of the mouse message
+            // Get the x and y coordinates of the mouse message
             int x = 0, y = 0;
 
             // Look for a mouse handler.
