@@ -19,7 +19,7 @@ namespace System.Windows.Forms
     ///  virtualized indexes.  Indexes are virtualized according
     ///  to the state mask passed in.  This allows ItemArray
     ///  to be the backing store for one read-write "master"
-    ///  collection and serveral read-only collections based
+    ///  collection and several read-only collections based
     ///  on masks.  ItemArray supports up to 31 masks.
     /// </summary>
     internal partial class ItemArray : IComparer<Entry>
