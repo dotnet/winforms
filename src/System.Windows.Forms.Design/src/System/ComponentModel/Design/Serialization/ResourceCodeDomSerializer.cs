@@ -499,7 +499,7 @@ namespace System.ComponentModel.Design.Serialization
             public bool DeclarationAdded { get; set; }
 
             /// <summary>
-            ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at diffrerent times, if the declaration was added by a cached component.
+            ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at different times, if the declaration was added by a cached component.
             /// </summary>
             public bool ExpressionAdded { get; set; }
 
