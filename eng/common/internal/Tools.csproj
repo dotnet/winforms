@@ -7,7 +7,7 @@
     <AutomaticallyUseReferenceAssemblyPackages>false</AutomaticallyUseReferenceAssemblyPackages>
   </PropertyGroup>
   <ItemGroup>
-    <!-- Clear references, the SDK may add some depending on UsuingToolXxx settings, but we only want to restore the following -->
+    <!-- Clear references, the SDK may add some depending on UsingToolXxx settings, but we only want to restore the following -->
     <PackageReference Remove="@(PackageReference)"/>
     <PackageReference Include="Microsoft.DotNet.IBCMerge" Version="$(MicrosoftDotNetIBCMergeVersion)" Condition="'$(UsingToolIbcOptimization)' == 'true'" />
     <PackageReference Include="Drop.App" Version="$(DropAppVersion)" ExcludeAssets="all" Condition="'$(UsingToolVisualStudioIbcTraining)' == 'true'"/>
