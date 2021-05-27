@@ -127,8 +127,8 @@ namespace System.Windows.Forms
         private static readonly int s_stateAutoSize = BitVector32.CreateMask(s_stateMouseDownAndNoDrag);
         private static readonly int s_statePressed = BitVector32.CreateMask(s_stateAutoSize);
         private static readonly int s_stateSelected = BitVector32.CreateMask(s_statePressed);
-        private static readonly int s_stateContstructing = BitVector32.CreateMask(s_stateSelected);
-        private static readonly int s_stateDisposed = BitVector32.CreateMask(s_stateContstructing);
+        private static readonly int s_stateConstructing = BitVector32.CreateMask(s_stateSelected);
+        private static readonly int s_stateDisposed = BitVector32.CreateMask(s_stateConstructing);
         private static readonly int s_stateCurrentlyAnimatingImage = BitVector32.CreateMask(s_stateDisposed);
         private static readonly int s_stateDoubleClickEnabled = BitVector32.CreateMask(s_stateCurrentlyAnimatingImage);
         private static readonly int s_stateAutoToolTip = BitVector32.CreateMask(s_stateDoubleClickEnabled);
@@ -154,13 +154,13 @@ namespace System.Windows.Forms
                 _scaledDefaultStatusStripMargin = DpiHelper.LogicalToDeviceUnits(s_defaultStatusStripMargin);
             }
 
-            _state[s_stateEnabled | s_stateAutoSize | s_stateVisible | s_stateContstructing | s_stateSupportsItemClick | s_stateInvalidMirroredImage | s_stateMouseDownAndUpMustBeInSameItem | s_stateUseAmbientMargin] = true;
+            _state[s_stateEnabled | s_stateAutoSize | s_stateVisible | s_stateConstructing | s_stateSupportsItemClick | s_stateInvalidMirroredImage | s_stateMouseDownAndUpMustBeInSameItem | s_stateUseAmbientMargin] = true;
             _state[s_stateAllowDrop | s_stateMouseDownAndNoDrag | s_stateSupportsRightClick | s_statePressed | s_stateSelected | s_stateDisposed | s_stateDoubleClickEnabled | s_stateRightToLeftAutoMirrorImage | s_stateSupportsSpaceKey] = false;
             SetAmbientMargin();
             Size = DefaultSize;
             DisplayStyle = DefaultDisplayStyle;
             CommonProperties.SetAutoSize(this, true);
-            _state[s_stateContstructing] = false;
+            _state[s_stateConstructing] = false;
             AutoToolTip = DefaultAutoToolTip;
         }
 
@@ -656,7 +656,7 @@ namespace System.Windows.Forms
                     SourceGenerated.EnumValidator.Validate(value);
 
                     _displayStyle = value;
-                    if (!_state[s_stateContstructing])
+                    if (!_state[s_stateConstructing])
                     {
                         InvalidateItemLayout(PropertyNames.DisplayStyle);
                         OnDisplayStyleChanged(EventArgs.Empty);
@@ -3135,7 +3135,7 @@ namespace System.Windows.Forms
             Rectangle oldBounds = _bounds;
             _bounds = bounds;
 
-            if (!_state[s_stateContstructing])
+            if (!_state[s_stateConstructing])
             {
                 // Don't fire while we're in the base constructor as the inherited
                 // class may not have had a chance to initialize yet.
