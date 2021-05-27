@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
         public MenuTimer()
         {
-            // MenuShowDelay can be set to 0.  In this case, set to something low so it's inperceptable.
+            // MenuShowDelay can be set to 0.  In this case, set to something low so it's imperceptible.
             autoMenuExpandTimer.Tick += new EventHandler(OnTick);
 
             // since MenuShowDelay is registry tweakable we've gotta make sure we've got some sort
