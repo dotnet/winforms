@@ -2248,7 +2248,7 @@ namespace System.Windows.Forms
         ///  we have optimized the case where a user is only adding items within a beginupdate/endupdate
         ///  block.  If they do any other operations (get the count, remove, insert, etc.), we push in the
         ///  cached up items first, then do the requested operation.  This keeps it simple so we don't have to
-        ///  try to maintain parellel state of the cache during a begin update end update.
+        ///  try to maintain parallel state of the cache during a begin update end update.
         /// </summary>
         private void ApplyUpdateCachedItems()
         {
