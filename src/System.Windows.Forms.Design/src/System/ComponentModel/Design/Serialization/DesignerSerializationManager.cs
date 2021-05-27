@@ -262,7 +262,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     try
                     {
-                        // First, just try to create the object directly with the arguments.  generaly this should work.
+                        // First, just try to create the object directly with the arguments.  generally this should work.
                         instance = TypeDescriptor.CreateInstance(provider, type, null, argArray);
                     }
                     catch (MissingMethodException)
