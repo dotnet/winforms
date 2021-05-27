@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         private const int InvalidDimensionValue = int.MinValue;
 
         /// <summary>
-        ///  For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels
+        ///  For buttons whose FlatStyle = FlatStyle.Flat, this property specifies the size, in pixels
         ///  of the border around the button.
         /// </summary>
         private Size _systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
