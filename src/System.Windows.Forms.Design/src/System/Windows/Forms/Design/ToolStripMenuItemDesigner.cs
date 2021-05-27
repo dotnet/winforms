@@ -345,7 +345,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal void AddNewTemplateNode(ToolStripDropDown dropDown)
         {
-            //Check if the DropDown contains a typehereNode....
+            //Check if the DropDown contains a typeHereNode....
             foreach (ToolStripItem currentItem in dropDown.Items)
             {
                 if (currentItem is DesignerToolStripControlHost)
