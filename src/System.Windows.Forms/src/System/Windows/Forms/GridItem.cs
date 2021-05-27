@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     ///  the grid's state and contents.
     ///  These objects should not be cached because they represent a snapshot of the
     ///  PropertyGrid's state and may be disposed by grid activity. The PropertyGrid often
-    ///  recretates these objects internally even if it doesn't appear to change to the user.
+    ///  recreates these objects internally even if it doesn't appear to change to the user.
     /// </summary>
     public abstract class GridItem
     {
