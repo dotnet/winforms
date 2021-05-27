@@ -169,7 +169,7 @@ When writing theories note the following:
     ```
   
 3. theories must not reuse disposable components.<br />
-  In situations where following the above recommentation could be impractical, it is maybe acceptable to create disposable controls for each theory data, e.g.:
+  In situations where following the above recommendation could be impractical, it is maybe acceptable to create disposable controls for each theory data, e.g.:
     ```cs
     public static IEnumerable<object[]> GetButton_TestData()
     {
