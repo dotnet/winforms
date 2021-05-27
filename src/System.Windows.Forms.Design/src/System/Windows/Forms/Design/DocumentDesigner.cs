@@ -419,7 +419,7 @@ namespace System.Windows.Forms.Design
                     host.Activated -= new EventHandler(OnDesignerActivate);
                     host.Deactivated -= new EventHandler(OnDesignerDeactivate);
 
-                    // If the tray wasn't destroyed, then we got some sort of inbalance
+                    // If the tray wasn't destroyed, then we got some sort of imbalance
                     // in our add/remove calls.  Don't sweat it, but do remove the tray.
                     //
                     if (componentTray != null)
