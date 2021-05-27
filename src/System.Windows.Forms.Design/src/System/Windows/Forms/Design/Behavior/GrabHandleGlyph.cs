@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Design.Behavior
 
                     break;
                 default:
-                    Debug.Assert(false, "GrabHandleGlyph was called with a bad GrapHandleGlyphType.");
+                    Debug.Assert(false, "GrabHandleGlyph was called with a bad GrabHandleGlyphType.");
                     break;
             }
 
