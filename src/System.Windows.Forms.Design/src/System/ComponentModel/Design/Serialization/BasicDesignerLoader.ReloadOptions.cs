@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design.Serialization
             Default = 0x00,
 
             /// <summary>
-            ///  If this flag is set, any error encoutered during the
+            ///  If this flag is set, any error encountered during the
             ///  reload will automatically put the designer loader in
             ///  the modified state.
             /// </summary>
