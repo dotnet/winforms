@@ -825,7 +825,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the mouse pointer hovers over the contro.
+        ///  Occurs when the mouse pointer hovers over the control.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -3886,7 +3886,7 @@ namespace System.Windows.Forms
                 ContainerControl f = ContainingControl;
                 if (f is null)
                 {
-                    // ContainingCointrol can be null if the AxHost is still not parented to a containerControl
+                    // ContainingControl can be null if the AxHost is still not parented to a containerControl
                     // In everett we used to return a parking window.
                     // now we just set the containingControl to a dummyValue.
                     if (newParent is null)

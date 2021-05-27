@@ -325,7 +325,7 @@ namespace System.Windows.Forms.Layout
         {
 #if DEBUG
             // We cannot apply any of these checks @ design-time since dragging new children into a FlowLayoutPanel
-            // will attempt to set the children at the mouse position when the child was dropped - we rely on the controil
+            // will attempt to set the children at the mouse position when the child was dropped - we rely on the control
             // to reposition the children once added.
             if (container is Control flp && flp.Site != null && flp.Site.DesignMode)
             {
