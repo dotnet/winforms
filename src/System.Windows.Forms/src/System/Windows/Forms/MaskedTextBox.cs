@@ -382,7 +382,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the formatting options for text cut/copited to the clipboard (Whether the mask returned from the Text
         ///  property includes Literals and/or prompt characters).
-        ///  When prompt characters are excluded, theyare returned as spaces in the string returned.
+        ///  When prompt characters are excluded, they are returned as spaces in the string returned.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MaskedTextBoxCutCopyMaskFormat))]
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the formatting options for text output (Whether the mask returned from the Text
         ///  property includes Literals and/or prompt characters).
-        ///  When prompt characters are excluded, theyare returned as spaces in the string returned.
+        ///  When prompt characters are excluded, they returned as spaces in the string returned.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MaskedTextBoxTextMaskFormat))]
