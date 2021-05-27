@@ -546,7 +546,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Identifes where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
+        ///  Identifies where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
         /// </summary>
         public static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
         {
