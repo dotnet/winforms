@@ -14,7 +14,7 @@ internal static partial class Interop
         ///  These objects are usually stateless, and invoking them does not change their own state,
         ///  but causes something to happen in the larger context of the app the control is in.
         ///
-        ///  Examples of UI that implments this includes:
+        ///  Examples of UI that implements this includes:
         ///  Push buttons
         ///  Hyperlinks
         ///  Menu items
