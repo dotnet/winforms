@@ -393,7 +393,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Equal(0, control.DataManager.Position);
 
-            // Supsending should call.
+            // Suspending should call.
             control.DataManager.SuspendBinding();
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Equal(1, callCount);
@@ -469,7 +469,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Equal(0, control.DataManager.Position);
 
-            // Supsending should call.
+            // Suspending should call.
             control.DataManager.SuspendBinding();
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Equal(1, callCount);
