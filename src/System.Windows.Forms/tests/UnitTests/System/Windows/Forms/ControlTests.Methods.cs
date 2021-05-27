@@ -4038,7 +4038,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Control_Invoke_InvokeInvalidParameters_ThrowsargetParameterCountException()
+        public void Control_Invoke_InvokeInvalidParameters_ThrowsTargetParameterCountException()
         {
             using var control = new Control();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
