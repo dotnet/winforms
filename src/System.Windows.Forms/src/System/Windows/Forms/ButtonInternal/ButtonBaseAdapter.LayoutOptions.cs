@@ -219,7 +219,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Size textImageInsetSize = new Size(TextImageInset * 2, TextImageInset * 2);
                 Size requiredImageSize = (ImageSize != Size.Empty) ? ImageSize + textImageInsetSize : Size.Empty;
 
-                // Pack Text into remaning space
+                // Pack Text into remaining space
                 proposedSize -= textImageInsetSize;
                 proposedSize = Decompose(checkSize, requiredImageSize, proposedSize);
 

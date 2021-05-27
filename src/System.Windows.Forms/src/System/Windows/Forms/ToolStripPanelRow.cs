@@ -476,7 +476,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // STEP 2 change the size of the remaing ToolStrips from Right to Left.
+            // STEP 2 change the size of the remaining ToolStrips from Right to Left.
             int[] cellOffsets = null;
             for (int i = Cells.Count - 1; i >= 0; i--)
             {
@@ -570,7 +570,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // STEP 2 change the size of the remaing ToolStrips from Bottom to Top.
+            // STEP 2 change the size of the remaining ToolStrips from Bottom to Top.
             int[] cellOffsets = null;
             for (int i = Cells.Count - 1; i >= 0; i--)
             {

@@ -1281,7 +1281,7 @@ namespace System.Windows.Forms.Layout
             remainingSpace = maxSize - usedSpace;
 
             // Step 3: add remaining space to autosize columns
-            //  - usually we only do this if we're not in preferred size (remaingSpace would be < 0)
+            //  - usually we only do this if we're not in preferred size (remainingSpace would be < 0)
             //  - and there are no % style columns
 
             if (hasAutoSizeColumn && remainingSpace > 0)
