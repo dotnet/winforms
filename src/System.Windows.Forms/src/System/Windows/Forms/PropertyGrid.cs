@@ -5052,7 +5052,7 @@ namespace System.Windows.Forms
                             if (_toolStrip.Items[index] is ToolStripButton button)
                             {
                                 button.Checked = !button.Checked;
-                                // special treatment for the properies page button
+                                // special treatment for the properties page button
                                 if (button == _btnViewPropertyPages)
                                 {
                                     OnViewButtonClickPP(button, EventArgs.Empty);

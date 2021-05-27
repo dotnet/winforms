@@ -35,7 +35,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  We increment this every time we look at an Object, at specified
-        ///  intervals, we run through the properies list to see if we should
+        ///  intervals, we run through the properties list to see if we should
         ///  delete any.
         /// </summary>
         private int clearCount;

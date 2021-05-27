@@ -795,7 +795,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         eventDesc = _eventBindings.GetEvent(_propertyInfo);
                     }
 
-                    // For a merged set of propertius, the event binding service won't
+                    // For a merged set of properties, the event binding service won't
                     // find an event.  So, we ask type descriptor directly.
                     //
                     if (eventDesc is null)
