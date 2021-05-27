@@ -351,7 +351,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent)
         {
@@ -359,7 +359,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent, string containerName)
         {
