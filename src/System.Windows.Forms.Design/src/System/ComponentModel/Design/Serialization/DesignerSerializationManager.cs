@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This property determines the behavior of the CreateInstance method.  If false, CreateInstance will always create a new instance of an object.  If true, CreateInstance will first search the nametable and container for an object of the same name.  If such an object exists and is of the same type, CreateInstance will return the existing object instance.  This second variation is useful for implemeting a serializer that applies serialization state to an existing set of objects, rather than always creating a new tree.  Undo often uses this type of serializer. The default value of this property is false.
+        ///  This property determines the behavior of the CreateInstance method.  If false, CreateInstance will always create a new instance of an object.  If true, CreateInstance will first search the nametable and container for an object of the same name.  If such an object exists and is of the same type, CreateInstance will return the existing object instance.  This second variation is useful for implementing a serializer that applies serialization state to an existing set of objects, rather than always creating a new tree.  Undo often uses this type of serializer. The default value of this property is false.
         /// </summary>
         public bool RecycleInstances
         {
