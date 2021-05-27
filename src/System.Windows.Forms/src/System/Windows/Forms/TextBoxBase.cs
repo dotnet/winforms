@@ -1616,7 +1616,7 @@ namespace System.Windows.Forms
         {
             // since AutoSize existed in Everett, (and is the default) we can't
             // relayout the parent when the "preferredsize" of the control changes.
-            // this means a multiline = true textbox wont natrually grow in height when
+            // this means a multiline = true textbox wont naturally grow in height when
             // the text changes.
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
