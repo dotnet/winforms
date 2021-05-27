@@ -7172,7 +7172,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(SetAutoSizeMode_TestData))]
-        public void Control_SetAutoSizeMode_InvoekWithParent_GetAutoSizeModeReturnsExpected(AutoSizeMode mode, AutoSizeMode expected)
+        public void Control_SetAutoSizeMode_InvokeWithParent_GetAutoSizeModeReturnsExpected(AutoSizeMode mode, AutoSizeMode expected)
         {
             using var parent = new Control();
             using var control = new SubControl
