@@ -464,7 +464,7 @@ namespace System.Windows.Forms.Design
                 return true;
             }
 
-            // commandsAdded means that either toolstrip, toolSripItem or templatenode is selected.
+            // commandsAdded means that either toolstrip, toolStripItem or templatenode is selected.
             if (_commandsAdded && x == -1 && y == -1)
             {
                 ContextMenuShownByKeyBoard = true;
