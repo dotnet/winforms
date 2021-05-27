@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // replace this one seperately because it is of a different type (DesignerControlCollection) than the
+            // replace this one separately because it is of a different type (DesignerControlCollection) than the
             // original property (ControlCollection)
             PropertyDescriptor controlsProp = (PropertyDescriptor)properties["Controls"];
 
