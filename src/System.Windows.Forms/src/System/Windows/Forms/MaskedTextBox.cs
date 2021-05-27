@@ -1873,7 +1873,7 @@ namespace System.Windows.Forms
             {
                 switch (keyCode)
                 {
-                    // Unsupported keys should not be handled to allow generatating the corresponding message
+                    // Unsupported keys should not be handled to allow generating the corresponding message
                     // which is handled in the WndProc.
                     //case Keys.Z:  // ctrl-z == Undo.
                     //case Keys.Y:  // ctrl-y == Redo.
