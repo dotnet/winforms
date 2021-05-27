@@ -110,7 +110,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This property returns the object that should be used to provide properties to the serialization manager's Propeties property.  This object's  public properties will be inspected and wrapped in new property descriptors that have a target object of the serialization manager.
+        ///  This property returns the object that should be used to provide properties to the serialization manager's Properties property.  This object's  public properties will be inspected and wrapped in new property descriptors that have a target object of the serialization manager.
         /// </summary>
         public object PropertyProvider
         {

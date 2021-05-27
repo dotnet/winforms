@@ -1202,7 +1202,7 @@ namespace System.ComponentModel.Design.Serialization
                             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(data._value.GetType(), typeof(CodeDomSerializer));
                             // Saved state. Slot 0 is the code gen
                             // Slot 1 is for generated statements coming from the context.
-                            // Slot 2 is an array of default properites.
+                            // Slot 2 is an array of default properties.
                             // Slot 3 is for design time props.Any may be null.
                             // Slot 4 is for events that need to be reset.
                             // Slot 5 is for the modifier property of the object.
