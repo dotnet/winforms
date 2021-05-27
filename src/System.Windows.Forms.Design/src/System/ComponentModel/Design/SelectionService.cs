@@ -78,7 +78,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Called when our visiblity or batch mode changes.  Flushes any pending notifications or updates if possible.
+        ///  Called when our visibility or batch mode changes.  Flushes any pending notifications or updates if possible.
         /// </summary>
         private void FlushSelectionChanges()
         {
