@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Design
                 Type[] stockItemTypeList = GetStandardItemTypes(component);
                 if (currentToolStripVisibility != ToolStripItemDesignerAvailability.None)
                 {
-                    ArrayList createableTypes = new ArrayList(itemTypes.Count);
+                    ArrayList creatableTypes = new ArrayList(itemTypes.Count);
                     foreach (Type t in itemTypes)
                     {
                         if (t.IsAbstract)
@@ -310,17 +310,17 @@ namespace System.Windows.Forms.Design
 
                             if (!isStockType)
                             {
-                                createableTypes.Add(t);
+                                creatableTypes.Add(t);
                             }
                         }
                     }
 
-                    if (createableTypes.Count > 0)
+                    if (creatableTypes.Count > 0)
                     {
-                        Type[] createableTypesArray = new Type[createableTypes.Count];
-                        createableTypes.CopyTo(createableTypesArray, 0);
-                        s_customToolStripItemCount = createableTypes.Count;
-                        return createableTypesArray;
+                        Type[] creatableTypesArray = new Type[creatableTypes.Count];
+                        creatableTypes.CopyTo(creatableTypesArray, 0);
+                        s_customToolStripItemCount = creatableTypes.Count;
+                        return creatableTypesArray;
                     }
                 }
             }
