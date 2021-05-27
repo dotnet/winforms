@@ -2130,7 +2130,7 @@ namespace System.Windows.Forms
                         else
                         {
                             // No menu command service.  Go straight to the component's designer.  We
-                            // can only do this if the Object count is 1, because desginers do not
+                            // can only do this if the Object count is 1, because designers do not
                             // support verbs across a multi-selection.
                             //
                             if (_currentObjects.Length == 1 && GetUnwrappedObject(0) is IComponent)

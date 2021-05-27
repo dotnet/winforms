@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         ///  Since the Control which is wrapped by ToolStripControlHost is a runtime instance, there is no way of knowing
         ///  whether the control is in runtime or designtime.
         ///  This implementation of ISite would be set to Control.Site when ToolStripControlHost.Site is set at DesignTime. (Refer to Site property on ToolStripControlHost)
-        ///  This implementation just returns the DesigMode property to be ToolStripControlHost's DesignMode property.
+        ///  This implementation just returns the DesignMode property to be ToolStripControlHost's DesignMode property.
         ///  Everything else is pretty much default implementation.
         /// </remarks>
         private class StubSite : ISite, IDictionaryService

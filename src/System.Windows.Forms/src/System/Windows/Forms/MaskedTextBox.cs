@@ -2464,7 +2464,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Designe time support for resetting Culture property..
+        ///  Design time support for resetting Culture property..
         /// </summary>
         private void ResetCulture()
         {
@@ -2669,7 +2669,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Designe time support for checking if Culture value in the designer should be serialized.
+        ///  Design time support for checking if Culture value in the designer should be serialized.
         /// </summary>
         private bool ShouldSerializeCulture()
         {
