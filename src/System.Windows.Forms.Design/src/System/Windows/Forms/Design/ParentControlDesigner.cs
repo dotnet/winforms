@@ -749,7 +749,7 @@ namespace System.Windows.Forms.Design
                         //name = null;
                         // we don't want to add unsited child controls because
                         // these may be items from a composite control.  if they
-                        // are legitamite children, the ComponentModelPersister would have
+                        // are legitimate children, the ComponentModelPersister would have
                         // sited them already.
                         //
                         continue;
