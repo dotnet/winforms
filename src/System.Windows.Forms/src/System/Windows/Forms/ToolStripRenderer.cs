@@ -789,7 +789,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draw the item'si mage.  ToolStrip users should override this function to change the
+        ///  Draw the item's image.  ToolStrip users should override this function to change the
         ///  drawing of all images.
         /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
