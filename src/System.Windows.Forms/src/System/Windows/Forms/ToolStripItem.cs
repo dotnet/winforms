@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is explicitly a ToolStrip, because only ToolStrips know how to manage ToolStripitems
+        ///  This is explicitly a ToolStrip, because only ToolStrips know how to manage ToolStripItems
         /// </summary>
         internal ToolStrip ParentInternal
         {
