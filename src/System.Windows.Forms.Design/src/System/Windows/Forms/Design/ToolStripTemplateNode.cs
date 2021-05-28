@@ -1821,7 +1821,7 @@ namespace System.Windows.Forms.Design
                         }
 
                         break;
-                    case 5: //MouseOnthe HotRegion
+                    case 5: //MouseOverHotRegion
                         using (SolidBrush b = new SolidBrush(dropDownMouseOverColor))
                         {
                             g.FillRectangle(b, hotRegion);
