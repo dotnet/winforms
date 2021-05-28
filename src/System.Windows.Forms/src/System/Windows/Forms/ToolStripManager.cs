@@ -776,7 +776,7 @@ namespace System.Windows.Forms
                     case Keys.Menu:
                     case Keys.ControlKey:
                     case Keys.ShiftKey:
-                        // Shift, control and alt arent valid on their own.
+                        // Shift, control and alt aren't valid on their own.
                         return false;
                     default:
                         if (modifiers == Keys.Shift)

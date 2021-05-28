@@ -256,7 +256,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public virtual bool HasDropDownItems
             =>
-                //Use count of visible DisplayedItems instead so that we take into account things that arent visible
+                //Use count of visible DisplayedItems instead so that we take into account things that aren't visible
                 (dropDown is not null) && dropDown.HasVisibleItems;
 
         [Browsable(false)]

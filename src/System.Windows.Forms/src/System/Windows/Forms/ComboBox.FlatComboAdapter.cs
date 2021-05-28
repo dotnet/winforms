@@ -191,7 +191,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  This eliminates flicker by removing the pieces we're going to paint ourselves from the update region.
             ///  Note the UpdateRegionBox is the bounding box of the actual update region. This is here so we can
-            ///  quickly eliminate rectangles that arent in the update region.
+            ///  quickly eliminate rectangles that aren't in the update region.
             /// </summary>
             public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {

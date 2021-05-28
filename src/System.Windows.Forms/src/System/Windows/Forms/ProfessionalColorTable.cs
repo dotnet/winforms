@@ -365,7 +365,7 @@ namespace System.Windows.Forms
 
             InitCommonColors(ref rgbTable);
 
-            // use locals so we arent fetching again and again.
+            // use locals so we aren't fetching again and again.
             Color buttonFace = SystemColors.ButtonFace;
             Color buttonShadow = SystemColors.ButtonShadow;
             Color highlight = SystemColors.Highlight;

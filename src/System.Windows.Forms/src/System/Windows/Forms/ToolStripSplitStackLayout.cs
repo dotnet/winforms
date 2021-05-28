@@ -558,7 +558,7 @@ namespace System.Windows.Forms
 
         private void SetItemLocation(ToolStripItem item, Point itemLocation, Size itemSize)
         {
-            // make sure that things that dont fit within the display rectangle arent laid out.
+            // make sure that things that dont fit within the display rectangle aren't laid out.
             if ((item.Placement == ToolStripItemPlacement.Main) && !(item is ToolStripOverflowButton))
             {
                 // overflow buttons can be placed outside the display rect.

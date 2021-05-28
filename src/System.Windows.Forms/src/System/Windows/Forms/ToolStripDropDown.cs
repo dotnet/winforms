@@ -1563,7 +1563,7 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "ToolStripDropDown.ProcessDialogChar [" + charCode.ToString() + "]");
 
-            // Since we're toplevel and arent a container control, we've got to do our own mnemonic handling.
+            // Since we're toplevel and aren't a container control, we've got to do our own mnemonic handling.
             if ((OwnerItem is null || OwnerItem.Pressed) && charCode != ' ' && ProcessMnemonic(charCode))
             {
                 return true;
