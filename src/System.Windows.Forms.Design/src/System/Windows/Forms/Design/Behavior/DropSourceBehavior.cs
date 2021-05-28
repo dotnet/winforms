@@ -901,7 +901,7 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void DisableAdorners(IServiceProvider serviceProvider, BehaviorService behaviorService, bool hostChange)
         {
-            // find our bodyglyph adorner offered by the behavior service we don't want to disable the transparent body glyphs
+            // find our body glyph adorner offered by the behavior service we don't want to disable the transparent body glyphs
             Adorner bodyGlyphAdorner = null;
             SelectionManager selMgr = (SelectionManager)serviceProvider.GetService(typeof(SelectionManager));
             if (selMgr != null)
@@ -909,7 +909,7 @@ namespace System.Windows.Forms.Design.Behavior
                 bodyGlyphAdorner = selMgr.BodyGlyphAdorner;
             }
 
-            //disable all adorners except for bodyglyph adorner
+            //disable all adorners except for body glyph adorner
             foreach (Adorner a in behaviorService.Adorners)
             {
                 if (bodyGlyphAdorner != null && a.Equals(bodyGlyphAdorner))
