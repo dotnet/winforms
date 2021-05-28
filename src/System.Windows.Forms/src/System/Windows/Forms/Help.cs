@@ -300,7 +300,7 @@ namespace System.Windows.Forms
 
             if (file is null)
             {
-                Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "try appbase relative");
+                Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "try AppBase relative");
                 try
                 {
                     // try relative to AppBase...
