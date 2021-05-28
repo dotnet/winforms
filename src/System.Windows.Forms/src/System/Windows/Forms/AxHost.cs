@@ -2130,7 +2130,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns this control's logicaly containing form.
+        ///  Returns this control's logically containing form.
         ///  At design time this is always the form being designed.
         ///  At runtime it is either the form set with setContainingForm or,
         ///  by default, the parent form.
