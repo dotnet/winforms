@@ -2098,7 +2098,7 @@ namespace System.Windows.Forms
                 case User32.WM.NCACTIVATE:
                     // if someone clicks on a child control of the toolstrip dropdown, we want
                     // the title bar to continue appearing active.  Normally we just show without
-                    // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
+                    // taking window activation (ShowWindow(SHOWNOACTIVATE)) but we can't stop
                     // child controls from taking focus.
                     WmNCActivate(ref m);
                     return;
@@ -2161,7 +2161,7 @@ namespace System.Windows.Forms
             else
             {
                 ArrayList dropDowns = ActiveDropDowns.Clone() as ArrayList;
-                // We cant iterate through the active dropdown collection
+                // We can't iterate through the active dropdown collection
                 // here as changing visibility changes the collection.
                 for (int i = 0; i < dropDowns.Count; i++)
                 {
@@ -2179,7 +2179,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  If someone clicks on a child control of the toolstrip dropdown, we want
         ///  the title bar to continue appearing active.  Normally we just show without
-        ///  taking window activation (ShowWindow(SHOWNOACTIVATE)) but we cant stop
+        ///  taking window activation (ShowWindow(SHOWNOACTIVATE)) but we can't stop
         ///  child controls from taking focus.
         /// </summary>
         private unsafe void WmNCActivate(ref Message m)

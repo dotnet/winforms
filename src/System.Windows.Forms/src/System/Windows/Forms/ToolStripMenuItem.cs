@@ -653,7 +653,7 @@ namespace System.Windows.Forms
             menuItem.TextImageRelation = TextImageRelation;
             menuItem.ToolTipText = ToolTipText;
 
-            // cant actually use "Visible" property as that returns whether or not the parent
+            // can't actually use "Visible" property as that returns whether or not the parent
             // is visible too.. instead use ParticipatesInLayout as this queries the actual state.
             menuItem.Visible = ((IArrangedElement)this).ParticipatesInLayout;
 

@@ -683,7 +683,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // cant use Enum.IsValid as its not sequential
+                // can't use Enum.IsValid as its not sequential
                 switch (value)
                 {
                     case ToolStripDropDownDirection.AboveLeft:
@@ -3798,7 +3798,7 @@ namespace System.Windows.Forms
 
             if (!LayoutUtils.IsZeroWidthOrHeight(bitmapSize))
             {
-                // cant create a 0x0 bmp.
+                // can't create a 0x0 bmp.
 
                 // Supporting RoundedEdges...
                 // we've got a concept of a region that we shouldnt paint (the TransparentRegion as specified in the Renderer).

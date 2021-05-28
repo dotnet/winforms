@@ -649,7 +649,7 @@ namespace System.Windows.Forms
                     if (t_toolStripPanelWeakArrayList[i] is ToolStripPanel toolStripPanel && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                         toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation)))
                     {
-                        // Ensure that we cant drag off one window to another.
+                        // Ensure that we can't drag off one window to another.
                         if (rootWindowCheck)
                         {
                             if (IsOnSameWindow(draggedControl, toolStripPanel))
@@ -822,7 +822,7 @@ namespace System.Windows.Forms
             if (ToolStripManager.IsValidShortcut(keyData))
             {
                 // If we're at the toplevel, check the toolstrips for matching shortcuts.
-                // Win32 menus are handled in Form.ProcessCmdKey, but we cant guarantee that
+                // Win32 menus are handled in Form.ProcessCmdKey, but we can't guarantee that
                 // toolstrips will be hosted in a form. ToolStrips have a hash of shortcuts
                 // per container, so this should hopefully be a quick search.
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - IsValidShortcut: [" + keyData.ToString() + "]");

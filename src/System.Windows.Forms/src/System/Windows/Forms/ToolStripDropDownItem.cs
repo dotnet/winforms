@@ -164,7 +164,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // cant use Enum.IsValid as its not sequential
+                // can't use Enum.IsValid as its not sequential
                 switch (value)
                 {
                     case ToolStripDropDownDirection.AboveLeft:

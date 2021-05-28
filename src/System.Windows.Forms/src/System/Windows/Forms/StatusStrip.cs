@@ -212,7 +212,7 @@ namespace System.Windows.Forms
                 if (SizingGrip)
                 {
                     Size statusStripSize = Size;
-                    // we cant necessarily make this the height of the status strip, as
+                    // we can't necessarily make this the height of the status strip, as
                     // the orientation could change.
                     int gripHeight = Math.Min(DefaultSize.Height, statusStripSize.Height);
 
@@ -426,7 +426,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // we cant fit an item, everything else after it should not be displayed
+                        // we can't fit an item, everything else after it should not be displayed
                         if (((IArrangedElement)item).ParticipatesInLayout)
                         {
                             overflow = true;
