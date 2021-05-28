@@ -1328,7 +1328,7 @@ namespace System.Windows.Forms.Tests
             using var child2 = new Control();
             using var child3 = new Control();
             var sourceCollection = new Control.ControlCollection(owner);
-            ICloneable iClonable = sourceCollection;
+            ICloneable iCloneable = sourceCollection;
             sourceCollection.Add(child1);
             sourceCollection.Add(child2);
             sourceCollection.Add(child3);
@@ -1342,7 +1342,7 @@ namespace System.Windows.Forms.Tests
 
             try
             {
-                var collection = Assert.IsType<Control.ControlCollection>(iClonable.Clone());
+                var collection = Assert.IsType<Control.ControlCollection>(iCloneable.Clone());
                 Assert.NotSame(sourceCollection, collection);
                 Assert.Equal(new Control[] { child1, child2, child3 }, sourceCollection.Cast<Control>());
                 Assert.Equal(new Control[] { child1, child2, child3 }, collection.Cast<Control>());
