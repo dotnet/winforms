@@ -750,7 +750,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This denotes the depth of nesting of the treenode.
+        ///  This denotes the depth of nesting of the TreeNode.
         /// </summary>
         [Browsable(false)]
         public int Level
