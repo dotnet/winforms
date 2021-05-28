@@ -1659,12 +1659,12 @@ namespace System.Windows.Forms.Design
             //Remove body Glyphs...
             InitializeBodyGlyphsForItems(false /*remove*/, MenuItem);
             Rectangle boundstoInvalidate = Rectangle.Union(hostingDropDownBounds, itemDropDownBounds);
-            ToolStripAdornerWindowService toolStripservice = _toolStripAdornerWindowService;
+            ToolStripAdornerWindowService toolStripService = _toolStripAdornerWindowService;
             ToolStripItem newItem = base.MorphCurrentItem(t);
             // We loose the ToolStripWindowService after Morphing... so use the cached one.
-            if (toolStripservice != null)
+            if (toolStripService != null)
             {
-                toolStripservice.Invalidate(boundstoInvalidate);
+                toolStripService.Invalidate(boundstoInvalidate);
             }
 
             return newItem;
