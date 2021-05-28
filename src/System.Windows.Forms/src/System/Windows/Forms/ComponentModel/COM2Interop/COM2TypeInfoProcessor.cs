@@ -452,7 +452,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
-            // for each item in uur list, create the descriptor an check
+            // for each item in our list, create the descriptor an check
             // if it's the default one.
             foreach (PropInfo pi in propInfos.Values)
             {
