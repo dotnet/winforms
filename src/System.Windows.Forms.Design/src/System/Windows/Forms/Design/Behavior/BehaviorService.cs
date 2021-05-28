@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Glyph _hitTestedGlyph;                                  // the last valid glyph that was hit tested
         private IToolboxService _toolboxSvc;                            // allows us to have the toolbox choose a cursor
         private Control _dropSource;                                    // actual control used to call .dodragdrop
-        private DragEventArgs _validDragArgs;                           // if valid - this is used to fabricate drag enter/leave envents
+        private DragEventArgs _validDragArgs;                           // if valid - this is used to fabricate drag enter/leave events
         private BehaviorDragDropEventHandler _beginDragHandler;         // fired directly before we call .DoDragDrop()
         private BehaviorDragDropEventHandler _endDragHandler;           // fired directly after we call .DoDragDrop()
         private EventHandler _synchronizeEventHandler;                  // fired when we want to synchronize the selection
