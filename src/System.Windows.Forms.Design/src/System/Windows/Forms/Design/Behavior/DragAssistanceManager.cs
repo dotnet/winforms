@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly Pen _edgePen = SystemPens.Highlight;
         private readonly bool _disposeEdgePen;
         private readonly Pen _baselinePen = new Pen(Color.Fuchsia);
-        // These are global lists of all the existing vertical and horizontal snaplineson the designer's surface excluding the targetControl.  All SnapLine coords in theselists have been properly adjusted for the AdornerWindow coords.
+        // These are global lists of all the existing vertical and horizontal snaplineson the designer's surface excluding the targetControl.  All SnapLine coords in these lists have been properly adjusted for the AdornerWindow coords.
         private readonly ArrayList _verticalSnapLines = new ArrayList();
         private readonly ArrayList _horizontalSnapLines = new ArrayList();
         // These are SnapLines that represent our target control.
