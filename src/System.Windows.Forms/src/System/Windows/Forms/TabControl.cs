@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
                 _selectedIndex = SelectedIndex;
             }
 
-            //Remove the Handle from NativewIndow....
+            //Remove the Handle from NativeWindow....
 
             // Don't try to remove the Handle if we've already done so
             if (_handleInTable)
