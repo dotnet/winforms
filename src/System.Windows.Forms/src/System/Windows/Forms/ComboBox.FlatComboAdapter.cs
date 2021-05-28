@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 DrawFlatComboDropDown(comboBox, g, _dropDownRect);
 
                 // When we are disabled there is one line of color that seems to eek through if backcolor is set
-                // so lets erase it.
+                // so let's erase it.
                 if (!LayoutUtils.IsZeroWidthOrHeight(_whiteFillRect))
                 {
                     // Fill in two more pixels with white so it looks smaller.
