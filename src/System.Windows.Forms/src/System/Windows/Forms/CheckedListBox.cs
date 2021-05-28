@@ -450,7 +450,7 @@ namespace System.Windows.Forms
             // this.  Note that we'll only change the selection when the
             // user clicks again on a currently selected item, or when the
             // user has CheckOnClick set to true.  Otherwise
-            // just using the up and down arrows selects or unselects
+            // just using the up and down arrows selects or deselects
             // every item around town ...
             //
 

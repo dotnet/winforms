@@ -260,7 +260,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Unselects all items.
+            ///  Deselects all items.
             /// </summary>
             public void Clear()
             {

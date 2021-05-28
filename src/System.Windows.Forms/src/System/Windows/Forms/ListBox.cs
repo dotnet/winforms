@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Unselects all currently selected items.
+        ///  Deselects all currently selected items.
         /// </summary>
         public void ClearSelected()
         {
