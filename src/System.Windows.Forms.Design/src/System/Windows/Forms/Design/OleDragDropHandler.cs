@@ -587,7 +587,7 @@ namespace System.Windows.Forms.Design
             DataObject data = new ComponentDataObjectWrapper(new ComponentDataObject(client, serviceProvider, components, initialX, initialY));
 
             // We make sure we're painted before we start the drag.  Then, we disable window painting to
-            // ensure that the drag can proceed without leaving artifacts lying around.  We should be caling LockWindowUpdate,
+            // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
             // but that causes a horrible flashing because GDI+ uses direct draw.
             //
             User32.MSG msg = default;
