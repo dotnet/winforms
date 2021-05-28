@@ -128,7 +128,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // Prevent sending same runtime ID for all edit boxes. Individual edit in
                         // each row should have unique runtime ID to prevent incorrect announcement.
                         // For instance screen reader may announce row 2 for the third row edit
-                        // as the sme TextBox control is used both in row 2 and row 3.
+                        // as the same TextBox control is used both in row 2 and row 3.
                         return null;
                     }
                 }
