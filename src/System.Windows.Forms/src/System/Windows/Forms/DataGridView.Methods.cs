@@ -22549,7 +22549,7 @@ namespace System.Windows.Forms
             // Refactor the special keys into two parts.
             // 1. Escape and Space exist in both WM_CHAR and WM_KEYDOWN, WM_KEYUP.
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
-            // w/ some of the key code. (Like character code of lowcase "q" is 0x71, it's overlapped w/ Keys.F2). This
+            // w/ some of the key code. (Like character code of lowercase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
             if (m.Msg == (int)User32.WM.CHAR)
             {
