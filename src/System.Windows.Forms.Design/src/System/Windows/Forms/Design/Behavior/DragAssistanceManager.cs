@@ -978,7 +978,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
             }
 
-            //First pass - build up a distance array of all same-type-alignment pts to theclosest point on our targetControl.  Also, keep track of the smallestdistance overall
+            //First pass - build up a distance array of all same-type-alignment pts to the closest point on our targetControl.  Also, keep track of the smallestdistance overall
             int smallestDistanceVert = BuildDistanceArray(_verticalSnapLines, _targetVerticalSnapLines, _verticalDistances, dragBounds);
             int smallestDistanceHorz = INVALID_VALUE;
             if (shouldSnapHorizontally)
