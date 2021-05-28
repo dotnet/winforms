@@ -1262,7 +1262,7 @@ namespace System.Windows.Forms
 
                             // When there is only one link in link label,
                             // it's not necessary to paint with foreBrush first
-                            // as it will be overlapped by linkbrush in the following steps
+                            // as it will be overlapped by linkBrush in the following steps
 
                             if (!IsOneLink())
                             {
