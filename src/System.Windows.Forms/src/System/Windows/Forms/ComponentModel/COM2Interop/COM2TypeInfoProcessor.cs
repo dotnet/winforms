@@ -91,7 +91,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
-        ///  all available type infos will be returned, otherwise the primary one will be alled.
+        ///  all available type infos will be returned, otherwise the primary one will be called.
         /// </summary>
         public unsafe static ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
         {
