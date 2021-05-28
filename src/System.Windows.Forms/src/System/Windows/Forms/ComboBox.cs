@@ -875,11 +875,11 @@ namespace System.Windows.Forms
                 {
                     //do preferred height the old broken way for everett apps
                     //we need this for compat reasons because (get this)
-                    //  (a) everett preferredheight was always wrong.
+                    //  (a) everett PreferredHeight was always wrong.
                     //  (b) so, when combobox1.Size = actualdefaultsize was called, it would enter setboundscore
                     //  (c) this updated requestedheight
                     //  (d) if the user then changed the combo to simple style, the height did not change.
-                    // We simply cannot match this behavior if preferredheight is corrected so that (b) never
+                    // We simply cannot match this behavior if PreferredHeight is corrected so that (b) never
                     // occurs.  We simply do not know when Size was set.
 
                     // So in whidbey, the behavior will be:
