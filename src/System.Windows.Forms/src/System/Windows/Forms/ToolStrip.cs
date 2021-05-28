@@ -2841,7 +2841,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This override fires the LocationChanging event if
         ///  1) We are not currently Rafting .. since this cause this infinite times...
-        ///  2) If we havent been called once .. Since the "LocationChanging" is listened to by the RaftingCell and calls "JOIN" which may call us back.
+        ///  2) If we haven't been called once .. Since the "LocationChanging" is listened to by the RaftingCell and calls "JOIN" which may call us back.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
@@ -3215,7 +3215,7 @@ namespace System.Windows.Forms
             index = startIndex;
 
             // MenuStrip parity: key presses should change selection if mnemonic not present
-            // if we havent found a mnemonic, cycle through the menu items and
+            // if we haven't found a mnemonic, cycle through the menu items and
             // checbbbMk if we match.
 
             // PASS2, iterate through the pseudo mnemonics

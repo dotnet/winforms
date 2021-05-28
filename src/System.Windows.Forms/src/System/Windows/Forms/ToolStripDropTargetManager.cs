@@ -257,7 +257,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  If we have a new active item, fire drag leave and enter. This corresponds to the case
-        ///  where you are dragging between items and havent actually left the ToolStrip's client area.
+        ///  where you are dragging between items and haven't actually left the ToolStrip's client area.
         /// </summary>
         private void UpdateDropTarget(IDropTarget newTarget, DragEventArgs e)
         {

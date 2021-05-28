@@ -46,7 +46,7 @@ namespace System.Windows.Forms
                     return Size.Empty;
                 }
 
-                // since we havent parented the item yet - the auto size wont have reset the size yet.
+                // since we haven't parented the item yet - the auto size wont have reset the size yet.
                 Size overflowButtonSize = toolStrip.OverflowButton.AutoSize ? toolStrip.OverflowButton.GetPreferredSize(displayRectangle.Size) : toolStrip.OverflowButton.Size;
                 return overflowButtonSize + toolStrip.OverflowButton.Margin.Size;
             }
@@ -98,7 +98,7 @@ namespace System.Windows.Forms
 
                     if (item.Overflow != ToolStripItemOverflow.Always && item.Placement == ToolStripItemPlacement.None)
                     {
-                        // since we havent parented the item yet - the auto size wont have reset the size yet.
+                        // since we haven't parented the item yet - the auto size wont have reset the size yet.
                         Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
 
                         currentWidth += itemSize.Width + item.Margin.Horizontal;
@@ -161,7 +161,7 @@ namespace System.Windows.Forms
 
                     if (item.Overflow != ToolStripItemOverflow.Always && item.Placement == ToolStripItemPlacement.None)
                     {
-                        // since we havent parented the item yet - the auto size wont have reset the size yet.
+                        // since we haven't parented the item yet - the auto size wont have reset the size yet.
                         Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
                         int overflowWidth = (OverflowRequired) ? OverflowButtonSize.Height : 0;
 
@@ -309,7 +309,7 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    // since we havent parented the item yet - the auto size wont have reset the size yet.
+                    // since we haven't parented the item yet - the auto size wont have reset the size yet.
                     itemSize = item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
                 }
 
@@ -468,7 +468,7 @@ namespace System.Windows.Forms
                         continue;
                     }
 
-                    // since we havent parented the item yet - the auto size wont have reset the size yet.
+                    // since we haven't parented the item yet - the auto size wont have reset the size yet.
                     itemSize = item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
                 }
 
@@ -608,7 +608,7 @@ namespace System.Windows.Forms
             for (int i = 0; i < toolStrip.Items.Count; i++)
             {
                 ToolStripItem item = toolStrip.Items[i];
-                // if we havent placed the items, place them now.
+                // if we haven't placed the items, place them now.
                 if (item.Placement == ToolStripItemPlacement.None)
                 {
                     if (item.Overflow != ToolStripItemOverflow.Always)
@@ -680,7 +680,7 @@ namespace System.Windows.Forms
                     }
 #endif
 
-                    // since we havent parented the item yet - the auto size wont have reset the size yet.
+                    // since we haven't parented the item yet - the auto size wont have reset the size yet.
                     Size itemSize = item.AutoSize ? item.GetPreferredSize(displayRectangle.Size) : item.Size;
 
                     if (BackwardsWalkingIndex <= ForwardsWalkingIndex)

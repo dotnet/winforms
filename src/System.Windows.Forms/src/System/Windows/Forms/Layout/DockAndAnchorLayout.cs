@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Layout
             Rectangle displayRectangle = container.DisplayRectangle;
             if (CommonProperties.GetAutoSize(container) && ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)))
             {
-                // we havent set oursleves to the preferred size yet. proceeding will
+                // we haven't set oursleves to the preferred size yet. proceeding will
                 // just set all the control widths to zero. let's return here
                 return;
             }
@@ -783,7 +783,7 @@ namespace System.Windows.Forms.Layout
                 using (new LayoutTransaction(element.Container as Control, element, PropertyNames.Dock))
                 {
                     // if the item is autosized, calling setbounds performs a layout, which
-                    // if we havent set the anchor info properly yet makes dock/anchor layout cranky.
+                    // if we haven't set the anchor info properly yet makes dock/anchor layout cranky.
                     if (value == DockStyle.None)
                     {
                         if (dockNeedsLayout)

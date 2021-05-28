@@ -384,7 +384,7 @@ namespace System.Windows.Forms
                 {
                     _currentlyDragging = true;
                     Point newloc = e.NewLocation;
-                    // detect if we havent yet performed a layout - force one so we can
+                    // detect if we haven't yet performed a layout - force one so we can
                     // properly join to the row.
                     if (ToolStripPanelRow is not null && ToolStripPanelRow.Bounds == Rectangle.Empty)
                     {
