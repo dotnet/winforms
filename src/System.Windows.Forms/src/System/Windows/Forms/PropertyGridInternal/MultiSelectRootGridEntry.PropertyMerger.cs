@@ -70,7 +70,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return result;
             }
 
-            // this returns an array list of the propertydescriptor arrays, one for each
+            // this returns an array list of the PropertyDescriptor arrays, one for each
             // component
             //
             private static ArrayList GetCommonProperties(object[] objs, bool presort, PropertyTab tab, GridEntry parentEntry)
