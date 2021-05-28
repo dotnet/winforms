@@ -948,7 +948,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     Edit.Filter = false;
 
-                    // disable the ddh so it wont' steal the focus back
+                    // disable the ddh so it won't steal the focus back
                     //
                     _dropDownHolder.SetComponent(null, false);
                     _dropDownHolder.Visible = false;

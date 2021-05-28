@@ -230,7 +230,7 @@ namespace System.Windows.Forms.ButtonInternal
                     // When Button.AutoSizeMode is set to GrowOnly TableLayoutPanel expects buttons not to
                     // automatically wrap on word break. If there's enough room for the text to word-wrap then it
                     // will happen but the layout would not be adjusted to allow text wrapping. If someone has a
-                    // carriage return in the text we'll honor that for preferred size, but we wont wrap based
+                    // carriage return in the text we'll honor that for preferred size, but we won't wrap based
                     // on constraints.
                     try
                     {

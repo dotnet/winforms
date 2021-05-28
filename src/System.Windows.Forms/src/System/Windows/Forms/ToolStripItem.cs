@@ -2184,7 +2184,7 @@ namespace System.Windows.Forms
                     break;
                 case ToolStripItemEventType.MouseHover:
                     // disabled toolstrip items should show tooltips.
-                    // we wont raise mouse events though.
+                    // we won't raise mouse events though.
                     if (!Enabled && ParentInternal is not null && !string.IsNullOrEmpty(ToolTipText))
                     {
                         ParentInternal.UpdateToolTip(this);
@@ -2200,7 +2200,7 @@ namespace System.Windows.Forms
                     break;
                 case ToolStripItemEventType.MouseLeave:
                     // disabled toolstrip items should also clear tooltips.
-                    // we wont raise mouse events though.
+                    // we won't raise mouse events though.
                     if (!Enabled && ParentInternal is not null)
                     {
                         ParentInternal.UpdateToolTip(null);

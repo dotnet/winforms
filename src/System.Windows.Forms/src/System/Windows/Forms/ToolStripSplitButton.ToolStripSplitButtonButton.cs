@@ -14,8 +14,8 @@ namespace System.Windows.Forms
         ///  This class represents the item to the left of the dropdown [ A |v]  (e.g the "A")
         ///  It exists so that we can use our existing methods for text and image layout
         ///  and have a place to stick certain state information like pushed and selected
-        ///  Note since this is NOT an actual item hosted on the ToolStrip - it wont get things
-        ///  like MouseOver, wont be laid out by the ToolStrip, etc etc.  This is purely internal
+        ///  Note since this is NOT an actual item hosted on the ToolStrip - it won't get things
+        ///  like MouseOver, won't be laid out by the ToolStrip, etc etc.  This is purely internal
         ///  convenience.
         /// </summary>
         private class ToolStripSplitButtonButton : ToolStripButton

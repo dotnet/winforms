@@ -1162,7 +1162,7 @@ namespace System.Windows.Forms
         ///  [ toolstrip double buffer hdc ] ← onpaint hands us this buffer, after we're done DBuf is copied to "main hdc"/
         ///  [tsi dc] ← we copy the background from the DBuf, then paint the item into this DC, then BitBlt back up to DBuf
         ///
-        ///  This is done because GDI wont honor GDI+ TranslateTransform.  We used to use DCMapping to change the viewport
+        ///  This is done because GDI won't honor GDI+ TranslateTransform.  We used to use DCMapping to change the viewport
         ///  origin and clipping rect of the toolstrip double buffer hdc to paint each item, but this proves costly
         ///  because you need to allocate GDI+ Graphics objects for every single item.  This method allows us to only
         ///  allocate 1 Graphics object and share it between all the items in OnPaint.
@@ -2027,7 +2027,7 @@ namespace System.Windows.Forms
             {
                 // stuff away the lastInsertionMarkRect
                 // and clear it out _before_ we call paint OW
-                // the call to invalidate wont help as it will get
+                // the call to invalidate won't help as it will get
                 // repainted.
                 Rectangle invalidate = _lastInsertionMarkRect;
                 _lastInsertionMarkRect = Rectangle.Empty;
@@ -2695,7 +2695,7 @@ namespace System.Windows.Forms
             ToolStripItemClickedEventArgs e = new ToolStripItemClickedEventArgs(dismissingItem);
             OnItemClicked(e);
             // Ensure both the overflow and the main toolstrip fire ItemClick event
-            // otherwise the overflow wont dismiss.
+            // otherwise the overflow won't dismiss.
             if (!IsDropDown && dismissingItem.IsOnOverflow)
             {
                 OverflowButton.DropDown.HandleItemClick(dismissingItem);
@@ -4924,7 +4924,7 @@ namespace System.Windows.Forms
             if (m.Msg == (int)User32.WM.MOUSEACTIVATE)
             {
                 // we want to prevent taking focus if someone clicks on the toolstrip dropdown
-                // itself.  the mouse message will still go through, but focus wont be taken.
+                // itself.  the mouse message will still go through, but focus won't be taken.
                 // if someone clicks on a child control (combobox, textbox, etc) focus will
                 // be taken - but we'll handle that in WM_NCACTIVATE handler.
                 Point pt = PointToClient(WindowsFormsUtils.LastCursorPoint);
