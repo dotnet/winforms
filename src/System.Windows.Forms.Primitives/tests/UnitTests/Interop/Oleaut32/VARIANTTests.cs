@@ -410,7 +410,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
 
         [StaTheory]
         [MemberData(nameof(BYREFNoData_TestData))]
-        public void VARIANT_Toobject_BYREFNoData_Throws(ushort vt)
+        public void VARIANT_ToObject_BYREFNoData_Throws(ushort vt)
         {
             using var variant = new VARIANT
             {
