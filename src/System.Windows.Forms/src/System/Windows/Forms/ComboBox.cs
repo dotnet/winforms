@@ -22,7 +22,7 @@ using static Interop.User32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Displays an editing field and a list, allowing the user to select from thelist or to enter new text. Displays
+    ///  Displays an editing field and a list, allowing the user to select from the list or to enter new text. Displays
     ///  only the editing field until the user explicitly displays the list.
     /// </summary>
     [DefaultEvent(nameof(SelectedIndexChanged))]
