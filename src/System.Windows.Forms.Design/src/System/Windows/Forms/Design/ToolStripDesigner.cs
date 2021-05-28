@@ -2491,7 +2491,7 @@ namespace System.Windows.Forms.Design
         //Helper function to toggle the Item Visibility
         private void ShowHideToolStripItems(bool toolStripSelected)
         {
-            //If we arent Selected then turn the TOPLEVEL ITEMS visibility WYSIWYG
+            //If we aren't Selected then turn the TOPLEVEL ITEMS visibility WYSIWYG
             foreach (ToolStripItem item in ToolStrip.Items)
             {
                 if (item is DesignerToolStripControlHost)
