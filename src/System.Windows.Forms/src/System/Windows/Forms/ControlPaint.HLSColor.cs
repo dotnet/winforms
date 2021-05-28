@@ -262,7 +262,7 @@ namespace System.Windows.Forms
                     hue -= HLSMax;
                 }
 
-                // return r, g, or b value from this tridrant
+                // return r, g, or b value from this sector
                 if (hue < (HLSMax / 6))
                 {
                     return n1 + (((n2 - n1) * hue + (HLSMax / 12)) / (HLSMax / 6));
