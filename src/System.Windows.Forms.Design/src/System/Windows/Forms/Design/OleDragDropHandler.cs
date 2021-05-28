@@ -600,7 +600,7 @@ namespace System.Windows.Forms.Design
             // don't do any new painting...
             bool oldFreezePainting = freezePainting;
 
-            // asurt 90345 -- this causes some subtle bugs, so i'm turning it off to see if we really need it, and if we do
+            // ASURT 90345 -- this causes some subtle bugs, so i'm turning it off to see if we really need it, and if we do
             // if we can find a better way.
             //
             //freezePainting = true;
