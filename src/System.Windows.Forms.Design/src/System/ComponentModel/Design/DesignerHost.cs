@@ -800,7 +800,7 @@ namespace System.ComponentModel.Design
                 Debug.Fail("There are open transactions at unload");
                 while (_transactions.Count > 0)
                 {
-                    DesignerTransaction trans = (DesignerTransaction)_transactions.Peek(); // it'll get pop'ed in the OnCommit for DesignerHostTransaction
+                    DesignerTransaction trans = (DesignerTransaction)_transactions.Peek(); // it'll get popped in the OnCommit for DesignerHostTransaction
                     trans.Commit();
                 }
             }
