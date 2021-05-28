@@ -507,7 +507,7 @@ namespace System.Windows.Forms
             {
                 // Reset this just in case, because the SHAutoComplete stuff
                 // will subclass this guys wndproc (and nativewindow can't know about it).
-                // so this will undo it, but on a dispose we'll be Destroying the window anyay.
+                // so this will undo it, but on a dispose we'll be Destroying the window anyway.
 
                 ResetAutoComplete(true);
                 if (autoCompleteCustomSource is not null)
