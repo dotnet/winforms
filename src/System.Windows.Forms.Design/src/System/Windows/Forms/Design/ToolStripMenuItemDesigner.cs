@@ -2190,7 +2190,7 @@ namespace System.Windows.Forms.Design
                     originalSelComps = selectionSvc.GetSelectedComponents();
                 }
 
-                // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents wont do it for us.
+                // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents won't do it for us.
                 origSel = new ArrayList(originalSelComps);
                 if (origSel.Count == 0)
                 {
@@ -2318,7 +2318,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal void RemoveTypeHereNode(ToolStripDropDownItem ownerItem)
         {
-            //This will cause the DropDown to Relayout  so that during the DropDownClosed event we wont have proper Bounds to Invalidate the ToolStripAdorner... So for this case do it here...
+            //This will cause the DropDown to Relayout  so that during the DropDownClosed event we won't have proper Bounds to Invalidate the ToolStripAdorner... So for this case do it here...
             Rectangle bounds = ownerItem.DropDown.Bounds;
             if (ownerItem.DropDownItems.Count > 0 && ownerItem.DropDownItems[0] is DesignerToolStripControlHost)
             {

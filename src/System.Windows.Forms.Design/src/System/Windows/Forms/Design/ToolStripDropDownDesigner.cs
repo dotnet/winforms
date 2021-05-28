@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Design
         // We have to add the glyphs ourselves.
         private void AddSelectionGlyphs(SelectionManager selectionManager, ISelectionService selectionService)
         {
-            //If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which wont get called on the "GetGlyphs"
+            //If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
             ICollection selComponents = selectionService.GetSelectedComponents();
             GlyphCollection glyphs = new GlyphCollection();
             foreach (object selComp in selComponents)

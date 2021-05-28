@@ -2133,7 +2133,7 @@ namespace System.Windows.Forms.Design
             {
                 //Cache original selection
                 ICollection originalSelComps = selSvc.GetSelectedComponents();
-                // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents wont do it for us.
+                // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents won't do it for us.
                 ArrayList origSel = new ArrayList(originalSelComps);
                 if (origSel.Count == 0)
                 {
