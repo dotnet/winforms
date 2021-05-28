@@ -3530,7 +3530,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adjusts the Createparams to reflect the window state.
+        ///  Adjusts the CreateParams to reflect the window state.
         /// </summary>
         private void FillInCreateParamsWindowState(CreateParams cp)
         {
