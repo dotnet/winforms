@@ -685,9 +685,9 @@ namespace System.Drawing.Design
                 Type parentType = type;
                 while (parentType != null)
                 {
-                    AssemblyName policiedname = parentType.Assembly.GetName(true);
+                    AssemblyName policiedName = parentType.Assembly.GetName(true);
 
-                    AssemblyName aname = GetNonRetargetedAssemblyName(type, policiedname);
+                    AssemblyName aname = GetNonRetargetedAssemblyName(type, policiedName);
 
                     if (aname != null && !parents.ContainsKey(aname.FullName))
                     {
