@@ -2396,7 +2396,7 @@ namespace System.Windows.Forms
                 int oppositeSide = otherItemMidLocation.X - midPointOfCurrent.X;
                 int adjacentSide = otherItemMidLocation.Y - midPointOfCurrent.Y;
 
-                // use pythagrian theorem to calculate the length of the distance
+                // use pythagorean theorem to calculate the length of the distance
                 // between the middle of the current control in question and it's adjacent
                 // objects.
                 double hypotenuse = Math.Sqrt(adjacentSide * adjacentSide + oppositeSide * oppositeSide);
