@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms
                     {
                         // When no row is selected, SelectedGridItem returns grid entry for root
                         // object. But this is not a selectable item. So don't worry if setting SelectedGridItem
-                        // cause an argument exception whe ntrying to re-select the root object. Just leave the
+                        // cause an argument exception when trying to re-select the root object. Just leave the
                         // the grid with no selected row.
                     }
                 }
