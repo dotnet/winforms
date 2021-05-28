@@ -886,7 +886,7 @@ namespace System.ComponentModel.Design
 
                     Items = items;
 
-                    // If omeone changes the edit value which resets the selindex, we
+                    // If someone changes the edit value which resets the selindex, we
                     // should keep the new index.
                     if (_listbox.Items.Count > 0 && _listbox.SelectedIndex != _listbox.Items.Count - 1)
                     {
