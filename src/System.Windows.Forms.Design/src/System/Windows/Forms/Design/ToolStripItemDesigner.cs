@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // CALLED ONLY IF THE EDIT ACTION WAS ROLLBACKED!!!
+        // CALLED ONLY IF THE EDIT ACTION WAS ROLLED BACK!!!
         public void RemoveItem()
         {
             dummyItemAdded = false;
