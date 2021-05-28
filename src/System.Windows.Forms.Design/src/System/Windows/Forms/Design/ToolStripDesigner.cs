@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         private ToolStrip _miniToolStrip; // the toolStrip that hosts the "New Template Node" button
         private DesignerTransaction _insertMenuItemTransaction; //There Should be one and only one Pending insertTransaction.
         private Rectangle _dragBoxFromMouseDown = Rectangle.Empty; //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
-        private int _indexOfItemUnderMouseToDrag = -1; //defaulted to invalid index andwill be set by the behaviour.
+        private int _indexOfItemUnderMouseToDrag = -1; //defaulted to invalid index and will be set by the behaviour.
         private ToolStripTemplateNode _tn; //templateNode
         private ISelectionService _selectionService; // cached selection service.
         private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
