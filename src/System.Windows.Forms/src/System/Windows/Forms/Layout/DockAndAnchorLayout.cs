@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Layout
         /// </summary>
         private static Rectangle GetAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
         {
-            // Container can not be null since we AschorControls takes a non-null container.
+            // Container can not be null since we AnchorControls takes a non-null container.
             //
             // NB: DO NOT convert the following into Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "...")
             // because it WILL execute GetCachedBounds(element).ToString() calls even if CompModSwitches.RichLayout.TraceInfo=false
