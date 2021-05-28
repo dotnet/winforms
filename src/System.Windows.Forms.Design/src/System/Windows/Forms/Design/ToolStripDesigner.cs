@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 EnableDragDrop(false);
-                //Dispose of the EitManager
+                //Dispose of the EditManager
                 if (_editManager != null)
                 {
                     _editManager.CloseManager();
