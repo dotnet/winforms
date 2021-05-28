@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         internal static readonly object s_lostFocusEvent = new object();
         internal static readonly object s_keyDownEvent = new object();
         internal static readonly object s_keyPressEvent = new object();
-        internal static readonly object s_keyUpEent = new object();
+        internal static readonly object s_keyUpEvent = new object();
         internal static readonly object s_enterEvent = new object();
         internal static readonly object s_leaveEvent = new object();
         internal static readonly object s_validatedEvent = new object();
@@ -310,8 +310,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlOnKeyUpDescr))]
         public event KeyEventHandler KeyUp
         {
-            add => Events.AddHandler(s_keyUpEent, value);
-            remove => Events.RemoveHandler(s_keyUpEent, value);
+            add => Events.AddHandler(s_keyUpEvent, value);
+            remove => Events.RemoveHandler(s_keyUpEvent, value);
         }
 
         /// <summary>
@@ -640,7 +640,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnKeyPress(KeyPressEventArgs e) => RaiseKeyPressEvent(s_keyPressEvent, e);
 
-        protected virtual void OnKeyUp(KeyEventArgs e) => RaiseKeyEvent(s_keyUpEent, e);
+        protected virtual void OnKeyUp(KeyEventArgs e) => RaiseKeyEvent(s_keyUpEvent, e);
 
         /// <summary>
         ///  Called when the items bounds are changed.  Here, we update the Control's bounds.
