@@ -42,7 +42,7 @@ namespace System.Resources
         // this is going to be used to check if a ResXDataNode is of type ResXFileRef
         private static readonly ITypeResolutionService s_internalTypeResolver = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
 
-        // call back function to get type name for multitargeting.
+        // callback function to get type name for multitargeting.
         // No public property to force using constructors for the following reasons:
         // 1. one of the constructors needs this field (if used) to initialize the object, make it consistent with the other ctrs to avoid errors.
         // 2. once the object is constructed the delegate should not be changed to avoid getting inconsistent results.
