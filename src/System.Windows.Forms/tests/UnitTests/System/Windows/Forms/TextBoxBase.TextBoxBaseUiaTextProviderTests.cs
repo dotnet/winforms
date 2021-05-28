@@ -202,7 +202,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBaseUiaTextProvider_FirstVisibleLine_Get_ReturnsMinuOne_WithoutHandle()
+        public void TextBoxBaseUiaTextProvider_FirstVisibleLine_Get_ReturnsMinusOne_WithoutHandle()
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
