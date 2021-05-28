@@ -196,7 +196,7 @@ namespace System.ComponentModel.Design
             {
                 if (value is ICloneable)
                 {
-                    // if it's clonable, clone it...
+                    // if it's cloneable, clone it...
                     value = ((ICloneable)value).Clone();
                 }
                 else
