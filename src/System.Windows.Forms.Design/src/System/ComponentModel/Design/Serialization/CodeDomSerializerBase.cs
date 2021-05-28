@@ -921,7 +921,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else
                         {
-                            // Last ditch effort.  Some things have to code gen against "this", such as event wireups.  Those are always bounda against the root component.
+                            // Last ditch effort.  Some things have to code gen against "this", such as event wireups.  Those are always bound against the root component.
                             if (manager.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                             {
                                 result = host.RootComponent;
