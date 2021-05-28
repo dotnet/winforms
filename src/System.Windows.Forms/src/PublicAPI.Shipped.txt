@@ -1536,13 +1536,13 @@ static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.Owner
 ~System.Windows.Forms.Binding.NullValue.get -> object
 ~System.Windows.Forms.Binding.NullValue.set -> void
 ~System.Windows.Forms.Binding.PropertyName.get -> string
-~System.Windows.Forms.BindingCompleteEventArgs.Binding.get -> System.Windows.Forms.Binding
-~System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context) -> void
-~System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string errorText) -> void
-~System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string errorText, System.Exception exception) -> void
-~System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string errorText, System.Exception exception, bool cancel) -> void
-~System.Windows.Forms.BindingCompleteEventArgs.ErrorText.get -> string
-~System.Windows.Forms.BindingCompleteEventArgs.Exception.get -> System.Exception
+System.Windows.Forms.BindingCompleteEventArgs.Binding.get -> System.Windows.Forms.Binding?
+System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context) -> void
+System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText) -> void
+System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText, System.Exception? exception) -> void
+System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText, System.Exception? exception, bool cancel) -> void
+System.Windows.Forms.BindingCompleteEventArgs.ErrorText.get -> string!
+System.Windows.Forms.BindingCompleteEventArgs.Exception.get -> System.Exception?
 ~System.Windows.Forms.BindingContext.Add(object dataSource, System.Windows.Forms.BindingManagerBase listManager) -> void
 ~System.Windows.Forms.BindingContext.Contains(object dataSource) -> bool
 ~System.Windows.Forms.BindingContext.Contains(object dataSource, string dataMember) -> bool
