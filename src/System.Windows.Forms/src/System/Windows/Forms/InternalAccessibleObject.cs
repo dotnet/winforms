@@ -66,7 +66,7 @@ namespace System.Windows.Forms
         private readonly ITableItemProvider publicITableItemProvider;                              // AccessibleObject as ITableItemProvider
         private readonly IGridProvider publicIGridProvider;                                        // AccessibleObject as IGridProvider
         private readonly IGridItemProvider publicIGridItemProvider;                                // AccessibleObject as IGridItemProvider
-        private readonly ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;              // AccessibleObject as ILegayAccessibleProvider
+        private readonly ILegacyIAccessibleProvider publicILegacyIAccessibleProvider;              // AccessibleObject as ILegacyAccessibleProvider
         private readonly ISelectionProvider publicISelectionProvider;                              // AccessibleObject as ISelectionProvider
         private readonly ISelectionItemProvider publicISelectionItemProvider;                      // AccessibleObject as ISelectionItemProvider
         private readonly IScrollItemProvider publicIScrollItemProvider;                            // AccessibleObject as IScrollItemProvider
