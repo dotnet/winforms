@@ -10350,7 +10350,7 @@ namespace System.Windows.Forms
             // Scale Min/Max size
             //
 
-            // make sure we consider the andornments as fixed.  rather than scaling the entire size,
+            // make sure we consider the adornments as fixed.  rather than scaling the entire size,
             // we should pull out the fixed things such as the border, scale the rest, then apply the fixed
             // adornment size.
             Size adornmentSize = adornments.Size;
