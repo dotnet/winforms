@@ -10442,7 +10442,7 @@ namespace System.Windows.Forms
                 int totalVisibleWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible);
                 int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
 
-                // Expensive call - dataGridView could have a mode where no row is resizable which would result in better perfs
+                // Expensive call - dataGridView could have a mode where no row is resizable which would result in better perf
                 int totalVisibleHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible);
                 int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
 
