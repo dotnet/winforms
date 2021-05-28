@@ -3840,7 +3840,7 @@ namespace System.Windows.Forms
                                     // area. (this is mainly to prevent obscuring the grip
                                     // and overflowbutton - ToolStripDropDownMenu places items
                                     // outside of the display rectangle - so we need to allow for this
-                                    // in dropdoowns).
+                                    // in dropdowns).
                                     clippingRect.Intersect(viewableArea);
                                 }
 
