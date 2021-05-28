@@ -630,7 +630,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
+        ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
         /// </summary>
         public void ShowMenu()
         {
@@ -646,7 +646,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
+        ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
         /// </summary>
         public void ShowMenu(ToolStripItem selectedItem)
         {
