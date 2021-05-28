@@ -77,7 +77,7 @@ namespace System.Windows.Forms
                                 bounds.Y += bounds.Height;
                             }
 
-                            // Convert to screen co-ords
+                            // Convert to screen coords
                             return (((UpDownButtons)_parent.Owner).ParentInternal).RectangleToScreen(bounds);
                         }
                     }
