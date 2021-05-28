@@ -581,7 +581,7 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(numRows <= maxRows, "number of rows allocated shouldn't exceed max number of rows");
             Debug.Assert(numColumns <= maxColumns, "number of columns allocated shouldn't exceed max number of columns");
 
-            // we should respect columncount and rowcount as according to GrowStyle.
+            // we should respect column count and rowcount as according to GrowStyle.
             if (growStyle == TableLayoutPanelGrowStyle.FixedSize)
             {
                 // now that we've calculated the assignments - use the "max" as the actual number of rows.
