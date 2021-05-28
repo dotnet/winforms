@@ -2277,7 +2277,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called from the ToolStripItemGlyph to rollback the TemplateNode Edition on the Parent ToolStrip.
+        /// Called from the ToolStripItemGlyph to roll back the TemplateNode Edition on the Parent ToolStrip.
         /// </summary>
         internal void RollBack()
         {
