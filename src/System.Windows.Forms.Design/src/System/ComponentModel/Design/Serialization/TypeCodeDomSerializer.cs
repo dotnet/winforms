@@ -103,8 +103,8 @@ namespace System.ComponentModel.Design.Serialization
                 _nameTable = new HybridDictionary(count, caseInsensitive);
                 _statementTable = new Dictionary<string, OrderedCodeStatementCollection>(count);
                 Dictionary<string, string> names = new Dictionary<string, string>(count);
-                RootContext rootCxt = new RootContext(new CodeThisReferenceExpression(), rootObject);
-                manager.Context.Push(rootCxt);
+                RootContext rootCtx = new RootContext(new CodeThisReferenceExpression(), rootObject);
+                manager.Context.Push(rootCtx);
                 try
                 {
                     StringComparison compare = caseInsensitive ? StringComparison.OrdinalIgnoreCase : StringComparison.Ordinal;
@@ -147,7 +147,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // The name table should come pre-populated with our root expression.
-                    _nameTable[declaration.Name] = rootCxt.Expression;
+                    _nameTable[declaration.Name] = rootCtx.Expression;
 
                     // We fill a "statement table" for everything in our init methods. This statement table is a dictionary whose keys contain object names and whose values contain a statement collection of all statements with a LHS resolving to an object by that name. If supportGenerate is true, FillStatementTable will skip methods that are marked with the tag "GeneratedStatement".
                     foreach (CodeMemberMethod method in methods)
@@ -217,7 +217,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     _nameTable = null;
                     _statementTable = null;
-                    Debug.Assert(manager.Context.Current == rootCxt, "Context stack corrupted");
+                    Debug.Assert(manager.Context.Current == rootCtx, "Context stack corrupted");
                     manager.ResolveName -= onResolveName;
                     manager.Context.Pop();
                 }
@@ -260,9 +260,9 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else
                         {
-                            if (manager.Context[typeof(RootContext)] is RootContext rootCxt && codeObject is CodeExpression exp && rootCxt.Expression == exp)
+                            if (manager.Context[typeof(RootContext)] is RootContext rootCtx && codeObject is CodeExpression exp && rootCtx.Expression == exp)
                             {
-                                value = rootCxt.Value;
+                                value = rootCtx.Value;
                                 typeName = TypeDescriptor.GetClassName(value);
                             }
                             else
@@ -452,19 +452,19 @@ namespace System.ComponentModel.Design.Serialization
             // As a type serializer we are responsible for creating the type declaration. Other serializers may access this type declaration and add members to it, so we need to place it on the context stack. The serialization process also looks at the root context to see if there is a root component. The root context is also used by the serializers to add statement collections for serialized components.
             CodeTypeDeclaration docType = new CodeTypeDeclaration(manager.GetName(root));
             CodeThisReferenceExpression thisRef = new CodeThisReferenceExpression();
-            RootContext rootCxt = new RootContext(thisRef, root);
-            StatementContext statementCxt = new StatementContext();
+            RootContext rootCtx = new RootContext(thisRef, root);
+            StatementContext statementCtx = new StatementContext();
             // Populate the statement context with a list of members we'd like to see statements for
-            statementCxt.StatementCollection.Populate(root);
+            statementCtx.StatementCollection.Populate(root);
             if (members != null)
             {
-                statementCxt.StatementCollection.Populate(members);
+                statementCtx.StatementCollection.Populate(members);
             }
 
             docType.BaseTypes.Add(root.GetType());
             manager.Context.Push(docType);
-            manager.Context.Push(rootCxt);
-            manager.Context.Push(statementCxt);
+            manager.Context.Push(rootCtx);
+            manager.Context.Push(statementCtx);
             try
             {
                 // Do each component, skipping us, since we handle our own serialization. This looks really sweet, but is it worth it?  We take the perf hit of a quicksort + the allocation overhead of 4 bytes for each component. Profiles show this as a 2% cost for a form with 100 controls. Let's meet the perf goals first, then consider uncommenting this.
@@ -506,11 +506,11 @@ namespace System.ComponentModel.Design.Serialization
                 // Now, do the root object last.
                 SerializeToExpression(manager, root);
                 // After serializing everything we will walk over the statement context's statement table. We will validate that each and every member we've serialized has a presence in the statement table. If it doesn't, that's an error in the member's serializer.
-                IntegrateStatements(manager, root, members, statementCxt, docType);
+                IntegrateStatements(manager, root, members, statementCtx, docType);
             }
             finally
             {
-                Debug.Assert(manager.Context.Current == statementCxt, "Somebody messed up our context stack");
+                Debug.Assert(manager.Context.Current == statementCtx, "Somebody messed up our context stack");
                 manager.Context.Pop();
                 manager.Context.Pop();
                 manager.Context.Pop();
@@ -526,7 +526,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Takes the statement context and integrates all the statements into the correct methods.  Then, those methods are added to the code type declaration.
         /// </summary>
-        private void IntegrateStatements(IDesignerSerializationManager manager, object root, ICollection members, StatementContext statementCxt, CodeTypeDeclaration typeDecl)
+        private void IntegrateStatements(IDesignerSerializationManager manager, object root, ICollection members, StatementContext statementCtx, CodeTypeDeclaration typeDecl)
         {
             Dictionary<string, int> methodMapIndex = new Dictionary<string, int>();
             List<CodeMethodMap> methodMap = new List<CodeMethodMap>();
@@ -537,7 +537,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (member != root)
                     { // always skip the root and do it last
-                        CodeStatementCollection statements = statementCxt.StatementCollection[member];
+                        CodeStatementCollection statements = statementCtx.StatementCollection[member];
                         if (statements != null)
                         {
                             CodeMemberMethod method = GetInitializeMethod(manager, typeDecl, member);
@@ -568,7 +568,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // Finally, do the same thing for the root object.
-            CodeStatementCollection rootStatements = statementCxt.StatementCollection[root];
+            CodeStatementCollection rootStatements = statementCtx.StatementCollection[root];
             if (rootStatements != null)
             {
                 CodeMemberMethod rootMethod = GetInitializeMethod(manager, typeDecl, root);

@@ -2184,9 +2184,9 @@ namespace System.ComponentModel.Design.Serialization
             // Finally, the expression context.
             if (expression is null)
             {
-                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && ReferenceEquals(cxt.PresetValue, value))
+                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
                 {
-                    expression = cxt.Expression;
+                    expression = ctx.Expression;
                 }
             }
 
@@ -2375,9 +2375,9 @@ namespace System.ComponentModel.Design.Serialization
 
             TypeConverter converter = TypeDescriptor.GetConverter(value);
             // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
-            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && ReferenceEquals(cxt.PresetValue, value))
+            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
             {
-                CodeExpression expression = cxt.Expression;
+                CodeExpression expression = ctx.Expression;
                 //Okay, we found a preset creation expression. We just need to find if it isComplete.
                 if (converter.CanConvertTo(typeof(InstanceDescriptor)))
                 {
@@ -2451,13 +2451,13 @@ namespace System.ComponentModel.Design.Serialization
                     Debug.Assert(argumentValues != null && parameters != null, "These should have been allocated when the argument array was created.");
                     object arg = argumentValues[i];
                     CodeExpression exp = null;
-                    ExpressionContext newCxt = null;
+                    ExpressionContext newCtx = null;
 
                     // If there is an ExpressionContext on the stack, we need to fix up its type to be the parameter type, so the argument objects get serialized correctly.
-                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt)
+                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx)
                     {
-                        newCxt = new ExpressionContext(cxt.Expression, parameters[i].ParameterType, cxt.Owner);
-                        manager.Context.Push(newCxt);
+                        newCtx = new ExpressionContext(ctx.Expression, parameters[i].ParameterType, ctx.Owner);
+                        manager.Context.Push(newCtx);
                     }
 
                     try
@@ -2466,9 +2466,9 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     finally
                     {
-                        if (newCxt != null)
+                        if (newCtx != null)
                         {
-                            Debug.Assert(manager.Context.Current == newCxt, "Context stack corrupted.");
+                            Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                             manager.Context.Pop();
                         }
                     }
@@ -2906,9 +2906,9 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             // The Whidbey model for serializing a complex object is to call SetExpression with the object's reference expression and then  call on the various Serialize Property / Event methods.  This is incompatible with legacy code, and if not handled legacy code may serialize incorrectly or even stack fault.  To handle this, we keep a private "Legacy Expression Table".  This is a table that we fill in here.  We don't fill in the actual legacy expression here.  Rather,  we fill it with a marker value and obtain the legacy expression  above in GetLegacyExpression.  If we hit this case, we then save the expression in GetExpression so that future calls to IsSerialized will succeed.
                             SetLegacyExpression(manager, value);
-                            if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
+                            if (manager.Context[typeof(StatementContext)] is StatementContext statementCtx)
                             {
-                                saveStatements = statementCxt.StatementCollection[value];
+                                saveStatements = statementCtx.StatementCollection[value];
                             }
 
                             if (saveStatements != null)
@@ -3113,9 +3113,9 @@ namespace System.ComponentModel.Design.Serialization
                 CodeStatementCollection saveStatements = null;
                 if (value != null)
                 {
-                    if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
+                    if (manager.Context[typeof(StatementContext)] is StatementContext statementCtx)
                     {
-                        saveStatements = statementCxt.StatementCollection[value];
+                        saveStatements = statementCtx.StatementCollection[value];
                     }
 
                     if (saveStatements != null)
