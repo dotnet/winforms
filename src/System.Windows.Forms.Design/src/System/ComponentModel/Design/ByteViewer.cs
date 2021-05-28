@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design
         }
 
         // Stole this code from  XmlScanner
-        private static int AnalizeByteOrderMark(byte[] buffer, int index)
+        private static int AnalyzeByteOrderMark(byte[] buffer, int index)
         {
             int c1 = buffer[index + 0] << 8 | buffer[index + 1];
             int c2 = buffer[index + 2] << 8 | buffer[index + 3];
@@ -295,7 +295,7 @@ namespace System.ComponentModel.Design
                 return DisplayMode.Hexdump;
             }
 
-            switch (AnalizeByteOrderMark(_dataBuf, 0))
+            switch (AnalyzeByteOrderMark(_dataBuf, 0))
             {
                 case 2:
                     //_Encoding = Encoding.BigEndianUnicode;
