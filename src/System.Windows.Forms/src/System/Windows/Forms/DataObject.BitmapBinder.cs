@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         {
             // Bitmap type lives in different assemblies in the .NET Framework and in .NET Core.
             // However we allow desktop content to be deserialization in Core and Core content
-            // deserialized on desktop. To support this roundtrip,
+            // deserialized on desktop. To support this round trip,
             // Bitmap type identity is unified to the desktop type during serialization
             // and we use the desktop type name when filtering as well.
             private const string AllowedTypeName = "System.Drawing.Bitmap";
