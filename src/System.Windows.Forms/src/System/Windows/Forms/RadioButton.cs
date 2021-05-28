@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
             }
 
-            // Radiobuttons shouldn't respond to right clicks, so we need to do all our own click logic
+            // Radio buttons shouldn't respond to right clicks, so we need to do all our own click logic
             SetStyle(ControlStyles.StandardClick, false);
 
             TextAlign = ContentAlignment.MiddleLeft;
