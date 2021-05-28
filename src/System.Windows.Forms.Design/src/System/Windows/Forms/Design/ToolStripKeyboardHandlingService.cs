@@ -579,7 +579,7 @@ namespace System.Windows.Forms.Design
         private void OnCommandPaste(object sender, EventArgs e)
         {
             //IF TemplateNode is Active DO NOT Support Paste. This is what MainMenu did
-            // We used to incorrectly paste the item to the parent's collection; so inorder to make a simple fix I am being consistent with MainMenu
+            // We used to incorrectly paste the item to the parent's collection; so in order to make a simple fix I am being consistent with MainMenu
             if (TemplateNodeActive)
             {
                 return;
