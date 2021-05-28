@@ -110,7 +110,7 @@ namespace System.Windows.Forms
         public Control Control => BindableComponent as Control;
 
         /// <summary>
-        ///  Is the binadable component in a 'created' (ready-to-use) state? For controls,
+        ///  Is the bindable component in a 'created' (ready-to-use) state? For controls,
         ///  this depends on whether the window handle has been created yet. For everything
         ///  else, we'll assume they are always in a created state.
         /// </summary>
