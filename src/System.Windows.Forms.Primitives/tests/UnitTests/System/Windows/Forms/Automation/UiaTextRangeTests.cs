@@ -785,7 +785,7 @@ This is the line 3";
         [StaFact]
         public void UiaTextRange_ITextRangeProvider_AddToSelection_DoesntThrowException()
         {
-            // Check an app doesn't crash when calling AddToSelectio method.
+            // Check an app doesn't crash when calling AddToSelection method.
             IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
             UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 3, 7);
