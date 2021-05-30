@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design.Tests
 
         [Theory]
         [MemberData(nameof(Commands_TestData))]
-        public void MenuCommands_Commands_Get_ReturnsExected(CommandID command, CommandID expected)
+        public void MenuCommands_Commands_Get_ReturnsExpected(CommandID command, CommandID expected)
         {
             Assert.Equal(expected, command);
         }

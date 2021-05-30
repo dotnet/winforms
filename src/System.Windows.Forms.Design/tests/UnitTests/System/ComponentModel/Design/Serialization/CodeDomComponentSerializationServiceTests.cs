@@ -770,7 +770,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Fact]
-        public void CreateStore_ISerializableGetObjectDataSeriaized_Success()
+        public void CreateStore_ISerializableGetObjectDataSerialized_Success()
         {
             var service = new CodeDomComponentSerializationService();
             SerializationStore store = service.CreateStore();

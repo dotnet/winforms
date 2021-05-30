@@ -96,7 +96,7 @@ namespace System.Drawing.Design.Tests
             }
 
             // assert by the virtue of calling the method
-            // if the impementation is incorrect, having disposed of the Graphics object
+            // if the implementation is incorrect, having disposed of the Graphics object
             // we would received an AE attempting to call e.Graphics.FillRectangle()
             var editor = new FontNameEditor();
             editor.PaintValue(e);
