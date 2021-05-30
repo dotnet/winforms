@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(ComboBoxStyle.DropDown)]
         [InlineData(ComboBoxStyle.Simple)]
-        public void ComboBoxChildEditUiaProvider_SupportsValuetPattern(ComboBoxStyle comboBoxStyle)
+        public void ComboBoxChildEditUiaProvider_SupportsValuePattern(ComboBoxStyle comboBoxStyle)
         {
             using ComboBox comboBox = new ComboBox
             {

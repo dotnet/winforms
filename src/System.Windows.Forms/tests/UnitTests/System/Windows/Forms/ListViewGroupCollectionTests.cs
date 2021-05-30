@@ -459,7 +459,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListViewGroupCollection_Addd_AlreadyInOtherCollection_GetReturnsExpected()
+        public void ListViewGroupCollection_Add_AlreadyInOtherCollection_GetReturnsExpected()
         {
             using var listView = new ListView();
             ListViewGroupCollection collection = listView.Groups;

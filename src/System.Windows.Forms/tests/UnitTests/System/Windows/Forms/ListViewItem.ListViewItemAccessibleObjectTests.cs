@@ -250,7 +250,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_FragmentNavigate_Sibling_TestData))]
-        public void ListViewItemAccessibleObject_FragmentNavigate_PreviousSibling_ReturnExpected_IfHanleIsCreated(View view, bool virtualMode, bool showGroups)
+        public void ListViewItemAccessibleObject_FragmentNavigate_PreviousSibling_ReturnExpected_IfHandleIsCreated(View view, bool virtualMode, bool showGroups)
         {
             using ListView listView = GetListViewWithData(view, true, virtualMode, showGroups);
 
@@ -654,7 +654,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_State_TestData))]
-        public void ListViewItemAccessibleObject_State_ReturnExpected(View view, bool selected, AccessibleStates expectedAcessibleStates, bool createHandle)
+        public void ListViewItemAccessibleObject_State_ReturnExpected(View view, bool selected, AccessibleStates expectedAccessibleStates, bool createHandle)
         {
             using ListView listView = new ListView
             {
@@ -671,7 +671,7 @@ namespace System.Windows.Forms.Tests
             listView.Items[0].Selected = selected;
             AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
 
-            Assert.Equal(expectedAcessibleStates, accessibleObject.State);
+            Assert.Equal(expectedAccessibleStates, accessibleObject.State);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
@@ -701,7 +701,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_State_VirtualMode_TestData))]
-        public void ListViewItemAccessibleObject_State_Virtual_ModeReturnExpected(View view, bool selected, AccessibleStates expectedAcessibleStates, bool createHandle)
+        public void ListViewItemAccessibleObject_State_Virtual_ModeReturnExpected(View view, bool selected, AccessibleStates expectedAccessibleStates, bool createHandle)
         {
             using ListView listView = new ListView
             {
@@ -735,7 +735,7 @@ namespace System.Windows.Forms.Tests
 
             AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
 
-            Assert.Equal(expectedAcessibleStates, accessibleObject.State);
+            Assert.Equal(expectedAccessibleStates, accessibleObject.State);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
@@ -945,20 +945,20 @@ namespace System.Windows.Forms.Tests
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
             }
 
-            AccessibleObject listViewItemaAccessibleObject = listViewItem.AccessibilityObject;
+            AccessibleObject listViewItemAccessibleObject = listViewItem.AccessibilityObject;
 
-            Assert.Equal(ToggleState.Off, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
             Assert.False(listViewItem.Checked);
 
-            listViewItemaAccessibleObject.Toggle();
+            listViewItemAccessibleObject.Toggle();
 
-            Assert.Equal(ToggleState.On, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.On, listViewItemAccessibleObject.ToggleState);
             Assert.True(listViewItem.Checked);
 
             // toggle again
-            listViewItemaAccessibleObject.Toggle();
+            listViewItemAccessibleObject.Toggle();
 
-            Assert.Equal(ToggleState.Off, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
             Assert.False(listViewItem.Checked);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
@@ -968,7 +968,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_InvisibleItems(View view)
         {
             using ListView listView = GetListViewItemWithInvisibleItems(view);
 
@@ -986,7 +986,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
         {
             using ListView listView = GetListViewItemWithInvisibleItems(view);
 
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_Parent_ReturnsExpected_AfterAddingGroup(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_Parent_ReturnsExpected_AfterAddingGroup(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1333,7 +1333,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_Parent_ReturnsExpected_AfterRemovingGroup(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_Parent_ReturnsExpected_AfterRemovingGroup(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_Parent_ReturnsExpected_AfterUpdatingGroup(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_Parent_ReturnsExpected_AfterUpdatingGroup(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1445,7 +1445,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_Parent_ReturnsExpected_ListView()
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_Parent_ReturnsExpected_ListView()
         {
             using ListView listView = new()
             {
@@ -1668,7 +1668,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_ReturnExpectedType_TestData))]
-        public void ListViewItemAccessibleObject_ReturnExpectedType_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_ReturnExpectedType_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem("Test"));
@@ -1714,7 +1714,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.Tile, View.LargeIcon)]
         [InlineData(View.Tile, View.List)]
         [InlineData(View.Tile, View.SmallIcon)]
-        public void ListViewItemAccessibleObject_GetChild_ReturnException_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_GetChild_ReturnException_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.List, View.SmallIcon)]
         [InlineData(View.SmallIcon, View.LargeIcon)]
         [InlineData(View.SmallIcon, View.List)]
-        public void ListViewItemAccessibleObject_GetChild_DoesNotReturnException_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_GetChild_DoesNotReturnException_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
@@ -1760,7 +1760,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.Tile, View.LargeIcon)]
         [InlineData(View.Tile, View.List)]
         [InlineData(View.Tile, View.SmallIcon)]
-        public void ListViewItemAccessibleObject_GetChildCount_ReturnException_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_GetChildCount_ReturnException_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem(new string[] { "1" }));
@@ -1779,7 +1779,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.List, View.SmallIcon)]
         [InlineData(View.SmallIcon, View.LargeIcon)]
         [InlineData(View.SmallIcon, View.List)]
-        public void ListViewItemAccessibleObject_GetChildCount_DoesNotReturnException_AfterChaningView(View oldView, View newView)
+        public void ListViewItemAccessibleObject_GetChildCount_DoesNotReturnException_AfterChangingView(View oldView, View newView)
         {
             using ListView listView = new() { View = oldView };
             listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));

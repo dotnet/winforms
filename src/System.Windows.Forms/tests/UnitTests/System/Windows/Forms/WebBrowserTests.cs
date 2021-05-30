@@ -3054,7 +3054,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, canGoBackChangedCallCount);
             Assert.Equal(1, canGoForwardChangedCallCount);
 
-            // Go foward.
+            // Go forward.
             source = new TaskCompletionSource<bool>();
             await Task.Run(() => Assert.True(control.GoForward()));
             Assert.True(await source.Task);

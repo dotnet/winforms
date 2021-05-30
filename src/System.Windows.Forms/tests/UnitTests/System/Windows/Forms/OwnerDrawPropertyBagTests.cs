@@ -106,7 +106,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void OwnerDrawPropertyBag_Serailize_Deserialize_Success()
+        public void OwnerDrawPropertyBag_Serialize_Deserialize_Success()
         {
             using var treeView = new SubTreeView();
             OwnerDrawPropertyBag original = treeView.GetItemRenderStyles(null, 0);

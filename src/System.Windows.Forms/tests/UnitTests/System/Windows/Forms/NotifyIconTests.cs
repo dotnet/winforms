@@ -346,11 +346,11 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Text_Set_TestData))]
-        public void CollectionForm_Text_Set_GetReturnsExpected(bool viisble, Icon icon, string value, string expected)
+        public void CollectionForm_Text_Set_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
         {
             using var notifyIcon = new NotifyIcon
             {
-                Visible = viisble,
+                Visible = visible,
                 Icon = icon,
                 Text = value
             };
@@ -363,11 +363,11 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Text_Set_TestData))]
-        public void CollectionForm_Text_SetWithCustomOldValue_GetReturnsExpected(bool viisble, Icon icon, string value, string expected)
+        public void CollectionForm_Text_SetWithCustomOldValue_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
         {
             using var notifyIcon = new NotifyIcon
             {
-                Visible = viisble,
+                Visible = visible,
                 Icon = icon,
                 Text = "OldValue"
             };
@@ -402,7 +402,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Text_SetDesignMode_TestData))]
-        public void CollectionForm_Text_SetDesignMode_GetReturnsExpected(bool viisble, Icon icon, string value, string expected, int expectedDesignModeCallCount)
+        public void CollectionForm_Text_SetDesignMode_GetReturnsExpected(bool visible, Icon icon, string value, string expected, int expectedDesignModeCallCount)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -413,7 +413,7 @@ namespace System.Windows.Forms.Tests
                 .Returns(true);
             using var notifyIcon = new NotifyIcon
             {
-                Visible = viisble,
+                Visible = visible,
                 Icon = icon,
                 Site = mockSite.Object,
                 Text = value
@@ -436,11 +436,11 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Text_Set_TestData))]
-        public void CollectionForm_Text_SetDisposed_GetReturnsExpected(bool viisble, Icon icon, string value, string expected)
+        public void CollectionForm_Text_SetDisposed_GetReturnsExpected(bool visible, Icon icon, string value, string expected)
         {
             using var notifyIcon = new NotifyIcon
             {
-                Visible = viisble,
+                Visible = visible,
                 Icon = icon
             };
             notifyIcon.Dispose();

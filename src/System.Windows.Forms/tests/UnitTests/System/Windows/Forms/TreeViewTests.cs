@@ -6799,7 +6799,7 @@ namespace System.Windows.Forms.Tests
             string actual = listViewDynamic.controlToolTipText;
 
             Assert.Null(actual);
-            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
 
             string text = "Some test text";
             toolTip.SetToolTip(treeView, text); // Invokes TreeView's SetToolTip inside

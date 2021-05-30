@@ -1273,9 +1273,9 @@ namespace System.Windows.Forms.Tests
         {
             foreach (ToolStripLayoutStyle ownerLayoutStyle in Enum.GetValues(typeof(ToolStripLayoutStyle)))
             {
-                foreach (ToolStripLayoutStyle paremtLayoutStyle in Enum.GetValues(typeof(ToolStripLayoutStyle)))
+                foreach (ToolStripLayoutStyle parentLayoutStyle in Enum.GetValues(typeof(ToolStripLayoutStyle)))
                 {
-                    yield return new object[] { ownerLayoutStyle, paremtLayoutStyle };
+                    yield return new object[] { ownerLayoutStyle, parentLayoutStyle };
                 }
             }
         }

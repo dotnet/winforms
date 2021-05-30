@@ -440,7 +440,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
         }
 
-        public static IEnumerable<object[]> ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHanlde_TestData()
+        public static IEnumerable<object[]> ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHandle_TestData()
         {
             yield return new object[] { ComboBoxStyle.DropDown, new Size(50, 20), "Some test text for testing", 0 };
             yield return new object[] { ComboBoxStyle.DropDown, new Size(50, 20), "Some test text for testing", 15 };
@@ -450,8 +450,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHanlde_TestData))]
-        public void ComboBoxUiaTextProvider_GetPositionFromChar_ReturnsEmpty_WithoutHanlde(ComboBoxStyle dropDownStyle, Size size, string text, int charIndex)
+        [MemberData(nameof(ComboBoxUiaTextProvider_GetPositionFromChar_WithoutHandle_TestData))]
+        public void ComboBoxUiaTextProvider_GetPositionFromChar_ReturnsEmpty_WithoutHandle(ComboBoxStyle dropDownStyle, Size size, string text, int charIndex)
         {
             using (new NoAssertContext())
             {
@@ -1033,7 +1033,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(ComboBoxStyle.DropDown, 2)]
         [InlineData(ComboBoxStyle.Simple, 0)]
         [InlineData(ComboBoxStyle.Simple, 2)]
-        public void ComboBoxUiaTextProvider_LineScroll_DoesntWork_WitoutHandle(ComboBoxStyle dropDownStyle, int newLine)
+        public void ComboBoxUiaTextProvider_LineScroll_DoesntWork_WithoutHandle(ComboBoxStyle dropDownStyle, int newLine)
         {
             using (new NoAssertContext())
             {
@@ -1090,9 +1090,9 @@ namespace System.Windows.Forms.Tests
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            var actualValie = (int)(long)SendMessageW(comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETFIRSTVISIBLELINE);
+            var actualValue = (int)(long)SendMessageW(comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETFIRSTVISIBLELINE);
 
-            Assert.Equal(actualValie, provider.FirstVisibleLine);
+            Assert.Equal(actualValue, provider.FirstVisibleLine);
         }
 
         [WinFormsTheory]
@@ -1104,9 +1104,9 @@ namespace System.Windows.Forms.Tests
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 
-            var actualValie = (int)(long)SendMessageW(comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETLINECOUNT);
+            var actualValue = (int)(long)SendMessageW(comboBox.TestAccessor().Dynamic._childEdit, (WM)EM.GETLINECOUNT);
 
-            Assert.Equal(actualValie, provider.LinesCount);
+            Assert.Equal(actualValue, provider.LinesCount);
         }
 
         [WinFormsTheory]

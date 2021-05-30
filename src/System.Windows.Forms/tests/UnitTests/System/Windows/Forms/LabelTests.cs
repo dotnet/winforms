@@ -234,7 +234,7 @@ namespace System.Windows.Forms.Tests
             bool actual = labelDynamic._controlToolTip;
 
             Assert.False(actual);
-            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
 
             toolTip.SetToolTip(label, "Some test text"); // Invokes Label's SetToolTip inside
             actual = labelDynamic._controlToolTip;

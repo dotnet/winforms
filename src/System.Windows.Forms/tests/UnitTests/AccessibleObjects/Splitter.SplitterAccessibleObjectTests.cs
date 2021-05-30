@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void SplitterAccessibleObject_Descrpition_ReturnsExpected()
+        public void SplitterAccessibleObject_Description_ReturnsExpected()
         {
             using var splitter = new Splitter
             {
