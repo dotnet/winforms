@@ -44,7 +44,7 @@ namespace WinformsControlsTest
             this.label4 = new System.Windows.Forms.Label();
             this.resetMinDateButton = new System.Windows.Forms.Button();
             this.resetMaxDateButton = new System.Windows.Forms.Button();
-            this.showWeekNumbrsCheckBox = new System.Windows.Forms.CheckBox();
+            this.showWeekNumbersCheckBox = new System.Windows.Forms.CheckBox();
             this.showTodayCheckBox = new System.Windows.Forms.CheckBox();
             this.label5 = new System.Windows.Forms.Label();
             this.currentDPILabel1 = new CurrentDPILabel();
@@ -177,17 +177,17 @@ namespace WinformsControlsTest
             this.resetMaxDateButton.UseVisualStyleBackColor = true;
             this.resetMaxDateButton.Click += new System.EventHandler(this.resetMaxDateButton_Click);
             // 
-            // showWeekNumbrsCheckBox
+            // showWeekNumbersCheckBox
             //
-            this.showWeekNumbrsCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.showWeekNumbrsCheckBox.AutoSize = true;
-            this.showWeekNumbrsCheckBox.Location = new System.Drawing.Point(301, 452);
-            this.showWeekNumbrsCheckBox.Name = "showWeekNumbrsCheckBox";
-            this.showWeekNumbrsCheckBox.Size = new System.Drawing.Size(161, 24);
-            this.showWeekNumbrsCheckBox.TabIndex = 12;
-            this.showWeekNumbrsCheckBox.Text = "showWeekNumbers";
-            this.showWeekNumbrsCheckBox.UseVisualStyleBackColor = true;
-            this.showWeekNumbrsCheckBox.CheckedChanged += new System.EventHandler(this.showWeekNumbrsCheckBox_CheckedChanged);
+            this.showWeekNumbersCheckBox.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
+            this.showWeekNumbersCheckBox.AutoSize = true;
+            this.showWeekNumbersCheckBox.Location = new System.Drawing.Point(301, 452);
+            this.showWeekNumbersCheckBox.Name = "showWeekNumbersCheckBox";
+            this.showWeekNumbersCheckBox.Size = new System.Drawing.Size(161, 24);
+            this.showWeekNumbersCheckBox.TabIndex = 12;
+            this.showWeekNumbersCheckBox.Text = "showWeekNumbers";
+            this.showWeekNumbersCheckBox.UseVisualStyleBackColor = true;
+            this.showWeekNumbersCheckBox.CheckedChanged += new System.EventHandler(this.showWeekNumbersCheckBox_CheckedChanged);
             // 
             // showTodayCheckBox
             //
@@ -227,7 +227,7 @@ namespace WinformsControlsTest
             this.Controls.Add(this.currentDPILabel1);
             this.Controls.Add(this.label5);
             this.Controls.Add(this.showTodayCheckBox);
-            this.Controls.Add(this.showWeekNumbrsCheckBox);
+            this.Controls.Add(this.showWeekNumbersCheckBox);
             this.Controls.Add(this.resetMaxDateButton);
             this.Controls.Add(this.resetMinDateButton);
             this.Controls.Add(this.label4);
@@ -261,7 +261,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.Button resetMinDateButton;
         private System.Windows.Forms.Button resetMaxDateButton;
-        private System.Windows.Forms.CheckBox showWeekNumbrsCheckBox;
+        private System.Windows.Forms.CheckBox showWeekNumbersCheckBox;
         private System.Windows.Forms.CheckBox showTodayCheckBox;
         private System.Windows.Forms.Label label5;
         private CurrentDPILabel currentDPILabel1;
