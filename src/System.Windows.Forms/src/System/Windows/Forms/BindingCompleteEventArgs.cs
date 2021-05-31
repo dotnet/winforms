@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -16,12 +14,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Constructor for BindingCompleteEventArgs.
         /// </summary>
-        public BindingCompleteEventArgs(Binding binding,
-                                        BindingCompleteState state,
-                                        BindingCompleteContext context,
-                                        string errorText,
-                                        Exception exception,
-                                        bool cancel) : base(cancel)
+        public BindingCompleteEventArgs(
+            Binding? binding,
+            BindingCompleteState state,
+            BindingCompleteContext context,
+            string? errorText,
+            Exception? exception,
+            bool cancel)
+            : base(cancel)
         {
             Binding = binding;
             BindingCompleteState = state;
@@ -33,34 +33,40 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Constructor for BindingCompleteEventArgs.
         /// </summary>
-        public BindingCompleteEventArgs(Binding binding,
-                                        BindingCompleteState state,
-                                        BindingCompleteContext context,
-                                        string errorText,
-                                        Exception exception) : this(binding, state, context, errorText, exception, true)
+        public BindingCompleteEventArgs(
+            Binding? binding,
+            BindingCompleteState state,
+            BindingCompleteContext context,
+            string? errorText,
+            Exception? exception)
+            : this(binding, state, context, errorText, exception, true)
         {
         }
 
         /// <summary>
         ///  Constructor for BindingCompleteEventArgs.
         /// </summary>
-        public BindingCompleteEventArgs(Binding binding,
-                                        BindingCompleteState state,
-                                        BindingCompleteContext context,
-                                        string errorText) : this(binding, state, context, errorText, null, true)
+        public BindingCompleteEventArgs(
+            Binding? binding,
+            BindingCompleteState state,
+            BindingCompleteContext context,
+            string? errorText)
+            : this(binding, state, context, errorText, null, true)
         {
         }
 
         /// <summary>
         ///  Constructor for BindingCompleteEventArgs.
         /// </summary>
-        public BindingCompleteEventArgs(Binding binding,
-                                        BindingCompleteState state,
-                                        BindingCompleteContext context) : this(binding, state, context, string.Empty, null, false)
+        public BindingCompleteEventArgs(
+            Binding? binding,
+            BindingCompleteState state,
+            BindingCompleteContext context)
+            : this(binding, state, context, string.Empty, null, false)
         {
         }
 
-        public Binding Binding { get; }
+        public Binding? Binding { get; }
 
         public BindingCompleteState BindingCompleteState { get; }
 
@@ -68,6 +74,6 @@ namespace System.Windows.Forms
 
         public string ErrorText { get; }
 
-        public Exception Exception { get; }
+        public Exception? Exception { get; }
     }
 }
