@@ -141,12 +141,12 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void DataGridViewAccessibleObject_ControlType_IsTable_IfAccessibleRoleIsDefault()
+        public void DataGridViewAccessibleObject_ControlType_IsDataGrid_IfAccessibleRoleIsDefault()
         {
             using DataGridView dataGridView = new DataGridView();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            UiaCore.UIA expected = UiaCore.UIA.TableControlTypeId;
+            UiaCore.UIA expected = UiaCore.UIA.DataGridControlTypeId;
             Assert.Equal(expected, actual);
         }
 
