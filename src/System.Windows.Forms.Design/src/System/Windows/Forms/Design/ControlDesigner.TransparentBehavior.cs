@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design
 
             /// <summary>
             ///  This property performs a hit test on the ControlDesigner to determine if the BodyGlyph should return
-            ///  '-1' for hit testing (letting all messages pass directly to the the control).
+            ///  '-1' for hit testing (letting all messages pass directly to the control).
             /// </summary>
             internal bool IsTransparent(Point p) => _designer.GetHitTest(p);
 

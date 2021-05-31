@@ -59,7 +59,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  This guid corresponds to the standard set of commands for the shell and office.
-        ///  This new giud is added so that the ToolStripDesigner now respond to the F2 command
+        ///  This new guid is added so that the ToolStripDesigner now respond to the F2 command
         ///  and go into InSitu Edit mode.
         /// </summary>
         private static readonly Guid VSStandardCommandSet97 = new Guid("{5efc7975-14bc-11cf-9b2b-00aa00573819}");

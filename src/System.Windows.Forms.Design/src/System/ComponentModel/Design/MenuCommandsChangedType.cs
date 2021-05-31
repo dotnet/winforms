@@ -5,7 +5,7 @@
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  An enum that defines what time of action happend to the
+    ///  An enum that defines what time of action happened to the
     ///  related object's MenuCommands collection.
     /// </summary>
     public enum MenuCommandsChangedType

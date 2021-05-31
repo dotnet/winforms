@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Design
         {
             serviceProvider = provider;
             this.component = component;
-            // Now initialiaze the contextMenu
+            // Now initialize the contextMenu
             InitializeContextMenu();
         }
 

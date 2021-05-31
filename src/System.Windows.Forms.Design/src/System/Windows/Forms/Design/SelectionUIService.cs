@@ -175,7 +175,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void EndMouseDrag(Point position)
         {
-            // it's possible for us to be destroyed in a drag -- e.g. if this is the tray's selectionuiservice and the last item is dragged out, so check diposed first
+            // it's possible for us to be destroyed in a drag -- e.g. if this is the tray's SelectionUIService and the last item is dragged out, so check disposed first
             if (IsDisposed)
             {
                 return;
@@ -481,7 +481,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Inheriting classes should override this method to handle this event. Call base.OnDoiubleClick to send this event to any registered event listeners.
+        ///  Inheriting classes should override this method to handle this event. Call base.OnDoubleClick to send this event to any registered event listeners.
         /// </summary>
         protected override void OnDoubleClick(EventArgs devent)
         {
@@ -752,7 +752,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  If the selection manager move, this indicates that the form has autoscolling enabled and has been scrolled.  We have to invalidate here because we may get moved before the rest of the components so we may draw the selection in the wrong spot.
+        ///  If the selection manager move, this indicates that the form has autoscrolling enabled and has been scrolled.  We have to invalidate here because we may get moved before the rest of the components so we may draw the selection in the wrong spot.
         /// </summary>
         protected override void OnMove(EventArgs e)
         {
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This should be called when a component has been moved, sized or re-parented, but the change was not the result of a property change.  All property changes are monitored by the selection UI service, so this is automatic most of the time.  There are times, however, when a component may be moved without a property change notification occurring.  Scrolling an auto scroll Win32 form is an example of this. This method simply re-queries all currently selected components for their bounds and udpates the selection handles for any that have changed.
+        ///  This should be called when a component has been moved, sized or re-parented, but the change was not the result of a property change.  All property changes are monitored by the selection UI service, so this is automatic most of the time.  There are times, however, when a component may be moved without a property change notification occurring.  Scrolling an auto scroll Win32 form is an example of this. This method simply re-queries all currently selected components for their bounds and updates the selection handles for any that have changed.
         /// </summary>
         void ISelectionUIService.SyncSelection()
         {
@@ -1349,7 +1349,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This should be called when a component's property changed, that the designer thinks should result in a selection UI change. This method simply re-queries all currently selected components for their bounds and udpates the selection handles for any that have changed.
+        ///  This should be called when a component's property changed, that the designer thinks should result in a selection UI change. This method simply re-queries all currently selected components for their bounds and updates the selection handles for any that have changed.
         /// </summary>
         void ISelectionUIService.SyncComponent(object component)
         {
@@ -1853,7 +1853,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  rebuilds the inner and outer rectangles based on the current selItem.component dimensions.  We could calcuate this every time, but that would be expensive for functions like getHitTest that are called a lot (like on every mouse move)
+            ///  rebuilds the inner and outer rectangles based on the current selItem.component dimensions.  We could calculate this every time, but that would be expensive for functions like getHitTest that are called a lot (like on every mouse move)
             /// </summary>
             public virtual bool UpdateSize()
             {

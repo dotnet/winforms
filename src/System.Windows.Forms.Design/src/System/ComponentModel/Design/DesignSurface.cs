@@ -351,7 +351,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent)
         {
@@ -359,7 +359,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent, string containerName)
         {
@@ -392,7 +392,7 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detatch.
+                // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detach.
                 Disposed?.Invoke(this, EventArgs.Empty);
 
                 // Destroying the host also destroys all components. In most cases destroying the root component will destroy its designer which also kills the view. So, we destroy the view below last (remember, this view is a "view container" so we are destroying the innermost view first and then destroying our own view).

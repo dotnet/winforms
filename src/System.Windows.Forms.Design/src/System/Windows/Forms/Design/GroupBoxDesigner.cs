@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         /// Determines the default location for a control added to this designer.
-        /// it is usualy (0,0), but may be modified if the container has special borders, etc.
+        /// it is usually (0,0), but may be modified if the container has special borders, etc.
         /// </summary>
         protected override Point DefaultControlLocation
         {

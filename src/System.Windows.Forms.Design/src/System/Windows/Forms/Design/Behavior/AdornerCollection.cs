@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Design.Behavior
         ///  containing any array of <see cref='Adorner' /> objects.
         /// </summary>
         /// <param name='value'>
-        ///  A array of <see cref='Adorner' /> objects with which to intialize the collection.
+        ///  A array of <see cref='Adorner' /> objects with which to initialize the collection.
         /// </param>
         public BehaviorServiceAdornerCollection(Adorner[] value)
         {

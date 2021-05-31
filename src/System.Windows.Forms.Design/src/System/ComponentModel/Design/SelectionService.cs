@@ -78,7 +78,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Called when our visiblity or batch mode changes.  Flushes any pending notifications or updates if possible.
+        ///  Called when our visibility or batch mode changes.  Flushes any pending notifications or updates if possible.
         /// </summary>
         private void FlushSelectionChanges()
         {
@@ -198,7 +198,7 @@ namespace System.ComponentModel.Design
                 {
                     // we don't have an help service YET, we need to wait for it...
                     // hook up to the application.idle event
-                    // yes this is UGLY but we don't have a choice, vs is always returning a UserContext, so even if we manage to instanciate the HelpService beforehand and class pushcontext on it (trying to stack up help context in the helpservice to be flushed when we get the documentactivation event we just don't know if that's going to work or not... so we just wait...) :(((
+                    // yes this is UGLY but we don't have a choice, vs is always returning a UserContext, so even if we manage to instantiate the HelpService beforehand and class pushcontext on it (trying to stack up help context in the helpservice to be flushed when we get the documentactivation event we just don't know if that's going to work or not... so we just wait...) :(((
                     Application.Idle += new EventHandler(ApplicationIdle);
                 }
 
@@ -346,7 +346,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Determines if the component is currently selected.  This is faster than getting the entire list of selelected components.
+        ///  Determines if the component is currently selected.  This is faster than getting the entire list of selected components.
         /// </summary>
         bool ISelectionService.GetComponentSelected(object component)
         {
@@ -400,7 +400,7 @@ namespace System.ComponentModel.Design
                 components = Array.Empty<object>();
             }
 
-            // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifer keys.  This creates the "Auto" selection type for us by default.
+            // If toggle, replace, remove or add are not specifically specified, infer them from  the state of the modifier keys.  This creates the "Auto" selection type for us by default.
             if (fAuto)
             {
                 fToggle = (Control.ModifierKeys & (Keys.Control | Keys.Shift)) > 0;

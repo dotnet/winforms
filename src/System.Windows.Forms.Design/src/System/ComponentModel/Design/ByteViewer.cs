@@ -78,7 +78,7 @@ namespace System.ComponentModel.Design
             SetStyle(ControlStyles.ResizeRedraw, true);
         }
 
-        // Stole this code from  XmlSanner
+        // Stole this code from  XmlScanner
         private static int AnalizeByteOrderMark(byte[] buffer, int index)
         {
             int c1 = buffer[index + 0] << 8 | buffer[index + 1];
@@ -151,7 +151,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Draws an adress part in the HEXDUMP view
+        ///  Draws an address part in the HEXDUMP view
         /// </summary>
         private void DrawAddress(Graphics g, int startLine, int line)
         {
@@ -276,7 +276,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Establishes the display mode for the control based on the contents of the buffer.
         ///  This is based on the following algorithm:
-        ///  * Count number of zeros, prinables and other characters in the half of the dataBuffer
+        ///  * Count number of zeros, printables and other characters in the half of the dataBuffer
         ///  * Base on the following table establish the mode:
         ///  - 80% Characters or digits -> ANSI
         ///  - 80% Valid Unicode chars -> Unicode
@@ -387,7 +387,7 @@ namespace System.ComponentModel.Design
             return _displayMode;
         }
 
-        // Stole this code from  XmlSanner
+        // Stole this code from  XmlScanner
         private static int GetEncodingIndex(int c1)
         {
             switch (c1)
@@ -452,7 +452,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Initializes the Unicode string varible that will be assigned to the edit box
+        ///  Initializes the Unicode string variable that will be assigned to the edit box
         /// </summary>
         private void InitUnicode()
         {

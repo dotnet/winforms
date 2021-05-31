@@ -13,7 +13,7 @@ using System.Windows.Forms.Design.Behavior;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  The behavior for the glpyh that covers the items themselves.  This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
+    ///  The behavior for the glyph that covers the items themselves.  This selects the items when they are clicked, and will (when implemented) do the dragging/reordering of them.
     /// </summary>
     internal class ToolStripItemBehavior : Behavior.Behavior
     {
@@ -59,20 +59,20 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void ClearInsertionMark(ToolStripItem item)
         {
-            // Dont paint if cursor hasnt moved.
+            // Don't paint if cursor hasnt moved.
             if (ToolStripDesigner.s_lastCursorPosition != Point.Empty && ToolStripDesigner.s_lastCursorPosition == Cursor.Position)
             {
                 return;
             }
 
-            // Dont paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
+            // Don't paint any "MouseOver" glyphs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
             if (keyService != null && keyService.TemplateNodeActive)
             {
                 return;
             }
 
-            // stuff away the lastInsertionMarkRect  and clear it out _before_ we call paint OW the call to invalidate wont help as it will get repainted.
+            // stuff away the lastInsertionMarkRect  and clear it out _before_ we call paint OW the call to invalidate won't help as it will get repainted.
             if (item != null && item.Site != null)
             {
                 IDesignerHost designerHost = (IDesignerHost)item.Site.GetService(typeof(IDesignerHost));
@@ -167,7 +167,7 @@ namespace System.Windows.Forms.Design
             return bounds;
         }
 
-        // This helper function will return true if any other MouseHandler (say TabOrder UI) is active, in which case we should not handle any Mouse Messages.. Since the TabOrder UI is pre-Whidbey when the TabOrder UI is up,  It adds a new Overlay (a window) to the DesignerFrame (something similar to AdornerWindow).  This UI is a transaparent control which has overrides foir Mouse Messages. It listens for all mouse messages through the IMouseHandler interface instead of using the new  BehaviorService. Hence we have to special case this scenario. (CONTROL DESIGNER ALSO DOES THIS).
+        // This helper function will return true if any other MouseHandler (say TabOrder UI) is active, in which case we should not handle any Mouse Messages.. Since the TabOrder UI is pre-Whidbey when the TabOrder UI is up,  It adds a new Overlay (a window) to the DesignerFrame (something similar to AdornerWindow).  This UI is a transparent control which has overrides for Mouse Messages. It listens for all mouse messages through the IMouseHandler interface instead of using the new  BehaviorService. Hence we have to special case this scenario. (CONTROL DESIGNER ALSO DOES THIS).
         private bool MouseHandlerPresent(ToolStripItem item)
         {
             IMouseHandler mouseHandler = null;
@@ -298,7 +298,7 @@ namespace System.Windows.Forms.Design
                 originalSelComps = selSvc.GetSelectedComponents();
             }
 
-            // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents wont do it for us.
+            // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents won't do it for us.
             ArrayList origSel = new ArrayList(originalSelComps);
             if (origSel.Count == 0)
             {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms.Design
                     // Heres the scenario ....
                     // DOWN 1 - selects the ITEM
                     // DOWN 2 - ITEM goes into INSITU....
-                    // DOUBLE CLICK - dont show code..
+                    // DOUBLE CLICK - don't show code..
                     // Open INSITU after the double click time
                     if (selectedItem is ToolStripMenuItem)
                     {
@@ -378,7 +378,7 @@ namespace System.Windows.Forms.Design
                     // We should process MouseDown only if we are not yet selected....
                     if (!selSvc.GetComponentSelected(glyphItem))
                     {
-                        //Reset the State... On the Glpyhs .. we get MouseDown - Mouse UP (for single Click) And we get MouseDown - MouseUp - DoubleClick - Up (for double Click) Hence reset the state at start....
+                        //Reset the State... On the Glyphs .. we get MouseDown - Mouse UP (for single Click) And we get MouseDown - MouseUp - DoubleClick - Up (for double Click) Hence reset the state at start....
                         _mouseUpFired = false;
                         _doubleClickFired = false;
                         //Implementing Shift + Click....
@@ -419,12 +419,12 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        //End Implmentation
+                        //End Implementation
                         else
                         {
                             if (glyphItem.IsOnDropDown && ToolStripDesigner.s_shiftState)
                             {
-                                //Invalidate glyh only if we are in ShiftState...
+                                //Invalidate glyph only if we are in ShiftState...
                                 ToolStripDesigner.s_shiftState = false;
                                 if (bSvc != null)
                                 {
@@ -889,13 +889,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void PaintInsertionMark(ToolStripItem item)
         {
-            // Dont paint if cursor hasnt moved.
+            // Don't paint if cursor hasnt moved.
             if (ToolStripDesigner.s_lastCursorPosition != Point.Empty && ToolStripDesigner.s_lastCursorPosition == Cursor.Position)
             {
                 return;
             }
 
-            // Dont paint any "MouseOver" glyohs if TemplateNode is ACTIVE !
+            // Don't paint any "MouseOver" glyphs if TemplateNode is ACTIVE !
             ToolStripKeyboardHandlingService keyService = GetKeyBoardHandlingService(item);
             if (keyService != null && keyService.TemplateNodeActive)
             {

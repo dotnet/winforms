@@ -452,7 +452,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Invokes a command on the local form or in the global environment.
         ///  The local form is first searched for the given command ID.  If it is
-        ///  found, it is invoked.  Otherwise the the command ID is passed to the
+        ///  found, it is invoked.  Otherwise the command ID is passed to the
         ///  global environment command handler, if one is available.
         /// </summary>
         public virtual bool GlobalInvoke(CommandID commandID)
@@ -471,7 +471,7 @@ namespace System.ComponentModel.Design
         /// <summary>
         ///  Invokes a command on the local form or in the global environment.
         ///  The local form is first searched for the given command ID.  If it is
-        ///  found, it is invoked.  Otherwise the the command ID is passed to the
+        ///  found, it is invoked.  Otherwise the command ID is passed to the
         ///  global environment command handler, if one is available.
         /// </summary>
         public virtual bool GlobalInvoke(CommandID commandId, object arg)

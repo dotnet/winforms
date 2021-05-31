@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Design.Behavior
         public virtual Cursor Cursor => Cursors.Default;
 
         /// <summary>
-        ///  Rerturning true from here indicates to the BehaviorService that all MenuCommands the designer receives
+        ///  Returning true from here indicates to the BehaviorService that all MenuCommands the designer receives
         ///  should have their state set to 'Enabled = false' when this Behavior is active.
         /// </summary>
         public virtual bool DisableAllCommands

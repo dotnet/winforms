@@ -97,8 +97,8 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Returns true when the designer is in the process of loading.
         ///  Clients that are sinking notifications from the designer often
-        ///  want to ignore them while the desingner is loading
-        ///  and only respond to them if they result from user interatcions.
+        ///  want to ignore them while the designer is loading
+        ///  and only respond to them if they result from user interactions.
         /// </summary>
         public override bool Loading => _loadDependencyCount > 0 || _loading;
 
@@ -369,7 +369,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         ///  This method is called immediately after the first time
-        ///  BeginLoad is invoked.  This is an appopriate place to
+        ///  BeginLoad is invoked.  This is an appropriate place to
         ///  add custom services to the loader host.  Remember to
         ///  remove any custom services you add here by overriding
         ///  Dispose.
@@ -381,7 +381,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  logic to determine if a reload is required.  This method is
         ///  called when someone requests a reload but doesn't force
         ///  the reload.  It gives the loader an opportunity to scan
-        ///  the underlying storage to determine if a reload is acutually
+        ///  the underlying storage to determine if a reload is actually
         ///  needed.  The default implementation of this method always
         ///  returns true.
         /// </summary>
@@ -705,7 +705,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  This method is called in response to a component changing, adding or removing event to indicate
         ///  that the designer is about to be modified.  Those interested in implementing source code
         ///  control may do so by overriding this method.  A call to OnModifying does not mean that the
-        ///  Modified property will later be set to true; it is merly an intention to do so.
+        ///  Modified property will later be set to true; it is merely an intention to do so.
         /// </summary>
         protected virtual void OnModifying()
         { }
@@ -797,7 +797,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  underlying code dom tree has changed in a way that
         ///  would affect the form.
         ///  If flush is true, the designer is flushed before performing
-        ///  a reload.  If false, any designer changes are abandonded.
+        ///  a reload.  If false, any designer changes are abandoned.
         ///  If ModifyOnError is true, the designer loader will be put
         ///  in the modified state if any errors happened during the
         ///  load.

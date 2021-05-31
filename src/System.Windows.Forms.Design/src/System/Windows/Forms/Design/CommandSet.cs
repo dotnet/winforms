@@ -914,7 +914,7 @@ namespace System.Windows.Forms.Design
                                 //move these controls...
                                 if (BehaviorService != null)
                                 {
-                                    Control primaryControl = comp as Control; //this can be null (when we are moving a component in the ComponenTray)
+                                    Control primaryControl = comp as Control; //this can be null (when we are moving a component in the ComponentTray)
 
                                     bool useSnapLines = BehaviorService.UseSnapLines;
 
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms.Design
                                 continue;
                             }
 
-                            // Also, skip all locked componenents...
+                            // Also, skip all locked components...
                             //
                             PropertyDescriptor lockProp = props["Locked"];
                             if (lockProp != null && (bool)lockProp.GetValue(comp) == true)
@@ -2282,7 +2282,7 @@ namespace System.Windows.Forms.Design
                                     // If we have failed to add a control in this Paste operation ...
                                     if (associatedCompsOfFailedContol != null)
                                     {
-                                        // then dont add its children controls.
+                                        // then don't add its children controls.
                                         foreach (Component comp in associatedCompsOfFailedContol)
                                         {
                                             if (comp == obj as Component)
@@ -2295,7 +2295,7 @@ namespace System.Windows.Forms.Design
 
                                     if (foundAssociatedControl)
                                     {
-                                        continue; //continue from here so that we dont add the associted compoenet of a control that failed paste operation.
+                                        continue; //continue from here so that we don't add the associated component of a control that failed paste operation.
                                     }
 
                                     ComponentDesigner cDesigner = host.GetDesigner(curComp) as ComponentDesigner;
@@ -2349,7 +2349,7 @@ namespace System.Windows.Forms.Design
                                             //cache the associatedComponents only for FAILED control.
                                             associatedCompsOfFailedContol = designerComps;
                                             // now we will jump out of the using block and call trans.Dispose()
-                                            // which in turn calls trans.Cancel for an uncommited transaction,
+                                            // which in turn calls trans.Cancel for an uncommitted transaction,
                                             // We want to cancel the transaction because otherwise we'll have
                                             // un-parented controls
                                             return;
@@ -3467,7 +3467,7 @@ namespace System.Windows.Forms.Design
 #if UNUSED
 
         // Let's keep this in case we need it in the future
-        
+
         /// <summary>
         ///  Determines the status of a menu command.  Commands with this event are
         ///  considered to be not yet implemented and are disabled.
@@ -3555,7 +3555,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is called when the selection has changed.  Anyone using CommandSetItems
         ///  that need to update their status based on selection changes should override
-        ///  this and update their own commands at this time.  The base implementaion
+        ///  this and update their own commands at this time.  The base implementation
         ///  runs through all base commands and calls UpdateStatus on them.
         /// </summary>
         protected virtual void OnUpdateCommandStatus()
@@ -4008,7 +4008,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// Applys the cached status to this item.
+            /// Applies the cached status to this item.
             /// </summary>
             private void ApplyCachedStatus()
             {
@@ -4208,7 +4208,7 @@ namespace System.Windows.Forms.Design
 
                 /// <summary>
                 /// Updates this status object  with the state from the given item,
-                /// and saves teh seletion version.
+                /// and saves the selection version.
                 /// </summary>
                 internal void SaveState(CommandSetItem item, int version)
                 {

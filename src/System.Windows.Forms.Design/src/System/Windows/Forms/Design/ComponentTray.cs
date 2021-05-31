@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design
 
         private ArrayList controls; // List of items in the tray in the order of their layout.
         private SelectionUIHandler dragHandler; // the thing responsible for handling mouse drags
-        private ISelectionUIService selectionUISvc; // selectiuon UI; we use this a lot
+        private ISelectionUIService selectionUISvc; // selection UI; we use this a lot
         private IToolboxService toolboxService; // cached for drag/drop
 
         /// <summary>
@@ -364,7 +364,7 @@ namespace System.Windows.Forms.Design
 
             //Reset the autoscroll position before auto arranging.
             //This way, when OnLayout gets fired after this, we won't
-            //have to move every component again.  Note that sync'ing
+            //have to move every component again.  Note that syncing
             //the selection will automatically select & scroll into view
             //the right components
             AutoScrollPosition = new Point(0, 0);
@@ -448,7 +448,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Gets the number of compnents contained within this tray.
+        ///  Gets the number of components contained within this tray.
         /// </summary>
         public int ComponentCount
         {
@@ -1016,7 +1016,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Gets the requsted service type.
+        ///  Gets the requested service type.
         /// </summary>
         protected override object GetService(Type serviceType)
         {
@@ -1031,7 +1031,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Returns true if the given componenent is being shown on the tray.
+        ///  Returns true if the given component is being shown on the tray.
         /// </summary>
         public bool IsTrayComponent(IComponent comp)
         {
@@ -1285,7 +1285,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                // If it is the left button, start a rubber band drag to laso controls.
+                // If it is the left button, start a rubber band drag to lasso controls.
                 if (e.Button == MouseButtons.Left)
                 {
                     mouseDragStart = new Point(e.X, e.Y);
@@ -1917,7 +1917,7 @@ namespace System.Windows.Forms.Design
             }
             else
             {
-                // Calcuate the next location for this control.
+                // Calculate the next location for this control.
                 Rectangle bounds = prevCtl.Bounds;
                 Point newLoc = new Point(bounds.X + bounds.Width + whiteSpace.X, bounds.Y);
 
@@ -2019,7 +2019,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Retrieves the compnent this control is representing.
+            ///  Retrieves the component this control is representing.
             /// </summary>
             public IComponent Component
             {
@@ -2142,7 +2142,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Delegate that is called in response to a name change.  Here we update our own stashed version of the name, recalcuate our size and repaint.
+            ///  Delegate that is called in response to a name change.  Here we update our own stashed version of the name, recalculate our size and repaint.
             /// </summary>
             private void OnComponentRename(object sender, ComponentRenameEventArgs e)
             {
@@ -2720,7 +2720,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Clears teh adorner of glyphs.
+            ///  Clears the adorner of glyphs.
             /// </summary>
             public void Dispose()
             {
@@ -2772,7 +2772,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to respond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseDoubleClick(MouseEventArgs e)
             {
@@ -2785,7 +2785,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to respond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseDown(MouseEventArgs e)
             {
@@ -2798,7 +2798,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to respond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseMove(MouseEventArgs e)
             {
@@ -2811,7 +2811,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to repsond to the message before the tray even sees it.
+            ///  Called when the tray receives this mouse message.  Here,  we'll give our glyphs the first chance to respond to the message before the tray even sees it.
             /// </summary>
             public bool OnMouseUp(MouseEventArgs e)
             {

@@ -442,7 +442,7 @@ namespace System.ComponentModel.Design.Serialization
                                 // see CodeDomSerializerBase.cs::GetExpression for usage
 
                                 // This entry will only be used if the valid bit is set.
-                                // This is useful because we still need to setup depedency relationships
+                                // This is useful because we still need to setup dependency relationships
                                 // between components even if they are not cached.  See VSWhidbey 263053.
                                 bool correctManager = manager == mainManager;
                                 entry.Valid = correctManager && CanCacheComponent(manager, value, props);
@@ -478,7 +478,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                         //
                                         // cache the statements for future usage if possible. We only do this for the main serialization manager, not
-                                        // for any other seriallization managers that may be calling us for undo or clipboard functions.
+                                        // for any other serialization managers that may be calling us for undo or clipboard functions.
                                         if (correctManager && cache != null && cache.Enabled)
                                         {
                                             cache[value] = entry;
@@ -506,7 +506,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                             }
 
-                            // Regarless, apply statements.  Either we created them or we got them
+                            // Regardless, apply statements.  Either we created them or we got them
                             // out of the cache.
                             statements.AddRange(entry.Statements);
 

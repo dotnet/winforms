@@ -13,7 +13,7 @@ using static Interop;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swaped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
+    ///  This internal class wraps the InSitu Editor. The editor is a runtime ToolStrip  control which contains a leftButton (for image), centerLabel (for text) which  gets swapped by a centerTextBox (when InSitu is ON). The ToolStripTemplateNode is also responsible for intercepting the Escape and Enter keys and implements the IMenuStatusHandler so that it can commit and rollback as required. Finally this ToolStripTemplateNode has a private class ItemTypeToolStripMenuItem for adding  ToolStripItem types to the Dropdown for addItemButton.
     /// </summary>
     internal class ToolStripTemplateNode : IMenuStatusHandler
     {
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Design
 
         // Component for this InSitu Editor... (this is a ToolStripItem) that wants to go into InSitu
         private readonly IComponent _component;
-        // Current Designer for the comopenent that in InSitu mode
+        // Current Designer for the component that in InSitu mode
         private IDesigner _designer;
         //Get DesignerHost.
         private readonly IDesignerHost _designerHost;
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Design
         private ToolStripLabel _centerLabel;
         // SplitButton reAdded for ToolStrip specific TemplateNode
         private ToolStripSplitButton _addItemButton;
-        //swaped in text...
+        //swapped in text...
         private ToolStripControlHost _centerTextBox;
 
         //reqd as rtb does accept Enter..
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Design
         private MiniToolStripRenderer _renderer;
         // This is the Type that the user has selected for the new Item
         private Type _itemType;
-        //Get the ToolStripKeyBoardService to notify that the TemplateNode is Active and so it shouldnt process the KeyMessages.
+        //Get the ToolStripKeyBoardService to notify that the TemplateNode is Active and so it shouldn't process the KeyMessages.
         private ToolStripKeyboardHandlingService _toolStripKeyBoardService;
 
         //Cached ISelectionService
@@ -469,7 +469,7 @@ namespace System.Windows.Forms.Design
             //For Right Button we show the DesignerContextMenu...
             if (e.Button == MouseButtons.Right)
             {
-                //Dont show the DesignerContextMenu if there is any active templateNode.
+                // Don't show the DesignerContextMenu if there is any active templateNode.
                 if (KeyboardService != null && KeyboardService.TemplateNodeActive)
                 {
                     return;
@@ -677,7 +677,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This Internal function is called from the ToolStripItemDesigner to relinquish the resources used by the EditorToolStrip. This Fucntion disposes the ToolStrip and its components and also clears the event handlers associated.
+        ///  This Internal function is called from the ToolStripItemDesigner to relinquish the resources used by the EditorToolStrip. This Function disposes the ToolStrip and its components and also clears the event handlers associated.
         /// </summary>
         internal void CloseEditor()
         {
@@ -812,7 +812,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This private function performs the job of commiting the current InSitu Editor. This will call the CommitEdit(...) function for the appropriate designers so that they can actually do their own Specific things for commiting (or ROLLBACKING) the Insitu Edit mode.  The commit flag is used for commit or rollback. BE SURE TO ALWAYS call ExitInSituEdit from this function to put the EditorToolStrip in a sane "NON EDIT" mode.
+        ///  This private function performs the job of committing the current InSitu Editor. This will call the CommitEdit(...) function for the appropriate designers so that they can actually do their own Specific things for committing (or ROLLING BACK) the Insitu Edit mode.  The commit flag is used for commit or rollback. BE SURE TO ALWAYS call ExitInSituEdit from this function to put the EditorToolStrip in a sane "NON EDIT" mode.
         /// </summary>
         private void CommitEditor(bool commit, bool enterKeyPressed, bool tabKeyPressed)
         {
@@ -854,7 +854,7 @@ namespace System.Windows.Forms.Design
         {
             if (!_inSituMode)
             {
-                // Listen For Commandss....
+                // Listen For Commands....
                 if (_miniToolStrip.Parent != null)
                 {
                     _miniToolStrip.Parent.SuspendLayout();
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void OnKeyDefaultAction(object sender, EventArgs e)
         {
-            //exit Insitu with commiting....
+            //exit Insitu with committing....
             Active = false;
             Debug.Assert(_centerTextBox.Control != null, "The TextBox is null");
             if (_centerTextBox.Control != null)
@@ -1241,7 +1241,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Intercept invokation of specific commands and keys
+        ///  Intercept invocation of specific commands and keys
         /// </summary>
         public bool OverrideInvoke(MenuCommand cmd)
         {
@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Intercept invokation of specific commands and keys
+        ///  Intercept invocation of specific commands and keys
         /// </summary>
         public bool OverrideStatus(MenuCommand cmd)
         {
@@ -1610,7 +1610,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TranparentToolStrip so that it picks up the itemColor.
+        ///  Private class to Change the ToolStrip to a TransparentToolStrip. Our EditorToolStrip is a TransparentToolStrip so that it picks up the itemColor.
         /// </summary>
         public class TransparentToolStrip : ToolStrip
         {
@@ -1821,7 +1821,7 @@ namespace System.Windows.Forms.Design
                         }
 
                         break;
-                    case 5: //MouseOnthe HotRegion
+                    case 5: //MouseOverHotRegion
                         using (SolidBrush b = new SolidBrush(dropDownMouseOverColor))
                         {
                             g.FillRectangle(b, hotRegion);
@@ -1957,7 +1957,7 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
             {
-                // DONT CALL THE BASE AS IT DOESNT ALLOW US TO RENDER THE DROPDOWN BUTTON ....
+                // DON'T CALL THE BASE AS IT DOESNT ALLOW US TO RENDER THE DROPDOWN BUTTON ....
                 //base.OnRenderSplitButtonBackground(e);
                 Graphics g = e.Graphics;
                 if (e.Item is ToolStripSplitButton splitButton)
@@ -2011,7 +2011,7 @@ namespace System.Windows.Forms.Design
                     Pen selectborderPen;
                     if (splitButtonSelected)
                     {
-                        //DrawSeleted Boder
+                        //DrawSelected Boder
                         selectborderPen = new Pen(selectedBorderColor);
                     }
                     else

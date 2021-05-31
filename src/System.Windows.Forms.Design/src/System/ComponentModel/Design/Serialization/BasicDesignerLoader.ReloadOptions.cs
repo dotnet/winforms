@@ -14,12 +14,12 @@ namespace System.ComponentModel.Design.Serialization
         protected enum ReloadOptions
         {
             /// <summary>
-            ///  Peform the default behavior.
+            ///  Perform the default behavior.
             /// </summary>
             Default = 0x00,
 
             /// <summary>
-            ///  If this flag is set, any error encoutered during the
+            ///  If this flag is set, any error encountered during the
             ///  reload will automatically put the designer loader in
             ///  the modified state.
             /// </summary>
@@ -34,7 +34,7 @@ namespace System.ComponentModel.Design.Serialization
 
             /// <summary>
             ///  If this flag is set, any pending changes in the
-            ///  designer will be abandonded.  If this flag is not
+            ///  designer will be abandoned.  If this flag is not
             ///  set, designer changes will be flushed through the
             ///  designer loader before reloading the design surface.
             /// </summary>
