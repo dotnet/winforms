@@ -11,24 +11,24 @@ using static Interop.UiaCore;
 
 namespace System.Windows.Forms.InteropTests
 {
-    public class AccesibleObjectTests : InteropTestBase
+    public class AccessibleObjectTests : InteropTestBase
     {
         [WinFormsFact]
-        public unsafe void AccesibleObject_IAccessibleExConvertReturnedElement_Invoke_ReturnsExpected()
+        public unsafe void AccessibleObject_IAccessibleExConvertReturnedElement_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IAccessibleExConvertReturnedElement(o));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IAccessibleExGetIAccessiblePair_Invoke_ReturnsExpected()
+        public unsafe void AccessibleObject_IAccessibleExGetIAccessiblePair_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IAccessibleExGetIAccessiblePair(o));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IAccessibleExGetRuntimeId_Invoke_ReturnsExpected()
+        public unsafe void AccessibleObject_IAccessibleExGetRuntimeId_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IAccessibleExGetRuntimeId(o, null));
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.InteropTests
         [InlineData(0)]
         [InlineData(-1)]
         [InlineData(1)]
-        public unsafe void AccesibleObject_IAccessibleExGetObjectForChild_Invoke_ReturnsExpected(int idChild)
+        public unsafe void AccessibleObject_IAccessibleExGetObjectForChild_Invoke_ReturnsExpected(int idChild)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IAccessibleExGetObjectForChild(o, idChild));
@@ -53,14 +53,14 @@ namespace System.Windows.Forms.InteropTests
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRawElementProviderSimple_GetHostRawElementProvider_ReturnsExpected()
+        public void AccessibleObject_IRawElementProviderSimple_GetHostRawElementProvider_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderSimpleHostRawElementProvider(o, BOOL.FALSE));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRawElementProviderSimpleProviderOptions_Get_ReturnsExpected()
+        public void AccessibleObject_IRawElementProviderSimpleProviderOptions_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderSimpleProviderOptions(o, ProviderOptions.ServerSideProvider | ProviderOptions.UseComThreading));
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.InteropTests
 
         [WinFormsTheory]
         [MemberData(nameof(GetPatternProvider_TestData))]
-        public void AccesibleObject_IRawElementProviderSimpleGetPatternProvider_Invoke_ReturnsExpected(object patternId, object expected)
+        public void AccessibleObject_IRawElementProviderSimpleGetPatternProvider_Invoke_ReturnsExpected(object patternId, object expected)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderSimpleGetPatternProvider(o, (UIA)patternId, (BOOL)expected));
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.InteropTests
 
         [WinFormsTheory]
         [MemberData(nameof(GetPropertyValue_TestData))]
-        public void AccesibleObject_IRawElementProviderSimpleGetPropertyValue_Invoke_ReturnsExpected(object patternId, object expected)
+        public void AccessibleObject_IRawElementProviderSimpleGetPropertyValue_Invoke_ReturnsExpected(object patternId, object expected)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderSimpleGetPropertyValue(o, (UIA)patternId, out VARIANT variant));
@@ -100,42 +100,42 @@ namespace System.Windows.Forms.InteropTests
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRangeValueProviderIsReadOnly_Get_ReturnsExpected()
+        public void AccessibleObject_IRangeValueProviderIsReadOnly_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRangeValueProviderGetIsReadOnly(o, BOOL.FALSE));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRangeValueProviderLargeChange_Get_ReturnsExpected()
+        public void AccessibleObject_IRangeValueProviderLargeChange_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRangeValueProviderGetLargeChange(o, double.NaN));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRangeValueProviderMaximum_Get_ReturnsExpected()
+        public void AccessibleObject_IRangeValueProviderMaximum_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRangeValueProviderGetMaximum(o, double.NaN));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRangeValueProviderMinimum_Get_ReturnsExpected()
+        public void AccessibleObject_IRangeValueProviderMinimum_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRangeValueProviderGetMinimum(o, double.NaN));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRangeValueProviderSmallChange_Get_ReturnsExpected()
+        public void AccessibleObject_IRangeValueProviderSmallChange_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRangeValueProviderGetSmallChange(o, double.NaN));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRangeValueProviderValue_Get_ReturnsExpected()
+        public void AccessibleObject_IRangeValueProviderValue_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRangeValueProviderGetValue(o, double.NaN));
@@ -148,35 +148,35 @@ namespace System.Windows.Forms.InteropTests
         [InlineData(0, double.NaN)]
         [InlineData(-1, double.NaN)]
         [InlineData(double.NaN, double.NaN)]
-        public void AccesibleObject_IRangeValueProviderSetValue_Invoke_GetReturnsExpected(double value, double expected)
+        public void AccessibleObject_IRangeValueProviderSetValue_Invoke_GetReturnsExpected(double value, double expected)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRangeValueProviderSetValue(o, value, expected));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IRawElementProviderFragmentBoundingRectangle_Get_ReturnsExpected()
+        public unsafe void AccessibleObject_IRawElementProviderFragmentBoundingRectangle_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderFragmentGetBoundingRectangle(o, new UiaRect()));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IRawElementProviderFragmentFragmentRoot_Get_ReturnsExpected()
+        public unsafe void AccessibleObject_IRawElementProviderFragmentFragmentRoot_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderFragmentGetFragmentRoot(o));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IRawElementProviderFragmentGetEmbeddedFragmentRoots_Invoke_ReturnsExpected()
+        public unsafe void AccessibleObject_IRawElementProviderFragmentGetEmbeddedFragmentRoots_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderFragmentGetEmbeddedFragmentRoots(o));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IRawElementProviderFragmentGetRuntimeId_Invoke_ReturnsExpected()
+        public unsafe void AccessibleObject_IRawElementProviderFragmentGetRuntimeId_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderFragmentGetRuntimeId(o, null));
@@ -190,14 +190,14 @@ namespace System.Windows.Forms.InteropTests
         [InlineData((int)NavigateDirection.FirstChild)]
         [InlineData((int)NavigateDirection.LastChild)]
         [InlineData((int)NavigateDirection.LastChild + 1)]
-        public void AccesibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
+        public void AccessibleObject_IRawElementProviderFragmentNavigate_Invoke_ReturnsExpected(int direction)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderFragmentNavigate(o, (NavigateDirection)direction));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IRawElementProviderFragmentSetFocus_Invoke_ReturnsExpected()
+        public unsafe void AccessibleObject_IRawElementProviderFragmentSetFocus_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderFragmentSetFocus(o));
@@ -208,35 +208,35 @@ namespace System.Windows.Forms.InteropTests
         [InlineData(0, 0)]
         [InlineData(-1, -2)]
         [InlineData(double.NaN, double.NaN)]
-        public unsafe void AccesibleObject_IRawElementProviderFragmentRootElementProviderFromPoint_Invoke_ReturnsExpected(double x, double y)
+        public unsafe void AccessibleObject_IRawElementProviderFragmentRootElementProviderFromPoint_Invoke_ReturnsExpected(double x, double y)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderFragmentRootElementProviderFromPoint(o, x, y));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IRawElementProviderFragmentRootGetFocus_Invoke_ReturnsExpected()
+        public unsafe void AccessibleObject_IRawElementProviderFragmentRootGetFocus_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderFragmentRootGetFocus(o));
         }
 
         [WinFormsFact]
-        public unsafe void AccesibleObject_IInvokeProviderInvoke_Invoke_ReturnsExpected()
+        public unsafe void AccessibleObject_IInvokeProviderInvoke_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IInvokeProviderInvoke(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IValueProviderIsReadOnly_Get_ReturnsExpected()
+        public void AccessibleObject_IValueProviderIsReadOnly_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IValueProviderGetIsReadOnly(o, BOOL.FALSE));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IValueProviderValue_Get_ReturnsExpected()
+        public void AccessibleObject_IValueProviderValue_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IValueProviderGetValue(o, string.Empty));
@@ -249,21 +249,21 @@ namespace System.Windows.Forms.InteropTests
         [InlineData("0", "")]
         [InlineData("-1", "")]
         [InlineData("abc", "")]
-        public void AccesibleObject_IValueProviderSetValue_Invoke_GetReturnsExpected(string value, string expected)
+        public void AccessibleObject_IValueProviderSetValue_Invoke_GetReturnsExpected(string value, string expected)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IValueProviderSetValue(o, value, expected));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IValueProviderCollapse_Invoke_Success()
+        public void AccessibleObject_IValueProviderCollapse_Invoke_Success()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IValueProviderCollapse_InvokeAfterExpand_Success()
+        public void AccessibleObject_IValueProviderCollapse_InvokeAfterExpand_Success()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IExpandCollapseProviderExpand(o, ExpandCollapseState.Collapsed));
@@ -271,14 +271,14 @@ namespace System.Windows.Forms.InteropTests
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IExpandCollapseProviderExpand_Invoke_Success()
+        public void AccessibleObject_IExpandCollapseProviderExpand_Invoke_Success()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IExpandCollapseProviderExpand_InvokeAfterCollapse_Success()
+        public void AccessibleObject_IExpandCollapseProviderExpand_InvokeAfterCollapse_Success()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IExpandCollapseProviderCollapse(o, ExpandCollapseState.Collapsed));
@@ -286,70 +286,70 @@ namespace System.Windows.Forms.InteropTests
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IExpandCollapseProviderExpandCollapseState_Get_ReturnsExpected()
+        public void AccessibleObject_IExpandCollapseProviderExpandCollapseState_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IExpandCollapseProviderGetExpandCollapseState(o, ExpandCollapseState.Collapsed));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IToggleProviderToggleState_Get_ReturnsExpected()
+        public void AccessibleObject_IToggleProviderToggleState_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IToggleProviderGetToggleState(o, ToggleState.Indeterminate));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IToggleProviderToggle_Invoke_Success()
+        public void AccessibleObject_IToggleProviderToggle_Invoke_Success()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IToggleProviderToggle(o, ToggleState.Indeterminate));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ITableProviderRowOrColumnMajor_Get_ReturnsExpected()
+        public void AccessibleObject_ITableProviderRowOrColumnMajor_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ITableProviderGetRowOrColumnMajor(o, RowOrColumnMajor.RowMajor));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ITableProviderGetColumnHeaders_Get_ReturnsExpected()
+        public void AccessibleObject_ITableProviderGetColumnHeaders_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ITableProviderGetColumnHeaders(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ITableProviderGetRowHeaders_Get_ReturnsExpected()
+        public void AccessibleObject_ITableProviderGetRowHeaders_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ITableProviderGetRowHeaders(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ITableItemProviderGetColumnHeaderItems_Get_ReturnsExpected()
+        public void AccessibleObject_ITableItemProviderGetColumnHeaderItems_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ITableItemProviderGetColumnHeaderItems(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ITableItemProviderGetRowHeaderItems_Get_ReturnsExpected()
+        public void AccessibleObject_ITableItemProviderGetRowHeaderItems_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ITableItemProviderGetRowHeaderItems(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IGridProviderColumnCount_Get_ReturnsExpected()
+        public void AccessibleObject_IGridProviderColumnCount_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IGridProviderGetColumnCount(o, -1));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IGridProviderRowCount_Get_ReturnsExpected()
+        public void AccessibleObject_IGridProviderRowCount_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IGridProviderGetRowCount(o, -1));
@@ -363,63 +363,63 @@ namespace System.Windows.Forms.InteropTests
         [InlineData(1, 0)]
         [InlineData(0, 1)]
         [InlineData(1, 2)]
-        public void AccesibleObject_IGridProviderGetItem_Get_ReturnsExpected(int row, int column)
+        public void AccessibleObject_IGridProviderGetItem_Get_ReturnsExpected(int row, int column)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IGridProviderGetItem(o, row, column));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IGridItemProviderColumn_Get_ReturnsExpected()
+        public void AccessibleObject_IGridItemProviderColumn_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IGridItemProviderGetColumn(o, -1));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IGridItemProviderColumnSpan_Get_ReturnsExpected()
+        public void AccessibleObject_IGridItemProviderColumnSpan_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IGridItemProviderGetColumnSpan(o, 1));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IGridItemProviderContainingGrid_Get_ReturnsExpected()
+        public void AccessibleObject_IGridItemProviderContainingGrid_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IGridItemProviderGetContainingGrid(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IGridItemProviderRow_Get_ReturnsExpected()
+        public void AccessibleObject_IGridItemProviderRow_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IGridItemProviderGetRow(o, -1));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IGridItemProviderRowSpan_Get_ReturnsExpected()
+        public void AccessibleObject_IGridItemProviderRowSpan_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IGridItemProviderGetRowSpan(o, 1));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IEnumVARIANTClone_Invoke_ReturnsExpected()
+        public void AccessibleObject_IEnumVARIANTClone_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IEnumVARIANTClone(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IEnumVARIANTNextReset_Invoke_ReturnsExpected()
+        public void AccessibleObject_IEnumVARIANTNextReset_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IEnumVARIANTNextReset(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IEnumVARIANTSkip_Invoke_ReturnsExpected()
+        public void AccessibleObject_IEnumVARIANTSkip_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IEnumVARIANTSkip(o));
@@ -428,7 +428,7 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsTheory]
         [InlineData((int)BOOL.TRUE)]
         [InlineData((int)BOOL.FALSE)]
-        public void AccesibleObject_IOleWindowContextSensitiveHelp_Invoke_ReturnsExpected(object fEnterMode)
+        public void AccessibleObject_IOleWindowContextSensitiveHelp_Invoke_ReturnsExpected(object fEnterMode)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IOleWindowContextSensitiveHelp(o, (BOOL)fEnterMode, HRESULT.S_OK));
@@ -437,7 +437,7 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsTheory]
         [InlineData((int)BOOL.TRUE)]
         [InlineData((int)BOOL.FALSE)]
-        public void AccesibleObject_IOleWindowContextSensitiveHelp_InvokeWithParent_ReturnsExpected(object fEnterMode)
+        public void AccessibleObject_IOleWindowContextSensitiveHelp_InvokeWithParent_ReturnsExpected(object fEnterMode)
         {
             var o = new CustomParentAccessibleObject
             {
@@ -449,7 +449,7 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsTheory]
         [InlineData((int)BOOL.TRUE)]
         [InlineData((int)BOOL.FALSE)]
-        public void AccesibleObject_IOleWindowContextSensitiveHelp_InvokeWithControlParent_ReturnsExpected(object fEnterMode)
+        public void AccessibleObject_IOleWindowContextSensitiveHelp_InvokeWithControlParent_ReturnsExpected(object fEnterMode)
         {
             using var control = new Control();
             var o = new CustomParentAccessibleObject
@@ -460,14 +460,14 @@ namespace System.Windows.Forms.InteropTests
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IOleWindowGetWindow_Invoke_ReturnsExpected()
+        public void AccessibleObject_IOleWindowGetWindow_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IOleWindowGetWindow(o, IntPtr.Zero, HRESULT.E_FAIL));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IOleWindowGetWindow_InvokeWithParent_ReturnsExpected()
+        public void AccessibleObject_IOleWindowGetWindow_InvokeWithParent_ReturnsExpected()
         {
             var o = new CustomParentAccessibleObject
             {
@@ -479,7 +479,7 @@ namespace System.Windows.Forms.InteropTests
         // Crashes with Attempted to read or write protected memory. This is often an indication that other memory is corrupt..
 #if false
         [WinFormsFact]
-        public void AccesibleObject_IOleWindowGetWindow_InvokeWithControlParent_ReturnsExpected()
+        public void AccessibleObject_IOleWindowGetWindow_InvokeWithControlParent_ReturnsExpected()
         {
             using var control = new Control();
             var o = new CustomParentAccessibleObject
@@ -491,84 +491,84 @@ namespace System.Windows.Forms.InteropTests
 #endif
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderChildId_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderChildId_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetChildId(o, 0));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderDefaultAction_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderDefaultAction_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetDefaultAction(o, null));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderDescription_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderDescription_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetDescription(o, null));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderHelp_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderHelp_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetHelp(o, null));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderKeyboardShortcut_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderKeyboardShortcut_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetKeyboardShortcut(o, null));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderName_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderName_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetName(o, null));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderRole_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderRole_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetRole(o, 0));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderState_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderState_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetState(o, 0));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderValue_Get_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderValue_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetValue(o, string.Empty));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderDoDefaultAction_Invoke_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderDoDefaultAction_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderDoDefaultAction(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderGetIAccessible_Invoke_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderGetIAccessible_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetIAccessible(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ILegacyIAccessibleProviderGetSelection_Invoke_ReturnsExpected()
+        public void AccessibleObject_ILegacyIAccessibleProviderGetSelection_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderGetSelection(o, BOOL.FALSE));
@@ -581,7 +581,7 @@ namespace System.Windows.Forms.InteropTests
         [InlineData("0", "")]
         [InlineData("-1", "")]
         [InlineData("abc", "")]
-        public void AccesibleObject_ILegacyIAccessibleProviderSetValue_Invoke_GetReturnsExpected(string value, string expected)
+        public void AccessibleObject_ILegacyIAccessibleProviderSetValue_Invoke_GetReturnsExpected(string value, string expected)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderSetValue(o, value, expected));
@@ -596,77 +596,77 @@ namespace System.Windows.Forms.InteropTests
         [InlineData(8)]
         [InlineData(16)]
         [InlineData(int.MaxValue)]
-        public void AccesibleObject_ILegacyIAccessibleProviderSelect_Invoke_ReturnsExpected(int flagsSelect)
+        public void AccessibleObject_ILegacyIAccessibleProviderSelect_Invoke_ReturnsExpected(int flagsSelect)
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ILegacyIAccessibleProviderSelect(o, flagsSelect));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ISelectionProviderCanSelectMultiple_Get_ReturnsExpected()
+        public void AccessibleObject_ISelectionProviderCanSelectMultiple_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ISelectionProviderGetCanSelectMultiple(o, BOOL.FALSE));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ISelectionProviderIsSelectionRequired_Get_ReturnsExpected()
+        public void AccessibleObject_ISelectionProviderIsSelectionRequired_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ISelectionProviderGetIsSelectionRequired(o, BOOL.FALSE));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ISelectionProviderGetSelection_Invoke_ReturnsExpected()
+        public void AccessibleObject_ISelectionProviderGetSelection_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ISelectionProviderGetSelection(o, BOOL.FALSE));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ISelectionProviderIsSelected_Get_ReturnsExpected()
+        public void AccessibleObject_ISelectionProviderIsSelected_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ISelectionItemProviderGetIsSelected(o, BOOL.FALSE));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ISelectionProviderSelectionContainer_Get_ReturnsExpected()
+        public void AccessibleObject_ISelectionProviderSelectionContainer_Get_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ISelectionItemProviderGetSelectionContainer(o, BOOL.FALSE));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ISelectionItemProviderAddToSelection_Invoke_ReturnsExpected()
+        public void AccessibleObject_ISelectionItemProviderAddToSelection_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ISelectionItemProviderAddToSelection(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ISelectionItemProviderRemoveFromSelection_Invoke_ReturnsExpected()
+        public void AccessibleObject_ISelectionItemProviderRemoveFromSelection_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ISelectionItemProviderRemoveFromSelection(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_ISelectionItemProviderSelect_Invoke_ReturnsExpected()
+        public void AccessibleObject_ISelectionItemProviderSelect_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_ISelectionItemProviderSelect(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd_Invoke_ReturnsExpected()
+        public void AccessibleObject_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd_Invoke_ReturnsExpected()
         {
             var o = new AccessibleObject();
             AssertSuccess(Test_IRawElementProviderHwndOverrideGetOverrideProviderForHwnd(o));
         }
 
         [WinFormsFact]
-        public void AccesibleObject_IScrollItemProviderScrollIntoView_Invoke_ReturnsExpected()
+        public void AccessibleObject_IScrollItemProviderScrollIntoView_Invoke_ReturnsExpected()
         {
             using (new NoAssertContext())
             {
