@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Metafiles
         public uint offDescription;     // Offset to the metafile description record.
                                         // This is 0 if there is no description string
         public uint nPalEntries;        // Number of entries in the metafile palette.
-        public Size szlDevice;          // Size of the reference device in pels
+        public Size szlDevice;          // Size of the reference device in pixels
         public Size szlMillimeters;     // Size of the reference device in millimeters
 
         // The next three bring the size up to 100 bytes
