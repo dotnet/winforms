@@ -8,7 +8,8 @@ internal partial class Interop
 {
     internal static class CLSID
     {
-        internal static Guid FileSaveDialog = new Guid("C0B4E2F3-BA21-4773-8DBA-335EC946EB8B");
+        // C0B4E2F3-BA21-4773-8DBA-335EC946EB8B
+        internal static Guid FileSaveDialog = new Guid(0xC0B4E2F3, 0xBA21, 0x4773, 0x8D, 0xBA, 0x33, 0x5E, 0xC9, 0x46, 0xEB, 0x8B);
 
         internal static Guid FileOpenDialog = new Guid("DC1C5A9C-E88A-4dde-A5A1-60F82A20AEF7");
     }
