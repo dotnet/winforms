@@ -15,7 +15,7 @@ internal static partial class Interop
         }
 
         /// <remarks>
-        ///  WM_MOUSEACTIVATE Note (for top level compoenents and host)
+        ///  WM_MOUSEACTIVATE Note (for top level components and host)
         ///
         ///  If the active (or tracking) comp's reg info indicates that it wants mouse
         ///  messages, then no MA_xxxANDEAT value should be returned  from WM_MOUSEACTIVATE,

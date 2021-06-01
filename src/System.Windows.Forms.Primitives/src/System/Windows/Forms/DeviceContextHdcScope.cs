@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         private readonly int _savedHdcState;
 
         /// <summary>
-        ///  Gets the <see cref="Gdi32.HDC"/> from the the given <paramref name="deviceContext"/>.
+        ///  Gets the <see cref="Gdi32.HDC"/> from the given <paramref name="deviceContext"/>.
         /// </summary>
         /// <remarks>
         ///  When a <see cref="Graphics"/> object is created from a <see cref="Gdi32.HDC"/> the clipping region and
@@ -175,7 +175,7 @@ namespace System.Windows.Forms
                 if (applyClipping)
                 {
                     // If the Graphics object was created from a native DC the actual clipping region is the intersection
-                    // beteween the original DC clip region and the GDI+ one - for display Graphics it is the same as
+                    // between the original DC clip region and the GDI+ one - for display Graphics it is the same as
                     // Graphics.VisibleClipBounds.
 
                     RegionType type;
