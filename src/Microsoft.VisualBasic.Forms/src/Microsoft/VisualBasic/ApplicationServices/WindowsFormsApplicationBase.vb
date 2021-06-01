@@ -199,7 +199,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                     If _networkAvailabilityEventHandlers Is Nothing Then _networkAvailabilityEventHandlers = New ArrayList
                     _networkAvailabilityEventHandlers.Add(value)
                     _turnOnNetworkListener = True 'We don't want to create the network object now - it takes a snapshot of the executionContext and our IPrincipal isn't on the thread yet.  We know we need to create it and we will at the appropriate time
-                    If _networkObject Is Nothing And _finishedOnInitilaize = True Then 'But the user may be doing an AddHandler of their own in which case we need to make sure to honor the request.  If we aren't past OnInitialize() yet we shouldn't do it but the flag above catches that case
+                    If _networkObject Is Nothing And _finishedOnInitialize = True Then 'But the user may be doing an AddHandler of their own in which case we need to make sure to honor the request.  If we aren't past OnInitialize() yet we shouldn't do it but the flag above catches that case
                         _networkObject = New Devices.Network
                         Dim windowsFormsApplicationBase As WindowsFormsApplicationBase = Me
                         AddHandler _networkObject.NetworkAvailabilityChanged, AddressOf windowsFormsApplicationBase.NetworkAvailableEventAdaptor
@@ -470,8 +470,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 ShowSplashScreen()
             End If
 
-            _finishedOnInitilaize = True 'we are now at a point where we can allow the network object to be created since the iPrincipal is on the thread by now.
-            Return True 'true means to not bail out but keep on running after OnIntiailize() finishes
+            _finishedOnInitialize = True 'we are now at a point where we can allow the network object to be created since the iPrincipal is on the thread by now.
+            Return True 'true means to not bail out but keep on running after OnInitialize() finishes
         End Function
 
         ''' <summary>
@@ -483,7 +483,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             eventArgs.Cancel = False
             'It is important not to create the network object until the ExecutionContext has everything on it.  By now the principal will be on the thread so
             'we can create the network object.  The timing is important because the network object has an AsyncOperationsManager in it that marshals
-            'the network changed event to the main thread.  The asycnOperationsManager does a CreateOperation() which makes a copy of the executionContext
+            'the network changed event to the main thread.  The asyncOperationsManager does a CreateOperation() which makes a copy of the executionContext
             'That execution context shows up on your thread during the callback so I delay creating the network object (and consequently the capturing of the
             'execution context) until the principal has been set on the thread.
             'this avoid the problem where My.User isn't set during the NetworkAvailabilityChanged event.  This problem would just extend
@@ -829,7 +829,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _unhandledExceptionHandlers As ArrayList
         Private _processingUnhandledExceptionEvent As Boolean
         Private _turnOnNetworkListener As Boolean 'Tracks whether we need to create the network object so we can listen to the NetworkAvailabilityChanged event
-        Private _finishedOnInitilaize As Boolean 'Whether we have made it through the processing of OnInitialize
+        Private _finishedOnInitialize As Boolean 'Whether we have made it through the processing of OnInitialize
         Private _networkAvailabilityEventHandlers As ArrayList
         Private _networkObject As Devices.Network
 #Disable Warning IDE0032 ' Use auto property, Justification:=<Public API>
