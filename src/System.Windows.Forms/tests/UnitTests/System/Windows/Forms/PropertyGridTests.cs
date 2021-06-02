@@ -36,7 +36,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SizeF.Empty, control.AutoScaleDimensions);
             Assert.Equal(new SizeF(1, 1), control.AutoScaleFactor);
             Assert.Equal(Size.Empty, control.AutoScrollMargin);
-            Assert.Equal(AutoScaleMode.None, control.AutoScaleMode);
+            Assert.Equal(AutoScaleMode.Inherit, control.AutoScaleMode);
             Assert.Equal(Size.Empty, control.AutoScrollMinSize);
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
             Assert.False(control.AutoSize);
