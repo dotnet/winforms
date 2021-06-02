@@ -11614,7 +11614,7 @@ namespace System.Windows.Forms
             if (pref.Category == UserPreferenceCategory.Color)
             {
                 s_defaultFont = null;
-                Application.ScaleDefaultFont();
+                Application.ScaleDefaultFont(DpiHelper.GetTextScaleFactor());
                 OnSystemColorsChanged(EventArgs.Empty);
             }
         }
