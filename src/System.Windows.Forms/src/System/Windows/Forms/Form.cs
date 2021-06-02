@@ -4250,34 +4250,7 @@ namespace System.Windows.Forms
 
                 if (!e.Cancel)
                 {
-                    float factor = (float)e.DeviceDpiNew / (float)e.DeviceDpiOld;
-                    SuspendAllLayout(this);
-                    try
-                    {
-                        User32.SetWindowPos(
-                            new HandleRef(this, HandleInternal),
-                            User32.HWND_TOP,
-                            e.SuggestedRectangle.X,
-                            e.SuggestedRectangle.Y,
-                            e.SuggestedRectangle.Width,
-                            e.SuggestedRectangle.Height,
-                            User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
-                        if (AutoScaleMode != AutoScaleMode.Font)
-                        {
-                            Font = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
-                            FormDpiChanged(factor);
-                        }
-                        else
-                        {
-                            ScaleFont(factor);
-                            FormDpiChanged(factor);
-                        }
-                    }
-                    finally
-                    {
-                        // We want to perform layout for dpi-changed HDpi improvements - setting the second parameter to 'true'
-                        ResumeAllLayout(this, true);
-                    }
+                    ScaleContainer(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
                 }
             }
         }

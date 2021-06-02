@@ -160,7 +160,14 @@ namespace System.Windows.Forms
             _onComponentChanged = new ComponentChangedEventHandler(OnComponentChanged);
 
             SuspendLayout();
-            AutoScaleMode = AutoScaleMode.None;
+
+            // Scaling PropertyGrid but its children will be excluded from AutoScale.
+            AutoScaleMode = AutoScaleMode.Inherit;
+
+            // children of PropertyGrid are speacial and explicitly resized when propertygrid is resized (OnLayoutInternal())
+            // and adjust its children bounds with respect to propertygrid bounds. Autoscale mode
+            // should not scale them again.
+            _doNotScaleChildren = true;
 
             SetStyle(ControlStyles.UseTextForAccessibility, false);
 
@@ -3042,6 +3049,14 @@ namespace System.Windows.Forms
 
                 if (!dividerOnly)
                 {
+                    // PropertyGrid does a special handling on scaling and positioning its
+                    // child controls. These are not scaled by their parent when Dpi/Font changed
+                    if (_oldDeviceDpi != _deviceDpi)
+                    {
+                        RescaleConstants();
+                        SetupToolbar(true);
+                    }
+
                     // no toolbar or doc comment or commands, just
                     // fill the whole thing with the grid
                     if (!_toolStrip.Visible && !_doccomment.Visible && !_hotcommands.Visible)
@@ -4944,18 +4959,6 @@ namespace System.Windows.Forms
             s_largeButtonSize = LogicalToDeviceUnits(s_defaultLargeButtonSize);
             s_cyDivider = LogicalToDeviceUnits(CYDIVIDER);
             _toolStripButtonPaddingY = LogicalToDeviceUnits(ToolStripButtonPaddingY);
-        }
-
-        /// <summary>
-        ///  Rescale constants when DPI changed
-        /// </summary>
-        /// <param name="deviceDpiOld">old dpi</param>
-        /// <param name="deviceDpiNew">new dpi</param>
-        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
-        {
-            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            RescaleConstants();
-            SetupToolbar(true);
         }
 
         protected override void WndProc(ref Message m)
