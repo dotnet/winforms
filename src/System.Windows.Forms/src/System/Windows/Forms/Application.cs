@@ -1240,7 +1240,7 @@ namespace System.Windows.Forms
             textScaleFactor = Math.Min(2.25f, textScaleFactor);
             if (textScaleFactor > 1.0f)
             {
-                s_defaultFontScaled = new Font(s_defaultFont.FontFamily, s_defaultFont.Size * textScaleFactor, s_defaultFont.Style, s_defaultFont.Unit);
+                s_defaultFontScaled = s_defaultFont.WithSize(s_defaultFont.Size * textScaleFactor);
             }
         }
 

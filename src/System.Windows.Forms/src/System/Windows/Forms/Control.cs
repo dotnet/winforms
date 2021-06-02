@@ -12143,12 +12143,13 @@ namespace System.Windows.Forms
                 // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
                 if (_oldDeviceDpi != _deviceDpi)
                 {
-                    // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
-                    Font local = (Font)Properties.GetObject(s_fontProperty);
-                    if (local is not null)
+                    // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged()
+                    // events to scale those controls.
+                    Font currentFont = (Font)Properties.GetObject(s_fontProperty);
+                    if (currentFont is not null)
                     {
-                        var factor = (float)_deviceDpi / _oldDeviceDpi;
-                        Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+                        float factor = (float)_deviceDpi / _oldDeviceDpi;
+                        Font = currentFont.WithSize(currentFont.Size * factor);
                     }
 
                     RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
