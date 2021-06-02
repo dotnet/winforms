@@ -280,7 +280,7 @@ namespace System.Windows.Forms
         internal static bool CustomThreadExceptionHandlerAttached
             => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-        internal static Font DefaultFont => Defaults.GetDefaultFont();
+        internal static Font DefaultFont => Defaults.GetFont();
 
         /// <summary>
         ///  Gets the path for the executable file that started the application.

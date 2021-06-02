@@ -220,7 +220,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Application_SetDefaultFont_SetNull_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>("font", () => Application.Defaults.SetDefaultFont(null));
+            Assert.Throws<ArgumentNullException>("font", () => Application.Defaults.SetFont(null));
         }
 
         [WinFormsFact]
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Tests
             var window = new NativeWindow();
             window.AssignHandle(control.Handle);
 
-            Assert.Throws<InvalidOperationException>(() => Application.Defaults.SetDefaultFont(SystemFonts.CaptionFont));
+            Assert.Throws<InvalidOperationException>(() => Application.Defaults.SetFont(SystemFonts.CaptionFont));
         }
 
         [WinFormsFact]
@@ -251,7 +251,7 @@ namespace System.Windows.Forms.Tests
             {
                 nativeWindowTestAccessor.t_anyHandleCreated = false;
 
-                Application.Defaults.SetDefaultFont(SystemFonts.CaptionFont);
+                Application.Defaults.SetFont(SystemFonts.CaptionFont);
 
                 Assert.False(applicationTestAccessor.s_defaultFont.IsSystemFont);
             }

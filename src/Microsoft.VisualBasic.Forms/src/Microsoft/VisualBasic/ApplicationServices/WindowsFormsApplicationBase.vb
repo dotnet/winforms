@@ -64,7 +64,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     ''' Signature for the ApplyApplicationDefaults event handler
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
-    Public Delegate Sub ApplyApplicationDefaultsEventHandler(sender As Object, e As ApplyApplicationDefaultsEventArgs)
+    Public Delegate Sub ApplyApplicationDefaultsEventHandler(sender As Object, e As ApplyDefaultsEventArgs)
 
     ''' <summary>
     ''' Provides the infrastructure for the VB Windows Forms application model
@@ -410,7 +410,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
 
             ' ...and whatever Defaults need to be set.
-            Dim getApplicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(Windows.Forms.Application.Defaults)
+            Dim getApplicationDefaultsEventArgs = New ApplyDefaultsEventArgs(Windows.Forms.Application.Defaults)
             RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
 
             ' Apply HighDpiMode

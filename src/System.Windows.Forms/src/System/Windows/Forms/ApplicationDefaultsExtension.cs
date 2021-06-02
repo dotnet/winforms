@@ -18,17 +18,17 @@ namespace System.Windows.Forms
         /// <summary>
         /// Scale the default font (if it is set) as per the Settings display text scale settings.
         /// </summary>
-        internal static void ScaleDefaultFont(ApplicationDefaults defaults)
+        internal static void ScaleFont(ApplicationDefaults defaults)
         {
             Font defaultFont, defaultFontScaled = null;
-            defaultFont = (Font)defaults.DefaultProperties.GetValueOrDefault(DefaultFont);
+            defaultFont = defaults.GetValueOrDefault<Font>(DefaultFont);
 
             if (defaultFont is null || !OsVersion.IsWindows10_1507OrGreater)
             {
                 return;
             }
 
-            defaultFontScaled = (Font)defaults.DefaultProperties.GetValueOrDefault(DefaultFontScaled);
+            defaultFontScaled = defaults.GetValueOrDefault<Font>(DefaultFontScaled);
             float textScaleValue = DpiHelper.GetTextScaleFactor();
 
             if (defaultFontScaled is not null)
@@ -43,29 +43,29 @@ namespace System.Windows.Forms
                 defaultFontScaled = new Font(defaultFont.FontFamily, defaultFont.Size * textScaleValue);
             }
 
-            defaults.DefaultProperties.TryAdd(DefaultFontScaled, defaultFontScaled);
+            defaults.TryAddDefaultValue(DefaultFontScaled, defaultFontScaled);
         }
 
-        internal static void ResetDefaultFont(this ApplicationDefaults defaults)
+        internal static void ResetFont(this ApplicationDefaults defaults)
         {
             Font defaultFont, defaultFontScaled = null;
 
-            defaultFont = (Font)defaults.DefaultProperties.GetValueOrDefault(DefaultFont);
+            defaultFont = defaults.GetValueOrDefault<Font>(DefaultFont);
 
             if (defaultFont is { })
             {
                 defaultFont.Dispose();
-                defaults.DefaultProperties.Remove(DefaultFont);
+                defaults.Remove(DefaultFont);
 
-                defaultFontScaled = (Font)defaults.DefaultProperties.GetValueOrDefault(DefaultFontScaled);
+                defaultFontScaled = defaults.GetValueOrDefault<Font>(DefaultFontScaled);
                 defaultFontScaled.Dispose();
-                defaults.DefaultProperties.Remove(DefaultFontScaled);
+                defaults.Remove(DefaultFontScaled);
             }
         }
 
-        internal static Font GetDefaultFont(this ApplicationDefaults defaults)
-            => (Font)defaults.DefaultProperties.GetValueOrDefault(DefaultFontScaled)
-                    ?? (Font)defaults.DefaultProperties.GetValueOrDefault(DefaultFont);
+        internal static Font GetFont(this ApplicationDefaults defaults)
+            => defaults.GetValueOrDefault<Font>(DefaultFontScaled)
+                    ?? defaults.GetValueOrDefault<Font>(DefaultFont);
 
         /// <summary>
         ///  Sets the default <see cref="Font"/> for process.
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
         ///  </para>
         /// </remarks>
         /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
-        public static ApplicationDefaults SetDefaultFont(this ApplicationDefaults defaults, Font font)
+        public static ApplicationDefaults SetFont(this ApplicationDefaults defaults, Font font)
         {
             Font defaultFont, defaultFontScaled = null;
 
@@ -93,17 +93,17 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(font));
 
             if (NativeWindow.AnyHandleCreated)
-                throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetDefaultFont)));
+                throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetFont)));
 
             // If user made a prior call to this API with a different custom fonts, we want to clean it up.
-            defaultFont = (Font)defaults.DefaultProperties.GetValueOrDefault(DefaultFont);
+            defaultFont = defaults.GetValueOrDefault<Font>(DefaultFont);
 
             if (defaultFont is not null)
             {
                 defaultFont?.Dispose();
                 defaultFont = null;
 
-                defaultFontScaled = (Font) defaults.DefaultProperties.GetValueOrDefault(DefaultFontScaled);
+                defaultFontScaled = defaults.GetValueOrDefault<Font>(DefaultFontScaled);
                 defaultFontScaled?.Dispose();
                 defaultFontScaled = null;
             }
@@ -117,10 +117,10 @@ namespace System.Windows.Forms
             else
             {
                 defaultFont = font;
-                ScaleDefaultFont(defaults);
+                ScaleFont(defaults);
             }
 
-            defaults.DefaultProperties.TryAdd(DefaultFont, defaultFont);
+            defaults.TryAddDefaultValue(DefaultFont, defaultFont);
 
             return defaults;
         }

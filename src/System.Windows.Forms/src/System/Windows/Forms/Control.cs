@@ -11616,7 +11616,7 @@ namespace System.Windows.Forms
                 s_defaultFont = null;
 
                 // TODO: IGOR: Why do we need to reset the Font when the Color has changed?
-                Application.Defaults.ResetDefaultFont();
+                Application.Defaults.ResetFont();
                 OnSystemColorsChanged(EventArgs.Empty);
             }
         }
