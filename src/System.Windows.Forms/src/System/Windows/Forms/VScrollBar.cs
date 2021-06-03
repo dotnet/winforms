@@ -54,8 +54,5 @@ namespace System.Windows.Forms
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;
         }
-
-        protected override AccessibleObject CreateAccessibilityInstance()
-            => new VScrollBarAccessibleObject(this);
     }
 }

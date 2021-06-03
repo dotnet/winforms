@@ -7,7 +7,7 @@ using Xunit;
 using static Interop;
 using static Interop.UiaCore;
 
-namespace System.Windows.Forms.Tests
+namespace System.Windows.Forms.Tests.AccessibleObjects
 {
     public class ScrollBar_ScrollBarAccessibleObjectTests :
         IClassFixture<ThreadExceptionFixture>
