@@ -157,53 +157,59 @@ namespace System.Windows.Forms
 
             internal AccessibleObject GetChildFragment(int fragmentIndex, UiaCore.NavigateDirection direction, bool getOverflowItem = false)
             {
-                ToolStripItemCollection items = getOverflowItem ? _owningToolStrip.OverflowItems : _owningToolStrip.DisplayedItems;
-                int childFragmentCount = items.Count;
+                if (fragmentIndex < 0)
+                {
+                    return null;
+                }
 
-                if (!getOverflowItem && _owningToolStrip.CanOverflow && _owningToolStrip.OverflowButton.Visible && fragmentIndex == childFragmentCount - 1)
+                ToolStripItemCollection items = getOverflowItem
+                    ? _owningToolStrip.OverflowItems
+                    : _owningToolStrip.DisplayedItems;
+
+                if (!getOverflowItem
+                    && _owningToolStrip.CanOverflow
+                    && _owningToolStrip.OverflowButton.Visible
+                    && fragmentIndex == items.Count - 1)
                 {
                     return _owningToolStrip.OverflowButton.AccessibilityObject;
                 }
 
-                for (int index = 0; index < childFragmentCount; index++)
+                if (fragmentIndex < items.Count)
                 {
-                    ToolStripItem item = items[index];
-                    if (item.Available && item.Alignment == ToolStripItemAlignment.Left && fragmentIndex == index)
+                    ToolStripItem item = items[fragmentIndex];
+                    if (item.Available && item.Alignment == ToolStripItemAlignment.Left)
                     {
-                        if (item is ToolStripControlHost controlHostItem)
-                        {
-                            if (ShouldItemBeSkipped(controlHostItem.Control))
-                            {
-                                return GetFollowingChildFragment(fragmentIndex, items, direction);
-                            }
-
-                            return controlHostItem.ControlAccessibilityObject;
-                        }
-
-                        return item.AccessibilityObject;
+                        return GetItemAccessibleObject(item);
                     }
                 }
 
-                for (int index = 0; index < childFragmentCount; index++)
+                items = _owningToolStrip.Items;
+
+                if (fragmentIndex < items.Count)
                 {
-                    ToolStripItem item = _owningToolStrip.Items[index];
-                    if (item.Available && item.Alignment == ToolStripItemAlignment.Right && fragmentIndex == index)
+                    ToolStripItem item = items[fragmentIndex];
+                    if (item.Available && item.Alignment == ToolStripItemAlignment.Right)
                     {
-                        if (item is ToolStripControlHost controlHostItem)
-                        {
-                            if (ShouldItemBeSkipped(controlHostItem.Control))
-                            {
-                                return GetFollowingChildFragment(fragmentIndex, items, direction);
-                            }
-
-                            return controlHostItem.ControlAccessibilityObject;
-                        }
-
-                        return item.AccessibilityObject;
+                        return GetItemAccessibleObject(item);
                     }
                 }
 
                 return null;
+
+                AccessibleObject GetItemAccessibleObject(ToolStripItem item)
+                {
+                    if (item is ToolStripControlHost controlHostItem)
+                    {
+                        if (ShouldItemBeSkipped(controlHostItem.Control))
+                        {
+                            return GetFollowingChildFragment(fragmentIndex, items, direction);
+                        }
+
+                        return controlHostItem.ControlAccessibilityObject;
+                    }
+
+                    return item.AccessibilityObject;
+                }
             }
 
             internal int GetChildOverflowFragmentCount()
