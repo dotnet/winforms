@@ -1,0 +1,31 @@
+<!--
+    This props file comes from dotnet/winforms. It gets ingested by dotnet/windowsdesktop and processed by
+    pkg\windowsdesktop\sfx\Microsoft.WindowsDesktop.App.Ref.sfxproj.
+   -->
+
+<Project>
+
+  <Target Name="_SetWindowsFormsAnalyzersNuspecTargetPaths" BeforeTargets="GenerateNuspec">
+
+    <!-- Validate that we're correctly referencing the Windows Forms transport package, and it has valid content -->
+    <Error Text="Unable to resolve path to Microsoft.Private.Winforms NuGet package. Is %24(PkgMicrosoft_Private_Winforms) defined?"
+           Condition="'$(PkgMicrosoft_Private_Winforms)' == ''"/>
+
+    <ItemGroup>
+      <_WinFormsAnalyzers Include="$(PkgMicrosoft_Private_Winforms)\ref\netstandard2.0\**\*" />
+    </ItemGroup>
+
+    <Error Text="Microsoft.Private.Winforms NuGet package contains no analyzers. Is this expected?"
+           Condition="@(_WinFormsAnalyzers->Count()) == 0"/>
+    <!-- End validation -->
+
+    <ItemGroup>
+      <_PackageFiles Include="@(_WinFormsAnalyzers)">
+        <GeneratedBuildFile>true</GeneratedBuildFile>
+        <PackagePath>ref/netstandard2.0/</PackagePath>
+        <TargetPath>ref/netstandard2.0/</TargetPath>
+      </_PackageFiles>
+    </ItemGroup>
+  </Target>
+
+</Project>

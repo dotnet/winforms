@@ -1,0 +1,50 @@
+<!--
+    This props file comes from dotnet/winforms. It gets ingested by dotnet/wpf and processed by
+    packaging/Microsoft.NET.Sdk.WindowsDesktop project.
+    
+    It is referenced via Microsoft.NET.Sdk.WindowsDesktop/targets/Microsoft.NET.Sdk.WindowsDesktop.props.
+   -->
+
+<Project>
+
+  <!--
+      The task that determines the path to Microsoft.WindowsDesktop.App.Ref pack folder, and then
+      references all Windows Forms analyzers.
+
+      This task is needed until https://github.com/dotnet/designs/pull/181 approved and implemented.
+   -->
+  <Target Name="_ReferenceWindowsFormsAnalyzers"
+          AfterTargets="ResolveFrameworkReferences;AddImplicitDefineConstants"
+          DependsOnTargets="AddImplicitDefineConstants"
+          Condition="('$(UseWindowsForms)' == 'true')
+                 and ('$(ResolveWinFormsAnalyzersFromSdkRefPack)' != 'false')
+                 and $(DefineConstants.Contains('NET6_0_OR_GREATER'))">
+
+    <!-- Determine the path to Microsoft.WindowsDesktop.App.Ref pack folder -->
+    <PropertyGroup>
+      <_WindowsFormsRefPath Condition="@(ResolvedFrameworkReference->'%(OriginalItemSpec)') == 'Microsoft.WindowsDesktop.App.WindowsForms'"
+                            >$([MSBuild]::NormalizePath(%(TargetingPackPath), 'ref', 'netstandard2.0'))</_WindowsFormsRefPath>
+    </PropertyGroup>
+
+    <Error Text="Failed to determine Microsoft.WindowsDesktop.App.Ref pack path."
+           Condition="'$(_WindowsFormsRefPath)' == ''" />
+
+    <!-- Reference analyzers -->
+    <ItemGroup Condition=" $(EnableNETAnalyzers)">
+      <Analyzer
+        Include="$(_WindowsFormsRefPath)\System.Windows.Forms.Analyzers.dll"
+        IsImplicitlyDefined="true" />
+      <Analyzer
+        Condition="'$(Language)' == 'C#'"
+        Include="$(_WindowsFormsRefPath)\System.Windows.Forms.Analyzers.CSharp.dll"
+        IsImplicitlyDefined="true" />
+      <!--
+      <Analyzer
+        Condition="'$(Language)' == 'VB'"
+        Include="$(_WindowsFormsRefPath)\System.Windows.Forms.Analyzers.VisualBasic.dll"
+        IsImplicitlyDefined="true" />
+      -->
+    </ItemGroup>
+  </Target>
+
+</Project>

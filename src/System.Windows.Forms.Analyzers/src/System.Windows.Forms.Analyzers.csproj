@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <Compile Include="..\..\System.Windows.Forms.Primitives\src\System\Windows\Forms\HighDpiMode.cs" Link="System\Windows\Forms\HighDpiMode.cs" />
+    <None Include="..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,10 +31,6 @@
       <GenerateSource>true</GenerateSource>
       <Namespace>System</Namespace>
     </EmbeddedResource>
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="System.Windows.Forms.Analyzers.props" />
   </ItemGroup>
 
 </Project>
