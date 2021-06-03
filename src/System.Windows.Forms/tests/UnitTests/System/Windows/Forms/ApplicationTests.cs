@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Tests
 
                 AreFontEqual(scaled, Application.DefaultFont);
 
-                Application.ScaleDefaultFont(/* default scaling factor */1.0f);
+                Application.ScaleDefaultFont(DpiHelper.MinTextScaleFactorValue);
 
                 // The font is not scaled at 100% (factor=1.0)
                 Assert.Null(applicationTestAccessor.s_defaultFontScaled);
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.Tests
                 Application.ScaleDefaultFont(4.0f);
 
                 Assert.NotNull(applicationTestAccessor.s_defaultFontScaled);
-                Assert.Equal(12f * 2.25f, applicationTestAccessor.s_defaultFontScaled.SizeInPoints);
+                Assert.Equal(12f * DpiHelper.MaxTextScaleFactorValue, applicationTestAccessor.s_defaultFontScaled.SizeInPoints);
             }
             finally
             {

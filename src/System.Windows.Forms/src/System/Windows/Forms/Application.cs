@@ -1237,8 +1237,8 @@ namespace System.Windows.Forms
             }
 
             // Restore the text scale if it isn't the default value in the valid text scale factor value
-            textScaleFactor = Math.Min(2.25f, textScaleFactor);
-            if (textScaleFactor > 1.0f)
+            textScaleFactor = Math.Min(DpiHelper.MaxTextScaleFactorValue, textScaleFactor);
+            if (textScaleFactor > DpiHelper.MinTextScaleFactorValue)
             {
                 s_defaultFontScaled = s_defaultFont.WithSize(s_defaultFont.Size * textScaleFactor);
             }
