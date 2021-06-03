@@ -209,12 +209,136 @@ namespace System.Windows.Forms.Tests
             }
         }
 
-        private static void AreFontEqual(Font expected, Font actual)
+        [WinFormsFact]
+        public void Application_ScaleDefaultFont_Disposes_ScaleDefaultFont_IfExists()
         {
-            Assert.Equal(expected.Name, actual.Name);
-            Assert.Equal(expected.SizeInPoints, actual.SizeInPoints);
-            Assert.Equal(expected.GdiCharSet, actual.GdiCharSet);
-            Assert.Equal(expected.Style, actual.Style);
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+            Font font = new Font(new FontFamily("Arial"), 12f);
+            Font scaled = new Font(new FontFamily("Arial"), 16f);
+            try
+            {
+                applicationTestAccessor.s_defaultFont = font;
+                applicationTestAccessor.s_defaultFontScaled = scaled;
+
+                AreFontEqual(scaled, Application.DefaultFont);
+
+                Application.ScaleDefaultFont(DpiHelper.MinTextScaleFactorValue);
+
+                // The font is not scaled at 100% (factor=1.0)
+                Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                font.Dispose();
+                scaled.Dispose();
+            }
+        }
+
+        [WinFormsFact]
+        public void Application_ScaleDefaultFont_Should_Not_Rescale_IfTextScaleFactorLessThan1()
+        {
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+            Font font = new Font(new FontFamily("Arial"), 12f);
+            try
+            {
+                applicationTestAccessor.s_defaultFont = font;
+
+                Application.ScaleDefaultFont(0f);
+
+                // The font is not scaled at 100% (factor=1.0)
+                Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                font.Dispose();
+            }
+        }
+
+        [WinFormsFact]
+        public void Application_ScaleDefaultFont_Should_Rescale_IfTextScaleFactorGreaterThan1()
+        {
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+            Font font = new Font(new FontFamily("Arial"), 12f);
+            try
+            {
+                applicationTestAccessor.s_defaultFont = font;
+
+                Application.ScaleDefaultFont(2.0f);
+
+                Assert.NotNull(applicationTestAccessor.s_defaultFontScaled);
+                Assert.Equal(12f * 2, applicationTestAccessor.s_defaultFontScaled.SizeInPoints);
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled.Dispose();
+                applicationTestAccessor.s_defaultFontScaled = null;
+                font.Dispose();
+            }
+        }
+
+        [WinFormsFact]
+        public void Application_ScaleDefaultFont_Should_Cap_Rescale_ToTextScaleFactor225()
+        {
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+            Font font = new Font(new FontFamily("Arial"), 12f);
+            try
+            {
+                applicationTestAccessor.s_defaultFont = font;
+
+                Application.ScaleDefaultFont(4.0f);
+
+                Assert.NotNull(applicationTestAccessor.s_defaultFontScaled);
+                Assert.Equal(12f * DpiHelper.MaxTextScaleFactorValue, applicationTestAccessor.s_defaultFontScaled.SizeInPoints);
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled.Dispose();
+                applicationTestAccessor.s_defaultFontScaled = null;
+                font.Dispose();
+            }
+        }
+
+        [WinFormsFact]
+        public void Application_ScaleDefaultFont_Should_Rescale_FontCorrectly()
+        {
+            var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
+            Assert.Null(applicationTestAccessor.s_defaultFont);
+            Assert.Null(applicationTestAccessor.s_defaultFontScaled);
+
+            Font font = new Font(new FontFamily("Arial"), 12f, FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Pixel);
+            Font scaled = new Font(new FontFamily("Arial"), 18f, FontStyle.Italic | FontStyle.Underline, GraphicsUnit.Pixel);
+            try
+            {
+                applicationTestAccessor.s_defaultFont = font;
+
+                Application.ScaleDefaultFont(1.5f);
+
+                Assert.NotNull(applicationTestAccessor.s_defaultFontScaled);
+                AreFontEqual(scaled, applicationTestAccessor.s_defaultFontScaled);
+            }
+            finally
+            {
+                applicationTestAccessor.s_defaultFont = null;
+                applicationTestAccessor.s_defaultFontScaled = null;
+                font.Dispose();
+                scaled.Dispose();
+            }
         }
 
         [WinFormsFact]
@@ -234,7 +358,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Application_SetDefaultFont_MustCloseSystemFont()
+        public void Application_SetDefaultFont_MustCloneSystemFont()
         {
             var applicationTestAccessor = typeof(Application).TestAccessor().Dynamic;
             Assert.Null(applicationTestAccessor.s_defaultFont);
@@ -272,6 +396,14 @@ namespace System.Windows.Forms.Tests
         public void Application_SetHighDpiMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(HighDpiMode value)
         {
             Assert.Throws<InvalidEnumArgumentException>("highDpiMode", () => Application.SetHighDpiMode(value));
+        }
+
+        private static void AreFontEqual(Font expected, Font actual)
+        {
+            Assert.Equal(expected.Name, actual.Name);
+            Assert.Equal(expected.SizeInPoints, actual.SizeInPoints);
+            Assert.Equal(expected.GdiCharSet, actual.GdiCharSet);
+            Assert.Equal(expected.Style, actual.Style);
         }
 
         private class CustomLCIDCultureInfo : CultureInfo

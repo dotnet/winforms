@@ -1222,14 +1222,13 @@ namespace System.Windows.Forms
         /// <summary>
         /// Scale the default font (if it is set) as per the Settings display text scale settings.
         /// </summary>
-        internal static void ScaleDefaultFont()
+        /// <param name="textScaleFactor">The scaling factor in the range [1.0, 2.25].</param>
+        internal static void ScaleDefaultFont(float textScaleFactor)
         {
             if (s_defaultFont is null || !OsVersion.IsWindows10_1507OrGreater)
             {
                 return;
             }
-
-            float textScaleValue = DpiHelper.GetTextScaleFactor();
 
             if (s_defaultFontScaled is not null)
             {
@@ -1238,9 +1237,10 @@ namespace System.Windows.Forms
             }
 
             // Restore the text scale if it isn't the default value in the valid text scale factor value
-            if (textScaleValue > 1.0f)
+            textScaleFactor = Math.Min(DpiHelper.MaxTextScaleFactorValue, textScaleFactor);
+            if (textScaleFactor > DpiHelper.MinTextScaleFactorValue)
             {
-                s_defaultFontScaled = new Font(s_defaultFont.FontFamily, s_defaultFont.Size * textScaleValue);
+                s_defaultFontScaled = s_defaultFont.WithSize(s_defaultFont.Size * textScaleFactor);
             }
         }
 
@@ -1303,7 +1303,7 @@ namespace System.Windows.Forms
             else
             {
                 s_defaultFont = font;
-                ScaleDefaultFont();
+                ScaleDefaultFont(DpiHelper.GetTextScaleFactor());
             }
         }
 

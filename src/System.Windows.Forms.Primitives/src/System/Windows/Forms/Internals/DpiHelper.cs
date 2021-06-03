@@ -16,6 +16,14 @@ namespace System.Windows.Forms
     /// </summary>
     internal static partial class DpiHelper
     {
+        // The default(100) and max(225) text scale factor is value what Settings display text scale
+        // applies and also clamps the text scale factor value between 100 and 225 value.
+        // See https://docs.microsoft.com/windows/uwp/design/input/text-scaling.
+        internal const short MinTextScaleValue = 100;
+        internal const short MaxTextScaleValue = 225;
+        internal const float MinTextScaleFactorValue = 1.00f;
+        internal const float MaxTextScaleFactorValue = 2.25f;
+
         internal const double LogicalDpi = 96.0;
         private static InterpolationMode s_interpolationMode;
 
@@ -180,11 +188,6 @@ namespace System.Windows.Forms
         /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
         public static float GetTextScaleFactor()
         {
-            // The default(100) and max(225) text scale factor is value what Settings display text scale
-            // applies and also clamps the text scale factor value between 100 and 225 value.
-            const short MinTextScaleValue = 100;
-            const short MaxTextScaleValue = 225;
-
             short textScaleValue = MinTextScaleValue;
             try
             {
@@ -208,7 +211,7 @@ namespace System.Windows.Forms
                 return (float)textScaleValue / MinTextScaleValue;
             }
 
-            return 1.0f;
+            return MinTextScaleFactorValue;
         }
 
         /// <summary>

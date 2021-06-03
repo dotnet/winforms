@@ -755,12 +755,11 @@ namespace System.Windows.Forms
                             continue;
 
                         // Checking if font was inherited from parent.
-                        Font local = childItem.Font;
-                        if (!local.Equals(childItem.OwnerItem?.Font))
+                        Font currentFont = childItem.Font;
+                        if (!currentFont.Equals(childItem.OwnerItem?.Font))
                         {
-                            var factor = (float)newDpi / oldDpi;
-                            childItem.Font = new Font(local.FontFamily, local.Size * factor, local.Style,
-                                                    local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+                            float factor = (float)newDpi / oldDpi;
+                            childItem.Font = currentFont.WithSize(currentFont.Size * factor);
                         }
 
                         childItem.DeviceDpi = newDpi;
