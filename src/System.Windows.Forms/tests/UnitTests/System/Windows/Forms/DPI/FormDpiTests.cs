@@ -25,7 +25,7 @@ namespace System.Windows.Forms.Tests.DPI
         }
 
         [WinFormsTheory]
-        [InlineData(2*DpiHelper.LogicalDpi)]
+        [InlineData(2 * DpiHelper.LogicalDpi)]
         [InlineData(3.5 * DpiHelper.LogicalDpi)]
         public void Form_DpiChanged_ClientRectangle(int newDpi)
         {
@@ -68,4 +68,4 @@ namespace System.Windows.Forms.Tests.DPI
             }
         }
     }
-
+}
