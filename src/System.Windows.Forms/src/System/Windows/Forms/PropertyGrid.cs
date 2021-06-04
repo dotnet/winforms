@@ -164,7 +164,7 @@ namespace System.Windows.Forms
             // Scaling PropertyGrid but its children will be excluded from AutoScale.
             AutoScaleMode = AutoScaleMode.Inherit;
 
-            // children of PropertyGrid are speacial and explicitly resized when propertygrid is resized (OnLayoutInternal())
+            // Children of PropertyGrid are special and explicitly resized when propertygrid is resized (OnLayoutInternal())
             // and adjust its children bounds with respect to propertygrid bounds. Autoscale mode
             // should not scale them again.
             _doNotScaleChildren = true;

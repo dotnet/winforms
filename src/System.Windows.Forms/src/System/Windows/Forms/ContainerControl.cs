@@ -81,7 +81,7 @@ namespace System.Windows.Forms
 
         // Child container controls that inherit autoscale mode ( and does not store their own) would need 'AutoscaleFactor' from
         // parent to scale them during DPI changed events. We can not dynamically query for 'public
-        // property 'AutoscaleFactor' as it computes with already updated Font and Dpi of the parent.
+        // property 'AutoScaleFactor' as it computes with already updated Font and Dpi of the parent.
         internal SizeF _currentAutoScaleFactor = new(1F, 1F);
 
         /// <summary>
@@ -862,8 +862,8 @@ namespace System.Windows.Forms
         {
             // Font may be updated for container controls that are set
             // to scale in DPI mode (ex: DPI changed event). This may require
-            // scaling/relayout of the form. 'AutoscaleFactor' will take
-            // 'AutoscaleMode' into account while scalign the controls.
+            // scaling/relayout of the form. 'AutoScaleFactor' will take
+            // 'AutoScaleMode' into account while scaling the controls.
             if (AutoScaleMode != AutoScaleMode.None)
             {
                 _currentAutoScaleDimensions = SizeF.Empty;
@@ -1361,9 +1361,9 @@ namespace System.Windows.Forms
 
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-            // checking if font is inherited from parent and is not being scaled by Parent.
+            // Checking if font is inherited from parent and is not being scaled by Parent.
             // need to scale explicitly with new scaled font. (ex scenario: Winforms designer in VS)
-            if (Properties.GetObject(s_fontProperty) is not null)
+            if (TryGetExplicitlySetFont(out _))
             {
                 return;
             }
@@ -1391,34 +1391,34 @@ namespace System.Windows.Forms
                 // Scrollbars (horizantal/vertical)
 
                 User32.SetWindowPos(
-                new HandleRef(this, HandleInternal),
-                User32.HWND_TOP,
-                suggestedRectangle.X,
-                suggestedRectangle.Y,
-                suggestedRectangle.Width,
-                suggestedRectangle.Height,
-                User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
+                    new HandleRef(this, HandleInternal),
+                    User32.HWND_TOP,
+                    suggestedRectangle.X,
+                    suggestedRectangle.Y,
+                    suggestedRectangle.Width,
+                    suggestedRectangle.Height,
+                    User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
 
                 // Bounds are already scaled for the top-level window. We would need to skip scaling of
                 // this control further by the 'OnFontChanged' event.
                 _scaledByDpiChangedEvent = true;
 
-                // factor is used only to scale Font. After that, AutoscaleFactor kicks in to scale controls.
+                // Factor is used only to scale Font. After that, AutoscaleFactor kicks in to scale controls.
                 var factor = ((float)deviceDpiNew) / deviceDpiOld;
-                if (Properties.GetObject(s_fontProperty) is not null)
+                if (TryGetExplicitlySetFont(out Font localFont))
                 {
-                    Font = new Font(Font.FontFamily,
-                                    Font.Size * factor,
-                                    Font.Style,
-                                    Font.Unit,
-                                    Font.GdiCharSet,
-                                    Font.GdiVerticalFont);
+                    Font = new Font(localFont.FontFamily,
+                                    localFont.Size * factor,
+                                    localFont.Style,
+                                    localFont.Unit,
+                                    localFont.GdiCharSet,
+                                    localFont.GdiVerticalFont);
                 }
                 else
                 {
-                    // scaling font and caching it locally. Propertybag is not updated.
+                    // Scaling font and caching it locally. Propertybag is not updated.
                     // If Font was not explicitly assigned, it should remain that way.
-                    // need to make sure this holds true at the time of designer serialization.
+                    // Need to make sure this holds true at the time of designer serialization.
                     ScaleFont(factor);
 
                     using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))

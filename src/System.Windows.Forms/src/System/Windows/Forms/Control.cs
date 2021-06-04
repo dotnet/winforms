@@ -335,8 +335,9 @@ namespace System.Windows.Forms
         // Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
         // Dpi changed events and explicit Font change/assignment. Caching Font values for each Dpi is complex.
         // ToDO: Look into caching Dpi and control bounds for each Dpi to improve perf.
+        // https://github.com/dotnet/winforms/issues/5047
         private Font _scaledControlFont;
-        private FontHandleWrapper _sclaedFontWrapper;
+        private FontHandleWrapper _scaledFontWrapper;
 
         // ContainerControls like 'PropertyGrid' scale their children when they resize.
         // no explicit scaling of children required in such cases. They have specific logic.
@@ -1933,8 +1934,8 @@ namespace System.Windows.Forms
         // Dispose scaled font handle.
         private void DisposeScaledFontHandle()
         {
-            _sclaedFontWrapper?.Dispose();
-            _sclaedFontWrapper = null;
+            _scaledFontWrapper?.Dispose();
+            _scaledFontWrapper = null;
         }
 
         /// <summary>
@@ -2103,8 +2104,7 @@ namespace System.Windows.Forms
                     return _scaledControlFont;
                 }
 
-                var font = (Font)Properties.GetObject(s_fontProperty);
-                if (font is not null)
+                if (TryGetExplicitlySetFont(out Font font))
                 {
                     return font;
                 }
@@ -2200,17 +2200,15 @@ namespace System.Windows.Forms
                 // if application is in PermonitorV2 mode and font is scaled when application moved between monitor.
                 if (_scaledControlFont is not null)
                 {
-                    if (_sclaedFontWrapper is null)
+                    if (_scaledFontWrapper is null)
                     {
-                        _sclaedFontWrapper = new FontHandleWrapper(_scaledControlFont);
+                        _scaledFontWrapper = new FontHandleWrapper(_scaledControlFont);
                     }
 
-                    return _sclaedFontWrapper.Handle;
+                    return _scaledFontWrapper.Handle;
                 }
 
-                var font = (Font)Properties.GetObject(s_fontProperty);
-
-                if (font is not null)
+                if (TryGetExplicitlySetFont(out Font font))
                 {
                     FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     if (fontHandle is null)
@@ -2271,8 +2269,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Font font = (Font)Properties.GetObject(s_fontProperty);
-                    if (font is not null)
+                    if (TryGetExplicitlySetFont(out Font font))
                     {
                         fontHeight = font.Height;
                         Properties.SetInteger(s_fontHeightProperty, fontHeight);
@@ -6597,8 +6594,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsFontSet()
         {
-            Font font = (Font)Properties.GetObject(s_fontProperty);
-            if (font is not null)
+            if (Properties.GetObject(s_fontProperty) is not null)
             {
                 return true;
             }
@@ -7436,7 +7432,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_fontProperty) is null)
+            if (!IsFontSet())
             {
                 OnFontChanged(e);
             }
@@ -10147,7 +10143,7 @@ namespace System.Windows.Forms
             {
                 ScaleControl(includedFactor, excludedFactor, requestingControl);
 
-                // ceratin controls like 'PropertyGrid' does special scalling. Differing scaling to their own methods.
+                // Certain controls like 'PropertyGrid' does special scalling. Differing scaling to their own methods.
                 if (!_doNotScaleChildren)
                 {
                     ScaleChildControls(includedFactor, excludedFactor, requestingControl, scalingByFontChanged);
@@ -10219,7 +10215,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateWindowFontIfNeeded()
         {
-            if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && (Properties.GetObject(s_fontProperty) is null))
+            if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && !IsFontSet())
             {
                 SetWindowFont();
             }
@@ -10457,9 +10453,10 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // scaled font is only in cache and property bag is not updated with these values to avoid serializing new scaled values.
+            // Scaled font is only in cache and property bag is not updated with these values to avoid serializing new scaled values.
             DisposeScaledFontHandle();
-            _scaledControlFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+            var currentFont = Font;
+            _scaledControlFont = new Font(currentFont.FontFamily, currentFont.Size * factor, currentFont.Style, currentFont.Unit, currentFont.GdiCharSet, currentFont.GdiVerticalFont);
 
             if (Properties.ContainsInteger(s_fontHeightProperty))
             {
@@ -11346,6 +11343,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Retreive Font from propertybag. This is the FOnt that was explicitly set on control by the application.
+        /// </summary>
+        internal bool TryGetExplicitlySetFont(out Font localFont)
+        {
+            localFont = (Font)Properties.GetObject(s_fontProperty);
+
+            return localFont is not null;
+        }
+
+        /// <summary>
         ///  Stops listening for the mouse leave event.
         /// </summary>
         private void UnhookMouseEvent()
@@ -12192,13 +12199,13 @@ namespace System.Windows.Forms
                 if (_oldDeviceDpi != _deviceDpi)
                 {
                     var factor = (float)_deviceDpi / _oldDeviceDpi;
-                    var scaledFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style, Font.Unit, Font.GdiCharSet, Font.GdiVerticalFont);
+                    var currentFont = Font;
+                    var scaledFont = new Font(currentFont.FontFamily, currentFont.Size * factor, currentFont.Style, currentFont.Unit, currentFont.GdiCharSet, currentFont.GdiVerticalFont);
 
                     // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
                     // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
                     // 'OnFontChanged' event explicitly. ex: winforms designer in VS.
-                    var local = (Font)Properties.GetObject(s_fontProperty);
-                    if (this is not ContainerControl || local is not null || !IsScaledByParent(this))
+                    if (TryGetExplicitlySetFont(out Font local) || this is not ContainerControl || !IsScaledByParent(this))
                     {
                         if (local is not null)
                         {
