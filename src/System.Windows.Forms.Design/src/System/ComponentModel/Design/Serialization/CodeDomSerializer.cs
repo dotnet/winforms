@@ -55,7 +55,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Deserilizes the given CodeDom object into a real object.  This
+        ///  Deserializes the given CodeDom object into a real object.  This
         ///  will use the serialization manager to create objects and resolve
         ///  data types.  The root of the object graph is returned.
         /// </summary>

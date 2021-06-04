@@ -316,10 +316,8 @@ namespace System.Windows.Forms
                         };
                     }
 
-                    if (_owningListView.View == View.Details)
+                    if (hitTestInfo.Item.AccessibilityObject is ListViewItem.ListViewItemDetailsAccessibleObject itemAccessibleObject)
                     {
-                        var itemAccessibleObject = (ListViewItem.ListViewItemAccessibleObject)hitTestInfo.Item.AccessibilityObject;
-
                         for (int i = 1; i < _owningListView.Columns.Count; i++)
                         {
                             if (itemAccessibleObject.GetSubItemBounds(i).Contains(point))

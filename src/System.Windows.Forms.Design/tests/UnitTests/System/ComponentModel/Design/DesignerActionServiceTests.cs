@@ -641,7 +641,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void GetComponentServiceActions_NoSuchComponenEmpty_ReturnsEmpty()
+        public void GetComponentServiceActions_NoSuchComponentEmpty_ReturnsEmpty()
         {
             var service = new SubDesignerActionService(null);
             var actionListBuffer = new DesignerActionListCollection();

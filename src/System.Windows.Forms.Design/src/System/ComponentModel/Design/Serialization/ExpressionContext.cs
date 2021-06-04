@@ -54,7 +54,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  hand, a property such as Text or Visible does not have a preset
         ///  value and therefore the PresetValue property will return null.
         ///  Serializers can use this information to guide serialization.
-        ///  For example, take the following two snippts of code:
+        ///  For example, take the following two snippets of code:
         ///  Padding p = new Padding();
         ///  p.Left = 5;
         ///  button1.Padding = p;

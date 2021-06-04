@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Read-only property describing the SelecitonRules for these Glyphs.
+        ///  Read-only property describing the SelectionRules for these Glyphs.
         /// </summary>
         public SelectionRules SelectionRules
         {

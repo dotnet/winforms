@@ -341,25 +341,6 @@ namespace System.Windows.Forms
         public static class EnumValidator
         {
             /// <summary>
-            ///  Valid values are 0x001,0x002,0x004, 0x010,0x020,0x040, 0x100, 0x200,0x400
-            ///  Method for verifying
-            ///  Verify that the number passed in has only one bit on
-            ///  Verify that the bit that is on is a valid bit by bitwise anding it to a mask.
-            /// </summary>
-            public static bool IsValidContentAlignment(ContentAlignment contentAlign)
-            {
-                if (BitOperations.PopCount((uint)contentAlign) != 1)
-                {
-                    return false;
-                }
-
-                // to calculate:
-                // foreach (int val in Enum.GetValues(typeof(ContentAlignment))) { mask |= val; }
-                int contentAlignmentMask = 0x777;
-                return ((contentAlignmentMask & (int)contentAlign) != 0);
-            }
-
-            /// <summary>
             ///  shifts off the number of bits specified by numBitsToShift
             ///  -  makes sure the bits we've shifted off are just zeros
             ///  -  then compares if the resulting value is between minValAfterShift and maxValAfterShift

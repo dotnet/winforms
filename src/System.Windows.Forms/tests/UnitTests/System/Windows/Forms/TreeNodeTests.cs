@@ -2309,7 +2309,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TreeView_NextVisibleNode_GetWithParentWithTreeViewWithHanlde_ReturnsExpected()
+        public void TreeView_NextVisibleNode_GetWithParentWithTreeViewWithHandle_ReturnsExpected()
         {
             using var control = new TreeView();
             var parent = new TreeNode();
@@ -2702,7 +2702,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TreeView_PrevVisibleNode_GetWithParentWithTreeViewWithHanlde_ReturnsExpected()
+        public void TreeView_PrevVisibleNode_GetWithParentWithTreeViewWithHandle_ReturnsExpected()
         {
             using var control = new TreeView();
             var parent = new TreeNode();

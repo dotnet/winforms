@@ -1407,12 +1407,7 @@ namespace System.Windows.Forms
                 var factor = ((float)deviceDpiNew) / deviceDpiOld;
                 if (TryGetExplicitlySetFont(out Font localFont))
                 {
-                    Font = new Font(localFont.FontFamily,
-                                    localFont.Size * factor,
-                                    localFont.Style,
-                                    localFont.Unit,
-                                    localFont.GdiCharSet,
-                                    localFont.GdiVerticalFont);
+                    Font = localFont.WithSize(factor);
                 }
                 else
                 {

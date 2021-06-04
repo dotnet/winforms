@@ -118,7 +118,7 @@ Supported controls and scenarios, and things you should be testing
     Also, with those commands you can change the z-order of the controls by
     using *Bring to Font* and *Send to back*.
 
--   **Anchroing and Docking:** Those controls which are supporting this, can be
+-   **Anchoring and Docking:** Those controls which are supporting this, can be
     anchored and docked. Keep in mind, though, that the repositioning of
     anchored controls beyond the borders of the Form can be problematic in this
     Preview.
@@ -144,7 +144,7 @@ track, and to note that a lot of things are still in development.
     correlating section below. The rule of thumb is: The controls you see in the
     toolbox are supported. Said that, there might be a few properties of those
     controls, which rely on other features, that have not implemented yet – like
-    the *Image* property of the PicturteBox control, which needs the Resources
+    the *Image* property of the PictureBox control, which needs the Resources
     feature to be working.
 
 -   **Resource Files:** Resource files are not yet supported, so you cannot use

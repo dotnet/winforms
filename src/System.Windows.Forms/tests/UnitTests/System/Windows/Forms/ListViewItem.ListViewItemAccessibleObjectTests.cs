@@ -250,7 +250,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_FragmentNavigate_Sibling_TestData))]
-        public void ListViewItemAccessibleObject_FragmentNavigate_PreviousSibling_ReturnExpected_IfHanleIsCreated(View view, bool virtualMode, bool showGroups)
+        public void ListViewItemAccessibleObject_FragmentNavigate_PreviousSibling_ReturnExpected_IfHandleIsCreated(View view, bool virtualMode, bool showGroups)
         {
             using ListView listView = GetListViewWithData(view, true, virtualMode, showGroups);
 
@@ -654,7 +654,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_State_TestData))]
-        public void ListViewItemAccessibleObject_State_ReturnExpected(View view, bool selected, AccessibleStates expectedAcessibleStates, bool createHandle)
+        public void ListViewItemAccessibleObject_State_ReturnExpected(View view, bool selected, AccessibleStates expectedAccessibleStates, bool createHandle)
         {
             using ListView listView = new ListView
             {
@@ -669,9 +669,9 @@ namespace System.Windows.Forms.Tests
             ListViewItem listItem1 = new ListViewItem(new string[] { "Test A", "Alpha" }, -1);
             listView.Items.Add(listItem1);
             listView.Items[0].Selected = selected;
-            ListViewItemAccessibleObject accessibleObject = (ListViewItemAccessibleObject)listView.Items[0].AccessibilityObject;
+            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
 
-            Assert.Equal(expectedAcessibleStates, accessibleObject.State);
+            Assert.Equal(expectedAccessibleStates, accessibleObject.State);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
@@ -701,7 +701,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(ListViewItemAccessibleObject_State_VirtualMode_TestData))]
-        public void ListViewItemAccessibleObject_State_Virtual_ModeReturnExpected(View view, bool selected, AccessibleStates expectedAcessibleStates, bool createHandle)
+        public void ListViewItemAccessibleObject_State_Virtual_ModeReturnExpected(View view, bool selected, AccessibleStates expectedAccessibleStates, bool createHandle)
         {
             using ListView listView = new ListView
             {
@@ -733,9 +733,9 @@ namespace System.Windows.Forms.Tests
                 listView.Items[0].Selected = true;
             }
 
-            ListViewItemAccessibleObject accessibleObject = (ListViewItemAccessibleObject)listView.Items[0].AccessibilityObject;
+            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
 
-            Assert.Equal(expectedAcessibleStates, accessibleObject.State);
+            Assert.Equal(expectedAccessibleStates, accessibleObject.State);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
@@ -945,20 +945,20 @@ namespace System.Windows.Forms.Tests
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
             }
 
-            AccessibleObject listViewItemaAccessibleObject = listViewItem.AccessibilityObject;
+            AccessibleObject listViewItemAccessibleObject = listViewItem.AccessibilityObject;
 
-            Assert.Equal(ToggleState.Off, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
             Assert.False(listViewItem.Checked);
 
-            listViewItemaAccessibleObject.Toggle();
+            listViewItemAccessibleObject.Toggle();
 
-            Assert.Equal(ToggleState.On, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.On, listViewItemAccessibleObject.ToggleState);
             Assert.True(listViewItem.Checked);
 
             // toggle again
-            listViewItemaAccessibleObject.Toggle();
+            listViewItemAccessibleObject.Toggle();
 
-            Assert.Equal(ToggleState.Off, listViewItemaAccessibleObject.ToggleState);
+            Assert.Equal(ToggleState.Off, listViewItemAccessibleObject.ToggleState);
             Assert.False(listViewItem.Checked);
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
@@ -968,7 +968,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_InvisibleItems(View view)
         {
             using ListView listView = GetListViewItemWithInvisibleItems(view);
 
@@ -986,7 +986,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_InvisibleItems_AfterAddingItems(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_ReturnsExpected_InvisibleItems_AfterRemovingItems(View view)
         {
             using ListView listView = GetListViewItemWithInvisibleItems(view);
 
@@ -1062,8 +1062,8 @@ namespace System.Windows.Forms.Tests
         public void ListViewItemAccessibleObject_GetChild_ReturnsExpected(View view, bool createControl, bool virtualMode, bool showGroups)
         {
             using ListView listView = GetListViewWithSubItemData(view, createControl, virtualMode, showGroups, columnCount: 3, subItemCount: 1);
-            ListViewItemAccessibleObject accessibleObject1 = (ListViewItemAccessibleObject)listView.Items[0].AccessibilityObject;
-            ListViewItemAccessibleObject accessibleObject2 = (ListViewItemAccessibleObject)listView.Items[1].AccessibilityObject;
+            AccessibleObject accessibleObject1 = listView.Items[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = listView.Items[1].AccessibilityObject;
 
             Assert.Null(accessibleObject1.GetChild(-1));
             Assert.Null(accessibleObject2.GetChild(-1));
@@ -1071,11 +1071,15 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(listView.Items[0].SubItems[0].AccessibilityObject, accessibleObject1.GetChild(0));
                 Assert.Equal(listView.Items[0].SubItems[1].AccessibilityObject, accessibleObject1.GetChild(1));
-                Assert.Equal(accessibleObject1.GetDetailsSubItemOrFake(2), accessibleObject1.GetChild(2));
+                Assert.Equal(
+                    ((ListViewItem.ListViewItemDetailsAccessibleObject)accessibleObject1).GetDetailsSubItemOrFake(2),
+                    accessibleObject1.GetChild(2));
 
                 Assert.Equal(listView.Items[1].SubItems[0].AccessibilityObject, accessibleObject2.GetChild(0));
                 Assert.Equal(listView.Items[1].SubItems[1].AccessibilityObject, accessibleObject2.GetChild(1));
-                Assert.Equal(accessibleObject2.GetDetailsSubItemOrFake(2), accessibleObject2.GetChild(2));
+                Assert.Equal(
+                    ((ListViewItem.ListViewItemDetailsAccessibleObject)accessibleObject2).GetDetailsSubItemOrFake(2),
+                    accessibleObject2.GetChild(2));
             }
             else
             {
@@ -1098,8 +1102,8 @@ namespace System.Windows.Forms.Tests
         public void ListViewItemAccessibleObject_GetChild_ReturnsExpected_ForManySubItems(View view, bool createControl, bool virtualMode, bool showGroups)
         {
             using ListView listView = GetListViewWithSubItemData(view, createControl, virtualMode, showGroups, columnCount: 3, subItemCount: 10);
-            ListViewItemAccessibleObject accessibleObject1 = (ListViewItemAccessibleObject)listView.Items[0].AccessibilityObject;
-            ListViewItemAccessibleObject accessibleObject2 = (ListViewItemAccessibleObject)listView.Items[1].AccessibilityObject;
+            AccessibleObject accessibleObject1 = listView.Items[0].AccessibilityObject;
+            AccessibleObject accessibleObject2 = listView.Items[1].AccessibilityObject;
 
             Assert.Null(accessibleObject1.GetChild(-1));
             Assert.Null(accessibleObject2.GetChild(-1));
@@ -1272,7 +1276,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_Parent_ReturnsExpected_AfterAddingGroup(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_Parent_ReturnsExpected_AfterAddingGroup(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1329,7 +1333,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_Parent_ReturnsExpected_AfterRemovingGroup(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_Parent_ReturnsExpected_AfterRemovingGroup(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1387,7 +1391,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.LargeIcon)]
         [InlineData(View.SmallIcon)]
         [InlineData(View.Tile)]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_Parent_ReturnsExpected_AfterUpdatingGroup(View view)
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_Parent_ReturnsExpected_AfterUpdatingGroup(View view)
         {
             if (!Application.UseVisualStyles)
             {
@@ -1441,7 +1445,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListViewItemAccessibleObject_FragmentNaviage_Sibling_Parent_ReturnsExpected_ListView()
+        public void ListViewItemAccessibleObject_FragmentNavigate_Sibling_Parent_ReturnsExpected_ListView()
         {
             using ListView listView = new()
             {
@@ -1557,7 +1561,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.Tile)]
         public void ListViewItemAccessibleObject_GetChildIndex_ReturnsMinusOne_IfChildIsNull(View view)
         {
-            using ListView listView = new() { View = view};
+            using ListView listView = new() { View = view };
             listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1", "SubItem 2" }));
 
             Assert.Equal(-1, listView.Items[0].AccessibilityObject.GetChildIndex(null));
@@ -1591,8 +1595,8 @@ namespace System.Windows.Forms.Tests
             listView.Columns.Add(new ColumnHeader());
             listView.Columns.Add(new ColumnHeader());
             listView.Columns.Add(new ColumnHeader());
-            listView.Items.Add(new ListViewItem(new string[] { "Item 1"}));
-            ListViewItemAccessibleObject accessibleObject = (ListViewItemAccessibleObject)listView.Items[0].AccessibilityObject;
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1" }));
+            ListViewItemDetailsAccessibleObject accessibleObject = (ListViewItemDetailsAccessibleObject)listView.Items[0].AccessibilityObject;
 
             Assert.Equal(0, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
             Assert.Equal(1, accessibleObject.GetChildIndex(accessibleObject.GetDetailsSubItemOrFake(1)));
@@ -1617,6 +1621,174 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(-1, listView.Items[0].AccessibilityObject.GetChildIndex(listView.AccessibilityObject));
             Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details)]
+        [InlineData(View.LargeIcon)]
+        [InlineData(View.List)]
+        [InlineData(View.SmallIcon)]
+        [InlineData(View.Tile)]
+        public void ListViewItemAccessibleObject_ReturnExpectedType(View view)
+        {
+            using ListView listView = new() { View = view };
+            listView.Items.Add(new ListViewItem("Test"));
+
+            switch (view)
+            {
+                case View.Details:
+                    Assert.IsType<ListViewItemDetailsAccessibleObject>(listView.Items[0].AccessibilityObject);
+                    break;
+                case View.LargeIcon:
+                case View.SmallIcon:
+                    Assert.IsType<ListViewItemBaseAccessibleObject>(listView.Items[0].AccessibilityObject);
+                    break;
+                case View.List:
+                    Assert.IsType<ListViewItemListAccessibleObject>(listView.Items[0].AccessibilityObject);
+                    break;
+                case View.Tile:
+                    Assert.IsType<ListViewItemTileAccessibleObject>(listView.Items[0].AccessibilityObject);
+                    break;
+            }
+        }
+
+        public static IEnumerable<object[]> ListViewItemAccessibleObject_ReturnExpectedType_TestData()
+        {
+            foreach (View oldView in Enum.GetValues(typeof(View)))
+            {
+                foreach (View newView in Enum.GetValues(typeof(View)))
+                {
+                    if(oldView != newView)
+                    {
+                        yield return new object[] { oldView, newView };
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewItemAccessibleObject_ReturnExpectedType_TestData))]
+        public void ListViewItemAccessibleObject_ReturnExpectedType_AfterChangingView(View oldView, View newView)
+        {
+            using ListView listView = new() { View = oldView };
+            listView.Items.Add(new ListViewItem("Test"));
+            CheckAccessibleObject();
+
+            listView.View = newView;
+
+            CheckAccessibleObject();
+
+            void CheckAccessibleObject()
+            {
+                switch (listView.View)
+                {
+                    case View.Details:
+                        Assert.IsType<ListViewItemDetailsAccessibleObject>(listView.Items[0].AccessibilityObject);
+                        break;
+                    case View.LargeIcon:
+                    case View.SmallIcon:
+                        Assert.IsType<ListViewItemBaseAccessibleObject>(listView.Items[0].AccessibilityObject);
+                        break;
+                    case View.List:
+                        Assert.IsType<ListViewItemListAccessibleObject>(listView.Items[0].AccessibilityObject);
+                        break;
+                    case View.Tile:
+                        Assert.IsType<ListViewItemTileAccessibleObject>(listView.Items[0].AccessibilityObject);
+                        break;
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details, View.LargeIcon)]
+        [InlineData(View.Details, View.List)]
+        [InlineData(View.Details, View.SmallIcon)]
+        [InlineData(View.Details, View.Tile)]
+        [InlineData(View.LargeIcon, View.Details)]
+        [InlineData(View.LargeIcon, View.Tile)]
+        [InlineData(View.List, View.Details)]
+        [InlineData(View.List, View.Tile)]
+        [InlineData(View.SmallIcon, View.Details)]
+        [InlineData(View.SmallIcon, View.Tile)]
+        [InlineData(View.Tile, View.Details)]
+        [InlineData(View.Tile, View.LargeIcon)]
+        [InlineData(View.Tile, View.List)]
+        [InlineData(View.Tile, View.SmallIcon)]
+        public void ListViewItemAccessibleObject_GetChild_ReturnException_AfterChangingView(View oldView, View newView)
+        {
+            using ListView listView = new() { View = oldView };
+            listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
+            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+            Assert.Null(accessibleObject.GetChild(0));
+
+            listView.View = newView;
+
+            Assert.Throws<InvalidOperationException>(() => accessibleObject.GetChild(0));
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.LargeIcon, View.List)]
+        [InlineData(View.LargeIcon, View.SmallIcon)]
+        [InlineData(View.List, View.LargeIcon)]
+        [InlineData(View.List, View.SmallIcon)]
+        [InlineData(View.SmallIcon, View.LargeIcon)]
+        [InlineData(View.SmallIcon, View.List)]
+        public void ListViewItemAccessibleObject_GetChild_DoesNotReturnException_AfterChangingView(View oldView, View newView)
+        {
+            using ListView listView = new() { View = oldView };
+            listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
+            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+            Assert.Null(accessibleObject.GetChild(0));
+
+            listView.View = newView;
+
+            Assert.Null(accessibleObject.GetChild(0));
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.Details, View.LargeIcon)]
+        [InlineData(View.Details, View.List)]
+        [InlineData(View.Details, View.SmallIcon)]
+        [InlineData(View.Details, View.Tile)]
+        [InlineData(View.LargeIcon, View.Details)]
+        [InlineData(View.LargeIcon, View.Tile)]
+        [InlineData(View.List, View.Details)]
+        [InlineData(View.List, View.Tile)]
+        [InlineData(View.SmallIcon, View.Details)]
+        [InlineData(View.SmallIcon, View.Tile)]
+        [InlineData(View.Tile, View.Details)]
+        [InlineData(View.Tile, View.LargeIcon)]
+        [InlineData(View.Tile, View.List)]
+        [InlineData(View.Tile, View.SmallIcon)]
+        public void ListViewItemAccessibleObject_GetChildCount_ReturnException_AfterChangingView(View oldView, View newView)
+        {
+            using ListView listView = new() { View = oldView };
+            listView.Items.Add(new ListViewItem(new string[] { "1" }));
+            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+            Assert.NotEqual(2, accessibleObject.GetChildCount());
+
+            listView.View = newView;
+
+            Assert.Throws<InvalidOperationException>(() => accessibleObject.GetChildCount());
+        }
+
+        [WinFormsTheory]
+        [InlineData(View.LargeIcon, View.List)]
+        [InlineData(View.LargeIcon, View.SmallIcon)]
+        [InlineData(View.List, View.LargeIcon)]
+        [InlineData(View.List, View.SmallIcon)]
+        [InlineData(View.SmallIcon, View.LargeIcon)]
+        [InlineData(View.SmallIcon, View.List)]
+        public void ListViewItemAccessibleObject_GetChildCount_DoesNotReturnException_AfterChangingView(View oldView, View newView)
+        {
+            using ListView listView = new() { View = oldView };
+            listView.Items.Add(new ListViewItem(new string[] { "1", "2" }));
+            AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+            Assert.NotEqual(2, accessibleObject.GetChildCount());
+
+            listView.View = newView;
+
+            Assert.NotEqual(2, accessibleObject.GetChildCount());
         }
 
         private ListView GetBoundsListView(View view, bool showGroups, bool virtualMode)

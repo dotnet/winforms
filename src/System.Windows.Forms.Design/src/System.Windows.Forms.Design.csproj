@@ -20,12 +20,12 @@
       <Namespace>System.Windows.Forms.Design</Namespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\CollectionEditor.resx">
-      <!-- Unncessary because CollectionEditor.resx only contains properties; not string constants -->
+      <!-- Unnecessary because CollectionEditor.resx only contains properties; not string constants -->
       <!--GenerateSource>true</GenerateSource-->
       <Namespace>System.ComponentModel.Design</Namespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\BorderSidesEditor.resx">
-      <!-- Unncessary because BorderSidesEditor.resx only contains properties; not string constants -->
+      <!-- Unnecessary because BorderSidesEditor.resx only contains properties; not string constants -->
       <!--GenerateSource>true</GenerateSource-->
       <Namespace>System.Windows.Forms.Design</Namespace>
     </EmbeddedResource>
@@ -33,7 +33,7 @@
       <Namespace>System.Windows.Forms.Design</Namespace>
     </EmbeddedResource>
     <EmbeddedResource Update="Resources\ShortcutKeysEditor.resx">
-      <!-- Unncessary because ShortcutKeysEditor.resx only contains properties; not string constants -->
+      <!-- Unnecessary because ShortcutKeysEditor.resx only contains properties; not string constants -->
       <!--GenerateSource>true</GenerateSource-->
       <Namespace>System.Windows.Forms.Design</Namespace>
     </EmbeddedResource>

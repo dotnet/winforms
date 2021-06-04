@@ -28,7 +28,7 @@ internal static partial class Interop
             // Performance should not be an issue for current MAX_PATH length due to this
             if ((resultValue = DragQueryFileWInternal(hDrop, iFile, lpszFile, (uint)lpszFile.Capacity)) == lpszFile.Capacity)
             {
-                // passing null for buffer will return actual number of charectors in the file name.
+                // passing null for buffer will return actual number of characters in the file name.
                 // So, one extra call would be suffice to avoid while loop in case of long path.
                 uint capacity = DragQueryFileWInternal(hDrop, iFile, null, 0);
                 if (capacity < Kernel32.MAX_UNICODESTRING_LEN)

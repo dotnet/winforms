@@ -6481,6 +6481,16 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Zezwala na zmianę atrybutów znacznika wstawiania.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Zdarzenie wywoływane, gdy zostanie zmieniona zaznaczona właściwość elementu ListView.</target>

@@ -709,7 +709,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TableLayoutPanel_GetColumnWidths_NoColumns_ReturnsExpectd()
+        public void TableLayoutPanel_GetColumnWidths_NoColumns_ReturnsExpected()
         {
             var panel = new TableLayoutPanel();
             Assert.Empty(panel.GetColumnWidths());
@@ -947,7 +947,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TableLayoutPanel_GetRowHeights_NoRows_ReturnsExpectd()
+        public void TableLayoutPanel_GetRowHeights_NoRows_ReturnsExpected()
         {
             using var control = new TableLayoutPanel();
             Assert.Empty(control.GetRowHeights());

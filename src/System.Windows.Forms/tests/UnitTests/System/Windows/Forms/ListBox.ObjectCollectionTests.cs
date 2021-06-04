@@ -3775,7 +3775,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_Clear_InvokeEmptyWithHande_Success()
+        public void ListBoxObjectCollection_Clear_InvokeEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             var collection = new ListBox.ObjectCollection(owner);
@@ -3812,7 +3812,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_Clear_InvokeItemsEmptyWithHande_Success()
+        public void ListBoxObjectCollection_Clear_InvokeItemsEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             ListBox.ObjectCollection collection = owner.Items;
@@ -3849,7 +3849,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_Clear_InvokeNotEmptyWithHande_Success()
+        public void ListBoxObjectCollection_Clear_InvokeNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             var collection = new ListBox.ObjectCollection(owner);
@@ -3887,7 +3887,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_Clear_InvokeItemsNotEmptyWithHande_Success()
+        public void ListBoxObjectCollection_Clear_InvokeItemsNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             ListBox.ObjectCollection collection = owner.Items;
@@ -9059,7 +9059,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_IListClear_InvokeEmptyWithHande_Success()
+        public void ListBoxObjectCollection_IListClear_InvokeEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = new ListBox.ObjectCollection(owner);
@@ -9096,7 +9096,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_IListClear_InvokeItemsEmptyWithHande_Success()
+        public void ListBoxObjectCollection_IListClear_InvokeItemsEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = owner.Items;
@@ -9133,7 +9133,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_IListClear_InvokeNotEmptyWithHande_Success()
+        public void ListBoxObjectCollection_IListClear_InvokeNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = new ListBox.ObjectCollection(owner);
@@ -9171,7 +9171,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxObjectCollection_IListClear_InvokeItemsNotEmptyWithHande_Success()
+        public void ListBoxObjectCollection_IListClear_InvokeItemsNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = owner.Items;

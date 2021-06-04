@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Design
         private DesignerActionListCollection _actionLists;
 
         /// <summary>
-        ///  Called when the designer is intialized.  This allows the designer to provide some
+        ///  Called when the designer is initialized.  This allows the designer to provide some
         ///  meaningful default values in the control.  The default implementation of this
         ///  sets the control's text to its name.
         /// </summary>

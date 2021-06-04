@@ -13,13 +13,13 @@ namespace DesignSurfaceExt
         //- de/activate the TabOrder facility
         void SwitchTabOrder();
 
-        //- select the controls alignement mode
+        //- select the controls alignment mode
         void UseSnapLines();
         void UseGrid(System.Drawing.Size gridSize);
         void UseGridWithoutSnapping(System.Drawing.Size gridSize);
         void UseNoGuides();
 
-        //- method usefull to create control without the ToolBox facility
+        //- method useful to create control without the ToolBox facility
         TControl CreateRootComponent<TControl>(Size controlSize)
             where TControl : Control, IComponent;
 

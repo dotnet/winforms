@@ -23,7 +23,6 @@ namespace WinformsControlsTest
             var random = new Random();
             int i = random.Next(100, 300);
 
-            Debug.WriteLine(listView1.TileSize);
             listView1.TileSize = new Size(200, 50);
             listView1.Items[0].ImageIndex = 0;
             listView1.Items[1].ImageIndex = 1;
@@ -123,8 +122,8 @@ namespace WinformsControlsTest
             listView2.AutoResizeColumns(ColumnHeaderAutoResizeStyle.HeaderSize);
 
             // Create two ImageList objects.
-            ImageList imageListSmall = new();
-            ImageList imageListLarge = new();
+            ImageList imageListSmall = new(components);
+            ImageList imageListLarge = new(components);
 
             // Initialize the ImageList objects with bitmaps.
             imageListSmall.Images.Add(Bitmap.FromFile("Images\\SmallA.bmp"));

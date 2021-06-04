@@ -1793,7 +1793,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false, 0)]
         [InlineData(false, true, 0)]
         [InlineData(false, false, 0)]
-        public void DataGridView_TopLeftHeaderCell_SetWithHadle_GetReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible, int expectedInvalidatedCallCount)
+        public void DataGridView_TopLeftHeaderCell_SetWithHandle_GetReturnsExpected(bool rowHeadersVisible, bool columnHeadersVisible, int expectedInvalidatedCallCount)
         {
             using var cell1 = new DataGridViewHeaderCell();
             using var control = new DataGridView

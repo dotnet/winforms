@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
         private object _ownerItemAfterCut; // This value is set only of the ToolStripMenuItem is cut and now we need to reopen the dropDown which was closed in the previous CUT operation.
 
         /// <summary>
-        ///  This creates a service for handling the keyboard navigation at desgin time.
+        ///  This creates a service for handling the keyboard navigation at design time.
         /// </summary>
         public ToolStripKeyboardHandlingService(IServiceProvider serviceProvider)
         {
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Design
             set => _contextMenuShownByKeyBoard = value;
         }
 
-        // When Copy (Through Control + Drag) this boolean is set to true.  Problem is that during copy the DesignerUtils creates new components and as a result the ToolStripMenuItemDesigner and ToolStripDesigners get the "ComponentAdding/ComponentAdded" events where they try to parent the components.  We dont need to "parent" in case of control + drag.
+        // When Copy (Through Control + Drag) this boolean is set to true.  Problem is that during copy the DesignerUtils creates new components and as a result the ToolStripMenuItemDesigner and ToolStripDesigners get the "ComponentAdding/ComponentAdded" events where they try to parent the components.  We don't need to "parent" in case of control + drag.
         internal bool CopyInProgress
         {
             get => _copyInProgress;
@@ -117,7 +117,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
+        ///  Retrieves the selection service, which this service uses while selecting the toolStrip Item.
         /// </summary>
         private IDesignerHost Host
         {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // When the TemplateNode gets selected ... we dont set in the SelectionService.SelectedComponents since we want to blank out the propertygrid ... so we keep the selected cache here.
+        // When the TemplateNode gets selected ... we don't set in the SelectionService.SelectedComponents since we want to blank out the propertygrid ... so we keep the selected cache here.
         internal object SelectedDesignerControl
         {
             get => _currentSelection;
@@ -195,14 +195,14 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Retrieves the selection service, which tthis service uses while selecting the toolStrip Item.
+        ///  Retrieves the selection service, which this service uses while selecting the toolStrip Item.
         /// </summary>
         private ISelectionService SelectionService
         {
             get => _selectionService;
         }
 
-        // When the ToolStripTemplateNode becomes active, the ToolStripKeyBoardHandlingService shouldnt process any MenuCommands...
+        // When the ToolStripTemplateNode becomes active, the ToolStripKeyBoardHandlingService shouldn't process any MenuCommands...
         internal bool TemplateNodeActive
         {
             get => _templateNodeActive;
@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Design
 
                     for (int c = 0; c < parentControlCount; c++)
                     {
-                        // The logic for this is a bit lengthy, so I have broken it into separate caluses: We are not interested in ourself.
+                        // The logic for this is a bit lengthy, so I have broken it into separate clauses: We are not interested in ourself.
                         if (parentControls[c] != ctl)
                         {
                             // We are interested in controls with >= tab indexes to ctl.  We must include those controls with equal indexes to account for duplicate indexes.
@@ -370,7 +370,7 @@ namespace System.Windows.Forms.Design
 
                     for (int c = parentControlCount - 1; c >= 0; c--)
                     {
-                        // The logic for this is a bit lengthy, so I have broken it into separate caluses: We are not interested in ourself.
+                        // The logic for this is a bit lengthy, so I have broken it into separate clauses: We are not interested in ourself.
                         if (parentControls[c] != ctl)
                         {
                             // We are interested in controls with <= tab indexes to ctl.  We must include those controls with equal indexes to account for duplicate indexes.
@@ -464,7 +464,7 @@ namespace System.Windows.Forms.Design
                 return true;
             }
 
-            // commandsAdded means that either toolstrip, toolSripItem or templatenode is selected.
+            // commandsAdded means that either toolstrip, toolStripItem or templatenode is selected.
             if (_commandsAdded && x == -1 && y == -1)
             {
                 ContextMenuShownByKeyBoard = true;
@@ -579,7 +579,7 @@ namespace System.Windows.Forms.Design
         private void OnCommandPaste(object sender, EventArgs e)
         {
             //IF TemplateNode is Active DO NOT Support Paste. This is what MainMenu did
-            // We used to incorrectly paste the item to the parent's collection; so inorder to make a simple fix I am being consistent with MainMenu
+            // We used to incorrectly paste the item to the parent's collection; so in order to make a simple fix I am being consistent with MainMenu
             if (TemplateNodeActive)
             {
                 return;
@@ -616,14 +616,14 @@ namespace System.Windows.Forms.Design
                 if (parent != null)
                 {
                     parent.ResumeLayout();
-                    // Since the Glyphs dont get correct bounds as the ToolStrip Layout is suspended .. force Glyph Updates.
+                    // Since the Glyphs don't get correct bounds as the ToolStrip Layout is suspended .. force Glyph Updates.
                     BehaviorService behaviorService = (BehaviorService)_provider.GetService(typeof(BehaviorService));
                     if (behaviorService != null)
                     {
                         behaviorService.SyncSelection();
                     }
 
-                    // For ContextMenuStrip; since its not a control .. we dont get called on GetGlyphs directly through the BehaviorService So we need this internal call to push the glyphs on the SelectionManager
+                    // For ContextMenuStrip; since its not a control .. we don't get called on GetGlyphs directly through the BehaviorService So we need this internal call to push the glyphs on the SelectionManager
                     if (host.GetDesigner(item) is ToolStripItemDesigner designer)
                     {
                         ToolStripDropDown dropDown = designer.GetFirstDropDown(item);
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms.Design
                         }
                         else
                         {
-                            // We dont want to WRAP around for items on toolStrip Overflow, if the currentSelection is the  topMost item on the Overflow, but select the one on the PARENT toolStrip.
+                            // We don't want to WRAP around for items on toolStrip Overflow, if the currentSelection is the  topMost item on the Overflow, but select the one on the PARENT toolStrip.
                             if (parentToMoveOn is ToolStripOverflow)
                             {
                                 ToolStripItem firstItem = GetNextItem(parentToMoveOn, null, ArrowDirection.Down);
@@ -1537,7 +1537,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // pupulates a list of our custom commands to be added to menu command service.
+        // populates a list of our custom commands to be added to menu command service.
         private void PopulateNewCommands()
         {
             if (_newCommands is null)
@@ -1846,7 +1846,7 @@ namespace System.Windows.Forms.Design
                                     if (targetSelection != null)
                                     {
                                         ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
+                                        // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                         while (controlDesigner != null)
                                         {
                                             // if the targetSelection from the Tray is a control .. try the next one.
@@ -1968,7 +1968,7 @@ namespace System.Windows.Forms.Design
                                         if (targetSelection != null)
                                         {
                                             ControlDesigner controlDesigner = host.GetDesigner((IComponent)targetSelection) as ControlDesigner;
-                                            // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again through compoenent tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
+                                            // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again through component tray since here we select only Components. Hence only components that have ComponentDesigners should be selected via the ComponentTray.
                                             while (controlDesigner != null)
                                             {
                                                 // if the targetSelection from the Tray is a control .. try the next one.
@@ -2040,7 +2040,7 @@ namespace System.Windows.Forms.Design
                     ToolStrip parent = item.GetCurrentParent();
                     if (parent != null)
                     {
-                        // flip the semantics of bakcwards...
+                        // flip the semantics of backwards...
                         if (parent.RightToLeft == RightToLeft.Yes)
                         {
                             backwards = !backwards;
@@ -2133,7 +2133,7 @@ namespace System.Windows.Forms.Design
             {
                 //Cache original selection
                 ICollection originalSelComps = selSvc.GetSelectedComponents();
-                // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents wont do it for us.
+                // Add the TemplateNode to the Selection if it is currently Selected as the GetSelectedComponents won't do it for us.
                 ArrayList origSel = new ArrayList(originalSelComps);
                 if (origSel.Count == 0)
                 {

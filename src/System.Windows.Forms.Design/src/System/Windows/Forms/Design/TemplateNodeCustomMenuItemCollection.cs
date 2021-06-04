@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Design
 
                 Debug.Assert(dummyIndex != -1, "Why is the index of the Item negative?");
                 parent.Items.Insert(dummyIndex, (ToolStripItem)component);
-                // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionServive from new Component
+                // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                 ISelectionService selSvc = (ISelectionService)_serviceProvider.GetService(typeof(ISelectionService));
                 if (selSvc != null)
                 {

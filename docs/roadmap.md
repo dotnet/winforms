@@ -17,7 +17,7 @@ We also invite contributions. The [up-for-grabs issues](https://github.com/dotne
     The primary goal of .NET Core 3.x release was to achieve parity with .NET Framework.
 
 * **.NET 5.0**
-    - We aimed to optimize our implementations, reduce our memory footprints, increase performance, and update implementations to deliver all aspects of modern Windows UI, including missings properties or actions, and new UI controls.
+    - We aimed to optimize our implementations, reduce our memory footprints, increase performance, and update implementations to deliver all aspects of modern Windows UI, including missing properties or actions, and new UI controls.
     - Added [Task Dialog](https://docs.microsoft.com/dotnet/api/system.windows.forms.taskdialog) control, and added missing functionality to [ListView](https://docs.microsoft.com/dotnet/api/system.windows.forms.listview) control.
     - We have also further increased our accessibility support, e.g. by adding [Text Pattern support](https://docs.microsoft.com/windows/win32/winauto/uiauto-implementingtextandtextrange).
     - Reinstated Visual Basic support.

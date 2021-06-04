@@ -240,7 +240,7 @@
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(102, 15);
             this.label2.TabIndex = 2;
-            this.label2.Text = "numericcUpdown";
+            this.label2.Text = "numericUpdown";
             // 
             // numericUpDown1
             // 

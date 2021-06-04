@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
     public class ToolStripSplitButton_ToolStripSplitButtonAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
-        public void ToolStripSplitButtonAccessibleObect_Ctor_Default()
+        public void ToolStripSplitButtonAccessibleObject_Ctor_Default()
         {
             using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
             ToolStripSplitButtonAccessibleObject accessibleObject = new ToolStripSplitButtonAccessibleObject(toolStripSplitButton);
@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripSplitButtonAccessibleObect_ControlType_IsButton_IfAccessibleRoleIsDefault()
+        public void ToolStripSplitButtonAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
         {
             using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
             // AccessibleRole is not set = Default
@@ -32,7 +32,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ToolStripSplitButtonAccessibleObect_Role_IsMenuItem_ByDefault()
+        public void ToolStripSplitButtonAccessibleObject_Role_IsMenuItem_ByDefault()
         {
             using ToolStripSplitButton toolStripSplitButton = new ToolStripSplitButton();
             // AccessibleRole is not set = Default

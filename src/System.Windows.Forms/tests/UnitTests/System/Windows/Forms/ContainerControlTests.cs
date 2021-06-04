@@ -148,7 +148,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ContainerControl_ActiveContanerControl_Set_GetReturnsExpected()
+        public void ContainerControl_ActiveContainerControl_Set_GetReturnsExpected()
         {
             using var control = new ContainerControl();
             using var child = new Control();
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ContainerControl_ActiveContanerControl_SetInvalid_ThrowsArgumentException()
+        public void ContainerControl_ActiveContainerControl_SetInvalid_ThrowsArgumentException()
         {
             using var control = new ContainerControl();
             Assert.Throws<ArgumentException>("value", () => control.ActiveControl = control);
@@ -448,7 +448,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ContanerControl_Font_SetWithHandler_CallsFontChanged()
+        public void ContainerControl_Font_SetWithHandler_CallsFontChanged()
         {
             using var control = new ContainerControl();
             int callCount = 0;
@@ -573,7 +573,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ContainerControl_CreateContanerControl_Invoke_CallsBindingContextChanged()
+        public void ContainerControl_CreateContainerControl_Invoke_CallsBindingContextChanged()
         {
             using var control = new ContainerControl();
             int callCount = 0;

@@ -110,7 +110,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderSimple[]? GetColumnHeaderItems()
             {
-                if (_monthCalendarAccessibleObject.IsHandleCreated
+                if (!_monthCalendarAccessibleObject.IsHandleCreated
                     || _monthCalendarAccessibleObject.CelendarView != MCMV.MONTH)
                 {
                     // Column headers are available only in the "Month" view

@@ -127,7 +127,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This Function gets the object from the givem object. The input is an arrayList returned as an Object.
+        ///  This Function gets the object from the given object. The input is an arrayList returned as an Object.
         ///  The output is a arraylist which contains the individual objects that need to be created.
         /// </summary>
         protected virtual IList GetObjectsFromInstance(object instance) => new ArrayList { instance };
@@ -646,7 +646,7 @@ namespace System.ComponentModel.Design
 
                 PaintArrow(g, _dropDownRectangle);
 
-                // If we dont' use mnemonic, set formatFlag to NoPrefix as this will show ampersand.
+                // If we don't use mnemonic, set formatFlag to NoPrefix as this will show ampersand.
                 if (!UseMnemonic)
                 {
                     formatFlags |= TextFormatFlags.NoPrefix;
@@ -886,7 +886,7 @@ namespace System.ComponentModel.Design
 
                     Items = items;
 
-                    // If omeone changes the edit value which resets the selindex, we
+                    // If someone changes the edit value which resets the selindex, we
                     // should keep the new index.
                     if (_listbox.Items.Count > 0 && _listbox.SelectedIndex != _listbox.Items.Count - 1)
                     {
@@ -965,9 +965,9 @@ namespace System.ComponentModel.Design
                         if (items.Length > 0 && items[0] is IComponent && ((IComponent)items[0]).Site != null)
                         {
                             // here we bail now because we don't want to do the "undo" manually,
-                            // we're part of a trasaction, we've added item, the rollback will be
+                            // we're part of a transaction, we've added item, the rollback will be
                             // handled by the undo engine because the component in the collection are sited
-                            // doing it here kills perfs because the undo of the transaction has to rollback the remove and then
+                            // doing it here kills perf because the undo of the transaction has to roll back the remove and then
                             // rollback the add. This is useless and is only needed for non sited component or other classes
                             return;
                         }
@@ -2048,7 +2048,7 @@ namespace System.ComponentModel.Design
                 /// <summary>
                 ///  Retrieves the object that directly depends on this value being edited.
                 ///  This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
-                ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object,
+                ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descriptor implementation should return the default object,
                 ///  that is the main object that exposes the properties and attributes
                 /// </summary>
                 object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)

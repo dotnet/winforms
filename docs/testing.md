@@ -132,7 +132,7 @@ Tests are built and executed by file name convention
   
 #### Theory tests
 
-Quite often there may be multiple tests that test exectly the same functionality but with different input parameters (e.g. `null`, `""`, `" "` for a `string` argument). 
+Quite often there may be multiple tests that test exactly the same functionality but with different input parameters (e.g. `null`, `""`, `" "` for a `string` argument). 
 In such cases instead of creating multiple tests it is preferred to have a theory test, which is in another words a data-driven test.
 
 When writing theories note the following:
@@ -169,7 +169,7 @@ When writing theories note the following:
     ```
   
 3. theories must not reuse disposable components.<br />
-  In situations where following the above recommentation could be impractical, it is maybe acceptable to create disposable controls for each theory data, e.g.:
+  In situations where following the above recommendation could be impractical, it is maybe acceptable to create disposable controls for each theory data, e.g.:
     ```cs
     public static IEnumerable<object[]> GetButton_TestData()
     {
@@ -233,7 +233,7 @@ Each test class must implement the `IClassFixture<ThreadExceptionFixture>` inter
 
 We use [Enhance Metafiles](https://docs.microsoft.com/windows/win32/gdi/enhanced-format-metafiles) (or EMF for short) to validate rendering operations, i.e. assert that correct shapes were drawn with expected colours and brushes.
 
-A typical "rendering" assersion test would looks something like this:
+A typical "rendering" assertion test would looks something like this:
 ```cs
 [WinFormsFact]
 public void MyControl_Rendering()

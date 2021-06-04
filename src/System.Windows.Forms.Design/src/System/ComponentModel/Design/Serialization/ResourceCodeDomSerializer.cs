@@ -77,7 +77,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Deserilizes the given CodeDom object into a real object. This will use the serialization manager to create objects and resolve data types. The root of the object graph is returned.
+        ///  Deserializes the given CodeDom object into a real object. This will use the serialization manager to create objects and resolve data types. The root of the object graph is returned.
         /// </summary>
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         foreach (CodeStatement element in statements)
                         {
-                            // We create the resource manager ouselves here because it's not just a straight parse of the code. Do special parsing of the resources statement
+                            // We create the resource manager ourselves here because it's not just a straight parse of the code. Do special parsing of the resources statement
                             if (element is CodeVariableDeclarationStatement statement)
                             {
                                 TraceWarningIf(!statement.Name.Equals(ResourceManagerName), "WARNING: Resource manager serializer being invoked to deserialize a collection we didn't create.");
@@ -180,7 +180,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Deserilizes the given CodeDom object into a real object.  This will use the serialization manager to create objects and resolve data types.  It uses the invariant resource blob to obtain resources.
+        ///  Deserializes the given CodeDom object into a real object.  This will use the serialization manager to create objects and resolve data types.  It uses the invariant resource blob to obtain resources.
         /// </summary>
         public object DeserializeInvariant(IDesignerSerializationManager manager, string resourceName)
         {
@@ -499,7 +499,7 @@ namespace System.ComponentModel.Design.Serialization
             public bool DeclarationAdded { get; set; }
 
             /// <summary>
-            ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at diffrerent times, if the declaration was added by a cached component.
+            ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at different times, if the declaration was added by a cached component.
             /// </summary>
             public bool ExpressionAdded { get; set; }
 

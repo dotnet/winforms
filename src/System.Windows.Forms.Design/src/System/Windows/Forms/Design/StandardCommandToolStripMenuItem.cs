@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
         private readonly string _name;
         private readonly MenuCommand _menuCommand;
 
-        // Ok to call MenuService.FindComand to find the menuCommand mapping to the appropriated menuID.
+        // Ok to call MenuService.FindCommand to find the menuCommand mapping to the appropriated menuID.
         public StandardCommandToolStripMenuItem(CommandID menuID, string text, string imageName, IServiceProvider serviceProvider)
         {
             _menuID = menuID;

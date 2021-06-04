@@ -14,7 +14,7 @@ namespace System.ComponentModel.Design.Serialization
     {
         /// <summary>
         ///  This will be called by the serialization manager when it
-        ///  is trying to locate a serialzer for an object type.
+        ///  is trying to locate a serializer for an object type.
         ///  If this serialization provider can provide a serializer
         ///  that is of the correct type, it should return it.
         ///  Otherwise, it should return null.

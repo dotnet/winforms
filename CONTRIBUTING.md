@@ -8,7 +8,7 @@ You can contribute to Windows Forms with issues, pull-requests, and general revi
 
 Project maintainers will merge changes that improve the product significantly and broadly and that align with the our [Roadmap](docs/roadmap.md).
 
-Maintainers will not merge changes that have narrowly-defined benefits, due to compatibility risk. The Windows Forms .NET codebase is used by a significant number of internal and exteranl customers world-wide. We may revert changes if they are found to be breaking.
+Maintainers will not merge changes that have narrowly-defined benefits, due to compatibility risk. The Windows Forms .NET codebase is used by a significant number of internal and external customers world-wide. We may revert changes if they are found to be breaking.
 
 Whilst most .NET Core/.NET components are cross-platform Windows Forms implementations remain tightly coupled with Win32 API. With this we will typically not accept contributions that provide cross-platform implementations.
 

@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design.Serialization
         private readonly CodeDomSerializer _currentSerializer;
 
         /// <summary>
-        ///  Only we can create an instance of this. Everyonen else accesses it though
+        ///  Only we can create an instance of this. Everyone else accesses it though
         ///  static properties.
         /// </summary>
         internal LocalizationCodeDomSerializer(CodeDomLocalizationModel model, object currentSerializer)

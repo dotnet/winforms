@@ -476,7 +476,7 @@ namespace System.ComponentModel.Design.Serialization
                 delegator.Manager.PreserveNames = recycleInstances;
                 delegator.Manager.ValidateRecycledTypes = validateRecycledTypes;
                 ArrayList objects = null;
-                // recreate resouces
+                // recreate resources
                 if (_resourceStream != null)
                 {
                     BinaryFormatter formatter = new BinaryFormatter();
@@ -789,7 +789,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 private void OnResolveName(object sender, ResolveNameEventArgs e)
                 {
-                    //note: this recursionguard does not fix the problem, but rathar avoids a stack overflow which will bring down VS and cause loss of data.
+                    //note: this recursionguard does not fix the problem, but rather avoids a stack overflow which will bring down VS and cause loss of data.
                     if (_nameResolveGuard.ContainsKey(e.Name))
                     {
                         return;
@@ -934,7 +934,7 @@ namespace System.ComponentModel.Design.Serialization
                     // First we check to see if the statements table contains an OrderedCodeStatementCollection for this name.  If it does this means we have not resolved this name yet, so we grab its OrderedCodeStatementCollection and deserialize that, along with any default properties and design-time properties.
                     // If it doesn't contain an OrderedCodeStatementsCollection this means one of two things:
                     // 1. We already resolved this name and shoved an instance in there.  In this case we just return the instance
-                    // 2. There are no statements corresponding to this name, but there might be expressions that have never been deserialized, so we check for that and deserailize those.
+                    // 2. There are no statements corresponding to this name, but there might be expressions that have never been deserialized, so we check for that and deserialize those.
                     if (_statementsTable[name] is OrderedCodeStatementCollection statements)
                     {
                         _objectState[name] = null;
@@ -1202,7 +1202,7 @@ namespace System.ComponentModel.Design.Serialization
                             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(data._value.GetType(), typeof(CodeDomSerializer));
                             // Saved state. Slot 0 is the code gen
                             // Slot 1 is for generated statements coming from the context.
-                            // Slot 2 is an array of default properites.
+                            // Slot 2 is an array of default properties.
                             // Slot 3 is for design time props.Any may be null.
                             // Slot 4 is for events that need to be reset.
                             // Slot 5 is for the modifier property of the object.
@@ -1483,7 +1483,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  Our private resource manager...it just pushes all the data into a hashtable and then we serialize the hashtable.  On deseriaization, the hashtable is rebuilt for us and we have all the data we saved out.
+            ///  Our private resource manager...it just pushes all the data into a hashtable and then we serialize the hashtable.  On deserialization, the hashtable is rebuilt for us and we have all the data we saved out.
             /// </summary>
             private class LocalResourceManager : ResourceManager, IResourceWriter, IResourceReader
             {
@@ -1620,7 +1620,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     object instance = ((IDesignerSerializationManager)_manager).GetInstance(name);
 
-                    // If an object is retrived from the current container as a result of GetInstance(), we need to make sure and fully deserialize it before returning it.  To do this, we will force a resolve on this name and not interfere the next time GetInstance() is called with this component.  This will force the component to completely deserialize.
+                    // If an object is retrieved from the current container as a result of GetInstance(), we need to make sure and fully deserialize it before returning it.  To do this, we will force a resolve on this name and not interfere the next time GetInstance() is called with this component.  This will force the component to completely deserialize.
                     if (_resolveNameEventHandler != null && instance != null && !_resolved.ContainsKey(name) &&
                         _manager.PreserveNames && _manager.Container != null && _manager.Container.Components[name] != null)
                     {
@@ -1668,7 +1668,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  This is a serialzation manager that can load assemblies and search for types and provide a resource manager from our serialization store.
+            ///  This is a serialization manager that can load assemblies and search for types and provide a resource manager from our serialization store.
             /// </summary>
             private class LocalDesignerSerializationManager : DesignerSerializationManager
             {
@@ -1676,7 +1676,7 @@ namespace System.ComponentModel.Design.Serialization
                 private bool? _typeSvcAvailable;
 
                 /// <summary>
-                ///  Creates a new serilalization manager.
+                ///  Creates a new serialization manager.
                 /// </summary>
                 internal LocalDesignerSerializationManager(CodeDomSerializationStore store, IServiceProvider provider) : base(provider)
                 {

@@ -16,6 +16,14 @@ namespace System.Windows.Forms
     /// </summary>
     internal static partial class DpiHelper
     {
+        // The default(100) and max(225) text scale factor is value what Settings display text scale
+        // applies and also clamps the text scale factor value between 100 and 225 value.
+        // See https://docs.microsoft.com/windows/uwp/design/input/text-scaling.
+        internal const short MinTextScaleValue = 100;
+        internal const short MaxTextScaleValue = 225;
+        internal const float MinTextScaleFactorValue = 1.00f;
+        internal const float MaxTextScaleFactorValue = 2.25f;
+
         internal const double LogicalDpi = 96.0;
         private static InterpolationMode s_interpolationMode;
 
@@ -112,8 +120,8 @@ namespace System.Windows.Forms
                     int dpiScalePercent = (int)Math.Round(LogicalToDeviceUnitsScalingFactor * 100);
 
                     // We will prefer NearestNeighbor algorithm for 200, 300, 400, etc zoom factors, in which each pixel become a 2x2, 3x3, 4x4, etc rectangle.
-                    // This produces sharp edges in the scaled image and doesn't cause distorsions of the original image.
-                    // For any other scale factors we will prefer a high quality resizing algorith. While that introduces fuzziness in the resulting image,
+                    // This produces sharp edges in the scaled image and doesn't cause distortions of the original image.
+                    // For any other scale factors we will prefer a high quality resizing algorithm. While that introduces fuzziness in the resulting image,
                     // it will not distort the original (which is extremely important for small zoom factors like 125%, 150%).
                     // We'll use Bicubic in those cases, except on reducing (zoom < 100, which we shouldn't have anyway), in which case Linear produces better
                     // results because it uses less neighboring pixels.
@@ -180,11 +188,6 @@ namespace System.Windows.Forms
         /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
         public static float GetTextScaleFactor()
         {
-            // The default(100) and max(225) text scale factor is value what Settings display text scale
-            // applies and also clamps the text scale factor value between 100 and 225 value.
-            const short MinTextScaleValue = 100;
-            const short MaxTextScaleValue = 225;
-
             short textScaleValue = MinTextScaleValue;
             try
             {
@@ -208,7 +211,7 @@ namespace System.Windows.Forms
                 return (float)textScaleValue / MinTextScaleValue;
             }
 
-            return 1.0f;
+            return MinTextScaleFactorValue;
         }
 
         /// <summary>

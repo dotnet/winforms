@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(ComboBoxStyle.Simple)]
         [InlineData(ComboBoxStyle.DropDownList)]
         [InlineData(ComboBoxStyle.DropDown)]
-        public void DropDownButtonUiaProvider_FragmentNavigate_PreviousSibling_ReturnsExpected_IfHanleIsNotCreated(
+        public void DropDownButtonUiaProvider_FragmentNavigate_PreviousSibling_ReturnsExpected_IfHandleIsNotCreated(
             ComboBoxStyle comboBoxStyle)
         {
             using ComboBox comboBox = new ComboBox

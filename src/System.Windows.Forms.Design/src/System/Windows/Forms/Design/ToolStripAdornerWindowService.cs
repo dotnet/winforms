@@ -128,7 +128,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate()
         {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Rectangle rect)
         {
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners and, in turn, all Glyphs.
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Region r)
         {
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  The key here is to set the appropriate TransparetWindow style.
+            ///  The key here is to set the appropriate TransparentWindow style.
             /// </summary>
             protected override CreateParams CreateParams
             {

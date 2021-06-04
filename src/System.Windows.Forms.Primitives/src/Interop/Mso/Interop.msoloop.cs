@@ -22,7 +22,7 @@ internal partial class Interop
                                // as possible- app should do no idling in this case
                                // if alerts might come up in badly defined states
 
-            // Unoffical msoloop messages
+            // Unofficial msoloop messages
             DoEventsModal = unchecked((uint)(-2)),
             Main = unchecked((uint)(-1))
         }

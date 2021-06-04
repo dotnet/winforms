@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
         // This is a bit that we stuff into the DoDragDrop
         // to indicate that the thing that is being dragged should only
         // be allowed to be moved in the current DropTarget (e.g. parent designer).
-        // We use this for interited components that can be modified (e.g. location/size) changed
+        // We use this for inherited components that can be modified (e.g. location/size) changed
         // but not removed from their parent.
         //
         protected const int AllowLocalMoveOnly = 0x04000000;
@@ -518,7 +518,7 @@ namespace System.Windows.Forms.Design
                 rectangle.Height = 5;
 
             // Copy of ControlPaint.DrawReversibleFrame, see VSWhidbey 581670
-            // If ControlPaint ever gets overrloaded, we should replace the code below by calling it:
+            // If ControlPaint ever gets overloaded, we should replace the code below by calling it:
             // ControlPaint.DrawReversibleFrame(handle, rectangle, backColor, FrameStyle.Thick);
 
             // ------ Duplicate code----------------------------------------------------------
@@ -568,7 +568,7 @@ namespace System.Windows.Forms.Design
 
             DragDropEffects allowedEffects = DragDropEffects.Copy | DragDropEffects.None | DragDropEffects.Move;
 
-            // check to see if any of the components are inherhited. if so, don't allow them to be moved.
+            // check to see if any of the components are inherited. if so, don't allow them to be moved.
             // We replace DragDropEffects.Move with a local bit called AllowLocalMoveOnly which means it
             // can be moved around on the current dropsource/target, but not to another target.  Since only
             // we understand this bit, other drop targets will not allow the move to occur
@@ -587,7 +587,7 @@ namespace System.Windows.Forms.Design
             DataObject data = new ComponentDataObjectWrapper(new ComponentDataObject(client, serviceProvider, components, initialX, initialY));
 
             // We make sure we're painted before we start the drag.  Then, we disable window painting to
-            // ensure that the drag can proceed without leaving artifacts lying around.  We should be caling LockWindowUpdate,
+            // ensure that the drag can proceed without leaving artifacts lying around.  We should be calling LockWindowUpdate,
             // but that causes a horrible flashing because GDI+ uses direct draw.
             //
             User32.MSG msg = default;
@@ -600,7 +600,7 @@ namespace System.Windows.Forms.Design
             // don't do any new painting...
             bool oldFreezePainting = freezePainting;
 
-            // asurt 90345 -- this causes some subtle bugs, so i'm turning it off to see if we really need it, and if we do
+            // ASURT 90345 -- this causes some subtle bugs, so i'm turning it off to see if we really need it, and if we do
             // if we can find a better way.
             //
             //freezePainting = true;
@@ -860,7 +860,7 @@ namespace System.Windows.Forms.Design
 
                     // now we need to offset the components locations from the drop mouse
                     // point to the parent, since their current locations are relative
-                    // the the mouse pointer
+                    // the mouse pointer
                     if (components != null && components.Length > 0)
                     {
                         Debug.Assert(container != null, "Didn't get a container from the site!");

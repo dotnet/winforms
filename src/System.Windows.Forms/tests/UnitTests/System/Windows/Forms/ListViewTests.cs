@@ -4302,16 +4302,16 @@ namespace System.Windows.Forms.Tests
         {
             foreach (View view in Enum.GetValues(typeof(View)))
             {
-                foreach (bool showGrops in new[] { true, false })
+                foreach (bool showGroups in new[] { true, false })
                 {
                     foreach (bool focused in new[] { true, false })
                     {
                         foreach (bool selected in new[] { true, false })
                         {
-                            // Updating Focused property of ListViewItem always calls RaiseAutomatiomEvent.
-                            // If ListViewItem is focused and selected then RaiseAutomatiomEvent is also called.
+                            // Updating Focused property of ListViewItem always calls RaiseAutomationEvent.
+                            // If ListViewItem is focused and selected then RaiseAutomationEvent is also called.
                             int expectedCallCount = focused && selected ? 2 : 1;
-                            yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
+                            yield return new object[] { view, showGroups, focused, selected, expectedCallCount };
                         }
                     }
                 }
@@ -4354,16 +4354,16 @@ namespace System.Windows.Forms.Tests
                     continue;
                 }
 
-                foreach (bool showGrops in new[] { true, false })
+                foreach (bool showGroups in new[] { true, false })
                 {
                     foreach (bool focused in new[] { true, false })
                     {
                         foreach (bool selected in new[] { true, false })
                         {
-                            // Updating Focused property of ListViewItem always calls RaiseAutomatiomEvent.
-                            // If ListViewItem is focused and selected then RaiseAutomatiomEvent is also called.
+                            // Updating Focused property of ListViewItem always calls RaiseAutomationEvent.
+                            // If ListViewItem is focused and selected then RaiseAutomationEvent is also called.
                             int expectedCallCount = focused && selected ? 2 : 1;
-                            yield return new object[] { view, showGrops, focused, selected, expectedCallCount };
+                            yield return new object[] { view, showGroups, focused, selected, expectedCallCount };
                         }
                     }
                 }
@@ -4514,7 +4514,7 @@ namespace System.Windows.Forms.Tests
             uint keyCode = (uint)key;
             uint lParam = (0x00000001 | keyCode << 16);
 
-            // If control doesn't have selected items noone will be focused.
+            // If control doesn't have selected items none will be focused.
             User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
             Assert.Empty(control.SelectedIndices);
             Assert.Null(control.FocusedItem);
@@ -4573,7 +4573,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(Keys.Down)]
         [InlineData(Keys.Up)]
-        public unsafe void ListView_VirtualMode_WmReflectNotify_LVN_KEYDOWN_WithGroups_DoenstFocusGroups(Keys key)
+        public unsafe void ListView_VirtualMode_WmReflectNotify_LVN_KEYDOWN_WithGroups_DoesNotFocusGroups(Keys key)
         {
             using ListView control = new ListView
             {
@@ -4612,7 +4612,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
-        public unsafe void ListView_VirtualMode_WmReflectNotify_LVN_KEYDOWN_EnabledCheckBoxes_WithoutGroups_DoenstCheckItems(bool checkedItem)
+        public unsafe void ListView_VirtualMode_WmReflectNotify_LVN_KEYDOWN_EnabledCheckBoxes_WithoutGroups_DoesNotCheckItems(bool checkedItem)
         {
             using ListView control = new ListView
             {
@@ -5089,7 +5089,7 @@ namespace System.Windows.Forms.Tests
             string actual = listViewDynamic.toolTipCaption;
 
             Assert.Empty(actual);
-            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
 
             string text = "Some test text";
             toolTip.SetToolTip(listView, text); // Invokes ListView's SetToolTip inside
@@ -5251,6 +5251,9 @@ namespace System.Windows.Forms.Tests
         {
             using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup);
             ListViewItem listViewItem = listView.Items[0];
+
+            Assert.NotNull(listViewItem.AccessibilityObject);
+
             SubListViewItemAccessibleObject accessibleObject = new SubListViewItemAccessibleObject(listViewItem);
             listViewItem.TestAccessor().Dynamic._accessibilityObject = accessibleObject;
             listView.CreateControl();
@@ -5275,7 +5278,7 @@ namespace System.Windows.Forms.Tests
             internal override AccessibleObject AccessibilityObject => CustomAccessibleObject;
         }
 
-        private class SubListViewItemAccessibleObject : ListViewItemAccessibleObject
+        private class SubListViewItemAccessibleObject : ListViewItemBaseAccessibleObject
         {
             public int RaiseAutomationEventCalls;
 

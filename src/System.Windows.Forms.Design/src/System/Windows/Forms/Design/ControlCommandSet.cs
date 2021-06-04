@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design
             //
             commandSet = new CommandSetItem[]
             {
-                // Allignment commands
+                // Alignment commands
                 new CommandSetItem(
                                   this,
                                   new EventHandler(OnStatusMultiSelectPrimary),
@@ -342,7 +342,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                // mark that this compoent checked out okay, so any siblings (or children of siblings) of this control
+                // mark that this component checked out okay, so any siblings (or children of siblings) of this control
                 // are ok.
                 //
                 okParent = c.Parent;
@@ -541,7 +541,7 @@ namespace System.Windows.Forms.Design
                     IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                     if (host != null)
                     {
-                        //This will exluded components in the ComponentTray, but that's okay, they are not resizable to begin with.
+                        //This will excluded components in the ComponentTray, but that's okay, they are not resizable to begin with.
                         ControlDesigner des = host.GetDesigner(comp) as ControlDesigner;
                         if (des != null && ((des.SelectionRules & SelectionRules.Locked) == 0))
                         {
@@ -932,7 +932,7 @@ namespace System.Windows.Forms.Design
 #if UNUSED
         /// <summary>
         ///  This should never be called.  It is a placeholder for
-        ///  menu items that we temporarially want to disable.
+        ///  menu items that we temporarily want to disable.
         /// </summary>
         private void OnMenuNever(object sender, EventArgs e) {
             Debug.Fail("This menu item should never be invoked.");
@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms.Design
                                     if (nestedContainer != null)
                                     {
                                         control = nestedContainer.Owner as Control;
-                                        selectedComponents[i] = control; // set this so that we dont have to re-do this logic in the BrintToFront case down.
+                                        selectedComponents[i] = control; // set this so that we don't have to re-do this logic in the BringToFront case down.
                                     }
                                 }
                             }
@@ -1070,7 +1070,7 @@ namespace System.Windows.Forms.Design
                                                 if (controlsProp != null)
                                                 {
                                                     // For a perf improvement, we will
-                                                    // call OnComponentChanging only once per parent to make sure we do not do unnecessaru serialization for Undo
+                                                    // call OnComponentChanging only once per parent to make sure we do not do unnecessary serialization for Undo
                                                     //this makes bulk operations way faster (see bug 532657)
 
                                                     parentList.Add(parent);
@@ -1396,7 +1396,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is called when the selection has changed.  Anyone using CommandSetItems
         ///  that need to update their status based on selection changes should override
-        ///  this and update their own commands at this time.  The base implementaion
+        ///  this and update their own commands at this time.  The base implementation
         ///  runs through all base commands and calls UpdateStatus on them.
         /// </summary>
         protected override void OnUpdateCommandStatus()
@@ -1532,8 +1532,8 @@ namespace System.Windows.Forms.Design
                     {
                         IComponent selection = targetSelection as IComponent;
                         ControlDesigner controlDesigner = host.GetDesigner(selection) as ControlDesigner;
-                        // In Whidbey controls like ToolStrips have componentTray presence, So dont select them again
-                        // through compoenent tray since here we select only Components. Hence only
+                        // In Whidbey controls like ToolStrips have componentTray presence, So don't select them again
+                        // through component tray since here we select only Components. Hence only
                         // components that have ComponentDesigners should be selected via the ComponentTray.
                         while (controlDesigner != null)
                         {
@@ -1606,7 +1606,7 @@ namespace System.Windows.Forms.Design
                     for (int c = 0; c < parentControlCount; c++)
                     {
                         // The logic for this is a bit lengthy, so I have broken it into separate
-                        // caluses:
+                        // clauses:
 
                         // We are not interested in ourself.
                         //
@@ -1674,7 +1674,7 @@ namespace System.Windows.Forms.Design
                     for (int c = parentControlCount - 1; c >= 0; c--)
                     {
                         // The logic for this is a bit lengthy, so I have broken it into separate
-                        // caluses:
+                        // clauses:
 
                         // We are not interested in ourself.
                         //

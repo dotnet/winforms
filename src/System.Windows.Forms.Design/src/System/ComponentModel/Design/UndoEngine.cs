@@ -186,7 +186,7 @@ namespace System.ComponentModel.Design
 
         /// <summary>
         ///  This virtual method creates a new instance of an  UndoUnit class.  The default implementation just returns a new instance of UndoUnit.  Those providing their own UndoEngine can derive from UndoUnit to customize the actions it performs.  This is also a handy way to connect UndoEngine into an existing undo stack.
-        ///  If the primary parameter is set to true, the undo unit will eventually be passed to either the AddUndoUnit or DiscardUndoUnit methods.  If the primary parameter is false, the undo unit is part of a nested transaction and will never be passed to AddUndoUnit or DiscardUndoUnit; only the encompasing unit will be passed, because the undo engine will either include or exclude the contents of the nested unit when it is closed.
+        ///  If the primary parameter is set to true, the undo unit will eventually be passed to either the AddUndoUnit or DiscardUndoUnit methods.  If the primary parameter is false, the undo unit is part of a nested transaction and will never be passed to AddUndoUnit or DiscardUndoUnit; only the encompassing unit will be passed, because the undo engine will either include or exclude the contents of the nested unit when it is closed.
         /// </summary>
         protected virtual UndoUnit CreateUndoUnit(string name, bool primary)
         {
@@ -935,7 +935,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  Returns an instance of the rquested service.
+            ///  Returns an instance of the requested service.
             /// </summary>
             protected object GetService(Type serviceType)
             {
@@ -1134,7 +1134,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///  If this add/remove event is still open, OpenCompnent will contain the component it is operating on.
+                ///  If this add/remove event is still open, OpenComponent will contain the component it is operating on.
                 /// </summary>
                 internal IComponent OpenComponent
                 {
@@ -1230,7 +1230,7 @@ namespace System.ComponentModel.Design
 
                 /// <summary>
                 ///  Indicates that undoing this event may cause side effects in other objects.
-                ///  Chagne events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
+                ///  Change events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
                 ///  Events without side effects have their BeforeUndo called and then their Undo called immediately after.
                 /// </summary>
                 public override bool CausesSideEffects { get { return true; } }
@@ -1288,7 +1288,7 @@ namespace System.ComponentModel.Design
                 }
 
                 /// <summary>
-                ///  Commits the unit.  Comitting the unit saves the "after" snapshot of the unit.  If commit is called multiple times only the first commit is registered.
+                ///  Commits the unit.  Committing the unit saves the "after" snapshot of the unit.  If commit is called multiple times only the first commit is registered.
                 /// </summary>
                 public void Commit(UndoEngine engine)
                 {
@@ -1401,7 +1401,7 @@ namespace System.ComponentModel.Design
             {
                 /// <summary>
                 ///  Indicates that undoing this event may cause side effects in other objects.
-                ///  Chagne events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.
+                ///  Change events fall into this category because, for example, a change involving adding an object to one collection may have a side effect of removing it from another collection.
                 ///  Events with side effects are grouped at undo time so all their BeforeUndo methods are called before their Undo methods.
                 ///  Events without side effects have their BeforeUndo called and then their Undo called immediately after.
                 /// </summary>

@@ -170,7 +170,7 @@ namespace System.Windows.Forms.Tests
 
             dataGridView.PrintToMetafile(emf);
 
-            // We only care about font styles, nothihg else
+            // We only care about font styles, nothing else
             emf.Validate(
                 state,
 

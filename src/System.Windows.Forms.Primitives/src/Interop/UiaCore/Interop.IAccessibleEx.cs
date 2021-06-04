@@ -47,7 +47,7 @@ internal static partial class Interop
             ///  Some wrapper-based implementations (notably UIABridge) can't reasonably wrap all
             ///  IRawElementProviderSimple elements returned as property values or patterns, so
             ///  these elements won't QI to IAccessibleEx. Where this is the case, the original
-            ///  IAccessibleEx that the property was retreived from must implement this method
+            ///  IAccessibleEx that the property was retrieved from must implement this method
             ///  so that the client can get an IAccessibleEx.
             ///
             ///  Usage for a client is as follows:

@@ -41,14 +41,14 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <!-- Supress creation of contentFiles directory -->
+    <!-- Suppress creation of contentFiles directory -->
     <ContentTargetFolders>.\</ContentTargetFolders>
   </PropertyGroup>
 
   <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
     <Content Include="content\**\*" />
     <Content Update="@(Content)">
-      <!-- Supress creation of content directory -->
+      <!-- Suppress creation of content directory -->
       <PackagePath>.\</PackagePath>
       <SkipPackageFileCheck>true</SkipPackageFileCheck>
     </Content>
