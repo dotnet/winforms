@@ -1309,8 +1309,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             Oleaut32.IErrorInfo pErrorInfo;
                             Oleaut32.GetErrorInfo(0, out pErrorInfo);
 
-                            string info = null;
-                            if (pErrorInfo is not null && pErrorInfo.GetDescription(ref info).Succeeded())
+                            string info;
+                            if (pErrorInfo is not null && pErrorInfo.GetDescription(out info).Succeeded())
                             {
                                 errorInfo = info;
                             }
