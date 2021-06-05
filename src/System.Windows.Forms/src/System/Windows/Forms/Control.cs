@@ -10455,7 +10455,8 @@ namespace System.Windows.Forms
 
             // Scaled font is only in cache and property bag is not updated with these values to avoid serializing new scaled values.
             DisposeScaledFontHandle();
-            _scaledControlFont = Font.WithSize(factor);
+            Font currentFont = Font;
+            _scaledControlFont = currentFont.WithSize(currentFont.Size * factor);
 
             if (Properties.ContainsInteger(s_fontHeightProperty))
             {
@@ -12198,7 +12199,8 @@ namespace System.Windows.Forms
                 if (_oldDeviceDpi != _deviceDpi)
                 {
                     var factor = (float)_deviceDpi / _oldDeviceDpi;
-                    var scaledFont = Font.WithSize(factor);
+                    Font localFont = Font;
+                    var scaledFont = localFont.WithSize(localFont.Size * factor);
 
                     // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
                     // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
