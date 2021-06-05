@@ -29,15 +29,13 @@ namespace System.Windows.Forms.Tests.DPI
         [InlineData(3.5 * DpiHelper.LogicalDpi)]
         public void Form_DpiChanged_ClientRectangle(int newDpi)
         {
-            // run tests only on Windows 10 versions that support thread dpi awareness.
+            // Run tests only on Windows 10 versions that support thread dpi awareness.
             if (!PlatformDetection.IsWindows10Version1803OrGreater)
             {
                 return;
             }
 
-            // set thread awareness context to PermonitorV2(PMv2).
-            // if process/thread is not in PMv2, calling 'EnterDpiAwarenessScope' is a no-op and that is by design.
-            // In this case, we will be setting thread to PMv2 mode and then scope to UNAWARE
+            // Set thread awareness context to PermonitorV2(PMv2).
             IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
 
             // Allocating dummy memory. Which will be cleared and replaced in TriggerDpiMessage.
@@ -47,15 +45,14 @@ namespace System.Windows.Forms.Tests.DPI
                 using var form = new Form();
                 form.AutoScaleMode = AutoScaleMode.Dpi;
                 form.Show();
-                Drawing.Rectangle initialClientRect = form.ClientRectangle;
+                Drawing.Rectangle initialBounds = form.Bounds;
+                float initialFontSize = form.Font.Size;
                 allocatedMemory = TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
                 var factor = newDpi / DpiHelper.LogicalDpi;
 
-                //Its difficult to calculate exact value in tests here. We need to account for native
-                //portions of the form and their DpiAwareness. So, simulating expected values to be greater
-                // than that factor multiplication.
-                Assert.True(form.ClientRectangle.Width > Math.Round(initialClientRect.Width * factor));
-                Assert.True(form.ClientRectangle.Height > Math.Round(initialClientRect.Height * factor));
+                Assert.Equal(form.Bounds.Width, Math.Round(initialBounds.Width * factor));
+                Assert.Equal(form.Bounds.Height, Math.Round(initialBounds.Height * factor));
+                Assert.Equal(form.Font.Size, initialFontSize * factor);
                 form.Close();
             }
             finally
@@ -63,7 +60,7 @@ namespace System.Windows.Forms.Tests.DPI
                 // Free the unmanaged memory.
                 Marshal.FreeHGlobal(allocatedMemory);
 
-                // reset back to original awareness context.
+                // Reset back to original awareness context.
                 User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
             }
         }
