@@ -1306,11 +1306,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         g = typeof(Oleaut32.IDispatch).GUID;
                         if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                         {
-                            Oleaut32.IErrorInfo pErrorInfo = null;
-                            Oleaut32.GetErrorInfo(0, ref pErrorInfo);
+                            Oleaut32.IErrorInfo pErrorInfo;
+                            Oleaut32.GetErrorInfo(0, out pErrorInfo);
 
-                            string info = null;
-                            if (pErrorInfo is not null && pErrorInfo.GetDescription(ref info).Succeeded())
+                            string info;
+                            if (pErrorInfo is not null && pErrorInfo.GetDescription(out info).Succeeded())
                             {
                                 errorInfo = info;
                             }
