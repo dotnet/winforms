@@ -220,7 +220,7 @@ namespace System.ComponentModel.Design
 
                 int verbCount = 0;
                 DesignerVerbCollection localVerbs = null;
-                DesignerVerbCollection designerActionVerbs = new DesignerVerbCollection(); // we instanciate this one here...
+                DesignerVerbCollection designerActionVerbs = new DesignerVerbCollection(); // we instantiate this one here...
                 IDesignerHost designerHost = GetService(typeof(IDesignerHost)) as IDesignerHost;
 
                 if (_selectionService != null && designerHost != null && _selectionService.SelectionCount == 1)

@@ -157,7 +157,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     statements = new CodeStatementCollection();
                     CodeTypeDeclaration typeDecl = manager.Context[typeof(CodeTypeDeclaration)] as CodeTypeDeclaration;
-                    RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
+                    RootContext rootCtx = manager.Context[typeof(RootContext)] as RootContext;
                     CodeExpression assignLhs = null;
                     CodeExpression assignRhs;
 
@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design.Serialization
                             // property and would still serialize it.  This code reverses what the
                             // outer if block does for this specific case.  We also need this
                             // for Everett / 1.0 backwards compat.
-                            if (!(manager.Context[typeof(ExpressionContext)] is ExpressionContext expCxt) || expCxt.PresetValue != value)
+                            if (!(manager.Context[typeof(ExpressionContext)] is ExpressionContext expCtx) || expCtx.PresetValue != value)
                             {
                                 isComplete = true;
                             }
@@ -212,7 +212,7 @@ namespace System.ComponentModel.Design.Serialization
                             generateObject = false;
                         }
 
-                        if (rootCxt is null)
+                        if (rootCtx is null)
                         {
                             generateLocal = true;
                             generateField = false;
@@ -240,17 +240,17 @@ namespace System.ComponentModel.Design.Serialization
                                     // We need to generate the field declaration.  See if there is a modifiers property on
                                     // the object.  If not, look for a DefaultModifies, and finally assume it's private.
                                     CodeMemberField field = new CodeMemberField(typeName, name);
-                                    PropertyDescriptor modifersProp = props["Modifiers"];
+                                    PropertyDescriptor modifiersProp = props["Modifiers"];
                                     MemberAttributes fieldAttrs;
 
-                                    if (modifersProp is null)
+                                    if (modifiersProp is null)
                                     {
-                                        modifersProp = props["DefaultModifiers"];
+                                        modifiersProp = props["DefaultModifiers"];
                                     }
 
-                                    if (modifersProp != null && modifersProp.PropertyType == typeof(MemberAttributes))
+                                    if (modifiersProp != null && modifiersProp.PropertyType == typeof(MemberAttributes))
                                     {
-                                        fieldAttrs = (MemberAttributes)modifersProp.GetValue(value);
+                                        fieldAttrs = (MemberAttributes)modifiersProp.GetValue(value);
                                     }
                                     else
                                     {
@@ -264,7 +264,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
 
                                 // Next, create a nice LHS for our pending assign statement, when we hook up the variable.
-                                assignLhs = new CodeFieldReferenceExpression(rootCxt.Expression, name);
+                                assignLhs = new CodeFieldReferenceExpression(rootCtx.Expression, name);
                             }
                             else
                             {

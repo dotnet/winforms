@@ -120,9 +120,9 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (name != null && ownerExpression != null)
                     {
-                        RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
+                        RootContext rootCtx = manager.Context[typeof(RootContext)] as RootContext;
 
-                        if (rootCxt != null && rootCxt.Value == tree.Owner)
+                        if (rootCtx != null && rootCtx.Value == tree.Owner)
                         {
                             name = "$this";
                         }

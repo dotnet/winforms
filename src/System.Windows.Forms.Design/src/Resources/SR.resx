@@ -661,7 +661,7 @@
   <data name="ContextMenuViewCode" xml:space="preserve">
     <value>View &amp;Code</value>
   </data>
-  <data name="SerializationManagerAreadyInSession" xml:space="preserve">
+  <data name="SerializationManagerAlreadyInSession" xml:space="preserve">
     <value>You cannot create a new session because this serialization manager already has an active serialization session.</value>
   </data>
   <data name="SerializationManagerNoMatchingCtor" xml:space="preserve">

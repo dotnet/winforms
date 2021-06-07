@@ -299,9 +299,9 @@ namespace System.ComponentModel.Design.Serialization
                         if (statements != null)
                         {
                             CodeExpression[] parameters;
-                            if (manager.Context[typeof(RootContext)] is RootContext rootCxt)
+                            if (manager.Context[typeof(RootContext)] is RootContext rootCtx)
                             {
-                                string baseType = manager.GetName(rootCxt.Value);
+                                string baseType = manager.GetName(rootCtx.Value);
                                 parameters = new CodeExpression[] { new CodeTypeOfExpression(baseType) };
                             }
                             else
@@ -513,9 +513,9 @@ namespace System.ComponentModel.Design.Serialization
                     if (!_checkedLocalizationLanguage)
                     {
                         // Check to see if our base component's localizable prop is true
-                        if (_manager.Context[typeof(RootContext)] is RootContext rootCxt)
+                        if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
                         {
-                            object comp = rootCxt.Value;
+                            object comp = rootCtx.Value;
                             PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
                             if (prop != null && prop.PropertyType == typeof(CultureInfo))
                             {
@@ -579,9 +579,9 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (_rootComponent is null)
                     {
-                        if (_manager.Context[typeof(RootContext)] is RootContext rootCxt)
+                        if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
                         {
-                            _rootComponent = rootCxt.Value;
+                            _rootComponent = rootCtx.Value;
                         }
                     }
 

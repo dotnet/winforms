@@ -61,14 +61,14 @@ namespace System.ComponentModel.Design.Serialization
             CodeStatementCollection statements = new CodeStatementCollection();
             CodeExpression lhs;
 
-            if (manager.Context[typeof(CodeTypeDeclaration)] is CodeTypeDeclaration typeDecl && manager.Context[typeof(RootContext)] is RootContext rootCxt)
+            if (manager.Context[typeof(CodeTypeDeclaration)] is CodeTypeDeclaration typeDecl && manager.Context[typeof(RootContext)] is RootContext rootCtx)
             {
                 CodeMemberField field = new CodeMemberField(typeof(IContainer), _containerName)
                 {
                     Attributes = MemberAttributes.Private
                 };
                 typeDecl.Members.Add(field);
-                lhs = new CodeFieldReferenceExpression(rootCxt.Expression, _containerName);
+                lhs = new CodeFieldReferenceExpression(rootCtx.Expression, _containerName);
             }
             else
             {

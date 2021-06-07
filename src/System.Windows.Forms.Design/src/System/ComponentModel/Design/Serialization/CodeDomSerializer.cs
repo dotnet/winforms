@@ -198,7 +198,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // We need to find out if SerializeCreationExpression returned a preset expression.
-                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && ReferenceEquals(cxt.PresetValue, value))
+                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
                     {
                         isPreset = true;
                     }

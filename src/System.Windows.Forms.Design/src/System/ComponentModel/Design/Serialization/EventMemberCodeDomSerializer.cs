@@ -66,7 +66,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         Trace("Event {0} bound to {1}", eventToSerialize.Name, methodName);
                         CodeExpression eventTarget = SerializeToExpression(manager, value);
-                        TraceWarningIf(eventTarget is null, "Object has no name and no propery ref in context so we cannot serialize events: {0}", value);
+                        TraceWarningIf(eventTarget is null, "Object has no name and no property ref in context so we cannot serialize events: {0}", value);
                         if (eventTarget != null)
                         {
                             CodeTypeReference delegateTypeRef = new CodeTypeReference(eventToSerialize.EventType);

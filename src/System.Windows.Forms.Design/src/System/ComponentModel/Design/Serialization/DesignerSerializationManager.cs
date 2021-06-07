@@ -390,7 +390,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (session != null)
             {
-                throw new InvalidOperationException(SR.SerializationManagerAreadyInSession);
+                throw new InvalidOperationException(SR.SerializationManagerAlreadyInSession);
             }
 
             session = new SerializationSession(this);

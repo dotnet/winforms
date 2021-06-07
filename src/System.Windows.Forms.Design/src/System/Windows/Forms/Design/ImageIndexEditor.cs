@@ -187,7 +187,7 @@ namespace System.Windows.Forms.Design
                 {
                     if (parentInstance is null)
                     {
-                        Debug.Fail("A property specified in the path is null or not yet instanciated at this time");
+                        Debug.Fail("A property specified in the path is null or not yet instantiated at this time");
                         break; // path is wrong
                     }
 

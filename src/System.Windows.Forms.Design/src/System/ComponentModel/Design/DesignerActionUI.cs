@@ -18,7 +18,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     internal class DesignerActionUI : IDisposable
     {
-        private static readonly TraceSwitch s_designeActionPanelTraceSwitch = new TraceSwitch("DesigneActionPanelTrace", "DesignerActionPanel tracing");
+        private static readonly TraceSwitch s_designerActionPanelTraceSwitch = new TraceSwitch("DesignerActionPanelTrace", "DesignerActionPanel tracing");
 
         private Adorner _designerActionAdorner; //used to add designeraction-related glyphs
         private IServiceProvider _serviceProvider; //standard service provider
@@ -740,7 +740,7 @@ namespace System.ComponentModel.Design
             {
                 if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
-                    Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
+                    Debug.WriteLineIf(s_designerActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
                     Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
                     User32.SetWindowLong(designerActionHost, User32.GWL.HWNDPARENT, new HandleRef(_mainParentWindow, _mainParentWindow.Handle));
                 }

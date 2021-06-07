@@ -1090,7 +1090,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!(resolved || (!resolved && !canInvokeManager)))
                         {
                             manager.ReportError(new CodeDomSerializerException(string.Format(SR.CodeDomComponentSerializationServiceDeserializationError, name), manager));
-                            Debug.Fail("No statements or instance for name and no lone experssions: " + name);
+                            Debug.Fail("No statements or instance for name and no lone expressions: " + name);
                         }
                     }
 
@@ -1192,9 +1192,9 @@ namespace System.ComponentModel.Design.Serialization
                     }
 
                     // Next, save a statement collection for each object.
-                    StatementContext statementCxt = new StatementContext();
-                    statementCxt.StatementCollection.Populate(objectData.Keys);
-                    manager.Context.Push(statementCxt);
+                    StatementContext statementCtx = new StatementContext();
+                    statementCtx.StatementCollection.Populate(objectData.Keys);
+                    manager.Context.Push(statementCtx);
                     try
                     {
                         foreach (ObjectData data in objectData.Values)
@@ -1226,7 +1226,7 @@ namespace System.ComponentModel.Design.Serialization
                                             state[StateCode] = serializer.Serialize(manager, data._value);
                                         }
 
-                                        CodeStatementCollection ctxStatements = statementCxt.StatementCollection[data._value];
+                                        CodeStatementCollection ctxStatements = statementCtx.StatementCollection[data._value];
                                         if (ctxStatements != null && ctxStatements.Count > 0)
                                         {
                                             state[StateCtx] = ctxStatements;
@@ -1242,7 +1242,7 @@ namespace System.ComponentModel.Design.Serialization
                                     }
                                     else
                                     {
-                                        state[StateCode] = statementCxt.StatementCollection[data._value];
+                                        state[StateCode] = statementCtx.StatementCollection[data._value];
                                     }
                                 }
                                 else
