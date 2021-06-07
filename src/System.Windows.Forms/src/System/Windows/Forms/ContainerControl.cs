@@ -44,9 +44,11 @@ namespace System.Windows.Forms
 
         private AutoScaleMode _autoScaleMode = AutoScaleMode.Inherit;
 
-        // Top-level window is scaled by windows suggested rectangle during WM_DPICHANGED event.
-        // We use this flag to indicate its top-level window and is already scaled.
-        private bool _scaledByDpiChangedEvent;
+        /// <summary>
+        /// Top-level window is scaled by suggested rectangle received from windows WM_DPICHANGED message event.
+        /// We use this flag to indicate it is top-level window and is already scaled.
+        /// </summary>
+        private bool _isScaledByDpiChangedEvent;
 
         private BitVector32 _state;
 
@@ -79,9 +81,11 @@ namespace System.Windows.Forms
 
         private const string FontMeasureString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        // Child container controls that inherit autoscale mode ( and does not store their own) would need 'AutoscaleFactor' from
-        // parent to scale them during DPI changed events. We can not dynamically query for 'public
-        // property 'AutoScaleFactor' as it computes with already updated Font and Dpi of the parent.
+        /// <summary>
+        /// Child Container control that inherit <see cref="AutoScaleMode"/> (and does not store their own) would need
+        /// <see cref="AutoScaleFactor"/> from parent to scale them during Dpi changed events. We can not use
+        /// <see cref="AutoScaleFactor"/> property as it get computed with already updated Font and Dpi of their parent.
+        /// </summary>
         internal SizeF _currentAutoScaleFactor = new(1F, 1F);
 
         /// <summary>
@@ -96,7 +100,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  AutoScaleDimensions represents the DPI or Font setting that the control has been scaled
+        ///  AutoScaleDimensions represents the Dpi or Font setting that the control has been scaled
         ///  to or designed at. Specifically, at design time this property will be set by the
         ///  designer to the value that the developer is designing at. Then, at runtime, when the
         ///  form loads if the CurrentAutoScaleDimensions are different from the AutoScaleDimensions,
@@ -152,9 +156,9 @@ namespace System.Windows.Forms
         ///  Scaling by Font is useful if you wish to have a control
         ///  or form stretch or shrink according to the size of the fonts in the system, and should
         ///  be used when the control or form's size itself does not matter.
-        ///  Scaling by DPI is useful when you wish to keep a control or form a specific size
+        ///  Scaling by Dpi is useful when you wish to keep a control or form a specific size
         ///  independent of font. for example, a control displaying a chart or other graphic
-        ///  may want to use DPI scaling to increase in size to account for higher DPI monitors.
+        ///  may want to use Dpi scaling to increase in size to account for higher Dpi monitors.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [SRDescription(nameof(SR.ContainerControlAutoScaleModeDescr))]
@@ -300,7 +304,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Represent the actual DPI or Font settings of the display at runtime. If the AutoScaleMode
+        ///  Represent the actual Dpi or Font settings of the display at runtime. If the AutoScaleMode
         ///  is set to 'None' then the CurrentAutoScaleDimensions is equal to the ActualScaleDimensions.
         /// </summary>
         [Browsable(false)]
@@ -326,7 +330,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                // this DPI value comes from the primary monitor.
+                                // This Dpi value comes from the primary monitor.
                                 _currentAutoScaleDimensions = new SizeF(DpiHelper.DeviceDpi, DpiHelper.DeviceDpi);
                             }
 
@@ -861,9 +865,9 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             // Font may be updated for container controls that are set
-            // to scale in DPI mode (ex: DPI changed event). This may require
-            // scaling/relayout of the form. 'AutoScaleFactor' will take
-            // 'AutoScaleMode' into account while scaling the controls.
+            // to scale in Dpi mode (during WM_DPICHANGED event).
+            // This may require scaling/relayout of the form. AutoScaleFactor will take
+            // AutoScaleMode into account while scaling the controls.
             if (AutoScaleMode != AutoScaleMode.None)
             {
                 _currentAutoScaleDimensions = SizeF.Empty;
@@ -877,8 +881,8 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    // 'scalingByFontChanged' helps to differentiate the scaling between ResumeLayout and FontChanged event.
-                    PerformAutoScale(!RequiredScalingEnabled, excludedBounds: true, scalingByFontChanged: true);
+                    // Parameter 'causedByFontChanged' helps to differentiate the scaling between ResumeLayout and FontChanged event.
+                    PerformAutoScale(!RequiredScalingEnabled, excludedBounds: true, causedByFontChanged: true);
                 }
                 finally
                 {
@@ -930,23 +934,20 @@ namespace System.Windows.Forms
         public void PerformAutoScale() => PerformAutoScale(includedBounds: true, excludedBounds: true);
 
         /// <summary>
-        ///  Performs scaling of this control. Scaling works by scaling all children of this control.
-        ///
-        ///  If includedBounds is true those controls whose bounds have changed since
-        ///  they were last scaled will be auto scaled. If excludedBounds is true those
-        ///  controls whose bounds have not changed since they were last scaled will be
-        ///  auto scaled.
-        ///
-        ///  PerformAutoScale is automatically called during OnLayout. The parameters to
-        ///  PerformAutoScale are passed as follows:
+        /// Performs scaling of this control. Scaling works by scaling all children of this control.
+        /// PerformAutoScale is automatically called during OnLayout. The parameters to
+        /// PerformAutoScale are passed as follows:
         ///  1. If AutoScaleDimensions are set, includedBounds is set to true.
         ///  2. If a font change occurred, excludedBounds is set to true.
-        ///
-        /// 'scalingByFontChanged' parameter help distinguish the scaling by 'ResumeLayout'
-        /// or 'OnFontChanged' event. Scaling by 'OnFontChanged' event does not need to scale
-        /// child container controls as they receive their own 'OnFontChanged' message.
         /// </summary>
-        private void PerformAutoScale(bool includedBounds, bool excludedBounds, bool scalingByFontChanged = false)
+        /// <param name="includedBounds">If includedBounds is true those controls whose bounds have changed since
+        ///  they were last scaled will be auto scaled.</param>
+        /// <param name="excludedBounds">If excludedBounds is true those controls whose bounds have not changed
+        /// since they were last scaled will be auto scaled.</param>
+        /// <param name="causedByFontChanged">Helps to distinguish the scaling by ResumeLayout
+        /// or <see cref="OnFontChanged(EventArgs)"/> event. Scaling by <see cref="OnFontChanged(EventArgs)"/> event
+        /// does not need to scale child container control as they receive their own <see cref="OnFontChanged(EventArgs)"/> event.</param>
+        private void PerformAutoScale(bool includedBounds, bool excludedBounds, bool causedByFontChanged = false)
         {
             bool suspended = false;
 
@@ -960,7 +961,7 @@ namespace System.Windows.Forms
                     SizeF autoScaleFactor = AutoScaleFactor;
 
                     // Container controls at child level that inherit autoscale mode but does not store
-                    // AutoScaleDimensions, we would need to scale those controls with their parent 'AutoScaleFactor'.
+                    // AutoScaleDimensions, we would need to scale those controls with their parent AutoScaleFactor.
                     if (AutoScaleMode == AutoScaleMode.Inherit)
                     {
                         autoScaleFactor = GetParentAutoScaleFactor();
@@ -975,7 +976,7 @@ namespace System.Windows.Forms
                         // we set its scaling factor to unity too.
                         SizeF included = includedBounds ? autoScaleFactor : SizeF.Empty;
                         SizeF excluded = excludedBounds ? autoScaleFactor : SizeF.Empty;
-                        Scale(included, excluded, this, scalingByFontChanged);
+                        Scale(included, excluded, this, causedByFontChanged);
                     }
 
                     _autoScaleDimensions = CurrentAutoScaleDimensions;
@@ -1048,16 +1049,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Overrides the default scaling mechanism to account for autoscaling. This override
         ///  behaves as follows: any unchanged controls are always scaled according to the container
-        ///  control's AutoScaleFactor. Any changed controls are scaled according to the provided
+        ///  control's <see cref="AutoScaleFactor"/>. Any changed controls are scaled according to the provided
         ///  scaling factor.
         /// </summary>
-        internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool scalingByFontChanged = false)
+        internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool causedByFontChanged = false)
         {
             // If we're inhieriting our scaling from our parent, Scale is really easy:  just do the
             // base class implementation.
             if (AutoScaleMode == AutoScaleMode.Inherit)
             {
-                base.Scale(includedFactor, excludedFactor, requestingControl, scalingByFontChanged);
+                base.Scale(includedFactor, excludedFactor, requestingControl, causedByFontChanged);
             }
             else
             {
@@ -1093,7 +1094,7 @@ namespace System.Windows.Forms
                     {
                         ourExternalContainerFactor = SizeF.Empty;
 
-                        bool scaleUs = (requestingControl != this || _state[s_stateParentChanged] || scalingByFontChanged);
+                        bool scaleUs = (requestingControl != this || _state[s_stateParentChanged] || causedByFontChanged);
 
                         // For design time support:  we may be parented within another form
                         // that is not part of the designer.
@@ -1114,14 +1115,14 @@ namespace System.Windows.Forms
                     }
 
                     // Top-level window may be already scaled by WM_DPICHANGE message. So, we skip it in such case.
-                    if (!_scaledByDpiChangedEvent)
+                    if (!_isScaledByDpiChangedEvent)
                     {
                         ScaleControl(includedFactor, ourExternalContainerFactor, requestingControl);
                     }
 
                     if (!_doNotScaleChildren)
                     {
-                        ScaleChildControls(childIncludedFactor, ourExcludedFactor, requestingControl, scalingByFontChanged);
+                        ScaleChildControls(childIncludedFactor, ourExcludedFactor, requestingControl, causedByFontChanged);
                     }
                 }
             }
@@ -1361,8 +1362,8 @@ namespace System.Windows.Forms
 
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-            // Checking if font is inherited from parent and is not being scaled by Parent.
-            // need to scale explicitly with new scaled font. (ex scenario: Winforms designer in VS)
+            // Check if font is inherited from parent and is not being scaled by Parent (e.g. Winforms designer
+            // in Visual Studio). In this case we need to scale Control explicitly with respect to new scaled Font.
             if (TryGetExplicitlySetFont(out _))
             {
                 return;
@@ -1380,16 +1381,14 @@ namespace System.Windows.Forms
             SuspendAllLayout(this);
             try
             {
-                // If this container is a top-level window, We would receive WM_DPICHANGED message that
-                // has 'SuggestedRectangle' for the control. We are forced to use this in such cases to
+                // If this container is a top-level window, we would receive WM_DPICHANGED message that
+                // has SuggestedRectangle for the control. We are forced to use this in such cases to
                 // make the control placed in right location with respect to the new monitor that triggered
-                // Dpi change event. Failing to apply these bounds will result in a circular WM_DPICHANGED
+                // WM_DPICHANGED event. Failing to apply SuggestedRectangle will result in a circular WM_DPICHANGED
                 // events on the control.
 
-                // Note: 'SuggestedRectangle' passed is based on the DPI (not Font) scale. if top-level window is
-                // Font scaled,We might see deviations in the expected bounds and may result in adding
-                // Scrollbars (horizantal/vertical)
-
+                // Note: SuggestedRectangle supplied  by WM_DPICHANGED event is Dpi (not Font) scaled. if top-level window is
+                // Font scaled, we might see deviations in the expected bounds and may result in adding Scrollbars (horizantal/vertical)
                 User32.SetWindowPos(
                     new HandleRef(this, HandleInternal),
                     User32.HWND_TOP,
@@ -1401,9 +1400,9 @@ namespace System.Windows.Forms
 
                 // Bounds are already scaled for the top-level window. We would need to skip scaling of
                 // this control further by the 'OnFontChanged' event.
-                _scaledByDpiChangedEvent = true;
+                _isScaledByDpiChangedEvent = true;
 
-                // Factor is used only to scale Font. After that, AutoscaleFactor kicks in to scale controls.
+                // Factor is used only to scale Font. After that AutoscaleFactor kicks in to scale controls.
                 var factor = ((float)deviceDpiNew) / deviceDpiOld;
                 if (TryGetExplicitlySetFont(out Font localFont))
                 {
@@ -1411,9 +1410,10 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // Scaling font and caching it locally. Propertybag is not updated.
+                    // Scale Font and cache it locally. Propertybag is not updated.
                     // If Font was not explicitly assigned, it should remain that way.
                     // Need to make sure this holds true at the time of designer serialization.
+                    // https://github.com/dotnet/winforms/issues/5047
                     ScaleFont(factor);
 
                     using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
@@ -1424,9 +1424,9 @@ namespace System.Windows.Forms
             }
             finally
             {
-                // We want to perform layout for dpi-changed HDpi improvements - setting the second parameter to 'true'
+                // We want to perform layout for dpi-changed high Dpi improvements - setting the second parameter to 'true'
                 ResumeAllLayout(this, true);
-                _scaledByDpiChangedEvent = false;
+                _isScaledByDpiChangedEvent = false;
             }
         }
 

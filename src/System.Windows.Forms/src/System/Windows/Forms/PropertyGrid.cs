@@ -161,12 +161,11 @@ namespace System.Windows.Forms
 
             SuspendLayout();
 
-            // Scaling PropertyGrid but its children will be excluded from AutoScale.
+            // Scaling PropertyGrid but its children will be excluded from AutoScale. Please see OnLayoutInternal().
             AutoScaleMode = AutoScaleMode.Inherit;
 
-            // Children of PropertyGrid are special and explicitly resized when propertygrid is resized (OnLayoutInternal())
-            // and adjust its children bounds with respect to propertygrid bounds. Autoscale mode
-            // should not scale them again.
+            // Children of PropertyGrid are special and explicitly resized when propertygrid is resized (by calling OnLayoutInternal())
+            // and adjust its children bounds with respect to propertygrid bounds. Autoscale mode should not scale them again.
             _doNotScaleChildren = true;
 
             SetStyle(ControlStyles.UseTextForAccessibility, false);
@@ -3050,7 +3049,7 @@ namespace System.Windows.Forms
                 if (!dividerOnly)
                 {
                     // PropertyGrid does a special handling on scaling and positioning its
-                    // child controls. These are not scaled by their parent when Dpi/Font changed
+                    // child controls. These are not scaled by their parent when Dpi/Font changed events
                     if (_oldDeviceDpi != _deviceDpi)
                     {
                         RescaleConstants();

@@ -4256,7 +4256,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the DPI resolution of the screen this top level window is displayed on changes,
+        ///  Occurs when the Dpi resolution of the screen this top level window is displayed on changes,
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
@@ -4295,8 +4295,8 @@ namespace System.Windows.Forms
         ///  scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
         ///  This message is sent to top level windows before WM_DPICHANGED.
         ///  If the application responds to this message, the resulting size will be the candidate rectangle
-        ///  sent to WM_DPICHANGED. The WPARAM contains a DPI value. The size needs to be computed if
-        ///  the window were to switch to this DPI. LPARAM is unused and will be zero.
+        ///  sent to WM_DPICHANGED. The WPARAM contains a Dpi value. The size needs to be computed if
+        ///  the window were to switch to this Dpi. LPARAM is unused and will be zero.
         ///  The return value is a size, where the LOWORD is the desired width of the window and the HIWORD
         ///  is the desired height of the window. A return value of zero indicates that the app does not
         ///  want any special behavior and the candidate rectangle will be computed linearly.
@@ -5253,11 +5253,11 @@ namespace System.Windows.Forms
                         throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "showDialog"), nameof(owner));
                     }
 
-                    // In a multi DPI environment and applications in PMV2 mode, DPI changed events triggered
-                    // only when there is a DPI change happened for the Handle directly or via its parent.
+                    // In a multi Dpi environment and applications in PMV2 mode, Dpi changed events triggered
+                    // only when there is a Dpi change happened for the Handle directly or via its parent.
                     // So, it is necessary to not set the owner before creating the handle. Otherwise,
-                    // the window may never receive DPI changed event even if its parent has different DPI.
-                    // Users at runtime, has to move the window between the screens to get the DPI changed events triggered.
+                    // the window may never receive Dpi changed event even if its parent has different Dpi.
+                    // Users at runtime, has to move the window between the screens to get the Dpi changed events triggered.
 
                     Properties.SetObject(PropDialogOwner, owner);
                     if (owner is Form form && owner != oldOwner)

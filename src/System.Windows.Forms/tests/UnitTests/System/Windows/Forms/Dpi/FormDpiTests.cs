@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
 
-namespace System.Windows.Forms.Tests.DPI
+namespace System.Windows.Forms.Tests.Dpi
 {
     public class FormDpiTests : IClassFixture<ThreadExceptionFixture>
     {
