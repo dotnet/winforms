@@ -1202,7 +1202,7 @@ namespace System.Windows.Forms
             // Determine whether the new list converts PropertyChanged events on its items into ListChanged events.
             // If it does, then the BindingSource won't need to hook the PropertyChanged events itself. If the list
             // implements IRaiseItemChangedEvents, we can ask it directly. Otherwise we will assume that any list
-            // which impements IBindingList automatically supports this capability.
+            // which implements IBindingList automatically supports this capability.
             if (listInternal is IRaiseItemChangedEvents)
             {
                 _listRaisesItemChangedEvents = (listInternal as IRaiseItemChangedEvents).RaisesItemChangedEvents;
