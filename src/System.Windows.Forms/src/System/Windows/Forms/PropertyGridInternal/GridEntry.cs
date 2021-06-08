@@ -1404,9 +1404,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected virtual void Dispose(bool disposing)
         {
-            // make sure we don't accidentally
-            // check flags in this state...
-            Flags |= FL_CHECKED;
+            // Make sure we don't accidentally check flags while disposing.
+            _flags |= FL_CHECKED;
 
             SetFlag(FLAG_DISPOSED, true);
 

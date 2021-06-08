@@ -416,7 +416,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (Converter is null)
                 {
-                    Converter = _propertyInfo.Converter;
+                    Converter = _propertyInfo?.Converter;
                 }
 
                 return base.TypeConverter;

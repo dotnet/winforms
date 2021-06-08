@@ -28,7 +28,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
             int firstPropertyIndex = 1; // Index 0 corresponds to the category grid entry.
             PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
-            PropertyDescriptorGridEntry selectedGridEntry = propertyGridView.TestAccessor().Dynamic.selectedGridEntry;
+            PropertyDescriptorGridEntry selectedGridEntry = propertyGridView.TestAccessor().Dynamic._selectedGridEntry;
 
             Assert.Equal(gridEntry.PropertyName, selectedGridEntry.PropertyName);
 
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             int firstPropertyIndex = 2; // Index of Text property which has a RichEdit control as an editor.
             PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
 
-            propertyGridView.TestAccessor().Dynamic.selectedGridEntry = gridEntry;
+            propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
             UiaCore.IRawElementProviderFragment editFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.Equal("GridViewEditAccessibleObject", editFieldAccessibleObject.GetType().Name);
@@ -60,7 +60,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             // The case with drop down holder:
             using TestDropDownHolder dropDownHolder = new TestDropDownHolder(propertyGridView);
             dropDownHolder.CreateControl();
-            propertyGridView.TestAccessor().Dynamic.dropDownHolder = dropDownHolder;
+            propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
 
             dropDownHolder.SetState(0x00000002, true); // Control class States.Visible flag
 

@@ -17,11 +17,11 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             using TestPropertyGridView testPropertyGridView = new(null, propertyGrid);
 
             TestPropertyDescriptorGridEntry gridEntry = new(propertyGrid, null, false);
-            testPropertyGridView.TestAccessor().Dynamic.selectedGridEntry = gridEntry;
+            testPropertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
             TestDropDownHolder dropDownHolder = new(testPropertyGridView);
             dropDownHolder.SetState(0x00000002, true); // Control class States.Visible flag
-            testPropertyGridView.TestAccessor().Dynamic.dropDownHolder = dropDownHolder;
+            testPropertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
             gridEntry.TestAccessor().Dynamic._parentEntry = new TestGridEntry(propertyGrid, null, testPropertyGridView);
 
             UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
