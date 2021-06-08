@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Return the requested method if it is implemented by the Reflection object. The
-        ///  match is based upon the name of the method. If the object implementes multiple methods
+        ///  match is based upon the name of the method. If the object implemented multiple methods
         ///  with the same name an AmbiguousMatchException is thrown.
         /// </summary>
         MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)
