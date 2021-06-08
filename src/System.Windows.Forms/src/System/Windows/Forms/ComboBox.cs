@@ -1353,7 +1353,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            //don't fire textch if we had set the selectedindex -- because it was already fired if so.
+            //don't fire TextChanged if we had set the selectedindex -- because it was already fired if so.
             if (textChanged && !selectedIndexSet)
             {
                 // No match, just fire a TextChanged
