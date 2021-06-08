@@ -14,14 +14,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class CategoryGridEntry : GridEntry
     {
-        internal string name;
-        private Brush backBrush;
-        private static Hashtable categoryStates;
+        private readonly string _name;
+        private Brush _backBrush;
+        private static Hashtable s_categoryStates;
+        private readonly static object s_lock = new();
 
         public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry peParent, string name, GridEntry[] childGridEntries)
-        : base(ownerGrid, peParent)
+            : base(ownerGrid, peParent)
         {
-            this.name = name;
+            _name = name;
 
 #if DEBUG
             for (int n = 0; n < childGridEntries.Length; n++)
@@ -29,16 +30,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Assert(childGridEntries[n] is not null, "Null item in category subproperty list");
             }
 #endif
-            if (categoryStates is null)
-            {
-                categoryStates = new Hashtable();
-            }
 
-            lock (categoryStates)
+            lock (s_lock)
             {
-                if (!categoryStates.ContainsKey(name))
+                s_categoryStates ??= new Hashtable();
+
+                if (!s_categoryStates.ContainsKey(name))
                 {
-                    categoryStates.Add(name, true);
+                    s_categoryStates.Add(name, true);
                 }
             }
 
@@ -51,12 +50,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             ChildCollection = new GridEntryCollection(this, childGridEntries);
 
-            lock (categoryStates)
+            lock (s_lock)
             {
-                InternalExpanded = (bool)categoryStates[name];
+                InternalExpanded = (bool)s_categoryStates[name];
             }
 
-            SetFlag(GridEntry.FLAG_LABEL_BOLD, true);
+            SetFlag(FLAG_LABEL_BOLD, true);
         }
 
         /// <summary>
@@ -74,10 +73,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (disposing)
             {
-                if (backBrush is not null)
+                if (_backBrush is not null)
                 {
-                    backBrush.Dispose();
-                    backBrush = null;
+                    _backBrush.Dispose();
+                    _backBrush = null;
                 }
 
                 if (ChildCollection is not null)
@@ -108,7 +107,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override Color GetBackgroundColor() => GridEntryHost.GetLineColor();
 
-        protected override Color LabelTextColor => ownerGrid.CategoryForeColor;
+        protected override Color LabelTextColor => OwnerGrid.CategoryForeColor;
 
         public override bool Expandable
         {
@@ -123,9 +122,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             set
             {
                 base.InternalExpanded = value;
-                lock (categoryStates)
+                lock (s_lock)
                 {
-                    categoryStates[name] = value;
+                    s_categoryStates[_name] = value;
                 }
             }
         }
@@ -150,7 +149,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return name;
+                return _name;
             }
         }
 
@@ -167,10 +166,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public override string GetPropertyTextValue(object o)
-        {
-            return "";
-        }
+        public override string GetPropertyTextValue(object o) => string.Empty;
 
         public override Type PropertyType
         {
@@ -207,9 +203,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             base.PaintLabel(g, rect, clipRect, false, true);
 
             // now draw the focus rect
-            if (selected && hasFocus)
+            if (selected && HasFocus)
             {
-                bool bold = ((Flags & GridEntry.FLAG_LABEL_BOLD) != 0);
+                bool bold = ((Flags & FLAG_LABEL_BOLD) != 0);
                 Font font = GetFont(bold);
                 int labelWidth = GetLabelTextWidth(PropertyLabel, g, font);
 
@@ -226,10 +222,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            // draw the line along the top
-            if (parentPE.GetChildIndex(this) > 0)
+            // Draw the line along the top
+            if (ParentGridEntry.GetChildIndex(this) > 0)
             {
-                using var topLinePen = ownerGrid.CategorySplitterColor.GetCachedPenScope();
+                using var topLinePen = OwnerGrid.CategorySplitterColor.GetCachedPenScope();
                 g.DrawLine(topLinePen, rect.X - 1, rect.Y - 1, rect.Width + 2, rect.Y - 1);
             }
         }
@@ -238,17 +234,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             base.PaintValue(val, g, rect, clipRect, paintFlags & ~PaintValueFlags.DrawSelected);
 
-            // draw the line along the top
-            if (parentPE.GetChildIndex(this) > 0)
+            // Draw the line along the top
+            if (ParentGridEntry.GetChildIndex(this) > 0)
             {
-                using var topLinePen = ownerGrid.CategorySplitterColor.GetCachedPenScope();
+                using var topLinePen = OwnerGrid.CategorySplitterColor.GetCachedPenScope();
                 g.DrawLine(topLinePen, rect.X - 2, rect.Y - 1, rect.Width + 1, rect.Y - 1);
             }
         }
 
         internal override bool NotifyChildValue(GridEntry pe, int type)
         {
-            return parentPE.NotifyChildValue(pe, type);
+            return ParentGridEntry.NotifyChildValue(pe, type);
         }
     }
 }

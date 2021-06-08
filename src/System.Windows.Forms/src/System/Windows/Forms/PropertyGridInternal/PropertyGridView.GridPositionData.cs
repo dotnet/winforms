@@ -12,32 +12,32 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal class GridPositionData
         {
-            readonly ArrayList expandedState;
-            readonly GridEntryCollection selectedItemTree;
-            readonly int itemRow;
-            readonly int itemCount;
+            private readonly ArrayList _expandedState;
+            private readonly GridEntryCollection _selectedItemTree;
+            private readonly int _itemRow;
+            private readonly int _itemCount;
 
             public GridPositionData(PropertyGridView gridView)
             {
-                selectedItemTree = gridView.GetGridEntryHierarchy(gridView.selectedGridEntry);
-                expandedState = gridView.SaveHierarchyState(gridView.topLevelGridEntries);
-                itemRow = gridView.selectedRow;
-                itemCount = gridView.totalProps;
+                _selectedItemTree = gridView.GetGridEntryHierarchy(gridView._selectedGridEntry);
+                _expandedState = gridView.SaveHierarchyState(gridView._topLevelGridEntries);
+                _itemRow = gridView._selectedRow;
+                _itemCount = gridView.TotalProps;
             }
 
             public GridEntry Restore(PropertyGridView gridView)
             {
-                gridView.RestoreHierarchyState(expandedState);
-                GridEntry entry = gridView.FindEquivalentGridEntry(selectedItemTree);
+                gridView.RestoreHierarchyState(_expandedState);
+                GridEntry entry = gridView.FindEquivalentGridEntry(_selectedItemTree);
 
                 if (entry is not null)
                 {
                     gridView.SelectGridEntry(entry, true);
 
-                    int delta = gridView.selectedRow - itemRow;
+                    int delta = gridView._selectedRow - _itemRow;
                     if (delta != 0 && gridView.ScrollBar.Visible)
                     {
-                        if (itemRow < gridView.visibleRows)
+                        if (_itemRow < gridView._visibleRows)
                         {
                             delta += gridView.GetScrollOffset();
 

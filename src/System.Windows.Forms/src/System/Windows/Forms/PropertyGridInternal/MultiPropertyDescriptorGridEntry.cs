@@ -12,15 +12,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridEntry
     {
-        private readonly MergePropertyDescriptor mergedPd;
-        private readonly object[] objs;
+        private readonly MergePropertyDescriptor _mergedDescriptor;
+        private readonly object[] _objects;
 
         public MultiPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, object[] objectArray, PropertyDescriptor[] propInfo, bool hide)
         : base(ownerGrid, peParent, hide)
         {
-            mergedPd = new MergePropertyDescriptor(propInfo);
-            objs = objectArray;
-            base.Initialize(mergedPd);
+            _mergedDescriptor = new MergePropertyDescriptor(propInfo);
+            _objects = objectArray;
+            Initialize(_mergedDescriptor);
         }
 
         public override IContainer Container
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 IContainer c = null;
 
-                foreach (object o in objs)
+                foreach (object o in _objects)
                 {
                     if (!(o is IComponent comp))
                     {
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 try
                 {
-                    foreach (object o in mergedPd.GetValues(objs))
+                    foreach (object o in _mergedDescriptor.GetValues(_objects))
                     {
                         if (o is null)
                         {
@@ -117,14 +117,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                if (mergedPd.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
+                if (_mergedDescriptor.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
                 {
                     return base.CreateChildren(diffOldChildren);
                 }
 
                 ChildCollection.Clear();
 
-                MultiPropertyDescriptorGridEntry[] mergedProps = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(mergedPd.GetValues(objs), this, PropertySort, CurrentTab);
+                MultiPropertyDescriptorGridEntry[] mergedProps = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(_mergedDescriptor.GetValues(_objects), this, PropertySort, CurrentTab);
 
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 
@@ -149,18 +149,18 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override object GetChildValueOwner(GridEntry childEntry)
         {
-            if (mergedPd.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
+            if (_mergedDescriptor.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
             {
                 return base.GetChildValueOwner(childEntry);
             }
 
-            return mergedPd.GetValues(objs);
+            return _mergedDescriptor.GetValues(_objects);
         }
 
         public override IComponent[] GetComponents()
         {
-            IComponent[] temp = new IComponent[objs.Length];
-            Array.Copy(objs, 0, temp, 0, objs.Length);
+            IComponent[] temp = new IComponent[_objects.Length];
+            Array.Copy(_objects, 0, temp, 0, _objects.Length);
             return temp;
         }
 
@@ -172,7 +172,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             bool allEqual = true;
             try
             {
-                if (value is null && mergedPd.GetValue(objs, out allEqual) is null)
+                if (value is null && _mergedDescriptor.GetValue(_objects, out allEqual) is null)
                 {
                     if (!allEqual)
                     {
@@ -313,7 +313,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 }
                             }
 
-                            mergedPd.ResetValue(obj);
+                            _mergedDescriptor.ResetValue(obj);
 
                             if (needChangeNotify)
                             {
@@ -395,12 +395,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (ComponentChangeService is not null)
             {
-                int cLength = objs.Length;
+                int cLength = _objects.Length;
                 for (int i = 0; i < cLength; i++)
                 {
                     try
                     {
-                        ComponentChangeService.OnComponentChanging(objs[i], mergedPd[i]);
+                        ComponentChangeService.OnComponentChanging(_objects[i], _mergedDescriptor[i]);
                     }
                     catch (CheckoutException co)
                     {
@@ -421,10 +421,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (ComponentChangeService is not null)
             {
-                int cLength = objs.Length;
+                int cLength = _objects.Length;
                 for (int i = 0; i < cLength; i++)
                 {
-                    ComponentChangeService.OnComponentChanged(objs[i], mergedPd[i], null, null);
+                    ComponentChangeService.OnComponentChanged(_objects[i], _mergedDescriptor[i], null, null);
                 }
             }
         }

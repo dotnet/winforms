@@ -9,9 +9,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
-using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -417,9 +414,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _exceptionConverter;
                 }
 
-                if (converter is null)
+                if (Converter is null)
                 {
-                    converter = _propertyInfo.Converter;
+                    Converter = _propertyInfo.Converter;
                 }
 
                 return base.TypeConverter;
@@ -439,7 +436,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _exceptionEditor;
                 }
 
-                editor = (UITypeEditor)_propertyInfo.GetEditor(typeof(UITypeEditor));
+                Editor = (UITypeEditor)_propertyInfo.GetEditor(typeof(UITypeEditor));
 
                 return base.UITypeEditor;
             }

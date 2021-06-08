@@ -16,8 +16,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             public int Compare(object left, object right)
             {
-                // review: (Microsoft) Is CurrentCulture correct here?  This was already reviewed as invariant...
-                return string.Compare(((PropertyDescriptor)left).DisplayName, ((PropertyDescriptor)right).DisplayName, true, CultureInfo.CurrentCulture);
+                return string.Compare(
+                    ((PropertyDescriptor)left).DisplayName,
+                    ((PropertyDescriptor)right).DisplayName,
+                    ignoreCase: true,
+                    CultureInfo.CurrentCulture);
             }
         }
     }

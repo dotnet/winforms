@@ -18,16 +18,9 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private readonly PropertyDescriptor[] _descriptors;
 
-        private enum TriState
-        {
-            Unknown,
-            Yes,
-            No
-        }
-
-        private TriState _localizable = TriState.Unknown;
-        private TriState _readOnly = TriState.Unknown;
-        private TriState _canReset = TriState.Unknown;
+        private bool? _localizable;
+        private bool? _readOnly;
+        private bool? _canReset;
 
         private MultiMergeCollection _collection;
 
@@ -36,11 +29,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             _descriptors = descriptors;
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, gets the type of the
-        ///  component this property
-        ///  is bound to.
-        /// </summary>
+        /// <inheritdoc />
         public override Type ComponentType
         {
             get
@@ -49,9 +38,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  Gets the type converter for this property.
-        /// </summary>
+        /// <inheritdoc />
         public override TypeConverter Converter
         {
             get
@@ -68,62 +55,51 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  Gets a value
-        ///  indicating whether this property should be localized, as
-        ///  specified in the <see cref='LocalizableAttribute'/>.
-        /// </summary>
+        /// <inheritdoc />
         public override bool IsLocalizable
         {
             get
             {
-                if (_localizable == TriState.Unknown)
+                if (!_localizable.HasValue)
                 {
-                    _localizable = TriState.Yes;
+                    _localizable = true;
                     foreach (PropertyDescriptor pd in _descriptors)
                     {
                         if (!pd.IsLocalizable)
                         {
-                            _localizable = TriState.No;
+                            _localizable = false;
                             break;
                         }
                     }
                 }
 
-                return (_localizable == TriState.Yes);
+                return _localizable.Value;
             }
         }
 
-        /// <summary>
-        ///  When overridden in
-        ///  a derived class, gets a value
-        ///  indicating whether this property is read-only.
-        /// </summary>
+        /// <inheritdoc />
         public override bool IsReadOnly
         {
             get
             {
-                if (_readOnly == TriState.Unknown)
+                if (!_readOnly.HasValue)
                 {
-                    _readOnly = TriState.No;
+                    _readOnly = false;
                     foreach (PropertyDescriptor pd in _descriptors)
                     {
                         if (pd.IsReadOnly)
                         {
-                            _readOnly = TriState.Yes;
+                            _readOnly = true;
                             break;
                         }
                     }
                 }
 
-                return (_readOnly == TriState.Yes);
+                return _readOnly.Value;
             }
         }
 
-        /// <summary>
-        ///  When overridden in a derived class,
-        ///  gets the type of the property.
-        /// </summary>
+        /// <inheritdoc />
         public override Type PropertyType
         {
             get
@@ -140,29 +116,25 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, indicates whether
-        ///  resetting the <paramref name="component"/> will change the value of the
-        ///  <paramref name="component"/>.
-        /// </summary>
+        /// <inheritdoc />
         public override bool CanResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::CanResetValue called with non-array value");
-            if (_canReset == TriState.Unknown)
+            if (!_canReset.HasValue)
             {
-                _canReset = TriState.Yes;
+                _canReset = true;
                 Array a = (Array)component;
                 for (int i = 0; i < _descriptors.Length; i++)
                 {
                     if (!_descriptors[i].CanResetValue(GetPropertyOwnerForComponent(a, i)))
                     {
-                        _canReset = TriState.No;
+                        _canReset = false;
                         break;
                     }
                 }
             }
 
-            return (_canReset == TriState.Yes);
+            return _canReset.Value;
         }
 
         /// <summary>
@@ -238,10 +210,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return value;
         }
 
-        /// <summary>
-        ///  Creates a collection of attributes using the
-        ///  array of attributes that you passed to the constructor.
-        /// </summary>
+        /// <inheritdoc />
         protected override AttributeCollection CreateAttributeCollection()
         {
             return new MergedAttributeCollection(this);
@@ -258,20 +227,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             return propertyOwner;
         }
 
-        /// <summary>
-        ///  Gets an editor of the specified type.
-        /// </summary>
+        /// <inheritdoc />
         public override object GetEditor(Type editorBaseType)
         {
             return _descriptors[0].GetEditor(editorBaseType);
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, gets the current
-        ///  value
-        ///  of the
-        ///  property on a component.
-        /// </summary>
+        /// <inheritdoc />
         public override object GetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::GetValue called with non-array value");
@@ -343,12 +305,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return values;
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, resets the
-        ///  value
-        ///  for this property
-        ///  of the component.
-        /// </summary>
+        /// <inheritdoc />
         public override void ResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ResetValue called with non-array value");
@@ -396,10 +353,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, sets the value of
-        ///  the component to a different value.
-        /// </summary>
+        /// <inheritdoc />
         public override void SetValue(object component, object value)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::SetValue called with non-array value");
@@ -418,11 +372,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  When overridden in a derived class, indicates whether the
-        ///  value of
-        ///  this property needs to be persisted.
-        /// </summary>
+        /// <inheritdoc />
         public override bool ShouldSerializeValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ShouldSerializeValue called with non-array value");

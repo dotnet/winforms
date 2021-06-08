@@ -25,11 +25,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         case UiaCore.NavigateDirection.Parent:
                             return ExistsInAccessibleTree
-                                ? _owningDropDownHolder.gridView?.SelectedGridEntry?.AccessibilityObject
+                                ? _owningDropDownHolder._gridView?.SelectedGridEntry?.AccessibilityObject
                                 : null;
                         case UiaCore.NavigateDirection.NextSibling:
                             return ExistsInAccessibleTree
-                                ? _owningDropDownHolder.gridView?.EditAccessibleObject
+                                ? _owningDropDownHolder._gridView?.EditAccessibleObject
                                 : null;
                         case UiaCore.NavigateDirection.PreviousSibling:
                             return null;
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot =>
-                    _owningDropDownHolder.gridView?.OwnerGrid?.AccessibilityObject;
+                    _owningDropDownHolder._gridView?.OwnerGrid?.AccessibilityObject;
 
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 {

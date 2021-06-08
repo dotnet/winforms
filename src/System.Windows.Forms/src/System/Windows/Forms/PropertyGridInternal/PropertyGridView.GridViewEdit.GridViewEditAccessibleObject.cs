@@ -18,7 +18,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 public GridViewEditAccessibleObject(GridViewEdit owner) : base(owner)
                 {
-                    _owningPropertyGridView = owner.psheet;
+                    _owningPropertyGridView = owner.PropertyGridView;
                     _owningGridViewEdit = owner;
                     _textProvider = new TextBoxBaseUiaTextProvider(owner);
                     UseTextProviders(_textProvider, _textProvider);

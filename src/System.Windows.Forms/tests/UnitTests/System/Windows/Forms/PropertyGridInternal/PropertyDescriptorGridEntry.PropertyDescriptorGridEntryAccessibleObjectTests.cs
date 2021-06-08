@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
 using Xunit;
 using static Interop;
 
@@ -15,16 +13,16 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsFact]
         public void PropertyDescriptorGridEntryAccessibleObject_Navigates_to_DropDownControlHolder()
         {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            using TestPropertyGridView testPropertyGridView = new TestPropertyGridView(null, propertyGrid);
+            using PropertyGrid propertyGrid = new();
+            using TestPropertyGridView testPropertyGridView = new(null, propertyGrid);
 
-            TestPropertyDescriptorGridEntry gridEntry = new TestPropertyDescriptorGridEntry(propertyGrid, null, false);
+            TestPropertyDescriptorGridEntry gridEntry = new(propertyGrid, null, false);
             testPropertyGridView.TestAccessor().Dynamic.selectedGridEntry = gridEntry;
 
-            TestDropDownHolder dropDownHolder = new TestDropDownHolder(testPropertyGridView);
+            TestDropDownHolder dropDownHolder = new(testPropertyGridView);
             dropDownHolder.SetState(0x00000002, true); // Control class States.Visible flag
             testPropertyGridView.TestAccessor().Dynamic.dropDownHolder = dropDownHolder;
-            gridEntry.parentPE = new TestGridEntry(propertyGrid, null, testPropertyGridView);
+            gridEntry.TestAccessor().Dynamic._parentEntry = new TestGridEntry(propertyGrid, null, testPropertyGridView);
 
             UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);
@@ -34,15 +32,13 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsFact]
         public void PropertyDescriptorGridEntryAccessibleObject_Ctor_Default()
         {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            TestPropertyDescriptorGridEntry propertyDescriptorGridEntryTestEntity = new TestPropertyDescriptorGridEntry(propertyGrid, null, false);
+            using PropertyGrid propertyGrid = new();
+            TestPropertyDescriptorGridEntry propertyDescriptorGridEntryTestEntity = new(propertyGrid, null, false);
             AccessibleObject propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.AccessibilityObject;
 
             Assert.NotNull(propertyDescriptorGridEntryAccessibleObject);
 
-            TypeInfo propertyDescriptorGridEntryAccessibleObjectTypeInfo = propertyDescriptorGridEntryAccessibleObject.GetType().GetTypeInfo();
-            FieldInfo owningPropertyDescriptorGridEntryField = propertyDescriptorGridEntryAccessibleObjectTypeInfo.GetDeclaredField("_owningPropertyDescriptorGridEntry");
-            object owningGridEntry = owningPropertyDescriptorGridEntryField.GetValue(propertyDescriptorGridEntryAccessibleObject);
+            object owningGridEntry = propertyDescriptorGridEntryAccessibleObject.TestAccessor().Dynamic._owningPropertyDescriptorGridEntry;
 
             Assert.Equal(propertyDescriptorGridEntryTestEntity, owningGridEntry);
         }
@@ -61,22 +57,17 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsFact]
         public void PropertyDescriptorGridEntryAccessibleObject_ExpandCollapseState_reflects_ExpandablePropertyState()
         {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            TestEntity testEntity = new TestEntity();
+            using PropertyGrid propertyGrid = new();
+            TestEntity testEntity = new();
             testEntity.SizeProperty = Size.Empty;
             propertyGrid.SelectedObject = testEntity;
 
             PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
-            Type propertyGridViewType = typeof(PropertyGridView);
-            FieldInfo[] propertyGridViewFields = propertyGridViewType.GetFields(
-                BindingFlags.NonPublic |
-                BindingFlags.Instance);
 
             int firstPropertyIndex = 1; // Index 0 corresponds to the category grid entry.
-            PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
+            var gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
 
-            FieldInfo selectedGridEntryField = propertyGridViewFields.First(f => f.Name == "selectedGridEntry");
-            PropertyDescriptorGridEntry selectedGridEntry = selectedGridEntryField.GetValue(propertyGridView) as PropertyDescriptorGridEntry;
+            var selectedGridEntry = propertyGridView.TestAccessor().Dynamic._selectedGridEntry as PropertyDescriptorGridEntry;
             Assert.Equal(gridEntry.PropertyName, selectedGridEntry.PropertyName);
 
             AccessibleObject selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
