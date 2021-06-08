@@ -3049,7 +3049,7 @@ namespace System.Windows.Forms
                 if (!dividerOnly)
                 {
                     // PropertyGrid does a special handling on scaling and positioning its
-                    // child controls. These are not scaled by their parent when Dpi/Font changed events
+                    // child controls. These are not scaled by their parent when Dpi/Font change.
                     if (_oldDeviceDpi != _deviceDpi)
                     {
                         RescaleConstants();

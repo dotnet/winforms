@@ -6796,7 +6796,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        // checks if this is a container control and will be scaled by parent.
+        // Checks if this is a container control and will be scaled by parent.
         private bool IsScaledByParent(Control control)
         {
             Control parentControl = control.Parent;
@@ -12193,7 +12193,7 @@ namespace System.Windows.Forms
                 {
                     var factor = (float)_deviceDpi / _oldDeviceDpi;
                     Font localFont = Font;
-                    var scaledFont = localFont.WithSize(localFont.Size * factor);
+                    Font scaledFont = localFont.WithSize(localFont.Size * factor);
 
                     // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
                     // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
