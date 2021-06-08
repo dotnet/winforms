@@ -118,7 +118,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Design
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiPropertyGridViewTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiPropertyGridViewTests\MauiPropertyGridViewTests.csproj", "{F4E4EB7A-1A93-4D85-9E8E-8171809BEA4D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiMonthCalendarTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauimonthCalendarTests\MauiMonthCalendarTests.csproj", "{9DDC6936-9197-4C09-8640-AF0BE4918700}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiMonthCalendarTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiMonthCalendarTests\MauiMonthCalendarTests.csproj", "{9DDC6936-9197-4C09-8640-AF0BE4918700}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiTestsHelper", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiTestsHelper\MauiTestsHelper.csproj", "{44BB1092-1844-4EAF-8DF5-338DE4C3149A}"
 EndProject
