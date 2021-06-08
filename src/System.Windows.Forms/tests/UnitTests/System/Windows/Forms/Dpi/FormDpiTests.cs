@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
 
@@ -10,18 +9,12 @@ namespace System.Windows.Forms.Tests.Dpi
 {
     public class FormDpiTests : IClassFixture<ThreadExceptionFixture>
     {
-        private IntPtr TriggerDpiMessage(User32.WM MSG, Control control, int newDpi)
+        private IntPtr TriggerDpiMessage(User32.WM message, Control control, int newDpi)
         {
             double factor = newDpi / DpiHelper.LogicalDpi;
             var wParam = PARAM.FromLowHigh(newDpi, newDpi);
-            var suggestedRect = new RECT(0, 0, (int)Math.Round(control.Width * factor), (int)Math.Round(control.Height * factor));
-
-            // Initialize unmanged memory to hold the struct.
-            IntPtr rectPtr = Marshal.AllocHGlobal(Marshal.SizeOf(suggestedRect));
-            Marshal.StructureToPtr(suggestedRect, rectPtr, true);
-            User32.SendMessageW(control.Handle, MSG, wParam, rectPtr);
-
-            return rectPtr;
+            RECT suggestedRect = new(0, 0, (int)Math.Round(control.Width * factor), (int)Math.Round(control.Height * factor));
+            return User32.SendMessageW(control, message, wParam, ref suggestedRect);
         }
 
         [WinFormsTheory]
@@ -38,8 +31,6 @@ namespace System.Windows.Forms.Tests.Dpi
             // Set thread awareness context to PermonitorV2(PMv2).
             IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
 
-            // Allocating dummy memory. Which will be cleared and replaced in TriggerDpiMessage.
-            IntPtr allocatedMemory = Marshal.AllocHGlobal(Marshal.SizeOf(originalAwarenessContext));
             try
             {
                 using var form = new Form();
@@ -47,7 +38,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 form.Show();
                 Drawing.Rectangle initialBounds = form.Bounds;
                 float initialFontSize = form.Font.Size;
-                allocatedMemory = TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+                _ = TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
                 var factor = newDpi / DpiHelper.LogicalDpi;
 
                 // Lab machines giving strange values that I could not explain. for ex: on local machine,
@@ -60,9 +51,6 @@ namespace System.Windows.Forms.Tests.Dpi
             }
             finally
             {
-                // Free the unmanaged memory.
-                Marshal.FreeHGlobal(allocatedMemory);
-
                 // Reset back to original awareness context.
                 User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
             }

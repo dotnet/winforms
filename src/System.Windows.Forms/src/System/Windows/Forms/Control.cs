@@ -3310,6 +3310,8 @@ namespace System.Windows.Forms
             {
                 _scaledFontWrapper?.Dispose();
                 _scaledFontWrapper = null;
+
+                _scaledControlFont?.Dispose();
                 _scaledControlFont = value;
             }
         }
