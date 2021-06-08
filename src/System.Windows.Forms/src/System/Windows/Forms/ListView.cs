@@ -1058,7 +1058,7 @@ namespace System.Windows.Forms
         ///  different color) when focus is moved away from the ListView.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
-        [DefaultValue(true)]
+        [DefaultValue(false)]
         [SRDescription(nameof(SR.ListViewHideSelectionDescr))]
         public bool HideSelection
         {
