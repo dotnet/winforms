@@ -22,7 +22,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.PropertyGridDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
     {
@@ -3108,7 +3108,7 @@ namespace System.Windows.Forms
                     if (_doccomment.Visible)
                     {
                         dcOptHeight = _doccomment.GetOptimalHeight(Size.Width - s_cyDivider);
-                        if (_doccomment.userSized)
+                        if (_doccomment.UserSized)
                         {
                             dcRequestedHeight = _doccomment.Size.Height;
                         }
@@ -3125,7 +3125,7 @@ namespace System.Windows.Forms
                     if (_hotcommands.Visible)
                     {
                         hcOptHeight = _hotcommands.GetOptimalHeight(Size.Width - s_cyDivider);
-                        if (_hotcommands.userSized)
+                        if (_hotcommands.UserSized)
                         {
                             hcRequestedHeight = _hotcommands.Size.Height;
                         }
@@ -3168,9 +3168,9 @@ namespace System.Windows.Forms
                     // if we've modified the height to less than the optimal, clear the userSized item
                     if (height <= dcOptHeight && height < dcRequestedHeight)
                     {
-                        _doccomment.userSized = false;
+                        _doccomment.UserSized = false;
                     }
-                    else if (_dcSizeRatio != -1 || _doccomment.userSized)
+                    else if (_dcSizeRatio != -1 || _doccomment.UserSized)
                     {
                         _dcSizeRatio = (_doccomment.Height * 100) / Height;
                     }
@@ -3201,9 +3201,9 @@ namespace System.Windows.Forms
                     // if we've modified the height, clear the userSized item
                     if (height <= hcOptHeight && height < hcRequestedHeight)
                     {
-                        _hotcommands.userSized = false;
+                        _hotcommands.UserSized = false;
                     }
-                    else if (_hcSizeRatio != -1 || _hotcommands.userSized)
+                    else if (_hcSizeRatio != -1 || _hotcommands.UserSized)
                     {
                         _hcSizeRatio = (_hotcommands.Height * 100) / Height;
                     }
@@ -3282,7 +3282,7 @@ namespace System.Windows.Forms
                 Size size = _targetMove.Size;
                 size.Height = Math.Max(0, yNew);
                 _targetMove.Size = size;
-                _targetMove.userSized = true;
+                _targetMove.UserSized = true;
                 OnLayoutInternal(true);
                 // invalidate the divider area so we cleanup anything
                 // left by the xor

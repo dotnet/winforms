@@ -15,13 +15,13 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private partial class GridViewEdit : TextBox, IMouseHookClient
         {
-            internal bool fInSetText;
-            internal bool filter;
-            internal PropertyGridView psheet;
-            private bool dontFocusMe;
-            private int lastMove;
+            private bool _inSetText;
+            private bool _filter;
+            internal PropertyGridView PropertyGridView { get; }
+            private bool _dontFocus;
+            private int _lastMove;
 
-            private readonly MouseHook mouseHook;
+            private readonly MouseHook _mouseHook;
 
             // We do this because the Focus call above doesn't always stick, so
             // we make the Edit think that it doesn't have focus.  this prevents
@@ -31,17 +31,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 set
                 {
-                    dontFocusMe = value;
+                    _dontFocus = value;
                 }
             }
 
             public virtual bool Filter
             {
-                get { return filter; }
+                get { return _filter; }
 
                 set
                 {
-                    filter = value;
+                    _filter = value;
                 }
             }
 
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (dontFocusMe)
+                    if (_dontFocus)
                     {
                         return false;
                     }
@@ -69,9 +69,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 get => base.Text;
                 set
                 {
-                    fInSetText = true;
+                    _inSetText = true;
                     base.Text = value;
-                    fInSetText = false;
+                    _inSetText = false;
                 }
             }
 
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 set
                 {
-                    mouseHook.DisableMouseHook = value;
+                    _mouseHook.DisableMouseHook = value;
                 }
             }
 
@@ -87,11 +87,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    return mouseHook.HookMouseDown;
+                    return _mouseHook.HookMouseDown;
                 }
                 set
                 {
-                    mouseHook.HookMouseDown = value;
+                    _mouseHook.HookMouseDown = value;
                     if (value)
                     {
                         Focus();
@@ -101,8 +101,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public GridViewEdit(PropertyGridView psheet)
             {
-                this.psheet = psheet;
-                mouseHook = new MouseHook(this, this, psheet);
+                PropertyGridView = psheet;
+                _mouseHook = new MouseHook(this, this, psheet);
             }
 
             /// <summary>
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void DestroyHandle()
             {
-                mouseHook.HookMouseDown = false;
+                _mouseHook.HookMouseDown = false;
                 base.DestroyHandle();
             }
 
@@ -127,7 +127,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (disposing)
                 {
-                    mouseHook.Dispose();
+                    _mouseHook.Dispose();
                 }
 
                 base.Dispose(disposing);
@@ -158,7 +158,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return false;
                 }
 
-                if (psheet.NeedsCommit)
+                if (PropertyGridView.NeedsCommit)
                 {
                     return false;
                 }
@@ -185,7 +185,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.OnGotFocus(e);
 
-                this.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
             protected override void OnKeyDown(KeyEventArgs ke)
@@ -217,7 +217,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // can we commit this value?
                 // eat the value if we failed to commit.
-                return !psheet._Commit();
+                return !PropertyGridView._Commit();
             }
 
             protected override void OnMouseEnter(EventArgs e)
@@ -227,10 +227,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (!Focused)
                 {
                     Graphics g = CreateGraphics();
-                    if (psheet.SelectedGridEntry is not null &&
-                        ClientRectangle.Width <= psheet.SelectedGridEntry.GetValueTextWidth(Text, g, Font))
+                    if (PropertyGridView.SelectedGridEntry is not null &&
+                        ClientRectangle.Width <= PropertyGridView.SelectedGridEntry.GetValueTextWidth(Text, g, Font))
                     {
-                        psheet.ToolTip.ToolTip = PasswordProtect ? "" : Text;
+                        PropertyGridView.ToolTip.ToolTip = PasswordProtect ? "" : Text;
                     }
 
                     g.Dispose();
@@ -296,12 +296,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                             // if this is just the delete key and we're on a non-text editable property that is resettable,
                             // reset it now.
                             //
-                            if (psheet.SelectedGridEntry is not null && !psheet.SelectedGridEntry.Enumerable && !psheet.SelectedGridEntry.IsTextEditable && psheet.SelectedGridEntry.CanResetPropertyValue())
+                            if (PropertyGridView.SelectedGridEntry is not null && !PropertyGridView.SelectedGridEntry.Enumerable && !PropertyGridView.SelectedGridEntry.IsTextEditable && PropertyGridView.SelectedGridEntry.CanResetPropertyValue())
                             {
-                                object oldValue = psheet.SelectedGridEntry.PropertyValue;
-                                psheet.SelectedGridEntry.ResetPropertyValue();
-                                psheet.UnfocusSelection();
-                                psheet.OwnerGrid.OnPropertyValueSet(psheet.SelectedGridEntry, oldValue);
+                                object oldValue = PropertyGridView.SelectedGridEntry.PropertyValue;
+                                PropertyGridView.SelectedGridEntry.ResetPropertyValue();
+                                PropertyGridView.UnfocusSelection();
+                                PropertyGridView.OwnerGrid.OnPropertyValueSet(PropertyGridView.SelectedGridEntry, oldValue);
                             }
                         }
 
@@ -324,18 +324,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                     switch (keyData & Keys.KeyCode)
                     {
                         case Keys.Return:
-                            bool fwdReturn = !psheet.NeedsCommit;
-                            if (psheet.UnfocusSelection() && fwdReturn && psheet.SelectedGridEntry is not null)
+                            bool fwdReturn = !PropertyGridView.NeedsCommit;
+                            if (PropertyGridView.UnfocusSelection() && fwdReturn && PropertyGridView.SelectedGridEntry is not null)
                             {
-                                psheet.SelectedGridEntry.OnValueReturnKey();
+                                PropertyGridView.SelectedGridEntry.OnValueReturnKey();
                             }
 
                             return true;
                         case Keys.Escape:
-                            psheet.OnEscape(this);
+                            PropertyGridView.OnEscape(this);
                             return true;
                         case Keys.F4:
-                            psheet.F4Selection(true);
+                            PropertyGridView.F4Selection(true);
                             return true;
                     }
                 }
@@ -343,7 +343,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // for the tab key, we want to commit before we allow it to be processed.
                 if ((keyData & Keys.KeyCode) == Keys.Tab && ((keyData & (Keys.Control | Keys.Alt)) == 0))
                 {
-                    return !psheet._Commit();
+                    return !PropertyGridView._Commit();
                 }
 
                 return base.ProcessDialogKey(keyData);
@@ -356,7 +356,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // we're going invisible
                 if (value == false && HookMouseDown)
                 {
-                    mouseHook.HookMouseDown = false;
+                    _mouseHook.HookMouseDown = false;
                 }
 
                 base.SetVisibleCore(value);
@@ -366,7 +366,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // for responding to WM_GETDLGCODE
             internal bool WantsTab(bool forward)
             {
-                return psheet.WantsTab(forward);
+                return PropertyGridView.WantsTab(forward);
             }
 
             private unsafe bool WmNotify(ref Message m)
@@ -375,16 +375,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
 
-                    if (nmhdr->hwndFrom == psheet.ToolTip.Handle)
+                    if (nmhdr->hwndFrom == PropertyGridView.ToolTip.Handle)
                     {
                         switch ((ComCtl32.TTN)nmhdr->code)
                         {
                             case ComCtl32.TTN.SHOW:
-                                PropertyGridView.PositionTooltip(this, psheet.ToolTip, ClientRectangle);
+                                PropertyGridView.PositionTooltip(this, PropertyGridView.ToolTip, ClientRectangle);
                                 m.Result = (IntPtr)1;
                                 return true;
                             default:
-                                psheet.WndProc(ref m);
+                                PropertyGridView.WndProc(ref m);
                                 break;
                         }
                     }
@@ -395,9 +395,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void WndProc(ref Message m)
             {
-                if (filter)
+                if (_filter)
                 {
-                    if (psheet.FilterEditWndProc(ref m))
+                    if (PropertyGridView.FilterEditWndProc(ref m))
                     {
                         return;
                     }
@@ -408,25 +408,25 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case User32.WM.STYLECHANGED:
                         if ((unchecked((int)(long)m.WParam) & (int)User32.GWL.EXSTYLE) != 0)
                         {
-                            psheet.Invalidate();
+                            PropertyGridView.Invalidate();
                         }
 
                         break;
                     case User32.WM.MOUSEMOVE:
-                        if (unchecked((int)(long)m.LParam) == lastMove)
+                        if (unchecked((int)(long)m.LParam) == _lastMove)
                         {
                             return;
                         }
 
-                        lastMove = unchecked((int)(long)m.LParam);
+                        _lastMove = unchecked((int)(long)m.LParam);
                         break;
                     case User32.WM.DESTROY:
-                        mouseHook.HookMouseDown = false;
+                        _mouseHook.HookMouseDown = false;
                         break;
                     case User32.WM.SHOWWINDOW:
                         if (IntPtr.Zero == m.WParam)
                         {
-                            mouseHook.HookMouseDown = false;
+                            _mouseHook.HookMouseDown = false;
                         }
 
                         break;
@@ -441,7 +441,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case User32.WM.GETDLGCODE:
 
                         m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS);
-                        if (psheet.NeedsCommit || WantsTab((ModifierKeys & Keys.Shift) == 0))
+                        if (PropertyGridView.NeedsCommit || WantsTab((ModifierKeys & Keys.Shift) == 0))
                         {
                             m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTALLKEYS | (int)User32.DLGC.WANTTAB);
                         }
@@ -462,7 +462,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public virtual bool InSetText()
             {
-                return fInSetText;
+                return _inSetText;
             }
         }
     }

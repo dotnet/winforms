@@ -9,8 +9,7 @@ using System.ComponentModel.Design;
 namespace System.Windows.Forms.PropertyGridInternal
 {
     /// <summary>
-    ///  This class contains the set of menu commands our property browser
-    ///  uses.
+    ///  This class contains the set of menu commands our property browser uses.
     /// </summary>
     public class PropertyGridCommands
     {

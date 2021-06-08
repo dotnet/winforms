@@ -8,15 +8,15 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private sealed class EventEntry
         {
-            internal Delegate _handler;
-            internal object _key;
-            internal EventEntry _next;
+            public Delegate Handler { get; set; }
+            public object Key { get; }
+            public EventEntry Next { get; set; }
 
             internal EventEntry(EventEntry next, object key, Delegate handler)
             {
-                this._next = next;
-                this._key = key;
-                this._handler = handler;
+                Next = next;
+                Key = key;
+                Handler = handler;
             }
         }
     }

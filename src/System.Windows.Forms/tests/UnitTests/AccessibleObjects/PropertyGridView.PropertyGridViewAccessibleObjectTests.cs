@@ -39,7 +39,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using ComboBox comboBox = new ComboBox();
             propertyGrid.SelectedObject = comboBox;
             GridEntry entry = (GridEntry)((GridEntry)propertyGrid.GetPropEntries()[0]).Children[2];
-            entry.Focus = true;
+            entry.HasFocus = true;
             entry.Select();
             Assert.Equal(entry, propertyGrid.SelectedGridItem);
 
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using ComboBox comboBox = new ComboBox();
             propertyGrid.SelectedObject = comboBox;
             GridEntry entry = (GridEntry)((GridEntry)propertyGrid.GetPropEntries()[0]).Children[2];
-            entry.Focus = true;
+            entry.HasFocus = true;
             entry.Select();
             Assert.Equal(entry, propertyGrid.SelectedGridItem);
 

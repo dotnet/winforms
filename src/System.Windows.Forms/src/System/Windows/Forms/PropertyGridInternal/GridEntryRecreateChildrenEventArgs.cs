@@ -6,8 +6,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal class GridEntryRecreateChildrenEventArgs : EventArgs
     {
-        public readonly int NewChildCount;
-        public readonly int OldChildCount;
+        public int NewChildCount { get; }
+        public int OldChildCount { get; }
 
         public GridEntryRecreateChildrenEventArgs(int oldCount, int newCount)
         {
