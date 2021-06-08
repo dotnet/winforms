@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
 using Microsoft.Win32;
 using static Interop;
 using static Interop.User32;

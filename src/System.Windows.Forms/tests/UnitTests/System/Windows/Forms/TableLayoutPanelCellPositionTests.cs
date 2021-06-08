@@ -6,7 +6,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Globalization;
 using WinForms.Common.Tests;
 using Xunit;
 

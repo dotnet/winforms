@@ -8,7 +8,6 @@ using System.Reflection;
 using Microsoft.DotNet.RemoteExecutor;
 using Xunit;
 using static System.Windows.Forms.ListViewGroup;
-using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.UiaCore;
 

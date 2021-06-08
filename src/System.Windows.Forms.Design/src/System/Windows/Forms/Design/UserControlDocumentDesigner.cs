@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Collections;
-using System.ComponentModel.Design;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design

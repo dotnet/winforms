@@ -4,21 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.ComponentModel.Design.Serialization;
-using System.Diagnostics;
-using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Windows.Forms.Layout;
-using Microsoft.Win32;
-using static Interop;
-
 namespace System.Windows.Forms
 {
     public partial class ToolStrip

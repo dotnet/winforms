@@ -7,12 +7,9 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Runtime.InteropServices;
 using System.Threading;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
-using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
 namespace System.Windows.Forms.Tests
 {

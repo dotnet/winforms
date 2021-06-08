@@ -4,12 +4,8 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using System.Drawing.Design;
 using System.Drawing.Imaging;
 using System.IO;
-using System.Windows.Forms.Design;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 

@@ -4,8 +4,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Runtime.InteropServices;
-using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
 

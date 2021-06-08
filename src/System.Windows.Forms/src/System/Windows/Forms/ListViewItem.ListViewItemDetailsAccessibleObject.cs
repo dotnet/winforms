@@ -3,12 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using Accessibility;
-using static System.Windows.Forms.ListView;
-using static System.Windows.Forms.ListViewGroup;
 using static Interop;
 
 namespace System.Windows.Forms

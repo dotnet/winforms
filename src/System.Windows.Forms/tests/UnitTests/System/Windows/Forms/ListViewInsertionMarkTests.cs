@@ -4,12 +4,10 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using Microsoft.DotNet.RemoteExecutor;
 using WinForms.Common.Tests;
 using Xunit;
 using static Interop;
-using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {

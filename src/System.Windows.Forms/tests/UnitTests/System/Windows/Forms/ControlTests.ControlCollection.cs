@@ -6,7 +6,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Windows.Forms.Layout;
 using Moq;

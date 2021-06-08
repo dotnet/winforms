@@ -10,7 +10,6 @@ using System.Drawing.Design;
 using System.Linq;
 using System.Windows.Forms.PropertyGridInternal;
 using Moq;
-using Moq.Protected;
 using WinForms.Common.Tests;
 using Xunit;
 

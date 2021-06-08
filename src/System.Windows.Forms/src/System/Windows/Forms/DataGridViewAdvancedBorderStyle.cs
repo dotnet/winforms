@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.ComponentModel;
-
 namespace System.Windows.Forms
 {
     public sealed class DataGridViewAdvancedBorderStyle : ICloneable

@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Reflection;
 using WinForms.Common.Tests;
 using Xunit;

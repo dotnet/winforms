@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {

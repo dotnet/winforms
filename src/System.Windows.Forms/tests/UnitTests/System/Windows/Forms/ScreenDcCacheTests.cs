@@ -5,7 +5,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {

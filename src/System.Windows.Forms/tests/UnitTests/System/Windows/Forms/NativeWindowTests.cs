@@ -4,8 +4,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using Moq;
-using Moq.Protected;
 using Xunit;
 using static Interop;
 

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Reflection;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;

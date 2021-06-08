@@ -4,9 +4,7 @@
 
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Reflection;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests

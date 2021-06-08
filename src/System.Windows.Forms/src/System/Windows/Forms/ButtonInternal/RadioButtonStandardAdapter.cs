@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Drawing;
-
 namespace System.Windows.Forms.ButtonInternal
 {
     internal class RadioButtonStandardAdapter : RadioButtonBaseAdapter

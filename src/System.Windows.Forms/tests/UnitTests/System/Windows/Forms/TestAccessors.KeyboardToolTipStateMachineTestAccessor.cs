@@ -3,9 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Windows.Forms;
-using System.Windows.Forms.Automation;
-using static Interop;
-using static Interop.User32;
 
 namespace System
 {

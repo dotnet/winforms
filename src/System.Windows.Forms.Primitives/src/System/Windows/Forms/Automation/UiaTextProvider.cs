@@ -4,8 +4,6 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using static Interop.Gdi32;
 using static Interop.UiaCore;
 using static Interop.User32;
 

@@ -3,12 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using WinForms.Common.Tests;
 using Xunit;
 

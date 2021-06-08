@@ -8,10 +8,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows.Forms.Internal;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {

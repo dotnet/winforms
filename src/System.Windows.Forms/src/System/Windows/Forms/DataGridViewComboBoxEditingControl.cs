@@ -6,7 +6,6 @@
 
 using System.Drawing;
 using System.Globalization;
-using static Interop;
 
 namespace System.Windows.Forms
 {

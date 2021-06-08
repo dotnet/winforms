@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using Accessibility;
 
 internal static partial class Interop
 {

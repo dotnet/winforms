@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Windows.Forms.VisualStyles;
 
 namespace System.Windows.Forms
 {

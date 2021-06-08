@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using System.Drawing;
-using Castle.DynamicProxy.Generators.Emitters.SimpleAST;
 using Moq;
 using Moq.Protected;
 using Xunit;

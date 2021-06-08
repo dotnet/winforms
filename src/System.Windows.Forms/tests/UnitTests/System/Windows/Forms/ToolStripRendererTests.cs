@@ -3,11 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.IO;
-using Moq;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Tests

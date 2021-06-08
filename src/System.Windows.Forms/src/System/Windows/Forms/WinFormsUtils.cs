@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Interop;

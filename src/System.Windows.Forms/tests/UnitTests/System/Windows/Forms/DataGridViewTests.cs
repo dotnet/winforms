@@ -6,12 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
-using System.Numerics;
-using System.Windows.Forms.Metafiles;
 using WinForms.Common.Tests;
 using Xunit;
-using static System.Windows.Forms.Metafiles.DataHelpers;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
