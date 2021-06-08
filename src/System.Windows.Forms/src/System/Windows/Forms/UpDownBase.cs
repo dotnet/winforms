@@ -730,7 +730,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Debug.Assert(_wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too smal");
+            Debug.Assert(_wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too small");
             Debug.Assert(_wheelDelta < NativeMethods.WHEEL_DELTA, "wheelDelta is too big");
             _wheelDelta += e.Delta;
 
