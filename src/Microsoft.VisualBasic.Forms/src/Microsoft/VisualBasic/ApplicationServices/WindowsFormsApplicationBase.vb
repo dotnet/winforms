@@ -409,7 +409,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim applicationDefaultsEventArgs = New ApplyDefaultsEventArgs()
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
             If (applicationDefaultsEventArgs.DefaultFont IsNot Nothing) Then
-                'Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.DefaultFont)
+                Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.DefaultFont)
             End If
 
             ' Let'then s get the request from the ApplicationEvents for the HighDpiMode...

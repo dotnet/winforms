@@ -20,9 +20,9 @@ namespace WinformsControlsTest
             Application.EnableVisualStyles();
             Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
 
-            //Application.Defaults.SetDefaultFont(new Font(new FontFamily("Microsoft Sans Serif"), 8f));
-            //Application.Defaults.SetDefaultFont(new Font(new FontFamily("Chiller"), 12f));
-            Application.Defaults.SetFont(new Font(new FontFamily("Calibri"), 11f));
+            //Application.SetDefaultFont(new Font(new FontFamily("Microsoft Sans Serif"), 8f));
+            //Application.SetDefaultFont(new Font(new FontFamily("Chiller"), 12f));
+            Application.SetDefaultFont(new Font(new FontFamily("Calibri"), 11f));
 
             Application.SetCompatibleTextRenderingDefault(false);
             Application.SetUnhandledExceptionMode(UnhandledExceptionMode.ThrowException); //UnhandledExceptionMode.ThrowException
