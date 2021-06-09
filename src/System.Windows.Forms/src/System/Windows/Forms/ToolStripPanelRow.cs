@@ -493,7 +493,7 @@ namespace System.Windows.Forms
                         // make sure we don't take more space than we need - if spaceToFree is less than 0, add back in.
                         cachedBounds.Width = (spaceToFree < 0) ? minSize.Width + -spaceToFree : minSize.Width;
 
-                        // we're not reperforming a layout, so we need to adjust the next cell
+                        // we're not re-performing a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
                             if (cellOffsets is null)
@@ -587,7 +587,7 @@ namespace System.Windows.Forms
                         // make sure we don't take more space than we need - if spaceToFree is less than 0, add back in.
                         cachedBounds.Height = (spaceToFree < 0) ? minSize.Height + -spaceToFree : minSize.Height;
 
-                        // we're not reperforming a layout, so we need to adjust the next cell
+                        // we're not re-performing a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
                             if (cellOffsets is null)
