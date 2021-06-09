@@ -25,12 +25,12 @@ namespace System.Windows.Forms
         Center,
 
         /// <summary>
-        ///  The image is streched across the controls client rectangle.
+        ///  The image is stretched across the controls client rectangle.
         /// </summary>
         Stretch,
 
         /// <summary>
-        ///  The image is streched across the controls client rectangle.
+        ///  The image is stretched across the controls client rectangle.
         /// </summary>
         Zoom,
     }
