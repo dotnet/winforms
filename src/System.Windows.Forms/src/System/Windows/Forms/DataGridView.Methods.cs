@@ -1553,7 +1553,7 @@ namespace System.Windows.Forms
             // 2. Delete all the currently bound columns.
             // 3. Sort the cloned columns in order of their DisplayIndex.
             // 4. Add the new data bound columns. Here are the rules:
-            //      a. if the cloned collection contains (possible multiple) columns with DataProperyHame == current data field,
+            //      a. if the cloned collection contains (possible multiple) columns with DataPropertyName == current data field,
             //          add the first cloned column that maps to the data field.
             //      b. other wise add the new bound column.
             // 5. Add the remaining cloned columns in the order of their DisplayIndex.
@@ -3331,7 +3331,7 @@ namespace System.Windows.Forms
                                                                    true,  /*setAnchorCellAddress*/
                                                                    false, /*validateCurrentCell*/
                                                                    false,  /*throughMouseClick*/
-                                                                   true /*clearSelecttion*/,
+                                                                   true /*clearSelection*/,
                                                                    false /*forceCurrentCellSelection (unused)*/);
                                 }
                             }
@@ -3536,7 +3536,7 @@ namespace System.Windows.Forms
                                 SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
                             }
 
-                            // Force repainting of the current collumn's header cell to remove highlighting
+                            // Force repainting of the current column's header cell to remove highlighting
                             if (_ptCurrentCell.X != -1 &&
                                 SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                             {
@@ -6918,7 +6918,7 @@ namespace System.Windows.Forms
 
         protected override AccessibleObject GetAccessibilityObjectById(int objectId)
         {
-            // decrement the objectId because in our implementation of AccessibilityClient notitification objectId's are 1 - based.
+            // decrement the objectId because in our implementation of AccessibilityClient notification objectId's are 1 - based.
             // 0 == NativeMethods.CHILDID_SELF corresponds to the AccessibleObject itself
             return AccessibilityObject.GetChild(objectId - 1);
         }
@@ -10442,7 +10442,7 @@ namespace System.Windows.Forms
                 int totalVisibleWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible);
                 int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
 
-                // Expensive call - dataGridView could have a mode where no row is resizable which would result in better perfs
+                // Expensive call - dataGridView could have a mode where no row is resizable which would result in better perf
                 int totalVisibleHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible);
                 int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
 
@@ -10925,7 +10925,7 @@ namespace System.Windows.Forms
                     autoSizeRow = true;
                 }
 
-                // Auto size columms also if needed
+                // Auto size columns also if needed
                 DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
                 if (rowDisplayed)
                 {
@@ -13412,7 +13412,7 @@ namespace System.Windows.Forms
                         AdjustShrinkingRows(_autoSizeRowsMode, false /*fixedWidth*/, true /*internalAutosizing*/);
                     }
 
-                    // Auto size columms also if needed
+                    // Auto size columns also if needed
                     // Impossible to figure out if DisplayedRows filter should be added or not. Adding it to be on the conservative side.
                     AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows |
                                                         DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
@@ -14801,7 +14801,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Auto-size columms if needed
+            // Auto-size columns if needed
             bool fixedHeight = (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) == 0;
             bool columnAutoSized = AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows, fixedHeight);
             // Autosize rows if needed
@@ -15152,7 +15152,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert(AllowUserToAddRowsInternal);
                 // First time the 'new' row gets edited.
-                // It becomes a regular row and a new 'new' row is appened.
+                // It becomes a regular row and a new 'new' row is appended.
                 NewRowIndex = -1;
                 AddNewRow(true /*createdByEditing*/);
             }
@@ -15368,7 +15368,7 @@ namespace System.Windows.Forms
                                     Debug.Assert(DataConnection is not null);
                                     Debug.Assert(DataConnection.CurrencyManager is not null);
                                     Debug.Assert(DataConnection.CurrencyManager.Position == _ptCurrentCell.Y);
-                                    // the row associated with the currency manager's position cannot be made invisble.
+                                    // the row associated with the currency manager's position cannot be made invisible.
                                     throw new InvalidOperationException(SR.DataGridView_CurrencyManagerRowCannotBeInvisible);
                                 }
 
@@ -15628,7 +15628,7 @@ namespace System.Windows.Forms
 
                 OnCellEnter(ref dataGridViewCell, _ptCurrentCell.X, _ptCurrentCell.Y);
 
-                // Force repainting of the current collumn's header cell to highlight it
+                // Force repainting of the current column's header cell to highlight it
                 if (SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                 {
                     InvalidateCellPrivate(_ptCurrentCell.X, -1);
@@ -17541,7 +17541,7 @@ namespace System.Windows.Forms
                 dataGridViewRow.ThicknessInternal = Math.Max(dataGridViewRow.MinimumHeight, dataGridViewRow.CachedThickness);
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
             if (rowDisplayed)
             {
@@ -18395,7 +18395,7 @@ namespace System.Windows.Forms
                 autoSizeRow = true;
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
             if (rowDisplayed)
             {
@@ -19154,7 +19154,7 @@ namespace System.Windows.Forms
                 AdjustShrinkingRows(_autoSizeRowsMode, false /*fixedWidth*/, true /*internalAutosizing*/);
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows |
                                                 DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
                                                 true /*fixedHeight*/);
@@ -19288,7 +19288,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        // Auto size columms also if needed
+                        // Auto size columns also if needed
                         DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
                         if (rowDisplayed)
                         {
@@ -19456,7 +19456,7 @@ namespace System.Windows.Forms
             Point pt = PointToScreen(Location);
             int step = newValue - oldValue;
 
-            // horizontal scrool left
+            // horizontal scroll left
             if (pt.X < 0 && step < 0)
             {
                 Invalidate(new Rectangle(new Point(-pt.X, ColumnHeadersHeight),
@@ -19467,21 +19467,21 @@ namespace System.Windows.Forms
             pt.Y += Height;
             Rectangle rect = Screen.GetBounds(pt);
 
-            // horizontal scrool right
+            // horizontal scroll right
             if (pt.X > rect.Right && step > 0)
             {
                 Invalidate(new Rectangle(new Point(ClientSize.Width - (pt.X - rect.Right) - step, ColumnHeadersHeight),
                                          new Size(step, ClientSize.Height)));
             }
 
-            // vertical scrool up
+            // vertical scroll up
             if (pt.Y < 0 && step < 0)
             {
                 Invalidate(new Rectangle(new Point(0, -pt.Y),
                                          new Size(-step, ClientSize.Width)));
             }
 
-            // vertical scrool down
+            // vertical scroll down
             if (pt.Y > rect.Bottom && step > 0)
             {
                 Invalidate(new Rectangle(new Point(0, ColumnHeadersHeight),
@@ -22549,7 +22549,7 @@ namespace System.Windows.Forms
             // Refactor the special keys into two parts.
             // 1. Escape and Space exist in both WM_CHAR and WM_KEYDOWN, WM_KEYUP.
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
-            // w/ some of the key code. (Like character code of lowcase "q" is 0x71, it's overlapped w/ Keys.F2). This
+            // w/ some of the key code. (Like character code of lowercase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
             if (m.Msg == (int)User32.WM.CHAR)
             {
@@ -27366,7 +27366,7 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            // Force repainting of the current and previous collumns` header cells to update highlighting
+                            // Force repainting of the current and previous columns` header cells to update highlighting
                             if (oldCurrentCellX != columnIndex &&
                                 SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                             {
@@ -28709,7 +28709,7 @@ namespace System.Windows.Forms
                 if (!SetCurrentCellAddressCore(-1, -1, true, true, false))
                 {
                     // Just cancel operation silently instead of throwing InvalidOperationException
-                    // 'finally' below resets this.dataGridViewOper[OperationinSort] to false
+                    // 'finally' below resets this.dataGridViewOper[OperationInSort] to false
                     return;
                 }
 

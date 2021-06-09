@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
             set
             {
                 bool autoSize = (bool)ShadowProperties[nameof(AutoSize)];
-                // always set this in regardless of whether the property changed. it can come back to bite later after in-situ editing if we dont.
+                // always set this in regardless of whether the property changed. it can come back to bite later after in-situ editing if we don't.
                 ShadowProperties[nameof(AutoSize)] = value;
                 if (value != autoSize)
                 {
@@ -80,7 +80,7 @@ namespace System.Windows.Forms.Design
             get
             {
                 BaseContextMenuStrip toolStripContextMenu = new BaseContextMenuStrip(Component.Site, ToolStripItem);
-                // If multiple Items Selected dont show the custom properties...
+                // If multiple Items Selected don't show the custom properties...
                 if (_selectionService.SelectionCount > 1)
                 {
                     toolStripContextMenu.GroupOrdering.Clear();
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  ToolStripEditorManager used this internal property to  set the the desinger's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
+        ///  ToolStripEditorManager used this internal property to  set the designer's IsEditorActive to notify  if this item has entered or exited the InSitu Edit Mode.
         /// </summary>
         internal bool IsEditorActive
         {
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  When the ToolStripItem is created we dont want InitializeNewComponent to set the "text" we do it ourselves from the Text the User has provided in the InSitu Edit Mode. Reason being the item and the Parent unnecessarily Layout and cause flicker.
+        ///  When the ToolStripItem is created we don't want InitializeNewComponent to set the "text" we do it ourselves from the Text the User has provided in the InSitu Edit Mode. Reason being the item and the Parent unnecessarily Layout and cause flicker.
         /// </summary>
         internal bool InternalCreate
         {
@@ -366,7 +366,7 @@ namespace System.Windows.Forms.Design
                     try
                     {
                         RemoveItem();
-                        newItem = designer.AddNewItem(type, text, enterKeyPressed, false /* Dont select the templateNode but select the newly added item */);
+                        newItem = designer.AddNewItem(type, text, enterKeyPressed, false /* Don't select the templateNode but select the newly added item */);
                     }
                     finally
                     {
@@ -559,7 +559,7 @@ namespace System.Windows.Forms.Design
 
             foreach (ToolStripItem item in parent.DropDownItems)
             {
-                // Dont Serialize the DesignerToolStripControlHost...
+                // Don't Serialize the DesignerToolStripControlHost...
                 if (item is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 1 /*including TN*/)
                 {
                     FireComponentChanging(dropDownItem);
@@ -581,7 +581,7 @@ namespace System.Windows.Forms.Design
 
             foreach (ToolStripItem item in parent.DropDownItems)
             {
-                // Dont Serialize the DesignerToolStripControlHost...
+                // Don't Serialize the DesignerToolStripControlHost...
                 if (item is ToolStripDropDownItem dropDownItem && dropDownItem.DropDownItems.Count > 1 /*including TN*/)
                 {
                     FireComponentChanged(dropDownItem);
@@ -601,7 +601,7 @@ namespace System.Windows.Forms.Design
             Rectangle parentBounds = GetService<BehaviorService>().ControlRectInAdornerWindow((Control)ImmediateParent);
             if (parentBounds.Contains(r.Left, r.Top))
             {
-                // Dont paint the glyphs if we are opening a DropDown...
+                // Don't paint the glyphs if we are opening a DropDown...
                 if (ToolStripItem.IsOnDropDown)
                 {
                     ToolStrip parent = ToolStripItem.GetCurrentParent();
@@ -724,7 +724,7 @@ namespace System.Windows.Forms.Design
             }
 
             base.InitializeNewComponent(defaultValues);
-            // ComboBoxes and TextBoxes shouldnt have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
+            // ComboBoxes and TextBoxes shouldn't have Texts... In TextBoxBaseDesigner we do similar thing where we call the base (which sets the text) and then reset it back
             if (Component is ToolStripTextBox || Component is ToolStripComboBox)
             {
                 PropertyDescriptor textProp = TypeDescriptor.GetProperties(Component)["Text"];
@@ -890,7 +890,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 FireComponentChanged(dropDownItem);
-                // Add the Glyph for the DropDown ... We are responsible for the Glyh Addition since BodyGlyphs for DropDownItems are added by us.
+                // Add the Glyph for the DropDown ... We are responsible for the Glyph Addition since BodyGlyphs for DropDownItems are added by us.
                 if (newItem.IsOnDropDown && ownerItemDesigner != null)
                 {
                     ownerItemDesigner.RemoveItemBodyGlyph(newItem);
@@ -913,7 +913,7 @@ namespace System.Windows.Forms.Design
                         windowService.Invalidate();
                     }
 
-                    // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionServive from new Component
+                    // set the selection to our new item.. since we destroyed Original component.. we have to ask SelectionService from new Component
                     ISelectionService selSvc = (ISelectionService)newItem.Site.GetService(typeof(ISelectionService));
                     if (selSvc != null)
                     {
@@ -1094,7 +1094,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        // CALLED ONLY IF THE EDIT ACTION WAS ROLLBACKED!!!
+        // CALLED ONLY IF THE EDIT ACTION WAS ROLLED BACK!!!
         public void RemoveItem()
         {
             dummyItemAdded = false;
@@ -1192,7 +1192,7 @@ namespace System.Windows.Forms.Design
         {
             foreach (ToolStripItem item in parent.DropDownItems)
             {
-                //Dont Serialize the DesignerToolStripControlHost...
+                // Don't Serialize the DesignerToolStripControlHost...
                 if (!(item is DesignerToolStripControlHost))
                 {
                     _serializationService.Serialize(_serializedDataForDropDownItems, item);
@@ -1311,7 +1311,7 @@ namespace System.Windows.Forms.Design
                         boundsInAdornerWindow = Rectangle.Union(origBoundsInAdornerWindow, boundsInAdornerWindow);
                         behaviorService.Invalidate(boundsInAdornerWindow);
 
-                        // PLEASE DONT CHANGE THIS ORDER !!!
+                        // PLEASE DON'T CHANGE THIS ORDER !!!
                         if (parentDesigner != null && parentDesigner.EditManager != null)
                         {
                             parentDesigner.EditManager.ActivateEditor(ToolStripItem, clicked);

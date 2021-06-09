@@ -662,7 +662,7 @@ namespace System.Windows.Forms
                     {
                         // OK this is weird but here we're in the midst of a suspend layout.
                         // the only way we can deterministically place these guys is to force a layout
-                        // each time we've added a new row.  Otherwise we wont find the correct
+                        // each time we've added a new row.  Otherwise we won't find the correct
                         // row to add the control to (PointToRow will fail as Row.Bounds isn't set yet)
                         OnLayout(new LayoutEventArgs(this, PropertyNames.Rows));
                     }

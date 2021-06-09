@@ -17,7 +17,7 @@ namespace System.Windows.Forms
     public sealed partial class Application
     {
         /// <summary>
-        ///  This is our implementation of the MSO ComponentManager.  The Componoent Manager is
+        ///  This is our implementation of the MSO ComponentManager.  The Component Manager is
         ///  an object that is responsible for handling all message loop activity in a process.
         ///  The idea is that someone in the process implements the component manager and then
         ///  anyone who wants access to the message loop can get to it.  We implement this

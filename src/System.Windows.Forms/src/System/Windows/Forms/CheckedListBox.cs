@@ -125,7 +125,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is called when creating a window.  Inheriting classes can ovveride
+        ///  This is called when creating a window.  Inheriting classes can override
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.
@@ -450,7 +450,7 @@ namespace System.Windows.Forms
             // this.  Note that we'll only change the selection when the
             // user clicks again on a currently selected item, or when the
             // user has CheckOnClick set to true.  Otherwise
-            // just using the up and down arrows selects or unselects
+            // just using the up and down arrows selects or deselects
             // every item around town ...
             //
 

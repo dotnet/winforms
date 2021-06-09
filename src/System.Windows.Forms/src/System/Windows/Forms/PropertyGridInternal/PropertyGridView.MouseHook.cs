@@ -15,32 +15,32 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal class MouseHook
         {
-            private readonly PropertyGridView gridView;
-            private readonly Control control;
-            private readonly IMouseHookClient client;
+            private readonly PropertyGridView _gridView;
+            private readonly Control _control;
+            private readonly IMouseHookClient _client;
 
-            internal uint _thisProcessID;
+            private uint _thisProcessId;
             private GCHandle _mouseHookRoot;
             private IntPtr _mouseHookHandle = IntPtr.Zero;
-            private bool hookDisable;
+            private bool _hookDisable;
 
-            private bool processing;
+            private bool _processing;
 
             public MouseHook(Control control, IMouseHookClient client, PropertyGridView gridView)
             {
-                this.control = control;
-                this.gridView = gridView;
-                this.client = client;
+                _control = control;
+                _gridView = gridView;
+                _client = client;
 #if DEBUG
-                callingStack = Environment.StackTrace;
+                _callingStack = Environment.StackTrace;
 #endif
             }
 
 #if DEBUG
-            readonly string callingStack;
+            private readonly string _callingStack;
             ~MouseHook()
             {
-                Debug.Assert(_mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + callingStack);
+                Debug.Assert(_mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + _callingStack);
             }
 #endif
 
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 set
                 {
-                    hookDisable = value;
+                    _hookDisable = value;
                     if (value)
                     {
                         UnhookMouse();
@@ -65,7 +65,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 set
                 {
-                    if (value && !hookDisable)
+                    if (value && !_hookDisable)
                     {
                         HookMouse();
                     }
@@ -95,9 +95,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return;
                     }
 
-                    if (_thisProcessID == 0)
+                    if (_thisProcessId == 0)
                     {
-                        User32.GetWindowThreadProcessId(control, out _thisProcessID);
+                        User32.GetWindowThreadProcessId(_control, out _thisProcessId);
                     }
 
                     var hook = new User32.HOOKPROC(new MouseHookObject(this).Callback);
@@ -170,27 +170,27 @@ namespace System.Windows.Forms.PropertyGridInternal
             private bool ProcessMouseDown(IntPtr hWnd, int x, int y)
             {
                 // If we put up the "invalid" message box, it appears this
-                // method is getting called re-entrantly when it shouldn't be.
+                // method is getting called reentrantly when it shouldn't be.
                 // this prevents us from recursing.
-                if (processing)
+                if (_processing)
                 {
                     return false;
                 }
 
                 IntPtr hWndAtPoint = hWnd;
-                IntPtr handle = control.Handle;
+                IntPtr handle = _control.Handle;
                 Control ctrlAtPoint = FromHandle(hWndAtPoint);
 
                 // if it's us or one of our children, just process as normal
-                if (hWndAtPoint != handle && !control.Contains(ctrlAtPoint))
+                if (hWndAtPoint != handle && !_control.Contains(ctrlAtPoint))
                 {
-                    Debug.Assert(_thisProcessID != 0, "Didn't get our process id!");
+                    Debug.Assert(_thisProcessId != 0, "Didn't get our process id!");
 
                     // Make sure the window is in our process
                     User32.GetWindowThreadProcessId(hWndAtPoint, out uint pid);
 
                     // if this isn't our process, unhook the mouse.
-                    if (pid != _thisProcessID)
+                    if (pid != _thisProcessId)
                     {
                         HookMouseDown = false;
                         return false;
@@ -199,15 +199,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     bool needCommit = false;
 
                     // if this a sibling control (e.g. the drop down or buttons), just forward the message and skip the commit
-                    needCommit = ctrlAtPoint is null ? true : !gridView.IsSiblingControl(control, ctrlAtPoint);
+                    needCommit = ctrlAtPoint is null ? true : !_gridView.IsSiblingControl(_control, ctrlAtPoint);
 
                     try
                     {
-                        processing = true;
+                        _processing = true;
 
                         if (needCommit)
                         {
-                            if (client.OnClickHooked())
+                            if (_client.OnClickHooked())
                             {
                                 return true; // there was an error, so eat the mouse
                             }
@@ -215,7 +215,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     finally
                     {
-                        processing = false;
+                        _processing = false;
                     }
 
                     // cancel our hook at this point

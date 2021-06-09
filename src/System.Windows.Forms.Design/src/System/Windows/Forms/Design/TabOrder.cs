@@ -373,7 +373,7 @@ namespace System.Windows.Forms.Design
 
                 // We do not break if we find it here.  The vector is already setup
                 // to have all controls in the current tabbing order, and child controls
-                // are always after their parents.  If we broke, we wouldn't necessarially
+                // are always after their parents.  If we broke, we wouldn't necessarily
                 // find the appropriate child.
                 //
                 if (rc.Contains(x, y))
@@ -509,7 +509,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called in response to a component add or remove event.  Here we re-aquire our
+        ///  Called in response to a component add or remove event.  Here we re-acquire our
         ///  set of tabs.
         /// </summary>
         private void OnComponentAddRemove(object sender, ComponentEventArgs ce)
@@ -603,7 +603,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is called when the user double clicks on a component.  The typical
         ///  behavior is to create an event handler for the component's default event
-        ///  and nativagate to the handler.
+        ///  and delegate (?) to the handler.
         /// </summary>
         public virtual void OnMouseDoubleClick(IComponent component)
         {
@@ -637,7 +637,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  This is called when the mouse momentarially hovers over the
+        ///  This is called when the mouse momentarily hovers over the
         ///  view for the given component.
         /// </summary>
         public virtual void OnMouseHover(IComponent component)

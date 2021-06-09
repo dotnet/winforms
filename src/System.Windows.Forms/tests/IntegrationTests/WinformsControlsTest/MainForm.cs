@@ -123,7 +123,7 @@ namespace WinformsControlsTest
             },
             {
                 MainFormControlsTabOrder.ListViewButton,
-                new InitInfo("ListVew", (obj, e) => new ListViewTest().Show())
+                new InitInfo("ListView", (obj, e) => new ListViewTest().Show())
             },
             {
                 MainFormControlsTabOrder.FontNameEditorButton,

@@ -170,7 +170,7 @@ namespace System.Windows.Forms
                 {
                     if (DesignMode)
                     {
-                        return true;  // we dont care about the state of VS.
+                        return true;  // we don't care about the state of VS.
                     }
 
                     IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
@@ -212,7 +212,7 @@ namespace System.Windows.Forms
                 if (SizingGrip)
                 {
                     Size statusStripSize = Size;
-                    // we cant necessarily make this the height of the status strip, as
+                    // we can't necessarily make this the height of the status strip, as
                     // the orientation could change.
                     int gripHeight = Math.Min(DefaultSize.Height, statusStripSize.Height);
 
@@ -376,7 +376,7 @@ namespace System.Windows.Forms
             {
                 bool rightToLeft = ((Orientation == Orientation.Horizontal) && (RightToLeft == RightToLeft.Yes));
 
-                // shove all items that dont fit one pixel outside the displayed region
+                // shove all items that don't fit one pixel outside the displayed region
                 Rectangle displayRect = DisplayRectangle;
                 Point noMansLand = displayRect.Location;
                 noMansLand.X += ClientSize.Width + 1;
@@ -426,7 +426,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // we cant fit an item, everything else after it should not be displayed
+                        // we can't fit an item, everything else after it should not be displayed
                         if (((IArrangedElement)item).ParticipatesInLayout)
                         {
                             overflow = true;
@@ -513,7 +513,7 @@ namespace System.Windows.Forms
                     TableLayoutSettings.RowStyles[0].Height = Math.Max(0, DisplayRectangle.Height);
                     TableLayoutSettings.ColumnCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
 
-                    // dont remove the extra column styles, just set them back to autosize.
+                    // don't remove the extra column styles, just set them back to autosize.
                     for (int i = DisplayedItems.Count; i < TableLayoutSettings.ColumnStyles.Count; i++)
                     {
                         TableLayoutSettings.ColumnStyles[i].SizeType = SizeType.AutoSize;
@@ -562,7 +562,7 @@ namespace System.Windows.Forms
 
                     TableLayoutSettings.RowCount = DisplayedItems.Count + 1; // add an extra cell so it fills the remaining space
 
-                    // dont remove the extra column styles, just set them back to autosize.
+                    // don't remove the extra column styles, just set them back to autosize.
                     for (int i = DisplayedItems.Count; i < TableLayoutSettings.RowStyles.Count; i++)
                     {
                         TableLayoutSettings.RowStyles[i].SizeType = SizeType.AutoSize;
@@ -587,7 +587,7 @@ namespace System.Windows.Forms
                 {
                     IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
 
-                    // if the main window isnt maximized - we should paint a resize grip.
+                    // if the main window isn't maximized - we should paint a resize grip.
                     // double check that we're at the bottom right hand corner of the window.
                     if (rootHwnd != IntPtr.Zero && !User32.IsZoomed(rootHwnd).IsTrue())
                     {

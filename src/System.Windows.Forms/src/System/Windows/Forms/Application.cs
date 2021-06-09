@@ -1010,7 +1010,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns a string that is the combination of the basePath + CompanyName + ProducName + ProductVersion. This
+        ///  Returns a string that is the combination of the basePath + CompanyName + ProductName + ProductVersion. This
         ///  will also create the directory if it doesn't exist.
         /// </summary>
         private static string GetDataPath(string basePath)
@@ -1218,6 +1218,31 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.ModalForm, new ModalApplicationContext(form));
 
         /// <summary>
+        /// Scale the default font (if it is set) as per the Settings display text scale settings.
+        /// </summary>
+        /// <param name="textScaleFactor">The scaling factor in the range [1.0, 2.25].</param>
+        internal static void ScaleDefaultFont(float textScaleFactor)
+        {
+            if (s_defaultFont is null || !OsVersion.IsWindows10_1507OrGreater)
+            {
+                return;
+            }
+
+            if (s_defaultFontScaled is not null)
+            {
+                s_defaultFontScaled.Dispose();
+                s_defaultFontScaled = null;
+            }
+
+            // Restore the text scale if it isn't the default value in the valid text scale factor value
+            textScaleFactor = Math.Min(DpiHelper.MaxTextScaleFactorValue, textScaleFactor);
+            if (textScaleFactor > DpiHelper.MinTextScaleFactorValue)
+            {
+                s_defaultFontScaled = s_defaultFont.WithSize(s_defaultFont.Size * textScaleFactor);
+            }
+        }
+
+        /// <summary>
         ///  Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in.
         ///  This switch determines the default text rendering engine to use by some controls that support
         ///  switching rendering engine.
@@ -1230,6 +1255,54 @@ namespace System.Windows.Forms
             }
 
             Control.UseCompatibleTextRenderingDefault = defaultValue;
+        }
+
+        /// <summary>
+        ///  Sets the default <see cref="Font"/> for process.
+        /// </summary>
+        /// <param name="font">The font to be used as a default across the application.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="font"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// You can only call this method before the first window is created by your Windows Forms application.
+        /// </exception>
+        /// <remarks>
+        ///  <para>
+        ///    The system text scale factor will be applied to the font, i.e. if the default font is set to "Calibri, 11f"
+        ///    and the text scale factor is set to 150% the resulting default font will be set to "Calibri, 16.5f".
+        ///  </para>
+        ///  <para>
+        ///    Users can adjust text scale with the Make text bigger slider on the Settings -> Ease of Access -> Vision/Display screen.
+        ///  </para>
+        /// </remarks>
+        /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
+        public static void SetDefaultFont(Font font)
+        {
+            if (font is null)
+                throw new ArgumentNullException(nameof(font));
+
+            if (NativeWindow.AnyHandleCreated)
+                throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetDefaultFont)));
+
+            // If user made a prior call to this API with a different custom fonts, we want to clean it up.
+            if (s_defaultFont is not null)
+            {
+                s_defaultFont?.Dispose();
+                s_defaultFont = null;
+                s_defaultFontScaled?.Dispose();
+                s_defaultFontScaled = null;
+            }
+
+            if (font.IsSystemFont)
+            {
+                // The system font is managed the .NET runtime, and it is already scaled to the current text scale factor.
+                // We need to clone it because our reference will no longer be scaled by the .NET runtime.
+                s_defaultFont = (Font)font.Clone();
+            }
+            else
+            {
+                s_defaultFont = font;
+                ScaleDefaultFont(DpiHelper.GetTextScaleFactor());
+            }
         }
 
         /// <summary>

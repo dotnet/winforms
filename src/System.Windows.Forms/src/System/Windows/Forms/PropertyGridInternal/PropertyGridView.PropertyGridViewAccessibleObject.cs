@@ -448,7 +448,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             public override AccessibleObject? GetFocused()
             {
                 GridEntry gridEntry = ((PropertyGridView)Owner).SelectedGridEntry;
-                if (gridEntry is not null && gridEntry.Focus)
+                if (gridEntry is not null && gridEntry.HasFocus)
                 {
                     return gridEntry.AccessibilityObject;
                 }

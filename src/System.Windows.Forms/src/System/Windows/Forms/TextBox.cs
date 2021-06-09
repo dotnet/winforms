@@ -507,7 +507,7 @@ namespace System.Windows.Forms
             {
                 // Reset this just in case, because the SHAutoComplete stuff
                 // will subclass this guys wndproc (and nativewindow can't know about it).
-                // so this will undo it, but on a dispose we'll be Destroying the window anyay.
+                // so this will undo it, but on a dispose we'll be Destroying the window anyway.
 
                 ResetAutoComplete(true);
                 if (autoCompleteCustomSource is not null)
@@ -576,7 +576,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Overrideen to focus the text on first focus.
+        ///  Overridden to focus the text on first focus.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -696,7 +696,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Process a command key.
-        ///  Native "EDIT" control does not support "Select All" shorcut represented by Ctrl-A keys, when in multiline mode,
+        ///  Native "EDIT" control does not support "Select All" shortcut represented by Ctrl-A keys, when in multiline mode,
         ///  Winforms TextBox supports this in .NET.
         /// </summary>
         /// <param name="m">The current windows message.</param>
@@ -940,7 +940,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The edits window procedure.  Inheritng classes can override this
+        ///  The edits window procedure.  Inheriting classes can override this
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>

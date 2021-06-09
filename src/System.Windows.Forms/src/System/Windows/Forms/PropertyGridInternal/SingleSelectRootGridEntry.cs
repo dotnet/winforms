@@ -169,7 +169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(ReadOnlyAttribute)];
                     if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(objValue).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
-                        flags |= FLAG_FORCE_READONLY;
+                        Flags |= FLAG_FORCE_READONLY;
                     }
 
                     forceReadOnlyChecked = true;
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 object old = objValue;
                 objValue = value;
                 objValueClassName = TypeDescriptor.GetClassName(objValue);
-                ownerGrid.ReplaceSelectedObject(old, value);
+                OwnerGrid.ReplaceSelectedObject(old, value);
             }
         }
 
@@ -385,7 +385,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 bin.CopyTo(rgpes, 0);
                                 try
                                 {
-                                    propList.Add(new CategoryGridEntry(ownerGrid, this, category, rgpes));
+                                    propList.Add(new CategoryGridEntry(OwnerGrid, this, category, rgpes));
                                 }
                                 catch
                                 {

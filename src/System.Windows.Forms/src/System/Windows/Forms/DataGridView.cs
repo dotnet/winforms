@@ -1514,7 +1514,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // Some DataGridViewTextBoxColumn columns need to be appened.
+                        // Some DataGridViewTextBoxColumn columns need to be appended.
                         while (value > Columns.Count)
                         {
                             int currentColumnCount = Columns.Count;
@@ -3437,7 +3437,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // Some rows need to be appened.
+                    // Some rows need to be appended.
                     if (Columns.Count == 0)
                     {
                         // There are no columns yet, we simply create a single DataGridViewTextBoxColumn.
@@ -3856,7 +3856,7 @@ namespace System.Windows.Forms
                     using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.ScrollBars))
                     {
                         // Before changing the value of this.scrollBars, we scroll to the top-left cell to
-                        // avoid inconsitent state of scrollbars.
+                        // avoid inconsistent state of scrollbars.
                         DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                         int firstVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
 

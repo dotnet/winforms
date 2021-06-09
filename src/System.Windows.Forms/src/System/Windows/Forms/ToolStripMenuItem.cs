@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         private IntPtr _targetWindowHandle = IntPtr.Zero;
         private IntPtr _nativeMenuHandle = IntPtr.Zero;
 
-        // Keep checked images shared between menu items, but per thread so we dont have locking issues in GDI+
+        // Keep checked images shared between menu items, but per thread so we don't have locking issues in GDI+
         [ThreadStatic]
         private static Image t_indeterminateCheckedImage;
 
@@ -150,8 +150,8 @@ namespace System.Windows.Forms
 
                 if (textFields.Length >= 2)
                 {
-                    // We dont care about the shortcut here, the OS is going to
-                    // handle it for us by sending a WM_(SYS)COMMAND during TranslateAcellerator
+                    // We don't care about the shortcut here, the OS is going to
+                    // handle it for us by sending a WM_(SYS)COMMAND during TranslateAccelerator
                     // Just display whatever the OS would have.
                     ShowShortcutKeys = true;
                     ShortcutKeyDisplayString = textFields[1];
@@ -560,7 +560,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets a value that indicates whether the shortcut
-        ///  keys that are assocaited
+        ///  keys that are associated
         ///  with the menu item are displayed next to the menu item
         ///  caption.
         /// </summary>
@@ -653,7 +653,7 @@ namespace System.Windows.Forms
             menuItem.TextImageRelation = TextImageRelation;
             menuItem.ToolTipText = ToolTipText;
 
-            // cant actually use "Visible" property as that returns whether or not the parent
+            // can't actually use "Visible" property as that returns whether or not the parent
             // is visible too.. instead use ParticipatesInLayout as this queries the actual state.
             menuItem.Visible = ((IArrangedElement)this).ParticipatesInLayout;
 

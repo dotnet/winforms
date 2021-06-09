@@ -439,7 +439,7 @@ namespace System.ComponentModel.Design
             #region IServiceProvider implementation
             object IServiceProvider.GetService(Type serviceType)
             {
-                // Inject this class as the IWindowsFormsEditroService
+                // Inject this class as the IWindowsFormsEditorService
                 // so drop-down custom editors can work
                 if (serviceType == typeof(IWindowsFormsEditorService))
                 {

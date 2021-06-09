@@ -31,7 +31,7 @@ namespace System.ComponentModel.Design
         public virtual DesignerActionListCollection ActionLists => _actionLists ??= new DesignerActionListCollection();
 
         /// <summary>
-        ///  Retrieves a list of associated components. These are components that should be incluced in a cut or copy
+        ///  Retrieves a list of associated components. These are components that should be included in a cut or copy
         ///  operation on this component.
         /// </summary>
         public virtual ICollection AssociatedComponents => Array.Empty<IComponent>();
@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design
         ///  The defaultValues property contains a name/value dictionary of default values that should be applied to
         ///  properties. This dictionary may be null if no default values are specified.
         ///
-        ///  You may use the defaultValues dictionary to apply recommended defaults to proeprties but you should not
+        ///  You may use the defaultValues dictionary to apply recommended defaults to properties but you should not
         ///  modify component properties beyond what is stored in the dictionary, because this is an existing component
         ///  that may already have properties set on it.
         ///

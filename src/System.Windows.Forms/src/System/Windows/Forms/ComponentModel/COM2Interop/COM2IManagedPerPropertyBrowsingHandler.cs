@@ -111,7 +111,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     else
                     {
-                        // somethings odd
+                        // something's odd
                         Debug.Fail("No dot in class name?");
                         continue;
                     }
@@ -169,7 +169,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Attribute attr = null;
 
                 // okay, if we got here, we need to build the attribute...
-                // get the initalizer value if we've got a one item ctor
+                // get the initializer value if we've got a one item ctor
 
                 if (!Convert.IsDBNull(varParams[i]) && varParams[i] is not null)
                 {

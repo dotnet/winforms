@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Glyph _hitTestedGlyph;                                  // the last valid glyph that was hit tested
         private IToolboxService _toolboxSvc;                            // allows us to have the toolbox choose a cursor
         private Control _dropSource;                                    // actual control used to call .dodragdrop
-        private DragEventArgs _validDragArgs;                           // if valid - this is used to fabricate drag enter/leave envents
+        private DragEventArgs _validDragArgs;                           // if valid - this is used to fabricate drag enter/leave events
         private BehaviorDragDropEventHandler _beginDragHandler;         // fired directly before we call .DoDragDrop()
         private BehaviorDragDropEventHandler _endDragHandler;           // fired directly after we call .DoDragDrop()
         private EventHandler _synchronizeEventHandler;                  // fired when we want to synchronize the selection
@@ -102,7 +102,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Read-only property that returns the AdornerCollection that the BehaivorService manages.
+        ///  Read-only property that returns the AdornerCollection that the BehaviorService manages.
         /// </summary>
         public BehaviorServiceAdornerCollection Adorners { get; }
 
@@ -396,19 +396,19 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate() => _adornerWindow.InvalidateAdornerWindow();
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Rectangle rect) => _adornerWindow.InvalidateAdornerWindow(rect);
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Region r) => _adornerWindow.InvalidateAdornerWindow(r);

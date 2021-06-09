@@ -14,11 +14,11 @@ using static Interop;
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///  The DesignerActionUI is the designer/UI-specific implementation of the DesignerActions feature.  This class instantiates the DesignerActionService and hooks to its DesignerActionsChanged event.  Responding to this single event will enable the DesignerActionUI to perform all neceessary UI-related operations. Note that the DesignerActionUI uses the BehaviorService to manage all UI interaction.  For every component containing a DesignerAction (determined by the DesignerActionsChagned event) there will be an associated  DesignerActionGlyph and DesignerActionBehavior. Finally, the DesignerActionUI is also responsible for showing and managing the Action's context menus.  Note that every DesignerAction context menu has an item that will bring up the DesignerActions option pane in the options dialog.
+    ///  The DesignerActionUI is the designer/UI-specific implementation of the DesignerActions feature.  This class instantiates the DesignerActionService and hooks to its DesignerActionsChanged event.  Responding to this single event will enable the DesignerActionUI to perform all necessary UI-related operations. Note that the DesignerActionUI uses the BehaviorService to manage all UI interaction.  For every component containing a DesignerAction (determined by the DesignerActionsChanged event) there will be an associated  DesignerActionGlyph and DesignerActionBehavior. Finally, the DesignerActionUI is also responsible for showing and managing the Action's context menus.  Note that every DesignerAction context menu has an item that will bring up the DesignerActions option pane in the options dialog.
     /// </summary>
     internal class DesignerActionUI : IDisposable
     {
-        private static readonly TraceSwitch s_designeActionPanelTraceSwitch = new TraceSwitch("DesigneActionPanelTrace", "DesignerActionPanel tracing");
+        private static readonly TraceSwitch s_designerActionPanelTraceSwitch = new TraceSwitch("DesignerActionPanelTrace", "DesignerActionPanel tracing");
 
         private Adorner _designerActionAdorner; //used to add designeraction-related glyphs
         private IServiceProvider _serviceProvider; //standard service provider
@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design
         private BehaviorService _behaviorService; //this is how all of our UI is implemented (glyphs, behaviors, etc...)
         private readonly IMenuCommandService _menuCommandService;
         private DesignerActionKeyboardBehavior _dapkb;   //out keyboard behavior
-        private readonly Hashtable _componentToGlyph; //used for quick reference between compoments and our glyphs
+        private readonly Hashtable _componentToGlyph; //used for quick reference between components and our glyphs
         private Control _marshalingControl; //used to invoke events on our main gui thread
         private IComponent _lastPanelComponent;
 
@@ -36,7 +36,7 @@ namespace System.ComponentModel.Design
         private readonly IWin32Window _mainParentWindow;
         internal DesignerActionToolStripDropDown designerActionHost;
 
-        private readonly MenuCommand _cmdShowDesignerActions; //used to respond to the Alt+Shft+F10 command
+        private readonly MenuCommand _cmdShowDesignerActions; //used to respond to the Alt+Shift+F10 command
         private bool _inTransaction;
         private IComponent _relatedComponentTransaction;
         private DesignerActionGlyph _relatedGlyphTransaction;
@@ -50,7 +50,7 @@ namespace System.ComponentModel.Design
         internal static readonly TraceSwitch DropDownVisibilityDebug;
 #endif
         /// <summary>
-        ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelecteionService, as well as spin-up the DesignerActionService.
+        ///  Constructor that takes a service provider.  This is needed to establish references to the BehaviorService and SelectionService, as well as spin-up the DesignerActionService.
         /// </summary>
         public DesignerActionUI(IServiceProvider serviceProvider, Adorner containerAdorner)
         {
@@ -207,7 +207,7 @@ namespace System.ComponentModel.Design
                         }
                     }
 
-                    //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyoh.
+                    //either comp is a control or we failed to find a traycontrol (which could be the case for toolstripitem components) - in this case just create a standard glyph.
                     if (dag is null)
                     {
                         //if the related comp is a control, then this shortcut will be off its bounds
@@ -288,7 +288,7 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            // we check wether or not we're in a transaction, if we are, we only the refresh at the end of the transaction to avoid flicker.
+            // we check whether or not we're in a transaction, if we are, we only the refresh at the end of the transaction to avoid flicker.
             if (_serviceProvider.GetService(typeof(IDesignerHost)) is IDesignerHost host)
             {
                 bool hostIsClosingTransaction = false;
@@ -328,7 +328,7 @@ namespace System.ComponentModel.Design
             if (glyph != null)
             {
                 VerifyGlyphIsInAdorner(glyph);
-                // this could happen when a verb change state or suddendly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...
+                // this could happen when a verb change state or suddenly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...
                 RecreatePanel(glyph); // recreate the DAP itself
                 UpdateDAPLocation(comp, glyph); // reposition the thing
             }
@@ -481,14 +481,14 @@ namespace System.ComponentModel.Design
         // we cannot attach several menu command to the same command id, we need a single entry point, we put it in designershortcutui. but we need a way to call the show ui on the related behavior hence this internal function to hack it together. we return false if we have nothing to display, we hide it and return true if we're already displaying
         internal bool ShowDesignerActionPanelForPrimarySelection()
         {
-            //can't do anythign w/o selection service
+            //can't do anything w/o selection service
             if (_selSvc is null)
             {
                 return false;
             }
 
             object primarySelection = _selSvc.PrimarySelection;
-            //verfiy that we have obtained a valid component with designer actions
+            //verify that we have obtained a valid component with designer actions
             if (primarySelection is null || !_componentToGlyph.Contains(primarySelection))
             {
                 return false;
@@ -711,7 +711,7 @@ namespace System.ComponentModel.Design
 
         bool _cancelClose;
         /// <summary>
-        ///  This shows the actual chrome paenl that is created by the DesignerActionBehavior object.
+        ///  This shows the actual chrome panel that is created by the DesignerActionBehavior object.
         /// </summary>
         internal void ShowDesignerActionPanel(IComponent relatedComponent, DesignerActionPanel panel, DesignerActionGlyph glyph)
         {
@@ -740,7 +740,7 @@ namespace System.ComponentModel.Design
             {
                 if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
-                    Debug.WriteLineIf(s_designeActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
+                    Debug.WriteLineIf(s_designerActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
                     Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
                     User32.SetWindowLong(designerActionHost, User32.GWL.HWNDPARENT, new HandleRef(_mainParentWindow, _mainParentWindow.Handle));
                 }
@@ -748,7 +748,7 @@ namespace System.ComponentModel.Design
                 _cancelClose = true;
                 designerActionHost.Show(location);
                 designerActionHost.Focus();
-                // when a control is drag and dropped and authoshow is set to true the vs designer is going to get activated as soon as the control is dropped we don't want to close the panel then, so we post a message (using the trick to call begin invoke) and once everything is settled re-activate the autoclose logic
+                // when a control is drag and dropped and autoshow is set to true the vs designer is going to get activated as soon as the control is dropped we don't want to close the panel then, so we post a message (using the trick to call begin invoke) and once everything is settled re-activate the autoclose logic
                 designerActionHost.BeginInvoke(new EventHandler(OnShowComplete));
                 // invalidate the glyph to have it point the other way
                 glyph.InvalidateOwnerLocation();
@@ -864,8 +864,8 @@ namespace System.ComponentModel.Design
             }
 
             // when we get closing event as a result of an activation change, pre-populate e.Cancel based on why we're exiting.
-            // - if it's a modal window that's owned by VS dont exit
-            // - if it's a window that's owned by the toolstrip dropdown dont exit
+            // - if it's a modal window that's owned by VS don't exit
+            // - if it's a window that's owned by the toolstrip dropdown don't exit
             else if (e.CloseReason == ToolStripDropDownCloseReason.AppFocusChange || e.CloseReason == ToolStripDropDownCloseReason.AppClicked)
             {
                 IntPtr hwndActivating = User32.GetActiveWindow();

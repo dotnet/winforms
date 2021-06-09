@@ -4,7 +4,7 @@
 
 using System.Runtime.CompilerServices;
 
-// Awkward, but necessary to expose Interop based internals to other test libaries
+// Awkward, but necessary to expose Interop based internals to other test libraries
 [assembly: InternalsVisibleTo("System.Windows.Forms.Primitives.Tests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Tests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.TestUtilities, PublicKey=00000000000000000400000000000000")]

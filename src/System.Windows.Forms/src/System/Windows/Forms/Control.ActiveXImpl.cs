@@ -320,7 +320,7 @@ namespace System.Windows.Forms
 
                             if (lpmsg->hwnd != _control.Handle && lpmsg->IsMouseMessage())
                             {
-                                // Must translate message coordniates over to our HWND.  We first try
+                                // Must translate message coordinates over to our HWND.  We first try
                                 IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
                                 var pt = new Point
                                 {
@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms
                 internal class SafeIUnknown : SafeHandle
                 {
                     /// <summary>
-                    ///  Wrap an incomoing unknown or get the unknown for the CCW (COM-callable wrapper).
+                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
                     /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr)
                         : this(obj, addRefIntPtr, Guid.Empty)
@@ -1537,8 +1537,8 @@ namespace System.Windows.Forms
                     }
 
                     /// <summary>
-                    ///  Wrap an incomoing unknown or get the unknown for the CCW (COM-callable wrapper).
-                    ///  If an iid is supplied, QI for the interface and wrap that unknonwn instead.
+                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
+                    ///  If an iid is supplied, QI for the interface and wrap that unknown instead.
                     /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr, Guid iid)
                         : base(IntPtr.Zero, true)
@@ -1726,7 +1726,7 @@ namespace System.Windows.Forms
                     private readonly VTABLE _vtbl;
 
                     /// <summary>
-                    ///  Call IConnectioinPoint.Advise using Delegate.Invoke on the v-table slot.
+                    ///  Call IConnectionPoint.Advise using Delegate.Invoke on the v-table slot.
                     /// </summary>
                     public bool Advise(IntPtr punkEventSink, out uint pdwCookie)
                     {
@@ -2003,7 +2003,7 @@ namespace System.Windows.Forms
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Control has changed size.  Setting dirty bit");
                             _activeXState[s_isDirty] = true;
 
-                            // If we're not inplace active, then anounce that the view changed.
+                            // If we're not inplace active, then announce that the view changed.
                             if (!_activeXState[s_inPlaceActive])
                             {
                                 ViewChanged();
@@ -2399,7 +2399,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Since this method is used by Reflection .. dont change the "signature"
+            // Since this method is used by Reflection .. don't change the "signature"
             internal void ViewChangedInternal()
             {
                 ViewChanged();

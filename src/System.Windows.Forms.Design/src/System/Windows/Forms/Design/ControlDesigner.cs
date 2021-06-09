@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Retrieves a list of associated components. These are components that should be incluced
+        ///  Retrieves a list of associated components. These are components that should be included
         ///  in a cut or copy operation on this component.
         /// </summary>
         public override ICollection AssociatedComponents
@@ -430,7 +430,7 @@ namespace System.Windows.Forms.Design
             => m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
 
         /// <summary>
-        ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the
+        ///  Determines if the this designer can be parented to the specified designer -- generally this means if the
         ///  control for this designer can be parented into the given ParentControlDesigner's designer.
         /// </summary>
         public virtual bool CanBeParentedTo(IDesigner parentDesigner)
@@ -603,8 +603,8 @@ namespace System.Windows.Forms.Design
         ///  Panel1 and Panel2.  These panels are exposed through read only Panel1 and Panel2 properties on the
         ///  SplitContainer class. SplitContainer's designer calls EnableDesignTime for each panel, which allows other
         ///  components to be dropped on them.  But, in order for the contents of Panel1 and Panel2 to be saved,
-        ///  SplitContainer itself needed to expose the panels as public properties. The child paramter is the control
-        ///  to enable.  The name paramter is the name of this control as exposed to the end user.  Names need to be
+        ///  SplitContainer itself needed to expose the panels as public properties. The child parameter is the control
+        ///  to enable.  The name parameter is the name of this control as exposed to the end user.  Names need to be
         ///  unique within a control designer, but do not have to be unique to other control designer's children. This
         ///  method returns true if the child control could be enabled for design time, or false if the hosting
         ///  infrastructure does not support it.  To support this feature, the hosting infrastructure must expose the
@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called when the designer is intialized.  This allows the designer to provide some meaningful default
+        ///  Called when the designer is initialized.  This allows the designer to provide some meaningful default
         ///  values in the component.  The default implementation of this sets the components's default property to
         ///  it's name, if that property is a string.
         /// </summary>
@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // replace this one seperately because it is of a different type (DesignerControlCollection) than the
+            // replace this one separately because it is of a different type (DesignerControlCollection) than the
             // original property (ControlCollection)
             PropertyDescriptor controlsProp = (PropertyDescriptor)properties["Controls"];
 
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            // Get the x and y coordniates of the mouse message
+            // Get the x and y coordinates of the mouse message
             int x = 0, y = 0;
 
             // Look for a mouse handler.
@@ -2180,9 +2180,9 @@ namespace System.Windows.Forms.Design
                         DefWndProc(ref m);
                     }
 
-                    // For some reason we dont always get an NCPAINT with the WM_NCACTIVATE usually this repros with
+                    // For some reason we don't always get an NCPAINT with the WM_NCACTIVATE usually this repros with
                     // themes on.... this can happen when someone calls RedrawWindow without the flags to send an
-                    // NCPAINT.  So that we dont double process this event, our calls to redraw window should not have
+                    // NCPAINT.  So that we don't double process this event, our calls to redraw window should not have
                     // RDW_ERASENOW | RDW_UPDATENOW.
                     if (OverlayService != null)
                     {

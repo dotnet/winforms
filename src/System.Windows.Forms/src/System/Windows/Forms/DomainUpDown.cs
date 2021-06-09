@@ -545,7 +545,7 @@ namespace System.Windows.Forms
             Text = _stringValue;
         }
 
-        // This is not a breaking change -- Even though this control previously autosized to hieght,
+        // This is not a breaking change -- Even though this control previously autosized to height,
         // it didn't actually have an AutoSize property.  The new AutoSize property enables the
         // smarter behavior.
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
@@ -553,7 +553,7 @@ namespace System.Windows.Forms
             int height = PreferredHeight;
             int width = LayoutUtils.OldGetLargestStringSizeInCollection(Font, Items).Width;
 
-            // AdjuctWindowRect with our border, since textbox is borderless.
+            // AdjustWindowRect with our border, since textbox is borderless.
             width = SizeFromClientSize(width, height).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }

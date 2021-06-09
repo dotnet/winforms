@@ -19,7 +19,7 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.DataItemControlTypeId,
                     _ => base.GetPropertyValue(propertyID)
                 };
         }

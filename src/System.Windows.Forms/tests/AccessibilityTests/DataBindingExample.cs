@@ -48,7 +48,7 @@ namespace AccessibilityTests
                 new Student(4, "StudentD", "Male", 12124, "1004", "Football", true, 10, 11),
             };
 
-            // Binding Data For TextBox/Label/DomianUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button controls by using DadaBindings property
+            // Binding Data For TextBox/Label/DomainUpDown/NumericUpDown/LinkLabel/CheckBox/RadioButton/RichTextBox/MaskedTextBox/Button controls by using DadaBindings property
             Student stu = new Student(1, "StudentNumber", "Female", 12121, "HomeNumber", "Habits\nBasketball\nFootball", true, 10, 11);
             this.textBox1.DataBindings.Add("Text", stu, "StudentNumber");
             this.domainUpDown1.DataBindings.Add("Text", stu, "LuckyNumber");

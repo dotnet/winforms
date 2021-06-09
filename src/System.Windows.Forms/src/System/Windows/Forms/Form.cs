@@ -708,7 +708,7 @@ namespace System.Windows.Forms
 
                 // In Windows Theme, the FixedDialog tend to have a small Icon.
                 // So to make this behave uniformly with other styles, we need to make
-                // the call to UpdateIcon after the the form styles have been updated.
+                // the call to UpdateIcon after the form styles have been updated.
                 if (formState[FormStateIconSet] == 0)
                 {
                     UpdateWindowIcon(false);
@@ -2214,7 +2214,7 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(s_focusTracing.TraceVerbose, "Form::SetVisibleCore(" + value.ToString() + ") - " + Name);
 
             // If DialogResult.OK and the value == Visible then this code has been called either through
-            // ShowDialog( ) or explicit Hide( ) by the user. So dont go through this function again.
+            // ShowDialog( ) or explicit Hide( ) by the user. So don't go through this function again.
             // This will avoid flashing during closing the dialog;
             if (value == Visible && dialogResult == DialogResult.OK)
             {
@@ -2538,7 +2538,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the the user attempts to change the input language for the
+        ///  Occurs when the user attempts to change the input language for the
         ///  form.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -3530,7 +3530,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adjusts the Createparams to reflect the window state.
+        ///  Adjusts the CreateParams to reflect the window state.
         /// </summary>
         private void FillInCreateParamsWindowState(CreateParams cp)
         {
@@ -4022,7 +4022,7 @@ namespace System.Windows.Forms
                 ApplyAutoScaling();
             }
 
-            // Also, at this time we can now locate the form the the correct
+            // Also, at this time we can now locate the form the correct
             // area of the screen.  We must do this after applying any
             // autoscaling.
             //
@@ -4053,7 +4053,7 @@ namespace System.Windows.Forms
                 // So in the event that the user has set the on load event
                 // in their application, we should go ahead and invalidate
                 // the controls in their collection so that we paint properly.
-                // This seems to manifiest itself in changes to the window caption,
+                // This seems to manifest itself in changes to the window caption,
                 // and changes to the control box and help.
 
                 foreach (Control c in Controls)
@@ -4250,40 +4250,13 @@ namespace System.Windows.Forms
 
                 if (!e.Cancel)
                 {
-                    float factor = (float)e.DeviceDpiNew / (float)e.DeviceDpiOld;
-                    SuspendAllLayout(this);
-                    try
-                    {
-                        User32.SetWindowPos(
-                            new HandleRef(this, HandleInternal),
-                            User32.HWND_TOP,
-                            e.SuggestedRectangle.X,
-                            e.SuggestedRectangle.Y,
-                            e.SuggestedRectangle.Width,
-                            e.SuggestedRectangle.Height,
-                            User32.SWP.NOZORDER | User32.SWP.NOACTIVATE);
-                        if (AutoScaleMode != AutoScaleMode.Font)
-                        {
-                            Font = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
-                            FormDpiChanged(factor);
-                        }
-                        else
-                        {
-                            ScaleFont(factor);
-                            FormDpiChanged(factor);
-                        }
-                    }
-                    finally
-                    {
-                        // We want to perform layout for dpi-changed HDpi improvements - setting the second parameter to 'true'
-                        ResumeAllLayout(this, true);
-                    }
+                    ScaleContainer(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
                 }
             }
         }
 
         /// <summary>
-        ///  Occurs when the DPI resolution of the screen this top level window is displayed on changes,
+        ///  Occurs when the Dpi resolution of the screen this top level window is displayed on changes,
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
@@ -4322,8 +4295,8 @@ namespace System.Windows.Forms
         ///  scale window size non-lineary. If this message is not processed, the size is scaled linearly by Windows.
         ///  This message is sent to top level windows before WM_DPICHANGED.
         ///  If the application responds to this message, the resulting size will be the candidate rectangle
-        ///  sent to WM_DPICHANGED. The WPARAM contains a DPI value. The size needs to be computed if
-        ///  the window were to switch to this DPI. LPARAM is unused and will be zero.
+        ///  sent to WM_DPICHANGED. The WPARAM contains a Dpi value. The size needs to be computed if
+        ///  the window were to switch to this Dpi. LPARAM is unused and will be zero.
         ///  The return value is a size, where the LOWORD is the desired width of the window and the HIWORD
         ///  is the desired height of the window. A return value of zero indicates that the app does not
         ///  want any special behavior and the candidate rectangle will be computed linearly.
@@ -4372,7 +4345,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Thi event fires whenever the form is first shown.
+        ///  This event fires whenever the form is first shown.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnShown(EventArgs e)
@@ -4720,7 +4693,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Resets the form's icon the the default value.
+        ///  Resets the form's icon the default value.
         /// </summary>
         private void ResetIcon()
         {
@@ -5280,11 +5253,11 @@ namespace System.Windows.Forms
                         throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "showDialog"), nameof(owner));
                     }
 
-                    // In a multi DPI environment and applications in PMV2 mode, DPI changed events triggered
-                    // only when there is a DPI change happened for the Handle directly or via its parent.
+                    // In a multi Dpi environment and applications in PMV2 mode, Dpi changed events triggered
+                    // only when there is a Dpi change happened for the Handle directly or via its parent.
                     // So, it is necessary to not set the owner before creating the handle. Otherwise,
-                    // the window may never receive DPI changed event even if its parent has different DPI.
-                    // Users at runtime, has to move the window between the screens to get the DPI changed events triggered.
+                    // the window may never receive Dpi changed event even if its parent has different Dpi.
+                    // Users at runtime, has to move the window between the screens to get the Dpi changed events triggered.
 
                     Properties.SetObject(PropDialogOwner, owner);
                     if (owner is Form form && owner != oldOwner)
@@ -5731,7 +5704,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // we dont want to be redundantly called as we could merge in two control menus.
+            // we don't want to be redundantly called as we could merge in two control menus.
             formStateEx[FormStateExInUpdateMdiControlStrip] = 1;
 
             try
@@ -6106,7 +6079,7 @@ namespace System.Windows.Forms
 
                     // if this comes back false, someone canceled the close.  we want
                     // to call this here so that we can get the cancel event properly,
-                    // and if this is a WM_QUERYENDSESSION, appriopriately set the result
+                    // and if this is a WM_QUERYENDSESSION, appropriately set the result
                     // based on this call.
                     //
                     // NOTE: We should also check !Validate(true) below too in the modal case,

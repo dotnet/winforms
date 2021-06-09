@@ -240,6 +240,10 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return _ownerDataGridView.AccessibleRole == AccessibleRole.Default
+                               ? UiaCore.UIA.DataGridControlTypeId
+                               : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:

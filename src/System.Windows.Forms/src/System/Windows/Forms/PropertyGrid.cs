@@ -22,7 +22,7 @@ using static Interop;
 
 namespace System.Windows.Forms
 {
-    [Designer("System.Windows.Forms.Design.PropertyGridDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.PropertyGridDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
     {
@@ -160,12 +160,18 @@ namespace System.Windows.Forms
             _onComponentChanged = new ComponentChangedEventHandler(OnComponentChanged);
 
             SuspendLayout();
-            AutoScaleMode = AutoScaleMode.None;
+
+            // Scaling PropertyGrid but its children will be excluded from AutoScale. Please see OnLayoutInternal().
+            AutoScaleMode = AutoScaleMode.Inherit;
+
+            // Children of PropertyGrid are special and explicitly resized when propertygrid is resized (by calling OnLayoutInternal())
+            // and adjust its children bounds with respect to propertygrid bounds. Autoscale mode should not scale them again.
+            _doNotScaleChildren = true;
 
             SetStyle(ControlStyles.UseTextForAccessibility, false);
 
             // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue.
-            // So, recalculate static variables everytime property grid initialized.
+            // So, recalculate static variables every time property grid initialized.
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
                 RescaleConstants();
@@ -520,7 +526,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The forground color for the hot commands region.
+        ///  The foreground color for the hot commands region.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))]
@@ -788,7 +794,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The forground color for the help region.
+        ///  The foreground color for the help region.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridHelpForeColorDesc))]
@@ -824,7 +830,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets or gets the visiblity state of the help pane.
+        ///  Sets or gets the visibility state of the help pane.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(true)]
@@ -1080,7 +1086,7 @@ namespace System.Windows.Forms
                     {
                         // When no row is selected, SelectedGridItem returns grid entry for root
                         // object. But this is not a selectable item. So don't worry if setting SelectedGridItem
-                        // cause an argument exception whe ntrying to re-select the root object. Just leave the
+                        // cause an argument exception when trying to re-select the root object. Just leave the
                         // the grid with no selected row.
                     }
                 }
@@ -1539,7 +1545,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets or gets the visiblity state of the toolStrip.
+        ///  Sets or gets the visibility state of the toolStrip.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(true)]
@@ -2124,7 +2130,7 @@ namespace System.Windows.Forms
                         else
                         {
                             // No menu command service.  Go straight to the component's designer.  We
-                            // can only do this if the Object count is 1, because desginers do not
+                            // can only do this if the Object count is 1, because designers do not
                             // support verbs across a multi-selection.
                             //
                             if (_currentObjects.Length == 1 && GetUnwrappedObject(0) is IComponent)
@@ -2838,7 +2844,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  We forward messages from several of our children
-        ///  to our mouse move so we can put up the spliter over their borders
+        ///  to our mouse move so we can put up the splitter over their borders
         /// </summary>
         private void OnChildMouseMove(object sender, MouseEventArgs me)
         {
@@ -2853,7 +2859,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  We forward messages from several of our children
-        ///  to our mouse move so we can put up the spliter over their borders
+        ///  to our mouse move so we can put up the splitter over their borders
         /// </summary>
         private void OnChildMouseDown(object sender, MouseEventArgs me)
         {
@@ -3042,6 +3048,14 @@ namespace System.Windows.Forms
 
                 if (!dividerOnly)
                 {
+                    // PropertyGrid does a special handling on scaling and positioning its
+                    // child controls. These are not scaled by their parent when Dpi/Font change.
+                    if (_oldDeviceDpi != _deviceDpi)
+                    {
+                        RescaleConstants();
+                        SetupToolbar(true);
+                    }
+
                     // no toolbar or doc comment or commands, just
                     // fill the whole thing with the grid
                     if (!_toolStrip.Visible && !_doccomment.Visible && !_hotcommands.Visible)
@@ -3094,7 +3108,7 @@ namespace System.Windows.Forms
                     if (_doccomment.Visible)
                     {
                         dcOptHeight = _doccomment.GetOptimalHeight(Size.Width - s_cyDivider);
-                        if (_doccomment.userSized)
+                        if (_doccomment.UserSized)
                         {
                             dcRequestedHeight = _doccomment.Size.Height;
                         }
@@ -3111,7 +3125,7 @@ namespace System.Windows.Forms
                     if (_hotcommands.Visible)
                     {
                         hcOptHeight = _hotcommands.GetOptimalHeight(Size.Width - s_cyDivider);
-                        if (_hotcommands.userSized)
+                        if (_hotcommands.UserSized)
                         {
                             hcRequestedHeight = _hotcommands.Size.Height;
                         }
@@ -3154,9 +3168,9 @@ namespace System.Windows.Forms
                     // if we've modified the height to less than the optimal, clear the userSized item
                     if (height <= dcOptHeight && height < dcRequestedHeight)
                     {
-                        _doccomment.userSized = false;
+                        _doccomment.UserSized = false;
                     }
-                    else if (_dcSizeRatio != -1 || _doccomment.userSized)
+                    else if (_dcSizeRatio != -1 || _doccomment.UserSized)
                     {
                         _dcSizeRatio = (_doccomment.Height * 100) / Height;
                     }
@@ -3187,9 +3201,9 @@ namespace System.Windows.Forms
                     // if we've modified the height, clear the userSized item
                     if (height <= hcOptHeight && height < hcRequestedHeight)
                     {
-                        _hotcommands.userSized = false;
+                        _hotcommands.UserSized = false;
                     }
-                    else if (_hcSizeRatio != -1 || _hotcommands.userSized)
+                    else if (_hcSizeRatio != -1 || _hotcommands.UserSized)
                     {
                         _hcSizeRatio = (_hotcommands.Height * 100) / Height;
                     }
@@ -3268,7 +3282,7 @@ namespace System.Windows.Forms
                 Size size = _targetMove.Size;
                 size.Height = Math.Max(0, yNew);
                 _targetMove.Size = size;
-                _targetMove.userSized = true;
+                _targetMove.UserSized = true;
                 OnLayoutInternal(true);
                 // invalidate the divider area so we cleanup anything
                 // left by the xor
@@ -3441,7 +3455,7 @@ namespace System.Windows.Forms
                 {
                     if (currentSelection.Site is null) //The component is not logically sited...so clear the PropertyGrid Selection..
                     {
-                        //Setting to null... actually will clear off the state information so that ProperyGrid is in sane State.
+                        //Setting to null... actually will clear off the state information so that PropertyGrid is in sane State.
                         SelectedObject = null;
                         return;
                     }
@@ -4440,7 +4454,7 @@ namespace System.Windows.Forms
                 Bitmap b;
                 int i;
 
-                // we manange the buttons as a seperate list so the toobar doesn't flash
+                // we manage the buttons as a separate list so the toolbar doesn't flash
                 ArrayList buttonList;
 
                 if (fullRebuild)
@@ -4946,18 +4960,6 @@ namespace System.Windows.Forms
             _toolStripButtonPaddingY = LogicalToDeviceUnits(ToolStripButtonPaddingY);
         }
 
-        /// <summary>
-        ///  Rescale constants when DPI changed
-        /// </summary>
-        /// <param name="deviceDpiOld">old dpi</param>
-        /// <param name="deviceDpiNew">new dpi</param>
-        protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
-        {
-            base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
-            RescaleConstants();
-            SetupToolbar(true);
-        }
-
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
@@ -5050,7 +5052,7 @@ namespace System.Windows.Forms
                             if (_toolStrip.Items[index] is ToolStripButton button)
                             {
                                 button.Checked = !button.Checked;
-                                // special treatment for the properies page button
+                                // special treatment for the properties page button
                                 if (button == _btnViewPropertyPages)
                                 {
                                     OnViewButtonClickPP(button, EventArgs.Empty);

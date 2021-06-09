@@ -171,7 +171,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The index of this column.  This index does not necessarily correspond
         ///  to the current visual position of the column in the ListView, because the
-        ///  user may orerder columns if the allowColumnReorder property is true.
+        ///  user may order columns if the allowColumnReorder property is true.
         /// </summary>
         [Browsable(false)]
         public int Index

@@ -17,7 +17,7 @@ namespace System.ComponentModel.Design
         private readonly IServiceProvider _serviceProvider; // standard service provider
         private readonly ISelectionService _selSvc; // selection service
         private readonly Hashtable _componentToVerbsEventHookedUp; //table component true/false
-        // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accesssed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
+        // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
         private bool _reEntrantCode;
 
         /// <summary>
@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            //this will represent the list of componets we just cleared
+            //this will represent the list of components we just cleared
             ArrayList compsRemoved = new ArrayList(_designerActionLists.Count);
             foreach (DictionaryEntry entry in _designerActionLists)
             {
@@ -340,7 +340,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
         /// </summary>
         public void Remove(IComponent comp)
         {
@@ -359,7 +359,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
         /// </summary>
         public void Remove(DesignerActionList actionList)
         {

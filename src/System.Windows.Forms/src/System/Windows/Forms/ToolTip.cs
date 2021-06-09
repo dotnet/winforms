@@ -875,8 +875,8 @@ namespace System.Windows.Forms
         private void DestroyRegion(Control ctl)
         {
             // When the toplevelControl is a form and is Modal, the Handle of the tooltip is released
-            // before we come here. In such a case the tool wont get deleted from the tooltip.
-            // So we dont check "Handle" in the handlesCreate but check it only foe Non-Nodal dialogs later
+            // before we come here. In such a case the tool won't get deleted from the tooltip.
+            // So we don't check "Handle" in the handlesCreate but check it only foe Non-Nodal dialogs later
             bool handlesCreated = ctl.IsHandleCreated
                                 && _topLevelControl is not null
                                 && _topLevelControl.IsHandleCreated
@@ -913,7 +913,7 @@ namespace System.Windows.Forms
 
                     _window = null;
 
-                    // Unhook the DeactiveEvent. Find the Form for associated Control and hook
+                    // Unhook the DeactivateEvent. Find the Form for associated Control and hook
                     // up to the Deactivated event to Hide the Shown tooltip
                     if (TopLevelControl is Form baseFrom)
                     {
@@ -2067,7 +2067,7 @@ namespace System.Windows.Forms
 
             // Set the max possible size of the tooltip to the size we received.
             // This prevents the operating system from drawing incorrect rectangles
-            // when determing the correct display rectangle
+            // when determining the correct display rectangle
             // Set the MaxWidth only if user has changed the width.
             if (currentTooltipSize != r.Size)
             {
@@ -2232,8 +2232,8 @@ namespace System.Windows.Forms
                 User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)screen.WorkingArea.Width);
             }
 
-            // For non-auto tips (those showned through the show(.) methods, we need to
-            // dissassociate them from the tip control.
+            // For non-auto tips (those shown through the show(.) methods, we need to
+            // disassociate them from the tip control.
             if ((tt.TipType & TipInfo.Type.Auto) == 0)
             {
                 _tools.Remove(control);

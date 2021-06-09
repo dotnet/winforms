@@ -756,7 +756,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            // The TreeView shows up the state imageList after sending this message even if the nodes dont have any stateImageIndex set.
+                            // The TreeView shows up the state imageList after sending this message even if the nodes don't have any stateImageIndex set.
                             // In order to avoid that we refresh nodes which would "reset" the images to none.
                             // This causes flicker but gives us the right behavior
                             RefreshNodes();
@@ -1240,7 +1240,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The ShowLines property determines whether or not the tooltips willbe displayed on the nodes
+        ///  The ShowLines property determines whether or not the tooltips will be displayed on the nodes
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
@@ -2711,9 +2711,9 @@ namespace System.Windows.Forms
         private void WmMouseDown(ref Message m, MouseButtons button, int clicks)
         {
             // Required to put the TreeView in sane-state for painting proper highlighting of selectedNodes.
-            // If the user shows the ContextMenu bu overiding the WndProc( ), then the treeview
+            // If the user shows the ContextMenu bu overriding the WndProc( ), then the treeview
             // goes into the weird state where the high-light gets locked to the node on which the ContextMenu was shown.
-            // So we need to get the native TREEIVEW out of this weird state.
+            // So we need to get the native TREEVIEW out of this weird state.
             User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
 
             // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
@@ -2721,7 +2721,7 @@ namespace System.Windows.Forms
             // comes back up.
             OnMouseDown(new MouseEventArgs(button, clicks, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
 
-            //If Validation is cancelled dont fire any events through the Windows TreeView's message loop...
+            //If Validation is cancelled don't fire any events through the Windows TreeView's message loop...
             if (!ValidationCancelled)
             {
                 DefWndProc(ref m);
@@ -3191,7 +3191,7 @@ namespace System.Windows.Forms
                 case (int)User32.WM.NCCALCSIZE:
                 case (int)User32.WM.WINDOWPOSCHANGED:
                 case (int)User32.WM.SIZE:
-                    // While we are changing size of treeView to avoid the scrollbar; dont respond to the window-sizing messages.
+                    // While we are changing size of treeView to avoid the scrollbar; don't respond to the window-sizing messages.
                     if (treeViewState[TREEVIEWSTATE_stopResizeWindowMsgs])
                     {
                         DefWndProc(ref m);
@@ -3302,7 +3302,7 @@ namespace System.Windows.Forms
                     // highlight to a node when the user clicks on its checkbox.
                     if ((tvhip.flags & TVHT.ONITEMSTATEICON) != 0)
                     {
-                        //We donot pass the Message to the Control .. so fire MouseDowm ...
+                        //We do not pass the Message to the Control .. so fire MouseDown ...
                         OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         if (!ValidationCancelled && CheckBoxes)
                         {
@@ -3457,7 +3457,7 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            // in this case we dont have a selected node.  The base
+                            // in this case we don't have a selected node.  The base
                             // will ensure we're constrained to the client area.
                             base.WndProc(ref m);
                         }

@@ -39,7 +39,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (anyRO)
                     {
-                        flags |= FLAG_FORCE_READONLY;
+                        Flags |= FLAG_FORCE_READONLY;
                     }
 
                     forceReadOnlyChecked = true;

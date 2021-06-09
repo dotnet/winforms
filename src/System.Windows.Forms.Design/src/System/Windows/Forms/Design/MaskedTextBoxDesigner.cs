@@ -69,7 +69,7 @@ namespace System.Windows.Forms.Design
                 designMaskedTextBox.RejectInputOnFirstFailure = maskedTextBox.RejectInputOnFirstFailure;
                 designMaskedTextBox.CutCopyMaskFormat = maskedTextBox.CutCopyMaskFormat;
                 designMaskedTextBox.Culture = maskedTextBox.Culture;
-                // designMaskedTextBox.TextMaskFormat = maskedTextBox.TextMaskFormat; - Not relevant since it is to be used programatically only.
+                // designMaskedTextBox.TextMaskFormat = maskedTextBox.TextMaskFormat; - Not relevant since it is to be used programmatically only.
             }
 
             // Some constant properties at design time.
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  Shadows the PasswordChar.  UseSystemPasswordChar overrides PasswordChar so independent on the value
-        ///  of PasswordChar it will return the systemp password char.  However, the value of PasswordChar is
+        ///  of PasswordChar it will return the system password char.  However, the value of PasswordChar is
         ///  cached so if UseSystemPasswordChar is reset at design time the PasswordChar value can be restored.
         ///  So in the case both properties are set, we need to serialize the real PasswordChar value as well.
         /// </summary>

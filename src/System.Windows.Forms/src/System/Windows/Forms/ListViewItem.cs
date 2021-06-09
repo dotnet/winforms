@@ -58,6 +58,7 @@ namespace System.Windows.Forms
         private object userData;
 
         private AccessibleObject _accessibilityObject;
+        private View _accessibilityObjectView;
 
         public ListViewItem()
         {
@@ -235,9 +236,19 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_accessibilityObject is null)
+                ListView owningListView = listView ?? Group.ListView ?? throw new InvalidOperationException(nameof(listView));
+                if (_accessibilityObject is null || owningListView.View != _accessibilityObjectView)
                 {
-                    _accessibilityObject = new ListViewItemAccessibleObject(this);
+                    _accessibilityObjectView = owningListView.View;
+                    _accessibilityObject = _accessibilityObjectView switch
+                    {
+                        View.Details => new ListViewItem.ListViewItemDetailsAccessibleObject(this),
+                        View.LargeIcon => new ListViewItem.ListViewItemBaseAccessibleObject(this),
+                        View.List => new ListViewItemListAccessibleObject(this),
+                        View.SmallIcon => new ListViewItem.ListViewItemBaseAccessibleObject(this),
+                        View.Tile => new ListViewItemTileAccessibleObject(this),
+                        _ => throw new Exception()
+                    };
                 }
 
                 return _accessibilityObject;
@@ -1186,7 +1197,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // let image key take precidence
+            // let image key take precedence
             if (imageKey is not null)
             {
                 ImageKey = imageKey;

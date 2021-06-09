@@ -119,7 +119,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // Determine focus
                     //
-                    if (_owningGridEntry.Focus)
+                    if (_owningGridEntry.HasFocus)
                     {
                         state |= AccessibleStates.Focused;
                     }
@@ -293,7 +293,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public override AccessibleObject? GetFocused()
             {
-                if (_owningGridEntry.Focus)
+                if (_owningGridEntry.HasFocus)
                 {
                     return this;
                 }
@@ -428,11 +428,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // button is one of the first children of PropertyGridView.
                         return UiaCore.UIA.TreeItemControlTypeId;
                     case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
-                        return (Object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
+                        return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _owningGridEntry.hasFocus;
+                        return _owningGridEntry.HasFocus;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
                     case UiaCore.UIA.IsEnabledPropertyId:

@@ -90,8 +90,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Given an Object, this attempts to locate its type info. If it implementes IProvideMultipleClassInfo
-        ///  all available type infos will be returned, otherwise the primary one will be alled.
+        ///  Given an Object, this attempts to locate its type info. If it implements IProvideMultipleClassInfo
+        ///  all available type infos will be returned, otherwise the primary one will be called.
         /// </summary>
         public unsafe static ITypeInfo[] FindTypeInfos(object obj, bool wantCoClass)
         {
@@ -301,7 +301,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Resolves a value type for a property from a TYPEDESC.  Value types can be
         ///  user defined, which and may be aliased into other type infos.  This function
-        ///  will recusively walk the ITypeInfos to resolve the type to a clr Type.
+        ///  will recursively walk the ITypeInfos to resolve the type to a clr Type.
         /// </summary>
         private unsafe static Type GetValueTypeFromTypeDesc(in TYPEDESC typeDesc, ITypeInfo typeInfo, object[] typeData)
         {
@@ -452,7 +452,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             object[] pvar = new object[1];
             ComNativeDescriptor cnd = ComNativeDescriptor.Instance;
 
-            // for each item in uur list, create the descriptor an check
+            // for each item in our list, create the descriptor an check
             // if it's the default one.
             foreach (PropInfo pi in propInfos.Values)
             {

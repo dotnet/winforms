@@ -82,7 +82,7 @@ namespace System.Windows.Forms
 #if DEBUG
             private int _debugModalCounter;
 #endif
-            // We need to set this flag if we have started the ModalMessageLoop so that we dont create the ThreadWindows
+            // We need to set this flag if we have started the ModalMessageLoop so that we don't create the ThreadWindows
             // when the ComponentManager calls on us (as IMSOComponent) during the OnEnterState.
             private bool _ourModalLoop;
 
@@ -660,7 +660,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    // Reset the flag since we are exiting out of a ModalMesaageLoop..
+                    // Reset the flag since we are exiting out of a ModalMessageLoop..
                     _ourModalLoop = wasOurLoop;
                 }
 
@@ -938,7 +938,7 @@ namespace System.Windows.Forms
                 // When that occurs, we rely on the STATE_POSTEDQUIT to be caught in the next
                 // idle, at which point we can tear down.
                 //
-                // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
+                // We can't follow the KB article exactly, because we don't have an HWND to PostMessage
                 // to.
                 User32.PostThreadMessageW(_id, User32.WM.QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
@@ -1083,7 +1083,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    // The second half of the the modalEnabled flag above.  Here, if we were previously
+                    // The second half of the modalEnabled flag above.  Here, if we were previously
                     // enabled, make sure that's still the case.
                     if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm).IsTrue() != modalEnabled)
                     {
@@ -1373,7 +1373,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // See if this is a dialog message -- this is for handling any native dialogs that are launched from
-                        // winforms code.  This can happen with ActiveX controls that launch dialogs specificially
+                        // winforms code.  This can happen with ActiveX controls that launch dialogs specifically
 
                         // First, get the first top-level window in the hierarchy.
                         IntPtr hwndRoot = User32.GetAncestor(msg.hwnd, User32.GA.ROOT);

@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         private TaskDialogPage? _boundPage;
 
         /// <summary>
-        ///   A qeueue of <see cref="TaskDialogPage"/>s that have been bound by
+        ///   A queue of <see cref="TaskDialogPage"/>s that have been bound by
         ///   navigating the dialog, but don't yet reflect the state of the
         ///   native dialog because the corresponding
         ///   <see cref="ComCtl32.TDN.NAVIGATED"/> notification was
@@ -453,7 +453,7 @@ namespace System.Windows.Forms
                     // problems because the callback delegate for the subclassed
                     // WndProc might already have been freed).
                     //
-                    // Therefore, we neeed to catch all exceptions in the
+                    // Therefore, we need to catch all exceptions in the
                     // native -> managed transition, and when one occurs, call
                     // Application.OnThreadException().
                     //
@@ -502,7 +502,7 @@ namespace System.Windows.Forms
 
                     // Normally, the returned button ID should always equal the cached
                     // result button ID. However, in some cases when the dialog is closed
-                    // abormally (e.g. when closing the main window while a modeless task
+                    // abnormally (e.g. when closing the main window while a modeless task
                     // dialog is displayed), the dialog returns IDCANCEL (2) without
                     // priorly raising the TDN_BUTTON_CLICKED notification.
                     // Therefore, in that case we need to retrieve the button ourselves.
@@ -1090,7 +1090,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe void Navigate(TaskDialogPage page)
         {
-            // We allow to nagivate the dialog even if the previous navigation did
+            // We allow to navigate the dialog even if the previous navigation did
             // not complete yet, as this seems to work in the native implementation.
             DenyIfDialogNotUpdatable(checkWaitingForNavigation: false);
 

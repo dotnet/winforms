@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
         private ToolboxItemCreatorCallback toolboxCreator;
 
         /// <summary>
-        ///  Property shadow for ContainerControl's AutoScaleDimenions.  We shadow here so it
+        ///  Property shadow for ContainerControl's AutoScaleDimensions.  We shadow here so it
         ///  always returns the CurrentAutoScaleDimensions for the control. This way the control's
         ///  state always adapts to the current font / monitor.
         /// </summary>
@@ -166,7 +166,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  We override our selectino rules to make the document non-sizeable.
+        ///  We override our selection rules to make the document non-sizeable.
         /// </summary>
         public override SelectionRules SelectionRules
         {
@@ -419,7 +419,7 @@ namespace System.Windows.Forms.Design
                     host.Activated -= new EventHandler(OnDesignerActivate);
                     host.Deactivated -= new EventHandler(OnDesignerDeactivate);
 
-                    // If the tray wasn't destroyed, then we got some sort of inbalance
+                    // If the tray wasn't destroyed, then we got some sort of imbalance
                     // in our add/remove calls.  Don't sweat it, but do remove the tray.
                     //
                     if (componentTray != null)
@@ -776,7 +776,7 @@ namespace System.Windows.Forms.Design
                 // M3.2 CONTROL ARRAY IS CUT
 
                 // Create the view for this component. We first create the designer frame so we can provide
-                // the overlay and split window services, and then later on we initilaize the frame with
+                // the overlay and split window services, and then later on we initialize the frame with
                 // the designer view.
                 //
                 frame = new DesignerFrame(component.Site);
@@ -803,7 +803,7 @@ namespace System.Windows.Forms.Design
                     cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                 }
 
-                // We must do the ineritance scan early, but not so early that we haven't hooked events
+                // We must do the inheritance scan early, but not so early that we haven't hooked events
                 // to handle invisible components.  We also use the variable "inheritanceService"
                 // as a check in OnCreateHandle -- we cannot call base.OnCreateHandle if we have
                 // not done an inheritance scan yet, because this will cause the base control
@@ -946,7 +946,7 @@ namespace System.Windows.Forms.Design
                         }
                     }
 
-                    // Also suspend the rooot component's parent.
+                    // Also suspend the root component's parent.
                     Control root = host.RootComponent as Control;
                     if (root != null)
                     {
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms.Design
                     if (componentTray != null)
                     {
                         // Suspend the layout of the tray through the loading
-                        // process. This way, we won't continuosly try to layout
+                        // process. This way, we won't continuously try to layout
                         // components in auto arrange mode. We will instead let
                         // the controls restore themselves to their persisted state
                         // and then let auto-arrange kick in once.
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void OnCreateHandle()
         {
-            // Don't call base unless our inheritance serivce is already running.
+            // Don't call base unless our inheritance service is already running.
             if (inheritanceService != null)
             {
                 base.OnCreateHandle();

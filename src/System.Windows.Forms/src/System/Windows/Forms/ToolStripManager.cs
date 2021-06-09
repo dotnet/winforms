@@ -649,7 +649,7 @@ namespace System.Windows.Forms
                     if (t_toolStripPanelWeakArrayList[i] is ToolStripPanel toolStripPanel && toolStripPanel.IsHandleCreated && toolStripPanel.Visible &&
                         toolStripPanel.DragBounds.Contains(toolStripPanel.PointToClient(screenLocation)))
                     {
-                        // Ensure that we cant drag off one window to another.
+                        // Ensure that we can't drag off one window to another.
                         if (rootWindowCheck)
                         {
                             if (IsOnSameWindow(draggedControl, toolStripPanel))
@@ -776,12 +776,12 @@ namespace System.Windows.Forms
                     case Keys.Menu:
                     case Keys.ControlKey:
                     case Keys.ShiftKey:
-                        // Shift, control and alt arent valid on their own.
+                        // Shift, control and alt aren't valid on their own.
                         return false;
                     default:
                         if (modifiers == Keys.Shift)
                         {
-                            // Shift + somekey isnt a valid modifier either
+                            // Shift + somekey isn't a valid modifier either
                             return false;
                         }
 
@@ -822,7 +822,7 @@ namespace System.Windows.Forms
             if (ToolStripManager.IsValidShortcut(keyData))
             {
                 // If we're at the toplevel, check the toolstrips for matching shortcuts.
-                // Win32 menus are handled in Form.ProcessCmdKey, but we cant guarantee that
+                // Win32 menus are handled in Form.ProcessCmdKey, but we can't guarantee that
                 // toolstrips will be hosted in a form. ToolStrips have a hash of shortcuts
                 // per container, so this should hopefully be a quick search.
                 Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessCmdKey - IsValidShortcut: [" + keyData.ToString() + "]");
@@ -840,7 +840,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We're halfway to an accellerator table system here.
+        ///  We're halfway to an accelerator table system here.
         ///  Each toolstrip maintains a hash of the current shortcuts its using.
         ///  this way the search only takes O(number of toolstrips in the thread)
         ///  ToolStripMenuItem pushes itself into this table as the owner is set or the shortcut changes.
@@ -910,7 +910,7 @@ namespace System.Windows.Forms
                     {
                         if (toolStrip.IsDropDown)
                         {
-                            // We dont want to process someone else's context menu (e.g. button1 and button2 have context menus)
+                            // We don't want to process someone else's context menu (e.g. button1 and button2 have context menus)
                             // button2's context menu should not be processed if button1 is the one we're processing.
 
                             ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
@@ -1038,7 +1038,7 @@ namespace System.Windows.Forms
             // we need to compare against char instead.
             if ((char)keyData == ' ')
             {
-                // Dont process system menu
+                // Don't process system menu
                 ModalMenuFilter.MenuKeyToggle = false;
             }
             else if ((char)keyData == '-')
@@ -1068,7 +1068,7 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] attempting to set focus to menustrip");
 
-                        // If we've alt-tabbed away dont snap/restore focus.
+                        // If we've alt-tabbed away don't snap/restore focus.
                         IntPtr topmostParentOfMenu = User32.GetAncestor(menuStripToActivate, User32.GA.ROOT);
                         IntPtr foregroundWindow = User32.GetForegroundWindow();
 
@@ -1443,7 +1443,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // Performance: if we dont have the toolstrip in our merge history, bail.
+                // Performance: if we don't have the toolstrip in our merge history, bail.
                 if (!foundToolStrip)
                 {
                     return false;

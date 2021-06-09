@@ -1323,8 +1323,8 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
-        <source>Place existing controls in new containerDetermines the size of the positioning grid.</source>
-        <target state="new">Place existing controls in new containerDetermines the size of the positioning grid.</target>
+        <source>Determines the size of the positioning grid.</source>
+        <target state="new">Determines the size of the positioning grid.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
@@ -1352,7 +1352,7 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <target state="translated">FolderBrowserDialog iletişim kutusunda başlangıçta seçili olacak klasörün yolunu seçin.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">Bu serileştirme yöneticisinin zaten etkin bir serileştirme oturumu bulunduğundan yeni oturum oluşturamazsınız.</target>
         <note />

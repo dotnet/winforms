@@ -153,7 +153,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            ///  Returns the selected keys. If only modifers were selected, we return Keys.None.
+            ///  Returns the selected keys. If only modifiers were selected, we return Keys.None.
             /// </summary>
             public object Value
             {

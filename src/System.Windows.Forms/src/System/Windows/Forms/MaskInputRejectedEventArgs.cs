@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         public int Position { get; }
 
         /// <summary>
-        ///  Retreives a hint on why the input is rejected.
+        ///  Retrieves a hint on why the input is rejected.
         /// </summary>
         public MaskedTextResultHint RejectionHint { get; }
     }

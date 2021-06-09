@@ -128,7 +128,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         ///  Get a faux type which is generated from the metadata, which is
-        ///  looked up on the target framerwork assembly. Be careful to not use mix
+        ///  looked up on the target framework assembly. Be careful to not use mix
         ///  this type with runtime types in comparisons!
         /// </summary>
         protected static Type GetReflectionTypeFromTypeHelper(IDesignerSerializationManager manager, Type type)
@@ -541,7 +541,7 @@ namespace System.ComponentModel.Design.Serialization
                 manager.Context.Push(statement);
                 try
                 {
-                    // Perf: is -> as changes, change ordering based on possibility of occurance
+                    // Perf: is -> as changes, change ordering based on possibility of occurrence
                     // Please excuse the bad formatting, but I think it is more readable this way than nested indenting.
                     if (statement is CodeAssignStatement cas)
                     {
@@ -555,7 +555,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else if (statement is CodeCommentStatement)
                         {
-                            // do nothing for comments.  This just supresses the debug warning
+                            // do nothing for comments.  This just suppresses the debug warning
                         }
                         else
                         {
@@ -836,7 +836,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        TraceErrorIf(!(array is Array), "Array resovled to something other than an array: {0}", (array is null ? "(null)" : array.GetType().Name));
+                        TraceErrorIf(!(array is Array), "Array resolved to something other than an array: {0}", (array is null ? "(null)" : array.GetType().Name));
                         TraceErrorIf(!indexesOK, "Indexes to array could not be converted to int32.");
                     }
                 }
@@ -879,7 +879,7 @@ namespace System.ComponentModel.Design.Serialization
             object result = expression;
             using (TraceScope("CodeDomSerializerBase::" + nameof(DeserializeExpression)))
             {
-                // Perf: is -> as changes, change ordering based on possibility of occurance
+                // Perf: is -> as changes, change ordering based on possibility of occurrence
                 // If you are adding to this, use as instead of is + cast and order new expressions in order of frequency in typical user code.
                 CodePropertyReferenceExpression propertyReferenceEx;
                 CodeTypeReferenceExpression typeReferenceEx;
@@ -921,7 +921,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         else
                         {
-                            // Last ditch effort.  Some things have to code gen against "this", such as event wireups.  Those are always bounda against the root component.
+                            // Last ditch effort.  Some things have to code gen against "this", such as event wireups.  Those are always bound against the root component.
                             if (manager.GetService(typeof(IDesignerHost)) is IDesignerHost host)
                             {
                                 result = host.RootComponent;
@@ -990,7 +990,7 @@ namespace System.ComponentModel.Design.Serialization
                                         }
                                     }
 
-                                    // Technically, the paramters are not OK.  Our special case above, if successful, would have produced a "result" object for us.
+                                    // Technically, the parameters are not OK.  Our special case above, if successful, would have produced a "result" object for us.
                                     paramsOk = false;
                                     break;
                                 }
@@ -1456,7 +1456,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     else
                     {
-                        // All expression evaluation happens above.  This codepath indicates that we got some sort of junk in the evalualtor,  or that someone assigned result to a value without breaking out of the loop.
+                        // All expression evaluation happens above.  This codepath indicates that we got some sort of junk in the evaluator,  or that someone assigned result to a value without breaking out of the loop.
                         Debug.Fail("Unrecognized expression type: " + result.GetType().Name);
                         break;
                     }
@@ -2097,7 +2097,7 @@ namespace System.ComponentModel.Design.Serialization
         ///  is a name for the given object.  If the expression service returns a valid name, it checks to see if
         ///  there is a '.' in the name.  This indicates that the expression service found this object as the return
         ///  value of a read only property on another object.  If there is a '.', GetExpression will split the reference
-        ///  into sub-parts.  The leftmost part is a name that will be evalulated via manager.GetInstance.  For each
+        ///  into sub-parts.  The leftmost part is a name that will be evaluated via manager.GetInstance.  For each
         ///  subsequent part, a property reference expression will be built.  The final expression will then be returned.
         ///  If the object did not have an expression set, or the object was not found in the reference service, null will
         ///  be returned from GetExpression, indicating there is no existing expression for the object.
@@ -2184,9 +2184,9 @@ namespace System.ComponentModel.Design.Serialization
             // Finally, the expression context.
             if (expression is null)
             {
-                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && ReferenceEquals(cxt.PresetValue, value))
+                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
                 {
-                    expression = cxt.Expression;
+                    expression = ctx.Expression;
                 }
             }
 
@@ -2375,9 +2375,9 @@ namespace System.ComponentModel.Design.Serialization
 
             TypeConverter converter = TypeDescriptor.GetConverter(value);
             // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
-            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && ReferenceEquals(cxt.PresetValue, value))
+            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ReferenceEquals(ctx.PresetValue, value))
             {
-                CodeExpression expression = cxt.Expression;
+                CodeExpression expression = ctx.Expression;
                 //Okay, we found a preset creation expression. We just need to find if it isComplete.
                 if (converter.CanConvertTo(typeof(InstanceDescriptor)))
                 {
@@ -2400,7 +2400,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            // see if this thing is serialiable
+            // see if this thing is serializable
             if (GetReflectionTypeHelper(manager, value).IsSerializable && !(value is IComponent && ((IComponent)value).Site != null))
             {
                 CodeExpression expression = SerializeToResourceExpression(manager, value);
@@ -2451,13 +2451,13 @@ namespace System.ComponentModel.Design.Serialization
                     Debug.Assert(argumentValues != null && parameters != null, "These should have been allocated when the argument array was created.");
                     object arg = argumentValues[i];
                     CodeExpression exp = null;
-                    ExpressionContext newCxt = null;
+                    ExpressionContext newCtx = null;
 
                     // If there is an ExpressionContext on the stack, we need to fix up its type to be the parameter type, so the argument objects get serialized correctly.
-                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt)
+                    if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx)
                     {
-                        newCxt = new ExpressionContext(cxt.Expression, parameters[i].ParameterType, cxt.Owner);
-                        manager.Context.Push(newCxt);
+                        newCtx = new ExpressionContext(ctx.Expression, parameters[i].ParameterType, ctx.Owner);
+                        manager.Context.Push(newCtx);
                     }
 
                     try
@@ -2466,9 +2466,9 @@ namespace System.ComponentModel.Design.Serialization
                     }
                     finally
                     {
-                        if (newCxt != null)
+                        if (newCtx != null)
                         {
-                            Debug.Assert(manager.Context.Current == newCxt, "Context stack corrupted.");
+                            Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                             manager.Context.Pop();
                         }
                     }
@@ -2696,7 +2696,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 finally
                 {
-                    Debug.Assert(manager.Context.Current == inheritance, "Sombody messed up our context stack.");
+                    Debug.Assert(manager.Context.Current == inheritance, "Somebody messed up our context stack.");
                     manager.Context.Pop();
                 }
             }
@@ -2787,7 +2787,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This serializes the given proeprty for the given object.
+        ///  This serializes the given property for the given object.
         /// </summary>
         protected void SerializeProperty(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, PropertyDescriptor propertyToSerialize)
         {
@@ -2906,9 +2906,9 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             // The Whidbey model for serializing a complex object is to call SetExpression with the object's reference expression and then  call on the various Serialize Property / Event methods.  This is incompatible with legacy code, and if not handled legacy code may serialize incorrectly or even stack fault.  To handle this, we keep a private "Legacy Expression Table".  This is a table that we fill in here.  We don't fill in the actual legacy expression here.  Rather,  we fill it with a marker value and obtain the legacy expression  above in GetLegacyExpression.  If we hit this case, we then save the expression in GetExpression so that future calls to IsSerialized will succeed.
                             SetLegacyExpression(manager, value);
-                            if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
+                            if (manager.Context[typeof(StatementContext)] is StatementContext statementCtx)
                             {
-                                saveStatements = statementCxt.StatementCollection[value];
+                                saveStatements = statementCtx.StatementCollection[value];
                             }
 
                             if (saveStatements != null)
@@ -3113,9 +3113,9 @@ namespace System.ComponentModel.Design.Serialization
                 CodeStatementCollection saveStatements = null;
                 if (value != null)
                 {
-                    if (manager.Context[typeof(StatementContext)] is StatementContext statementCxt)
+                    if (manager.Context[typeof(StatementContext)] is StatementContext statementCtx)
                     {
-                        saveStatements = statementCxt.StatementCollection[value];
+                        saveStatements = statementCtx.StatementCollection[value];
                     }
 
                     if (saveStatements != null)

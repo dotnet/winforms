@@ -14,7 +14,7 @@ namespace WinformsControlsTest
         {
             InitializeComponent();
             daysOfWeekComboBox.SelectedIndex = (int)monthCalendar1.FirstDayOfWeek;
-            showWeekNumbrsCheckBox.Checked = monthCalendar1.ShowWeekNumbers;
+            showWeekNumbersCheckBox.Checked = monthCalendar1.ShowWeekNumbers;
             showTodayCheckBox.Checked = monthCalendar1.ShowToday;
         }
 
@@ -55,9 +55,9 @@ namespace WinformsControlsTest
             monthCalendar1.MaxDate = MaximumDateTime;
         }
 
-        private void showWeekNumbrsCheckBox_CheckedChanged(object sender, EventArgs e)
+        private void showWeekNumbersCheckBox_CheckedChanged(object sender, EventArgs e)
         {
-            monthCalendar1.ShowWeekNumbers = showWeekNumbrsCheckBox.Checked;
+            monthCalendar1.ShowWeekNumbers = showWeekNumbersCheckBox.Checked;
         }
 
         private void showTodayCheckBox_CheckedChanged(object sender, EventArgs e)

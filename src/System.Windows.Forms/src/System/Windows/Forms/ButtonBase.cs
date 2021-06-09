@@ -382,10 +382,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value != _imageAlign)
                 {
@@ -671,10 +668,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (value == TextAlign)
                 {
@@ -796,7 +790,7 @@ namespace System.Windows.Forms
                     _imageList.Disposed -= new EventHandler(DetachImageList);
                 }
 
-                //Dipose the tooltip if one present..
+                //Dispose the tooltip if one present..
                 if (_textToolTip is not null)
                 {
                     _textToolTip.Dispose();

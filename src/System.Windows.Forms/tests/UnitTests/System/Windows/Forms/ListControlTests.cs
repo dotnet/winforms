@@ -393,7 +393,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Equal(0, control.DataManager.Position);
 
-            // Supsending should call.
+            // Suspending should call.
             control.DataManager.SuspendBinding();
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Equal(1, callCount);
@@ -469,7 +469,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Equal(0, control.DataManager.Position);
 
-            // Supsending should call.
+            // Suspending should call.
             control.DataManager.SuspendBinding();
             Assert.Equal(-1, control.SelectedIndex);
             Assert.Equal(1, callCount);
@@ -1864,7 +1864,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 valueMemberCallCount++;
             };
-            EventHandler selectedValueHanlder = (sender, e) =>
+            EventHandler selectedValueHandler = (sender, e) =>
             {
                 Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
@@ -1872,7 +1872,7 @@ namespace System.Windows.Forms.Tests
                 selectedValueCallCount++;
             };
             control.ValueMemberChanged += valueMemberHandler;
-            control.SelectedValueChanged += selectedValueHanlder;
+            control.SelectedValueChanged += selectedValueHandler;
 
             // Set different.
             control.ValueMember = "Value1";
@@ -1906,7 +1906,7 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             control.ValueMemberChanged -= valueMemberHandler;
-            control.SelectedValueChanged -= selectedValueHanlder;
+            control.SelectedValueChanged -= selectedValueHandler;
             control.ValueMember = "Value1";
             Assert.Equal("Value1", control.ValueMember);
             Assert.Equal(3, valueMemberCallCount);

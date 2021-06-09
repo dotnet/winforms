@@ -158,7 +158,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void CalendarBodyAccessibleObject_Parent_IsСalendarAccessibleObject()
+        public void CalendarBodyAccessibleObject_Parent_IsCalendarAccessibleObject()
         {
             using MonthCalendar control = new MonthCalendar();
             MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;

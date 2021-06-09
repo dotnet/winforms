@@ -604,7 +604,7 @@ namespace System.Windows.Forms
         ///  global object who's lifetime exceeds the lifetime of the parent form. Otherwise
         ///  the BindingSource (and any components bound through it) will end up in limbo,
         ///  still processing list change events, etc. And when unhooking from the data source,
-        ///  take care not to trigger any events that could confuse compoents bound to us.
+        ///  take care not to trigger any events that could confuse components bound to us.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -1202,7 +1202,7 @@ namespace System.Windows.Forms
             // Determine whether the new list converts PropertyChanged events on its items into ListChanged events.
             // If it does, then the BindingSource won't need to hook the PropertyChanged events itself. If the list
             // implements IRaiseItemChangedEvents, we can ask it directly. Otherwise we will assume that any list
-            // which impements IBindingList automatically supports this capability.
+            // which implements IBindingList automatically supports this capability.
             if (listInternal is IRaiseItemChangedEvents)
             {
                 _listRaisesItemChangedEvents = (listInternal as IRaiseItemChangedEvents).RaisesItemChangedEvents;
@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms
         internal virtual bool ShouldSerializeAllowNew() => _allowNewIsSet;
 
         /// <summary>
-        ///  Hooks property changed events for the NEW current item, if nececssary
+        ///  Hooks property changed events for the NEW current item, if necessary
         /// </summary>
         private void HookItemChangedEventsForNewCurrent()
         {
@@ -1610,7 +1610,7 @@ namespace System.Windows.Forms
             // Remember this since EndEdit() below will clear it
             int saveAddNew = _addNewPos;
 
-            // Commit any uncomitted list changes now
+            // Commit any uncommitted list changes now
             EndEdit();
 
             // We just committed a new item; mimic DataView and fire an ItemAdded event for it here

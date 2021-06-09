@@ -6481,6 +6481,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">允许更改插入标记特性。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">当 ListView 项的 Checked 属性更改时引发的事件。</target>

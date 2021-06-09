@@ -19,7 +19,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  This control is an encapsulateion of the Windows month calendar control.
+    ///  This control is an encapsulation of the Windows month calendar control.
     ///  A month calendar control implements a calendar-like user interface, that
     ///  provides the user with a very intuitive and recognizable method of entering
     ///  or selecting a date.

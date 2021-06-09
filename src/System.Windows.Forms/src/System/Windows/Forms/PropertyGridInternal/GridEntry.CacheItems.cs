@@ -10,17 +10,17 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private class CacheItems
         {
-            public string? lastLabel;
-            public Font? lastLabelFont;
-            public int lastLabelWidth;
-            public bool lastShouldSerialize;
-            public object? lastValue;
-            public Font? lastValueFont;
-            public string? lastValueString;
-            public int lastValueTextWidth;
-            public bool useCompatTextRendering;
-            public bool useShouldSerialize;
-            public bool useValueString;
+            public string? LastLabel;
+            public Font? LastLabelFont;
+            public int LastLabelWidth;
+            public bool LastShouldSerialize;
+            public object? LastValue;
+            public Font? LastValueFont;
+            public string? LastValueString;
+            public int LastValueTextWidth;
+            public bool UseCompatTextRendering;
+            public bool UseShouldSerialize;
+            public bool UseValueString;
         }
     }
 }

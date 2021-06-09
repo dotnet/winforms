@@ -261,8 +261,8 @@ namespace System.Windows.Forms.Tests
 
             ScrollableControl.DockPaddingEdges CreateClonedPadding(int left, int top, int right, int bottom)
             {
-                ICloneable clonable = CreatePadding(left, top, right, bottom);
-                return Assert.IsType<ScrollableControl.DockPaddingEdges>(clonable.Clone());
+                ICloneable cloneable = CreatePadding(left, top, right, bottom);
+                return Assert.IsType<ScrollableControl.DockPaddingEdges>(cloneable.Clone());
             }
 
             yield return new object[] { CreatePadding(1, 2, 3, 4), CreatePadding(1, 2, 3, 4), true };

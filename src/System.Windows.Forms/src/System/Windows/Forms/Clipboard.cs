@@ -137,7 +137,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            // We need to retry the GetDataObject() since the clipBaord is busy sometimes and hence the GetDataObject would fail with ClipBoardException.
+            // We need to retry the GetDataObject() since the clipBoard is busy sometimes and hence the GetDataObject would fail with ClipBoardException.
             return GetDataObject(retryTimes: 10, retryDelay: 100);
         }
 

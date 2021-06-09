@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Design
         public static int DEFAULTROWCOUNT = 2;
         public static int DEFAULTCOLUMNCOUNT = 2;
 
-        //size of the col/row grab handle glyphs for teh table layout panel
+        //size of the col/row grab handle glyphs for the table layout panel
         public static int RESIZEGLYPHSIZE = ScaleLogicalToDeviceUnitsX(4);
 
         //default value for Form padding if it has not been set in the designer (usability study request)
@@ -546,7 +546,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Identifes where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
+        ///  Identifies where the text baseline for our control which should be based on bounds, padding, font, and textalignment.
         /// </summary>
         public static int GetTextBaseline(Control ctrl, ContentAlignment alignment)
         {
@@ -627,7 +627,7 @@ namespace System.Windows.Forms.Design
                     }
                     else if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Right) != 0)
                     {
-                        // e.Offset.X is positive when we snao to right
+                        // e.Offset.X is positive when we snap to right
                         newBounds.X -= e.Offset.X;
                     }
                 }
@@ -704,7 +704,7 @@ namespace System.Windows.Forms.Design
                 // by doing the pointer math
                 byte* maxAddr = (byte*)(pPixels + pixels);
 
-                // now run through the pixels only modifyng the A byte
+                // now run through the pixels only modifying the A byte
                 for (byte* addr = (byte*)(pPixels) + 3; addr < maxAddr; addr += 4)
                 {
                     // the new value is just an index into our precomputed value array from above.

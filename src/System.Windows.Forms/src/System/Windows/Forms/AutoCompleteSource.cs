@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         FileSystemDirectories = 0x00000020,
 
         /// <summary>
-        ///  This option includes stirngs from a built in String Collection object.
+        ///  This option includes strings from a built in String Collection object.
         /// </summary>
         CustomSource = 0x00000040,
 

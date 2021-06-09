@@ -333,7 +333,7 @@ namespace System.Windows.Forms
             }
 
             // if wRef is null, then it is the first time we want this bindingManagerBase: so add it
-            // if wRef is not null, then the bindingManagerBase was GC'ed at some point: keep the old wRef and change its target
+            // if wRef is not null, then the bindingManagerBase was GC'd at some point: keep the old wRef and change its target
             if (wRef is null)
             {
                 _listManagers.Add(key, new WeakReference(bindingManagerBase, false));

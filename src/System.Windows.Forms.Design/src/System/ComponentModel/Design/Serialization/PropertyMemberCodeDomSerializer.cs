@@ -272,7 +272,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
                 else
                 {
-                    CodeDomSerializer.TraceError("Property {0} is marked as Visibilty.Content but there is no serializer for it.", property.Name);
+                    CodeDomSerializer.TraceError("Property {0} is marked as Visibility.Content but there is no serializer for it.", property.Name);
 
                     manager.ReportError(new CodeDomSerializerException(string.Format(SR.SerializerNoSerializerForComponent, property.PropertyType.FullName), manager));
                 }

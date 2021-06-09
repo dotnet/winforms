@@ -92,7 +92,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///  Ensures that the new collection equals the exisitng one.
+            ///  Ensures that the new collection equals the existing one.
             ///  Otherwise, it wipes out the contents of the new collection.
             /// </summary>
             public bool MergeCollection(ICollection newCollection)

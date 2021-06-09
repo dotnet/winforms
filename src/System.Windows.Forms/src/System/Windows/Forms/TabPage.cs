@@ -370,7 +370,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  This property is required by certain controls (TabPage) to render its transparency using
-        ///  theming API. We dont want all controls (that are have transparent BackColor) to use
+        ///  theming API. We don't want all controls (that are have transparent BackColor) to use
         ///  theming API to render its background because it has large performance cost.
         /// </summary>
         internal override bool RenderTransparencyWithVisualStyles => true;

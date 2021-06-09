@@ -135,7 +135,7 @@ namespace System.Windows.Forms
 
                         if (IsOnDropDown)
                         {
-                            // we gotta make sure that we dont collide with the existing menu.
+                            // we gotta make sure that we don't collide with the existing menu.
                             Rectangle bounds = GetDropDownBounds(dropDownDirection);
                             Rectangle ownerItemBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
                             Rectangle intersectionBetweenChildAndParent = Rectangle.Intersect(bounds, ownerItemBounds);
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // cant use Enum.IsValid as its not sequential
+                // can't use Enum.IsValid as its not sequential
                 switch (value)
                 {
                     case ToolStripDropDownDirection.AboveLeft:
@@ -256,7 +256,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         public virtual bool HasDropDownItems
             =>
-                //Use count of visible DisplayedItems instead so that we take into account things that arent visible
+                //Use count of visible DisplayedItems instead so that we take into account things that aren't visible
                 (dropDown is not null) && dropDown.HasVisibleItems;
 
         [Browsable(false)]
@@ -379,7 +379,7 @@ namespace System.Windows.Forms
             // calculate the offset from the upper left hand corner of the item.
             dropDownBounds = DropDownDirectionToDropDownBounds(dropDownDirection, dropDownBounds);
 
-            // we should make sure we dont obscure the owner item.
+            // we should make sure we don't obscure the owner item.
             Rectangle itemScreenBounds = new Rectangle(TranslatePoint(Point.Empty, ToolStripPointType.ToolStripItemCoords, ToolStripPointType.ScreenCoords), Size);
 
             if (Rectangle.Intersect(dropDownBounds, itemScreenBounds).Height > 1)
@@ -635,7 +635,7 @@ namespace System.Windows.Forms
 
             Debug.Fail("Why are we here");
 
-            // dont expect it to come to this but just in case here are the real defaults.
+            // don't expect it to come to this but just in case here are the real defaults.
             if (IsOnDropDown)
             {
                 return (rightToLeft == RightToLeft.Yes) ? ToolStripDropDownDirection.Left : ToolStripDropDownDirection.Right;
@@ -755,12 +755,11 @@ namespace System.Windows.Forms
                             continue;
 
                         // Checking if font was inherited from parent.
-                        Font local = childItem.Font;
-                        if (!local.Equals(childItem.OwnerItem?.Font))
+                        Font currentFont = childItem.Font;
+                        if (!currentFont.Equals(childItem.OwnerItem?.Font))
                         {
-                            var factor = (float)newDpi / oldDpi;
-                            childItem.Font = new Font(local.FontFamily, local.Size * factor, local.Style,
-                                                    local.Unit, local.GdiCharSet, local.GdiVerticalFont);
+                            float factor = (float)newDpi / oldDpi;
+                            childItem.Font = currentFont.WithSize(currentFont.Size * factor);
                         }
 
                         childItem.DeviceDpi = newDpi;

@@ -567,7 +567,7 @@ namespace System.Windows.Forms
                     if (_dataConnectionState[DATACONNECTIONSTATE_inDeleteOperation] && _dataConnectionState[DATACONNECTIONSTATE_didNotDeleteRowFromDataGridView])
                     {
                         // we received a ListChangedType.ItemAdded while we were deleting rows from the back end
-                        // and we stil haven't removed a row from the data grid view
+                        // and we still haven't removed a row from the data grid view
                         // System.Data.DataView started an AddNew transaction as a result of deleting rows
                         // mark the state as itemAddedInDeleteOperation
                         _dataConnectionState[DATACONNECTIONSTATE_itemAddedInDeleteOperation] = true;
@@ -964,9 +964,9 @@ namespace System.Windows.Forms
             {
                 UnWireEvents();
 
-                // Set the currency manager to null so if someone would want to resurect this data grid view data connection
-                // we would not unwire the events from the curency manager twice.
-                // (NOTE: resurecting a disposed data grid view data connection is not allowed.)
+                // Set the currency manager to null so if someone would want to resurrect this data grid view data connection
+                // we would not unwire the events from the currency manager twice.
+                // (NOTE: resurrecting a disposed data grid view data connection is not allowed.)
                 //
                 CurrencyManager = null;
             }

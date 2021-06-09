@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///  Represents an internal class that is used bu ComboBox and TextBox AutoCompleteCustomSource property.
-    ///  This class is reponsible for initializing the SHAutoComplete COM object and setting options in it.
+    ///  This class is responsible for initializing the SHAutoComplete COM object and setting options in it.
     ///  The StringSource contains an array of Strings which is passed to the COM object as the custom source.
     /// </summary>
     internal class StringSource : IEnumString

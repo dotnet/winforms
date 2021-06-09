@@ -222,25 +222,25 @@ namespace System.Windows.Forms.Design
 
         private static ToolStripItemDesignerAvailability GetDesignerVisibility(ToolStrip toolStrip)
         {
-            ToolStripItemDesignerAvailability visiblity;
+            ToolStripItemDesignerAvailability visibility;
             if (toolStrip is StatusStrip)
             {
-                visiblity = ToolStripItemDesignerAvailability.StatusStrip;
+                visibility = ToolStripItemDesignerAvailability.StatusStrip;
             }
             else if (toolStrip is MenuStrip)
             {
-                visiblity = ToolStripItemDesignerAvailability.MenuStrip;
+                visibility = ToolStripItemDesignerAvailability.MenuStrip;
             }
             else if (toolStrip is ToolStripDropDownMenu)
             {
-                visiblity = ToolStripItemDesignerAvailability.ContextMenuStrip;
+                visibility = ToolStripItemDesignerAvailability.ContextMenuStrip;
             }
             else
             {
-                visiblity = ToolStripItemDesignerAvailability.ToolStrip;
+                visibility = ToolStripItemDesignerAvailability.ToolStrip;
             }
 
-            return visiblity;
+            return visibility;
         }
 
         public static Type[] GetCustomItemTypes(IComponent component, IServiceProvider serviceProvider)
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Design
                 Type[] stockItemTypeList = GetStandardItemTypes(component);
                 if (currentToolStripVisibility != ToolStripItemDesignerAvailability.None)
                 {
-                    ArrayList createableTypes = new ArrayList(itemTypes.Count);
+                    ArrayList creatableTypes = new ArrayList(itemTypes.Count);
                     foreach (Type t in itemTypes)
                     {
                         if (t.IsAbstract)
@@ -294,8 +294,8 @@ namespace System.Windows.Forms.Design
                         }
 
                         // if the visibility matches the current toolstrip type,  add it to the list of possible types to create.
-                        ToolStripItemDesignerAvailabilityAttribute visiblityAttribute = (ToolStripItemDesignerAvailabilityAttribute)TypeDescriptor.GetAttributes(t)[typeof(ToolStripItemDesignerAvailabilityAttribute)];
-                        if (visiblityAttribute != null && ((visiblityAttribute.ItemAdditionVisibility & currentToolStripVisibility) == currentToolStripVisibility))
+                        ToolStripItemDesignerAvailabilityAttribute visibilityAttribute = (ToolStripItemDesignerAvailabilityAttribute)TypeDescriptor.GetAttributes(t)[typeof(ToolStripItemDesignerAvailabilityAttribute)];
+                        if (visibilityAttribute != null && ((visibilityAttribute.ItemAdditionVisibility & currentToolStripVisibility) == currentToolStripVisibility))
                         {
                             bool isStockType = false;
                             // PERF: consider a dictionary - but this list will usually be 3-7 items.
@@ -310,17 +310,17 @@ namespace System.Windows.Forms.Design
 
                             if (!isStockType)
                             {
-                                createableTypes.Add(t);
+                                creatableTypes.Add(t);
                             }
                         }
                     }
 
-                    if (createableTypes.Count > 0)
+                    if (creatableTypes.Count > 0)
                     {
-                        Type[] createableTypesArray = new Type[createableTypes.Count];
-                        createableTypes.CopyTo(createableTypesArray, 0);
-                        s_customToolStripItemCount = createableTypes.Count;
-                        return createableTypesArray;
+                        Type[] creatableTypesArray = new Type[creatableTypes.Count];
+                        creatableTypes.CopyTo(creatableTypesArray, 0);
+                        s_customToolStripItemCount = creatableTypes.Count;
+                        return creatableTypesArray;
                     }
                 }
             }
@@ -436,7 +436,7 @@ namespace System.Windows.Forms.Design
 
         public static void InvalidateSelection(ArrayList originalSelComps, ToolStripItem nextSelection, IServiceProvider provider, bool shiftPressed)
         {
-            // if we are not selecting a ToolStripItem then return (dont invalidate).
+            // if we are not selecting a ToolStripItem then return (don't invalidate).
             if (nextSelection is null || provider is null)
             {
                 return;

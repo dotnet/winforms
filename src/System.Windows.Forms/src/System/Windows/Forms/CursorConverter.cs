@@ -121,7 +121,7 @@ namespace System.Windows.Forms
                     // We throw here because we cannot meaningfully convert a custom
                     // cursor into a string. In fact, the ResXResourceWriter will use
                     // this exception to indicate to itself that this object should
-                    // be serialized through ISeriazable instead of a string.
+                    // be serialized through ISerializable instead of a string.
 
                     throw new FormatException(SR.CursorCannotCovertToString);
                 }

@@ -3430,7 +3430,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
-        public void TabPageCollection_Item_SetValidIndexDesigModeWithHandle_ReturnsExpected(int index)
+        public void TabPageCollection_Item_SetValidIndexDesignModeWithHandle_ReturnsExpected(int index)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -3817,7 +3817,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
-        public void TabPageCollection_IListItem_SetValidIndexDesigModeWithHandle_ReturnsExpected(int index)
+        public void TabPageCollection_IListItem_SetValidIndexDesignModeWithHandle_ReturnsExpected(int index)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite

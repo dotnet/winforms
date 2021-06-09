@@ -37,12 +37,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private bool readOnly;
 
         /// <summary>
-        ///  The resoved native type -> clr type
+        ///  The resolved native type -> clr type
         /// </summary>
         private readonly Type propertyType;
 
         /// <summary>
-        ///  The dispid. This is also in a DispIDAttiribute, but we
+        ///  The dispid. This is also in a DispIDAttribute, but we
         ///  need it a lot.
         /// </summary>
         private readonly DispatchID dispid;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private bool inAttrQuery;
 
         /// <summary>
-        ///  Our event signitures.
+        ///  Our event signatures.
         /// </summary>
         private static readonly object EventGetBaseAttributes = new object();
         private static readonly object EventGetDynamicAttributes = new object();
@@ -327,7 +327,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the attributes are valid.  Asks any clients if they
-        ///  would like attributes requeried.
+        ///  would like attributes required.
         /// </summary>
         protected bool AttributesValid
         {
@@ -438,7 +438,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the property display name is valid
-        ///  asks clients if they would like display name requeried.
+        ///  asks clients if they would like display name required.
         /// </summary>
         protected bool DisplayNameValid
         {
@@ -524,7 +524,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the read only state is valid.
-        ///  Asks clients if they would like read-only requeried.
+        ///  Asks clients if they would like read-only required.
         /// </summary>
         protected bool ReadOnlyValid
         {
@@ -663,7 +663,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Creates a converter Object, first by looking for a ctor with a Com2ProeprtyDescriptor
+        ///  Creates a converter Object, first by looking for a ctor with a Com2PropertyDescriptor
         ///  parameter, then using the default ctor if it is not found.
         /// </summary>
         private Com2DataTypeToManagedDataTypeConverter CreateOleTypeConverter(Type t)
@@ -1306,11 +1306,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         g = typeof(Oleaut32.IDispatch).GUID;
                         if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                         {
-                            Oleaut32.IErrorInfo pErrorInfo = null;
-                            Oleaut32.GetErrorInfo(0, ref pErrorInfo);
+                            Oleaut32.IErrorInfo pErrorInfo;
+                            Oleaut32.GetErrorInfo(0, out pErrorInfo);
 
-                            string info = null;
-                            if (pErrorInfo is not null && pErrorInfo.GetDescription(ref info).Succeeded())
+                            string info;
+                            if (pErrorInfo is not null && pErrorInfo.GetDescription(out info).Succeeded())
                             {
                                 errorInfo = info;
                             }
@@ -1359,7 +1359,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  other words, it indicates whether the state of the property is distinct
         ///  from when the component is first instantiated. If there is a default
         ///  value specified in this PropertyDescriptor, it will be compared against the
-        ///  property's current value to determine this.  If there is't, the
+        ///  property's current value to determine this.  If there isn't, the
         ///  shouldPersistXXX method is looked for and invoked if found.  If both
         ///  these routes fail, true will be returned.
         ///

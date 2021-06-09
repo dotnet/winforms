@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
         private ToolStrip _miniToolStrip; // the toolStrip that hosts the "New Template Node" button
         private DesignerTransaction _insertMenuItemTransaction; //There Should be one and only one Pending insertTransaction.
         private Rectangle _dragBoxFromMouseDown = Rectangle.Empty; //Needed to Store the DRAGDROP Rect from the ToolStripItemBehavior.
-        private int _indexOfItemUnderMouseToDrag = -1; //defaulted to invalid index andwill be set by the behaviour.
+        private int _indexOfItemUnderMouseToDrag = -1; //defaulted to invalid index and will be set by the behaviour.
         private ToolStripTemplateNode _tn; //templateNode
         private ISelectionService _selectionService; // cached selection service.
         private uint _editingCollection; // non-zero if the collection editor is up for this ToolStrip or a child of it.
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
         private ToolStripKeyboardHandlingService _keyboardHandlingService;
         private bool _parentNotVisible; //sync the parent visibility (used for ToolStripPanels)
         private bool _dontCloseOverflow; //When an item is added to the ToolStrip through the templateNode which is on the Overflow; we should not close the overflow (to avoid flicker)
-        private bool _addingDummyItem; //When the dummyItem is added the toolStrip might resize (as in the Vertival Layouts). In this case we dont want the Resize to cause SyncSelection and Layouts.
+        private bool _addingDummyItem; //When the dummyItem is added the toolStrip might resize (as in the Vertical Layouts). In this case we don't want the Resize to cause SyncSelection and Layouts.
 
         /// <summary>
         ///  Adds designer actions to the ActionLists collection.
@@ -334,14 +334,14 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is the insert Transaction. Now insert can happen at Main Menu level or the DropDown Level. This transaction is used to keep both in sync.
         /// </summary>
-        public DesignerTransaction InsertTansaction
+        public DesignerTransaction InsertTransaction
         {
             get => _insertMenuItemTransaction;
             set => _insertMenuItemTransaction = value;
         }
 
         /// <summary>
-        ///  Checks if there is a seleciton of the ToolStrip or one of it's items.
+        ///  Checks if there is a selection of the ToolStrip or one of it's items.
         /// </summary>
         private bool IsToolStripOrItemSelected
         {
@@ -411,7 +411,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Handy way of gettting our ToolStrip
+        ///  Handy way of getting our ToolStrip
         /// </summary>
         protected ToolStrip ToolStrip
         {
@@ -585,7 +585,7 @@ namespace System.Windows.Forms.Design
                 ToolStripItemDesigner designer = _host.GetDesigner(component) as ToolStripItemDesigner;
                 try
                 {
-                    // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldnt do this. Also we shouldn't set the TEXT if we are creating a dummyItem.
+                    // ToolStripItem designer tries to set the TEXT for the item in the InitializeNewComponent(). But since we are create item thru InSitu .. we shouldn't do this. Also we shouldn't set the TEXT if we are creating a dummyItem.
                     if (!string.IsNullOrEmpty(text))
                     {
                         designer.InternalCreate = true;
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms.Design
                 }
 
                 EnableDragDrop(false);
-                //Dispose of the EitManager
+                //Dispose of the EditManager
                 if (_editManager != null)
                 {
                     _editManager.CloseManager();
@@ -1240,7 +1240,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override void DoDefaultAction()
         {
-            //Dont Fire the Events if the Component is Inherited.
+            // Don't Fire the Events if the Component is Inherited.
             if (InheritanceAttribute != InheritanceAttribute.InheritedReadOnly)
             {
                 IComponent selectedItem = SelectionService.PrimarySelection as IComponent;
@@ -1827,7 +1827,7 @@ namespace System.Windows.Forms.Design
         protected override void OnDragDrop(DragEventArgs de)
         {
             base.OnDragDrop(de);
-            // There is a "drop region" before firstItem which is not included in the "ToolStrip Item glyhs" so if the drop point falls in this drop region we should insert the items at the head instead of the tail of the toolStrip.
+            // There is a "drop region" before firstItem which is not included in the "ToolStrip Item glyphs" so if the drop point falls in this drop region we should insert the items at the head instead of the tail of the toolStrip.
             bool dropAtHead = false;
             ToolStrip parentToolStrip = ToolStrip;
             var offset = new Point(de.X, de.Y);
@@ -1980,7 +1980,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Everytime we add Item .. the TemplateNode needs to go at the end if its not there.
+        ///  Every time we add Item .. the TemplateNode needs to go at the end if its not there.
         /// </summary>
         private void OnItemAdded(object sender, ToolStripItemEventArgs e)
         {
@@ -2073,7 +2073,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  In Order to Draw the Selection Glyphs we need to reforce painting on the  the AdonerWindow.This method forces the repaint
+        ///  In Order to Draw the Selection Glyphs we need to reforce painting on the AdornerWindow. This method forces the repaint
         /// </summary>
         private void OnOverFlowDropDownPaint(object sender, PaintEventArgs e)
         {
@@ -2277,7 +2277,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Called from the ToolStripItemGlyph to rollback the TemplateNode Edition on the Parent ToolStrip.
+        /// Called from the ToolStripItemGlyph to roll back the TemplateNode Edition on the Parent ToolStrip.
         /// </summary>
         internal void RollBack()
         {
@@ -2441,7 +2441,7 @@ namespace System.Windows.Forms.Design
         private bool ShouldSerializeAllowItemReorder() => (bool)ShadowProperties[nameof(AllowItemReorder)];
 
         /// <summary>
-        ///  This is the method that gets called when the Designer has to show thwe InSitu Edit Node,
+        ///  This is the method that gets called when the Designer has to show the InSitu Edit Node,
         /// </summary>
         internal void ShowEditNode(bool clicked)
         {
@@ -2491,7 +2491,7 @@ namespace System.Windows.Forms.Design
         //Helper function to toggle the Item Visibility
         private void ShowHideToolStripItems(bool toolStripSelected)
         {
-            //If we arent Selected then turn the TOPLEVEL ITEMS visibility WYSIWYG
+            //If we aren't Selected then turn the TOPLEVEL ITEMS visibility WYSIWYG
             foreach (ToolStripItem item in ToolStrip.Items)
             {
                 if (item is DesignerToolStripControlHost)

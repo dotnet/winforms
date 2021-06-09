@@ -526,7 +526,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the full path of this node.
         ///  The path consists of the labels of each of the nodes from the root to this node,
-        ///  each separated by the pathSeperator.
+        ///  each separated by the pathSeparator.
         /// </summary>
         [Browsable(false)]
         public string FullPath
@@ -750,7 +750,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This denotes the depth of nesting of the treenode.
+        ///  This denotes the depth of nesting of the TreeNode.
         /// </summary>
         [Browsable(false)]
         public int Level
@@ -1629,7 +1629,7 @@ namespace System.Windows.Forms
                 switch (entry.Name)
                 {
                     case "PropBag":
-                        // this would throw a InvalidaCastException if improper cast, thus validating the serializationInfo for OwnerDrawPropertyBag
+                        // this would throw a InvalidCastException if improper cast, thus validating the serializationInfo for OwnerDrawPropertyBag
                         propBag = (OwnerDrawPropertyBag)serializationInfo.GetValue(entry.Name, typeof(OwnerDrawPropertyBag));
                         break;
                     case nameof(Text):
@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // let imagekey take precidence
+            // let imagekey take precedence
             if (imageKey is not null)
             {
                 ImageKey = imageKey;
@@ -1681,7 +1681,7 @@ namespace System.Windows.Forms
                 ImageIndex = imageIndex;
             }
 
-            // let selectedimagekey take precidence
+            // let selectedimagekey take precedence
             if (selectedImageKey is not null)
             {
                 SelectedImageKey = selectedImageKey;
@@ -1691,7 +1691,7 @@ namespace System.Windows.Forms
                 SelectedImageIndex = selectedImageIndex;
             }
 
-            // let stateimagekey take precidence
+            // let stateimagekey take precedence
             if (stateImageKey is not null)
             {
                 StateImageKey = stateImageKey;
@@ -1759,7 +1759,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Ensures the the node's StateImageIndex value is properly set.
+        ///  Ensures the node's StateImageIndex value is properly set.
         /// </summary>
         private void EnsureStateImageValue()
         {
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Saves this TreeNode object to the given data stream.
         /// </summary>
-        ///  Review: Changing this would break VB users. so suppresing this message.
+        ///  Review: Changing this would break VB users. so suppressing this message.
         ///
         protected virtual void Serialize(SerializationInfo si, StreamingContext context)
         {

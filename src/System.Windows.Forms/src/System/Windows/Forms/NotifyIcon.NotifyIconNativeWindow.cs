@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         private class NotifyIconNativeWindow : NativeWindow
         {
             internal NotifyIcon reference;
-            private GCHandle rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
+            private GCHandle rootRef;   // We will root the control when we do not want to be eligible for garbage collection.
 
             /// <summary>
             ///  Create a new NotifyIcon, and bind the window to the NotifyIcon component.

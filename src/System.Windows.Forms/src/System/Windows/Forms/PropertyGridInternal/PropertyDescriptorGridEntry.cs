@@ -9,9 +9,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Globalization;
-using System.Windows.Forms.Design;
-using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -417,9 +414,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _exceptionConverter;
                 }
 
-                if (converter is null)
+                if (Converter is null)
                 {
-                    converter = _propertyInfo.Converter;
+                    Converter = _propertyInfo?.Converter;
                 }
 
                 return base.TypeConverter;
@@ -439,7 +436,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _exceptionEditor;
                 }
 
-                editor = (UITypeEditor)_propertyInfo.GetEditor(typeof(UITypeEditor));
+                Editor = (UITypeEditor)_propertyInfo.GetEditor(typeof(UITypeEditor));
 
                 return base.UITypeEditor;
             }
@@ -528,7 +525,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                    ge is PropertyDescriptorGridEntry &&
                    ((PropertyDescriptorGridEntry)ge)._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
-                // find the next parent property with a differnet value owner
+                // find the next parent property with a different value owner
                 object owner = ge.GetValueOwner();
 
                 // when owner is an instance of a value type,
@@ -652,7 +649,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override void OnComponentChanged()
         {
             base.OnComponentChanged();
-            // If we got this it means someone called ITypeDescriptorContext.OnCompnentChanged.
+            // If we got this it means someone called ITypeDescriptorContext.OnComponentChanged.
             // so we need to echo that change up the inheritance change in case the owner object isn't a sited component.
             NotifyParentChange(this);
         }
@@ -739,7 +736,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Usually IComponent things are sited and this notification will be
                 // fired automatically by the PropertyDescriptor.  However, for non-IComponent sub objects
-                // or sub objects that are non-sited sub components, we need to manuall fire
+                // or sub objects that are non-sited sub components, we need to manually fire
                 // the notification.
                 //
                 bool needChangeNotify = !(obj is IComponent) || ((IComponent)obj).Site is null;
@@ -798,7 +795,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         eventDesc = _eventBindings.GetEvent(_propertyInfo);
                     }
 
-                    // For a merged set of propertius, the event binding service won't
+                    // For a merged set of properties, the event binding service won't
                     // find an event.  So, we ask type descriptor directly.
                     //
                     if (eventDesc is null)

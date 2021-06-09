@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         {
             //
             // The purpose of this method is to find a list, given a 'data source' object and a
-            // decription of some 'data member' property of that object which returns the list.
+            // description of some 'data member' property of that object which returns the list.
             //
             // - If the data source is not a list, we get the list by just querying for the
             //   current value of that property on the data source itself.

@@ -3693,7 +3693,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(AdjustRowHeaderBorderStyle_WithDataGridView_TestData))]
-        public void DataGridViewRow_AdjustRowHeaderBorderStyle_InvokeWithDataGridVew_ReturnsExpected(bool enableHeadersVisualStyles, bool rowHeadersVisible, RightToLeft rightToLeft, DataGridViewAdvancedCellBorderStyle all, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow, bool returnsAdvanced, DataGridViewAdvancedCellBorderStyle expectedLeft, DataGridViewAdvancedCellBorderStyle expectedRight, DataGridViewAdvancedCellBorderStyle expectedTop, DataGridViewAdvancedCellBorderStyle expectedBottom)
+        public void DataGridViewRow_AdjustRowHeaderBorderStyle_InvokeWithDataGridView_ReturnsExpected(bool enableHeadersVisualStyles, bool rowHeadersVisible, RightToLeft rightToLeft, DataGridViewAdvancedCellBorderStyle all, bool singleVerticalBorderAdded, bool singleHorizontalBorderAdded, bool isFirstDisplayedColumn, bool isFirstDisplayedRow, bool returnsAdvanced, DataGridViewAdvancedCellBorderStyle expectedLeft, DataGridViewAdvancedCellBorderStyle expectedRight, DataGridViewAdvancedCellBorderStyle expectedTop, DataGridViewAdvancedCellBorderStyle expectedBottom)
         {
             using var control = new DataGridView
             {

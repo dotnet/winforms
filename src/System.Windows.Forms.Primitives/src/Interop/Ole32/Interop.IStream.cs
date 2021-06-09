@@ -27,7 +27,7 @@ internal static partial class Interop
             // pcbWritten is optional so it must be a pointer
             void Write(byte* pv, uint cb, uint* pcbWritten);
 
-            // SeekOrgin matches the native values, plibNewPosition is optional
+            // SeekOrigin matches the native values, plibNewPosition is optional
             void Seek(long dlibMove, SeekOrigin dwOrigin, ulong* plibNewPosition);
 
             void SetSize(ulong libNewSize);

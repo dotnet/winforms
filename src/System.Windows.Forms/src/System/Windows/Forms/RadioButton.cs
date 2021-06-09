@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
             }
 
-            // Radiobuttons shouldn't respond to right clicks, so we need to do all our own click logic
+            // Radio buttons shouldn't respond to right clicks, so we need to do all our own click logic
             SetStyle(ControlStyles.StandardClick, false);
 
             TextAlign = ContentAlignment.MiddleLeft;
@@ -156,10 +156,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 checkAlign = value;
                 if (OwnerDraw)

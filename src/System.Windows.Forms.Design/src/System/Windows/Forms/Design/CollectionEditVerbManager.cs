@@ -11,7 +11,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Class for sharing code for launching the ToolStripItemsCollectionEditor from a verb. This class implments the IWindowsFormsEditorService and ITypeDescriptorContext to display the dialog.
+    ///  Class for sharing code for launching the ToolStripItemsCollectionEditor from a verb. This class implements the IWindowsFormsEditorService and ITypeDescriptorContext to display the dialog.
     /// </summary>
     internal class CollectionEditVerbManager : IWindowsFormsEditorService, ITypeDescriptorContext
     {
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collectoin edtior with.");
+            Debug.Assert(_targetProperty != null, "Need PropertyDescriptor for ICollection property to associate collection editor with.");
             if (text is null)
             {
                 text = SR.ToolStripItemCollectionEditorVerb;

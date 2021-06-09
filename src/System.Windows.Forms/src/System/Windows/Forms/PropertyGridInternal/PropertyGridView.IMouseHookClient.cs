@@ -8,8 +8,9 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal interface IMouseHookClient
         {
-            // return true if the click is handled, false
-            // to pass it on
+            /// <summary>
+            ///  Returns true if the click is handled, false to pass it on.
+            /// </summary>
             bool OnClickHooked();
         }
     }

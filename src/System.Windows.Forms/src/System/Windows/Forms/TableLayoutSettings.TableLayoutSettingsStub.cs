@@ -28,7 +28,7 @@ namespace System.Windows.Forms
             ///
             ///  NOTE: this is a one-time only operation - there is data loss to the stub
             ///  as a result of calling this function. We hand as much over to the other settings
-            ///  so we dont have to reallocate anything
+            ///  so we don't have to reallocate anything
             /// </summary>
             internal void ApplySettings(TableLayoutSettings settings)
             {

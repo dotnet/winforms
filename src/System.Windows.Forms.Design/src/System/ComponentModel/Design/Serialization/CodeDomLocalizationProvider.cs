@@ -125,7 +125,7 @@ namespace System.ComponentModel.Design.Serialization
             //
             // The first serializer is used for serializable objects that have no serializer of their
             // own, and for localizable properties when the CodeDomLocalizationModel is set to PropertyAssignment.
-            // The second serializer is used only for localizaing properties when the CodeDomLocalizationModel
+            // The second serializer is used only for localizing properties when the CodeDomLocalizationModel
             // is set to PropertyReflection
 
             // Compute a localization model based on the property, localization mode,

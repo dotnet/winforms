@@ -1459,11 +1459,11 @@ namespace System.ComponentModel.Design.Tests
             surface.Flush();
             Assert.Equal(1, callCount);
 
-            // Fush again.
+            // Flush again.
             surface.Flush();
             Assert.Equal(2, callCount);
 
-            // Fush when disposed.
+            // Flush when disposed.
             surface.Dispose();
             surface.Flush();
             Assert.Equal(3, callCount);

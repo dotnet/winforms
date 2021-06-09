@@ -198,7 +198,7 @@ namespace System.Windows.Forms
 
                         if (_messageHook is not null)
                         {
-                            // message filter isn't going to help as we dont own the message pump
+                            // message filter isn't going to help as we don't own the message pump
                             // switch over to a MessageHook
                             _messageHook.HookMessages = false;
                         }
@@ -431,7 +431,7 @@ namespace System.Windows.Forms
 
                 if (toolStrip.IsDropDown)
                 {
-                    // For something that never closes, dont use menu mode.
+                    // For something that never closes, don't use menu mode.
                     ToolStripDropDown dropDown = toolStrip as ToolStripDropDown;
 
                     if (dropDown.AutoClose == false)
@@ -443,7 +443,7 @@ namespace System.Windows.Forms
                             ActiveHwndInternal = new HandleRef(this, hwndActive);
                         }
 
-                        // Dont actually enter menu mode..
+                        // Don't actually enter menu mode..
                         return;
                     }
                 }
@@ -581,7 +581,7 @@ namespace System.Windows.Forms
                     // if another window has gotten activation - we should dismiss.
                     if (hwndCurrentActiveWindow.Handle == IntPtr.Zero)
                     {
-                        // we dont know what it was cause it's on another thread or doesnt exist
+                        // we don't know what it was cause it's on another thread or doesnt exist
                         Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.PreFilterMessage] Dismissing because: " + WindowsFormsUtils.GetControlInformation(hwndCurrentActiveWindow.Handle) + " has gotten activation. ");
                         ProcessActivationChange();
                     }
@@ -594,7 +594,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // Store this off so we dont have to do activation processing next time
+                // Store this off so we don't have to do activation processing next time
                 _lastActiveWindow = hwndCurrentActiveWindow;
 
                 // Performance: skip over things like WM_PAINT.

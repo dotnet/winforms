@@ -13,7 +13,7 @@ using static Interop;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the relatd control based on the new mouse location and the resize Rules.
+    ///  The ResizeBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The ResizeBehavior simply tracks the MouseMove messages and updates the bounds of the related control based on the new mouse location and the resize Rules.
     /// </summary>
     internal class ResizeBehavior : Behavior
     {
@@ -474,7 +474,7 @@ namespace System.Windows.Forms.Design.Behavior
                 return true;
             }
 
-            // When DesignerWindowPane has scrollbars and we resize, shrinking the the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
+            // When DesignerWindowPane has scrollbars and we resize, shrinking the DesignerWindowPane makes it look like the mouse has moved to the BS.  To compensate for that we keep track of the mouse's previous position in screen coordinates, and use that to compare if the mouse has really moved.
             if (_lastMouseAbs != Point.Empty)
             {
                 var mouseLocAbs = new Point(mouseLoc.X, mouseLoc.Y);
@@ -613,7 +613,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Control control = _resizeComponents[i].resizeControl as Control;
                 Rectangle bounds = control.Bounds;
                 Rectangle oldBounds = bounds;
-                // We need to compute the offset beased on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
+                // We need to compute the offset based on the original cached Bounds ... ListBox doesnt allow drag on the top boundary if this is not done when it is "IntegralHeight"
                 Rectangle baseBounds = _resizeComponents[i].resizeBounds;
                 Rectangle oldBorderRect = BehaviorService.ControlRectInAdornerWindow(control);
                 bool needToUpdate = true;

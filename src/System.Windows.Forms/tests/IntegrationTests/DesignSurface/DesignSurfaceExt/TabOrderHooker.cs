@@ -25,7 +25,7 @@ namespace DesignSurfaceExt
                 Type tabOrderType = designAssembly.GetType("System.Windows.Forms.Design.TabOrder");
                 if (_tabOrder == null)
                 {
-                    //- call the ctor passing the IDesignerHost taget object
+                    //- call the ctor passing the IDesignerHost target object
                     _tabOrder = Activator.CreateInstance(tabOrderType, new object[] { host });
                 }
                 else

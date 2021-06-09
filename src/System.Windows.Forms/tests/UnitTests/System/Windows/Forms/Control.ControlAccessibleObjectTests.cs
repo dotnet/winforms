@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(ownerControl.IsHandleCreated);
             Assert.Equal(IntPtr.Zero, controlAccessibleObject.HandleInternal);
 
-            // force the owner contrl to create its handle
+            // force the owner control to create its handle
             ownerControl.CreateControl();
 
             Assert.True(ownerControl.IsHandleCreated);
@@ -126,7 +126,7 @@ namespace System.Windows.Forms.Tests
             Assert.False(ownerControl.IsHandleCreated);
             Assert.Equal(IntPtr.Zero, accessibleObject.HandleInternal);
 
-            // force the owner contrl to create its handle
+            // force the owner control to create its handle
             ownerControl.CreateControl();
 
             Assert.True(ownerControl.IsHandleCreated);
@@ -865,7 +865,7 @@ namespace System.Windows.Forms.Tests
             string helpKeyword,
             int expectedResult,
             bool createControl,
-            int exectedResultWithoutHandler)
+            int expectedResultWithoutHandler)
         {
             using var ownerControl = new Control();
             if (createControl)
@@ -904,7 +904,7 @@ namespace System.Windows.Forms.Tests
 
             // Remove handler.
             ownerControl.QueryAccessibilityHelp -= handler;
-            Assert.Equal(exectedResultWithoutHandler, accessibleObject.GetHelpTopic(out fileName));
+            Assert.Equal(expectedResultWithoutHandler, accessibleObject.GetHelpTopic(out fileName));
             Assert.Null(fileName);
             Assert.Equal(2, callCount);
         }

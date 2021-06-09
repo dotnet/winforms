@@ -54,11 +54,11 @@ namespace System.ComponentModel.Design.Serialization
             if (localizationLanguage is null)
             {
                 // Check to see if our base component's localizable prop is true
-                RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
+                RootContext rootCtx = manager.Context[typeof(RootContext)] as RootContext;
 
-                if (rootCxt != null)
+                if (rootCtx != null)
                 {
-                    object comp = rootCxt.Value;
+                    object comp = rootCtx.Value;
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
 
                     if (prop != null && prop.PropertyType == typeof(CultureInfo))

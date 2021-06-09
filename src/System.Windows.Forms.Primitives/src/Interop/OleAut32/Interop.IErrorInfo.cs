@@ -20,15 +20,15 @@ internal partial class Interop
 
             [PreserveSig]
             HRESULT GetSource(
-                ref string pBstrSource);
+                out string pBstrSource);
 
             [PreserveSig]
             HRESULT GetDescription(
-                ref string pBstrDescription);
+                out string pBstrDescription);
 
             [PreserveSig]
             HRESULT GetHelpFile(
-                ref string pBstrHelpFile);
+                out string pBstrHelpFile);
 
             [PreserveSig]
             HRESULT GetHelpContext(

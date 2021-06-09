@@ -1323,8 +1323,8 @@ Press Ctrl+Enter to accept Text.</source>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
-        <source>Place existing controls in new containerDetermines the size of the positioning grid.</source>
-        <target state="new">Place existing controls in new containerDetermines the size of the positioning grid.</target>
+        <source>Determines the size of the positioning grid.</source>
+        <target state="new">Determines the size of the positioning grid.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
@@ -1352,7 +1352,7 @@ Press Ctrl+Enter to accept Text.</source>
         <target state="translated">FolderBrowserDialog에서 처음 선택되어 표시될 폴더의 경로를 선택합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">이 serialization 관리자에 이미 활성 serialization 세션이 있으므로 새 세션을 만들 수 없습니다.</target>
         <note />

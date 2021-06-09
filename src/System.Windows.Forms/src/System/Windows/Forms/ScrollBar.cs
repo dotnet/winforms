@@ -457,7 +457,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the <see cref='Value'/> property has
         ///  changed, either by a <see cref='OnScroll'/> event
-        ///  or programatically.
+        ///  or programmatically.
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.valueChangedEventDescr))]

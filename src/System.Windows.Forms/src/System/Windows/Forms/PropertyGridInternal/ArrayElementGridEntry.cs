@@ -44,13 +44,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public override Type PropertyType
-        {
-            get
-            {
-                return parentPE.PropertyType.GetElementType();
-            }
-        }
+        public override Type PropertyType => ParentGridEntry.PropertyType.GetElementType();
 
         public override object PropertyValue
         {

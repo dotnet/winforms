@@ -480,7 +480,7 @@ namespace System.Windows.Forms
             }
 
             // Start from the start index and wrap around until we find the string
-            // in question. Use a separate counter to ensure that we arent cycling through the list infinitely.
+            // in question. Use a separate counter to ensure that we aren't cycling through the list infinitely.
             int numberOfTimesThroughLoop = 0;
 
             // this API is really Find NEXT String...

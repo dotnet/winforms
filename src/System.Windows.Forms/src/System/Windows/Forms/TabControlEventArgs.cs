@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Stores the referemce to the tabpage that is undergoing the event.
+        ///  Stores the reference to the tabpage that is undergoing the event.
         /// </summary>
         public TabPage? TabPage { get; }
 

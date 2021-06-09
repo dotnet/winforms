@@ -1519,7 +1519,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws a standard selection grab handle with the given dimensions. Grab
         ///  handles are used by components to indicate to the user that they can
-        ///  be directly maniupulated.
+        ///  be directly manipulated.
         /// </summary>
         public static void DrawGrabHandle(Graphics graphics, Rectangle rectangle, bool primary, bool enabled)
         {
@@ -1665,7 +1665,7 @@ namespace System.Windows.Forms
                 // The idea is to scale everything down (more than just a grayscale does, therefore the small numbers
                 // in the scaling part of matrix). White becomes some shade of gray and black stays black.
                 //
-                // Second part of the matrix is to translate everything, so all colors are a bit brigher. Grays become
+                // Second part of the matrix is to translate everything, so all colors are a bit brighter. Grays become
                 // lighter and washed out looking black becomes a shade of gray as well.
 
                 float[][] array = new float[5][];

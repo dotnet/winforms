@@ -117,9 +117,9 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             AccessibleObject controlItem1_AccessibilityObject = _controlItem1.AccessibilityObject;
             AccessibleObject controlItem2_AccessibilityObject = _controlItem2.AccessibilityObject;
 
-            int childCound = errorWindowAccessibilityObject.GetChildCount();
+            int childCount = errorWindowAccessibilityObject.GetChildCount();
             int expectedCount = 2;
-            Assert.Equal(expectedCount, childCound);
+            Assert.Equal(expectedCount, childCount);
 
             AccessibleObject actualAccessibilityObject = errorWindowAccessibilityObject.GetChild(0);
             Assert.Equal(controlItem1_AccessibilityObject, actualAccessibilityObject);

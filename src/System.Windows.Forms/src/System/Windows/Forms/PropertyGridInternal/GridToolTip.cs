@@ -12,14 +12,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal class GridToolTip : Control
     {
-        readonly Control[] controls;
-        string toolTipText;
-        bool dontShow;
-        private readonly int maximumToolTipLength = 1000;
+        private readonly Control[] _controls;
+        private string _toolTipText;
+        private bool _dontShow;
+        private const int MaximumToolTipLength = 1000;
 
         internal GridToolTip(Control[] controls)
         {
-            this.controls = controls;
+            _controls = controls;
             SetStyle(ControlStyles.UserPaint, false);
             Font = controls[0].Font;
 
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return toolTipText;
+                return _toolTipText;
             }
             set
             {
@@ -48,13 +48,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Reset();
                 }
 
-                if (value is not null && value.Length > maximumToolTipLength)
+                if (value is not null && value.Length > MaximumToolTipLength)
                 {
                     //Let the user know the text was truncated by throwing on an ellipsis
-                    value = value.Substring(0, maximumToolTipLength) + "...";
+                    value = value.Substring(0, MaximumToolTipLength) + "...";
                 }
 
-                toolTipText = value;
+                _toolTipText = value;
 
                 if (IsHandleCreated)
                 {
@@ -67,15 +67,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     // Here's a workaround.  If we give the tooltip an empty string, it won't come back
                     // so we just force it hidden instead.
-                    dontShow = string.IsNullOrEmpty(value);
+                    _dontShow = string.IsNullOrEmpty(value);
 
-                    for (int i = 0; i < controls.Length; i++)
+                    for (int i = 0; i < _controls.Length; i++)
                     {
-                        ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(controls[i]);
+                        ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
                         info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
                     }
 
-                    if (visible && !dontShow)
+                    if (visible && !_dontShow)
                     {
                         Visible = true;
                     }
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         private ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Control c)
-            => new ComCtl32.ToolInfoWrapper<Control>(c, ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS, toolTipText);
+            => new ComCtl32.ToolInfoWrapper<Control>(c, ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS, _toolTipText);
 
         private void OnControlCreateHandle(object sender, EventArgs e)
         {
@@ -127,11 +127,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            for (int i = 0; i < controls.Length; i++)
+            for (int i = 0; i < _controls.Length; i++)
             {
-                if (controls[i].IsHandleCreated)
+                if (_controls[i].IsHandleCreated)
                 {
-                    SetupToolTip(controls[i]);
+                    SetupToolTip(_controls[i]);
                 }
             }
         }
@@ -163,15 +163,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             // what it was, so the tooltip thinks it's back in the regular state again
 
             string oldText = ToolTip;
-            toolTipText = string.Empty;
+            _toolTipText = string.Empty;
 
-            for (int i = 0; i < controls.Length; i++)
+            for (int i = 0; i < _controls.Length; i++)
             {
-                ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(controls[i]);
+                ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(_controls[i]);
                 info.SendMessage(this, (User32.WM)ComCtl32.TTM.UPDATETIPTEXTW);
             }
 
-            toolTipText = oldText;
+            _toolTipText = oldText;
             User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.UPDATE);
         }
 
@@ -180,7 +180,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             switch ((User32.WM)msg.Msg)
             {
                 case User32.WM.SHOWWINDOW:
-                    if (unchecked((int)(long)msg.WParam) != 0 && dontShow)
+                    if (unchecked((int)(long)msg.WParam) != 0 && _dontShow)
                     {
                         msg.WParam = IntPtr.Zero;
                     }
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // When using v6 common controls, the native tooltip does not end up returning HTTRANSPARENT
                     // all the time, so its TTF_TRANSPARENT behavior does not work, ie. mouse events do not fall
                     // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,
-                    // functional changes between v5 and v6, and the specfic way the property grid drives its tooltip.
+                    // functional changes between v5 and v6, and the specific way the property grid drives its tooltip.
                     // Workaround is to just force HTTRANSPARENT all the time.
                     msg.Result = (IntPtr)User32.HT.TRANSPARENT;
                     return;

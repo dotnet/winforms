@@ -87,7 +87,7 @@ namespace System.Drawing.Design
         ToolboxItemCollection GetToolboxItems(IDesignerHost host);
 
         /// <summary>
-        ///  Gets all .NET tools on the toolbox fopr specific category.
+        ///  Gets all .NET tools on the toolbox for specific category.
         /// </summary>
         ToolboxItemCollection GetToolboxItems(string category);
 

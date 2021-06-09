@@ -168,7 +168,7 @@ namespace System.ComponentModel.Design
             DesignSurface surface = (DesignSurface)sender;
             surface.Disposed -= new EventHandler(OnDesignerDisposed);
 
-            // Detatch the selection change and add/remove events, if we were monitoring such events
+            // Detach the selection change and add/remove events, if we were monitoring such events
             SinkChangeEvents(surface, false);
 
             IDesignerHost host = surface.GetService(typeof(IDesignerHost)) as IDesignerHost;

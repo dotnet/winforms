@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             ///  pages for the control.  Note that even if this flag is
             ///  specified, the verb will not appear unless the control
             ///  proffers a set of property pages.
-            ///  [Since most activeX controls alreay have their own properties verb
+            ///  [Since most activeX controls already have their own properties verb
             ///  on the context menu, the default is not to include one specified by
             ///  this flag.]
             /// </summary>
@@ -825,7 +825,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the mouse pointer hovers over the contro.
+        ///  Occurs when the mouse pointer hovers over the control.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -959,7 +959,7 @@ namespace System.Windows.Forms
 
         private void OnComponentRename(object sender, ComponentRenameEventArgs e)
         {
-            // When we're notified of a rename, see if this is the componnent that is being
+            // When we're notified of a rename, see if this is the component that is being
             // renamed.
             //
             if (e.Component == this)
@@ -1189,7 +1189,7 @@ namespace System.Windows.Forms
                     TransitionUpTo(OC_INPLACE);
                     // it is possible that we were hidden while in place activating, in which case we don't
                     // really have a handle now because the act of hiding could have destroyed it
-                    // so, just call ourselves again recursively, and if we dont't have a handle, we will
+                    // so, just call ourselves again recursively, and if we don't have a handle, we will
                     // just take the "axState[fNeedOwnWindow]" path above...
                     if (axState[fNeedOwnWindow])
                     {
@@ -1411,7 +1411,7 @@ namespace System.Windows.Forms
 
             // yikes, we were resubclassed...
             Debug.WriteLineIf(AxHostSwitch.TraceVerbose, "The horrible control subclassed itself w/o calling the old wndproc...");
-            // we need to resubclass outselves now...
+            // we need to resubclass ourselves now...
             Debug.Assert(!OwnWindow(), "why are we here if we own our window?");
             WindowReleaseHandle();
             User32.SetWindowLong(new HandleRef(this, handle), User32.GWL.WNDPROC, new HandleRef(this, currentWndproc));
@@ -1838,7 +1838,7 @@ namespace System.Windows.Forms
         ///
         ///  The keyboard processing of input keys to AxHost controls go in 3 steps inside AxHost.PreProcessMessage()
         ///
-        ///  (1) Call the OCX's TranslateAccelarator. This may or may not call back into us using IOleControlSite::TranslateAccelarator()
+        ///  (1) Call the OCX's TranslateAccelerator. This may or may not call back into us using IOleControlSite::TranslateAccelerator()
         ///
         ///  (2) If the control completely processed this without calling us back:
         ///  -- If this returns S_OK, then it means that the control already processed this message and we return true,
@@ -1864,7 +1864,7 @@ namespace System.Windows.Forms
                     // call the base implementation which normally would call the control's
                     // IsInputKey() or IsInputChar(). So, we short-circuit those to return false
                     // and only return true, if the container-chain wanted to process the keystroke
-                    // (e.g. tab, accelarators etc.)
+                    // (e.g. tab, accelerators etc.)
                     //
                     return base.PreProcessMessage(ref msg);
                 }
@@ -2130,7 +2130,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns this control's logicaly containing form.
+        ///  Returns this control's logically containing form.
         ///  At design time this is always the form being designed.
         ///  At runtime it is either the form set with setContainingForm or,
         ///  by default, the parent form.
@@ -2139,7 +2139,7 @@ namespace System.Windows.Forms
         ///  however possible for another form higher in the parent chain
         ///  to serve in that role.  The logical container of this
         ///  control determines the set of logical sibling control.
-        ///  In general this property exists only to enable some speficic
+        ///  In general this property exists only to enable some specific
         ///  behaviours of ActiveX controls and should in general not be set
         ///  by the user.
         /// </summary>
@@ -3080,7 +3080,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.UnableToInitComponent);
             }
 
-            // Otherwise, we have state to deperist from:
+            // Otherwise, we have state to depersist from:
             switch (ocxState.Type)
             {
                 case STG_STREAM:
@@ -3755,7 +3755,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Frees all resources assocaited with this control. This method may not be
+        ///  Frees all resources associated with this control. This method may not be
         ///  called at runtime. Any resources used by the control should be setup to
         ///  be released when the control is garbage collected. Inheriting classes should always
         ///  call base.dispose.
@@ -3886,7 +3886,7 @@ namespace System.Windows.Forms
                 ContainerControl f = ContainingControl;
                 if (f is null)
                 {
-                    // ContainingCointrol can be null if the AxHost is still not parented to a containerControl
+                    // ContainingControl can be null if the AxHost is still not parented to a containerControl
                     // In everett we used to return a parking window.
                     // now we just set the containingControl to a dummyValue.
                     if (newParent is null)

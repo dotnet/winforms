@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         private int accelerationsCurrentIndex;
 
         // Used to calculate the time elapsed since the up/down button was pressed,
-        // to know when to get the next entry in the accelaration table.
+        // to know when to get the next entry in the acceleration table.
         private long buttonPressedStartTime;
 
         public NumericUpDown() : base()
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
             UpdateEditText();
         }
 
-        // This is not a breaking change -- Even though this control previously autosized to hieght,
+        // This is not a breaking change -- Even though this control previously autosized to height,
         // it didn't actually have an AutoSize property.  The new AutoSize property enables the
         // smarter behavior.
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
@@ -832,7 +832,7 @@ namespace System.Windows.Forms
                 numDigits = maxDigits - 1;
             }
 
-            // e.g., if the lagest digit is 7, and we can have 3 digits, the widest string would be "777"
+            // e.g., if the largest digit is 7, and we can have 3 digits, the widest string would be "777"
             for (int i = 0; i < numDigits; i++)
             {
                 testNumber = testNumber * baseSize + digit;
@@ -858,7 +858,7 @@ namespace System.Windows.Forms
                 textWidth += shortTextWidth / (numDigits + 1);
             }
 
-            // Call AdjuctWindowRect to add space for the borders
+            // Call AdjustWindowRect to add space for the borders
             int width = SizeFromClientSize(textWidth, height).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }

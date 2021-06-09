@@ -234,7 +234,7 @@ namespace System.Drawing.Design
         ///  names and the values are property values.  This dictionary becomes read-only
         ///  after the toolbox item has been locked.
         ///  Values in the properties dictionary are validated through ValidateProperty
-        ///  and default values are obtained from GetDefalutProperty.
+        ///  and default values are obtained from GetDefaultProperty.
         /// </summary>
         public IDictionary Properties
         {
@@ -414,7 +414,7 @@ namespace System.Drawing.Design
         {
             // Do this in a couple of passes -- first pass, try to pull
             // out our dictionary of property names.  We need to do this
-            // for backwards compatibilty because if we throw everything
+            // for backwards compatibility because if we throw everything
             // into the property dictionary we'll duplicate stuff people
             // have serialized by hand.
 
@@ -685,9 +685,9 @@ namespace System.Drawing.Design
                 Type parentType = type;
                 while (parentType != null)
                 {
-                    AssemblyName policiedname = parentType.Assembly.GetName(true);
+                    AssemblyName policiedName = parentType.Assembly.GetName(true);
 
-                    AssemblyName aname = GetNonRetargetedAssemblyName(type, policiedname);
+                    AssemblyName aname = GetNonRetargetedAssemblyName(type, policiedName);
 
                     if (aname != null && !parents.ContainsKey(aname.FullName))
                     {
@@ -902,7 +902,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         ///  This is called whenever a value is set in the property dictionary.  It gives you a chance
-        ///  to change the value of an object before comitting it, our reject it by throwing an
+        ///  to change the value of an object before committing it, our reject it by throwing an
         ///  exception.
         /// </summary>
         protected virtual object ValidatePropertyValue(string propertyName, object value)

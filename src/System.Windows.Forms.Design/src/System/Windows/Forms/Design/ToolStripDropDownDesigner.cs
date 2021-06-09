@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Design
         // We have to add the glyphs ourselves.
         private void AddSelectionGlyphs(SelectionManager selectionManager, ISelectionService selectionService)
         {
-            //If one or many of our items are selected then Add Selection Glyphs ourselces since this is a ComponentDesigner which wont get called on the "GetGlyphs"
+            //If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
             ICollection selComponents = selectionService.GetSelectedComponents();
             GlyphCollection glyphs = new GlyphCollection();
             foreach (object selComp in selComponents)
@@ -630,7 +630,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
+        ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
         /// </summary>
         public void ShowMenu()
         {
@@ -646,7 +646,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
+        ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
         /// </summary>
         public void ShowMenu(ToolStripItem selectedItem)
         {
@@ -675,7 +675,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // Everytime you hide/show .. set the DropDown of the designer MenuItem to the component dropDown beign designed.
+            // Every time you hide/show .. set the DropDown of the designer MenuItem to the component dropDown being designed.
             menuItem.DropDown = dropDown;
             menuItem.DropDown.OwnerItem = menuItem;
             if (dropDown.Items.Count > 0)

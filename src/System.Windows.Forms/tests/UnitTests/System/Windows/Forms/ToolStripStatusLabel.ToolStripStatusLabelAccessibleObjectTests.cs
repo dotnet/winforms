@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
     public class ToolStripStatusLabel_ToolStripStatusLabelAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
-        public void ToolStripStatusLabelAccessibleObect_Ctor_Default()
+        public void ToolStripStatusLabelAccessibleObject_Ctor_Default()
         {
             using ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
             ToolStripStatusLabelAccessibleObject accessibleObject = new ToolStripStatusLabelAccessibleObject(toolStripStatusLabel);
@@ -23,7 +23,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, (int)UiaCore.UIA.HyperlinkControlTypeId)]
         [InlineData(false, (int)UiaCore.UIA.TextControlTypeId)]
-        public void ToolStripStatusLabelAccessibleObect_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, int expectedType)
+        public void ToolStripStatusLabelAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, int expectedType)
         {
             using ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
             toolStripStatusLabel.IsLink = isLink;
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, AccessibleRole.Link)]
         [InlineData(false, AccessibleRole.StaticText)]
-        public void ToolStripStatusLabelAccessibleObect_Role_IsExpected_ByDefault(bool isLink, AccessibleRole expectedRole)
+        public void ToolStripStatusLabelAccessibleObject_Role_IsExpected_ByDefault(bool isLink, AccessibleRole expectedRole)
         {
             using ToolStripStatusLabel toolStripStatusLabel = new ToolStripStatusLabel();
             toolStripStatusLabel.IsLink = isLink;

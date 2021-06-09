@@ -1323,8 +1323,8 @@ Press Ctrl+Enter to accept Text.</source>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
-        <source>Place existing controls in new containerDetermines the size of the positioning grid.</source>
-        <target state="new">Place existing controls in new containerDetermines the size of the positioning grid.</target>
+        <source>Determines the size of the positioning grid.</source>
+        <target state="new">Determines the size of the positioning grid.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
@@ -1352,7 +1352,7 @@ Press Ctrl+Enter to accept Text.</source>
         <target state="translated">选择最初会在 FolderBrowserDialog 中被选中的文件夹的路径。</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">此序列化管理器已有活动的序列化会话，因此不能创建新的会话。</target>
         <note />

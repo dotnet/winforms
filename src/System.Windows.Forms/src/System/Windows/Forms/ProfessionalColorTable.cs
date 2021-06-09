@@ -334,7 +334,7 @@ namespace System.Windows.Forms
         private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             // We need to calculate our own alpha blended color based on the Highlight and Window
-            // colors on the system. Since terminalserver + alphablending doesnt work we cant just do a
+            // colors on the system. Since terminalserver + alphablending doesnt work we can't just do a
             // FromARGB here. So we have a simple function which calculates the blending for us.
             if (!DisplayInformation.LowResolution)
             {
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
 
             InitCommonColors(ref rgbTable);
 
-            // use locals so we arent fetching again and again.
+            // use locals so we aren't fetching again and again.
             Color buttonFace = SystemColors.ButtonFace;
             Color buttonShadow = SystemColors.ButtonShadow;
             Color highlight = SystemColors.Highlight;

@@ -75,7 +75,7 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         ///  Gets the bounds of the element after growing to newSize (note that depending on
-        ///  anchoring the element may grow to the left/updwards rather than to the
+        ///  anchoring the element may grow to the left/upwards rather than to the
         ///  right/downwards. i.e., it may be translated.)
         /// </summary>
         private static Rectangle GetGrowthBounds(IArrangedElement element, Size newSize)
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Layout
         /// </summary>
         private static Rectangle GetAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
         {
-            // Container can not be null since we AschorControls takes a non-null container.
+            // Container can not be null since we AnchorControls takes a non-null container.
             //
             // NB: DO NOT convert the following into Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "...")
             // because it WILL execute GetCachedBounds(element).ToString() calls even if CompModSwitches.RichLayout.TraceInfo=false
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Layout
             Rectangle displayRectangle = container.DisplayRectangle;
             if (CommonProperties.GetAutoSize(container) && ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)))
             {
-                // we havent set oursleves to the preferred size yet. proceeding will
+                // we haven't set ourselves to the preferred size yet. proceeding will
                 // just set all the control widths to zero. let's return here
                 return;
             }
@@ -581,7 +581,7 @@ namespace System.Windows.Forms.Layout
             if (anchor && !measureOnly)
             {
                 // In the case of anchor, where we currently are defines the preferred size,
-                // so dont recalculate the positions of everything.
+                // so don't recalculate the positions of everything.
                 LayoutAnchoredControls(container);
             }
 
@@ -783,7 +783,7 @@ namespace System.Windows.Forms.Layout
                 using (new LayoutTransaction(element.Container as Control, element, PropertyNames.Dock))
                 {
                     // if the item is autosized, calling setbounds performs a layout, which
-                    // if we havent set the anchor info properly yet makes dock/anchor layout cranky.
+                    // if we haven't set the anchor info properly yet makes dock/anchor layout cranky.
                     if (value == DockStyle.None)
                     {
                         if (dockNeedsLayout)

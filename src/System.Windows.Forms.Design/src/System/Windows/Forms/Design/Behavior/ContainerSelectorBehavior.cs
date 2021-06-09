@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Design.Behavior
             _behaviorService = (BehaviorService)serviceProvider.GetService(typeof(BehaviorService));
             if (_behaviorService is null)
             {
-                Debug.Fail("Could not get the BehaviorService from ContainerSelectroBehavior!");
+                Debug.Fail("Could not get the BehaviorService from ContainerSelectorBehavior!");
                 return;
             }
 
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 continue;
                             }
 
-                            // and the relatedcomponents are the same, then we have found the new glyph that just got added
+                            // and the related components are the same, then we have found the new glyph that just got added
                             if (behOld.ContainerControl.Equals(behNew.ContainerControl))
                             {
                                 behNew.OkToMove = true;

@@ -380,9 +380,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Specifies the formatting options for text cut/copited to the clipboard (Whether the mask returned from the Text
+        ///  Specifies the formatting options for text cut/copied to the clipboard (Whether the mask returned from the Text
         ///  property includes Literals and/or prompt characters).
-        ///  When prompt characters are excluded, theyare returned as spaces in the string returned.
+        ///  When prompt characters are excluded, they are returned as spaces in the string returned.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MaskedTextBoxCutCopyMaskFormat))]
@@ -651,7 +651,7 @@ namespace System.Windows.Forms
             set
             {
                 //
-                // We dont' do anything if:
+                // We don't do anything if:
                 // 1.  IsNullOrEmpty( value )->[Reset control] && this.flagState[IS_NULL_MASK]==>Already Reset.
                 // 2. !IsNullOrEmpty( value )->[Set control] && !this.flagState[IS_NULL_MASK][control is set] && [value is the same]==>No need to update.
                 //
@@ -1125,7 +1125,7 @@ namespace System.Windows.Forms
                 {
                     // We need to temporarily create an edit control to get the default password character.
                     // We cannot use this control because we would have to reset the native control's password char to use
-                    // the defult one so we can get it; this would change the text displayed in the box (even for a short time)
+                    // the default one so we can get it; this would change the text displayed in the box (even for a short time)
                     // opening a sec hole.
 
                     TextBox txtBox = new TextBox
@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the formatting options for text output (Whether the mask returned from the Text
         ///  property includes Literals and/or prompt characters).
-        ///  When prompt characters are excluded, theyare returned as spaces in the string returned.
+        ///  When prompt characters are excluded, they're returned as spaces in the string returned.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MaskedTextBoxTextMaskFormat))]
@@ -1873,14 +1873,14 @@ namespace System.Windows.Forms
             {
                 switch (keyCode)
                 {
-                    // Unsupported keys should not be handled to allow generatating the corresponding message
+                    // Unsupported keys should not be handled to allow generating the corresponding message
                     // which is handled in the WndProc.
                     //case Keys.Z:  // ctrl-z == Undo.
                     //case Keys.Y:  // ctrl-y == Redo.
                     //    e.Handled = true;
                     //    return;
 
-                    // Note: Ctrl-Insert (Copy -Shortcut.CtrlIns) and Shft-Insert (Paste - Shortcut.ShiftIns) are
+                    // Note: Ctrl-Insert (Copy -Shortcut.CtrlIns) and Shift-Insert (Paste - Shortcut.ShiftIns) are
                     // handled by the base class and behavior depend on ShortcutsEnabled property.
 
                     // Special cases: usually cases where the native edit control would modify the mask.
@@ -1997,12 +1997,12 @@ namespace System.Windows.Forms
                     if (ImeModeConversion.InputLanguageTable == ImeModeConversion.KoreanTable)
                     {
                         // Korean IMEs complete composition when a character has been fully converted, so the composition string
-                        // is only one-character long; once composed we block the IME if there ins't more room in the test string.
+                        // is only one-character long; once composed we block the IME if there isn't more room in the test string.
 
                         int editPos = maskedTextProvider.FindUnassignedEditPositionFrom(caretTestPos, forward);
                         if (editPos == MaskedTextProvider.InvalidIndex)
                         {
-                            ImeComplete();  // Force completion of compostion.
+                            ImeComplete();  // Force completion of composition.
                         }
                     }
                 }
@@ -2147,7 +2147,7 @@ namespace System.Windows.Forms
             Debug.Assert(text is not null, "text is null.");
 
             // Clone the MaskedTextProvider so text properties are not modified until the paste operation is
-            // completed.  This is needed in case one of these properties is retreived in a MaskedInputRejected
+            // completed.  This is needed in case one of these properties is retrieved in a MaskedInputRejected
             // event handler (clipboard text is attempted to be set into the input text char by char).
 
             MaskedTextProvider clonedProvider = (MaskedTextProvider)maskedTextProvider.Clone();
@@ -2464,7 +2464,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Designe time support for resetting Culture property..
+        ///  Design time support for resetting Culture property..
         /// </summary>
         private void ResetCulture()
         {
@@ -2615,7 +2615,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the control's text to the formatted text obtained from the underlying MaskedTextProvider.
         ///  TextChanged is raised always, this assumes the display or the output text changed.
-        ///  The caret position is lost (unless cached somewhere else like when lossing the focus).
+        ///  The caret position is lost (unless cached somewhere else like when losing the focus).
         ///  This is the common way of changing the text in the control.
         /// </summary>
         private void SetText()
@@ -2669,7 +2669,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Designe time support for checking if Culture value in the designer should be serialized.
+        ///  Design time support for checking if Culture value in the designer should be serialized.
         /// </summary>
         private bool ShouldSerializeCulture()
         {
@@ -3003,7 +3003,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Processes the WM_KILLFOCUS message. Updates control's text replacing promp chars with space.
+        ///  Processes the WM_KILLFOCUS message. Updates control's text replacing prompt chars with space.
         /// </summary>
         private void WmKillFocus()
         {

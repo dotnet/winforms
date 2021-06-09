@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         ///  HTMLDocumentEvents2: we create an IConnectionPoint (via ConnectionPointCookie) between us and MSHTML and it calls back
         ///              on our an instance of HTMLDocumentEvents2.  The HTMLDocumentEvents2 class then fires the event.
         ///
-        ///  IHTMLDocument3.AttachHandler: MSHML calls back on an HtmlToClrEventProxy that we've created, looking
+        ///  IHTMLDocument3.AttachHandler: MSHTML calls back on an HtmlToClrEventProxy that we've created, looking
         ///                       for a method named DISPID=0.  For each event that's subscribed, we create
         ///                       a new HtmlToClrEventProxy, detect the callback and fire the corresponding
         ///                       CLR event.

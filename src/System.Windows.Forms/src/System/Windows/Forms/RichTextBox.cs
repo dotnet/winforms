@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         internal const int RTF = 0x0040;
         internal const int KINDMASK = TEXTLF | TEXTCRLF | RTF;
 
-        // This is where we store the reched library.
+        // This is where we store the Rich Edit library.
         private static IntPtr moduleHandle;
 
         private const string SZ_RTF_TAG = "{\\rtf";
@@ -1818,9 +1818,9 @@ namespace System.Windows.Forms
                     case RichTextBox.INPUT:
                         {
                             // Several customers complained that they were getting Random NullReference exceptions inside EditStreamProc.
-                            // We had a case of  acustomer using Everett bits and another case of a customer using Whidbey Beta1 bits.
+                            // We had a case of a customer using Everett bits and another case of a customer using Whidbey Beta1 bits.
                             // We don't have a repro in house which makes it problematic to determine the cause for this behavior.
-                            // Looking at the code it seems that the only posibility for editStream to be null is when the user
+                            // Looking at the code it seems that the only possibility for editStream to be null is when the user
                             // calls RichTextBox::LoadFile(Stream, RichTextBoxStreamType) with a null Stream.
                             // However, the user said that his app is not using LoadFile method.
                             // The only possibility left open is that the native Edit control sends random calls into EditStreamProc.
@@ -3033,7 +3033,7 @@ namespace System.Windows.Forms
 
                 // If we failed to load because of protected
                 // text then return protect event was fired so no
-                // exception is required for the the error
+                // exception is required for the error
                 if (GetProtectedError())
                 {
                     return;
@@ -3709,7 +3709,7 @@ namespace System.Windows.Forms
                 case User32.WM.RBUTTONUP:
                     //since RichEdit eats up the WM_CONTEXTMENU message, we need to force DefWndProc
                     //to spit out this message again on receiving WM_RBUTTONUP message. By setting UserMouse
-                    //style to true, we effectily let the WmMouseUp method in Control.cs to generate
+                    //style to true, we effectively let the WmMouseUp method in Control.cs to generate
                     //the WM_CONTEXTMENU message for us.
                     bool oldStyle = GetStyle(ControlStyles.UserMouse);
                     SetStyle(ControlStyles.UserMouse, true);

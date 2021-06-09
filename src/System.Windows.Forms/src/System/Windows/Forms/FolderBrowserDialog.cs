@@ -205,12 +205,23 @@ namespace System.Windows.Forms
 
         private bool TryRunDialogVista(IntPtr owner, out bool returnValue)
         {
-            OpenFileDialog.NativeFileOpenDialog dialog;
+            IFileOpenDialog dialog;
             try
             {
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
                 // Server Core App Compatibility FOD is installed.
-                dialog = new OpenFileDialog.NativeFileOpenDialog();
+                HRESULT hr = Ole32.CoCreateInstance(
+                    ref CLSID.FileOpenDialog,
+                    IntPtr.Zero,
+                    Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
+                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    out object obj);
+                if (!hr.Succeeded())
+                {
+                    Marshal.ThrowExceptionForHR((int)hr);
+                }
+
+                dialog = (IFileOpenDialog)obj;
             }
             catch (COMException)
             {

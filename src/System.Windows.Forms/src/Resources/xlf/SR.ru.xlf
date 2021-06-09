@@ -6482,6 +6482,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Позволяет изменение атрибутов метки вставки.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Событие возникает при изменении отмеченного свойства элемента ListView.</target>

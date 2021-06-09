@@ -11,7 +11,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design.Behavior
 {
     /// <summary>
-    ///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potention DragBehavior.
+    ///  The SelectionBehavior is pushed onto the BehaviorStack in response to a positively hit tested SelectionGlyph.  The SelectionBehavior performs  two main tasks: 1) forward messages to the related ControlDesigner, and 2) calls upon the SelectionManager to push a potential DragBehavior.
     /// </summary>
     internal sealed class SelectionManager : IDisposable
     {
@@ -28,8 +28,8 @@ namespace System.Windows.Forms.Design.Behavior
         private object _prevPrimarySelection;               //used to check if the primary selection changed
         private Rectangle[] _curSelectionBounds;
         private int _curCompIndex;
-        private DesignerActionUI _designerActionUI;         // the "container" for all things related to the designer action (smartags) UI
-        private bool _selectionChanging;                    //we dont want the OnSelectionChanged to be recursively called.
+        private DesignerActionUI _designerActionUI;         // the "container" for all things related to the designer action (smarttags) UI
+        private bool _selectionChanging;                    //we don't want the OnSelectionChanged to be recursively called.
 
         /// <summary>
         ///  Constructor.  Here we query for necessary services and cache them for perf. reasons. We also hook to Component Added/Removed/Changed notifications so we can keep in sync when the designers' components change.  Also, we create our custom Adorner and add it to the BehaviorService.
@@ -437,7 +437,7 @@ namespace System.Windows.Forms.Design.Behavior
         private void OnSelectionChanged(object sender, EventArgs e)
         {
             // Note: selectionChanging would guard against a re-entrant code...
-            // Since we dont want to be in messed up state when adding new Glyphs.
+            // Since we don't want to be in messed up state when adding new Glyphs.
             if (!_selectionChanging)
             {
                 _selectionChanging = true;

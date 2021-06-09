@@ -2755,7 +2755,7 @@ namespace System.Windows.Forms
             }
 
             flags &= TextFormatSupportedFlags;
-            // Dont use passed in graphics so we can optimze measurement
+            // Don't use passed in graphics so we can optimize measurement
             Size requiredSize = TextRenderer.MeasureText(text, font, new Size(maxWidth, int.MaxValue), flags);
             widthTruncated = (requiredSize.Width > maxWidth);
             return requiredSize.Height;
@@ -2800,7 +2800,7 @@ namespace System.Windows.Forms
             Size textSize;
             do
             {
-                // Dont use passed in graphics so we can optimze measurement
+                // Don't use passed in graphics so we can optimize measurement
                 textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, int.MaxValue), flags);
                 if ((float)(textSize.Width / textSize.Height) <= maxRatio || textSize.Width > (int)maxWidth)
                 {
@@ -2832,7 +2832,7 @@ namespace System.Windows.Forms
             }
 
             flags &= TextFormatSupportedFlags;
-            // Dont use passed in graphics so we can optimze measurement
+            // Don't use passed in graphics so we can optimize measurement
             return TextRenderer.MeasureText(text, font, new Size(int.MaxValue, int.MaxValue), flags);
         }
 
@@ -2857,7 +2857,7 @@ namespace System.Windows.Forms
                 Size textSize;
                 do
                 {
-                    // Dont use passed in graphics so we can optimze measurement
+                    // Don't use passed in graphics so we can optimize measurement
                     textSize = TextRenderer.MeasureText(text, font, new Size((int)maxWidth, maxHeight), flags);
                     if (textSize.Height > maxHeight || textSize.Width > (int)maxWidth)
                     {
@@ -4127,7 +4127,7 @@ namespace System.Windows.Forms
                         {
                             // As a result of pushing the value in the back end, the data grid view row and/or data grid view cell
                             // became disconnected from the DataGridView.
-                            // Return true because the operation succeded.
+                            // Return true because the operation succeeded.
                             // However, because the row which was edited became disconnected  from the DataGridView,
                             // do not mark the current row in the data grid view as being dirty.
                             // And because the data grid view cell which was edited became disconnected from the data grid view
@@ -4137,7 +4137,7 @@ namespace System.Windows.Forms
 
                         if (OwningRow.Index == DataGridView.CurrentCellAddress.Y)
                         {
-                            // The user programatically changed a value in the current row.
+                            // The user programmatically changed a value in the current row.
                             // The DataGridView already opened a transaction for the current row.
                             // All is left to do is to mark the current row in the DataGridView as being dirty.
                             DataGridView.IsCurrentRowDirtyInternal = true;

@@ -368,7 +368,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  New EventHandler for The LocationChanging so that ToolStripPanelCell Listens to the Location Property on the ToolStrips's being changed.
-        ///  The ToolStrip needs to Raft (Join) to the approriate Location Depending on the new Location w.r.t to the oldLocation ...
+        ///  The ToolStrip needs to Raft (Join) to the appropriate Location Depending on the new Location w.r.t to the oldLocation ...
         ///  Hence the need for this event listener.
         /// </summary>
         private void OnToolStripLocationChanging(object sender, ToolStripLocationCancelEventArgs e)
@@ -384,7 +384,7 @@ namespace System.Windows.Forms
                 {
                     _currentlyDragging = true;
                     Point newloc = e.NewLocation;
-                    // detect if we havent yet performed a layout - force one so we can
+                    // detect if we haven't yet performed a layout - force one so we can
                     // properly join to the row.
                     if (ToolStripPanelRow is not null && ToolStripPanelRow.Bounds == Rectangle.Empty)
                     {
@@ -414,7 +414,7 @@ namespace System.Windows.Forms
                 && !_wrappedToolStrip.Disposing)
             {
                 // Rejoin the row when visibility is toggled.
-                // we dont want to do this logic at DT, as the DropSourceBehavior
+                // we don't want to do this logic at DT, as the DropSourceBehavior
                 // will set the toolstrip visible = false.
                 if (!Control.Visible)
                 {

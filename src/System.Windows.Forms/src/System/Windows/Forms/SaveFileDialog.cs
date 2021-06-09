@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.IO;
+using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Shell32;
 
@@ -151,6 +152,20 @@ namespace System.Windows.Forms
             return new string[] { GetFilePathFromShellItem(item) };
         }
 
-        private protected override IFileDialog CreateVistaDialog() => new NativeFileSaveDialog();
+        private protected override IFileDialog CreateVistaDialog()
+        {
+            HRESULT hr = Ole32.CoCreateInstance(
+                ref CLSID.FileSaveDialog,
+                IntPtr.Zero,
+                Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
+                ref NativeMethods.ActiveX.IID_IUnknown,
+                out object obj);
+            if (!hr.Succeeded())
+            {
+                Marshal.ThrowExceptionForHR((int)hr);
+            }
+
+            return (IFileSaveDialog)obj;
+        }
     }
 }

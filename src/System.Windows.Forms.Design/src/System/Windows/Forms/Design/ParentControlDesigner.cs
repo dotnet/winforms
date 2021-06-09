@@ -30,8 +30,8 @@ namespace System.Windows.Forms.Design
         private Control _pendingRemoveControl;                              // we've gotten an OnComponentRemoving, and are waiting for OnComponentRemove
         private IComponentChangeService _componentChangeSvc;
         private DragAssistanceManager _dragManager;                         //used to apply snaplines when dragging a new tool rect on the designer's surface
-        private ToolboxSnapDragDropEventArgs _toolboxSnapDragDropEventArgs; //used to store extra info about a beh. svc. dragdrop from the toolbx
-        private ToolboxItemSnapLineBehavior _toolboxItemSnapLineBehavior;   //this is our generic snapline box for dragging comps from the toolbx
+        private ToolboxSnapDragDropEventArgs _toolboxSnapDragDropEventArgs; //used to store extra info about a beh. svc. dragdrop from the toolbox
+        private ToolboxItemSnapLineBehavior _toolboxItemSnapLineBehavior;   //this is our generic snapline box for dragging comps from the toolbox
         private Graphics _graphics;                                         //graphics object of the adornerwindow (via BehaviorService)
 
         // Services that we keep around for the duration of a drag.  you should always check
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This can be called to determine the current grid spacing and mode.
         ///  It is sensitive to what modifier keys the user currently has down and
-        ///  will either return the current grid snap dimensons, or a 1x1 point
+        ///  will either return the current grid snap dimensions, or a 1x1 point
         ///  indicating no snap.
         /// </summary>
         private Size CurrentGridSize
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  Determines the default location for a control added to this designer.
-        ///  it is usualy (0,0), but may be modified if the container has special borders, etc.
+        ///  it is usually (0,0), but may be modified if the container has special borders, etc.
         /// </summary>
         protected virtual Point DefaultControlLocation
         {
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Design
 
                     _drawGrid = value;
 
-                    //invalidate the cotnrol to remove or draw the grid based on the new value
+                    //invalidate the control to remove or draw the grid based on the new value
                     Control control = Control;
                     if (control != null)
                     {
@@ -379,7 +379,7 @@ namespace System.Windows.Forms.Design
             // Ex: we want to add padding on a form to the insides of the borders and below the titlebar.
             Point offset = GetOffsetToClientArea();
 
-            //the desplay rectangle should be the client area combined with the padding value
+            //the display rectangle should be the client area combined with the padding value
             Rectangle displayRectangle = Control.DisplayRectangle;
             displayRectangle.X += offset.X;//offset for non-client area
             displayRectangle.Y += offset.Y;//offset for non-client area
@@ -749,7 +749,7 @@ namespace System.Windows.Forms.Design
                         //name = null;
                         // we don't want to add unsited child controls because
                         // these may be items from a composite control.  if they
-                        // are legitamite children, the ComponentModelPersister would have
+                        // are legitimate children, the ComponentModelPersister would have
                         // sited them already.
                         //
                         continue;
@@ -896,7 +896,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Determines if the this designer can parent to the specified desinger --
+        ///  Determines if the this designer can parent to the specified designer --
         ///  generally this means if the control for this designer can parent the
         ///  given ControlDesigner's control.
         /// </summary>
@@ -906,7 +906,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Determines if the this designer can parent to the specified desinger --
+        ///  Determines if the this designer can parent to the specified designer --
         ///  generally this means if the control for this designer can parent the
         ///  given ControlDesigner's control.
         /// </summary>
@@ -970,7 +970,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Used when draggin a new tool rect on the designer's surface -
+        ///  Used when dragging a new tool rect on the designer's surface -
         ///  this will return some generic snaplines Allowing the rect to
         ///  snap to existing control edges on the surface.
         /// </summary>
@@ -1316,7 +1316,7 @@ namespace System.Windows.Forms.Design
                     updatedRect.Width = ((dragRect.X + dragRect.Width) / gridSize.Width) * gridSize.Width - updatedRect.X;
                     updatedRect.Height = ((dragRect.Y + dragRect.Height) / gridSize.Height) * gridSize.Height - updatedRect.Y;
 
-                    // ASURT 71552 <subhag> Added so that if the updated dimnesion is smaller than grid dimension then snap that dimension to
+                    // ASURT 71552 <subhag> Added so that if the updated dimension is smaller than grid dimension then snap that dimension to
                     // the grid dimension
                     //
                     if (updatedRect.Width < gridSize.Width)
@@ -1762,7 +1762,7 @@ namespace System.Windows.Forms.Design
                 _mouseDragTool = _toolboxService.DeserializeToolboxItem(de.Data, host);
 
                 //If we have a valid toolbox item to drag and
-                //we haven't pushed our behaivor, then do so now...
+                //we haven't pushed our behavior, then do so now...
                 if ((_mouseDragTool != null) && BehaviorService != null && BehaviorService.UseSnapLines)
                 {
                     //demand create
@@ -2150,7 +2150,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override void OnMouseDragMove(int x, int y)
         {
-            //if we puhsed a snapline behavior during a drag operation - make sure we have popped it
+            //if we pushed a snapline behavior during a drag operation - make sure we have popped it
             //if we're now receiving mouse move messages.
             if (_toolboxItemSnapLineBehavior != null && _toolboxItemSnapLineBehavior.IsPushed)
             {

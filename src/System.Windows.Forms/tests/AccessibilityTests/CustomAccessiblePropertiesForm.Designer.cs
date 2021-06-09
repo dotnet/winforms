@@ -318,7 +318,7 @@
             // monthCalendar1
             // 
             this.monthCalendar1.AccessibleDescription = "This is a test MonthCalendar.";
-            this.monthCalendar1.AccessibleName = "monthCalendatTestControl";
+            this.monthCalendar1.AccessibleName = "monthCalendarTestControl";
             this.monthCalendar1.AccessibleRole = System.Windows.Forms.AccessibleRole.Window;
             this.monthCalendar1.Location = new System.Drawing.Point(345, 252);
             this.monthCalendar1.Name = "monthCalendar1";
@@ -383,7 +383,7 @@
             // 
             // menuStrip1
             // 
-            this.menuStrip1.AccessibleDescription = "MenuStrip to test Accessiblity.";
+            this.menuStrip1.AccessibleDescription = "MenuStrip to test Accessibility.";
             this.menuStrip1.AccessibleName = "menuStripTestControl";
             this.menuStrip1.AccessibleRole = System.Windows.Forms.AccessibleRole.Caret;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {

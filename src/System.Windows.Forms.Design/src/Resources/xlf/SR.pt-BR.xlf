@@ -1323,8 +1323,8 @@ Pressione Ctrl+Enter para aceitar Texto.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
-        <source>Place existing controls in new containerDetermines the size of the positioning grid.</source>
-        <target state="new">Place existing controls in new containerDetermines the size of the positioning grid.</target>
+        <source>Determines the size of the positioning grid.</source>
+        <target state="new">Determines the size of the positioning grid.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
@@ -1352,7 +1352,7 @@ Pressione Ctrl+Enter para aceitar Texto.</target>
         <target state="translated">Selecione o caminho para a pasta que será selecionada inicialmente no FolderBrowserDialog.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">Você não pode criar uma nova sessão porque esse gerente de serialização já possui uma sessão de serialização ativa.</target>
         <note />

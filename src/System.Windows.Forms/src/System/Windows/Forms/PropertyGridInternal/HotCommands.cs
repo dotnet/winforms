@@ -12,11 +12,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class HotCommands : PropertyGrid.SnappableControl
     {
-        private object component;
-        private DesignerVerb[] verbs;
-        private LinkLabel label;
-        private bool allowVisible = true;
-        private int optimalHeight = -1;
+        private object _component;
+        private DesignerVerb[] _verbs;
+        private LinkLabel _label;
+        private bool _allowVisible = true;
+        private int _optimalHeight = -1;
 
         internal HotCommands(PropertyGrid owner) : base(owner)
         {
@@ -27,13 +27,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return allowVisible;
+                return _allowVisible;
             }
             set
             {
-                if (allowVisible != value)
+                if (_allowVisible != value)
                 {
-                    allowVisible = value;
+                    _allowVisible = value;
                     if (value && WouldBeVisible)
                     {
                         Visible = true;
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
         {
-            return new HotCommandsAccessibleObject(this, ownerPropertyGrid);
+            return new HotCommandsAccessibleObject(this, OwnerPropertyGrid);
         }
 
         public override Rectangle DisplayRectangle
@@ -68,9 +68,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (label is null)
+                if (_label is null)
                 {
-                    label = new LinkLabel
+                    _label = new LinkLabel
                     {
                         Dock = DockStyle.Fill,
                         LinkBehavior = LinkBehavior.AlwaysUnderline,
@@ -78,11 +78,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                         // use default LinkLabel colors for regular, active, and visited
                         DisabledLinkColor = SystemColors.ControlDark
                     };
-                    label.LinkClicked += new LinkLabelLinkClickedEventHandler(LinkClicked);
-                    Controls.Add(label);
+                    _label.LinkClicked += new LinkLabelLinkClickedEventHandler(LinkClicked);
+                    Controls.Add(_label);
                 }
 
-                return label;
+                return _label;
             }
         }
 
@@ -90,25 +90,25 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return (component is not null);
+                return (_component is not null);
             }
         }
 
         public override int GetOptimalHeight(int width)
         {
-            if (optimalHeight == -1)
+            if (_optimalHeight == -1)
             {
                 int lineHeight = (int)(1.5 * Font.Height);
                 int verbCount = 0;
-                if (verbs is not null)
+                if (_verbs is not null)
                 {
-                    verbCount = verbs.Length;
+                    verbCount = _verbs.Length;
                 }
 
-                optimalHeight = verbCount * lineHeight + 8;
+                _optimalHeight = verbCount * lineHeight + 8;
             }
 
-            return optimalHeight;
+            return _optimalHeight;
         }
 
         public override int SnapHeightRequest(int request)
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override void OnFontChanged(EventArgs e)
         {
             base.OnFontChanged(e);
-            optimalHeight = -1;
+            _optimalHeight = -1;
         }
 
         internal void SetColors(Color background, Color normalText, Color link, Color activeLink, Color visitedLink, Color disabledLink)
@@ -174,15 +174,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual void SetVerbs(object component, DesignerVerb[] verbs)
         {
-            if (this.verbs is not null)
+            if (_verbs is not null)
             {
-                for (int i = 0; i < this.verbs.Length; i++)
+                for (int i = 0; i < _verbs.Length; i++)
                 {
-                    this.verbs[i].CommandChanged -= new EventHandler(OnCommandChanged);
+                    _verbs[i].CommandChanged -= new EventHandler(OnCommandChanged);
                 }
 
-                this.component = null;
-                this.verbs = null;
+                _component = null;
+                _verbs = null;
             }
 
             if (component is null || verbs is null || verbs.Length == 0)
@@ -193,15 +193,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                this.component = component;
-                this.verbs = verbs;
+                _component = component;
+                _verbs = verbs;
 
                 for (int i = 0; i < verbs.Length; i++)
                 {
                     verbs[i].CommandChanged += new EventHandler(OnCommandChanged);
                 }
 
-                if (allowVisible)
+                if (_allowVisible)
                 {
                     Visible = true;
                 }
@@ -209,20 +209,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                 SetupLabel();
             }
 
-            optimalHeight = -1;
+            _optimalHeight = -1;
         }
 
         private void SetupLabel()
         {
             Label.Links.Clear();
             StringBuilder sb = new StringBuilder();
-            Point[] links = new Point[verbs.Length];
+            Point[] links = new Point[_verbs.Length];
             int charLoc = 0;
             bool firstVerb = true;
 
-            for (int i = 0; i < verbs.Length; i++)
+            for (int i = 0; i < _verbs.Length; i++)
             {
-                if (verbs[i].Visible && verbs[i].Supported)
+                if (_verbs[i].Visible && _verbs[i].Supported)
                 {
                     if (!firstVerb)
                     {
@@ -231,7 +231,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         charLoc += 2;
                     }
 
-                    string name = verbs[i].Text;
+                    string name = _verbs[i].Text;
 
                     links[i] = new Point(charLoc, name.Length);
                     sb.Append(name);
@@ -242,12 +242,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             Label.Text = sb.ToString();
 
-            for (int i = 0; i < verbs.Length; i++)
+            for (int i = 0; i < _verbs.Length; i++)
             {
-                if (verbs[i].Visible && verbs[i].Supported)
+                if (_verbs[i].Visible && _verbs[i].Supported)
                 {
-                    LinkLabel.Link link = Label.Links.Add(links[i].X, links[i].Y, verbs[i]);
-                    if (!verbs[i].Enabled)
+                    LinkLabel.Link link = Label.Links.Add(links[i].X, links[i].Y, _verbs[i]);
+                    if (!_verbs[i].Enabled)
                     {
                         link.Enabled = false;
                     }

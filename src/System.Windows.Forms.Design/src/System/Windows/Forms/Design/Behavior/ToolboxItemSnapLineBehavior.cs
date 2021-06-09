@@ -65,7 +65,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  OnDragDrop can be overridden so that a Behavior can specify its own
         ///  Drag/Drop rules.
-        ///  CONSIDER: Should we have the BehaivorService fire push/pop events on Behaviors???
+        ///  CONSIDER: Should we have the BehaviorService fire push/pop events on Behaviors???
         /// </summary>
         public bool IsPushed
         {

@@ -1,3 +1,5 @@
+override System.Windows.Forms.ContainerControl.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
+*REMOVED*override System.Windows.Forms.PropertyGrid.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 System.Windows.Forms.Application.ApplicationDefaults
 System.Windows.Forms.ApplicationDefaultsExtension
 ~System.Windows.Forms.Application.ApplicationDefaults.TryAddDefaultValue(string PropertyName, object value) -> bool

@@ -615,7 +615,7 @@ namespace System.ComponentModel.Design.Serialization
 
         /// <summary>
         ///  This method is called immediately after the first time
-        ///  BeginLoad is invoked.  This is an appopriate place to
+        ///  BeginLoad is invoked.  This is an appropriate place to
         ///  add custom services to the loader host.  Remember to
         ///  remove any custom services you add here by overriding
         ///  Dispose.
@@ -630,7 +630,7 @@ namespace System.ComponentModel.Design.Serialization
             LoaderHost.AddService(typeof(INameCreationService), this);
             LoaderHost.AddService(typeof(IDesignerSerializationService), this);
 
-            // The code dom desinger loader requires a working ITypeResolutionService to
+            // The code dom designer loader requires a working ITypeResolutionService to
             // function.  See if someone added one already, and if not, provide
             // our own.
             if (GetService(typeof(ITypeResolutionService)) is null)
@@ -666,7 +666,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Determines if the designer needs to be reloaded.  It does this
         ///  by examining the code dom tree for changes.  This does not check
-        ///  for outside infleuences; the caller should already think a reload
+        ///  for outside influences; the caller should already think a reload
         ///  is needed -- this is just a last optimization.
         /// </summary>
         protected override bool IsReloadNeeded()
@@ -1145,7 +1145,7 @@ namespace System.ComponentModel.Design.Serialization
             b.Replace('`', '_');
             baseName = b.ToString();
 
-            // Now hash up all of the member variable names using a case insensitve hash.
+            // Now hash up all of the member variable names using a case insensitive hash.
             CodeTypeDeclaration type = _documentType;
             Hashtable memberHash = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
 
@@ -1213,7 +1213,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Determines if the given name is valid.  A name
         ///  creation service may have rules defining a valid
-        ///  name, and this method allows the sevice to enforce
+        ///  name, and this method allows the service to enforce
         ///  those rules.
         /// </summary>
         bool INameCreationService.IsValidName(string name)
@@ -1285,7 +1285,7 @@ namespace System.ComponentModel.Design.Serialization
         /// <summary>
         ///  Determines if the given name is valid.  A name
         ///  creation service may have rules defining a valid
-        ///  name, and this method allows the sevice to enforce
+        ///  name, and this method allows the service to enforce
         ///  those rules.  It is similar to IsValidName, except
         ///  that this method will throw an exception if the
         ///  name is invalid.  This allows implementors to provide

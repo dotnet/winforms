@@ -56,7 +56,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
             PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(PropertyGrid))[0];
             PropertyDescriptorGridEntry gridEntry = new PropertyDescriptorGridEntry(propertyGrid, null, property, false);
-            propertyGridView.TestAccessor().Dynamic.selectedGridEntry = gridEntry;
+            propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
             ownerControl.Visible = true;
 

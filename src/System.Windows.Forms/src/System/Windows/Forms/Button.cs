@@ -31,7 +31,7 @@ namespace System.Windows.Forms
         private const int InvalidDimensionValue = int.MinValue;
 
         /// <summary>
-        ///  For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels
+        ///  For buttons whose FlatStyle = FlatStyle.Flat, this property specifies the size, in pixels
         ///  of the border around the button.
         /// </summary>
         private Size _systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is called when creating a window. Inheriting classes can overide
+        ///  This is called when creating a window. Inheriting classes can override
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.
@@ -343,7 +343,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Lets a control process mnmemonic characters. Inheriting classes can
+        ///  Lets a control process mnemonic characters. Inheriting classes can
         ///  override this to add extra functionality, but should not forget to call
         ///  base.ProcessMnemonic(charCode); to ensure basic functionality
         ///  remains unchanged.

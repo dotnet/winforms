@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Stores the referemce to the tabpage that is undergoing the TabControl event.
+        ///  Stores the reference to the tabpage that is undergoing the TabControl event.
         /// </summary>
         public TabPage? TabPage { get; }
 

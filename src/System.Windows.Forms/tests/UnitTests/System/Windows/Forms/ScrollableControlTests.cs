@@ -172,10 +172,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false, 0x56210000)]
         [InlineData(false, true, 0x56210000)]
         [InlineData(false, false, 0x56010000)]
-        public void ScrollableControl_CreateParams_GetVScroll_ReturnsExpected(bool vScroll, bool verticalScrollVisbile, int expectedStyle)
+        public void ScrollableControl_CreateParams_GetVScroll_ReturnsExpected(bool vScroll, bool verticalScrollVisible, int expectedStyle)
         {
             using var control = new SubScrollableControl();
-            control.VerticalScroll.Visible = verticalScrollVisbile;
+            control.VerticalScroll.Visible = verticalScrollVisible;
             control.VScroll = vScroll;
 
             CreateParams createParams = control.CreateParams;

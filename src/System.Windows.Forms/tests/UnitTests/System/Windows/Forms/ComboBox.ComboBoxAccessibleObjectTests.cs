@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ComboBoxAccessibleObject_ControlType_IsComboBox_IfAccessibeRoleIsDefault()
+        public void ComboBoxAccessibleObject_ControlType_IsComboBox_IfAccessibleRoleIsDefault()
         {
             using ComboBox control = new ComboBox();
             // AccessibleRole is not set = Default

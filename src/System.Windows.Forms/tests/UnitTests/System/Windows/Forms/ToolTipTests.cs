@@ -709,7 +709,7 @@ namespace System.Windows.Forms.Tests
             SubControl control = new SubControl();
             control.CreateControl();
 
-            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaroung to create the toolTip native window Handle
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
 
             toolTip.SetToolTip(control, "Some test text");
 
@@ -729,7 +729,7 @@ namespace System.Windows.Forms.Tests
             topLevelControl.CreateControl();
             control.CreateControl();
 
-            Assert.True(toolTip.Handle != IntPtr.Zero); // A workaroung to create the toolTip native window Handle
+            Assert.True(toolTip.Handle != IntPtr.Zero); // A workaround to create the toolTip native window Handle
 
             toolTip.SetToolTip(control, "Some test text");
             toolTip.RemoveAll();

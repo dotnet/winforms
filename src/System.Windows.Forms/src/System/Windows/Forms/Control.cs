@@ -246,7 +246,7 @@ namespace System.Windows.Forms
         private static readonly int s_controlsCollectionProperty = PropertyStore.CreateKey();
         private static readonly int s_backColorProperty = PropertyStore.CreateKey();
         private static readonly int s_foreColorProperty = PropertyStore.CreateKey();
-        private static readonly int s_fontProperty = PropertyStore.CreateKey();
+        internal static readonly int s_fontProperty = PropertyStore.CreateKey();
 
         private static readonly int s_backgroundImageProperty = PropertyStore.CreateKey();
         private static readonly int s_fontHandleWrapperProperty = PropertyStore.CreateKey();
@@ -332,6 +332,17 @@ namespace System.Windows.Forms
         // variable here because we hit this a lot
         private UICuesStates _uiCuesState;
 
+        // Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
+        // Dpi changed events and explicit Font change/assignment. Caching Font values for each Dpi is complex.
+        // ToDo: Look into caching Dpi and control bounds for each Dpi to improve perf.
+        // https://github.com/dotnet/winforms/issues/5047
+        private Font _scaledControlFont;
+        private FontHandleWrapper _scaledFontWrapper;
+
+        // ContainerControls like 'PropertyGrid' scale their children when they resize.
+        // no explicit scaling of children required in such cases. They have specific logic.
+        internal bool _doNotScaleChildren;
+
 #if DEBUG
         internal int LayoutSuspendCount
         {
@@ -373,7 +384,7 @@ namespace System.Windows.Forms
 #endif
             Properties = new PropertyStore();
 
-            // Initialize DPI to the value on the primary screen, we will have the correct value when the Handle is created.
+            // Initialize Dpi to the value on the primary screen, we will have the correct value when the Handle is created.
             _deviceDpi = _oldDeviceDpi = DpiHelper.DeviceDpi;
 
             _window = new ControlNativeWindow(this);
@@ -392,7 +403,7 @@ namespace System.Windows.Forms
 
             // We baked the "default default" margin and min size into CommonProperties
             // so that in the common case the PropertyStore would be empty.  If, however,
-            // someone overrides these Default* methads, we need to write the default
+            // someone overrides these Default* methods, we need to write the default
             // value into the PropertyStore in the ctor.
 
             if (DefaultMargin != CommonProperties.DefaultMargin)
@@ -560,7 +571,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns a specific AccessibleObbject associated w/ the objectID
+        ///  Returns a specific AccessibleObject associated w/ the objectID
         /// </summary>
         protected virtual AccessibleObject GetAccessibilityObjectById(int objectId)
         {
@@ -1029,7 +1040,7 @@ namespace System.Windows.Forms
                     // Valid values are 0x0 to 0x4
                     SourceGenerated.EnumValidator.Validate(value);
 
-                    // Check if the value is either center, strech or zoom;
+                    // Check if the value is either center, stretch or zoom;
                     if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch)
                     {
                         SetStyle(ControlStyles.ResizeRedraw, true);
@@ -1282,7 +1293,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // Ff this control always cachest text or the handle hasn't been created,
+                // Ff this control always caches text or the handle hasn't been created,
                 // just bail.
                 if (GetStyle(ControlStyles.CacheText) || !IsHandleCreated)
                 {
@@ -1404,7 +1415,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The contextMenuStrip associated with this control. The contextMenuStrip
         ///  will be shown when the user right clicks the mouse on the control.
-        ///  Note: if a context menu is also assigned, it will take precidence over this property.
+        ///  Note: if a context menu is also assigned, it will take precedence over this property.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]
@@ -1843,8 +1854,8 @@ namespace System.Windows.Forms
         private void DetachContextMenuStrip(object sender, EventArgs e) => ContextMenuStrip = null;
 
         /// <summary>
-        ///  DPI value either for the primary screen or for the monitor where the top-level parent is displayed when
-        ///  EnableDpiChangedMessageHandling option is on and the application is per-monitor V2 DPI-aware (rs2+)
+        ///  Dpi value either for the primary screen or for the monitor where the top-level parent is displayed when
+        ///  EnableDpiChangedMessageHandling option is on and the application is per-monitor V2 Dpi-aware (rs2+)
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Always)]
@@ -2079,24 +2090,30 @@ namespace System.Windows.Forms
             [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             get
             {
-                Font font = (Font)Properties.GetObject(s_fontProperty);
+                // if application is in PermonitorV2 mode and font is scaled when moved between monitors.
+                // ToDo: need to work on getting Font serialization at design time right.
+                if (ScaledControlFont is not null)
+                {
+                    return ScaledControlFont;
+                }
+
+                if (TryGetExplicitlySetFont(out Font font))
+                {
+                    return font;
+                }
+
+                font = GetParentFont();
                 if (font is not null)
                 {
                     return font;
                 }
 
-                Font f = GetParentFont();
-                if (f is not null)
-                {
-                    return f;
-                }
-
                 if (IsActiveX)
                 {
-                    f = ActiveXAmbientFont;
-                    if (f is not null)
+                    font = ActiveXAmbientFont;
+                    if (font is not null)
                     {
-                        return f;
+                        return font;
                     }
                 }
 
@@ -2113,8 +2130,6 @@ namespace System.Windows.Forms
             set
             {
                 Font local = (Font)Properties.GetObject(s_fontProperty);
-                Font resolved = Font;
-
                 bool localChanged = false;
                 if (value is null)
                 {
@@ -2140,56 +2155,22 @@ namespace System.Windows.Forms
                     // Store new local value
                     Properties.SetObject(s_fontProperty, value);
 
-                    // We only fire the Changed event if the "resolved" value
-                    // changed, however we must update the font if the local
-                    // value changed...
-                    if (!resolved.Equals(value))
-                    {
-                        // Cleanup any font handle wrapper...
-                        DisposeFontHandle();
-
-                        if (Properties.ContainsInteger(s_fontHeightProperty))
-                        {
-                            Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
-                        }
-
-                        // Font is an ambient property.  We need to layout our parent because Font may
-                        // change our size.  We need to layout ourselves because our children may change
-                        // size by inheriting the new value.
-                        using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
-                        {
-                            OnFontChanged(EventArgs.Empty);
-                        }
-                    }
-                    else
-                    {
-                        if (IsHandleCreated && !GetStyle(ControlStyles.UserPaint))
-                        {
-                            DisposeFontHandle();
-                            SetWindowFont();
-                        }
-                    }
-                }
-            }
-        }
-
-        internal void ScaleFont(float factor)
-        {
-            Font local = (Font)Properties.GetObject(s_fontProperty);
-            Font resolved = Font;
-            Font newFont = new Font(Font.FontFamily, Font.Size * factor, Font.Style);
-
-            if ((local is null) || !local.Equals(newFont))
-            {
-                Properties.SetObject(s_fontProperty, newFont);
-
-                if (!resolved.Equals(newFont))
-                {
+                    // Cleanup any font handle wrapper...
                     DisposeFontHandle();
+
+                    ScaledControlFont = value;
 
                     if (Properties.ContainsInteger(s_fontHeightProperty))
                     {
-                        Properties.SetInteger(s_fontHeightProperty, newFont.Height);
+                        Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
+                    }
+
+                    // Font is an ambient property.  We need to layout our parent because Font may
+                    // change our size.  We need to layout ourselves because our children may change
+                    // size by inheriting the new value.
+                    using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                    {
+                        OnFontChanged(EventArgs.Empty);
                     }
                 }
             }
@@ -2207,9 +2188,18 @@ namespace System.Windows.Forms
         {
             get
             {
-                Font font = (Font)Properties.GetObject(s_fontProperty);
+                // if application is in PermonitorV2 mode and font is scaled when application moved between monitor.
+                if (ScaledControlFont is not null)
+                {
+                    if (_scaledFontWrapper is null)
+                    {
+                        _scaledFontWrapper = new FontHandleWrapper(ScaledControlFont);
+                    }
 
-                if (font is not null)
+                    return _scaledFontWrapper.Handle;
+                }
+
+                if (TryGetExplicitlySetFont(out Font font))
                 {
                     FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     if (fontHandle is null)
@@ -2270,8 +2260,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Font font = (Font)Properties.GetObject(s_fontProperty);
-                    if (font is not null)
+                    if (TryGetExplicitlySetFont(out Font font))
                     {
                         fontHeight = font.Height;
                         Properties.SetInteger(s_fontHeightProperty, fontHeight);
@@ -2712,7 +2701,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsActiveX => GetExtendedState(ExtendedStates.IsActiveX);
 
-        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we dont return the parent
+        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we don't return the parent
         // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
         // Hence we have a new internal property IsContainerControl which returns false for all Everett control, but
         // this property is overidden in SplitContainer to return true so that we skip the SplitContainer
@@ -3168,7 +3157,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  This property is required by certain controls (TabPage) to render its transparency using theming API.
-        ///  We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
+        ///  We don't want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
         /// </summary>
         internal virtual bool RenderTransparencyWithVisualStyles => false;
 
@@ -3282,7 +3271,7 @@ namespace System.Windows.Forms
                 if (oldValue != RightToLeft)
                 {
                     // Setting RTL on a container does not cause the container to change size.
-                    // Only the children need to have thier layout updated.
+                    // Only the children need to have their layout updated.
                     using (new LayoutTransaction(this, this, PropertyNames.RightToLeft))
                     {
                         OnRightToLeftChanged(EventArgs.Empty);
@@ -3307,6 +3296,24 @@ namespace System.Windows.Forms
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual bool ScaleChildren => true;
+
+        /// <summary>
+        /// Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
+        /// Dpi changed events and explicit Font change/assignment. Caching Font values for each Dpi is complex.
+        /// ToDo: Look into caching Dpi and control bounds for each Dpi to improve perf.
+        /// https://github.com/dotnet/winforms/issues/5047
+        /// </summary>
+        internal Font ScaledControlFont
+        {
+            get => _scaledControlFont;
+            set
+            {
+                _scaledFontWrapper?.Dispose();
+                _scaledFontWrapper = null;
+
+                _scaledControlFont = value;
+            }
+        }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public override ISite Site
@@ -3606,7 +3613,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // This auto upgraged v1 client to per-process doublebuffering logic
+        // This auto upgraded v1 client to per-process doublebuffering logic
         private BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
 
         /// <summary>
@@ -3620,7 +3627,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                // Controls in design mode always draw their accellerators.
+                // Controls in design mode always draw their accelerators.
                 if (!IsHandleCreated || DesignMode)
                 {
                     return true;
@@ -3636,11 +3643,11 @@ namespace System.Windows.Forms
                 // the second represent keyboard cues.  "F" is the UICuesStates.FocusMask,
                 // "F0" is the UICuesStates.KeyboardMask
 
-                // We check here if we have cached state.  If we dont, we need to initialize ourself.
+                // We check here if we have cached state.  If we don't, we need to initialize ourself.
                 // We do this by checking "MenuAccessKeysUnderlined" - we show if this returns true.
 
                 // If MenuAccessKeysUnderlined returns false, we have to manually call CHANGEUISTATE on the topmost control
-                // Why? Well the way the API seems to work is that it stores in a bit flag for the the hidden
+                // Why? Well the way the API seems to work is that it stores in a bit flag for the hidden
                 // state.
 
                 // Details from the Menu keydown to changed value of _uiCuesState.
@@ -4381,7 +4388,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the DPI resolution of the screen this control is displayed on changes,
+        ///  Occurs when the Dpi resolution of the screen this control is displayed on changes,
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
         ///  This event is raised before the top level parent window receives WM_DPICHANGED message.
         /// </summary>
@@ -4394,7 +4401,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the DPI resolution of the screen this control is displayed on changes,
+        ///  Occurs when the Dpi resolution of the screen this control is displayed on changes,
         ///  either when the top level window is moved between monitors or when the OS settings are changed.
         ///  This message is received after the top level parent window receives WM_DPICHANGED message.
         /// </summary>
@@ -5453,7 +5460,7 @@ namespace System.Windows.Forms
         ///  Attempts to find a control Object that we can use to marshal
         ///  calls.  We must marshal calls to a control with a window
         ///  handle, so we traverse up the parent chain until we find one.
-        ///  Failing that, we just return ouselves.
+        ///  Failing that, we just return ourselves.
         /// </summary>
         private Control FindMarshalingControl()
         {
@@ -5708,7 +5715,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This new Internal method checks the updateCount to signify that the control is within the "BeginUpdate" and "EndUpdate" cycle.
         ///  Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
-        ///  even if the control in "Begin - End" update cycle. Using thie Function we can guard against repetitively redrawing the control.
+        ///  even if the control in "Begin - End" update cycle. Using this Function we can guard against repetitively redrawing the control.
         /// </summary>
         internal bool IsUpdating()
         {
@@ -6376,7 +6383,7 @@ namespace System.Windows.Forms
         ///  follow up the control's parent chain until it finds a control or form that does
         ///  have a window handle.  If no appropriate handle can be found, invoke will throw
         ///  an exception.  Exceptions that are raised during the call will be
-        ///  propapgated back to the caller.
+        ///  propagated back to the caller.
         ///
         ///  There are five functions on a control that are safe to call from any
         ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
@@ -6395,7 +6402,7 @@ namespace System.Windows.Forms
         ///  follow up the control's parent chain until it finds a control or form that does
         ///  have a window handle.  If no appropriate handle can be found, invoke will throw
         ///  an exception.  Exceptions that are raised during the call will be
-        ///  propapgated back to the caller.
+        ///  propagated back to the caller.
         ///
         ///  There are five functions on a control that are safe to call from any
         ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
@@ -6416,7 +6423,7 @@ namespace System.Windows.Forms
         ///  of that thread. The callback is then invoked using that ExecutionContext (which includes info like the
         ///  compressed security stack).
         ///
-        ///  NOTE: The one part of the ExecutionContext that we DONT want applied to the callback is its SyncContext,
+        ///  NOTE: The one part of the ExecutionContext that we DON'T want applied to the callback is its SyncContext,
         ///  since this is the SyncContext of the other thread. So we grab the SyncContext of OUR thread, and pass
         ///  this through to the callback to use instead.
         ///
@@ -6596,8 +6603,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsFontSet()
         {
-            Font font = (Font)Properties.GetObject(s_fontProperty);
-            if (font is not null)
+            if (Properties.GetObject(s_fontProperty) is not null)
             {
                 return true;
             }
@@ -6728,7 +6734,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Determines if charCode is the mnemonic character in text.
-        ///  The mnemonic character is the character imediately following the first
+        ///  The mnemonic character is the character immediately following the first
         ///  instance of "&amp;" in text
         /// </summary>
         public static bool IsMnemonic(char charCode, string text)
@@ -6791,6 +6797,18 @@ namespace System.Windows.Forms
             return false;
         }
 
+        // Checks if this is a container control and will be scaled by parent.
+        private bool IsScaledByParent(Control control)
+        {
+            Control parentControl = control.Parent;
+            while (parentControl is not null and not ContainerControl)
+            {
+                parentControl = parentControl.Parent;
+            }
+
+            return parentControl is ContainerControl;
+        }
+
         private void ListenToUserPreferenceChanged(bool listen)
         {
             if (GetExtendedState(ExtendedStates.ListeningToUserPreferenceChanged))
@@ -6810,7 +6828,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Transforms an integer coordinate from logical to device units
-        ///  by scaling it for the current DPI and rounding down to the nearest integer value.
+        ///  by scaling it for the current Dpi and rounding down to the nearest integer value.
         /// </summary>
         public int LogicalToDeviceUnits(int value)
         {
@@ -6819,7 +6837,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Transforms size from logical to device units by scaling it for the current
-        ///  DPI and rounding down to the nearest integer value for width and height.
+        ///  Dpi and rounding down to the nearest integer value for width and height.
         /// </summary>
         /// <param name="value"> size to be scaled</param>
         /// <returns> scaled size</returns>
@@ -7278,7 +7296,7 @@ namespace System.Windows.Forms
             // Cleanup any font handle wrapper...
             DisposeFontHandle();
 
-            if (IsHandleCreated && !GetStyle(ControlStyles.UserPaint))
+            if (IsHandleCreated)
             {
                 SetWindowFont();
             }
@@ -7423,7 +7441,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_fontProperty) is null)
+            if (!IsFontSet())
             {
                 OnFontChanged(e);
             }
@@ -7453,7 +7471,7 @@ namespace System.Windows.Forms
 
             SetState(States.ParentRecreating, false);
 
-            // if our parent was initially the the parent who's handle just got recreated, we need
+            // if our parent was initially the parent who's handle just got recreated, we need
             // to recreate ourselves so that we get notification.  See UpdateReflectParent for more details.
             if (ReflectParent == ParentInternal)
             {
@@ -8643,8 +8661,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // We need to use themeing painting for certain controls (like TabPage) when they parent other controls.
-            // But we dont want to to this always as this causes serious preformance (at Runtime and DesignTime)
+            // We need to use theming painting for certain controls (like TabPage) when they parent other controls.
+            // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
             // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
             if (Application.RenderWithVisualStyles && parent.RenderTransparencyWithVisualStyles)
             {
@@ -8860,14 +8878,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Peforms data validation (not paint validation!) on a single control.
+        ///  Performs data validation (not paint validation!) on a single control.
         ///
         ///  Returns whether validation failed:
         ///  False = Validation succeeded, control is valid, accept its new value
         ///  True = Validation was cancelled, control is invalid, reject its new value
         ///
         ///  NOTE: This is the lowest possible level of validation. It does not account
-        ///  for the context in which the validation is occuring, eg. change of focus
+        ///  for the context in which the validation is occurring, eg. change of focus
         ///  between controls in a container. Stuff like that is handled by the caller.
         /// </summary>
         internal bool PerformControlValidation(bool bulkValidation)
@@ -9109,7 +9127,7 @@ namespace System.Windows.Forms
                 {
                     if (msg.Msg == (int)User32.WM.KEYDOWN || msg.Msg == (int)User32.WM.SYSKEYDOWN)
                     {
-                        // check if IsInputKey has already procssed this message
+                        // check if IsInputKey has already processed this message
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetExtendedState(ExtendedStates.InputKey) || target.IsInputKey(keyData))
                         {
@@ -9119,7 +9137,7 @@ namespace System.Windows.Forms
                     }
                     else if (msg.Msg == (int)User32.WM.CHAR || msg.Msg == (int)User32.WM.SYSCHAR)
                     {
-                        // check if IsInputChar has already procssed this message
+                        // check if IsInputChar has already processed this message
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetExtendedState(ExtendedStates.InputChar) || target.IsInputChar((char)msg.WParam))
                         {
@@ -9248,7 +9266,7 @@ namespace System.Windows.Forms
             else
             {
                 // If a system control has no children in the Controls collection we
-                // restore the the PRF_CHILDREN flag because it may internally
+                // restore the PRF_CHILDREN flag because it may internally
                 // have nested children we do not know about.  ComboBox is a
                 // good example.
                 if (Controls.Count == 0)
@@ -9485,13 +9503,13 @@ namespace System.Windows.Forms
 
             if (keyCode != Keys.F10 && keyCode != Keys.Menu && keyCode != Keys.Tab)
             {
-                return;  // PERF: dont WM_QUERYUISTATE if we dont have to.
+                return;  // PERF: don't WM_QUERYUISTATE if we don't have to.
             }
 
             Control topMostParent = null;
             User32.UISF current = unchecked((User32.UISF)(long)User32.SendMessageW(this, User32.WM.QUERYUISTATE));
 
-            // dont trust when a control says the accelerators are showing.
+            // don't trust when a control says the accelerators are showing.
             // make sure the topmost parent agrees with this as we could be in a mismatched state.
             if (current == 0 /*accelerator and focus cues are showing*/)
             {
@@ -9735,8 +9753,8 @@ namespace System.Windows.Forms
                     // do the main work of recreating the handle
                     DestroyHandle();
 
-                    // Note that CreateHandle --> _window.CreateHandle may fail due to DPI awareness setting.
-                    // By carefully choosing the correct parking window / keeping this and this.Parent DPI awareness untouched,
+                    // Note that CreateHandle --> _window.CreateHandle may fail due to Dpi awareness setting.
+                    // By carefully choosing the correct parking window / keeping this and this.Parent Dpi awareness untouched,
                     // the call shouldn't fail.
                     // However, it could fail if this.CreateParams.Parent is changed outside our control.
                     CreateHandle();
@@ -9804,7 +9822,7 @@ namespace System.Windows.Forms
                     // us back.
                     if (User32.SetParent(new HandleRef(this, Handle), parentHandle) == IntPtr.Zero)
                     {
-                        // Somehow we failed to SetParent due to, e.g., different DPI awareness setting.
+                        // Somehow we failed to SetParent due to, e.g., different Dpi awareness setting.
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                     }
                 }
@@ -9864,7 +9882,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  /Releases UI Automation provinder for specified window.
+        ///  /Releases UI Automation provider for specified window.
         /// </summary>
         /// <param name="handle">The window handle.</param>
         internal virtual void ReleaseUiaProvider(IntPtr handle)
@@ -9968,7 +9986,7 @@ namespace System.Windows.Forms
 
             We've had this since Everett,but it seems wrong, redundant and a performance hit.  The
             correct layout calls are already made when bounds or parenting changes, which is all
-            we care about. We may want to call this at layout suspend count == 0, but certainaly
+            we care about. We may want to call this at layout suspend count == 0, but certainly
             not for all resumes.  I  tried removing it, and doing it only when suspendCount == 0,
             but we break things at every step.
 
@@ -10107,60 +10125,56 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Scales a control and its children given a pair of scaling factors.
-        ///  IncludedFactor will be applied to the dimensions of controls based on
-        ///  their RequiredScaling property.  For example, if a control's
-        ///  RequiredScaling property returns Width, the width of the control will
-        ///  be scaled according to the includedFactor value.
-        ///
-        ///  The excludedFactor parameter is used to scale those control bounds who
-        ///  are not included in RequiredScaling.
-        ///
-        ///  If a factor is empty, it indicates that no scaling of those control
-        ///  dimensions should be done.
-        ///
-        ///  The requestingControl property indicates which control has requested
-        ///  the scaling function.
+        /// Scales control and its children given a pair of scaling factors.
+        /// IncludedFactor will be applied to the dimensions of controls based on
+        /// their <see cref="RequiredScaling"/> property.  For example, if a control's
+        /// RequiredScaling property returns Width, the width of the control will
+        /// be scaled according to the includedFactor value.
         /// </summary>
-        internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl)
+        /// <param name="includedFactor">Control bounds that are included in <see cref="RequiredScaling"/>.
+        /// If the factor is empty, it indicates that no scaling of those control dimensions should be done.</param>
+        /// <param name="excludedFactor">Control bounds that are not included in <see cref="RequiredScaling"/>.
+        /// If the factor is empty, it indicates that no scaling of those control dimensions should be done.</param>
+        /// <param name="requestingControl">Control that has requested the scaling function.</param>
+        /// <param name="causedByFontChanged">Indicates if it need to update Window font for controls
+        /// that need it, i.e. controls using default or inherited font, that are also not user-painted.</param>
+        internal virtual void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool causedByFontChanged = false)
         {
             // When we scale, we are establishing new baselines for the
             // positions of all controls.  Therefore, we should resume(false).
             using (new LayoutTransaction(this, this, PropertyNames.Bounds, false))
             {
                 ScaleControl(includedFactor, excludedFactor, requestingControl);
-                ScaleChildControls(includedFactor, excludedFactor, requestingControl);
+
+                // Certain controls like 'PropertyGrid' does special scalling. Differing scaling to their own methods.
+                if (!_doNotScaleChildren)
+                {
+                    ScaleChildControls(includedFactor, excludedFactor, requestingControl, causedByFontChanged);
+                }
             }
 
             LayoutTransaction.DoLayout(this, this, PropertyNames.Bounds);
         }
 
         /// <summary>
-        ///  Scales the children of this control.  The default implementation recursively
-        ///  walks children and calls ScaleControl on each one.
-        ///  IncludedFactor will be applied to the dimensions of controls based on
-        ///  their RequiredScaling property.  For example, if a control's
-        ///  RequiredScaling property returns Width, the width of the control will
-        ///  be scaled according to the includedFactor value.
-        ///
-        ///  The excludedFactor parameter is used to scale those control bounds who
-        ///  are not included in RequiredScaling.
-        ///
-        ///  If a factor is empty, it indicates that no scaling of those control
-        ///  dimensions should be done.
-        ///
-        ///  The requestingControl property indicates which control has requested
-        ///  the scaling function.
-        ///
-        ///  The updateWindowFontIfNeeded parameter indicates if we need to update Window
-        ///  font for controls that need it, i.e. controls using default or inherited font,
-        ///  that are also not user-painted.
+        /// Scales control and its children given a pair of scaling factors.
+        /// IncludedFactor will be applied to the dimensions of controls based on
+        /// their <see cref="RequiredScaling"/> property.  For example, if a control's
+        /// RequiredScaling property returns Width, the width of the control will
+        /// be scaled according to the includedFactor value.
         /// </summary>
-        internal void ScaleChildControls(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool updateWindowFontIfNeeded = false)
+        /// <param name="includedFactor">Control bounds that are included in <see cref="RequiredScaling"/>.
+        /// If the factor is empty, it indicates that no scaling of those control dimensions should be done.</param>
+        /// <param name="excludedFactor">Control bounds that are not included in <see cref="RequiredScaling"/>.
+        /// If the factor is empty, it indicates that no scaling of those control dimensions should be done.</param>
+        /// <param name="requestingControl">Control that has requested the scaling function.</param>
+        /// <param name="causedByFontChanged">Indicates if it need to update Window font for controls
+        /// that need it, i.e. controls using default or inherited font, that are also not user-painted.</param>
+        internal void ScaleChildControls(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool causedByFontChanged = false)
         {
             if (ScaleChildren)
             {
-                ControlCollection controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
+                var controlsCollection = (ControlCollection)Properties.GetObject(s_controlsCollectionProperty);
 
                 if (controlsCollection is not null)
                 {
@@ -10169,15 +10183,23 @@ namespace System.Windows.Forms
                     // enumerate
                     for (int i = 0; i < controlsCollection.Count; i++)
                     {
-                        Control c = controlsCollection[i];
+                        Control control = controlsCollection[i];
 
-                        // Update window font before scaling, as controls often use font metrics during scaling.
-                        if (updateWindowFontIfNeeded)
+                        // ContainerControls get their own OnFontChanged Events and scale.
+                        // If this scaling is caused by ResumeLayout instead of OnFontChanged,
+                        // We would be scaling all container controls.
+                        if (control is ContainerControl && causedByFontChanged)
                         {
-                            c.UpdateWindowFontIfNeeded();
+                            continue;
                         }
 
-                        c.Scale(includedFactor, excludedFactor, requestingControl);
+                        // Update window font before scaling, as controls often use font metrics during scaling.
+                        if (causedByFontChanged)
+                        {
+                            control.UpdateWindowFontIfNeeded();
+                        }
+
+                        control.Scale(includedFactor, excludedFactor, requestingControl, causedByFontChanged);
                     }
                 }
             }
@@ -10189,7 +10211,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateWindowFontIfNeeded()
         {
-            if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && (Properties.GetObject(s_fontProperty) is null))
+            if (DpiHelper.IsScalingRequirementMet && !GetStyle(ControlStyles.UserPaint) && !IsFontSet())
             {
                 SetWindowFont();
             }
@@ -10328,14 +10350,14 @@ namespace System.Windows.Forms
             // Scale Min/Max size
             //
 
-            // make sure we consider the andornments as fixed.  rather than scaling the entire size,
+            // make sure we consider the adornments as fixed.  rather than scaling the entire size,
             // we should pull out the fixed things such as the border, scale the rest, then apply the fixed
             // adornment size.
             Size adornmentSize = adornments.Size;
             if (!minSize.IsEmpty)
             {
                 minSize -= adornmentSize;
-                minSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we dont go below 0.
+                minSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we don't go below 0.
                                         factor.Width,
                                         factor.Height) + adornmentSize;
             }
@@ -10343,12 +10365,12 @@ namespace System.Windows.Forms
             if (!maxSize.IsEmpty)
             {
                 maxSize -= adornmentSize;
-                maxSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we dont go below 0.
+                maxSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we don't go below 0.
                                         factor.Width,
                                         factor.Height) + adornmentSize;
             }
 
-            // Apply the min/max size constraints - dont call ApplySizeConstraints
+            // Apply the min/max size constraints - don't call ApplySizeConstraints
             // as MinimumSize/MaximumSize are currently cleared out.
             Size maximumSize = LayoutUtils.ConvertZeroToUnbounded(maxSize);
             Size scaledSize = LayoutUtils.IntersectSizes(rawScaledBounds.Size, maximumSize);
@@ -10416,6 +10438,23 @@ namespace System.Windows.Forms
 #if DEBUG
                 AssertLayoutSuspendCount(dbgLayoutCheck);
 #endif
+            }
+        }
+
+        // scale font in cache.
+        internal void ScaleFont(float factor)
+        {
+            if (factor == 1.0F)
+            {
+                return;
+            }
+
+            Font currentFont = Font;
+            ScaledControlFont = currentFont.WithSize(currentFont.Size * factor);
+
+            if (Properties.ContainsInteger(s_fontHeightProperty))
+            {
+                Properties.SetInteger(s_fontHeightProperty, ScaledControlFont.Height);
             }
         }
 
@@ -10623,7 +10662,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Performs the work of setting the bounds of this control. Inheriting
-        ///  classes can overide this function to add size restrictions. Inheriting
+        ///  classes can override this function to add size restrictions. Inheriting
         ///  classes must call base.setBoundsCore to actually cause the bounds
         ///  of the control to change.
         /// </summary>
@@ -10816,7 +10855,7 @@ namespace System.Windows.Forms
                         {
                             if (User32.SetParent(new HandleRef(_window, Handle), value) == IntPtr.Zero)
                             {
-                                // Somehow we failed to SetParent, e.g. due to different DPI awareness setting.
+                                // Somehow we failed to SetParent, e.g. due to different Dpi awareness setting.
                                 // Throwing exception will keep the handle parked inside ParkingWindow if recreate == true.
                                 throw new Win32Exception(Marshal.GetLastWin32Error(), SR.Win32SetParentFailed);
                             }
@@ -10973,7 +11012,7 @@ namespace System.Windows.Forms
                 {
                     // We do not do this in the OnPropertyChanged event for visible
                     // Lots of things could cause us to become visible, including a
-                    // parent window.  We do not want to indescriminiately layout
+                    // parent window.  We do not want to indiscriminately layout
                     // due to this, but we do want to layout if the user changed
                     // our visibility.
                     using (new LayoutTransaction(_parent, this, PropertyNames.Visible))
@@ -11298,6 +11337,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Retreive Font from propertybag. This is the FOnt that was explicitly set on control by the application.
+        /// </summary>
+        internal bool TryGetExplicitlySetFont(out Font localFont)
+        {
+            localFont = (Font)Properties.GetObject(s_fontProperty);
+
+            return localFont is not null;
+        }
+
+        /// <summary>
         ///  Stops listening for the mouse leave event.
         /// </summary>
         private void UnhookMouseEvent()
@@ -11429,8 +11478,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Updates the binding manager bindings when the binding proeprty changes.
-        ///  We have the code here, rather than in PropertyChagned, so we don't pull
+        ///  Updates the binding manager bindings when the binding property changes.
+        ///  We have the code here, rather than in PropertyChanged, so we don't pull
         ///  in the data assembly if it's not used.
         /// </summary>
         private void UpdateBindings()
@@ -11614,9 +11663,7 @@ namespace System.Windows.Forms
             if (pref.Category == UserPreferenceCategory.Color)
             {
                 s_defaultFont = null;
-
-                // TODO: IGOR: Why do we need to reset the Font when the Color has changed?
-                Application.Defaults.ResetFont();
+                Application.ScaleDefaultFont(DpiHelper.GetTextScaleFactor());
                 OnSystemColorsChanged(EventArgs.Empty);
             }
         }
@@ -12142,18 +12189,33 @@ namespace System.Windows.Forms
                 _deviceDpi = (int)User32.GetDpiForWindow(this);
 
                 // Controls are by default font scaled.
-                // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
+                // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
                 if (_oldDeviceDpi != _deviceDpi)
                 {
-                    // Checking if font was inherited from parent. Font inherited from parent will receive OnParentFontChanged() events to scale those controls.
-                    Font local = (Font)Properties.GetObject(s_fontProperty);
-                    if (local is not null)
-                    {
-                        var factor = (float)_deviceDpi / _oldDeviceDpi;
-                        Font = new Font(local.FontFamily, local.Size * factor, local.Style, local.Unit, local.GdiCharSet, local.GdiVerticalFont);
-                    }
+                    var factor = (float)_deviceDpi / _oldDeviceDpi;
+                    Font localFont = Font;
+                    Font scaledFont = localFont.WithSize(localFont.Size * factor);
 
-                    RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
+                    // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
+                    // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
+                    // 'OnFontChanged' event explicitly. ex: winforms designer in VS.
+                    if (TryGetExplicitlySetFont(out Font local) || this is not ContainerControl || !IsScaledByParent(this))
+                    {
+                        if (local is not null)
+                        {
+                            Font = scaledFont;
+                        }
+                        else
+                        {
+                            ScaledControlFont = scaledFont;
+                        }
+
+                        RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
+                    }
+                    else
+                    {
+                        ScaledControlFont = scaledFont;
+                    }
                 }
             }
 
@@ -12171,7 +12233,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the "WM_MOUSEHOVER" message... until we get actuall OS support
+        ///  Handles the "WM_MOUSEHOVER" message... until we get actual OS support
         ///  for this, it is implemented as a custom message.
         /// </summary>
         private void WmMouseHover(ref Message m)
@@ -12740,7 +12802,7 @@ namespace System.Windows.Forms
 
             User32.UIS cmd = (User32.UIS)PARAM.LOWORD(m.WParam);
 
-            // if we're initializing, dont bother updating the uiCuesState/Firing the event.
+            // if we're initializing, don't bother updating the uiCuesState/Firing the event.
 
             if (cmd == User32.UIS.INITIALIZE)
             {

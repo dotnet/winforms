@@ -118,7 +118,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the utton portion of a split button  is double clicked.
+        ///  Occurs when the button portion of a split button  is double clicked.
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
         [SRDescription(nameof(SR.ToolStripSplitButtonOnButtonDoubleClickDescr))]

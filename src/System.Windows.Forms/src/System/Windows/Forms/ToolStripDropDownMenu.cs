@@ -446,7 +446,7 @@ namespace System.Windows.Forms
                 checkAndImageMarginWidth += extraImageWidth;
 
                 // NOTE due to the Padding property, we're going to have to recalc the vertical alignment in ToolStripMenuItemInternalLayout.
-                // Dont fuss here over the Y, X is what's critical.
+                // Don't fuss here over the Y, X is what's critical.
 
                 // check and image rect are the same - take the max of the image size and the check size and align
                 nextPoint = new Point(1, scaledCheckPadding.Top);
@@ -577,7 +577,7 @@ namespace System.Windows.Forms
 
         internal override ToolStripItem GetNextItem(ToolStripItem start, ArrowDirection direction, bool rtlAware)
         {
-            // for up/down we dont care about flipping left/right tab should still take you down.
+            // for up/down we don't care about flipping left/right tab should still take you down.
             return GetNextItem(start, direction);
         }
 

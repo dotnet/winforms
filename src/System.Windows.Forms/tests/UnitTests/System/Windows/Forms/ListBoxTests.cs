@@ -167,7 +167,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, 0x562110C1)]
         [InlineData(false, 0x562100C1)]
-        public void ListBox_CreateParams_GetScrolAlwaysVisible_ReturnsExpected(bool scrollAlwaysVisible, int expectedStyle)
+        public void ListBox_CreateParams_GetScrollAlwaysVisible_ReturnsExpected(bool scrollAlwaysVisible, int expectedStyle)
         {
             using var control = new SubListBox
             {

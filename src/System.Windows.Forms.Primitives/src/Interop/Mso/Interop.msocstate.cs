@@ -20,7 +20,7 @@ internal static partial class Interop
             ///  If app is entering modal state, host/component should disable
             ///  its toplevel windows, and reenable them when app exits this
             ///  state.  Also, when this state is entered or exited, host/component
-            ///  should notify approprate inplace objects via
+            ///  should notify appropriate inplace objects via
             ///  IOleInPlaceActiveObject::EnableModeless.
             /// </summary>
             Modal = 1,

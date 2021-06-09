@@ -266,7 +266,7 @@ namespace System.Windows.Forms
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
                 {
-                    return -1; // we dont support empty or null keys.
+                    return -1; // we don't support empty or null keys.
                 }
 
                 // step 1 - check the last cached item
