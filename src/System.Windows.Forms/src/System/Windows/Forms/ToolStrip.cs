@@ -4079,6 +4079,20 @@ namespace System.Windows.Forms
                         _toolStripGrip.ToolStrip_RescaleConstants(deviceDpiOld, deviceDpiNew);
                     }
 
+                    // ToolStripItems are components and have Font property. Components does not
+                    // receive DPICHANGED messages and ToolstripItems doesn't carry parent-child
+                    // relationship with owner to get scaled by parent/Container. For these reasons,
+                    // they need to be explicitly updated for the font when Dpi changes. If font was
+                    // not explicitly set, DefaultFont, that is scaled to current Dpi, will be applied.
+                    var factor = (float)deviceDpiNew / deviceDpiOld;
+                    foreach (ToolStripItem item in Items)
+                    {
+                        if(item.TryGetExplicitlySetFont(out Font local))
+                        {
+                            item.Font = local.WithSize(local.Size * factor);
+                        }
+                    }
+
                     // We need to delegate this "event" to the Controls/Components, which are
                     // not directly affected by this, but need to consume.
                     _rescaleConstsCallbackDelegate?.Invoke(deviceDpiOld, deviceDpiNew);
