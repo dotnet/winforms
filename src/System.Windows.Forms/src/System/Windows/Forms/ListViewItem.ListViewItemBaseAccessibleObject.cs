@@ -140,7 +140,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View == View.Details || _owningListView.View == View.Tile)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewsException,
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewsException,
                         nameof(View.LargeIcon),
                         nameof(View.List),
                         nameof(View.SmallIcon)));
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View == View.Details || _owningListView.View == View.Tile)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewsException,
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewsException,
                         nameof(View.LargeIcon),
                         nameof(View.List),
                         nameof(View.SmallIcon)));

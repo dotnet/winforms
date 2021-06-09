@@ -6481,12 +6481,12 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Umožňuje změnit atributy značky vložení.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="new">The current accessibility object is only for the ListView in {0} view</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
         <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
         <note />

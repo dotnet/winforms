@@ -43,7 +43,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View != View.Details)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewException, nameof(View.Details)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Details)));
                 }
 
                 return !_owningListView.SupportsListViewSubItems || _owningListView.Columns.Count <= index || index < 0
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View != View.Details)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewException, nameof(View.Details)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Details)));
                 }
 
                 return !_owningListView.IsHandleCreated || !_owningListView.SupportsListViewSubItems
