@@ -2,13 +2,13 @@
 
 ## Prerequisites
 
-Follow the prerequisites listed at [Developer Guide](developer-guide.md).
+Follow the pre-requisites listed at [Developer Guide](developer-guide.md).
 
 ## Building
 
 ### Building from command line
 
-* Run `.\build.cmd` from the repository root. This builds the `Winforms.sln` using the default config (Debug|Any CPU).
+* Run `.\build.cmd` from the repousiotry root. This builds the `Winforms.sln` using the default config (Debug|Any CPU).
 * To specify a build configuration, add `-configuration` followed by the config such as `.\build -configuration Release`.
 
 Note that this does **not** build using your machine-wide installed version of the dotnet sdk. It builds using the repo-local .NET SDK specified in the global.json in the repository root.
