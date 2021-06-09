@@ -56,7 +56,7 @@ namespace System.Windows.Forms
         internal const int RTF = 0x0040;
         internal const int KINDMASK = TEXTLF | TEXTCRLF | RTF;
 
-        // This is where we store the reched library.
+        // This is where we store the Rich Edit library.
         private static IntPtr moduleHandle;
 
         private const string SZ_RTF_TAG = "{\\rtf";
