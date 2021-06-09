@@ -1283,7 +1283,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the formatting options for text output (Whether the mask returned from the Text
         ///  property includes Literals and/or prompt characters).
-        ///  When prompt characters are excluded, they returned as spaces in the string returned.
+        ///  When prompt characters are excluded, they're returned as spaces in the string returned.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MaskedTextBoxTextMaskFormat))]
