@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Layout
         // value are sorted. While Array.Sort() was documented as not a being stable sort,
         // we need to preserve the order of same elements as it used to be with the old algorithm since
         // some customers are putting more than one control in the same TableLayout cell
-        // and we rely on this order to resovle the conflict
+        // and we rely on this order to resolve the conflict
 
         private static int GetMedian(int low, int hi)
         {
@@ -257,10 +257,10 @@ namespace System.Windows.Forms.Layout
         ///  GetPreferredSize:  Called on the container to determine the size that best fits its contents.
         ///  Container: IArrangedElement to determine preferredSize (could be table layout panel but doesnt have to be - eg. ToolStrip)
         ///  ProposedContstraints: the suggested size that the table layout should fit into.  If either argument is 0,
-        ///             TableLayout pretends it's unconstrained for perfomance reasons.
+        ///             TableLayout pretends it's unconstrained for performance reasons.
         ///
         ///  Summary of Algorithm:
-        ///  Similar to LayoutCore.  Row/Column assignments are NOT cached.  TableLayout uses AGRESSIVE
+        ///  Similar to LayoutCore.  Row/Column assignments are NOT cached.  TableLayout uses AGGRESSIVE
         ///  caching for performance reasons.
         /// </summary>
         internal override Size GetPreferredSize(IArrangedElement container, Size proposedConstraints)
@@ -269,7 +269,7 @@ namespace System.Windows.Forms.Layout
 
             // PERF: Optimizing nested table layouts.
             // The problem:  TableLayout asks for GPS(0,0) GPS(1,0) GPS(0,1) and GPS(w,0) and GPS(w,h).
-            // if the table layout is nested, this becomes pretty nasty, as we dont cache row, column
+            // if the table layout is nested, this becomes pretty nasty, as we don't cache row, column
             // assignments in preferred size.
             // GPS(0,1) GPS(1,0) should return same as GPS(0,0)- if that's already cached return it.
             float oldWidth = -1f;
@@ -546,7 +546,7 @@ namespace System.Windows.Forms.Layout
                     }
 
                     //try to layout the absolutely positioned element as if it were non-absolutely positioned.
-                    //In this way we can tell whether this element overlapps with others or fits on the table.
+                    //In this way we can tell whether this element overlaps with others or fits on the table.
                     AdvanceUntilFits(maxColumns, reservationGrid, fixedElement, out colStop);
 
                     //we have exceeded the row limit. just return
@@ -581,7 +581,7 @@ namespace System.Windows.Forms.Layout
             Debug.Assert(numRows <= maxRows, "number of rows allocated shouldn't exceed max number of rows");
             Debug.Assert(numColumns <= maxColumns, "number of columns allocated shouldn't exceed max number of columns");
 
-            // we should respect columncount and rowcount as according to GrowStyle.
+            // we should respect column count and row count as according to GrowStyle.
             if (growStyle == TableLayoutPanelGrowStyle.FixedSize)
             {
                 // now that we've calculated the assignments - use the "max" as the actual number of rows.
@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms.Layout
                     {
                         case SizeType.Absolute:
                             totalAbsoluteAndAutoSizeAllocatedSpace += strip.MinSize;
-                            // We gaurantee a strip will be exactly abs pixels
+                            // We guarantee a strip will be exactly abs pixels
                             Debug.Assert((strip.MinSize == style.Size), "absolutely sized strip's size should be set before we call ApplyStyles");
                             break;
                         case SizeType.Percent:
@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms.Layout
                         {
                             TableLayoutStyle style = (TableLayoutStyle)styles[i];
 
-                            // cast to int / (take the floor) so we know we dont accidentally go over our limit.
+                            // cast to int / (take the floor) so we know we don't accidentally go over our limit.
                             // the rest will be distributed later.
                             int stripSize = (int)(style.Size * totalPercentAllocatedSpace / totalPercent);
                             usedSpace -= strip.MinSize; // back out the size we thought we were allocating before.
@@ -1281,7 +1281,7 @@ namespace System.Windows.Forms.Layout
             remainingSpace = maxSize - usedSpace;
 
             // Step 3: add remaining space to autosize columns
-            //  - usually we only do this if we're not in preferred size (remaingSpace would be < 0)
+            //  - usually we only do this if we're not in preferred size (remainingSpace would be < 0)
             //  - and there are no % style columns
 
             if (hasAutoSizeColumn && remainingSpace > 0)
@@ -1409,7 +1409,7 @@ namespace System.Windows.Forms.Layout
 
                 Rectangle elementBounds = LayoutUtils.AlignAndStretch(GetElementSize(element, cellBounds.Size), cellBounds, anchorStyles);
 
-                // If the element was not BoxStretch.Both, AlignAndStretch does not gaurantee
+                // If the element was not BoxStretch.Both, AlignAndStretch does not guarantee
                 // that the element has been clipped to the cell bounds.
                 elementBounds.Width = Math.Min(cellBounds.Width, elementBounds.Width);
                 elementBounds.Height = Math.Min(cellBounds.Height, elementBounds.Height);
@@ -1603,7 +1603,7 @@ namespace System.Windows.Forms.Layout
             containerInfo.Valid = false;
         }
 
-        //we make sure that our conatinerInfo never returns null. If there is no
+        //we make sure that our containerInfo never returns null. If there is no
         //existing containerInfo, instantiate a new one and store it in the property
         //store.
         internal static ContainerInfo GetContainerInfo(IArrangedElement container)
@@ -1912,7 +1912,7 @@ namespace System.Windows.Forms.Layout
                 get
                 {
                     Debug.Assert(ChildInfoValid, "Fetched invalid information");
-                    // we only get this in a cached scenario - so we dont have to worry about caching it.
+                    // we only get this in a cached scenario - so we don't have to worry about caching it.
                     LayoutInfo[] fixedChildren = new LayoutInfo[_countFixedChildren];
                     if (HasChildWithAbsolutePositioning)
                     {

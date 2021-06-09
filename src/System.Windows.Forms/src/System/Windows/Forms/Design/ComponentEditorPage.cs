@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Design
         public virtual void OnApplyComplete() => ReloadComponent();
 
         /// <summary>
-        ///  Called when the current component may have changed elsewhere and needs to be reloded into the UI
+        ///  Called when the current component may have changed elsewhere and needs to be reloaded into the UI
         /// </summary>
         protected virtual void ReloadComponent()
         {

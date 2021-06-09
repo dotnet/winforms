@@ -960,7 +960,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Lets you set the the entire range for the TrackBar control at once.
+        ///  Lets you set the entire range for the TrackBar control at once.
         ///  The values passed are both the lower and upper limits to the range
         ///  with which the control will work.
         /// </summary>

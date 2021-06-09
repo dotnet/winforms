@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
         public MenuTimer()
         {
-            // MenuShowDelay can be set to 0.  In this case, set to something low so it's inperceptable.
+            // MenuShowDelay can be set to 0.  In this case, set to something low so it's imperceptible.
             autoMenuExpandTimer.Tick += new EventHandler(OnTick);
 
             // since MenuShowDelay is registry tweakable we've gotta make sure we've got some sort
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
             {
                 InTransition = false;
 
-                // we should roolup if the current item has changed and is selected.
+                // we should rollup if the current item has changed and is selected.
                 bool rollup = forceClose || (CurrentItem is not null && CurrentItem != lastSelected && CurrentItem.Selected);
                 if (rollup && lastSelected is not null && lastSelected.HasDropDownItems)
                 {

@@ -180,7 +180,7 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    // Set the destination coordiates depending on whether stretch-to-fit was chosen
+                    // Set the destination coordinates depending on whether stretch-to-fit was chosen
                     int xDest, yDest, cxDest, cyDest;
                     if (bStretch)
                     {

@@ -741,7 +741,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the text in the Label. Since we can have multiline support
-        ///  this property just overides the base to pluck in the Multiline editor.
+        ///  this property just overrides the base to pluck in the Multiline editor.
         /// </summary>
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         SettingsBindable(true)]
@@ -957,7 +957,7 @@ namespace System.Windows.Forms
             //
             // Please read if you're adding a new TextFormatFlag.
             // whenever something can change the TextFormatFlags used
-            // MeasureTextCache.InvalidateCache() should be called so we can approprately clear.
+            // MeasureTextCache.InvalidateCache() should be called so we can appropriately clear.
 
             TextFormatFlags flags = ControlPaint.CreateTextFormatFlags(this, TextAlign, AutoEllipsis, UseMnemonic);
 
@@ -993,7 +993,7 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_propImage, null);
                 }
 
-                //Dipose the tooltip if one present..
+                //Dispose the tooltip if one present..
                 if (_textToolTip is not null)
                 {
                     _textToolTip.Dispose();
@@ -1379,7 +1379,7 @@ namespace System.Windows.Forms
             if (SelfSizing)
             {
                 // In the case of SelfSizing
-                // we dont know what size to be until we're parented
+                // we don't know what size to be until we're parented
                 AdjustSize();
             }
 

@@ -1261,8 +1261,8 @@ namespace System.Windows.Forms
                             }
 
                             // When there is only one link in link label,
-                            // it's not necessary to paint with forebrush first
-                            // as it will be overlapped by linkbrush in the following steps
+                            // it's not necessary to paint with foreBrush first
+                            // as it will be overlapped by linkBrush in the following steps
 
                             if (!IsOneLink())
                             {
@@ -1308,7 +1308,7 @@ namespace System.Windows.Forms
                         if (UseCompatibleTextRendering)
                         {
                             // APPCOMPAT: Use DisabledColor because Everett used DisabledColor.
-                            // (ie, dont use Graphics.GetNearestColor(DisabledColor.)
+                            // (ie, don't use Graphics.GetNearestColor(DisabledColor.)
                             StringFormat stringFormat = CreateStringFormat();
                             ControlPaint.DrawStringDisabled(g, Text, Font, DisabledColor, ClientRectWithPadding, stringFormat);
                         }
@@ -1781,13 +1781,13 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Performs the work of setting the bounds of this control. Inheriting classes
-        ///  can overide this function to add size restrictions. Inheriting classes must call
+        ///  can override this function to add size restrictions. Inheriting classes must call
         ///  base.setBoundsCore to actually cause the bounds of the control to change.
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
             // we cache too much state to try and optimize this (regions, etc)... it is best
-            // to always relayout here... If we want to resurect this code in the future,
+            // to always relayout here... If we want to resurrect this code in the future,
             // remember that we need to handle a word wrapped top aligned text that
             // will become newly exposed (and therefore layed out) when we resize...
             InvalidateTextLayout();

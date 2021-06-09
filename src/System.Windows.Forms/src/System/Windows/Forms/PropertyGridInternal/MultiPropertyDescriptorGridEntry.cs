@@ -222,7 +222,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                    ge is PropertyDescriptorGridEntry &&
                    ((PropertyDescriptorGridEntry)ge)._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
-                // find the next parent property with a differnet value owner
+                // find the next parent property with a different value owner
                 object owner = ge.GetValueOwner();
 
                 // find the next property descriptor with a different parent

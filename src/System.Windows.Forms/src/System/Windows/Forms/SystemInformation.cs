@@ -128,7 +128,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the width andheight of a window border in pixels.
+        ///  Gets the width and height of a window border in pixels.
         /// </summary>
         public static Size GetBorderSizeForDpi(int dpi)
         {

@@ -282,7 +282,7 @@ namespace System.Windows.Forms
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
                 {
-                    return -1; // we dont support empty or null keys.
+                    return -1; // we don't support empty or null keys.
                 }
 
                 // step 1 - check the last cached item
@@ -543,7 +543,7 @@ namespace System.Windows.Forms
                     // this can happen if someone does:
                     //     foreach (Control c in Controls) { c.Dispose(); }
                     //
-                    // We also dont want to iterate past the original size of the collection
+                    // We also don't want to iterate past the original size of the collection
                     //
                     // this can happen if someone does
                     //     foreach (Control c in Controls) { c.Controls.Add(new Label()); }

@@ -70,7 +70,7 @@ namespace System.Windows.Forms
                     {
                         if (ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
-                            // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
+                            // since menuItem.Padding isn't taken into consideration, we've got to recalc the centering of
                             // the arrow rect per item
                             Rectangle arrowRect = menu.ArrowRectangle;
                             arrowRect.Y = LayoutUtils.VAlign(arrowRect.Size, ownerItem.ClientBounds, ContentAlignment.MiddleCenter).Y;
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                     {
                         if (ownerItem.Owner is ToolStripDropDownMenu menu)
                         {
-                            // since menuItem.Padding isnt taken into consideration, we've got to recalc the centering of
+                            // since menuItem.Padding isn't taken into consideration, we've got to recalc the centering of
                             // the image rect per item
                             Rectangle imageRect = menu.ImageRectangle;
                             if (ownerItem.ImageScaling == ToolStripItemImageScaling.SizeToFit)

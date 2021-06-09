@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  indicates that the tags are stretched to ensure they reach the far
-        ///  right of the strip, if necesary.  This is only applicable to tab
+        ///  right of the strip, if necessary.  This is only applicable to tab
         ///  strips with more than one row.
         /// </summary>
         FillToRight = 1,

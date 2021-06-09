@@ -403,7 +403,7 @@ namespace System.Windows.Forms
 
             // We baked the "default default" margin and min size into CommonProperties
             // so that in the common case the PropertyStore would be empty.  If, however,
-            // someone overrides these Default* methads, we need to write the default
+            // someone overrides these Default* methods, we need to write the default
             // value into the PropertyStore in the ctor.
 
             if (DefaultMargin != CommonProperties.DefaultMargin)
@@ -571,7 +571,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns a specific AccessibleObbject associated w/ the objectID
+        ///  Returns a specific AccessibleObject associated w/ the objectID
         /// </summary>
         protected virtual AccessibleObject GetAccessibilityObjectById(int objectId)
         {
@@ -1040,7 +1040,7 @@ namespace System.Windows.Forms
                     // Valid values are 0x0 to 0x4
                     SourceGenerated.EnumValidator.Validate(value);
 
-                    // Check if the value is either center, strech or zoom;
+                    // Check if the value is either center, stretch or zoom;
                     if (value == ImageLayout.Center || value == ImageLayout.Zoom || value == ImageLayout.Stretch)
                     {
                         SetStyle(ControlStyles.ResizeRedraw, true);
@@ -1293,7 +1293,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // Ff this control always cachest text or the handle hasn't been created,
+                // Ff this control always caches text or the handle hasn't been created,
                 // just bail.
                 if (GetStyle(ControlStyles.CacheText) || !IsHandleCreated)
                 {
@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The contextMenuStrip associated with this control. The contextMenuStrip
         ///  will be shown when the user right clicks the mouse on the control.
-        ///  Note: if a context menu is also assigned, it will take precidence over this property.
+        ///  Note: if a context menu is also assigned, it will take precedence over this property.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(null)]
@@ -2701,7 +2701,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool IsActiveX => GetExtendedState(ExtendedStates.IsActiveX);
 
-        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we dont return the parent
+        // If the control on which GetContainerControl( ) is called is a ContainerControl, then we don't return the parent
         // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
         // Hence we have a new internal property IsContainerControl which returns false for all Everett control, but
         // this property is overidden in SplitContainer to return true so that we skip the SplitContainer
@@ -3157,7 +3157,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  This property is required by certain controls (TabPage) to render its transparency using theming API.
-        ///  We dont want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
+        ///  We don't want all controls (that are have transparent BackColor) to use theming API to render its background because it has  HUGE PERF cost.
         /// </summary>
         internal virtual bool RenderTransparencyWithVisualStyles => false;
 
@@ -3271,7 +3271,7 @@ namespace System.Windows.Forms
                 if (oldValue != RightToLeft)
                 {
                     // Setting RTL on a container does not cause the container to change size.
-                    // Only the children need to have thier layout updated.
+                    // Only the children need to have their layout updated.
                     using (new LayoutTransaction(this, this, PropertyNames.RightToLeft))
                     {
                         OnRightToLeftChanged(EventArgs.Empty);
@@ -3613,7 +3613,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // This auto upgraged v1 client to per-process doublebuffering logic
+        // This auto upgraded v1 client to per-process doublebuffering logic
         private BufferedGraphicsContext BufferContext => BufferedGraphicsManager.Current;
 
         /// <summary>
@@ -3627,7 +3627,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                // Controls in design mode always draw their accellerators.
+                // Controls in design mode always draw their accelerators.
                 if (!IsHandleCreated || DesignMode)
                 {
                     return true;
@@ -3643,11 +3643,11 @@ namespace System.Windows.Forms
                 // the second represent keyboard cues.  "F" is the UICuesStates.FocusMask,
                 // "F0" is the UICuesStates.KeyboardMask
 
-                // We check here if we have cached state.  If we dont, we need to initialize ourself.
+                // We check here if we have cached state.  If we don't, we need to initialize ourself.
                 // We do this by checking "MenuAccessKeysUnderlined" - we show if this returns true.
 
                 // If MenuAccessKeysUnderlined returns false, we have to manually call CHANGEUISTATE on the topmost control
-                // Why? Well the way the API seems to work is that it stores in a bit flag for the the hidden
+                // Why? Well the way the API seems to work is that it stores in a bit flag for the hidden
                 // state.
 
                 // Details from the Menu keydown to changed value of _uiCuesState.
@@ -5460,7 +5460,7 @@ namespace System.Windows.Forms
         ///  Attempts to find a control Object that we can use to marshal
         ///  calls.  We must marshal calls to a control with a window
         ///  handle, so we traverse up the parent chain until we find one.
-        ///  Failing that, we just return ouselves.
+        ///  Failing that, we just return ourselves.
         /// </summary>
         private Control FindMarshalingControl()
         {
@@ -5715,7 +5715,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This new Internal method checks the updateCount to signify that the control is within the "BeginUpdate" and "EndUpdate" cycle.
         ///  Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
-        ///  even if the control in "Begin - End" update cycle. Using thie Function we can guard against repetitively redrawing the control.
+        ///  even if the control in "Begin - End" update cycle. Using this Function we can guard against repetitively redrawing the control.
         /// </summary>
         internal bool IsUpdating()
         {
@@ -6383,7 +6383,7 @@ namespace System.Windows.Forms
         ///  follow up the control's parent chain until it finds a control or form that does
         ///  have a window handle.  If no appropriate handle can be found, invoke will throw
         ///  an exception.  Exceptions that are raised during the call will be
-        ///  propapgated back to the caller.
+        ///  propagated back to the caller.
         ///
         ///  There are five functions on a control that are safe to call from any
         ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
@@ -6402,7 +6402,7 @@ namespace System.Windows.Forms
         ///  follow up the control's parent chain until it finds a control or form that does
         ///  have a window handle.  If no appropriate handle can be found, invoke will throw
         ///  an exception.  Exceptions that are raised during the call will be
-        ///  propapgated back to the caller.
+        ///  propagated back to the caller.
         ///
         ///  There are five functions on a control that are safe to call from any
         ///  thread:  GetInvokeRequired, Invoke, BeginInvoke, EndInvoke and CreateGraphics.
@@ -6423,7 +6423,7 @@ namespace System.Windows.Forms
         ///  of that thread. The callback is then invoked using that ExecutionContext (which includes info like the
         ///  compressed security stack).
         ///
-        ///  NOTE: The one part of the ExecutionContext that we DONT want applied to the callback is its SyncContext,
+        ///  NOTE: The one part of the ExecutionContext that we DON'T want applied to the callback is its SyncContext,
         ///  since this is the SyncContext of the other thread. So we grab the SyncContext of OUR thread, and pass
         ///  this through to the callback to use instead.
         ///
@@ -6734,7 +6734,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Determines if charCode is the mnemonic character in text.
-        ///  The mnemonic character is the character imediately following the first
+        ///  The mnemonic character is the character immediately following the first
         ///  instance of "&amp;" in text
         /// </summary>
         public static bool IsMnemonic(char charCode, string text)
@@ -7471,7 +7471,7 @@ namespace System.Windows.Forms
 
             SetState(States.ParentRecreating, false);
 
-            // if our parent was initially the the parent who's handle just got recreated, we need
+            // if our parent was initially the parent who's handle just got recreated, we need
             // to recreate ourselves so that we get notification.  See UpdateReflectParent for more details.
             if (ReflectParent == ParentInternal)
             {
@@ -8661,8 +8661,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // We need to use themeing painting for certain controls (like TabPage) when they parent other controls.
-            // But we dont want to to this always as this causes serious preformance (at Runtime and DesignTime)
+            // We need to use theming painting for certain controls (like TabPage) when they parent other controls.
+            // But we don't want to to this always as this causes serious performance (at Runtime and DesignTime)
             // so checking for RenderTransparencyWithVisualStyles which is TRUE for TabPage and false by default.
             if (Application.RenderWithVisualStyles && parent.RenderTransparencyWithVisualStyles)
             {
@@ -8878,14 +8878,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Peforms data validation (not paint validation!) on a single control.
+        ///  Performs data validation (not paint validation!) on a single control.
         ///
         ///  Returns whether validation failed:
         ///  False = Validation succeeded, control is valid, accept its new value
         ///  True = Validation was cancelled, control is invalid, reject its new value
         ///
         ///  NOTE: This is the lowest possible level of validation. It does not account
-        ///  for the context in which the validation is occuring, eg. change of focus
+        ///  for the context in which the validation is occurring, eg. change of focus
         ///  between controls in a container. Stuff like that is handled by the caller.
         /// </summary>
         internal bool PerformControlValidation(bool bulkValidation)
@@ -9127,7 +9127,7 @@ namespace System.Windows.Forms
                 {
                     if (msg.Msg == (int)User32.WM.KEYDOWN || msg.Msg == (int)User32.WM.SYSKEYDOWN)
                     {
-                        // check if IsInputKey has already procssed this message
+                        // check if IsInputKey has already processed this message
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetExtendedState(ExtendedStates.InputKey) || target.IsInputKey(keyData))
                         {
@@ -9137,7 +9137,7 @@ namespace System.Windows.Forms
                     }
                     else if (msg.Msg == (int)User32.WM.CHAR || msg.Msg == (int)User32.WM.SYSCHAR)
                     {
-                        // check if IsInputChar has already procssed this message
+                        // check if IsInputChar has already processed this message
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetExtendedState(ExtendedStates.InputChar) || target.IsInputChar((char)msg.WParam))
                         {
@@ -9266,7 +9266,7 @@ namespace System.Windows.Forms
             else
             {
                 // If a system control has no children in the Controls collection we
-                // restore the the PRF_CHILDREN flag because it may internally
+                // restore the PRF_CHILDREN flag because it may internally
                 // have nested children we do not know about.  ComboBox is a
                 // good example.
                 if (Controls.Count == 0)
@@ -9503,13 +9503,13 @@ namespace System.Windows.Forms
 
             if (keyCode != Keys.F10 && keyCode != Keys.Menu && keyCode != Keys.Tab)
             {
-                return;  // PERF: dont WM_QUERYUISTATE if we dont have to.
+                return;  // PERF: don't WM_QUERYUISTATE if we don't have to.
             }
 
             Control topMostParent = null;
             User32.UISF current = unchecked((User32.UISF)(long)User32.SendMessageW(this, User32.WM.QUERYUISTATE));
 
-            // dont trust when a control says the accelerators are showing.
+            // don't trust when a control says the accelerators are showing.
             // make sure the topmost parent agrees with this as we could be in a mismatched state.
             if (current == 0 /*accelerator and focus cues are showing*/)
             {
@@ -9882,7 +9882,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  /Releases UI Automation provinder for specified window.
+        ///  /Releases UI Automation provider for specified window.
         /// </summary>
         /// <param name="handle">The window handle.</param>
         internal virtual void ReleaseUiaProvider(IntPtr handle)
@@ -9986,7 +9986,7 @@ namespace System.Windows.Forms
 
             We've had this since Everett,but it seems wrong, redundant and a performance hit.  The
             correct layout calls are already made when bounds or parenting changes, which is all
-            we care about. We may want to call this at layout suspend count == 0, but certainaly
+            we care about. We may want to call this at layout suspend count == 0, but certainly
             not for all resumes.  I  tried removing it, and doing it only when suspendCount == 0,
             but we break things at every step.
 
@@ -10350,14 +10350,14 @@ namespace System.Windows.Forms
             // Scale Min/Max size
             //
 
-            // make sure we consider the andornments as fixed.  rather than scaling the entire size,
+            // make sure we consider the adornments as fixed.  rather than scaling the entire size,
             // we should pull out the fixed things such as the border, scale the rest, then apply the fixed
             // adornment size.
             Size adornmentSize = adornments.Size;
             if (!minSize.IsEmpty)
             {
                 minSize -= adornmentSize;
-                minSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we dont go below 0.
+                minSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, minSize), // make sure we don't go below 0.
                                         factor.Width,
                                         factor.Height) + adornmentSize;
             }
@@ -10365,12 +10365,12 @@ namespace System.Windows.Forms
             if (!maxSize.IsEmpty)
             {
                 maxSize -= adornmentSize;
-                maxSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we dont go below 0.
+                maxSize = ScaleSize(LayoutUtils.UnionSizes(Size.Empty, maxSize), // make sure we don't go below 0.
                                         factor.Width,
                                         factor.Height) + adornmentSize;
             }
 
-            // Apply the min/max size constraints - dont call ApplySizeConstraints
+            // Apply the min/max size constraints - don't call ApplySizeConstraints
             // as MinimumSize/MaximumSize are currently cleared out.
             Size maximumSize = LayoutUtils.ConvertZeroToUnbounded(maxSize);
             Size scaledSize = LayoutUtils.IntersectSizes(rawScaledBounds.Size, maximumSize);
@@ -10662,7 +10662,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Performs the work of setting the bounds of this control. Inheriting
-        ///  classes can overide this function to add size restrictions. Inheriting
+        ///  classes can override this function to add size restrictions. Inheriting
         ///  classes must call base.setBoundsCore to actually cause the bounds
         ///  of the control to change.
         /// </summary>
@@ -11012,7 +11012,7 @@ namespace System.Windows.Forms
                 {
                     // We do not do this in the OnPropertyChanged event for visible
                     // Lots of things could cause us to become visible, including a
-                    // parent window.  We do not want to indescriminiately layout
+                    // parent window.  We do not want to indiscriminately layout
                     // due to this, but we do want to layout if the user changed
                     // our visibility.
                     using (new LayoutTransaction(_parent, this, PropertyNames.Visible))
@@ -11478,8 +11478,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Updates the binding manager bindings when the binding proeprty changes.
-        ///  We have the code here, rather than in PropertyChagned, so we don't pull
+        ///  Updates the binding manager bindings when the binding property changes.
+        ///  We have the code here, rather than in PropertyChanged, so we don't pull
         ///  in the data assembly if it's not used.
         /// </summary>
         private void UpdateBindings()
@@ -12189,7 +12189,7 @@ namespace System.Windows.Forms
                 _deviceDpi = (int)User32.GetDpiForWindow(this);
 
                 // Controls are by default font scaled.
-                // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.
+                // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
                 if (_oldDeviceDpi != _deviceDpi)
                 {
                     var factor = (float)_deviceDpi / _oldDeviceDpi;
@@ -12233,7 +12233,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the "WM_MOUSEHOVER" message... until we get actuall OS support
+        ///  Handles the "WM_MOUSEHOVER" message... until we get actual OS support
         ///  for this, it is implemented as a custom message.
         /// </summary>
         private void WmMouseHover(ref Message m)
@@ -12802,7 +12802,7 @@ namespace System.Windows.Forms
 
             User32.UIS cmd = (User32.UIS)PARAM.LOWORD(m.WParam);
 
-            // if we're initializing, dont bother updating the uiCuesState/Firing the event.
+            // if we're initializing, don't bother updating the uiCuesState/Firing the event.
 
             if (cmd == User32.UIS.INITIALIZE)
             {

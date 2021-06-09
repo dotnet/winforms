@@ -270,7 +270,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Checks the source object for eache extended browsing inteface
+        ///  Checks the source object for each extended browsing inteface
         ///  listed in extendedInterfaces and creates a handler from extendedInterfaceHandlerTypes
         ///  to handle it.
         /// </summary>

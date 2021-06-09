@@ -533,7 +533,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     _flags |= FL_EXPANDABLE;
 
-                    // If we're exapndable, but we don't support editing,
+                    // If we're expandable, but we don't support editing,
                     // make us read only editable so we don't paint grey.
                     //
                     if (!forceReadOnly && (Flags & FLAG_TEXT_EDITABLE) == 0 && !isImmutableReadOnly)
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Add an event handler to be invoked when the outline icone portion of
+        ///  Add an event handler to be invoked when the outline icon portion of
         ///  the prop entry is clicked
         /// </summary>
         public virtual void AddOnOutlineClick(EventHandler h)
@@ -1214,7 +1214,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Add an event handler to be invoked when the outline icone portion of
+        ///  Add an event handler to be invoked when the outline icon portion of
         ///  the prop entry is double clicked
         /// </summary>
         public virtual void AddOnOutlineDoubleClick(EventHandler h)
@@ -2132,12 +2132,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         public virtual void PaintOutline(Graphics g, Rectangle r)
         {
             // draw tree-view glyphs as triangles on Vista and Windows afterword
-            // when Vistual style is enabled
+            // when Visual style is enabled
             if (GridEntryHost.IsExplorerTreeSupported)
             {
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
                 // so when we change the visual style (such as changing Windows theme),
-                // we need to recaculate outlineRect
+                // we need to recalculate outlineRect
                 if (!_lastPaintWithExplorerStyle)
                 {
                     _outlineRect = Rectangle.Empty;
@@ -2152,7 +2152,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 // size of Explorer Tree style glyph (triangle) is different from +/- glyph,
                 // so when we change the visual style (such as changing Windows theme),
-                // we need to recaculate outlineRect
+                // we need to recalculate outlineRect
                 if (_lastPaintWithExplorerStyle)
                 {
                     _outlineRect = Rectangle.Empty;
@@ -2448,8 +2448,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  Called when the label portion of this GridEntry is clicked.
-        ///  Default implmentation fired the event to any listeners, so be sure
-        ///  to call base.OnLabelClick(e) if this is overrideen.
+        ///  Default implementation fired the event to any listeners, so be sure
+        ///  to call base.OnLabelClick(e) if this is overridden.
         /// </summary>
         protected virtual void OnLabelClick(EventArgs e)
         {
@@ -2458,8 +2458,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  Called when the label portion of this GridEntry is double-clicked.
-        ///  Default implmentation fired the event to any listeners, so be sure
-        ///  to call base.OnLabelDoubleClick(e) if this is overrideen.
+        ///  Default implementation fired the event to any listeners, so be sure
+        ///  to call base.OnLabelDoubleClick(e) if this is overridden.
         /// </summary>
         protected virtual void OnLabelDoubleClick(EventArgs e)
         {
@@ -2538,8 +2538,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  Called when the outline icon portion of this GridEntry is clicked.
-        ///  Default implmentation fired the event to any listeners, so be sure
-        ///  to call base.OnOutlineClick(e) if this is overrideen.
+        ///  Default implementation fired the event to any listeners, so be sure
+        ///  to call base.OnOutlineClick(e) if this is overridden.
         /// </summary>
         protected virtual void OnOutlineClick(EventArgs e)
         {
@@ -2548,8 +2548,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  Called when the outline icon portion of this GridEntry is double-clicked.
-        ///  Default implmentation fired the event to any listeners, so be sure
-        ///  to call base.OnOutlineDoubleClick(e) if this is overrideen.
+        ///  Default implementation fired the event to any listeners, so be sure
+        ///  to call base.OnOutlineDoubleClick(e) if this is overridden.
         /// </summary>
         protected virtual void OnOutlineDoubleClick(EventArgs e)
         {
@@ -2558,8 +2558,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  Called when RecreateChildren is called.
-        ///  Default implmentation fired the event to any listeners, so be sure
-        ///  to call base.OnOutlineDoubleClick(e) if this is overrideen.
+        ///  Default implementation fired the event to any listeners, so be sure
+        ///  to call base.OnOutlineDoubleClick(e) if this is overridden.
         /// </summary>
         protected virtual void OnRecreateChildren(GridEntryRecreateChildrenEventArgs e)
         {
@@ -2572,8 +2572,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  Called when the value portion of this GridEntry is clicked.
-        ///  Default implmentation fired the event to any listeners, so be sure
-        ///  to call base.OnValueClick(e) if this is overrideen.
+        ///  Default implementation fired the event to any listeners, so be sure
+        ///  to call base.OnValueClick(e) if this is overridden.
         /// </summary>
         protected virtual void OnValueClick(EventArgs e)
         {
@@ -2582,8 +2582,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  Called when the value portion of this GridEntry is clicked.
-        ///  Default implmentation fired the event to any listeners, so be sure
-        ///  to call base.OnValueDoubleClick(e) if this is overrideen.
+        ///  Default implementation fired the event to any listeners, so be sure
+        ///  to call base.OnValueDoubleClick(e) if this is overridden.
         /// </summary>
         protected virtual void OnValueDoubleClick(EventArgs e)
         {
@@ -2640,7 +2640,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Checks if this value should be persisited.
+        ///  Checks if this value should be persisted.
         /// </summary>
         internal virtual bool ShouldSerializePropertyValue()
         {
@@ -2673,7 +2673,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             PropertyDescriptor[] newProps = null;
             int newPos = 0;
 
-            // first scan the list and move any parentesized properties to the front.
+            // first scan the list and move any parenthesized properties to the front.
             for (int i = 0; i < props.Length; i++)
             {
                 if (((ParenthesizePropertyNameAttribute)props[i].Attributes[typeof(ParenthesizePropertyNameAttribute)]).NeedParenthesis)

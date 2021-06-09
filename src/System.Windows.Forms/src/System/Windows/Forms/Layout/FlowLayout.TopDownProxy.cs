@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Layout
         ///  which flips all the rectangles and rotates itself into the vertical orientation.
         ///  to achieve right to left, we actually have to do something non-intuitive - instead of
         ///  sending the control to the right, we have to send the control to the bottom. When the rotation
-        ///  is complete - that's equivilant to pushing it to the right.
+        ///  is complete - that's equivalent to pushing it to the right.
         /// </summary>
         private class TopDownProxy : ContainerProxy
         {

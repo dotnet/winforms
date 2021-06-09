@@ -54,7 +54,7 @@ namespace System.Windows.Forms
                 };
 
             // This value wasn't saved to _initRuntimeId as in the rest calendar accessible objects
-            // because GetChildId requares _monthCalendarAccessibleObject existing
+            // because GetChildId requires _monthCalendarAccessibleObject existing
             // but it will be null because an inherited constructor is not called yet.
             internal override int[] RuntimeId
                 => new int[]

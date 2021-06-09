@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         public const int NoMatches = LB_ERR;
 
         /// <summary>
-        ///  The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
+        ///  The default item height for an owner-draw ListBox. The ListBox's non-ownerdraw
         ///  item height is 13 for the default font on Windows.
         /// </summary>
         public const int DefaultItemHeight = 13;
@@ -163,7 +163,7 @@ namespace System.Windows.Forms
             {
                 scaledListItemStartPosition = LogicalToDeviceUnits(defaultListItemStartPos);
 
-                // height inlude 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number
+                // height include 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number
                 // that might helps us in positioning control in the center for list items.
                 scaledListItemBordersHeight = 2 * LogicalToDeviceUnits(defaultListItemBorderHeight);
                 scaledListItemPaddingBuffer = LogicalToDeviceUnits(defaultListItemPaddingBuffer);
@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Unselects all currently selected items.
+        ///  Deselects all currently selected items.
         /// </summary>
         public void ClearSelected()
         {
@@ -1439,7 +1439,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Finds the first item after the given index that matches the given string.
-        ///  The strings must match excatly, except for differences in casing.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s, int startIndex)
         {

@@ -145,7 +145,7 @@ namespace System.Windows.Forms
                 if (Control is not null)
                 {
                     // When you create the control - it sets up its size as its default size.
-                    // Since the property is protected we dont know for sure, but this is a pretty good guess.
+                    // Since the property is protected we don't know for sure, but this is a pretty good guess.
                     return Control.Size;
                 }
 
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
                 Rectangle specifiedBounds = Rectangle.Empty;
                 if (_control is not null)
                 {
-                    // we dont normally update the specified bounds, but if someone explicitly sets
+                    // we don't normally update the specified bounds, but if someone explicitly sets
                     // the size we should.
                     specifiedBounds = _control.Bounds;
                     specifiedBounds.Size = value;
@@ -657,7 +657,7 @@ namespace System.Windows.Forms
             Size size = LayoutUtils.DeflateRect(Bounds, Padding).Size;
             Rectangle bounds = LayoutUtils.Align(size, Bounds, ControlAlign);
 
-            // use BoundsSpecified.None so we dont deal w/specified bounds - this way we can tell what someone has set the size to.
+            // use BoundsSpecified.None so we don't deal w/specified bounds - this way we can tell what someone has set the size to.
             element.SetBounds(bounds, BoundsSpecified.None);
 
             // sometimes a control can ignore the size passed in, use the adjustment

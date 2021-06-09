@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Layout
                     // to be 200 px wide.  We would come here only for proposed widths less
                     // than 200 px.
 
-                    // Create our ring buffer if we dont have one
+                    // Create our ring buffer if we don't have one
                     if (_sizeCacheList is null)
                     {
                         _sizeCacheList = new PreferredSizeCache[MaxCacheSize];
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Layout
                         //
                     }
 
-                    // if we've gotten here, it means we dont have a cache entry, therefore
+                    // if we've gotten here, it means we don't have a cache entry, therefore
                     // we should add a new one in the next available slot.
                     Size prefSize = TextRenderer.MeasureText(text, font, proposedConstraints, flags);
                     _nextCacheEntry = (_nextCacheEntry + 1) % MaxCacheSize;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Layout
             public bool TextRequiresWordBreak(string? text, Font? font, Size size, TextFormatFlags flags)
             {
                 // if the unconstrained size of the string is larger than the proposed width
-                // we need the word break flag, otherwise we dont, its a perf hit to use it.
+                // we need the word break flag, otherwise we don't, its a perf hit to use it.
                 return GetUnconstrainedSize(text, font, flags).Width > size.Width;
             }
 

@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                     // just null out the last drop target manager.
 
                     // the other valid reason for being here is that we've done an AllowItemReorder
-                    // and we dont have a ToolStripItem contain within the data (say someone drags a link
+                    // and we don't have a ToolStripItem contain within the data (say someone drags a link
                     // from IE over the ToolStrip)
 
                     Debug.WriteLineIf(DragDropDebug.TraceVerbose, "No one wanted it.");
@@ -257,7 +257,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  If we have a new active item, fire drag leave and enter. This corresponds to the case
-        ///  where you are dragging between items and havent actually left the ToolStrip's client area.
+        ///  where you are dragging between items and haven't actually left the ToolStrip's client area.
         /// </summary>
         private void UpdateDropTarget(IDropTarget newTarget, DragEventArgs e)
         {

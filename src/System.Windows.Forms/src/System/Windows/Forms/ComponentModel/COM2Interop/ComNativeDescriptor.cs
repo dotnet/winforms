@@ -35,7 +35,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  We increment this every time we look at an Object, at specified
-        ///  intervals, we run through the properies list to see if we should
+        ///  intervals, we run through the properties list to see if we should
         ///  delete any.
         /// </summary>
         private int clearCount;
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             string name = null;
 
-            // does IVsPerPropretyBrowsing supply us a name?
+            // does IVsPerPropertyBrowsing supply us a name?
             if (component is VSSDK.IVsPerPropertyBrowsing)
             {
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the given dispid matches the dispid that the Object would like to specify
-        ///  as its identification proeprty (Name, ID, etc).
+        ///  as its identification property (Name, ID, etc).
         /// </summary>
         internal bool IsNameDispId(object obj, DispatchID dispid)
         {
@@ -309,7 +309,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             //
             Com2Properties propsInfo = (Com2Properties)nativeProps[component];
 
-            // if we dont' have one, create one and set it up
+            // if we don't have one, create one and set it up
             //
             if (propsInfo is null || !propsInfo.CheckValid())
             {

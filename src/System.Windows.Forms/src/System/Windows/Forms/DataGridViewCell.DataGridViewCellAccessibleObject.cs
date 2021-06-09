@@ -578,7 +578,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
+            ///  Sets the detachable child accessible object which may be added or removed to/from hierarchy nodes.
             /// </summary>
             /// <param name="child">The child accessible object.</param>
             internal override void SetDetachableChild(AccessibleObject? child)

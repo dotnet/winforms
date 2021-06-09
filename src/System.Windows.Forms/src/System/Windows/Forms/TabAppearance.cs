@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Indicates that buttons should be draw flat instead of like regular
-        ///  windows pushbuttons.
+        ///  windows push buttons.
         /// </summary>
         FlatButtons = 2,
     }

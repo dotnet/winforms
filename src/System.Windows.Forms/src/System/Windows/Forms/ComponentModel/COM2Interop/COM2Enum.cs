@@ -19,7 +19,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     ///  variants to mimic enum functionality.  If the actual property value is a DWORD,
     ///  which translates to VT_UI4, and they specify their values as VT_I4 (which is a common
     ///  mistake), they won't compare properly and values can't be updated.
-    ///  By comparing strings, we avoid this problem and add flexiblity to the system.
+    ///  By comparing strings, we avoid this problem and add flexibility to the system.
     /// </summary>
     internal class Com2Enum
     {

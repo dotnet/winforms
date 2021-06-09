@@ -160,7 +160,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Uses HGLOBALs and retrieves the specified format from the bound IComDatabject.
+            ///  Uses HGLOBALs and retrieves the specified format from the bound IComDataObject.
             /// </summary>
             private object GetDataFromOleHGLOBAL(string format, out bool done)
             {
@@ -251,7 +251,7 @@ namespace System.Windows.Forms
                     {
                         if (format.Equals(DataFormats.Bitmap))
                         {
-                            // as/urt 140870 -- GDI+ doesn't own this HBITMAP, but we can't
+                            // ASURT 140870 -- GDI+ doesn't own this HBITMAP, but we can't
                             // delete it while the object is still around.  So we have to do the really expensive
                             // thing of cloning the image so we can release the HBITMAP.
 

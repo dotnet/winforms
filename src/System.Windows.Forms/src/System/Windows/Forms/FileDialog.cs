@@ -530,7 +530,7 @@ namespace System.Windows.Forms
                                 }
                                 catch
                                 {
-                                    // intentionaly not throwing here.
+                                    // intentionally not throwing here.
                                 }
                             }
 

@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Appends the remainder of the most likely candidate string to the existing
-        ///  characters, hightlighting the appended characters.
+        ///  characters, highlighting the appended characters.
         /// </summary>
         Append = (int)Shell32.AUTOCOMPLETEOPTIONS.AUTOAPPEND,
 

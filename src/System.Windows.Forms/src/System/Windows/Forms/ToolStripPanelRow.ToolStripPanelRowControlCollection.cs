@@ -246,7 +246,7 @@ namespace System.Windows.Forms
             {
                 if (_owner is not null)
                 {
-                    // unfortunately we dont know the index of the control in the ToolStripPanel's
+                    // unfortunately we don't know the index of the control in the ToolStripPanel's
                     // control collection, as all rows share this collection.
                     // To unparent this control we need to use Remove instead  of RemoveAt.
                     using (LayoutTransaction t = new LayoutTransaction(ToolStripPanel, control, PropertyNames.Parent))

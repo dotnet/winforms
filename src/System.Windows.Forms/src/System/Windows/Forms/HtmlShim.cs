@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     ///  This is essentially a proxy object between the native
     ///  html objects and our managed ones.  We want the managed
     ///  HtmlDocument, HtmlWindow and HtmlElement to be super-lightweight,
-    ///  which means that we shouldnt have things that tie up their lifetimes
+    ///  which means that we shouldn't have things that tie up their lifetimes
     ///  contained within them.  The "Shim" is essentially the object that
     ///  manages events coming out of the HtmlDocument, HtmlElement and HtmlWindow
     ///  and serves them back up to the user.

@@ -140,7 +140,7 @@ namespace System.Windows.Forms.Layout
         ///  Typically the padding is accounted for in either the DisplayRectangle calculation
         ///  and/or the GetPreferredSize calculation of a control.
         ///
-        ///  NOTE:  LayoutEngines should never read this property.  Padding gets incorperated into
+        ///  NOTE:  LayoutEngines should never read this property.  Padding gets incorporated into
         ///  layout by modifying what the control reports for preferred size.
         internal static Padding GetPadding(IArrangedElement element, Padding defaultPadding)
         {
@@ -253,7 +253,7 @@ namespace System.Windows.Forms.Layout
         }
 
         ///  SetPadding
-        ///  Sets the padding (interior space) for an element. See GetPadding for more detiails.
+        ///  Sets the padding (interior space) for an element. See GetPadding for more details.
         ///  NOTE: It is the callers responsibility to do layout.  See Control.Padding for details.
         internal static void SetPadding(IArrangedElement element, Padding value)
         {
@@ -620,7 +620,7 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         ///  Helper method for xGetAnchor / xSetAnchor.
-        ///  We store anchor DefualtAnchor as None and vice versa.
+        ///  We store anchor DefaultAnchor as None and vice versa.
         ///  We either had to do this or map Dock.None to DefaultAnchor (Dock and Anchor share the same section
         ///  in LayoutState.) Mapping DefaultAnchor to 0 is nicer because we do not need to allocate anything in
         ///  the PropertyStore to get a 0 back from PropertyStore.GetInteger().

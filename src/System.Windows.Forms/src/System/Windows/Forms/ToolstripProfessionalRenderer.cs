@@ -769,7 +769,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                // Since office images dont scoot one px we have to override all painting but enabled = false;
+                // Since office images don't scoot one px we have to override all painting but enabled = false;
                 if (e.Item.ImageScaling == ToolStripItemImageScaling.None)
                 {
                     e.Graphics.DrawImage(image, imageRect, new Rectangle(Point.Empty, imageRect.Size), GraphicsUnit.Pixel);
@@ -796,7 +796,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // dont paint background effects
+            // don't paint background effects
             e.Handled = true;
 
             RenderBackgroundGradient(e.Graphics, toolStripPanel, ColorTable.ToolStripPanelGradientBegin, ColorTable.ToolStripPanelGradientEnd);
@@ -822,7 +822,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // dont paint background effects
+            // don't paint background effects
             e.Handled = true;
 
             e.Graphics.Clear(ColorTable.ToolStripContentPanelGradientEnd);
@@ -953,7 +953,7 @@ namespace System.Windows.Forms
         ///  (2)gradient from beginning to middle of width firstGradientWidth
         ///  (3)gradient from middle to end of width secondGradientWidth
         ///
-        ///  if there isnt enough room to do (2) and (3) it merges into a single gradient from beginning to end.
+        ///  if there isn't enough room to do (2) and (3) it merges into a single gradient from beginning to end.
         /// </summary>
         private void FillWithDoubleGradient(Color beginColor, Color middleColor, Color endColor, Graphics g, Rectangle bounds, int firstGradientWidth, int secondGradientWidth, LinearGradientMode mode, bool flipHorizontal)
         {

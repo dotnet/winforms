@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Layout
             {
                 // Controls measured earlier than a control which couldn't be fit to constraints may
                 // shift around with the new bounds. We need to make a 2nd pass through the
-                // controls using these bounds which are gauranteed to fit.
+                // controls using these bounds which are guaranteed to fit.
                 measureBounds.Size = prefSize;
                 prefSize = TryCalculatePreferredSize(container, measureBounds, /* measureOnly = */ true);
             }
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  Just forwards to TryCalculatePreferredSizeRow. This will layout elements from the start index to the end
         ///  index. RowBounds was computed by a call to measure row and is used for alignment/boxstretch.
-        ///  See the ElementProxy class for an explaination of the elementProxy parameter.
+        ///  See the ElementProxy class for an explanation of the elementProxy parameter.
         /// </summary>
         private void LayoutRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, int endIndex, Rectangle rowBounds)
         {
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Layout
         ///  Just forwards to TryCalculatePreferredSizeRow. breakIndex is the index of the first control not to
         ///  fit in the displayRectangle. The returned Size is the size required to layout the
         ///  controls from startIndex up to but not including breakIndex. See the ElementProxy
-        ///  class for an explaination of the elementProxy parameter.
+        ///  class for an explanation of the elementProxy parameter.
         /// </summary>
         private Size MeasureRow(ContainerProxy containerProxy, ElementProxy elementProxy, int startIndex, Rectangle displayRectangle, out int breakIndex)
         {
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.Layout
                 // Position the element (if applicable).
                 if (!measureOnly)
                 {
-                    // If measureOnly = false, rowBounds.Height = measured row hieght
+                    // If measureOnly = false, rowBounds.Height = measured row height
                     // (otherwise its the remaining displayRect of the container)
 
                     Rectangle cellBounds = new Rectangle(location, new Size(requiredSize.Width, rowBounds.Height));
@@ -325,7 +325,7 @@ namespace System.Windows.Forms.Layout
         {
 #if DEBUG
             // We cannot apply any of these checks @ design-time since dragging new children into a FlowLayoutPanel
-            // will attempt to set the children at the mouse position when the child was dropped - we rely on the controil
+            // will attempt to set the children at the mouse position when the child was dropped - we rely on the control
             // to reposition the children once added.
             if (container is Control flp && flp.Site != null && flp.Site.DesignMode)
             {

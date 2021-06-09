@@ -18,7 +18,7 @@ namespace System.Windows.Forms
     ///  in the middle. This is a composite control. The user can drag and drop this control from Toolbox.
     ///  Controls can be added to the right panel and the left panel. The Orientation can be either Horizontal or Vertical.
     ///  The Controls inside the Panels would be redrawn with the new Orientation.
-    ///  With this control the user need be aware of docking, z-order of the controls. The controls get parented when thry are
+    ///  With this control the user need be aware of docking, z-order of the controls. The controls get parented when they are
     ///  dropped on the SpitContainer.
     /// </summary>
     [DefaultEvent(nameof(SplitterMoved))]
@@ -121,7 +121,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This property is overridden to allow the AutoScroll to be set on all the panels when
         ///  The autoScroll on SplitContainer is shown.
-        ///  Here we dont set the base value ... but set autoscroll for panels.
+        ///  Here we don't set the base value ... but set autoscroll for panels.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [Localizable(true)]
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This property determines whether the the splitter can move.
+        ///  This property determines whether the splitter can move.
         /// </summary>
         [SRCategory(nameof(SR.CatLayout))]
         [DefaultValue(false)]
@@ -818,7 +818,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We need to have a internal Property for the SplitterWidth which returns zero if we are in collapased mode.
+        ///  We need to have a internal Property for the SplitterWidth which returns zero if we are in collapsed mode.
         ///  This property is used to Layout SplitContainer.
         /// </summary>
         private int SplitterWidthInternal
@@ -965,7 +965,7 @@ namespace System.Windows.Forms
         //                                                                            //
         /////////////////////////////////////////////////////////////////////////////////////////////
         /// <summary>
-        ///  Overides the Control.OnGotFocus to Invalidate...
+        ///  Overrides the Control.OnGotFocus to Invalidate...
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -1270,7 +1270,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inherriting classes should override this method to respond to the
+        ///  Inheriting classes should override this method to respond to the
         ///  splitterMoving event. This event occurs while the splitter is
         ///  being moved by the user.
         /// </summary>
@@ -1280,7 +1280,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inherriting classes should override this method to respond to the
+        ///  Inheriting classes should override this method to respond to the
         ///  splitterMoved event. This event occurs when the user finishes
         ///  moving the splitter.
         /// </summary>
@@ -1408,7 +1408,7 @@ namespace System.Windows.Forms
                 SplitterDistanceInternal = _splitterDistance;
             }
 
-            // We need to invalidate when we have transparent backgournd.
+            // We need to invalidate when we have transparent background.
             if (BackColor == Color.Transparent)
             {
                 // the panel1 retains the focus rect... so Invalidate the rect ...
@@ -1529,7 +1529,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Draws the splitter line at the requested location. Should only be called
-        ///  by drawSpltBar.
+        ///  by drawSplitBar.
         /// </summary>
         private void DrawSplitHelper(int splitSize)
         {
@@ -1648,7 +1648,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Reize SplitContainer
+        ///  Resize SplitContainer
         /// </summary>
         private void ResizeSplitContainer()
         {
@@ -2022,7 +2022,7 @@ namespace System.Windows.Forms
                 _callBaseVersion = true;
             }
 
-            //IF the CTL == typeof(SpliterPanel) find the NEXT Control... so that we know
+            //IF the CTL == typeof(SplitterPanel) find the NEXT Control... so that we know
             // we can focus the NEXT control within this SPLITCONTAINER....
             else
             {
@@ -2117,7 +2117,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            // If we are changing Height, check if its greater than minimun else ... make it equal to the minimum
+            // If we are changing Height, check if its greater than minimum else ... make it equal to the minimum
             if ((specified & BoundsSpecified.Height) != BoundsSpecified.None && Orientation == Orientation.Horizontal)
             {
                 if (height < Panel1MinSize + SplitterWidthInternal + Panel2MinSize)
@@ -2126,7 +2126,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // If we are changing Width, check if its greater than minimun else ... make it equal to the minimum
+            // If we are changing Width, check if its greater than minimum else ... make it equal to the minimum
             if ((specified & BoundsSpecified.Width) != BoundsSpecified.None && Orientation == Orientation.Vertical)
             {
                 if (width < Panel1MinSize + SplitterWidthInternal + Panel2MinSize)
@@ -2422,7 +2422,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool ProcessTabKey(bool forward)
         {
-            //Dont Focus the Splitter if TabStop == False or if the Splitter is Fixed !!
+            // Don't Focus the Splitter if TabStop == False or if the Splitter is Fixed !!
             if (!TabStop || IsSplitterFixed)
             {
                 return base.ProcessTabKey(forward);

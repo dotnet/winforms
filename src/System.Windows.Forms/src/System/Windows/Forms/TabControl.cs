@@ -372,7 +372,7 @@ namespace System.Windows.Forms
                 if (!IsDisposed)
                 {
                     // Since this is called thru the OnResize (and Layout) which is triggered by SetExtent if the TabControl is hosted as
-                    // a ActiveX control, so check if this is ActiveX and dont force Handle Creation here as the native code breaks in this case.
+                    // a ActiveX control, so check if this is ActiveX and don't force Handle Creation here as the native code breaks in this case.
                     if (!IsActiveX)
                     {
                         if (!IsHandleCreated)
@@ -497,7 +497,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  By default, tabs will automatically size themselves to fit their icon, if any, and their label.
-        ///  However, the tab size can be explicity set by setting this property.
+        ///  However, the tab size can be explicitly set by setting this property.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]
@@ -538,7 +538,7 @@ namespace System.Windows.Forms
         ///  This private property is set by the TabPageCollection when the user calls "InsertItem".
         ///  The problem is when InsertItem is called then we add this item to the ControlsCollection (in addition to the TabPageCollection)
         ///  to keep both the collections is sync. But the controlCollection.Add is overriden to again ADD the item to the TabPageCollection.
-        ///  So we keep this flag in order to aviod repeatd addition (only during insert)
+        ///  So we keep this flag in order to avoid repeated addition (only during insert)
         ///  When the Add ends ... we reset this flag.
         /// </summary>
         private bool InsertingItem
@@ -637,7 +637,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  The number of rows currently being displayed in
-        ///  the tab strip.  This is most commonly used when the Multline property
+        ///  the tab strip.  This is most commonly used when the Multiline property
         ///  is 'true' and you want to know how many rows the tabs are currently
         ///  taking up.
         /// </summary>
@@ -704,7 +704,7 @@ namespace System.Windows.Forms
                         if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                         {
                             // Fire Selecting & Selected .. Also if Selecting is Canceled..
-                            // then retuern as we do not change the SelectedIndex...
+                            // then return as we do not change the SelectedIndex...
                             SetState(State.SelectFirstControl, true);
                             if (WmSelChange())
                             {
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms
                 _selectedIndex = SelectedIndex;
             }
 
-            //Remove the Handle from NativewIndow....
+            //Remove the Handle from NativeWindow....
 
             // Don't try to remove the Handle if we've already done so
             if (_handleInTable)
@@ -2108,7 +2108,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The tab's window procedure.  Inheritng classes can override this
+        ///  The tab's window procedure.  Inheriting classes can override this
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the tab continues to function properly.
         /// </summary>

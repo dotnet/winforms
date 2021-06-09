@@ -70,7 +70,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return result;
             }
 
-            // this returns an array list of the propertydescriptor arrays, one for each
+            // this returns an array list of the PropertyDescriptor arrays, one for each
             // component
             //
             private static ArrayList GetCommonProperties(object[] objs, bool presort, PropertyTab tab, GridEntry parentEntry)
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 MultiPropertyDescriptorGridEntry[] newEntries = null;
                 int newPos = 0;
 
-                // first scan the list and move any parentesized properties to the front.
+                // first scan the list and move any parenthesized properties to the front.
                 for (int i = 0; i < entries.Length; i++)
                 {
                     if (entries[i].ParensAroundName)

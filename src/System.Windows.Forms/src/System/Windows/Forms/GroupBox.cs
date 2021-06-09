@@ -247,7 +247,7 @@ namespace System.Windows.Forms
             get => base.Text;
             set
             {
-                // the GroupBox controls immediately draws when teh WM_SETTEXT comes through, but
+                // the GroupBox controls immediately draws when the WM_SETTEXT comes through, but
                 // does so in the wrong font, so we suspend that behavior, and then
                 // invalidate.
                 bool suspendRedraw = Visible;
@@ -637,7 +637,7 @@ namespace System.Windows.Forms
             if (factor.Width != 1F && factor.Height != 1F)
             {
                 // Make sure when we're scaling by non-unity to clear the font cache
-                // as the font has likely changed, but we dont know it yet as OnFontChanged has yet to
+                // as the font has likely changed, but we don't know it yet as OnFontChanged has yet to
                 // be called on us by our parent.
                 _fontHeight = -1;
                 _cachedFont = null;
@@ -704,7 +704,7 @@ namespace System.Windows.Forms
                     // Force MSAA to always treat a group box as a custom window. This ensures its child controls
                     // will always be exposed through MSAA. Reason: When FlatStyle=System, we map down to the Win32
                     // "Button" window class to get OS group box rendering; but the OS does not expose the children
-                    // of buttons to MSAA (beacuse it assumes buttons won't have children).
+                    // of buttons to MSAA (because it assumes buttons won't have children).
                     if (unchecked((int)(long)m.LParam) == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
                         m.Result = IntPtr.Zero;

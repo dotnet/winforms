@@ -179,7 +179,7 @@ namespace System.Windows.Forms
         SystemMinimizeStart = 0x0016,
 
         /// <summary>
-        ///  <c>EVENT_SYSTEM_MINIMIZEEND</c>
+        ///  <c>EVENT_SYSTEM_MINIMIZED</c>
         ///  Sent when a window minimizes and just before it restores.
         /// </summary>
         /// <seealso cref="SystemMinimizeStart"/>.

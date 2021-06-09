@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     ///  the grid's state and contents.
     ///  These objects should not be cached because they represent a snapshot of the
     ///  PropertyGrid's state and may be disposed by grid activity. The PropertyGrid often
-    ///  recretates these objects internally even if it doesn't appear to change to the user.
+    ///  recreates these objects internally even if it doesn't appear to change to the user.
     /// </summary>
     public abstract class GridItem
     {
@@ -47,9 +47,9 @@ namespace System.Windows.Forms
         public abstract GridItem? Parent { get; }
 
         /// <summary>
-        ///  If this item is a GridItemType.Property GridItem, this retreives the
+        ///  If this item is a GridItemType.Property GridItem, this retrieves the
         ///  System.ComponentModel.PropertyDescriptor that is associated with this GridItem.
-        ///  This can be used to retrieve infomration such as property Type, Name, or
+        ///  This can be used to retrieve information such as property Type, Name, or
         ///  TypeConverter.
         /// </summary>
         public abstract PropertyDescriptor? PropertyDescriptor { get; }
@@ -61,12 +61,12 @@ namespace System.Windows.Forms
         public abstract object? Value { get; }
 
         /// <summary>
-        ///  Retreives whether the given property is expandable.
+        ///  Retrieves whether the given property is expandable.
         /// </summary>
         public virtual bool Expandable => false;
 
         /// <summary>
-        ///  Retreives or sets whether the GridItem is in an expanded state.
+        ///  Retrieves or sets whether the GridItem is in an expanded state.
         /// </summary>
         public virtual bool Expanded
         {

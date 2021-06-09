@@ -90,7 +90,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Specifies whether the WebBrowser control will receive drop notifcations.
+        ///  Specifies whether the WebBrowser control will receive drop notifications.
         ///  Maps to IWebBrowser2:RegisterAsDropTarget.
         ///  Note that this does not mean that the WebBrowser control integrates with
         ///  Windows Forms drag/drop i.e. the DragDrop event does not fire.  It does
@@ -272,7 +272,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Get/sets the stream for the html document.
-        ///  Uses the IPersisteStreamInit interface on the HtmlDocument to set/retrieve the html stream.
+        ///  Uses the IPersistStreamInit interface on the HtmlDocument to set/retrieve the html stream.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -497,7 +497,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Allows the host application to provide an object that the contained html
-        ///  pages can access programatically in script.  The object specified here
+        ///  pages can access programmatically in script.  The object specified here
         ///  will be accessible in script as the "window.external" object via IDispatch
         ///  COM interop. Maps to an implementation of the IDocUIHandler.GetExternal event.
         /// </summary>
@@ -981,7 +981,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Occurs when the document hosted in the web browser control is fully loaded.
-        ///  This is conceptially similar to Form.Load().  You need to wait until this event fires
+        ///  This is conceptually similar to Form.Load().  You need to wait until this event fires
         ///  before doing anything that manipulates the html page, ex. reading the Document
         ///  property of the webbrowser control. Maps to DWebBrowserEvents2:DocumentComplete.
         /// </summary>

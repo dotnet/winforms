@@ -63,7 +63,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Contructs a WindowsFont object from an existing System.Drawing.Font object (GDI+), based on the screen dc
+            ///  Constructs a WindowsFont object from an existing System.Drawing.Font object (GDI+), based on the screen dc
             ///  MapMode and resolution (normally: MM_TEXT and 96 dpi).
             /// </summary>
             private static Gdi32.HFONT FromFont(Font font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)

@@ -376,7 +376,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This event is raised from Application when each window thread termiantes. It gives us a chance to
+        ///  This event is raised from Application when each window thread terminates. It gives us a chance to
         ///  uninstall our journal hook if we had one installed.
         /// </summary>
         private static void OnThreadExit(object sender, EventArgs e)

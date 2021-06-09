@@ -170,7 +170,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private bool ProcessMouseDown(IntPtr hWnd, int x, int y)
             {
                 // If we put up the "invalid" message box, it appears this
-                // method is getting called re-entrantly when it shouldn't be.
+                // method is getting called reentrantly when it shouldn't be.
                 // this prevents us from recursing.
                 if (_processing)
                 {

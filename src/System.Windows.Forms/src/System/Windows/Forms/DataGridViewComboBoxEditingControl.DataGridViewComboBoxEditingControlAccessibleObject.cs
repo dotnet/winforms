@@ -88,7 +88,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+            ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
             /// </summary>
             /// <param name="parent">The parent accessible object.</param>
             internal override void SetParent(AccessibleObject parent)

@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // let image key take precidence
+            // let image key take precedence
             if (imageKey is not null)
             {
                 ImageKey = imageKey;

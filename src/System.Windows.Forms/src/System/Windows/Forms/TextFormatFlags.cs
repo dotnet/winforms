@@ -52,7 +52,7 @@ namespace System.Windows.Forms
 
         ///  The following flags are exclusive of TextRenderer (no Windows native flags)
         ///  and apply to methods receiving a Graphics as the IDeviceContext object, and
-        ///  specify whether to reapply clipping and coordintate transformations to the hdc
+        ///  specify whether to reapply clipping and coordinate transformations to the hdc
         ///  obtained from the Graphics object, which returns a clean hdc.
         ///
         ///  These get stripped off by TextExtensions before we call DrawText or MeasureText

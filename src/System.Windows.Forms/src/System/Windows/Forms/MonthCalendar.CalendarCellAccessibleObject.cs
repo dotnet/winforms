@@ -88,7 +88,7 @@ namespace System.Windows.Forms
                         culture.DateTimeFormat.CalendarWeekRule, _monthCalendarAccessibleObject.FirstDayOfWeek);
 
                     // Used string.Format here to get the correct value from resources
-                    // that should be cosistent with the rest resources values
+                    // that should be consistent with the rest resources values
                     return string.Format(SR.MonthCalendarWeekNumberDescription, weekNumber)
                         + $", {cellDate.ToString("dddd", culture)}";
                 }
@@ -216,7 +216,7 @@ namespace System.Windows.Forms
                     // This condition works correctly in Month view only because the cell range is bigger
                     // then the calendar selection range in the rest views.
                     // But in the rest views a user can select only one cell. It means that a focused cell equals one selected cell,
-                    // so the correct state will be returned in the codition above for the rest views.
+                    // so the correct state will be returned in the condition above for the rest views.
                     if (DateRange is not null && _monthCalendarAccessibleObject.CelendarView == MCMV.MONTH
                         && DateRange.Start >= _monthCalendarAccessibleObject.SelectionRange.Start
                         && DateRange.End <= _monthCalendarAccessibleObject.SelectionRange.End)

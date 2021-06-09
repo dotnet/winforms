@@ -1360,7 +1360,7 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            // make sure we restore whatever running state whad prior to the handle recreate.
+            // make sure we restore whatever running state we had prior to the handle recreate.
             //
             if (axReloadingState != WebBrowserHelper.AXState.Passive && axReloadingState != axState)
             {

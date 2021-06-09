@@ -171,7 +171,7 @@ namespace System.Windows.Forms
             SetStyle(ControlStyles.UseTextForAccessibility, false);
 
             // static variables are problem in a child level mixed mode scenario. Changing static variables cause compatibility issue.
-            // So, recalculate static variables everytime property grid initialized.
+            // So, recalculate static variables every time property grid initialized.
             if (DpiHelper.IsPerMonitorV2Awareness)
             {
                 RescaleConstants();
@@ -526,7 +526,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The forground color for the hot commands region.
+        ///  The foreground color for the hot commands region.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))]
@@ -794,7 +794,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The forground color for the help region.
+        ///  The foreground color for the help region.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridHelpForeColorDesc))]
@@ -830,7 +830,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets or gets the visiblity state of the help pane.
+        ///  Sets or gets the visibility state of the help pane.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(true)]
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms
                     {
                         // When no row is selected, SelectedGridItem returns grid entry for root
                         // object. But this is not a selectable item. So don't worry if setting SelectedGridItem
-                        // cause an argument exception whe ntrying to re-select the root object. Just leave the
+                        // cause an argument exception when trying to re-select the root object. Just leave the
                         // the grid with no selected row.
                     }
                 }
@@ -1545,7 +1545,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets or gets the visiblity state of the toolStrip.
+        ///  Sets or gets the visibility state of the toolStrip.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [DefaultValue(true)]
@@ -2130,7 +2130,7 @@ namespace System.Windows.Forms
                         else
                         {
                             // No menu command service.  Go straight to the component's designer.  We
-                            // can only do this if the Object count is 1, because desginers do not
+                            // can only do this if the Object count is 1, because designers do not
                             // support verbs across a multi-selection.
                             //
                             if (_currentObjects.Length == 1 && GetUnwrappedObject(0) is IComponent)
@@ -2844,7 +2844,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  We forward messages from several of our children
-        ///  to our mouse move so we can put up the spliter over their borders
+        ///  to our mouse move so we can put up the splitter over their borders
         /// </summary>
         private void OnChildMouseMove(object sender, MouseEventArgs me)
         {
@@ -2859,7 +2859,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  We forward messages from several of our children
-        ///  to our mouse move so we can put up the spliter over their borders
+        ///  to our mouse move so we can put up the splitter over their borders
         /// </summary>
         private void OnChildMouseDown(object sender, MouseEventArgs me)
         {
@@ -3455,7 +3455,7 @@ namespace System.Windows.Forms
                 {
                     if (currentSelection.Site is null) //The component is not logically sited...so clear the PropertyGrid Selection..
                     {
-                        //Setting to null... actually will clear off the state information so that ProperyGrid is in sane State.
+                        //Setting to null... actually will clear off the state information so that PropertyGrid is in sane State.
                         SelectedObject = null;
                         return;
                     }
@@ -4454,7 +4454,7 @@ namespace System.Windows.Forms
                 Bitmap b;
                 int i;
 
-                // we manange the buttons as a seperate list so the toobar doesn't flash
+                // we manage the buttons as a separate list so the toolbar doesn't flash
                 ArrayList buttonList;
 
                 if (fullRebuild)
@@ -5052,7 +5052,7 @@ namespace System.Windows.Forms
                             if (_toolStrip.Items[index] is ToolStripButton button)
                             {
                                 button.Checked = !button.Checked;
-                                // special treatment for the properies page button
+                                // special treatment for the properties page button
                                 if (button == _btnViewPropertyPages)
                                 {
                                     OnViewButtonClickPP(button, EventArgs.Empty);

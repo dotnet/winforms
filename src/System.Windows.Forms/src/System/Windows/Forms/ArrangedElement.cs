@@ -177,7 +177,7 @@ namespace System.Windows.Forms
 
         public void SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
-            // in this case the parent is telling us to refresh our bounds - dont
+            // in this case the parent is telling us to refresh our bounds - don't
             // call PerformLayout
             SetBoundsCore(bounds, specified);
         }

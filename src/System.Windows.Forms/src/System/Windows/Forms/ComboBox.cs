@@ -22,7 +22,7 @@ using static Interop.User32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Displays an editing field and a list, allowing the user to select from thelist or to enter new text. Displays
+    ///  Displays an editing field and a list, allowing the user to select from the list or to enter new text. Displays
     ///  only the editing field until the user explicitly displays the list.
     /// </summary>
     [DefaultEvent(nameof(SelectedIndexChanged))]
@@ -875,11 +875,11 @@ namespace System.Windows.Forms
                 {
                     //do preferred height the old broken way for everett apps
                     //we need this for compat reasons because (get this)
-                    //  (a) everett preferredheight was always wrong.
+                    //  (a) everett PreferredHeight was always wrong.
                     //  (b) so, when combobox1.Size = actualdefaultsize was called, it would enter setboundscore
                     //  (c) this updated requestedheight
                     //  (d) if the user then changed the combo to simple style, the height did not change.
-                    // We simply cannot match this behavior if preferredheight is corrected so that (b) never
+                    // We simply cannot match this behavior if PreferredHeight is corrected so that (b) never
                     // occurs.  We simply do not know when Size was set.
 
                     // So in whidbey, the behavior will be:
@@ -887,7 +887,7 @@ namespace System.Windows.Forms
                     //  (2) user uses nondefault size = setting dropdownstyle=simple will not change height from this value
 
                     //In everett
-                    //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidey.(1) above
+                    //  if the user manually sets Size = (121, 20) in code (usually height gets forced to 21), then he will see Whidbey.(1) above
                     //  user usually uses nondefault size and will experience whidbey.(2) above
 
                     Size textSize = TextRenderer.MeasureText(LayoutUtils.TestString, Font, new Size(short.MaxValue, (int)(FontHeight * 1.25)), TextFormatFlags.SingleLine);
@@ -1131,7 +1131,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                // SelectionLength can be negtive...
+                // SelectionLength can be negative...
                 Select(SelectionStart, value);
             }
         }
@@ -1353,10 +1353,10 @@ namespace System.Windows.Forms
                 }
             }
 
-            //don't fire textch if we had set the selectedindex -- because it was already fired if so.
+            //don't fire TextChanged if we had set the selectedindex -- because it was already fired if so.
             if (textChanged && !selectedIndexSet)
             {
-                // No match, just fire a TextChagned
+                // No match, just fire a TextChanged
                 OnTextChanged(EventArgs.Empty);
             }
 
@@ -1539,7 +1539,7 @@ namespace System.Windows.Forms
                 return new Point(0, 0);
             }
 
-            // Get the Combox Rect
+            // Get the Combobox Rect
             var comboRectMid = new RECT();
             GetWindowRect(this, ref comboRectMid);
 
@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms
 
                     break;
                 case WM.KILLFOCUS:
-                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
+                    // Consider - If we don't have a childwndproc, then we don't get here, so we don't
                     // update the cache. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode)
                     {
@@ -1694,7 +1694,7 @@ namespace System.Windows.Forms
                     break;
                 case WM.SETFOCUS:
 
-                    // Consider - If we dont' have a childwndproc, then we don't get here, so we don't
+                    // Consider - If we don't have a childwndproc, then we don't get here, so we don't
                     // set the status. Do we need to? This happens when we have a DropDownList.
                     if (!DesignMode)
                     {
@@ -2540,7 +2540,7 @@ namespace System.Windows.Forms
                     NativeAdd(item);
                 }
 
-                // Now udpate the current selection.
+                // Now update the current selection.
                 //
                 if (_selectedIndex >= 0)
                 {
@@ -2692,8 +2692,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is the code that actually fires the measuereItem event.  Don't
-        ///  forget to call base.onMeasureItem() to ensure that measureItem
+        ///  This is the code that actually fires the OnMeasureItem event.  Don't
+        ///  forget to call base.onMeasureItem() to ensure that OnMeasureItem
         ///  events are correctly fired at all other times.
         /// </summary>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
@@ -3085,7 +3085,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  This event is fired when the edit portion of a combobox is about to display altered text.
-        ///  This event is NOT fired if the TEXT property is programatically changed.
+        ///  This event is NOT fired if the TEXT property is programmatically changed.
         /// </summary>
         protected virtual void OnTextUpdate(EventArgs e)
         {
@@ -3645,8 +3645,8 @@ namespace System.Windows.Forms
                 _childDropDown = new ComboBoxChildNativeWindow(this, ChildWindowType.DropDownList);
                 _childDropDown.AssignHandle(_dropDownHandle);
 
-                // Reset the child list accessible object in case the the DDL is recreated.
-                // For instance when dialog window containging the ComboBox is reopened.
+                // Reset the child list accessible object in case the DDL is recreated.
+                // For instance when dialog window containing the ComboBox is reopened.
                 _childListAccessibleObject = null;
             }
         }
@@ -3792,7 +3792,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The comboboxs window procedure.  Inheritng classes can override this
+        ///  The Combobox's window procedure.  Inheriting classes can override this
         ///  to add extra functionality, but should not forget to call
         ///  base.wndProc(m); to ensure the combo continues to function properly.
         /// </summary>

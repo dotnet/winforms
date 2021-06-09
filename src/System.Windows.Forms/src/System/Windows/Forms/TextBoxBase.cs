@@ -1615,8 +1615,8 @@ namespace System.Windows.Forms
         protected override void OnTextChanged(EventArgs e)
         {
             // since AutoSize existed in Everett, (and is the default) we can't
-            // relayout the parent when the "preferredsize" of the control changes.
-            // this means a multiline = true textbox wont natrually grow in height when
+            // relayout the parent when the "PreferredSize" of the control changes.
+            // this means a multiline = true textbox won't naturally grow in height when
             // the text changes.
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
@@ -1978,8 +1978,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Converts byte offsset to unicode offsets.
-        ///  When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
+        ///  Converts byte offset to unicode offsets.
+        ///  When processing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
         ///  as opposed to RICHEDIT which does it always as character positions.
         ///  This method is used when handling the WM_GETSEL message.
         /// </summary>
@@ -2026,8 +2026,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Converts unicode offsset to byte offsets.
-        ///  When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
+        ///  Converts unicode offset to byte offsets.
+        ///  When processing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
         ///  as opposed to RICHEDIT which does it always as character positions.
         ///  This method is used when handling the WM_SETSEL message.
         /// </summary>

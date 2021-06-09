@@ -735,7 +735,7 @@ namespace System.Windows.Forms
                 }
 
                 // We can do this 'cuz the viewStyle enums are the same values as the actual LVS styles
-                // this new check since the value for LV_VIEW_TILE == LVS_SINGLESEL; so dont OR that value since
+                // this new check since the value for LV_VIEW_TILE == LVS_SINGLESEL; so don't OR that value since
                 // LV_VIEW_TILE is not a STYLE but should be Send via a SENDMESSAGE.
                 if (viewStyle != View.Tile)
                 {
@@ -802,7 +802,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retreives the group which currently has the user focus.  This is the
+        ///  Retrieves the group which currently has the user focus.  This is the
         ///  group that's drawn with the dotted focus rectangle around it.
         ///  Returns null if no group is currently focused.
         /// </summary>
@@ -820,7 +820,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retreives the item which currently has the user focus.  This is the
+        ///  Retrieves the item which currently has the user focus.  This is the
         ///  item that's drawn with the dotted focus rectangle around it.
         ///  Returns null if no item is currently focused.
         /// </summary>
@@ -2245,10 +2245,10 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Called to add any delayed update items we have to the list view.  We do this because
-        ///  we have optimnized the case where a user is only adding items within a beginupdate/endupdate
+        ///  we have optimized the case where a user is only adding items within a beginupdate/endupdate
         ///  block.  If they do any other operations (get the count, remove, insert, etc.), we push in the
         ///  cached up items first, then do the requested operation.  This keeps it simple so we don't have to
-        ///  try to maintain parellel state of the cache during a begin update end update.
+        ///  try to maintain parallel state of the cache during a begin update end update.
         /// </summary>
         private void ApplyUpdateCachedItems()
         {
@@ -2827,7 +2827,7 @@ namespace System.Windows.Forms
 
                             if (subitem > 0 || (state & (CDIS.SELECTED | CDIS.GRAYED | CDIS.HOT | CDIS.DISABLED)) == 0)
                             {
-                                // we only propogate colors if we're displaying things normally
+                                // we only propagate colors if we're displaying things normally
                                 // the user can override this method to do all kinds of other bad things if they
                                 // want to though - but we don't support that.
                                 subItemForeColor = item.SubItems[subitem].ForeColor;
@@ -4161,7 +4161,7 @@ namespace System.Windows.Forms
             Invalidate();
             ArrangeIcons(alignStyle);
 
-            // Any newly added items shoul dhave the correct location.
+            // Any newly added items should have the correct location.
             // UpdateListViewItemsLocations();
 
             // Update sorted order
@@ -4588,14 +4588,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            // If font changes and we have headers, they need to be expicitly invalidated
+            // If font changes and we have headers, they need to be explicitly invalidated
             //
             InvalidateColumnHeaders();
         }
 
         protected override void OnHandleCreated(EventArgs e)
         {
-            // don't persist flipViewToLargeIconAndSmallIcon accross handle recreations...
+            // don't persist flipViewToLargeIconAndSmallIcon across handle recreations...
             FlipViewToLargeIconAndSmallIcon = false;
 
             base.OnHandleCreated(e);
@@ -4732,7 +4732,7 @@ namespace System.Windows.Forms
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            // don't save the list view items state when in virtual mode : it is the responsability of the
+            // don't save the list view items state when in virtual mode : it is the responsibility of the
             // user to cache the list view items in virtual mode
             if (!Disposing && !VirtualMode)
             {
@@ -5548,7 +5548,7 @@ namespace System.Windows.Forms
         //
         // ComCtl32 list view uses a selection mark to keep track of selection state - iMark.
         // ComCtl32 list view updates iMark only when the user hovers over the item.
-        // This means that if we programatically set the selection item, then the list view will not update
+        // This means that if we programmatically set the selection item, then the list view will not update
         // its selection mark.
         // So we explicitly set the selection mark.
         //
@@ -5922,7 +5922,7 @@ namespace System.Windows.Forms
             int y = PARAM.SignedHIWORD(m.LParam);
             OnMouseDown(new MouseEventArgs(button, clicks, x, y, 0));
 
-            //If Validation is cancelled dont fire any events through the Windows ListView's message loop...
+            //If Validation is cancelled don't fire any events through the Windows ListView's message loop...
             if (!ValidationCancelled)
             {
                 if (CheckBoxes)
@@ -6564,7 +6564,7 @@ namespace System.Windows.Forms
                             // this event twice, once with newState, oldState, and again with
                             // oldState, newState.
                             // Changing this affects the behaviour as the control never
-                            // fires the event on a Deselct of an Items from multiple selections.
+                            // fires the event on a Deselect of an Items from multiple selections.
                             // So leave it as it is...
                             if (newState != oldState)
                             {

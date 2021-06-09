@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         private static readonly int s_stateScalingChild = BitVector32.CreateMask(s_stateProcessingMnemonic);
 
         /// <summary>
-        ///  Flagged when a parent changes so we can adpat our scaling logic to match.
+        ///  Flagged when a parent changes so we can adapt our scaling logic to match.
         /// </summary>
         private static readonly int s_stateParentChanged = BitVector32.CreateMask(s_stateScalingChild);
 
@@ -721,7 +721,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This method calcuates the auto scale dimensions based on the control's current font.
+        ///  This method calculates the auto scale dimensions based on the control's current font.
         /// </summary>
         private SizeF GetFontAutoScaleDimensions()
         {
@@ -1054,7 +1054,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal override void Scale(SizeF includedFactor, SizeF excludedFactor, Control requestingControl, bool causedByFontChanged = false)
         {
-            // If we're inhieriting our scaling from our parent, Scale is really easy:  just do the
+            // If we're inheriting our scaling from our parent, Scale is really easy:  just do the
             // base class implementation.
             if (AutoScaleMode == AutoScaleMode.Inherit)
             {

@@ -948,7 +948,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     Edit.Filter = false;
 
-                    // disable the ddh so it wont' steal the focus back
+                    // disable the ddh so it won't steal the focus back
                     //
                     _dropDownHolder.SetComponent(null, false);
                     _dropDownHolder.Visible = false;
@@ -1782,7 +1782,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // control is a top=level window. standard way of setparent on the control is prohibited for top-level controls.
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
-            // We are not touching this for this relase. We may revisit it in next release.
+            // We are not touching this for this release. We may revisit it in next release.
             User32.SetWindowLong(_dropDownHolder, User32.GWL.HWNDPARENT, new HandleRef(this, Handle));
             _dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
             User32.ShowWindow(_dropDownHolder, User32.SW.SHOWNA);
@@ -3012,7 +3012,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            // if the focus isn't goint to a child of the view
+            // if the focus isn't going to a child of the view
             if (!Commit())
             {
                 Edit.Focus();
@@ -3047,7 +3047,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // this allows the edits to be selected with two clicks instead of 3 (select row, double click).
             //
             long timeStamp = DateTime.Now.Ticks;
-            int delta = (int)((timeStamp - _rowSelectTime) / 10000); // make it milleseconds
+            int delta = (int)((timeStamp - _rowSelectTime) / 10000); // make it milliseconds
 
             if (delta < SystemInformation.DoubleClickTime)
             {
@@ -4109,7 +4109,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     entries = newEntries;
                 }
 
-                // from that point, replace the children with tne new children.
+                // from that point, replace the children with the new children.
                 GridEntryCollection children = parent.Children;
                 int childCount = children.Count;
 

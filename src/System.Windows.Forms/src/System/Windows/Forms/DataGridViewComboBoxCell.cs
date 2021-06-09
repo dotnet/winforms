@@ -2317,7 +2317,7 @@ namespace System.Windows.Forms
                                 Point pt1 = new Point(middle.X - (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
                                 Point pt2 = new Point(middle.X + (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
                                 g.FillPolygon(SystemBrushes.ControlText, new Point[] { pt1, pt2, middle });
-                                // quirk in GDI+ : if we dont draw the line below then the top right most pixel of the DropDown triangle will not paint
+                                // quirk in GDI+ : if we don't draw the line below then the top right most pixel of the DropDown triangle will not paint
                                 // Would think that g.FillPolygon would have painted that...
                                 g.DrawLine(SystemPens.ControlText, pt1.X, pt1.Y, pt2.X, pt2.Y);
 

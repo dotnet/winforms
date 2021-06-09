@@ -558,7 +558,7 @@ namespace System.Windows.Forms
         internal virtual UiaCore.IRawElementProviderSimple? ItemSelectionContainer => null;
 
         /// <summary>
-        ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+        ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
         /// </summary>
         /// <param name="parent">The parent accessible object.</param>
         internal virtual void SetParent(AccessibleObject? parent)
@@ -566,7 +566,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
+        ///  Sets the detachable child accessible object which may be added or removed to/from hierarchy nodes.
         /// </summary>
         /// <param name="child">The child accessible object.</param>
         internal virtual void SetDetachableChild(AccessibleObject? child)
@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Return the requested method if it is implemented by the Reflection object. The
-        ///  match is based upon the name of the method. If the object implementes multiple methods
+        ///  match is based upon the name of the method. If the object implemented multiple methods
         ///  with the same name an AmbiguousMatchException is thrown.
         /// </summary>
         MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)

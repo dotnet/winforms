@@ -1012,7 +1012,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns a string that is the combination of the basePath + CompanyName + ProducName + ProductVersion. This
+        ///  Returns a string that is the combination of the basePath + CompanyName + ProductName + ProductVersion. This
         ///  will also create the directory if it doesn't exist.
         /// </summary>
         private static string GetDataPath(string basePath)
