@@ -57,7 +57,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Retrieves a WindowClass object for use.  This will create a new
-            ///  object if there is no such class/style available, or retrun a
+            ///  object if there is no such class/style available, or return a
             ///  cached object if one exists.
             /// </summary>
             internal static WindowClass Create(string className, User32.CS classStyle)

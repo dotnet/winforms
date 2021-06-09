@@ -704,7 +704,7 @@ namespace System.Windows.Forms
                         if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                         {
                             // Fire Selecting & Selected .. Also if Selecting is Canceled..
-                            // then retuern as we do not change the SelectedIndex...
+                            // then return as we do not change the SelectedIndex...
                             SetState(State.SelectFirstControl, true);
                             if (WmSelChange())
                             {
