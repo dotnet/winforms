@@ -2692,8 +2692,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This is the code that actually fires the measuereItem event.  Don't
-        ///  forget to call base.onMeasureItem() to ensure that measureItem
+        ///  This is the code that actually fires the OnMeasureItem event.  Don't
+        ///  forget to call base.onMeasureItem() to ensure that OnMeasureItem
         ///  events are correctly fired at all other times.
         /// </summary>
         protected virtual void OnMeasureItem(MeasureItemEventArgs e)
