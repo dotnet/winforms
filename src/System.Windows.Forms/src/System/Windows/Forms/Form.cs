@@ -4345,7 +4345,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Thi event fires whenever the form is first shown.
+        ///  This event fires whenever the form is first shown.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnShown(EventArgs e)

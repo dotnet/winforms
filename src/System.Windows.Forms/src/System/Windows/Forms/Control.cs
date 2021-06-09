@@ -5715,7 +5715,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This new Internal method checks the updateCount to signify that the control is within the "BeginUpdate" and "EndUpdate" cycle.
         ///  Check out : for usage of this. The Treeview tries to ForceUpdate the scrollbars by calling "WM_SETREDRAW"
-        ///  even if the control in "Begin - End" update cycle. Using thie Function we can guard against repetitively redrawing the control.
+        ///  even if the control in "Begin - End" update cycle. Using this Function we can guard against repetitively redrawing the control.
         /// </summary>
         internal bool IsUpdating()
         {
