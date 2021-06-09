@@ -4,5 +4,5 @@ System.Windows.Forms.Application.ApplicationDefaults
 System.Windows.Forms.ApplicationDefaultsExtension
 ~System.Windows.Forms.Application.ApplicationDefaults.TryAddDefaultValue(string PropertyName, object value) -> bool
 ~System.Windows.Forms.Application.ApplicationDefaults.TryAddDefaultValue<T>(string PropertyName, object value) -> bool
-~static System.Windows.Forms.Application.Defaults.get -> System.Windows.Forms.Application.ApplicationDefaults
+~static System.Windows.Forms.Application.SetDefaultFont(System.Drawing.Font font) -> void
 ~static System.Windows.Forms.ApplicationDefaultsExtension.SetFont(this System.Windows.Forms.Application.ApplicationDefaults defaults, System.Drawing.Font font) -> System.Windows.Forms.Application.ApplicationDefaults

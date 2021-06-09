@@ -31,6 +31,8 @@ namespace System.Windows.Forms
         ///  Hash table for our event list
         /// </summary>
         private static EventHandlerList s_eventHandlers;
+        private static Font s_defaultFont;
+        private static Font s_defaultFontScaled;
         private static string s_startupPath;
         private static string s_executablePath;
         private static object s_appFileVersion;
@@ -280,7 +282,7 @@ namespace System.Windows.Forms
         internal static bool CustomThreadExceptionHandlerAttached
             => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
-        internal static Font DefaultFont => Defaults.GetFont();
+        internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont;
 
         /// <summary>
         ///  Gets the path for the executable file that started the application.
@@ -1352,10 +1354,5 @@ namespace System.Windows.Forms
         /// </summary>
         public static void SetUnhandledExceptionMode(UnhandledExceptionMode mode, bool threadScope)
             => NativeWindow.SetUnhandledExceptionModeInternal(mode, threadScope);
-
-        /// <summary>
-        /// Gives access to a collection of Default settings, which can be exclusively accessed via methods defined in.
-        /// </summary>
-        public static ApplicationDefaults Defaults { get; } = new ApplicationDefaults();
     }
 }
