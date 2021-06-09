@@ -9,6 +9,7 @@ Namespace My
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
 
     ' **NEW** ApplyHighDpiMode: Raised when the application queries the HighDpiMode to set it for the application.
+    ' **NEW** ApplyApplicationDefaults: Raised when the application queries default values to be set for the application.
 
     ' Example:
 
