@@ -1,7 +1,8 @@
 Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler
 Microsoft.VisualBasic.ApplicationServices.ApplyDefaultsEventArgs
-Microsoft.VisualBasic.ApplicationServices.ApplyDefaultsEventArgs.Defaults() -> System.Windows.Forms.Application.ApplicationDefaults
-Microsoft.VisualBasic.ApplicationServices.ApplyDefaultsEventArgs.New(defaults As System.Windows.Forms.Application.ApplicationDefaults) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyDefaultsEventArgs.DefaultFont() -> System.Drawing.Font
+Microsoft.VisualBasic.ApplicationServices.ApplyDefaultsEventArgs.DefaultFont(AutoPropertyValue As System.Drawing.Font) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyDefaultsEventArgs.New() -> Void
 Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventArgs
 Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventArgs.HighDpiMode() -> System.Windows.Forms.HighDpiMode
 Microsoft.VisualBasic.ApplicationServices.ApplyHighDpiModeEventArgs.HighDpiMode(value As System.Windows.Forms.HighDpiMode) -> Void

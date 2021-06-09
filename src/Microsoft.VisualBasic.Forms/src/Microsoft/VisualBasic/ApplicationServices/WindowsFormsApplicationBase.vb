@@ -405,12 +405,15 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
-            ' Let's get the request from the ApplicationEvents for the HighDpiMode...
-            Dim getHighDpiEventArgs = New ApplyHighDpiModeEventArgs(HighDpiMode)
-            RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
+            ' Lets first query and set, if applicable, the DefaultFont.
+            Dim applicationDefaultsEventArgs = New ApplyDefaultsEventArgs()
+            RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
+            If (applicationDefaultsEventArgs.DefaultFont IsNot Nothing) Then
+                'Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.DefaultFont)
+            End If
 
-            ' ...and whatever Defaults need to be set.
-            Dim getApplicationDefaultsEventArgs = New ApplyDefaultsEventArgs(Windows.Forms.Application.Defaults)
+            ' Let'then s get the request from the ApplicationEvents for the HighDpiMode...
+            Dim getHighDpiEventArgs = New ApplyHighDpiModeEventArgs(HighDpiMode)
             RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
 
             ' Apply HighDpiMode
@@ -756,102 +759,102 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' unhandled exception event so we do the translation here before raising our event.
         ''' </remarks>
         Private Sub OnUnhandledExceptionEventAdaptor(sender As Object, e As ThreadExceptionEventArgs)
-                OnUnhandledException(New UnhandledExceptionEventArgs(True, e.Exception))
-            End Sub
+            OnUnhandledException(New UnhandledExceptionEventArgs(True, e.Exception))
+        End Sub
 
-            Private Sub OnStartupNextInstanceMarshallingAdaptor(ByVal args As String())
-                If MainForm Is Nothing Then
-                    Return
-                End If
+        Private Sub OnStartupNextInstanceMarshallingAdaptor(ByVal args As String())
+            If MainForm Is Nothing Then
+                Return
+            End If
 
-                Dim invoked = False
+            Dim invoked = False
 
+            Try
+                MainForm.Invoke(
+                    Sub()
+                        invoked = True
+                        OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), bringToForegroundFlag:=True))
+                    End Sub)
+            Catch ex As Exception When Not invoked
+                ' Only catch exceptions thrown when the UI thread is not available, before
+                ' the UI thread has been created or after it has been terminated. Exceptions
+                ' thrown from OnStartupNextInstance() should be allowed to propagate.
+            End Try
+        End Sub
+
+        ''' <summary>
+        ''' Handles the Network.NetworkAvailability event (on the correct thread) and raises the
+        ''' NetworkAvailabilityChanged event
+        ''' </summary>
+        ''' <param name="Sender">Contains the Network instance that raised the event</param>
+        ''' <param name="e">Contains whether the network is available or not</param>
+        Private Sub NetworkAvailableEventAdaptor(sender As Object, e As Devices.NetworkAvailableEventArgs)
+            RaiseEvent NetworkAvailabilityChanged(sender, e)
+        End Sub
+
+        ''' <summary>
+        ''' Runs the user's program through the VB Startup/Shutdown application model
+        ''' </summary>
+        Private Sub DoApplicationModel()
+
+            Dim EventArgs As New StartupEventArgs(CommandLineArgs)
+
+            'Only do the try/catch if we aren't running under the debugger.  If we do try/catch under the debugger the debugger never gets a crack at exceptions which breaks the exception helper
+            If Not Debugger.IsAttached Then
+                'NO DEBUGGER ATTACHED - we use a catch so that we can run our UnhandledException code
+                'Note - Sadly, code changes within this IF (that don't pertain to exception handling) need to be mirrored in the ELSE debugger attached clause below
                 Try
-                    MainForm.Invoke(
-                        Sub()
-                            invoked = True
-                            OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), bringToForegroundFlag:=True))
-                        End Sub)
-                Catch ex As Exception When Not invoked
-                    ' Only catch exceptions thrown when the UI thread is not available, before
-                    ' the UI thread has been created or after it has been terminated. Exceptions
-                    ' thrown from OnStartupNextInstance() should be allowed to propagate.
-                End Try
-            End Sub
-
-            ''' <summary>
-            ''' Handles the Network.NetworkAvailability event (on the correct thread) and raises the
-            ''' NetworkAvailabilityChanged event
-            ''' </summary>
-            ''' <param name="Sender">Contains the Network instance that raised the event</param>
-            ''' <param name="e">Contains whether the network is available or not</param>
-            Private Sub NetworkAvailableEventAdaptor(sender As Object, e As Devices.NetworkAvailableEventArgs)
-                RaiseEvent NetworkAvailabilityChanged(sender, e)
-            End Sub
-
-            ''' <summary>
-            ''' Runs the user's program through the VB Startup/Shutdown application model
-            ''' </summary>
-            Private Sub DoApplicationModel()
-
-                Dim EventArgs As New StartupEventArgs(CommandLineArgs)
-
-                'Only do the try/catch if we aren't running under the debugger.  If we do try/catch under the debugger the debugger never gets a crack at exceptions which breaks the exception helper
-                If Not Debugger.IsAttached Then
-                    'NO DEBUGGER ATTACHED - we use a catch so that we can run our UnhandledException code
-                    'Note - Sadly, code changes within this IF (that don't pertain to exception handling) need to be mirrored in the ELSE debugger attached clause below
-                    Try
-                        If OnInitialize(CommandLineArgs) Then
-                            If OnStartup(EventArgs) = True Then
-                                OnRun()
-                                OnShutdown()
-                            End If
-                        End If
-                    Catch ex As Exception
-                        'This catch is for exceptions that happen during the On* methods above, but have occurred outside of the message pump (which exceptions we would
-                        'have already seen via our hook of System.Windows.Forms.Application.ThreadException)
-                        If _processingUnhandledExceptionEvent Then
-                            Throw 'If the UnhandledException handler threw for some reason, throw that error out to the system.
-                        Else 'We had an exception, but not during the OnUnhandledException handler so give the user a chance to look at what happened in the UnhandledException event handler
-                            If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) = True Then
-                                Throw 'the user didn't write a handler so throw the error out to the system
-                            End If
-                        End If
-                    End Try
-                Else 'DEBUGGER ATTACHED - we don't have an uber catch when debugging so the exception will bubble out to the exception helper
-                    'We also don't hook up the Application.ThreadException event because WinForms ignores it when we are running under the debugger
                     If OnInitialize(CommandLineArgs) Then
                         If OnStartup(EventArgs) = True Then
                             OnRun()
                             OnShutdown()
                         End If
                     End If
-                End If
-            End Sub
-
-            ''' <summary>
-            ''' Generates the name for the remote singleton that we use to channel multiple instances
-            ''' to the same application model thread.
-            ''' </summary>
-            ''' <returns>A string unique to the application that should be the same for versions of
-            '''  the application that have the same Major and Minor Version Number
-            ''' </returns>
-            ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId</remarks>
-            Private Shared Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
-
-                Dim guidAttrib As GuidAttribute = Entry.GetCustomAttribute(Of GuidAttribute)()
-
-                If guidAttrib IsNot Nothing Then
-                    Dim version As Version = Entry.GetName.Version
-                    If version IsNot Nothing Then
-                        Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
-                    Else
-                        Return guidAttrib.Value
+                Catch ex As Exception
+                    'This catch is for exceptions that happen during the On* methods above, but have occurred outside of the message pump (which exceptions we would
+                    'have already seen via our hook of System.Windows.Forms.Application.ThreadException)
+                    If _processingUnhandledExceptionEvent Then
+                        Throw 'If the UnhandledException handler threw for some reason, throw that error out to the system.
+                    Else 'We had an exception, but not during the OnUnhandledException handler so give the user a chance to look at what happened in the UnhandledException event handler
+                        If Not OnUnhandledException(New UnhandledExceptionEventArgs(True, ex)) = True Then
+                            Throw 'the user didn't write a handler so throw the error out to the system
+                        End If
+                    End If
+                End Try
+            Else 'DEBUGGER ATTACHED - we don't have an uber catch when debugging so the exception will bubble out to the exception helper
+                'We also don't hook up the Application.ThreadException event because WinForms ignores it when we are running under the debugger
+                If OnInitialize(CommandLineArgs) Then
+                    If OnStartup(EventArgs) = True Then
+                        OnRun()
+                        OnShutdown()
                     End If
                 End If
+            End If
+        End Sub
 
-                Return Entry.ManifestModule.ModuleVersionId.ToString()
-            End Function
+        ''' <summary>
+        ''' Generates the name for the remote singleton that we use to channel multiple instances
+        ''' to the same application model thread.
+        ''' </summary>
+        ''' <returns>A string unique to the application that should be the same for versions of
+        '''  the application that have the same Major and Minor Version Number
+        ''' </returns>
+        ''' <remarks>If GUID Attribute does not exist fall back to unique ModuleVersionId</remarks>
+        Private Shared Function GetApplicationInstanceID(ByVal Entry As Assembly) As String
 
-        End Class
+            Dim guidAttrib As GuidAttribute = Entry.GetCustomAttribute(Of GuidAttribute)()
+
+            If guidAttrib IsNot Nothing Then
+                Dim version As Version = Entry.GetName.Version
+                If version IsNot Nothing Then
+                    Return $"{guidAttrib.Value}{version.Major}.{version.Minor}"
+                Else
+                    Return guidAttrib.Value
+                End If
+            End If
+
+            Return Entry.ManifestModule.ModuleVersionId.ToString()
+        End Function
+    End Class
+
 End Namespace

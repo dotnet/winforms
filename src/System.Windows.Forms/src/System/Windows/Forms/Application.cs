@@ -1281,7 +1281,7 @@ namespace System.Windows.Forms
             => NativeWindow.SetUnhandledExceptionModeInternal(mode, threadScope);
 
         /// <summary>
-        /// Gives access to a collection of Default settings, which can be exclusively accessed via methods defined in 
+        /// Gives access to a collection of Default settings, which can be exclusively accessed via methods defined in.
         /// </summary>
         public static ApplicationDefaults Defaults { get; } = new ApplicationDefaults();
     }

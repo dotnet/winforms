@@ -7,8 +7,8 @@ Option Explicit On
 Option Infer On
 
 Imports System.ComponentModel
+Imports System.Drawing
 Imports System.Runtime.InteropServices
-Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -22,13 +22,13 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' Creates a new instance of the StartupEventArgs.
         ''' </summary>
-        Public Sub New(defaults As Application.ApplicationDefaults)
-            _Defaults = defaults
+        Public Sub New()
+            Me.DefaultFont = DefaultFont
         End Sub
 
         ''' <summary>
         ''' Gets or Sets the HighDpiMode.
         ''' </summary>
-        Public ReadOnly Property Defaults As Application.ApplicationDefaults
+        Public Property DefaultFont As Font
     End Class
 End Namespace
