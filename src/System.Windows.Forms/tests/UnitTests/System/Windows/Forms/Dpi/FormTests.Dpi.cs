@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 form.Show();
                 Drawing.Rectangle initialBounds = form.Bounds;
                 float initialFontSize = form.Font.Size;
-                _ = DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+                DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
                 var factor = newDpi / DpiHelper.LogicalDpi;
 
                 // Lab machines giving strange values that I could not explain. for ex: on local machine,

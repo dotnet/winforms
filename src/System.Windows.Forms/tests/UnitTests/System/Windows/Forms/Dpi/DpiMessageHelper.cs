@@ -8,17 +8,17 @@ namespace System.Windows.Forms.Tests.Dpi
 {
     internal static class DpiMessageHelper
     {
-        public static IntPtr TriggerDpiMessage(User32.WM message, Control control, int newDpi)
+        public static void TriggerDpiMessage(User32.WM message, Control control, int newDpi)
         {
             double factor = newDpi / DpiHelper.LogicalDpi;
             IntPtr wParam = PARAM.FromLowHigh(newDpi, newDpi);
 
-            return message switch
+            _ = message switch
             {
                 User32.WM.DPICHANGED => SendWmDpiChangedMessage(),
                 User32.WM.DPICHANGED_BEFOREPARENT => User32.SendMessageW(control, message, wParam),
                 User32.WM.DPICHANGED_AFTERPARENT => User32.SendMessageW(control, message),
-                _ => IntPtr.Zero
+                _ => throw new NotImplementedException()
             };
 
             IntPtr SendWmDpiChangedMessage()
