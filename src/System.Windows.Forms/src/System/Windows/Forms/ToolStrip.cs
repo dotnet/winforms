@@ -14,7 +14,9 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+#if DEBUG
 using System.Text.RegularExpressions;
+#endif
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
@@ -2490,7 +2492,7 @@ namespace System.Windows.Forms
             return prefSize + newPadding.Size;
         }
 
-        #region GetPreferredSizeHelpers
+#region GetPreferredSizeHelpers
 
         //
         // These are here so they can be shared between splitstack layout and StatusStrip
@@ -2625,7 +2627,7 @@ namespace System.Windows.Forms
         {
             return item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
         }
-        #endregion
+#endregion
 
         internal ToolStripItem GetSelectedItem()
         {

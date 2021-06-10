@@ -8,7 +8,9 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+#if DEBUG
 using System.Globalization;
+#endif
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -725,7 +727,7 @@ namespace System.Windows.Forms
             }
         }
 
-        #region MouseStuff
+#region MouseStuff
 
 #if DEBUG
         internal static readonly TraceSwitch ToolStripPanelMouseDebug = new TraceSwitch("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
@@ -763,6 +765,6 @@ namespace System.Windows.Forms
             }
         }
 
-        #endregion
+#endregion
     }
 }

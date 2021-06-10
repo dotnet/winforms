@@ -11,7 +11,9 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
+#if DEBUG
 using System.Globalization;
+#endif
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using static Interop;

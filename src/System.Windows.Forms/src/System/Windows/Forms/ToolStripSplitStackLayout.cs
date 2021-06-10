@@ -6,7 +6,9 @@
 
 using System.Diagnostics;
 using System.Drawing;
+#if DEBUG
 using System.Globalization;
+#endif
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms

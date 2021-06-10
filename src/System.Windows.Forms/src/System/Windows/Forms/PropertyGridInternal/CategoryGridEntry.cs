@@ -7,7 +7,9 @@
 //#define PAINT_CATEGORY_TRIANGLE
 
 using System.Collections;
+#if DEBUG
 using System.Diagnostics;
+#endif
 using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal
