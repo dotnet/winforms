@@ -12553,6 +12553,7 @@ namespace System.Windows.Forms.Tests
                 var m = new Message
                 {
                     Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
+                    WParam = PARAM.FromLowHigh(192, 192),
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -12584,6 +12585,7 @@ namespace System.Windows.Forms.Tests
             var m = new Message
             {
                 Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
+                WParam = PARAM.FromLowHigh(192, 192),
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -12611,6 +12613,7 @@ namespace System.Windows.Forms.Tests
                 var m = new Message
                 {
                     Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
+                    WParam = PARAM.FromLowHigh(192, 192),
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -12642,6 +12645,7 @@ namespace System.Windows.Forms.Tests
             var m = new Message
             {
                 Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
+                WParam = PARAM.FromLowHigh(192, 192),
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);

@@ -33,7 +33,6 @@ namespace System.Windows.Forms.Tests.Dpi
                 var toolStrip = new ToolStrip();
                 var toolStripItemOpen = new ToolStripButton("Open");
 
-                toolStrip.BackColor = Color.FromArgb(((int)(((byte)(40)))), ((int)(((byte)(40)))), ((int)(((byte)(40)))));
                 toolStrip.GripStyle = ToolStripGripStyle.Hidden;
                 toolStrip.Items.Add(toolStripItemOpen);
                 toolStrip.Location = new Point(0, 0);
