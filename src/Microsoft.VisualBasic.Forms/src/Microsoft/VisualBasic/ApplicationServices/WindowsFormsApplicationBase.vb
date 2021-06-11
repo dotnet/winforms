@@ -798,16 +798,20 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         End Sub
 
         Private Sub OnStartupNextInstanceMarshallingAdaptor(ByVal args As String())
-            If MainForm Is Nothing Then
-                Return
-            End If
+
             Dim invoked = False
+
             Try
-                MainForm.Invoke(
-                    Sub()
-                        invoked = True
-                        OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), bringToForegroundFlag:=True))
-                    End Sub)
+                If _appSyncronizationContext.IsWaitNotificationRequired() Then
+                    _appSyncronizationContext.Send(
+                        Sub()
+                            invoked = True
+                            OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), bringToForegroundFlag:=True))
+                        End Sub, Nothing)
+                Else
+                    OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), bringToForegroundFlag:=True))
+                End If
+
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
                 ' the UI thread has been created or after it has been terminated. Exceptions
