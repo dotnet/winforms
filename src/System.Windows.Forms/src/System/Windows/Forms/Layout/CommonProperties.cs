@@ -667,7 +667,7 @@ namespace System.Windows.Forms.Layout
 
             LayoutTransaction.DoLayout(element.Container, element, PropertyNames.FlowBreak);
 
-            Debug.Assert(GetFlowBreak(element) == value, "Error detected setitng SetFlowBreak.");
+            Debug.Assert(GetFlowBreak(element) == value, "Error detected setting SetFlowBreak.");
         }
         #endregion
         #region AutoScrollSpecific

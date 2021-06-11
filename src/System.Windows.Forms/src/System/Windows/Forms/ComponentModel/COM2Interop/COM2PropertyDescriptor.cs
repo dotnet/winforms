@@ -785,7 +785,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             catch (Exception ex)
                             {
-                                Debug.Fail("Failed to create edtior of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString());
+                                Debug.Fail("Failed to create editor of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString());
                             }
                         }
                     }
@@ -1383,7 +1383,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             private const int CheckSubprops = 0;
             private const int AllowSubprops = 1;
-            private const int SupressSubprops = 2;
+            private const int SuppressSubprops = 2;
 
             private int subprops = CheckSubprops;
 
@@ -1443,7 +1443,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     if (!base.GetPropertiesSupported(context))
                     {
-                        subprops = SupressSubprops;
+                        subprops = SuppressSubprops;
                     }
                     else
                     {

@@ -2120,12 +2120,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Fail("Why are we being activated when we're not visible? Deactivating thingee is " + WindowsFormsUtils.GetControlInformation(m.LParam));
+                            Debug.Fail("Why are we being activated when we're not visible? Deactivating thingie is " + WindowsFormsUtils.GetControlInformation(m.LParam));
                         }
                     }
                     else
                     {
-                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.WndProc] activating thingee is " + WindowsFormsUtils.GetControlInformation(m.LParam));
+                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.WndProc] activating thingie is " + WindowsFormsUtils.GetControlInformation(m.LParam));
                     }
 
                     base.WndProc(ref m);

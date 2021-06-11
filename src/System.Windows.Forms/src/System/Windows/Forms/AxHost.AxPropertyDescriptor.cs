@@ -29,7 +29,7 @@ namespace System.Windows.Forms
 
             private const int FlagUpdatedEditorAndConverter = 0x00000001;
             private const int FlagCheckGetter = 0x00000002;
-            private const int FlagGettterThrew = 0x00000004;
+            private const int FlagGetterThrew = 0x00000004;
             private const int FlagIgnoreCanAccessProperties = 0x00000008;
             private const int FlagSettingValue = 0x00000010;
 
@@ -193,7 +193,7 @@ namespace System.Windows.Forms
 
             public override object GetValue(object component)
             {
-                if ((!GetFlag(FlagIgnoreCanAccessProperties) && !_owner.CanAccessProperties) || GetFlag(FlagGettterThrew))
+                if ((!GetFlag(FlagIgnoreCanAccessProperties) && !_owner.CanAccessProperties) || GetFlag(FlagGetterThrew))
                 {
                     return null;
                 }
@@ -214,7 +214,7 @@ namespace System.Windows.Forms
                         SetFlag(FlagCheckGetter, true);
                         AddAttribute(new BrowsableAttribute(false));
                         _owner.RefreshAllProperties = true;
-                        SetFlag(FlagGettterThrew, true);
+                        SetFlag(FlagGetterThrew, true);
                     }
 
                     throw;

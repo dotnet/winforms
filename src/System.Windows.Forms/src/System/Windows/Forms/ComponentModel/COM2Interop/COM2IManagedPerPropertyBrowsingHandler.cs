@@ -189,7 +189,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             catch
                             {
                                 // nevermind
-                                Debug.Fail("Attribute " + t.FullName + " did not have a initalizer specified and has no default constructor");
+                                Debug.Fail("Attribute " + t.FullName + " did not have a initializer specified and has no default constructor");
                                 continue;
                             }
                         }
@@ -206,7 +206,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     catch
                     {
                         // nevermind
-                        Debug.Fail("Attribute " + t.FullName + " did not have a initalizer specified and has no default constructor");
+                        Debug.Fail("Attribute " + t.FullName + " did not have a initializer specified and has no default constructor");
                         continue;
                     }
                 }

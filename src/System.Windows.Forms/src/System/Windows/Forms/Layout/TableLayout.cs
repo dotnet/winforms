@@ -256,7 +256,7 @@ namespace System.Windows.Forms.Layout
         /// <summary>
         ///  GetPreferredSize:  Called on the container to determine the size that best fits its contents.
         ///  Container: IArrangedElement to determine preferredSize (could be table layout panel but doesnt have to be - eg. ToolStrip)
-        ///  ProposedContstraints: the suggested size that the table layout should fit into.  If either argument is 0,
+        ///  ProposedConstraints: the suggested size that the table layout should fit into.  If either argument is 0,
         ///             TableLayout pretends it's unconstrained for performance reasons.
         ///
         ///  Summary of Algorithm:
@@ -1987,10 +1987,10 @@ namespace System.Windows.Forms.Layout
                 set { _state[stateChildHasRowSpan] = value; }
             }
 
-            public Size GetCachedPreferredSize(Size proposedContstraints, out bool isValid)
+            public Size GetCachedPreferredSize(Size proposedConstraints, out bool isValid)
             {
                 isValid = false;
-                if (proposedContstraints.Height == 0 || proposedContstraints.Width == 0)
+                if (proposedConstraints.Height == 0 || proposedConstraints.Width == 0)
                 {
                     Size cachedSize = CommonProperties.xGetPreferredSizeCache(Container);
 

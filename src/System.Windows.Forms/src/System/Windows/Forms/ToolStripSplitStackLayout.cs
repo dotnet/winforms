@@ -92,7 +92,7 @@ namespace System.Windows.Forms
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         {
-                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to alaways overflow: {0} ", item));
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "OverflowRequired - item set to always overflow: {0} ", item));
                         }
 #endif
                         OverflowRequired = true;
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
 #if DEBUG
                             if (DebugLayoutTraceSwitch.TraceVerbose)
                             {
-                                Debug.WriteLine("SendNextItemToOverflow to fres space for " + item.ToString());
+                                Debug.WriteLine("SendNextItemToOverflow to free space for " + item.ToString());
                             }
 #endif
                             int spaceRecovered = SendNextItemToOverflow((currentWidth + overflowWidth) - displayRectangle.Width, true);
@@ -322,7 +322,7 @@ namespace System.Windows.Forms
                 {
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
-                    { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item)); }
+                    { Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we don't need it to overflow", item)); }
 #endif
                     item.SetPlacement(ToolStripItemPlacement.Main);
                 }
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
 #if DEBUG
                     if (DebugLayoutTraceSwitch.TraceVerbose)
                     {
-                        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we dont need it to overflow", item));
+                        Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Resetting {0} to Main - we don't need it to overflow", item));
                     }
 #endif
                     item.SetPlacement(ToolStripItemPlacement.Main);
@@ -591,7 +591,7 @@ namespace System.Windows.Forms
 #if DEBUG
                         if (DebugLayoutTraceSwitch.TraceVerbose)
                         {
-                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit verticallu within the DRect", item));
+                            Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "[SplitStack.SetItemLocation] Sending Item {0} to NoMansLand as it doesnt fit vertically within the DRect", item));
                         }
 #endif
 

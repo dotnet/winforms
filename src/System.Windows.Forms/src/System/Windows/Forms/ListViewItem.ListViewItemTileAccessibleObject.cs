@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View != View.Tile)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewException, nameof(View.Tile)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Tile)));
                 }
 
                 return GetChildInternal(index + 1);
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View != View.Tile)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewException, nameof(View.Tile)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Tile)));
                 }
 
                 if (!_owningListView.IsHandleCreated || !_owningListView.SupportsListViewSubItems)

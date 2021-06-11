@@ -1242,7 +1242,7 @@
         <target state="translated">상황에 맞는 메뉴 스트립을 표시한 마지막 컨트롤입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">컨트롤의 액세스 가능한 개체가 잘못된 상태입니다.</target>
         <note />
@@ -4764,7 +4764,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">로드된 어셈블리</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4773,7 +4773,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -6481,12 +6481,12 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">삽입 표시 특성의 변경을 허용합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="new">The current accessibility object is only for the ListView in {0} view</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
         <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
         <note />

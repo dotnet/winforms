@@ -2164,7 +2164,7 @@ namespace System.Windows.Forms
 
                 default:
                     {
-                        Debug.Fail("Unexpected cca value in DataGridViewRowCollecttion.OnCollectionChanged");
+                        Debug.Fail("Unexpected cca value in DataGridViewRowCollection.OnCollectionChanged");
                         break;
                     }
             }

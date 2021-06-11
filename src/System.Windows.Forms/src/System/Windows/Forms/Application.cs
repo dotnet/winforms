@@ -1002,13 +1002,13 @@ namespace System.Windows.Forms
         /// </summary>
         internal static ThreadContext GetContextForHandle(HandleRef handle)
         {
-            ThreadContext cxt = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
+            ThreadContext threadContext = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
             Debug.Assert(
-                cxt is not null,
+                threadContext is not null,
                 "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
 
             GC.KeepAlive(handle.Wrapper);
-            return cxt;
+            return threadContext;
         }
 
         /// <summary>
@@ -1069,10 +1069,10 @@ namespace System.Windows.Forms
             Debug.Assert(User32.IsWindow(handle).IsTrue(), "Handle being parked is not a valid window handle");
             Debug.Assert(((int)User32.GetWindowLong(handle, User32.GWL.STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
 
-            ThreadContext cxt = GetContextForHandle(handle);
-            if (cxt is not null)
+            ThreadContext threadContext = GetContextForHandle(handle);
+            if (threadContext is not null)
             {
-                cxt.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
+                threadContext.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
             }
         }
 
@@ -1083,10 +1083,10 @@ namespace System.Windows.Forms
         /// <param name="dpiAwarenessContext"> dpi awareness</param>
         internal static void ParkHandle(CreateParams cp, IntPtr dpiAwarenessContext)
         {
-            ThreadContext cxt = ThreadContext.FromCurrent();
-            if (cxt is not null)
+            ThreadContext threadContext = ThreadContext.FromCurrent();
+            if (threadContext is not null)
             {
-                cp.Parent = cxt.GetParkingWindow(dpiAwarenessContext).Handle;
+                cp.Parent = threadContext.GetParkingWindow(dpiAwarenessContext).Handle;
             }
         }
 
@@ -1108,10 +1108,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal static void UnparkHandle(HandleRef handle, IntPtr context)
         {
-            ThreadContext cxt = GetContextForHandle(handle);
-            if (cxt is not null)
+            ThreadContext threadContext = GetContextForHandle(handle);
+            if (threadContext is not null)
             {
-                cxt.GetParkingWindow(context).UnparkHandle(handle);
+                threadContext.GetParkingWindow(context).UnparkHandle(handle);
             }
         }
 

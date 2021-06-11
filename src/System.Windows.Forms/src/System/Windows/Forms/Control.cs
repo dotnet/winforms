@@ -258,7 +258,7 @@ namespace System.Windows.Forms
 
         private static readonly int s_bindingsProperty = PropertyStore.CreateKey();
         private static readonly int s_bindingManagerProperty = PropertyStore.CreateKey();
-        private static readonly int s_accessbileDefaultActionProperty = PropertyStore.CreateKey();
+        private static readonly int s_accessibleDefaultActionProperty = PropertyStore.CreateKey();
         private static readonly int s_accessibleDescriptionProperty = PropertyStore.CreateKey();
 
         private static readonly int s_accessibilityProperty = PropertyStore.CreateKey();
@@ -593,8 +593,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlAccessibleDefaultActionDescr))]
         public string AccessibleDefaultActionDescription
         {
-            get => (string)Properties.GetObject(s_accessbileDefaultActionProperty);
-            set => Properties.SetObject(s_accessbileDefaultActionProperty, value);
+            get => (string)Properties.GetObject(s_accessibleDefaultActionProperty);
+            set => Properties.SetObject(s_accessibleDefaultActionProperty, value);
         }
 
         /// <summary>
@@ -11933,7 +11933,7 @@ namespace System.Windows.Forms
                     object tempObject = intAccessibleObject;
                     if (tempObject is IAccessible iAccCheck)
                     {
-                        throw new InvalidOperationException(SR.ControlAccessibileObjectInvalid);
+                        throw new InvalidOperationException(SR.ControlAccessibleObjectInvalid);
                     }
 
                     // Check that we have an IAccessibleInternal implementation and return this

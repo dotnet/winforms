@@ -1242,7 +1242,7 @@
         <target state="translated">Последний элемент управления, вызвавший отображение полосы данного контекстного меню.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Доступный объект элемента управления в недействительном состоянии.</target>
         <note />
@@ -4765,7 +4765,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">Загруженные сборки</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4774,7 +4774,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -6482,12 +6482,12 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Позволяет изменение атрибутов метки вставки.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
         <target state="new">The current accessibility object is only for the ListView in {0} view</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
         <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
         <note />
