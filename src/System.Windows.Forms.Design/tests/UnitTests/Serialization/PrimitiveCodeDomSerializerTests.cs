@@ -4,8 +4,6 @@
 
 using System.CodeDom;
 using System.ComponentModel.Design.Serialization;
-using System.Text;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Serialization.Tests

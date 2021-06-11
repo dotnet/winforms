@@ -4,14 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Drawing;
-using System.Globalization;
-using System.Runtime.InteropServices;
-using System.Windows.Forms.Layout;
 using static Interop;
 
 namespace System.Windows.Forms

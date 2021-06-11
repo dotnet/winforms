@@ -12,7 +12,6 @@ using System.Text;
 using System.Threading;
 using WinForms.Common.Tests;
 using Xunit;
-using Xunit.Abstractions;
 using static Interop;
 using static Interop.Richedit;
 using static Interop.User32;

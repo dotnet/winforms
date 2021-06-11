@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel;
 using System;
 using System.ComponentModel.Design;
-using System.Windows.Forms;
 using System.Drawing;
 
 namespace TestConsole

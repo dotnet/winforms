@@ -5,8 +5,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Printing;
-using System.Runtime.InteropServices;
-using Moq;
 using WinForms.Common.Tests;
 using Xunit;
 

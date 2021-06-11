@@ -6,7 +6,6 @@ using System;
 using System.CodeDom;
 using System.Linq;
 using Xunit;
-using Xunit.Sdk;
 
 namespace WinForms.Common.Tests
 {

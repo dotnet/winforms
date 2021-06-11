@@ -6,12 +6,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Windows.Forms.IntegrationTests.Common;
 using ReflectTools;
 using WFCTestLib.Log;
-using static System.Windows.Forms.ImageList;
 using static Interop;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests

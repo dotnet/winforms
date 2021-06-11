@@ -4,9 +4,13 @@
 
 #nullable disable
 
+#if DEBUG
 using System.Collections;
+#endif
 using System.Collections.Specialized;
+#if DEBUG
 using System.ComponentModel;
+#endif
 using System.Diagnostics;
 using System.Drawing;
 

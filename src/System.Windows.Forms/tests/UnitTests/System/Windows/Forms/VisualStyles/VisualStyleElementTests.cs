@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.VisualStyles.Tests

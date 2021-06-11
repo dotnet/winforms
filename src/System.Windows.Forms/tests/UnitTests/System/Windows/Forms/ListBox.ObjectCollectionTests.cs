@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Linq;
 using Xunit;
-using static Interop.ComCtl32;
 using static Interop.User32;
 
 namespace System.Windows.Forms.Tests

@@ -4,10 +4,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.Design;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 using static Interop.Kernel32;
 
 namespace System.Windows.Forms.Tests

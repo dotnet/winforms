@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Reflection;
 using System.Threading;
 using System.Windows.Forms.IntegrationTests.Common;
 using ReflectTools;
@@ -11,7 +10,6 @@ using WFCTestLib.Log;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop.ComCtl32;
 using static Interop.Kernel32;
-using static Interop.UiaCore;
 using static Interop.User32;
 
 namespace System.Windows.Forms.IntegrationTests.MauiTests

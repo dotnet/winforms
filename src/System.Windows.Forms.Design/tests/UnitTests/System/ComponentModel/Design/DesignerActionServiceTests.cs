@@ -5,7 +5,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Windows.Forms.Design;
 using Moq;
 using WinForms.Common.Tests;

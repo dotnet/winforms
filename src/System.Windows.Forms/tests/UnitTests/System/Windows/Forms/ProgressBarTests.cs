@@ -8,7 +8,6 @@ using System.Drawing;
 using Moq;
 using WinForms.Common.Tests;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {

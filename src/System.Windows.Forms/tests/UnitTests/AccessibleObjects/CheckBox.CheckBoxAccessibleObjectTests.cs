@@ -4,7 +4,6 @@
 
 using System.Collections.Generic;
 using Xunit;
-using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests

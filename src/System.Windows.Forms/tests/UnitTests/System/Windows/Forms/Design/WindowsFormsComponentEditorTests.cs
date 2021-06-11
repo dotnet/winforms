@@ -5,7 +5,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Moq;
-using WinForms.Common.Tests;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
