@@ -60,34 +60,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                if (_owningPropertyGridView.OwnerGrid.SortedByCategories)
+                return direction switch
                 {
-                    switch (direction)
-                    {
-                        case UiaCore.NavigateDirection.FirstChild:
-                            return GetFirstCategory();
-                        case UiaCore.NavigateDirection.LastChild:
-                            return GetLastCategory();
-                    }
-                }
-                else
-                {
-                    switch (direction)
-                    {
-                        case UiaCore.NavigateDirection.FirstChild:
-                            return GetChild(0);
-                        case UiaCore.NavigateDirection.LastChild:
-                            int childCount = GetChildCount();
-                            if (childCount > 0)
-                            {
-                                return GetChild(childCount - 1);
-                            }
-
-                            return null;
-                    }
-                }
-
-                return base.FragmentNavigate(direction);
+                    UiaCore.NavigateDirection.FirstChild => IsSortedByCategories ? GetCategory(0) : GetChild(0),
+                    UiaCore.NavigateDirection.LastChild => IsSortedByCategories ? GetLastCategory() : GetLastChild(),
+                    _ => base.FragmentNavigate(direction)
+                };
             }
 
             /// <summary>
@@ -132,6 +110,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     UiaCore.UIA.GridPatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };
+
+            private bool IsSortedByCategories
+                => _owningPropertyGridView.OwnerGrid is not null && _owningPropertyGridView.OwnerGrid.SortedByCategories;
 
             public override string Name => Owner.AccessibleName
                 ?? string.Format(SR.PropertyGridDefaultAccessibleNameTemplate, _owningPropertyGridView?.OwnerGrid?.AccessibilityObject.Name);
@@ -181,16 +162,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            internal AccessibleObject? GetFirstCategory()
-            {
-                return GetCategory(0);
-            }
-
             internal AccessibleObject? GetLastCategory()
             {
                 GridEntryCollection topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
                 var topLevelGridEntriesCount = topLevelGridEntries.Count;
+
                 return GetCategory(topLevelGridEntries.Count - 1);
+            }
+
+            internal AccessibleObject? GetLastChild()
+            {
+                int childCount = GetChildCount();
+
+                return childCount > 0 ? GetChild(childCount - 1) : null;
             }
 
             /// <summary>
@@ -540,7 +524,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return 0;
                     }
 
-                    if (!_owningPropertyGridView.OwnerGrid.SortedByCategories)
+                    if (!IsSortedByCategories)
                     {
                         return topLevelGridEntries.Count;
                     }
