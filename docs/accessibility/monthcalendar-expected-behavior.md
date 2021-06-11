@@ -79,7 +79,7 @@ MonthCalendar:
 - [x] `IsEnabled` = `true`, if the control is enabled
 - [x] `HasKeyboardFocus` = `true`, if the control is in focus
 - [x] `IsKeyboardFocusable` = `true`, if the calendar is enabled
-- [x] `HelpText` = "MonthCaledar(Control)"
+- [x] `HelpText` = "MonthCalendar(Control)"
 - [x] Correct grid Column and Row count
 - [x] `Name` is empty, if it is not set
 - [x] `Role` = "table"
@@ -206,7 +206,7 @@ MonthCalendar:
 - [x] `IsEnabled` = `true`, if the control is enabled
 - [x] `HasKeyboardFocus` = `true`, if the control is in focus
 - [x] `IsKeyboardFocusable` = `true`, if the calendar is enabled
-- [x] `HelpText` = "MonthCaledar(Control)"
+- [x] `HelpText` = "MonthCalendar(Control)"
 - [x] Correct grid Column and Row count
 - [x] `Name` is empty, if it is not set
 - [x] `Role` = "table"
@@ -307,7 +307,7 @@ MonthCalendar:
 - [x] `IsEnabled` = `true`, if the control is enabled
 - [x] `HasKeyboardFocus` = `true`, if the control is in focus
 - [x] `IsKeyboardFocusable` = `true`, if the calendar is enabled
-- [x] `HelpText` = "MonthCaledar(Control)"
+- [x] `HelpText` = "MonthCalendar(Control)"
 - [x] Correct grid Column and Row count
 - [x] `Name` is empty, if it is not set
 - [x] `Role` = "table"
@@ -408,7 +408,7 @@ MonthCalendar:
 - [x] `IsEnabled` = `true`, if the control is enabled
 - [x] `HasKeyboardFocus` = `true`, if the control is in focus
 - [x] `IsKeyboardFocusable` = `true`, if the calendar is enabled
-- [x] `HelpText` = "MonthCaledar(Control)"
+- [x] `HelpText` = "MonthCalendar(Control)"
 - [x] Correct grid Column and Row count
 - [x] `Name` is empty, if it is not set
 - [x] `Role` = "table"
@@ -1360,7 +1360,7 @@ Invisible calendars are not accessible. Invisible dates of partial calendars are
 
 - Rebuild the accessibility tree, if the calendar `View`, `MaxDate`, `MinDate`, `TodayDate`, `Size` are changed
 or Next or Previous buttons are clicked (i.e. the display range is changed).
-- Invoke method of button accessible objects of MonthCalednar simulates mouse moving, clicks and then returns the mouse position back.
+- Invoke method of button accessible objects of MonthCalendar simulates mouse moving, clicks and then returns the mouse position back.
 Windows doesn't provide API to simulate  MonthCalendar buttons clicks via messages.
 
 [monthcalendar-inspect-month-view-tree]: ../images/monthcalendar-inspect-month-view-tree.png
