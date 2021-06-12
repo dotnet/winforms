@@ -72,13 +72,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
+        internal static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
         {
             SourceGenerated.EnumValidator.Validate(buttons, nameof(buttons));
 
             // TODO: these must be tested, see https://github.com/dotnet/winforms/issues/4639
-            // SourceGenerated.EnumValidator.Validate(defaultButton, nameof(defaultButton));
             // SourceGenerated.EnumValidator.Validate(icon, nameof(icon));
+            // SourceGenerated.EnumValidator.Validate(defaultButton, nameof(defaultButton));
             // valid values are 0x0 0x10 0x20 0x30 0x40, chop off the last 4 bits and check that it's between 0 and 4.
             if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4))
             {
