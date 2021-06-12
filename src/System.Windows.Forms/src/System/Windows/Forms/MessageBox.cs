@@ -75,21 +75,8 @@ namespace System.Windows.Forms
         internal static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
         {
             SourceGenerated.EnumValidator.Validate(buttons, nameof(buttons));
-
-            // TODO: these must be tested, see https://github.com/dotnet/winforms/issues/4639
-            // SourceGenerated.EnumValidator.Validate(icon, nameof(icon));
-            // SourceGenerated.EnumValidator.Validate(defaultButton, nameof(defaultButton));
-            // valid values are 0x0 0x10 0x20 0x30 0x40, chop off the last 4 bits and check that it's between 0 and 4.
-            if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4))
-            {
-                throw new InvalidEnumArgumentException(nameof(icon), (int)icon, typeof(MessageBoxIcon));
-            }
-
-            // valid values are 0x0 0x100, 0x200, chop off the last 8 bits and check that it's between 0 and 2.
-            if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(defaultButton, /*numBitsToShift*/8, /*min*/0x0,/*max*/0x2))
-            {
-                throw new InvalidEnumArgumentException(nameof(defaultButton), (int)defaultButton, typeof(DialogResult));
-            }
+            SourceGenerated.EnumValidator.Validate(icon, nameof(icon));
+            SourceGenerated.EnumValidator.Validate(defaultButton, nameof(defaultButton));
 
             // options intentionally not verified because we don't expose all the options Win32 supports.
 
