@@ -10146,7 +10146,7 @@ namespace System.Windows.Forms
             {
                 ScaleControl(includedFactor, excludedFactor, requestingControl);
 
-                // Certain controls like 'PropertyGrid' does special scalling. Differing scaling to their own methods.
+                // Certain controls like 'PropertyGrid' does special scaling. Differing scaling to their own methods.
                 if (!_doNotScaleChildren)
                 {
                     ScaleChildControls(includedFactor, excludedFactor, requestingControl, causedByFontChanged);
