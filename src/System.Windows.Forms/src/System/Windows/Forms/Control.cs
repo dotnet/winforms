@@ -11337,7 +11337,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retreive Font from propertybag. This is the FOnt that was explicitly set on control by the application.
+        /// Retrieve Font from propertybag. This is the FOnt that was explicitly set on control by the application.
         /// </summary>
         internal bool TryGetExplicitlySetFont(out Font localFont)
         {
