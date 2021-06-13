@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Throws<InvalidEnumArgumentException>(
                 "buttons",
-                () => MessageBox.GetMessageBoxStyle(
+                () => GetMessageBoxStyle(
                     null,
                     value,
                     MessageBoxIcon.None,
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(MessageBoxButtons_Set_TestData))]
         public void MessageBox_MessageBoxButtons_Valid(MessageBoxButtons value)
         {
-            MB style = MessageBox.GetMessageBoxStyle(
+            MB style = GetMessageBoxStyle(
                 null,
                 value,
                 MessageBoxIcon.None,
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Throws<InvalidEnumArgumentException>(
                 "icon",
-                () => MessageBox.GetMessageBoxStyle(
+                () => GetMessageBoxStyle(
                     null,
                     MessageBoxButtons.OK,
                     value,
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(MessageBoxIcon_Set_TestData))]
         public void MessageBox_MessageBoxIcon_Valid(MessageBoxIcon value)
         {
-            MB style = MessageBox.GetMessageBoxStyle(
+            MB style = GetMessageBoxStyle(
                 null,
                 MessageBoxButtons.OK,
                 value,
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Throws<InvalidEnumArgumentException>(
                 "defaultButton",
-                () => MessageBox.GetMessageBoxStyle(
+                () => GetMessageBoxStyle(
                     null,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.None,
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(MessageBoxDefaultButton_Set_TestData))]
         public void MessageBox_MessageBoxDefaultButton_Valid(MessageBoxDefaultButton value)
         {
-            MB style = MessageBox.GetMessageBoxStyle(
+            MB style = GetMessageBoxStyle(
                 null,
                 MessageBoxButtons.OK,
                 MessageBoxIcon.None,
@@ -123,5 +123,8 @@ namespace System.Windows.Forms.Tests
                 false);
             Assert.Equal(style, (MB)MessageBoxButtons.OK | (MB)MessageBoxIcon.None | (MB)value | (MB)MessageBoxOptions.DefaultDesktopOnly);
         }
+
+        private static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
+            => typeof(MessageBox).TestAccessor().Dynamic.GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
     }
 }

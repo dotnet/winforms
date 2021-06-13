@@ -72,7 +72,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
+        private static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
         {
             SourceGenerated.EnumValidator.Validate(buttons, nameof(buttons));
             SourceGenerated.EnumValidator.Validate(icon, nameof(icon));
