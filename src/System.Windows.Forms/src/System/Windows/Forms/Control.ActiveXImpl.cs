@@ -1717,7 +1717,7 @@ namespace System.Windows.Forms
                         public IntPtr AddRefPtr;
                         public IntPtr ReleasePtr;
                         public IntPtr GetConnectionInterfacePtr;
-                        public IntPtr GetConnectionPointContainterPtr;
+                        public IntPtr GetConnectionPointContainerPtr;
                         public IntPtr AdvisePtr;
                         public IntPtr UnadvisePtr;
                         public IntPtr EnumConnectionsPtr;
