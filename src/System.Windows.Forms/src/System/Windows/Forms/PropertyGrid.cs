@@ -4663,7 +4663,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBCatego");
+                return DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), "PBCategory");
             }
         }
 
