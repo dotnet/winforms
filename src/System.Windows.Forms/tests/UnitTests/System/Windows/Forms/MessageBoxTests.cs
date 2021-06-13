@@ -7,6 +7,7 @@ namespace System.Windows.Forms.Tests
     using System;
     using System.Collections.Generic;
     using System.ComponentModel;
+    using System.Reflection;
     using WinForms.Common.Tests;
     using Xunit;
     using static Interop.User32;
@@ -125,6 +126,15 @@ namespace System.Windows.Forms.Tests
         }
 
         private static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
-            => typeof(MessageBox).TestAccessor().Dynamic.GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
+        {
+            try
+            {
+                return typeof(MessageBox).TestAccessor().Dynamic.GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
+            }
+            catch (TargetInvocationException ex)
+            {
+                throw ex.InnerException;
+            }
+        }
     }
 }
