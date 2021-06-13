@@ -3418,7 +3418,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
                 case (int)User32.WM.SETFOCUS:
-                    // If we get focus through the LBUttonDown .. we might have done the validation...
+                    // If we get focus through the LButtonDown .. we might have done the validation...
                     // so skip it..
                     if (treeViewState[TREEVIEWSTATE_lastControlValidated])
                     {
