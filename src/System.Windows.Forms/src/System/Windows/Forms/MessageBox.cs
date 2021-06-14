@@ -32,29 +32,6 @@ namespace System.Windows.Forms
         {
         }
 
-        private static DialogResult Win32ToDialogResult(ID value)
-        {
-            switch (value)
-            {
-                case ID.OK:
-                    return DialogResult.OK;
-                case ID.CANCEL:
-                    return DialogResult.Cancel;
-                case ID.ABORT:
-                    return DialogResult.Abort;
-                case ID.RETRY:
-                    return DialogResult.Retry;
-                case ID.IGNORE:
-                    return DialogResult.Ignore;
-                case ID.YES:
-                    return DialogResult.Yes;
-                case ID.NO:
-                    return DialogResult.No;
-                default:
-                    return DialogResult.No;
-            }
-        }
-
         internal static HelpInfo HelpInfo
         {
             get
@@ -406,22 +383,20 @@ namespace System.Windows.Forms
             }
 
             Application.BeginModalMessageLoop();
-            DialogResult result;
             try
             {
-                result = Win32ToDialogResult(MessageBoxW(new HandleRef(owner, handle), text, caption, style));
+                return (DialogResult)MessageBoxW(new HandleRef(owner, handle), text, caption, style);
             }
             finally
             {
                 Application.EndModalMessageLoop();
                 ThemingScope.Deactivate(userCookie);
-            }
 
-            // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
-            // but since we have disabled this thread main window the message is lost. So we have to send it again after
-            // we enable the main window.
-            User32.SendMessageW(new HandleRef(owner, handle), User32.WM.SETFOCUS);
-            return result;
+                // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
+                // but since we have disabled this thread main window the message is lost. So we have to send it again after
+                // we enable the main window.
+                User32.SendMessageW(new HandleRef(owner, handle), User32.WM.SETFOCUS);
+            }
         }
     }
 }
