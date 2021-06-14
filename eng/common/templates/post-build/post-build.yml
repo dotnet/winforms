@@ -167,7 +167,7 @@ stages:
             filePath: eng\common\enable-cross-org-publishing.ps1
             arguments: -token $(dn-bot-dnceng-artifact-feeds-rw)
 
-        # Signing validation will optionally work with the buildmanifest file which is downloaded from
+        # Signing validation will optionally work with the build manifest file which is downloaded from
         # Azure DevOps above.
         - task: PowerShell@2
           displayName: Validate

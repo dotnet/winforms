@@ -10146,7 +10146,7 @@ namespace System.Windows.Forms
             {
                 ScaleControl(includedFactor, excludedFactor, requestingControl);
 
-                // Certain controls like 'PropertyGrid' does special scalling. Differing scaling to their own methods.
+                // Certain controls like 'PropertyGrid' does special scaling. Differing scaling to their own methods.
                 if (!_doNotScaleChildren)
                 {
                     ScaleChildControls(includedFactor, excludedFactor, requestingControl, causedByFontChanged);
@@ -11337,7 +11337,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retreive Font from propertybag. This is the FOnt that was explicitly set on control by the application.
+        /// Retrieve Font from propertybag. This is the FOnt that was explicitly set on control by the application.
         /// </summary>
         internal bool TryGetExplicitlySetFont(out Font localFont)
         {

@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void SystemInformation_HighContrasst_Get_ReturnsExpected()
+        public void SystemInformation_HighContrast_Get_ReturnsExpected()
         {
             Assert.Equal(SystemInformation.HighContrast, SystemInformation.HighContrast);
         }

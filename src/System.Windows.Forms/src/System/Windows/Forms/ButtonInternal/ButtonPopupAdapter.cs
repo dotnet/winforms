@@ -168,7 +168,7 @@ namespace System.Windows.Forms.ButtonInternal
             layout.ShadowedText = SystemInformation.HighContrast;
 
             Debug.Assert(layout.BorderSize + layout.PaddingSize == 2,
-                "It is assemed borderSize + paddingSize will always be 2. Bad value for paintedBorder?");
+                "It is assumed borderSize + paddingSize will always be 2. Bad value for paintedBorder?");
 
             return layout;
         }
