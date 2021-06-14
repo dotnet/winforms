@@ -195,18 +195,6 @@ namespace System.Windows.Forms
 #endif
         }
 
-        internal static string AssertControlInformation(bool condition, Control control)
-        {
-            if (condition)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return GetControlInformation(control.Handle);
-            }
-        }
-
         /// <summary>
         ///  Retrieves the mnemonic from a given string, or zero if no mnemonic.
         ///  As used by the Control.Mnemonic to get mnemonic from Control.Text.
@@ -334,33 +322,6 @@ namespace System.Windows.Forms
             else
             {
                 return defaultNameValue;
-            }
-        }
-
-        public static class EnumValidator
-        {
-            /// <summary>
-            ///  shifts off the number of bits specified by numBitsToShift
-            ///  -  makes sure the bits we've shifted off are just zeros
-            ///  -  then compares if the resulting value is between minValAfterShift and maxValAfterShift
-            ///
-            ///  EXAMPLE:
-            ///  MessageBoxIcon. Valid values are 0x0, 0x10, 0x20, 0x30, 0x40
-            ///  Method for verifying: chop off the last 0 by shifting right 4 bits, verify resulting number is between 0 &amp; 4.
-            ///
-            ///  WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4)
-            /// </summary>
-            public static bool IsEnumWithinShiftedRange(Enum enumValue, int numBitsToShift, int minValAfterShift, int maxValAfterShift)
-            {
-                int iValue = Convert.ToInt32(enumValue, CultureInfo.InvariantCulture);
-                int remainder = iValue >> numBitsToShift;
-                if (remainder << numBitsToShift != iValue)
-                {
-                    // there were bits that we shifted out.
-                    return false;
-                }
-
-                return (remainder >= minValAfterShift && remainder <= maxValAfterShift);
             }
         }
     }

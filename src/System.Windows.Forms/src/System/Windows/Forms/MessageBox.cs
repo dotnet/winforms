@@ -72,6 +72,34 @@ namespace System.Windows.Forms
             }
         }
 
+        private static MB GetMessageBoxStyle(IWin32Window owner, MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton, MessageBoxOptions options, bool showHelp)
+        {
+            SourceGenerated.EnumValidator.Validate(buttons, nameof(buttons));
+            SourceGenerated.EnumValidator.Validate(icon, nameof(icon));
+            SourceGenerated.EnumValidator.Validate(defaultButton, nameof(defaultButton));
+
+            // options intentionally not verified because we don't expose all the options Win32 supports.
+
+            if (!SystemInformation.UserInteractive && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0)
+            {
+                throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
+            }
+
+            if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
+            {
+                throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
+            }
+
+            if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
+            {
+                throw new ArgumentException(SR.CantShowMBServiceWithHelp, nameof(options));
+            }
+
+            MB style = (showHelp) ? MB.HELP : 0;
+            style |= (MB)buttons | (MB)icon | (MB)defaultButton | (MB)options;
+            return style;
+        }
+
         private static void PopHelpInfo()
         {
             // we roll our own stack here because we want a pretty lightweight implementation.
@@ -343,39 +371,7 @@ namespace System.Windows.Forms
                                              MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton,
                                              MessageBoxOptions options, bool showHelp)
         {
-            SourceGenerated.EnumValidator.Validate(buttons, nameof(buttons));
-
-            // valid values are 0x0 0x10 0x20 0x30 0x40, chop off the last 4 bits and check that it's between 0 and 4.
-            if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4))
-            {
-                throw new InvalidEnumArgumentException(nameof(icon), (int)icon, typeof(MessageBoxIcon));
-            }
-
-            // valid values are 0x0 0x100, 0x200, chop off the last 8 bits and check that it's between 0 and 2.
-            if (!WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(defaultButton, /*numBitsToShift*/8, /*min*/0x0,/*max*/0x2))
-            {
-                throw new InvalidEnumArgumentException(nameof(defaultButton), (int)defaultButton, typeof(DialogResult));
-            }
-
-            // options intentionally not verified because we don't expose all the options Win32 supports.
-
-            if (!SystemInformation.UserInteractive && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0)
-            {
-                throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
-            }
-
-            if (owner is not null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
-            {
-                throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
-            }
-
-            if (showHelp && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
-            {
-                throw new ArgumentException(SR.CantShowMBServiceWithHelp, nameof(options));
-            }
-
-            MB style = (showHelp) ? MB.HELP : 0;
-            style |= (MB)buttons | (MB)icon | (MB)defaultButton | (MB)options;
+            MB style = GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
 
             IntPtr handle = IntPtr.Zero;
             if (showHelp || ((options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) == 0))
