@@ -93,8 +93,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text displayed in the group header.
         /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
         [AllowNull]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string Header
         {
             get => _header ?? string.Empty;
@@ -135,8 +136,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text displayed in the group footer.
         /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
         [AllowNull]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string Footer
         {
             get => _footer ?? string.Empty;
@@ -214,8 +216,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text displayed in the group subtitle.
         /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
         [AllowNull]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string Subtitle
         {
             get => _subtitle ?? string.Empty;
@@ -234,8 +237,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The name of the task link displayed in the group header.
         /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
         [AllowNull]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string TaskLink
         {
             get => _taskLink ?? string.Empty;
