@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Windows.Forms.PropertyGridInternal;
 using Xunit;
+using static System.Windows.Forms.PropertyGridInternal.PropertyGridView;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -43,6 +45,20 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             var parentGridEntry = defaultGridEntry.ParentGridEntry; // Category which has item pattern.
             var accessibleObject = parentGridEntry.AccessibilityObject;
             Assert.True(accessibleObject.IsPatternSupported(pattern));
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)UnsafeNativeMethods.NavigateDirection.Parent)]
+        [InlineData((int)UnsafeNativeMethods.NavigateDirection.NextSibling)]
+        [InlineData((int)UnsafeNativeMethods.NavigateDirection.PreviousSibling)]
+        [InlineData((int)UnsafeNativeMethods.NavigateDirection.FirstChild)]
+        [InlineData((int)UnsafeNativeMethods.NavigateDirection.LastChild)]
+        public void PropertyGridViewAccessibleObject_FragmentNavigate_DoesNotThrowExpection_WithoutOwnerGrid(int direction)
+        {
+            using PropertyGrid propertyGrid = new();
+            using PropertyGridView propertyGridView = new(null, null);
+            PropertyGridViewAccessibleObject accessibleObject = new(propertyGridView, propertyGrid);
+            Assert.Null(accessibleObject.FragmentNavigate((UnsafeNativeMethods.NavigateDirection)direction));
         }
     }
 }
