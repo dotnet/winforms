@@ -802,11 +802,17 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             Dim invoked = False
 
             Try
-                _appSyncronizationContext.Send(
-                    Sub()
-                        invoked = True
-                        OnStartupNextInstance(New StartupNextInstanceEventArgs(New ReadOnlyCollection(Of String)(args), bringToForegroundFlag:=True))
-                    End Sub, Nothing)
+                AsyncOperationManager.
+                    SynchronizationContext.
+                    Send(
+                        Sub()
+                            invoked = True
+
+                            OnStartupNextInstance(
+                                New StartupNextInstanceEventArgs(
+                                    New ReadOnlyCollection(Of String)(args),
+                                    bringToForegroundFlag:=True))
+                        End Sub, Nothing)
 
             Catch ex As Exception When Not invoked
                 ' Only catch exceptions thrown when the UI thread is not available, before
