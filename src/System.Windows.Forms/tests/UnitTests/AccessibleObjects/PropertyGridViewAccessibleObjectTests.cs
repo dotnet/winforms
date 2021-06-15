@@ -32,6 +32,20 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Throws<ArgumentNullException>(() => new PropertyGridViewAccessibleObject(null, null));
         }
 
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.NavigateDirection.Parent)]
+        [InlineData((int)UiaCore.NavigateDirection.NextSibling)]
+        [InlineData((int)UiaCore.NavigateDirection.PreviousSibling)]
+        [InlineData((int)UiaCore.NavigateDirection.FirstChild)]
+        [InlineData((int)UiaCore.NavigateDirection.LastChild)]
+        public void PropertyGridViewAccessibleObject_FragmentNavigate_DoesNotThrowExpection_WithoutOwnerGrid(int direction)
+        {
+            using PropertyGrid propertyGrid = new();
+            using PropertyGridView propertyGridView = new(null, null);
+            PropertyGridViewAccessibleObject accessibleObject = new(propertyGridView, propertyGrid);
+            Assert.Null(accessibleObject.FragmentNavigate((UiaCore.NavigateDirection)direction));
+        }
+
         [WinFormsFact]
         public void PropertyGridViewAccessibleObject_GetFocused_ReturnsCorrectValue()
         {
