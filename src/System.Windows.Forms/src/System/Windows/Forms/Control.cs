@@ -12187,8 +12187,14 @@ namespace System.Windows.Forms
             {
                 _oldDeviceDpi = _deviceDpi;
 
-                // In order to support tests, will be querying Dpi from the message instead of getting directly from the window handle.
+                // In order to support tests, will be querying Dpi from the message first.
                 _deviceDpi = PARAM.SignedLOWORD(m.WParam);
+
+                // On certain OS versions, for non-test scenarios, WParam may be empty.
+                if (_deviceDpi == 0)
+                {
+                    _deviceDpi = (int)User32.GetDpiForWindow(this);
+                }
 
                 // Controls are by default font scaled.
                 // Dpi change requires font to be recalculated inorder to get controls scaled with right dpi.

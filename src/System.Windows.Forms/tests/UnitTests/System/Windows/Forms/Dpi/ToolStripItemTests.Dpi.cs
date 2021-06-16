@@ -30,8 +30,8 @@ namespace System.Windows.Forms.Tests.Dpi
                 using var form = new Form();
                 form.AutoScaleMode = AutoScaleMode.Dpi;
                 form.ClientSize = new Size(clientWidth, 450);
-                var toolStrip = new ToolStrip();
-                var toolStripItemOpen = new ToolStripButton("Open");
+                using var toolStrip = new ToolStrip();
+                using var toolStripItemOpen = new ToolStripButton("Open");
 
                 toolStrip.GripStyle = ToolStripGripStyle.Hidden;
                 toolStrip.Items.Add(toolStripItemOpen);
