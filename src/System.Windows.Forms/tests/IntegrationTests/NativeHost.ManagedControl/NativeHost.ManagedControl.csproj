@@ -4,6 +4,9 @@
     <AssemblyName>NativeHost.ManagedControl</AssemblyName>
     <Platforms>x86;x64</Platforms>
     <EnableComHosting>true</EnableComHosting>
+
+    <EnableXlfLocalization>false</EnableXlfLocalization>
+    <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
