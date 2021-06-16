@@ -119,7 +119,7 @@ stages:
     jobs:
     - template: /eng/common/templates/job/onelocbuild.yml
       parameters:
-        CreatePr: false
+        MirrorRepo: winforms
         UseCheckedInLocProjectJson: true
         LclSource: lclFilesfromPackage
         LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
