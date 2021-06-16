@@ -4,47 +4,47 @@
     <body>
       <trans-unit id="$this.Text">
         <source>{0} Collection Editor</source>
-        <target state="translated">Редактор коллекции "{0}"</target>
+        <target state="new">{0} Collection Editor</target>
         <note />
       </trans-unit>
       <trans-unit id="addButton.Text">
         <source>&amp;Add</source>
-        <target state="translated">&amp;Добавить</target>
+        <target state="new">&amp;Add</target>
         <note />
       </trans-unit>
       <trans-unit id="cancelButton.Text">
         <source>Cancel</source>
-        <target state="translated">Отмена</target>
+        <target state="new">Cancel</target>
         <note />
       </trans-unit>
       <trans-unit id="downButton.AccessibleName">
         <source>Move Down</source>
-        <target state="translated">Вниз</target>
+        <target state="new">Move Down</target>
         <note />
       </trans-unit>
       <trans-unit id="membersLabel.Text">
         <source>&amp;Members:</source>
-        <target state="translated">&amp;Члены:</target>
+        <target state="new">&amp;Members:</target>
         <note />
       </trans-unit>
       <trans-unit id="okButton.Text">
         <source>OK</source>
-        <target state="translated">ОК</target>
+        <target state="new">OK</target>
         <note />
       </trans-unit>
       <trans-unit id="propertiesLabel.Text">
         <source>&amp;Properties:</source>
-        <target state="translated">Сво&amp;йства:</target>
+        <target state="new">&amp;Properties:</target>
         <note />
       </trans-unit>
       <trans-unit id="removeButton.Text">
         <source>&amp;Remove</source>
-        <target state="translated">&amp;Удалить</target>
+        <target state="new">&amp;Remove</target>
         <note />
       </trans-unit>
       <trans-unit id="upButton.AccessibleName">
         <source>Move Up</source>
-        <target state="translated">Вверх</target>
+        <target state="new">Move Up</target>
         <note />
       </trans-unit>
     </body>
