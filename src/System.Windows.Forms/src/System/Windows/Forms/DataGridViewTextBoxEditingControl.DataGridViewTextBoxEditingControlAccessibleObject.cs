@@ -41,7 +41,7 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.NavigateDirection.Parent:
                         if (Owner is IDataGridViewEditingControl owner
-                            && owner.EditingControlDataGridView.EditingControl == owner
+                            && owner.EditingControlDataGridView?.EditingControl == owner
                             && Owner.ToolStripControlHost is null)
                         {
                             return _parentAccessibleObject;
