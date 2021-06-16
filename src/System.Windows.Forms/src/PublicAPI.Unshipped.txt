@@ -1,5 +1,0 @@
-override System.Windows.Forms.ContainerControl.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
-*REMOVED*override System.Windows.Forms.PropertyGrid.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
-~System.Windows.Forms.Control.BeginInvoke(System.Action method) -> System.IAsyncResult
-~System.Windows.Forms.Control.Invoke(System.Action method) -> void
-~System.Windows.Forms.Control.Invoke<T>(System.Func<T> method) -> T
