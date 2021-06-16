@@ -1,0 +1,14 @@
+System.Windows.Forms.IdleSensor
+System.Windows.Forms.IdleSensor.Idle -> System.ComponentModel.CancelEventHandler
+System.Windows.Forms.IdleSensor.IdleSensor() -> void
+System.Windows.Forms.IdleSensor.KeepAlive() -> void
+System.Windows.Forms.IdleSensor.KeepAliveTime.get -> int
+System.Windows.Forms.IdleSensor.KeepAliveTime.set -> void
+System.Windows.Forms.IdleSensor.Pause() -> void
+System.Windows.Forms.IdleSensor.Resume() -> void
+System.Windows.Forms.TextBoxBase.IdleTextChanged -> System.EventHandler
+System.Windows.Forms.TextBoxBase.IdleTextDelayTime.get -> int
+System.Windows.Forms.TextBoxBase.IdleTextDelayTime.set -> void
+override System.Windows.Forms.IdleSensor.Dispose(bool disposing) -> void
+~System.Windows.Forms.TextBoxBase.IdleText.get -> string
+~System.Windows.Forms.TextBoxBase.TextBoxBase(System.EventArgs e) -> void
