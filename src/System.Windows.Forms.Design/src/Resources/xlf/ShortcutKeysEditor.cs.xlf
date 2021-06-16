@@ -4,62 +4,62 @@
     <body>
       <trans-unit id="$this.AccessibleName">
         <source>Shortcut Keys Editor</source>
-        <target state="translated">Editor klávesových zkratek</target>
+        <target state="new">Shortcut Keys Editor</target>
         <note />
       </trans-unit>
       <trans-unit id="btnReset.AccessibleName">
         <source>Reset</source>
-        <target state="translated">Resetovat</target>
+        <target state="new">Reset</target>
         <note />
       </trans-unit>
       <trans-unit id="btnReset.Text">
         <source>&amp;Reset</source>
-        <target state="translated">&amp;Resetovat</target>
+        <target state="new">&amp;Reset</target>
         <note />
       </trans-unit>
       <trans-unit id="chkAlt.AccessibleName">
         <source>Alt key</source>
-        <target state="translated">Klávesa Alt</target>
+        <target state="new">Alt key</target>
         <note />
       </trans-unit>
       <trans-unit id="chkAlt.Text">
         <source>&amp;Alt</source>
-        <target state="translated">&amp;Alt</target>
+        <target state="new">&amp;Alt</target>
         <note />
       </trans-unit>
       <trans-unit id="chkCtrl.AccessibleName">
         <source>Control key</source>
-        <target state="translated">Klávesa Ctrl</target>
+        <target state="new">Control key</target>
         <note />
       </trans-unit>
       <trans-unit id="chkCtrl.Text">
         <source>&amp;Ctrl</source>
-        <target state="translated">&amp;Ctrl</target>
+        <target state="new">&amp;Ctrl</target>
         <note />
       </trans-unit>
       <trans-unit id="chkShift.AccessibleName">
         <source>Shift key</source>
-        <target state="translated">Klávesa Shift</target>
+        <target state="new">Shift key</target>
         <note />
       </trans-unit>
       <trans-unit id="chkShift.Text">
         <source>&amp;Shift</source>
-        <target state="translated">&amp;Shift</target>
+        <target state="new">&amp;Shift</target>
         <note />
       </trans-unit>
       <trans-unit id="cmbKey.AccessibleName">
         <source>Shortcut key</source>
-        <target state="translated">Klávesová zkratka</target>
+        <target state="new">Shortcut key</target>
         <note />
       </trans-unit>
       <trans-unit id="lblKey.Text">
         <source>&amp;Key:</source>
-        <target state="translated">&amp;Klíč:</target>
+        <target state="new">&amp;Key:</target>
         <note />
       </trans-unit>
       <trans-unit id="lblModifiers.Text">
         <source>Modifiers:</source>
-        <target state="translated">Modifikátory:</target>
+        <target state="new">Modifiers:</target>
         <note />
       </trans-unit>
     </body>

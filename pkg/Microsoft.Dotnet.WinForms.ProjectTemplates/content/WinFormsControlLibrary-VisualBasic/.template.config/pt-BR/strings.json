@@ -1,7 +1,7 @@
-{
+﻿{
   "version": "1.0.0.0",
   "strings": {
-    "name": "Biblioteca de Controles do Windows Forms",
-    "description": "Um modelo de projeto para criar uma biblioteca de controles direcionada ao WinForms (Windows Forms) do .NET."
+    "name": "Windows Forms Control Library",
+    "description": "A project template for creating a control library that targets .NET Windows Forms (WinForms)."
   }
 }

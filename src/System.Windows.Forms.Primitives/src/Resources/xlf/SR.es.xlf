@@ -4,17 +4,17 @@
     <body>
       <trans-unit id="COM2UnhandledVT">
         <source>Unhandled VT: {0}.</source>
-        <target state="translated">VT no controlado: {0}.</target>
+        <target state="new">Unhandled VT: {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
-        <target state="translated">Una o más entradas no son válidas en el parámetro IDictionary. Compruebe que todos los valores coinciden con las propiedades del objeto.</target>
+        <target state="new">One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Parse of Text("{0}") expected text in the format "{1}" did not succeed.</source>
-        <target state="translated">No se pudo analizar el texto esperado Text("{0}") en formato "{1}".</target>
+        <target state="new">Parse of Text("{0}") expected text in the format "{1}" did not succeed.</target>
         <note />
       </trans-unit>
     </body>

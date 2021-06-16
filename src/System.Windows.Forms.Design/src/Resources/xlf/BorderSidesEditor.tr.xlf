@@ -4,32 +4,32 @@
     <body>
       <trans-unit id="allCheckBox.Text">
         <source>&amp;All</source>
-        <target state="translated">&amp;Tümü</target>
+        <target state="new">&amp;All</target>
         <note />
       </trans-unit>
       <trans-unit id="bottomCheckBox.Text">
         <source>&amp;Bottom</source>
-        <target state="translated">&amp;Alt</target>
+        <target state="new">&amp;Bottom</target>
         <note />
       </trans-unit>
       <trans-unit id="leftCheckBox.Text">
         <source>&amp;Left</source>
-        <target state="translated">&amp;Sol</target>
+        <target state="new">&amp;Left</target>
         <note />
       </trans-unit>
       <trans-unit id="noneCheckBox.Text">
         <source>&amp;None</source>
-        <target state="translated">&amp;Yok</target>
+        <target state="new">&amp;None</target>
         <note />
       </trans-unit>
       <trans-unit id="rightCheckBox.Text">
         <source>&amp;Right</source>
-        <target state="translated">&amp;Sağ</target>
+        <target state="new">&amp;Right</target>
         <note />
       </trans-unit>
       <trans-unit id="topCheckBox.Text">
         <source>&amp;Top</source>
-        <target state="translated">Üs&amp;t</target>
+        <target state="new">&amp;Top</target>
         <note />
       </trans-unit>
     </body>

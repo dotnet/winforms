@@ -4,57 +4,57 @@
     <body>
       <trans-unit id="dateTimeFormatsListBox.AccessibleDescription">
         <source>Type:</source>
-        <target state="translated">Type :</target>
+        <target state="new">Type:</target>
         <note />
       </trans-unit>
       <trans-unit id="decimalPlacesUpDown.AccessibleDescription">
         <source>Decimal places</source>
-        <target state="translated">Nombre de décimales</target>
+        <target state="new">Decimal places</target>
         <note />
       </trans-unit>
       <trans-unit id="formatGroupBox.Text">
         <source>Format</source>
-        <target state="translated">Format</target>
+        <target state="new">Format</target>
         <note />
       </trans-unit>
       <trans-unit id="formatTypeLabel.Text">
         <source>&amp;Format type:</source>
-        <target state="translated">&amp;Type de format :</target>
+        <target state="new">&amp;Format type:</target>
         <note />
       </trans-unit>
       <trans-unit id="formatTypeListBox.AccessibleDescription">
         <source>Format type:</source>
-        <target state="translated">Type de format :</target>
+        <target state="new">Format type:</target>
         <note />
       </trans-unit>
       <trans-unit id="nullValueLabel.Text">
         <source>&amp;Null value</source>
-        <target state="translated">&amp;Valeur null</target>
+        <target state="new">&amp;Null value</target>
         <note />
       </trans-unit>
       <trans-unit id="nullValueTextBox.AccessibleDescription">
         <source>Null value</source>
-        <target state="translated">Valeur null</target>
+        <target state="new">Null value</target>
         <note />
       </trans-unit>
       <trans-unit id="sampleGroupBox.Text">
         <source>Sample</source>
-        <target state="translated">Aperçu</target>
+        <target state="new">Sample</target>
         <note />
       </trans-unit>
       <trans-unit id="sampleLabel.Text">
         <source>sample</source>
-        <target state="translated">exemple</target>
+        <target state="new">sample</target>
         <note />
       </trans-unit>
       <trans-unit id="secondRowLabel.Text">
         <source>&amp;Decimal places</source>
-        <target state="translated">Nb de &amp;décimales</target>
+        <target state="new">&amp;Decimal places</target>
         <note />
       </trans-unit>
       <trans-unit id="thirdRowLabel.Text">
         <source>Note: Custom format strings are not guaranteed  to successfully complete a round trip between the data source and the bound control. In order to ensure that a custom-formatted value successfully displays in the control and is persisted to the data base, handle the parse or format event for the binding.</source>
-        <target state="translated">Remarque : il n'est pas garanti que les chaînes de format personnalisées effectuent correctement un aller-retour entre la source de données et le contrôle dépendant. Pour vous assurer qu'une valeur de format personnalisé s'affiche dans le contrôle et est enregistrée dans la base de données, gérez l'analyse ou formatez l'événement pour la liaison.</target>
+        <target state="new">Note: Custom format strings are not guaranteed  to successfully complete a round trip between the data source and the bound control. In order to ensure that a custom-formatted value successfully displays in the control and is persisted to the data base, handle the parse or format event for the binding.</target>
         <note />
       </trans-unit>
     </body>
