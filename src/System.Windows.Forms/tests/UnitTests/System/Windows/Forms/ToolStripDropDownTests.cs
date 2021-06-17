@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -796,7 +796,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void ToolStripDropDown_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new ToolStripDropDown
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ToolStripDropDown_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubToolStripDropDown
@@ -1709,7 +1709,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStripDropDown_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new ToolStripDropDown
@@ -1761,7 +1761,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStripDropDown_GripMargin_Set_GetReturnsExpected(Padding value)
         {
             using var control = new ToolStripDropDown();
@@ -4064,7 +4064,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ToolStripDropDown_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();
@@ -4088,7 +4088,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void ToolStripDropDown_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();
@@ -4112,7 +4112,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ToolStripDropDown_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
             using var control = new SubToolStripDropDown();

@@ -8,7 +8,7 @@ using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Automation;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -2742,7 +2742,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_GetWithColumn_ReturnsExpected(Type valueType)
         {
             using var column = new DataGridViewColumn
@@ -2755,7 +2755,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_GetWithDataGridView_ReturnsExpected(Type valueType)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2772,7 +2772,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_Set_GetReturnsExpected(Type value)
         {
             using var cell = new SubDataGridViewCell
@@ -2789,7 +2789,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithNonNullOldValue_GetReturnsExpected(Type value)
         {
             using var cell = new SubDataGridViewCell
@@ -2807,7 +2807,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithRow_GetReturnsExpected(Type value)
         {
             using var row = new DataGridViewRow();
@@ -2825,7 +2825,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithRowWithNonNullOldValue_GetReturnsExpected(Type value)
         {
             using var row = new DataGridViewRow();
@@ -2892,7 +2892,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithDataGridView_GetReturnsExpected(Type value)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2917,7 +2917,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(Type value)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -5848,7 +5848,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void DataGridViewCell_OnKeyDown_Invoke_Nop(KeyEventArgs e)
         {
             using var cell = new SubDataGridViewCell();
@@ -5856,7 +5856,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void DataGridViewCell_OnKeyPress_Invoke_Nop(KeyPressEventArgs e)
         {
             using var cell = new SubDataGridViewCell();
@@ -5864,7 +5864,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void DataGridViewCell_OnKeyUp_Invoke_Nop(KeyEventArgs e)
         {
             using var cell = new SubDataGridViewCell();

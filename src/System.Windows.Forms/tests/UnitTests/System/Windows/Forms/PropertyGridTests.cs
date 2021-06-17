@@ -10,7 +10,7 @@ using System.Drawing.Design;
 using System.Linq;
 using System.Windows.Forms.PropertyGridInternal;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -283,7 +283,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PropertyGrid_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new PropertyGrid
@@ -939,7 +939,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_CommandsBackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -956,7 +956,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_CommandsBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -1187,7 +1187,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_CommandsForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -1204,7 +1204,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_CommandsForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -1606,7 +1606,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -1727,7 +1727,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_HelpBackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -1744,7 +1744,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_HelpBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -1890,7 +1890,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_HelpForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -1907,7 +1907,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_HelpForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -2218,7 +2218,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void PropertyGrid_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new PropertyGrid
@@ -2235,7 +2235,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void PropertyGrid_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new PropertyGrid();
@@ -3086,7 +3086,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_ViewBackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -3103,7 +3103,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_ViewBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -3499,7 +3499,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void PropertyGrid_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
@@ -3525,7 +3525,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void PropertyGrid_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
@@ -3551,7 +3551,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void PropertyGrid_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
@@ -3721,7 +3721,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void PropertyGrid_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();

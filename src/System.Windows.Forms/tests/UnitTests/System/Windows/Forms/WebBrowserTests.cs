@@ -9,7 +9,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.Mshtml;
@@ -1313,7 +1313,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void WebBrowser_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new WebBrowser
@@ -1330,7 +1330,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void WebBrowser_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new WebBrowser();

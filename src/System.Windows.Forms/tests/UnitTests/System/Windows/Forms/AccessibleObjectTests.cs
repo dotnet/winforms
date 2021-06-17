@@ -7,7 +7,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 

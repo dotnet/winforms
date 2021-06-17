@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.User32;
@@ -504,7 +504,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubButtonBase
@@ -521,7 +521,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_SetWithUseVisualStyleBackColor_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubButtonBase
@@ -541,7 +541,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_SetDesignMode_GetReturnsExpected(Color value, Color expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -587,7 +587,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_SetDesignModeWithUseVisualStyleBackColor_GetReturnsExpected(Color value, Color expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -633,7 +633,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_SetDesignModeWithInvalidDescriptor_GetReturnsExpected(Color value, Color expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);

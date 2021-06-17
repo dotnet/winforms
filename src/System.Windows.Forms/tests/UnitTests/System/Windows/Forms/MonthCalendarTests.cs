@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -373,7 +373,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void MonthCalendar_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new MonthCalendar
@@ -1634,7 +1634,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void MonthCalendar_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new MonthCalendar
@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void MonthCalendar_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new MonthCalendar();
@@ -3710,7 +3710,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void MonthCalendar_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3734,7 +3734,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void MonthCalendar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3758,7 +3758,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void MonthCalendar_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();

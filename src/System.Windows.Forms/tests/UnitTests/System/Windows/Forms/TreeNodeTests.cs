@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.Serialization;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.ComCtl32;
@@ -2802,7 +2802,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TreeNode_NodeFont_Set_GetReturnsExpected(Font value)
         {
             var node = new TreeNode
@@ -2817,7 +2817,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TreeNode_NodeFont_SetWithTreeView_GetReturnsExpected(Font value)
         {
             using var control = new TreeView();
@@ -2872,7 +2872,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TreeNode_NodeFont_SetWithCustomOldValue_GetReturnsExpected(Font value)
         {
             using var oldValue = new Font("Arial", 1);
@@ -2890,7 +2890,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TreeNode_NodeFont_SetWithCustomOldValueWithTreeView_GetReturnsExpected(Font value)
         {
             using var control = new TreeView();

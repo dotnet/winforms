@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -602,7 +602,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void UpDownBase_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new SubUpDownBase
@@ -2118,7 +2118,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void UpDownBase_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
         {
             using var control = new SubUpDownBase();

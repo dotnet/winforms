@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -992,7 +992,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void UserControl_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
         {
             using var control = new SubUserControl();
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void UserControl_OnMouseDown_InvokeWithHandle_CallsMouseDown(MouseEventArgs eventArgs)
         {
             using var control = new SubUserControl();

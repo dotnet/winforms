@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 

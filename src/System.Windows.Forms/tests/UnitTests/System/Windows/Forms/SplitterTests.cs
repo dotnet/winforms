@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void Splitter_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new Splitter
@@ -734,7 +734,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void Splitter_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubSplitter
@@ -795,7 +795,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Splitter_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Splitter
@@ -1859,7 +1859,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void Splitter_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var control = new SubSplitter();
@@ -2180,7 +2180,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Splitter_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
         {
             using var control = new SubSplitter();
@@ -2212,7 +2212,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Splitter_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
         {
             using var control = new SubSplitter();

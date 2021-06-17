@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 

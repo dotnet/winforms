@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -619,7 +619,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void TabControl_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new TabControl
@@ -924,7 +924,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void TabControl_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new TabControl

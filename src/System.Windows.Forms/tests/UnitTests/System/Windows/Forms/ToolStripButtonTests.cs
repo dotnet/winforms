@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ToolStripButton_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
         {
             using var item = new SubToolStripButton();

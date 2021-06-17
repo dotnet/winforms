@@ -11,7 +11,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -1236,7 +1236,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void Control_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Control
@@ -1253,7 +1253,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void Control_BackColor_SetWithCustomOldValue_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Control
@@ -1296,7 +1296,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void Control_BackColor_SetWithChildren_GetReturnsExpected(Color value, Color expected)
         {
             using var child1 = new Control();
@@ -1320,7 +1320,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void Control_BackColor_SetWithChildrenWithColor_GetReturnsExpected(Color value, Color expected)
         {
             using var child1 = new Control
@@ -1644,7 +1644,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void Control_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new Control
@@ -1696,7 +1696,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void Control_BackgroundImage_SetWithChildren_GetReturnsExpected(Image value)
         {
             using var child1 = new Control();
@@ -1718,7 +1718,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void Control_BackgroundImage_SetWithChildrenWithBackgroundImage_GetReturnsExpected(Image value)
         {
             using var image1 = new Bitmap(10, 10);
@@ -3815,7 +3815,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Control_Cursor_Set_GetReturnsExpected(Cursor value)
         {
             using var control = new Control
@@ -3832,7 +3832,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Control_Cursor_SetWithHandle_GetReturnsExpected(Cursor value)
         {
             using var control = new Control();
@@ -3861,7 +3861,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Control_Cursor_SetWithChildren_GetReturnsExpected(Cursor value)
         {
             using var child1 = new Control();
@@ -3883,7 +3883,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Control_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
         {
             var cursor1 = new Cursor((IntPtr)1);
@@ -4845,7 +4845,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void Control_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubControl
@@ -4920,7 +4920,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void Control_Font_SetWithNonNullOldValue_GetReturnsExpected(Font value)
         {
             using var control = new SubControl
@@ -5300,7 +5300,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Control_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Control
@@ -5317,7 +5317,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Control_ForeColor_SetWithCustomOldValue_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Control
@@ -5336,7 +5336,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Control_ForeColor_SetWithChildren_GetReturnsExpected(Color value, Color expected)
         {
             using var child1 = new Control();
@@ -5360,7 +5360,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Control_ForeColor_SetWithChildrenWithColor_GetReturnsExpected(Color value, Color expected)
         {
             using var child1 = new Control
@@ -10064,7 +10064,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new Control
@@ -10081,7 +10081,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_SetWithOldValue_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new Control
@@ -10100,7 +10100,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_SetWithChildren_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var child1 = new Control();
@@ -10124,7 +10124,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_SetWithChildrenWithRightToLeft_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var child1 = new Control

@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Moq;
 using Moq.Protected;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
@@ -971,7 +971,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DesignerSerializationManager_GetService_WithProvider_ReturnsExpected(Type serviceType)
         {
             var service = new object();
@@ -1024,7 +1024,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DesignerSerializationManager_IDesignerSerializationManagerGetService_WithProvider_ReturnsExpected(Type serviceType)
         {
             var service = new object();
@@ -1289,7 +1289,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DesignerSerializationManager_GetSerializer_NullSerializerType_ThrowsArgumentNullException(Type objectType)
         {
             var manager = new DesignerSerializationManager();
@@ -1406,7 +1406,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DesignerSerializationManager_IDesignerSerializationManagerGetSerializer_NullSerializerType_ThrowsArgumentNullException(Type objectType)
         {
             var manager = new DesignerSerializationManager();

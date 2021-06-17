@@ -8,7 +8,7 @@ using System.Drawing;
 using System.IO;
 using System.Runtime.InteropServices.ComTypes;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -1565,7 +1565,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ToolStripItem_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var item = new SubToolStripItem
@@ -1580,7 +1580,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ToolStripItem_BackColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
         {
             using var owner = new ToolStrip();
@@ -1600,7 +1600,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ToolStripItem_BackColor_SetWithOwnerWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var owner = new ToolStrip();
@@ -1633,7 +1633,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ToolStripItem_BackColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
         {
             using var parent = new ToolStrip();
@@ -3255,7 +3255,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStripItem_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var item = new SubToolStripItem
@@ -3270,7 +3270,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStripItem_ForeColor_SetWithOwner_GetReturnsExpected(Color value, Color expected)
         {
             using var owner = new ToolStrip();
@@ -3290,7 +3290,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStripItem_ForeColor_SetWithOwnerWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var owner = new ToolStrip();
@@ -3323,7 +3323,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStripItem_ForeColor_SetWithParent_GetReturnsExpected(Color value, Color expected)
         {
             using var parent = new ToolStrip();
@@ -5891,7 +5891,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStripItem_Margin_Set_GetReturnsExpected(Padding value)
         {
             using var item = new SubToolStripItem
@@ -5906,7 +5906,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStripItem_Margin_SetWithOwner_GetReturnsExpected(Padding value)
         {
             using var owner = new ToolStrip();
@@ -5945,7 +5945,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStripItem_Margin_SetWithOwnerWithHandle_GetReturnsExpected(Padding value)
         {
             using var owner = new ToolStrip();
@@ -5997,7 +5997,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStripItem_Margin_SetWithParent_GetReturnsExpected(Padding value)
         {
             using var parent = new ToolStrip();
@@ -6036,7 +6036,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStripItem_Margin_SetWithParentWithHandle_GetReturnsExpected(Padding value)
         {
             using var parent = new ToolStrip();
@@ -6712,7 +6712,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void ToolStripItem_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var item = new SubToolStripItem
@@ -6826,7 +6826,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void ToolStripItem_Padding_SetWithParent_GetReturnsExpected(Padding value, Padding expected)
         {
             using var parent = new ToolStrip();
@@ -6858,7 +6858,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void ToolStripItem_Padding_SetWithParentWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var parent = new ToolStrip();
@@ -11714,7 +11714,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStripItem_OnLayout_Invoke_Nop(LayoutEventArgs eventArgs)
         {
             using var item = new SubToolStripItem();
@@ -11750,7 +11750,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ToolStripItem_OnMouseDown_Invoke_Nop(MouseEventArgs eventArgs)
         {
             using var item = new SubToolStripItem();
@@ -12059,7 +12059,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ToolStripItem_OnMouseMove_Invoke_Nop(MouseEventArgs eventArgs)
         {
             using var item = new SubToolStripItem();
@@ -12083,7 +12083,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ToolStripItem_OnMouseUp_Invoke_Nop(MouseEventArgs eventArgs)
         {
             using var item = new SubToolStripItem();
@@ -12459,7 +12459,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ToolStripItem_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
         {
             using var item = new SubToolStripItem();

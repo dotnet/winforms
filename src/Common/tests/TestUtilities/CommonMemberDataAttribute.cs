@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Reflection;
 using Xunit;
 
-namespace WinForms.Common.Tests
+namespace System.Windows.Forms.TestUtilities
 {
     /// <summary>
     ///  A custom MemberData attribute that is specialized for the CommonTestHelper type.

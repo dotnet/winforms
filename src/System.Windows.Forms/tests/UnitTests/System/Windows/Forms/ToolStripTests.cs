@@ -10,7 +10,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -1357,7 +1357,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void ToolStrip_Cursor_Set_GetReturnsExpected(Cursor value)
         {
             using var control = new ToolStrip
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ToolStrip_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubToolStrip
@@ -2658,7 +2658,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStrip_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new ToolStrip
@@ -2710,7 +2710,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStrip_GripMargin_Set_GetReturnsExpected(Padding value)
         {
             using var control = new ToolStrip();
@@ -2728,7 +2728,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void ToolStrip_GripMargin_SetWithGrip_GetReturnsExpected(Padding value)
         {
             using var control = new ToolStrip();
@@ -3459,7 +3459,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ToolStrip_RightToLeft_SetWithChildren_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var item1 = new SubToolStripItem();
@@ -3483,7 +3483,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ToolStrip_RightToLeft_SetWithChildrenWithRightToLeft_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var item1 = new SubToolStripItem
@@ -5224,7 +5224,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5259,7 +5259,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithOverflowButton_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5295,7 +5295,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithDropDown_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5331,7 +5331,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithItems_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var item1 = new SubToolStripItem();
@@ -5385,7 +5385,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5433,7 +5433,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5482,7 +5482,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithOverflowButtonWithDropDownWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubToolStrip();
@@ -5531,7 +5531,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStrip_OnLayout_InvokeWithItemsWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var item1 = new SubToolStripItem();

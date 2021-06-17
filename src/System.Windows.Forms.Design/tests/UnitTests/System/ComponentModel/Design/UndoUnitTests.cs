@@ -4,7 +4,7 @@
 
 using System.ComponentModel.Design.Serialization;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests

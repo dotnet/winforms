@@ -9,7 +9,7 @@ using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void AxHost_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -303,7 +303,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void AxHost_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -432,7 +432,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void AxHost_Cursor_Set_GetReturnsExpected(Cursor value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -447,7 +447,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithHandle_GetReturnsExpected(Cursor value)
         {
             using var control = new SubAxHost(WebBrowserClsidString);
@@ -462,7 +462,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithChildren_GetReturnsExpected(Cursor value)
         {
             var child1 = new Control();
@@ -484,7 +484,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void AxHost_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
         {
             var cursor1 = new Cursor((IntPtr)1);
@@ -514,7 +514,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void AxHost_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -533,7 +533,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void AxHost_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubAxHost(EmptyClsidString)
@@ -2273,7 +2273,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void AxHost_OnLeave_Invoke_CallsLeave(KeyEventArgs eventArgs)
         {
             using var control = new SubAxHost(EmptyClsidString);

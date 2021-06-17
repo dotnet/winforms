@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests

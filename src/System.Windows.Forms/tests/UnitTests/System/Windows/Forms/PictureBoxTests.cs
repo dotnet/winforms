@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -312,7 +312,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_ErrorImage_Set_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_ErrorImage_SetWithNonNullOldValue_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_ErrorImage_SetWithHandle_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox();
@@ -365,7 +365,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_ErrorImage_SetWithNonNullOldValueWithHandle_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -419,7 +419,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PictureBox_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PictureBox
@@ -469,7 +469,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void PictureBox_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubPictureBox
@@ -530,7 +530,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_Image_Set_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -545,7 +545,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_Image_SetWithNonNullOldValue_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -562,7 +562,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_Image_SetWithHandle_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox();
@@ -577,7 +577,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_Image_SetWithNonNullOldValueWithHandle_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_InitialImage_Set_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -1017,7 +1017,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_InitialImage_SetWithNonNullOldValue_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -1036,7 +1036,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_InitialImage_SetWithHandle_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox();
@@ -1053,7 +1053,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PictureBox_InitialImage_SetWithNonNullOldValueWithHandle_GetReturnsExpected(Image value)
         {
             using var pictureBox = new PictureBox
@@ -1210,7 +1210,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void PictureBox_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new PictureBox
@@ -2287,7 +2287,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void PictureBox_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var control = new SubPictureBox();
@@ -2311,7 +2311,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void PictureBox_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var control = new SubPictureBox();
@@ -2335,7 +2335,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void PictureBox_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
             using var control = new SubPictureBox();
@@ -2443,7 +2443,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void PictureBox_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubPictureBox();
@@ -2468,7 +2468,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnPaint_Image_TestData()
         {
-            foreach (object[] testData in CommonTestHelper.GetPaintEventArgsTheoryData())
+            foreach (object[] testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
             {
                 foreach (PictureBoxSizeMode sizeMode in Enum.GetValues(typeof(PictureBoxSizeMode)))
                 {
@@ -2513,7 +2513,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnPaint_NullOrEmptyImageLocation_TestData()
         {
-            foreach (object[] testData in CommonTestHelper.GetPaintEventArgsTheoryData())
+            foreach (object[] testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
             {
                 yield return new object[] { string.Empty, testData[0] };
                 yield return new object[] { null, testData[0] };
@@ -2539,7 +2539,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> OnPaint_InvalidImageLocation_TestData()
         {
-            foreach (object[] testData in CommonTestHelper.GetPaintEventArgsTheoryData())
+            foreach (object[] testData in CommonTestHelperEx.GetPaintEventArgsTheoryData())
             {
                 foreach (PictureBoxSizeMode sizeMode in Enum.GetValues(typeof(PictureBoxSizeMode)))
                 {
@@ -2568,7 +2568,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void PictureBox_OnPaint_InvokeWithImage_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubPictureBox

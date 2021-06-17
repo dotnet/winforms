@@ -10,7 +10,7 @@ using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Moq;
 using Moq.Protected;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -756,7 +756,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
         public void CollectionEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new SubCollectionEditor(null);
@@ -765,7 +765,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void CollectionEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new CollectionEditor(null);
@@ -773,7 +773,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void CollectionEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new CollectionEditor(null);
@@ -843,7 +843,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void CollectionEditor_GetService_WithContext_CallsContextGetService(Type serviceType)
         {
             var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
@@ -880,7 +880,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void CollectionEditor_GetService_InvokeWithoutContext_ReturnsNull(Type serviceType)
         {
             var editor = new SubCollectionEditor(serviceType);

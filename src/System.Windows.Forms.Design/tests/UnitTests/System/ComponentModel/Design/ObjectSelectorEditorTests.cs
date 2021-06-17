@@ -7,7 +7,7 @@ using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -63,7 +63,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
         public void ObjectSelectorEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new SubObjectSelectorEditor();
@@ -71,7 +71,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void ObjectSelectorEditor_GetEditStyle_Invoke_ReturnsDropDown(ITypeDescriptorContext context)
         {
             var editor = new SubObjectSelectorEditor();
@@ -79,7 +79,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void ObjectSelectorEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new SubObjectSelectorEditor();

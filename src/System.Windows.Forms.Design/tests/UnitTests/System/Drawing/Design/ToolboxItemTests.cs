@@ -11,7 +11,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Drawing.Design.Tests

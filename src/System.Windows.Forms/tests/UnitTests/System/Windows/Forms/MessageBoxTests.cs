@@ -8,7 +8,7 @@ namespace System.Windows.Forms.Tests
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Reflection;
-    using WinForms.Common.Tests;
+    using System.Windows.Forms.TestUtilities;
     using Xunit;
     using static Interop.User32;
 

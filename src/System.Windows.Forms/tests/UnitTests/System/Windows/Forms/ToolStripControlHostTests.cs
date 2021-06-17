@@ -9,7 +9,7 @@ using System.Drawing;
 using System.IO;
 using System.Reflection;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -265,7 +265,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ToolStripControlHost_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var c = new Control();
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStripControlHost_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var c = new Control();
@@ -1576,7 +1576,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ToolStripControlHost_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var c = new Control();
@@ -2872,7 +2872,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ToolStripControlHost_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var c = new Control();
@@ -2897,7 +2897,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void ToolStripControlHost_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var c = new Control();
@@ -2922,7 +2922,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ToolStripControlHost_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
             using var c = new Control();
@@ -2947,7 +2947,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ToolStripControlHost_OnLayout_Invoke_Nop(LayoutEventArgs eventArgs)
         {
             using var c = new Control();
@@ -3010,7 +3010,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ToolStripControlHost_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
         {
             using var c = new Control();
@@ -3536,7 +3536,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ToolStripControlHost_OnSubscribeControlEvents_InvokeKeyDown_Success(KeyEventArgs eventArgs)
         {
             using var c = new SubControl();
@@ -3556,7 +3556,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void ToolStripControlHost_OnSubscribeControlEvents_InvokeKeyPress_Success(KeyPressEventArgs eventArgs)
         {
             using var c = new SubControl();
@@ -3576,7 +3576,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ToolStripControlHost_OnSubscribeControlEvents_InvokeKeyUp_Success(KeyEventArgs eventArgs)
         {
             using var c = new SubControl();
@@ -3656,7 +3656,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ToolStripControlHost_OnSubscribeControlEvents_InvokeMouseDown_Success(MouseEventArgs eventArgs)
         {
             using var c = new SubControl();
@@ -3736,7 +3736,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ToolStripControlHost_OnSubscribeControlEvents_InvokeMouseMove_Success(MouseEventArgs eventArgs)
         {
             using var c = new SubControl();
@@ -3756,7 +3756,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ToolStripControlHost_OnSubscribeControlEvents_InvokeMouseUp_Success(MouseEventArgs eventArgs)
         {
             using var c = new SubControl();
@@ -3776,7 +3776,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ToolStripControlHost_OnSubscribeControlEvents_InvokePaint_Success(PaintEventArgs eventArgs)
         {
             using var c = new SubControl();

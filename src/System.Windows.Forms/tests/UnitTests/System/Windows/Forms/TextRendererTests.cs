@@ -10,7 +10,7 @@ using System.Drawing.Text;
 using System.IO;
 using System.Windows.Forms.Metafiles;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 

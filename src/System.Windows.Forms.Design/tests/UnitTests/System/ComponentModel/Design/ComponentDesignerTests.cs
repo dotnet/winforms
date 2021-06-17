@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Moq;
 using Moq.Protected;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -1893,7 +1893,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithComponentWithSite_ReturnsNull(Type serviceType)
         {
             var service = new object();
@@ -1926,7 +1926,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithComponentWithoutSite_ReturnsNull(Type serviceType)
         {
             using var designer = new SubComponentDesigner();
@@ -1935,7 +1935,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithoutComponent_ReturnsNull(Type serviceType)
         {
             using var designer = new SubComponentDesigner();

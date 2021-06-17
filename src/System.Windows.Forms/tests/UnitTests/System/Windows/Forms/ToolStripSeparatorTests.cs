@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -336,7 +336,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ToolStripSeparator_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var item = new ToolStripSeparator
@@ -1090,7 +1090,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ToolStripSeparator_OnPaint_Invoke_DoesNotCallPaint(PaintEventArgs eventArgs)
         {
             using var item = new SubToolStripSeparator();
@@ -1126,7 +1126,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ToolStripSeparator_OnPaint_InvokeWithOwner_DoesNotCallPaint(PaintEventArgs eventArgs)
         {
             var renderer = new SubToolStripRenderer();
@@ -1162,7 +1162,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ToolStripSeparator_OnPaint_InvokeWithParent_DoesNotCallPaint(PaintEventArgs eventArgs)
         {
             var renderer = new SubToolStripRenderer();
