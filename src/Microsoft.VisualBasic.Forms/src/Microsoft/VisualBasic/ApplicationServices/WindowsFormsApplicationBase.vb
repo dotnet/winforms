@@ -104,7 +104,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
         ' For splash screens with a minimum display time, this let's us know when that time
         ' has expired and it is OK to close the splash screen.
-        Private _splashScreenCompletionSource As New TaskCompletionSource(Of Boolean)
+        Private _splashScreenCompletionSource As TaskCompletionSource(Of Boolean)
+        Private _formLoadWaiter As AutoResetEvent
         Private _splashScreen As Windows.Forms.Form
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
@@ -253,8 +254,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Public Sub New(authenticationMode As AuthenticationMode)
             MyBase.New()
 
-            ' Default to true in case there is no splash screen so we won't block forever waiting for it to appear.
-            _splashScreenCompletionSource.SetResult(True)
             ValidateAuthenticationModeEnumValue(authenticationMode, NameOf(authenticationMode))
 
             ' Setup Windows Authentication if that's what the user wanted.  Note, we want to do this now,
@@ -638,11 +637,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                         AddHandler _splashTimer.Elapsed, AddressOf MinimumSplashExposureTimeIsUp
                         _splashTimer.AutoReset = False
 
-                        ' We'll enable it in DisplaySplash() once the splash screen thread gets running.
-                    Else
+                        ' We only need this, when we actually need to wait for it.
+                        _splashScreenCompletionSource = New TaskCompletionSource(Of Boolean)
 
-                        ' No timeout so just close it when then main form comes up.
-                        _splashScreenCompletionSource.SetResult(True)
+                        ' We'll enable it in DisplaySplash() once the splash screen thread gets running.
                     End If
 
                     ' Run the splash screen on another thread so we don't starve it for events and painting
@@ -674,8 +672,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 End If
 
                 If _splashScreen IsNot Nothing AndAlso Not _splashScreen.IsDisposed Then
-                    Dim TheBigGoodbye As New DisposeDelegate(AddressOf _splashScreen.Dispose)
-                    _splashScreen.Invoke(TheBigGoodbye)
+                    Dim disposeSplashDelegate As New DisposeDelegate(AddressOf _splashScreen.Dispose)
+                    _splashScreen.Invoke(disposeSplashDelegate)
                     _splashScreen = Nothing
                 End If
             End SyncLock
@@ -782,13 +780,27 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' </summary>
         ''' <param name="sender"></param>
         ''' <param name="e"></param>
-        Private Async Sub MainFormLoadingDone(sender As Object, e As EventArgs)
+        Private Sub MainFormLoadingDone(sender As Object, e As EventArgs)
 
             ' We don't want this event to call us again.
             RemoveHandler MainForm.Load, AddressOf MainFormLoadingDone
 
-            ' Block until the splash screen time is up. See MinimumSplashExposureTimeIsUp() which releases us.
-            Await _splashScreenCompletionSource.Task
+            ' Now, we don't want to eat up a complete Processor Core just for waiting on the main form,
+            ' since this is eating up a LOT of enegery and workload, espacially on Notebooks and tablets.
+            If _splashScreenCompletionSource IsNot Nothing Then
+
+                _formLoadWaiter = New AutoResetEvent(False)
+
+                Task.Run(Async Function() As Task
+                             Await _splashScreenCompletionSource.Task
+                             _formLoadWaiter.Set()
+                         End Function)
+
+                ' Block until the splash screen time is up.
+                ' See MinimumSplashExposureTimeIsUp() which releases us.
+                _formLoadWaiter.WaitOne()
+            End If
+
             HideSplashScreen()
         End Sub
 
