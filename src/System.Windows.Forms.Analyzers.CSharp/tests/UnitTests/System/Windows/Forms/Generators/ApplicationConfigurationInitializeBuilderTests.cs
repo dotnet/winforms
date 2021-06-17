@@ -4,10 +4,10 @@
 
 using System.IO;
 using System.Threading.Tasks;
-using System.Windows.Forms.Generators;
+using System.Windows.Forms.Analyzers;
 using VerifyXunit;
 using Xunit;
-using static System.Windows.Forms.Generators.ApplicationConfig;
+using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Generators.Tests
 {

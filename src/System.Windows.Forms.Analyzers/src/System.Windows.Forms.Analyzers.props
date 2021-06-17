@@ -6,7 +6,8 @@
    -->
 
 <Project>
-  <ItemGroup Condition="'$(UseWindowsForms)' == 'true'">
+  <!-- Import for Windows Forms applications or when developing/testing locally -->
+  <ItemGroup Condition="('$(UseWindowsForms)' == 'true') or ('$(ResolveWinFormsAnalyzersFromSdkRefPack)' == 'false')">
     <!-- Known Application properties -->
     <CompilerVisibleProperty Include="ApplicationManifest" />
     <CompilerVisibleProperty Include="StartupObject" />

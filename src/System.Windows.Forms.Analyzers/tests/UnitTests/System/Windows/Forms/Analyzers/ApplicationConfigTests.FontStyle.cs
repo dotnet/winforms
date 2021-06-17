@@ -3,9 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
-using static System.Windows.Forms.Generators.ApplicationConfig;
+using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
-namespace System.Windows.Forms.Analyzers.Generators.Tests
+namespace System.Windows.Forms.Analyzers.Tests
 {
     public partial class ApplicationConfigTests
     {

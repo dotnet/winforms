@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 #if WINFORMS_ANALYZERS
-namespace System.Windows.Forms.Generators
+namespace System.Windows.Forms.Analyzers
 #else
 namespace System.Windows.Forms
 #endif

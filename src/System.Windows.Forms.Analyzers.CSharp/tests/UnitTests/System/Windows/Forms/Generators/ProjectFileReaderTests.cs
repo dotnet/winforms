@@ -6,13 +6,13 @@ using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Globalization;
 using System.Windows.Forms.Analyzers.Tests;
-using System.Windows.Forms.Generators;
+using System.Windows.Forms.Analyzers;
 using System.Windows.Forms.TestUtilities;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Diagnostics;
 using Xunit;
 using Xunit.Abstractions;
-using static System.Windows.Forms.Generators.ApplicationConfig;
+using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Generators.Tests
 {
