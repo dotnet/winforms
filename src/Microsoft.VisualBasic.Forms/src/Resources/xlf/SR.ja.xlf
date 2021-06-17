@@ -49,7 +49,7 @@
       </trans-unit>
       <trans-unit id="ApplicationLog_ReservedSpaceEncroached">
         <source>Unable to write to log file because writing to it would reduce free disk space below ReservedSpace value.</source>
-        <target state="translated">書き込みを行うと、空きディスク領域が  ReservedSpace 値よりも少なくなるため、ログ ファイルに書き込めません。</target>
+        <target state="translated">書き込みを行うと、空きディスク領域が ReservedSpace 値よりも少なくなるため、ログ ファイルに書き込めません。</target>
         <note />
       </trans-unit>
       <trans-unit id="Argument_InvalidNullValue1">

@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Windows Forms 類別庫",
+    "description": "用於建立以 .NET Windows Forms (WinForms) 為目標之類別庫的專案範本。"
+  }
+}

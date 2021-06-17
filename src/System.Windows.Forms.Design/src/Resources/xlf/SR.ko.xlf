@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
-        <target state="new">Could not create ActiveX control '{0}' because it is not properly registered.</target>
+        <target state="translated">'{0}' ActiveX 컨트롤이 제대로 등록되어 있지 않으므로 이 컨트롤을 만들 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorAccName">
@@ -34,12 +34,12 @@
       </trans-unit>
       <trans-unit id="AxImportFailed">
         <source>Failed to import the ActiveX control.  Please ensure it is properly registered.</source>
-        <target state="new">Failed to import the ActiveX control.  Please ensure it is properly registered.</target>
+        <target state="translated">ActiveX 컨트롤을 가져오지 못했습니다. 제대로 등록되어 있는지 확인하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="Ax_Control">
         <source>ActiveX Control</source>
-        <target state="new">ActiveX Control</target>
+        <target state="translated">ActiveX 컨트롤</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
@@ -219,17 +219,17 @@
       </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
-        <target state="new">Select the image displayed in the PictureBox</target>
+        <target state="translated">PictureBox에 표시된 이미지를 선택합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ChooseImageDisplayName">
         <source>Choose Image...</source>
-        <target state="new">Choose Image...</target>
+        <target state="translated">이미지 선택...</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardError">
         <source>Requested Clipboard operation did not succeed.</source>
-        <target state="new">Requested Clipboard operation did not succeed.</target>
+        <target state="translated">요청한 클립보드 작업을 수행하지 못했습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -386,7 +386,7 @@
       </trans-unit>
       <trans-unit id="CommandSetBringToFront">
         <source>Bring {0} controls to front</source>
-        <target state="new">Bring {0} controls to front</target>
+        <target state="translated">{0}개 컨트롤을 맨 앞으로 가져오기</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
@@ -413,7 +413,7 @@
       </trans-unit>
       <trans-unit id="CommandSetLockControls">
         <source>Lock {0} components</source>
-        <target state="new">Lock {0} components</target>
+        <target state="translated">{0}개 구성 요소 잠금</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetPaste">
@@ -423,7 +423,7 @@
       </trans-unit>
       <trans-unit id="CommandSetSendToBack">
         <source>Send {0} controls to back</source>
-        <target state="new">Send {0} controls to back</target>
+        <target state="translated">{0}개 컨트롤을 맨 뒤로 보내기</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
@@ -648,7 +648,7 @@
       </trans-unit>
       <trans-unit id="DesignerBatchCreateTool">
         <source>Creating components in tool '{0}'</source>
-        <target state="new">Creating components in tool '{0}'</target>
+        <target state="translated">'{0}' 도구에서 구성 요소를 만들고 있습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
@@ -658,7 +658,7 @@
       </trans-unit>
       <trans-unit id="DesignerCantParentType">
         <source>Cannot add component of type '{0}' to container of type '{1}'</source>
-        <target state="new">Cannot add component of type '{0}' to container of type '{1}'</target>
+        <target state="translated">'{0}' 형식의 구성 요소를 '{1}' 형식의 컨테이너에 추가할 수 없습니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
@@ -857,7 +857,7 @@
       </trans-unit>
       <trans-unit id="DesignerPropName">
         <source>Indicates the name used in code to identify the object.</source>
-        <target state="new">Indicates the name used in code to identify the object.</target>
+        <target state="translated">개체를 식별하기 위해 코드에 사용되는 이름을 나타냅니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
@@ -917,7 +917,7 @@
       </trans-unit>
       <trans-unit id="DragDropDropComponents">
         <source>Drop components</source>
-        <target state="new">Drop components</target>
+        <target state="translated">구성 요소 놓기</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
@@ -947,12 +947,12 @@
       </trans-unit>
       <trans-unit id="EditLinesDescription">
         <source>Opens the Lines collection editor</source>
-        <target state="new">Opens the Lines collection editor</target>
+        <target state="translated">선 컬렉션 편집기를 엽니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="EditLinesDisplayName">
         <source>Edit Text Lines...</source>
-        <target state="new">Edit Text Lines...</target>
+        <target state="translated">텍스트 선 편집...</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
@@ -987,7 +987,7 @@
       </trans-unit>
       <trans-unit id="FailedToCreateComponent">
         <source>Failed to create component '{0}'.  The error message follows:\r\n '{1}'</source>
-        <target state="new">Failed to create component '{0}'.  The error message follows:\r\n '{1}'</target>
+        <target state="translated">'{0}' 구성 요소를 만들지 못했습니다. 오류 메시지는 다음과 같습니다.\r\n '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
@@ -1022,12 +1022,12 @@
       </trans-unit>
       <trans-unit id="ImageListDescription">
         <source>Chooses an ImageList to use with this TreeView</source>
-        <target state="new">Chooses an ImageList to use with this TreeView</target>
+        <target state="translated">이 TreeView와 함께 사용할 ImageList를 선택하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDisplayName">
         <source>ImageList:</source>
-        <target state="new">ImageList:</target>
+        <target state="translated">ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -1037,7 +1037,7 @@
       </trans-unit>
       <trans-unit id="InitialDirectoryEditorLabel">
         <source>Select the directory that will initially be opened in the dialog.</source>
-        <target state="new">Select the directory that will initially be opened in the dialog.</target>
+        <target state="translated">대화 상자에서 처음에 열 디렉터리를 선택합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -1052,17 +1052,17 @@
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDescription">
         <source>Opens the Nodes collection editor</source>
-        <target state="new">Opens the Nodes collection editor</target>
+        <target state="translated">노드 컬렉션 편집기를 엽니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDisplayName">
         <source>Edit Nodes...</source>
-        <target state="new">Edit Nodes...</target>
+        <target state="translated">노드 편집...</target>
         <note />
       </trans-unit>
       <trans-unit id="ItemsCategoryName">
         <source>Items</source>
-        <target state="new">Items</target>
+        <target state="translated">항목</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
@@ -1087,77 +1087,77 @@
       </trans-unit>
       <trans-unit id="LinksCategoryName">
         <source>Links</source>
-        <target state="new">Links</target>
+        <target state="translated">링크</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">항목 컬렉션 편집기를 엽니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">항목 편집...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDescription">
         <source>Opens the Columns collection editor</source>
-        <target state="new">Opens the Columns collection editor</target>
+        <target state="translated">열 컬렉션 편집기를 엽니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDisplayName">
         <source>Edit Columns...</source>
-        <target state="new">Edit Columns...</target>
+        <target state="translated">열 편집...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDescription">
         <source>Opens the Groups collection editor</source>
-        <target state="new">Opens the Groups collection editor</target>
+        <target state="translated">그룹 컬렉션 편집기를 엽니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDisplayName">
         <source>Edit Groups...</source>
-        <target state="new">Edit Groups...</target>
+        <target state="translated">그룹 편집...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">항목 컬렉션 편집기를 엽니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">항목 편집...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDescription">
         <source>Selects an ImageList to use with LargeIcon mode</source>
-        <target state="new">Selects an ImageList to use with LargeIcon mode</target>
+        <target state="translated">LargeIcon 모드에서 사용할 ImageList를 선택합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDisplayName">
         <source>Large ImageList:</source>
-        <target state="new">Large ImageList:</target>
+        <target state="translated">큰 ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDescription">
         <source>Selects an ImageList to use with SmallIcon mode</source>
-        <target state="new">Selects an ImageList to use with SmallIcon mode</target>
+        <target state="translated">SmallIcon 모드에서 사용할 ImageList를 선택합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDisplayName">
         <source>Small ImageList:</source>
-        <target state="new">Small ImageList:</target>
+        <target state="translated">작은 ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDescription">
         <source>Changes the type of View this ListView shows</source>
-        <target state="new">Changes the type of View this ListView shows</target>
+        <target state="translated">이 ListView에서 표시할 뷰의 형식을 변경합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDisplayName">
         <source>View:</source>
-        <target state="new">View:</target>
+        <target state="translated">보기:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
@@ -1177,7 +1177,7 @@
       </trans-unit>
       <trans-unit id="LocalizingCannotAdd">
         <source>Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</source>
-        <target state="new">Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</target>
+        <target state="translated">지역화 모드에서는 구성 요소를 추가할 수 없습니다. Language 속성에서 (기본값)을 선택하여 기본 폼으로 돌아간 다음 구성 요소를 추가하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
@@ -1292,12 +1292,12 @@
       </trans-unit>
       <trans-unit id="MultiLineDescription">
         <source>Puts the TextBox in a mode where it can display multiple lines of text</source>
-        <target state="new">Puts the TextBox in a mode where it can display multiple lines of text</target>
+        <target state="translated">TextBox의 모드를 여러 줄의 텍스트를 표시할 수 있는 모드로 지정합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="MultiLineDisplayName">
         <source>MultiLine</source>
-        <target state="new">MultiLine</target>
+        <target state="translated">여러 줄</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
@@ -1324,12 +1324,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
         <source>Determines the size of the positioning grid.</source>
-        <target state="new">Determines the size of the positioning grid.</target>
+        <target state="translated">위치 지정 모눈의 크기를 결정합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
         <source>Place existing controls in new container, '{0}'.</source>
-        <target state="new">Place existing controls in new container, '{0}'.</target>
+        <target state="translated">기존 컨트롤을 새 컨테이너 '{0}'에 배치하십시오.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
@@ -1339,7 +1339,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="PropertiesCategoryName">
         <source>Properties</source>
-        <target state="new">Properties</target>
+        <target state="translated">속성</target>
         <note />
       </trans-unit>
       <trans-unit id="RTL">
@@ -1479,12 +1479,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="SizeModeDescription">
         <source>Changes the sizing mode of the Image displayed in the PictureBox</source>
-        <target state="new">Changes the sizing mode of the Image displayed in the PictureBox</target>
+        <target state="translated">PictureBox에 표시된 이미지의 크기 조정 모드를 변경합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="SizeModeDisplayName">
         <source>Size Mode:</source>
-        <target state="new">Size Mode:</target>
+        <target state="translated">크기 모드:</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
@@ -1889,7 +1889,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="WindowsFormsTabOrderReadOnly">
         <source>- Read Only</source>
-        <target state="new">- Read Only</target>
+        <target state="translated">- 읽기 전용</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">

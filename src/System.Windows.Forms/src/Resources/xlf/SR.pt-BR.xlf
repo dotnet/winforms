@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">Ir para o próximo período</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">Ir para o intervalo de tempo anterior</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">Ir para e selecionar a data de hoje</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -5079,7 +5079,7 @@ Deseja substituí-lo?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
         <source>The location of the root folder from which to start browsing. Only the specified folder and any subfolders that are beneath it will appear in the dialog box.</source>
-        <target state="translated">O local da pasta raiz onde a procura deve ser iniciada. Apenas a pasta especificada e quaisquer subpastas abaixo dela  aparecerão na caixa de diálogo.</target>
+        <target state="translated">O local da pasta raiz onde a procura deve ser iniciada. Apenas a pasta especificada e quaisquer subpastas abaixo dela aparecerão na caixa de diálogo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogSelectedPath">
@@ -6483,12 +6483,12 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">O objeto de acessibilidade atual é somente para a ListView no modo de exibição {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">O objeto de acessibilidade atual é apenas para ListView no modo de exibição {0}, {1} ou {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">Semana {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -11063,7 +11063,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">{0} deve ser chamado antes que o primeiro objeto IWin32Window seja criado no aplicativo.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

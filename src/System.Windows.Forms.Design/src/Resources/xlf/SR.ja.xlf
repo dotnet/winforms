@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
-        <target state="new">Could not create ActiveX control '{0}' because it is not properly registered.</target>
+        <target state="translated">正しく登録されていないため、ActiveX コントロール '{0}' を作成できませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorAccName">
@@ -34,12 +34,12 @@
       </trans-unit>
       <trans-unit id="AxImportFailed">
         <source>Failed to import the ActiveX control.  Please ensure it is properly registered.</source>
-        <target state="new">Failed to import the ActiveX control.  Please ensure it is properly registered.</target>
+        <target state="translated">ActiveX コントロールをインポートできませんでした。  正しく登録されているか確認してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="Ax_Control">
         <source>ActiveX Control</source>
-        <target state="new">ActiveX Control</target>
+        <target state="translated">ActiveX コントロール</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
@@ -219,17 +219,17 @@
       </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
-        <target state="new">Select the image displayed in the PictureBox</target>
+        <target state="translated">PictureBox に表示されているイメージを選択してください</target>
         <note />
       </trans-unit>
       <trans-unit id="ChooseImageDisplayName">
         <source>Choose Image...</source>
-        <target state="new">Choose Image...</target>
+        <target state="translated">イメージの選択...</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardError">
         <source>Requested Clipboard operation did not succeed.</source>
-        <target state="new">Requested Clipboard operation did not succeed.</target>
+        <target state="translated">要求されたクリップボード操作に成功しませんでした。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -386,7 +386,7 @@
       </trans-unit>
       <trans-unit id="CommandSetBringToFront">
         <source>Bring {0} controls to front</source>
-        <target state="new">Bring {0} controls to front</target>
+        <target state="translated">{0} コントロールを前面に移動する</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
@@ -413,7 +413,7 @@
       </trans-unit>
       <trans-unit id="CommandSetLockControls">
         <source>Lock {0} components</source>
-        <target state="new">Lock {0} components</target>
+        <target state="translated">{0} コンポーネントのロック</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetPaste">
@@ -423,7 +423,7 @@
       </trans-unit>
       <trans-unit id="CommandSetSendToBack">
         <source>Send {0} controls to back</source>
-        <target state="new">Send {0} controls to back</target>
+        <target state="translated">{0} コントロールを送り返す</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
@@ -648,7 +648,7 @@
       </trans-unit>
       <trans-unit id="DesignerBatchCreateTool">
         <source>Creating components in tool '{0}'</source>
-        <target state="new">Creating components in tool '{0}'</target>
+        <target state="translated">ツール '{0}' でコンポーネントを作成しています。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
@@ -658,7 +658,7 @@
       </trans-unit>
       <trans-unit id="DesignerCantParentType">
         <source>Cannot add component of type '{0}' to container of type '{1}'</source>
-        <target state="new">Cannot add component of type '{0}' to container of type '{1}'</target>
+        <target state="translated">型 '{0}' のコンポーネントを '{1}' という種類のコンテナーに追加できません。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
@@ -857,7 +857,7 @@
       </trans-unit>
       <trans-unit id="DesignerPropName">
         <source>Indicates the name used in code to identify the object.</source>
-        <target state="new">Indicates the name used in code to identify the object.</target>
+        <target state="translated">オブジェクトを識別するコードで使われる名前です。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
@@ -917,7 +917,7 @@
       </trans-unit>
       <trans-unit id="DragDropDropComponents">
         <source>Drop components</source>
-        <target state="new">Drop components</target>
+        <target state="translated">コンポーネントをドロップする</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
@@ -947,12 +947,12 @@
       </trans-unit>
       <trans-unit id="EditLinesDescription">
         <source>Opens the Lines collection editor</source>
-        <target state="new">Opens the Lines collection editor</target>
+        <target state="translated">行コレクション エディターを開きます</target>
         <note />
       </trans-unit>
       <trans-unit id="EditLinesDisplayName">
         <source>Edit Text Lines...</source>
-        <target state="new">Edit Text Lines...</target>
+        <target state="translated">テキスト行の編集...</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
@@ -987,7 +987,7 @@
       </trans-unit>
       <trans-unit id="FailedToCreateComponent">
         <source>Failed to create component '{0}'.  The error message follows:\r\n '{1}'</source>
-        <target state="new">Failed to create component '{0}'.  The error message follows:\r\n '{1}'</target>
+        <target state="translated">コンポーネント '{0}' を作成できませんでした。 エラー メッセージ:\r\n '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
@@ -1022,12 +1022,12 @@
       </trans-unit>
       <trans-unit id="ImageListDescription">
         <source>Chooses an ImageList to use with this TreeView</source>
-        <target state="new">Chooses an ImageList to use with this TreeView</target>
+        <target state="translated">この TreeView に使用する ImageList を選択します</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDisplayName">
         <source>ImageList:</source>
-        <target state="new">ImageList:</target>
+        <target state="translated">ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -1037,7 +1037,7 @@
       </trans-unit>
       <trans-unit id="InitialDirectoryEditorLabel">
         <source>Select the directory that will initially be opened in the dialog.</source>
-        <target state="new">Select the directory that will initially be opened in the dialog.</target>
+        <target state="translated">ダイアログで最初に開くディレクトリを選択してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -1052,17 +1052,17 @@
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDescription">
         <source>Opens the Nodes collection editor</source>
-        <target state="new">Opens the Nodes collection editor</target>
+        <target state="translated">ノード コレクション エディターを開きます</target>
         <note />
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDisplayName">
         <source>Edit Nodes...</source>
-        <target state="new">Edit Nodes...</target>
+        <target state="translated">ノードの編集...</target>
         <note />
       </trans-unit>
       <trans-unit id="ItemsCategoryName">
         <source>Items</source>
-        <target state="new">Items</target>
+        <target state="translated">アイテム</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
@@ -1087,77 +1087,77 @@
       </trans-unit>
       <trans-unit id="LinksCategoryName">
         <source>Links</source>
-        <target state="new">Links</target>
+        <target state="translated">リンク</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">項目コレクション エディターを開きます</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">項目の編集...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDescription">
         <source>Opens the Columns collection editor</source>
-        <target state="new">Opens the Columns collection editor</target>
+        <target state="translated">列コレクション エディターを開きます</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDisplayName">
         <source>Edit Columns...</source>
-        <target state="new">Edit Columns...</target>
+        <target state="translated">列の編集...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDescription">
         <source>Opens the Groups collection editor</source>
-        <target state="new">Opens the Groups collection editor</target>
+        <target state="translated">グループ コレクション エディターを開きます</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDisplayName">
         <source>Edit Groups...</source>
-        <target state="new">Edit Groups...</target>
+        <target state="translated">グループの編集...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">項目コレクション エディターを開きます</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">項目の編集...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDescription">
         <source>Selects an ImageList to use with LargeIcon mode</source>
-        <target state="new">Selects an ImageList to use with LargeIcon mode</target>
+        <target state="translated">LargeIcon モードで使用する ImageList を選択します</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDisplayName">
         <source>Large ImageList:</source>
-        <target state="new">Large ImageList:</target>
+        <target state="translated">大きい ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDescription">
         <source>Selects an ImageList to use with SmallIcon mode</source>
-        <target state="new">Selects an ImageList to use with SmallIcon mode</target>
+        <target state="translated">SmallIcon モードで使用する ImageList を選択します</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDisplayName">
         <source>Small ImageList:</source>
-        <target state="new">Small ImageList:</target>
+        <target state="translated">小さい ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDescription">
         <source>Changes the type of View this ListView shows</source>
-        <target state="new">Changes the type of View this ListView shows</target>
+        <target state="translated">この ListView が表示するビューを変更します</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDisplayName">
         <source>View:</source>
-        <target state="new">View:</target>
+        <target state="translated">表示:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
@@ -1177,7 +1177,7 @@
       </trans-unit>
       <trans-unit id="LocalizingCannotAdd">
         <source>Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</source>
-        <target state="new">Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</target>
+        <target state="translated">ローカリゼーション モードでコンポーネントを追加することはできません。  既定の形式に戻しコンポーネントを追加するには、言語プロパティで (既定値) を選択してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
@@ -1292,12 +1292,12 @@
       </trans-unit>
       <trans-unit id="MultiLineDescription">
         <source>Puts the TextBox in a mode where it can display multiple lines of text</source>
-        <target state="new">Puts the TextBox in a mode where it can display multiple lines of text</target>
+        <target state="translated">テキストを複数行表示できるモードで TextBox を配置します</target>
         <note />
       </trans-unit>
       <trans-unit id="MultiLineDisplayName">
         <source>MultiLine</source>
-        <target state="new">MultiLine</target>
+        <target state="translated">複数行</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
@@ -1324,12 +1324,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
         <source>Determines the size of the positioning grid.</source>
-        <target state="new">Determines the size of the positioning grid.</target>
+        <target state="translated">配置グリッドのサイズを決定します。</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
         <source>Place existing controls in new container, '{0}'.</source>
-        <target state="new">Place existing controls in new container, '{0}'.</target>
+        <target state="translated">既存のコントロールを新しいコンテナー '{0}' に入れます。</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
@@ -1339,7 +1339,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="PropertiesCategoryName">
         <source>Properties</source>
-        <target state="new">Properties</target>
+        <target state="translated">プロパティ</target>
         <note />
       </trans-unit>
       <trans-unit id="RTL">
@@ -1479,12 +1479,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="SizeModeDescription">
         <source>Changes the sizing mode of the Image displayed in the PictureBox</source>
-        <target state="new">Changes the sizing mode of the Image displayed in the PictureBox</target>
+        <target state="translated">PictureBox に表示されたイメージのサイズ変更モードを変更します</target>
         <note />
       </trans-unit>
       <trans-unit id="SizeModeDisplayName">
         <source>Size Mode:</source>
-        <target state="new">Size Mode:</target>
+        <target state="translated">サイズ モード:</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
@@ -1889,7 +1889,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="WindowsFormsTabOrderReadOnly">
         <source>- Read Only</source>
-        <target state="new">- Read Only</target>
+        <target state="translated">- 読み取り専用</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">
