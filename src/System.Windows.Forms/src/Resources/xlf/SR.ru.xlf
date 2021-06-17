@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">Перейти к следующему интервалу времени</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">Перейти к предыдущему интервалу времени</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">Перейти и выбрать сегодняшний день</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -964,7 +964,7 @@
       </trans-unit>
       <trans-unit id="CombinationOfAccessibilitySwitchesNotSupported">
         <source>Desktop applications are required to opt in to all earlier accessibility improvements to get the later improvements. To do this, ensure that if the AppContext switch 'Switch.UseLegacyAccessibilityFeatures.N' is set to 'false', then 'Switch.UseLegacyAccessibilityFeatures' and all 'Switch.UseLegacyAccessibilityFeatures.M' switches, when M &lt; N, evaluate to false as well. Note that, if a switch for a particular set of accessibility improvements is not present, its value is determined by the target framework version. You can remedy this by adding these switches and setting their value to false.</source>
-        <target state="translated">Классические приложения должны активировать все предыдущие специальные возможности, чтобы получить  последующие улучшения. Для этого в случае, когда параметр AppContext "Switch.UseLegacyAccessibilityFeatures.N" имеет значение False, "Switch.UseLegacyAccessibilityFeatures" и все параметры "Switch.UseLegacyAccessibilityFeatures.M" также должны иметь значение False, если M &lt; N. Обратите внимание, что если параметр для конкретного набора улучшений специальных возможностей отсутствует, его значение определяется версией целевой платформы. Исправить это можно, добавив параметры и задав значение False.</target>
+        <target state="translated">Классические приложения должны активировать все предыдущие специальные возможности, чтобы получить последующие улучшения. Для этого в случае, когда параметр AppContext "Switch.UseLegacyAccessibilityFeatures.N" имеет значение False, "Switch.UseLegacyAccessibilityFeatures" и все параметры "Switch.UseLegacyAccessibilityFeatures.M" также должны иметь значение False, если M &lt; N. Обратите внимание, что если параметр для конкретного набора улучшений специальных возможностей отсутствует, его значение определяется версией целевой платформы. Исправить это можно, добавив параметры и задав значение False.</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxAutoCompleteCustomSourceDescr">
@@ -6484,12 +6484,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлении {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">Текущий объект специальных возможностей предназначен только для ListView в представлениях {0}, {1} или {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7104,7 +7104,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">Неделя {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -8794,7 +8794,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="SortRequiresIBindingList">
         <source>Sorting requires an IBindingList that supports sorting or an IBindingListView that supports advanced sorting.</source>
-        <target state="translated">Для сортировки нужен элемент IBindingList, поддерживающий сортировку, или IBindingListView,  поддерживающий расширенную сортировку.</target>
+        <target state="translated">Для сортировки нужен элемент IBindingList, поддерживающий сортировку, или IBindingListView, поддерживающий расширенную сортировку.</target>
         <note />
       </trans-unit>
       <trans-unit id="SortedAscendingAccessibleStatus">
@@ -11064,7 +11064,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">Перед созданием в приложении первого объекта IWin32Window необходимо вызвать {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

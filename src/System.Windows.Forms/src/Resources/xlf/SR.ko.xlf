@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">다음 기간으로 이동</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">이전 기간으로 이동</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">오늘 날짜로 이동하여 선택합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -6483,12 +6483,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">현재 접근성 개체는 {0} 보기의 ListView에만 해당됩니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">현재 접근성 개체는 {0}, {1} 또는 {2} 보기의 ListView에만 해당됩니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">{0}주</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -11063,7 +11063,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">{0}은(는) 응용 프로그램에 첫 번째 IWin32Window 개체가 만들어지기 전에 호출해야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-HANS" original="../SR.resx">
+  <file datatype="xml" source-language="en" target-language="zh-Hans" original="../SR.resx">
     <body>
       <trans-unit id="AXAddInvalidEvent">
         <source>Event {0} is not valid on this ActiveX control.</source>
@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">转到下一个期限</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">转到上一个期限</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">转到并选择今天的日期</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -6483,12 +6483,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">当前的可访问性对象仅适用于 {0} 视图中的 ListView</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">当前的可访问性对象仅适用于 {0}、{1} 或 {2} 视图中的 ListView</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">第 {0} 周</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -11063,7 +11063,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">必须调用 {0}，才能在应用程序中创建第一个 IWin32Window 对象。</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

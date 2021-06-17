@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
-        <target state="new">Could not create ActiveX control '{0}' because it is not properly registered.</target>
+        <target state="translated">Невозможно создать элемент управления ActiveX '{0}', так как он не был должным образом зарегистрирован.</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorAccName">
@@ -34,12 +34,12 @@
       </trans-unit>
       <trans-unit id="AxImportFailed">
         <source>Failed to import the ActiveX control.  Please ensure it is properly registered.</source>
-        <target state="new">Failed to import the ActiveX control.  Please ensure it is properly registered.</target>
+        <target state="translated">Сбой при импорте элемента управления ActiveX.  Убедитесь в том, что он правильно зарегистрирован.</target>
         <note />
       </trans-unit>
       <trans-unit id="Ax_Control">
         <source>ActiveX Control</source>
-        <target state="new">ActiveX Control</target>
+        <target state="translated">Элемент управления ActiveX</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
@@ -174,7 +174,7 @@
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNoFormattingExplanation">
         <source>Use no formatting to display the value from the source without adornment.</source>
-        <target state="translated">Не использовать форматирование, если значения  из источника отображаются без оформления.</target>
+        <target state="translated">Не использовать форматирование, если значения из источника отображаются без оформления.</target>
         <note />
       </trans-unit>
       <trans-unit id="BindingFormattingDialogFormatTypeNumeric">
@@ -219,17 +219,17 @@
       </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
-        <target state="new">Select the image displayed in the PictureBox</target>
+        <target state="translated">Выберите изображение, отображаемое в поле PictureBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ChooseImageDisplayName">
         <source>Choose Image...</source>
-        <target state="new">Choose Image...</target>
+        <target state="translated">Выбрать изображение…</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardError">
         <source>Requested Clipboard operation did not succeed.</source>
-        <target state="new">Requested Clipboard operation did not succeed.</target>
+        <target state="translated">Сбой при выполнении запрошенной операции с буфером обмена.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -289,13 +289,13 @@
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializer">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.</source>
-        <target state="translated">Показать конструктор для этого файла невозможно, так как невозможно сконструировать  ни один из входящих в него классов.</target>
+        <target state="translated">Показать конструктор для этого файла невозможно, так как невозможно сконструировать ни один из входящих в него классов.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomDesignerLoaderNoRootSerializerWithFailures">
         <source>The designer could not be shown for this file because none of the classes within it can be designed.  The designer inspected the following classes in the file: 
 {0}</source>
-        <target state="translated">Показать конструктор для этого файла невозможно, так как невозможно сконструировать  ни один из входящих в него классов.  Конструктор проверил следующие классы в этом файле: 
+        <target state="translated">Показать конструктор для этого файла невозможно, так как невозможно сконструировать ни один из входящих в него классов.  Конструктор проверил следующие классы в этом файле: 
 {0}</target>
         <note />
       </trans-unit>
@@ -336,7 +336,7 @@
       </trans-unit>
       <trans-unit id="CollectionEditorProperties">
         <source>{0} &amp;properties:</source>
-        <target state="translated">Свойства {0}:</target>
+        <target state="translated">С&amp;войства {0}:</target>
         <note />
       </trans-unit>
       <trans-unit id="CollectionEditorPropertiesMultiSelect">
@@ -386,7 +386,7 @@
       </trans-unit>
       <trans-unit id="CommandSetBringToFront">
         <source>Bring {0} controls to front</source>
-        <target state="new">Bring {0} controls to front</target>
+        <target state="translated">Переместить {0} элементов управления на передний план</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
@@ -413,7 +413,7 @@
       </trans-unit>
       <trans-unit id="CommandSetLockControls">
         <source>Lock {0} components</source>
-        <target state="new">Lock {0} components</target>
+        <target state="translated">Заблокировать компоненты ({0})</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetPaste">
@@ -423,7 +423,7 @@
       </trans-unit>
       <trans-unit id="CommandSetSendToBack">
         <source>Send {0} controls to back</source>
-        <target state="new">Send {0} controls to back</target>
+        <target state="translated">Переместить {0} элементов управления на задний план</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
@@ -648,7 +648,7 @@
       </trans-unit>
       <trans-unit id="DesignerBatchCreateTool">
         <source>Creating components in tool '{0}'</source>
-        <target state="new">Creating components in tool '{0}'</target>
+        <target state="translated">Создаются компоненты в инструменте '{0}'</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
@@ -658,7 +658,7 @@
       </trans-unit>
       <trans-unit id="DesignerCantParentType">
         <source>Cannot add component of type '{0}' to container of type '{1}'</source>
-        <target state="new">Cannot add component of type '{0}' to container of type '{1}'</target>
+        <target state="translated">Невозможно добавить компонент типа '{0}' в контейнер типа '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
@@ -857,7 +857,7 @@
       </trans-unit>
       <trans-unit id="DesignerPropName">
         <source>Indicates the name used in code to identify the object.</source>
-        <target state="new">Indicates the name used in code to identify the object.</target>
+        <target state="translated">Указывает имя, используемое в коде для идентификации объекта.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
@@ -917,7 +917,7 @@
       </trans-unit>
       <trans-unit id="DragDropDropComponents">
         <source>Drop components</source>
-        <target state="new">Drop components</target>
+        <target state="translated">Отпустить компоненты</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
@@ -947,12 +947,12 @@
       </trans-unit>
       <trans-unit id="EditLinesDescription">
         <source>Opens the Lines collection editor</source>
-        <target state="new">Opens the Lines collection editor</target>
+        <target state="translated">Открывает редактор коллекции строк</target>
         <note />
       </trans-unit>
       <trans-unit id="EditLinesDisplayName">
         <source>Edit Text Lines...</source>
-        <target state="new">Edit Text Lines...</target>
+        <target state="translated">Изменить текстовые строки…</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
@@ -987,7 +987,7 @@
       </trans-unit>
       <trans-unit id="FailedToCreateComponent">
         <source>Failed to create component '{0}'.  The error message follows:\r\n '{1}'</source>
-        <target state="new">Failed to create component '{0}'.  The error message follows:\r\n '{1}'</target>
+        <target state="translated">Не удалось создать компонент "{0}".  Сообщение об ошибке:\r\n "{1}"</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
@@ -1022,12 +1022,12 @@
       </trans-unit>
       <trans-unit id="ImageListDescription">
         <source>Chooses an ImageList to use with this TreeView</source>
-        <target state="new">Chooses an ImageList to use with this TreeView</target>
+        <target state="translated">Выбирает ImageList для использования с этим TreeView</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDisplayName">
         <source>ImageList:</source>
-        <target state="new">ImageList:</target>
+        <target state="translated">Список изображений:</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -1037,7 +1037,7 @@
       </trans-unit>
       <trans-unit id="InitialDirectoryEditorLabel">
         <source>Select the directory that will initially be opened in the dialog.</source>
-        <target state="new">Select the directory that will initially be opened in the dialog.</target>
+        <target state="translated">Выберите каталог, который будет изначально открываться в диалоговом окне.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -1052,17 +1052,17 @@
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDescription">
         <source>Opens the Nodes collection editor</source>
-        <target state="new">Opens the Nodes collection editor</target>
+        <target state="translated">Открывает редактор коллекции узлов</target>
         <note />
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDisplayName">
         <source>Edit Nodes...</source>
-        <target state="new">Edit Nodes...</target>
+        <target state="translated">Изменить узлы…</target>
         <note />
       </trans-unit>
       <trans-unit id="ItemsCategoryName">
         <source>Items</source>
-        <target state="new">Items</target>
+        <target state="translated">Элементы</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
@@ -1087,77 +1087,77 @@
       </trans-unit>
       <trans-unit id="LinksCategoryName">
         <source>Links</source>
-        <target state="new">Links</target>
+        <target state="translated">Ссылки</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">Открывает редактор коллекции элементов</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">Изменить элементы…</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDescription">
         <source>Opens the Columns collection editor</source>
-        <target state="new">Opens the Columns collection editor</target>
+        <target state="translated">Открывает редактор коллекции столбцов</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDisplayName">
         <source>Edit Columns...</source>
-        <target state="new">Edit Columns...</target>
+        <target state="translated">Изменить столбцы…</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDescription">
         <source>Opens the Groups collection editor</source>
-        <target state="new">Opens the Groups collection editor</target>
+        <target state="translated">Открывает редактор коллекции групп</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDisplayName">
         <source>Edit Groups...</source>
-        <target state="new">Edit Groups...</target>
+        <target state="translated">Изменить группы…</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">Открывает редактор коллекции элементов</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">Изменить элементы…</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDescription">
         <source>Selects an ImageList to use with LargeIcon mode</source>
-        <target state="new">Selects an ImageList to use with LargeIcon mode</target>
+        <target state="translated">Выбирает список ImageList для использования с режимом LargeIcon</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDisplayName">
         <source>Large ImageList:</source>
-        <target state="new">Large ImageList:</target>
+        <target state="translated">Список крупных изображений:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDescription">
         <source>Selects an ImageList to use with SmallIcon mode</source>
-        <target state="new">Selects an ImageList to use with SmallIcon mode</target>
+        <target state="translated">Выбирает список ImageList для использования с режимом SmallIcon</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDisplayName">
         <source>Small ImageList:</source>
-        <target state="new">Small ImageList:</target>
+        <target state="translated">Список малых изображений:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDescription">
         <source>Changes the type of View this ListView shows</source>
-        <target state="new">Changes the type of View this ListView shows</target>
+        <target state="translated">Меняет тип представления, отображаемого этим ListView</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDisplayName">
         <source>View:</source>
-        <target state="new">View:</target>
+        <target state="translated">Вид:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
@@ -1177,7 +1177,7 @@
       </trans-unit>
       <trans-unit id="LocalizingCannotAdd">
         <source>Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</source>
-        <target state="new">Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</target>
+        <target state="translated">Компоненты нельзя добавлять в режиме локализации.  Чтобы вернуться в форму по умолчанию и добавить компоненты, выберите значение "По умолчанию" в свойстве "Язык".</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
@@ -1292,12 +1292,12 @@
       </trans-unit>
       <trans-unit id="MultiLineDescription">
         <source>Puts the TextBox in a mode where it can display multiple lines of text</source>
-        <target state="new">Puts the TextBox in a mode where it can display multiple lines of text</target>
+        <target state="translated">Переводит поле TextBox в режим, когда в нем отображается несколько строк текста</target>
         <note />
       </trans-unit>
       <trans-unit id="MultiLineDisplayName">
         <source>MultiLine</source>
-        <target state="new">MultiLine</target>
+        <target state="translated">Многострочный</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
@@ -1324,12 +1324,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
         <source>Determines the size of the positioning grid.</source>
-        <target state="new">Determines the size of the positioning grid.</target>
+        <target state="translated">Определяет размер направляющей сетки.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
         <source>Place existing controls in new container, '{0}'.</source>
-        <target state="new">Place existing controls in new container, '{0}'.</target>
+        <target state="translated">Поместить существующие элементы управления в новый контейнер, '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
@@ -1339,7 +1339,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="PropertiesCategoryName">
         <source>Properties</source>
-        <target state="new">Properties</target>
+        <target state="translated">Свойства</target>
         <note />
       </trans-unit>
       <trans-unit id="RTL">
@@ -1479,12 +1479,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="SizeModeDescription">
         <source>Changes the sizing mode of the Image displayed in the PictureBox</source>
-        <target state="new">Changes the sizing mode of the Image displayed in the PictureBox</target>
+        <target state="translated">Меняет режим изменения размера изображения, отображаемого в поле PictureBox</target>
         <note />
       </trans-unit>
       <trans-unit id="SizeModeDisplayName">
         <source>Size Mode:</source>
-        <target state="new">Size Mode:</target>
+        <target state="translated">Режим изменения размера:</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
@@ -1889,7 +1889,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="WindowsFormsTabOrderReadOnly">
         <source>- Read Only</source>
-        <target state="new">- Read Only</target>
+        <target state="translated">– Только для чтения</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">
