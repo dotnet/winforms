@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Tests
     public class CursorConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(string), true)]
         [InlineData(typeof(byte[]), true)]
         [InlineData(typeof(Cursor), false)]

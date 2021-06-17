@@ -21,8 +21,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SizeType))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(SizeType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
         public void TableLayoutStyle_SizeType_Set_GetReturnsExpected(SizeType value)
         {
             var style = new SubTableLayoutStyle
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SizeType))]
         public void TableLayoutStyle_ConverterConvertTo_InvalidSizeType_ThrowsNotSupportedException(SizeType sizeType)
         {
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutStyle));

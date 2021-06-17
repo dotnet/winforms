@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
     public class TreeNodeCollectionTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNodeCollection_Add_String_Success(string text, string expectedText)
         {
             using var treeView = new TreeView();
@@ -218,7 +218,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void TreeNodeCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
         {
             using var treeView = new TreeView();

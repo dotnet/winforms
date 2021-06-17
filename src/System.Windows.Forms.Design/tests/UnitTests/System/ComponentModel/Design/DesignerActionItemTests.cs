@@ -29,7 +29,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerActionItem_AllowAssociate_Set_GetReturnsExpected(bool value)
         {
             var item = new SubDesignerActionItem("displayName", "category", "description")
@@ -44,7 +44,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerActionItem_ShowInSourceView_Set_GetReturnsExpected(bool value)
         {
             var item = new SubDesignerActionItem("displayName", "category", "description")

@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void BackColor_Set_GetReturnsExpected(Color value)
         {
             var property = new AmbientProperties
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Cursor_Set_GetReturnsExpected(Cursor value)
         {
             var property = new AmbientProperties
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void Font_Set_GetReturnsExpected(Font value)
         {
             var property = new AmbientProperties
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
         public void ForeColor_Set_GetReturnsExpected(Color value)
         {
             var property = new AmbientProperties

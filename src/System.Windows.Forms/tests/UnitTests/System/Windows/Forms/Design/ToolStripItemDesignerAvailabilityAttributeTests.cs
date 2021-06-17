@@ -20,8 +20,8 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDesignerAvailability))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemDesignerAvailability))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDesignerAvailability))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemDesignerAvailability))]
         public void ToolStripItemDesignerAvailabilityAttribute_Ctor_ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability visibility)
         {
             var attribute = new ToolStripItemDesignerAvailabilityAttribute(visibility);

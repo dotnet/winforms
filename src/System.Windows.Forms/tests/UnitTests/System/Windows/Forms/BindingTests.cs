@@ -210,8 +210,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ControlUpdateMode))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ControlUpdateMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ControlUpdateMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ControlUpdateMode))]
         public void Binding_ControlUpdateMode_Set_GetReturnsExpected(ControlUpdateMode value)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
@@ -226,8 +226,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataSourceUpdateMode))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataSourceUpdateMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataSourceUpdateMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataSourceUpdateMode))]
         public void Binding_DataSourceUpdateMode_Set_GetReturnsExpected(DataSourceUpdateMode value)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
@@ -263,7 +263,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Binding_FormatString_Set_GetReturnsExpected(string value, string expected)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")
@@ -278,7 +278,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Binding_FormattingEnabled_Set_GetReturnsExpected(bool value)
         {
             var binding = new Binding("propertyName", new object(), "dataMember")

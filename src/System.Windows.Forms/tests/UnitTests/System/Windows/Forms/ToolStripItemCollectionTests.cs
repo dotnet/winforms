@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void ToolStripItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
         {
             using ToolStripMenuItem toolStrip = new ToolStripMenuItem();

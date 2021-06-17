@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripDropDownItem_DropDown_GetWithOwner_ReturnsExpected(bool showItemToolTips)
         {
             using var owner = new ToolStrip
@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripDropDownItem_DropDown_GetWithParent_ReturnsExpected(bool showItemToolTips)
         {
             using var parent = new ToolStrip

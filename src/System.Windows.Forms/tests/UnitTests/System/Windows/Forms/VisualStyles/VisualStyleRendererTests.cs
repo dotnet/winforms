@@ -220,7 +220,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(Edges))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(Edges))]
         public void VisualStyleRenderer_DrawEdge_InvalidEdges_ThrowsInvalidEnumArgumentException(Edges edges)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeStyle))]
         public void VisualStyleRenderer_DrawEdge_InvalidStyle_ThrowsInvalidEnumArgumentException(EdgeStyle style)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeEffects))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalidMasked), typeof(EdgeEffects))]
         public void VisualStyleRenderer_DrawEdge_InvalidEffects_ThrowsInvalidEnumArgumentException(EdgeEffects effects)
         {
             var renderer = new VisualStyleRenderer(VisualStyleElement.Button.PushButton.Normal);
@@ -580,7 +580,7 @@ namespace System.Windows.Forms.VisualStyles.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FontProperty))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FontProperty))]
         public void VisualStyleRenderer_GetFont_for_InvalidFontProperty(FontProperty value)
         {
             var renderer = new VisualStyleRenderer("TEXTSTYLE", 1, 0);

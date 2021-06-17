@@ -46,7 +46,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void TableLayoutPanelCellPosition_Column_Set_GetReturnsExpected(int value)
         {
             var style = new TableLayoutPanelCellPosition
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void TableLayoutPanelCellPosition_Row_Set_GetReturnsExpected(int value)
         {
             var style = new TableLayoutPanelCellPosition

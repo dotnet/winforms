@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_All_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -101,7 +101,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Left_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Top_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -187,7 +187,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Right_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Bottom_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl

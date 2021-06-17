@@ -553,7 +553,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ButtonBorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ButtonBorderStyle))]
         [InlineData(ButtonBorderStyle.None)]
         public void ControlPaint_DrawBorder_GraphicsRectangleColorButtonBorderStyleInvalidStyle_Nop(ButtonBorderStyle style)
         {
@@ -664,8 +664,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ButtonBorderStyle))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ButtonBorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ButtonBorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ButtonBorderStyle))]
         public void ControlPaint_DrawBorder_NullGraphicsComplex_ThrowsArgumentNullException(ButtonBorderStyle style)
         {
             Assert.Throws<ArgumentNullException>("graphics", () => ControlPaint.DrawBorder(null, new Rectangle(1, 2, 3, 4), Color.Red, 1, style, Color.Red, 1, style, Color.Red, 1, style, Color.Red, 1, style));
@@ -783,8 +783,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Border3DStyle))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Border3DStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Border3DStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Border3DStyle))]
         public void ControlPaint_DrawBorder3D_NullGraphics_ThrowsArgumentNullException(Border3DStyle style)
         {
             Assert.Throws<ArgumentNullException>("graphics", () => ControlPaint.DrawBorder3D(null, new Rectangle(1, 2, 3, 4)));
@@ -1911,7 +1911,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void ControlPaint_DrawStringDisabled_NullFontWithNullOrEmptyS_Nop(string s)
         {
             using var image = new Bitmap(10, 10);
@@ -1923,7 +1923,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlPaint_DrawStringDisabled_NullGraphics_ThrowsArgumentNullException(string s)
         {
             Assert.Throws<ArgumentNullException>("graphics", () => ControlPaint.DrawStringDisabled(null, s, SystemFonts.MenuFont, Color.Red, new RectangleF(1, 2, 3, 4), new StringFormat()));
@@ -1959,7 +1959,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlPaint_DrawStringDisabled_NullDc_ThrowsArgumentNullException(string s)
         {
             Assert.Throws<ArgumentNullException>("dc", () => ControlPaint.DrawStringDisabled(null, s, SystemFonts.MenuFont, Color.Red, new Rectangle(1, 2, 3, 4), TextFormatFlags.Default));

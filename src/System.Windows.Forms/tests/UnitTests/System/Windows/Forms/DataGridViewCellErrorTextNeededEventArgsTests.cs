@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests
     public class DataGridViewCellErrorTextNeededEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCellErrorTextNeededEventArgs_ErrorText_Set_GetReturnsExpected(string value)
         {
             var dataGridView = new DataGridView

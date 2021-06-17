@@ -212,7 +212,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public async Task HtmlElement_Enabled_GetCustomValueSet_ReturnsExpected(bool disabled)
         {
             using var parent = new Control();
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public async Task HtmlElement_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -618,7 +618,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public async Task HtmlElement_Name_GetCustomValueSet_ReturnsExpected(string id, string expected)
         {
             using var parent = new Control();
@@ -2154,7 +2154,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HtmlElementInsertionOrientation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HtmlElementInsertionOrientation))]
         public async Task HtmlElement_InsertAdjacentElement_InvalidOrient_ThrowsArgumentException(HtmlElementInsertionOrientation orient)
         {
             using var parent = new Control();
@@ -2248,7 +2248,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public async Task HtmlElement_ScrollIntoView_Invoke_Success(bool alignWithTop)
         {
             using var parent = new Control();
@@ -2267,7 +2267,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public async Task HtmlElement_SetAttribute_Invoke_GetAttributeReturnsExpected(string value)
         {
             using var parent = new Control();

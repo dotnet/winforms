@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_Ctor_String(string text, string expectedText)
         {
             var node = new TreeNode(text);
@@ -266,7 +266,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_BackColor_Set_GetReturnsExpected(Color value)
         {
             var node = new TreeNode
@@ -281,7 +281,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_BackColor_SetWithTreeView_GetReturnsExpected(Color value)
         {
             using var control = new TreeView();
@@ -360,7 +360,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_BackColor_SetWithCustomOldValueWithTreeView_GetReturnsExpected(Color value)
         {
             using var control = new TreeView();
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TreeNode_Checked_Set_GetReturnsExpected(bool value)
         {
             var node = new TreeNode
@@ -682,7 +682,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TreeNode_Checked_SetWithTreeViewDisposed_GetReturnsExpected(bool value)
         {
             using var control = new TreeView();
@@ -707,7 +707,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_ForeColor_Set_GetReturnsExpected(Color value)
         {
             var node = new TreeNode
@@ -722,7 +722,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_ForeColor_SetWithTreeView_GetReturnsExpected(Color value)
         {
             using var control = new TreeView();
@@ -801,7 +801,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void TreeNode_ForeColor_SetWithCustomOldValueWithTreeView_GetReturnsExpected(Color value)
         {
             using var control = new TreeView();
@@ -1325,7 +1325,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_ImageKey_SetWithoutTreeView_GetReturnsExpected(string value, string expected)
         {
             var node = new TreeNode
@@ -1362,7 +1362,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_ImageKey_SetWithTreeView_GetReturnsExpected(string value, string expected)
         {
             using var control = new TreeView();
@@ -1382,7 +1382,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_ImageKey_SetWithTreeViewWithEmptyList_GetReturnsExpected(string value, string expected)
         {
             using var imageList = new ImageList();
@@ -1439,7 +1439,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_ImageKey_SetWithTreeViewWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new TreeView();
@@ -1558,7 +1558,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_ImageKey_SetWithTreeViewDisposed_GetReturnsExpected(string value, string expected)
         {
             using var control = new TreeView();
@@ -2105,7 +2105,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_Name_Set_GetReturnsExpected(string value, string expected)
         {
             var node = new TreeNode
@@ -2802,7 +2802,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TreeNode_NodeFont_Set_GetReturnsExpected(Font value)
         {
             var node = new TreeNode
@@ -2817,7 +2817,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TreeNode_NodeFont_SetWithTreeView_GetReturnsExpected(Font value)
         {
             using var control = new TreeView();
@@ -2872,7 +2872,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TreeNode_NodeFont_SetWithCustomOldValue_GetReturnsExpected(Font value)
         {
             using var oldValue = new Font("Arial", 1);
@@ -2890,7 +2890,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TreeNode_NodeFont_SetWithCustomOldValueWithTreeView_GetReturnsExpected(Font value)
         {
             using var control = new TreeView();
@@ -3309,7 +3309,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_SelectedImageKey_SetWithoutTreeView_GetReturnsExpected(string value, string expected)
         {
             var node = new TreeNode
@@ -3346,7 +3346,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_SelectedImageKey_SetWithTreeView_GetReturnsExpected(string value, string expected)
         {
             using var control = new TreeView();
@@ -3366,7 +3366,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_SelectedImageKey_SetWithTreeViewWithEmptyList_GetReturnsExpected(string value, string expected)
         {
             using var imageList = new ImageList();
@@ -3423,7 +3423,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_SelectedImageKey_SetWithTreeViewWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new TreeView();
@@ -3542,7 +3542,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_SelectedImageKey_SetWithTreeViewDisposed_GetReturnsExpected(string value, string expected)
         {
             using var control = new TreeView();
@@ -4005,7 +4005,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_StateImageKey_SetWithoutTreeView_GetReturnsExpected(string value, string expected)
         {
             var node = new TreeNode
@@ -4347,7 +4347,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TreeNode_Tag_Set_GetReturnsExpected(string value)
         {
             var node = new TreeNode
@@ -4362,7 +4362,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TreeNode_Text_Set_GetReturnsExpected(string value, string expected)
         {
             var node = new TreeNode
@@ -4492,7 +4492,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TreeNode_ToolTipText_Set_GetReturnsExpected(string value)
         {
             var node = new TreeNode

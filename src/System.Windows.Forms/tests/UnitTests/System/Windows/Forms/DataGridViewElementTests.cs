@@ -314,7 +314,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void DataGridViewElement_RaiseMouseWheel_Invoke_Nop(MouseEventArgs eventArgs)
         {
             var element = new SubDataGridViewElement();
@@ -322,7 +322,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void DataGridViewElement_RaiseMouseWheel_InvokeWithDataGridView_Success(MouseEventArgs eventArgs)
         {
             using var control = new DataGridView

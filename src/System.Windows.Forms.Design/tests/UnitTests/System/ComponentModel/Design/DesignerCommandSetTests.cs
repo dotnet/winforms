@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DesignerCommandSet_GetCommands_Invoke_ReturnsNull(string name)
         {
             var set = new DesignerCommandSet();

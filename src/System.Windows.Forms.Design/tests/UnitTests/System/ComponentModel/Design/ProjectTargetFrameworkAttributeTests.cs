@@ -10,7 +10,7 @@ namespace System.ComponentModel.Design.Tests
     public class ProjectTargetFrameworkAttributeTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ProjectTargetFrameworkAttribute_Ctor_String(string targetFrameworkMoniker)
         {
             var attribute = new ProjectTargetFrameworkAttribute(targetFrameworkMoniker);

@@ -279,7 +279,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Cursor_Tag_Set_GetReturnsExpected(object value)
         {
             var cursor = new Cursor((IntPtr)2)

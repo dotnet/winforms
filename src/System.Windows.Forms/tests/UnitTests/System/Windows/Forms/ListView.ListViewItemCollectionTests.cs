@@ -94,7 +94,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void ListViewItemCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
         {
             using ListView listView = new ListView();

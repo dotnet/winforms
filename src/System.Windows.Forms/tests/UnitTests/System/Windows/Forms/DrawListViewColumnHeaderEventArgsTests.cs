@@ -47,7 +47,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DrawListViewColumnHeaderEventArgs_DrawDefault_Set_GetReturnsExpected(bool value)
         {
             using (var image = new Bitmap(10, 10))

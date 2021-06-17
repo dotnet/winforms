@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void UndoUnit_Ctor_UndoEngine_String(string name, string expectedName)
         {
             var unit = new SubUndoUnit(this, name);

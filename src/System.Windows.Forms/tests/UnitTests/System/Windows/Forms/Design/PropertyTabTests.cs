@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void PropertyTab_CanExtend_Invoke_ReturnsTrue(object extendee)
         {
             var tab = new SubPropertyTab();
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PropertyTab_Dispose_NoBitmapDisposing_Success(bool disposing)
         {
             var tab = new SubPropertyTab();
@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PropertyTab_Dispose_WithBitmapDisposing_Success(bool disposing)
         {
             var tab = new CustomPropertyTab();
@@ -144,7 +144,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void PropertyTab_GetProperties_Invoke_ReturnsExpected(object component)
         {
             var tab = new SubPropertyTab();

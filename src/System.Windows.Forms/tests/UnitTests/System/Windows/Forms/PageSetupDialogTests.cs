@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_AllowMargins_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new PageSetupDialog
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_AllowOrientation_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new PageSetupDialog
@@ -72,7 +72,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_AllowPaper_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new PageSetupDialog
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_AllowPrinter_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new PageSetupDialog
@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_EnableMetric_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new PageSetupDialog
@@ -345,7 +345,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_ShowHelp_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new PageSetupDialog
@@ -364,7 +364,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PageSetupDialog_ShowNetwork_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new PageSetupDialog

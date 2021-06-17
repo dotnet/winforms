@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design.Tests
     public class DesignerHostTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_CanReloadWithErrors_Set_GetReturnsExpected(bool value)
         {
             var surface = new SubDesignSurface();
@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_IgnoreErrorsDuringReload_Set_GetReturnsExpected(bool value)
         {
             var surface = new SubDesignSurface();
@@ -60,7 +60,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_IgnoreErrorsDuringReload_SetWithCanReloadWithErrors_GetReturnsExpected(bool value)
         {
             var surface = new SubDesignSurface();
@@ -104,7 +104,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_Loading_GetWithLoader_ReturnsExpected(bool loading)
         {
             var surface = new SubDesignSurface();
@@ -704,7 +704,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void DesignerHost_Add_ComponentWithNameCreationServiceWithName_CallsValidateName(string name)
         {
             var mockNameCreationService = new Mock<INameCreationService>(MockBehavior.Strict);
@@ -1296,7 +1296,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DesignerHost_AddComponentISiteName_SetWithMultipleComponents_GetReturnsExpected(string value)
         {
             var surface = new SubDesignSurface();
@@ -1369,7 +1369,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DesignerHost_AddComponentISiteName_SetNameWithComponentRename_CallsHandler(string value)
         {
             var surface = new SubDesignSurface();
@@ -1748,7 +1748,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_AddService_InvokeObjectBool_GetServiceReturnsExpected(bool promote)
         {
             var surface = new SubDesignSurface();
@@ -1776,7 +1776,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_AddService_InvokeObjectCallback_GetServiceReturnsExpected(bool promote)
         {
             var surface = new SubDesignSurface();
@@ -2916,7 +2916,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerHost_RemoveService_InvokeBool_GetServiceReturnsExpected(bool promote)
         {
             var surface = new SubDesignSurface();

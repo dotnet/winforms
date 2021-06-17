@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void PropertyManager_Position_Set_Nop(int value)
         {
             var context = new BindingContext();
@@ -401,7 +401,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void PropertyManager_RemoveAt_Invoke_ThrowsNotSupportedException(int index)
         {
             var context = new BindingContext();

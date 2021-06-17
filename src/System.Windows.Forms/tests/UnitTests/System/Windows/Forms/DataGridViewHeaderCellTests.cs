@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Displayed_GetWithRow_ReturnsExpected(bool rowVisible)
         {
             using var row = new DataGridViewRow
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Displayed_GetWithRowHeaderCell_ReturnsExpected(bool rowVisible)
         {
             using var row = new DataGridViewRow
@@ -79,7 +79,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Displayed_GetColumnHeaderCellHeaderCell_ReturnsExpected(bool columnVisible)
         {
             using var column = new DataGridViewColumn
@@ -373,7 +373,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Displayed_GetTopLeftHeaderCellWithHandle_ReturnsExpected(bool visible)
         {
             using var control = new DataGridView
@@ -455,7 +455,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Frozen_GetWithRow_ReturnsExpected(bool rowFrozen)
         {
             using var row = new DataGridViewRow
@@ -468,7 +468,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Frozen_GetColumnHeaderCellHeaderCell_ReturnsExpected(bool columnFrozen)
         {
             using var column = new DataGridViewColumn
@@ -521,7 +521,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Frozen_GetShared_ThrowsInvalidOperationException(bool columnFrozen)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -553,7 +553,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_GetWithRow_ReturnsExpected(bool rowReadOnly)
         {
             using var row = new DataGridViewRow
@@ -566,7 +566,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_GetWithRowHeaderCell_ReturnsExpected(bool rowReadOnly)
         {
             using var row = new DataGridViewRow
@@ -579,7 +579,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_GetColumnHeaderCellHeaderCell_ReturnsExpected(bool columnReadOnly)
         {
             using var column = new DataGridViewColumn
@@ -674,7 +674,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_GetTopLeftHeaderCell_ReturnsExpected(bool readOnly)
         {
             using var cell = new DataGridViewHeaderCell();
@@ -711,7 +711,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_Set_ThrowsInvalidOperationException(bool value)
         {
             using var cell = new DataGridViewHeaderCell();
@@ -720,7 +720,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_SetWithRow_ThrowsInvalidOperationException(bool value)
         {
             using var row = new DataGridViewRow();
@@ -732,7 +732,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_SetWithRowHeaderCell_ThrowsInvalidOperationException(bool value)
         {
             using var row = new DataGridViewRow();
@@ -743,7 +743,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_SetColumnHeaderCellHeaderCell_ThrowsInvalidOperationException(bool value)
         {
             using var column = new DataGridViewColumn();
@@ -754,7 +754,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_SetWithDataGridView_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -771,7 +771,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_SetRowHeaderCellWithDataGridView_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -791,7 +791,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_SetColumnHeaderCellWithDataGridView_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -810,7 +810,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_SetTopLeftHeaderCell_ThrowsInvalidOperationException(bool value)
         {
             using var cell = new DataGridViewHeaderCell();
@@ -824,7 +824,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_ReadOnly_SetShared_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1043,7 +1043,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
         public void DataGridViewHeaderCell_Resizable_GetShared_ThrowsInvalidOperationException(DataGridViewTriState columnResizable)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1182,7 +1182,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_GetShared_ReturnsExpected(bool columnSelected)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1199,7 +1199,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_Set_ThrowsInvalidOperationException(bool value)
         {
             using var cell = new DataGridViewHeaderCell();
@@ -1208,7 +1208,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_SetWithRow_ThrowsInvalidOperationException(bool value)
         {
             using var row = new DataGridViewRow();
@@ -1220,7 +1220,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_SetWithRowHeaderCell_ThrowsInvalidOperationException(bool value)
         {
             using var row = new DataGridViewRow();
@@ -1232,7 +1232,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_SetColumnHeaderCellHeaderCell_ThrowsInvalidOperationException(bool value)
         {
             using var column = new DataGridViewColumn();
@@ -1244,7 +1244,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_SetWithDataGridView_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1262,7 +1262,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_SetRowHeaderCellWithDataGridView_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1282,7 +1282,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_SetColumnHeaderCellWithDataGridView_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1301,7 +1301,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_SetTopLeftHeaderCell_ThrowsInvalidOperationException(bool value)
         {
             using var cell = new DataGridViewHeaderCell();
@@ -1316,7 +1316,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Selected_SetShared_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1352,7 +1352,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewHeaderCell_ValueType_GetColumnHeaderCellHeaderCell_ReturnsExpected(Type valueType)
         {
             using var column = new DataGridViewColumn
@@ -1365,7 +1365,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewHeaderCell_ValueType_GetWithDataGridView_ReturnsExpected(Type valueType)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1382,7 +1382,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewHeaderCell_ValueType_GetRowHeaderCellWithDataGridView_ReturnsExpected(Type valueType)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1401,7 +1401,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewHeaderCell_ValueType_GetColumnHeaderCellWithDataGridView_ReturnsExpected(Type valueType)
         {
             using var cellTemplate = new DataGridViewHeaderCell();
@@ -1834,7 +1834,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Visible_GetWithRow_ReturnsExpected(bool rowVisible)
         {
             using var row = new DataGridViewRow
@@ -1847,7 +1847,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Visible_GetRowHeaderCell_ReturnsExpected(bool rowVisible)
         {
             using var row = new DataGridViewRow
@@ -1860,7 +1860,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Visible_GetColumnHeaderCell_ReturnsExpected(bool columnVisible)
         {
             using var column = new DataGridViewColumn
@@ -1994,7 +1994,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewHeaderCell_Visible_GetShared_ThrowsInvalidOperationException(bool columnVisible)
         {
             using var cellTemplate = new DataGridViewHeaderCell();

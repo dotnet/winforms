@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void GridItemCollection_Item_GetEmpty_ReturnsNull(string label)
         {
             GridItemCollection collection = GridItemCollection.Empty;

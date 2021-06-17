@@ -15,9 +15,9 @@ namespace System.Windows.Forms.TestUtilities
     /// </summary>
     public sealed class CommonMemberDataAttribute : MemberDataAttributeBase
     {
-        public CommonMemberDataAttribute(string memberName, params object[] parameters) : base(memberName, parameters)
+        public CommonMemberDataAttribute(Type memberType, string memberName, params object[] parameters) : base(memberName, parameters)
         {
-            MemberType = typeof(CommonTestHelper);
+            MemberType = memberType;
         }
 
         protected override object[] ConvertDataItem(MethodInfo testMethod, object item)
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.TestUtilities
                 return null;
             }
 
-            if (!(item is object[] array))
+            if (item is not object[] array)
             {
                 throw new ArgumentException($"Property {MemberName} on {MemberType ?? testMethod.DeclaringType} yielded an item that is not an object[]");
             }

@@ -30,7 +30,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Tag_Set_GetReturnsExpected(object value)
         {
             using var dialog = new SubCommonDialog()
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void OnHelpRequest_Invoke_CallsHelpRequest(EventArgs eventArgs)
         {
             using var dialog = new SubCommonDialog();

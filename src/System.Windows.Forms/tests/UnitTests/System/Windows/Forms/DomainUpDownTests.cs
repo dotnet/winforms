@@ -177,7 +177,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void DomainUpDown_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new DomainUpDown
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void DomainUpDown_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new DomainUpDown();
@@ -902,7 +902,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DomainUpDown_Wrap_Set_GetReturnsExpected(bool value)
         {
             using var control = new DomainUpDown
@@ -924,7 +924,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DomainUpDown_Wrap_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new DomainUpDown();

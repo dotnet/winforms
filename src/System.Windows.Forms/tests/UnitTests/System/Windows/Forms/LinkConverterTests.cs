@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Tests
     public class LinkConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(LinkLabel.Link), false)]
         [InlineData(typeof(string), true)]
         public void LinkConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)

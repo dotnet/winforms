@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void OwnerDrawPropertyBag_BackColor_Set_GetReturnsExpected(Color value)
         {
             using var treeView = new SubTreeView();
@@ -41,7 +41,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelperEx.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void OwnerDrawPropertyBag_Font_Set_GetReturnsExpected(Font value)
         {
             using var treeView = new SubTreeView();
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void OwnerDrawPropertyBag_ForeColor_Set_GetReturnsExpected(Color value)
         {
             using var treeView = new SubTreeView();

@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerActionList_AutoShow_Set_GetReturnsExpected(bool value)
         {
             var list = new DesignerActionList(new Component())
