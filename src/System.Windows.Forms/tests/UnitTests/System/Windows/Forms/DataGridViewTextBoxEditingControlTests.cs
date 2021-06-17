@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -311,7 +311,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_EditingControlValueChanged_Set_GetReturnsExpected(bool value)
         {
             using var control = new DataGridViewTextBoxEditingControl
@@ -1079,8 +1079,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewDataErrorContexts))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewDataErrorContexts))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewDataErrorContexts))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewDataErrorContexts))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetEditingControlFormattedValue_Invoke_ReturnsExpected(DataGridViewDataErrorContexts context)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1088,8 +1088,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewDataErrorContexts))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewDataErrorContexts))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewDataErrorContexts))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewDataErrorContexts))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_GetEditingControlFormattedValue_InvokeWithText_ReturnsExpected(DataGridViewDataErrorContexts context)
         {
             using var control = new SubDataGridViewTextBoxEditingControl
@@ -1137,7 +1137,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1165,7 +1165,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnGotFocus_InvokeWithHandle_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1204,7 +1204,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingControl_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1232,7 +1232,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingControl_OnHandleCreated_InvokeWithDataGridView_CallsHandleCreated(EventArgs eventArgs)
         {
             using var dataGridView = new DataGridView();
@@ -1304,7 +1304,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1323,7 +1323,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnMouseWheel_InvokeWithDataGridView_CallsMouseWheel(MouseEventArgs eventArgs)
         {
             using var dataGridView = new DataGridView();
@@ -1355,7 +1355,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
         {
             using var control = new SubDataGridViewTextBoxEditingControl();
@@ -1383,7 +1383,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_InvokeWithDataGridView_CallsTextChanged(EventArgs eventArgs)
         {
             using var dataGridView = new DataGridView
@@ -1415,7 +1415,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DataGridViewTextBoxEditingDataGridViewTextBoxEditingControl_OnTextChanged_InvokeWithDataGridViewNoColumns_CallsTextChanged(EventArgs eventArgs)
         {
             using var dataGridView = new DataGridView();
@@ -1982,7 +1982,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewTextBoxEditingControl_ProcessKeyMessage_InvokeWithCustomParentProcessKeyPreview_ReturnsExpected(bool result)
         {
             int callCount = 0;
@@ -2011,7 +2011,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewTextBoxEditingControl_ProcessKeyMessage_InvokeWithCustomProcessKeyEventArgs_ReturnsExpected(bool result)
         {
             int callCount = 0;

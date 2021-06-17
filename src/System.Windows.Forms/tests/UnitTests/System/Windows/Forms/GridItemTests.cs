@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.ComponentModel;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void GridItem_Expanded_Set_ThrowsNotSupportedException(bool value)
         {
             var item = new SubGridItem();
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void GridItem_Tag_Set_GetReturnsExpected(object value)
         {
             var item = new SubGridItem

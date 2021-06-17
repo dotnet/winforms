@@ -8,7 +8,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Linq;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -881,7 +881,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPageCollection_Add_InvokeString_Success(string text, string expectedText)
         {
             using var owner = new TabControl();
@@ -1621,7 +1621,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TabPageCollection_ContainsKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var owner = new TabControl();
@@ -1916,7 +1916,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TabPageCollection_IndexOfKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var owner = new TabControl();
@@ -2668,7 +2668,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPageCollection_Insert_InvokeIntString_Success(string text, string expectedText)
         {
             using var owner = new TabControl();
@@ -3262,7 +3262,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TabPageCollection_Item_GetStringEmpty_ReturnsNull(string key)
         {
             using var owner = new TabControl();

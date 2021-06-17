@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Tests
     public class DataGridViewCellErrorTextNeededEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCellErrorTextNeededEventArgs_ErrorText_Set_GetReturnsExpected(string value)
         {
             var dataGridView = new DataGridView

@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignerActionList_AutoShow_Set_GetReturnsExpected(bool value)
         {
             var list = new DesignerActionList(new Component())

@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BoundsSpecified))]
         public void Control_RequiredScaling_Set_GetReturnsExpected(BoundsSpecified value)
         {
             using var control = new Control
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_RequiredScalingEnabled_Get_ReturnsExpected(bool value)
         {
             using var control = new Control
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_TabStopInternal_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_TabStopInternal_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -218,7 +218,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData))]
         public void Control_ApplySizeConstraintsSize_Invoke_ReturnsExpected(Size expectedSize)
         {
             using var control = new Control();

@@ -7,7 +7,7 @@ using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -232,7 +232,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ByteViewer_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubByteViewer();
@@ -259,7 +259,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ByteViewer_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubByteViewer();
@@ -285,7 +285,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ByteViewer_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubByteViewer();
@@ -403,7 +403,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ByteViewer_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var control = new SubByteViewer();
@@ -595,7 +595,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ByteViewer_SaveToFile_InvokeNoBytes_Nop(string path)
         {
             using var control = new ByteViewer();
@@ -749,7 +749,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DisplayMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DisplayMode))]
         public void ByteViewer_SetDisplayMode_InvokeWithBytes_GetReturnsExpected(DisplayMode value)
         {
             using var control = new ByteViewer();
@@ -875,7 +875,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DisplayMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DisplayMode))]
         public void ByteViewer_SetDisplayMode_InvokeInvalidMode_ThrowsInvalidEnumArgumentException(DisplayMode value)
         {
             using var control = new ByteViewer();

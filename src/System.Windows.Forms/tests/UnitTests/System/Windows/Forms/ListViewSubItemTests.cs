@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewSubItem_Font_Set_GetReturnsExpected(Font value)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -287,7 +287,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewSubItem_Font_SetWithListViewItemWithListView_GetReturnsExpected(Font value)
         {
             using var listView = new ListView
@@ -311,7 +311,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewSubItem_Font_SetWithListViewItem_GetReturnsExpected(Font value)
         {
             var item = new ListViewItem
@@ -456,7 +456,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Name_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
             var item = new ListViewItem();
@@ -472,7 +472,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Name_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -487,7 +487,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewSubItem_Tag_Set_GetReturnsExpected(string value)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -502,7 +502,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Text_SetWithOwner_GetReturnsExpected(string value, string expected)
         {
             var item = new ListViewItem();
@@ -518,7 +518,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewSubItem_Text_SetWithoutOwner_GetReturnsExpected(string value, string expected)
         {
             var subItem = new ListViewItem.ListViewSubItem
@@ -600,7 +600,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewSubItem_ToString_Invoke_ReturnsExpected(string text)
         {
             var subItem = new ListViewItem.ListViewSubItem(null, text);

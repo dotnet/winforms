@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Reflection;
 using Xunit;
 
-namespace WinForms.Common.Tests
+namespace System.Windows.Forms.TestUtilities
 {
     /// <summary>
     ///  A custom MemberData attribute that is specialized for the CommonTestHelper type.
@@ -16,9 +15,9 @@ namespace WinForms.Common.Tests
     /// </summary>
     public sealed class CommonMemberDataAttribute : MemberDataAttributeBase
     {
-        public CommonMemberDataAttribute(string memberName, params object[] parameters) : base(memberName, parameters)
+        public CommonMemberDataAttribute(Type memberType, string memberName, params object[] parameters) : base(memberName, parameters)
         {
-            MemberType = typeof(CommonTestHelper);
+            MemberType = memberType;
         }
 
         protected override object[] ConvertDataItem(MethodInfo testMethod, object item)
@@ -28,7 +27,7 @@ namespace WinForms.Common.Tests
                 return null;
             }
 
-            if (!(item is object[] array))
+            if (item is not object[] array)
             {
                 throw new ArgumentException($"Property {MemberName} on {MemberType ?? testMethod.DeclaringType} yielded an item that is not an object[]");
             }

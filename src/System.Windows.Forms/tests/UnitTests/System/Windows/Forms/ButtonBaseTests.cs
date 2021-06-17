@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.User32;
@@ -251,7 +251,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ButtonBase_AutoEllipsis_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubButtonBase
@@ -311,7 +311,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ButtonBase_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubButtonBase();
@@ -340,7 +340,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ButtonBase_AutoSize_SetAutoEllipsis_GetReturnsExpected(bool value)
         {
             using var control = new SubButtonBase
@@ -372,7 +372,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ButtonBase_AutoSize_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubButtonBase();
@@ -504,7 +504,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubButtonBase
@@ -521,7 +521,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_SetWithUseVisualStyleBackColor_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubButtonBase
@@ -541,7 +541,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_SetDesignMode_GetReturnsExpected(Color value, Color expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -587,7 +587,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_SetDesignModeWithUseVisualStyleBackColor_GetReturnsExpected(Color value, Color expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -633,7 +633,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ButtonBase_BackColor_SetDesignModeWithInvalidDescriptor_GetReturnsExpected(Color value, Color expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -1322,7 +1322,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(FlatStyle))]
         public void ButtonBase_FlatStyle_SetInvalidValue_ThrowsInvalidEnumArgumentException(FlatStyle value)
         {
             using var control = new SubButtonBase();
@@ -1999,7 +1999,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
         public void ButtonBase_ImageAlign_SetInvalid_ThrowsInvalidEnumArgumentException(ContentAlignment value)
         {
             using var control = new SubButtonBase();
@@ -2168,7 +2168,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ButtonBase_ImageKey_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubButtonBase
@@ -2225,7 +2225,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ButtonBase_ImageKey_SetWithEmptyList_GetReturnsExpected(string value, string expected)
         {
             using var imageList = new ImageList();
@@ -2601,7 +2601,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ButtonBase_ImeMode_Set_GetReturnsExpected(ImeMode value)
         {
             using var control = new SubButtonBase
@@ -2653,7 +2653,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void ButtonBase_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new SubButtonBase();
@@ -3442,7 +3442,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
         public void ButtonBase_TextAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
         {
             using var control = new SubButtonBase();
@@ -3668,7 +3668,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextImageRelation))]
         [InlineData((TextImageRelation)3)]
         [InlineData((TextImageRelation)5)]
         [InlineData((TextImageRelation)6)]
@@ -4106,7 +4106,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ButtonBase_UseVisualStyleBackColor_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubButtonBase
@@ -4128,7 +4128,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ButtonBase_UseVisualStyleBackColor_SetWithCustomOldValue_GetReturnsExpected(bool value)
         {
             using var control = new SubButtonBase
@@ -5259,7 +5259,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ButtonBase_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubButtonBase();
@@ -5285,7 +5285,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ButtonBase_OnGotFocus_InvokeWithHandle_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubButtonBase();
@@ -5324,7 +5324,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ButtonBase_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubButtonBase();
@@ -5350,7 +5350,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ButtonBase_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubButtonBase();
@@ -5377,7 +5377,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ButtonBase_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubButtonBase();
@@ -5403,7 +5403,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ButtonBase_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubButtonBase();
@@ -5975,7 +5975,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ButtonBase_OnLostFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
         {
             using var control = new SubButtonBase();
@@ -6003,7 +6003,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ButtonBase_OnLostFocus_InvokeWithHandle_CallsLostFocus(EventArgs eventArgs)
         {
             using var control = new SubButtonBase();
@@ -7556,7 +7556,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCancelModeWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -7586,7 +7586,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCancelModeMousePressedWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -7617,7 +7617,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCancelModeMousePressedLostFocusWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -7649,7 +7649,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCancelModeMousePressedInButtonUpWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -7693,7 +7693,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCancelModeWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -7779,7 +7779,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCancelModeMousePressedLostFocusWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -7822,7 +7822,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCancelModeMousePressedInButtonUpWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -7876,7 +7876,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCaptureChangedWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -7911,7 +7911,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCaptureChangedMousePressedWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -7947,7 +7947,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCaptureChangedMousePressedLostFocusWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -7984,7 +7984,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCaptureChangedMousePressedLostFocusInButtonUpWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -8033,7 +8033,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCaptureChangedWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -8129,7 +8129,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCaptureChangedMousePressedLostFocusWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -8177,7 +8177,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeCaptureChangedMousePressedInButtonUpWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -8236,7 +8236,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeClick_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -8263,7 +8263,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeClickButtonButtonBase_Success(FlatStyle flatStyle)
         {
             using var control = new ButtonControl
@@ -8293,7 +8293,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeClickWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -8330,7 +8330,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeClickButtonControlWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new ButtonControl
@@ -8370,7 +8370,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeKillFocusWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -8405,7 +8405,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeKillFocusMousePressedWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -8441,7 +8441,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeKillFocusMousePressedLostFocusWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -8478,7 +8478,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeKillFocusMousePressedLostFocusInButtonUpWithoutHandle_Success(FlatStyle flatStyle)
         {
             using (new NoAssertContext())
@@ -8527,7 +8527,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeKillFocusWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -8623,7 +8623,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeKillFocusMousePressedLostFocusWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -8671,7 +8671,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeKillFocusMousePressedInButtonUpWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase
@@ -8730,7 +8730,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(FlatStyle))]
         public void ButtonBase_WndProc_InvokeMouseHoverWithHandle_Success(FlatStyle flatStyle)
         {
             using var control = new SubButtonBase

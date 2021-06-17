@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -38,7 +38,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_EditValue_Set_GetReturnsExpected(object value)
         {
             var editor = new CollectionEditor(typeof(int[]));
@@ -756,7 +756,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void CollectionForm_GetService_WithContext_CallsContextGetService(Type serviceType)
         {
             var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
@@ -794,7 +794,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void CollectionForm_GetService_InvokeWithoutContext_ReturnsNull(Type serviceType)
         {
             var editor = new SubCollectionEditor(serviceType);

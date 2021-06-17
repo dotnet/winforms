@@ -9,7 +9,7 @@ using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
         public void TableLayoutSettings_GrowStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             using var control = new TableLayoutPanel();

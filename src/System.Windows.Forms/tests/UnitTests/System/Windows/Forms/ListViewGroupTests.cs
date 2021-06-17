@@ -10,7 +10,7 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Microsoft.DotNet.RemoteExecutor;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.ComCtl32;
@@ -40,7 +40,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewGroup_Ctor_String(string header, string expectedHeader)
         {
             var group = new ListViewGroup(header);
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageIndex_SetWithoutListView_GetReturnsExpected(int value)
         {
@@ -136,7 +136,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageIndex_SetWithListView_GetReturnsExpected(int value)
         {
@@ -155,7 +155,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageIndex_SetWithListViewWithHandle_GetReturnsExpected(int value)
         {
@@ -240,7 +240,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewGroup_TitleImageIndex_SetTitleImageKey_GetReturnsExpected(string key, string expected)
         {
             var group = new ListViewGroup
@@ -257,7 +257,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_TitleImageKey_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
@@ -274,7 +274,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_TitleImageKey_SetWithListView_GetReturnsExpected(string value, string expected)
         {
@@ -371,7 +371,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageKey_SetTitleImageIndex_GetReturnsExpected(int value)
         {
@@ -389,7 +389,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_Subtitle_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_Subtitle_SetWithListView_GetReturnsExpected(string value, string expected)
         {
@@ -508,7 +508,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_Footer_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
@@ -525,7 +525,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_Footer_SetWithListView_GetReturnsExpected(string value, string expected)
         {
@@ -760,7 +760,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
         public void ListViewGroup_FooterAlignment_SetInvalid_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
         {
             var group = new ListViewGroup();
@@ -768,7 +768,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_Header_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
@@ -785,7 +785,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_Header_SetWithListView_GetReturnsExpected(string value, string expected)
         {
@@ -1010,7 +1010,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
         public void ListViewGroup_HeaderAlignment_SetInvalid_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
         {
             var group = new ListViewGroup();
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ListViewGroupCollapsedState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ListViewGroupCollapsedState))]
         public void ListViewGroup_CollapsedState_SetInvalid_ThrowsInvalidEnumArgumentException(ListViewGroupCollapsedState value)
         {
             var group = new ListViewGroup();
@@ -1154,7 +1154,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewGroup_Name_Set_GetReturnsExpected(string value)
         {
             var group = new ListViewGroup
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_Task_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
@@ -1187,7 +1187,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         [InlineData("te\0xt", "te\0xt")]
         public void ListViewGroup_Task_SetWithListView_GetReturnsExpected(string value, string expected)
         {
@@ -1281,7 +1281,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ListViewGroup_Tag_Set_GetReturnsExpected(string value)
         {
             var group = new ListViewGroup
@@ -1332,7 +1332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewGroup_ToString_Invoke_ReturnsExpected(string header, string expected)
         {
             var group = new ListViewGroup(header);

@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -799,7 +799,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ListViewItem_Ctor_String(string text, string expectedText)
         {
             var item = new ListViewItem(text);
@@ -959,7 +959,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewItem_Font_GetWithOwner_ReturnsExpected(Font value)
         {
             var listView = new ListView
@@ -976,7 +976,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewItem_Font_Set_GetReturnsExpected(Font value)
         {
             var item = new ListViewItem
@@ -991,7 +991,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ListViewItem_Font_SetWithOwner_GetReturnsExpected(Font value)
         {
             var listView = new ListView

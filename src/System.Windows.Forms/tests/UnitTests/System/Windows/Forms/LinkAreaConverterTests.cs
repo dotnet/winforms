@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests
     public class LinkAreaConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(LinkArea), false)]
         [InlineData(typeof(string), true)]
         public void LinkAreaConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)

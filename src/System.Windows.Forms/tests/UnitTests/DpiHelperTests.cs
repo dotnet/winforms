@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData))]
         public void DpiHelper_LogicalToDeviceUnitsSize(Size value)
         {
             var expected = new Size((int)Math.Round(value.Width * (DpiHelper.DeviceDpi / DpiHelper.LogicalDpi)),

@@ -4,7 +4,7 @@
 
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -14,7 +14,7 @@ namespace System.Windows.Forms.Tests
     public class MessageTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntPtrTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntPtrTheoryData))]
         public void Message_HWnd_Set_GetReturnsExpected(IntPtr value)
         {
             var message = new Message
@@ -29,7 +29,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Message_Msg_Set_GetReturnsExpected(int value)
         {
             var message = new Message
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntPtrTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntPtrTheoryData))]
         public void Message_WParam_Set_GetReturnsExpected(IntPtr value)
         {
             var message = new Message
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntPtrTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntPtrTheoryData))]
         public void Message_LParam_Set_GetReturnsExpected(IntPtr value)
         {
             var message = new Message
@@ -70,7 +70,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntPtrTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntPtrTheoryData))]
         public void Message_Result_Set_GetReturnsExpected(IntPtr value)
         {
             var message = new Message

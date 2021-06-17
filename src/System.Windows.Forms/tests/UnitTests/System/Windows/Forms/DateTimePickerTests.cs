@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop.Kernel32;
 
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DateTimePickerFormat))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DateTimePickerFormat))]
         public void DateTimePicker_Format_Set_GetReturnsExpected(DateTimePickerFormat value)
         {
             using var control = new SubDateTimePicker();
@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DateTimePickerFormat))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DateTimePickerFormat))]
         public void DateTimePicker_Format_SetInvalid_ThrowsInvalidEnumArgumentException(DateTimePickerFormat value)
         {
             using var control = new DateTimePicker();

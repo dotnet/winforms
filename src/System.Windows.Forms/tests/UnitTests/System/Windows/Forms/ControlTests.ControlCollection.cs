@@ -9,7 +9,7 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Forms.Layout;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -329,7 +329,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ControlCollection_Add_InvokeValueWithoutHandleOwnerWithHandle_CreatedValueIfVisible(bool visible)
         {
             using var owner = new Control();
@@ -358,7 +358,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ControlCollection_Add_InvokeValueWithHandleOwnerWithoutHandle_Success(bool visible)
         {
             using var owner = new Control();
@@ -387,7 +387,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ControlCollection_Add_InvokeValueWithHandleOwnerWithHandleControlNewCollection_Success(bool visible)
         {
             using var owner = new Control();
@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ControlCollection_Add_InvokeValueWithHandleOwnerWithHandleControlExistingCollection_Success(bool visible)
         {
             using var owner = new Control();
@@ -1496,7 +1496,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void ControlCollection_Find_NullOrEmptyKey_ThrowsArgumentNullException(string key)
         {
             using var owner = new Control();

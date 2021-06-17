@@ -8,14 +8,14 @@ namespace System.Windows.Forms.Tests
     using System.Collections.Generic;
     using System.ComponentModel;
     using System.Reflection;
-    using WinForms.Common.Tests;
+    using System.Windows.Forms.TestUtilities;
     using Xunit;
     using static Interop.User32;
 
     public class MessageBoxTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MessageBoxButtons))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MessageBoxButtons))]
         public void MessageBox_MessageBoxButtons_ThrowsInvalidEnumArgumentException(MessageBoxButtons value)
         {
             Assert.Throws<InvalidEnumArgumentException>(
@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MessageBoxIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MessageBoxIcon))]
         public void MessageBox_MessageBoxIcon_ThrowsInvalidEnumArgumentException(MessageBoxIcon value)
         {
             Assert.Throws<InvalidEnumArgumentException>(
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MessageBoxDefaultButton))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(MessageBoxDefaultButton))]
         public void MessageBox_MessageBoxDefaultButton_ThrowsInvalidEnumArgumentException(MessageBoxDefaultButton value)
         {
             Assert.Throws<InvalidEnumArgumentException>(

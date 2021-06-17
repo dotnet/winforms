@@ -3,7 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -20,8 +20,8 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDesignerAvailability))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemDesignerAvailability))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolStripItemDesignerAvailability))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripItemDesignerAvailability))]
         public void ToolStripItemDesignerAvailabilityAttribute_Ctor_ToolStripItemDesignerAvailability(ToolStripItemDesignerAvailability visibility)
         {
             var attribute = new ToolStripItemDesignerAvailabilityAttribute(visibility);
