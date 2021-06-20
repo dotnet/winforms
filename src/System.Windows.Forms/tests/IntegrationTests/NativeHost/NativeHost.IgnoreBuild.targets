@@ -10,4 +10,7 @@
   <Target Name="Clean" />
   <Target Name="Build" />
   <Target Name="Rebuild" />
+  <Target Name="Pack" />
+  <Target Name="Test" />
+  <Target Name="IntegrationTest" />
 </Project>
