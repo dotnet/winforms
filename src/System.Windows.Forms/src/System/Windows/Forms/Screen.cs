@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Drawing;
 using System.Threading;
 using Microsoft.Win32;
@@ -15,7 +14,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a display device or multiple display devices on a single system.
     /// </summary>
-    public class Screen
+    public partial class Screen
     {
         readonly IntPtr hmonitor;
         /// <summary>
@@ -453,17 +452,6 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             return GetType().Name + "[Bounds=" + bounds.ToString() + " WorkingArea=" + WorkingArea.ToString() + " Primary=" + primary.ToString() + " DeviceName=" + deviceName;
-        }
-
-        private class MonitorEnumCallback
-        {
-            public ArrayList screens = new ArrayList();
-
-            public virtual BOOL Callback(IntPtr monitor, Gdi32.HDC hdc, IntPtr lprcMonitor, IntPtr lparam)
-            {
-                screens.Add(new Screen(monitor, hdc));
-                return BOOL.TRUE;
-            }
         }
     }
 }
