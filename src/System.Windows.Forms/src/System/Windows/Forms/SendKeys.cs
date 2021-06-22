@@ -6,7 +6,6 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Globalization;
 using System.Security;
 using System.Threading;
@@ -17,7 +16,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Provides methods for sending keystrokes to an application.
     /// </summary>
-    public class SendKeys
+    public partial class SendKeys
     {
         // It is unclear what significance the value 10 has, but it seems to make sense to make this a constant rather
         // than have 10 sprinkled throughout the code. It appears to be a sentinel value of some sort - indicating an
@@ -1022,145 +1021,6 @@ namespace System.Windows.Forms
 
                 User32.UnhookWindowsHookEx(s_hhook);
                 s_hhook = IntPtr.Zero;
-            }
-        }
-
-        /// <summary>
-        ///  SendKeys creates a window to monitor WM_CANCELJOURNAL messages.
-        /// </summary>
-        private class SKWindow : Control
-        {
-            public SKWindow()
-            {
-                SetState(States.TopLevel, true);
-                SetExtendedState(ExtendedStates.InterestedInUserPreferenceChanged, false);
-                SetBounds(-1, -1, 0, 0);
-                Visible = false;
-            }
-
-            protected override void WndProc(ref Message m)
-            {
-                if (m.Msg == (int)User32.WM.CANCELJOURNAL)
-                {
-                    try
-                    {
-                        JournalCancel();
-                    }
-                    catch
-                    {
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        ///  Helps us hold information about the various events we're going to journal.
-        /// </summary>
-        private readonly struct SKEvent
-        {
-            public readonly User32.WM WM;
-            public readonly uint ParamL;
-            public readonly uint ParamH;
-            public readonly IntPtr HWND;
-
-            public SKEvent(User32.WM wm, uint paramL, bool paramH, IntPtr hwnd)
-            {
-                WM = wm;
-                ParamL = paramL;
-                ParamH = paramH ? 1u : 0;
-                HWND = hwnd;
-            }
-
-            public SKEvent(User32.WM wm, uint paramL, uint paramH, IntPtr hwnd)
-            {
-                WM = wm;
-                ParamL = paramL;
-                ParamH = paramH;
-                HWND = hwnd;
-            }
-        }
-
-        /// <summary>
-        ///  Holds a keyword and the associated VK_ for it.
-        /// </summary>
-        private readonly struct KeywordVk
-        {
-            public readonly string Keyword;
-            public readonly int VK;
-
-            public KeywordVk(string keyword, Keys key)
-            {
-                Keyword = keyword;
-                VK = (int)key;
-            }
-        }
-
-        /// <summary>
-        ///  This class is our callback for the journaling hook we install.
-        /// </summary>
-        private class SendKeysHookProc
-        {
-            // There appears to be a timing issue where setting and removing and then setting these hooks via
-            // SetWindowsHookEx / UnhookWindowsHookEx can cause messages to be left in the queue and sent after the
-            // re-hookup happens. This puts us in a bad state as we get an HC_SKIP before an HC_GETNEXT. So in that
-            // case, we just ignore the HC_SKIP calls until we get an HC_GETNEXT. We also sleep a bit in the Unhook.
-
-            private bool _gotNextEvent;
-
-            public unsafe virtual IntPtr Callback(User32.HC nCode, IntPtr wparam, IntPtr lparam)
-            {
-                User32.EVENTMSG* eventmsg = (User32.EVENTMSG*)lparam;
-
-                if (User32.GetAsyncKeyState((int)Keys.Pause) != 0)
-                {
-                    s_stopHook = true;
-                }
-
-                switch (nCode)
-                {
-                    case User32.HC.SKIP:
-                        if (_gotNextEvent)
-                        {
-                            if (s_events is not null && s_events.Count > 0)
-                            {
-                                s_events.Dequeue();
-                            }
-
-                            s_stopHook = s_events is null || s_events.Count == 0;
-                            break;
-                        }
-
-                        break;
-                    case User32.HC.GETNEXT:
-                        _gotNextEvent = true;
-
-                        Debug.Assert(
-                            s_events is not null && s_events.Count > 0 && !s_stopHook,
-                            "HC_GETNEXT when queue is empty!");
-
-                        SKEvent evt = (SKEvent)s_events.Peek();
-                        eventmsg->message = evt.WM;
-                        eventmsg->paramL = evt.ParamL;
-                        eventmsg->paramH = evt.ParamH;
-                        eventmsg->hwnd = evt.HWND;
-                        eventmsg->time = Kernel32.GetTickCount();
-                        break;
-                    default:
-                        if (nCode < 0)
-                        {
-                            User32.CallNextHookEx(s_hhook, nCode, wparam, lparam);
-                        }
-
-                        break;
-                }
-
-                if (s_stopHook)
-                {
-                    UninstallJournalingHook();
-                    _gotNextEvent = false;
-                }
-
-                return IntPtr.Zero;
             }
         }
     }
