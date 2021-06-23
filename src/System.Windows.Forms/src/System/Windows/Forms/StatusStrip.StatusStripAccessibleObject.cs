@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             {
                 if (!(Owner is StatusStrip statusStrip) || statusStrip.Items.Count == 0)
                 {
-                    return null;
+                    return base.FragmentNavigate(direction);
                 }
 
                 switch (direction)

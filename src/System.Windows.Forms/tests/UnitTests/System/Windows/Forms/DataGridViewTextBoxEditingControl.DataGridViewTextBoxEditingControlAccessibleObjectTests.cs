@@ -118,5 +118,40 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(textCellControl.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.NavigateDirection.NextSibling)]
+        [InlineData((int)UiaCore.NavigateDirection.PreviousSibling)]
+        [InlineData((int)UiaCore.NavigateDirection.FirstChild)]
+        [InlineData((int)UiaCore.NavigateDirection.LastChild)]
+        public void DataGridViewTextBoxEditingControlAccessibleObject_FragmentNavigate_SiblingsAndChildrenAreNull(int direction)
+        {
+            using DataGridViewTextBoxEditingControl control = new();
+
+            object actual = control.AccessibilityObject.FragmentNavigate((UiaCore.NavigateDirection)direction);
+
+            Assert.Null(actual);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewTextBoxEditingControlAccessibleObject_FragmentNavigate_ParentIsCell()
+        {
+            using DataGridView control = new();
+            control.Columns.Add(new DataGridViewTextBoxColumn());
+            control.Rows.Add();
+
+            control.CreateControl();
+            control.CurrentCell = control.Rows[0].Cells[0];
+            control.BeginEdit(false);
+
+            object actual = control.EditingControlAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+
+            control.EndEdit();
+
+            Assert.Null(control.EditingControl);
+            Assert.Equal(control.CurrentCell.AccessibilityObject, actual);
+            Assert.True(control.IsHandleCreated);
+        }
     }
 }

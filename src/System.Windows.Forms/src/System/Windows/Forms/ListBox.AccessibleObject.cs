@@ -107,7 +107,7 @@ namespace System.Windows.Forms
 
                 if (childCount == 0)
                 {
-                    return null;
+                    return base.FragmentNavigate(direction);
                 }
 
                 return direction switch

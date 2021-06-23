@@ -164,6 +164,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.MessageBoxButton,
                 new InitInfo("MessageBox", (obj, e) => new MessageBoxes().Show())
+            },
+            {
+                MainFormControlsTabOrder.ToolStripsButton,
+                new InitInfo("ToolStrips", (obj, e) => new ToolStripTests().Show())
             }
         };
 

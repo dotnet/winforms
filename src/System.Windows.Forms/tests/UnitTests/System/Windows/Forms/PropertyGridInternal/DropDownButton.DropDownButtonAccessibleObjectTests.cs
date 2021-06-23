@@ -43,5 +43,57 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.Equal(AccessibleRole.PushButton, actual);
             Assert.False(dropDownButton.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void DropDownButtonAccessibleObject_FragmentNavigate_SiblingsAreExpected()
+        {
+            using PropertyGrid control = new();
+            using Button button = new();
+            control.SelectedObject = button;
+            control.SelectedGridItem = control.GetPropEntries()[1].GridItems[5]; // FlatStyle property
+
+            PropertyGridView gridView = control.TestAccessor().GridView;
+            DropDownButton dropDownButton = gridView.DropDownButton;
+
+            object nextSibling = dropDownButton.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            object previousSibling = dropDownButton.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+
+            Assert.Null(nextSibling);
+            Assert.Equal(gridView.EditAccessibleObject, previousSibling);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(dropDownButton.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.NavigateDirection.FirstChild)]
+        [InlineData((int)UiaCore.NavigateDirection.LastChild)]
+        public void DropDownButtonAccessibleObject_FragmentNavigate_ChildrenAreNull(int direction)
+        {
+            using DropDownButton dropDownButton = new();
+
+            object actual = dropDownButton.AccessibilityObject.FragmentNavigate((UiaCore.NavigateDirection)direction);
+
+            Assert.Null(actual);
+            Assert.False(dropDownButton.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DropDownButtonAccessibleObject_FragmentNavigate_ParentIsGridEntry()
+        {
+            using PropertyGrid control = new();
+            using Button button = new();
+            control.SelectedObject = button;
+            control.SelectedGridItem = control.GetPropEntries()[1].GridItems[5]; // FlatStyle property
+
+            PropertyGridView gridView = control.TestAccessor().GridView;
+            DropDownButton dropDownButton = gridView.DropDownButton;
+            dropDownButton.Visible = true;
+
+            object actual = dropDownButton.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+
+            Assert.Equal(gridView.SelectedGridEntry.AccessibilityObject, actual);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(dropDownButton.IsHandleCreated); // Setting Visible property forces Handle creation
+        }
     }
 }
