@@ -882,23 +882,22 @@ namespace System.Windows.Forms
         {
             get
             {
-                Font font = (Font)Properties.GetObject(s_fontProperty);
-                if (font is not null)
+                if (TryGetExplicitlySetFont(out Font font))
                 {
                     return font;
                 }
 
-                Font f = GetOwnerFont();
-                if (f is not null)
+                font = GetOwnerFont();
+                if (font is not null)
                 {
-                    return f;
+                    return font;
                 }
 
                 return DpiHelper.IsPerMonitorV2Awareness ? _defaultFont : ToolStripManager.DefaultFont;
             }
             set
             {
-                Font local = (Font)Properties.GetObject(s_fontProperty);
+                var local = (Font)Properties.GetObject(s_fontProperty);
                 if ((local != value))
                 {
                     Properties.SetObject(s_fontProperty, value);
@@ -2830,7 +2829,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected internal virtual void OnOwnerFontChanged(EventArgs e)
         {
-            if (Properties.GetObject(s_fontProperty) is null)
+            if (!TryGetExplicitlySetFont(out _))
             {
                 OnFontChanged(e);
             }
@@ -3207,11 +3206,7 @@ namespace System.Windows.Forms
         ///  Returns true if the font should be persisted in code gen.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        internal virtual bool ShouldSerializeFont()
-        {
-            object font = Properties.GetObject(s_fontProperty, out bool found);
-            return (found && font is not null);
-        }
+        internal virtual bool ShouldSerializeFont() => TryGetExplicitlySetFont(out _);
 
         /// <summary>
         ///  Determines if the <see cref='Padding'/> property needs to be persisted.
@@ -3542,5 +3537,15 @@ namespace System.Windows.Forms
         }
 
         internal virtual bool IsBeingTabbedTo() => ToolStrip.AreCommonNavigationalKeysDown();
+
+        /// <summary>
+        /// Query font from property bag.
+        /// </summary>
+        internal bool TryGetExplicitlySetFont(out Font local)
+        {
+            local = (Font)Properties.GetObject(s_fontProperty);
+
+            return local is not null;
+        }
     }
 }

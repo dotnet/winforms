@@ -9,14 +9,6 @@ namespace System.Windows.Forms.Tests.Dpi
 {
     public class FormDpiTests : IClassFixture<ThreadExceptionFixture>
     {
-        private IntPtr TriggerDpiMessage(User32.WM message, Control control, int newDpi)
-        {
-            double factor = newDpi / DpiHelper.LogicalDpi;
-            var wParam = PARAM.FromLowHigh(newDpi, newDpi);
-            RECT suggestedRect = new(0, 0, (int)Math.Round(control.Width * factor), (int)Math.Round(control.Height * factor));
-            return User32.SendMessageW(control, message, wParam, ref suggestedRect);
-        }
-
         [WinFormsTheory]
         [InlineData(2 * DpiHelper.LogicalDpi)]
         [InlineData(3.5 * DpiHelper.LogicalDpi)]
@@ -38,7 +30,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 form.Show();
                 Drawing.Rectangle initialBounds = form.Bounds;
                 float initialFontSize = form.Font.Size;
-                _ = TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
+                DpiMessageHelper.TriggerDpiMessage(User32.WM.DPICHANGED, form, newDpi);
                 var factor = newDpi / DpiHelper.LogicalDpi;
 
                 // Lab machines giving strange values that I could not explain. for ex: on local machine,
