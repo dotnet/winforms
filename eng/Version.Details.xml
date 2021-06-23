@@ -15,11 +15,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.Win32.Registry" Version="6.0.0-preview.6.21314.2">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>bc16a7bd2dcca7f1f8ce70e75dc86a3fac3ffcd2</Sha>
-    </Dependency>
-    <Dependency Name="Microsoft.Win32.SystemEvents" Version="6.0.0-preview.6.21323.11">
+    <Dependency Name="Microsoft.Win32.SystemEvents" Version="6.0.0-preview.6.21317.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
@@ -39,11 +35,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Cng" Version="6.0.0-preview.5.21226.1">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>3782e6e41cfaf76ec9ae4117722f835596026b1a</Sha>
-    </Dependency>
-    <Dependency Name="System.Security.Permissions" Version="6.0.0-preview.6.21323.11">
+    <Dependency Name="System.Security.Permissions" Version="6.0.0-preview.6.21317.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
@@ -79,19 +71,11 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
-    <Dependency Name="System.Security.AccessControl" Version="6.0.0-preview.6.21314.2">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>bc16a7bd2dcca7f1f8ce70e75dc86a3fac3ffcd2</Sha>
-    </Dependency>
-    <Dependency Name="System.Security.Cryptography.Xml" Version="6.0.0-preview.6.21323.11">
+    <Dependency Name="System.Security.Cryptography.Xml" Version="6.0.0-preview.6.21317.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Principal.Windows" Version="6.0.0-preview.6.21314.2">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>bc16a7bd2dcca7f1f8ce70e75dc86a3fac3ffcd2</Sha>
-    </Dependency>
-    <Dependency Name="System.IO.Packaging" Version="6.0.0-preview.6.21323.11">
+    <Dependency Name="System.IO.Packaging" Version="6.0.0-preview.6.21317.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
@@ -99,23 +83,11 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.Targets" Version="6.0.0-preview.5.21254.12">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65020c946254c9a99497f4fdfa4136131f51f913</Sha>
-    </Dependency>
-    <Dependency Name="System.Diagnostics.PerformanceCounter" Version="6.0.0-preview.6.21323.11">
+    <Dependency Name="System.Diagnostics.PerformanceCounter" Version="6.0.0-preview.6.21317.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
-    <Dependency Name="System.IO.FileSystem.AccessControl" Version="6.0.0-preview.6.21314.2">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>bc16a7bd2dcca7f1f8ce70e75dc86a3fac3ffcd2</Sha>
-    </Dependency>
-    <Dependency Name="System.IO.Pipes.AccessControl" Version="6.0.0-preview.6.21314.2">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>bc16a7bd2dcca7f1f8ce70e75dc86a3fac3ffcd2</Sha>
-    </Dependency>
-    <Dependency Name="System.Security.Cryptography.Pkcs" Version="6.0.0-preview.6.21323.11">
+    <Dependency Name="System.Security.Cryptography.Pkcs" Version="6.0.0-preview.6.21317.12">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>bd66ebb4adf5d4acc645c3b1010d7e4d8bcc47e5</Sha>
     </Dependency>
