@@ -36,9 +36,9 @@
     <SystemSecurityPermissionsPackageVersion>6.0.0-preview.6.21317.12</SystemSecurityPermissionsPackageVersion>
     <SystemWindowsExtensionsPackageVersion>6.0.0-preview.6.21317.12</SystemWindowsExtensionsPackageVersion>
     <MicrosoftNETCoreILPackageVersion>3.0.0-preview5-27616-73</MicrosoftNETCoreILPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>6.0.0-preview.6.21317.12</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>6.0.0-preview.6.21317.12</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>6.0.0-preview.6.21317.12</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>6.0.0-preview.6.21323.11</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>6.0.0-preview.6.21323.11</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>6.0.0-preview.6.21323.11</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
