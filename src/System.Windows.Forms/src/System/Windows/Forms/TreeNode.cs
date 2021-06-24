@@ -59,50 +59,6 @@ namespace System.Windows.Forms
         private ContextMenuStrip contextMenuStrip;
         internal bool nodesCleared;
 
-        // We need a special way to defer to the TreeView's image
-        // list for indexing purposes.
-        internal class TreeNodeImageIndexer : ImageList.Indexer
-        {
-            private readonly TreeNode owner;
-
-            public enum ImageListType
-            {
-                Default,
-                State
-            }
-
-            private readonly ImageListType imageListType;
-
-            public TreeNodeImageIndexer(TreeNode node, ImageListType imageListType)
-            {
-                owner = node;
-                this.imageListType = imageListType;
-            }
-
-            public override ImageList ImageList
-            {
-                get
-                {
-                    if (owner.TreeView is not null)
-                    {
-                        if (imageListType == ImageListType.State)
-                        {
-                            return owner.TreeView.StateImageList;
-                        }
-                        else
-                        {
-                            return owner.TreeView.ImageList;
-                        }
-                    }
-                    else
-                    {
-                        return null;
-                    }
-                }
-                set { Debug.Assert(false, "We should never set the image list"); }
-            }
-        }
-
         internal TreeNodeImageIndexer ImageIndexer
         {
             get
