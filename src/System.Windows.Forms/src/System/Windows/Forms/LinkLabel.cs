@@ -1915,6 +1915,11 @@ namespace System.Windows.Forms
             }
 
             AccessibilityNotifyClients(AccessibleEvents.Focus, focusIndex);
+
+            if (IsAccessibilityObjectCreated)
+            {
+                focusLink.AccessibleObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         /// <summary>
@@ -2001,7 +2006,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SupportsUiaProviders => false;
+        internal override bool SupportsUiaProviders => true;
 
         /// <summary>
         ///  Handles the WM_SETCURSOR message

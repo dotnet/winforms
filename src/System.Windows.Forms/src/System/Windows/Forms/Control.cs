@@ -2697,6 +2697,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Indicates whether or not this control has an accessible object associated with it.
+        /// </summary>
+        internal bool IsAccessibilityObjectCreated => Properties.GetObject(s_accessibilityProperty) is AccessibleObject;
+
+        /// <summary>
         ///  Used to tell if this control is being hosted as an ActiveX control.
         /// </summary>
         internal bool IsActiveX => GetExtendedState(ExtendedStates.IsActiveX);
