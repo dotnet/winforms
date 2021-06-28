@@ -76,5 +76,143 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Equal(expected, actual);
             Assert.False(monthCalendar.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MonthCalendarAccessibleObject_ShowToday_IsExpected(bool showToday)
+        {
+            using MonthCalendar monthCalendar = new();
+            monthCalendar.ShowToday = showToday;
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            Assert.Equal(showToday, accessibleObject.ShowToday);
+            Assert.False(monthCalendar.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_TodayDate_IsToday()
+        {
+            using MonthCalendar monthCalendar = new();
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            Assert.Equal(DateTime.Today, accessibleObject.TodayDate);
+            Assert.False(monthCalendar.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_ColumnCount_IsMinusOne_IfHandleIsNotCreated()
+        {
+            using MonthCalendar monthCalendar = new();
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            Assert.False(monthCalendar.IsHandleCreated);
+            Assert.Equal(-1, accessibleObject.ColumnCount);
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_RowCount_IsZero_IfHandleIsNotCreated()
+        {
+            using MonthCalendar monthCalendar = new();
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            Assert.False(monthCalendar.IsHandleCreated);
+            Assert.Equal(0, accessibleObject.RowCount);
+        }
+
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_CalendarsAccessibleObjects_IsNull_IfHandleIsNotCreated()
+        {
+            using MonthCalendar monthCalendar = new();
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            Assert.False(monthCalendar.IsHandleCreated);
+            Assert.Null(accessibleObject.CalendarsAccessibleObjects);
+        }
+
+        public static IEnumerable<object[]> MonthCalendarAccessibleObject_Date_ReturnsExpected_TestData()
+        {
+            yield return new object[] { new DateTime(2000, 1, 1) };
+            yield return new object[] { DateTime.Today };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendarAccessibleObject_Date_ReturnsExpected_TestData))]
+        public void MonthCalendarAccessibleObject_MinDate_IsExpected(DateTime minDate)
+        {
+            using MonthCalendar monthCalendar = new();
+            monthCalendar.MinDate = minDate;
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            Assert.Equal(DateTimePicker.EffectiveMinDate(minDate), accessibleObject.MinDate);
+            Assert.False(monthCalendar.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendarAccessibleObject_Date_ReturnsExpected_TestData))]
+        public void MonthCalendarAccessibleObject_MaxDate_IsExpected(DateTime maxDate)
+        {
+            using MonthCalendar monthCalendar = new();
+            monthCalendar.MaxDate = maxDate;
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            Assert.Equal(DateTimePicker.EffectiveMaxDate(maxDate), accessibleObject.MaxDate);
+            Assert.False(monthCalendar.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> MonthCalendarAccessibleObject_CastDayToDayOfWeek_ReturnsExpected_TestData()
+        {
+            yield return new object[] { Day.Monday, DayOfWeek.Monday };
+            yield return new object[] { Day.Tuesday, DayOfWeek.Tuesday };
+            yield return new object[] { Day.Wednesday, DayOfWeek.Wednesday };
+            yield return new object[] { Day.Thursday, DayOfWeek.Thursday };
+            yield return new object[] { Day.Friday, DayOfWeek.Friday };
+            yield return new object[] { Day.Saturday, DayOfWeek.Saturday };
+            yield return new object[] { Day.Sunday, DayOfWeek.Sunday };
+            yield return new object[] { Day.Default, DayOfWeek.Sunday };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendarAccessibleObject_CastDayToDayOfWeek_ReturnsExpected_TestData))]
+        public void MonthCalendarAccessibleObject_CastDayToDayOfWeek_IsExpected(Day day, DayOfWeek expected)
+        {
+            using MonthCalendar monthCalendar = new();
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            DayOfWeek actual = accessibleObject.TestAccessor().Dynamic.CastDayToDayOfWeek(day);
+
+            Assert.Equal(expected, actual);
+            Assert.False(monthCalendar.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MonthCalendarAccessibleObject_GetDisplayRange_IsNull_IfHandleIsNotCreated(bool visible)
+        {
+            using MonthCalendar monthCalendar = new();
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            Assert.False(monthCalendar.IsHandleCreated);
+            Assert.Null(accessibleObject.GetDisplayRange(visible));
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void MonthCalendarAccessibleObject_GetDisplayRange_IsExpected(bool visible)
+        {
+            using MonthCalendar monthCalendar = new();
+            monthCalendar.CreateControl();
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)monthCalendar.AccessibilityObject;
+
+            SelectionRange expected = monthCalendar.GetDisplayRange(visible);
+            SelectionRange actual = accessibleObject.GetDisplayRange(visible);
+
+            Assert.NotNull(actual);
+            Assert.Equal(expected.Start, actual.Start);
+            Assert.Equal(expected.End, actual.End);
+            Assert.True(monthCalendar.IsHandleCreated);
+        }
     }
 }

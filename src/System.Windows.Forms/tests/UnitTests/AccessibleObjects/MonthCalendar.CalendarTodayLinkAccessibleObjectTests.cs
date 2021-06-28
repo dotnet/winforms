@@ -32,5 +32,50 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             Assert.Equal(SR.CalendarTodayLinkAccessibleObjectDescription, actual);
             Assert.False(control.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void CalendarPreviousButtonAccessibleObject_GetChildId_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+
+            control.CreateControl();
+
+            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+
+            int actual = todayLinkAccessibleObject.GetChildId();
+
+            Assert.Equal(4, actual);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarPreviousButtonAccessibleObject_GetChildId_ReturnsExpected_IfCalendarsAccessibleObjectsIsNull()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+
+            int actual = todayLinkAccessibleObject.GetChildId();
+
+            Assert.Null(controlAccessibleObject.CalendarsAccessibleObjects);
+            Assert.Equal(-1, actual);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarTodayLinkAccessibleObject_Name_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+
+            string expected = string.Format(SR.MonthCalendarTodayButtonAccessibleName,
+                DateTime.Today.ToShortDateString());
+            string actual = todayLinkAccessibleObject.Name;
+
+            Assert.Equal(expected, actual);
+            Assert.False(control.IsHandleCreated);
+        }
     }
 }
