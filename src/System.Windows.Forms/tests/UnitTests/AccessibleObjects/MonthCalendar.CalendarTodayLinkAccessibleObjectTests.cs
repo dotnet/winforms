@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarTodayLinkAccessibleObject_ctor_default()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
 
             Assert.Equal(controlAccessibleObject, todayLinkAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarTodayLinkAccessibleObject_Description_ReturnsExpected()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
 
             string actual = todayLinkAccessibleObject.Description;
@@ -34,26 +34,27 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void CalendarPreviousButtonAccessibleObject_GetChildId_ReturnsExpected()
+        public void CalendarTodayLinkAccessibleObject_GetChildId_ReturnsExpected()
         {
             using MonthCalendar control = new();
 
             control.CreateControl();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
 
+            int expected = 3 + controlAccessibleObject.CalendarsAccessibleObjects.Count;
             int actual = todayLinkAccessibleObject.GetChildId();
 
-            Assert.Equal(4, actual);
+            Assert.Equal(expected, actual);
             Assert.True(control.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void CalendarPreviousButtonAccessibleObject_GetChildId_ReturnsExpected_IfCalendarsAccessibleObjectsIsNull()
+        public void CalendarTodayLinkAccessibleObject_GetChildId_ReturnsExpected_IfCalendarsAccessibleObjectsIsNull()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
 
             int actual = todayLinkAccessibleObject.GetChildId();
@@ -67,7 +68,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarTodayLinkAccessibleObject_Name_ReturnsExpected()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
 
             string expected = string.Format(SR.MonthCalendarTodayButtonAccessibleName,
