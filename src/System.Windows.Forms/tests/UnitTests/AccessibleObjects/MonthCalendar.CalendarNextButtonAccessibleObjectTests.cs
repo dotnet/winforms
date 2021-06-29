@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarNextButtonAccessibleObject_ctor_default()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarNextButtonAccessibleObject nextButtonAccessibleObject = new(controlAccessibleObject);
 
             Assert.Equal(controlAccessibleObject, nextButtonAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
@@ -24,7 +24,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarNextButtonAccessibleObject_Description_ReturnsExpected()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarNextButtonAccessibleObject nextButtonAccessibleObject = new(controlAccessibleObject);
 
             string actual = nextButtonAccessibleObject.Description;
@@ -37,7 +37,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarNextButtonAccessibleObject_GetChildId_ReturnsExpected()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarNextButtonAccessibleObject nextButtonAccessibleObject = new(controlAccessibleObject);
 
             int actual = nextButtonAccessibleObject.GetChildId();
@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarNextButtonAccessibleObject_Name_ReturnsExpected()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarNextButtonAccessibleObject nextButtonAccessibleObject = new(controlAccessibleObject);
 
             string actual = nextButtonAccessibleObject.Name;
