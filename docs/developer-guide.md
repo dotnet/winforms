@@ -20,6 +20,7 @@ Windows Forms requires the following workloads and components be selected when i
   ```
   choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
   ```
+� CMake yet add support for VS 2022 preview and being tracked [here](https://gitlab.kitware.com/cmake/cmake/-/issues/22357). So, this repo require to have VS 2019 or older to build it successfully.
 
 ## Workflow
 
