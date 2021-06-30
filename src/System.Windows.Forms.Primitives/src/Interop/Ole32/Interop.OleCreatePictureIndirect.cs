@@ -13,6 +13,9 @@ internal static partial class Interop
         [return: MarshalAs(UnmanagedType.Interface)]
         private unsafe static extern object OleCreatePictureIndirect(PICTDESC* pictdesc, ref Guid refiid, BOOL fOwn);
 
+        [DllImport(Libraries.Oleaut32)]
+        private unsafe static extern IntPtr OleCreatePictureIndirectRaw(PICTDESC* pictdesc, ref Guid refiid, BOOL fOwn);
+
         /// <param name="fOwn">
         ///  <see cref="BOOL.TRUE"/> if the picture object is to destroy its picture when the object is destroyed.
         ///  (The picture handle in the <paramref name="pictdesc"/>.)
@@ -27,6 +30,10 @@ internal static partial class Interop
         }
 
         public unsafe static object OleCreatePictureIndirect(ref Guid refiid)
-            => OleCreatePictureIndirect(null, ref refiid, BOOL.TRUE);
+        {
+            IntPtr pPicture = OleCreatePictureIndirectRaw(null, ref refiid, BOOL.TRUE);
+            return WinFormsComWrappers.Instance
+                .GetOrCreateObjectForComInstance(lpPicture, CreateObjectFlags.UniqueInstance);
+        }
     }
 }
