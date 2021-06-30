@@ -31,7 +31,7 @@ internal static partial class Interop
 
         public unsafe static object OleCreatePictureIndirect(ref Guid refiid)
         {
-            IntPtr pPicture = OleCreatePictureIndirectRaw(null, ref refiid, BOOL.TRUE);
+            IntPtr lpPicture = OleCreatePictureIndirectRaw(null, ref refiid, BOOL.TRUE);
             return WinFormsComWrappers.Instance
                 .GetOrCreateObjectForComInstance(lpPicture, CreateObjectFlags.UniqueInstance);
         }

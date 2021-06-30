@@ -380,12 +380,13 @@ internal partial class Interop
             public void Load(Interop.Ole32.IStream pstm)
             {
                 Guid streamIID = IID_IStream;
-                Marshal.ThrowExceptionForHR(Marshal.QueryInterface(pstm, ref streamIID, out IntPtr pstmImpl));
+                IntPtr streamPtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pstm, CreateComInterfaceFlags.None);
+                Marshal.ThrowExceptionForHR(Marshal.QueryInterface(streamPtr, ref streamIID, out IntPtr pstmImpl));
 
                 try
                 {
-                    Marshal.ThrowExceptionForHR((delegate* unmanaged<IntPtr, IntPtr, int>)(*(*(void***)_wrappedInstance + 5 /* IPersistStream.Load slot */)))
-                        (_wrappedInstance, pstmImpl);
+                    Marshal.ThrowExceptionForHR(((delegate* unmanaged<IntPtr, IntPtr, int>)(*(*(void***)_wrappedInstance + 5 /* IPersistStream.Load slot */)))
+                        (_wrappedInstance, pstmImpl));
                 }
                 finally
                 {

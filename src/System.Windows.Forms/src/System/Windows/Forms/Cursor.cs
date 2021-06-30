@@ -457,7 +457,7 @@ namespace System.Windows.Forms
                 {
                     if (picture is IDisposable disposable)
                     {
-                        disposable.Release();
+                        disposable.Dispose();
                     }
                 }
             }
