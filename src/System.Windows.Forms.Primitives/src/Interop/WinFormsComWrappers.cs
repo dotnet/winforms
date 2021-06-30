@@ -4,7 +4,6 @@
 
 using System;
 using System.Collections;
-using System.IO;
 using System.Runtime.InteropServices;
 
 internal partial class Interop
@@ -375,7 +374,7 @@ internal partial class Interop
                 throw new NotImplementedException();
             }
 
-            public void Load(IStream pstm)
+            public void Load(Interop.Ole32.IStream pstm)
             {
                 Guid streamIID = IID_IStream;
                 Marshal.ThrowExceptionForHR(Marshal.QueryInterface(pstm, ref streamIID, out IntPtr pstmImpl));
@@ -391,7 +390,7 @@ internal partial class Interop
                 }
             }
 
-            public void Save(IStream pstm, Interop.BOOL fClearDirty)
+            public void Save(Interop.Ole32.IStream pstm, Interop.BOOL fClearDirty)
             {
                 throw new NotImplementedException();
             }
