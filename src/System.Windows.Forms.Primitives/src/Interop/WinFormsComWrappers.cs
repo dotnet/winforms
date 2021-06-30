@@ -3,6 +3,8 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
+using System.Collections;
+using System.IO;
 using System.Runtime.InteropServices;
 
 internal partial class Interop
