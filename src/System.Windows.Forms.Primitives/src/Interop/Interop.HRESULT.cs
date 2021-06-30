@@ -57,6 +57,7 @@ internal static partial class Interop
         STG_E_INVALIDFUNCTION                   = unchecked((int)0x80030001),
         STG_E_FILENOTFOUND                      = unchecked((int)0x80030002),
         STG_E_ACCESSDENIED                      = unchecked((int)0x80030005),
+        STG_E_INVALIDPOINTER                    = unchecked((int)0x80030009),
         STG_E_INVALIDPARAMETER                  = unchecked((int)0x80030057),
         STG_E_INVALIDFLAG                       = unchecked((int)0x800300FF),
         OLE_E_ADVISENOTSUPPORTED                = unchecked((int)0x80040003),

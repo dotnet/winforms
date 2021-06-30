@@ -4,7 +4,9 @@
 
 using System;
 using System.Collections;
+using System.Diagnostics;
 using System.IO;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal partial class Interop
@@ -51,7 +53,7 @@ internal partial class Interop
         {
             Debug.Assert(flags == CreateObjectFlags.UniqueInstance);
 
-            Guid pictureIID = IPicture.IID;
+            Guid pictureIID = IID_IPicture;
             int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr comObject);
             if (hr == S_OK)
             {
@@ -177,7 +179,7 @@ internal partial class Interop
                 try
                 {
                     Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
-                    inst.Commit(grfCommitFlags);
+                    inst.Commit((Interop.Ole32.STGC)grfCommitFlags);
                 }
                 catch (Exception e)
                 {
@@ -237,7 +239,7 @@ internal partial class Interop
                 try
                 {
                     Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
-                    inst.Stat(pstatstg, grfStatFlag);
+                    inst.Stat(out *pstatstg, grfStatFlag);
                 }
                 catch (Exception e)
                 {
