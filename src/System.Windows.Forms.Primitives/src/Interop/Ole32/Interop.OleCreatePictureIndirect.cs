@@ -13,7 +13,7 @@ internal static partial class Interop
         [return: MarshalAs(UnmanagedType.Interface)]
         private unsafe static extern object OleCreatePictureIndirect(PICTDESC* pictdesc, ref Guid refiid, BOOL fOwn);
 
-        [DllImport(Libraries.Oleaut32)]
+        [DllImport(Libraries.Oleaut32, EntryPoint = "OleCreatePictureIndirect")]
         private unsafe static extern IntPtr OleCreatePictureIndirectRaw(PICTDESC* pictdesc, ref Guid refiid, BOOL fOwn);
 
         /// <param name="fOwn">
