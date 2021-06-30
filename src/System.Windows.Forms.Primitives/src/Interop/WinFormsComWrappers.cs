@@ -21,7 +21,7 @@ internal partial class Interop
         private const int S_OK = (int)Interop.HRESULT.S_OK;
         private static readonly ComInterfaceEntry* s_wrapperEntry = InitializeComInterfaceEntry();
         private static readonly Guid IID_IStream = new Guid(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
-        internal static readonly Guid IID_IPicture = new Guid(0x0000000C, 0x0000, 0x0000, 0xC0, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x46);
+        internal static readonly Guid IID_IPicture = new Guid(0x7BF80980, 0xBF32, 0x101A, 0x8B, 0xBB, 0x00, 0xAA, 0x00, 0x30, 0x0C, 0xAB);
 
         internal static WinFormsComWrappers Instance { get; } = new WinFormsComWrappers();
 
