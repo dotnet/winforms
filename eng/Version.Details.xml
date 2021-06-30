@@ -35,10 +35,6 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>ff88d1d3a022021a54fbe05949a27db29c690f0c</Sha>
     </Dependency>
-    <Dependency Name="System.Security.Cryptography.Cng" Version="6.0.0-preview.5.21226.1">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>3782e6e41cfaf76ec9ae4117722f835596026b1a</Sha>
-    </Dependency>
     <Dependency Name="System.Security.Permissions" Version="6.0.0-preview.7.21330.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>ff88d1d3a022021a54fbe05949a27db29c690f0c</Sha>
@@ -87,10 +83,6 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>ff88d1d3a022021a54fbe05949a27db29c690f0c</Sha>
     </Dependency>
-    <Dependency Name="Microsoft.NETCore.Targets" Version="6.0.0-preview.5.21254.12">
-      <Uri>https://github.com/dotnet/runtime</Uri>
-      <Sha>65020c946254c9a99497f4fdfa4136131f51f913</Sha>
-    </Dependency>
     <Dependency Name="System.Diagnostics.PerformanceCounter" Version="6.0.0-preview.7.21330.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>ff88d1d3a022021a54fbe05949a27db29c690f0c</Sha>
@@ -135,6 +127,10 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Sha>685c1a4fa207d81e881a402a32ffa1c0fb191b42</Sha>
     </Dependency>
     <Dependency Name="Microsoft.DotNet.GenFacades" Version="6.0.0-beta.21328.2">
+      <Uri>https://github.com/dotnet/arcade</Uri>
+      <Sha>685c1a4fa207d81e881a402a32ffa1c0fb191b42</Sha>
+    </Dependency>
+    <Dependency Name="Microsoft.DotNet.CMake.Sdk" Version="6.0.0-beta.21328.2">
       <Uri>https://github.com/dotnet/arcade</Uri>
       <Sha>685c1a4fa207d81e881a402a32ffa1c0fb191b42</Sha>
     </Dependency>
