@@ -169,7 +169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(objValue)[typeof(ReadOnlyAttribute)];
                     if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(objValue).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
-                        Flags |= FLAG_FORCE_READONLY;
+                        _flags |= FLAG_FORCE_READONLY;
                     }
 
                     forceReadOnlyChecked = true;

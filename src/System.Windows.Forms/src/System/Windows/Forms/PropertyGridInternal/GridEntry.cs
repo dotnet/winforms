@@ -132,7 +132,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (peParent.ForceReadOnly)
                 {
-                    Flags |= FLAG_FORCE_READONLY;
+                    _flags |= FLAG_FORCE_READONLY;
                 }
             }
             else
@@ -434,7 +434,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                return (Flags & FLAG_FORCE_READONLY) != 0;
+                return (_flags & FLAG_FORCE_READONLY) != 0;
             }
         }
 
@@ -538,7 +538,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // If we're expandable, but we don't support editing,
                     // make us read only editable so we don't paint grey.
                     //
-                    if (!forceReadOnly && (Flags & FLAG_TEXT_EDITABLE) == 0 && !isImmutableReadOnly)
+                    if (!forceReadOnly && (_flags & FLAG_TEXT_EDITABLE) == 0 && !isImmutableReadOnly)
                     {
                         _flags |= FLAG_READONLY_EDITABLE;
                     }
@@ -754,25 +754,25 @@ namespace System.Windows.Forms.PropertyGridInternal
             get
             {
                 // prevent full flag population if possible.
-                if ((Flags & FL_CHECKED) == 0)
+                if ((_flags & FL_CHECKED) == 0)
                 {
                     UITypeEditor typeEd = UITypeEditor;
                     if (typeEd is not null)
                     {
-                        if ((Flags & FLAG_CUSTOM_PAINT) != 0 ||
-                            (Flags & FL_NO_CUSTOM_PAINT) != 0)
+                        if ((_flags & FLAG_CUSTOM_PAINT) != 0 ||
+                            (_flags & FL_NO_CUSTOM_PAINT) != 0)
                         {
-                            return (Flags & FLAG_CUSTOM_PAINT) != 0;
+                            return (_flags & FLAG_CUSTOM_PAINT) != 0;
                         }
 
                         if (typeEd.GetPaintValueSupported(this))
                         {
-                            Flags |= FLAG_CUSTOM_PAINT;
+                            _flags |= FLAG_CUSTOM_PAINT;
                             return true;
                         }
                         else
                         {
-                            Flags |= FL_NO_CUSTOM_PAINT;
+                            _flags |= FL_NO_CUSTOM_PAINT;
                             return false;
                         }
                     }
@@ -1826,7 +1826,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                             if (forceReadOnly)
                             {
-                                newEntry.Flags |= FLAG_FORCE_READONLY;
+                                newEntry._flags |= FLAG_FORCE_READONLY;
                             }
 
                             // check to see if we've come across the default item.
