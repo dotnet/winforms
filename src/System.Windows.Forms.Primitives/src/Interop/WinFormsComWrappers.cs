@@ -99,7 +99,7 @@ internal partial class Interop
                     Interop.Ole32.IStream inst = ComInterfaceDispatch.GetInstance<Interop.Ole32.IStream>((ComInterfaceDispatch*)thisPtr);
                     inst.Read(pv, cb, pcbRead);
                 }
-                catch (Exception e)
+                catch (Exception ex)
                 {
                     return e.HResult;
                 }
