@@ -31,7 +31,10 @@ namespace System.Windows.Forms
                     throw new ArgumentException(nameof(owner));
                 }
 
-                _ownerComboBoxAccessibleObject = (ComboBoxAccessibleObject)_owner.AccessibilityObject;
+                if (_owner.AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
+                {
+                    _ownerComboBoxAccessibleObject = accessibleObject;
+                }
             }
 
             internal List<Entry> InnerList
@@ -156,7 +159,7 @@ namespace System.Windows.Forms
                 {
                     if (!successful)
                     {
-                        _ownerComboBoxAccessibleObject.ItemAccessibleObjects.Remove(InnerList[index]);
+                        _ownerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
                         Remove(item);
                     }
                 }
@@ -245,7 +248,7 @@ namespace System.Windows.Forms
 
                 InnerList.Clear();
 
-                _ownerComboBoxAccessibleObject.ItemAccessibleObjects.Clear();
+                _ownerComboBoxAccessibleObject?.ItemAccessibleObjects.Clear();
 
                 _owner._selectedIndex = -1;
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
@@ -360,7 +363,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                _ownerComboBoxAccessibleObject.ItemAccessibleObjects.Remove(InnerList[index]);
+                                _ownerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
                                 InnerList.RemoveAt(index);
                             }
                         }
@@ -385,7 +388,7 @@ namespace System.Windows.Forms
                     _owner.NativeRemoveAt(index);
                 }
 
-                _ownerComboBoxAccessibleObject.ItemAccessibleObjects.Remove(InnerList[index]);
+                _ownerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
                 InnerList.RemoveAt(index);
 
                 if (!_owner.IsHandleCreated && index < _owner._selectedIndex)
