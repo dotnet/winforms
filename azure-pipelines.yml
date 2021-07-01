@@ -28,23 +28,23 @@ variables:
     - group: DotNet-Winforms-SDLValidation-Params
     - group: DotNet-Blob-Feed
     - group: DotNet-Symbol-Server-Pats
-  - ${{ if ne(variables['System.TeamProject'], 'public') }}:
+  - ${{ if ne(variables['System.TeamProject'], 'internal') }}:
+    - name: _InternalRuntimeDownloadArgs
+      value: ''
+  - ${{ if eq(variables['System.TeamProject'], 'internal') }}:
     - group: DotNet-MSRC-Storage
     - group: AzureDevOps-Artifact-Feeds-Pats
-
+    - name: _InternalRuntimeDownloadArgs
+      value: >-
+        /p:DotNetRuntimeSourceFeed=https://dotnetclimsrc.blob.core.windows.net/dotnet
+        /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
 
   # Produce test-signed build for PR and Public builds
   - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
     # needed for darc (dependency flow) publishing
-    - name: _PublishType
-      value: none
-    - name: _DotNetPublishToBlobFeed
-      value: false
     - name: _PublishArgs
       value: ''
     - name: _OfficialBuildIdArgs
-      value: ''
-    - name: _InternalRuntimeDownloadArgs
       value: ''
     # needed for signing
     - name: _SignType
@@ -57,26 +57,11 @@ variables:
   # Set up non-PR build from internal project
   - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
     # needed for darc (dependency flow) publishing
-    - name: _PublishType
-      value: blob
-    - name: _DotNetPublishToBlobFeed
-      value: true
-    - name: _PublishBlobFeedUrl
-      value: https://dotnetfeed.blob.core.windows.net/dotnet-windowsdesktop/index.json
     - name: _PublishArgs
       value: >-
-            /p:DotNetPublishBlobFeedKey=$(dotnetfeed-storage-access-key-1)
-            /p:DotNetPublishBlobFeedUrl=$(_PublishBlobFeedUrl)
-            /p:DotNetPublishToBlobFeed=$(_DotNetPublishToBlobFeed)
             /p:DotNetPublishUsingPipelines=true
-            /p:DotNetSymbolServerTokenMsdl=$(microsoft-symbol-server-pat)
-            /p:DotNetSymbolServerTokenSymWeb=$(symweb-symbol-server-pat)
     - name: _OfficialBuildIdArgs
       value: /p:OfficialBuildId=$(BUILD.BUILDNUMBER)
-    - name: _InternalRuntimeDownloadArgs
-      value: >-
-        /p:DotNetRuntimeSourceFeed=https://dotnetclimsrc.blob.core.windows.net/dotnet
-        /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
     # needed for signing
     - name: _SignType
       value: real
