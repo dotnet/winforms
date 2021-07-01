@@ -3788,6 +3788,22 @@ namespace System.Windows.Forms.Tests
 #endif
         }
 
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void PropertyGrid_SetEnableFalse_DoesntBreakEntries_AndFlagsReturnCorrectValue(bool enable)
+        {
+            using PropertyGrid propertyGrid = new();
+            using Button button = new();
+            propertyGrid.SelectedObject = button;
+            propertyGrid.Enabled = enable;
+            var entry = (GridEntry)propertyGrid.SelectedGridItem;
+
+            Assert.True(entry.Flags != 0);
+            Assert.False(propertyGrid.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
+        }
+
         private class SubToolStripRenderer : ToolStripRenderer
         {
         }
