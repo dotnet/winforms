@@ -42,7 +42,7 @@ internal partial class Interop
         protected override unsafe ComInterfaceEntry* ComputeVtables(object obj, CreateComInterfaceFlags flags, out int count)
         {
             Debug.Assert(obj is Interop.Ole32.IStream);
-            Debug.Assert(s_wrapperEntry != null);
+            Debug.Assert(s_wrapperEntry is not null);
 
             // Always return the same table mappings.
             count = 1;
