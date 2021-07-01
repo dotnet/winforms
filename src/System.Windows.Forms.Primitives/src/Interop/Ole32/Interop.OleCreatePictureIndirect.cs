@@ -35,6 +35,10 @@ internal static partial class Interop
             fixed (Guid* piid = &refiid)
             {
                 int errorCode = OleCreatePictureIndirectRaw(null, piid, BOOL.TRUE, &lpPicture);
+                if (errorCode < 0)
+                {
+                    Marshal.ThrowExceptionForHR(errorCode);
+                }
             }
 
             return WinFormsComWrappers.Instance
