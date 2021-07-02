@@ -6277,7 +6277,7 @@ namespace System.Windows.Forms
                     {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
-                        var text = new string(dispInfo->item.pszText);
+                        string text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);
                         LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem, text);
                         OnAfterLabelEdit(e);
                         m.Result = (IntPtr)(e.CancelEdit ? 0 : 1);
