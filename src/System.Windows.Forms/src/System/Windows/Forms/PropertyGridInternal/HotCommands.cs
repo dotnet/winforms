@@ -167,7 +167,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Label.DisabledLinkColor = disabledLink;
         }
 
-        public void Select(bool forward)
+        public void FocusLabel()
         {
             Label.Focus();
         }
@@ -215,8 +215,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         private void SetupLabel()
         {
             Label.Links.Clear();
-            StringBuilder sb = new StringBuilder();
-            Point[] links = new Point[_verbs.Length];
+            StringBuilder sb = new();
+            var links = new Point[_verbs.Length];
             int charLoc = 0;
             bool firstVerb = true;
 

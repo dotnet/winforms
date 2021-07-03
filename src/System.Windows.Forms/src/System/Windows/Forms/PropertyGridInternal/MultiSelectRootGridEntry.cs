@@ -16,7 +16,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private static readonly PDComparer s_propertyComparer = new();
 
         internal MultiSelectRootGridEntry(PropertyGridView view, object obj, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType)
-        : base(view, obj, baseProvider, host, tab, sortType)
+            : base(view, obj, baseProvider, host, tab, sortType)
         {
         }
 
@@ -24,12 +24,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (!forceReadOnlyChecked)
+                if (!_forceReadOnlyChecked)
                 {
                     bool anyRO = false;
-                    foreach (object obj in (Array)objValue)
+                    foreach (object obj in (Array)_objValue)
                     {
-                        ReadOnlyAttribute readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
+                        var readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
                         if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
                         {
                             anyRO = true;
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         _flags |= FLAG_FORCE_READONLY;
                     }
 
-                    forceReadOnlyChecked = true;
+                    _forceReadOnlyChecked = true;
                 }
 
                 return base.ForceReadOnly;
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                object[] rgobjs = (object[])objValue;
+                object[] rgobjs = (object[])_objValue;
 
                 ChildCollection.Clear();
 
@@ -74,7 +74,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
-                    SetFlag(GridEntry.FL_EXPANDABLE_FAILED, true);
+                    SetFlag(FL_EXPANDABLE_FAILED, true);
                 }
 
                 CategorizePropEntries();

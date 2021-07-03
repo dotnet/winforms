@@ -35,14 +35,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             set
             {
                 // Create a new instance of the value and set it into the parent grid entry.
-                //
                 object owner = GetValueOwner();
                 GridEntry parentEntry = InstanceParentGridEntry;
                 TypeConverter parentConverter = parentEntry.TypeConverter;
 
                 PropertyDescriptorCollection props = parentConverter.GetProperties(parentEntry, owner);
                 IDictionary values = new Hashtable(props.Count);
-                object newObject = null;
+                object newObject;
 
                 for (int i = 0; i < props.Count; i++)
                 {
@@ -64,9 +63,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (string.IsNullOrEmpty(e.Message))
                     {
-                        throw new TargetInvocationException(string.Format(SR.ExceptionCreatingObject,
-                                                            InstanceParentGridEntry.PropertyType.FullName,
-                                                            e.ToString()), e);
+                        throw new TargetInvocationException(
+                            string.Format(SR.ExceptionCreatingObject, InstanceParentGridEntry.PropertyType.FullName, e.ToString()),
+                            e);
                     }
                     else
                     {
@@ -81,18 +80,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal override bool NotifyValueGivenParent(object obj, int type)
-        {
-            return ParentGridEntry.NotifyValue(type);
-        }
+        internal override bool NotifyValueGivenParent(object obj, int type) => ParentGridEntry.NotifyValue(type);
 
-        public override bool ShouldRenderReadOnly
-        {
-            get
-            {
-                return InstanceParentGridEntry.ShouldRenderReadOnly;
-            }
-        }
+        public override bool ShouldRenderReadOnly => InstanceParentGridEntry.ShouldRenderReadOnly;
 
         private GridEntry InstanceParentGridEntry
         {

@@ -11,23 +11,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     public class PropertiesTab : PropertyTab
     {
-        public override string TabName
-        {
-            get
-            {
-                return SR.PBRSToolTipProperties;
-            }
-        }
+        public override string TabName => SR.PBRSToolTipProperties;
 
-        public override string HelpKeyword
-        {
-            get
-            {
-                return "vs.properties"; // do not localize.
-            }
-        }
+        public override string HelpKeyword => "vs.properties"; // do not localize.
 
+#pragma warning disable CA1725 // Parameter names should match base declaration - publicly shipped API
         public override PropertyDescriptor GetDefaultProperty(object obj)
+#pragma warning restore CA1725
         {
             PropertyDescriptor def = base.GetDefaultProperty(obj);
 
