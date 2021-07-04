@@ -54,24 +54,6 @@ steps:
         displayName: Publish logs
         continueOnError: true
         condition: always()
-    - ${{ if or(eq(parameters.artifacts.publish.manifests, 'true'), ne(parameters.artifacts.publish.manifests, '')) }}:
-      - ${{ if and(ne(parameters.enablePublishUsingPipelines, 'true'), eq(parameters.runAsPublic, 'false'), ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:    
-        - task: CopyFiles@2
-          displayName: Gather Asset Manifests
-          inputs:
-            SourceFolder: '$(Build.SourcesDirectory)/artifacts/log/$(_BuildConfig)/AssetManifest'
-            TargetFolder: '$(Build.ArtifactStagingDirectory)/AssetManifests'
-          continueOnError: ${{ parameters.continueOnError }}
-          condition: and(succeeded(), eq(variables['_DotNetPublishToBlobFeed'], 'true'))
-
-        - task: PublishBuildArtifacts@1
-          displayName: Push Asset Manifests
-          inputs:
-            PathtoPublish: '$(Build.ArtifactStagingDirectory)/AssetManifests'
-            PublishLocation: Container
-            ArtifactName: AssetManifests
-          continueOnError: ${{ parameters.continueOnError }}
-          condition: and(succeeded(), eq(variables['_DotNetPublishToBlobFeed'], 'true'))
 
   - ${{ if ne(parameters.enablePublishBuildArtifacts, 'false') }}:
     - task: PublishBuildArtifacts@1
@@ -106,21 +88,4 @@ steps:
         mergeTestResults: ${{ parameters.mergeTestResults }}
       continueOnError: true
       condition: always()
-    
-  - ${{ if and(eq(parameters.enablePublishBuildAssets, true), ne(parameters.enablePublishUsingPipelines, 'true'), eq(parameters.runAsPublic, 'false'), ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
-    - task: CopyFiles@2
-      displayName: Gather Asset Manifests
-      inputs:
-        SourceFolder: '$(Build.SourcesDirectory)/artifacts/log/$(_BuildConfig)/AssetManifest'
-        TargetFolder: '$(Build.StagingDirectory)/AssetManifests'
-      continueOnError: ${{ parameters.continueOnError }}
-      condition: and(succeeded(), eq(variables['_DotNetPublishToBlobFeed'], 'true'))
 
-    - task: PublishBuildArtifacts@1
-      displayName: Push Asset Manifests
-      inputs:
-        PathtoPublish: '$(Build.StagingDirectory)/AssetManifests'
-        PublishLocation: Container
-        ArtifactName: AssetManifests
-      continueOnError: ${{ parameters.continueOnError }}
-      condition: and(succeeded(), eq(variables['_DotNetPublishToBlobFeed'], 'true'))
