@@ -8462,34 +8462,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                if (_owningPropertyGridView.OwnerGrid.SortedByCategories)
+                return direction switch
                 {
-                    switch (direction)
-                    {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                            return GetFirstCategory();
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
-                            return GetLastCategory();
-                    }
-                }
-                else
-                {
-                    switch (direction)
-                    {
-                        case UnsafeNativeMethods.NavigateDirection.FirstChild:
-                            return GetChild(0);
-                        case UnsafeNativeMethods.NavigateDirection.LastChild:
-                            int childCount = GetChildCount();
-                            if (childCount > 0)
-                            {
-                                return GetChild(childCount - 1);
-                            }
+                    UnsafeNativeMethods.NavigateDirection.FirstChild => IsSortedByCategories() ? GetCategory(0) : GetChild(0),
+                    UnsafeNativeMethods.NavigateDirection.LastChild => IsSortedByCategories() ? GetLastCategory() : GetLastChild(),
+                    _ => base.FragmentNavigate(direction)
+                };
 
-                            return null;
-                    }
-                }
-
-                return base.FragmentNavigate(direction);
+                bool IsSortedByCategories() => _owningPropertyGridView.OwnerGrid is not null
+                                               && _owningPropertyGridView.OwnerGrid.SortedByCategories;
             }
 
             /// <summary>
@@ -8593,16 +8574,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            internal AccessibleObject GetFirstCategory()
-            {
-                return GetCategory(0);
-            }
-
             internal AccessibleObject GetLastCategory()
             {
                 GridEntryCollection topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
                 var topLevelGridEntriesCount = topLevelGridEntries.Count;
+
                 return GetCategory(topLevelGridEntries.Count - 1);
+            }
+
+            internal AccessibleObject GetLastChild()
+            {
+                int childCount = GetChildCount();
+
+                return childCount > 0 ? GetChild(childCount - 1) : null;
             }
 
             /// <summary>
@@ -8947,7 +8931,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return 0;
                     }
 
-                    if (!_owningPropertyGridView.OwnerGrid.SortedByCategories)
+                    if (_owningPropertyGridView.OwnerGrid is null || !_owningPropertyGridView.OwnerGrid.SortedByCategories)
                     {
                         return topLevelGridEntries.Count;
                     }
