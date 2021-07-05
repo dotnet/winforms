@@ -127,13 +127,9 @@ namespace System.Windows.Forms
         /// </summary>
         private int _datesToBoldMonthly;
 
-        /// <summary>
-        ///  Lists are slow, so this section can be optimized.
-        ///  Implementation is such that inserts are fast, removals are slow.
-        /// </summary>
-        private readonly List<DateTime> _arrayOfDates = new List<DateTime>();
-        private readonly List<DateTime> _annualArrayOfDates = new List<DateTime>();
-        private readonly List<DateTime> _monthlyArrayOfDates = new List<DateTime>();
+        private readonly HashSet<DateTime> _arrayOfDates = new HashSet<DateTime>();
+        private readonly HashSet<DateTime> _annualArrayOfDates = new HashSet<DateTime>();
+        private readonly HashSet<DateTime> _monthlyArrayOfDates = new HashSet<DateTime>();
 
         private DateRangeEventHandler _onDateChanged;
         private DateRangeEventHandler _onDateSelected;
@@ -195,11 +191,9 @@ namespace System.Windows.Forms
 
                 if (value is not null && value.Length > 0)
                 {
-                    // Add each bolded date to our List.
                     foreach (var dateTime in value)
                     {
-                        _annualArrayOfDates.Add(dateTime);
-                        _monthsOfYear[dateTime.Month - 1] |= 0x00000001 << (dateTime.Day - 1);
+                        AddAnnuallyBoldedDate(dateTime);
                     }
                 }
 
@@ -268,10 +262,9 @@ namespace System.Windows.Forms
                 _arrayOfDates.Clear();
                 if (value is not null && value.Length > 0)
                 {
-                    // Add each bolded date to our List.
                     foreach (var dateTime in value)
                     {
-                        _arrayOfDates.Add(dateTime);
+                        AddBoldedDate(dateTime);
                     }
                 }
 
@@ -535,11 +528,9 @@ namespace System.Windows.Forms
 
                 if (value is not null && value.Length > 0)
                 {
-                    // Add each bolded date to our List.
                     foreach (var dateTime in value)
                     {
-                        _monthlyArrayOfDates.Add(dateTime);
-                        _datesToBoldMonthly |= 0x00000001 << (dateTime.Day - 1);
+                        AddMonthlyBoldedDate(dateTime);
                     }
                 }
 
@@ -992,6 +983,14 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddAnnuallyBoldedDate(DateTime date)
         {
+            foreach (DateTime item in _annualArrayOfDates)
+            {
+                if (CompareDayAndMonth(item, date))
+                {
+                    return;
+                }
+            }
+
             _annualArrayOfDates.Add(date);
             _monthsOfYear[date.Month - 1] |= 0x00000001 << (date.Day - 1);
         }
@@ -1002,10 +1001,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddBoldedDate(DateTime date)
         {
-            if (!_arrayOfDates.Contains(date))
-            {
-                _arrayOfDates.Add(date);
-            }
+            _arrayOfDates.Add(date);
         }
 
         /// <summary>
@@ -1014,6 +1010,14 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddMonthlyBoldedDate(DateTime date)
         {
+            foreach (DateTime item in _monthlyArrayOfDates)
+            {
+                if (item.Day == date.Day)
+                {
+                    return;
+                }
+            }
+
             _monthlyArrayOfDates.Add(date);
             _datesToBoldMonthly |= 0x00000001 << (date.Day - 1);
         }
@@ -1115,10 +1119,8 @@ namespace System.Windows.Forms
             SelectionRange range = GetDisplayRange(false);
             int startMonth = range.Start.Month;
             int startYear = range.Start.Year;
-            int numDates = _arrayOfDates.Count;
-            for (int i = 0; i < numDates; ++i)
+            foreach (DateTime date in _arrayOfDates)
             {
-                DateTime date = _arrayOfDates[i];
                 if (DateTime.Compare(date, range.Start) >= 0 && DateTime.Compare(date, range.End) <= 0)
                 {
                     int month = date.Month;
@@ -1565,85 +1567,60 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Removes an annually bolded date. If the date is not found in the
-        ///  bolded date list, then no action is taken. If date occurs more than
-        ///  once in the bolded date list, then only the first date is removed. When
-        ///  comparing dates, only the day and month are used. Be sure to call
-        ///  UpdateBoldedDates afterwards.
+        ///  bolded date set, then no action is taken. If date occurs in the bolded
+        ///  date set, then date is removed. When comparing dates, only the day
+        ///  and month are used. Be sure to call UpdateBoldedDates() afterwards.
         /// </summary>
         public void RemoveAnnuallyBoldedDate(DateTime date)
         {
-            int length = _annualArrayOfDates.Count;
-            int i = 0;
-            for (; i < length; ++i)
+            foreach (DateTime item in _annualArrayOfDates)
             {
-                if (CompareDayAndMonth(_annualArrayOfDates[i], date))
+                if (CompareDayAndMonth(item, date))
                 {
-                    _annualArrayOfDates.RemoveAt(i);
-                    break;
-                }
-            }
+                    _annualArrayOfDates.Remove(item);
+                    _monthsOfYear[date.Month - 1] &= ~(0x00000001 << (date.Day - 1));
 
-            --length;
-            for (int j = i; j < length; ++j)
-            {
-                if (CompareDayAndMonth(_annualArrayOfDates[j], date))
-                {
                     return;
                 }
             }
-
-            _monthsOfYear[date.Month - 1] &= ~(0x00000001 << (date.Day - 1));
         }
 
         /// <summary>
-        ///  Removes a bolded date. If the date is not found in the bolded date list,
-        ///  then no action is taken. If date occurs more than once in the bolded
-        ///  date list, then only the first date is removed.
-        ///  Be sure to call UpdateBoldedDates() afterwards.
+        ///  Removes a bolded date. If the date is not found in the bolded date set,
+        ///  then no action is taken. If date occurs in the bolded date set, then
+        ///  the date is removed. Be sure to call UpdateBoldedDates() afterwards.
         /// </summary>
         public void RemoveBoldedDate(DateTime date)
         {
-            int length = _arrayOfDates.Count;
-            for (int i = 0; i < length; ++i)
+            foreach (DateTime item in _arrayOfDates)
             {
-                if (DateTime.Compare(_arrayOfDates[i].Date, date.Date) == 0)
+                if (item.Date == date.Date)
                 {
-                    _arrayOfDates.RemoveAt(i);
+                    _arrayOfDates.Remove(item);
+
                     return;
                 }
             }
         }
 
         /// <summary>
-        ///  Removes a monthly bolded date. If the date is not found in the
-        ///  bolded date list, then no action is taken. If date occurs more than
-        ///  once in the bolded date list, then only the first date is removed. When
-        ///  comparing dates, only the day and month are used. Be sure to call
-        ///  UpdateBoldedDates afterwards.
+        ///  Removes a monthly bolded date. If the date is not found in the bolded
+        ///  date set, then no action is taken. If date occurs in the bolded date set,
+        ///  then the date is removed. When comparing dates, only the day are used.
+        ///  Be sure to call UpdateBoldedDates() afterwards.
         /// </summary>
         public void RemoveMonthlyBoldedDate(DateTime date)
         {
-            int length = _monthlyArrayOfDates.Count;
-            int i = 0;
-            for (; i < length; ++i)
+            foreach (DateTime item in _monthlyArrayOfDates)
             {
-                if (CompareDayAndMonth(_monthlyArrayOfDates[i], date))
+                if (item.Day == date.Day)
                 {
-                    _monthlyArrayOfDates.RemoveAt(i);
-                    break;
-                }
-            }
+                    _monthlyArrayOfDates.Remove(item);
+                    _datesToBoldMonthly &= ~(0x00000001 << (date.Day - 1));
 
-            --length;
-            for (int j = i; j < length; ++j)
-            {
-                if (CompareDayAndMonth(_monthlyArrayOfDates[j], date))
-                {
                     return;
                 }
             }
-
-            _datesToBoldMonthly &= ~(0x00000001 << (date.Day - 1));
         }
 
         private void ResetAnnuallyBoldedDates() => _annualArrayOfDates.Clear();

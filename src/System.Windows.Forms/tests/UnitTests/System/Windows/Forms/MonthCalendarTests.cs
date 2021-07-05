@@ -165,14 +165,15 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        public static IEnumerable<object[]> AnnuallyBoldedDates_Set_TestData()
+        public static IEnumerable<object[]> MonthCalendar_AnnuallyBoldedDates_Set_TestData()
         {
             yield return new object[] { null, Array.Empty<DateTime>() };
             yield return new object[] { Array.Empty<DateTime>(), Array.Empty<DateTime>() };
 
             yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
             yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };
-            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) }, new DateTime[] { new DateTime(2019, 01, 1) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 04, 1) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 04, 1) } };
             yield return new object[] { new DateTime[] { DateTime.MinValue, DateTime.MaxValue }, new DateTime[] { DateTime.MinValue, DateTime.MaxValue } };
 
             var everyMonth = new DateTime[]
@@ -194,89 +195,62 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(AnnuallyBoldedDates_Set_TestData))]
+        [MemberData(nameof(MonthCalendar_AnnuallyBoldedDates_Set_TestData))]
         public void MonthCalendar_AnnuallyBoldedDates_Set_GetReturnsExpected(DateTime[] value, DateTime[] expected)
         {
             using var calendar = new MonthCalendar
             {
                 AnnuallyBoldedDates = value
             };
+
             Assert.Equal(expected, calendar.AnnuallyBoldedDates);
-            Assert.NotSame(value, calendar.AnnuallyBoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
-            }
-
-            Assert.False(calendar.IsHandleCreated);
-
-            // Set same.
-            calendar.AnnuallyBoldedDates = value;
-            Assert.Equal(expected, calendar.AnnuallyBoldedDates);
-            Assert.NotSame(value, calendar.AnnuallyBoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
-            }
-
             Assert.False(calendar.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [MemberData(nameof(AnnuallyBoldedDates_Set_TestData))]
-        public void MonthCalendar_AnnuallyBoldedDates_SetWithHandle_GetReturnsExpected(DateTime[] value, DateTime[] expected)
+        public static IEnumerable<object[]> MonthCalendar_AnnuallyBoldedDates_RemoveItem_GetReturnsExpected_TestData()
         {
-            using var calendar = new MonthCalendar();
-            Assert.NotEqual(IntPtr.Zero, calendar.Handle);
-            int invalidatedCallCount = 0;
-            calendar.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            calendar.HandleCreated += (sender, e) => createdCallCount++;
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime(2019, 01, 1), new DateTime[] { new DateTime(2019, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime(2018, 01, 21), new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) }, new DateTime(2019, 01, 1), Array.Empty<DateTime>() };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 20) }, null, new DateTime[] { new DateTime(2019, 01, 20) } };
+        }
 
-            calendar.AnnuallyBoldedDates = value;
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendar_AnnuallyBoldedDates_RemoveItem_GetReturnsExpected_TestData))]
+        public void MonthCalendar_AnnuallyBoldedDates_RemoveItem_GetReturnsExpected(DateTime[] value, DateTime item, DateTime[] expected)
+        {
+            using var calendar = new MonthCalendar
+            {
+                AnnuallyBoldedDates = value
+            };
+
+            calendar.RemoveAnnuallyBoldedDate(item);
+
             Assert.Equal(expected, calendar.AnnuallyBoldedDates);
-            Assert.NotSame(value, calendar.AnnuallyBoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
-            }
+            Assert.False(calendar.IsHandleCreated);
+        }
 
-            Assert.True(calendar.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+        public static IEnumerable<object[]> MonthCalendar_AnnuallyBoldedDates_RemoveAll_GetReturnsExpected_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { Array.Empty<DateTime>() };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) } };
+        }
 
-            // Set same.
-            calendar.AnnuallyBoldedDates = value;
-            Assert.Equal(expected, calendar.AnnuallyBoldedDates);
-            Assert.NotSame(value, calendar.AnnuallyBoldedDates);
-            if (value?.Length > 0)
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendar_AnnuallyBoldedDates_RemoveAll_GetReturnsExpected_TestData))]
+        public void MonthCalendar_AnnuallyBoldedDates_RemoveAll_GetReturnsExpected(DateTime[] value)
+        {
+            using var calendar = new MonthCalendar
             {
-                Assert.NotSame(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.AnnuallyBoldedDates, calendar.AnnuallyBoldedDates);
-            }
+                AnnuallyBoldedDates = value
+            };
 
-            Assert.True(calendar.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            calendar.RemoveAllAnnuallyBoldedDates();
+
+            Assert.Empty(calendar.AnnuallyBoldedDates);
+            Assert.False(calendar.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> BackColor_Set_TestData()
@@ -493,14 +467,15 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("value", () => control.BackgroundImageLayout = value);
         }
 
-        public static IEnumerable<object[]> BoldedDates_Set_TestData()
+        public static IEnumerable<object[]> MonthCalendar_BoldedDates_Set_GetReturnsExpected_TestData()
         {
             yield return new object[] { null, Array.Empty<DateTime>() };
             yield return new object[] { Array.Empty<DateTime>(), Array.Empty<DateTime>() };
 
             yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
             yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };
-            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 04, 1) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 04, 1) } };
             yield return new object[] { new DateTime[] { DateTime.MinValue, DateTime.MaxValue }, new DateTime[] { DateTime.MinValue, DateTime.MaxValue } };
 
             var everyMonth = new DateTime[]
@@ -522,89 +497,62 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(BoldedDates_Set_TestData))]
+        [MemberData(nameof(MonthCalendar_BoldedDates_Set_GetReturnsExpected_TestData))]
         public void MonthCalendar_BoldedDates_Set_GetReturnsExpected(DateTime[] value, DateTime[] expected)
         {
             using var calendar = new MonthCalendar
             {
                 BoldedDates = value
             };
+
             Assert.Equal(expected, calendar.BoldedDates);
-            Assert.NotSame(value, calendar.BoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.BoldedDates, calendar.BoldedDates);
-            }
-
-            Assert.False(calendar.IsHandleCreated);
-
-            // Set same.
-            calendar.BoldedDates = value;
-            Assert.Equal(expected, calendar.BoldedDates);
-            Assert.NotSame(value, calendar.BoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.BoldedDates, calendar.BoldedDates);
-            }
-
             Assert.False(calendar.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [MemberData(nameof(BoldedDates_Set_TestData))]
-        public void MonthCalendar_BoldedDates_SetWithHandle_GetReturnsExpected(DateTime[] value, DateTime[] expected)
+        public static IEnumerable<object[]> MonthCalendar_BoldedDates_RemoveItem_GetReturnsExpected_TestData()
         {
-            using var calendar = new MonthCalendar();
-            Assert.NotEqual(IntPtr.Zero, calendar.Handle);
-            int invalidatedCallCount = 0;
-            calendar.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            calendar.HandleCreated += (sender, e) => createdCallCount++;
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime(2019, 01, 1), new DateTime[] { new DateTime(2019, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime(2018, 01, 21), new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2019, 01, 1) }, new DateTime(2019, 01, 1), Array.Empty<DateTime>() };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, null, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
+        }
 
-            calendar.BoldedDates = value;
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendar_BoldedDates_RemoveItem_GetReturnsExpected_TestData))]
+        public void MonthCalendar_BoldedDates_RemoveItem_GetReturnsExpected(DateTime[] value, DateTime item, DateTime[] expected)
+        {
+            using var calendar = new MonthCalendar
+            {
+                BoldedDates = value
+            };
+
+            calendar.RemoveBoldedDate(item);
+
             Assert.Equal(expected, calendar.BoldedDates);
-            Assert.NotSame(value, calendar.BoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.BoldedDates, calendar.BoldedDates);
-            }
+            Assert.False(calendar.IsHandleCreated);
+        }
 
-            Assert.True(calendar.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+        public static IEnumerable<object[]> MonthCalendar_BoldedDates_RemoveAll_GetReturnsExpected_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { Array.Empty<DateTime>() };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1) } };
+        }
 
-            // Set same.
-            calendar.BoldedDates = value;
-            Assert.Equal(expected, calendar.BoldedDates);
-            Assert.NotSame(value, calendar.BoldedDates);
-            if (value?.Length > 0)
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendar_BoldedDates_RemoveAll_GetReturnsExpected_TestData))]
+        public void MonthCalendar_BoldedDates_RemoveAll_GetReturnsExpected(DateTime[] value)
+        {
+            using var calendar = new MonthCalendar
             {
-                Assert.NotSame(calendar.BoldedDates, calendar.BoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.BoldedDates, calendar.BoldedDates);
-            }
+                BoldedDates = value
+            };
 
-            Assert.True(calendar.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            calendar.RemoveAllBoldedDates();
+
+            Assert.Empty(calendar.BoldedDates);
+            Assert.False(calendar.IsHandleCreated);
         }
 
         public static IEnumerable<object[]> CalendarDimensions_Set_TestData()
@@ -1519,14 +1467,14 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentOutOfRangeException>("value", () => calendar.MinDate = calendar.MinDate.AddTicks(-1));
         }
 
-        public static IEnumerable<object[]> MonthlyBoldedDates_Set_TestData()
+        public static IEnumerable<object[]> MonthCalendar_MonthlyBoldedDates_Set_GetReturnsExpected_TestData()
         {
             yield return new object[] { null, Array.Empty<DateTime>() };
             yield return new object[] { Array.Empty<DateTime>(), Array.Empty<DateTime>() };
 
             yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
-            yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };
-            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) }, new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 1), new DateTime(2018, 01, 1) }, new DateTime[] { new DateTime(2019, 01, 1) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 04, 1) }, new DateTime[] { new DateTime(2019, 01, 1) } };
             yield return new object[] { new DateTime[] { DateTime.MinValue, DateTime.MaxValue }, new DateTime[] { DateTime.MinValue, DateTime.MaxValue } };
 
             var everyMonth = new DateTime[]
@@ -1548,89 +1496,62 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [MemberData(nameof(MonthlyBoldedDates_Set_TestData))]
+        [MemberData(nameof(MonthCalendar_MonthlyBoldedDates_Set_GetReturnsExpected_TestData))]
         public void MonthCalendar_MonthlyBoldedDates_Set_GetReturnsExpected(DateTime[] value, DateTime[] expected)
         {
             using var calendar = new MonthCalendar
             {
                 MonthlyBoldedDates = value
             };
+
             Assert.Equal(expected, calendar.MonthlyBoldedDates);
-            Assert.NotSame(value, calendar.MonthlyBoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
-            }
-
-            Assert.False(calendar.IsHandleCreated);
-
-            // Set same.
-            calendar.MonthlyBoldedDates = value;
-            Assert.Equal(expected, calendar.MonthlyBoldedDates);
-            Assert.NotSame(value, calendar.MonthlyBoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
-            }
-
             Assert.False(calendar.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [MemberData(nameof(MonthlyBoldedDates_Set_TestData))]
-        public void MonthCalendar_MonthlyBoldedDates_SetWithHandle_GetReturnsExpected(DateTime[] value, DateTime[] expected)
+        public static IEnumerable<object[]> MonthCalendar_MonthlyBoldedDates_RemoveItem_GetReturnsExpected_TestData()
         {
-            using var calendar = new MonthCalendar();
-            Assert.NotEqual(IntPtr.Zero, calendar.Handle);
-            int invalidatedCallCount = 0;
-            calendar.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            calendar.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            calendar.HandleCreated += (sender, e) => createdCallCount++;
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) }, new DateTime(2017, 03, 1), new DateTime[] { new DateTime(2019, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) }, new DateTime(2018, 01, 21), new DateTime[] { new DateTime(2017, 01, 1), new DateTime(2018, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2009, 06, 1), new DateTime(2018, 07, 1) }, new DateTime(2017, 03, 1), Array.Empty<DateTime>() };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 03, 17), new DateTime(2019, 01, 20) }, null, new DateTime[] { new DateTime(2019, 03, 17), new DateTime(2019, 01, 20) } };
+        }
 
-            calendar.MonthlyBoldedDates = value;
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendar_MonthlyBoldedDates_RemoveItem_GetReturnsExpected_TestData))]
+        public void MonthCalendar_MonthlyBoldedDates_RemoveItem_GetReturnsExpected(DateTime[] value, DateTime item, DateTime[] expected)
+        {
+            using var calendar = new MonthCalendar
+            {
+                MonthlyBoldedDates = value
+            };
+
+            calendar.RemoveMonthlyBoldedDate(item);
+
             Assert.Equal(expected, calendar.MonthlyBoldedDates);
-            Assert.NotSame(value, calendar.MonthlyBoldedDates);
-            if (value?.Length > 0)
-            {
-                Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
-            }
+            Assert.False(calendar.IsHandleCreated);
+        }
 
-            Assert.True(calendar.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+        public static IEnumerable<object[]> MonthCalendar_MonthlyBoldedDates_RemoveAll_GetReturnsExpected_TestData()
+        {
+            yield return new object[] { null };
+            yield return new object[] { Array.Empty<DateTime>() };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2019, 01, 20) } };
+            yield return new object[] { new DateTime[] { new DateTime(2019, 01, 1), new DateTime(2009, 06, 1), new DateTime(2018, 07, 1) } };
+        }
 
-            // Set same.
-            calendar.MonthlyBoldedDates = value;
-            Assert.Equal(expected, calendar.MonthlyBoldedDates);
-            Assert.NotSame(value, calendar.MonthlyBoldedDates);
-            if (value?.Length > 0)
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendar_MonthlyBoldedDates_RemoveAll_GetReturnsExpected_TestData))]
+        public void MonthCalendar_MonthlyBoldedDates_RemoveAll_GetReturnsExpected(DateTime[] value)
+        {
+            using var calendar = new MonthCalendar
             {
-                Assert.NotSame(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
-            }
-            else
-            {
-                Assert.Same(calendar.MonthlyBoldedDates, calendar.MonthlyBoldedDates);
-            }
+                MonthlyBoldedDates = value
+            };
 
-            Assert.True(calendar.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
+            calendar.RemoveAllMonthlyBoldedDates();
+
+            Assert.Empty(calendar.MonthlyBoldedDates);
+            Assert.False(calendar.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -3004,22 +2925,22 @@ namespace System.Windows.Forms.Tests
 
             // Different year.
             calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5) }, calendar.AnnuallyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
 
             // Duplicate.
-            calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+            calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 5));
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5) }, calendar.AnnuallyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
 
             // MinValue.
             calendar.AddAnnuallyBoldedDate(DateTime.MinValue);
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5), DateTime.MinValue }, calendar.AnnuallyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), DateTime.MinValue }, calendar.AnnuallyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
 
             // MaxValue.
             calendar.AddAnnuallyBoldedDate(DateTime.MaxValue);
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5), DateTime.MinValue, DateTime.MaxValue }, calendar.AnnuallyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), DateTime.MinValue, DateTime.MaxValue }, calendar.AnnuallyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
         }
 
@@ -3060,15 +2981,15 @@ namespace System.Windows.Forms.Tests
 
             // Different year.
             calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5) }, calendar.AnnuallyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
             // Duplicate.
-            calendar.AddAnnuallyBoldedDate(new DateTime(2018, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5) }, calendar.AnnuallyBoldedDates);
+            calendar.AddAnnuallyBoldedDate(new DateTime(2019, 10, 5));
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5) }, calendar.AnnuallyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3076,7 +2997,7 @@ namespace System.Windows.Forms.Tests
 
             // MinValue.
             calendar.AddAnnuallyBoldedDate(DateTime.MinValue);
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5), DateTime.MinValue }, calendar.AnnuallyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), DateTime.MinValue }, calendar.AnnuallyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3084,7 +3005,7 @@ namespace System.Windows.Forms.Tests
 
             // MaxValue.
             calendar.AddAnnuallyBoldedDate(DateTime.MaxValue);
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5), DateTime.MinValue, DateTime.MaxValue }, calendar.AnnuallyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), DateTime.MinValue, DateTime.MaxValue }, calendar.AnnuallyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3213,27 +3134,27 @@ namespace System.Windows.Forms.Tests
 
             // Different month.
             calendar.AddMonthlyBoldedDate(new DateTime(2019, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5) }, calendar.MonthlyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5) }, calendar.MonthlyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
 
             // Different year.
             calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5) }, calendar.MonthlyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
 
             // Duplicate.
-            calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+            calendar.AddMonthlyBoldedDate(new DateTime(2019, 09, 5));
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5) }, calendar.MonthlyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
 
             // MinValue.
             calendar.AddMonthlyBoldedDate(DateTime.MinValue);
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5), DateTime.MinValue }, calendar.MonthlyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), DateTime.MinValue }, calendar.MonthlyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
 
             // MaxValue.
             calendar.AddMonthlyBoldedDate(DateTime.MaxValue);
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5), DateTime.MinValue, DateTime.MaxValue }, calendar.MonthlyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), DateTime.MinValue, DateTime.MaxValue }, calendar.MonthlyBoldedDates);
             Assert.False(calendar.IsHandleCreated);
         }
 
@@ -3266,7 +3187,7 @@ namespace System.Windows.Forms.Tests
 
             // Different month.
             calendar.AddMonthlyBoldedDate(new DateTime(2019, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5) }, calendar.MonthlyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5) }, calendar.MonthlyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3274,15 +3195,15 @@ namespace System.Windows.Forms.Tests
 
             // Different year.
             calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5) }, calendar.MonthlyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
             Assert.Equal(0, createdCallCount);
 
             // Duplicate.
-            calendar.AddMonthlyBoldedDate(new DateTime(2018, 09, 5));
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5) }, calendar.MonthlyBoldedDates);
+            calendar.AddMonthlyBoldedDate(new DateTime(2019, 09, 5));
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5) }, calendar.MonthlyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3290,7 +3211,7 @@ namespace System.Windows.Forms.Tests
 
             // MinValue.
             calendar.AddMonthlyBoldedDate(DateTime.MinValue);
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5), DateTime.MinValue }, calendar.MonthlyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), DateTime.MinValue }, calendar.MonthlyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
@@ -3298,7 +3219,7 @@ namespace System.Windows.Forms.Tests
 
             // MaxValue.
             calendar.AddMonthlyBoldedDate(DateTime.MaxValue);
-            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), new DateTime(2019, 09, 5), new DateTime(2018, 09, 5), new DateTime(2018, 09, 5), DateTime.MinValue, DateTime.MaxValue }, calendar.MonthlyBoldedDates);
+            Assert.Equal(new DateTime[] { new DateTime(2019, 10, 3), new DateTime(2019, 10, 5), DateTime.MinValue, DateTime.MaxValue }, calendar.MonthlyBoldedDates);
             Assert.True(calendar.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
             Assert.Equal(0, styleChangedCallCount);
