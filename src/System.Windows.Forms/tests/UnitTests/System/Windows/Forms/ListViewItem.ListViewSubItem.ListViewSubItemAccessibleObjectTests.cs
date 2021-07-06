@@ -843,5 +843,40 @@ namespace System.Windows.Forms.Tests
 
             return listView;
         }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_ProcessId_ReturnCorrectValue()
+        {
+            using ListView list = new();
+            ListViewItem listViewItem1 = new(new string[]
+            {
+            "Test 1",
+            "Item 1",
+            "Something 1"
+            }, -1);
+
+            ColumnHeader columnHeader1 = new();
+            ColumnHeader columnHeader2 = new();
+            ColumnHeader columnHeader3 = new();
+
+            list.Columns.AddRange(new ColumnHeader[]
+            {
+                columnHeader1,
+                columnHeader2,
+                columnHeader3
+            });
+            list.HideSelection = false;
+            list.Items.Add(listViewItem1);
+            list.View = View.Details;
+
+            AccessibleObject subItemAccObj1 = listViewItem1.AccessibilityObject.GetChild(0);
+            AccessibleObject subItemAccObj2 = listViewItem1.AccessibilityObject.GetChild(1);
+            AccessibleObject subItemAccObj3 = listViewItem1.AccessibilityObject.GetChild(2);
+
+            Assert.Equal(Environment.ProcessId, subItemAccObj1.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
+            Assert.Equal(Environment.ProcessId, subItemAccObj2.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
+            Assert.Equal(Environment.ProcessId, subItemAccObj3.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
+            Assert.False(list.IsHandleCreated);
+        }
     }
 }

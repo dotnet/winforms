@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -127,9 +126,7 @@ namespace System.Windows.Forms
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
                         UiaCore.UIA.NamePropertyId => Name,
                         UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
-#pragma warning disable CA1837 // Use 'Environment.ProcessId'
-                        UiaCore.UIA.ProcessIdPropertyId => Process.GetCurrentProcess().Id,
-#pragma warning restore CA1837 // Use 'Environment.ProcessId'
+                        UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
                         UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                         UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,
