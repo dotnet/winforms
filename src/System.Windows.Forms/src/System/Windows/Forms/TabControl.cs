@@ -946,7 +946,7 @@ namespace System.Windows.Forms
 
         private int AddNativeTabPage(TabPage tabPage)
         {
-            int index = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)(_tabPageCount + 1), tabPage);
+            int index = PARAM.ToInt(SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)(_tabPageCount + 1), tabPage));
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -1227,7 +1227,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int retIndex = (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage);
+                int retIndex = PARAM.ToInt(SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage));
                 if (retIndex >= 0)
                 {
                     Insert(retIndex, tabPage);

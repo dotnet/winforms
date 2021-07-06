@@ -1823,7 +1823,7 @@ namespace System.Windows.Forms
                 sa[0] = DateTimePicker.DateTimeToSysTime(minDate);
                 sa[1] = DateTimePicker.DateTimeToSysTime(maxDate);
                 GDTR flags = GDTR.MIN | GDTR.MAX;
-                if ((int)User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (IntPtr)flags, ref sa[0]) == 0)
+                if (User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (IntPtr)flags, ref sa[0]) == IntPtr.Zero)
                 {
                     throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
                 }

@@ -1560,7 +1560,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1568,7 +1568,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1607,7 +1607,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1615,7 +1615,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1664,7 +1664,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1672,7 +1672,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1851,7 +1851,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1859,7 +1859,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1898,7 +1898,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1906,7 +1906,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };
@@ -1955,7 +1955,7 @@ namespace System.Windows.Forms.Tests
             control.KeyDown += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyDownCallCount++;
             };
@@ -1963,7 +1963,7 @@ namespace System.Windows.Forms.Tests
             control.KeyUp += (sender, e) =>
             {
                 Assert.Same(control, sender);
-                Assert.Equal((int)wParam, e.KeyValue);
+                Assert.Equal(PARAM.ToInt(wParam), e.KeyValue);
                 e.Handled = handled;
                 keyUpCallCount++;
             };

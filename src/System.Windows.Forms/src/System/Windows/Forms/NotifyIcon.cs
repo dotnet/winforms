@@ -743,7 +743,7 @@ namespace System.Windows.Forms
             switch ((User32.WM)msg.Msg)
             {
                 case (User32.WM)WM_TRAYMOUSEMESSAGE:
-                    switch ((int)msg.LParam)
+                    switch (PARAM.ToInt(msg.LParam))
                     {
                         case (int)User32.WM.LBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Left, 2);
@@ -798,7 +798,7 @@ namespace System.Windows.Forms
                 case User32.WM.COMMAND:
                     if (IntPtr.Zero == msg.LParam)
                     {
-                        if (Command.DispatchID((int)msg.WParam & 0xFFFF))
+                        if (Command.DispatchID(PARAM.ToInt(msg.WParam) & 0xFFFF))
                         {
                             return;
                         }

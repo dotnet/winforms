@@ -323,7 +323,7 @@ namespace System.Windows.Forms
 
                                     if (uReason != msoloop.Main)
                                     {
-                                        User32.PostQuitMessage((int)msg.wParam);
+                                        User32.PostQuitMessage(PARAM.ToInt(msg.wParam));
                                     }
 
                                     continueLoop = BOOL.FALSE;

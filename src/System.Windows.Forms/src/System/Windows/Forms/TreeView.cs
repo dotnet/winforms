@@ -1979,14 +1979,14 @@ namespace System.Windows.Forms
             // This seems to make the Treeview happy.
             if (CheckBoxes)
             {
-                int style = unchecked((int)User32.GetWindowLong(this, User32.GWL.STYLE));
+                int style = PARAM.ToInt(User32.GetWindowLong(this, User32.GWL.STYLE));
                 style |= (int)TVS.CHECKBOXES;
                 User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
             }
 
             if (ShowNodeToolTips && !DesignMode)
             {
-                int style = unchecked((int)User32.GetWindowLong(this, User32.GWL.STYLE));
+                int style = PARAM.ToInt(User32.GetWindowLong(this, User32.GWL.STYLE));
                 style |= (int)TVS.INFOTIP;
                 User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
             }

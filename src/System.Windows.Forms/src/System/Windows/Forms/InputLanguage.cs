@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the culture of the current input language.
         /// </summary>
-        public CultureInfo Culture => new CultureInfo((int)_handle & 0xFFFF);
+        public CultureInfo Culture => new CultureInfo(PARAM.ToInt(_handle) & 0xFFFF);
 
         /// <summary>
         ///  Gets or sets the input language for the current thread.

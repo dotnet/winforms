@@ -263,7 +263,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            switch ((Keys)(int)m.WParam)
+            switch ((Keys)PARAM.ToInt(m.WParam))
             {
                 case Keys.Enter:
                     if (m.Msg == (int)User32.WM.CHAR &&

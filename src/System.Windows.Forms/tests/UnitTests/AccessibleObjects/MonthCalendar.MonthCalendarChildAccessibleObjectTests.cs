@@ -111,7 +111,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             Assert.Equal(3, accessibleObject.RuntimeId.Length);
             Assert.Equal(AccessibleObject.RuntimeIDFirstItem, accessibleObject.RuntimeId[0]);
-            Assert.Equal(control.Handle.ToInt32(), accessibleObject.RuntimeId[1]);
+            Assert.Equal(PARAM.ToInt(control.Handle), accessibleObject.RuntimeId[1]);
             Assert.Equal(accessibleObject.GetChildId(), accessibleObject.RuntimeId[2]);
             Assert.True(control.IsHandleCreated);
         }

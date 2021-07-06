@@ -282,7 +282,7 @@ namespace System.Windows.Forms
 
             internal static void ProcessMenuKeyDown(ref Message m)
             {
-                Keys keyData = (Keys)(int)m.WParam;
+                Keys keyData = (Keys)PARAM.ToInt(m.WParam);
 
                 if (Control.FromHandle(m.HWnd) is ToolStrip toolStrip && !toolStrip.IsDropDown)
                 {
