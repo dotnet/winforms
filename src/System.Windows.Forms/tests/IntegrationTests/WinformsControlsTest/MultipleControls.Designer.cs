@@ -236,6 +236,7 @@ namespace WinformsControlsTest
             this.domainUpDown1.Size = new System.Drawing.Size(120, 20);
             this.domainUpDown1.TabIndex = 10;
             this.domainUpDown1.Text = "domainUpDown1";
+            this.domainUpDown1.Items.AddRange(new string[] { "First", "Second", "Third", "Fourth" });
             // 
             // Form1
             // 
