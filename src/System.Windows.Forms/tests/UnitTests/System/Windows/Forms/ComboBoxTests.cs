@@ -1835,6 +1835,28 @@ namespace System.Windows.Forms.Tests
             Assert.False(comboBox.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ComboBox_CustomAccessibleObject_DoesntCrashControl_WhenAddingItems()
+        {
+            using CustomComboBox control = new();
+            control.Items.Add("item1");
+            control.Items.Add("item2");
+
+            Assert.False(control.IsHandleCreated);
+        }
+
+        private class CustomComboBox : ComboBox
+        {
+            protected override AccessibleObject CreateAccessibilityInstance()
+                => new CustomComboBoxAccessibleObject(this);
+        }
+
+        private class CustomComboBoxAccessibleObject : Control.ControlAccessibleObject
+        {
+            public CustomComboBoxAccessibleObject(ComboBox owner) : base(owner)
+            { }
+        }
+
         private class SubComboBox : ComboBox
         {
             public SubComboBox()
