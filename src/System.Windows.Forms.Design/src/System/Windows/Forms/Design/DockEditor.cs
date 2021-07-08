@@ -77,8 +77,6 @@ namespace System.Windows.Forms.Design
             private static int offset2Y = OFFSET2Y;
             private static int noneY = NONE_Y;
 
-            private readonly CheckBox bottom = new DockEditorCheckBox();
-
             // Even though the selections are mutually exclusive, I'm using
             // CheckBoxes instead of RadioButtons because RadioButtons fire Click
             // events whenever they get focus, which is bad when the user is trying
@@ -86,14 +84,15 @@ namespace System.Windows.Forms.Design
             private readonly ContainerPlaceholder container = new ContainerPlaceholder();
             private readonly DockEditor editor;
             private IWindowsFormsEditorService edSvc;
-            private readonly CheckBox fill = new DockEditorCheckBox();
-            private readonly CheckBox left = new DockEditorCheckBox();
+            private readonly CheckBox fill = new DockEditorCheckBox() { AccessibleRole = AccessibleRole.RadioButton };
+            private readonly CheckBox left = new DockEditorCheckBox() { AccessibleRole = AccessibleRole.RadioButton };
             private readonly CheckBox[] leftRightOrder;
-            private readonly CheckBox none = new DockEditorCheckBox();
-            private readonly CheckBox right = new DockEditorCheckBox();
+            private readonly CheckBox none = new DockEditorCheckBox() { AccessibleRole = AccessibleRole.RadioButton };
+            private readonly CheckBox right = new DockEditorCheckBox() { AccessibleRole = AccessibleRole.RadioButton };
             private readonly CheckBox[] tabOrder;
-            private readonly CheckBox top = new DockEditorCheckBox();
+            private readonly CheckBox top = new DockEditorCheckBox() { AccessibleRole = AccessibleRole.RadioButton };
             private readonly CheckBox[] upDownOrder;
+            private readonly CheckBox bottom = new DockEditorCheckBox() { AccessibleRole = AccessibleRole.RadioButton };
 
             public DockUI(DockEditor editor)
             {

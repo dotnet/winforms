@@ -69,10 +69,10 @@ namespace System.Windows.Forms.Design
             public AnchorUI(AnchorEditor editor)
             {
                 this.editor = editor;
-                left = new SpringControl(this);
-                right = new SpringControl(this);
-                top = new SpringControl(this);
-                bottom = new SpringControl(this);
+                left = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+                right = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+                top = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
+                bottom = new SpringControl(this) { AccessibleRole = AccessibleRole.CheckButton };
                 tabOrder = new[] { left, top, right, bottom };
 
                 InitializeComponent();

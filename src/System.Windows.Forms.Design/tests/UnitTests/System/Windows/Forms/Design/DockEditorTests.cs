@@ -8,6 +8,7 @@ using System.Drawing.Design;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests
 {
@@ -74,6 +75,28 @@ namespace System.Windows.Forms.Design.Tests
         {
             var editor = new DockEditor();
             Assert.False(editor.GetPaintValueSupported(context));
+        }
+
+        [Theory]
+        [InlineData("fill")]
+        [InlineData("left")]
+        [InlineData("none")]
+        [InlineData("right")]
+        [InlineData("top")]
+        [InlineData("bottom")]
+        public void DockEditor_DockUI_ControlType_IsRadioButton(string fieldName)
+        {
+            DockEditor editor = new();
+            Type type = editor.GetType()
+                .GetNestedType("DockUI", BindingFlags.NonPublic | BindingFlags.Instance);
+            var dockUI = (Control)Activator.CreateInstance(type, new object[] { editor });
+            var item = (Control)dockUI.GetType()
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(dockUI);
+
+            object actual = item.AccessibilityObject.TestAccessor().Dynamic
+                .GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(Interop.UiaCore.UIA.RadioButtonControlTypeId, actual);
         }
     }
 }
