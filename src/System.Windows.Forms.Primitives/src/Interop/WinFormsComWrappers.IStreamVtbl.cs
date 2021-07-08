@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections;
-using System.Diagnostics;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
@@ -46,7 +44,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;
@@ -62,7 +60,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;
@@ -78,7 +76,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;
@@ -94,7 +92,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;
@@ -112,7 +110,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;
@@ -128,7 +126,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;
@@ -144,7 +142,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;
@@ -160,7 +158,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
             }
 
@@ -174,7 +172,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
             }
 
@@ -188,7 +186,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;
@@ -210,7 +208,7 @@ internal partial class Interop
                 }
                 catch (Exception ex)
                 {
-                    return e.HResult;
+                    return ex.HResult;
                 }
 
                 return S_OK;

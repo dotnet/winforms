@@ -3,10 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System;
-using System.Collections;
 using System.Diagnostics;
-using System.IO;
-using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 
 internal partial class Interop
@@ -120,14 +117,29 @@ internal partial class Interop
 
             public void Load(Interop.Ole32.IStream pstm)
             {
-                Guid streamIID = IID_IStream;
+                Guid persistedStreamIID = IID.IPersistStream;
+                Guid streamIID = IID.IStream;
+                IntPtr streamUnkPtr = IntPtr.Zero;
                 IntPtr streamPtr = IntPtr.Zero;
+                IntPtr persistedStreamPtr = IntPtr.Zero;
 
                 try
                 {
-                    streamPtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pstm, CreateComInterfaceFlags.None);
-                    int errorCode = ((delegate* unmanaged<IntPtr, IntPtr, int>)(*(*(void***)_wrappedInstance + 5 /* IPersistStream.Load slot */)))
-                        (_wrappedInstance, streamPtr);
+                    int errorCode = Marshal.QueryInterface(_wrappedInstance, ref persistedStreamIID, out persistedStreamPtr);
+                    if (errorCode < 0)
+                    {
+                        Marshal.ThrowExceptionForHR(errorCode);
+                    }
+
+                    streamUnkPtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pstm, CreateComInterfaceFlags.None);
+                    errorCode = Marshal.QueryInterface(streamUnkPtr, ref streamIID, out streamPtr);
+                    if (errorCode < 0)
+                    {
+                        Marshal.ThrowExceptionForHR(errorCode);
+                    }
+
+                    errorCode = ((delegate* unmanaged<IntPtr, IntPtr, int>)(*(*(void***)persistedStreamPtr + 5 /* IPersistStream.Load slot */)))
+                        (persistedStreamPtr, streamPtr);
                     if (errorCode < 0)
                     {
                         Marshal.ThrowExceptionForHR(errorCode);
@@ -137,8 +149,18 @@ internal partial class Interop
                 {
                     if (streamPtr != IntPtr.Zero)
                     {
-                        int count = Marshal.Release(streamPtr);
-                        Debug.Assert(count == 0);
+                        Marshal.Release(streamPtr);
+                    }
+
+                    if (streamUnkPtr != IntPtr.Zero)
+                    {
+                        int count = Marshal.Release(streamUnkPtr);
+                        Debug.Assert(count == 0, $"streamUnkPtr = {count}");
+                    }
+
+                    if (persistedStreamPtr != IntPtr.Zero)
+                    {
+                        Marshal.Release(persistedStreamPtr);
                     }
                 }
             }
