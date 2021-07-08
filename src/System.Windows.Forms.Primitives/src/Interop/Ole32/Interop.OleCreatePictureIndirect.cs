@@ -29,16 +29,13 @@ internal static partial class Interop
             }
         }
 
-        public unsafe static object OleCreatePictureIndirect(ref Guid refiid)
+        public unsafe static object OleCreatePictureIndirect(Guid* refiid)
         {
             IntPtr lpPicture = IntPtr.Zero;
-            fixed (Guid* piid = &refiid)
+            int errorCode = OleCreatePictureIndirectRaw(null, refiid, BOOL.TRUE, &lpPicture);
+            if (errorCode < 0)
             {
-                int errorCode = OleCreatePictureIndirectRaw(null, piid, BOOL.TRUE, &lpPicture);
-                if (errorCode < 0)
-                {
-                    Marshal.ThrowExceptionForHR(errorCode);
-                }
+                Marshal.ThrowExceptionForHR(errorCode);
             }
 
             return WinFormsComWrappers.Instance

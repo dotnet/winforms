@@ -417,20 +417,20 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Loads a picture from the requested stream.
         /// </summary>
-        private void LoadPicture(Ole32.IStream stream, string paramName)
+        private unsafe void LoadPicture(Ole32.IStream stream, string paramName)
         {
             Debug.Assert(stream is not null, "Stream should be validated before this method is called.");
 
             try
             {
-                Guid iid = typeof(Ole32.IPicture).GUID;
-                Ole32.IPicture picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(ref iid);
+                Guid iid = IID.IPicture;
+                Ole32.IPicture picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(&iid);
                 try
                 {
                     Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
                     ipictureAsIPersist.Load(stream);
 
-                    if (picture is not null && picture.Type == (short)Ole32.PICTYPE.ICON)
+                    if (picture.Type == (short)Ole32.PICTYPE.ICON)
                     {
                         IntPtr cursorHandle = (IntPtr)picture.Handle;
                         Size picSize = GetIconSize(cursorHandle);
