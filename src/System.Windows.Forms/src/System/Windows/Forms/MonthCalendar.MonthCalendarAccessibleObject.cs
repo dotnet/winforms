@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                     _ => DayOfWeek.Sunday
                 };
 
-            internal MCMV CelendarView => _owningMonthCalendar._mcCurView;
+            internal MCMV CalendarView => _owningMonthCalendar._mcCurView;
 
             internal override int ColumnCount
             {
@@ -545,7 +545,7 @@ namespace System.Windows.Forms
                 {
                     SelectionRange? range;
 
-                    switch (CelendarView)
+                    switch (CalendarView)
                     {
                         case MCMV.MONTH:
                             range = _owningMonthCalendar.SelectionRange;

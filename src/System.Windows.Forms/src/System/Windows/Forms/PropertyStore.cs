@@ -67,7 +67,7 @@ namespace System.Windows.Forms
                     return wrapper.Color;
                 }
 
-                Debug.Assert(storedObject is null, $"Have non-null object that isnt a color wrapper stored in a color entry!{Environment.NewLine}Did someone SetObject instead of SetColor?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isn't a color wrapper stored in a color entry!{Environment.NewLine}Did someone SetObject instead of SetColor?");
             }
 
             found = false;
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
                     return wrapper.Padding;
                 }
 
-                Debug.Assert(storedObject is null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isn't a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
             }
 
             found = false;
@@ -107,7 +107,7 @@ namespace System.Windows.Forms
                     return wrapper.Size;
                 }
 
-                Debug.Assert(storedObject is null, $"Have non-null object that isnt a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isn't a padding wrapper stored in a padding entry!{Environment.NewLine}Did someone SetObject instead of SetPadding?");
             }
 
             found = false;
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                     return wrapper.Rectangle;
                 }
 
-                Debug.Assert(storedObject is null, $"Have non-null object that isnt a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
+                Debug.Assert(storedObject is null, $"Have non-null object that isn't a Rectangle wrapper stored in a Rectangle entry!{Environment.NewLine}Did someone SetObject instead of SetRectangle?");
             }
 
             found = false;

@@ -143,7 +143,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutomaticDelay), value, 0));
+                   throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutomaticDelay), value, 0));
                 }
 
                 SetDelayTime((int)TTDT.AUTOMATIC, value);
@@ -676,7 +676,7 @@ namespace System.Windows.Forms
 
         private void TopLevelDestroyed(object sender, EventArgs eventargs)
         {
-            DestoyAllRegions();
+            DestroyAllRegions();
             DestroyHandle();
         }
 
@@ -792,7 +792,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DestoyAllRegions()
+        private void DestroyAllRegions()
         {
             Control[] ctls = new Control[_tools.Keys.Count];
             _tools.Keys.CopyTo(ctls, 0);
@@ -1146,7 +1146,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the delayTime based on the NativeMethods.TTDT_* values.
+        ///  Sets the delay time based on the NativeMethods.TTDT_* values.
         /// </summary>
         private void SetDelayTime(TTDT type, int time)
         {
@@ -1177,7 +1177,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetToolTip(Control control, string caption)
         {
-            TipInfo info = new TipInfo(caption, TipInfo.Type.Auto);
+            TipInfo info = new (caption, TipInfo.Type.Auto);
             SetToolTipInternal(control, info);
         }
 

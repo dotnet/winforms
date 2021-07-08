@@ -695,7 +695,7 @@ namespace System.Windows.Forms
             if (!CurrentFeedbackRect.Visible)
             {
                 Debug.WriteLineIf(s_toolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: Showing NEW feedback at " + screenLocation.ToString());
-                toolStripToDrag.SuspendCaputureMode();
+                toolStripToDrag.SuspendCaptureMode();
                 try
                 {
                     CurrentFeedbackRect.Show(screenLocation);
@@ -703,7 +703,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    toolStripToDrag.ResumeCaputureMode();
+                    toolStripToDrag.ResumeCaptureMode();
                 }
             }
             else
@@ -960,7 +960,7 @@ namespace System.Windows.Forms
                 }
                 else if (!row.CanMove(toolStripToDrag))
                 {
-                    Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we cant add the control to it, creating/inserting new row."));
+                    Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we can't add the control to it, creating/inserting new row."));
 
                     // we have a row at that point, but its too full or doesnt want
                     // anyone to join it.

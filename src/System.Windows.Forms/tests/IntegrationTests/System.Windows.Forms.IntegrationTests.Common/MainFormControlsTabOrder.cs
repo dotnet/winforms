@@ -31,6 +31,8 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ToggleIconButton,
         FileDialogButton,
         ErrorProviderButton,
-        TaskDialogButton
+        TaskDialogButton,
+        MessageBoxButton,
+        ToolStripsButton
     }
 }

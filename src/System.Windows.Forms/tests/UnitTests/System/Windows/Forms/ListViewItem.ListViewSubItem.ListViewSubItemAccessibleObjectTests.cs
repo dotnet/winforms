@@ -46,11 +46,11 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(true, 0, (int)UiaCore.UIA.EditControlTypeId)]
-        [InlineData(false, 0, (int)UiaCore.UIA.TextControlTypeId)]
-        [InlineData(true, 1, (int)UiaCore.UIA.TextControlTypeId)]
-        [InlineData(false, 1, (int)UiaCore.UIA.TextControlTypeId)]
-        public void ListViewSubItemAccessibleObject_GetPropertyValue_returns_correct_values(bool labelEdit, int childId, int expectedControlType)
+        [InlineData(true, 0)]
+        [InlineData(false, 0)]
+        [InlineData(true, 1)]
+        [InlineData(false, 1)]
+        public void ListViewSubItemAccessibleObject_GetPropertyValue_returns_correct_values(bool labelEdit, int childId)
         {
             using ListView list = new();
             ListViewItem listViewItem1 = new(new string[]
@@ -89,9 +89,8 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("WinForm", frameworkId);
 
             object controlType = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            UiaCore.UIA expected = (UiaCore.UIA)expectedControlType;
 
-            Assert.Equal(expected, controlType);
+            Assert.Equal(UiaCore.UIA.TextControlTypeId, controlType);
             Assert.True(list.IsHandleCreated);
         }
 
@@ -717,7 +716,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(View.Tile, false)]
         public void ListViewSubItemAccessibleObject_ColumnProperty_ReturnMinusOne_ForNotTableView(View view, bool createControl)
         {
-            using ListView list = new() { View = view};
+            using ListView list = new() { View = view };
             ListViewItem listViewItem1 = new(new string[]
             {
                 "Test 1",
@@ -843,6 +842,41 @@ namespace System.Windows.Forms.Tests
             }
 
             return listView;
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_ProcessId_ReturnCorrectValue()
+        {
+            using ListView list = new();
+            ListViewItem listViewItem1 = new(new string[]
+            {
+            "Test 1",
+            "Item 1",
+            "Something 1"
+            }, -1);
+
+            ColumnHeader columnHeader1 = new();
+            ColumnHeader columnHeader2 = new();
+            ColumnHeader columnHeader3 = new();
+
+            list.Columns.AddRange(new ColumnHeader[]
+            {
+                columnHeader1,
+                columnHeader2,
+                columnHeader3
+            });
+            list.HideSelection = false;
+            list.Items.Add(listViewItem1);
+            list.View = View.Details;
+
+            AccessibleObject subItemAccObj1 = listViewItem1.AccessibilityObject.GetChild(0);
+            AccessibleObject subItemAccObj2 = listViewItem1.AccessibilityObject.GetChild(1);
+            AccessibleObject subItemAccObj3 = listViewItem1.AccessibilityObject.GetChild(2);
+
+            Assert.Equal(Environment.ProcessId, subItemAccObj1.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
+            Assert.Equal(Environment.ProcessId, subItemAccObj2.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
+            Assert.Equal(Environment.ProcessId, subItemAccObj3.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
+            Assert.False(list.IsHandleCreated);
         }
     }
 }

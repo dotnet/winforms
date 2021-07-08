@@ -2,11 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.Drawing;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
-using static Interop;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -16,7 +13,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarTodayLinkAccessibleObject_ctor_default()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
 
             Assert.Equal(controlAccessibleObject, todayLinkAccessibleObject.TestAccessor().Dynamic._monthCalendarAccessibleObject);
@@ -27,12 +24,58 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarTodayLinkAccessibleObject_Description_ReturnsExpected()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
 
             string actual = todayLinkAccessibleObject.Description;
 
             Assert.Equal(SR.CalendarTodayLinkAccessibleObjectDescription, actual);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarTodayLinkAccessibleObject_GetChildId_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+
+            control.CreateControl();
+
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+
+            int expected = 3 + controlAccessibleObject.CalendarsAccessibleObjects.Count;
+            int actual = todayLinkAccessibleObject.GetChildId();
+
+            Assert.Equal(expected, actual);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarTodayLinkAccessibleObject_GetChildId_ReturnsExpected_IfCalendarsAccessibleObjectsIsNull()
+        {
+            using MonthCalendar control = new();
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+
+            int actual = todayLinkAccessibleObject.GetChildId();
+
+            Assert.Null(controlAccessibleObject.CalendarsAccessibleObjects);
+            Assert.Equal(-1, actual);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CalendarTodayLinkAccessibleObject_Name_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarTodayLinkAccessibleObject todayLinkAccessibleObject = new(controlAccessibleObject);
+
+            string expected = string.Format(SR.MonthCalendarTodayButtonAccessibleName,
+                DateTime.Today.ToShortDateString());
+            string actual = todayLinkAccessibleObject.Name;
+
+            Assert.Equal(expected, actual);
             Assert.False(control.IsHandleCreated);
         }
     }

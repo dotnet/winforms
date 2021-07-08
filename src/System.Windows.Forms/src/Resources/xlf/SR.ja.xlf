@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">次の期間へ移動します</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">前の期間へ移動します</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">今日の日付に移動して、選択します</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -1242,7 +1242,7 @@
         <target state="translated">このコンテキスト メニュー ストリップを最後に表示させたコントロールです。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">コントロールがアクセス可能なオブジェクトが、無効な状態になっています。</target>
         <note />
@@ -4764,7 +4764,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">読み込まれたアセンブリ</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4773,7 +4773,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -6481,14 +6481,14 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">挿入マーク属性を変更できるようにします。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">現在のアクセシビリティ オブジェクトは {0} ビューの ListView にのみ使用できます</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">現在のアクセシビリティ オブジェクトは {0}、{1} または {2} ビューの ListView にのみ使用できます</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">第 {0} 週</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -11063,7 +11063,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">{0} は、最初の IWin32Window オブジェクトがアプリケーションで作成される前に呼び出す必要があります。</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

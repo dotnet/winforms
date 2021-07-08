@@ -151,10 +151,10 @@ namespace System.Windows.Forms
         {
             MouseDownTimer.Enabled = false;
             MouseDownTimer.Tick -= new EventHandler(OnInitialAutoScrollMouseDown);
-            MouseDownTimer.Tick -= new EventHandler(OnAutoScrollAccellerate);
+            MouseDownTimer.Tick -= new EventHandler(OnAutoScrollAccelerate);
         }
 
-        private void OnAutoScrollAccellerate(object sender, EventArgs e)
+        private void OnAutoScrollAccelerate(object sender, EventArgs e)
         {
             Scroll();
         }
@@ -165,7 +165,7 @@ namespace System.Windows.Forms
 
             Scroll();
             MouseDownTimer.Interval = AUTOSCROLL_UPDATE;
-            MouseDownTimer.Tick += new EventHandler(OnAutoScrollAccellerate);
+            MouseDownTimer.Tick += new EventHandler(OnAutoScrollAccelerate);
         }
 
         public override Size GetPreferredSize(Size constrainingSize)

@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-HANT" original="../SR.resx">
+  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../SR.resx">
     <body>
       <trans-unit id="AXAddInvalidEvent">
         <source>Event {0} is not valid on this ActiveX control.</source>
@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">移至下一個時間範圍</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">移至上一個時間範圍</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">移至並選取今天的日期</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -1242,7 +1242,7 @@
         <target state="translated">造成顯示此內容功能表區域的最後控制項。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">控制項的可存取物件的狀態無效。</target>
         <note />
@@ -4764,7 +4764,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">已載入的組件</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4773,7 +4773,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -6481,14 +6481,14 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">允許變更插入標記屬性。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">目前的協助工具物件僅適用於 {0} 檢視中的 ListView</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">目前的協助工具物件僅適用於 {0}、 {1} 或 {2} 檢視中的 ListView</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">第 {0} 週</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -7768,7 +7768,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ProfessionalColorsButtonSelectedBorderDescr">
         <source>Border color to use with the selected button gradient colors (ButtonCheckedGradient*).</source>
-        <target state="translated">與已選取的按鈕漸層色彩  (ButtonCheckedGradient*) 搭配使用的框線色彩。</target>
+        <target state="translated">與已選取的按鈕漸層色彩 (ButtonCheckedGradient*) 搭配使用的框線色彩。</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsButtonSelectedGradientBeginDescr">
@@ -11063,7 +11063,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">在應用程式中建立第一個 IWin32Window 物件之前，必須先呼叫 {0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

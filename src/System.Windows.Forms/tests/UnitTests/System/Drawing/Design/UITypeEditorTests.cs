@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Drawing.Design.Tests
@@ -58,7 +58,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void UITypeEditor_GetEditStyle_Invoke_ReturnsNone(ITypeDescriptorContext context)
         {
             var editor = new UITypeEditor();
@@ -78,7 +78,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void UITypeEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new UITypeEditor();
@@ -86,7 +86,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void UITypeEditor_GetPaintValueSupported_Invoke_CallsVirtualGetPaintValueSupported(bool result)
         {
             var mockEditor = new Mock<UITypeEditor>(MockBehavior.Strict);

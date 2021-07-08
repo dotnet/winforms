@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">Aller à la période suivante</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">Aller à la période précédente</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">Sélectionner la date du jour</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -1242,7 +1242,7 @@
         <target state="translated">Dernier contrôle ayant provoqué l'affichage de cette bande de menus contextuels.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">L'objet accessible du contrôle est dans un état non valide.</target>
         <note />
@@ -4764,7 +4764,7 @@ juste-à-temps (JIT) à la place de cette boîte de dialogue.
         <target state="translated">Assemblys chargés</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4773,7 +4773,7 @@ juste-à-temps (JIT) à la place de cette boîte de dialogue.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -6481,14 +6481,14 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Autorise la modification des attributs des marques d'insertion.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">L’objet d’accessibilité actuel est uniquement destiné à ListView dans l’affichage {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">L’objet d’accessibilité actuel est uniquement destiné à ListView dans l’affichage {0}, {1} ou {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">Semaine {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -11063,7 +11063,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">{0} doit être appelé avant la création du premier objet IWin32Window dans l'application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

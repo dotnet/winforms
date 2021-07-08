@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -104,7 +104,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Ctor_String(string text, string expectedText)
         {
             using var control = new SubControl(text);

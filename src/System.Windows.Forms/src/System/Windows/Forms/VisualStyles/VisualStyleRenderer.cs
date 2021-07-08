@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.ComponentModel;
 using System.Drawing;
 using Microsoft.Win32;
 using static Interop;

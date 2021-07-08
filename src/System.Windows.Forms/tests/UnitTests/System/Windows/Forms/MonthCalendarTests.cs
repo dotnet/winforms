@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -373,7 +373,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void MonthCalendar_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new MonthCalendar
@@ -432,7 +432,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void MonthCalendar_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubMonthCalendar
@@ -486,7 +486,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void MonthCalendar_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new MonthCalendar();
@@ -743,7 +743,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MonthCalendar_DoubleBuffered_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubMonthCalendar
@@ -768,7 +768,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MonthCalendar_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubMonthCalendar();
@@ -808,7 +808,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Day))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Day))]
         public void MonthCalendar_FirstDayOfWeek_Set_GetReturnsExpected(Day value)
         {
             using var calendar = new MonthCalendar
@@ -825,7 +825,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Day))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Day))]
         public void MonthCalendar_FirstDayOfWeek_SetWithCustomOldValue_GetReturnsExpected(Day value)
         {
             using var calendar = new MonthCalendar
@@ -844,7 +844,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Day))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Day))]
         public void MonthCalendar_FirstDayOfWeek_SetWithHandle_GetReturnsExpected(Day value)
         {
             using var calendar = new MonthCalendar();
@@ -912,7 +912,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Day))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Day))]
         public void MonthCalendar_FirstDayOfWeek_SetInvalidValue_ThrowsInvalidEnumArgumentException(Day value)
         {
             using var calendar = new MonthCalendar();
@@ -1302,7 +1302,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void MonthCalendar_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new MonthCalendar();
@@ -1634,7 +1634,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void MonthCalendar_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new MonthCalendar
@@ -1651,7 +1651,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void MonthCalendar_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new MonthCalendar();
@@ -2229,7 +2229,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MonthCalendar_ShowToday_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubMonthCalendar
@@ -2301,7 +2301,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MonthCalendar_ShowTodayCircle_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubMonthCalendar
@@ -2361,7 +2361,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void MonthCalendar_ShowWeekNumbers_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubMonthCalendar
@@ -2632,7 +2632,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void MonthCalendar_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new MonthCalendar
@@ -2649,7 +2649,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void MonthCalendar_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new MonthCalendar();
@@ -3360,7 +3360,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3386,7 +3386,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnBackColorChanged_InvokeWithHandle_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3431,7 +3431,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3509,7 +3509,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthControl_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3533,7 +3533,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3559,7 +3559,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnForeColorChanged_InvokeWithHandle_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3604,7 +3604,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3630,7 +3630,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3657,7 +3657,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3683,7 +3683,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthCalendar_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3710,7 +3710,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void MonthCalendar_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3734,7 +3734,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void MonthCalendar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();
@@ -3758,7 +3758,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void MonthCalendar_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubMonthCalendar();

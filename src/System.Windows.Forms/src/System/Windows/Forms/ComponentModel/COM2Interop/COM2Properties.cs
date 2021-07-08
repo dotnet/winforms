@@ -26,7 +26,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///
         ///  5 minutes -- ticks are 1/10,000,000th of a second
         /// </summary>
-        private const long AGE_THRESHHOLD = (long)(10000000L * 60L * 5L);
+        private const long AGE_THRESHOLD = (long)(10000000L * 60L * 5L);
 
         /// <summary>
         ///  This is the object that gave us the properties.  We hold a WeakRef so we don't addref the object.
@@ -265,7 +265,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return false;
                 }
 
-                return TicksSinceTouched > AGE_THRESHHOLD;
+                return TicksSinceTouched > AGE_THRESHOLD;
             }
         }
 

@@ -171,11 +171,11 @@ namespace System.Windows.Forms
             return count;
         }
 
-        internal AccessibleObject GetChildFragment(int index)
+        internal AccessibleObject GetChildFragment(int index, UiaCore.NavigateDirection direction)
         {
             if (owner.DropDown.AccessibilityObject is ToolStrip.ToolStripAccessibleObject toolStripAccessibleObject)
             {
-                return toolStripAccessibleObject.GetChildFragment(index);
+                return toolStripAccessibleObject.GetChildFragment(index, direction);
             }
 
             return null;

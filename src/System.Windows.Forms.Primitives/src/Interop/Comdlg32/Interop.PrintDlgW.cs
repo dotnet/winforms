@@ -4,7 +4,6 @@
 
 using System;
 using System.Runtime.InteropServices;
-using static Interop.User32;
 
 internal partial class Interop
 {

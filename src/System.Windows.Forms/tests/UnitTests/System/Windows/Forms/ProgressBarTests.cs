@@ -6,9 +6,8 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -196,7 +195,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ProgressBar_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new ProgressBar
@@ -218,7 +217,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void ProgressBar_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new ProgressBar
@@ -278,7 +277,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ProgressBar_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubProgressBar
@@ -333,7 +332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void ProgressBar_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new ProgressBar();
@@ -341,7 +340,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ProgressBar_CausesValidation_Set_GetReturnsExpected(bool value)
         {
             using var control = new ProgressBar
@@ -401,7 +400,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ProgressBar_DoubleBuffered_Get_ReturnsExpected(bool value)
         {
             using var control = new SubProgressBar();
@@ -410,7 +409,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ProgressBar_DoubleBuffered_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubProgressBar
@@ -435,7 +434,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ProgressBar_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubProgressBar();
@@ -475,7 +474,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ProgressBar_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubProgressBar
@@ -536,7 +535,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ProgressBar_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new ProgressBar
@@ -755,7 +754,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void ProgressBar_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new ProgressBar();
@@ -1101,7 +1100,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void ProgressBar_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new ProgressBar
@@ -1118,7 +1117,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void ProgressBar_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new ProgressBar();
@@ -1403,7 +1402,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ProgressBarStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ProgressBarStyle))]
         public void ProgressBar_Style_Set_GetReturnsExpected(ProgressBarStyle value)
         {
             using var control = new ProgressBar
@@ -1420,7 +1419,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ProgressBarStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ProgressBarStyle))]
         public void ProgressBar_Style_SetZeroMarqueeAnimationSpeed_GetReturnsExpected(ProgressBarStyle value)
         {
             using var control = new ProgressBar
@@ -1503,7 +1502,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ProgressBarStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ProgressBarStyle))]
         public void ProgressBar_Style_SetInvalidValue_ThrowsInvalidEnumArgumentException(ProgressBarStyle value)
         {
             using var control = new ProgressBar();
@@ -1511,7 +1510,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ProgressBar_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new ProgressBar
@@ -1533,7 +1532,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ProgressBar_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new ProgressBar();
@@ -1608,7 +1607,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ProgressBar_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new ProgressBar
@@ -1625,7 +1624,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ProgressBar_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new ProgressBar();
@@ -1903,7 +1902,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ProgressBar_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -1929,7 +1928,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ProgressBar_OnBackColorChanged_InvokeWithHandle_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -1974,7 +1973,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void MonthControl_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -1998,7 +1997,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ProgressBar_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2022,7 +2021,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ProgressBar_OnForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2048,7 +2047,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ProgressBar_OnForeColorChanged_InvokeWithHandle_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2169,7 +2168,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ProgressBar_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2197,7 +2196,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ProgressBar_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2227,7 +2226,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ProgressBar_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2251,7 +2250,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void ProgressBar_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2275,7 +2274,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void ProgressBar_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2299,7 +2298,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ProgressBar_OnLeave_Invoke_CallsLeave(EventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2323,7 +2322,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ProgressBar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
             using var control = new SubProgressBar();
@@ -2347,7 +2346,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ProgressBar_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubProgressBar();

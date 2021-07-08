@@ -39,13 +39,13 @@ namespace System.Windows.Forms
         {
             Point[] points = new Point[3];
 
-            int updnWidth = (int)(bounds.Width * TRI_WIDTH_RATIO);
-            if (updnWidth % 2 == 1)
+            int upDownWidth = (int)(bounds.Width * TRI_WIDTH_RATIO);
+            if (upDownWidth % 2 == 1)
             {
-                updnWidth++;
+                upDownWidth++;
             }
 
-            int updnHeight = (int)Math.Ceiling((updnWidth / 2) * TRI_HEIGHT_RATIO);
+            int upDownHeight = (int)Math.Ceiling((upDownWidth / 2) * TRI_HEIGHT_RATIO);
 
             int lrWidth = (int)(bounds.Height * TRI_WIDTH_RATIO);
             if (lrWidth % 2 == 0)
@@ -59,17 +59,17 @@ namespace System.Windows.Forms
             {
                 case TriangleDirection.Up:
                     {
-                        points[0] = new Point(0, updnHeight);
-                        points[1] = new Point(updnWidth, updnHeight);
-                        points[2] = new Point(updnWidth / 2, 0);
+                        points[0] = new Point(0, upDownHeight);
+                        points[1] = new Point(upDownWidth, upDownHeight);
+                        points[2] = new Point(upDownWidth / 2, 0);
                     }
 
                     break;
                 case TriangleDirection.Down:
                     {
                         points[0] = new Point(0, 0);
-                        points[1] = new Point(updnWidth, 0);
-                        points[2] = new Point(updnWidth / 2, updnHeight);
+                        points[1] = new Point(upDownWidth, 0);
+                        points[2] = new Point(upDownWidth / 2, upDownHeight);
                     }
 
                     break;
@@ -101,8 +101,8 @@ namespace System.Windows.Forms
                 case TriangleDirection.Up:
                 case TriangleDirection.Down:
                     OffsetPoints(points,
-                                  bounds.X + (bounds.Width - updnHeight) / 2,
-                                  bounds.Y + (bounds.Height - updnWidth) / 2);
+                                  bounds.X + (bounds.Width - upDownHeight) / 2,
+                                  bounds.Y + (bounds.Height - upDownWidth) / 2);
                     break;
                 case TriangleDirection.Left:
                 case TriangleDirection.Right:

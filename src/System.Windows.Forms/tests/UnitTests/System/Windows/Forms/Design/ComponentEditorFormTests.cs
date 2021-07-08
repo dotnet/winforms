@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -255,7 +255,7 @@ namespace System.Windows.Forms.Design.Tests
 
         /*
                 [WinFormsTheory]
-                [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+                [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
                 public void ComponentEditorForm_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
                 {
                     using var component = new Component();
@@ -283,7 +283,7 @@ namespace System.Windows.Forms.Design.Tests
         */
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ComponentEditorForm_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var component = new Component();
@@ -311,7 +311,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ComponentEditorForm_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var component = new Component();
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ComponentEditorForm_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var component = new Component();

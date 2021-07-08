@@ -10,7 +10,7 @@ using System.IO;
 using System.Threading;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.DotNet.RemoteExecutor;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -121,8 +121,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory(Skip = "Crash with AbandonedMutexException. See: https://github.com/dotnet/arcade/issues/5325")]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(VisualStyleState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(VisualStyleState))]
         public void Application_VisualStyleState_Set_ReturnsExpected(VisualStyleState valueParam)
         {
             // This needs to be in RemoteExecutor.Invoke because changing Application.VisualStyleState
@@ -392,7 +392,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HighDpiMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HighDpiMode))]
         public void Application_SetHighDpiMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(HighDpiMode value)
         {
             Assert.Throws<InvalidEnumArgumentException>("highDpiMode", () => Application.SetHighDpiMode(value));

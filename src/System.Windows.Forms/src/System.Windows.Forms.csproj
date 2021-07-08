@@ -29,7 +29,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Win32.Registry" Version="$(MicrosoftWin32RegistryPackageVersion)" />
     <PackageReference Include="Microsoft.Win32.SystemEvents" Version="$(MicrosoftWin32SystemEventsPackageVersion)" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="$(SystemConfigurationConfigurationManagerPackageVersion)" />
     <PackageReference Include="System.Drawing.Common" Version="$(SystemDrawingCommonPackageVersion)" />
@@ -413,8 +412,8 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBAlpha.ico">
       <LogicalName>System.Windows.Forms.PBAlpha</LogicalName>
     </EmbeddedResource>
-    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBCatego.ico">
-      <LogicalName>System.Windows.Forms.PBCatego</LogicalName>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBCategory.ico">
+      <LogicalName>System.Windows.Forms.PBCategory</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBEvent.ico">
       <LogicalName>System.Windows.Forms.PBEvent</LogicalName>

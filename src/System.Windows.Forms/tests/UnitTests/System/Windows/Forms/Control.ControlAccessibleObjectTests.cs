@@ -7,13 +7,13 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Windows.Forms.Automation;
 using Accessibility;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ControlControlAccessibleObject : IClassFixture<ThreadExceptionFixture>
+    public class Control_ControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void ControlAccessibleObject_Ctor_ControlWithoutHandle()
@@ -152,7 +152,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_DefaultAction_GetWithAccessibleDefaultActionDescription_ReturnsExpected(string accessibleDefaultActionDescription)
         {
             using var ownerControl = new Control
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Description_GetWithAccessibleDescription_ReturnsExpected(string accessibleDescription)
         {
             using var ownerControl = new Control
@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Help_GetWithQueryAccessibilityHelpEvent_Success(string result)
         {
             using var ownerControl = new Control();
@@ -666,7 +666,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Name_Set_GetReturnsExpected(string value)
         {
             using var ownerControl = new Control();
@@ -766,7 +766,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Value_Set_GetReturnsNull_IfHandleIsCreated(string value)
         {
             using var ownerControl = new Control();
@@ -783,7 +783,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Value_Set_GetReturnsNull_IfHandleIsNotCreated(string value)
         {
             using var ownerControl = new Control();
@@ -929,7 +929,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
         public void AccessibleObject_Navigate_InvokeDefault_ReturnsNull(AccessibleNavigation navdir)
         {
             using var ownerControl = new Control();
@@ -1312,6 +1312,205 @@ namespace System.Windows.Forms.Tests
             // Check if the method returns an exist UIA_ControlTypeId
             Assert.True(actual >= UiaCore.UIA.ButtonControlTypeId && actual <= UiaCore.UIA.AppBarControlTypeId);
         }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentRoot_IsNullOrOwnObject(Type type)
+        {
+            using NoAssertContext context = new();
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            Assert.False(control.IsHandleCreated);
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentRoot;
+
+            Assert.True(actual is null || actual == control.AccessibilityObject);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentRoot_IsToolStrip_IfControlIsUsedAsToolStripItem(Type type)
+        {
+            using NoAssertContext context = new();
+            using ToolStrip toolStrip = new();
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            using ToolStripControlHost host = new(control);
+
+            toolStrip.CreateControl();
+            control.CreateControl();
+
+            if (!CanBeAddedToToolStrip(control))
+            {
+                // A number of controls can't be added to ToolStrip. Double verify it is still the case, and exit.
+                Assert.Throws<ArgumentException>(() => toolStrip.Items.Add(host));
+
+                return;
+            }
+
+            toolStrip.Items.Add(host);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = ((UiaCore.IRawElementProviderFragment)control.AccessibilityObject).FragmentRoot;
+
+            Assert.Equal(toolStrip.AccessibilityObject, actual);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_Parent_IsNull(Type type)
+        {
+            using NoAssertContext context = new();
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment parent
+                = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+
+            Assert.True(parent is null);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_Siblings_AreNull(Type type)
+        {
+            using NoAssertContext context = new();
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment nextSibling
+                = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            UiaCore.IRawElementProviderFragment previousSibling
+                = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+
+            Assert.True(nextSibling is null);
+            Assert.True(previousSibling is null);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_ParentIsToolStrip_IfControlIsUsedAsToolStripItem(Type type)
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStrip toolStrip = new() { Size = new Drawing.Size(1000, 25) };
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            using ToolStripControlHost host = new(control);
+
+            toolStrip.CreateControl();
+            control.CreateControl();
+
+            if (!CanBeAddedToToolStrip(control))
+            {
+                // A number of controls can't be added to ToolStrip. Double verify it is still the case, and exit.
+                Assert.Throws<ArgumentException>(() => toolStrip.Items.Add(host));
+
+                return;
+            }
+
+            toolStrip.Items.Add(host);
+            ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+            host.SetPlacement(ToolStripItemPlacement.Main);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+            AccessibleObject expected = toolStrip.AccessibilityObject;
+
+            Assert.Equal(expected, actual);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_NextSibling_IsNextItem_IfControlIsUsedAsToolStripItem(Type type)
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStrip toolStrip = new() { Size = new Drawing.Size(1000, 25) };
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            using ToolStripControlHost host = new(control);
+            using ToolStripLabel label = new();
+            using ToolStripButton button = new();
+
+            toolStrip.CreateControl();
+            control.CreateControl();
+            toolStrip.Items.Add(label);
+
+            if (!CanBeAddedToToolStrip(control))
+            {
+                // A number of controls can't be added to ToolStrip. Double verify it is still the case, and exit.
+                Assert.Throws<ArgumentException>(() => toolStrip.Items.Add(host));
+
+                return;
+            }
+
+            toolStrip.Items.Add(host);
+            toolStrip.Items.Add(button);
+            ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+            host.SetPlacement(ToolStripItemPlacement.Main);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            AccessibleObject expected = button.AccessibilityObject;
+
+            Assert.Equal(expected, actual);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_FragmentNavigate_PreviousSibling_IsPreviousItem_IfControlIsUsedAsToolStripItem(Type type)
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStrip toolStrip = new() { Size = new Drawing.Size(1000, 25) };
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+            using ToolStripControlHost host = new(control);
+            using ToolStripLabel label = new();
+
+            toolStrip.CreateControl();
+            control.CreateControl();
+            toolStrip.Items.Add(label);
+
+            if (!CanBeAddedToToolStrip(control))
+            {
+                // A number of controls can't be added to ToolStrip. Double verify it is still the case, and exit.
+                Assert.Throws<ArgumentException>(() => toolStrip.Items.Add(host));
+
+                return;
+            }
+
+            toolStrip.Items.Add(host);
+            ((ToolStripItem)host).TestAccessor().Dynamic._parent = toolStrip;
+            host.SetPlacement(ToolStripItemPlacement.Main);
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
+            UiaCore.IRawElementProviderFragment actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            AccessibleObject expected = label.AccessibilityObject;
+
+            Assert.Equal(expected, actual);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
+        }
+
+        // ContextMenuStrip, From, ToolStripDropDown, ToolStripDropDownMenu
+        // are Top level controls that can't be added to a ToolStrip.
+        // A TabPage can be added to a TabControl only (see TabPage.AssignParent method).
+        private bool CanBeAddedToToolStrip(Control control)
+            => !(control is ContextMenuStrip
+                || control is Form
+                || control is ToolStripDropDown
+                || control is ToolStripDropDownMenu
+                || control is TabPage);
 
         private class AutomationLiveRegionControl : Control, IAutomationLiveRegion
         {

@@ -6,13 +6,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Drawing.Design.Tests
@@ -133,7 +132,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolboxItem_Company_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
@@ -209,7 +208,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolboxItem_Description_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
@@ -233,7 +232,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolboxItem_DisplayName_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem
@@ -289,7 +288,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolboxItem_IsTransient_Set_GetReturnsExpected(bool value)
         {
             var item = new ToolboxItem
@@ -344,7 +343,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolboxItem_TypeName_Set_GetReturnsExpected(string value, string expected)
         {
             var item = new ToolboxItem

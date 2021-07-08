@@ -434,7 +434,6 @@
 ~override System.Windows.Forms.DomainUpDown.OnChanged(object source, System.EventArgs e) -> void
 ~override System.Windows.Forms.DomainUpDown.OnTextBoxKeyPress(object source, System.Windows.Forms.KeyPressEventArgs e) -> void
 ~override System.Windows.Forms.DomainUpDown.ToString() -> string
-override System.Windows.Forms.DpiChangedEventArgs.ToString() -> string!
 ~override System.Windows.Forms.ErrorProvider.Site.set -> void
 ~override System.Windows.Forms.FileDialog.ToString() -> string
 ~override System.Windows.Forms.FlowLayoutPanel.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
@@ -1340,7 +1339,6 @@ override System.Windows.Forms.DpiChangedEventArgs.ToString() -> string!
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator, object param) -> System.Windows.Forms.DialogResult
 ~static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> System.Windows.Forms.NativeWindow
 ~static System.Windows.Forms.OSFeature.Feature.get -> System.Windows.Forms.OSFeature
-static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.OwnerDrawPropertyBag? value) -> System.Windows.Forms.OwnerDrawPropertyBag!
 ~static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalBar(System.Drawing.Graphics g, System.Drawing.Rectangle bounds) -> void
 ~static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalChunks(System.Drawing.Graphics g, System.Drawing.Rectangle bounds) -> void
 ~static System.Windows.Forms.ProgressBarRenderer.DrawVerticalBar(System.Drawing.Graphics g, System.Drawing.Rectangle bounds) -> void
@@ -1536,13 +1534,6 @@ static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.Owner
 ~System.Windows.Forms.Binding.NullValue.get -> object
 ~System.Windows.Forms.Binding.NullValue.set -> void
 ~System.Windows.Forms.Binding.PropertyName.get -> string
-System.Windows.Forms.BindingCompleteEventArgs.Binding.get -> System.Windows.Forms.Binding?
-System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context) -> void
-System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText) -> void
-System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText, System.Exception? exception) -> void
-System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText, System.Exception? exception, bool cancel) -> void
-System.Windows.Forms.BindingCompleteEventArgs.ErrorText.get -> string!
-System.Windows.Forms.BindingCompleteEventArgs.Exception.get -> System.Exception?
 ~System.Windows.Forms.BindingContext.Add(object dataSource, System.Windows.Forms.BindingManagerBase listManager) -> void
 ~System.Windows.Forms.BindingContext.Contains(object dataSource) -> bool
 ~System.Windows.Forms.BindingContext.Contains(object dataSource, string dataMember) -> bool
@@ -1676,6 +1667,7 @@ System.Windows.Forms.BindingCompleteEventArgs.Exception.get -> System.Exception?
 ~System.Windows.Forms.Control.AccessibleDescription.set -> void
 ~System.Windows.Forms.Control.AccessibleName.get -> string
 ~System.Windows.Forms.Control.AccessibleName.set -> void
+~System.Windows.Forms.Control.BeginInvoke(System.Action method) -> System.IAsyncResult
 ~System.Windows.Forms.Control.BeginInvoke(System.Delegate method) -> System.IAsyncResult
 ~System.Windows.Forms.Control.BeginInvoke(System.Delegate method, params object[] args) -> System.IAsyncResult
 ~System.Windows.Forms.Control.CompanyName.get -> string
@@ -1703,8 +1695,10 @@ System.Windows.Forms.BindingCompleteEventArgs.Exception.get -> System.Exception?
 ~System.Windows.Forms.Control.GetNextControl(System.Windows.Forms.Control ctl, bool forward) -> System.Windows.Forms.Control
 ~System.Windows.Forms.Control.Invalidate(System.Drawing.Region region) -> void
 ~System.Windows.Forms.Control.Invalidate(System.Drawing.Region region, bool invalidateChildren) -> void
+~System.Windows.Forms.Control.Invoke(System.Action method) -> void
 ~System.Windows.Forms.Control.Invoke(System.Delegate method) -> object
 ~System.Windows.Forms.Control.Invoke(System.Delegate method, params object[] args) -> object
+~System.Windows.Forms.Control.Invoke<T>(System.Func<T> method) -> T
 ~System.Windows.Forms.Control.InvokeGotFocus(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.InvokeLostFocus(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
 ~System.Windows.Forms.Control.InvokeOnClick(System.Windows.Forms.Control toInvoke, System.EventArgs e) -> void
@@ -1837,7 +1831,6 @@ System.Windows.Forms.BindingCompleteEventArgs.Exception.get -> System.Exception?
 ~System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.set -> void
 ~System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormattingEventArgs(int columnIndex, int rowIndex, object value, System.Type desiredType, System.Windows.Forms.DataGridViewCellStyle cellStyle) -> void
-System.Windows.Forms.DataGridViewCellMouseEventArgs.DataGridViewCellMouseEventArgs(int columnIndex, int rowIndex, int localX, int localY, System.Windows.Forms.MouseEventArgs? e) -> void
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.AdvancedBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.DataGridViewCellPaintingEventArgs(System.Windows.Forms.DataGridView dataGridView, System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, int columnIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
@@ -1845,9 +1838,6 @@ System.Windows.Forms.DataGridViewCellMouseEventArgs.DataGridViewCellMouseEventAr
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.FormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.Graphics.get -> System.Drawing.Graphics
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.Value.get -> object
-System.Windows.Forms.DataGridViewCellParsingEventArgs.DataGridViewCellParsingEventArgs(int rowIndex, int columnIndex, object? value, System.Type? desiredType, System.Windows.Forms.DataGridViewCellStyle? inheritedCellStyle) -> void
-System.Windows.Forms.DataGridViewCellParsingEventArgs.InheritedCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
-System.Windows.Forms.DataGridViewCellParsingEventArgs.InheritedCellStyle.set -> void
 ~System.Windows.Forms.DataGridViewCellStateChangedEventArgs.Cell.get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridViewCellStateChangedEventArgs.DataGridViewCellStateChangedEventArgs(System.Windows.Forms.DataGridViewCell dataGridViewCell, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
 ~System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
@@ -1867,8 +1857,6 @@ System.Windows.Forms.DataGridViewCellParsingEventArgs.InheritedCellStyle.set -> 
 ~System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.get -> string
 ~System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.set -> void
 ~System.Windows.Forms.DataGridViewCellValidatingEventArgs.FormattedValue.get -> object
-System.Windows.Forms.DataGridViewCellValueEventArgs.Value.get -> object?
-System.Windows.Forms.DataGridViewCellValueEventArgs.Value.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.get -> object
@@ -2550,9 +2538,6 @@ System.Windows.Forms.DataGridViewCellValueEventArgs.Value.set -> void
 ~System.Windows.Forms.OpenFileDialog.OpenFile() -> System.IO.Stream
 ~System.Windows.Forms.OpenFileDialog.SafeFileName.get -> string
 ~System.Windows.Forms.OpenFileDialog.SafeFileNames.get -> string[]
-System.Windows.Forms.OwnerDrawPropertyBag.Font.get -> System.Drawing.Font?
-System.Windows.Forms.OwnerDrawPropertyBag.Font.set -> void
-System.Windows.Forms.OwnerDrawPropertyBag.OwnerDrawPropertyBag(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 ~System.Windows.Forms.PageSetupDialog.Document.get -> System.Drawing.Printing.PrintDocument
 ~System.Windows.Forms.PageSetupDialog.Document.set -> void
 ~System.Windows.Forms.PageSetupDialog.MinMargins.get -> System.Drawing.Printing.Margins
@@ -2700,7 +2685,6 @@ System.Windows.Forms.OwnerDrawPropertyBag.OwnerDrawPropertyBag(System.Runtime.Se
 ~System.Windows.Forms.TabControl.TabPageCollection.Remove(System.Windows.Forms.TabPage value) -> void
 ~System.Windows.Forms.TabControl.TabPageCollection.TabPageCollection(System.Windows.Forms.TabControl owner) -> void
 ~System.Windows.Forms.TabControl.TabPages.get -> System.Windows.Forms.TabControl.TabPageCollection
-System.Windows.Forms.TableLayoutCellPaintEventArgs.TableLayoutCellPaintEventArgs(System.Drawing.Graphics! g, System.Drawing.Rectangle clipRectangle, System.Drawing.Rectangle cellBounds, int column, int row) -> void
 ~System.Windows.Forms.TableLayoutColumnStyleCollection.Add(System.Windows.Forms.ColumnStyle columnStyle) -> int
 ~System.Windows.Forms.TableLayoutColumnStyleCollection.Contains(System.Windows.Forms.ColumnStyle columnStyle) -> bool
 ~System.Windows.Forms.TableLayoutColumnStyleCollection.IndexOf(System.Windows.Forms.ColumnStyle columnStyle) -> int
@@ -4086,6 +4070,7 @@ override System.Windows.Forms.ContainerControl.ProcessCmdKey(ref System.Windows.
 override System.Windows.Forms.ContainerControl.ProcessDialogChar(char charCode) -> bool
 override System.Windows.Forms.ContainerControl.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.ContainerControl.ProcessMnemonic(char charCode) -> bool
+override System.Windows.Forms.ContainerControl.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 override System.Windows.Forms.ContainerControl.Select(bool directed, bool forward) -> void
 override System.Windows.Forms.ContainerControl.WndProc(ref System.Windows.Forms.Message m) -> void
 override System.Windows.Forms.ContextMenuStrip.Dispose(bool disposing) -> void
@@ -4311,6 +4296,7 @@ override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.RemoveAt(i
 override System.Windows.Forms.DomainUpDown.DownButton() -> void
 override System.Windows.Forms.DomainUpDown.UpButton() -> void
 override System.Windows.Forms.DomainUpDown.UpdateEditText() -> void
+override System.Windows.Forms.DpiChangedEventArgs.ToString() -> string!
 override System.Windows.Forms.ErrorProvider.Dispose(bool disposing) -> void
 override System.Windows.Forms.FileDialog.Reset() -> void
 override System.Windows.Forms.FolderBrowserDialog.Reset() -> void
@@ -4542,7 +4528,6 @@ override System.Windows.Forms.PropertyGrid.ForeColor.get -> System.Drawing.Color
 override System.Windows.Forms.PropertyGrid.ForeColor.set -> void
 override System.Windows.Forms.PropertyGrid.ProcessDialogKey(System.Windows.Forms.Keys keyData) -> bool
 override System.Windows.Forms.PropertyGrid.Refresh() -> void
-override System.Windows.Forms.PropertyGrid.RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew) -> void
 override System.Windows.Forms.PropertyGrid.ScaleCore(float dx, float dy) -> void
 override System.Windows.Forms.PropertyGrid.ShowFocusCues.get -> bool
 override System.Windows.Forms.PropertyGrid.WndProc(ref System.Windows.Forms.Message m) -> void
@@ -5134,6 +5119,7 @@ static System.Windows.Forms.InputLanguage.InstalledInputLanguages.get -> System.
 static System.Windows.Forms.LinkArea.operator !=(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
 static System.Windows.Forms.LinkArea.operator ==(System.Windows.Forms.LinkArea linkArea1, System.Windows.Forms.LinkArea linkArea2) -> bool
 static System.Windows.Forms.OSFeature.IsPresent(System.Windows.Forms.SystemParameter enumVal) -> bool
+static System.Windows.Forms.OwnerDrawPropertyBag.Copy(System.Windows.Forms.OwnerDrawPropertyBag? value) -> System.Windows.Forms.OwnerDrawPropertyBag!
 static System.Windows.Forms.ProfessionalColors.ButtonCheckedGradientBegin.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.ButtonCheckedGradientEnd.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.ButtonCheckedGradientMiddle.get -> System.Drawing.Color
@@ -6208,8 +6194,15 @@ System.Windows.Forms.BindingCompleteContext
 System.Windows.Forms.BindingCompleteContext.ControlUpdate = 0 -> System.Windows.Forms.BindingCompleteContext
 System.Windows.Forms.BindingCompleteContext.DataSourceUpdate = 1 -> System.Windows.Forms.BindingCompleteContext
 System.Windows.Forms.BindingCompleteEventArgs
+System.Windows.Forms.BindingCompleteEventArgs.Binding.get -> System.Windows.Forms.Binding?
 System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteContext.get -> System.Windows.Forms.BindingCompleteContext
+System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context) -> void
+System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText) -> void
+System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText, System.Exception? exception) -> void
+System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteEventArgs(System.Windows.Forms.Binding? binding, System.Windows.Forms.BindingCompleteState state, System.Windows.Forms.BindingCompleteContext context, string? errorText, System.Exception? exception, bool cancel) -> void
 System.Windows.Forms.BindingCompleteEventArgs.BindingCompleteState.get -> System.Windows.Forms.BindingCompleteState
+System.Windows.Forms.BindingCompleteEventArgs.ErrorText.get -> string!
+System.Windows.Forms.BindingCompleteEventArgs.Exception.get -> System.Exception?
 System.Windows.Forms.BindingCompleteEventHandler
 System.Windows.Forms.BindingCompleteState
 System.Windows.Forms.BindingCompleteState.DataError = 1 -> System.Windows.Forms.BindingCompleteState
@@ -7296,6 +7289,7 @@ System.Windows.Forms.DataGridViewCellFormattingEventArgs.RowIndex.get -> int
 System.Windows.Forms.DataGridViewCellFormattingEventHandler
 System.Windows.Forms.DataGridViewCellMouseEventArgs
 System.Windows.Forms.DataGridViewCellMouseEventArgs.ColumnIndex.get -> int
+System.Windows.Forms.DataGridViewCellMouseEventArgs.DataGridViewCellMouseEventArgs(int columnIndex, int rowIndex, int localX, int localY, System.Windows.Forms.MouseEventArgs? e) -> void
 System.Windows.Forms.DataGridViewCellMouseEventArgs.RowIndex.get -> int
 System.Windows.Forms.DataGridViewCellMouseEventHandler
 System.Windows.Forms.DataGridViewCellPaintingEventArgs
@@ -7311,6 +7305,9 @@ System.Windows.Forms.DataGridViewCellPaintingEventArgs.State.get -> System.Windo
 System.Windows.Forms.DataGridViewCellPaintingEventHandler
 System.Windows.Forms.DataGridViewCellParsingEventArgs
 System.Windows.Forms.DataGridViewCellParsingEventArgs.ColumnIndex.get -> int
+System.Windows.Forms.DataGridViewCellParsingEventArgs.DataGridViewCellParsingEventArgs(int rowIndex, int columnIndex, object? value, System.Type? desiredType, System.Windows.Forms.DataGridViewCellStyle? inheritedCellStyle) -> void
+System.Windows.Forms.DataGridViewCellParsingEventArgs.InheritedCellStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
+System.Windows.Forms.DataGridViewCellParsingEventArgs.InheritedCellStyle.set -> void
 System.Windows.Forms.DataGridViewCellParsingEventArgs.ParsingApplied.get -> bool
 System.Windows.Forms.DataGridViewCellParsingEventArgs.ParsingApplied.set -> void
 System.Windows.Forms.DataGridViewCellParsingEventArgs.RowIndex.get -> int
@@ -7362,6 +7359,8 @@ System.Windows.Forms.DataGridViewCellValueEventArgs
 System.Windows.Forms.DataGridViewCellValueEventArgs.ColumnIndex.get -> int
 System.Windows.Forms.DataGridViewCellValueEventArgs.DataGridViewCellValueEventArgs(int columnIndex, int rowIndex) -> void
 System.Windows.Forms.DataGridViewCellValueEventArgs.RowIndex.get -> int
+System.Windows.Forms.DataGridViewCellValueEventArgs.Value.get -> object?
+System.Windows.Forms.DataGridViewCellValueEventArgs.Value.set -> void
 System.Windows.Forms.DataGridViewCellValueEventHandler
 System.Windows.Forms.DataGridViewCheckBoxCell
 System.Windows.Forms.DataGridViewCheckBoxCell.DataGridViewCheckBoxCell() -> void
@@ -7887,11 +7886,13 @@ System.Windows.Forms.Design.WindowsFormsComponentEditor.WindowsFormsComponentEdi
 System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.Abort = 3 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.Cancel = 2 -> System.Windows.Forms.DialogResult
+System.Windows.Forms.DialogResult.Continue = 11 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.Ignore = 5 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.No = 7 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.None = 0 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.OK = 1 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.Retry = 4 -> System.Windows.Forms.DialogResult
+System.Windows.Forms.DialogResult.TryAgain = 10 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DialogResult.Yes = 6 -> System.Windows.Forms.DialogResult
 System.Windows.Forms.DockingAttribute
 System.Windows.Forms.DockingAttribute.DockingAttribute() -> void
@@ -9449,6 +9450,7 @@ System.Windows.Forms.MergeAction.Replace = 2 -> System.Windows.Forms.MergeAction
 System.Windows.Forms.MessageBox
 System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.AbortRetryIgnore = 2 -> System.Windows.Forms.MessageBoxButtons
+System.Windows.Forms.MessageBoxButtons.CancelTryContinue = 6 -> System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.OK = 0 -> System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.OKCancel = 1 -> System.Windows.Forms.MessageBoxButtons
 System.Windows.Forms.MessageBoxButtons.RetryCancel = 5 -> System.Windows.Forms.MessageBoxButtons
@@ -9458,6 +9460,7 @@ System.Windows.Forms.MessageBoxDefaultButton
 System.Windows.Forms.MessageBoxDefaultButton.Button1 = 0 -> System.Windows.Forms.MessageBoxDefaultButton
 System.Windows.Forms.MessageBoxDefaultButton.Button2 = 256 -> System.Windows.Forms.MessageBoxDefaultButton
 System.Windows.Forms.MessageBoxDefaultButton.Button3 = 512 -> System.Windows.Forms.MessageBoxDefaultButton
+System.Windows.Forms.MessageBoxDefaultButton.Button4 = 768 -> System.Windows.Forms.MessageBoxDefaultButton
 System.Windows.Forms.MessageBoxIcon
 System.Windows.Forms.MessageBoxIcon.Asterisk = 64 -> System.Windows.Forms.MessageBoxIcon
 System.Windows.Forms.MessageBoxIcon.Error = 16 -> System.Windows.Forms.MessageBoxIcon
@@ -9658,8 +9661,11 @@ System.Windows.Forms.OSFeature.OSFeature() -> void
 System.Windows.Forms.OwnerDrawPropertyBag
 System.Windows.Forms.OwnerDrawPropertyBag.BackColor.get -> System.Drawing.Color
 System.Windows.Forms.OwnerDrawPropertyBag.BackColor.set -> void
+System.Windows.Forms.OwnerDrawPropertyBag.Font.get -> System.Drawing.Font?
+System.Windows.Forms.OwnerDrawPropertyBag.Font.set -> void
 System.Windows.Forms.OwnerDrawPropertyBag.ForeColor.get -> System.Drawing.Color
 System.Windows.Forms.OwnerDrawPropertyBag.ForeColor.set -> void
+System.Windows.Forms.OwnerDrawPropertyBag.OwnerDrawPropertyBag(System.Runtime.Serialization.SerializationInfo! info, System.Runtime.Serialization.StreamingContext context) -> void
 System.Windows.Forms.PageSetupDialog
 System.Windows.Forms.PageSetupDialog.AllowMargins.get -> bool
 System.Windows.Forms.PageSetupDialog.AllowMargins.set -> void
@@ -10789,6 +10795,7 @@ System.Windows.Forms.TableLayoutCellPaintEventArgs
 System.Windows.Forms.TableLayoutCellPaintEventArgs.CellBounds.get -> System.Drawing.Rectangle
 System.Windows.Forms.TableLayoutCellPaintEventArgs.Column.get -> int
 System.Windows.Forms.TableLayoutCellPaintEventArgs.Row.get -> int
+System.Windows.Forms.TableLayoutCellPaintEventArgs.TableLayoutCellPaintEventArgs(System.Drawing.Graphics! g, System.Drawing.Rectangle clipRectangle, System.Drawing.Rectangle cellBounds, int column, int row) -> void
 System.Windows.Forms.TableLayoutCellPaintEventHandler
 System.Windows.Forms.TableLayoutColumnStyleCollection
 System.Windows.Forms.TableLayoutControlCollection

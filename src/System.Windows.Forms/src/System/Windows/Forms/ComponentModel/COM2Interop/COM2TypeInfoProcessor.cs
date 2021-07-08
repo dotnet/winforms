@@ -515,7 +515,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             string name = nameBstr.String.ToString();
             if (string.IsNullOrEmpty(name))
             {
-                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCEEDED(hr),  Component=" + cnd.GetClassName(typeInfo), dispid));
+                Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ITypeInfo::GetDocumentation didn't return a name for DISPID 0x{0:X} but returned SUCCEEDED(hr),  Component=" + cnd.GetClassName(typeInfo), dispid));
                 return null;
             }
 

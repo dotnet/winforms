@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -146,7 +146,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Appearance))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(Appearance))]
         public void CheckBox_Appearance_Set_GetReturnsExpected(Appearance value)
         {
             using var control = new CheckBox
@@ -163,7 +163,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Appearance))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(Appearance))]
         public void CheckBox_Appearance_SetInvalidValue_ThrowsInvalidEnumArgumentException(Appearance value)
         {
             using var control = new CheckBox();
@@ -189,7 +189,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
         public void CheckBox_CheckAlign_Set_GetReturnsExpected(ContentAlignment value)
         {
             using var control = new CheckBox
@@ -206,7 +206,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
         public void CheckBox_CheckAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
         {
             using var control = new CheckBox();
@@ -271,7 +271,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
         public void CheckBox_CheckState_Set_GetReturnsExpected(CheckState value)
         {
             using var control = new CheckBox
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
         public void CheckBox_CheckState_SetInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
         {
             using var control = new CheckBox();
@@ -298,7 +298,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ContentAlignment))]
         public void CheckBox_TextAlign_Set_GetReturnsExpected(ContentAlignment value)
         {
             using var control = new CheckBox
@@ -315,7 +315,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
         public void CheckBox_TextAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
         {
             using var control = new CheckBox();

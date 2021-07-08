@@ -1388,7 +1388,7 @@ namespace System.Windows.Forms
                 // events on the control.
 
                 // Note: SuggestedRectangle supplied  by WM_DPICHANGED event is Dpi (not Font) scaled. if top-level window is
-                // Font scaled, we might see deviations in the expected bounds and may result in adding Scrollbars (horizantal/vertical)
+                // Font scaled, we might see deviations in the expected bounds and may result in adding Scrollbars (horizontal/vertical)
                 User32.SetWindowPos(
                     new HandleRef(this, HandleInternal),
                     User32.HWND_TOP,

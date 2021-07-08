@@ -66,8 +66,6 @@ namespace System.Windows.Forms
             {
                 switch (direction)
                 {
-                    case UiaCore.NavigateDirection.Parent:
-                        return null;
                     case UiaCore.NavigateDirection.FirstChild:
                         return GetChildFragment(0);
                     case UiaCore.NavigateDirection.LastChild:

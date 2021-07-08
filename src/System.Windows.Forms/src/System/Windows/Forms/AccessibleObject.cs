@@ -451,6 +451,8 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.ToggleState ToggleState => UiaCore.ToggleState.Indeterminate;
 
+        private protected virtual UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot => null;
+
         internal virtual UiaCore.IRawElementProviderSimple[]? GetRowHeaders() => null;
 
         internal virtual UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
@@ -657,7 +659,13 @@ namespace System.Windows.Forms
 
         UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle => new UiaCore.UiaRect(BoundingRectangle);
 
-        UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot => FragmentRoot;
+        // An accessible object should provide info about its correct root object,
+        // even its owner is used like a ToolStrip item via ToolStripControlHost.
+        // This change was made here to not to rework FragmentRoot implementations
+        // for all accessible object. Moreover, this change will work for new accessible object
+        // classes, where it is enough to implement FragmentRoot for a common case.
+        UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot
+            => ToolStripFragmentRoot ?? FragmentRoot;
 
         object? UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
 

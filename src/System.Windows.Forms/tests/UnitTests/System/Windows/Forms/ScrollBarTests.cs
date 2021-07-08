@@ -5,8 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -132,7 +131,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar();
@@ -196,7 +195,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void ScrollBar_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubScrollBar
@@ -248,7 +247,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void ScrollBar_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new SubScrollBar
@@ -307,7 +306,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ScrollBar_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubScrollBar
@@ -359,7 +358,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void ScrollBar_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new SubScrollBar();
@@ -367,7 +366,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar
@@ -389,7 +388,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_Enabled_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar();
@@ -484,7 +483,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ScrollBar_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubScrollBar
@@ -545,7 +544,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void ScrollBar_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new SubScrollBar
@@ -626,7 +625,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void ScrollBar_ImeMode_Set_GetReturnsExpected(ImeMode value)
         {
             using var control = new SubScrollBar
@@ -678,7 +677,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void ScrollBar_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new SubScrollBar();
@@ -1184,7 +1183,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ScrollBar_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new SubScrollBar
@@ -1236,7 +1235,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void ScrollBar_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
             using var control = new SubScrollBar();
@@ -1244,7 +1243,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_ScaleScrollBarForDpiChange_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar
@@ -1381,7 +1380,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar
@@ -1403,7 +1402,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollBar();
@@ -1478,7 +1477,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ScrollBar_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubScrollBar
@@ -1495,7 +1494,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ScrollBar_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubScrollBar();
@@ -1901,7 +1900,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -1925,7 +1924,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -1949,7 +1948,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnEnabledChanged_Invoke_CallsEnabled(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -1975,7 +1974,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnEnabledChanged_InvokeWithHandle_CallsEnabledChanged(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2014,7 +2013,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2040,7 +2039,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2067,7 +2066,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2091,7 +2090,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2115,7 +2114,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2139,7 +2138,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2163,7 +2162,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2187,7 +2186,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void ScrollBar_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2500,7 +2499,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void ScrollBar_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2554,7 +2553,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollBar_OnValueChanged_Invoke_CallsValueChanged(EventArgs eventArgs)
         {
             using var control = new SubScrollBar();
@@ -2639,7 +2638,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_NoHandle_Success(bool enabled)
         {
             using var control = new SubScrollBar
@@ -2651,7 +2650,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_WithHandle_Success(bool enabled)
         {
             using var control = new SubScrollBar
@@ -2674,7 +2673,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollBar_UpdateScrollInfo_WithHandleRightToLeft_Success(bool enabled)
         {
             using var control = new SubScrollBar

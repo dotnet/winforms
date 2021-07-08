@@ -32,7 +32,7 @@ namespace System.Windows.Forms
         private static readonly object s_eventBindingComplete = new object();
         private static readonly object s_eventCurrentChanged = new object();
         private static readonly object s_eventCurrentItemChanged = new object();
-        private static readonly object s_eventDataErrror = new object();
+        private static readonly object s_eventDataError = new object();
         private static readonly object s_eventDataMemberChanged = new object();
         private static readonly object s_eventDataSourceChanged = new object();
         private static readonly object s_eventListChanged = new object();
@@ -427,8 +427,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceDataErrorEventHandlerDescr))]
         public event BindingManagerDataErrorEventHandler DataError
         {
-            add => Events.AddHandler(s_eventDataErrror, value);
-            remove => Events.RemoveHandler(s_eventDataErrror, value);
+            add => Events.AddHandler(s_eventDataError, value);
+            remove => Events.RemoveHandler(s_eventDataError, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
@@ -843,7 +843,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDataError(BindingManagerDataErrorEventArgs e)
         {
-            BindingManagerDataErrorEventHandler eh = Events[s_eventDataErrror] as BindingManagerDataErrorEventHandler;
+            BindingManagerDataErrorEventHandler eh = Events[s_eventDataError] as BindingManagerDataErrorEventHandler;
             eh?.Invoke(this, e);
         }
 

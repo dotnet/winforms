@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">다음 기간으로 이동</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">이전 기간으로 이동</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">오늘 날짜로 이동하여 선택합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -1242,7 +1242,7 @@
         <target state="translated">상황에 맞는 메뉴 스트립을 표시한 마지막 컨트롤입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">컨트롤의 액세스 가능한 개체가 잘못된 상태입니다.</target>
         <note />
@@ -4764,7 +4764,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">로드된 어셈블리</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4773,7 +4773,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -6481,14 +6481,14 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">삽입 표시 특성의 변경을 허용합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">현재 접근성 개체는 {0} 보기의 ListView에만 해당됩니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">현재 접근성 개체는 {0}, {1} 또는 {2} 보기의 ListView에만 해당됩니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">{0}주</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -11063,7 +11063,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">{0}은(는) 응용 프로그램에 첫 번째 IWin32Window 개체가 만들어지기 전에 호출해야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

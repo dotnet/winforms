@@ -1303,13 +1303,8 @@ namespace System.Windows.Forms
             }
 
             Color color;
-            if (Enabled && SystemInformation.HighContrast)
+            using (var hdc = new DeviceContextHdcScope(e))
             {
-                color = SystemColors.WindowText;
-            }
-            else
-            {
-                using var hdc = new DeviceContextHdcScope(e);
                 color = hdc.FindNearestColor(Enabled ? ForeColor : DisabledColor);
             }
 

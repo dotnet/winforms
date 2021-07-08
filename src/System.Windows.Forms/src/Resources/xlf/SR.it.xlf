@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">Vai all'intervallo di tempo successivo</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">Vai all'intervallo di tempo precedente</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">Vai alla data odierna e selezionala</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -824,7 +824,7 @@
       </trans-unit>
       <trans-unit id="CheckBoxAutoCheckDescr">
         <source>Causes the check box to automatically change state when clicked.</source>
-        <target state="translated">Comporta il cambiamento automatico dello stato della casella di controllo quando  si fa clic su di essa.</target>
+        <target state="translated">Comporta il cambiamento automatico dello stato della casella di controllo quando si fa clic su di essa.</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxCheckAlignDescr">
@@ -1242,7 +1242,7 @@
         <target state="translated">Ultimo controllo che ha causato la visualizzazione di questo elenco di menu di scelta rapida.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">L'oggetto accessibile del controllo si trova in uno stato non valido.</target>
         <note />
@@ -4764,7 +4764,7 @@ sono riportate in fondo al messaggio.
         <target state="translated">Assembly caricati</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4773,7 +4773,7 @@ sono riportate in fondo al messaggio.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -5229,7 +5229,7 @@ Sostituirlo?</target>
       </trans-unit>
       <trans-unit id="FormMinimizeBoxDescr">
         <source>Determines whether a form has a minimize box in the upper-right corner of its caption bar.</source>
-        <target state="translated">Determina se un form dispone di un pulsante di riduzione a icona  nella parte superiore destra della barra del titolo.</target>
+        <target state="translated">Determina se un form dispone di un pulsante di riduzione a icona nella parte superiore destra della barra del titolo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMinimumSizeDescr">
@@ -6481,14 +6481,14 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Consente la modifica di attributi dei segni di inserimento.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">L'oggetto accessibilità corrente viene usato solo per il controllo ListView nella visualizzazione {0}</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">L'oggetto accessibilità corrente viene usato solo per il controllo ListView nella visualizzazione {0}, {1} o {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -6513,7 +6513,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ListViewItemImageKeyDescr">
         <source>The key in the image-list value that represents the image to display. when the list view item is in the unselected state.</source>
-        <target state="translated">La chiave nel valore del componente ImageList che rappresenta l'immagine da visualizzare quando l'elemento  del controllo ListView non è selezionato.</target>
+        <target state="translated">La chiave nel valore del componente ImageList che rappresenta l'immagine da visualizzare quando l'elemento del controllo ListView non è selezionato.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemIndentCountDescr">
@@ -7103,7 +7103,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">Settimana {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -8718,7 +8718,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
-        <target state="translated">Ottiene la barra di scorrimento orizzontale per  ScrollableControl corrente.</target>
+        <target state="translated">Ottiene la barra di scorrimento orizzontale per ScrollableControl corrente.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
@@ -9023,7 +9023,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="TabBaseShowToolTipsDescr">
         <source>Indicates whether ToolTips should be shown for tabs that have their ToolTips set.</source>
-        <target state="translated">Indica se devono essere visualizzati componenti ToolTip per le schede per le quali è stato  definito un componente ToolTip.</target>
+        <target state="translated">Indica se devono essere visualizzati componenti ToolTip per le schede per le quali è stato definito un componente ToolTip.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabBaseSizeModeDescr">
@@ -11063,7 +11063,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">{0} deve essere chiamato prima della creazione del primo oggetto IWin32Window nell'applicazione.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

@@ -5748,11 +5748,26 @@ namespace System.Windows.Forms
             var lvgroup = new LVGROUPW
             {
                 cbSize = (uint)sizeof(LVGROUPW),
-                mask = LVGF.HEADER | LVGF.FOOTER | LVGF.ALIGN | LVGF.STATE | LVGF.SUBTITLE | LVGF.TASK | LVGF.TITLEIMAGE | additionalMask,
+                mask = LVGF.HEADER | LVGF.ALIGN | LVGF.STATE | LVGF.TITLEIMAGE | additionalMask,
                 cchHeader = header.Length,
                 iTitleImage = -1,
                 iGroupId = group.ID
             };
+
+            if (subtitle.Length != 0)
+            {
+                lvgroup.mask |= LVGF.SUBTITLE;
+            }
+
+            if (task.Length != 0)
+            {
+                lvgroup.mask |= LVGF.TASK;
+            }
+
+            if (footer.Length != 0)
+            {
+                lvgroup.mask |= LVGF.FOOTER;
+            }
 
             if (group.CollapsedState != ListViewGroupCollapsedState.Default)
             {
@@ -5786,25 +5801,36 @@ namespace System.Windows.Forms
             fixed (char* pHeader = header)
             fixed (char* pFooter = footer)
             {
-                lvgroup.cchFooter = footer.Length;
-                lvgroup.pszFooter = pFooter;
-                switch (group.FooterAlignment)
+                if (footer.Length != 0)
                 {
-                    case HorizontalAlignment.Left:
-                        lvgroup.uAlign |= LVGA.FOOTER_LEFT;
-                        break;
-                    case HorizontalAlignment.Right:
-                        lvgroup.uAlign |= LVGA.FOOTER_RIGHT;
-                        break;
-                    case HorizontalAlignment.Center:
-                        lvgroup.uAlign |= LVGA.FOOTER_CENTER;
-                        break;
+                    lvgroup.cchFooter = footer.Length;
+                    lvgroup.pszFooter = pFooter;
+                    switch (group.FooterAlignment)
+                    {
+                        case HorizontalAlignment.Left:
+                            lvgroup.uAlign |= LVGA.FOOTER_LEFT;
+                            break;
+                        case HorizontalAlignment.Right:
+                            lvgroup.uAlign |= LVGA.FOOTER_RIGHT;
+                            break;
+                        case HorizontalAlignment.Center:
+                            lvgroup.uAlign |= LVGA.FOOTER_CENTER;
+                            break;
+                    }
                 }
 
-                lvgroup.cchSubtitle = (uint)subtitle.Length;
-                lvgroup.pszSubtitle = pSubtitle;
-                lvgroup.cchTask = (uint)task.Length;
-                lvgroup.pszTask = pTask;
+                if (subtitle.Length != 0)
+                {
+                    lvgroup.cchSubtitle = (uint)subtitle.Length;
+                    lvgroup.pszSubtitle = pSubtitle;
+                }
+
+                if (task.Length != 0)
+                {
+                    lvgroup.cchTask = (uint)task.Length;
+                    lvgroup.pszTask = pTask;
+                }
+
                 lvgroup.pszHeader = pHeader;
                 return User32.SendMessageW(this, (User32.WM)msg, lParam, ref lvgroup);
             }
@@ -6356,10 +6382,10 @@ namespace System.Windows.Forms
             }
 
             // check if group header was double clicked
-            bool groupHeaderDblClked = lvhi.flags == LVHT.EX_GROUP_HEADER && clickType == User32.WM.LBUTTONDBLCLK;
+            bool groupHeaderDblClicked = lvhi.flags == LVHT.EX_GROUP_HEADER && clickType == User32.WM.LBUTTONDBLCLK;
             // check if chevron was clicked
-            bool chevronClked = (lvhi.flags & LVHT.EX_GROUP_COLLAPSE) == LVHT.EX_GROUP_COLLAPSE && clickType == User32.WM.LBUTTONUP;
-            if (!groupHeaderDblClked && !chevronClked)
+            bool chevronClicked = (lvhi.flags & LVHT.EX_GROUP_COLLAPSE) == LVHT.EX_GROUP_COLLAPSE && clickType == User32.WM.LBUTTONUP;
+            if (!groupHeaderDblClicked && !chevronClicked)
             {
                 return groupID;
             }
@@ -6447,7 +6473,7 @@ namespace System.Windows.Forms
                     {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
                         NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
-                        var text = new string(dispInfo->item.pszText);
+                        string text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);
                         LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem, text);
                         OnAfterLabelEdit(e);
                         m.Result = (IntPtr)(e.CancelEdit ? 0 : 1);

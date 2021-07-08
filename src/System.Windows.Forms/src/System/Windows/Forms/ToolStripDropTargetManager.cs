@@ -56,14 +56,14 @@ namespace System.Windows.Forms
             {
                 if (owner.Items[i].AllowDrop)
                 {
-                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "An item still has allowdrop set to true - cant unregister");
+                    Debug.WriteLineIf(DragDropDebug.TraceVerbose, "An item still has allowdrop set to true - can't unregister");
                     return; // can't unregister this as a drop target unless everyone is done.
                 }
             }
 
             if (owner.AllowDrop || owner.AllowItemReorder)
             {
-                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "The ToolStrip has AllowDrop or AllowItemReorder set to true - cant unregister");
+                Debug.WriteLineIf(DragDropDebug.TraceVerbose, "The ToolStrip has AllowDrop or AllowItemReorder set to true - can't unregister");
                 return;  // can't unregister this as a drop target if ToolStrip is still accepting drops
             }
 

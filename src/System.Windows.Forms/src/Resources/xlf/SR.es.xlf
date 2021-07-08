@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">Ir al siguiente período de tiempo</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">Ir al anterior período de tiempo</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">Ir a la fecha de hoy y seleccionarla</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -1242,7 +1242,7 @@
         <target state="translated">Último control que hizo que se mostrara la franja de menús contextuales.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">El objeto al que se puede tener acceso del control está en un estado no válido.</target>
         <note />
@@ -2339,7 +2339,7 @@
       </trans-unit>
       <trans-unit id="DataGridViewColumn_DisplayIndexTooNegative">
         <source>The DisplayIndex property of a detached DataGridViewColumn cannot be smaller than -1.</source>
-        <target state="translated">La propiedad DisplayIndex de un DataGridViewColumn desasociado no puede ser menor que  -1.</target>
+        <target state="translated">La propiedad DisplayIndex de un DataGridViewColumn desasociado no puede ser menor que -1.</target>
         <note />
       </trans-unit>
       <trans-unit id="DataGridViewColumn_FillWeightDescr">
@@ -4764,7 +4764,7 @@ Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
         <target state="translated">Ensamblados cargados</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4773,7 +4773,7 @@ Just-In-Time (JIT) en lugar de a este cuadro de diálogo.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -6481,14 +6481,14 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Permite que se cambien los atributos de marca de inserción.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">El objeto de accesibilidad actual solo es para la vista ListView {0} vista</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">El objeto de accesibilidad actual solo es para la vista ListView en {0}, {1} o {2} Vista</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">Semana {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -11063,7 +11063,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">Se debe llamar a {0} antes de crear el primer objeto IWin32Window en la aplicación.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

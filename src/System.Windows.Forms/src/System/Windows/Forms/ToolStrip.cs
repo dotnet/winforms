@@ -14,7 +14,9 @@ using System.Drawing.Drawing2D;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Text;
+#if DEBUG
 using System.Text.RegularExpressions;
+#endif
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
@@ -2490,7 +2492,7 @@ namespace System.Windows.Forms
             return prefSize + newPadding.Size;
         }
 
-        #region GetPreferredSizeHelpers
+#region GetPreferredSizeHelpers
 
         //
         // These are here so they can be shared between splitstack layout and StatusStrip
@@ -2625,7 +2627,7 @@ namespace System.Windows.Forms
         {
             return item.AutoSize ? item.GetPreferredSize(Size.Empty) : item.Size;
         }
-        #endregion
+#endregion
 
         internal ToolStripItem GetSelectedItem()
         {
@@ -4079,6 +4081,18 @@ namespace System.Windows.Forms
                         _toolStripGrip.ToolStrip_RescaleConstants(deviceDpiOld, deviceDpiNew);
                     }
 
+                    // ToolStripItems are components and have Font property. Components do not receive WM_DPICHANGED messages, nor they have
+                    // parent-child relationship with owners and, thus, do not get scaled by parent/Container. For these reasons, they need the font
+                    // to be explicitly updated when Dpi changes (only if the font was set explicitly).
+                    var factor = (float)deviceDpiNew / deviceDpiOld;
+                    foreach (ToolStripItem item in Items)
+                    {
+                        if (item.TryGetExplicitlySetFont(out Font local))
+                        {
+                            item.Font = local.WithSize(local.Size * factor);
+                        }
+                    }
+
                     // We need to delegate this "event" to the Controls/Components, which are
                     // not directly affected by this, but need to consume.
                     _rescaleConstsCallbackDelegate?.Invoke(deviceDpiOld, deviceDpiNew);
@@ -4347,12 +4361,12 @@ namespace System.Windows.Forms
             GripMargin = Grip.DefaultMargin;
         }
 
-        internal void ResumeCaputureMode()
+        internal void ResumeCaptureMode()
         {
             SetToolStripState(STATE_SUSPENDCAPTURE, false);
         }
 
-        internal void SuspendCaputureMode()
+        internal void SuspendCaptureMode()
         {
             SetToolStripState(STATE_SUSPENDCAPTURE, true);
         }

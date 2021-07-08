@@ -6,7 +6,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -341,7 +341,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void Ctor_Object_String_IBindingList(string dataMember)
         {
             PropertyDescriptor sortProperty = TypeDescriptor.GetProperties(typeof(DataClass))[0];
@@ -448,7 +448,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void Ctor_Object_String_ICurrencyManagerProvider(string dataMember)
         {
             var mockCurrencyManagerProvider = new Mock<ICurrencyManagerProvider>(MockBehavior.Strict);

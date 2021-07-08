@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -53,7 +53,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolTipIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolTipIcon))]
         public void NotifyIcon_BalloonTipIcon_Set_GetReturnsExpected(ToolTipIcon value)
         {
             var notifyIcon = new NotifyIcon
@@ -68,7 +68,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
         public void NotifyIcon_BalloonTipIcon_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolTipIcon value)
         {
             var notifyIcon = new NotifyIcon();
@@ -76,7 +76,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_BalloonTipText_Set_GetReturnsExpected(string value)
         {
             using var notifyIcon = new NotifyIcon
@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_BalloonTipText_SetWithCustomOldValue_GetReturnsExpected(string value)
         {
             using var notifyIcon = new NotifyIcon
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_BalloonTipTitle_Set_GetReturnsExpected(string value)
         {
             using var notifyIcon = new NotifyIcon
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_BalloonTipTitle_SetWithCustomOldValue_GetReturnsExpected(string value)
         {
             using var notifyIcon = new NotifyIcon
@@ -316,7 +316,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void CollectionForm_Tag_Set_GetReturnsExpected(object value)
         {
             using var notifyIcon = new NotifyIcon
@@ -454,7 +454,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void NotifyIcon_Visible_Set_GetReturnsExpected(bool value)
         {
             using var notifyIcon = new NotifyIcon
@@ -473,7 +473,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void NotifyIcon_Visible_SetWithIcon_GetReturnsExpected(bool value)
         {
             using var icon = new Icon("bitmaps/10x16_one_entry_32bit.ico");
@@ -558,7 +558,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void NotifyIcon_Visible_SetDisposed_ThrowsNullReferenceException(bool value)
         {
             using var notifyIcon = new NotifyIcon
@@ -959,7 +959,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void NotifyIcon_ShowBalloonTip_InvokeInvalidText_ThrowsArgumentException(string tipText)
         {
             using var notifyIcon = new NotifyIcon
@@ -971,7 +971,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
         public void NotifyIcon_ShowBalloonTip_InvokeInvalidTipIcon_ThrowsInvalidEnumArgumentException(ToolTipIcon tipIcon)
         {
             using var notifyIcon = new NotifyIcon();

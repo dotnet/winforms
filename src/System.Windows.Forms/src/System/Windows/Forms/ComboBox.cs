@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         private bool _fireSetFocus = true;
         private bool _fireLostFocus = true;
         private bool _mouseOver;
-        private bool _suppressNextWindosPos;
+        private bool _suppressNextWindowsPos;
         private bool _canFireLostFocus;
 
         // When the user types a letter and drops the dropdown the combobox itself auto-searches the matching item and
@@ -3980,19 +3980,19 @@ namespace System.Windows.Forms
                 case WM.SETFONT:
                     if (Width == 0)
                     {
-                        _suppressNextWindosPos = true;
+                        _suppressNextWindowsPos = true;
                     }
 
                     base.WndProc(ref m);
                     break;
 
                 case WM.WINDOWPOSCHANGED:
-                    if (!_suppressNextWindosPos)
+                    if (!_suppressNextWindowsPos)
                     {
                         base.WndProc(ref m);
                     }
 
-                    _suppressNextWindosPos = false;
+                    _suppressNextWindowsPos = false;
                     break;
 
                 case WM.NCDESTROY:

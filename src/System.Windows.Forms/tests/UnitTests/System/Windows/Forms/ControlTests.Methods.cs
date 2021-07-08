@@ -11,7 +11,7 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.User32;
@@ -116,7 +116,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_BringToFront_InvokeWithoutHandleWithoutParent_Nop(bool topLevel)
         {
             using var control = new SubControl();
@@ -475,7 +475,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_CreateControl_InvokeWithText_Success(string text, string expectedText)
         {
             using var control = new SubControl
@@ -522,7 +522,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_CreateControl_InvokeWithHandleWithText_Success(string text, string expectedText)
         {
             using var control = new SubControl
@@ -624,7 +624,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_CreateHandle_Invoke_Success(bool resizeRedraw)
         {
             using var control = new SubControl();
@@ -662,7 +662,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_CreateHandle_InvokeWithText_Success(string text, string expectedText)
         {
             using var control = new SubControl
@@ -2114,7 +2114,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(GetChildAtPointSkip))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(GetChildAtPointSkip))]
         public void Control_GetChildAtPoint_Invoke_ReturnsExpected(GetChildAtPointSkip skipValue)
         {
             using var control = new Control();
@@ -3006,7 +3006,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Invalidate_Invoke_Success(bool opaque)
         {
             using var control = new SubControl();
@@ -3024,7 +3024,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Invalidate_InvokeWithHandle_Success(bool opaque)
         {
             using var control = new SubControl
@@ -3060,7 +3060,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Invalidate_InvokeWithChildrenWithHandle_Success(bool opaque)
         {
             using var child = new SubControl
@@ -3869,6 +3869,142 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void Control_Invoke_Action_calls_correct_method()
+        {
+            using var control = new Control();
+            control.CreateControl();
+
+            DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() => control.Invoke(() => FaultingMethod()));
+
+            /*
+            Expecting something like the following.
+            The first frame must be the this method, followed by MarshaledInvoke at previous location.
+
+                at System.Windows.Forms.Tests.ControlTests.<Control_Invoke_Action_calls_correct_method>g__FaultingMethod|410_1() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3902
+                   at System.Windows.Forms.Tests.ControlTests.<>c.<Control_Invoke_Action_calls_correct_method>b__410_2() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3877
+                   at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6515
+                   at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6487
+                   at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6459
+                   at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6563
+                --- End of stack trace from previous location ---
+                   at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6951
+                   at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6413
+                   at System.Windows.Forms.Control.Invoke(Action method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6376
+                   at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass410_0.<Control_Invoke_Action_calls_correct_method>b__0() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3877
+                   at Xunit.Assert.RecordException(Action testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 27
+            */
+            Assert.Contains(nameof(FaultingMethod), exception.StackTrace);
+            Assert.Contains(" System.Windows.Forms.Control.Invoke(Action method) ", exception.StackTrace);
+
+            static void FaultingMethod()
+            {
+                throw new DivideByZeroException();
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Invoke_Delegate_Func_calls_correct_method()
+        {
+            using var control = new Control();
+            control.CreateControl();
+
+            DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() =>
+            {
+                int result = (int)control.Invoke((Delegate)(new Func<float>(() => FaultingMethod(10))));
+            });
+
+            /*
+            Expecting something like the following.
+            The first frame must be the this method, followed by MarshaledInvoke at previous location.
+
+                at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>g__FaultingMethod|412_1() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3945
+                    at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
+                    at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6376
+                    at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6348
+                    at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
+                --- End of stack trace from previous location ---
+                    at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
+                    at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
+                    at System.Windows.Forms.Control.Invoke(Delegate method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
+                    at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass412_0.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>b__0() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3915
+                    at Xunit.Assert.RecordException(Func`1 testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 50
+            */
+            Assert.Contains(nameof(FaultingMethod), exception.StackTrace);
+            Assert.Contains(" System.Windows.Forms.Control.Invoke(Delegate method) ", exception.StackTrace);
+
+            static int FaultingMethod(int a)
+            {
+                return a / 0;
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Invoke_Delegate_MethodInvoker_calls_correct_method()
+        {
+            using var control = new Control();
+            control.CreateControl();
+
+            DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() => control.Invoke((MethodInvoker)FaultingMethod));
+
+            /*
+            Expecting something like the following.
+            The first frame must be the this method, followed by MarshaledInvoke at previous location.
+
+                at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>g__FaultingMethod|412_1() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3945
+                    at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
+                    at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6376
+                    at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6348
+                    at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
+                --- End of stack trace from previous location ---
+                    at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
+                    at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
+                    at System.Windows.Forms.Control.Invoke(Delegate method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
+                    at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass412_0.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>b__0() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3915
+                    at Xunit.Assert.RecordException(Func`1 testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 50
+            */
+            Assert.Contains(nameof(FaultingMethod), exception.StackTrace);
+            Assert.Contains(" System.Windows.Forms.Control.Invoke(Delegate method) ", exception.StackTrace);
+
+            static void FaultingMethod()
+            {
+                throw new DivideByZeroException();
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_Invoke_Func_calls_correct_method()
+        {
+            using var control = new Control();
+            control.CreateControl();
+
+            DivideByZeroException exception = Assert.Throws<DivideByZeroException>(() =>
+            {
+                int result = control.Invoke(() => FaultingMethod(10));
+            });
+
+            /*
+            Expecting something like the following.
+            The first frame must be the this method, followed by MarshaledInvoke at previous location.
+
+                at System.Windows.Forms.Tests.ControlTests.<Control_Invoke_Func_calls_correct_method>g__FaultingMethod|412_1(Int32 a) in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3976
+                   at System.Windows.Forms.Tests.ControlTests.<>c.<Control_Invoke_Func_calls_correct_method>b__412_2() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3950
+                --- End of stack trace from previous location ---
+                   at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6951
+                   at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6413
+                   at System.Windows.Forms.Control.Invoke[T](Func`1 method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6422
+                   at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass412_0.<Control_Invoke_Func_calls_correct_method>b__0() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3950
+                   at Xunit.Assert.RecordException(Action testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 27
+            */
+            Assert.Contains(nameof(FaultingMethod), exception.StackTrace);
+            Assert.Contains(" System.Windows.Forms.Control.Invoke[T](Func`1 method) ", exception.StackTrace);
+
+            static int FaultingMethod(int a)
+            {
+                return a / 0;
+            }
+        }
+
+        [WinFormsFact]
         public void Control_InvokeDelegateObjectSameThread_Success()
         {
             using var control = new Control();
@@ -3934,16 +4070,16 @@ namespace System.Windows.Forms.Tests
             Expecting something like the following.
             The first frame must be the this method, followed by MarshaledInvoke at previous location.
 
-                    at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>g__FaultingMethod|412_1() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3945
-                           at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
-                           at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6376
-                           at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6348
-                           at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
+                    at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>g__FaultingMethod|412_1() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3945
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6376
+                           at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6348
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
                         --- End of stack trace from previous location ---
-                           at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
-                           at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
-                           at System.Windows.Forms.Control.Invoke(Delegate method) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
-                           at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass412_0.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>b__0() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3915
+                           at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
+                           at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
+                           at System.Windows.Forms.Control.Invoke(Delegate method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
+                           at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass412_0.<Control_InvokeDelegateObjectThrowsExceptionSameThread_VerifyStackTrace>b__0() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3915
                            at Xunit.Assert.RecordException(Func`1 testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 50
 
             */
@@ -4001,20 +4137,20 @@ namespace System.Windows.Forms.Tests
                 Expecting something like the following.
                 The first frame must be the this method, followed by MarshaledInvoke at previous location.
 
-                    at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace>g__FaultingMethod|413_1() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3969
-                           at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
-                           at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6367
+                    at System.Windows.Forms.Tests.ControlTests.<Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace>g__FaultingMethod|413_1() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3969
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackDo(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6400
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbackHelper(Object obj) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6367
                            at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
                         --- End of stack trace from previous location ---
                            at System.Threading.ExecutionContext.RunInternal(ExecutionContext executionContext, ContextCallback callback, Object state)
                            at System.Threading.ExecutionContext.Run(ExecutionContext executionContext, ContextCallback callback, Object state)
-                           at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6344
-                           at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
+                           at System.Windows.Forms.Control.InvokeMarshaledCallback(ThreadMethodEntry tme) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6344
+                           at System.Windows.Forms.Control.InvokeMarshaledCallbacks() in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6448
                         --- End of stack trace from previous location ---
-                           at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
-                           at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
-                           at System.Windows.Forms.Control.Invoke(Delegate method) in C:\Development\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
-                           at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass413_0.<Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace>b__2() in C:\Development\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3947
+                           at System.Windows.Forms.Control.MarshaledInvoke(Control caller, Delegate method, Object[] args, Boolean synchronous) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6829
+                           at System.Windows.Forms.Control.Invoke(Delegate method, Object[] args) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6310
+                           at System.Windows.Forms.Control.Invoke(Delegate method) in ...\winforms\src\System.Windows.Forms\src\System\Windows\Forms\Control.cs:line 6290
+                           at System.Windows.Forms.Tests.ControlTests.<>c__DisplayClass413_0.<Control_InvokeDelegateObjectThrowsExceptionDifferentThread_VerifyStackTrace>b__2() in ...\winforms\src\System.Windows.Forms\tests\UnitTests\System\Windows\Forms\ControlTests.Methods.cs:line 3947
                            at Xunit.Assert.RecordException(Func`1 testCode) in C:\Dev\xunit\xunit\src\xunit.assert\Asserts\Record.cs:line 50
 
                 */
@@ -4049,7 +4185,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_InvokeGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var otherControl = new Control();
@@ -4089,7 +4225,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_InvokeLostFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
         {
             using var otherControl = new SubControl();
@@ -4129,7 +4265,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void Control_InvokePaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var otherControl = new SubControl();
@@ -6002,7 +6138,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ProcessKeyMessage_InvokeWithCustomParentProcessKeyPreview_ReturnsExpected(bool result)
         {
             int callCount = 0;
@@ -6031,7 +6167,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ProcessKeyMessage_InvokeWithCustomProcessKeyEventArgs_ReturnsExpected(bool result)
         {
             int callCount = 0;
@@ -6119,7 +6255,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ProcessKeyPreview_InvokeWithCustomParent_ReturnsExpected(bool result)
         {
             int callCount = 0;
@@ -6506,7 +6642,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ResumeLayout_InvokeSuspendedWithoutLayoutRequests_Success(bool performLayout)
         {
             using var control = new Control();
@@ -6587,7 +6723,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ResumeLayout_InvokeSuspendedMultipleTimesWithoutLayoutRequests_Success(bool performLayout)
         {
             using var control = new Control();
@@ -6639,7 +6775,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ResumeLayout_InvokeNotSuspended_Nop(bool performLayout)
         {
             using var control = new Control();
@@ -6866,7 +7002,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_SendToBack_InvokeWithoutHandleWithoutParent_Nop(bool topLevel)
         {
             using var control = new SubControl();
@@ -10085,7 +10221,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Show_Invoke_Success(bool visible)
         {
             using var control = new Control
@@ -10103,7 +10239,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Show_InvokeWithHandle_Success(bool visible)
         {
             using var control = new Control
@@ -12553,6 +12689,7 @@ namespace System.Windows.Forms.Tests
                 var m = new Message
                 {
                     Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
+                    WParam = PARAM.FromLowHigh(192, 192),
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -12584,6 +12721,7 @@ namespace System.Windows.Forms.Tests
             var m = new Message
             {
                 Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
+                WParam = PARAM.FromLowHigh(192, 192),
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);
@@ -12611,6 +12749,7 @@ namespace System.Windows.Forms.Tests
                 var m = new Message
                 {
                     Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
+                    WParam = PARAM.FromLowHigh(192, 192),
                     Result = (IntPtr)250
                 };
                 control.WndProc(ref m);
@@ -12642,6 +12781,7 @@ namespace System.Windows.Forms.Tests
             var m = new Message
             {
                 Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
+                WParam = PARAM.FromLowHigh(192, 192),
                 Result = (IntPtr)250
             };
             control.WndProc(ref m);

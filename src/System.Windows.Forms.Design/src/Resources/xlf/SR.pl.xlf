@@ -4,7 +4,7 @@
     <body>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
-        <target state="new">Could not create ActiveX control '{0}' because it is not properly registered.</target>
+        <target state="translated">Nie można utworzyć formantu ActiveX '{0}', ponieważ nie został on zarejestrowany poprawnie.</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorAccName">
@@ -34,12 +34,12 @@
       </trans-unit>
       <trans-unit id="AxImportFailed">
         <source>Failed to import the ActiveX control.  Please ensure it is properly registered.</source>
-        <target state="new">Failed to import the ActiveX control.  Please ensure it is properly registered.</target>
+        <target state="translated">Nie można zaimportować formantu ActiveX. Upewnij się, że formant został zarejestrowany poprawnie.</target>
         <note />
       </trans-unit>
       <trans-unit id="Ax_Control">
         <source>ActiveX Control</source>
-        <target state="new">ActiveX Control</target>
+        <target state="translated">Formant kontrolki ActiveX</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
@@ -219,17 +219,17 @@
       </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
-        <target state="new">Select the image displayed in the PictureBox</target>
+        <target state="translated">Wybierz obraz wyświetlany w polu PictureBox</target>
         <note />
       </trans-unit>
       <trans-unit id="ChooseImageDisplayName">
         <source>Choose Image...</source>
-        <target state="new">Choose Image...</target>
+        <target state="translated">Wybierz obraz...</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardError">
         <source>Requested Clipboard operation did not succeed.</source>
-        <target state="new">Requested Clipboard operation did not succeed.</target>
+        <target state="translated">Żądana operacja schowka nie powiodła się.</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -386,7 +386,7 @@
       </trans-unit>
       <trans-unit id="CommandSetBringToFront">
         <source>Bring {0} controls to front</source>
-        <target state="new">Bring {0} controls to front</target>
+        <target state="translated">Przesuń na wierzch {0} formantów</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
@@ -413,7 +413,7 @@
       </trans-unit>
       <trans-unit id="CommandSetLockControls">
         <source>Lock {0} components</source>
-        <target state="new">Lock {0} components</target>
+        <target state="translated">Zablokuj {0} składników</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetPaste">
@@ -423,7 +423,7 @@
       </trans-unit>
       <trans-unit id="CommandSetSendToBack">
         <source>Send {0} controls to back</source>
-        <target state="new">Send {0} controls to back</target>
+        <target state="translated">Przesuń na spód {0} formantów</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
@@ -648,7 +648,7 @@
       </trans-unit>
       <trans-unit id="DesignerBatchCreateTool">
         <source>Creating components in tool '{0}'</source>
-        <target state="new">Creating components in tool '{0}'</target>
+        <target state="translated">Tworzenie składników za pomocą narzędzia '{0}'</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
@@ -658,7 +658,7 @@
       </trans-unit>
       <trans-unit id="DesignerCantParentType">
         <source>Cannot add component of type '{0}' to container of type '{1}'</source>
-        <target state="new">Cannot add component of type '{0}' to container of type '{1}'</target>
+        <target state="translated">Nie można dodać składnika typu '{0}' do kontenera typu '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
@@ -857,7 +857,7 @@
       </trans-unit>
       <trans-unit id="DesignerPropName">
         <source>Indicates the name used in code to identify the object.</source>
-        <target state="new">Indicates the name used in code to identify the object.</target>
+        <target state="translated">Wskazuje nazwę używaną w kodzie do określania obiektu.</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
@@ -917,7 +917,7 @@
       </trans-unit>
       <trans-unit id="DragDropDropComponents">
         <source>Drop components</source>
-        <target state="new">Drop components</target>
+        <target state="translated">Usuń składniki</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
@@ -947,12 +947,12 @@
       </trans-unit>
       <trans-unit id="EditLinesDescription">
         <source>Opens the Lines collection editor</source>
-        <target state="new">Opens the Lines collection editor</target>
+        <target state="translated">Otwiera edytora kolekcji Linie</target>
         <note />
       </trans-unit>
       <trans-unit id="EditLinesDisplayName">
         <source>Edit Text Lines...</source>
-        <target state="new">Edit Text Lines...</target>
+        <target state="translated">Edytuj Wiersze tekstu...</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
@@ -987,7 +987,7 @@
       </trans-unit>
       <trans-unit id="FailedToCreateComponent">
         <source>Failed to create component '{0}'.  The error message follows:\r\n '{1}'</source>
-        <target state="new">Failed to create component '{0}'.  The error message follows:\r\n '{1}'</target>
+        <target state="translated">Nie udało się utworzyć składnika „{0}”. Komunikat o błędzie:\r\n „{1}”</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
@@ -1022,12 +1022,12 @@
       </trans-unit>
       <trans-unit id="ImageListDescription">
         <source>Chooses an ImageList to use with this TreeView</source>
-        <target state="new">Chooses an ImageList to use with this TreeView</target>
+        <target state="translated">Wybiera listę ImageList do użycia w tym widoku TreeView</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDisplayName">
         <source>ImageList:</source>
-        <target state="new">ImageList:</target>
+        <target state="translated">ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -1052,17 +1052,17 @@
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDescription">
         <source>Opens the Nodes collection editor</source>
-        <target state="new">Opens the Nodes collection editor</target>
+        <target state="translated">Otwiera edytora kolekcji Węzły</target>
         <note />
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDisplayName">
         <source>Edit Nodes...</source>
-        <target state="new">Edit Nodes...</target>
+        <target state="translated">Edytuj węzły...</target>
         <note />
       </trans-unit>
       <trans-unit id="ItemsCategoryName">
         <source>Items</source>
-        <target state="new">Items</target>
+        <target state="translated">Elementy</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
@@ -1087,77 +1087,77 @@
       </trans-unit>
       <trans-unit id="LinksCategoryName">
         <source>Links</source>
-        <target state="new">Links</target>
+        <target state="translated">Połączenia</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">Otwiera edytora kolekcji Elementy</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">Edytuj elementy...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDescription">
         <source>Opens the Columns collection editor</source>
-        <target state="new">Opens the Columns collection editor</target>
+        <target state="translated">Otwiera edytora kolekcji Kolumny</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDisplayName">
         <source>Edit Columns...</source>
-        <target state="new">Edit Columns...</target>
+        <target state="translated">Edytuj kolumny...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDescription">
         <source>Opens the Groups collection editor</source>
-        <target state="new">Opens the Groups collection editor</target>
+        <target state="translated">Otwiera edytora kolekcji Grupy</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDisplayName">
         <source>Edit Groups...</source>
-        <target state="new">Edit Groups...</target>
+        <target state="translated">Edytuj grupy...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">Otwiera edytora kolekcji Elementy</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">Edytuj elementy...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDescription">
         <source>Selects an ImageList to use with LargeIcon mode</source>
-        <target state="new">Selects an ImageList to use with LargeIcon mode</target>
+        <target state="translated">Wybiera listę ImageList do użycia w trybie LargeIcon</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDisplayName">
         <source>Large ImageList:</source>
-        <target state="new">Large ImageList:</target>
+        <target state="translated">Duża lista ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDescription">
         <source>Selects an ImageList to use with SmallIcon mode</source>
-        <target state="new">Selects an ImageList to use with SmallIcon mode</target>
+        <target state="translated">Wybiera listę ImageList do użycia w trybie SmallIcon</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDisplayName">
         <source>Small ImageList:</source>
-        <target state="new">Small ImageList:</target>
+        <target state="translated">Mała lista ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDescription">
         <source>Changes the type of View this ListView shows</source>
-        <target state="new">Changes the type of View this ListView shows</target>
+        <target state="translated">Zmienia typ widoku tej listy ListView</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDisplayName">
         <source>View:</source>
-        <target state="new">View:</target>
+        <target state="translated">Widok:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
@@ -1177,7 +1177,7 @@
       </trans-unit>
       <trans-unit id="LocalizingCannotAdd">
         <source>Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</source>
-        <target state="new">Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</target>
+        <target state="translated">Nie można dodawać składników trybie lokalizacji. Wybierz opcję (Domyślna) w polu właściwości Język, aby powrócić do formularza domyślnego i dodać składniki.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
@@ -1292,12 +1292,12 @@
       </trans-unit>
       <trans-unit id="MultiLineDescription">
         <source>Puts the TextBox in a mode where it can display multiple lines of text</source>
-        <target state="new">Puts the TextBox in a mode where it can display multiple lines of text</target>
+        <target state="translated">Przełącza pole TextBox w tryb, w którym można w nim wyświetlać wiele wierszy tekstu</target>
         <note />
       </trans-unit>
       <trans-unit id="MultiLineDisplayName">
         <source>MultiLine</source>
-        <target state="new">MultiLine</target>
+        <target state="translated">MultiLine</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
@@ -1324,12 +1324,12 @@ Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
         <source>Determines the size of the positioning grid.</source>
-        <target state="new">Determines the size of the positioning grid.</target>
+        <target state="translated">Określa rozmiar siatki pozycjonującej.</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
         <source>Place existing controls in new container, '{0}'.</source>
-        <target state="new">Place existing controls in new container, '{0}'.</target>
+        <target state="translated">Umieść istniejące formanty w nowym kontenerze, '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
@@ -1339,7 +1339,7 @@ Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
       </trans-unit>
       <trans-unit id="PropertiesCategoryName">
         <source>Properties</source>
-        <target state="new">Properties</target>
+        <target state="translated">Właściwości</target>
         <note />
       </trans-unit>
       <trans-unit id="RTL">
@@ -1479,12 +1479,12 @@ Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
       </trans-unit>
       <trans-unit id="SizeModeDescription">
         <source>Changes the sizing mode of the Image displayed in the PictureBox</source>
-        <target state="new">Changes the sizing mode of the Image displayed in the PictureBox</target>
+        <target state="translated">Zmienia tryb formatowania obrazu wyświetlanego w polu PictureBox </target>
         <note />
       </trans-unit>
       <trans-unit id="SizeModeDisplayName">
         <source>Size Mode:</source>
-        <target state="new">Size Mode:</target>
+        <target state="translated">Tryb rozmiaru:</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
@@ -1889,7 +1889,7 @@ Naciśnij klawisze Ctrl+Enter, aby zaakceptować tekst.</target>
       </trans-unit>
       <trans-unit id="WindowsFormsTabOrderReadOnly">
         <source>- Read Only</source>
-        <target state="new">- Read Only</target>
+        <target state="translated">— tylko do odczytu</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">

@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-HANT" original="../SR.resx">
+  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../SR.resx">
     <body>
       <trans-unit id="AXNotRegistered">
         <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
-        <target state="new">Could not create ActiveX control '{0}' because it is not properly registered.</target>
+        <target state="translated">因為尚未正確註冊，所以無法建立 ActiveX 控制項 '{0}'。</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorAccName">
@@ -34,12 +34,12 @@
       </trans-unit>
       <trans-unit id="AxImportFailed">
         <source>Failed to import the ActiveX control.  Please ensure it is properly registered.</source>
-        <target state="new">Failed to import the ActiveX control.  Please ensure it is properly registered.</target>
+        <target state="translated">無法匯入 ActiveX 控制項。請確認已經正確註冊控制項。</target>
         <note />
       </trans-unit>
       <trans-unit id="Ax_Control">
         <source>ActiveX Control</source>
-        <target state="new">ActiveX Control</target>
+        <target state="translated">ActiveX 控制項</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
@@ -219,17 +219,17 @@
       </trans-unit>
       <trans-unit id="ChooseImageDescription">
         <source>Select the image displayed in the PictureBox</source>
-        <target state="new">Select the image displayed in the PictureBox</target>
+        <target state="translated">選取 PictureBox 中顯示的影像</target>
         <note />
       </trans-unit>
       <trans-unit id="ChooseImageDisplayName">
         <source>Choose Image...</source>
-        <target state="new">Choose Image...</target>
+        <target state="translated">選擇映像...</target>
         <note />
       </trans-unit>
       <trans-unit id="ClipboardError">
         <source>Requested Clipboard operation did not succeed.</source>
-        <target state="new">Requested Clipboard operation did not succeed.</target>
+        <target state="translated">要求的剪貼簿作業失敗。</target>
         <note />
       </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
@@ -386,7 +386,7 @@
       </trans-unit>
       <trans-unit id="CommandSetBringToFront">
         <source>Bring {0} controls to front</source>
-        <target state="new">Bring {0} controls to front</target>
+        <target state="translated">將 {0} 控制項置於上層</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
@@ -413,7 +413,7 @@
       </trans-unit>
       <trans-unit id="CommandSetLockControls">
         <source>Lock {0} components</source>
-        <target state="new">Lock {0} components</target>
+        <target state="translated">鎖定 {0} 個元件</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetPaste">
@@ -423,7 +423,7 @@
       </trans-unit>
       <trans-unit id="CommandSetSendToBack">
         <source>Send {0} controls to back</source>
-        <target state="new">Send {0} controls to back</target>
+        <target state="translated">將 {0} 控制項置於下層</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
@@ -648,7 +648,7 @@
       </trans-unit>
       <trans-unit id="DesignerBatchCreateTool">
         <source>Creating components in tool '{0}'</source>
-        <target state="new">Creating components in tool '{0}'</target>
+        <target state="translated">正建立工具 '{0}' 中的元件</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
@@ -658,7 +658,7 @@
       </trans-unit>
       <trans-unit id="DesignerCantParentType">
         <source>Cannot add component of type '{0}' to container of type '{1}'</source>
-        <target state="new">Cannot add component of type '{0}' to container of type '{1}'</target>
+        <target state="translated">無法將 '{0}' 類型的元件加入 '{1}' 類型的容器中</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
@@ -857,7 +857,7 @@
       </trans-unit>
       <trans-unit id="DesignerPropName">
         <source>Indicates the name used in code to identify the object.</source>
-        <target state="new">Indicates the name used in code to identify the object.</target>
+        <target state="translated">表示於程式碼中用於辨識物件的名稱。</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
@@ -917,7 +917,7 @@
       </trans-unit>
       <trans-unit id="DragDropDropComponents">
         <source>Drop components</source>
-        <target state="new">Drop components</target>
+        <target state="translated">拖放元件</target>
         <note />
       </trans-unit>
       <trans-unit id="DragDropMoveComponent">
@@ -947,12 +947,12 @@
       </trans-unit>
       <trans-unit id="EditLinesDescription">
         <source>Opens the Lines collection editor</source>
-        <target state="new">Opens the Lines collection editor</target>
+        <target state="translated">開啟行集合編輯器</target>
         <note />
       </trans-unit>
       <trans-unit id="EditLinesDisplayName">
         <source>Edit Text Lines...</source>
-        <target state="new">Edit Text Lines...</target>
+        <target state="translated">編輯文字行...</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
@@ -987,7 +987,7 @@
       </trans-unit>
       <trans-unit id="FailedToCreateComponent">
         <source>Failed to create component '{0}'.  The error message follows:\r\n '{1}'</source>
-        <target state="new">Failed to create component '{0}'.  The error message follows:\r\n '{1}'</target>
+        <target state="translated">無法建立元件 '{0}'。錯誤訊息為:\r\n '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
@@ -1022,12 +1022,12 @@
       </trans-unit>
       <trans-unit id="ImageListDescription">
         <source>Chooses an ImageList to use with this TreeView</source>
-        <target state="new">Chooses an ImageList to use with this TreeView</target>
+        <target state="translated">選擇要配合這個 TreeView 使用的 ImageList</target>
         <note />
       </trans-unit>
       <trans-unit id="ImageListDisplayName">
         <source>ImageList:</source>
-        <target state="new">ImageList:</target>
+        <target state="translated">ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
@@ -1037,7 +1037,7 @@
       </trans-unit>
       <trans-unit id="InitialDirectoryEditorLabel">
         <source>Select the directory that will initially be opened in the dialog.</source>
-        <target state="new">Select the directory that will initially be opened in the dialog.</target>
+        <target state="translated">選取一開始要在對話方塊中開啟的目錄。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -1052,17 +1052,17 @@
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDescription">
         <source>Opens the Nodes collection editor</source>
-        <target state="new">Opens the Nodes collection editor</target>
+        <target state="translated">開啟節點集合編輯器</target>
         <note />
       </trans-unit>
       <trans-unit id="InvokeNodesDialogDisplayName">
         <source>Edit Nodes...</source>
-        <target state="new">Edit Nodes...</target>
+        <target state="translated">編輯節點...</target>
         <note />
       </trans-unit>
       <trans-unit id="ItemsCategoryName">
         <source>Items</source>
-        <target state="new">Items</target>
+        <target state="translated">項目</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
@@ -1087,77 +1087,77 @@
       </trans-unit>
       <trans-unit id="LinksCategoryName">
         <source>Links</source>
-        <target state="new">Links</target>
+        <target state="translated">連結</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">開啟項目集合編輯器</target>
         <note />
       </trans-unit>
       <trans-unit id="ListControlUnboundActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">編輯項目...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDescription">
         <source>Opens the Columns collection editor</source>
-        <target state="new">Opens the Columns collection editor</target>
+        <target state="translated">開啟資料行集合編輯器</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditColumnsDisplayName">
         <source>Edit Columns...</source>
-        <target state="new">Edit Columns...</target>
+        <target state="translated">編輯資料行...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDescription">
         <source>Opens the Groups collection editor</source>
-        <target state="new">Opens the Groups collection editor</target>
+        <target state="translated">開啟群組集合編輯器</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditGroupsDisplayName">
         <source>Edit Groups...</source>
-        <target state="new">Edit Groups...</target>
+        <target state="translated">編輯群組...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDescription">
         <source>Opens the Items collection editor</source>
-        <target state="new">Opens the Items collection editor</target>
+        <target state="translated">開啟項目集合編輯器</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListEditItemsDisplayName">
         <source>Edit Items...</source>
-        <target state="new">Edit Items...</target>
+        <target state="translated">編輯項目...</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDescription">
         <source>Selects an ImageList to use with LargeIcon mode</source>
-        <target state="new">Selects an ImageList to use with LargeIcon mode</target>
+        <target state="translated">選取要配合 LargeIcon 模式使用的 ImageList</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListLargeImagesDisplayName">
         <source>Large ImageList:</source>
-        <target state="new">Large ImageList:</target>
+        <target state="translated">大型 ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDescription">
         <source>Selects an ImageList to use with SmallIcon mode</source>
-        <target state="new">Selects an ImageList to use with SmallIcon mode</target>
+        <target state="translated">選取要配合 SmallIcon 模式使用的 ImageList</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListSmallImagesDisplayName">
         <source>Small ImageList:</source>
-        <target state="new">Small ImageList:</target>
+        <target state="translated">小型 ImageList:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDescription">
         <source>Changes the type of View this ListView shows</source>
-        <target state="new">Changes the type of View this ListView shows</target>
+        <target state="translated">變更這個 ListView 顯示的檢視類型</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewActionListViewDisplayName">
         <source>View:</source>
-        <target state="new">View:</target>
+        <target state="translated">檢視:</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
@@ -1177,7 +1177,7 @@
       </trans-unit>
       <trans-unit id="LocalizingCannotAdd">
         <source>Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</source>
-        <target state="new">Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</target>
+        <target state="translated">元件不能加入當地語系化模式。請選取 Language 屬性中的 (預設)，以便傳回至預設表單，並加入元件。</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
@@ -1292,12 +1292,12 @@
       </trans-unit>
       <trans-unit id="MultiLineDescription">
         <source>Puts the TextBox in a mode where it can display multiple lines of text</source>
-        <target state="new">Puts the TextBox in a mode where it can display multiple lines of text</target>
+        <target state="translated">將 TextBox 置於可讓它顯示多行文字的模式</target>
         <note />
       </trans-unit>
       <trans-unit id="MultiLineDisplayName">
         <source>MultiLine</source>
-        <target state="new">MultiLine</target>
+        <target state="translated">MultiLine</target>
         <note />
       </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
@@ -1324,12 +1324,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="ParentControlDesignerGridSizeDescr">
         <source>Determines the size of the positioning grid.</source>
-        <target state="new">Determines the size of the positioning grid.</target>
+        <target state="translated">決定定位格線的大小。</target>
         <note />
       </trans-unit>
       <trans-unit id="ParentControlDesignerLassoShortcutRedo">
         <source>Place existing controls in new container, '{0}'.</source>
-        <target state="new">Place existing controls in new container, '{0}'.</target>
+        <target state="translated">將現有控制項置於新容器 '{0}' 中。</target>
         <note />
       </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
@@ -1339,7 +1339,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="PropertiesCategoryName">
         <source>Properties</source>
-        <target state="new">Properties</target>
+        <target state="translated">屬性</target>
         <note />
       </trans-unit>
       <trans-unit id="RTL">
@@ -1479,12 +1479,12 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="SizeModeDescription">
         <source>Changes the sizing mode of the Image displayed in the PictureBox</source>
-        <target state="new">Changes the sizing mode of the Image displayed in the PictureBox</target>
+        <target state="translated">變更 PictureBox 中所顯示影像的調整大小模式</target>
         <note />
       </trans-unit>
       <trans-unit id="SizeModeDisplayName">
         <source>Size Mode:</source>
-        <target state="new">Size Mode:</target>
+        <target state="translated">調整大小模式:</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
@@ -1889,7 +1889,7 @@ Press Ctrl+Enter to accept Text.</source>
       </trans-unit>
       <trans-unit id="WindowsFormsTabOrderReadOnly">
         <source>- Read Only</source>
-        <target state="new">- Read Only</target>
+        <target state="translated">- 唯讀</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">

@@ -7,6 +7,7 @@ using System.Drawing;
 using Xunit;
 using static System.Windows.Forms.MonthCalendar;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -80,7 +81,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarCellAccessibleObject_ContainingGrid_ReturnsExpected()
         {
             using MonthCalendar control = new();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendarAccessibleObject = new(controlAccessibleObject, 0, "Test name");
             CalendarBodyAccessibleObject bodyAccessibleObject = new(calendarAccessibleObject, controlAccessibleObject, 0);
             CalendarRowAccessibleObject rowAccessibleObject = new(bodyAccessibleObject, controlAccessibleObject, 0, 0);
@@ -108,13 +109,48 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
         private CalendarCellAccessibleObject CreateCalendarCellAccessibleObject(MonthCalendar control, int calendarIndex = 0, int rowIndex = 0, int columnIndex = 0)
         {
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendarAccessibleObject = new(controlAccessibleObject, calendarIndex, "Test name");
             CalendarBodyAccessibleObject bodyAccessibleObject = new(calendarAccessibleObject, controlAccessibleObject, calendarIndex);
             CalendarRowAccessibleObject rowAccessibleObject = new(bodyAccessibleObject, controlAccessibleObject, calendarIndex, rowIndex);
             CalendarCellAccessibleObject cellAccessibleObject = new(rowAccessibleObject, bodyAccessibleObject, controlAccessibleObject, calendarIndex, rowIndex, columnIndex);
 
             return cellAccessibleObject;
+        }
+
+        [WinFormsFact]
+        public void CalendarCellAccessibleObject_Name_IsEmptyString_IfControlIsNotCreated()
+        {
+            using MonthCalendar control = new();
+            CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control, 0, 0, 0);
+
+            Assert.Empty(cellAccessibleObject.Name);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> CalendarCellAccessibleObject_Name_ReturnsExpected_TestData()
+        {
+            yield return new object[] { MCMV.MONTH, "Wednesday, June 16, 2021" };
+            yield return new object[] { MCMV.YEAR, "November 2021" };
+            yield return new object[] { MCMV.DECADE, "2029" };
+            yield return new object[] { MCMV.CENTURY, "2090 - 2099" };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(CalendarCellAccessibleObject_Name_ReturnsExpected_TestData))]
+        public void CalendarCellAccessibleObject_Name_ReturnsExpected(int view, string expected)
+        {
+            using MonthCalendar control = new();
+            control.FirstDayOfWeek = Day.Monday;
+            control.SelectionStart = new DateTime(2021, 6, 16); // Set a date to have a stable test case
+
+            control.CreateControl();
+            User32.SendMessageW(control, (User32.WM)MCM.SETCURRENTVIEW, default, (IntPtr)view);
+
+            CalendarCellAccessibleObject cellAccessibleObject = CreateCalendarCellAccessibleObject(control, 0, 2, 2);
+
+            Assert.Equal(expected, cellAccessibleObject.Name);
+            Assert.True(control.IsHandleCreated);
         }
     }
 }

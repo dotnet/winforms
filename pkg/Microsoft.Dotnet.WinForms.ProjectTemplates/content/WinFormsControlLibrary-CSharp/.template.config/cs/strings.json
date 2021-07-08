@@ -1,0 +1,7 @@
+﻿{
+  "version": "1.0.0.0",
+  "strings": {
+    "name": "Knihovna ovládacích prvků Windows Forms",
+    "description": "Šablona projektu pro vytvoření knihovny ovládacích prvků, která cílí na .NET Windows Forms (WinForms)."
+  }
+}

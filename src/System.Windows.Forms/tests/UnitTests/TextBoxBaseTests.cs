@@ -7,7 +7,7 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.User32;
@@ -149,7 +149,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_AcceptsTab_Set_GetReturnsExpected(bool value)
         {
             using var control = new TextBox
@@ -209,7 +209,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox();
@@ -244,7 +244,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_AutoSize_SetMultiline_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox
@@ -285,7 +285,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_AutoSize_SetWithParent_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -443,7 +443,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void TextBoxBase_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new TextBox
@@ -502,7 +502,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void TextBoxBase_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubTextBox
@@ -557,7 +557,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(BorderStyle))]
         public void TextBoxBase_BorderStyle_Set_GetReturnsExpected(BorderStyle value)
         {
             using var control = new TextBox()
@@ -687,7 +687,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(BorderStyle))]
         public void TextBoxBase_BorderStyle_SetInvalid_ThrowsInvalidEnumArgumentException(BorderStyle value)
         {
             using var control = new TextBox();
@@ -764,7 +764,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_DoubleBuffered_Get_ReturnsExpected(bool value)
         {
             using var control = new SubTextBox();
@@ -773,7 +773,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_DoubleBuffered_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox
@@ -798,7 +798,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox();
@@ -838,7 +838,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TextBoxBase_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubTextBox
@@ -857,7 +857,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TextBoxBase_Font_SetWithText_GetReturnsExpected(Font value)
         {
             using var control = new SubTextBox
@@ -877,7 +877,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TextBoxBase_Font_SetWithNonNullOldValue_GetReturnsExpected(Font value)
         {
             using var oldValue = new Font("Arial", 1);
@@ -899,7 +899,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void TextBoxBase_Font_SetWithNonNullOldValueWithText_GetReturnsExpected(Font value)
         {
             using var oldValue = new Font("Arial", 1);
@@ -1276,7 +1276,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_HideSelection_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox
@@ -1409,7 +1409,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImeMode))]
         public void TextBoxBase_ImeModeBase_SetReadOnly_GetReturnsExpected(ImeMode value)
         {
             using var control = new SubTextBox
@@ -1554,7 +1554,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void TextBoxBase_ImeModeBase_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new SubTextBox();
@@ -1801,7 +1801,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_Modified_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox();
@@ -1822,7 +1822,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_Modified_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox();
@@ -1909,7 +1909,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_Multiline_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox
@@ -1940,7 +1940,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_Multiline_SetNotAutoSize_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox
@@ -2159,7 +2159,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void TextBoxBase_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new TextBox
@@ -2178,7 +2178,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void TextBoxBase_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new TextBox();
@@ -2303,7 +2303,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_ReadOnly_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox();
@@ -2329,7 +2329,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_ReadOnly_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox();
@@ -2366,7 +2366,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_ReadOnly_GetModify_Success(bool value)
         {
             using var control = new TextBox();
@@ -2703,7 +2703,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TextBoxBase_SelectedText_SetCantCreateHandle_GetReturnsExpected(string value)
         {
             using var control = new CantCreateHandleTextBox();
@@ -2718,7 +2718,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TextBoxBase_SelectedText_SetDisposed_ThrowsObjectDisposedException(string value)
         {
             using var control = new TextBox();
@@ -3111,7 +3111,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_ShortcutsEnabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new TextBox
@@ -3175,7 +3175,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TextBoxBase_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubTextBox
@@ -3258,7 +3258,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TextBoxBase_Text_SetModified_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubTextBox
@@ -3288,7 +3288,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TextBoxBase_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubTextBox();
@@ -3532,7 +3532,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TextBoxBase_Text_SetCantCreateHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new CantCreateHandleTextBox();
@@ -3547,7 +3547,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TextBoxBase_Text_SetDisposed_ThrowsObjectDisposedException(string value, string expected)
         {
             using var control = new TextBox();
@@ -3657,7 +3657,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_WordWrap_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubTextBox();
@@ -3734,7 +3734,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void TextBoxBase_WordWrap_SetNotAutoSizeWithParent_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -5405,7 +5405,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnAcceptsTabChanged_Invoke_CallsAcceptsTabChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5429,7 +5429,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnBorderStyleChanged_Invoke_CallsBorderStyleChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5453,7 +5453,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5477,7 +5477,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5503,7 +5503,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5531,7 +5531,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5560,7 +5560,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5648,7 +5648,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnHideSelectionChanged_Invoke_CallsHideSelectionChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5672,7 +5672,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnModifiedChanged_Invoke_CallsModifiedChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5696,7 +5696,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void TextBoxBase_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5816,7 +5816,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnMultilineChanged_Invoke_CallsMultilineChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5840,7 +5840,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnPaddingChanged_Invoke_CallsPaddingChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5866,7 +5866,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void TextBoxBase_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5890,7 +5890,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnReadOnlyChanged_Invoke_CallsReadOnlyChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -5914,7 +5914,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void TextBoxBase_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
         {
             using var control = new SubTextBox();
@@ -6121,7 +6121,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetCtrlBackspaceData))]
         public void TextBoxBase_ProcessCmdKey_CtrlBackspace_ClearsSelection(string text, string expected, int cursorRelativeToEnd)
         {
             using var control = new SubTextBox
@@ -6136,7 +6136,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCtrlBackspaceRepeatedData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetCtrlBackspaceRepeatedData))]
         public void TextBoxBase_ProcessCmdKey_CtrlBackspaceRepeated_ClearsSelection(string text, string expected, int repeats)
         {
             using var control = new SubTextBox

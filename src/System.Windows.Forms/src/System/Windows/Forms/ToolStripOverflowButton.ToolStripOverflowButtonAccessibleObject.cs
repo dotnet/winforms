@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using static Interop;
-
 namespace System.Windows.Forms
 {
     public partial class ToolStripOverflowButton

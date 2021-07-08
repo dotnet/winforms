@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void CalendarAccessibleObject_ctor_default()
         {
             using MonthCalendar control = new MonthCalendar();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             int calendarIndex = 0;
             string name = "Test name";
             CalendarAccessibleObject calendar = new(controlAccessibleObject, calendarIndex, name);
@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using MonthCalendar control = new MonthCalendar();
 
             control.CreateControl();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects.First?.Value;
             Rectangle bounds = calendar.Bounds;
 
@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using MonthCalendar control = new MonthCalendar();
 
             control.CreateControl();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects.First?.Value;
 
             Assert.NotNull(calendar.CalendarBodyAccessibleObject);
@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using MonthCalendar control = new MonthCalendar();
 
             control.CreateControl();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = controlAccessibleObject.CalendarsAccessibleObjects.First?.Value;
 
             Assert.NotNull(calendar.CalendarHeaderAccessibleObject);
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             control.Size = new Size(width, height);
 
             control.CreateControl();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, calendarIndex, "Test name");
 
             Assert.Equal(expected, calendar.Column);
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             using MonthCalendar control = new MonthCalendar();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.Equal(controlAccessibleObject, calendar.ContainingGrid);
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             control.SelectionStart = new DateTime(2021, 1, 1);
 
             control.CreateControl();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             LinkedListNode<CalendarAccessibleObject> calendarNode = controlAccessibleObject.CalendarsAccessibleObjects.First;
 
             for (int i = 1; i <= calendarIndex; i++)
@@ -168,7 +168,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             using MonthCalendar control = new MonthCalendar();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, calendarIndex, "Test name");
 
             Assert.Equal(calendarIndex + 3, calendar.GetChildId());
@@ -180,7 +180,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             using MonthCalendar control = new MonthCalendar();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.Null(calendar.GetColumnHeaderItems());
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using MonthCalendar control = new MonthCalendar();
             control.Enabled = enabled;
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.Equal(enabled, calendar.GetPropertyValue(UiaCore.UIA.IsKeyboardFocusablePropertyId));
@@ -207,7 +207,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             using MonthCalendar control = new MonthCalendar();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.Null(calendar.GetRowHeaderItems());
@@ -219,7 +219,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             using MonthCalendar control = new MonthCalendar();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.True(calendar.IsPatternSupported(UiaCore.UIA.GridItemPatternId));
@@ -231,7 +231,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             using MonthCalendar control = new MonthCalendar();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.True(calendar.IsPatternSupported(UiaCore.UIA.TableItemPatternId));
@@ -244,7 +244,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using MonthCalendar control = new MonthCalendar();
             string initName = "Test name";
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, initName);
 
             Assert.Equal(initName, calendar.Name);
@@ -256,7 +256,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             using MonthCalendar control = new MonthCalendar();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.Equal(controlAccessibleObject, calendar.Parent);
@@ -268,7 +268,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         {
             using MonthCalendar control = new MonthCalendar();
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.Equal(AccessibleRole.Client, calendar.Role);
@@ -288,7 +288,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             control.Size = new Size(450, 450);
 
             control.CreateControl();
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             LinkedListNode<CalendarAccessibleObject> calendarNode = controlAccessibleObject.CalendarsAccessibleObjects.First;
 
             for (int i = 1; i <= calendarIndex; i++)
@@ -310,7 +310,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using MonthCalendar control = new MonthCalendar();
             control.Enabled = false;
 
-            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            var controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
             CalendarAccessibleObject calendar = new(controlAccessibleObject, 0, "Test name");
 
             Assert.Equal(AccessibleStates.None, calendar.State);

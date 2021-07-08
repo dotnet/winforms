@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -120,16 +119,14 @@ namespace System.Windows.Forms
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                     => propertyID switch
                     {
-                        // All subitems are "text" except the first.
-                        // It can be "edit" if ListView.LabelEdit is true.
-                        UiaCore.UIA.ControlTypePropertyId => _owningListView.LabelEdit && ParentInternal.GetChildIndex(this) == 0
-                                                             ? UiaCore.UIA.EditControlTypeId
-                                                             : UiaCore.UIA.TextControlTypeId,
+                        // All subitems are "text". Some of them can be editable, if ListView.LabelEdit is true.
+                        // In this case, an edit field appears when editing. This field has own accessible object, that
+                        // has the "edit" control type, and it supports the Text pattern. And its owning subitem accessible
+                        // object has the "text" control type, because it is just a container for the edit field.
+                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
                         UiaCore.UIA.NamePropertyId => Name,
                         UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
-#pragma warning disable CA1837 // Use 'Environment.ProcessId'
-                        UiaCore.UIA.ProcessIdPropertyId => Process.GetCurrentProcess().Id,
-#pragma warning restore CA1837 // Use 'Environment.ProcessId'
+                        UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
                         UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                         UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,

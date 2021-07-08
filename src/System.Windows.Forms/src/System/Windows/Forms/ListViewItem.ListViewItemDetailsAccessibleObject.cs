@@ -3,12 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using Accessibility;
-using static System.Windows.Forms.ListView;
-using static System.Windows.Forms.ListViewGroup;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -43,7 +38,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View != View.Details)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewException, nameof(View.Details)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Details)));
                 }
 
                 return !_owningListView.SupportsListViewSubItems || _owningListView.Columns.Count <= index || index < 0
@@ -55,7 +50,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View != View.Details)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewException, nameof(View.Details)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Details)));
                 }
 
                 return !_owningListView.IsHandleCreated || !_owningListView.SupportsListViewSubItems
@@ -98,18 +93,18 @@ namespace System.Windows.Forms
                     return _listViewSubItemAccessibleObjects[subItemIndex];
                 }
 
-                ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessbileObject = new(owningSubItem: null, _owningItem);
-                _listViewSubItemAccessibleObjects.Add(subItemIndex, fakeAccessbileObject);
-                return fakeAccessbileObject;
+                ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessibleObject = new(owningSubItem: null, _owningItem);
+                _listViewSubItemAccessibleObjects.Add(subItemIndex, fakeAccessibleObject);
+                return fakeAccessibleObject;
             }
 
             // This method is required to get the index of the fake accessibility object. Since the fake accessibility object
             // has no ListViewSubItem from which we could get an index, we have to get its index from the dictionary
-            private int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessbileObject)
+            private int GetFakeSubItemIndex(ListViewSubItem.ListViewSubItemAccessibleObject fakeAccessibleObject)
             {
                 foreach (KeyValuePair<int, AccessibleObject> keyValuePair in _listViewSubItemAccessibleObjects)
                 {
-                    if (keyValuePair.Value == fakeAccessbileObject)
+                    if (keyValuePair.Value == fakeAccessibleObject)
                     {
                         return keyValuePair.Key;
                     }

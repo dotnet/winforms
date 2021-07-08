@@ -2,13 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
-using Accessibility;
-using static System.Windows.Forms.ListView;
-using static System.Windows.Forms.ListViewGroup;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -40,7 +34,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View != View.Tile)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewException, nameof(View.Tile)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Tile)));
                 }
 
                 return GetChildInternal(index + 1);
@@ -66,7 +60,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View != View.Tile)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewException, nameof(View.Tile)));
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewException, nameof(View.Tile)));
                 }
 
                 if (!_owningListView.IsHandleCreated || !_owningListView.SupportsListViewSubItems)

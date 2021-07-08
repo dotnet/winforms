@@ -40,12 +40,14 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        if (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
+                        if (Owner is IDataGridViewEditingControl owner
+                            && owner.EditingControlDataGridView?.EditingControl == owner
+                            && Owner.ToolStripControlHost is null)
                         {
                             return _parentAccessibleObject;
                         }
 
-                        return null;
+                        break;
                 }
 
                 return base.FragmentNavigate(direction);

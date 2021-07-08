@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
         public void ContainerControl_AutoScaleDimensions_Set_GetReturnsExpected(Size value)
         {
             using var control = new ContainerControl
@@ -198,7 +198,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
         public void ContainerControl_AutoScaleDimensions_SetWithChildren_GetReturnsExpected(Size value)
         {
             using var child = new Control();
@@ -214,7 +214,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
         public void ContainerControl_AutoScaleDimensions_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
         {
             using var control = new ContainerControl();
@@ -222,7 +222,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void ContainerControl_AutoScaleMode_Set_GetReturnsExpected(AutoScaleMode value)
         {
             using var control = new ContainerControl
@@ -270,7 +270,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoScaleMode))]
         public void ContainerControl_AutoScaleMode_SetInvalid_ThrowsInvalidEnumArgumentException(AutoScaleMode value)
         {
             using var control = new ContainerControl();
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoValidate))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AutoValidate))]
         public void ContainerControl_AutoValidate_SetInvalidValue_ThrowsInvalidEnumArgumentException(AutoValidate value)
         {
             using var control = new ContainerControl();
@@ -406,7 +406,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ContainerControl_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubContainerControl
@@ -425,7 +425,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void ContainerControl_Font_SetWithAutoScaleModeFont_GetReturnsExpected(Font value)
         {
             using var control = new SubContainerControl
@@ -549,7 +549,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithoutChildren_Success(AutoScaleMode autoScaleMode)
         {
             using var control = new SubContainerControl
@@ -560,7 +560,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AutoScaleMode))]
         public void PerformAutoScale_InvokeWithChildren_Success(AutoScaleMode autoScaleMode)
         {
             using var child = new Control();
@@ -623,7 +623,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnAutoValidateChanged_Invoke_CallsAutoValidateChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -669,7 +669,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -693,7 +693,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnFontChanged_InvokeWithAutoScaleModeFont_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl
@@ -722,7 +722,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void ContainerControl_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -746,7 +746,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ContainerControl_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
         {
             using var control = new SubContainerControl();
@@ -985,7 +985,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ValidationConstraints))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ValidationConstraints))]
         public void ContainerControl_ValidateChildren_InvokeValidationConstraintsWithoutChildren_ReturnsTrue(ValidationConstraints validationConstraints)
         {
             using var control = new ContainerControl();

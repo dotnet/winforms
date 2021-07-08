@@ -5,7 +5,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -110,7 +110,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SelectionMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(SelectionMode))]
         public void CheckedListBox_SelectionMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(SelectionMode value)
         {
             using var control = new CheckedListBox();
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void CheckedListBox_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new CheckedListBox
@@ -269,7 +269,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(CheckState))]
         public void CheckedListBox_SetItemCheckState_Invoke_GetReturnsExpected(CheckState value)
         {
             using var control = new CheckedListBox();
@@ -286,7 +286,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(CheckState))]
         public void CheckedListBox_SetItemCheckState_InvokeInvalidValue_ThrowsInvalidEnumArgumentException(CheckState value)
         {
             using var control = new CheckedListBox();

@@ -679,17 +679,17 @@
       </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
-        <target state="new">Go to next time frame</target>
+        <target state="translated">Přejít na další období</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
         <source>Go to previous time frame</source>
-        <target state="new">Go to previous time frame</target>
+        <target state="translated">Přejít na předchozí období</target>
         <note />
       </trans-unit>
       <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
         <source>Go to and select today's date</source>
-        <target state="new">Go to and select today's date</target>
+        <target state="translated">Přejít na dnešní datum a vybrat ho</target>
         <note />
       </trans-unit>
       <trans-unit id="CancelCaption">
@@ -1242,7 +1242,7 @@
         <target state="translated">Poslední ovládací prvek, který způsobil zobrazení této místní nabídky</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Dostupný objekt ovládacího prvku má neplatný stav.</target>
         <note />
@@ -4764,7 +4764,7 @@ nikoli v tomto dialogovém okně.
         <target state="translated">Načtená sestavení</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4773,7 +4773,7 @@ nikoli v tomto dialogovém okně.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -6481,14 +6481,14 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Umožňuje změnit atributy značky vložení.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
         <source>The current accessibility object is only for the ListView in {0} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0} view</target>
+        <target state="translated">Aktuální objekt přístupnosti je určený jenom pro ovládací prvek ListView v zobrazení {0}.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewItemAccessbilityObjectInvalidViewsException">
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
         <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
-        <target state="new">The current accessibility object is only for the ListView in {0}, {1} or {2} view</target>
+        <target state="translated">Aktuální objekt přístupnosti je určený jenom pro ovládací prvek ListView v zobrazení {0}, {1} nebo {2}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
@@ -7103,7 +7103,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="MonthCalendarWeekNumberDescription">
         <source>Week {0}</source>
-        <target state="new">Week {0}</target>
+        <target state="translated">{0}. týden</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -8908,7 +8908,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="SplitterSplitPositionDescr">
         <source>The current position of the splitter, or -1 if it is not bound to a control.</source>
-        <target state="translated">Aktuální pozice příčky nebo hodnota  -1, pokud příčka není svázána s ovládacím prvkem.</target>
+        <target state="translated">Aktuální pozice příčky nebo hodnota -1, pokud příčka není svázána s ovládacím prvkem.</target>
         <note />
       </trans-unit>
       <trans-unit id="SplitterSplitterMovedDescr">
@@ -11063,7 +11063,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
         <source>{0} must be called before the first IWin32Window object is created in the application.</source>
-        <target state="new">{0} must be called before the first IWin32Window object is created in the application.</target>
+        <target state="translated">Před vytvořením prvního objektu IWin32Window v aplikaci je nutné volat metodu {0}.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

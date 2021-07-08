@@ -59,91 +59,91 @@ namespace WinformsControlsTest
         {
             {
                 MainFormControlsTabOrder.ButtonsButton,
-                new InitInfo("Buttons", (obj, e) => new Buttons().Show())
+                new InitInfo("Buttons", (obj, e) => new Buttons().Show(this))
             },
             {
                 MainFormControlsTabOrder.CalendarButton,
-                new InitInfo("Calendar", (obj, e) => new Calendar().Show())
+                new InitInfo("Calendar", (obj, e) => new Calendar().Show(this))
             },
             {
                 MainFormControlsTabOrder.MultipleControlsButton,
-                new InitInfo("MultipleControls", (obj, e) => new MultipleControls().Show())
+                new InitInfo("MultipleControls", (obj, e) => new MultipleControls().Show(this))
             },
             {
                 MainFormControlsTabOrder.ComboBoxesButton,
-                new InitInfo("ComboBoxes", (obj, e) => new ComboBoxes().Show())
+                new InitInfo("ComboBoxes", (obj, e) => new ComboBoxes().Show(this))
             },
             {
                 MainFormControlsTabOrder.ComboBoxesWithScrollBarsButton,
-                new InitInfo("ComboBoxes with ScrollBars", (obj, e) => new ComboBoxesWithScrollBars().Show())
+                new InitInfo("ComboBoxes with ScrollBars", (obj, e) => new ComboBoxesWithScrollBars().Show(this))
             },
             {
                 MainFormControlsTabOrder.DateTimePickerButton,
-                new InitInfo("DateTimePicker", (obj, e) => new DateTimePicker().Show())
+                new InitInfo("DateTimePicker", (obj, e) => new DateTimePicker().Show(this))
             },
             {
                 MainFormControlsTabOrder.DialogsButton,
-                new InitInfo("Dialogs", (obj, e) => new Dialogs().ShowDialog())
+                new InitInfo("Dialogs", (obj, e) => new Dialogs().ShowDialog(this))
             },
             {
                 MainFormControlsTabOrder.DataGridViewButton,
-                new InitInfo("DataGridView", (obj, e) => new DataGridViewTest().Show())
+                new InitInfo("DataGridView", (obj, e) => new DataGridViewTest().Show(this))
             },
             {
                 MainFormControlsTabOrder.DataGridViewInVirtualModeButton,
-                new InitInfo("DataGridView in Virtual mode", (obj, e) => new DataGridViewInVirtualModeTest().Show())
+                new InitInfo("DataGridView in Virtual mode", (obj, e) => new DataGridViewInVirtualModeTest().Show(this))
             },
             {
                 MainFormControlsTabOrder.TreeViewButton,
-                new InitInfo("TreeView, ImageList", (obj, e) => new TreeViewTest().Show())
+                new InitInfo("TreeView, ImageList", (obj, e) => new TreeViewTest().Show(this))
             },
             {
                 MainFormControlsTabOrder.ContentAlignmentButton,
-                new InitInfo("ContentAlignment", (obj, e) => new DesignTimeAligned().Show())
+                new InitInfo("ContentAlignment", (obj, e) => new DesignTimeAligned().Show(this))
             },
             {
                 MainFormControlsTabOrder.MenusButton,
-                new InitInfo("Menus", (obj, e) => new MenuStripAndCheckedListBox().Show())
+                new InitInfo("Menus", (obj, e) => new MenuStripAndCheckedListBox().Show(this))
             },
             {
                 MainFormControlsTabOrder.PanelsButton,
-                new InitInfo("Panels", (obj, e) => new Panels().Show())
+                new InitInfo("Panels", (obj, e) => new Panels().Show(this))
             },
             {
                 MainFormControlsTabOrder.SplitterButton,
-                new InitInfo("Splitter", (obj, e) => new Splitter().Show())
+                new InitInfo("Splitter", (obj, e) => new Splitter().Show(this))
             },
             {
                 MainFormControlsTabOrder.MdiParentButton,
-                new InitInfo("MDI Parent", (obj, e) => new MdiParent().Show())
+                new InitInfo("MDI Parent", (obj, e) => new MdiParent().Show(this))
             },
             {
                 MainFormControlsTabOrder.PropertyGridButton,
-                new InitInfo("PropertyGrid", (obj, e) => new PropertyGrid(new UserControlWithObjectCollectionEditor()).Show())
+                new InitInfo("PropertyGrid", (obj, e) => new PropertyGrid(new UserControlWithObjectCollectionEditor()).Show(this))
             },
             {
                 MainFormControlsTabOrder.ListViewButton,
-                new InitInfo("ListView", (obj, e) => new ListViewTest().Show())
+                new InitInfo("ListView", (obj, e) => new ListViewTest().Show(this))
             },
             {
                 MainFormControlsTabOrder.FontNameEditorButton,
-                new InitInfo("FontNameEditor", (obj, e) => new PropertyGrid(new UserControlWithFontNameEditor()).Show())
+                new InitInfo("FontNameEditor", (obj, e) => new PropertyGrid(new UserControlWithFontNameEditor()).Show(this))
             },
             {
                 MainFormControlsTabOrder.CollectionEditorsButton,
-                new InitInfo("CollectionEditors", (obj, e) => new CollectionEditors().Show())
+                new InitInfo("CollectionEditors", (obj, e) => new CollectionEditors().Show(this))
             },
             {
                 MainFormControlsTabOrder.RichTextBoxesButton,
-                new InitInfo("RichTextBoxes", (obj, e) => new RichTextBoxes().Show())
+                new InitInfo("RichTextBoxes", (obj, e) => new RichTextBoxes().Show(this))
             },
             {
                 MainFormControlsTabOrder.PictureBoxesButton,
-                new InitInfo("PictureBoxes", (obj, e) => new PictureBoxes().Show())
+                new InitInfo("PictureBoxes", (obj, e) => new PictureBoxes().Show(this))
             },
             {
                 MainFormControlsTabOrder.FormBorderStylesButton,
-                new InitInfo("FormBorderStyles", (obj, e) => new FormBorderStyles().Show())
+                new InitInfo("FormBorderStyles", (obj, e) => new FormBorderStyles().Show(this))
             },
             {
                 MainFormControlsTabOrder.ToggleIconButton,
@@ -151,15 +151,23 @@ namespace WinformsControlsTest
             },
             {
                 MainFormControlsTabOrder.FileDialogButton,
-                new InitInfo("FileDialog", (obj, e) => new FileDialog().Show())
+                new InitInfo("FileDialog", (obj, e) => new FileDialog().Show(this))
             },
             {
                 MainFormControlsTabOrder.ErrorProviderButton,
-                new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show())
+                new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show(this))
             },
             {
                 MainFormControlsTabOrder.TaskDialogButton,
-                new InitInfo("Task Dialog", (obj, e) => new TaskDialogSamples().Show())
+                new InitInfo("Task Dialog", (obj, e) => new TaskDialogSamples().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.MessageBoxButton,
+                new InitInfo("MessageBox", (obj, e) => new MessageBoxes().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.ToolStripsButton,
+                new InitInfo("ToolStrips", (obj, e) => new ToolStripTests().Show(this))
             }
         };
 

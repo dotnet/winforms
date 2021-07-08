@@ -2,12 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
-using static System.Windows.Forms.ListView;
 using static System.Windows.Forms.ListViewGroup;
 using static Interop;
 
@@ -140,7 +137,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View == View.Details || _owningListView.View == View.Tile)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewsException,
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewsException,
                         nameof(View.LargeIcon),
                         nameof(View.List),
                         nameof(View.SmallIcon)));
@@ -155,7 +152,7 @@ namespace System.Windows.Forms
             {
                 if (_owningListView.View == View.Details || _owningListView.View == View.Tile)
                 {
-                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessbilityObjectInvalidViewsException,
+                    throw new InvalidOperationException(string.Format(SR.ListViewItemAccessibilityObjectInvalidViewsException,
                         nameof(View.LargeIcon),
                         nameof(View.List),
                         nameof(View.SmallIcon)));

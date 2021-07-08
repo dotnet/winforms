@@ -71,5 +71,36 @@ namespace System.Windows.Forms.Tests
             UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
             Assert.Equal(expected, actual);
         }
+
+        [WinFormsFact]
+        public void ToolStripComboBoxControlAccessibleObject_FragmentNavigate_ChildrenAreExpected()
+        {
+            using ToolStripComboBoxControl control = new();
+            control.CreateControl();
+
+            object firstChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+            object lastChild = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+
+            Assert.Equal(control.ChildEditAccessibleObject, firstChild);
+            Assert.Equal(((ToolStripComboBoxControlAccessibleObject)control.AccessibilityObject).DropDownButtonUiaProvider, lastChild);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripComboBoxControlAccessibleObject_FragmentNavigate_ParentIsToolStrip()
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStripComboBoxControl control = new();
+            using ToolStripComboBox item = new();
+            using ToolStrip toolStrip = new();
+            control.Owner = item;
+            item.Parent = toolStrip;
+
+            object actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+
+            Assert.Equal(toolStrip.AccessibilityObject, actual);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
     }
 }

@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                         int itemsCount = GetChildFragmentCount();
                         if (index >= 0 && index < itemsCount)
                         {
-                            sibling = GetChildFragment(index);
+                            sibling = GetChildFragment(index, direction);
                         }
 
                         return sibling;
@@ -398,11 +398,11 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            private AccessibleObject GetChildFragment(int index)
+            private AccessibleObject GetChildFragment(int index, UiaCore.NavigateDirection direction)
             {
                 if (Parent is ToolStrip.ToolStripAccessibleObject toolStripParent)
                 {
-                    return toolStripParent.GetChildFragment(index);
+                    return toolStripParent.GetChildFragment(index, direction);
                 }
 
                 // ToolStripOverflowButtonAccessibleObject is derived from ToolStripDropDownItemAccessibleObject
@@ -412,13 +412,13 @@ namespace System.Windows.Forms
                 {
                     if (toolStripOverflowButtonParent.Parent is ToolStrip.ToolStripAccessibleObject toolStripGrandParent)
                     {
-                        return toolStripGrandParent.GetChildFragment(index, true);
+                        return toolStripGrandParent.GetChildFragment(index, direction, true);
                     }
                 }
 
                 if (Parent is ToolStripDropDownItemAccessibleObject dropDownItemParent)
                 {
-                    return dropDownItemParent.GetChildFragment(index);
+                    return dropDownItemParent.GetChildFragment(index, direction);
                 }
 
                 return null;

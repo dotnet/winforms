@@ -11,6 +11,7 @@ internal static partial class Interop
             FIRST = 0x1000,
             SETTODAY = FIRST + 12,
             GETTODAY = FIRST + 13,
+            SETCURRENTVIEW = FIRST + 32,
         }
     }
 }

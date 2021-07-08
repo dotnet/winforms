@@ -5,10 +5,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.Design;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -245,7 +243,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
         public void Label_ImageAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
         {
             using var control = new Label();

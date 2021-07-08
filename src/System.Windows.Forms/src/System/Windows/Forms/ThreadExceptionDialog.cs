@@ -169,8 +169,8 @@ namespace System.Windows.Forms
 
             StringBuilder detailsTextBuilder = new StringBuilder();
             string newline = "\r\n";
-            string separator = SR.ExDlgMsgSeperator;
-            string sectionseparator = SR.ExDlgMsgSectionSeperator;
+            string separator = SR.ExDlgMsgSeparator;
+            string sectionseparator = SR.ExDlgMsgSectionSeparator;
             if (Application.CustomThreadExceptionHandlerAttached)
             {
                 detailsTextBuilder.Append(SR.ExDlgMsgHeaderNonSwitchable);

@@ -4,7 +4,9 @@
 
 #nullable disable
 
+#if DEBUG
 using System.Diagnostics;
+#endif
 
 namespace System.Windows.Forms
 {

@@ -254,7 +254,7 @@ namespace System.Windows.Forms
                     baseVar = distinctFormats.ToArray();
                 }
 
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: returing " + baseVar.Length.ToString(CultureInfo.InvariantCulture) + " formats from GetFormats");
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: returning " + baseVar.Length.ToString(CultureInfo.InvariantCulture) + " formats from GetFormats");
                 return baseVar;
             }
 

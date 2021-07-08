@@ -5,9 +5,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
-using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -27,7 +26,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void EventsTab_CanExtend_Invoke_ReturnsTrue(object extendee)
         {
             var mockServiceProvider = new Mock<IServiceProvider>(MockBehavior.Strict);

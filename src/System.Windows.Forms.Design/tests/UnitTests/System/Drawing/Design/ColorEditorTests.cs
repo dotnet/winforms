@@ -4,11 +4,10 @@
 
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing.Design;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Drawing.Design.Tests
@@ -56,7 +55,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
         public void ColorEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new ColorEditor();
@@ -64,7 +63,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void ColorEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new ColorEditor();
@@ -72,7 +71,7 @@ namespace System.Drawing.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void ColorEditor_GetPaintValueSupported_Invoke_ReturnsTrue(ITypeDescriptorContext context)
         {
             var editor = new ColorEditor();

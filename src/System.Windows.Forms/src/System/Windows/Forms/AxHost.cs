@@ -1541,7 +1541,7 @@ namespace System.Windows.Forms
                             break;
                         case OC_RUNNING:
                             axState[ownDisposing] = false;
-                            Debug.Assert(!axState[fOwnWindow], "If we are invis at runtime, we should never be going beynd OC_RUNNING");
+                            Debug.Assert(!axState[fOwnWindow], "If we are invis at runtime, we should never be going beyond OC_RUNNING");
                             if (!axState[fOwnWindow])
                             {
                                 InPlaceActivate();
@@ -2010,7 +2010,7 @@ namespace System.Windows.Forms
             {
                 if (IsDirty() || ocxState is null)
                 {
-                    Debug.Assert(!axState[disposed], "we chould not be asking for the object when we are axState[disposed]...");
+                    Debug.Assert(!axState[disposed], "we could not be asking for the object when we are axState[disposed]...");
                     ocxState = CreateNewOcxState(ocxState);
                 }
 
@@ -3076,7 +3076,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Debug.Fail("no implemented persitance interfaces on object");
+                Debug.Fail("no implemented persistence interfaces on object");
                 throw new InvalidOperationException(SR.UnableToInitComponent);
             }
 

@@ -10,9 +10,8 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
-using Xunit.Abstractions;
 using static Interop;
 using static Interop.Richedit;
 using static Interop.User32;
@@ -243,7 +242,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox
@@ -265,7 +264,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_AllowDrop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -302,7 +301,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_AllowDrop_SetWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -366,7 +365,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_AllowDrop_SetWithHandleNonSTAThread_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -403,7 +402,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubRichTextBox();
@@ -482,7 +481,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_AutoSize_SetWithParent_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -599,7 +598,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_AutoWordSelection_Set_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox
@@ -621,7 +620,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_AutoWordSelection_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -763,7 +762,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void RichTextBox_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new RichTextBox
@@ -822,7 +821,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void RichTextBox_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubRichTextBox
@@ -1146,7 +1145,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_DetectUrls_Set_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox
@@ -1218,7 +1217,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_EnableAutoDragDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox
@@ -1240,7 +1239,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_EnableAutoDragDrop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -1277,7 +1276,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_EnableAutoDragDrop_SetWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -1318,7 +1317,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_EnableAutoDragDrop_SetWithHandleNonSTAThread_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -1355,7 +1354,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void RichTextBox_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubRichTextBox
@@ -1374,7 +1373,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void RichTextBox_Font_SetWithText_GetReturnsExpected(Font value)
         {
             using var control = new SubRichTextBox
@@ -1394,7 +1393,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void RichTextBox_Font_SetWithNonNullOldValue_GetReturnsExpected(Font value)
         {
             using var oldValue = new Font("Arial", 1);
@@ -1416,7 +1415,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void RichTextBox_Font_SetWithNonNullOldValueWithText_GetReturnsExpected(Font value)
         {
             using var oldValue = new Font("Arial", 1);
@@ -1880,7 +1879,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RichTextBoxLanguageOptions))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RichTextBoxLanguageOptions))]
         public void RichTextBox_LanguageOption_Set_GetReturnsExpected(RichTextBoxLanguageOptions value)
         {
             using var control = new RichTextBox
@@ -1897,7 +1896,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RichTextBoxLanguageOptions))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RichTextBoxLanguageOptions))]
         public void RichTextBox_LanguageOption_SetWithHandle_GetReturnsExpected(RichTextBoxLanguageOptions value)
         {
             using var control = new RichTextBox();
@@ -1926,8 +1925,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RichTextBoxLanguageOptions))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RichTextBoxLanguageOptions))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(RichTextBoxLanguageOptions))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RichTextBoxLanguageOptions))]
         public unsafe void RichTextBox_LanguageOption_GetCharFormat_Success(RichTextBoxLanguageOptions value)
         {
             using var control = new RichTextBox();
@@ -2084,7 +2083,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_Multiline_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubRichTextBox
@@ -2154,7 +2153,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_Multiline_SetWithParent_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -2427,7 +2426,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_RichTextShortcutsEnabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox
@@ -2449,7 +2448,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_RichTextShortcutsEnabled_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -2728,7 +2727,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void RichTextBox_Rtf_Set_GetReturnsExpected(string nullOrEmpty)
         {
             using var control = new RichTextBox
@@ -2767,7 +2766,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void RichTextBox_Rtf_SetWithHandle_GetReturnsExpected(string nullOrEmpty)
         {
             using var control = new RichTextBox();
@@ -2921,7 +2920,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void RichTextBox_Rtf_SetDisposed_ThrowsObjectDisposedException(string value)
         {
             using var control = new RichTextBox();
@@ -3172,7 +3171,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RichTextBoxScrollBars))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RichTextBoxScrollBars))]
         [InlineData(RichTextBoxScrollBars.Both + 1)]
         [InlineData(RichTextBoxScrollBars.ForcedHorizontal - 1)]
         public void RichTextBox_ScrollBars_SetInvalidValue_ThrowsInvalidEnumArgumentException(RichTextBoxScrollBars value)
@@ -3291,7 +3290,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void RichTextBox_SelectedRtf_Set_GetReturnsExpected(string nullOrEmpty)
         {
             using var control = new RichTextBox
@@ -3312,7 +3311,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void RichTextBox_SelectedRtf_SetWithHandle_GetReturnsExpected(string nullOrEmpty)
         {
             using var control = new RichTextBox();
@@ -3344,7 +3343,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void RichTextBox_SelectedRtf_SetWithRtf_GetReturnsExpected(string nullOrEmpty)
         {
             using var control = new RichTextBox
@@ -3366,7 +3365,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void RichTextBox_SelectedRtf_SetWithRtfWithHandle_GetReturnsExpected(string nullOrEmpty)
         {
             using var control = new RichTextBox
@@ -3428,7 +3427,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void RichTextBox_SelectedRtf_SetDisposed_ThrowsObjectDisposedException(string value)
         {
             using var control = new RichTextBox();
@@ -3537,7 +3536,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void RichTextBox_SelectedText_Set_GetReturnsExpected(string value)
         {
             using var control = new RichTextBox
@@ -3554,7 +3553,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void RichTextBox_SelectedText_SetWithHandle_GetReturnsExpected(string value)
         {
             using var control = new RichTextBox();
@@ -3583,7 +3582,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void RichTextBox_SelectedText_SetWithRtf_GetReturnsExpected(string value)
         {
             using var control = new RichTextBox
@@ -3601,7 +3600,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void RichTextBox_SelectedText_SetWithText_GetReturnsExpected(string value)
         {
             using var control = new RichTextBox
@@ -3619,7 +3618,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void RichTextBox_SelectedText_SetWithTextWithHandle_GetReturnsExpected(string value)
         {
             using var control = new RichTextBox
@@ -3651,7 +3650,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void RichTextBox_SelectedText_SetDisposed_ThrowsObjectDisposedException(string value)
         {
             using var control = new RichTextBox();
@@ -3744,7 +3743,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
         public void RichTextBox_SelectionAlignment_Set_GetReturnsExpected(HorizontalAlignment value)
         {
             using var control = new RichTextBox
@@ -3761,7 +3760,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
         public void RichTextBox_SelectionAlignment_SetWithHandle_GetReturnsExpected(HorizontalAlignment value)
         {
             using var control = new RichTextBox();
@@ -3812,7 +3811,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
         public void RichTextBox_SelectionAlignment_SetInvalidValue_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
         {
             using var control = new RichTextBox();
@@ -3820,7 +3819,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
         public void RichTextBox_SelectionAlignment_SetCantCreateHandle_GetReturnsExpected(HorizontalAlignment value)
         {
             using var control = new CantCreateHandleRichTextBox();
@@ -3835,7 +3834,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
         public void RichTextBox_SelectionAlignment_SetDisposed_ThrowsObjectDisposedException(HorizontalAlignment value)
         {
             using var control = new RichTextBox();
@@ -4133,7 +4132,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionBullet_Set_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox
@@ -4161,7 +4160,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionBullet_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -4204,7 +4203,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionBullet_SetWithSelectionHangingIndentWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -4270,7 +4269,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionBullet_SetCantCreateHandle_GetReturnExpected(bool value)
         {
             using var control = new CantCreateHandleRichTextBox();
@@ -4290,7 +4289,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionBullet_SetDisposed_ThrowsObjectDisposedException(bool value)
         {
             using var control = new RichTextBox();
@@ -5700,7 +5699,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionProtected_Set_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox
@@ -5722,7 +5721,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionProtected_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -5759,7 +5758,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public unsafe void RichTextBox_SelectionProtected_GetCharFormat_Success(bool value)
         {
             using var control = new RichTextBox();
@@ -5776,7 +5775,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionProtected_SetCantCreateHandle_GetReturnExpected(bool value)
         {
             using var control = new CantCreateHandleRichTextBox();
@@ -5796,7 +5795,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_SelectionProtected_SetDisposed_ThrowsObjectDisposedException(bool value)
         {
             using var control = new RichTextBox();
@@ -6614,7 +6613,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_ShowSelectionMargin_Set_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox
@@ -6636,7 +6635,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void RichTextBox_ShowSelectionMargin_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new RichTextBox();
@@ -7079,7 +7078,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void RichTextBox_Text_SetWithRtfText_GetReturnsExpected(string value, string expected)
         {
             using var control = new RichTextBox
@@ -7304,7 +7303,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void RichTextBox_Text_SetWithRtfTextWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new RichTextBox
@@ -7618,7 +7617,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void RichTextBox_Text_SetCantCreateHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new CantCreateHandleRichTextBox();
@@ -7633,7 +7632,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void RichTextBox_Text_SetDisposed_ThrowsObjectDisposedException(string value)
         {
             using var control = new RichTextBox();
@@ -8777,7 +8776,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RichTextBoxStreamType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RichTextBoxStreamType))]
         public void RichTextBox_LoadFile_InvalidFileType_ThrowsInvalidEnumArgumentException(RichTextBoxStreamType fileType)
         {
             using var control = new RichTextBox();
@@ -9020,7 +9019,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void RichTextBox_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubRichTextBox();
@@ -9046,7 +9045,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void RichTextBox_OnBackColorChanged_InvokeWithHandle_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubRichTextBox();
@@ -9126,7 +9125,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void RichTextBox_OnHScroll_Invoke_CallsHScroll(EventArgs eventArgs)
         {
             using var control = new SubRichTextBox();
@@ -9152,7 +9151,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void RichTextBox_OnImeChange_Invoke_CallsImeChange(EventArgs eventArgs)
         {
             using var control = new SubRichTextBox();
@@ -9229,7 +9228,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void RichTextBox_OnProtected_Invoke_CallsProtected(EventArgs eventArgs)
         {
             using var control = new SubRichTextBox();
@@ -9255,7 +9254,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void RichTextBox_OnSelectionChanged_Invoke_CallsSelectionChanged(EventArgs eventArgs)
         {
             using var control = new SubRichTextBox();
@@ -9281,7 +9280,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void RichTextBox_OnVScroll_Invoke_CallsVScroll(EventArgs eventArgs)
         {
             using var control = new SubRichTextBox();
@@ -9741,7 +9740,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RichTextBoxStreamType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RichTextBoxStreamType))]
         public void RichTextBox_SaveFile_InvalidFileType_ThrowsInvalidEnumArgumentException(RichTextBoxStreamType fileType)
         {
             using var control = new RichTextBox();
