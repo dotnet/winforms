@@ -1259,7 +1259,7 @@ namespace System.Windows.Forms
             return (FlatStyle == FlatStyle.System || !UseCompatibleTextRendering);
         }
 
-// See ComboBox.cs GetComboHeight
+        // See ComboBox.cs GetComboHeight
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
         {
             Size bordersAndPadding = GetBordersAndPadding();
@@ -1491,24 +1491,18 @@ namespace System.Windows.Forms
             }
 
             Color color;
-            if (Enabled && SystemInformation.HighContrast)
+
+            IntPtr hdc = e.Graphics.GetHdc();
+            try
             {
-                color = SystemColors.WindowText;
+                using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
+                {
+                    color = wg.GetNearestColor((Enabled) ? ForeColor : DisabledColor);
+                }
             }
-            else
+            finally
             {
-                IntPtr hdc = e.Graphics.GetHdc();
-                try
-                {
-                    using (WindowsGraphics wg = WindowsGraphics.FromHdc(hdc))
-                    {
-                        color = wg.GetNearestColor((Enabled) ? ForeColor : DisabledColor);
-                    }
-                }
-                finally
-                {
-                    e.Graphics.ReleaseHdc();
-                }
+                e.Graphics.ReleaseHdc();
             }
 
             // Do actual drawing
