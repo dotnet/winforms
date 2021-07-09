@@ -7941,6 +7941,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Color que se utiliza para los efectos de resaltado en el separador.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">Color inicial del gradiente que se utiliza en StatusStrip.</target>

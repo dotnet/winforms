@@ -7941,6 +7941,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Cor a ser usada para efeitos de realce no separador.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">A cor inicial do gradiente usada em StatusStrip.</target>

@@ -7941,6 +7941,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Couleur à utiliser pour les effets de surbrillance sur le séparateur.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">Couleur de début du dégradé utilisé dans le StatusStrip.</target>

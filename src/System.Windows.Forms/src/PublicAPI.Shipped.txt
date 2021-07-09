@@ -5164,6 +5164,7 @@ static System.Windows.Forms.ProfessionalColors.RaftingContainerGradientBegin.get
 static System.Windows.Forms.ProfessionalColors.RaftingContainerGradientEnd.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.SeparatorDark.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.SeparatorLight.get -> System.Drawing.Color
+static System.Windows.Forms.ProfessionalColors.StatusStripBorder.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.StatusStripGradientBegin.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.StatusStripGradientEnd.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.ToolStripBorder.get -> System.Drawing.Color
@@ -13266,6 +13267,7 @@ virtual System.Windows.Forms.ProfessionalColorTable.RaftingContainerGradientBegi
 virtual System.Windows.Forms.ProfessionalColorTable.RaftingContainerGradientEnd.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.SeparatorDark.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.SeparatorLight.get -> System.Drawing.Color
+virtual System.Windows.Forms.ProfessionalColorTable.StatusStripBorder.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.StatusStripGradientBegin.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.StatusStripGradientEnd.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.ToolStripBorder.get -> System.Drawing.Color

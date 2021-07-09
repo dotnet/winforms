@@ -230,7 +230,8 @@ namespace System.Windows.Forms
         public virtual Color SeparatorLight => FromKnownColor(KnownColors.msocbvcrCBSplitterLineLight);
 
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripBorderDescr))]
-        public virtual Color StatusStripBorder => FromKnownColor(KnownColors.msocbvcrCBShadow);
+        // Note: the color is retained for backwards compatibility
+        public virtual Color StatusStripBorder => SystemColors.ButtonHighlight;
 
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
         public virtual Color StatusStripGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
