@@ -86,7 +86,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Equal(Keys.None, item.ShortcutKeys);
             Assert.True(item.ShowShortcutKeys);
             Assert.Null(item.Site);
