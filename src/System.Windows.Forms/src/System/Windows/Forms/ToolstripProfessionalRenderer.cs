@@ -1029,7 +1029,8 @@ namespace System.Windows.Forms
 
         private void RenderStatusStripBorder(ToolStripRenderEventArgs e)
         {
-            e.Graphics.DrawLine(ColorTable.StatusStripBorder, 0, 0, e.ToolStrip.Width, 0);
+            using Pen p = new Pen(ColorTable.StatusStripBorder);
+            e.Graphics.DrawLine(p, 0, 0, e.ToolStrip.Width, 0);
         }
 
         private void RenderStatusStripBackground(ToolStripRenderEventArgs e)
