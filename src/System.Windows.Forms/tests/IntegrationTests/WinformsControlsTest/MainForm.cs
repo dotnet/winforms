@@ -168,6 +168,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.ToolStripsButton,
                 new InitInfo("ToolStrips", (obj, e) => new ToolStripTests().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.TrackBarsButton,
+                new InitInfo("TrackBars", (obj, e) => new TrackBars().Show(this))
             }
         };
 
