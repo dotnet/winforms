@@ -795,7 +795,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKeyDown(ref Message msg)
         {
-            Keys keyData = (Keys)((int)msg.WParam | (int)ModifierKeys);
+            Keys keyData = (Keys)(PARAM.ToInt(msg.WParam) | (int)ModifierKeys);
             Point locPos = Position;
             int pos = 0;
             int maxPos = 0;

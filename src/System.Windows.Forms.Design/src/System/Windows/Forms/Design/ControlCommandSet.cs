@@ -1814,7 +1814,7 @@ namespace System.Windows.Forms.Design
                     else
                     {
                         //REVIEW This doesn't look 64-bit safe
-                        return (int)cX.Parent.Handle - (int)cY.Parent.Handle;
+                        return PARAM.ToInt(cX.Parent.Handle) - PARAM.ToInt(cY.Parent.Handle);
                     }
                 }
                 else if (cY != null)

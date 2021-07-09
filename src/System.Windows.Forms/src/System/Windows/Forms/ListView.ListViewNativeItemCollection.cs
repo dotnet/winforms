@@ -222,7 +222,7 @@ namespace System.Windows.Forms
                         iItem = displayIndex
                     };
                     User32.SendMessageW(owner, (User32.WM)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
-                    return (int)lvItem.lParam;
+                    return PARAM.ToInt(lvItem.lParam);
                 }
                 else
                 {

@@ -244,7 +244,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
-                if ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) == 0)
+                if (User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) == IntPtr.Zero)
                 {
                     // This means the node is not visible
                     //
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
                     return Rectangle.Empty;
                 }
 
-                if ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, IntPtr.Zero, ref rc) == 0)
+                if (User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, IntPtr.Zero, ref rc) == IntPtr.Zero)
                 {
                     // This means the node is not visible
                     //
@@ -677,7 +677,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 
-                bool visible = ((int)User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) != 0);
+                bool visible = User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) != IntPtr.Zero;
                 if (visible)
                 {
                     Size size = tv.ClientSize;

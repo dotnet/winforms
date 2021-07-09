@@ -523,7 +523,7 @@ namespace System.Windows.Forms
         public override int GetHashCode()
         {
             // Handle is a 64-bit value in 64-bit machines, uncheck here to avoid overflow exceptions.
-            return unchecked((int)_handle);
+            return unchecked(PARAM.ToInt(_handle));
         }
 
         public override bool Equals(object? obj)

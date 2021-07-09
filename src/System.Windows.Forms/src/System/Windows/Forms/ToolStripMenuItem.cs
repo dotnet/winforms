@@ -789,7 +789,7 @@ namespace System.Windows.Forms
             };
             User32.GetMenuItemInfoW(new HandleRef(this, _nativeMenuHandle), _nativeMenuCommandID, /*fByPosition instead of ID=*/ BOOL.FALSE, ref info);
 
-            if (info.hbmpItem != IntPtr.Zero && info.hbmpItem.ToInt32() > (int)User32.HBMMENU.POPUP_MINIMIZE)
+            if (info.hbmpItem != IntPtr.Zero && PARAM.ToInt(info.hbmpItem) > (int)User32.HBMMENU.POPUP_MINIMIZE)
             {
                 return Bitmap.FromHbitmap(info.hbmpItem);
             }
@@ -797,7 +797,7 @@ namespace System.Windows.Forms
             // its a system defined bitmap
             int buttonToUse = -1;
 
-            switch (info.hbmpItem.ToInt32())
+            switch (PARAM.ToInt(info.hbmpItem))
             {
                 case (int)User32.HBMMENU.MBAR_CLOSE:
                 case (int)User32.HBMMENU.MBAR_CLOSE_D:
