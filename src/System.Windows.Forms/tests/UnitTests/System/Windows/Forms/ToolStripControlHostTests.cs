@@ -112,7 +112,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(c.RightToLeft, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.Equal(c.Focused, item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(c.Size, item.Size);
             Assert.Null(item.Tag);
