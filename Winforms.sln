@@ -161,6 +161,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "System.Windows.Forms.Common
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiScrollBarTests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiScrollBarTests\MauiScrollBarTests.csproj", "{872E41E1-FF66-4B12-A273-1F26A548666F}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MauiMDITests", "src\System.Windows.Forms\tests\IntegrationTests\MauiTests\MauiMDITests\MauiMDITests.csproj", "{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -925,6 +927,22 @@ Global
 		{872E41E1-FF66-4B12-A273-1F26A548666F}.Release|x64.Build.0 = Release|Any CPU
 		{872E41E1-FF66-4B12-A273-1F26A548666F}.Release|x86.ActiveCfg = Release|Any CPU
 		{872E41E1-FF66-4B12-A273-1F26A548666F}.Release|x86.Build.0 = Release|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Debug|arm64.ActiveCfg = Debug|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Debug|arm64.Build.0 = Debug|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Debug|x64.Build.0 = Debug|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Debug|x86.Build.0 = Debug|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Release|arm64.ActiveCfg = Release|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Release|arm64.Build.0 = Release|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Release|x64.ActiveCfg = Release|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Release|x64.Build.0 = Release|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Release|x86.ActiveCfg = Release|Any CPU
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -985,6 +1003,7 @@ Global
 		{FC75CB54-D8D0-4B41-9A4D-9F862F34A02D} = {583F1292-AE8D-4511-B8D8-A81FE4642DDC}
 		{05FD23CE-60AE-44A8-8DD6-1688F04BE385} = {DF68A171-D27B-4E6A-8A7E-63A651622355}
 		{872E41E1-FF66-4B12-A273-1F26A548666F} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
+		{5D8C7F71-8B58-48B4-8A54-11E5AB8B02CA} = {8F20A905-BD37-4D80-B8DF-FA45276FC23F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7B1B0433-F612-4E5A-BE7E-FCF5B9F6E136}

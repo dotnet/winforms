@@ -3126,6 +3126,9 @@ Do you want to replace it?</value>
   <data name="FormMDIChildrenDescr" xml:space="preserve">
     <value>Retrieves the MDI children of this form.</value>
   </data>
+  <data name="FormMdiChildrenMinimizedAnchorBottomDescr" xml:space="preserve">
+    <value>Gets or sets the anchoring for minimized MDI children.</value>
+  </data>
   <data name="FormMDIParentAndChild" xml:space="preserve">
     <value>Form cannot be both an MDI child and MDI parent.</value>
   </data>

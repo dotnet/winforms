@@ -1,0 +1,2 @@
+System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.get -> bool
+System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.set -> void

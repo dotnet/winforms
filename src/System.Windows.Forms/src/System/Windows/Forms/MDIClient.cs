@@ -237,53 +237,51 @@ namespace System.Windows.Forms
         /// <param name="specified">A bitwise combination of the enumeration values that specifies the bounds of the control to use.</param>
         protected override void SetBoundsCore(int x, int y, int width, int height, BoundsSpecified specified)
         {
-            ISite site = ParentInternal?.Site;
-            if (IsHandleCreated && (site is null || !site.DesignMode))
+            if (!IsHandleCreated || (ParentInternal as Form)?.MdiChildrenMinimizedAnchorBottom == false || ParentInternal?.Site?.DesignMode == true)
             {
-                Rectangle oldBounds = Bounds;
                 base.SetBoundsCore(x, y, width, height, specified);
-                Rectangle newBounds = Bounds;
+                return;
+            }
 
-                int yDelta = oldBounds.Height - newBounds.Height;
-                if (yDelta != 0)
+            Rectangle oldBounds = Bounds;
+            base.SetBoundsCore(x, y, width, height, specified);
+            Rectangle newBounds = Bounds;
+
+            int yDelta = oldBounds.Height - newBounds.Height;
+            if (yDelta != 0)
+            {
+                // NOTE: This logic is to keep minimized MDI children anchored to
+                // the bottom left of the client area, normally they are anchored
+                // to the top left which just looks weird!
+                for (int i = 0; i < Controls.Count; i++)
                 {
-                    // NOTE: This logic is to keep minimized MDI children anchored to
-                    // the bottom left of the client area, normally they are anchored
-                    // to the top right which just looks weird!
-                    for (int i = 0; i < Controls.Count; i++)
+                    Control ctl = Controls[i];
+                    if (ctl is not null && ctl is Form)
                     {
-                        Control ctl = Controls[i];
-                        if (ctl is not null && ctl is Form)
+                        Form child = (Form)ctl;
+                        // Only adjust the window position for visible MDI Child windows to prevent
+                        // them from being re-displayed.
+                        if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
                         {
-                            Form child = (Form)ctl;
-                            // Only adjust the window position for visible MDI Child windows to prevent
-                            // them from being re-displayed.
-                            if (child.CanRecreateHandle() && child.WindowState == FormWindowState.Minimized)
+                            User32.GetWindowPlacement(child, out User32.WINDOWPLACEMENT wp);
+                            wp.ptMinPosition.Y -= yDelta;
+                            if (wp.ptMinPosition.Y == -1)
                             {
-                                User32.GetWindowPlacement(child, out User32.WINDOWPLACEMENT wp);
-                                wp.ptMinPosition.Y -= yDelta;
-                                if (wp.ptMinPosition.Y == -1)
+                                if (yDelta < 0)
                                 {
-                                    if (yDelta < 0)
-                                    {
-                                        wp.ptMinPosition.Y = 0;
-                                    }
-                                    else
-                                    {
-                                        wp.ptMinPosition.Y = -2;
-                                    }
+                                    wp.ptMinPosition.Y = 0;
                                 }
-
-                                wp.flags = User32.WPF.SETMINPOSITION;
-                                User32.SetWindowPlacement(child, ref wp);
+                                else
+                                {
+                                    wp.ptMinPosition.Y = -2;
+                                }
                             }
+
+                            wp.flags = User32.WPF.SETMINPOSITION;
+                            User32.SetWindowPlacement(child, ref wp);
                         }
                     }
                 }
-            }
-            else
-            {
-                base.SetBoundsCore(x, y, width, height, specified);
             }
         }
 
