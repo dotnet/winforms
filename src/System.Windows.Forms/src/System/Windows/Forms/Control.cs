@@ -9515,7 +9515,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void ProcessUICues(ref Message msg)
         {
-            Keys keyCode = (Keys)((int)msg.WParam) & Keys.KeyCode;
+            Keys keyCode = (Keys)(PARAM.ToInt(msg.WParam)) & Keys.KeyCode;
 
             if (keyCode != Keys.F10 && keyCode != Keys.Menu && keyCode != Keys.Tab)
             {

@@ -2778,12 +2778,12 @@ namespace System.Windows.Forms
                 byte imeConversionType = imeConversionNone;
 
                 // Check if there's an update to the composition string:
-                if ((m.LParam.ToInt32() & (int)Imm32.GCS.COMPSTR) != 0)
+                if ((PARAM.ToInt(m.LParam) & (int)Imm32.GCS.COMPSTR) != 0)
                 {
                     // The character in the composition has been updated but not yet converted.
                     imeConversionType = imeConversionUpdate;
                 }
-                else if ((m.LParam.ToInt32() & (int)Imm32.GCS.RESULTSTR) != 0)
+                else if ((PARAM.ToInt(m.LParam) & (int)Imm32.GCS.RESULTSTR) != 0)
                 {
                     // The character(s) in the composition has been fully converted.
                     imeConversionType = imeConversionCompleted;

@@ -355,15 +355,15 @@ namespace System.Windows.Forms
             switch ((User32.WM)msg)
             {
                 case User32.WM.COMMAND:
-                    if ((int)wparam == 0x402)
+                    if (PARAM.ToInt(wparam) == 0x402)
                     {
                         var logFont = new User32.LOGFONTW();
                         User32.SendMessageW(hWnd, User32.WM.CHOOSEFONT_GETLOGFONT, IntPtr.Zero, ref logFont);
                         UpdateFont(ref logFont);
-                        int index = (int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL);
+                        int index = PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETCURSEL));
                         if (index != User32.CB_ERR)
                         {
-                            UpdateColor((int)User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index));
+                            UpdateColor(PARAM.ToInt(User32.SendDlgItemMessageW(hWnd, User32.DialogItemID.cmb4, (User32.WM)User32.CB.GETITEMDATA, (IntPtr)index)));
                         }
 
                         if (NativeWindow.WndProcShouldBeDebuggable)

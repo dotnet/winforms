@@ -2106,9 +2106,9 @@ namespace System.Windows.Forms
                     // This is the Chrome Panel collection editor scenario
                     // we had focus, then the Chrome panel was activated and we never went away
                     // when we get focus again, we should reactivate our message filter.
-                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.WndProc] got a WM_ACTIVATE " + (((int)m.WParam == (int)User32.WA.ACTIVE) ? "WA_ACTIVE" : "WA_INACTIVE") + " - checkin if we need to set the active toolstrip");
+                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.WndProc] got a WM_ACTIVATE " + ((PARAM.ToInt(m.WParam) == (int)User32.WA.ACTIVE) ? "WA_ACTIVE" : "WA_INACTIVE") + " - checkin if we need to set the active toolstrip");
 
-                    if ((int)m.WParam == (int)User32.WA.ACTIVE)
+                    if (PARAM.ToInt(m.WParam) == (int)User32.WA.ACTIVE)
                     {
                         if (Visible)
                         {

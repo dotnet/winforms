@@ -10401,6 +10401,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">LargeChange: 值 '{0}' 必須大於或等於 0。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="new">Large decrease</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="new">Large increase</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">TrackBar 上滑桿位置的最大值。</target>
@@ -10419,6 +10429,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">控制項的方向。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="new">Position</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">

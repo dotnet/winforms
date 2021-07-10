@@ -10401,6 +10401,16 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">LargeChange: wartość '{0}' musi być większa od lub równa 0.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="new">Large decrease</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="new">Large increase</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">Maksymalna wartość dla pozycji suwaka w elemencie TrackBar.</target>
@@ -10419,6 +10429,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">Orientacja formantu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="new">Position</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">

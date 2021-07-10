@@ -6498,7 +6498,7 @@ namespace System.Windows.Forms
                 base.WndProc(ref m);
                 if (MdiControlStrip is null && MdiParentInternal != null && MdiParentInternal.ActiveMdiChildInternal == this)
                 {
-                    int wParam = m.WParam.ToInt32();
+                    int wParam = PARAM.ToInt(m.WParam);
                     MdiParentInternal.UpdateMdiControlStrip(wParam == (int)User32.WINDOW_SIZE.MAXIMIZED);
                 }
             }

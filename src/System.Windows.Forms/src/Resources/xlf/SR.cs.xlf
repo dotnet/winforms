@@ -10401,6 +10401,16 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">LargeChange: Hodnota {0} musí být větší nebo rovna 0.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="new">Large decrease</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="new">Large increase</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">Maximální hodnota pozice posuvníku v objektu TrackBar.</target>
@@ -10419,6 +10429,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">Orientace ovládacího prvku.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="new">Position</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">

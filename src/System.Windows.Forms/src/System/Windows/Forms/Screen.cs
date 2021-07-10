@@ -414,7 +414,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Computes and retrieves a hash code for an object.
         /// </summary>
-        public override int GetHashCode() => (int)hmonitor;
+        public override int GetHashCode() => PARAM.ToInt(hmonitor);
 
         /// <summary>
         ///  Called by the SystemEvents class when our display settings are

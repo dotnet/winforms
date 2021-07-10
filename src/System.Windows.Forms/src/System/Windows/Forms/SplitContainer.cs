@@ -2523,7 +2523,7 @@ namespace System.Windows.Forms
             {
                 if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
                 {
-                    if ((m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam == (int)Keys.Escape)
+                    if ((m.Msg == (int)User32.WM.KEYDOWN && PARAM.ToInt(m.WParam) == (int)Keys.Escape)
                         || (m.Msg == (int)User32.WM.SYSKEYDOWN))
                     {
                         //Notify that splitMOVE was reverted ..

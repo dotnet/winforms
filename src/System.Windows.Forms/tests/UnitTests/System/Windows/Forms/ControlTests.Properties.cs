@@ -10510,7 +10510,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.ShowFocusCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, control.ShowFocusCues);
         }
 
         [WinFormsTheory]
@@ -10553,7 +10553,7 @@ namespace System.Windows.Forms.Tests
                 Site = mockSite.Object
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.ShowFocusCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, control.ShowFocusCues);
         }
 
         [WinFormsFact]
@@ -10561,7 +10561,7 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, control.ShowKeyboardCues);
         }
 
         [WinFormsTheory]
@@ -10604,7 +10604,7 @@ namespace System.Windows.Forms.Tests
                 Site = mockSite.Object
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(designMode, control.ShowKeyboardCues);
+            Assert.Equal(designMode | SystemInformation.MenuAccessKeysUnderlined, control.ShowKeyboardCues);
         }
 
         public static IEnumerable<object[]> Site_Set_TestData()

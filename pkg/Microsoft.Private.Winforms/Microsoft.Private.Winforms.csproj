@@ -58,35 +58,42 @@
       <PackagePath></PackagePath>
     </None>
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Include="sdk\dotnet-wpf\*">
+      <Pack>True</Pack>
+      <PackagePath>sdk\dotnet-wpf</PackagePath>
+    </None>
+  </ItemGroup>
 
   <!-- Any projects referenced here will have their outputs automatically put into the package -->
   <!-- If you add a new csproj, and you want the outputs in the package, you must add it here -->
   <ItemGroup>
-    <!-- Facade for System.Drawing include -->
+    <!-- Facade for System.Drawing -->
     <ProjectReference Include="..\..\src\System.Drawing\src\System.Drawing.Facade.csproj" />
 
-    <!-- Facade for System.Design include -->
+    <!-- Facade for System.Design -->
     <ProjectReference Include="..\..\src\System.Design\src\System.Design.Facade.csproj" />
 
-    <!-- Facade for System.Drawing.Design include -->
+    <!-- Facade for System.Drawing.Design -->
     <ProjectReference Include="..\..\src\System.Drawing.Design\src\System.Drawing.Design.Facade.csproj" />
 
-    <!-- Reference and Source System.Windows.Forms includes -->
+    <!-- Reference and Source System.Windows.Forms -->
     <ProjectReference Include="..\..\src\System.Windows.Forms\src\System.Windows.Forms.csproj" />
 
-    <!-- Reference and Source System.Windows.Forms.Primitives includes -->
+    <!-- Reference and Source System.Windows.Forms.Primitives -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
 
-    <!-- Reference and Source System.Windows.Forms.Design includes -->
+    <!-- Reference and Source System.Windows.Forms.Design -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
 
-    <!-- Facade for System.Windows.Forms.Design.Editors includes -->
+    <!-- Facade for System.Windows.Forms.Design.Editors -->
     <ProjectReference Include="..\..\src\System.Windows.Forms.Design.Editors\src\System.Windows.Forms.Design.Editors.Facade3x.csproj" />
     
-    <!-- Facade for Microsoft.VisualBasic include -->
+    <!-- Facade for Microsoft.VisualBasic -->
     <ProjectReference Include="..\..\src\Microsoft.VisualBasic\src\Microsoft.VisualBasic.Facade.csproj" />
 
-    <!-- Reference and Source Microsoft.VisualBasic.Forms includes -->
+    <!-- Reference and Source Microsoft.VisualBasic.Forms -->
     <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Forms\src\Microsoft.VisualBasic.Forms.vbproj" />
 
     <ProjectReference Include="..\..\src\Accessibility\src\Accessibility.ilproj" />

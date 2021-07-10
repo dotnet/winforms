@@ -404,10 +404,10 @@ namespace System.Windows.Forms
                     IntPtr hwndHdr = User32.SendMessageW(ListView, (User32.WM)LVM.GETHEADER);
                     if (hwndHdr != IntPtr.Zero)
                     {
-                        int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
+                        int nativeColumnCount = PARAM.ToInt(User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT));
                         if (Index < nativeColumnCount)
                         {
-                            _width = (int)User32.SendMessageW(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index);
+                            _width = PARAM.ToInt(User32.SendMessageW(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index));
                         }
                     }
                 }

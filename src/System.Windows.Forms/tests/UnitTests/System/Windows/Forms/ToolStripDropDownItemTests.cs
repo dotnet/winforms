@@ -84,7 +84,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -272,7 +272,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
@@ -380,7 +380,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(RightToLeft.Inherit, item.RightToLeft);
             Assert.False(item.RightToLeftAutoMirrorImage);
             Assert.False(item.Selected);
-            Assert.False(item.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, item.ShowKeyboardCues);
             Assert.Null(item.Site);
             Assert.Equal(new Size(23, 23), item.Size);
             Assert.Null(item.Tag);
