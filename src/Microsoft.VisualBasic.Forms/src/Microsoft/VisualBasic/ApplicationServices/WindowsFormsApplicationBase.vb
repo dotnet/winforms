@@ -297,8 +297,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' When the startup form gets created, WinForms is going to push our context into the previous context
             ' and then restore it when Application.Run() exits.
             _appSynchronizationContext = AsyncOperationManager.SynchronizationContext
-
-            AsyncOperationManager.SynchronizationContext = New Windows.Forms.WindowsFormsSynchronizationContext()
         End Sub
 
         ''' <summary>
@@ -466,6 +464,10 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
+            If Debugger.IsAttached Then
+                Debugger.Break()
+            End If
+
             ' Lets first query and set, if applicable, the DefaultFont.
             Dim applicationDefaultsEventArgs = New ApplyDefaultsEventArgs()
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
@@ -473,18 +475,23 @@ Namespace Microsoft.VisualBasic.ApplicationServices
                 Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.DefaultFont)
             End If
 
-            ' Let'then s get the request from the ApplicationEvents for the HighDpiMode...
-            Dim getHighDpiEventArgs = New ApplyHighDpiModeEventArgs(HighDpiMode)
-            RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
+            ' This creates the native window, and that means, we can no longer apply a different Default Font.
+            ' So, this is the earliest point in time to set the AsyncOperationManager's SyncContext.
+            AsyncOperationManager.SynchronizationContext = New Windows.Forms.WindowsFormsSynchronizationContext()
 
-            ' Apply HighDpiMode
+            ' Let's then get the request from the ApplicationEvents for the HighDpiMode.
+            Dim getHighDpiEventArgs = New ApplyHighDpiModeEventArgs(_highDpiMode)
+            RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
+            _highDpiMode = getHighDpiEventArgs.HighDpiMode
+
+            ' Then, it's applying what we got back as HighDpiMode.
             Dim dpiSetResult = Windows.Forms.Application.SetHighDpiMode(_highDpiMode)
             If dpiSetResult Then
                 _highDpiMode = Windows.Forms.Application.HighDpiMode
             End If
             Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
 
-            ' EnableVisualStyles
+            ' And finally, we take care of EnableVisualStyles.
             If _enableVisualStyles Then
                 Windows.Forms.Application.EnableVisualStyles()
             End If
