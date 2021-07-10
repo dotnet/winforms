@@ -9,6 +9,7 @@ Option Infer On
 Imports System.ComponentModel
 Imports System.Drawing
 Imports System.Runtime.InteropServices
+Imports System.Windows.Forms
 
 Namespace Microsoft.VisualBasic.ApplicationServices
 
@@ -19,16 +20,18 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Class ApplyDefaultsEventArgs
         Inherits EventArgs
 
-        ''' <summary>
-        ''' Creates a new instance of the StartupEventArgs.
-        ''' </summary>
-        Public Sub New()
-            Me.DefaultFont = DefaultFont
+        Friend Sub New(minimumSplashScreenDisplayTime As Integer,
+                highDpiMode As HighDpiMode)
+            Me.MinimumSplashScreenDisplayTime = minimumSplashScreenDisplayTime
+            Me.HighDpiMode = highDpiMode
         End Sub
-
         ''' <summary>
         ''' Gets or Sets the HighDpiMode.
         ''' </summary>
-        Public Property DefaultFont As Font
+        Public Property Font As Font
+        Public Property MinimumSplashScreenDisplayTime As Integer =
+            WindowsFormsApplicationBase.MINIMUM_SPLASH_EXPOSURE_DEFAULT
+        Public Property HighDpiMode As HighDpiMode
+
     End Class
 End Namespace

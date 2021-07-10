@@ -37,12 +37,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Public Delegate Sub ApplyApplicationDefaultsEventHandler(sender As Object, e As ApplyDefaultsEventArgs)
 
     ''' <summary>
-    ''' Signature for the ApplyHighDpiMode event handler
-    ''' </summary>
-    <EditorBrowsable(EditorBrowsableState.Advanced)>
-    Public Delegate Sub ApplyHighDpiModeEventHandler(sender As Object, e As ApplyHighDpiModeEventArgs)
-
-    ''' <summary>
     ''' Signature for the Startup event handler
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
@@ -73,7 +67,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     Partial Public Class WindowsFormsApplicationBase : Inherits ConsoleApplicationBase
 
         Public Event ApplyApplicationDefaults As ApplyApplicationDefaultsEventHandler
-        Public Event ApplyHighDpiMode As ApplyHighDpiModeEventHandler
         Public Event Startup As StartupEventHandler
         Public Event StartupNextInstance As StartupNextInstanceEventHandler
         Public Event Shutdown As ShutdownEventHandler
@@ -82,7 +75,8 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private Delegate Sub DisposeDelegate()
 
         ' How long a subsequent instance will wait for the original instance to get on its feet.
-        Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 ' milliseconds.  
+        Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 ' milliseconds.
+        Friend Const MINIMUM_SPLASH_EXPOSURE_DEFAULT As Integer = 2000 ' milliseconds.
 
         Private ReadOnly _splashLock As New Object
         Private ReadOnly _appContext As WinFormsAppContext
@@ -123,7 +117,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _splashScreen As Windows.Forms.Form
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
-        Private _minimumSplashExposure As Integer = 2000
+        Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
 
@@ -464,25 +458,25 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
-            If Debugger.IsAttached Then
-                Debugger.Break()
+            ' Lets first query and set, if applicable, the DefaultFont.
+            Dim applicationDefaultsEventArgs = New ApplyDefaultsEventArgs(
+                MinimumSplashScreenDisplayTime,
+                _highDpiMode)
+
+            ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
+            applicationDefaultsEventArgs.MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
+            RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
+            If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
+                Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.Font)
             End If
 
-            ' Lets first query and set, if applicable, the DefaultFont.
-            Dim applicationDefaultsEventArgs = New ApplyDefaultsEventArgs()
-            RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
-            If (applicationDefaultsEventArgs.DefaultFont IsNot Nothing) Then
-                Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.DefaultFont)
-            End If
+            MinimumSplashScreenDisplayTime = applicationDefaultsEventArgs.MinimumSplashScreenDisplayTime
 
             ' This creates the native window, and that means, we can no longer apply a different Default Font.
             ' So, this is the earliest point in time to set the AsyncOperationManager's SyncContext.
             AsyncOperationManager.SynchronizationContext = New Windows.Forms.WindowsFormsSynchronizationContext()
 
-            ' Let's then get the request from the ApplicationEvents for the HighDpiMode.
-            Dim getHighDpiEventArgs = New ApplyHighDpiModeEventArgs(_highDpiMode)
-            RaiseEvent ApplyHighDpiMode(Me, getHighDpiEventArgs)
-            _highDpiMode = getHighDpiEventArgs.HighDpiMode
+            _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
 
             ' Then, it's applying what we got back as HighDpiMode.
             Dim dpiSetResult = Windows.Forms.Application.SetHighDpiMode(_highDpiMode)
@@ -491,12 +485,12 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End If
             Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
 
-            ' And finally, we take care of EnableVisualStyles.
+            ' And finally we take care of EnableVisualStyles.
             If _enableVisualStyles Then
                 Windows.Forms.Application.EnableVisualStyles()
             End If
 
-            ' We'll handle /nosplash for you.
+            ' We'll handle "/nosplash" for you.
             If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then
                 ShowSplashScreen()
             End If
