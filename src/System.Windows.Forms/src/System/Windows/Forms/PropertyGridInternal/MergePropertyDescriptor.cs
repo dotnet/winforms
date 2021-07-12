@@ -30,30 +30,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <inheritdoc />
-        public override Type ComponentType
-        {
-            get
-            {
-                return _descriptors[0].ComponentType;
-            }
-        }
+        public override Type ComponentType => _descriptors[0].ComponentType;
 
         /// <inheritdoc />
-        public override TypeConverter Converter
-        {
-            get
-            {
-                return _descriptors[0].Converter;
-            }
-        }
+        public override TypeConverter Converter => _descriptors[0].Converter;
 
-        public override string DisplayName
-        {
-            get
-            {
-                return _descriptors[0].DisplayName;
-            }
-        }
+        public override string DisplayName => _descriptors[0].DisplayName;
 
         /// <inheritdoc />
         public override bool IsLocalizable
@@ -100,21 +82,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <inheritdoc />
-        public override Type PropertyType
-        {
-            get
-            {
-                return _descriptors[0].PropertyType;
-            }
-        }
+        public override Type PropertyType => _descriptors[0].PropertyType;
 
-        public PropertyDescriptor this[int index]
-        {
-            get
-            {
-                return _descriptors[index];
-            }
-        }
+        public PropertyDescriptor this[int index] => _descriptors[index];
 
         /// <inheritdoc />
         public override bool CanResetValue(object component)
@@ -123,7 +93,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (!_canReset.HasValue)
             {
                 _canReset = true;
-                Array a = (Array)component;
+                var a = (Array)component;
                 for (int i = 0; i < _descriptors.Length; i++)
                 {
                     if (!_descriptors[i].CanResetValue(GetPropertyOwnerForComponent(a, i)))
@@ -144,7 +114,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         private object CopyValue(object value)
         {
-            // null is always OK
+            // Null is always OK.
             if (value is null)
             {
                 return value;
@@ -152,7 +122,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             Type type = value.GetType();
 
-            // value types are always copies
+            // Value types are always copies.
             if (type.IsValueType)
             {
                 return value;
@@ -160,7 +130,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             object clonedValue = null;
 
-            // ICloneable is the next easiest thing
+            // ICloneable is the next easiest thing.
             if (value is ICloneable clone)
             {
                 clonedValue = clone.Clone();
@@ -172,9 +142,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 TypeConverter converter = TypeDescriptor.GetConverter(value);
                 if (converter.CanConvertTo(typeof(InstanceDescriptor)))
                 {
-                    // Instance descriptors provide full fidelity unless
-                    // they are marked as incomplete.
-                    InstanceDescriptor desc = (InstanceDescriptor)converter.ConvertTo(null, CultureInfo.InvariantCulture, value, typeof(InstanceDescriptor));
+                    // Instance descriptors provide full fidelity unless they are marked as incomplete.
+                    var desc = (InstanceDescriptor)converter.ConvertTo(null, CultureInfo.InvariantCulture, value, typeof(InstanceDescriptor));
                     if (desc is not null && desc.IsComplete)
                     {
                         clonedValue = desc.Invoke();
@@ -192,8 +161,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             // How about serialization?
             if (clonedValue is null && type.IsSerializable)
             {
-                BinaryFormatter f = new BinaryFormatter();
-                MemoryStream ms = new MemoryStream();
+                BinaryFormatter f = new();
+                MemoryStream ms = new();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
                 f.Serialize(ms, value);
                 ms.Position = 0;
@@ -211,33 +180,27 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <inheritdoc />
-        protected override AttributeCollection CreateAttributeCollection()
-        {
-            return new MergedAttributeCollection(this);
-        }
+        protected override AttributeCollection CreateAttributeCollection() => new MergedAttributeCollection(this);
 
         private object GetPropertyOwnerForComponent(Array a, int i)
         {
             object propertyOwner = a.GetValue(i);
-            if (propertyOwner is ICustomTypeDescriptor)
+            if (propertyOwner is ICustomTypeDescriptor descriptor)
             {
-                propertyOwner = ((ICustomTypeDescriptor)propertyOwner).GetPropertyOwner(_descriptors[i]);
+                propertyOwner = descriptor.GetPropertyOwner(_descriptors[i]);
             }
 
             return propertyOwner;
         }
 
         /// <inheritdoc />
-        public override object GetEditor(Type editorBaseType)
-        {
-            return _descriptors[0].GetEditor(editorBaseType);
-        }
+        public override object GetEditor(Type editorBaseType) => _descriptors[0].GetEditor(editorBaseType);
 
         /// <inheritdoc />
         public override object GetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::GetValue called with non-array value");
-            return GetValue((Array)component, out bool temp);
+            return GetValue((Array)component, out bool _);
         }
 
         public object GetValue(Array components, out bool allEqual)
@@ -245,11 +208,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             allEqual = true;
             object obj = _descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
 
-            if (obj is ICollection)
+            if (obj is ICollection collection)
             {
                 if (_collection is null)
                 {
-                    _collection = new MultiMergeCollection((ICollection)obj);
+                    _collection = new MultiMergeCollection(collection);
                 }
                 else if (_collection.Locked)
                 {
@@ -257,7 +220,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    _collection.SetItems((ICollection)obj);
+                    _collection.SetItems(collection);
                 }
             }
 
@@ -309,10 +272,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override void ResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ResetValue called with non-array value");
-            Array a = (Array)component;
+            var array = (Array)component;
             for (int i = 0; i < _descriptors.Length; i++)
             {
-                _descriptors[i].ResetValue(GetPropertyOwnerForComponent(a, i));
+                _descriptors[i].ResetValue(GetPropertyOwnerForComponent(array, i));
             }
         }
 
@@ -325,14 +288,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _collection.Locked = true;
                 }
 
-                // now we have to copy the value into each property.
+                // Now we have to copy the value into each property.
                 object[] values = new object[listValue.Count];
 
                 listValue.CopyTo(values, 0);
 
                 for (int i = 0; i < _descriptors.Length; i++)
                 {
-                    if (!(_descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is IList propList))
+                    if (_descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is not IList propList)
                     {
                         continue;
                     }
@@ -357,17 +320,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override void SetValue(object component, object value)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::SetValue called with non-array value");
-            Array a = (Array)component;
-            if (value is IList && typeof(IList).IsAssignableFrom(PropertyType))
+            var array = (Array)component;
+            if (value is IList list && typeof(IList).IsAssignableFrom(PropertyType))
             {
-                SetCollectionValues(a, (IList)value);
+                SetCollectionValues(array, list);
             }
             else
             {
                 for (int i = 0; i < _descriptors.Length; i++)
                 {
                     object clonedValue = CopyValue(value);
-                    _descriptors[i].SetValue(GetPropertyOwnerForComponent(a, i), clonedValue);
+                    _descriptors[i].SetValue(GetPropertyOwnerForComponent(array, i), clonedValue);
                 }
             }
         }
@@ -376,10 +339,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override bool ShouldSerializeValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ShouldSerializeValue called with non-array value");
-            Array a = (Array)component;
+            var array = (Array)component;
             for (int i = 0; i < _descriptors.Length; i++)
             {
-                if (!_descriptors[i].ShouldSerializeValue(GetPropertyOwnerForComponent(a, i)))
+                if (!_descriptors[i].ShouldSerializeValue(GetPropertyOwnerForComponent(array, i)))
                 {
                     return false;
                 }

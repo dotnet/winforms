@@ -23,13 +23,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _owner = owner;
             }
 
-            public override Attribute this[Type attributeType]
-            {
-                get
-                {
-                    return GetCommonAttribute(attributeType);
-                }
-            }
+            public override Attribute this[Type attributeType] => GetCommonAttribute(attributeType);
 
             private Attribute GetCommonAttribute(Type attributeType)
             {

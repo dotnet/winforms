@@ -74,37 +74,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public override string Help
-            {
-                get
-                {
-                    return _owningGridEntry.PropertyDescription;
-                }
-            }
+            public override string Help => _owningGridEntry.PropertyDescription;
 
-            public override string? Name
-            {
-                get
-                {
-                    return _owningGridEntry?.PropertyLabel;
-                }
-            }
+            public override string? Name => _owningGridEntry?.PropertyLabel;
 
-            public override AccessibleObject? Parent
-            {
-                get
-                {
-                    return _owningGridEntry?.GridEntryHost?.AccessibilityObject;
-                }
-            }
+            public override AccessibleObject? Parent => _owningGridEntry?.GridEntryHost?.AccessibilityObject;
 
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.Cell;
-                }
-            }
+            public override AccessibleRole Role => AccessibleRole.Cell;
 
             public override AccessibleStates State
             {
@@ -118,23 +94,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable;
 
                     // Determine focus
-                    //
                     if (_owningGridEntry.HasFocus)
                     {
                         state |= AccessibleStates.Focused;
                     }
 
                     // Determine selected
-                    //
                     Debug.Assert(Parent is not null, "GridEntry AO does not have a parent AO");
-                    PropertyGridView.PropertyGridViewAccessibleObject parent = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
+                    var parent = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
                     if (parent.GetSelected() == this)
                     {
                         state |= AccessibleStates.Selected;
                     }
 
                     // Determine expanded/collapsed state
-                    //
                     if (_owningGridEntry.Expandable)
                     {
                         if (_owningGridEntry.Expanded)
@@ -148,14 +121,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     // Determine readonly/editable state
-                    //
                     if (_owningGridEntry.ShouldRenderReadOnly)
                     {
                         state |= AccessibleStates.ReadOnly;
                     }
 
                     // Determine password state
-                    //
                     if (_owningGridEntry.ShouldRenderPassword)
                     {
                         state |= AccessibleStates.Protected;
@@ -342,23 +313,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                // make sure we're on the right thread.
-                //
+                // Make sure we're on the right thread.
                 if (PropertyGridView.InvokeRequired)
                 {
                     PropertyGridView.Invoke(new SelectDelegate(Select), new object[] { flags });
                     return;
                 }
 
-                // Focus the PropertyGridView window
-                //
+                // Focus the PropertyGridView window.
                 if ((flags & AccessibleSelection.TakeFocus) == AccessibleSelection.TakeFocus)
                 {
                     bool focused = PropertyGridView.Focus();
                 }
 
-                // Select the grid entry
-                //
+                // Select the grid entry.
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {
                     PropertyGridView.AccessibilitySelect(_owningGridEntry);
@@ -416,46 +384,30 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
-                switch (propertyID)
+                return propertyID switch
                 {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                    case UiaCore.UIA.ControlTypePropertyId:
+                    UiaCore.UIA.NamePropertyId => Name,
 
-                        // The accessible hierarchy is changed so we cannot use Button type
-                        // for the grid items to not break automation logic that searches for the first
-                        // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
-                        // button is one of the first children of PropertyGridView.
-                        return UiaCore.UIA.TreeItemControlTypeId;
-                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return string.Empty;
-                    case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return _owningGridEntry.HasFocus;
-                    case UiaCore.UIA.IsKeyboardFocusablePropertyId:
-                        return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return true;
-                    case UiaCore.UIA.AutomationIdPropertyId:
-                        return GetHashCode().ToString();
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
-                    case UiaCore.UIA.IsPasswordPropertyId:
-                        return false;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    case UiaCore.UIA.IsGridItemPatternAvailablePropertyId:
-                    case UiaCore.UIA.IsTableItemPatternAvailablePropertyId:
-                        return true;
-                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                        return Role;
-                    case UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId:
-                        return DefaultAction;
+                    // The accessible hierarchy is changed so we cannot use Button type
+                    // for the grid items to not break automation logic that searches for the first
+                    // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
+                    // button is one of the first children of PropertyGridView.
 
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
+                    UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
+                    UiaCore.UIA.AccessKeyPropertyId => string.Empty,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningGridEntry.HasFocus,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
+                    UiaCore.UIA.IsEnabledPropertyId => true,
+                    UiaCore.UIA.AutomationIdPropertyId => GetHashCode().ToString(),
+                    UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
+                    UiaCore.UIA.IsPasswordPropertyId => false,
+                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
+                    UiaCore.UIA.IsGridItemPatternAvailablePropertyId or UiaCore.UIA.IsTableItemPatternAvailablePropertyId => true,
+                    UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
+                    UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => DefaultAction,
+                    _ => base.GetPropertyValue(propertyID),
+                };
             }
 
             internal override bool IsIAccessibleExSupported()
