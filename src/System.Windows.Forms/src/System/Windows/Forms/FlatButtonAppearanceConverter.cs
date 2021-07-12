@@ -10,15 +10,15 @@ namespace System.Windows.Forms
     internal class FlatButtonAppearanceConverter : ExpandableObjectConverter
     {
         // Don't let the property grid display the full type name in the value cell
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            return destinationType == typeof(string) ? "" : base.ConvertTo(context, culture, value, destinationType);
+            return destinationType == typeof(string) ? "" : base.ConvertTo(context, culture, value, destinationType)!;
         }
 
         // Don't let the property grid display the CheckedBackColor property for Button controls
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
-            if (context != null && context.Instance is Button)
+            if (context is not null && attributes is not null && context.Instance is Button)
             {
                 Attribute[] attributes2 = new Attribute[attributes.Length + 1];
                 attributes.CopyTo(attributes2, 0);

@@ -26,7 +26,7 @@ namespace System.Windows.Forms
             return base.CanConvertFrom(context, sourceType);
         }
 
-        public override bool CanConvertTo(ITypeDescriptorContext? context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
             {
@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object? value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             if (value is string stringValue)
             {
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < values.Length; i++)
                 {
                     // Note: ConvertFromString will raise exception if value cannot be converted.
-                    values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i]);
+                    values[i] = (int)intConverter.ConvertFromString(context, culture, tokens[i])!;
                 }
 
                 if (values.Length != 4)
@@ -91,10 +91,10 @@ namespace System.Windows.Forms
                     // Note: ConvertToString will raise exception if value cannot be converted.
                     string[] args = new string[]
                     {
-                        intConverter.ConvertToString(context, culture, padding.Left),
-                        intConverter.ConvertToString(context, culture, padding.Top),
-                        intConverter.ConvertToString(context, culture, padding.Right),
-                        intConverter.ConvertToString(context, culture, padding.Bottom)
+                        intConverter.ConvertToString(context, culture, padding.Left)!,
+                        intConverter.ConvertToString(context, culture, padding.Top)!,
+                        intConverter.ConvertToString(context, culture, padding.Right)!,
+                        intConverter.ConvertToString(context, culture, padding.Bottom)!
                     };
                     return string.Join(sep, args);
                 }
@@ -166,7 +166,7 @@ namespace System.Windows.Forms
 
         public override bool GetCreateInstanceSupported(ITypeDescriptorContext? context) => true;
 
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[] attributes)
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(Padding), attributes);
             return props.Sort(new string[] { nameof(Padding.All), nameof(Padding.Left), nameof(Padding.Top), nameof(Padding.Right), nameof(Padding.Bottom) });
