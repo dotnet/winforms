@@ -13,6 +13,7 @@
     <PropertyGroup Condition="'$(PackagePath)' == ''">
       <PackagePath>lib/$(TargetFramework)</PackagePath>
       <PackagePath Condition="'$(IsFacadeAssembly)' == 'true'">lib/$(TargetFramework);$(RefPackagePath)</PackagePath>
+      <PackagePath Condition="'$(IsAnalyzerAssembly)' == 'true'">$(RefPackagePath)</PackagePath>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -39,7 +40,7 @@
       This means we build a real assembly that has no associated official intellisense docs.
       Contact the intellisense team for guidance.
     -->
-    <Error  Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true'" 
+    <Error  Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true' and '$(IsAnalyzerAssembly)' != 'true'" 
             Text="$(AssemblyName).xml not found in dotnet-api-docs package. Contact the intellisense team about adding the docs for this assembly."
     />
 

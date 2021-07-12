@@ -53,9 +53,13 @@
   </ItemDefinitionGroup>
   
   <ItemGroup>
-    <None Include="FrameworkListFiles.props">
+    <None Include="sdk\dotnet-windowsdesktop\*" Exclude="sdk\dotnet-windowsdesktop\*.ps1">
       <Pack>True</Pack>
-      <PackagePath></PackagePath>
+      <PackagePath>sdk\dotnet-windowsdesktop</PackagePath>
+    </None>
+    <None Include="sdk\dotnet-wpf\*">
+      <Pack>True</Pack>
+      <PackagePath>sdk\dotnet-wpf</PackagePath>
     </None>
   </ItemGroup>
   
@@ -97,6 +101,13 @@
     <ProjectReference Include="..\..\src\Microsoft.VisualBasic.Forms\src\Microsoft.VisualBasic.Forms.vbproj" />
 
     <ProjectReference Include="..\..\src\Accessibility\src\Accessibility.ilproj" />
+
+    <!-- 
+      Analyzer System.Windows.Forms.Analyzers
+      Please note that analyzers aren't recorded into FrameworkListFiles.props
+    -->
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" />
+    <ProjectReference Include="..\..\src\System.Windows.Forms.Analyzers.CSharp\src\System.Windows.Forms.Analyzers.CSharp.csproj" />
 
   </ItemGroup>
 
