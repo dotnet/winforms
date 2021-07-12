@@ -10403,12 +10403,12 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TrackBarLargeDecreaseButtonName">
         <source>Large decrease</source>
-        <target state="new">Large decrease</target>
+        <target state="translated">Forte diminution</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarLargeIncreaseButtonName">
         <source>Large increase</source>
-        <target state="new">Large increase</target>
+        <target state="translated">Forte augmentation</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
@@ -10433,7 +10433,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TrackBarPositionButtonName">
         <source>Position</source>
-        <target state="new">Position</target>
+        <target state="translated">Position</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
