@@ -10403,12 +10403,12 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="TrackBarLargeDecreaseButtonName">
         <source>Large decrease</source>
-        <target state="new">Large decrease</target>
+        <target state="translated">Disminución grande</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarLargeIncreaseButtonName">
         <source>Large increase</source>
-        <target state="new">Large increase</target>
+        <target state="translated">Aumento grande</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
@@ -10433,7 +10433,7 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       </trans-unit>
       <trans-unit id="TrackBarPositionButtonName">
         <source>Position</source>
-        <target state="new">Position</target>
+        <target state="translated">Posición</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
