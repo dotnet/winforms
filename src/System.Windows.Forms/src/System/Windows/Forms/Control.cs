@@ -1684,6 +1684,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Indicates whether or not this control has an accessible object associated with it.
+        /// </summary>
+        internal bool IsAccessibilityObjectCreated => Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject;
+
+        /// <summary>
         ///  Retrieves the Win32 thread ID of the thread that created the
         ///  handle for this control.  If the control's handle hasn't been
         ///  created yet, this method will return the current thread's ID.
@@ -9912,7 +9917,7 @@ namespace System.Windows.Forms
                 UiaCore.UiaReturnRawElementProvider(new HandleRef(this, handle), IntPtr.Zero, IntPtr.Zero, null);
             }
 
-            if (OsVersion.IsWindows8OrGreater && Properties.GetObject(s_accessibilityProperty) is object)
+            if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
             {
                 var intAccessibleObject = new InternalAccessibleObject(AccessibilityObject);
                 UiaCore.UiaDisconnectProvider(intAccessibleObject);

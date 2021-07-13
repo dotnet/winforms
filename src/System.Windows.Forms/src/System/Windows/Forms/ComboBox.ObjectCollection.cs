@@ -19,21 +19,34 @@ namespace System.Windows.Forms
         public partial class ObjectCollection : IList, IComparer<Entry>
         {
             private readonly ComboBox _owner;
-            private readonly ComboBoxAccessibleObject _ownerComboBoxAccessibleObject;
+            private ComboBoxAccessibleObject _ownerComboBoxAccessibleObject;
             private List<Entry> _innerList;
 
             public ObjectCollection(ComboBox owner)
             {
                 _owner = owner;
+            }
 
-                if (_owner.AccessibilityObject is null)
+            private ComboBoxAccessibleObject OwnerComboBoxAccessibleObject
+            {
+                get
                 {
-                    throw new ArgumentException(nameof(owner));
-                }
+                    if (!_owner.IsAccessibilityObjectCreated)
+                    {
+                        return null;
+                    }
 
-                if (_owner.AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
-                {
-                    _ownerComboBoxAccessibleObject = accessibleObject;
+                    if (_ownerComboBoxAccessibleObject is not null)
+                    {
+                        return _ownerComboBoxAccessibleObject;
+                    }
+
+                    if (_owner.AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
+                    {
+                        _ownerComboBoxAccessibleObject = accessibleObject;
+                    }
+
+                    return _ownerComboBoxAccessibleObject;
                 }
             }
 
@@ -159,7 +172,7 @@ namespace System.Windows.Forms
                 {
                     if (!successful)
                     {
-                        _ownerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
+                        OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
                         Remove(item);
                     }
                 }
@@ -248,7 +261,7 @@ namespace System.Windows.Forms
 
                 InnerList.Clear();
 
-                _ownerComboBoxAccessibleObject?.ItemAccessibleObjects.Clear();
+                OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Clear();
 
                 _owner._selectedIndex = -1;
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)
@@ -363,7 +376,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                _ownerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
+                                OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
                                 InnerList.RemoveAt(index);
                             }
                         }
@@ -388,7 +401,7 @@ namespace System.Windows.Forms
                     _owner.NativeRemoveAt(index);
                 }
 
-                _ownerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
+                OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
                 InnerList.RemoveAt(index);
 
                 if (!_owner.IsHandleCreated && index < _owner._selectedIndex)
