@@ -2258,8 +2258,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(8, descriptor.Attributes.Count);
-            Assert.Equal(9, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Fact]
@@ -2278,8 +2278,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(8, descriptor.Attributes.Count);
-            Assert.Equal(9, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Theory]
@@ -2688,8 +2688,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(8, descriptor.Attributes.Count);
-            Assert.Equal(9, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Fact]
@@ -2709,8 +2709,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(8, descriptor.Attributes.Count);
-            Assert.Equal(9, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Theory]
