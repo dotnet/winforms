@@ -1709,11 +1709,13 @@ namespace System.Windows.Forms
         [Conditional("DEBUG")]
         internal void CheckInCreate()
         {
+#if DEBUG
             if (_inGridViewCreate)
             {
                 _inGridViewCreate = false;
                 throw new Exception("PERF REGRESSION - Creating item in grid view create");
             }
+#endif
         }
 
         private ToolStripSeparator CreateSeparatorButton()
