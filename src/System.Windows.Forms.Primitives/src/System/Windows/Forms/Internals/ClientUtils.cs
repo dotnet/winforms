@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         // Sequential version
         // assumes sequential enum members 0,1,2,3,4 -etc.
         //
-        public static bool IsEnumValid(Enum enumValue, int value, int minValue, int maxValue)
+        public static bool IsEnumValid<TEnum>(TEnum enumValue, int value, int minValue, int maxValue) where TEnum : struct, System.Enum
         {
             bool valid = (value >= minValue) && (value <= maxValue);
 #if DEBUG
@@ -84,18 +84,18 @@ namespace System.Windows.Forms
         private static Hashtable? enumValueInfo;
         public const int MAXCACHE = 300;  // we think we're going to get O(100) of these, put in a tripwire if it gets larger.
 
-        private class SequentialEnumInfo
+        private class SequentialEnumInfo<TEnum> where TEnum : struct, System.Enum
         {
-            public SequentialEnumInfo(Type t)
+            public SequentialEnumInfo()
             {
                 int actualMinimum = int.MaxValue;
                 int actualMaximum = int.MinValue;
                 int countEnumVals = 0;
 
-                foreach (int iVal in Enum.GetValues(t))
+                foreach (TEnum iVal in Enum.GetValues<TEnum>())
                 {
-                    actualMinimum = Math.Min(actualMinimum, iVal);
-                    actualMaximum = Math.Max(actualMaximum, iVal);
+                    actualMinimum = Math.Min(actualMinimum, Convert.ToInt32(iVal));
+                    actualMaximum = Math.Max(actualMaximum, Convert.ToInt32(iVal));
                     countEnumVals++;
                 }
 
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
             public int MaxValue;
         }
 
-        private static void Debug_SequentialEnumIsDefinedCheck(Enum value, int minVal, int maxVal)
+        private static void Debug_SequentialEnumIsDefinedCheck<TEnum>(TEnum value, int minVal, int maxVal) where TEnum : struct, System.Enum
         {
             Type t = value.GetType();
 
@@ -121,16 +121,16 @@ namespace System.Windows.Forms
                 enumValueInfo = new Hashtable();
             }
 
-            SequentialEnumInfo? sequentialEnumInfo = null;
+            SequentialEnumInfo<TEnum>? sequentialEnumInfo = null;
 
             if (enumValueInfo.ContainsKey(t))
             {
-                sequentialEnumInfo = enumValueInfo[t] as SequentialEnumInfo;
+                sequentialEnumInfo = enumValueInfo[t] as SequentialEnumInfo<TEnum>;
             }
 
             if (sequentialEnumInfo is null)
             {
-                sequentialEnumInfo = new SequentialEnumInfo(t);
+                sequentialEnumInfo = new SequentialEnumInfo<TEnum>();
 
                 if (enumValueInfo.Count > MAXCACHE)
                 {
