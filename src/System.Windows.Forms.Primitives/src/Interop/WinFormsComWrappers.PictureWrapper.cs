@@ -22,6 +22,7 @@ internal partial class Interop
             public void Dispose()
             {
                 Marshal.Release(_wrappedInstance);
+                _wrappedInstance = IntPtr.Zero;
             }
 
             public int Handle
@@ -119,7 +120,7 @@ internal partial class Interop
             {
                 Guid persistedStreamIID = IID.IPersistStream;
                 Guid streamIID = IID.IStream;
-                IntPtr streamUnkPtr = IntPtr.Zero;
+                IntPtr streamUnknownPtr = IntPtr.Zero;
                 IntPtr streamPtr = IntPtr.Zero;
                 IntPtr persistedStreamPtr = IntPtr.Zero;
 
@@ -131,8 +132,8 @@ internal partial class Interop
                         Marshal.ThrowExceptionForHR(errorCode);
                     }
 
-                    streamUnkPtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pstm, CreateComInterfaceFlags.None);
-                    errorCode = Marshal.QueryInterface(streamUnkPtr, ref streamIID, out streamPtr);
+                    streamUnknownPtr = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(pstm, CreateComInterfaceFlags.None);
+                    errorCode = Marshal.QueryInterface(streamUnknownPtr, ref streamIID, out streamPtr);
                     if (errorCode < 0)
                     {
                         Marshal.ThrowExceptionForHR(errorCode);
@@ -152,10 +153,10 @@ internal partial class Interop
                         Marshal.Release(streamPtr);
                     }
 
-                    if (streamUnkPtr != IntPtr.Zero)
+                    if (streamUnknownPtr != IntPtr.Zero)
                     {
-                        int count = Marshal.Release(streamUnkPtr);
-                        Debug.Assert(count == 0, $"streamUnkPtr = {count}");
+                        int count = Marshal.Release(streamUnknownPtr);
+                        Debug.Assert(count == 0, $"streamUnknownPtr = {count}");
                     }
 
                     if (persistedStreamPtr != IntPtr.Zero)
