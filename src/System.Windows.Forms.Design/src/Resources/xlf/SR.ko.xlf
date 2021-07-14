@@ -7,6 +7,16 @@
         <target state="translated">'{0}' ActiveX 컨트롤이 제대로 등록되어 있지 않으므로 이 컨트롤을 만들 수 없습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionCheck">
+        <source>Check</source>
+        <target state="new">Check</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleActionUncheck">
+        <source>Uncheck</source>
+        <target state="new">Uncheck</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
         <target state="translated">앵커 편집기</target>

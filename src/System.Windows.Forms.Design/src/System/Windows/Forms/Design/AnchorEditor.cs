@@ -376,6 +376,10 @@ namespace System.Windows.Forms.Design
                     {
                     }
 
+                    public override string DefaultAction => ((SpringControl)Owner).GetSolid()
+                        ? SR.AccessibleActionUncheck
+                        : SR.AccessibleActionCheck;
+
                     public override AccessibleStates State
                     {
                         get
@@ -384,7 +388,7 @@ namespace System.Windows.Forms.Design
 
                             if (((SpringControl)Owner).GetSolid())
                             {
-                                state |= AccessibleStates.Selected;
+                                state |= AccessibleStates.Checked;
                             }
 
                             return state;
