@@ -12,17 +12,17 @@ internal partial class Interop
     {
         private class PictureWrapper : Ole32.IPicture, Ole32.IPersistStream, IDisposable
         {
-            private readonly IntPtr _wrappedInstance;
+            private IntPtr _wrappedInstance;
 
             public PictureWrapper(IntPtr wrappedInstance)
             {
-                Debug.Assert(wrappedInstance != IntPtr.Zero);
+                Debug.Assert(_wrappedInstance != IntPtr.Zero);
                 _wrappedInstance = wrappedInstance;
             }
 
             public void Dispose()
             {
-                Debug.Assert(wrappedInstance != IntPtr.Zero);
+                Debug.Assert(_wrappedInstance != IntPtr.Zero);
                 Marshal.Release(_wrappedInstance);
                 _wrappedInstance = IntPtr.Zero;
             }
