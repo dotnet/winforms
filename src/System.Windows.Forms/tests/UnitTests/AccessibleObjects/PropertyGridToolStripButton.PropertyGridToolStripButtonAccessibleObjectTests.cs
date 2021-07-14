@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
-            ToolStripButton propertyPagesButton = propertyGrid.TestAccessor().Dynamic._btnViewPropertyPages;
+            ToolStripButton propertyPagesButton = propertyGrid.TestAccessor().Dynamic._viewPropertyPagesButton;
             AccessibleObject categoryButtonAccessibleObject = toolStripButtons[0].AccessibilityObject;
             AccessibleObject alphaButtonAccessibleObject = toolStripButtons[1].AccessibilityObject;
             AccessibleObject propertyPagesButtonAccessibleObject = propertyPagesButton.AccessibilityObject;
