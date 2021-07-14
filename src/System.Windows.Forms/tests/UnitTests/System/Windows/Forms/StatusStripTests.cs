@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class StatusStripTests : IClassFixture<ThreadExceptionFixture>
+    public partial class StatusStripTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void StatusStrip_Ctor_Default()
