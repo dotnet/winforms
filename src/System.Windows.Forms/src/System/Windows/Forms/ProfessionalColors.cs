@@ -159,6 +159,9 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ProfessionalColorsSeparatorLightDescr))]
         public static Color SeparatorLight => ColorTable.SeparatorLight;
 
+        [SRDescription(nameof(SR.ProfessionalColorsStatusStripBorderDescr))]
+        public static Color StatusStripBorder => ColorTable.StatusStripBorder;
+
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
         public static Color StatusStripGradientBegin => ColorTable.StatusStripGradientBegin;
 
