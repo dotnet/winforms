@@ -399,7 +399,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                // Ff changed from the default, then the set value is returned.
+                // If changed from the default, then the set value is returned.
                 if (_grayTextColorModified)
                 {
                     return _grayTextColor;
