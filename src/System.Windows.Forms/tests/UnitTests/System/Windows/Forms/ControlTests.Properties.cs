@@ -10513,19 +10513,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, control.ShowFocusCues);
         }
 
+        public static TheoryData<int, bool> Get_Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected()
+        {
+            return new TheoryData<int, bool>()
+            {
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), true },
+                { (int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true },
+                { (int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false },
+                { (int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), SystemInformation.MenuAccessKeysUnderlined }
+            };
+        }
+
         [WinFormsTheory]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), true)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
+        [CommonMemberData(typeof(ControlTests), nameof(ControlTests.Get_Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected))]
         public void Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected(int wParam, bool expected)
         {
             using var control = new SubControl();
@@ -10564,19 +10572,27 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, control.ShowKeyboardCues);
         }
 
+        public static TheoryData<int, bool> Get_Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected()
+        {
+            return new TheoryData<int, bool>()
+            {
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), true },
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true },
+                { (int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false },
+                { (int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), SystemInformation.MenuAccessKeysUnderlined }
+            };
+        }
+
         [WinFormsTheory]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), true)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
+        [CommonMemberData(typeof(ControlTests), nameof(ControlTests.Get_Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected))]
         public void Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected(int wParam, bool expected)
         {
             using var control = new SubControl();
