@@ -32,8 +32,8 @@ namespace System.Windows.Forms
     ///  Defines the base class for controls, which are components with visual representation.
     /// </summary>
     /// <remarks>
-    /// Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
-    /// all of these variables.
+    ///  Do not add instance variables to Control absolutely necessary. Every control on a form has the overhead of
+    ///  all of these variables.
     /// </remarks>
     [DefaultProperty(nameof(Text))]
     [DefaultEvent(nameof(Click))]
@@ -64,20 +64,20 @@ namespace System.Windows.Forms
         IHandle
     {
 #if DEBUG
-        internal static readonly TraceSwitch s_paletteTracing = new TraceSwitch(
+        internal static readonly TraceSwitch s_paletteTracing = new(
             "PaletteTracing",
             "Debug Palette code");
-        internal static readonly TraceSwitch s_controlKeyboardRouting = new TraceSwitch(
+        internal static readonly TraceSwitch s_controlKeyboardRouting = new(
             "ControlKeyboardRouting",
             "Debug Keyboard routing for controls");
-        private protected static readonly TraceSwitch s_focusTracing = new TraceSwitch(
+        private protected static readonly TraceSwitch s_focusTracing = new(
             "FocusTracing",
             "Debug focus/active control/enter/leave");
 
-        private static readonly BooleanSwitch s_assertOnControlCreateSwitch = new BooleanSwitch(
+        private static readonly BooleanSwitch s_assertOnControlCreateSwitch = new(
             "AssertOnControlCreate",
             "Assert when anything directly deriving from control is created.");
-        private protected static readonly BooleanSwitch s_traceMnemonicProcessing = new BooleanSwitch(
+        private protected static readonly BooleanSwitch s_traceMnemonicProcessing = new(
             "TraceCanProcessMnemonic",
             "Trace mnemonic processing calls to assure right child-parent call ordering.");
 
@@ -14322,9 +14322,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal virtual bool AllowsChildrenToShowToolTips()
-        {
-            return true;
-        }
+        internal virtual bool AllowsChildrenToShowToolTips() => true;
     }
 }

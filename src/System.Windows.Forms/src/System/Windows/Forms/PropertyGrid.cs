@@ -258,7 +258,7 @@ namespace System.Windows.Forms
 
         internal IDesignerHost ActiveDesigner
         {
-            get => _designerHost ??= (IDesignerHost)GetService(typeof(IDesignerHost));
+            get => _designerHost ??= GetService<IDesignerHost>();
             set
             {
                 if (value == _designerHost)
@@ -269,16 +269,14 @@ namespace System.Windows.Forms
                 SetFlag(Flags.ReInitTab, true);
                 if (_designerHost is not null)
                 {
-                    var changeService = (IComponentChangeService)_designerHost.GetService(typeof(IComponentChangeService));
-                    if (changeService is not null)
+                    if (_designerHost.TryGetService(out IComponentChangeService changeService))
                     {
                         changeService.ComponentAdded -= _onComponentAdd;
                         changeService.ComponentRemoved -= _onComponentRemove;
                         changeService.ComponentChanged -= _onComponentChanged;
                     }
 
-                    var propertyValueService = (IPropertyValueUIService)_designerHost.GetService(typeof(IPropertyValueUIService));
-                    if (propertyValueService is not null)
+                    if (_designerHost.TryGetService(out IPropertyValueUIService propertyValueService))
                     {
                         propertyValueService.PropertyUIValueItemsChanged -= OnNotifyPropertyValueUIItemsChanged;
                     }
@@ -293,8 +291,7 @@ namespace System.Windows.Forms
 
                 if (value is not null)
                 {
-                    var changeService = (IComponentChangeService)value.GetService(typeof(IComponentChangeService));
-                    if (changeService is not null)
+                    if (value.TryGetService(out IComponentChangeService changeService))
                     {
                         changeService.ComponentAdded += _onComponentAdd;
                         changeService.ComponentRemoved += _onComponentRemove;
@@ -305,8 +302,7 @@ namespace System.Windows.Forms
                     value.TransactionClosed += OnTransactionClosed;
                     SetFlag(Flags.BatchMode, false);
 
-                    var propertyValueService = (IPropertyValueUIService)value.GetService(typeof(IPropertyValueUIService));
-                    if (propertyValueService is not null)
+                    if (value.TryGetService(out IPropertyValueUIService propertyValueService))
                     {
                         propertyValueService.PropertyUIValueItemsChanged += OnNotifyPropertyValueUIItemsChanged;
                     }
@@ -1221,14 +1217,7 @@ namespace System.Windows.Forms
                 base.Site = value;
                 _gridView.ServiceProvider = value;
 
-                if (value is null)
-                {
-                    ActiveDesigner = null;
-                }
-                else
-                {
-                    ActiveDesigner = (IDesignerHost)value.GetService(typeof(IDesignerHost));
-                }
+                ActiveDesigner = value?.GetService<IDesignerHost>();
 
                 ResumeAllLayout(this, true);
             }
@@ -1560,9 +1549,9 @@ namespace System.Windows.Forms
                 // The tabs need service providers. The one we hold onto is not good enough,
                 // so try to get the one off of the component's site.
                 IDesignerHost host = null;
-                if (component is not null && component is IComponent component1 && component1.Site is not null)
+                if (component is IComponent component1 && component1.Site is ISite site)
                 {
-                    host = (IDesignerHost)component1.Site.GetService(typeof(IDesignerHost));
+                    host = site.GetService<IDesignerHost>();
                 }
 
                 try
@@ -1822,35 +1811,26 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (component is not null)
+                if (component?.Site is ISite site)
                 {
-                    ISite site = component.Site;
-
-                    if (site is not null)
+                    if (site.TryGetService(out IMenuCommandService menuCommandService))
                     {
-                        var mcs = (IMenuCommandService)site.GetService(typeof(IMenuCommandService));
-                        if (mcs is not null)
+                        // Got the menu command service.  Let it deal with the set of verbs for this component.
+                        verbs = new DesignerVerb[menuCommandService.Verbs.Count];
+                        menuCommandService.Verbs.CopyTo(verbs, 0);
+                    }
+                    else
+                    {
+                        // No menu command service.  Go straight to the component's designer.  We can only do this
+                        // if the object count is 1, because designers do not support verbs across a multi-selection.
+                        if (_currentObjects.Length == 1 && GetUnwrappedObject(0) is IComponent
+                            && site.TryGetService(out IDesignerHost designerHost))
                         {
-                            // Got the menu command service.  Let it deal with the set of verbs for this component.
-                            verbs = new DesignerVerb[mcs.Verbs.Count];
-                            mcs.Verbs.CopyTo(verbs, 0);
-                        }
-                        else
-                        {
-                            // No menu command service.  Go straight to the component's designer.  We can only do this
-                            // if the object count is 1, because designers do not support verbs across a multi-selection.
-                            if (_currentObjects.Length == 1 && GetUnwrappedObject(0) is IComponent)
+                            IDesigner designer = designerHost.GetDesigner(component);
+                            if (designer is not null)
                             {
-                                var designerHost = (IDesignerHost)site.GetService(typeof(IDesignerHost));
-                                if (designerHost is not null)
-                                {
-                                    IDesigner designer = designerHost.GetDesigner(component);
-                                    if (designer is not null)
-                                    {
-                                        verbs = new DesignerVerb[designer.Verbs.Count];
-                                        designer.Verbs.CopyTo(verbs, 0);
-                                    }
-                                }
+                                verbs = new DesignerVerb[designer.Verbs.Count];
+                                designer.Verbs.CopyTo(verbs, 0);
                             }
                         }
                     }
@@ -2051,10 +2031,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void IComPropertyBrowser.DropDownDone()
-        {
-            GetPropertyGridView().DropDownDone();
-        }
+        void IComPropertyBrowser.DropDownDone() => GetPropertyGridView().DropDownDone();
 
         private bool EnablePropPageButton(object obj)
         {
@@ -2064,10 +2041,9 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            var uiService = (IUIService)GetService(typeof(IUIService));
             bool enable;
 
-            if (uiService is not null)
+            if (TryGetService(out IUIService uiService))
             {
                 enable = uiService.CanShowComponentEditor(obj);
             }
@@ -2141,12 +2117,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            _designerEventService = (IDesignerEventService)GetService(typeof(IDesignerEventService));
-            if (_designerEventService is not null)
+            if (TryGetService(out _designerEventService))
             {
                 SetFlag(Flags.GotDesignerEventService, true);
                 _designerEventService.ActiveDesignerChanged += OnActiveDesignerChanged;
-                OnActiveDesignerChanged(null, new(null, _designerEventService.ActiveDesigner));
+                OnActiveDesignerChanged(sender: null, new(oldDesigner: null, _designerEventService.ActiveDesigner));
             }
         }
 
@@ -3262,7 +3237,7 @@ namespace System.Windows.Forms
 
                 bool success = false;
 
-                var uiService = (IUIService)GetService(typeof(IUIService));
+                var uiService = GetService<IUIService>();
 
                 try
                 {
@@ -3289,39 +3264,35 @@ namespace System.Windows.Forms
 
                     if (success)
                     {
-                        if (baseObject is IComponent component && _connectionPointCookies[0] is null)
+                        if (baseObject is IComponent component
+                            && _connectionPointCookies[0] is null
+                            && component.Site is ISite site)
                         {
-                            ISite site = component.Site;
-                            if (site is not null)
+                            if (site.TryGetService(out IComponentChangeService changeService))
                             {
-                                var changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-
-                                if (changeService is not null)
+                                try
                                 {
-                                    try
+                                    changeService.OnComponentChanging(baseObject, null);
+                                }
+                                catch (CheckoutException coEx)
+                                {
+                                    if (coEx == CheckoutException.Canceled)
                                     {
-                                        changeService.OnComponentChanging(baseObject, null);
-                                    }
-                                    catch (CheckoutException coEx)
-                                    {
-                                        if (coEx == CheckoutException.Canceled)
-                                        {
-                                            return;
-                                        }
-
-                                        throw;
+                                        return;
                                     }
 
-                                    try
-                                    {
-                                        // Now notify the change service that the change was successful.
-                                        SetFlag(Flags.InternalChange, true);
-                                        changeService.OnComponentChanged(baseObject, null, null, null);
-                                    }
-                                    finally
-                                    {
-                                        SetFlag(Flags.InternalChange, false);
-                                    }
+                                    throw;
+                                }
+
+                                try
+                                {
+                                    // Now notify the change service that the change was successful.
+                                    SetFlag(Flags.InternalChange, true);
+                                    changeService.OnComponentChanged(baseObject, null, null, null);
+                                }
+                                finally
+                                {
+                                    SetFlag(Flags.InternalChange, false);
                                 }
                             }
                         }

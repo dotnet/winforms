@@ -1897,16 +1897,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private IHelpService GetHelpService()
         {
-            if (_helpService is null && ServiceProvider is not null)
+            if (_helpService is null && ServiceProvider.TryGetService(out _topHelpService!))
             {
-                _topHelpService = (IHelpService)ServiceProvider.GetService(typeof(IHelpService));
-                if (_topHelpService is not null)
+                IHelpService localHelpService = _topHelpService.CreateLocalContext(HelpContextType.ToolWindowSelection);
+                if (localHelpService is not null)
                 {
-                    IHelpService localHelpService = _topHelpService.CreateLocalContext(HelpContextType.ToolWindowSelection);
-                    if (localHelpService is not null)
-                    {
-                        _helpService = localHelpService;
-                    }
+                    _helpService = localHelpService;
                 }
             }
 
@@ -5168,11 +5164,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             IntPtr priorFocus = User32.GetFocus();
 
-            var service = (IUIService)GetService(typeof(IUIService));
             DialogResult result;
-            if (service is not null)
+            if (TryGetService(out IUIService uiService))
             {
-                result = service.ShowDialog(dialog);
+                result = uiService.ShowDialog(dialog);
             }
             else
             {
@@ -5234,13 +5229,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 exMessage = ex.Message;
             }
 
-            var uiService = (IUIService)GetService(typeof(IUIService));
-
             ErrorDialog.Message = SR.PBRSFormatExceptionMessage;
             ErrorDialog.Text = SR.PBRSErrorTitle;
             ErrorDialog.Details = exMessage;
 
-            if (uiService is not null)
+            if (TryGetService(out IUIService uiService))
             {
                 revert = DialogResult.Cancel == uiService.ShowDialog(ErrorDialog);
             }
@@ -5307,13 +5300,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 exMessage = ex.Message;
             }
 
-            var uiService = (IUIService)GetService(typeof(IUIService));
-
             ErrorDialog.Message = SR.PBRSErrorInvalidPropertyValue;
             ErrorDialog.Text = SR.PBRSErrorTitle;
             ErrorDialog.Details = exMessage;
 
-            if (uiService is not null)
+            if (TryGetService(out IUIService uiService))
             {
                 revert = DialogResult.Cancel == uiService.ShowDialog(ErrorDialog);
             }
@@ -5485,16 +5476,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void UpdateResetCommand(GridEntry gridEntry)
         {
-            if (TotalProperties > 0)
+            if (TotalProperties > 0 && TryGetService(out IMenuCommandService menuCommandService))
             {
-                var menuCommandService = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-                if (menuCommandService is not null)
+                MenuCommand reset = menuCommandService.FindCommand(PropertyGridCommands.Reset);
+                if (reset is not null)
                 {
-                    MenuCommand reset = menuCommandService.FindCommand(PropertyGridCommands.Reset);
-                    if (reset is not null)
-                    {
-                        reset.Enabled = gridEntry is not null && gridEntry.CanResetPropertyValue();
-                    }
+                    reset.Enabled = gridEntry is not null && gridEntry.CanResetPropertyValue();
                 }
             }
         }
