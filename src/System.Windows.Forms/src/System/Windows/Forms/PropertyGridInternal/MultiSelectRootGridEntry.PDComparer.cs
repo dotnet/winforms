@@ -14,8 +14,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             public int Compare(object? obj1, object? obj2)
             {
-                PropertyDescriptor? a1 = obj1 as PropertyDescriptor;
-                PropertyDescriptor? a2 = obj2 as PropertyDescriptor;
+                var a1 = obj1 as PropertyDescriptor;
+                var a2 = obj2 as PropertyDescriptor;
 
                 if (a1 is null && a2 is null)
                 {

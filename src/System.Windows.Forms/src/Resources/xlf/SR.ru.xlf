@@ -10404,12 +10404,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TrackBarLargeDecreaseButtonName">
         <source>Large decrease</source>
-        <target state="new">Large decrease</target>
+        <target state="translated">Большое уменьшение</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarLargeIncreaseButtonName">
         <source>Large increase</source>
-        <target state="new">Large increase</target>
+        <target state="translated">Большое увеличение</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
@@ -10434,7 +10434,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="TrackBarPositionButtonName">
         <source>Position</source>
-        <target state="new">Position</target>
+        <target state="translated">Положение</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">

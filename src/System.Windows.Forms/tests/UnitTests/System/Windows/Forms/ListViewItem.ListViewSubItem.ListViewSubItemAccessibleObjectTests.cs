@@ -847,36 +847,15 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListViewSubItemAccessibleObject_ProcessId_ReturnCorrectValue()
         {
-            using ListView list = new();
-            ListViewItem listViewItem1 = new(new string[]
-            {
-            "Test 1",
-            "Item 1",
-            "Something 1"
-            }, -1);
+            using ListView listView = new();
+            ListViewItem listViewItem = new("Test item");
+            listViewItem.listView = listView;
+            ListViewItem.ListViewSubItem subItem = new(listViewItem, "Test subItem");
 
-            ColumnHeader columnHeader1 = new();
-            ColumnHeader columnHeader2 = new();
-            ColumnHeader columnHeader3 = new();
+            object actual = subItem.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId);
 
-            list.Columns.AddRange(new ColumnHeader[]
-            {
-                columnHeader1,
-                columnHeader2,
-                columnHeader3
-            });
-            list.HideSelection = false;
-            list.Items.Add(listViewItem1);
-            list.View = View.Details;
-
-            AccessibleObject subItemAccObj1 = listViewItem1.AccessibilityObject.GetChild(0);
-            AccessibleObject subItemAccObj2 = listViewItem1.AccessibilityObject.GetChild(1);
-            AccessibleObject subItemAccObj3 = listViewItem1.AccessibilityObject.GetChild(2);
-
-            Assert.Equal(Environment.ProcessId, subItemAccObj1.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
-            Assert.Equal(Environment.ProcessId, subItemAccObj2.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
-            Assert.Equal(Environment.ProcessId, subItemAccObj3.GetPropertyValue(UiaCore.UIA.ProcessIdPropertyId));
-            Assert.False(list.IsHandleCreated);
+            Assert.Equal(Environment.ProcessId, actual);
+            Assert.False(listView.IsHandleCreated);
         }
     }
 }

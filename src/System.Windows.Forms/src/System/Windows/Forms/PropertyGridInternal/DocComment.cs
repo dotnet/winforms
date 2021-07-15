@@ -11,8 +11,8 @@ namespace System.Windows.Forms.PropertyGridInternal
     internal partial class DocComment : PropertyGrid.SnappableControl
     {
         private readonly Label _labelTitle;
-        private readonly Label _labelDesc;
-        private string _fullDesc;
+        private readonly Label _labelDescription;
+        private string _fullDescription;
 
         private int _lineHeight;
         private bool _needUpdateUIWithFont = true;
@@ -35,7 +35,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 UseMnemonic = false,
                 Cursor = Cursors.Default
             };
-            _labelDesc = new Label
+            _labelDescription = new Label
             {
                 AutoEllipsis = true,
                 Cursor = Cursors.Default
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             UpdateTextRenderingEngine();
 
             Controls.Add(_labelTitle);
-            Controls.Add(_labelDesc);
+            Controls.Add(_labelDescription);
             if (DpiHelper.IsScalingRequirementMet)
             {
                 _cBorder = LogicalToDeviceUnits(CBORDER);
@@ -87,7 +87,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // compute optimal text height
             var isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
-            Graphics g = _labelDesc.CreateGraphicsInternal();
+            Graphics g = _labelDescription.CreateGraphicsInternal();
             SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(OwnerPropertyGrid, g, _labelTitle.Text, Font, width);
             Size sz = Size.Ceiling(sizef);
             g.Dispose();
@@ -111,8 +111,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             UpdateUIWithFont();
             SetChildLabelsBounds();
-            _labelDesc.Text = _fullDesc;
-            _labelDesc.AccessibleName = _fullDesc; // Don't crop the description for accessibility clients
+            _labelDescription.Text = _fullDescription;
+            _labelDescription.AccessibleName = _fullDescription; // Don't crop the description for accessibility clients
             base.OnLayout(e);
         }
 
@@ -132,7 +132,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (lineHeightOld != _lineHeight)
                 {
                     _labelTitle.Location = new Point(_cBorder, _cBorder);
-                    _labelDesc.Location = new Point(_cBorder, _cBorder + _lineHeight);
+                    _labelDescription.Location = new Point(_cBorder, _cBorder + _lineHeight);
                     // Labels were explicitly set bounds. resize of parent is not rescaling labels.
                     SetChildLabelsBounds();
                 }
@@ -160,8 +160,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                                    Math.Min(_lineHeight, size.Height),
                                    BoundsSpecified.Size);
 
-            _labelDesc.SetBounds(_labelDesc.Top,
-                                  _labelDesc.Left,
+            _labelDescription.SetBounds(_labelDescription.Top,
+                                  _labelDescription.Left,
                                   size.Width,
                                   Math.Max(0, size.Height - _lineHeight - (DpiHelper.IsScalingRequirementMet ? LogicalToDeviceUnits(1) : 1)),
                                   BoundsSpecified.Size);
@@ -190,16 +190,16 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual void SetComment(string title, string desc)
         {
-            if (_labelDesc.Text != title)
+            if (_labelDescription.Text != title)
             {
                 _labelTitle.Text = title;
             }
 
-            if (desc != _fullDesc)
+            if (desc != _fullDescription)
             {
-                _fullDesc = desc;
-                _labelDesc.Text = _fullDesc;
-                _labelDesc.AccessibleName = _fullDesc; // Don't crop the description for accessibility clients
+                _fullDescription = desc;
+                _labelDescription.Text = _fullDescription;
+                _labelDescription.AccessibleName = _fullDescription; // Don't crop the description for accessibility clients
             }
         }
 
@@ -228,7 +228,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal void UpdateTextRenderingEngine()
         {
             _labelTitle.UseCompatibleTextRendering = OwnerPropertyGrid.UseCompatibleTextRendering;
-            _labelDesc.UseCompatibleTextRendering = OwnerPropertyGrid.UseCompatibleTextRendering;
+            _labelDescription.UseCompatibleTextRendering = OwnerPropertyGrid.UseCompatibleTextRendering;
         }
 
         private void UpdateUIWithFont()
@@ -247,7 +247,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 _lineHeight = (int)Font.Height + 2;
                 _labelTitle.Location = new Point(_cBorder, _cBorder);
-                _labelDesc.Location = new Point(_cBorder, _cBorder + _lineHeight);
+                _labelDescription.Location = new Point(_cBorder, _cBorder + _lineHeight);
 
                 _needUpdateUIWithFont = false;
                 PerformLayout();

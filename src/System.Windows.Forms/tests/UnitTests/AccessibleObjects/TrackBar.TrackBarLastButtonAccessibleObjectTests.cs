@@ -166,10 +166,27 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         public void TrackBarLastButtonAccessibleObject_FragmentNavigate_ReturnsNull_IfButtonIsHidden(Orientation orientation, RightToLeft rightToLeft, bool rightToLeftLayout, int minimum, int maximum, int value)
         {
             using TrackBar trackBar = GetTrackBar(orientation, rightToLeft, rightToLeftLayout, createControl: true, value, minimum, maximum);
-            TrackBar.TrackBarLastButtonAccessibleObject accessibleObject = GetTrackBarLastButton(trackBar);
+            var trackBarAccessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
+            TrackBar.TrackBarLastButtonAccessibleObject accessibleObject = trackBarAccessibleObject.LastButtonAccessibleObject;
 
-            Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+            Assert.Equal(trackBarAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
             Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
+            Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
+            Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.True(trackBar.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(TrackBarTestHelper), nameof(TrackBarTestHelper.TrackBarAccessibleObject_MinimumEqualsMaximum_TestData))]
+        public void TrackBarLastButtonAccessibleObject_FragmentNavigate_ReturnsNull_MinimumEqualsMaximum(Orientation orientation, RightToLeft rightToLeft, bool rightToLeftLayout, int minimum, int maximum, int value)
+        {
+            using TrackBar trackBar = GetTrackBar(orientation, rightToLeft, rightToLeftLayout, createControl: true, value, minimum, maximum);
+            var trackBarAccessibleObject = (TrackBar.TrackBarAccessibleObject)trackBar.AccessibilityObject;
+            TrackBar.TrackBarLastButtonAccessibleObject accessibleObject = trackBarAccessibleObject.LastButtonAccessibleObject;
+
+            Assert.Equal(trackBarAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.Parent));
+            Assert.Equal(trackBarAccessibleObject.ThumbAccessibleObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.PreviousSibling));
             Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.NextSibling));
             Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
             Assert.Null(accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));

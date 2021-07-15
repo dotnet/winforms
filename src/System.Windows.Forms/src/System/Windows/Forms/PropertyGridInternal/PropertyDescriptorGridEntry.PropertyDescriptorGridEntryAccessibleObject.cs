@@ -68,13 +68,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case UiaCore.NavigateDirection.NextSibling:
                         var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
                         var propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                        bool currentGridEntryFound = false;
-                        return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
+                        return propertyGridViewAccessibleObject.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out _);
                     case UiaCore.NavigateDirection.PreviousSibling:
                         propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)Parent;
                         propertyGridView = propertyGridViewAccessibleObject.Owner as PropertyGridView;
-                        currentGridEntryFound = false;
-                        return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out currentGridEntryFound);
+                        return propertyGridViewAccessibleObject.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView.TopLevelGridEntries, out _);
                     case UiaCore.NavigateDirection.FirstChild:
                         return GetFirstChild();
                     case UiaCore.NavigateDirection.LastChild:

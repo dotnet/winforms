@@ -19,10 +19,10 @@ namespace WinformsControlsTest
         {
             private StandardValuesCollection? _values;
 
-            public override bool GetStandardValuesSupported(ITypeDescriptorContext context) => true;
-            public override bool GetStandardValuesExclusive(ITypeDescriptorContext context) => true;
+            public override bool GetStandardValuesSupported(ITypeDescriptorContext? context) => true;
+            public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context) => true;
 
-            public override object? ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+            public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
             {
                 // base class is for plain Guid, but ClientGuid is nullable Guid, which we need to implement separately
                 if ((value is null) || (value is string str && str.Length == 0))
@@ -31,7 +31,7 @@ namespace WinformsControlsTest
                 return base.ConvertFrom(context, culture, value);
             }
 
-            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+            public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
             {
                 if (_values is null)
                 {

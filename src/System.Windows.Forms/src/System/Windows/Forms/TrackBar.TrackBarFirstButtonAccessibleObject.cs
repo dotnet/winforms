@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (!OwningTrackBar.IsHandleCreated || !IsDisplayed)
+                if (!OwningTrackBar.IsHandleCreated)
                 {
                     return null;
                 }
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
                 return direction switch
                 {
                     UiaCore.NavigateDirection.PreviousSibling => null,
-                    UiaCore.NavigateDirection.NextSibling => ParentInternal.ThumbAccessibleObject,
+                    UiaCore.NavigateDirection.NextSibling => IsDisplayed ? ParentInternal.ThumbAccessibleObject : null,
                     _ => base.FragmentNavigate(direction)
                 };
             }

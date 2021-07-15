@@ -10403,12 +10403,12 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="TrackBarLargeDecreaseButtonName">
         <source>Large decrease</source>
-        <target state="new">Large decrease</target>
+        <target state="translated">Büyük azalma</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarLargeIncreaseButtonName">
         <source>Large increase</source>
-        <target state="new">Large increase</target>
+        <target state="translated">Büyük artış</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
@@ -10433,7 +10433,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="TrackBarPositionButtonName">
         <source>Position</source>
-        <target state="new">Position</target>
+        <target state="translated">Konum</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
