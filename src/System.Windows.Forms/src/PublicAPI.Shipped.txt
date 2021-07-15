@@ -1047,6 +1047,7 @@
 ~override System.Windows.Forms.ToolTip.ToString() -> string
 ~override System.Windows.Forms.TrackBar.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TrackBar.BackgroundImage.set -> void
+~override System.Windows.Forms.TrackBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.TrackBar.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.TrackBar.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.TrackBar.Font.set -> void
@@ -4349,7 +4350,6 @@ override System.Windows.Forms.GroupBox.DisplayRectangle.get -> System.Drawing.Re
 override System.Windows.Forms.GroupBox.ProcessMnemonic(char charCode) -> bool
 override System.Windows.Forms.GroupBox.ScaleControl(System.Drawing.SizeF factor, System.Windows.Forms.BoundsSpecified specified) -> void
 override System.Windows.Forms.GroupBox.WndProc(ref System.Windows.Forms.Message m) -> void
-override System.Windows.Forms.HScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.HScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.HScrollBar.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.HtmlDocument.GetHashCode() -> int
@@ -4949,7 +4949,6 @@ override System.Windows.Forms.UserControl.OnCreateControl() -> void
 override System.Windows.Forms.UserControl.ValidateChildren() -> bool
 override System.Windows.Forms.UserControl.ValidateChildren(System.Windows.Forms.ValidationConstraints validationConstraints) -> bool
 override System.Windows.Forms.UserControl.WndProc(ref System.Windows.Forms.Message m) -> void
-override System.Windows.Forms.VScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
 override System.Windows.Forms.VScrollBar.CreateParams.get -> System.Windows.Forms.CreateParams!
 override System.Windows.Forms.VScrollBar.DefaultSize.get -> System.Drawing.Size
 override System.Windows.Forms.VScrollBar.RightToLeft.get -> System.Windows.Forms.RightToLeft
