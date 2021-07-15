@@ -11,7 +11,7 @@ using System.Runtime.InteropServices;
 internal partial class Interop
 {
     /// <summary>
-    /// The ComWrappers implementation for System.Drawing.Common's COM interop usages.
+    /// The ComWrappers implementation for System.Windows.Forms.Primitive's COM interop usages.
     ///
     /// Supports IStream COM interface.
     /// </summary>
