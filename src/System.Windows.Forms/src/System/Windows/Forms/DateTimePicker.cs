@@ -1158,7 +1158,16 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnCloseUp(EventArgs eventargs)
         {
+            AccessibilityObject.Collapse();
             _onCloseUp?.Invoke(this, eventargs);
+
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+
+            // Notify collapsed/expanded property change.
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UiaCore.ExpandCollapseState.Expanded,
+                UiaCore.ExpandCollapseState.Collapsed);
         }
 
         /// <summary>
@@ -1166,7 +1175,16 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnDropDown(EventArgs eventargs)
         {
+            AccessibilityObject.Expand();
             _onDropDown?.Invoke(this, eventargs);
+
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+
+            // Notify collapsed/expanded property change.
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                UiaCore.ExpandCollapseState.Collapsed,
+                UiaCore.ExpandCollapseState.Expanded);
         }
 
         protected virtual void OnFormatChanged(EventArgs e)

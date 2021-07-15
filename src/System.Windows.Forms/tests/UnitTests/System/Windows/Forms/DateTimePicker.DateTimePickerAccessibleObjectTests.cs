@@ -100,5 +100,63 @@ namespace System.Windows.Forms.Tests
             Assert.Null(actual);
             Assert.False(dateTimePicker.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void DateTimePickerAccessibleObject_IsExpandCollapsePatternSupported_Supported()
+        {
+            using DateTimePicker dateTimePicker = new DateTimePicker();
+
+            var actual = (bool)dateTimePicker.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ExpandCollapsePatternId);
+
+            Assert.True(actual);
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(((int)UiaCore.ExpandCollapseState.Expanded))]
+        [InlineData(((int)UiaCore.ExpandCollapseState.Collapsed))]
+        public void DateTimePickerAccessibleObject_ExpandCollapseState_ReturnsExpected(int expandCollapseState)
+        {
+            using DateTimePicker dateTimePicker = new DateTimePicker();
+
+            var expected = (UiaCore.ExpandCollapseState)expandCollapseState;
+            var accessibleObject = (DateTimePickerAccessibleObject)dateTimePicker.AccessibilityObject;
+            accessibleObject.TestAccessor().Dynamic._expandCollapseState = expected;
+
+            UiaCore.ExpandCollapseState actual = accessibleObject.ExpandCollapseState;
+
+            Assert.Equal(expected, actual);
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DateTimePickerAccessibleObject_Expand_ExpandCollapseState_ReturnsExpected()
+        {
+            using DateTimePicker dateTimePicker = new DateTimePicker();
+
+            var accessibleObject = (DateTimePickerAccessibleObject)dateTimePicker.AccessibilityObject;
+            Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, accessibleObject.ExpandCollapseState);
+
+            accessibleObject.Expand();
+
+            Assert.Equal(UiaCore.ExpandCollapseState.Expanded, accessibleObject.ExpandCollapseState);
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DateTimePickerAccessibleObject_Collapse_ExpandCollapseState_ReturnsExpected()
+        {
+            using DateTimePicker dateTimePicker = new DateTimePicker();
+
+            var accessibleObject = (DateTimePickerAccessibleObject)dateTimePicker.AccessibilityObject;
+
+            accessibleObject.TestAccessor().Dynamic._expandCollapseState = UiaCore.ExpandCollapseState.Expanded;
+            Assert.Equal(UiaCore.ExpandCollapseState.Expanded, accessibleObject.ExpandCollapseState);
+
+            accessibleObject.Collapse();
+
+            Assert.Equal(UiaCore.ExpandCollapseState.Collapsed, accessibleObject.ExpandCollapseState);
+            Assert.False(dateTimePicker.IsHandleCreated);
+        }
     }
 }
