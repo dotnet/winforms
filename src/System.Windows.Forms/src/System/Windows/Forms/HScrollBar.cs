@@ -25,8 +25,5 @@ namespace System.Windows.Forms
 
         protected override Size DefaultSize
             => new Size(80, SystemInformation.HorizontalScrollBarHeight);
-
-        protected override AccessibleObject CreateAccessibilityInstance()
-            => new HScrollBarAccessibleObject(this);
     }
 }

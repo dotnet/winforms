@@ -172,6 +172,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.TrackBarsButton,
                 new InitInfo("TrackBars", (obj, e) => new TrackBars().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.ScrollBarsButton,
+                new InitInfo("ScrollBars", (obj, e) => new ScrollBars().Show(this))
             }
         };
 

@@ -312,6 +312,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [DefaultValue(false)]
         public new bool TabStop
         {
