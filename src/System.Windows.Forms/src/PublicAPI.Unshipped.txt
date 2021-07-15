@@ -1,3 +1,0 @@
-~override System.Windows.Forms.TrackBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-*REMOVED*override System.Windows.Forms.HScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
-*REMOVED*override System.Windows.Forms.VScrollBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
