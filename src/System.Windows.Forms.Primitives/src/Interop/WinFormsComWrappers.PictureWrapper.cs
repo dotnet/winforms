@@ -16,13 +16,16 @@ internal partial class Interop
 
             public PictureWrapper(IntPtr wrappedInstance)
             {
-                Debug.Assert(_wrappedInstance != IntPtr.Zero);
+                if (wrappedInstance == IntPtr.Zero)
+                {
+                    throw new ArgumentNullException(nameof(wrappedInstance));
+                }
+
                 _wrappedInstance = wrappedInstance;
             }
 
             public void Dispose()
             {
-                Debug.Assert(_wrappedInstance != IntPtr.Zero);
                 Marshal.Release(_wrappedInstance);
                 _wrappedInstance = IntPtr.Zero;
             }
