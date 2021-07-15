@@ -455,10 +455,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (picture is IDisposable disposable)
-                    {
-                        disposable.Dispose();
-                    }
+                    ((IDisposable)picture).Dispose();
                 }
             }
             catch (COMException e)
