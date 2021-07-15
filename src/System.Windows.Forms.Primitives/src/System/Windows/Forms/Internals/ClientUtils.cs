@@ -2,10 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#if DEBUG
-using System.Collections;
-using System.Diagnostics;
-#endif
 using System.Globalization;
 
 namespace System.Windows.Forms
@@ -24,18 +20,6 @@ namespace System.Windows.Forms
                     || ex is ExecutionEngineException
                     || ex is IndexOutOfRangeException
                     || ex is AccessViolationException;
-        }
-
-        // Sequential version
-        // assumes sequential enum members 0,1,2,3,4 -etc.
-        //
-        public static bool IsEnumValid<TEnum>(TEnum enumValue, int value, int minValue, int maxValue) where TEnum : struct, System.Enum
-        {
-            bool valid = (value >= minValue) && (value <= maxValue);
-#if DEBUG
-            Debug_SequentialEnumIsDefinedCheck(enumValue, minValue, maxValue);
-#endif
-            return valid;
         }
 
         private enum CharType
@@ -78,82 +62,5 @@ namespace System.Windows.Forms
 
             return index + 1;
         }
-
-#if DEBUG
-        [ThreadStatic]
-        private static Hashtable? enumValueInfo;
-        public const int MAXCACHE = 300;  // we think we're going to get O(100) of these, put in a tripwire if it gets larger.
-
-        private class SequentialEnumInfo<TEnum> where TEnum : struct, System.Enum
-        {
-            public SequentialEnumInfo()
-            {
-                int actualMinimum = int.MaxValue;
-                int actualMaximum = int.MinValue;
-                int countEnumVals = 0;
-
-                foreach (TEnum iVal in Enum.GetValues<TEnum>())
-                {
-                    actualMinimum = Math.Min(actualMinimum, Convert.ToInt32(iVal));
-                    actualMaximum = Math.Max(actualMaximum, Convert.ToInt32(iVal));
-                    countEnumVals++;
-                }
-
-                if (countEnumVals - 1 != (actualMaximum - actualMinimum))
-                {
-                    Debug.Fail("this enum cannot be sequential.");
-                }
-
-                MinValue = actualMinimum;
-                MaxValue = actualMaximum;
-            }
-
-            public int MinValue;
-            public int MaxValue;
-        }
-
-        private static void Debug_SequentialEnumIsDefinedCheck<TEnum>(TEnum value, int minVal, int maxVal) where TEnum : struct, System.Enum
-        {
-            Type t = value.GetType();
-
-            if (enumValueInfo is null)
-            {
-                enumValueInfo = new Hashtable();
-            }
-
-            SequentialEnumInfo<TEnum>? sequentialEnumInfo = null;
-
-            if (enumValueInfo.ContainsKey(t))
-            {
-                sequentialEnumInfo = enumValueInfo[t] as SequentialEnumInfo<TEnum>;
-            }
-
-            if (sequentialEnumInfo is null)
-            {
-                sequentialEnumInfo = new SequentialEnumInfo<TEnum>();
-
-                if (enumValueInfo.Count > MAXCACHE)
-                {
-                    // see comment next to MAXCACHE declaration.
-                    Debug.Fail("cache is too bloated, clearing out, we need to revisit this.");
-                    enumValueInfo.Clear();
-                }
-
-                enumValueInfo[t] = sequentialEnumInfo;
-            }
-
-            if (minVal != sequentialEnumInfo.MinValue)
-            {
-                // put string allocation in the IF block so the common case doesnt build up the string.
-                System.Diagnostics.Debug.Fail("Minimum passed in is not the actual minimum for the enum.  Consider changing the parameters or using a different function.");
-            }
-
-            if (maxVal != sequentialEnumInfo.MaxValue)
-            {
-                // put string allocation in the IF block so the common case doesnt build up the string.
-                Debug.Fail("Maximum passed in is not the actual maximum for the enum.  Consider changing the parameters or using a different function.");
-            }
-        }
-#endif
     }
 }
