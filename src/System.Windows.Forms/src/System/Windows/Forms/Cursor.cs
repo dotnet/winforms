@@ -417,38 +417,45 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Loads a picture from the requested stream.
         /// </summary>
-        private void LoadPicture(Ole32.IStream stream, string paramName)
+        private unsafe void LoadPicture(Ole32.IStream stream, string paramName)
         {
             Debug.Assert(stream is not null, "Stream should be validated before this method is called.");
 
             try
             {
-                Guid iid = typeof(Ole32.IPicture).GUID;
-                Ole32.IPicture picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(ref iid);
-                Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
-                ipictureAsIPersist.Load(stream);
-
-                if (picture is not null && picture.Type == (short)Ole32.PICTYPE.ICON)
+                Guid iid = IID.IPicture;
+                Ole32.IPicture picture = (Ole32.IPicture)Ole32.OleCreatePictureIndirect(&iid);
+                try
                 {
-                    IntPtr cursorHandle = (IntPtr)picture.Handle;
-                    Size picSize = GetIconSize(cursorHandle);
-                    if (DpiHelper.IsScalingRequired)
+                    Ole32.IPersistStream ipictureAsIPersist = (Ole32.IPersistStream)picture;
+                    ipictureAsIPersist.Load(stream);
+
+                    if (picture.Type == (short)Ole32.PICTYPE.ICON)
                     {
-                        picSize = DpiHelper.LogicalToDeviceUnits(picSize);
+                        IntPtr cursorHandle = (IntPtr)picture.Handle;
+                        Size picSize = GetIconSize(cursorHandle);
+                        if (DpiHelper.IsScalingRequired)
+                        {
+                            picSize = DpiHelper.LogicalToDeviceUnits(picSize);
+                        }
+
+                        _handle = User32.CopyImage(
+                            cursorHandle,
+                            User32.IMAGE.CURSOR,
+                            picSize.Width,
+                            picSize.Height,
+                            User32.LR.DEFAULTCOLOR);
+
+                        _ownHandle = true;
                     }
-
-                    _handle = User32.CopyImage(
-                        cursorHandle,
-                        User32.IMAGE.CURSOR,
-                        picSize.Width,
-                        picSize.Height,
-                        User32.LR.DEFAULTCOLOR);
-
-                    _ownHandle = true;
+                    else
+                    {
+                        throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
+                    }
                 }
-                else
+                finally
                 {
-                    throw new ArgumentException(string.Format(SR.InvalidPictureType, nameof(picture), nameof(Cursor)), paramName);
+                    ((IDisposable)picture).Dispose();
                 }
             }
             catch (COMException e)
