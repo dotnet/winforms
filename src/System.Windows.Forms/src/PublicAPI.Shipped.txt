@@ -3,8 +3,8 @@
 ~abstract System.Windows.Forms.BindingManagerBase.GetListName(System.Collections.ArrayList listAccessors) -> string
 ~abstract System.Windows.Forms.BindingManagerBase.OnCurrentChanged(System.EventArgs e) -> void
 ~abstract System.Windows.Forms.BindingManagerBase.OnCurrentItemChanged(System.EventArgs e) -> void
-~abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string
+abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string?
 ~abstract System.Windows.Forms.FeatureSupport.GetVersionPresent(object feature) -> System.Version
 ~abstract System.Windows.Forms.ListControl.SetItemsCore(System.Collections.IList items) -> void
 ~override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
@@ -411,12 +411,12 @@
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnActivated(System.EventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorForm.OnHelpRequested(System.Windows.Forms.HelpEventArgs e) -> void
 ~override System.Windows.Forms.Design.ComponentEditorPage.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.Design.EventsTab.CanExtend(object extendee) -> bool
-~override System.Windows.Forms.Design.EventsTab.GetDefaultProperty(object obj) -> System.ComponentModel.PropertyDescriptor
-~override System.Windows.Forms.Design.EventsTab.GetProperties(object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.Design.EventsTab.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.Design.EventsTab.HelpKeyword.get -> string
-~override System.Windows.Forms.Design.EventsTab.TabName.get -> string
+override System.Windows.Forms.Design.EventsTab.CanExtend(object! extendee) -> bool
+override System.Windows.Forms.Design.EventsTab.GetDefaultProperty(object! obj) -> System.ComponentModel.PropertyDescriptor?
+override System.Windows.Forms.Design.EventsTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+override System.Windows.Forms.Design.EventsTab.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+override System.Windows.Forms.Design.EventsTab.HelpKeyword.get -> string!
+override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object obj) -> bool
 ~override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component) -> bool
 ~override System.Windows.Forms.DockingAttribute.Equals(object obj) -> bool
@@ -1988,7 +1988,7 @@
 ~System.Windows.Forms.Design.ComponentEditorPage.Icon.set -> void
 ~System.Windows.Forms.Design.ComponentEditorPage.PageSite.get -> System.Windows.Forms.IComponentEditorPageSite
 ~System.Windows.Forms.Design.ComponentEditorPage.PageSite.set -> void
-~System.Windows.Forms.Design.EventsTab.EventsTab(System.IServiceProvider sp) -> void
+System.Windows.Forms.Design.EventsTab.EventsTab(System.IServiceProvider? sp) -> void
 ~System.Windows.Forms.Design.IUIService.CanShowComponentEditor(object component) -> bool
 ~System.Windows.Forms.Design.IUIService.GetDialogOwnerWindow() -> System.Windows.Forms.IWin32Window
 ~System.Windows.Forms.Design.IUIService.ShowComponentEditor(object component, System.Windows.Forms.IWin32Window parent) -> bool
@@ -3545,14 +3545,14 @@
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.SetComponent(System.ComponentModel.IComponent component) -> void
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.SetSite(System.Windows.Forms.IComponentEditorPageSite site) -> void
 ~virtual System.Windows.Forms.Design.ComponentEditorPage.Title.get -> string
-~virtual System.Windows.Forms.Design.PropertyTab.Bitmap.get -> System.Drawing.Bitmap
-~virtual System.Windows.Forms.Design.PropertyTab.CanExtend(object extendee) -> bool
-~virtual System.Windows.Forms.Design.PropertyTab.Components.get -> object[]
-~virtual System.Windows.Forms.Design.PropertyTab.Components.set -> void
-~virtual System.Windows.Forms.Design.PropertyTab.GetDefaultProperty(object component) -> System.ComponentModel.PropertyDescriptor
-~virtual System.Windows.Forms.Design.PropertyTab.GetProperties(object component) -> System.ComponentModel.PropertyDescriptorCollection
-~virtual System.Windows.Forms.Design.PropertyTab.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object component, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~virtual System.Windows.Forms.Design.PropertyTab.HelpKeyword.get -> string
+virtual System.Windows.Forms.Design.PropertyTab.Bitmap.get -> System.Drawing.Bitmap?
+virtual System.Windows.Forms.Design.PropertyTab.CanExtend(object! extendee) -> bool
+virtual System.Windows.Forms.Design.PropertyTab.Components.get -> object![]?
+virtual System.Windows.Forms.Design.PropertyTab.Components.set -> void
+virtual System.Windows.Forms.Design.PropertyTab.GetDefaultProperty(object! component) -> System.ComponentModel.PropertyDescriptor?
+virtual System.Windows.Forms.Design.PropertyTab.GetProperties(object! component) -> System.ComponentModel.PropertyDescriptorCollection!
+virtual System.Windows.Forms.Design.PropertyTab.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+virtual System.Windows.Forms.Design.PropertyTab.HelpKeyword.get -> string?
 ~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component, System.Windows.Forms.IWin32Window owner) -> bool
 ~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetComponentEditorPages() -> System.Type[]
 ~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void

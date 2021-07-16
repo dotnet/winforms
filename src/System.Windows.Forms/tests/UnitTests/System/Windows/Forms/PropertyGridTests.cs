@@ -2798,7 +2798,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void PropertyGrid_Site_SetInvalidDesignerHost_ThrowsInvalidCastException()
+        public void PropertyGrid_Site_SetInvalidDesignerHost_DoesNotThrowInvalidCastException()
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -2811,18 +2811,18 @@ namespace System.Windows.Forms.Tests
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(new object());
             using var control = new PropertyGrid();
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void PropertyGrid_Site_SetInvalidDesignerHostComponentChangeService_ThrowsInvalidCastException()
+        public void PropertyGrid_Site_SetInvalidDesignerHostComponentChangeService_DoesNotThrowInvalidCastException()
         {
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
@@ -2845,18 +2845,18 @@ namespace System.Windows.Forms.Tests
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(mockDesignerHost.Object);
             using var control = new PropertyGrid();
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void PropertyGrid_Site_SetInvalidDesignerHostPropertyValueUIService_ThrowsInvalidCastException()
+        public void PropertyGrid_Site_SetInvalidDesignerHostPropertyValueUIService_DoesNotThrowInvalidCastException()
         {
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
@@ -2879,12 +2879,12 @@ namespace System.Windows.Forms.Tests
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(mockDesignerHost.Object);
             using var control = new PropertyGrid();
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
         }
