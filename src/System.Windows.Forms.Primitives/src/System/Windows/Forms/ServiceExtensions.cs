@@ -43,7 +43,7 @@ namespace System.Windows.Forms
             this IServiceProvider? provider,
             [NotNullWhen(true)] out T? service)
             where T : class
-            => (service = provider?.GetService(typeof(T)) as T) != null;
+            => (service = provider?.GetService(typeof(T)) as T) is not null;
 
         /// <summary>
         ///  Gets the service object of the specified type.
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
             this IDesignerHost? designerHost,
             [NotNullWhen(true)] out T? service)
             where T : class
-            => (service = designerHost?.GetService(typeof(T)) as T) != null;
+            => (service = designerHost?.GetService(typeof(T)) as T) is not null;
 
         /// <summary>
         ///  Gets the service object of the specified type.
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
             this ITypeDescriptorContext? context,
             [NotNullWhen(true)] out T? service)
             where T : class
-            => (service = context?.GetService(typeof(T)) as T) != null;
+            => (service = context?.GetService(typeof(T)) as T) is not null;
 
         private static TInterface? GetService<TService, TInterface>(this IServiceProvider provider)
             where TService : class
