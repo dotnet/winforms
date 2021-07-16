@@ -442,18 +442,17 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected virtual void NotifyParentChange(GridEntry entry)
         {
-            // See if we need to notify the parent(s) up the chain
+            // See if we need to notify the parent(s) up the chain.
             while (entry is PropertyDescriptorGridEntry propertyEntry
                 && propertyEntry._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
-                // Find the next parent property with a different value owner
+                // Find the next parent property with a different value owner.
                 object owner = entry.GetValueOwner();
 
-                // When owner is an instance of a value type,
-                // we can't just use == in the following while condition testing
+                // When owner is an instance of a value type we can't use == in the following while condition.
                 bool isValueType = owner.GetType().IsValueType;
 
-                // Find the next property descriptor with a different parent
+                // Find the next property descriptor with a different parent.
                 while (entry is not PropertyDescriptorGridEntry
                     || isValueType ? owner.Equals(entry.GetValueOwner()) : owner == entry.GetValueOwner())
                 {
@@ -464,7 +463,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                // Fire the change on the owner
+                // Fire the change on the owner.
                 if (entry is not null)
                 {
                     owner = entry.GetValueOwner();
@@ -477,9 +476,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                         ComponentChangeService.OnComponentChanged(owner, propertyEntry._propertyInfo);
                     }
 
-                    //clear the value so it paints correctly next time.
+                    // Clear the value so it paints correctly next time.
                     entry.ClearCachedValues(clearChildren: false);
-                    PropertyGridView gv = GridEntryHost;
                     GridEntryHost?.InvalidateGridEntryValue(entry);
                 }
             }
