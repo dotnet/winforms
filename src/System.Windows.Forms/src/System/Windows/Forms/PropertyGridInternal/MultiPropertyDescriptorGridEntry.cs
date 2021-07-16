@@ -15,8 +15,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         private readonly MergePropertyDescriptor _mergedDescriptor;
         private readonly object[] _objects;
 
-        public MultiPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, object[] objectArray, PropertyDescriptor[] propInfo, bool hide)
-        : base(ownerGrid, peParent, hide)
+        public MultiPropertyDescriptorGridEntry(
+            PropertyGrid ownerGrid,
+            GridEntry peParent,
+            object[] objectArray,
+            PropertyDescriptor[] propInfo,
+            bool hide)
+            : base(ownerGrid, peParent, hide)
         {
             _mergedDescriptor = new MergePropertyDescriptor(propInfo);
             _objects = objectArray;
@@ -214,30 +219,29 @@ namespace System.Windows.Forms.PropertyGridInternal
             return success;
         }
 
-        protected override void NotifyParentChange(GridEntry ge)
+        protected override void NotifyParentChange(GridEntry entry)
         {
             // Now see if we need to notify the parent(s) up the chain.
-            while (ge is not null &&
-                   ge is PropertyDescriptorGridEntry entry &&
-                   entry._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
+            while (entry is PropertyDescriptorGridEntry propertyEntry
+                && propertyEntry._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
                 // Find the next parent property with a different value owner.
-                object owner = ge.GetValueOwner();
+                object owner = entry.GetValueOwner();
 
                 // Find the next property descriptor with a different parent.
-                while (!(ge is PropertyDescriptorGridEntry) || OwnersEqual(owner, ge.GetValueOwner()))
+                while (!(entry is PropertyDescriptorGridEntry) || OwnersEqual(owner, entry.GetValueOwner()))
                 {
-                    ge = ge.ParentGridEntry;
-                    if (ge is null)
+                    entry = entry.ParentGridEntry;
+                    if (entry is null)
                     {
                         break;
                     }
                 }
 
                 // Fire the change on the owner.
-                if (ge is not null)
+                if (entry is not null)
                 {
-                    owner = ge.GetValueOwner();
+                    owner = entry.GetValueOwner();
 
                     IComponentChangeService changeService = ComponentChangeService;
 
@@ -247,24 +251,24 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             for (int i = 0; i < ownerArray.Length; i++)
                             {
-                                PropertyDescriptor pd = entry._propertyInfo;
+                                PropertyDescriptor propertyInfo = propertyEntry._propertyInfo;
 
-                                if (pd is MergePropertyDescriptor descriptor)
+                                if (propertyInfo is MergePropertyDescriptor descriptor)
                                 {
-                                    pd = descriptor[i];
+                                    propertyInfo = descriptor[i];
                                 }
 
-                                if (pd is not null)
+                                if (propertyInfo is not null)
                                 {
-                                    changeService.OnComponentChanging(ownerArray.GetValue(i), pd);
-                                    changeService.OnComponentChanged(ownerArray.GetValue(i), pd, null, null);
+                                    changeService.OnComponentChanging(ownerArray.GetValue(i), propertyInfo);
+                                    changeService.OnComponentChanged(ownerArray.GetValue(i), propertyInfo);
                                 }
                             }
                         }
                         else
                         {
-                            changeService.OnComponentChanging(owner, entry._propertyInfo);
-                            changeService.OnComponentChanged(owner, entry._propertyInfo, null, null);
+                            changeService.OnComponentChanging(owner, propertyEntry._propertyInfo);
+                            changeService.OnComponentChanged(owner, propertyEntry._propertyInfo);
                         }
                     }
                 }
@@ -420,7 +424,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int cLength = _objects.Length;
                 for (int i = 0; i < cLength; i++)
                 {
-                    ComponentChangeService.OnComponentChanged(_objects[i], _mergedDescriptor[i], null, null);
+                    ComponentChangeService.OnComponentChanged(_objects[i], _mergedDescriptor[i]);
                 }
             }
         }

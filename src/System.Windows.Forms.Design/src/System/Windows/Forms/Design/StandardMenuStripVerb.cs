@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Design
     {
         private readonly ToolStripDesigner _designer;
         private readonly IDesignerHost _host;
-        private readonly IComponentChangeService _componentChangeSvc;
+        private readonly IComponentChangeService _changeService;
         private readonly IServiceProvider _provider;
 
         /// <summary>
@@ -31,7 +31,7 @@ namespace System.Windows.Forms.Design
             _designer = designer;
             _provider = designer.Component.Site;
             _host = (IDesignerHost)_provider.GetService(typeof(IDesignerHost));
-            _componentChangeSvc = (IComponentChangeService)_provider.GetService(typeof(IComponentChangeService));
+            _changeService = (IComponentChangeService)_provider.GetService(typeof(IComponentChangeService));
         }
 
         /// <summary>
@@ -203,8 +203,8 @@ namespace System.Windows.Forms.Design
                         {
                             // member is OK to be null...
                             MemberDescriptor member = TypeDescriptor.GetProperties(rootItem)["DropDownItems"];
-                            _componentChangeSvc.OnComponentChanging(rootItem, member);
-                            _componentChangeSvc.OnComponentChanged(rootItem, member, null, null);
+                            _changeService.OnComponentChanging(rootItem, member);
+                            _changeService.OnComponentChanged(rootItem, member);
                         }
                     }
 
@@ -216,8 +216,8 @@ namespace System.Windows.Forms.Design
                     {
                         // member is OK to be null...
                         MemberDescriptor topMember = TypeDescriptor.GetProperties(tool)["Items"];
-                        _componentChangeSvc.OnComponentChanging(tool, topMember);
-                        _componentChangeSvc.OnComponentChanged(tool, topMember, null, null);
+                        _changeService.OnComponentChanging(tool, topMember);
+                        _changeService.OnComponentChanged(tool, topMember);
                     }
                 }
             }
@@ -375,8 +375,8 @@ namespace System.Windows.Forms.Design
 
                 // finally, add it to the Main ToolStrip.
                 MemberDescriptor topMember = TypeDescriptor.GetProperties(tool)["Items"];
-                _componentChangeSvc.OnComponentChanging(tool, topMember);
-                _componentChangeSvc.OnComponentChanged(tool, topMember, null, null);
+                _changeService.OnComponentChanging(tool, topMember);
+                _changeService.OnComponentChanged(tool, topMember);
             }
             catch (Exception e)
             {

@@ -379,21 +379,16 @@ namespace System.Windows.Forms.Design
                         success = editor.EditComponent(obj);
                     }
 
-                    if (success && changeService != null)
+                    if (success)
                     {
-                        // Now notify the change service that the change was successful.
-                        //
-                        changeService.OnComponentChanged(obj, null, null, null);
+                        // Notify the change service that the change was successful.
+                        changeService?.OnComponentChanged(obj);
                     }
 
                     return true;
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
                 }
             }
 

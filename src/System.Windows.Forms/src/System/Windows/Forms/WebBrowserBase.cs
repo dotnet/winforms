@@ -40,7 +40,6 @@ namespace System.Windows.Forms
         private WebBrowserHelper.AXEditMode axEditMode = WebBrowserHelper.AXEditMode.None;
         private BitVector32 axHostState;
         private WebBrowserHelper.SelectionStyle selectionStyle = WebBrowserHelper.SelectionStyle.NotSelected;
-        private int noComponentChange;
         private WebBrowserSiteBase axSite;
         private ContainerControl containingControl;
         private IntPtr hwndFocus = IntPtr.Zero;
@@ -849,40 +848,18 @@ namespace System.Windows.Forms
             Bounds = new Rectangle(location.X, location.Y, extent.Width, extent.Height);
         }
 
-        internal bool IsUserMode
-        {
-            get
-            {
-                return Site is null || !DesignMode;
-            }
-        }
+        internal bool IsUserMode => Site is null || !DesignMode;
 
         internal void MakeDirty()
         {
-            ISite iSite = Site;
-            if (iSite is not null)
+            if (Site.TryGetService(out IComponentChangeService changeService))
             {
-                IComponentChangeService ccs = (IComponentChangeService)iSite.GetService(typeof(IComponentChangeService));
-                if (ccs is not null)
-                {
-                    ccs.OnComponentChanging(this, null);
-                    ccs.OnComponentChanged(this, null, null, null);
-                }
+                changeService.OnComponentChanging(this);
+                changeService.OnComponentChanged(this);
             }
         }
 
-        internal int NoComponentChangeEvents
-        {
-            get
-            {
-                return noComponentChange;
-            }
-
-            set
-            {
-                noComponentChange = value;
-            }
-        }
+        internal int NoComponentChangeEvents { get; set; }
 
         //
         // Private helper methods:

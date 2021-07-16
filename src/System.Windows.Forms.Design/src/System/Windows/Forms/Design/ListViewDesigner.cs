@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -141,11 +141,9 @@ namespace System.Windows.Forms.Design
                     if (nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
                     {
                         // Re-codegen if the columns have been resized
-                        //
                         try
                         {
-                            IComponentChangeService componentChangeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                            componentChangeService.OnComponentChanged(Component, null, null, null);
+                            GetService<IComponentChangeService>().OnComponentChanged(Component);
                         }
                         catch (InvalidOperationException ex)
                         {
@@ -154,11 +152,10 @@ namespace System.Windows.Forms.Design
                                 return;
                             }
 
-                            IUIService uiService = (IUIService)Component.Site.GetService(typeof(IUIService));
                             _inShowErrorDialog = true;
                             try
                             {
-                                ShowErrorDialog(uiService, ex, (ListView)Component);
+                                ShowErrorDialog(Component.Site.GetService<IUIService>(), ex, (ListView)Component);
                             }
                             finally
                             {

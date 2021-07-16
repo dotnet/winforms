@@ -41,30 +41,30 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        /// Removes the item from listview column header collection
+        ///  Removes the item from listview column header collection
         /// </summary>
         internal override void OnItemRemoving(object item)
         {
-            if (!(Context.Instance is ListView listview))
+            if (Context.Instance is not ListView listview)
             {
                 return;
             }
 
             if (item is ColumnHeader column)
             {
-                IComponentChangeService cs = GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                PropertyDescriptor itemsProp = null;
-                if (cs != null)
+                IComponentChangeService changeService = Context.GetService<IComponentChangeService>();
+                PropertyDescriptor property = null;
+                if (changeService is not null)
                 {
-                    itemsProp = TypeDescriptor.GetProperties(Context.Instance)["Columns"];
-                    cs.OnComponentChanging(Context.Instance, itemsProp);
+                    property = TypeDescriptor.GetProperties(Context.Instance)["Columns"];
+                    changeService.OnComponentChanging(Context.Instance, property);
                 }
 
                 listview.Columns.Remove(column);
 
-                if (cs != null && itemsProp != null)
+                if (changeService is not null && property is not null)
                 {
-                    cs.OnComponentChanged(Context.Instance, itemsProp, null, null);
+                    changeService.OnComponentChanged(Context.Instance, property);
                 }
             }
         }

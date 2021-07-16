@@ -1140,7 +1140,7 @@ namespace System.Windows.Forms.Design
                             Debug.Assert(ccs != null && controlsProp != null, "Wrong parent in parent list");
                             if (ccs != null && controlsProp != null)
                             {
-                                ccs.OnComponentChanged(parent, controlsProp, null, null);
+                                ccs.OnComponentChanged(parent, controlsProp);
                             }
                         }
 

@@ -215,18 +215,12 @@ namespace System.Windows.Forms.Design
             get => Control.Size;
             set
             {
-                IComponentChangeService cs = GetService<IComponentChangeService>();
+                IComponentChangeService changeService = GetService<IComponentChangeService>();
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(Component);
-                if (cs != null)
-                {
-                    cs.OnComponentChanging(Component, props["ClientSize"]);
-                }
+                changeService?.OnComponentChanging(Component, props["ClientSize"]);
 
                 Control.Size = value;
-                if (cs != null)
-                {
-                    cs.OnComponentChanged(Component, props["ClientSize"], null, null);
-                }
+                changeService?.OnComponentChanged(Component, props["ClientSize"]);
             }
         }
 

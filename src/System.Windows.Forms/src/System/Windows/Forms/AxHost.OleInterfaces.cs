@@ -637,31 +637,19 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    ISite site = host.Site;
-                    if (site is not null)
+                    if (host.Site.TryGetService(out IComponentChangeService changeService))
                     {
-                        IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-
-                        if (changeService is not null)
+                        try
                         {
-                            try
-                            {
-                                changeService.OnComponentChanging(host, prop);
-                            }
-                            catch (CheckoutException coEx)
-                            {
-                                if (coEx == CheckoutException.Canceled)
-                                {
-                                    return HRESULT.S_OK;
-                                }
-
-                                throw;
-                            }
-
-                            // Now notify the change service that the change was successful.
-                            //
-                            changeService.OnComponentChanged(host, prop, null, (prop?.GetValue(host)));
+                            changeService.OnComponentChanging(host, prop);
                         }
+                        catch (CheckoutException e) when (e == CheckoutException.Canceled)
+                        {
+                            return HRESULT.S_OK;
+                        }
+
+                        // Now notify the change service that the change was successful.
+                        changeService.OnComponentChanged(host, prop, oldValue: null, prop?.GetValue(host));
                     }
                 }
                 catch (Exception t)

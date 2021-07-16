@@ -668,17 +668,16 @@ namespace System.Windows.Forms.Design
                     DesignerTransaction designerTransaction = designerHost.CreateTransaction(transDesc);
                     try
                     {
-                        IComponentChangeService changeSvc = (IComponentChangeService)currentDropItem.Site.GetService(typeof(IComponentChangeService));
-                        if (changeSvc != null)
+                        if (currentDropItem.Site.TryGetService(out IComponentChangeService changeService))
                         {
                             if (parentToolStrip is ToolStripDropDown dropDown)
                             {
                                 ToolStripItem ownerItem = dropDown.OwnerItem;
-                                changeSvc.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                                changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
                             }
                             else
                             {
-                                changeSvc.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+                                changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
                             }
                         }
 
@@ -744,17 +743,17 @@ namespace System.Windows.Forms.Design
                             }
                         }
 
-                        if (changeSvc != null)
+                        if (changeService != null)
                         {
                             ToolStripDropDown dropDown = parentToolStrip as ToolStripDropDown;
                             if (dropDown != null)
                             {
                                 ToolStripItem ownerItem = dropDown.OwnerItem;
-                                changeSvc.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
+                                changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
                             }
                             else
                             {
-                                changeSvc.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"], null, null);
+                                changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
                             }
 
                             //fire extra changing/changed events.
@@ -763,13 +762,13 @@ namespace System.Windows.Forms.Design
                                 if (dropDown != null)
                                 {
                                     ToolStripItem ownerItem = dropDown.OwnerItem;
-                                    changeSvc.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                                    changeSvc.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
+                                    changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                                    changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
                                 }
                                 else
                                 {
-                                    changeSvc.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
-                                    changeSvc.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"], null, null);
+                                    changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
+                                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
                                 }
                             }
                         }

@@ -12,7 +12,7 @@ using System.Drawing.Design;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal partial  class PropertyDescriptorGridEntry : GridEntry
+    internal partial class PropertyDescriptorGridEntry : GridEntry
     {
         internal PropertyDescriptor _propertyInfo;
 
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private static EventDescriptor s_targetEventdesc;
 
         internal PropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, bool hide)
-        : base(ownerGrid, peParent)
+            : base(ownerGrid, peParent)
         {
             _activeXHide = hide;
         }
@@ -440,50 +440,45 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected virtual void NotifyParentChange(GridEntry ge)
+        protected virtual void NotifyParentChange(GridEntry entry)
         {
-            // now see if we need to notify the parent(s) up the chain
-            while (ge is not null &&
-                   ge is PropertyDescriptorGridEntry entry &&
-                   entry._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
+            // See if we need to notify the parent(s) up the chain.
+            while (entry is PropertyDescriptorGridEntry propertyEntry
+                && propertyEntry._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
-                // find the next parent property with a different value owner
-                object owner = ge.GetValueOwner();
+                // Find the next parent property with a different value owner.
+                object owner = entry.GetValueOwner();
 
-                // when owner is an instance of a value type,
-                // we can't just use == in the following while condition testing
+                // When owner is an instance of a value type we can't use == in the following while condition.
                 bool isValueType = owner.GetType().IsValueType;
 
-                // find the next property descriptor with a different parent
-                while (!(ge is PropertyDescriptorGridEntry)
-                    || isValueType ? owner.Equals(ge.GetValueOwner()) : owner == ge.GetValueOwner())
+                // Find the next property descriptor with a different parent.
+                while (entry is not PropertyDescriptorGridEntry
+                    || isValueType ? owner.Equals(entry.GetValueOwner()) : owner == entry.GetValueOwner())
                 {
-                    ge = ge.ParentGridEntry;
-                    if (ge is null)
+                    entry = entry.ParentGridEntry;
+                    if (entry is null)
                     {
                         break;
                     }
                 }
 
-                // fire the change on that owner
-                if (ge is not null)
+                // Fire the change on the owner.
+                if (entry is not null)
                 {
-                    owner = ge.GetValueOwner();
+                    owner = entry.GetValueOwner();
 
                     IComponentChangeService changeService = ComponentChangeService;
 
                     if (changeService is not null)
                     {
-                        changeService.OnComponentChanging(owner, entry._propertyInfo);
-                        changeService.OnComponentChanged(owner, entry._propertyInfo, null, null);
+                        ComponentChangeService.OnComponentChanging(owner, propertyEntry._propertyInfo);
+                        ComponentChangeService.OnComponentChanged(owner, propertyEntry._propertyInfo);
                     }
 
-                    ge.ClearCachedValues(false); //clear the value so it paints correctly next time.
-                    PropertyGridView gv = GridEntryHost;
-                    if (gv is not null)
-                    {
-                        gv.InvalidateGridEntryValue(ge);
-                    }
+                    // Clear the value so it paints correctly next time.
+                    entry.ClearCachedValues(clearChildren: false);
+                    GridEntryHost?.InvalidateGridEntryValue(entry);
                 }
             }
         }
@@ -761,7 +756,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // Now notify the change service that the change was successful.
                     if (needChangeNotify && ComponentChangeService is not null)
                     {
-                        ComponentChangeService.OnComponentChanged(obj, _propertyInfo, null, objVal);
+                        ComponentChangeService.OnComponentChanged(obj, _propertyInfo, oldValue: null, objVal);
                     }
 
                     NotifyParentChange(this);

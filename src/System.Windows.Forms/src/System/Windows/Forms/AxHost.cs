@@ -3290,21 +3290,11 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public void MakeDirty()
         {
-            ISite isite = Site;
-            if (isite is null)
+            if (Site.TryGetService(out IComponentChangeService changeService))
             {
-                return;
+                changeService.OnComponentChanging(this);
+                changeService.OnComponentChanged(this);
             }
-
-            IComponentChangeService ccs = (IComponentChangeService)isite.GetService(typeof(IComponentChangeService));
-            if (ccs is null)
-            {
-                return;
-            }
-
-            ccs.OnComponentChanging(this, null);
-
-            ccs.OnComponentChanged(this, null, null, null);
         }
 
         public void ShowPropertyPages()

@@ -1544,7 +1544,7 @@ namespace System.Windows.Forms.Design
                     if (_componentChangeSvc != null)
                     {
                         _componentChangeSvc.OnComponentChanging(ToolStrip, locationProp);
-                        _componentChangeSvc.OnComponentChanged(ToolStrip, locationProp, null, null);
+                        _componentChangeSvc.OnComponentChanged(ToolStrip, locationProp);
                     }
                 }
             }
@@ -1945,7 +1945,7 @@ namespace System.Windows.Forms.Design
 
                 if (changeService != null)
                 {
-                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"], null, null);
+                    changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
                 }
 
                 // Fire extra changing/changed events so that the order is "restored" after undo/redo
@@ -1954,7 +1954,7 @@ namespace System.Windows.Forms.Design
                     if (changeService != null)
                     {
                         changeService.OnComponentChanging(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
-                        changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"], null, null);
+                        changeService.OnComponentChanged(parentToolStrip, TypeDescriptor.GetProperties(parentToolStrip)["Items"]);
                     }
                 }
 

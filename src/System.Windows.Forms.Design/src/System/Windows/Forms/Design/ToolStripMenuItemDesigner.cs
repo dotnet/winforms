@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms.Design
                         if (changeService != null)
                         {
                             MemberDescriptor member = TypeDescriptor.GetProperties(MenuItem.DropDown)["Items"];
-                            changeService.OnComponentChanged(MenuItem.DropDown, member, null, null);
+                            changeService.OnComponentChanged(MenuItem.DropDown, member);
                         }
                     }
                     else
@@ -2724,11 +2724,8 @@ namespace System.Windows.Forms.Design
                         DesignerTransaction changeParent = host.CreateTransaction(transDesc);
                         try
                         {
-                            IComponentChangeService changeSvc = (IComponentChangeService)primaryItem.Site.GetService(typeof(IComponentChangeService));
-                            if (changeSvc != null)
-                            {
-                                changeSvc.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                            }
+                            var changeService = primaryItem.Site.GetService<IComponentChangeService>();
+                            changeService?.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
 
                             // If we are copying, then we want to make a copy of the components we are dragging
                             if (copy)
@@ -2779,18 +2776,15 @@ namespace System.Windows.Forms.Design
                                 menuItemDesigner._selectionService.SetSelectedComponents(new IComponent[] { primaryItem }, SelectionTypes.Primary | SelectionTypes.Replace);
                             }
 
-                            if (changeSvc != null)
-                            {
-                                changeSvc.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
-                            }
+                            changeService?.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
 
                             //fire extra changing/changed events so that the order is "restored" after undo/redo
                             if (copy)
                             {
-                                if (changeSvc != null)
+                                if (changeService is not null)
                                 {
-                                    changeSvc.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                                    changeSvc.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
+                                    changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
+                                    changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
                                 }
                             }
 

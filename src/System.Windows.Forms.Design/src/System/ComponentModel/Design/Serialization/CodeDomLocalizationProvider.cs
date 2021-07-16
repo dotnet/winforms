@@ -309,25 +309,19 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             /// <summary>
-            ///  Broadcasts a global change, indicating that all
-            ///  objects on the designer have changed.
+            ///  Broadcasts a global change, indicating that all objects on the designer have changed.
             /// </summary>
-            private void BroadcastGlobalChange(IComponent comp)
+            private void BroadcastGlobalChange(IComponent component)
             {
-                ISite site = comp.Site;
+                ISite site = component.Site;
 
-                if (site != null)
+                if (site.TryGetService(out IComponentChangeService changeService)
+                    && site.TryGetService(out IContainer container))
                 {
-                    IComponentChangeService cs = site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                    IContainer container = site.GetService(typeof(IContainer)) as IContainer;
-
-                    if (cs != null && container != null)
+                    foreach (IComponent c in container.Components)
                     {
-                        foreach (IComponent c in container.Components)
-                        {
-                            cs.OnComponentChanging(c, null);
-                            cs.OnComponentChanged(c, null, null, null);
-                        }
+                        changeService.OnComponentChanging(c);
+                        changeService.OnComponentChanged(c);
                     }
                 }
             }

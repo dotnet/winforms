@@ -1111,7 +1111,7 @@ namespace System.ComponentModel.Design.Serialization
 
                             if (paramsOk)
                             {
-                                IComponentChangeService compChange = (IComponentChangeService)manager.GetService(typeof(IComponentChangeService));
+                                var changeService = manager.GetService<IComponentChangeService>();
                                 Type t = targetObject as Type;
 
                                 if (t != null)
@@ -1120,10 +1120,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                                 else
                                 {
-                                    if (compChange != null)
-                                    {
-                                        compChange.OnComponentChanging(targetObject, null);
-                                    }
+                                    changeService?.OnComponentChanging(targetObject, null);
 
                                     try
                                     {
@@ -1154,10 +1151,7 @@ namespace System.ComponentModel.Design.Serialization
                                         }
                                     }
 
-                                    if (compChange != null)
-                                    {
-                                        compChange.OnComponentChanged(targetObject, null, null, null);
-                                    }
+                                    changeService?.OnComponentChanged(targetObject);
                                 }
                             }
                             else if (parameters.Length == 1 && parameters[0] is CodeDelegateCreateExpression)

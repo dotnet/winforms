@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
@@ -360,39 +359,17 @@ namespace System.Windows.Forms
 
         internal virtual void OnPropertyChanged(DispatchID dispid)
         {
-            try
+            if (Host.Site.TryGetService(out IComponentChangeService changeService))
             {
-                ISite site = Host.Site;
-                if (site is not null)
+                try
                 {
-                    IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-
-                    if (changeService is not null)
-                    {
-                        try
-                        {
-                            changeService.OnComponentChanging(Host, null);
-                        }
-                        catch (CheckoutException coEx)
-                        {
-                            if (coEx == CheckoutException.Canceled)
-                            {
-                                return;
-                            }
-
-                            throw;
-                        }
-
-                        // Now notify the change service that the change was successful.
-                        //
-                        changeService.OnComponentChanged(Host, null, null, null);
-                    }
+                    changeService.OnComponentChanging(Host);
+                    changeService.OnComponentChanged(Host);
                 }
-            }
-            catch (Exception t)
-            {
-                Debug.Fail(t.ToString());
-                throw;
+                catch (CheckoutException e) when (e == CheckoutException.Canceled)
+                {
+                    return;
+                }
             }
         }
 

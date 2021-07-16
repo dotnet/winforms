@@ -154,14 +154,14 @@ namespace System.Windows.Forms.Design
         void OnSplitterMoved(object sender, SplitterEventArgs e)
         {
             // Dirty the designer.
-            if (_designerSite.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
+            if (_designerSite.TryGetService(out IComponentChangeService changeService))
             {
                 try
                 {
-                    cs.OnComponentChanging(_designerSite.Component, null);
-                    cs.OnComponentChanged(_designerSite.Component, null, null, null);
+                    changeService.OnComponentChanging(_designerSite.Component);
+                    changeService.OnComponentChanged(_designerSite.Component);
                 }
-                catch
+                catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                 {
                 }
             }
