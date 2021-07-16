@@ -13336,66 +13336,62 @@ namespace System.Windows.Forms
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
             ISite site = Site;
-            IComponentChangeService ccs = null;
+            IComponentChangeService changeService = null;
             PropertyDescriptor sizeProperty = null;
             PropertyDescriptor locationProperty = null;
             bool sizeChanged = false;
             bool locationChanged = false;
 
-            if (site is not null && site.DesignMode)
+            if (site is not null && site.DesignMode && site.TryGetService(out changeService))
             {
-                ccs = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-                if (ccs is not null)
+                sizeProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Size];
+                locationProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Location];
+                Debug.Assert(sizeProperty is not null && locationProperty is not null, "Error retrieving Size/Location properties on Control.");
+
+                try
                 {
-                    sizeProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Size];
-                    locationProperty = TypeDescriptor.GetProperties(this)[PropertyNames.Location];
-                    Debug.Assert(sizeProperty is not null && locationProperty is not null, "Error retrieving Size/Location properties on Control.");
-
-                    try
+                    if (sizeProperty is not null && !sizeProperty.IsReadOnly && (bounds.Width != Width || bounds.Height != Height))
                     {
-                        if (sizeProperty is not null && !sizeProperty.IsReadOnly && (bounds.Width != Width || bounds.Height != Height))
+                        if (!(site is INestedSite))
                         {
-                            if (!(site is INestedSite))
-                            {
-                                ccs.OnComponentChanging(this, sizeProperty);
-                            }
-
-                            sizeChanged = true;
+                            changeService.OnComponentChanging(this, sizeProperty);
                         }
 
-                        if (locationProperty is not null && !locationProperty.IsReadOnly && (bounds.X != _x || bounds.Y != _y))
-                        {
-                            if (!(site is INestedSite))
-                            {
-                                ccs.OnComponentChanging(this, locationProperty);
-                            }
+                        sizeChanged = true;
+                    }
 
-                            locationChanged = true;
-                        }
-                    }
-                    catch (InvalidOperationException)
+                    if (locationProperty is not null && !locationProperty.IsReadOnly && (bounds.X != _x || bounds.Y != _y))
                     {
-                        // The component change events can throw InvalidOperationException if a change is
-                        // currently not allowed (typically because the doc data in VS is locked).
-                        // When this happens, we just eat the exception and proceed with the change.
+                        if (!(site is INestedSite))
+                        {
+                            changeService.OnComponentChanging(this, locationProperty);
+                        }
+
+                        locationChanged = true;
                     }
+                }
+                catch (InvalidOperationException)
+                {
+                    // The component change events can throw InvalidOperationException if a change is
+                    // currently not allowed (typically because the doc data in VS is locked).
+                    // When this happens, we just eat the exception and proceed with the change.
                 }
             }
 
             SetBoundsCore(bounds.X, bounds.Y, bounds.Width, bounds.Height, specified);
 
-            if (site is not null && ccs is not null)
+            if (changeService is not null)
             {
                 try
                 {
                     if (sizeChanged)
                     {
-                        ccs.OnComponentChanged(this, sizeProperty, null, null);
+                        changeService.OnComponentChanged(this, sizeProperty);
                     }
 
                     if (locationChanged)
                     {
-                        ccs.OnComponentChanged(this, locationProperty, null, null);
+                        changeService.OnComponentChanged(this, locationProperty);
                     }
                 }
                 catch (InvalidOperationException)

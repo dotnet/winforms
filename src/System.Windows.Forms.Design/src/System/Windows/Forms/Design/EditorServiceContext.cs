@@ -89,9 +89,7 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <summary>
-        ///  Self-explanitory interface impl.
-        /// </summary>
+        /// <inheritdoc />
         IContainer ITypeDescriptorContext.Container
         {
             get
@@ -105,45 +103,27 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <summary>
-        ///  Self-explanitory interface impl.
-        /// </summary>
+        /// <inheritdoc />
         void ITypeDescriptorContext.OnComponentChanged()
-        {
-            ChangeService.OnComponentChanged(_designer.Component, _targetProperty, null, null);
-        }
+            => ChangeService.OnComponentChanged(_designer.Component, _targetProperty);
 
-        /// <summary>
-        ///  Self-explanitory interface impl.
-        /// </summary>
+        /// <inheritdoc />
         bool ITypeDescriptorContext.OnComponentChanging()
         {
             try
             {
                 ChangeService.OnComponentChanging(_designer.Component, _targetProperty);
+                return true;
             }
-            catch (CheckoutException checkoutException)
+            catch (CheckoutException checkoutException) when (checkoutException == CheckoutException.Canceled)
             {
-                if (checkoutException == CheckoutException.Canceled)
-                {
-                    return false;
-                }
-
-                throw;
+                return false;
             }
-
-            return true;
         }
 
-        object ITypeDescriptorContext.Instance
-        {
-            get => _designer.Component;
-        }
+        object ITypeDescriptorContext.Instance => _designer.Component;
 
-        PropertyDescriptor ITypeDescriptorContext.PropertyDescriptor
-        {
-            get => _targetProperty;
-        }
+        PropertyDescriptor ITypeDescriptorContext.PropertyDescriptor => _targetProperty;
 
         object IServiceProvider.GetService(Type serviceType)
         {

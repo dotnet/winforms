@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  Self-explanitory interface impl.
         /// </summary>
-        void ITypeDescriptorContext.OnComponentChanged() => ChangeService.OnComponentChanged(_designer.Component, _targetProperty, null, null);
+        void ITypeDescriptorContext.OnComponentChanged() => ChangeService.OnComponentChanged(_designer.Component, _targetProperty);
 
         /// <summary>
         ///  Self-explanitory interface impl.

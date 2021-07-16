@@ -66,29 +66,29 @@ namespace System.Windows.Forms.Design
                         {
                             if (toolStrip != null)
                             {
-                                IComponentChangeService changeSvc = _provider.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                                var changeService = _provider.GetService<IComponentChangeService>();
                                 Control newParent = GetParent(tsc, toolStrip);
                                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
                                 Control oldParent = toolStrip.Parent;
                                 if (oldParent != null)
                                 {
-                                    changeSvc.OnComponentChanging(oldParent, controlsProp);
+                                    changeService.OnComponentChanging(oldParent, controlsProp);
                                     //remove control from the old parent
                                     oldParent.Controls.Remove(toolStrip);
                                 }
 
                                 if (newParent != null)
                                 {
-                                    changeSvc.OnComponentChanging(newParent, controlsProp);
+                                    changeService.OnComponentChanging(newParent, controlsProp);
                                     //finally add & relocate the control with the new parent
                                     newParent.Controls.Add(toolStrip);
                                 }
 
                                 //fire our comp changed events
-                                if (changeSvc != null && oldParent != null && newParent != null)
+                                if (changeService != null && oldParent != null && newParent != null)
                                 {
-                                    changeSvc.OnComponentChanged(oldParent, controlsProp, null, null);
-                                    changeSvc.OnComponentChanged(newParent, controlsProp, null, null);
+                                    changeService.OnComponentChanged(oldParent, controlsProp);
+                                    changeService.OnComponentChanged(newParent, controlsProp);
                                 }
 
                                 //Set the Selection on the new Parent ... so that the selection is restored to the new item,

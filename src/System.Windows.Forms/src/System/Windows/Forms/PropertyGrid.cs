@@ -3266,34 +3266,27 @@ namespace System.Windows.Forms
                     {
                         if (baseObject is IComponent component
                             && _connectionPointCookies[0] is null
-                            && component.Site is ISite site)
+                            && component.Site is ISite site
+                            && site.TryGetService(out IComponentChangeService changeService))
                         {
-                            if (site.TryGetService(out IComponentChangeService changeService))
+                            try
                             {
-                                try
-                                {
-                                    changeService.OnComponentChanging(baseObject, null);
-                                }
-                                catch (CheckoutException coEx)
-                                {
-                                    if (coEx == CheckoutException.Canceled)
-                                    {
-                                        return;
-                                    }
+                                changeService.OnComponentChanging(baseObject);
+                            }
+                            catch (CheckoutException checkoutException) when (checkoutException == CheckoutException.Canceled)
+                            {
+                                return;
+                            }
 
-                                    throw;
-                                }
-
-                                try
-                                {
-                                    // Now notify the change service that the change was successful.
-                                    SetFlag(Flags.InternalChange, true);
-                                    changeService.OnComponentChanged(baseObject, null, null, null);
-                                }
-                                finally
-                                {
-                                    SetFlag(Flags.InternalChange, false);
-                                }
+                            try
+                            {
+                                // Now notify the change service that the change was successful.
+                                SetFlag(Flags.InternalChange, true);
+                                changeService.OnComponentChanged(baseObject);
+                            }
+                            finally
+                            {
+                                SetFlag(Flags.InternalChange, false);
                             }
                         }
 

@@ -417,7 +417,7 @@ namespace System.ComponentModel.Design
             {
                 foreach (ReferencingComponent ro in propsToUpdate)
                 {
-                    _componentChangeService.OnComponentChanged(ro.component, ro.member, null, null);
+                    _componentChangeService.OnComponentChanged(ro.component, ro.member);
                 }
 
                 _refToRemovedComponent.Remove(e.Component);

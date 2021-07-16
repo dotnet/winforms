@@ -576,7 +576,7 @@ namespace System.Windows.Forms.Design
 
             if (TryGetService(out IComponentChangeService changeService) && parent.Site != null)
             {
-                changeService.OnComponentChanged(parent, TypeDescriptor.GetProperties(parent)["DropDownItems"], null, null);
+                changeService.OnComponentChanged(parent, TypeDescriptor.GetProperties(parent)["DropDownItems"]);
             }
 
             foreach (ToolStripItem item in parent.DropDownItems)
@@ -815,7 +815,7 @@ namespace System.Windows.Forms.Design
                     else if (ownerItem != null)
                     {
                         changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                        changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
+                        changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
                     }
                 }
 
@@ -880,12 +880,12 @@ namespace System.Windows.Forms.Design
                 {
                     if (parent.Site != null)
                     {
-                        changeService.OnComponentChanged(parent, TypeDescriptor.GetProperties(parent)["Items"], null, null);
+                        changeService.OnComponentChanged(parent, TypeDescriptor.GetProperties(parent)["Items"]);
                     }
                     else if (ownerItem != null)
                     {
                         changeService.OnComponentChanging(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
-                        changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"], null, null);
+                        changeService.OnComponentChanged(ownerItem, TypeDescriptor.GetProperties(ownerItem)["DropDownItems"]);
                     }
                 }
 

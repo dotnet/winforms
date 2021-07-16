@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Design
         private OleDragDropHandler _oleDragDropHandler;                     // handler for ole drag drop operations
         private EscapeHandler _escapeHandler;                               // active during drags to override escape.
         private Control _pendingRemoveControl;                              // we've gotten an OnComponentRemoving, and are waiting for OnComponentRemove
-        private IComponentChangeService _componentChangeSvc;
+        private IComponentChangeService _changeService;
         private DragAssistanceManager _dragManager;                         //used to apply snaplines when dragging a new tool rect on the designer's surface
         private ToolboxSnapDragDropEventArgs _toolboxSnapDragDropEventArgs; //used to store extra info about a beh. svc. dragdrop from the toolbox
         private ToolboxItemSnapLineBehavior _toolboxItemSnapLineBehavior;   //this is our generic snapline box for dragging comps from the toolbox
@@ -661,9 +661,9 @@ namespace System.Windows.Forms.Design
                 //
                 //
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(Control)["Controls"];
-                if (_componentChangeSvc != null)
+                if (_changeService != null)
                 {
-                    _componentChangeSvc.OnComponentChanging(Control, controlsProp);
+                    _changeService.OnComponentChanging(Control, controlsProp);
                 }
 
                 AddChildControl(newChild);
@@ -702,9 +702,9 @@ namespace System.Windows.Forms.Design
                     }
                 }
 
-                if (_componentChangeSvc != null)
+                if (_changeService != null)
                 {
-                    _componentChangeSvc.OnComponentChanged(Control, controlsProp, Control.Controls, Control.Controls);
+                    _changeService.OnComponentChanged(Control, controlsProp, Control.Controls, Control.Controls);
                 }
 
                 newChild.Update();
@@ -824,9 +824,9 @@ namespace System.Windows.Forms.Design
                 IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
                 if (host != null)
                 {
-                    _componentChangeSvc.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
-                    _componentChangeSvc.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
-                    _componentChangeSvc = null;
+                    _changeService.ComponentRemoving -= new ComponentEventHandler(OnComponentRemoving);
+                    _changeService.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
+                    _changeService = null;
                 }
             }
 
@@ -1355,11 +1355,11 @@ namespace System.Windows.Forms.Design
             IDesignerHost host = (IDesignerHost)GetService(typeof(IDesignerHost));
             if (host != null)
             {
-                _componentChangeSvc = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
-                if (_componentChangeSvc != null)
+                _changeService = (IComponentChangeService)host.GetService(typeof(IComponentChangeService));
+                if (_changeService != null)
                 {
-                    _componentChangeSvc.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
-                    _componentChangeSvc.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
+                    _changeService.ComponentRemoving += new ComponentEventHandler(OnComponentRemoving);
+                    _changeService.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                 }
             }
 
@@ -1480,7 +1480,7 @@ namespace System.Windows.Forms.Design
                 // see bug 488115
                 if (_suspendChanging == 0)
                 {
-                    _componentChangeSvc.OnComponentChanging(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
+                    _changeService.OnComponentChanging(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
                 }
             }
         }
@@ -1492,7 +1492,7 @@ namespace System.Windows.Forms.Design
             if (e.Component == _pendingRemoveControl)
             {
                 _pendingRemoveControl = null;
-                _componentChangeSvc.OnComponentChanged(Control, TypeDescriptor.GetProperties(Control)["Controls"], null, null);
+                _changeService.OnComponentChanged(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
             }
         }
 
@@ -1510,7 +1510,7 @@ namespace System.Windows.Forms.Design
 
         internal void ForceComponentChanging()
         {
-            _componentChangeSvc.OnComponentChanging(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
+            _changeService.OnComponentChanging(Control, TypeDescriptor.GetProperties(Control)["Controls"]);
         }
 
         /// <summary>
@@ -2401,7 +2401,7 @@ namespace System.Windows.Forms.Design
         {
             using (DesignerTransaction dt = host.CreateTransaction(transactionName))
             {
-                IComponentChangeService changeSvc = GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                var changeService = GetService<IComponentChangeService>();
 
                 PropertyDescriptor controlsProp = TypeDescriptor.GetProperties(newParent)["Controls"];
                 PropertyDescriptor locationProp = TypeDescriptor.GetProperties(newParent)["Location"];
@@ -2414,10 +2414,7 @@ namespace System.Windows.Forms.Design
                     parentLoc = (Point)locationProp.GetValue(newParent);
                 }
 
-                if (changeSvc != null)
-                {
-                    changeSvc.OnComponentChanging(newParent, controlsProp);
-                }
+                changeService?.OnComponentChanging(newParent, controlsProp);
 
                 //enumerate the lasso'd controls relocate and re-parent...
                 //
@@ -2444,9 +2441,9 @@ namespace System.Windows.Forms.Design
                     //fire comp changing on parent and control
                     if (oldParent != null)
                     {
-                        if (changeSvc != null)
+                        if (changeService != null)
                         {
-                            changeSvc.OnComponentChanging(oldParent, controlsProp);
+                            changeService.OnComponentChanging(oldParent, controlsProp);
                         }
 
                         //remove control from the old parent
@@ -2477,15 +2474,15 @@ namespace System.Windows.Forms.Design
                     locProp.SetValue(control, newLoc);
 
                     //fire our comp changed events
-                    if (changeSvc != null && oldParent != null)
+                    if (changeService != null && oldParent != null)
                     {
-                        changeSvc.OnComponentChanged(oldParent, controlsProp, null, null);
+                        changeService.OnComponentChanged(oldParent, controlsProp);
                     }
                 }
 
-                if (changeSvc != null)
+                if (changeService != null)
                 {
-                    changeSvc.OnComponentChanged(newParent, controlsProp, null, null);
+                    changeService.OnComponentChanged(newParent, controlsProp);
                 }
 
                 //commit the transaction
@@ -2706,21 +2703,21 @@ namespace System.Windows.Forms.Design
                         if (c.Parent != null)
                         {
                             Control cParent = c.Parent;
-                            if (_componentChangeSvc != null)
+                            if (_changeService != null)
                             {
-                                _componentChangeSvc.OnComponentChanging(cParent, controlsProp);
+                                _changeService.OnComponentChanging(cParent, controlsProp);
                             }
 
                             cParent.Controls.Remove(c);
-                            if (_componentChangeSvc != null)
+                            if (_changeService != null)
                             {
-                                _componentChangeSvc.OnComponentChanged(cParent, controlsProp, cParent.Controls, cParent.Controls);
+                                _changeService.OnComponentChanged(cParent, controlsProp, cParent.Controls, cParent.Controls);
                             }
                         }
 
-                        if (_suspendChanging == 0 && _componentChangeSvc != null)
+                        if (_suspendChanging == 0 && _changeService != null)
                         {
-                            _componentChangeSvc.OnComponentChanging(parent, controlsProp);
+                            _changeService.OnComponentChanging(parent, controlsProp);
                         }
 
                         parent.Controls.Add(c);
@@ -2728,9 +2725,9 @@ namespace System.Windows.Forms.Design
                         // z-order, but do we need that?
                         //
                         //parent.Controls.SetChildIndex(c, 0);
-                        if (_componentChangeSvc != null)
+                        if (_changeService != null)
                         {
-                            _componentChangeSvc.OnComponentChanged(parent, controlsProp, parent.Controls, parent.Controls);
+                            _changeService.OnComponentChanged(parent, controlsProp, parent.Controls, parent.Controls);
                         }
                     }
                     else

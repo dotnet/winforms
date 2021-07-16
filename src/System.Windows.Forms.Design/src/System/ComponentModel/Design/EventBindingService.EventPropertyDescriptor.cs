@@ -19,7 +19,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private class EventPropertyDescriptor : PropertyDescriptor
         {
-            private readonly EventBindingService _eventSvc;
+            private readonly EventBindingService _eventService;
             private TypeConverter _converter;
 
             /// <summary>
@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design
             internal EventPropertyDescriptor(EventDescriptor eventDesc, EventBindingService eventSvc) : base(eventDesc, null)
             {
                 Event = eventDesc;
-                _eventSvc = eventSvc;
+                _eventService = eventSvc;
             }
 
             /// <summary>
@@ -100,7 +100,7 @@ namespace System.ComponentModel.Design
 
                 if (site is null)
                 {
-                    if (_eventSvc._provider.GetService(typeof(IReferenceService)) is IReferenceService rs)
+                    if (_eventService._provider.GetService(typeof(IReferenceService)) is IReferenceService rs)
                     {
                         IComponent baseComponent = rs.GetComponent(component);
 
@@ -151,23 +151,23 @@ namespace System.ComponentModel.Design
                 // Argument, state checking.  Is it ok to set this event?
                 if (IsReadOnly)
                 {
-                    Exception ex = new InvalidOperationException(string.Format(SR.EventBindingServiceEventReadOnly, Name));
-                    ex.HelpLink = SR.EventBindingServiceEventReadOnly;
-
-                    throw ex;
+                    throw new InvalidOperationException(string.Format(SR.EventBindingServiceEventReadOnly, Name))
+                    {
+                        HelpLink = SR.EventBindingServiceEventReadOnly
+                    };
                 }
 
-                if (value != null && !(value is string))
+                if (value is not null and not string)
                 {
-                    Exception ex = new ArgumentException(string.Format(SR.EventBindingServiceBadArgType, Name, typeof(string).Name));
-                    ex.HelpLink = SR.EventBindingServiceBadArgType;
-
-                    throw ex;
+                    throw new ArgumentException(string.Format(SR.EventBindingServiceBadArgType, Name, typeof(string).Name))
+                    {
+                        HelpLink = SR.EventBindingServiceBadArgType
+                    };
                 }
 
                 string name = (string)value;
 
-                if (name != null && name.Length == 0)
+                if (name is not null && name.Length == 0)
                 {
                     name = null;
                 }
@@ -176,16 +176,16 @@ namespace System.ComponentModel.Design
                 // to a parent component if we can get to the reference service.
                 ISite site = null;
 
-                if (component is IComponent)
+                if (component is IComponent component1)
                 {
-                    site = ((IComponent)component).Site;
+                    site = component1.Site;
                 }
 
-                if (site is null && (_eventSvc._provider.GetService(typeof(IReferenceService)) is IReferenceService rs))
+                if (site is null && _eventService._provider.TryGetService(out IReferenceService referenceService))
                 {
-                    IComponent baseComponent = rs.GetComponent(component);
+                    IComponent baseComponent = referenceService.GetComponent(component);
 
-                    if (baseComponent != null)
+                    if (baseComponent is not null)
                     {
                         site = baseComponent.Site;
                     }
@@ -193,108 +193,99 @@ namespace System.ComponentModel.Design
 
                 if (site is null)
                 {
-                    Exception ex = new InvalidOperationException(SR.EventBindingServiceNoSite);
-                    ex.HelpLink = SR.EventBindingServiceNoSite;
-
-                    throw ex;
+                    throw new InvalidOperationException(SR.EventBindingServiceNoSite)
+                    {
+                        HelpLink = SR.EventBindingServiceNoSite
+                    };
                 }
 
                 // The dictionary service is where we store the actual event method name.
-                if (!(site.GetService(typeof(IDictionaryService)) is IDictionaryService ds))
+                if (!site.TryGetService(out IDictionaryService dictionaryService))
                 {
-                    Exception ex = new InvalidOperationException(string.Format(SR.EventBindingServiceMissingService, typeof(IDictionaryService).Name));
-                    ex.HelpLink = SR.EventBindingServiceMissingService;
-
-                    throw ex;
+                    throw new InvalidOperationException(string.Format(SR.EventBindingServiceMissingService, typeof(IDictionaryService).Name))
+                    {
+                        HelpLink = SR.EventBindingServiceMissingService
+                    };
                 }
 
                 // Get the old method name, ensure that they are different, and then continue.
-                ReferenceEventClosure key = new ReferenceEventClosure(component, this);
-                string oldName = (string)ds.GetValue(key);
+                ReferenceEventClosure key = new(component, this);
+                string oldName = (string)dictionaryService.GetValue(key);
 
                 if (ReferenceEquals(oldName, name))
                 {
                     return;
                 }
 
-                if (oldName != null && name != null && oldName.Equals(name))
+                if (oldName is not null && name is not null && oldName.Equals(name))
                 {
                     return;
                 }
 
                 // Before we continue our work, ensure that the name is actually valid.
-                if (name != null)
+                if (name is not null)
                 {
-                    _eventSvc.ValidateMethodName(name);
+                    _eventService.ValidateMethodName(name);
                 }
 
                 // If there is a designer host, create a transaction so there is a
                 // nice name for this change.  We don't want a name like
                 // "Change property 'Click', because to users, this isn't a property.
-                DesignerTransaction trans = null;
+                DesignerTransaction transaction = null;
 
-                if (site.GetService(typeof(IDesignerHost)) is IDesignerHost host)
+                if (site.TryGetService(out IDesignerHost host))
                 {
-                    trans = host.CreateTransaction(string.Format(SR.EventBindingServiceSetValue, site.Name, name));
+                    transaction = host.CreateTransaction(string.Format(SR.EventBindingServiceSetValue, site.Name, name));
                 }
 
                 try
                 {
-                    // Ok, the names are different.  Fire a changing event to make
+                    // The names are different.  Fire a changing event to make
                     // sure it's OK to perform the change.
-                    IComponentChangeService change = site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
 
-                    if (change != null)
+                    if (site.TryGetService(out IComponentChangeService changeService))
                     {
                         try
                         {
-                            change.OnComponentChanging(component, this);
-                            change.OnComponentChanging(component, Event);
+                            changeService.OnComponentChanging(component, this);
+                            changeService.OnComponentChanging(component, Event);
                         }
-                        catch (CheckoutException coEx)
+                        catch (CheckoutException coEx) when (coEx == CheckoutException.Canceled)
                         {
-                            if (coEx == CheckoutException.Canceled)
-                            {
-                                return;
-                            }
-
-                            throw;
+                            return;
                         }
                     }
 
                     // Less chance of success of adding a new method name, so
                     // don't release the old name until we verify that adding
                     // the new one actually succeeded.
-                    if (name != null)
+                    if (name is not null)
                     {
-                        _eventSvc.UseMethod((IComponent)component, Event, name);
+                        _eventService.UseMethod((IComponent)component, Event, name);
                     }
 
-                    if (oldName != null)
+                    if (oldName is not null)
                     {
-                        _eventSvc.FreeMethod((IComponent)component, Event, oldName);
+                        _eventService.FreeMethod((IComponent)component, Event, oldName);
                     }
 
-                    ds.SetValue(key, name);
+                    dictionaryService.SetValue(key, name);
 
-                    if (change != null)
+                    if (changeService is not null)
                     {
-                        change.OnComponentChanged(component, Event, null, null);
-                        change.OnComponentChanged(component, this, oldName, name);
+                        changeService.OnComponentChanged(component, Event);
+                        changeService.OnComponentChanged(component, this, oldName, name);
                     }
 
                     OnValueChanged(component, EventArgs.Empty);
 
-                    if (trans != null)
-                    {
-                        trans.Commit();
-                    }
+                    transaction?.Commit();
                 }
                 finally
                 {
-                    if (trans != null)
+                    if (transaction is not null)
                     {
-                        ((IDisposable)trans).Dispose();
+                        ((IDisposable)transaction).Dispose();
                     }
                 }
             }

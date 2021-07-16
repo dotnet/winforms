@@ -2078,53 +2078,33 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual bool OnComponentChanging()
         {
-            if (ComponentChangeService is not null)
+            try
             {
-                try
-                {
-                    ComponentChangeService.OnComponentChanging(GetValueOwner(), PropertyDescriptor);
-                }
-                catch (CheckoutException coEx)
-                {
-                    if (coEx == CheckoutException.Canceled)
-                    {
-                        return false;
-                    }
-
-                    throw;
-                }
+                ComponentChangeService?.OnComponentChanging(GetValueOwner(), PropertyDescriptor);
+                return true;
             }
-
-            return true;
+            catch (CheckoutException e) when (e == CheckoutException.Canceled)
+            {
+                return false;
+            }
         }
 
         public virtual void OnComponentChanged()
-        {
-            if (ComponentChangeService is not null)
-            {
-                ComponentChangeService.OnComponentChanged(GetValueOwner(), PropertyDescriptor, null, null);
-            }
-        }
+            => ComponentChangeService?.OnComponentChanged(GetValueOwner(), PropertyDescriptor);
 
         /// <summary>
         ///  Called when the label portion of this GridEntry is clicked.
         ///  Default implementation fired the event to any listeners, so be sure
         ///  to call base.OnLabelClick(e) if this is overridden.
         /// </summary>
-        protected virtual void OnLabelClick(EventArgs e)
-        {
-            RaiseEvent(s_labelClickEvent, e);
-        }
+        protected virtual void OnLabelClick(EventArgs e) => RaiseEvent(s_labelClickEvent, e);
 
         /// <summary>
         ///  Called when the label portion of this GridEntry is double-clicked.
         ///  Default implementation fired the event to any listeners, so be sure
         ///  to call base.OnLabelDoubleClick(e) if this is overridden.
         /// </summary>
-        protected virtual void OnLabelDoubleClick(EventArgs e)
-        {
-            RaiseEvent(s_labelDoubleClickEvent, e);
-        }
+        protected virtual void OnLabelDoubleClick(EventArgs e) => RaiseEvent(s_labelDoubleClickEvent, e);
 
         /// <summary>
         ///  Called when the GridEntry is clicked.
