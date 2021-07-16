@@ -396,25 +396,23 @@ namespace System.Windows.Forms
             /// </summary>
             private string[] ReadFileListFromHandle(IntPtr hdrop)
             {
-                uint count = Shell32.DragQueryFileW(hdrop, 0xFFFFFFFF, null);
+                uint count = Shell32.DragQueryFileW(hdrop, 0xFFFFFFFF, out string _);
                 if (count == 0)
                 {
                     return null;
                 }
 
-                var sb = new StringBuilder(Kernel32.MAX_PATH);
                 var files = new string[count];
                 for (uint i = 0; i < count; i++)
                 {
-                    uint charlen = Shell32.DragQueryFileW(hdrop, i, sb);
+                    uint charlen = Shell32.DragQueryFileW(hdrop, i, out string str);
                     if (charlen == 0)
                     {
                         continue;
                     }
 
-                    string s = sb.ToString(0, (int)charlen);
-                    string fullPath = Path.GetFullPath(s);
-                    files[i] = s;
+                    string fullPath = Path.GetFullPath(str);
+                    files[i] = str;
                 }
 
                 return files;

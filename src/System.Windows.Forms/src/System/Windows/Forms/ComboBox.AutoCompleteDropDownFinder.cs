@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Runtime.InteropServices;
-using System.Text;
 using static Interop;
 using static Interop.User32;
 
@@ -18,7 +17,6 @@ namespace System.Windows.Forms
         /// </summary>
         private class AutoCompleteDropDownFinder
         {
-            private const int MaxClassName = 256;
             private const string AutoCompleteClassName = "Auto-Suggest Dropdown";
             private bool _shouldSubClass;
 
@@ -55,11 +53,17 @@ namespace System.Windows.Forms
                 return BOOL.TRUE;
             }
 
-            static string GetClassName(HandleRef hRef)
+            private static unsafe string GetClassName(HandleRef hRef)
             {
-                StringBuilder sb = new StringBuilder(MaxClassName);
-                UnsafeNativeMethods.GetClassName(hRef, sb, MaxClassName);
-                return sb.ToString();
+                Span<char> buf = stackalloc char[256];
+                string result;
+                fixed (char* valueChars = buf)
+                {
+                    _ = UnsafeNativeMethods.GetClassName(hRef, valueChars, buf.Length);
+                    result = buf.SliceAtFirstNull().ToString();
+                }
+
+                return result;
             }
         }
     }

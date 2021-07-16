@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Reflection;
-using System.Text;
 using Xunit;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
@@ -33,7 +32,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop.Tests
         [InlineData("bla bla bla\r\n\nr\n\r\n\r\n", "bla bla bla\r\n\nr")]
         public void TrimNewline_should_remove_all_trailing_CR_LF(string message, string expected)
         {
-            string result = (string)s_miVersionInfo.Invoke(null, new[] { new StringBuilder(message) });
+            string result = (string)s_miVersionInfo.Invoke(null, new[] { message });
 
             Assert.Equal(expected, result);
         }
