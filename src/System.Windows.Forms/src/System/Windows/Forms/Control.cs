@@ -5782,20 +5782,19 @@ namespace System.Windows.Forms
             // We should not include the window adornments in our calculation,
             // because windows scales them for us.
             RECT adornmentsBeforeDpiChange = default;
+            RECT adornmentsAfterDpiChange = default;
             CreateParams cp = CreateParams;
 
             // We would need to get old adornments metrics as we will be deducting this from bounds and then scale it.
-            User32.AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, cp.Style, bMenu: false.ToBOOL(), cp.ExStyle, (uint)_oldDeviceDpi);
+            AdjustWindowRectEx(ref adornmentsAfterDpiChange, cp.Style, bMenu: false, cp.ExStyle);
 
-            // And now, we get new adornments to add to bounds after scaling
-            RECT adornmentsAfterDpiChange = default;
-            if (_oldDeviceDpi != _deviceDpi)
+            if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater)
             {
-                AdjustWindowRectEx(ref adornmentsAfterDpiChange, cp.Style, bMenu: false, cp.ExStyle);
+                User32.AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, cp.Style, bMenu: false.ToBOOL(), cp.ExStyle, (uint)_oldDeviceDpi);
             }
             else
             {
-                adornmentsAfterDpiChange = adornmentsBeforeDpiChange;
+                adornmentsBeforeDpiChange = adornmentsAfterDpiChange;
             }
 
             // Do this even for auto sized controls.  They'll "snap back", but it is important to size them in case
@@ -6875,7 +6874,7 @@ namespace System.Windows.Forms
 
         private protected void AdjustWindowRectEx(ref RECT rect, int style, bool bMenu, int exStyle)
         {
-            if (DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired)
+            if ((DpiHelper.IsPerMonitorV2Awareness || DpiHelper.IsScalingRequired) && OsVersion.IsWindows10_1703OrGreater)
             {
                 User32.AdjustWindowRectExForDpi(ref rect, style, bMenu.ToBOOL(), exStyle, (uint)_deviceDpi);
             }
