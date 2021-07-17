@@ -5785,7 +5785,7 @@ namespace System.Windows.Forms
             RECT adornmentsAfterDpiChange = default;
             CreateParams cp = CreateParams;
 
-            // We would need to get old adornments metrics as we will be deducting this from bounds and then scale it.
+            // We would need to get adornments metrics for both (old and new) Dpi in case application is in permonitor V2 mode and Dpi changed.
             AdjustWindowRectEx(ref adornmentsAfterDpiChange, cp.Style, bMenu: false, cp.ExStyle);
 
             if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater)
