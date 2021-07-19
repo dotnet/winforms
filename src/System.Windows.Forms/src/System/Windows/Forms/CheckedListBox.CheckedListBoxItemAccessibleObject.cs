@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -14,12 +13,12 @@ namespace System.Windows.Forms
         {
             private string _name;
             private readonly int _index;
-            private readonly CheckedListBoxAccessibleObject _parent;
+            private readonly CheckedListBoxAccessibleObject _parentAccessibleObject;
 
             public CheckedListBoxItemAccessibleObject(string name, int index, CheckedListBoxAccessibleObject parent) : base()
             {
                 _name = name;
-                _parent = parent;
+                _parentAccessibleObject = parent;
                 _index = index;
             }
 
@@ -79,7 +78,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return (CheckedListBox)_parent.Owner;
+                    return (CheckedListBox)_parentAccessibleObject.Owner;
                 }
             }
 
@@ -95,21 +94,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return _parent;
-                }
-            }
+            public override AccessibleObject Parent => _parentAccessibleObject;
 
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.CheckButton;
-                }
-            }
+            public override AccessibleRole Role => AccessibleRole.CheckButton;
 
             public override AccessibleStates State
             {
@@ -153,13 +140,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Value
-            {
-                get
-                {
-                    return ParentCheckedListBox.GetItemChecked(_index).ToString();
-                }
-            }
+            public override string Value => ParentCheckedListBox.GetItemChecked(_index).ToString();
 
             public override void DoDefaultAction()
             {
@@ -171,16 +152,16 @@ namespace System.Windows.Forms
                 ParentCheckedListBox.SetItemChecked(_index, !ParentCheckedListBox.GetItemChecked(_index));
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation direction)
+            public override AccessibleObject? Navigate(AccessibleNavigation direction)
             {
                 // Down/Next
                 //
                 if (direction == AccessibleNavigation.Down ||
                     direction == AccessibleNavigation.Next)
                 {
-                    if (_index < _parent.GetChildCount() - 1)
+                    if (_index < _parentAccessibleObject.GetChildCount() - 1)
                     {
-                        return _parent.GetChild(_index + 1);
+                        return _parentAccessibleObject.GetChild(_index + 1);
                     }
                 }
 
@@ -191,12 +172,21 @@ namespace System.Windows.Forms
                 {
                     if (_index > 0)
                     {
-                        return _parent.GetChild(_index - 1);
+                        return _parentAccessibleObject.GetChild(_index - 1);
                     }
                 }
 
                 return base.Navigate(direction);
             }
+
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+                => direction switch
+                    {
+                        UiaCore.NavigateDirection.Parent => _parentAccessibleObject,
+                        UiaCore.NavigateDirection.NextSibling => Navigate(AccessibleNavigation.Next),
+                        UiaCore.NavigateDirection.PreviousSibling => Navigate(AccessibleNavigation.Previous),
+                        _ => base.FragmentNavigate(direction),
+                    };
 
             public override void Select(AccessibleSelection flags)
             {
