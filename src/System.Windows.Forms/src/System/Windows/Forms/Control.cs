@@ -5790,7 +5790,7 @@ namespace System.Windows.Forms
 
             if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater)
             {
-                User32.AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, cp.Style, bMenu: false.ToBOOL(), cp.ExStyle, (uint)_oldDeviceDpi);
+                AdjustWindowRectExForDpi(ref adornmentsBeforeDpiChange, cp.Style, bMenu: false, cp.ExStyle, _oldDeviceDpi);
             }
             else
             {
