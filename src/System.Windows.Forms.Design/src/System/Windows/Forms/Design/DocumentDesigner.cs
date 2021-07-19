@@ -9,7 +9,6 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design.Behavior;
 using Microsoft.Win32;

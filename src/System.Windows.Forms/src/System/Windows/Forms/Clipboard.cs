@@ -6,9 +6,7 @@
 
 using System.Collections.Specialized;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 

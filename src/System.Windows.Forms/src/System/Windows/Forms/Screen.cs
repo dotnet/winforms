@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Drawing;
-using System.Threading;
 using Microsoft.Win32;
 using static Interop;
 

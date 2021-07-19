@@ -5,7 +5,6 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
 using System.Windows.Forms.Design.Behavior;

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Windows.Forms.TestUtilities;
 using Xunit;

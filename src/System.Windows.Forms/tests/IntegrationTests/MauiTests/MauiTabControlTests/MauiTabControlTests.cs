@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms.IntegrationTests.Common;
 using ReflectTools;
 using WFCTestLib.Log;

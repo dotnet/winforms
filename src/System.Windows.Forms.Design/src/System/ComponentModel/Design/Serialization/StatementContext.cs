@@ -4,7 +4,6 @@
 
 using System.CodeDom;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace System.ComponentModel.Design.Serialization
 {

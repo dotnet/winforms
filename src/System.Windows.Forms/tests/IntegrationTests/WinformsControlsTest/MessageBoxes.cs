@@ -4,7 +4,6 @@
 
 #nullable enable
 
-using System;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest

@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
-using System.IO;
 using System.Text;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;

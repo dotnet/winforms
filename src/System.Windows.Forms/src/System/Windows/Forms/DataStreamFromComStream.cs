@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.IO;
 using static Interop;
 
 namespace System.Windows.Forms

@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
+﻿using System.Drawing;
 using System.Windows.Forms;
 using System.ComponentModel.Design;
 
 using DesignSurfaceExt;
+using Timer = System.Windows.Forms.Timer;
 
 namespace TestConsole
 {

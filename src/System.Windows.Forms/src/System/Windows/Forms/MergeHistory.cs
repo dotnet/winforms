@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
-
 namespace System.Windows.Forms
 {
     internal class MergeHistory

@@ -4,7 +4,6 @@
 
 using System.Configuration;
 using System.Drawing.Configuration;
-using System.IO;
 using System.Reflection;
 
 namespace System.Drawing

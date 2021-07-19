@@ -6,8 +6,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
-using System.Threading;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 

@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Diagnostics;
-using System.IO;
 using static Interop;
 
 namespace System.Windows.Forms

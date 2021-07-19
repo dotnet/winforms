@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Threading;
-
 namespace System.Windows.Forms
 {
     public partial class PrintControllerWithStatusDialog

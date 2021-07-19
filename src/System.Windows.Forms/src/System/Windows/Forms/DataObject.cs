@@ -11,7 +11,6 @@ using System.Drawing;
 #if DEBUG
 using System.Globalization;
 #endif
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
