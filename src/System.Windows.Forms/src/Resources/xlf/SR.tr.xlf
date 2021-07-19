@@ -5222,6 +5222,11 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Formun yeniden boyutlandırılabileceği en büyük boyut.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="new">Gets or sets the anchoring for minimized MDI children.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">Form için birincil MenuStrip'i belirtir. Bu özellik MDI'da klavye etkinleştirme ve otomatik birleştirme için kullanılır.</target>

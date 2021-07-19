@@ -1517,6 +1517,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Gets or sets the anchoring for minimized MDI children.
+        /// </summary>
+        /// <value><see langword="true" /> to anchor minimized MDI children to the bottom left of the parent form; <see langword="false" /> to anchor to the top left of the parent form.</value>
+        /// <remarks>By default Windows Forms anchors MDI children to the bottom left of the parent form, whilst the Windows default is top left.</remarks>
+        [SRCategory(nameof(SR.CatWindowStyle))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FormMdiChildrenMinimizedAnchorBottomDescr))]
+        public bool MdiChildrenMinimizedAnchorBottom { get; set; } = true;
+
+        /// <summary>
         ///  Gets the MDIClient that the MDI container form is using to contain Multiple Document Interface (MDI) child forms,
         ///  if this is an MDI container form.
         ///  Represents the client area of a Multiple Document Interface (MDI) Form window, also known as the MDI child window.

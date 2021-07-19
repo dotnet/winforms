@@ -81,5 +81,10 @@ namespace WinformsControlsTest
         {
             WindowState = FormWindowState.Normal;
         }
+
+        private void chkChildAlign_CheckedChanged(object sender, EventArgs e)
+        {
+            MyParent.MdiChildrenMinimizedAnchorBottom = !chkChildAlign.Checked;
+        }
     }
 }

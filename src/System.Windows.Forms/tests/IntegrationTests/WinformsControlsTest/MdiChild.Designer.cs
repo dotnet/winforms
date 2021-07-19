@@ -38,11 +38,13 @@ namespace WinformsControlsTest
             this.chkSetMenustrip = new System.Windows.Forms.CheckBox();
             this.chkAddParentMenustrip = new System.Windows.Forms.CheckBox();
             this.chkAddMenustrip = new System.Windows.Forms.CheckBox();
+            this.chkChildAlign = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.chkChildAlign);
             this.panel1.Controls.Add(this.chkAddMenustrip);
             this.panel1.Controls.Add(this.chkAddParentMenustrip);
             this.panel1.Controls.Add(this.chkSetMenustrip);
@@ -54,6 +56,17 @@ namespace WinformsControlsTest
             this.panel1.Size = new System.Drawing.Size(480, 221);
             this.panel1.TabIndex = 0;
             this.panel1.DoubleClick += this.panel1_DoubleClick;
+            // 
+            // chkChildAlign
+            // 
+            this.chkChildAlign.AutoSize = true;
+            this.chkChildAlign.Location = new System.Drawing.Point(43, 121);
+            this.chkChildAlign.Name = "chkChildAlign";
+            this.chkChildAlign.Size = new System.Drawing.Size(162, 17);
+            this.chkChildAlign.TabIndex = 3;
+            this.chkChildAlign.Text = "Top align minimized child";
+            this.chkChildAlign.UseVisualStyleBackColor = true;
+            this.chkChildAlign.CheckedChanged += new System.EventHandler(this.chkChildAlign_CheckedChanged);
             // 
             // btnOpenChild
             // 
@@ -132,5 +145,6 @@ namespace WinformsControlsTest
         private System.Windows.Forms.CheckBox chkAddParentMenustrip;
         private System.Windows.Forms.CheckBox chkSetMenustrip;
         private System.Windows.Forms.CheckBox chkSetParentMenustrip;
+        private System.Windows.Forms.CheckBox chkChildAlign;
     }
 }

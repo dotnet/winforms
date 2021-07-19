@@ -5222,6 +5222,11 @@ Do you want to replace it?</source>
         <target state="translated">Tamaño máximo al que se puede ajustar el tamaño del formulario.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="new">Gets or sets the anchoring for minimized MDI children.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">Especifica el MenuStrip principal para el formulario. Esta propiedad se utiliza para la activación del teclado y la combinación automática en MDI.</target>
