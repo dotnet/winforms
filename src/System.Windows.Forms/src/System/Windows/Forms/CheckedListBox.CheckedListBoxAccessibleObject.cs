@@ -2,7 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -14,30 +14,14 @@ namespace System.Windows.Forms
             {
             }
 
-            private CheckedListBox CheckedListBox
-            {
-                get
-                {
-                    return (CheckedListBox)Owner;
-                }
-            }
+            private CheckedListBox CheckedListBox => (CheckedListBox)Owner;
 
-            public override AccessibleObject GetChild(int index)
-            {
-                if (index >= 0 && index < CheckedListBox.Items.Count)
-                {
-                    return new CheckedListBoxItemAccessibleObject(CheckedListBox.GetItemText(CheckedListBox.Items[index]), index, this);
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            public override AccessibleObject? GetChild(int index) =>
+                (index >= 0 && index < CheckedListBox.Items.Count)
+                    ? new CheckedListBoxItemAccessibleObject(CheckedListBox.GetItemText(CheckedListBox.Items[index]), index, this)
+                    : null;
 
-            public override int GetChildCount()
-            {
-                return CheckedListBox.Items.Count;
-            }
+            public override int GetChildCount() => CheckedListBox.Items.Count;
 
             public override AccessibleObject GetFocused()
             {
@@ -104,7 +88,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation direction)
+            public override AccessibleObject? Navigate(AccessibleNavigation direction)
             {
                 if (GetChildCount() > 0)
                 {
@@ -121,6 +105,14 @@ namespace System.Windows.Forms
 
                 return base.Navigate(direction);
             }
+
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+                => direction switch
+                    {
+                        UiaCore.NavigateDirection.FirstChild => Navigate(AccessibleNavigation.FirstChild),
+                        UiaCore.NavigateDirection.LastChild => Navigate(AccessibleNavigation.LastChild),
+                        _ => base.FragmentNavigate(direction),
+                    };
         }
     }
 }

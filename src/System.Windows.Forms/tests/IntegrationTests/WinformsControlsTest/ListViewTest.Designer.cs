@@ -44,6 +44,7 @@ namespace WinformsControlsTest
             this.LargeImageList = new System.Windows.Forms.ImageList(this.components);
             this.btnReplaceImageListView1 = new System.Windows.Forms.Button();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.SuspendLayout();
             // 
             // imageList1
@@ -132,6 +133,19 @@ namespace WinformsControlsTest
             this.btnReplaceImageListView1.UseVisualStyleBackColor = true;
             this.btnReplaceImageListView1.Click += new System.EventHandler(this.btnReplaceImageListView1_Click);
             // 
+            // checkedListBox1
+            // 
+            this.checkedListBox1.FormattingEnabled = true;
+            this.checkedListBox1.Items.AddRange(new object[] {
+            "checkedListBoxItem1",
+            "checkedListBoxItem2",
+            "checkedListBoxItem3",
+            "checkedListBoxItem4"});
+            this.checkedListBox1.Location = new System.Drawing.Point(480, 8);
+            this.checkedListBox1.Name = "checkedListBox1";
+            this.checkedListBox1.Size = new System.Drawing.Size(191, 130);
+            this.checkedListBox1.TabIndex = 4;
+            // 
             // ListViewTest
             // 
             resources.ApplyResources(this, "$this");
@@ -140,10 +154,10 @@ namespace WinformsControlsTest
             this.Controls.Add(this.btnLoadImagesListView1);
             this.Controls.Add(this.btnClearListView1);
             this.Controls.Add(this.listView1);
+            this.Controls.Add(this.checkedListBox1);
             this.Name = "ListViewTest";
             this.Text = "ListView Test";
             this.ResumeLayout(false);
-
         }
 
         #endregion
@@ -158,5 +172,6 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button btnLoadImagesListView1;
         private System.Windows.Forms.Button btnReplaceImageListView1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.CheckedListBox checkedListBox1;
     }
 }

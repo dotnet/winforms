@@ -1035,6 +1035,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal override bool SupportsUiaProviders => false;
+        internal override bool SupportsUiaProviders => true;
     }
 }
