@@ -96,33 +96,25 @@ namespace System.Windows.Forms
             internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+                => propertyID switch
                 {
-                    case UiaCore.UIA.IsTogglePatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.TogglePatternId);
-                    case UiaCore.UIA.LocalizedControlTypePropertyId:
+                    UiaCore.UIA.IsTogglePatternAvailablePropertyId => IsPatternSupported(propertyID),
+                    UiaCore.UIA.ExpandCollapsePatternId => IsPatternSupported(propertyID),
+                    UiaCore.UIA.LocalizedControlTypePropertyId =>
                         // We define a custom "LocalizedControlType" by default.
                         // If DateTimePicker.AccessibleRole value is customized by a user
                         // then "LocalizedControlType" value will be based on "ControlType"
-                        // which depends on DateTimePicker.AccessibleRole.
-                        return Owner.AccessibleRole == AccessibleRole.Default
-                               ? s_dateTimePickerLocalizedControlTypeString
-                               : base.GetPropertyValue(propertyID);
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
+                        // which depends onDateTimePicker.AccessibleRole.
+                        Owner.AccessibleRole == AccessibleRole.Default
+                            ? s_dateTimePickerLocalizedControlTypeString
+                            : base.GetPropertyValue(propertyID),
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+                (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox) ||
+                patternId == UiaCore.UIA.ExpandCollapsePatternId ||
+                base.IsPatternSupported(patternId);
 
             #region Toggle Pattern
 
@@ -143,6 +135,24 @@ namespace System.Windows.Forms
                     ((DateTimePicker)Owner).Checked = !((DateTimePicker)Owner).Checked;
                 }
             }
+
+            #endregion
+
+            #region Expand-Collapse Pattern
+
+            private UiaCore.ExpandCollapseState _expandCollapseState;
+
+            internal override void Expand()
+            {
+                _expandCollapseState = UiaCore.ExpandCollapseState.Expanded;
+            }
+
+            internal override void Collapse()
+            {
+                _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
+            }
+
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState => _expandCollapseState;
 
             #endregion
         }
