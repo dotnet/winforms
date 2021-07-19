@@ -9,7 +9,7 @@
       </trans-unit>
       <trans-unit id="General_MissingService">
         <source>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</source>
-        <target state="new">The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</target>
+        <target state="translated">この機能が動作するためにはサービス '{0}' をインストールする必要があります。サービスが利用可能であることを確認してください。</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
