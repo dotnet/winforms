@@ -28,7 +28,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         [Scenario(true)]
         public ScenarioResult Resize_When_MdiChildrenMinimizedAnchorBottom_Default(TParams p)
         {
-            // This is default value.
+            // Currently Maui test scenarios run on the same instance and this flag might have been set to a non-default values in the previous tests. So, explicitly setting it to `default' value `true` to make tests reliable.
             MdiChildrenMinimizedAnchorBottom = true;
 
             using Form childForm = new()
