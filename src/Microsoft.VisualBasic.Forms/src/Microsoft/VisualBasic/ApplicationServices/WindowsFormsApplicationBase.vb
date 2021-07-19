@@ -31,44 +31,59 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     End Enum
 
     ''' <summary>
-    ''' Signature for the ApplyApplicationDefaults event handler
+    ''' Signature for the ApplyApplicationDefaults event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
-    Public Delegate Sub ApplyApplicationDefaultsEventHandler(sender As Object, e As ApplyDefaultsEventArgs)
+    Public Delegate Sub ApplyApplicationDefaultsEventHandler(sender As Object, e As ApplyApplicationDefaultsEventArgs)
 
     ''' <summary>
-    ''' Signature for the Startup event handler
+    ''' Signature for the Startup event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub StartupEventHandler(sender As Object, e As StartupEventArgs)
 
     ''' <summary>
-    ''' Signature for the StartupNextInstance event handler
+    ''' Signature for the StartupNextInstance event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub StartupNextInstanceEventHandler(sender As Object, e As StartupNextInstanceEventArgs)
 
     ''' <summary>
-    ''' Signature for the Shutdown event handler
+    ''' Signature for the Shutdown event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub ShutdownEventHandler(sender As Object, e As EventArgs)
 
     ''' <summary>
-    ''' Signature for the UnhandledException event handler
+    ''' Signature for the UnhandledException event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub UnhandledExceptionEventHandler(sender As Object, e As UnhandledExceptionEventArgs)
 
     ''' <summary>
-    ''' Provides the infrastructure for the VB Windows Forms application model
+    ''' Provides the infrastructure for the VB Windows Forms application model.
     ''' </summary>
     ''' <remarks>Don't put access on this definition.</remarks>
     Partial Public Class WindowsFormsApplicationBase : Inherits ConsoleApplicationBase
 
+        ''' <summary>
+        ''' Occurs when the application is ready to accept default values for various application areas.
+        ''' </summary>
         Public Event ApplyApplicationDefaults As ApplyApplicationDefaultsEventHandler
+
+        ''' <summary>
+        ''' Occurs when the application starts.
+        ''' </summary>
         Public Event Startup As StartupEventHandler
+
+        ''' <summary>
+        ''' Occurs when attempting to start a single-instance application and the application is already active.
+        ''' </summary>
         Public Event StartupNextInstance As StartupNextInstanceEventHandler
+
+        ''' <summary>
+        ''' Occurs when the application shuts down.
+        ''' </summary>
         Public Event Shutdown As ShutdownEventHandler
 
         ' Used to marshal a call to Dispose on the Splash Screen.
@@ -129,6 +144,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
 
 #Enable Warning IDE0032 ' Use auto property
 
+        ''' <summary>
+        ''' Occurs when the network availability changes.
+        ''' </summary>
         Public Custom Event NetworkAvailabilityChanged As Devices.NetworkAvailableEventHandler
             ' This is a custom event because we want to hook up the NetworkAvailabilityChanged event only
             ' if the user writes a handler for it.
@@ -196,6 +214,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End RaiseEvent
         End Event
 
+        ''' <summary>
+        ''' Occurs when the application encounters an unhandled exception.
+        ''' </summary>
         Public Custom Event UnhandledException As UnhandledExceptionEventHandler
 
             ' This is a custom event because we want to hook up System.Windows.Forms.Application.ThreadException
@@ -458,14 +479,28 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
-            ' Lets first query and set, if applicable, the DefaultFont.
-            Dim applicationDefaultsEventArgs = New ApplyDefaultsEventArgs(
+            ' Rationale for how we process the default values and how we let the user modify 
+            ' them on demand via the ApplyApplicationDefaults event.
+            ' ===========================================================================================
+            ' a) Users used to be able to set MinimumSplashScreenDisplayTime _only_ by overriding OnInitialize
+            '    in a derived class and setting `MyBase.MinimumSplashScreenDisplayTime` there.
+            '    We are picking this (probably) changed value up, and pass it to the ApplyDefaultsEvents
+            '    where it could be modified (again). So event wins over Override over default value (2 seconds).
+            ' b) We feed the default HighDpiMode (SystemAware) to the EventArgs. With the introduction of
+            '    the HighDpiMode property, we give Project System the chance to reflect the HighDpiMode
+            '    in the App Designer UI and have it code-generated based on a modified Application.myapp, which
+            '    would result it to be set in the derived constructor. (See the hidden file in the Solution Explorer
+            '    "My Project\Application.myapp\Application.Designer.vb for how those UI-set values get applied.)
+            '    Once all this is done, we give the User another chance to change the value by code through
+            '    the ApplyDefaults event.
+            Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
                 MinimumSplashScreenDisplayTime,
-                _highDpiMode)
+                HighDpiMode)
 
             ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
             applicationDefaultsEventArgs.MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
             RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
+
             If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
                 Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.Font)
             End If
@@ -743,6 +778,7 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' <summary>
         ''' Gets or sets the HighDpiMode for the Application.
         ''' </summary>
+        <EditorBrowsable(EditorBrowsableState.Never)>
         Protected Property HighDpiMode() As Windows.Forms.HighDpiMode
             Get
                 Return _highDpiMode
