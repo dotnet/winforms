@@ -297,7 +297,7 @@ namespace System.Windows.Forms
             RECT rect = new RECT();
             CreateParams cp = CreateParams;
 
-            AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
+            AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
 
             Rectangle bounds = Bounds;
             using var rgn1 = new Gdi32.RegionScope(0, 0, bounds.Width, bounds.Height);
