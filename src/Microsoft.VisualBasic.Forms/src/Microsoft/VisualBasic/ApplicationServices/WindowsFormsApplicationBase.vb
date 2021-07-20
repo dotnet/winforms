@@ -415,6 +415,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' as soon as the main form becomes active.
         ''' </summary>
         ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
+        ''' <remarks>
+        ''' This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
+        ''' calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
+        ''' ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly 
+        ''' as it is currently suggested to be used in the docs.
+        ''' First step for that is to make it hidden in IntelliSense.
+        ''' </remarks>
+        <EditorBrowsable(EditorBrowsableState.Never)>
         Public Property MinimumSplashScreenDisplayTime() As Integer
             Get
                 Return _minimumSplashExposure
