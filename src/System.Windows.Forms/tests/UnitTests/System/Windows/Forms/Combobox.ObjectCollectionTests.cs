@@ -1410,6 +1410,45 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createControl, comboBox.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ComboBox_Item_RemoveAt_DoesNotCreateAccessibilityObject()
+        {
+            using ComboBox comboBox = new();
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.Items.Remove(1);
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_Item_Insert_DoesNotCreateAccessibilityObject()
+        {
+            using ComboBox comboBox = new();
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.Items.Insert(1, "Item3");
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_Item_Clear_DoesNotCreateAccessibilityObject()
+        {
+            using ComboBox comboBox = new();
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.Items.Clear();
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
         private ComboBox.ComboBoxAccessibleObject GetComboBoxAccessibleObject(ComboBox comboBox)
         {
             return (ComboBox.ComboBoxAccessibleObject)comboBox.AccessibilityObject;

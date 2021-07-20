@@ -1959,7 +1959,7 @@ namespace System.Windows.Forms
         {
             base.OnMouseDown(e);
 
-            if (_childEdit is not null && ChildEditAccessibleObject.Bounds.Contains(PointToScreen(e.Location)))
+            if (IsAccessibilityObjectCreated && _childEdit is not null && ChildEditAccessibleObject.Bounds.Contains(PointToScreen(e.Location)))
             {
                 ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
@@ -2602,14 +2602,17 @@ namespace System.Windows.Forms
             }
 
             // Notify collapsed/expanded property change.
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                UiaCore.ExpandCollapseState.Collapsed,
-                UiaCore.ExpandCollapseState.Expanded);
-
-            if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
+            if (IsAccessibilityObjectCreated)
             {
-                accessibleObject.SetComboBoxItemFocus();
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    UiaCore.ExpandCollapseState.Collapsed,
+                    UiaCore.ExpandCollapseState.Expanded);
+
+                if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject)
+                {
+                    accessibleObject.SetComboBoxItemFocus();
+                }
             }
         }
 
@@ -2669,7 +2672,7 @@ namespace System.Windows.Forms
         {
             base.OnKeyUp(e);
 
-            if (_childEdit is not null && ContainsNavigationKeyCode(e.KeyCode))
+            if (IsAccessibilityObjectCreated && _childEdit is not null && ContainsNavigationKeyCode(e.KeyCode))
             {
                 ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
@@ -2779,23 +2782,26 @@ namespace System.Windows.Forms
                 return;
             }
 
-            if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject &&
-                (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown))
+            if (IsAccessibilityObjectCreated)
             {
-                // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
-                // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
-                // ComboBox selection is announced by TextProvider.
-                if (_dropDown)
+                if (AccessibilityObject is ComboBoxAccessibleObject accessibleObject &&
+                (DropDownStyle == ComboBoxStyle.DropDownList || DropDownStyle == ComboBoxStyle.DropDown))
                 {
-                    accessibleObject.SetComboBoxItemFocus();
+                    // Announce DropDown- and DropDownList-styled ComboBox item selection using keyboard
+                    // in case when Level 3 is enabled and DropDown is not in expanded state. Simple-styled
+                    // ComboBox selection is announced by TextProvider.
+                    if (_dropDown)
+                    {
+                        accessibleObject.SetComboBoxItemFocus();
+                    }
+
+                    accessibleObject.SetComboBoxItemSelection();
                 }
 
-                accessibleObject.SetComboBoxItemSelection();
-            }
-
-            if (_childEdit is not null)
-            {
-                ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                if (_childEdit is not null)
+                {
+                    ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                }
             }
 
             // set the position in the dataSource, if there is any
@@ -2960,7 +2966,7 @@ namespace System.Windows.Forms
                 base.OnTextChanged(e);
             }
 
-            if (_childEdit is not null)
+            if (IsAccessibilityObjectCreated &&_childEdit is not null)
             {
                 ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
             }
@@ -3063,19 +3069,22 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Need to announce the focus on combo-box with new selected value on drop-down close.
-            // If do not do this focus in Level 3 stays on list item of unvisible list.
-            // This is necessary for DropDown style as edit should not take focus.
-            if (DropDownStyle == ComboBoxStyle.DropDown)
+            if (IsAccessibilityObjectCreated)
             {
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-            }
+                // Need to announce the focus on combo-box with new selected value on drop-down close.
+                // If do not do this focus in Level 3 stays on list item of unvisible list.
+                // This is necessary for DropDown style as edit should not take focus.
+                if (DropDownStyle == ComboBoxStyle.DropDown)
+                {
+                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
 
-            // Notify Collapsed/expanded property change.
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                UiaCore.ExpandCollapseState.Expanded,
-                UiaCore.ExpandCollapseState.Collapsed);
+                // Notify Collapsed/expanded property change.
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    UiaCore.ExpandCollapseState.Expanded,
+                    UiaCore.ExpandCollapseState.Collapsed);
+            }
 
             // Collapsing the DropDown, so reset the flag.
             _dropDownWillBeClosed = false;
@@ -3246,8 +3255,11 @@ namespace System.Windows.Forms
         {
             base.ReleaseUiaProvider(handle);
 
-            var uiaProvider = AccessibilityObject as ComboBoxAccessibleObject;
-            uiaProvider?.ResetListItemAccessibleObjects();
+            if (IsAccessibilityObjectCreated)
+            {
+                var uiaProvider = AccessibilityObject as ComboBoxAccessibleObject;
+                uiaProvider?.ResetListItemAccessibleObjects();
+            }
         }
 
         private void ResetAutoCompleteCustomSource()
