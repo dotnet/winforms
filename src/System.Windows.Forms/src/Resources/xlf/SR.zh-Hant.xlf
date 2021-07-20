@@ -5222,11 +5222,6 @@ Do you want to replace it?</source>
         <target state="translated">可以重新調整表單的最大值。</target>
         <note />
       </trans-unit>
-      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
-        <source>Gets or sets the anchoring for minimized MDI children.</source>
-        <target state="new">Gets or sets the anchoring for minimized MDI children.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">指定表單的主要 MenuStrip。此屬性可用於鍵盤啟用，以及 MDI 中的自動合併。</target>
