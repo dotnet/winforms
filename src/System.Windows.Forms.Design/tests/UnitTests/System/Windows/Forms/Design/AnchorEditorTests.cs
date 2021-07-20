@@ -7,6 +7,7 @@ using System.Drawing.Design;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests
 {
@@ -73,6 +74,26 @@ namespace System.Windows.Forms.Design.Tests
         {
             var editor = new AnchorEditor();
             Assert.False(editor.GetPaintValueSupported(context));
+        }
+
+        [Theory]
+        [InlineData("left")]
+        [InlineData("right")]
+        [InlineData("top")]
+        [InlineData("bottom")]
+        public void AnchorEditor_AnchorUI_ControlType_IsCheckButton(string fieldName)
+        {
+            AnchorEditor editor = new();
+            Type type = editor.GetType()
+                .GetNestedType("AnchorUI", BindingFlags.NonPublic | BindingFlags.Instance);
+            var anchorUI = (Control)Activator.CreateInstance(type, new object[] { editor });
+            var item = (Control)anchorUI.GetType()
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(anchorUI);
+
+            object actual = item.AccessibilityObject.TestAccessor().Dynamic
+                .GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(Interop.UiaCore.UIA.CheckBoxControlTypeId, actual);
         }
     }
 }
