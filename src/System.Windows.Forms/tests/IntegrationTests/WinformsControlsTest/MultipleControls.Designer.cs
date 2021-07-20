@@ -50,6 +50,8 @@ namespace WinformsControlsTest
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.numericUpDown1 = new System.Windows.Forms.NumericUpDown();
             this.domainUpDown1 = new System.Windows.Forms.DomainUpDown();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -93,13 +95,34 @@ namespace WinformsControlsTest
             this.label1.Size = new System.Drawing.Size(35, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "label1";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Location = new System.Drawing.Point(53, 73);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(60, 15);
+            this.linkLabel1.TabIndex = 3;
+            this.linkLabel1.Text = "linkLabel1";
+            // 
+            // linkLabel2
+            // 
+            this.linkLabel2.AutoSize = true;
+            this.linkLabel2.LinkArea = new System.Windows.Forms.LinkArea(0, 4);
+            this.linkLabel2.Location = new System.Drawing.Point(361, 200);
+            this.linkLabel2.Name = "linkLabel2";
+            this.linkLabel2.Size = new System.Drawing.Size(92, 17);
+            this.linkLabel2.TabIndex = 4;
+            this.linkLabel2.Text = "Home MSN Github";
+            this.linkLabel2.Links.Add(5, 3, "www.msn.com");
+            this.linkLabel2.Links.Add(9, 6, "www.github.com");
             //
             // maskedTextBox1
             //
             this.maskedTextBox1.Location = new System.Drawing.Point(13, 90);
             this.maskedTextBox1.Name = "maskedTextBox1";
             this.maskedTextBox1.Size = new System.Drawing.Size(100, 20);
-            this.maskedTextBox1.TabIndex = 3;
+            this.maskedTextBox1.TabIndex = 5;
             this.maskedTextBox1.Text = "Masked";
             //
             // richTextBox1
@@ -108,7 +131,7 @@ namespace WinformsControlsTest
             this.richTextBox1.Location = new System.Drawing.Point(13, 117);
             this.richTextBox1.Name = "richTextBox1";
             this.richTextBox1.Size = new System.Drawing.Size(100, 96);
-            this.richTextBox1.TabIndex = 4;
+            this.richTextBox1.TabIndex = 6;
             this.richTextBox1.Text = "LLLL";
             //
             // textBox1
@@ -117,7 +140,7 @@ namespace WinformsControlsTest
             this.textBox1.Name = "textBox1";
             this.textBox1.PlaceholderText = "Type some text here...";
             this.textBox1.Size = new System.Drawing.Size(100, 20);
-            this.textBox1.TabIndex = 5;
+            this.textBox1.TabIndex = 7;
             this.textBox1.Text = "LLLLL";
             //
             // tabControl1
@@ -129,7 +152,7 @@ namespace WinformsControlsTest
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.ShowToolTips = true;
             this.tabControl1.Size = new System.Drawing.Size(200, 100);
-            this.tabControl1.TabIndex = 6;
+            this.tabControl1.TabIndex = 8;
             //
             // tabPage1
             //
@@ -204,7 +227,7 @@ namespace WinformsControlsTest
             this.groupBox1.Location = new System.Drawing.Point(125, 171);
             this.groupBox1.Name = "groupBox1";
             this.groupBox1.Size = new System.Drawing.Size(177, 81);
-            this.groupBox1.TabIndex = 7;
+            this.groupBox1.TabIndex = 9;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "groupBox1";
             //
@@ -220,21 +243,21 @@ namespace WinformsControlsTest
             this.checkedListBox1.Location = new System.Drawing.Point(327, 19);
             this.checkedListBox1.Name = "checkedListBox1";
             this.checkedListBox1.Size = new System.Drawing.Size(202, 94);
-            this.checkedListBox1.TabIndex = 8;
+            this.checkedListBox1.TabIndex = 10;
             //
             // numericUpDown1
             //
             this.numericUpDown1.Location = new System.Drawing.Point(361, 134);
             this.numericUpDown1.Name = "numericUpDown1";
             this.numericUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.numericUpDown1.TabIndex = 9;
+            this.numericUpDown1.TabIndex = 11;
             //
             // domainUpDown1
             //
             this.domainUpDown1.Location = new System.Drawing.Point(361, 171);
             this.domainUpDown1.Name = "domainUpDown1";
             this.domainUpDown1.Size = new System.Drawing.Size(120, 20);
-            this.domainUpDown1.TabIndex = 10;
+            this.domainUpDown1.TabIndex = 12;
             this.domainUpDown1.Text = "domainUpDown1";
             this.domainUpDown1.Items.AddRange(new string[] { "First", "Second", "Third", "Fourth" });
             // 
@@ -254,6 +277,8 @@ namespace WinformsControlsTest
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button1);
             this.Controls.Add(this.progressBar1);
+            this.Controls.Add(this.linkLabel1);
+            this.Controls.Add(this.linkLabel2);
             this.Name = "Form1";
             this.Text = "These look ok";
             this.Load += new System.EventHandler(this.Test3_Load);
@@ -288,5 +313,7 @@ namespace WinformsControlsTest
         private System.Windows.Forms.CheckedListBox checkedListBox1;
         private System.Windows.Forms.NumericUpDown numericUpDown1;
         private System.Windows.Forms.DomainUpDown domainUpDown1;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel linkLabel2;
     }
 }
