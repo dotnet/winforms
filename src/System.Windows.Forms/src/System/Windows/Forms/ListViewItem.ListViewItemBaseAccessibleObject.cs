@@ -48,8 +48,8 @@ namespace System.Windows.Forms
                         _owningItem.Bounds.Width,
                         _owningItem.Bounds.Height);
 
-            private protected int CurrentIndex
-                => _owningListView.Items.IndexOf(_owningItem);
+            internal int CurrentIndex
+                => _owningItem.Index;
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 => _owningListView.AccessibilityObject;
