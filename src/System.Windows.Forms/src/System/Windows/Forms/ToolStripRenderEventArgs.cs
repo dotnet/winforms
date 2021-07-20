@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </summary>
-        public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
+        public ToolStripRenderEventArgs(Graphics g, ToolStrip? toolStrip)
         {
             Graphics = g;
             ToolStrip = toolStrip;
@@ -25,7 +23,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </summary>
-        public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip, Rectangle affectedBounds, Color backColor)
+        public ToolStripRenderEventArgs(
+            Graphics g,
+            ToolStrip? toolStrip,
+            Rectangle affectedBounds,
+            Color backColor)
         {
             Graphics = g;
             AffectedBounds = affectedBounds;
@@ -46,7 +48,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents which toolStrip was affected by the click
         /// </summary>
-        public ToolStrip ToolStrip { get; }
+        public ToolStrip? ToolStrip { get; }
 
         /// <summary>
         ///  The back color to draw with.
@@ -96,7 +98,7 @@ namespace System.Windows.Forms
             {
                 if (ToolStrip is ToolStripDropDown dropDown)
                 {
-                    ToolStripDropDownItem ownerItem = dropDown.OwnerItem as ToolStripDropDownItem;
+                    ToolStripDropDownItem? ownerItem = dropDown.OwnerItem as ToolStripDropDownItem;
 
                     if (ownerItem is MdiControlStrip.SystemMenuItem)
                     {
