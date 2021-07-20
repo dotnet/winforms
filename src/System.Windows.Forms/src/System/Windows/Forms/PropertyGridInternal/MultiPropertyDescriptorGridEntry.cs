@@ -67,14 +67,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                bool fExpandable = GetFlagSet(FL_EXPANDABLE);
+                bool expandable = GetFlagSet(Flags.Expandable);
 
-                if (fExpandable && ChildCollection.Count > 0)
+                if (expandable && ChildCollection.Count > 0)
                 {
                     return true;
                 }
 
-                if (GetFlagSet(FL_EXPANDABLE_FAILED))
+                if (GetFlagSet(Flags.ExpandableFailed))
                 {
                     return false;
                 }
@@ -85,17 +85,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         if (o is null)
                         {
-                            fExpandable = false;
+                            expandable = false;
                             break;
                         }
                     }
                 }
                 catch
                 {
-                    fExpandable = false;
+                    expandable = false;
                 }
 
-                return fExpandable;
+                return expandable;
             }
         }
 
@@ -122,14 +122,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                if (_mergedDescriptor.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
+                if (_mergedDescriptor.PropertyType.IsValueType || (EntryFlags & Flags.Immutable) != 0)
                 {
                     return base.CreateChildren(diffOldChildren);
                 }
 
                 ChildCollection.Clear();
 
-                MultiPropertyDescriptorGridEntry[] mergedProps = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(_mergedDescriptor.GetValues(_objects), this, PropertySort, CurrentTab);
+                MultiPropertyDescriptorGridEntry[] mergedProps = MultiSelectRootGridEntry.PropertyMerger.GetMergedProperties(_mergedDescriptor.GetValues(_objects), this, _propertySort, CurrentTab);
 
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 
@@ -141,7 +141,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
-                    SetFlag(GridEntry.FL_EXPANDABLE_FAILED, true);
+                    SetFlag(Flags.ExpandableFailed, true);
                 }
 
                 return fExpandable;
@@ -154,7 +154,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override object GetChildValueOwner(GridEntry childEntry)
         {
-            if (_mergedDescriptor.PropertyType.IsValueType || (Flags & GridEntry.FLAG_IMMUTABLE) != 0)
+            if (_mergedDescriptor.PropertyType.IsValueType || (EntryFlags & Flags.Immutable) != 0)
             {
                 return base.GetChildValueOwner(childEntry);
             }
@@ -192,31 +192,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             return base.GetPropertyTextValue(value);
         }
 
-        internal override bool NotifyChildValue(GridEntry pe, int type)
+        protected internal override bool NotifyChildValue(GridEntry entry, Notify type)
         {
-            bool success = false;
-
-            IDesignerHost host = DesignerHost;
-            DesignerTransaction trans = null;
-
-            if (host is not null)
-            {
-                trans = host.CreateTransaction();
-            }
+            DesignerTransaction transaction = DesignerHost?.CreateTransaction();
 
             try
             {
-                success = base.NotifyChildValue(pe, type);
+                return base.NotifyChildValue(entry, type);
             }
             finally
             {
-                if (trans is not null)
-                {
-                    trans.Commit();
-                }
+                transaction?.Commit();
             }
-
-            return success;
         }
 
         protected override void NotifyParentChange(GridEntry entry)
@@ -275,7 +262,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal override bool NotifyValueGivenParent(object obj, int type)
+        protected internal override bool NotifyValueGivenParent(object obj, Notify type)
         {
             if (obj is ICustomTypeDescriptor descriptor)
             {
@@ -284,7 +271,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             switch (type)
             {
-                case NOTIFY_RESET:
+                case Notify.Reset:
 
                     object[] objects = (object[])obj;
 
@@ -334,17 +321,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     return false;
-                case NOTIFY_DBL_CLICK:
-                case NOTIFY_RETURN:
+                case Notify.DoubleClick:
+                case Notify.Return:
                     Debug.Assert(_propertyInfo is MergePropertyDescriptor, "Did not get a MergePropertyDescriptor!!!");
                     Debug.Assert(obj is object[], "Did not get an array of objects!!");
 
                     if (_propertyInfo is MergePropertyDescriptor mpd)
                     {
-                        if (_eventBindings is null)
-                        {
-                            _eventBindings = (IEventBindingService)GetService(typeof(IEventBindingService));
-                        }
+                        _eventBindings ??= this.GetService<IEventBindingService>();
 
                         if (_eventBindings is not null)
                         {

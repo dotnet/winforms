@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
@@ -14,11 +12,11 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         public class DisplayNameSortComparer : IComparer
         {
-            public int Compare(object left, object right)
+            public int Compare(object? left, object? right)
             {
                 return string.Compare(
-                    ((PropertyDescriptor)left).DisplayName,
-                    ((PropertyDescriptor)right).DisplayName,
+                    ((PropertyDescriptor)left!).DisplayName,
+                    ((PropertyDescriptor)right!).DisplayName,
                     ignoreCase: true,
                     CultureInfo.CurrentCulture);
             }

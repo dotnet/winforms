@@ -16,7 +16,7 @@ namespace System.Windows.Forms
             internal bool UserSized { get; set; }
 
             public abstract int GetOptimalHeight(int width);
-            public abstract int SnapHeightRequest(int request);
+            public abstract int SnapHeightRequest(int newHeight);
 
             public SnappableControl(PropertyGrid ownerPropertyGrid)
             {

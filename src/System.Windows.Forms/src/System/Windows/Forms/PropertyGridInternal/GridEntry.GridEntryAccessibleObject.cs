@@ -51,28 +51,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public override string Description
-            {
-                get
-                {
-                    return _owningGridEntry.PropertyDescription;
-                }
-            }
+            public override string Description => _owningGridEntry.PropertyDescription;
 
             internal override UiaCore.ExpandCollapseState ExpandCollapseState
-            {
-                get
-                {
-                    if (_owningGridEntry.Expandable)
-                    {
-                        return _owningGridEntry.Expanded ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-                    }
-                    else
-                    {
-                        return UiaCore.ExpandCollapseState.LeafNode;
-                    }
-                }
-            }
+                => _owningGridEntry.Expandable
+                    ? _owningGridEntry.Expanded ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed
+                    : UiaCore.ExpandCollapseState.LeafNode;
 
             public override string Help => _owningGridEntry.PropertyDescription;
 
@@ -146,34 +130,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override string? Value
             {
-                get
-                {
-                    return _owningGridEntry.GetPropertyTextValue();
-                }
-
-                set
-                {
-                    _owningGridEntry.SetPropertyTextValue(value);
-                }
+                get => _owningGridEntry.GetPropertyTextValue();
+                set => _owningGridEntry.SetPropertyTextValue(value);
             }
 
             internal override int Column => 0;
 
-            internal override UiaCore.IRawElementProviderSimple? ContainingGrid
-            {
-                get => PropertyGridView?.AccessibilityObject;
-            }
+            internal override UiaCore.IRawElementProviderSimple? ContainingGrid => PropertyGridView?.AccessibilityObject;
 
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
             internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
-            {
-                get
-                {
-                    return Parent as PropertyGridView.PropertyGridViewAccessibleObject;
-                }
-            }
+                => Parent as PropertyGridView.PropertyGridViewAccessibleObject;
 
             internal override int Row
             {
@@ -262,17 +231,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  Returns the currently focused child, if any.
             ///  Returns this if the object itself is focused.
             /// </summary>
-            public override AccessibleObject? GetFocused()
-            {
-                if (_owningGridEntry.HasFocus)
-                {
-                    return this;
-                }
-                else
-                {
-                    return null;
-                }
-            }
+            public override AccessibleObject? GetFocused() => _owningGridEntry.HasFocus ? this : null;
 
             /// <summary>
             ///  Navigate to the next or previous grid entry.
@@ -410,17 +369,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 };
             }
 
-            internal override bool IsIAccessibleExSupported()
-            {
-                if (_owningGridEntry.Expandable)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
+            internal override bool IsIAccessibleExSupported() => _owningGridEntry.Expandable;
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {

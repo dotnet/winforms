@@ -14,9 +14,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     {
-        protected object _objValue;
-        private string _objValueClassName;
-        private GridEntry _propDefault;
+        protected object _value;
+        private string _valueClassName;
+        private GridEntry _defaultEntry;
         private IDesignerHost _host;
         private IServiceProvider _baseProvider;
         private PropertyTab _tab;
@@ -40,13 +40,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             _gridEntryHost = gridEntryHost;
             _baseProvider = baseProvider;
             _tab = tab;
-            _objValue = value;
-            _objValueClassName = TypeDescriptor.GetClassName(_objValue);
+            _value = value;
+            _valueClassName = TypeDescriptor.GetClassName(_value);
 
             IsExpandable = true;
 
             // Default to categories.
-            PropertySort = sortType;
+            _propertySort = sortType;
             InternalExpanded = true;
         }
 
@@ -86,17 +86,17 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (_browsableAttributes is not null && value is not null && _browsableAttributes.Count == value.Count)
                 {
-                    var attr1 = new Attribute[_browsableAttributes.Count];
-                    var attr2 = new Attribute[value.Count];
+                    var currentAttributes = new Attribute[_browsableAttributes.Count];
+                    var newAttributes = new Attribute[value.Count];
 
-                    _browsableAttributes.CopyTo(attr1, 0);
-                    value.CopyTo(attr2, 0);
+                    _browsableAttributes.CopyTo(currentAttributes, 0);
+                    value.CopyTo(newAttributes, 0);
 
-                    Array.Sort(attr1, AttributeTypeSorter);
-                    Array.Sort(attr2, AttributeTypeSorter);
-                    for (int i = 0; i < attr1.Length; i++)
+                    Array.Sort(currentAttributes, AttributeTypeSorter);
+                    Array.Sort(newAttributes, AttributeTypeSorter);
+                    for (int i = 0; i < currentAttributes.Length; i++)
                     {
-                        if (!attr1[i].Equals(attr2[i]))
+                        if (!currentAttributes[i].Equals(newAttributes[i]))
                         {
                             same = false;
                             break;
@@ -118,17 +118,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         protected override IComponentChangeService ComponentChangeService
-        {
-            get
-            {
-                if (_changeService is null)
-                {
-                    _changeService = (IComponentChangeService)GetService(typeof(IComponentChangeService));
-                }
-
-                return _changeService;
-            }
-        }
+            => _changeService ?? this.GetService<IComponentChangeService>();
 
         internal override bool AlwaysAllowExpand => true;
 
@@ -140,8 +130,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override GridEntry DefaultChild
         {
-            get => _propDefault;
-            set => _propDefault = value;
+            get => _defaultEntry;
+            set => _defaultEntry = value;
         }
 
         internal override IDesignerHost DesignerHost
@@ -156,10 +146,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_forceReadOnlyChecked)
                 {
-                    var readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(_objValue)[typeof(ReadOnlyAttribute)];
-                    if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(_objValue).Contains(InheritanceAttribute.InheritedReadOnly))
+                    var readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(_value)[typeof(ReadOnlyAttribute)];
+                    if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute())
+                        || TypeDescriptor.GetAttributes(_value).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
-                        _flags |= FLAG_FORCE_READONLY;
+                        SetForceReadOnlyFlag();
                     }
 
                     _forceReadOnlyChecked = true;
@@ -184,14 +175,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                var helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(_objValue)[typeof(HelpKeywordAttribute)];
+                var helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(_value)[typeof(HelpKeywordAttribute)];
 
                 if (helpAttribute is not null && !helpAttribute.IsDefaultAttribute())
                 {
                     return helpAttribute.HelpKeyword;
                 }
 
-                return _objValueClassName;
+                return _valueClassName;
             }
         }
 
@@ -199,20 +190,20 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (_objValue is IComponent component)
+                if (_value is IComponent component)
                 {
                     ISite site = component.Site;
                     if (site is null)
                     {
-                        return _objValue.GetType().Name;
+                        return _value.GetType().Name;
                     }
 
                     return site.Name;
                 }
 
-                if (_objValue is not null)
+                if (_value is not null)
                 {
-                    return _objValue.ToString();
+                    return _value.ToString();
                 }
 
                 return null;
@@ -224,12 +215,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public override object PropertyValue
         {
-            get => _objValue;
+            get => _value;
             set
             {
-                object old = _objValue;
-                _objValue = value;
-                _objValueClassName = TypeDescriptor.GetClassName(_objValue);
+                object old = _value;
+                _value = value;
+                _valueClassName = TypeDescriptor.GetClassName(_value);
                 OwnerGrid.ReplaceSelectedObject(old, value);
             }
         }
@@ -252,51 +243,34 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _changeService = null;
             }
 
-            _objValue = null;
-            _objValueClassName = null;
-            _propDefault = null;
+            _value = null;
+            _valueClassName = null;
+            _defaultEntry = null;
             base.Dispose(disposing);
         }
 
         public override object GetService(Type serviceType)
-        {
-            object service = null;
-
-            if (_host is not null)
-            {
-                service = _host.GetService(serviceType);
-            }
-
-            if (service is null && _baseProvider is not null)
-            {
-                service = _baseProvider.GetService(serviceType);
-            }
-
-            return service;
-        }
+            => _host?.GetService(serviceType) ?? _baseProvider?.GetService(serviceType);
 
         /// <summary>
         ///  Reset the Browsable attributes to the default (BrowsableAttribute.Yes).
         /// </summary>
-        public void ResetBrowsableAttributes()
-        {
-            _browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
-        }
+        public void ResetBrowsableAttributes() => _browsableAttributes = new(BrowsableAttribute.Yes);
 
         /// <summary>
         ///  Sets the value of this GridEntry from text.
         /// </summary>
         public virtual void ShowCategories(bool fCategories)
         {
-            if ((PropertySort &= PropertySort.Categorized) != 0 != fCategories)
+            if ((_propertySort &= PropertySort.Categorized) != 0 != fCategories)
             {
                 if (fCategories)
                 {
-                    PropertySort |= PropertySort.Categorized;
+                    _propertySort |= PropertySort.Categorized;
                 }
                 else
                 {
-                    PropertySort &= ~PropertySort.Categorized;
+                    _propertySort &= ~PropertySort.Categorized;
                 }
 
                 // Recreate the children.
@@ -317,51 +291,49 @@ namespace System.Windows.Forms.PropertyGridInternal
             var childEntries = new GridEntry[Children.Count];
             Children.CopyTo(childEntries, 0);
 
-            if ((PropertySort & PropertySort.Categorized) == 0)
+            if ((_propertySort & PropertySort.Categorized) == 0)
             {
                 return;
             }
 
-            // First, walk through all the entries and group them by their category by adding
-            // them to a hashtable of arraylists.
+            // First, walk through all the entries and group them by their category.
 
-            Hashtable bins = new();
+            Hashtable categories = new();
             for (int i = 0; i < childEntries.Length; i++)
             {
-                GridEntry pe = childEntries[i];
-                Debug.Assert(pe is not null);
-                if (pe is not null)
+                GridEntry child = childEntries[i];
+                Debug.Assert(child is not null);
+                if (child is not null)
                 {
-                    string category = pe.PropertyCategory;
-                    var bin = (ArrayList)bins[category];
-                    if (bin is null)
+                    string category = child.PropertyCategory;
+                    var gridEntries = (ArrayList)categories[category];
+                    if (gridEntries is null)
                     {
-                        bin = new ArrayList();
-                        bins[category] = bin;
+                        gridEntries = new ArrayList();
+                        categories[category] = gridEntries;
                     }
 
-                    bin.Add(pe);
+                    gridEntries.Add(child);
                 }
             }
 
-            // Now walk through the hashtable and create a categorygridentry for each
-            // category that holds all the properties of that category.
+            // Now walk through and create a CategoryGridEntry that holds all the properties for each category.
 
-            ArrayList propList = new();
-            IDictionaryEnumerator enumBins = bins.GetEnumerator();
-            while (enumBins.MoveNext())
+            ArrayList categoryGridEntries = new();
+            IDictionaryEnumerator enumerator = categories.GetEnumerator();
+            while (enumerator.MoveNext())
             {
-                var bin = (ArrayList)enumBins.Value;
-                if (bin is not null)
+                var gridEntries = (ArrayList)enumerator.Value;
+                if (gridEntries is not null)
                 {
-                    string category = (string)enumBins.Key;
-                    if (bin.Count > 0)
+                    string category = (string)enumerator.Key;
+                    if (gridEntries.Count > 0)
                     {
-                        var rgpes = new GridEntry[bin.Count];
-                        bin.CopyTo(rgpes, 0);
+                        var rgpes = new GridEntry[gridEntries.Count];
+                        gridEntries.CopyTo(rgpes, 0);
                         try
                         {
-                            propList.Add(new CategoryGridEntry(OwnerGrid, this, category, rgpes));
+                            categoryGridEntries.Add(new CategoryGridEntry(OwnerGrid, this, category, rgpes));
                         }
                         catch
                         {
@@ -370,8 +342,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            childEntries = new GridEntry[propList.Count];
-            propList.CopyTo(childEntries, 0);
+            childEntries = new GridEntry[categoryGridEntries.Count];
+            categoryGridEntries.CopyTo(childEntries, 0);
             Array.Sort(childEntries, GridEntryComparer.Default);
 
             ChildCollection.Clear();

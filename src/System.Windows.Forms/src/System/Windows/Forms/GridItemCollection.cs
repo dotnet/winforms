@@ -11,7 +11,9 @@ namespace System.Windows.Forms
     /// </summary>
     public class GridItemCollection : ICollection
     {
-        public static GridItemCollection Empty = new GridItemCollection(Array.Empty<GridItem>());
+#pragma warning disable IDE1006 // Naming Styles - this is public API
+        public static GridItemCollection Empty = new(Array.Empty<GridItem>());
+#pragma warning restore IDE1006
 
         private protected GridItem[] _entries;
 

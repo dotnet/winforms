@@ -45,7 +45,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly static Size s_minDropDownSize =
                 new(SystemInformation.VerticalScrollBarWidth * 4, SystemInformation.HorizontalScrollBarHeight * 4);
 
-            // Our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.  See GetSizeGripGlyph
+            // Our cached size grip glyph.  Control paint only does right bottom glyphs, so we cache a mirrored one.
             private Bitmap _sizeGripGlyph;
 
             private const int DropDownHolderBorder = 1;
@@ -54,7 +54,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private const int MoveTypeLeft = 0x2;
             private const int MoveTypeTop = 0x4;
 
-            internal DropDownHolder(PropertyGridView psheet)
+            internal DropDownHolder(PropertyGridView gridView)
                 : base()
             {
                 ShowInTaskbar = false;
@@ -64,9 +64,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Text = string.Empty;
                 FormBorderStyle = FormBorderStyle.None;
                 AutoScaleMode = AutoScaleMode.None; // children may scale, but we won't interfere.
-                _mouseHook = new MouseHook(this, this, psheet);
+                _mouseHook = new(this, this, gridView);
                 Visible = false;
-                _gridView = psheet;
+                _gridView = gridView;
                 BackColor = _gridView.BackColor;
             }
 
@@ -94,7 +94,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (_createNewLink is null)
                     {
                         _createNewLink = new LinkLabel();
-                        _createNewLink.LinkClicked += new LinkLabelLinkClickedEventHandler(OnNewLinkClicked);
+                        _createNewLink.LinkClicked += OnNewLinkClicked;
                     }
 
                     return _createNewLink;
@@ -103,14 +103,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public virtual bool HookMouseDown
             {
-                get
-                {
-                    return _mouseHook.HookMouseDown;
-                }
-                set
-                {
-                    _mouseHook.HookMouseDown = value;
-                }
+                get => _mouseHook.HookMouseDown;
+                set => _mouseHook.HookMouseDown = value;
             }
 
             /// <summary>
@@ -122,25 +116,26 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 set
                 {
-                    if (_resizeUp != value)
+                    if (_resizeUp == value)
                     {
-                        // clear the glyph so we regenerate it.
-                        //
-                        _sizeGripGlyph = null;
-                        _resizeUp = value;
+                        return;
+                    }
 
-                        if (_resizable)
+                    // Clear the glyph so we regenerate it.
+                    _sizeGripGlyph = null;
+                    _resizeUp = value;
+
+                    if (_resizable)
+                    {
+                        DockPadding.Bottom = 0;
+                        DockPadding.Top = 0;
+                        if (value)
                         {
-                            DockPadding.Bottom = 0;
-                            DockPadding.Top = 0;
-                            if (value)
-                            {
-                                DockPadding.Top = s_resizeBarSize;
-                            }
-                            else
-                            {
-                                DockPadding.Bottom = s_resizeBarSize;
-                            }
+                            DockPadding.Top = s_resizeBarSize;
+                        }
+                        else
+                        {
+                            DockPadding.Bottom = s_resizeBarSize;
                         }
                     }
                 }
@@ -170,8 +165,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public void DoModalLoop()
             {
-                // Push a modal loop.  This seems expensive, but I think it is a
-                // better user model than returning from DropDownControl immediately.
+                // Push a modal loop. This seems expensive, but it is a better user model than
+                // returning from DropDownControl immediately.
                 while (Visible)
                 {
                     Application.DoEventsModal();
@@ -179,22 +174,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public virtual Control Component
-            {
-                get
-                {
-                    return _currentControl;
-                }
-            }
+            public virtual Control Component => _currentControl;
 
-            /// <summary>
-            ///  Get an InstanceCreationEditor for this entry.  First, we look on the property type, and if we
-            ///  don't find that we'll go up to the editor type itself.  That way people can associate the InstanceCreationEditor with
-            ///  the type of DropDown UIType Editor.
-            ///
-            /// </summary>
             private InstanceCreationEditor GetInstanceCreationEditor(PropertyDescriptorGridEntry entry)
             {
+                // First we look on the property type, and if we don't find that we'll go up to the editor type
+                // itself.  That way people can associate the InstanceCreationEditor with the type of DropDown
+                // UIType Editor.
+
                 if (entry is null)
                 {
                     return null;
@@ -202,16 +189,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 InstanceCreationEditor editor = null;
 
-                // check the property type itself.  this is the default path.
-                //
+                // Check the property type itself. This is the default path.
                 PropertyDescriptor pd = entry.PropertyDescriptor;
                 if (pd is not null)
                 {
                     editor = pd.GetEditor(typeof(InstanceCreationEditor)) as InstanceCreationEditor;
                 }
 
-                // now check if there is a dropdown UI type editor.  If so, use that.
-                //
+                // Now check if there is a dropdown UI type editor.  If so, use that.
                 if (editor is null)
                 {
                     UITypeEditor ute = entry.UITypeEditor;
@@ -225,12 +210,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///  Get a glyph for sizing the lower left hand grip.  The code in ControlPaint only does lower-right glyphs
-            ///  so we do some GDI+ magic to take that glyph and mirror it.  That way we can still share the code (in case it changes for theming, etc),
-            ///  not have any special cases, and possibly solve world hunger.
+            ///  Get a glyph for sizing the lower left hand grip.
             /// </summary>
             private Bitmap GetSizeGripGlyph(Graphics g)
             {
+                // The code in ControlPaint only does lower-right glyphs so we do some GDI+ magic to take that glyph
+                // and mirror it. That way we can still share the code (in case it changes for theming, etc) and not
+                // have any special cases.
+
                 if (_sizeGripGlyph is not null)
                 {
                     return _sizeGripGlyph;
@@ -241,17 +228,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 using (Graphics glyphGraphics = Graphics.FromImage(_sizeGripGlyph))
                 {
-                    // mirror the image around the x-axis to get a gripper handle that works
-                    // for the lower left.
-                    Matrix m = new Matrix();
+                    // Mirror the image around the x-axis to get a gripper handle that works for the lower left.
+                    Matrix m = new();
 
-                    // basically, mirroring is just scaling by -1 on the X-axis.  So any point that's like (10, 10) goes to (-10, 10).
-                    // that mirrors it, but also moves everything to the negative axis, so we just bump the whole thing over by it's width.
+                    // Mirroring is just scaling by -1 on the X-axis.  So any point that's like (10, 10) goes to (-10, 10).
+                    // That mirrors it, but also moves everything to the negative axis, so we just bump the whole thing
+                    // over by it's width.
                     //
-                    // the +1 is because things at (0,0) stay at (0,0) since [0 * -1 = 0] so we want to get them over to the other side too.
+                    // The +1 is because things at (0,0) stay at (0,0) since [0 * -1 = 0] and we want to get them over
+                    // to the other side too.
                     //
-                    // resizeUp causes the image to also be mirrored vertically so the grip can be used as a top-left grip instead of bottom-left.
-                    //
+                    // _resizeUp causes the image to also be mirrored vertically so the grip can be used as a top-left
+                    // grip instead of bottom-left.
+
                     m.Translate(s_resizeGripSize + 1, (_resizeUp ? s_resizeGripSize + 1 : 0));
                     m.Scale(-1, (_resizeUp ? -1 : 1));
                     glyphGraphics.Transform = m;
@@ -263,10 +252,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return _sizeGripGlyph;
             }
 
-            public virtual bool GetUsed()
-            {
-                return (_currentControl is not null);
-            }
+            public virtual bool GetUsed() => _currentControl is not null;
 
             public virtual void FocusComponent()
             {
@@ -278,8 +264,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///  General purpose method, based on Control.Contains()...
-            ///
             ///  Determines whether a given window (specified using native window handle)
             ///  is a descendant of this control. This catches both contained descendants
             ///  and 'owned' windows such as modal dialogs. Using window handles rather
@@ -312,29 +296,31 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private void OnCurrentControlResize(object o, EventArgs e)
             {
-                if (_currentControl is not null && !_resizing)
+                if (_currentControl is null || _resizing)
                 {
-                    int oldWidth = Width;
-                    Size newSize = new Size(2 * DropDownHolderBorder + _currentControl.Width, 2 * DropDownHolderBorder + _currentControl.Height);
-                    if (_resizable)
-                    {
-                        newSize.Height += s_resizeBarSize;
-                    }
-
-                    try
-                    {
-                        _resizing = true;
-                        SuspendLayout();
-                        Size = newSize;
-                    }
-                    finally
-                    {
-                        _resizing = false;
-                        ResumeLayout(false);
-                    }
-
-                    Left -= (Width - oldWidth);
+                    return;
                 }
+
+                int oldWidth = Width;
+                Size newSize = new(2 * DropDownHolderBorder + _currentControl.Width, 2 * DropDownHolderBorder + _currentControl.Height);
+                if (_resizable)
+                {
+                    newSize.Height += s_resizeBarSize;
+                }
+
+                try
+                {
+                    _resizing = true;
+                    SuspendLayout();
+                    Size = newSize;
+                }
+                finally
+                {
+                    _resizing = false;
+                    ResumeLayout(false);
+                }
+
+                Left -= (Width - oldWidth);
             }
 
             protected override void OnLayout(LayoutEventArgs levent)
@@ -352,22 +338,21 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private void OnNewLinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
             {
-                InstanceCreationEditor ice = e.Link.LinkData as InstanceCreationEditor;
+                InstanceCreationEditor editor = e.Link.LinkData as InstanceCreationEditor;
 
-                Debug.Assert(ice is not null, "How do we have a link without the InstanceCreationEditor?");
-                if (ice is not null && _gridView?.SelectedGridEntry is not null)
+                Debug.Assert(editor is not null, "How do we have a link without the InstanceCreationEditor?");
+                if (editor is not null && _gridView?.SelectedGridEntry is not null)
                 {
                     Type createType = _gridView.SelectedGridEntry.PropertyType;
                     if (createType is not null)
                     {
                         _gridView.CloseDropDown();
 
-                        object newValue = ice.CreateInstance(_gridView.SelectedGridEntry, createType);
+                        object newValue = editor.CreateInstance(_gridView.SelectedGridEntry, createType);
 
                         if (newValue is not null)
                         {
-                            // make sure we got what we asked for.
-                            //
+                            // Make sure we got what we asked for.
                             if (!createType.IsInstanceOfType(newValue))
                             {
                                 throw new InvalidCastException(string.Format(SR.PropertyGridViewEditorCreatedInvalidObject, createType));
@@ -380,18 +365,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///  Just figure out what kind of sizing we would do at a given drag location.
+            ///  Figure out what kind of sizing we would do at a given drag location.
             /// </summary>
             private int MoveTypeFromPoint(int x, int y)
             {
-                Rectangle bGripRect = new Rectangle(0, Height - s_resizeGripSize, s_resizeGripSize, s_resizeGripSize);
-                Rectangle tGripRect = new Rectangle(0, 0, s_resizeGripSize, s_resizeGripSize);
+                Rectangle bottomGrip = new(0, Height - s_resizeGripSize, s_resizeGripSize, s_resizeGripSize);
+                Rectangle topGrip = new(0, 0, s_resizeGripSize, s_resizeGripSize);
 
-                if (!_resizeUp && bGripRect.Contains(x, y))
+                if (!_resizeUp && bottomGrip.Contains(x, y))
                 {
                     return MoveTypeLeft | MoveTypeBottom;
                 }
-                else if (_resizeUp && tGripRect.Contains(x, y))
+                else if (_resizeUp && topGrip.Contains(x, y))
                 {
                     return MoveTypeLeft | MoveTypeTop;
                 }
@@ -431,48 +416,36 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///  Either set the cursor or do a move, depending on what our currentMoveType is/
+            ///  Either set the cursor or do a move, depending on what our current move type is.
             /// </summary>
             protected override void OnMouseMove(MouseEventArgs e)
             {
-                // not moving so just set the cursor.
-                //
                 if (_currentMoveType == MoveTypeNone)
                 {
+                    // Not moving so just set the cursor.
                     int cursorMoveType = MoveTypeFromPoint(e.X, e.Y);
-                    switch (cursorMoveType)
+                    Cursor = cursorMoveType switch
                     {
-                        case (MoveTypeLeft | MoveTypeBottom):
-                            Cursor = Cursors.SizeNESW;
-                            break;
-                        case MoveTypeBottom:
-                        case MoveTypeTop:
-                            Cursor = Cursors.SizeNS;
-                            break;
-                        case MoveTypeTop | MoveTypeLeft:
-                            Cursor = Cursors.SizeNWSE;
-                            break;
-                        default:
-                            Cursor = null;
-                            break;
-                    }
+                        (MoveTypeLeft | MoveTypeBottom) => Cursors.SizeNESW,
+                        MoveTypeBottom or MoveTypeTop => Cursors.SizeNS,
+                        MoveTypeTop | MoveTypeLeft => Cursors.SizeNWSE,
+                        _ => null,
+                    };
                 }
                 else
                 {
                     Point dragPoint = PointToScreen(new Point(e.X, e.Y));
                     Rectangle newBounds = Bounds;
 
-                    // we're in a move operation, so do the resize.
-                    //
+                    // We're in a move operation, so do the resize.
                     if ((_currentMoveType & MoveTypeBottom) == MoveTypeBottom)
                     {
                         newBounds.Height = Math.Max(s_minDropDownSize.Height, _dragBaseRect.Height + (dragPoint.Y - _dragStart.Y));
                     }
 
-                    // for left and top moves, we actually have to resize and move the form simultaneously.
-                    // do to that, we compute the xdelta, and apply that to the base rectangle if it's not going to
+                    // For left and top moves, we actually have to resize and move the form simultaneously.
+                    // Due to that, we compute the x delta, and apply that to the base rectangle if it's not going to
                     // make the form smaller than the minimum.
-                    //
                     if ((_currentMoveType & MoveTypeTop) == MoveTypeTop)
                     {
                         int delta = dragPoint.Y - _dragStart.Y;
@@ -508,8 +481,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
 
-                    // Redraw!
-                    //
+                    // Redraw.
                     Invalidate();
                 }
 
@@ -518,8 +490,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void OnMouseLeave(EventArgs e)
             {
-                // just clear the cursor back to the default.
-                //
+                // Just clear the cursor back to the default.
                 Cursor = null;
                 base.OnMouseLeave(e);
             }
@@ -530,8 +501,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (e.Button == MouseButtons.Left)
                 {
-                    // reset the world.
-                    //
+                    // Reset the world.
                     _currentMoveType = MoveTypeNone;
                     _dragStart = Point.Empty;
                     _dragBaseRect = Rectangle.Empty;
@@ -539,26 +509,22 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            /// <summary>
-            ///  Just paint and draw our glyph.
-            /// </summary>
-            protected override void OnPaint(PaintEventArgs pe)
+            protected override void OnPaint(PaintEventArgs e)
             {
-                base.OnPaint(pe);
+                base.OnPaint(e);
                 if (_resizable)
                 {
-                    // Draw the grip
-                    Rectangle lRect = new Rectangle(0, _resizeUp ? 0 : Height - s_resizeGripSize, s_resizeGripSize, s_resizeGripSize);
-                    pe.Graphics.DrawImage(GetSizeGripGlyph(pe.Graphics), lRect);
+                    // Draw the grip.
+                    Rectangle lRect = new(0, _resizeUp ? 0 : Height - s_resizeGripSize, s_resizeGripSize, s_resizeGripSize);
+                    e.Graphics.DrawImage(GetSizeGripGlyph(e.Graphics), lRect);
 
-                    // Draw the divider
+                    // Draw the divider.
                     int y = _resizeUp ? (s_resizeBarSize - 1) : (Height - s_resizeBarSize);
-                    Pen pen = new Pen(SystemColors.ControlDark, 1)
+                    using Pen pen = new(SystemColors.ControlDark, 1)
                     {
                         DashStyle = DashStyle.Solid
                     };
-                    pe.Graphics.DrawLine(pen, 0, y, Width, y);
-                    pen.Dispose();
+                    e.Graphics.DrawLine(pen, 0, y, Width, y);
                 }
             }
 
@@ -589,126 +555,117 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.ProcessDialogKey(keyData);
             }
 
-            public void SetComponent(Control ctl, bool resizable)
+            public void SetComponent(Control control, bool resizable)
             {
-                this._resizable = resizable;
+                _resizable = resizable;
                 Font = _gridView.Font;
 
-                // check to see if we're going to be adding an InstanceCreationEditor
-                //
-                InstanceCreationEditor editor = (ctl is null ? null : GetInstanceCreationEditor(_gridView.SelectedGridEntry as PropertyDescriptorGridEntry));
+                // Check to see if we're going to be adding an InstanceCreationEditor.
+                InstanceCreationEditor editor = (control is null ? null : GetInstanceCreationEditor(_gridView.SelectedGridEntry as PropertyDescriptorGridEntry));
 
-                // clear any existing control we have
-                //
+                // Clear any existing control we have.
                 if (_currentControl is not null)
                 {
-                    _currentControl.Resize -= new EventHandler(OnCurrentControlResize);
+                    _currentControl.Resize -= OnCurrentControlResize;
                     Controls.Remove(_currentControl);
                     _currentControl = null;
                 }
 
-                // remove the InstanceCreationEditor link
-                //
+                // Remove the InstanceCreationEditor link.
                 if (_createNewLink is not null && _createNewLink.Parent == this)
                 {
                     Controls.Remove(_createNewLink);
                 }
 
-                // now set up the new control, top to bottom
-                //
-                if (ctl is not null)
+                // Now set up the new control, top to bottom.
+                if (control is null)
                 {
-                    _currentControl = ctl;
-                    Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:SetComponent(" + (ctl.GetType().Name) + ")");
-
-                    DockPadding.All = 0;
-
-                    // first handle the control.  If it's a listbox, make sure it's got some height
-                    // to it.
-                    //
-                    if (_currentControl is GridViewListBox)
-                    {
-                        ListBox lb = (ListBox)_currentControl;
-
-                        if (lb.Items.Count == 0)
-                        {
-                            lb.Height = Math.Max(lb.Height, lb.ItemHeight);
-                        }
-                    }
-
-                    // Parent the control now.  That way it can inherit our
-                    // font and scale itself if it wants to.
-                    try
-                    {
-                        SuspendLayout();
-                        Controls.Add(ctl);
-
-                        Size sz = new Size(2 * DropDownHolderBorder + ctl.Width, 2 * DropDownHolderBorder + ctl.Height);
-
-                        // now check for an editor, and show the link if there is one.
-                        //
-                        if (editor is not null)
-                        {
-                            // set up the link.
-                            //
-                            CreateNewLink.Text = editor.Text;
-                            CreateNewLink.Links.Clear();
-                            CreateNewLink.Links.Add(0, editor.Text.Length, editor);
-
-                            // size it as close to the size of the text as possible.
-                            //
-                            int linkHeight = CreateNewLink.Height;
-                            using (Graphics g = _gridView.CreateGraphics())
-                            {
-                                SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(_gridView.OwnerGrid, g, editor.Text, _gridView.GetBaseFont());
-                                linkHeight = (int)sizef.Height;
-                            }
-
-                            CreateNewLink.Height = linkHeight + DropDownHolderBorder;
-
-                            // add the total height plus some border
-                            sz.Height += (linkHeight + (DropDownHolderBorder * 2));
-                        }
-
-                        // finally, if we're resizable, add the space for the widget.
-                        //
-                        if (resizable)
-                        {
-                            sz.Height += s_resizeBarSize;
-
-                            // we use dockpadding to save space to draw the widget.
-                            //
-                            if (_resizeUp)
-                            {
-                                DockPadding.Top = s_resizeBarSize;
-                            }
-                            else
-                            {
-                                DockPadding.Bottom = s_resizeBarSize;
-                            }
-                        }
-
-                        // set the size stuff.
-                        //
-                        Size = sz;
-                        ctl.Dock = DockStyle.Fill;
-                        ctl.Visible = true;
-
-                        if (editor is not null)
-                        {
-                            CreateNewLink.Dock = DockStyle.Bottom;
-                            Controls.Add(CreateNewLink);
-                        }
-                    }
-                    finally
-                    {
-                        ResumeLayout(true);
-                    }
-
-                    // hook the resize event.
-                    //
-                    _currentControl.Resize += new EventHandler(OnCurrentControlResize);
+                    Enabled = false;
+                    return;
                 }
+
+                _currentControl = control;
+                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"DropDownHolder:SetComponent({control.GetType().Name})");
+
+                DockPadding.All = 0;
+
+                // First handle the control. If it's a listbox, make sure it's got some height to it.
+                if (_currentControl is GridViewListBox listBox)
+                {
+                    if (listBox.Items.Count == 0)
+                    {
+                        listBox.Height = Math.Max(listBox.Height, listBox.ItemHeight);
+                    }
+                }
+
+                // Parent the control now.  That way it can inherit our font and scale itself if it wants to.
+                try
+                {
+                    SuspendLayout();
+                    Controls.Add(control);
+
+                    Size size = new(2 * DropDownHolderBorder + control.Width, 2 * DropDownHolderBorder + control.Height);
+
+                    // Now check for an editor, and show the link if there is one.
+                    if (editor is not null)
+                    {
+                        // Set up the link.
+                        CreateNewLink.Text = editor.Text;
+                        CreateNewLink.Links.Clear();
+                        CreateNewLink.Links.Add(0, editor.Text.Length, editor);
+
+                        // Size it as close to the size of the text as possible.
+                        int linkHeight = CreateNewLink.Height;
+                        using (Graphics g = _gridView.CreateGraphics())
+                        {
+                            SizeF sizef = PropertyGrid.MeasureTextHelper.MeasureText(
+                                _gridView.OwnerGrid,
+                                g,
+                                editor.Text,
+                                _gridView.GetBaseFont());
+                            linkHeight = (int)sizef.Height;
+                        }
+
+                        CreateNewLink.Height = linkHeight + DropDownHolderBorder;
+
+                        //Add the total height plus some border
+                        size.Height += (linkHeight + (DropDownHolderBorder * 2));
+                    }
+
+                    // Finally, if we're resizable, add the space for the widget.
+                    if (resizable)
+                    {
+                        size.Height += s_resizeBarSize;
+
+                        // We use DockPadding to save space to draw the widget.
+                        if (_resizeUp)
+                        {
+                            DockPadding.Top = s_resizeBarSize;
+                        }
+                        else
+                        {
+                            DockPadding.Bottom = s_resizeBarSize;
+                        }
+                    }
+
+                    // Set the size.
+                    Size = size;
+                    control.Dock = DockStyle.Fill;
+                    control.Visible = true;
+
+                    if (editor is not null)
+                    {
+                        CreateNewLink.Dock = DockStyle.Bottom;
+                        Controls.Add(CreateNewLink);
+                    }
+                }
+                finally
+                {
+                    ResumeLayout(true);
+                }
+
+                // Hook the resize event.
+                _currentControl.Resize += OnCurrentControlResize;
 
                 Enabled = _currentControl is not null;
             }
@@ -719,7 +676,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     SetState(States.Modal, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
-                    IntPtr activatedWindow = (IntPtr)m.LParam;
+                    IntPtr activatedWindow = m.LParam;
                     if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
                     {
                         _gridView.CloseDropDownInternal(false);
@@ -728,8 +685,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else if (m.Msg == (int)User32.WM.CLOSE)
                 {
-                    // don't let an ALT-F4 get you down
-                    //
+                    // Don't let an ALT-F4 get you down.
                     if (Visible)
                     {
                         _gridView.CloseDropDown();
@@ -739,8 +695,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else if (m.Msg == (int)User32.WM.DPICHANGED)
                 {
-                    // Dropdownholder in PropertyGridView is already scaled based on parent font and other properties that were already set for new DPI
-                    // This case is to avoid rescaling(double scaling) of this form
+                    // Dropdownholder in PropertyGridView is already scaled based on the parent font and other
+                    // properties that were already set for the new DPI. This case is to avoid rescaling
+                    // (double scaling) of this form.
                     m.Result = IntPtr.Zero;
                     return;
                 }

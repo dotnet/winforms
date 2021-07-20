@@ -32,73 +32,28 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal static AttributeTypeSorter AttributeTypeSorter { get; } = new();
 
-        // Type flags
-        internal const int FLAG_TEXT_EDITABLE = 0x0001;
-        internal const int FLAG_ENUMERABLE = 0x0002;
-        internal const int FLAG_CUSTOM_PAINT = 0x0004;
-        internal const int FLAG_IMMEDIATELY_EDITABLE = 0x0008;
-        internal const int FLAG_CUSTOM_EDITABLE = 0x0010;
-        internal const int FLAG_DROPDOWN_EDITABLE = 0x0020;
-        internal const int FLAG_LABEL_BOLD = 0x0040;
-        internal const int FLAG_READONLY_EDITABLE = 0x0080;
-        internal const int FLAG_RENDER_READONLY = 0x0100;
-        internal const int FLAG_IMMUTABLE = 0x0200;
-        internal const int FLAG_FORCE_READONLY = 0x0400;
-        internal const int FLAG_RENDER_PASSWORD = 0x1000;
-
-        internal const int FLAG_DISPOSED = 0x2000;
-
-        internal const int FL_EXPAND = 0x00010000;
-        internal const int FL_EXPANDABLE = 0x00020000;
-        //protected const int FL_EXPANDABLE_VALID         = 0x00040000;
-        internal const int FL_EXPANDABLE_FAILED = 0x00080000;
-        internal const int FL_NO_CUSTOM_PAINT = 0x00100000;
-        internal const int FL_CATEGORIES = 0x00200000;
-        internal const int FL_CHECKED = unchecked((int)0x80000000);
-
-        // Rest are GridEntry constants.
-
-        protected const int NOTIFY_RESET = 1;
-        protected const int NOTIFY_CAN_RESET = 2;
-        protected const int NOTIFY_DBL_CLICK = 3;
-        protected const int NOTIFY_SHOULD_PERSIST = 4;
-        protected const int NOTIFY_RETURN = 5;
-
-        protected const int OUTLINE_ICON_PADDING = 5;
-
         protected static IComparer DisplayNameComparer { get; } = new DisplayNameSortComparer();
 
         private static char s_passwordReplaceChar;
 
-        // Maximum number of characters we'll show in the property grid.  Too many characters leads
-        // to bad performance.
+        // Maximum number of characters we'll show in the property grid.
+        // Too many characters leads to bad performance.
         private const int MaximumLengthOfPropertyString = 1000;
 
         private EventEntry _eventList;
-
-        [Flags]
-        internal enum PaintValueFlags
-        {
-            None = 0,
-            DrawSelected = 0x1,
-            FetchValue = 0x2,
-            CheckShouldSerialize = 0x4,
-            PaintInPlace = 0x8
-        }
-
         private CacheItems _cacheItems;
 
         protected TypeConverter Converter { get; set; }
         protected UITypeEditor Editor { get; set; }
 
-        private GridEntry _parentEntry;
-        private GridEntryCollection _childCollection;
+        private GridEntry _parent;
+        private GridEntryCollection _children;
         private int _propertyDepth;
         private bool _hasFocus;
         private Rectangle _outlineRect = Rectangle.Empty;
 
-        internal int _flags;
-        protected PropertySort PropertySort;
+        private Flags _flags;
+        protected PropertySort _propertySort;
 
         private Point _labelTipPoint = InvalidPoint;
         private Point _valueTipPoint = InvalidPoint;
@@ -116,25 +71,23 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool _lastPaintWithExplorerStyle;
 
         private static Color InvertColor(Color color)
-        {
-            return Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
-        }
+            => Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
 
-        protected GridEntry(PropertyGrid owner, GridEntry peParent)
+        protected GridEntry(PropertyGrid owner, GridEntry parent)
         {
-            _parentEntry = peParent;
+            _parent = parent;
             OwnerGrid = owner;
 
             Debug.Assert(OwnerGrid is not null, "GridEntry w/o PropertyGrid owner, text rendering will fail.");
 
-            if (peParent is not null)
+            if (parent is not null)
             {
-                _propertyDepth = peParent.PropertyDepth + 1;
-                PropertySort = peParent.PropertySort;
+                _propertyDepth = parent.PropertyDepth + 1;
+                _propertySort = parent._propertySort;
 
-                if (peParent.ForceReadOnly)
+                if (parent.ForceReadOnly)
                 {
-                    _flags |= FLAG_FORCE_READONLY;
+                    SetForceReadOnlyFlag();
                 }
             }
             else
@@ -150,15 +103,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
+                const int OutlineIconPaddingDefault = 5;
+
                 if (DpiHelper.IsScalingRequirementMet)
                 {
                     if (GridEntryHost is not null)
                     {
-                        return GridEntryHost.LogicalToDeviceUnits(OUTLINE_ICON_PADDING);
+                        return GridEntryHost.LogicalToDeviceUnits(OutlineIconPaddingDefault);
                     }
                 }
 
-                return OUTLINE_ICON_PADDING;
+                return OutlineIconPaddingDefault;
             }
         }
 
@@ -166,7 +121,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public AccessibleObject AccessibilityObject => _accessibleObject ??= GetAccessibilityObject();
 
-        protected virtual GridEntryAccessibleObject GetAccessibilityObject() => new GridEntryAccessibleObject(this);
+        protected virtual GridEntryAccessibleObject GetAccessibilityObject() => new(this);
 
         /// <summary>
         ///  Specify that this grid entry should be allowed to be merged for multi-select.
@@ -191,8 +146,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual AttributeCollection BrowsableAttributes
         {
-            get => _parentEntry?.BrowsableAttributes;
-            set => _parentEntry.BrowsableAttributes = value;
+            get => _parent?.BrowsableAttributes;
+            set => _parent.BrowsableAttributes = value;
         }
 
         /// <summary>
@@ -200,25 +155,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  return null if there is no component responsible for the call.
         /// </summary>
         public virtual IComponent Component
-        {
-            get
-            {
-                object owner = GetValueOwner();
-                if (owner is IComponent component)
-                {
-                    return component;
-                }
+            => GetValueOwner() is IComponent component ? component : (_parent?.Component);
 
-                if (_parentEntry is not null)
-                {
-                    return _parentEntry.Component;
-                }
-
-                return null;
-            }
-        }
-
-        protected virtual IComponentChangeService ComponentChangeService => _parentEntry.ComponentChangeService;
+        protected virtual IComponentChangeService ComponentChangeService => _parent.ComponentChangeService;
 
         /// <summary>
         ///  Retrieves the container that contains the set of objects this formatter may work
@@ -229,19 +168,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected GridEntryCollection ChildCollection
         {
-            get => _childCollection ??= new GridEntryCollection(this, null);
+            get => _children ??= new GridEntryCollection(this, entries: null);
             set
             {
                 Debug.Assert(value is null || !Disposed, "Why are we putting new children in after we are disposed?");
-                if (_childCollection != value)
+                if (_children != value)
                 {
-                    if (_childCollection is not null)
+                    if (_children is not null)
                     {
-                        _childCollection.Dispose();
-                        _childCollection = null;
+                        _children.Dispose();
+                        _children = null;
                     }
 
-                    _childCollection = value;
+                    _children = value;
                 }
             }
         }
@@ -252,23 +191,23 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (_childCollection is null && !Disposed)
+                if (_children is null && !Disposed)
                 {
                     CreateChildren();
                 }
 
-                return _childCollection;
+                return _children;
             }
         }
 
         public virtual PropertyTab CurrentTab
         {
-            get => _parentEntry?.CurrentTab;
+            get => _parent?.CurrentTab;
             set
             {
-                if (_parentEntry is not null)
+                if (_parent is not null)
                 {
-                    _parentEntry.CurrentTab = value;
+                    _parent.CurrentTab = value;
                 }
             }
         }
@@ -285,42 +224,42 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal virtual IDesignerHost DesignerHost
         {
-            get => _parentEntry?.DesignerHost;
+            get => _parent?.DesignerHost;
             set
             {
-                if (_parentEntry is not null)
+                if (_parent is not null)
                 {
-                    _parentEntry.DesignerHost = value;
+                    _parent.DesignerHost = value;
                 }
             }
         }
 
-        internal bool Disposed => GetFlagSet(FLAG_DISPOSED);
+        internal bool Disposed => GetFlagSet(Flags.Disposed);
 
-        internal virtual bool Enumerable => (Flags & FLAG_ENUMERABLE) != 0;
+        internal virtual bool Enumerable => (EntryFlags & Flags.Enumerable) != 0;
 
         public override bool Expandable
         {
             get
             {
-                bool fExpandable = GetFlagSet(FL_EXPANDABLE);
+                bool expandable = GetFlagSet(Flags.Expandable);
 
-                if (fExpandable && _childCollection is not null && _childCollection.Count > 0)
+                if (expandable && _children is not null && _children.Count > 0)
                 {
                     return true;
                 }
 
-                if (GetFlagSet(FL_EXPANDABLE_FAILED))
+                if (GetFlagSet(Flags.ExpandableFailed))
                 {
                     return false;
                 }
 
-                if (fExpandable && (_cacheItems is null || _cacheItems.LastValue is null) && PropertyValue is null)
+                if (expandable && (_cacheItems is null || _cacheItems.LastValue is null) && PropertyValue is null)
                 {
-                    fExpandable = false;
+                    expandable = false;
                 }
 
-                return fExpandable;
+                return expandable;
             }
         }
 
@@ -330,19 +269,21 @@ namespace System.Windows.Forms.PropertyGridInternal
             set => GridEntryHost.SetExpand(this, value);
         }
 
-        internal virtual bool ForceReadOnly => (_flags & FLAG_FORCE_READONLY) != 0;
+        internal virtual bool ForceReadOnly => (_flags & Flags.ForceReadOnly) != 0;
+
+        protected void SetForceReadOnlyFlag() => _flags |= Flags.ForceReadOnly;
 
         internal virtual bool InternalExpanded
         {
             get
             {
                 // Short circuit if we don't have children.
-                if (_childCollection is null || _childCollection.Count == 0)
+                if (_children is null || _children.Count == 0)
                 {
                     return false;
                 }
 
-                return GetFlagSet(FL_EXPAND);
+                return GetFlagSet(Flags.Expand);
             }
             set
             {
@@ -351,17 +292,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                if (_childCollection is not null && _childCollection.Count > 0)
+                if (_children is not null && _children.Count > 0)
                 {
-                    SetFlag(FL_EXPAND, value);
+                    SetFlag(Flags.Expand, value);
                 }
                 else
                 {
-                    SetFlag(FL_EXPAND, false);
+                    SetFlag(Flags.Expand, false);
                     if (value)
                     {
                         bool fMakeSure = CreateChildren();
-                        SetFlag(FL_EXPAND, fMakeSure);
+                        SetFlag(Flags.Expand, fMakeSure);
                     }
                 }
 
@@ -382,16 +323,16 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal virtual int Flags
+        public virtual Flags EntryFlags
         {
             get
             {
-                if ((_flags & FL_CHECKED) != 0)
+                if ((_flags & Flags.Checked) != 0)
                 {
                     return _flags;
                 }
 
-                _flags |= FL_CHECKED;
+                _flags |= Flags.Checked;
 
                 TypeConverter converter = TypeConverter;
                 UITypeEditor uiEditor = UITypeEditor;
@@ -405,13 +346,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (converter.GetStandardValuesSupported(this))
                 {
-                    _flags |= FLAG_ENUMERABLE;
+                    _flags |= Flags.Enumerable;
                 }
 
                 if (!forceReadOnly && converter.CanConvertFrom(this, typeof(string)) &&
                     !converter.GetStandardValuesExclusive(this))
                 {
-                    _flags |= FLAG_TEXT_EDITABLE;
+                    _flags |= Flags.TextEditable;
                 }
 
                 bool isImmutableReadOnly = TypeDescriptor.GetAttributes(PropertyType)[typeof(ImmutableObjectAttribute)]
@@ -420,38 +361,35 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (isImmutable)
                 {
-                    _flags |= FLAG_IMMUTABLE;
+                    _flags |= Flags.Immutable;
                 }
 
                 if (converter.GetPropertiesSupported(this))
                 {
-                    _flags |= FL_EXPANDABLE;
+                    _flags |= Flags.Expandable;
 
                     // If we're expandable, but we don't support editing,
                     // make us read only editable so we don't paint grey.
 
-                    if (!forceReadOnly && (_flags & FLAG_TEXT_EDITABLE) == 0 && !isImmutableReadOnly)
+                    if (!forceReadOnly && (_flags & Flags.TextEditable) == 0 && !isImmutableReadOnly)
                     {
-                        _flags |= FLAG_READONLY_EDITABLE;
+                        _flags |= Flags.ReadOnlyEditable;
                     }
                 }
 
                 if (Attributes.Contains(PasswordPropertyTextAttribute.Yes))
                 {
-                    _flags |= FLAG_RENDER_PASSWORD;
+                    _flags |= Flags.RenderPassword;
                 }
 
                 if (uiEditor is not null)
                 {
                     if (uiEditor.GetPaintValueSupported(this))
                     {
-                        _flags |= FLAG_CUSTOM_PAINT;
+                        _flags |= Flags.CustomPaint;
                     }
 
-                    // We only allow drop-downs if the object is NOT being inherited
-                    // I would really rather this not be here, but we have other places where
-                    // we make read-only properties editable if they have drop downs.  Not
-                    // sure this is the right thing... is it?
+                    // We only allow drop-downs if the object is NOT being inherited.
 
                     bool allowButtons = !forceReadOnly;
 
@@ -460,15 +398,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                         switch (uiEditor.GetEditStyle(this))
                         {
                             case UITypeEditorEditStyle.Modal:
-                                _flags |= FLAG_CUSTOM_EDITABLE;
+                                _flags |= Flags.CustomEditable;
                                 if (!isImmutable && !PropertyType.IsValueType)
                                 {
-                                    _flags |= FLAG_READONLY_EDITABLE;
+                                    _flags |= Flags.ReadOnlyEditable;
                                 }
 
                                 break;
                             case UITypeEditorEditStyle.DropDown:
-                                _flags |= FLAG_DROPDOWN_EDITABLE;
+                                _flags |= Flags.DropdownEditable;
                                 break;
                         }
                     }
@@ -476,11 +414,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 return _flags;
             }
-            set
-            {
-                _flags = value;
-            }
         }
+
+        protected void ClearFlags() => _flags = 0;
 
         /// <summary>
         ///  Checks if the entry is currently expanded.
@@ -531,24 +467,20 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                string str = null;
-                if (_parentEntry is not null)
-                {
-                    str = _parentEntry.FullLabel;
-                }
+                string label = _parent?.FullLabel;
 
-                if (str is not null)
+                if (label is not null)
                 {
-                    str += ".";
+                    label += ".";
                 }
                 else
                 {
-                    str = string.Empty;
+                    label = string.Empty;
                 }
 
-                str += PropertyLabel;
+                label += PropertyLabel;
 
-                return str;
+                return label;
             }
         }
 
@@ -561,7 +493,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     throw new ObjectDisposedException(SR.GridItemDisposed);
                 }
 
-                if (IsExpandable && _childCollection is not null && _childCollection.Count == 0)
+                if (IsExpandable && _children is not null && _children.Count == 0)
                 {
                     CreateChildren();
                 }
@@ -572,7 +504,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal virtual PropertyGridView GridEntryHost
         {
-            get => _parentEntry?.GridEntryHost;
+            get => _parent?.GridEntryHost;
             set => throw new NotSupportedException();
         }
 
@@ -593,9 +525,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 string keyWord = null;
 
-                if (_parentEntry is not null)
+                if (_parent is not null)
                 {
-                    keyWord = _parentEntry.HelpKeyword;
+                    keyWord = _parent.HelpKeyword;
                 }
 
                 if (keyWord is null)
@@ -613,32 +545,32 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                // prevent full flag population if possible.
-                if ((_flags & FL_CHECKED) == 0)
+                // Prevent full flag population if possible.
+                if ((_flags & Flags.Checked) == 0)
                 {
                     UITypeEditor typeEd = UITypeEditor;
                     if (typeEd is not null)
                     {
-                        if ((_flags & FLAG_CUSTOM_PAINT) != 0 ||
-                            (_flags & FL_NO_CUSTOM_PAINT) != 0)
+                        if ((_flags & Flags.CustomPaint) != 0 ||
+                            (_flags & Flags.NoCustomPaint) != 0)
                         {
-                            return (_flags & FLAG_CUSTOM_PAINT) != 0;
+                            return (_flags & Flags.CustomPaint) != 0;
                         }
 
                         if (typeEd.GetPaintValueSupported(this))
                         {
-                            _flags |= FLAG_CUSTOM_PAINT;
+                            _flags |= Flags.CustomPaint;
                             return true;
                         }
                         else
                         {
-                            _flags |= FL_NO_CUSTOM_PAINT;
+                            _flags |= Flags.NoCustomPaint;
                             return false;
                         }
                     }
                 }
 
-                return (Flags & FLAG_CUSTOM_PAINT) != 0;
+                return (EntryFlags & Flags.CustomPaint) != 0;
             }
         }
 
@@ -647,18 +579,21 @@ namespace System.Windows.Forms.PropertyGridInternal
             get => Expandable;
             set
             {
-                if (value != GetFlagSet(FL_EXPANDABLE))
+                if (value != GetFlagSet(Flags.Expandable))
                 {
-                    SetFlag(FL_EXPANDABLE_FAILED, false);
-                    SetFlag(FL_EXPANDABLE, value);
+                    SetFlag(Flags.ExpandableFailed, false);
+                    SetFlag(Flags.Expandable, value);
                 }
             }
         }
 
-        public virtual bool IsTextEditable => IsValueEditable && (Flags & FLAG_TEXT_EDITABLE) != 0;
+        public virtual bool IsTextEditable => IsValueEditable && (EntryFlags & Flags.TextEditable) != 0;
 
         public virtual bool IsValueEditable
-            => !ForceReadOnly && 0 != (Flags & (FLAG_DROPDOWN_EDITABLE | FLAG_TEXT_EDITABLE | FLAG_CUSTOM_EDITABLE | FLAG_ENUMERABLE));
+            => !ForceReadOnly
+            && 0 != (EntryFlags & (Flags.DropdownEditable | Flags.TextEditable | Flags.CustomEditable | Flags.Enumerable));
+
+        public bool IsImmediatelyEditable => (EntryFlags & Flags.ImmediatelyEditable) != 0;
 
         /// <summary>
         ///  Retrieves the component that is invoking the method on the formatter object.  This may
@@ -670,9 +605,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 object owner = GetValueOwner();
 
-                if (_parentEntry is not null && owner is null)
+                if (_parent is not null && owner is null)
                 {
-                    return _parentEntry.Instance;
+                    return _parent.Instance;
                 }
 
                 return owner;
@@ -702,10 +637,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal virtual string LabelToolTipText => PropertyLabel;
 
-        public virtual bool NeedsDropDownButton => (Flags & FLAG_DROPDOWN_EDITABLE) != 0;
+        public virtual bool NeedsDropDownButton => (EntryFlags & Flags.DropdownEditable) != 0;
 
         public virtual bool NeedsCustomEditorButton
-            => (Flags & FLAG_CUSTOM_EDITABLE) != 0 && (IsValueEditable || (Flags & FLAG_READONLY_EDITABLE) != 0);
+            => (EntryFlags & Flags.CustomEditable) != 0
+                && (IsValueEditable || (EntryFlags & Flags.ReadOnlyEditable) != 0);
 
         public PropertyGrid OwnerGrid { get; }
 
@@ -726,7 +662,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Assert(gridHost is not null, "No propEntryHost!");
                 int outlineSize = gridHost.GetOutlineIconSize();
                 int borderWidth = outlineSize + OutlineIconPadding;
-                int left = (_propertyDepth * borderWidth) + (OutlineIconPadding) / 2;
+                int left = (_propertyDepth * borderWidth) + OutlineIconPadding / 2;
                 int top = (gridHost.GetGridEntryHeight() - outlineSize) / 2;
                 _outlineRect = new Rectangle(left, top, outlineSize, outlineSize);
                 return _outlineRect;
@@ -743,20 +679,20 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual GridEntry ParentGridEntry
         {
-            get => _parentEntry;
+            get => _parent;
             set
             {
                 Debug.Assert(value != this, "how can we be our own parent?");
-                _parentEntry = value;
+                _parent = value;
                 if (value is not null)
                 {
                     _propertyDepth = value.PropertyDepth + 1;
 
-                    if (_childCollection is not null)
+                    if (_children is not null)
                     {
-                        for (int i = 0; i < _childCollection.Count; i++)
+                        for (int i = 0; i < _children.Count; i++)
                         {
-                            _childCollection.GetEntry(i).ParentGridEntry = this;
+                            _children.GetEntry(i).ParentGridEntry = this;
                         }
                     }
                 }
@@ -782,7 +718,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         public virtual string PropertyCategory => CategoryAttribute.Default.Category;
 
         /// <summary>
-        ///  Returns "depth" of this property.  That is, how many parent's between
+        ///  Returns "depth" of this property.  That is, how many parents between
         ///  this property and the root property.  The root property has a depth of -1.
         /// </summary>
         public virtual int PropertyDepth => _propertyDepth;
@@ -816,10 +752,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             set { }
         }
 
-        public virtual bool ShouldRenderPassword => (Flags & FLAG_RENDER_PASSWORD) != 0;
+        public virtual bool ShouldRenderPassword => (EntryFlags & Flags.RenderPassword) != 0;
 
         public virtual bool ShouldRenderReadOnly
-             => ForceReadOnly || (0 != (Flags & FLAG_RENDER_READONLY) || (!IsValueEditable && (0 == (Flags & FLAG_READONLY_EDITABLE))));
+             => ForceReadOnly
+                || 0 != (EntryFlags & Flags.RenderReadOnly)
+                || (!IsValueEditable && (0 == (EntryFlags & Flags.ReadOnlyEditable)));
 
         /// <summary>
         ///  Returns the type converter for this entry.
@@ -1009,37 +947,37 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             Debug.Assert(!Disposed, "Why are we creating children after we are disposed?");
 
-            if (!GetFlagSet(FL_EXPANDABLE))
+            if (!GetFlagSet(Flags.Expandable))
             {
-                if (_childCollection is not null)
+                if (_children is not null)
                 {
-                    _childCollection.Clear();
+                    _children.Clear();
                 }
                 else
                 {
-                    _childCollection = new GridEntryCollection(this, Array.Empty<GridEntry>());
+                    _children = new GridEntryCollection(this, Array.Empty<GridEntry>());
                 }
 
                 return false;
             }
 
-            if (!diffOldChildren && _childCollection is not null && _childCollection.Count > 0)
+            if (!diffOldChildren && _children is not null && _children.Count > 0)
             {
                 return true;
             }
 
             GridEntry[] childProps = GetPropEntries(this, PropertyValue, PropertyType);
 
-            bool fExpandable = (childProps is not null && childProps.Length > 0);
+            bool fExpandable = childProps is not null && childProps.Length > 0;
 
-            if (diffOldChildren && _childCollection is not null && _childCollection.Count > 0)
+            if (diffOldChildren && _children is not null && _children.Count > 0)
             {
                 bool same = true;
-                if (childProps.Length == _childCollection.Count)
+                if (childProps.Length == _children.Count)
                 {
                     for (int i = 0; i < childProps.Length; i++)
                     {
-                        if (!childProps[i].NonParentEquals(_childCollection[i]))
+                        if (!childProps[i].NonParentEquals(_children[i]))
                         {
                             same = false;
                             break;
@@ -1059,14 +997,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (!fExpandable)
             {
-                SetFlag(FL_EXPANDABLE_FAILED, true);
-                if (_childCollection is not null)
+                SetFlag(Flags.ExpandableFailed, true);
+                if (_children is not null)
                 {
-                    _childCollection.Clear();
+                    _children.Clear();
                 }
                 else
                 {
-                    _childCollection = new GridEntryCollection(this, Array.Empty<GridEntry>());
+                    _children = new GridEntryCollection(this, Array.Empty<GridEntry>());
                 }
 
                 if (InternalExpanded)
@@ -1076,14 +1014,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                if (_childCollection is not null)
+                if (_children is not null)
                 {
-                    _childCollection.Clear();
-                    _childCollection.AddRange(childProps);
+                    _children.Clear();
+                    _children.AddRange(childProps);
                 }
                 else
                 {
-                    _childCollection = new GridEntryCollection(this, childProps);
+                    _children = new GridEntryCollection(this, childProps);
                 }
             }
 
@@ -1099,9 +1037,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected virtual void Dispose(bool disposing)
         {
             // Make sure we don't accidentally check flags while disposing.
-            _flags |= FL_CHECKED;
+            _flags |= Flags.Checked;
 
-            SetFlag(FLAG_DISPOSED, true);
+            SetFlag(Flags.Disposed, true);
 
             _cacheItems = null;
             Converter = null;
@@ -1119,10 +1057,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual void DisposeChildren()
         {
-            if (_childCollection is not null)
+            if (_children is not null)
             {
-                _childCollection.Dispose();
-                _childCollection = null;
+                _children.Dispose();
+                _children = null;
             }
         }
 
@@ -1134,7 +1072,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Invokes the type editor for editing this item.
         /// </summary>
-        internal virtual void EditPropertyValue(PropertyGridView iva)
+        internal virtual void EditPropertyValue(PropertyGridView gridView)
         {
             if (UITypeEditor is not null)
             {
@@ -1154,14 +1092,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // Push the new value back into the property
                     if (value != originalValue && IsValueEditable)
                     {
-                        iva.CommitValue(this, value);
+                        gridView.CommitValue(this, value);
                     }
 
                     if (InternalExpanded)
                     {
-                        // QFE#3299: If edited property is expanded to show sub-properties, then we want to
+                        // If the edited property is expanded to show sub-properties, then we want to
                         // preserve the expanded states of it and all of its descendants. RecreateChildren()
-                        // has logic that is supposed to do this, but which is fundamentally flawed.
+                        // has logic that is supposed to do this, but it doesn't do so correctly.
                         PropertyGridView.GridPositionData positionData = GridEntryHost.CaptureGridPositionData();
                         InternalExpanded = false;
                         RecreateChildren();
@@ -1169,15 +1107,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     else
                     {
-                        // If edited property has no children or is collapsed, don't need to preserve expanded states.
-                        // This limits the scope of the above QFE fix to just those cases where it is actually required.
+                        // If edited property has no children or is collapsed, we don't need to preserve expanded states.
                         RecreateChildren();
                     }
                 }
                 catch (Exception e)
                 {
-                    var uiService = (IUIService)GetService(typeof(IUIService));
-                    if (uiService is not null)
+                    if (this.TryGetService(out IUIService uiService))
                     {
                         uiService.ShowError(e);
                     }
@@ -1221,9 +1157,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return property.GetValue(owner);
             }
 
-            if (_parentEntry is not null)
+            if (_parent is not null)
             {
-                return _parentEntry.FindPropertyValue(propertyName, propertyType);
+                return _parent.FindPropertyValue(propertyName, propertyType);
             }
 
             return null;
@@ -1232,7 +1168,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Returns the index of a child GridEntry.
         /// </summary>
-        internal virtual int GetChildIndex(GridEntry pe) => Children.GetEntry(pe);
+        internal virtual int GetChildIndex(GridEntry entry) => Children.GetEntry(entry);
 
         /// <summary>
         ///  Gets the components that own the current value.  This is usually the value of the
@@ -1250,7 +1186,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return null;
         }
 
-        protected int GetLabelTextWidth(string labelText, Graphics g, Font f)
+        protected int GetLabelTextWidth(string labelText, Graphics graphics, Font font)
         {
             if (_cacheItems is null)
             {
@@ -1258,22 +1194,22 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else if (_cacheItems.UseCompatTextRendering == OwnerGrid.UseCompatibleTextRendering
                 && _cacheItems.LastLabel == labelText
-                && f.Equals(_cacheItems.LastLabelFont))
+                && font.Equals(_cacheItems.LastLabelFont))
             {
                 return _cacheItems.LastLabelWidth;
             }
 
-            SizeF textSize = PropertyGrid.MeasureTextHelper.MeasureText(OwnerGrid, g, labelText, f);
+            SizeF textSize = PropertyGrid.MeasureTextHelper.MeasureText(OwnerGrid, graphics, labelText, font);
 
             _cacheItems.LastLabelWidth = (int)textSize.Width;
             _cacheItems.LastLabel = labelText;
-            _cacheItems.LastLabelFont = f;
+            _cacheItems.LastLabelFont = font;
             _cacheItems.UseCompatTextRendering = OwnerGrid.UseCompatibleTextRendering;
 
             return _cacheItems.LastLabelWidth;
         }
 
-        internal int GetValueTextWidth(string valueString, Graphics g, Font f)
+        internal int GetValueTextWidth(string valueString, Graphics graphics, Font font)
         {
             if (_cacheItems is null)
             {
@@ -1281,30 +1217,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else if (_cacheItems.LastValueTextWidth != -1
                 && _cacheItems.LastValueString == valueString
-                && f.Equals(_cacheItems.LastValueFont))
+                && font.Equals(_cacheItems.LastValueFont))
             {
                 return _cacheItems.LastValueTextWidth;
             }
 
             // Value text is rendered using GDI directly (No TextRenderer) but measured/adjusted using GDI+
             // (since previous releases), so don't use MeasureTextHelper.
-            _cacheItems.LastValueTextWidth = (int)g.MeasureString(valueString, f).Width;
+            _cacheItems.LastValueTextWidth = (int)graphics.MeasureString(valueString, font).Width;
             _cacheItems.LastValueString = valueString;
-            _cacheItems.LastValueFont = f;
+            _cacheItems.LastValueFont = font;
             return _cacheItems.LastValueTextWidth;
-        }
-
-        // To check if text contains multiple lines
-        internal bool GetMultipleLines(string valueString)
-        {
-            if (valueString.IndexOf('\n') > 0 || valueString.IndexOf('\r') > 0)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
 
         /// <summary>
@@ -1313,12 +1236,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual object GetValueOwner()
         {
-            if (_parentEntry is null)
+            if (_parent is null)
             {
                 return PropertyValue;
             }
 
-            return _parentEntry.GetChildValueOwner(this);
+            return _parent.GetChildValueOwner(this);
         }
 
         /// <summary>
@@ -1347,16 +1270,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual string GetTestingInfo()
         {
-            string str = "object = (";
-            string textVal = GetPropertyTextValue();
-            if (textVal is null)
+            string info = "object = (";
+            string textValue = GetPropertyTextValue();
+            if (textValue is null)
             {
-                textVal = "(null)";
+                textValue = "(null)";
             }
             else
             {
                 // make sure we clear any embedded nulls
-                textVal = textVal.Replace((char)0, ' ');
+                textValue = textValue.Replace((char)0, ' ');
             }
 
             Type type = PropertyType;
@@ -1365,9 +1288,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 type = typeof(object);
             }
 
-            str += $"{FullLabel}), property = ({PropertyLabel},{type.AssemblyQualifiedName}), value = [{textVal}], expandable = {Expandable}, readOnly = {ShouldRenderReadOnly}";
+            info += $"{FullLabel}), property = ({PropertyLabel},{type.AssemblyQualifiedName}), value = [{textValue}], expandable = {Expandable}, readOnly = {ShouldRenderReadOnly}";
 
-            return str;
+            return info;
         }
 
         /// <summary>
@@ -1400,123 +1323,122 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (!forceReadOnly)
                 {
-                    var readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
-                    forceReadOnly = (readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute());
+                    var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
+                    forceReadOnly = readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute();
                 }
 
                 // Do we want to expose sub properties?
-                if (TypeConverter.GetPropertiesSupported(this) || AlwaysAllowExpand)
+                if (!TypeConverter.GetPropertiesSupported(this) && !AlwaysAllowExpand)
                 {
-                    // Ask the tab if we have one.
-                    PropertyDescriptorCollection props = null;
-                    PropertyDescriptor defProp = null;
-                    if (tab is not null)
-                    {
-                        props = tab.GetProperties(this, obj, attributes);
-                        defProp = tab.GetDefaultProperty(obj);
-                    }
-                    else
-                    {
-                        props = TypeConverter.GetProperties(this, obj, attributes);
-                        defProp = TypeDescriptor.GetDefaultProperty(obj);
-                    }
+                    return entries;
+                }
 
-                    if (props is null)
+                // Ask the tab if we have one.
+                PropertyDescriptorCollection properties = null;
+                PropertyDescriptor defaultProperty = null;
+                if (tab is not null)
+                {
+                    properties = tab.GetProperties(this, obj, attributes);
+                    defaultProperty = tab.GetDefaultProperty(obj);
+                }
+                else
+                {
+                    properties = TypeConverter.GetProperties(this, obj, attributes);
+                    defaultProperty = TypeDescriptor.GetDefaultProperty(obj);
+                }
+
+                if (properties is null)
+                {
+                    return null;
+                }
+
+                if ((_propertySort & PropertySort.Alphabetical) != 0)
+                {
+                    if (objType is null || !objType.IsArray)
                     {
-                        return null;
-                    }
-
-                    if ((PropertySort & PropertySort.Alphabetical) != 0)
-                    {
-                        if (objType is null || !objType.IsArray)
-                        {
-                            props = props.Sort(DisplayNameComparer);
-                        }
-
-                        var propertyDescriptors = new PropertyDescriptor[props.Count];
-                        props.CopyTo(propertyDescriptors, 0);
-
-                        props = new PropertyDescriptorCollection(SortParenProperties(propertyDescriptors));
+                        properties = properties.Sort(DisplayNameComparer);
                     }
 
-                    if (defProp is null && props.Count > 0)
+                    var propertyDescriptors = new PropertyDescriptor[properties.Count];
+                    properties.CopyTo(propertyDescriptors, 0);
+
+                    properties = new PropertyDescriptorCollection(SortParenProperties(propertyDescriptors));
+                }
+
+                if (defaultProperty is null && properties.Count > 0)
+                {
+                    defaultProperty = properties[0];
+                }
+
+                // If the target object is an array and nothing else has provided a set of properties to use,
+                // then expand the array.
+
+                if ((properties is null || properties.Count == 0) && objType is not null && objType.IsArray && obj is not null)
+                {
+                    var objArray = (Array)obj;
+
+                    entries = new GridEntry[objArray.Length];
+
+                    for (int i = 0; i < entries.Length; i++)
                     {
-                        defProp = props[0];
-                    }
-
-                    // If the target object is an array and nothing else has provided a set of properties to use,
-                    // then expand the array.
-
-                    if ((props is null || props.Count == 0) && objType is not null && objType.IsArray && obj is not null)
-                    {
-                        var objArray = (Array)obj;
-
-                        entries = new GridEntry[objArray.Length];
-
-                        for (int i = 0; i < entries.Length; i++)
-                        {
-                            entries[i] = new ArrayElementGridEntry(OwnerGrid, peParent, i);
-                        }
-                    }
-                    else
-                    {
-                        // Otherwise, create the proper GridEntries.
-                        bool createInstanceSupported = TypeConverter.GetCreateInstanceSupported(this);
-                        entries = new GridEntry[props.Count];
-                        int index = 0;
-
-                        // Loop through all the props we got and create property descriptors.
-                        foreach (PropertyDescriptor pd in props)
-                        {
-                            GridEntry newEntry;
-
-                            // Make sure we've got a valid property, otherwise hide it.
-                            bool hide = false;
-                            try
-                            {
-                                object owner = obj;
-                                if (obj is ICustomTypeDescriptor descriptor)
-                                {
-                                    owner = descriptor.GetPropertyOwner(pd);
-                                }
-
-                                pd.GetValue(owner);
-                            }
-                            catch (Exception w)
-                            {
-                                if (s_pbrsAssertPropsSwitch.Enabled)
-                                {
-                                    Debug.Fail($"Bad property '{peParent.PropertyLabel}.{pd.Name}': {w}");
-                                }
-
-                                hide = true;
-                            }
-
-                            if (createInstanceSupported)
-                            {
-                                newEntry = new ImmutablePropertyDescriptorGridEntry(OwnerGrid, peParent, pd, hide);
-                            }
-                            else
-                            {
-                                newEntry = new PropertyDescriptorGridEntry(OwnerGrid, peParent, pd, hide);
-                            }
-
-                            if (forceReadOnly)
-                            {
-                                newEntry._flags |= FLAG_FORCE_READONLY;
-                            }
-
-                            // Check to see if we've come across the default item.
-                            if (pd.Equals(defProp))
-                            {
-                                DefaultChild = newEntry;
-                            }
-
-                            // Add it to the array.
-                            entries[index++] = newEntry;
-                        }
+                        entries[i] = new ArrayElementGridEntry(OwnerGrid, peParent, i);
                     }
                 }
+                else
+                {
+                    // Otherwise, create the proper GridEntries.
+                    bool createInstanceSupported = TypeConverter.GetCreateInstanceSupported(this);
+                    entries = new GridEntry[properties.Count];
+                    int index = 0;
+
+                    // Loop through all the props we got and create property descriptors.
+                    foreach (PropertyDescriptor property in properties)
+                    {
+                        GridEntry newEntry;
+
+                        // Make sure we've got a valid property, otherwise hide it.
+                        bool hide = false;
+                        try
+                        {
+                            object owner = obj;
+                            if (obj is ICustomTypeDescriptor descriptor)
+                            {
+                                owner = descriptor.GetPropertyOwner(property);
+                            }
+
+                            property.GetValue(owner);
+                        }
+                        catch (Exception w)
+                        {
+                            if (s_pbrsAssertPropsSwitch.Enabled)
+                            {
+                                Debug.Fail($"Bad property '{peParent.PropertyLabel}.{property.Name}': {w}");
+                            }
+
+                            hide = true;
+                        }
+
+                        newEntry = createInstanceSupported
+                            ? new ImmutablePropertyDescriptorGridEntry(OwnerGrid, peParent, property, hide)
+                            : new PropertyDescriptorGridEntry(OwnerGrid, peParent, property, hide);
+
+                        if (forceReadOnly)
+                        {
+                            newEntry._flags |= Flags.ForceReadOnly;
+                        }
+
+                        // Check to see if we've come across the default item.
+                        if (property.Equals(defaultProperty))
+                        {
+                            DefaultChild = newEntry;
+                        }
+
+                        // Add it to the array.
+                        entries[index++] = newEntry;
+                    }
+                }
+
+                return entries;
             }
             catch (Exception e)
             {
@@ -1550,19 +1472,19 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual void ResetPropertyValue()
         {
-            NotifyValue(NOTIFY_RESET);
+            NotifyValue(Notify.Reset);
             Refresh();
         }
 
         /// <summary>
         ///  Returns if the property can be reset
         /// </summary>
-        public virtual bool CanResetPropertyValue() => NotifyValue(NOTIFY_CAN_RESET);
+        public virtual bool CanResetPropertyValue() => NotifyValue(Notify.CanReset);
 
         /// <summary>
         ///  Called when the item is double clicked.
         /// </summary>
-        public virtual bool DoubleClickPropertyValue() => NotifyValue(NOTIFY_DBL_CLICK);
+        public virtual bool DoubleClickPropertyValue() => NotifyValue(Notify.DoubleClick);
 
         /// <summary>
         ///  Returns the text value of this property.
@@ -1574,24 +1496,24 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual string GetPropertyTextValue(object value)
         {
-            string str = null;
+            string textValue = null;
 
             TypeConverter converter = TypeConverter;
             try
             {
-                str = converter.ConvertToString(this, value);
+                textValue = converter.ConvertToString(this, value);
             }
             catch (Exception t)
             {
                 Debug.Fail($"Bad Type Converter! {t.GetType().Name}, {t.Message},{converter}", t.ToString());
             }
 
-            if (str is null)
+            if (textValue is null)
             {
-                str = string.Empty;
+                textValue = string.Empty;
             }
 
-            return str;
+            return textValue;
         }
 
         /// <summary>
@@ -1615,19 +1537,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Checks if a given flag is set
         /// </summary>
-        protected virtual bool GetFlagSet(int flag) => (flag & Flags) != 0;
+        protected virtual bool GetFlagSet(Flags flag) => (flag & EntryFlags) != 0;
 
-        protected Font GetFont(bool boldFont)
-        {
-            if (boldFont)
-            {
-                return GridEntryHost.GetBoldFont();
-            }
-            else
-            {
-                return GridEntryHost.GetBaseFont();
-            }
-        }
+        protected Font GetFont(bool boldFont) => boldFont ? GridEntryHost.GetBoldFont() : GridEntryHost.GetBaseFont();
 
         /// <summary>
         ///  Retrieves the requested service.  This may return null if the requested service is not available.
@@ -1639,9 +1551,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return this;
             }
 
-            if (_parentEntry is not null)
+            if (_parent is not null)
             {
-                return _parentEntry.GetService(serviceType);
+                return _parent.GetService(serviceType);
             }
 
             return null;
@@ -1676,7 +1588,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             PropertyGridView gridHost = GridEntryHost;
             Debug.Assert(gridHost is not null, "No propEntryHost");
-            string strLabel = PropertyLabel;
+            string label = PropertyLabel;
 
             int borderWidth = gridHost.GetOutlineIconSize() + OutlineIconPadding;
 
@@ -1689,10 +1601,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 backColor = gridHost.GetLineColor();
             }
 
-            bool fBold = ((Flags & FLAG_LABEL_BOLD) != 0);
-            Font font = GetFont(fBold);
+            bool bold = (EntryFlags & Flags.LabelBold) != 0;
+            Font font = GetFont(bold);
 
-            int labelWidth = GetLabelTextWidth(strLabel, g, font);
+            int labelWidth = GetLabelTextWidth(label, g, font);
 
             int neededWidth = paintFullLabel ? labelWidth : 0;
             int stringX = rect.X + PropertyLabelIndent;
@@ -1741,7 +1653,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // We need to Invert color only if in Highcontrast mode, targeting 4.7.1 and above, Gridcategory and
                 // not a developer override. This is required to achieve required contrast ratio.
-                bool shouldInvertForHC = ColorInversionNeededInHC && (fBold || (selected && !_hasFocus));
+                bool shouldInvertForHC = ColorInversionNeededInHC && (bold || (selected && !_hasFocus));
 
                 // Do actual drawing
                 // A brush is needed if using GDI+ only (UseCompatibleTextRendering); if using GDI, only the color is needed.
@@ -1758,11 +1670,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         Trimming = StringTrimming.None
                     };
-                    g.DrawString(strLabel, font, textBrush, textRect, stringFormat);
+                    g.DrawString(label, font, textBrush, textRect, stringFormat);
                 }
                 else
                 {
-                    TextRenderer.DrawText(g, strLabel, font, textRect, textColor, PropertyGrid.MeasureTextHelper.GetTextRendererFlags());
+                    TextRenderer.DrawText(g, label, font, textRect, textColor, PropertyGrid.MeasureTextHelper.GetTextRendererFlags());
                 }
 
                 g.SetClip(oldClip, CombineMode.Replace);
@@ -2012,7 +1924,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             bool doToolTip = false;
 
             // Check if text contains multiple lines.
-            if (textWidth >= rect.Width || GetMultipleLines(text))
+            if (textWidth >= rect.Width || HasMultipleLines(text))
             {
                 doToolTip = true;
             }
@@ -2074,6 +1986,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 (TextFormatFlags)format | PropertyGrid.MeasureTextHelper.GetTextRendererFlags());
 
             ValueToolTipLocation = doToolTip ? new Point(rect.X + 2, rect.Y - 1) : InvalidPoint;
+
+            static bool HasMultipleLines(string value) => value.IndexOf('\n') > 0 || value.IndexOf('\r') > 0;
         }
 
         public virtual bool OnComponentChanging()
@@ -2181,20 +2095,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Default implementation fired the event to any listeners, so be sure
         ///  to call base.OnOutlineClick(e) if this is overridden.
         /// </summary>
-        protected virtual void OnOutlineClick(EventArgs e)
-        {
-            RaiseEvent(s_outlineClickEvent, e);
-        }
+        protected virtual void OnOutlineClick(EventArgs e) => RaiseEvent(s_outlineClickEvent, e);
 
         /// <summary>
         ///  Called when the outline icon portion of this GridEntry is double-clicked.
         ///  Default implementation fired the event to any listeners, so be sure
         ///  to call base.OnOutlineDoubleClick(e) if this is overridden.
         /// </summary>
-        protected virtual void OnOutlineDoubleClick(EventArgs e)
-        {
-            RaiseEvent(s_outlineDoubleClickEvent, e);
-        }
+        protected virtual void OnOutlineDoubleClick(EventArgs e) => RaiseEvent(s_outlineDoubleClickEvent, e);
 
         /// <summary>
         ///  Called when RecreateChildren is called.
@@ -2215,50 +2123,32 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Default implementation fired the event to any listeners, so be sure
         ///  to call base.OnValueClick(e) if this is overridden.
         /// </summary>
-        protected virtual void OnValueClick(EventArgs e)
-        {
-            RaiseEvent(s_valueClickEvent, e);
-        }
+        protected virtual void OnValueClick(EventArgs e) => RaiseEvent(s_valueClickEvent, e);
 
         /// <summary>
         ///  Called when the value portion of this GridEntry is clicked.
         ///  Default implementation fired the event to any listeners, so be sure
         ///  to call base.OnValueDoubleClick(e) if this is overridden.
         /// </summary>
-        protected virtual void OnValueDoubleClick(EventArgs e)
-        {
-            RaiseEvent(s_valueDoubleClickEvent, e);
-        }
+        protected virtual void OnValueDoubleClick(EventArgs e) => RaiseEvent(s_valueDoubleClickEvent, e);
 
-        internal bool OnValueReturnKey()
-        {
-            return NotifyValue(NOTIFY_RETURN);
-        }
+        internal bool OnValueReturnKey() => NotifyValue(Notify.Return);
 
         /// <summary>
         ///  Sets the specified flag
         /// </summary>
-        protected virtual void SetFlag(int flag, bool value)
-        {
-            SetFlag(flag, (value ? flag : 0));
-        }
+        protected virtual void SetFlag(Flags flag, bool value) => SetFlag(flag, value ? flag : 0);
 
         /// <summary>
         ///  Sets the default child of this entry, given a valid value mask.
         /// </summary>
-        protected virtual void SetFlag(int flag_valid, int flag, bool value)
-        {
-            SetFlag(flag_valid | flag,
-                    flag_valid | (value ? flag : 0));
-        }
+        protected virtual void SetFlag(Flags validFlags, Flags flag, bool value)
+            => SetFlag(validFlags | flag, validFlags | (value ? flag : 0));
 
         /// <summary>
         ///  Sets the value of a flag
         /// </summary>
-        protected virtual void SetFlag(int flag, int value)
-        {
-            Flags = (Flags & ~(flag)) | value;
-        }
+        protected virtual void SetFlag(Flags flag, Flags value) => _flags = (EntryFlags & ~flag) | value;
 
         public override bool Select()
         {
@@ -2272,7 +2162,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 GridEntryHost.SelectedGridEntry = this;
                 return true;
             }
-            catch
+            catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
             {
             }
 
@@ -2292,7 +2182,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    _cacheItems.LastShouldSerialize = NotifyValue(NOTIFY_SHOULD_PERSIST);
+                    _cacheItems.LastShouldSerialize = NotifyValue(Notify.ShouldPersist);
                     _cacheItems.UseShouldSerialize = true;
                 }
             }
@@ -2300,7 +2190,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 _cacheItems = new CacheItems
                 {
-                    LastShouldSerialize = NotifyValue(NOTIFY_SHOULD_PERSIST),
+                    LastShouldSerialize = NotifyValue(Notify.ShouldPersist),
                     UseShouldSerialize = true
                 };
             }
@@ -2328,7 +2218,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            // Second pass, copy any that didn't have the parens.
+            // Second pass, copy any that didn't have the parenthesis.
             if (newPos > 0)
             {
                 for (int i = 0; i < props.Length; i++)
@@ -2348,35 +2238,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Sends a notify message to this GridEntry, and returns the success result
         /// </summary>
-        internal virtual bool NotifyValueGivenParent(object obj, int type)
-        {
-            return false;
-        }
+        protected internal virtual bool NotifyValueGivenParent(object value, Notify type) => false;
 
         /// <summary>
-        ///  Sends a notify message to the child GridEntry, and returns the success result
+        ///  Sends a notify message to the child GridEntry, and returns the success result.
         /// </summary>
-        internal virtual bool NotifyChildValue(GridEntry pe, int type)
-        {
-            return pe.NotifyValueGivenParent(pe.GetValueOwner(), type);
-        }
+        protected internal virtual bool NotifyChildValue(GridEntry entry, Notify type)
+            => entry.NotifyValueGivenParent(entry.GetValueOwner(), type);
 
-        internal virtual bool NotifyValue(int type)
-        {
-            if (_parentEntry is null)
-            {
-                return true;
-            }
-            else
-            {
-                return _parentEntry.NotifyChildValue(this, type);
-            }
-        }
+        protected internal virtual bool NotifyValue(Notify type) => _parent is null || _parent.NotifyChildValue(this, type);
 
-        internal void RecreateChildren()
-        {
-            RecreateChildren(-1);
-        }
+        internal void RecreateChildren() => RecreateChildren(-1);
 
         internal void RecreateChildren(int oldCount)
         {
@@ -2405,7 +2277,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Refresh the current GridEntry's value and it's children
+        ///  Refresh the current GridEntry's value and it's children.
         /// </summary>
         public virtual void Refresh()
         {
@@ -2415,10 +2287,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 CreateChildren(true);
             }
 
-            if (_childCollection is not null)
+            if (_children is not null)
             {
                 // Check to see if the value has changed.
-                if (InternalExpanded && _cacheItems is not null && _cacheItems.LastValue is not null && _cacheItems.LastValue != PropertyValue)
+                if (InternalExpanded && _cacheItems?.LastValue is not null && _cacheItems.LastValue != PropertyValue)
                 {
                     ClearCachedValues();
                     RecreateChildren();
@@ -2427,11 +2299,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 else if (InternalExpanded)
                 {
                     // Otherwise just do a refresh.
-                    IEnumerator childEnum = _childCollection.GetEnumerator();
+                    IEnumerator childEnum = _children.GetEnumerator();
                     while (childEnum.MoveNext())
                     {
                         object o = childEnum.Current;
-                        Debug.Assert(o is not null, "Collection contains a null element.  But how? Garbage collector hole?  GDI+ corrupting memory?");
+                        Debug.Assert(o is not null, "Collection contains a null element.");
                         ((GridEntry)o).Refresh();
                     }
                 }
@@ -2444,44 +2316,24 @@ namespace System.Windows.Forms.PropertyGridInternal
             ClearCachedValues();
         }
 
-        public virtual void RemoveOnLabelClick(EventHandler h)
-        {
-            RemoveEventHandler(s_labelClickEvent, h);
-        }
+        public virtual void RemoveOnLabelClick(EventHandler h) => RemoveEventHandler(s_labelClickEvent, h);
 
-        public virtual void RemoveOnLabelDoubleClick(EventHandler h)
-        {
-            RemoveEventHandler(s_labelDoubleClickEvent, h);
-        }
+        public virtual void RemoveOnLabelDoubleClick(EventHandler h) => RemoveEventHandler(s_labelDoubleClickEvent, h);
 
-        public virtual void RemoveOnValueClick(EventHandler h)
-        {
-            RemoveEventHandler(s_valueClickEvent, h);
-        }
+        public virtual void RemoveOnValueClick(EventHandler h) => RemoveEventHandler(s_valueClickEvent, h);
 
-        public virtual void RemoveOnValueDoubleClick(EventHandler h)
-        {
-            RemoveEventHandler(s_valueDoubleClickEvent, h);
-        }
+        public virtual void RemoveOnValueDoubleClick(EventHandler h) => RemoveEventHandler(s_valueDoubleClickEvent, h);
 
-        public virtual void RemoveOnOutlineClick(EventHandler h)
-        {
-            RemoveEventHandler(s_outlineClickEvent, h);
-        }
+        public virtual void RemoveOnOutlineClick(EventHandler h) => RemoveEventHandler(s_outlineClickEvent, h);
 
-        public virtual void RemoveOnOutlineDoubleClick(EventHandler h)
-        {
-            RemoveEventHandler(s_outlineDoubleClickEvent, h);
-        }
+        public virtual void RemoveOnOutlineDoubleClick(EventHandler h) => RemoveEventHandler(s_outlineDoubleClickEvent, h);
 
         public virtual void RemoveOnRecreateChildren(GridEntryRecreateChildrenEventHandler h)
-        {
-            RemoveEventHandler(s_recreateChildrenEvent, h);
-        }
+            => RemoveEventHandler(s_recreateChildrenEvent, h);
 
         protected void ResetState()
         {
-            Flags = 0;
+            ClearFlags();
             ClearCachedValues();
         }
 
@@ -2490,11 +2342,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual bool SetPropertyTextValue(string str)
         {
-            bool fChildrenPrior = (_childCollection is not null && _childCollection.Count > 0);
+            bool childrenPrior = _children is not null && _children.Count > 0;
             PropertyValue = ConvertTextToValue(str);
             CreateChildren();
-            bool fChildrenAfter = (_childCollection is not null && _childCollection.Count > 0);
-            return (fChildrenPrior != fChildrenAfter);
+            bool childrenAfter = _children is not null && _children.Count > 0;
+            return childrenPrior != childrenAfter;
         }
 
         public override string ToString() => $"{GetType().FullName} {PropertyLabel}";
@@ -2558,20 +2410,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                for (EventEntry e = _eventList, prev = null; e is not null; prev = e, e = e.Next)
+                for (EventEntry entry = _eventList, previous = null; entry is not null; previous = entry, entry = entry.Next)
                 {
-                    if (e.Key == key)
+                    if (entry.Key == key)
                     {
-                        e.Handler = Delegate.Remove(e.Handler, handler);
-                        if (e.Handler is null)
+                        entry.Handler = Delegate.Remove(entry.Handler, handler);
+                        if (entry.Handler is null)
                         {
-                            if (prev is null)
+                            if (previous is null)
                             {
-                                _eventList = e.Next;
+                                _eventList = entry.Next;
                             }
                             else
                             {
-                                prev.Next = e.Next;
+                                previous.Next = entry.Next;
                             }
                         }
 
@@ -2581,10 +2433,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected virtual void RemoveEventHandlers()
-        {
-            _eventList = null;
-        }
+        protected virtual void RemoveEventHandlers() => _eventList = null;
     }
 
     internal delegate void GridEntryRecreateChildrenEventHandler(object sender, GridEntryRecreateChildrenEventArgs rce);

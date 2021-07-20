@@ -15,7 +15,13 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         private static readonly PDComparer s_propertyComparer = new();
 
-        internal MultiSelectRootGridEntry(PropertyGridView view, object obj, IServiceProvider baseProvider, IDesignerHost host, PropertyTab tab, PropertySort sortType)
+        internal MultiSelectRootGridEntry(
+            PropertyGridView view,
+            object obj,
+            IServiceProvider baseProvider,
+            IDesignerHost host,
+            PropertyTab tab,
+            PropertySort sortType)
             : base(view, obj, baseProvider, host, tab, sortType)
         {
         }
@@ -26,20 +32,20 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_forceReadOnlyChecked)
                 {
-                    bool anyRO = false;
-                    foreach (object obj in (Array)_objValue)
+                    bool anyReadOnly = false;
+                    foreach (object obj in (Array)_value)
                     {
                         var readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
                         if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
                         {
-                            anyRO = true;
+                            anyReadOnly = true;
                             break;
                         }
                     }
 
-                    if (anyRO)
+                    if (anyReadOnly)
                     {
-                        _flags |= FLAG_FORCE_READONLY;
+                        SetForceReadOnlyFlag();
                     }
 
                     _forceReadOnlyChecked = true;
@@ -49,20 +55,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected override bool CreateChildren()
-        {
-            return CreateChildren(false);
-        }
+        protected override bool CreateChildren() => CreateChildren(diffOldChildren: false);
 
         protected override bool CreateChildren(bool diffOldChildren)
         {
             try
             {
-                object[] rgobjs = (object[])_objValue;
+                object[] rgobjs = (object[])_value;
 
                 ChildCollection.Clear();
 
-                MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, PropertySort, CurrentTab);
+                MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, _propertySort, CurrentTab);
 
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 
@@ -74,13 +77,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 bool fExpandable = Children.Count > 0;
                 if (!fExpandable)
                 {
-                    SetFlag(FL_EXPANDABLE_FAILED, true);
+                    SetFlag(Flags.ExpandableFailed, true);
                 }
 
                 CategorizePropEntries();
                 return fExpandable;
             }
-            catch
+            catch (Exception e) when (!ClientUtils.IsCriticalException(e))
             {
                 return false;
             }

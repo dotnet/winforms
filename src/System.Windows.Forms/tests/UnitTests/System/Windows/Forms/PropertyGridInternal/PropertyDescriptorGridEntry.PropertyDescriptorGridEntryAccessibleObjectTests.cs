@@ -22,7 +22,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             TestDropDownHolder dropDownHolder = new(testPropertyGridView);
             dropDownHolder.SetState(0x00000002, true); // Control class States.Visible flag
             testPropertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
-            gridEntry.TestAccessor().Dynamic._parentEntry = new TestGridEntry(propertyGrid, null, testPropertyGridView);
+            gridEntry.TestAccessor().Dynamic._parent = new TestGridEntry(propertyGrid, null, testPropertyGridView);
 
             UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);

@@ -1647,7 +1647,7 @@ namespace System.Windows.Forms
 
         /// <summary> Collapses all the nodes in the PropertyGrid</summary>
         public void CollapseAllGridItems()
-            => _gridView.RecursivelyExpand(_mainEntry, fInit: false, expand: false, maxExpands: -1);
+            => _gridView.RecursivelyExpand(_mainEntry, initialize: false, expand: false, maxExpands: -1);
 
         private void ClearCachedProps() => _viewTabProps?.Clear();
 
@@ -3867,7 +3867,7 @@ namespace System.Windows.Forms
         private void SetHotCommandColors()
             => _hotCommands.SetColors(SystemColors.Control, SystemColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
 
-        internal void SetStatusBox(string title, string desc) => _docComment.SetComment(title, desc);
+        internal void SetStatusBox(string title, string description) => _docComment.SetComment(title, description);
 
         private void SelectViewTabButton(ToolStripButton button, bool updateSelection)
         {
@@ -3880,7 +3880,7 @@ namespace System.Windows.Forms
 
             if (updateSelection)
             {
-                Refresh(false);
+                Refresh(clearCached: false);
             }
         }
 
@@ -4131,7 +4131,7 @@ namespace System.Windows.Forms
                 }
 
                 // Add the design page button.
-                int designpg = 0;
+                int designPage = 0;
 
                 try
                 {
@@ -4140,14 +4140,14 @@ namespace System.Windows.Forms
                         _propertyPageBitmap = ShowPropertyPageImage;
                     }
 
-                    designpg = AddImage(_propertyPageBitmap);
+                    designPage = AddImage(_propertyPageBitmap);
                 }
                 catch (Exception)
                 {
                 }
 
                 // We recreate this every time to ensure it's at the end.
-                _viewPropertyPagesButton = CreatePushButton(SR.PBRSToolTipPropertyPages, designpg, ehPP, false);
+                _viewPropertyPagesButton = CreatePushButton(SR.PBRSToolTipPropertyPages, designPage, ehPP, false);
                 _viewPropertyPagesButton.Enabled = false;
                 buttonList.Add(_viewPropertyPagesButton);
 
@@ -4290,15 +4290,15 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldForwardChildMouseMessage(Control child, MouseEventArgs me, ref Point pt)
+        private bool ShouldForwardChildMouseMessage(Control child, MouseEventArgs e, ref Point pt)
         {
             Size size = child.Size;
 
             // Are we within two pixels of the edge?
-            if (me.Y <= 1 || (size.Height - me.Y) <= 1)
+            if (e.Y <= 1 || (size.Height - e.Y) <= 1)
             {
                 // Convert the coordinates.
-                var temp = new Point(me.X, me.Y);
+                var temp = new Point(e.X, e.Y);
                 User32.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref temp, 1);
 
                 // Forward the message.
