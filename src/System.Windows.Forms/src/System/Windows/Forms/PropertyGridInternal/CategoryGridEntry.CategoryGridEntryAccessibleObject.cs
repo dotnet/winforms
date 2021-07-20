@@ -24,13 +24,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _owningCategoryGridEntry = owningCategoryGridEntry;
             }
 
-            public override AccessibleRole Role
-            {
-                get
-                {
-                    return AccessibleRole.ButtonDropDownGrid;
-                }
-            }
+            public override AccessibleRole Role => AccessibleRole.ButtonDropDownGrid;
 
             // Category is in the first column.
             internal override int Column => 0;
@@ -85,35 +79,24 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return null;
                 }
 
-                switch (direction)
+                return direction switch
                 {
-                    case UiaCore.NavigateDirection.Parent:
-                        return Parent;
-                    case UiaCore.NavigateDirection.NextSibling:
-                        return parent.GetNextCategory(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        return parent.GetPreviousCategory(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.FirstChild:
-                        return parent.GetFirstChildProperty(_owningCategoryGridEntry);
-                    case UiaCore.NavigateDirection.LastChild:
-                        return parent.GetLastChildProperty(_owningCategoryGridEntry);
-                }
-
-                return base.FragmentNavigate(direction);
+                    UiaCore.NavigateDirection.Parent => Parent,
+                    UiaCore.NavigateDirection.NextSibling => parent.GetNextCategory(_owningCategoryGridEntry),
+                    UiaCore.NavigateDirection.PreviousSibling => parent.GetPreviousCategory(_owningCategoryGridEntry),
+                    UiaCore.NavigateDirection.FirstChild => parent.GetFirstChildProperty(_owningCategoryGridEntry),
+                    UiaCore.NavigateDirection.LastChild => parent.GetLastChildProperty(_owningCategoryGridEntry),
+                    _ => base.FragmentNavigate(direction),
+                };
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
             {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.ControlTypePropertyId:
-                        // To announce expanded collapsed state control type should be appropriate:
-                        // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
-                        return UiaCore.UIA.TreeItemControlTypeId;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                // To announce expanded collapsed state control type should be appropriate:
+                // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
+                UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
+                _ => base.GetPropertyValue(propertyID),
+            };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {

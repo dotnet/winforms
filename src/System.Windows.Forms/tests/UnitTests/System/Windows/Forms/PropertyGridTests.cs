@@ -3799,7 +3799,7 @@ namespace System.Windows.Forms.Tests
             propertyGrid.Enabled = enable;
             var entry = (GridEntry)propertyGrid.SelectedGridItem;
 
-            Assert.True(entry.Flags != 0);
+            Assert.True(entry.EntryFlags != 0);
             Assert.False(propertyGrid.IsHandleCreated);
             Assert.False(button.IsHandleCreated);
         }
