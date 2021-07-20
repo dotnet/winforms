@@ -9,7 +9,6 @@ using System.Collections.Specialized;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows.Forms;

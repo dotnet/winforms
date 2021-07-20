@@ -7,7 +7,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing.Design;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.InteropServices;

@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using System.Linq;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests

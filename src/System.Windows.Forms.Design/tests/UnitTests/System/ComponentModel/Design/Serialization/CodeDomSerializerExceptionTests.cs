@@ -3,9 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Moq;

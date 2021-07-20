@@ -5,7 +5,6 @@
 using System.Diagnostics;
 using System.Drawing;
 using System.Numerics;
-using System.Threading;
 using static Interop;
 
 namespace System.Windows.Forms

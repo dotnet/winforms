@@ -4,9 +4,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using System.Windows.Forms.IntegrationTests.Common;
 using ReflectTools;
 using WFCTestLib.Log;
