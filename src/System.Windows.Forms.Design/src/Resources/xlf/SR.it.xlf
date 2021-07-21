@@ -7,6 +7,16 @@
         <target state="translated">Impossibile creare il controllo ActiveX '{0}' perché non è correttamente registrato.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleActionCheck">
+        <source>Check</source>
+        <target state="new">Check</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleActionUncheck">
+        <source>Uncheck</source>
+        <target state="new">Uncheck</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
         <target state="translated">Ancoraggio dell'editor.</target>
