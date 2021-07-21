@@ -5224,7 +5224,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
         <source>Gets or sets the anchoring for minimized MDI children.</source>
-        <target state="new">Gets or sets the anchoring for minimized MDI children.</target>
+        <target state="translated">Obtiene o establece la delimitación para elementos secundarios MDI minimizados.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
