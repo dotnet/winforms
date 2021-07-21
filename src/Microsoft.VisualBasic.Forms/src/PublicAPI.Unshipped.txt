@@ -1,0 +1,11 @@
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.MinimumSplashScreenDisplayTime(AutoPropertyValue As Integer) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.MinimumSplashScreenDisplayTime() -> Integer
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.Font() -> System.Drawing.Font
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.Font(AutoPropertyValue As System.Drawing.Font) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.HighDpiMode(AutoPropertyValue As System.Windows.Forms.HighDpiMode) -> Void
+Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventArgs.HighDpiMode() -> System.Windows.Forms.HighDpiMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.ApplyApplicationDefaults -> Microsoft.VisualBasic.ApplicationServices.ApplyApplicationDefaultsEventHandler
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HighDpiMode() -> System.Windows.Forms.HighDpiMode
+Microsoft.VisualBasic.ApplicationServices.WindowsFormsApplicationBase.HighDpiMode(value As System.Windows.Forms.HighDpiMode) -> Void
