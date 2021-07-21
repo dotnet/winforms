@@ -31,44 +31,67 @@ Namespace Microsoft.VisualBasic.ApplicationServices
     End Enum
 
     ''' <summary>
-    ''' Signature for the Startup event handler
+    ''' Signature for the ApplyApplicationDefaults event handler.
+    ''' </summary>
+    <EditorBrowsable(EditorBrowsableState.Advanced)>
+    Public Delegate Sub ApplyApplicationDefaultsEventHandler(sender As Object, e As ApplyApplicationDefaultsEventArgs)
+
+    ''' <summary>
+    ''' Signature for the Startup event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub StartupEventHandler(sender As Object, e As StartupEventArgs)
 
     ''' <summary>
-    ''' Signature for the StartupNextInstance event handler
+    ''' Signature for the StartupNextInstance event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub StartupNextInstanceEventHandler(sender As Object, e As StartupNextInstanceEventArgs)
 
     ''' <summary>
-    ''' Signature for the Shutdown event handler
+    ''' Signature for the Shutdown event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub ShutdownEventHandler(sender As Object, e As EventArgs)
 
     ''' <summary>
-    ''' Signature for the UnhandledException event handler
+    ''' Signature for the UnhandledException event handler.
     ''' </summary>
     <EditorBrowsable(EditorBrowsableState.Advanced)>
     Public Delegate Sub UnhandledExceptionEventHandler(sender As Object, e As UnhandledExceptionEventArgs)
 
     ''' <summary>
-    ''' Provides the infrastructure for the VB Windows Forms application model
+    ''' Provides the infrastructure for the VB Windows Forms application model.
     ''' </summary>
     ''' <remarks>Don't put access on this definition.</remarks>
     Partial Public Class WindowsFormsApplicationBase : Inherits ConsoleApplicationBase
 
+        ''' <summary>
+        ''' Occurs when the application is ready to accept default values for various application areas.
+        ''' </summary>
+        Public Event ApplyApplicationDefaults As ApplyApplicationDefaultsEventHandler
+
+        ''' <summary>
+        ''' Occurs when the application starts.
+        ''' </summary>
         Public Event Startup As StartupEventHandler
+
+        ''' <summary>
+        ''' Occurs when attempting to start a single-instance application and the application is already active.
+        ''' </summary>
         Public Event StartupNextInstance As StartupNextInstanceEventHandler
+
+        ''' <summary>
+        ''' Occurs when the application shuts down.
+        ''' </summary>
         Public Event Shutdown As ShutdownEventHandler
 
         ' Used to marshal a call to Dispose on the Splash Screen.
         Private Delegate Sub DisposeDelegate()
 
         ' How long a subsequent instance will wait for the original instance to get on its feet.
-        Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 ' milliseconds.  
+        Private Const SECOND_INSTANCE_TIMEOUT As Integer = 2500 ' milliseconds.
+        Friend Const MINIMUM_SPLASH_EXPOSURE_DEFAULT As Integer = 2000 ' milliseconds.
 
         Private ReadOnly _splashLock As New Object
         Private ReadOnly _appContext As WinFormsAppContext
@@ -109,15 +132,21 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         Private _splashScreen As Windows.Forms.Form
 
         ' Minimum amount of time to show the splash screen.  0 means hide as soon as the app comes up.
-        Private _minimumSplashExposure As Integer = 2000
+        Private _minimumSplashExposure As Integer = MINIMUM_SPLASH_EXPOSURE_DEFAULT
         Private _splashTimer As Timers.Timer
         Private _appSynchronizationContext As SynchronizationContext
 
         ' Informs My.Settings whether to save the settings on exit or not.
         Private _saveMySettingsOnExit As Boolean
 
+        ' The HighDpiMode the user picked from the AppDesigner or assigned to the ApplyHighDpiMode's Event.
+        Private _highDpiMode As Windows.Forms.HighDpiMode = Windows.Forms.HighDpiMode.SystemAware
+
 #Enable Warning IDE0032 ' Use auto property
 
+        ''' <summary>
+        ''' Occurs when the network availability changes.
+        ''' </summary>
         Public Custom Event NetworkAvailabilityChanged As Devices.NetworkAvailableEventHandler
             ' This is a custom event because we want to hook up the NetworkAvailabilityChanged event only
             ' if the user writes a handler for it.
@@ -185,6 +214,9 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End RaiseEvent
         End Event
 
+        ''' <summary>
+        ''' Occurs when the application encounters an unhandled exception.
+        ''' </summary>
         Public Custom Event UnhandledException As UnhandledExceptionEventHandler
 
             ' This is a custom event because we want to hook up System.Windows.Forms.Application.ThreadException
@@ -280,8 +312,6 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             ' When the startup form gets created, WinForms is going to push our context into the previous context
             ' and then restore it when Application.Run() exits.
             _appSynchronizationContext = AsyncOperationManager.SynchronizationContext
-
-            AsyncOperationManager.SynchronizationContext = New Windows.Forms.WindowsFormsSynchronizationContext()
         End Sub
 
         ''' <summary>
@@ -385,6 +415,14 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         ''' as soon as the main form becomes active.
         ''' </summary>
         ''' <value>The minimum amount of time, in milliseconds, to display the splash screen.</value>
+        ''' <remarks>
+        ''' This property, although public, used to be set in an `Overrides Function OnInitialize` _before_
+        ''' calling `MyBase.OnInitialize`. We want to phase this out, and with the introduction of the
+        ''' ApplyApplicationDefaults events have it handled in that event, rather than as awkwardly 
+        ''' as it is currently suggested to be used in the docs.
+        ''' First step for that is to make it hidden in IntelliSense.
+        ''' </remarks>
+        <EditorBrowsable(EditorBrowsableState.Never)>
         Public Property MinimumSplashScreenDisplayTime() As Integer
             Get
                 Return _minimumSplashExposure
@@ -449,12 +487,53 @@ Namespace Microsoft.VisualBasic.ApplicationServices
         <EditorBrowsable(EditorBrowsableState.Advanced), STAThread()>
         Protected Overridable Function OnInitialize(commandLineArgs As ReadOnlyCollection(Of String)) As Boolean
 
-            ' EnableVisualStyles!
+            ' Rationale for how we process the default values and how we let the user modify 
+            ' them on demand via the ApplyApplicationDefaults event.
+            ' ===========================================================================================
+            ' a) Users used to be able to set MinimumSplashScreenDisplayTime _only_ by overriding OnInitialize
+            '    in a derived class and setting `MyBase.MinimumSplashScreenDisplayTime` there.
+            '    We are picking this (probably) changed value up, and pass it to the ApplyDefaultsEvents
+            '    where it could be modified (again). So event wins over Override over default value (2 seconds).
+            ' b) We feed the default HighDpiMode (SystemAware) to the EventArgs. With the introduction of
+            '    the HighDpiMode property, we give Project System the chance to reflect the HighDpiMode
+            '    in the App Designer UI and have it code-generated based on a modified Application.myapp, which
+            '    would result it to be set in the derived constructor. (See the hidden file in the Solution Explorer
+            '    "My Project\Application.myapp\Application.Designer.vb for how those UI-set values get applied.)
+            '    Once all this is done, we give the User another chance to change the value by code through
+            '    the ApplyDefaults event.
+            Dim applicationDefaultsEventArgs = New ApplyApplicationDefaultsEventArgs(
+                MinimumSplashScreenDisplayTime,
+                HighDpiMode)
+
+            ' Overriding MinimumSplashScreenDisplayTime needs still to keep working!
+            applicationDefaultsEventArgs.MinimumSplashScreenDisplayTime = MinimumSplashScreenDisplayTime
+            RaiseEvent ApplyApplicationDefaults(Me, applicationDefaultsEventArgs)
+
+            If (applicationDefaultsEventArgs.Font IsNot Nothing) Then
+                Windows.Forms.Application.SetDefaultFont(applicationDefaultsEventArgs.Font)
+            End If
+
+            MinimumSplashScreenDisplayTime = applicationDefaultsEventArgs.MinimumSplashScreenDisplayTime
+
+            ' This creates the native window, and that means, we can no longer apply a different Default Font.
+            ' So, this is the earliest point in time to set the AsyncOperationManager's SyncContext.
+            AsyncOperationManager.SynchronizationContext = New Windows.Forms.WindowsFormsSynchronizationContext()
+
+            _highDpiMode = applicationDefaultsEventArgs.HighDpiMode
+
+            ' Then, it's applying what we got back as HighDpiMode.
+            Dim dpiSetResult = Windows.Forms.Application.SetHighDpiMode(_highDpiMode)
+            If dpiSetResult Then
+                _highDpiMode = Windows.Forms.Application.HighDpiMode
+            End If
+            Debug.Assert(dpiSetResult, "We could net set the HighDpiMode.")
+
+            ' And finally we take care of EnableVisualStyles.
             If _enableVisualStyles Then
                 Windows.Forms.Application.EnableVisualStyles()
             End If
 
-            ' We'll handle /nosplash for you.
+            ' We'll handle "/nosplash" for you.
             If Not (commandLineArgs.Contains("/nosplash") OrElse Me.CommandLineArgs.Contains("-nosplash")) Then
                 ShowSplashScreen()
             End If
@@ -701,6 +780,19 @@ Namespace Microsoft.VisualBasic.ApplicationServices
             End Get
             Set(value As Boolean)
                 _enableVisualStyles = value
+            End Set
+        End Property
+
+        ''' <summary>
+        ''' Gets or sets the HighDpiMode for the Application.
+        ''' </summary>
+        <EditorBrowsable(EditorBrowsableState.Never)>
+        Protected Property HighDpiMode() As Windows.Forms.HighDpiMode
+            Get
+                Return _highDpiMode
+            End Get
+            Set(value As Windows.Forms.HighDpiMode)
+                _highDpiMode = value
             End Set
         End Property
 
