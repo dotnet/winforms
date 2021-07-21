@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Text;
+using System.Windows.Forms.Analyzers;
 
 namespace System.Windows.Forms.Generators
 {

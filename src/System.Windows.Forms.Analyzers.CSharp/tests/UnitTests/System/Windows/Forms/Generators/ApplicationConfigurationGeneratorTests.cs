@@ -3,12 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Text;
+using System.Windows.Forms.Analyzers;
 using System.Windows.Forms.Analyzers.Tests;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Testing;
 using Microsoft.CodeAnalysis.Text;
 using Xunit;
-using static System.Windows.Forms.Generators.ApplicationConfig;
+using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Generators.Tests
 {

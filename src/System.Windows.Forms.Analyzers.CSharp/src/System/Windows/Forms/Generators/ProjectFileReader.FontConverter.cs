@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using static System.Windows.Forms.Generators.ApplicationConfig;
+using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
 namespace System.Windows.Forms.Generators
 {

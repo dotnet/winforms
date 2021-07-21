@@ -1,7 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <RootNamespace>System.Windows.Forms.Analyzers</RootNamespace>
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>Preview</LangVersion>
     <Nullable>enable</Nullable>
@@ -14,13 +13,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\ApplicationConfig.cs" Link="System\Windows\Forms\ApplicationConfig.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\ApplicationConfig.FontDescriptor.cs" Link="System\Windows\Forms\ApplicationConfig.FontDescriptor.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\ApplicationConfig.FontStyle.cs" Link="System\Windows\Forms\ApplicationConfig.FontStyle.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\ApplicationConfig.GraphicsUnit.cs" Link="System\Windows\Forms\ApplicationConfig.GraphicsUnit.cs" />
-    <Compile Include="..\..\System.Windows.Forms.Analyzers\src\System\Windows\Forms\AnalyzerConfigOptionsProviderExtensions.cs" Link="System\Windows\Forms\AnalyzerConfigOptionsProviderExtensions.cs" />
     <Compile Include="..\..\System.Windows.Forms.Primitives\src\System\Windows\Forms\HighDpiMode.cs" Link="System\Windows\Forms\HighDpiMode.cs" />
-    <None Include="..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.props" Link="System.Windows.Forms.Analyzers.props" />
   </ItemGroup>
 
   <ItemGroup>
@@ -29,6 +22,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisCSharpWorkspacesVersion)" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="$(MicrosoftCodeAnalysisVisualBasicWorkspacesVersion)" />
   </ItemGroup>
 
   <ItemGroup>
@@ -36,6 +30,10 @@
       <GenerateSource>true</GenerateSource>
       <Namespace>System</Namespace>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="System.Windows.Forms.Analyzers.props" />
   </ItemGroup>
 
 </Project>

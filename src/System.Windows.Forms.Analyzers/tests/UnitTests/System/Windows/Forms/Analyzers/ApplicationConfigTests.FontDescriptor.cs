@@ -2,11 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using static System.Windows.Forms.Generators.ApplicationConfig;
 using Xunit;
 using Xunit.Abstractions;
+using static System.Windows.Forms.Analyzers.ApplicationConfig;
 
-namespace System.Windows.Forms.Analyzers.Generators.Tests
+namespace System.Windows.Forms.Analyzers.Tests
 {
     public partial class ApplicationConfigTests
     {
