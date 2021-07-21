@@ -56,9 +56,16 @@
     <XUnitVersion>2.4.1</XUnitVersion>
     <XUnitAssertVersion>$(XUnitVersion)</XUnitAssertVersion>
     <XUnitRunnerConsoleVersion>$(XUnitVersion)</XUnitRunnerConsoleVersion>
-    <XUnitRunnerVisualStudioVersion>$(XUnitVersion)</XUnitRunnerVisualStudioVersion>
+    <XUnitRunnerVisualStudioVersion>2.4.3</XUnitRunnerVisualStudioVersion>
     <XUnitExtensibilityExecutionVersion>$(XUnitVersion)</XUnitExtensibilityExecutionVersion>
     <XUnitStaFactPackageVersion>1.0.33-beta</XUnitStaFactPackageVersion>
+  </PropertyGroup>
+  <!-- Test related -->
+  <PropertyGroup>
+    <VerifyXunitVersion>11.18.2</VerifyXunitVersion>
+    <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
+    <MicrosoftWindowsCompatibilityVersion>6.0.0-preview.4.21253.7</MicrosoftWindowsCompatibilityVersion>
+    <MoqPackageVersion>4.10.0</MoqPackageVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
@@ -70,11 +77,12 @@
   <PropertyGroup>
     <MicrosoftCodeAnalysisAnalyzersVersion>3.3.2</MicrosoftCodeAnalysisAnalyzersVersion>
     <MicrosoftCodeAnalysisCSharpWorkspacesVersion>4.0.0-1.final</MicrosoftCodeAnalysisCSharpWorkspacesVersion>
+    <MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>4.0.0-1.final</MicrosoftCodeAnalysisVisualBasicWorkspacesVersion>
+    <MicrosoftCodeAnalysisPackagesVersion>1.0.1-beta1.21265.1</MicrosoftCodeAnalysisPackagesVersion>
     <MicrosoftCodeAnalysisPublicApiAnalyzers>3.3.0-beta1.final</MicrosoftCodeAnalysisPublicApiAnalyzers>
   </PropertyGroup>
   <!-- Additional unchanging dependencies -->
   <PropertyGroup>
-    <MoqPackageVersion>4.10.0</MoqPackageVersion>
     <MicrosoftTargetingPackNETFrameworkv472PackageVersion>1.0.0</MicrosoftTargetingPackNETFrameworkv472PackageVersion>
     <MicrosoftWindowsDesktopAppRefv30PackageVersion>3.0.0</MicrosoftWindowsDesktopAppRefv30PackageVersion>
     <NewtonsoftJsonVersion>9.0.1</NewtonsoftJsonVersion>

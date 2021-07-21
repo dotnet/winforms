@@ -1,0 +1,25 @@
+<!--
+    This props file comes from dotnet/winforms. It gets ingested by dotnet/wpf and processed by
+    packaging/Microsoft.NET.Sdk.WindowsDesktop project.
+    
+    It is referenced via Microsoft.NET.Sdk.WindowsDesktop/targets/Microsoft.NET.Sdk.WindowsDesktop.props.
+   -->
+
+<Project>
+  <ItemGroup Condition="'$(UseWindowsForms)' == 'true'">
+    <!-- Known Application properties -->
+    <CompilerVisibleProperty Include="ApplicationManifest" />
+    <CompilerVisibleProperty Include="StartupObject" />
+
+    <!-- Custom Application properties -->
+    <CompilerVisibleProperty Include="ApplicationVisualStyles" />
+    <CompilerVisibleProperty Include="ApplicationDefaultFont" />
+    <CompilerVisibleProperty Include="ApplicationHighDpiMode" />
+    <CompilerVisibleProperty Include="ApplicationUseCompatibleTextRendering" />
+
+    <!-- If there is an app.manifest - let the generator explore it -->
+    <AdditionalFiles Include="$(ApplicationManifest)" Condition="'$(ApplicationManifest)' != ''" />
+
+  </ItemGroup>
+
+</Project>
