@@ -5222,11 +5222,6 @@ Do you want to replace it?</source>
         <target state="translated">조정할 수 있는 폼의 최대 크기입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
-        <source>Gets or sets the anchoring for minimized MDI children.</source>
-        <target state="new">Gets or sets the anchoring for minimized MDI children.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">폼의 주 MenuStrip을 지정합니다. 이 속성은 MDI에서 자동 병합 및 키보드 활성화에 사용됩니다.</target>
