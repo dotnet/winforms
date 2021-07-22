@@ -127,12 +127,10 @@ namespace System.Windows.Forms
                     return -1;
                 }
 
-                for (int i = 0; i < _owningListView.Items.Count; i++)
+                if (child is ListViewItem.ListViewItemBaseAccessibleObject itemAccessibleObject)
                 {
-                    if (_owningListView.Items[i].AccessibilityObject == child)
-                    {
-                        return i;
-                    }
+                    int index = itemAccessibleObject.CurrentIndex;
+                    return index < _owningListView.Items.Count ? index : -1;
                 }
 
                 return -1;
