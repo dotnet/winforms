@@ -7,6 +7,7 @@ using System.Drawing;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using static System.Windows.Forms.ComboBox;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
@@ -1844,16 +1845,273 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ComboBox_OnKeyUp_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsNotCreated()
+        {
+            using CustomComboBox comboBox = new();
+            comboBox.CreateControl();
+            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+
+            comboBox.OnKeyUp();
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+
+            // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
+            Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_OnKeyUp_Invoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
+        {
+            using CustomComboBox comboBox = new();
+            comboBox.CreateControl();
+            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+
+            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+
+            comboBox.OnKeyUp();
+
+            Assert.True(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+
+            // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
+            Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_OnMouseDown_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsNotCreated()
+        {
+            using CustomComboBox comboBox = new();
+            comboBox.CreateControl();
+            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+
+            comboBox.OnMouseDown(comboBox.PointToClient(comboBoxChildEditUiaProvider.Bounds.Location));
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+
+            // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
+            Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_OnMouseDown_Invoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
+        {
+            using CustomComboBox comboBox = new();
+            comboBox.CreateControl();
+            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+
+            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+
+            comboBox.OnMouseDown(comboBox.PointToClient(comboBoxChildEditUiaProvider.Bounds.Location));
+
+            Assert.True(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+
+            // The "RaiseAutomationCallCount" method is called from "OnTextChanged" method
+            Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_SelectedItem_Set_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
+        {
+            using CustomComboBox comboBox = new();
+            comboBox.CreateControl();
+            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.SelectedItem = comboBox.Items[0];
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+            Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_SelectedItem_Set_Invoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
+        {
+            using CustomComboBox comboBox = new();
+            comboBox.CreateControl();
+            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+
+            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+
+            comboBox.SelectedItem = comboBox.Items[0];
+
+            Assert.True(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+
+            // The "RaiseAutomationEvent" method is called from "OnTextChanged" and "OnSelectedIndexChanged" methods
+            Assert.Equal(2, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_Text_Set_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
+        {
+            using CustomComboBox comboBox = new();
+            comboBox.CreateControl();
+
+            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.Text = "Test";
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+            Assert.Equal(0, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_Text_Set_Invoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
+        {
+            using CustomComboBox comboBox = new();
+            comboBox.CreateControl();
+            CustomComboBoxChildEditUiaProvider comboBoxChildEditUiaProvider = new(comboBox, comboBox.TestAccessor().Dynamic._childEdit.Handle);
+            comboBox.TestAccessor().Dynamic._childEditAccessibleObject = comboBoxChildEditUiaProvider;
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+
+            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+
+            comboBox.Text = "Test";
+
+            Assert.True(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+
+            // The "RaiseAutomationEvent" method is called from "OnTextChanged" method
+            Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_DroppedDown_Set_True_DoesNotInvoke_RaiseAutomationPropertyChangedEvent_AccessibilityObjectIsNotCreated()
+        {
+            using CustomComboBox comboBox = new();
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.DroppedDown = true;
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+            Assert.Equal(0, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_DroppedDown_Set_False_DoesNotInvoke_RaiseAutomationPropertyChangedEvent_AccessibilityObjectIsNotCreated()
+        {
+            using CustomComboBox comboBox = new();
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.DroppedDown = true;
+            comboBox.DroppedDown = false;
+
+            Assert.False(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+            Assert.Equal(0, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_DroppedDownProperty_Set_True_Invoke_RaiseAutomationPropertyChangedEvent_AccessibilityObjectIsCreated()
+        {
+            using CustomComboBox comboBox = new();
+
+            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.DroppedDown = true;
+
+            Assert.True(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+
+            // The "RaiseAutomationPropertyChangedEvent" method is called from "OnDropDown" method
+            Assert.Equal(1, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_DroppedDownProperty_Set_False_Invoke_RaiseAutomationPropertyChangedEvent_AccessibilityObjectIsCreated()
+        {
+            using CustomComboBox comboBox = new();
+
+            Assert.IsType<CustomComboBoxAccessibleObject>(comboBox.AccessibilityObject);
+
+            comboBox.Items.Add("item1");
+            comboBox.Items.Add("item2");
+            comboBox.DroppedDown = true;
+            comboBox.DroppedDown = false;
+
+            Assert.True(comboBox.IsAccessibilityObjectCreated);
+            Assert.True(comboBox.IsHandleCreated);
+
+            // The "RaiseAutomationPropertyChangedEvent" method is called from "OnDropDown" and "OnDropDownClosed" method
+            Assert.Equal(2, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
+        }
+
         private class CustomComboBox : ComboBox
         {
             protected override AccessibleObject CreateAccessibilityInstance()
                 => new CustomComboBoxAccessibleObject(this);
+
+            public void OnKeyUp() => base.OnKeyUp(new KeyEventArgs(Keys.Left));
+
+            public void OnMouseDown(Point p) => base.OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, p.X, p.Y, 0));
         }
 
         private class CustomComboBoxAccessibleObject : Control.ControlAccessibleObject
         {
             public CustomComboBoxAccessibleObject(ComboBox owner) : base(owner)
             { }
+
+            internal int RaiseAutomationCallCount;
+
+            internal override bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
+            {
+                RaiseAutomationCallCount++;
+                return base.RaiseAutomationPropertyChangedEvent(propertyId, oldValue, newValue);
+            }
+        }
+
+        private class CustomComboBoxChildEditUiaProvider : ComboBoxChildEditUiaProvider
+        {
+            public CustomComboBoxChildEditUiaProvider(ComboBox owner, IntPtr childEditControlhandle) : base(owner, childEditControlhandle)
+            {
+                RaiseAutomationCallCount = 0;
+            }
+
+            internal int RaiseAutomationCallCount;
+
+            internal override bool RaiseAutomationEvent(UiaCore.UIA eventId)
+            {
+                RaiseAutomationCallCount++;
+                return base.RaiseAutomationEvent(eventId);
+            }
         }
 
         private class SubComboBox : ComboBox
