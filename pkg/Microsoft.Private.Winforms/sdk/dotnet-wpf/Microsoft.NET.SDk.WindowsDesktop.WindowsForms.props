@@ -8,8 +8,8 @@
 <Project>
   <!--
     ============================================================
-                                     GenerateImplicitNamespaceImports
-    Generates implicit namespace imports source to intermediate directory for C# projects
+                      GenerateImplicitNamespaceImports
+    Generates implicit namespace imports source to intermediate directory for Windows Forms projects
     ============================================================
     -->
   <ItemGroup Condition="'$(DisableImplicitNamespaceImports_WindowsForms)' != 'true'

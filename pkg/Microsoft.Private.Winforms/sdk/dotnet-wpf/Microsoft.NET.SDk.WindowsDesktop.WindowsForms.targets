@@ -8,8 +8,8 @@
 <Project>
   <!--
     ============================================================
-                                     GenerateImplicitNamespaceImports
-    Generates implicit namespace imports source to intermediate directory for C# projects
+                      GenerateImplicitNamespaceImports
+    Controls the implicit namespace imports for Windows Forms projects
     ============================================================
     -->
   <PropertyGroup>
