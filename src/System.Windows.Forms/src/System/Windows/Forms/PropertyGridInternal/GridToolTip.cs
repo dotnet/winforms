@@ -25,8 +25,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = 0; i < controls.Length; i++)
             {
-                controls[i].HandleCreated += new EventHandler(OnControlCreateHandle);
-                controls[i].HandleDestroyed += new EventHandler(OnControlDestroyHandle);
+                controls[i].HandleCreated += OnControlCreateHandle;
+                controls[i].HandleDestroyed += OnControlDestroyHandle;
 
                 if (controls[i].IsHandleCreated)
                 {
@@ -37,10 +37,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public string ToolTip
         {
-            get
-            {
-                return _toolTipText;
-            }
+            get => _toolTipText;
             set
             {
                 if (IsHandleCreated || !string.IsNullOrEmpty(value))
@@ -50,7 +47,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (value is not null && value.Length > MaximumToolTipLength)
                 {
-                    //Let the user know the text was truncated by throwing on an ellipsis
+                    // Let the user know the text was truncated by throwing on an ellipsis.
                     value = value.Substring(0, MaximumToolTipLength) + "...";
                 }
 
@@ -65,8 +62,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         Visible = false;
                     }
 
-                    // Here's a workaround.  If we give the tooltip an empty string, it won't come back
-                    // so we just force it hidden instead.
+                    // If we give the tooltip an empty string, it won't come back so we just force it hidden instead.
                     _dontShow = string.IsNullOrEmpty(value);
 
                     for (int i = 0; i < _controls.Length; i++)
@@ -94,6 +90,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     dwICC = ComCtl32.ICC.TAB_CLASSES
                 };
+
                 ComCtl32.InitCommonControlsEx(ref icc);
 
                 var cp = new CreateParams
@@ -101,6 +98,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Parent = IntPtr.Zero,
                     ClassName = ComCtl32.WindowClasses.TOOLTIPS_CLASS
                 };
+
                 cp.Style |= (int)(ComCtl32.TTS.ALWAYSTIP | ComCtl32.TTS.NOPREFIX);
                 cp.ExStyle = 0;
                 cp.Caption = ToolTip;
@@ -109,12 +107,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         private ComCtl32.ToolInfoWrapper<Control> GetTOOLINFO(Control c)
-            => new ComCtl32.ToolInfoWrapper<Control>(c, ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS, _toolTipText);
+            => new(c, ComCtl32.TTF.TRANSPARENT | ComCtl32.TTF.SUBCLASS, _toolTipText);
 
-        private void OnControlCreateHandle(object sender, EventArgs e)
-        {
-            SetupToolTip((Control)sender);
-        }
+        private void OnControlCreateHandle(object sender, EventArgs e) => SetupToolTip((Control)sender);
 
         private void OnControlDestroyHandle(object sender, EventArgs e)
         {
@@ -152,7 +147,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Setting the max width has the added benefit of enabling multiline tool tips
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                User32.SendMessageW(
+                    this,
+                    (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
+                    IntPtr.Zero,
+                    (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
@@ -160,7 +159,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             // This resets the tooltip state, which can get broken when we leave the window
             // then reenter. So we set the tooltip to null, update the text, then it back to
-            // what it was, so the tooltip thinks it's back in the regular state again
+            // what it was, so the tooltip thinks it's back in the regular state again.
 
             string oldText = ToolTip;
             _toolTipText = string.Empty;

@@ -89,7 +89,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private Control _currentEditor;
         private ScrollBar _scrollBar;
         private GridToolTip _toolTip;
-        private GridErrorDlg _errorDialog;
+        private GridErrorDialog _errorDialog;
 
         // Flags
         private const short FlagNeedsRefresh = 0x0001;
@@ -439,7 +439,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         // Use caution and check at all DPI scaling factors if adding a new message
         // to be displayed in the top pane.
 
-        private GridErrorDlg ErrorDialog => _errorDialog ??= new GridErrorDlg(OwnerGrid);
+        private GridErrorDialog ErrorDialog => _errorDialog ??= new GridErrorDialog(OwnerGrid);
 
         private bool HasEntries => TopLevelGridEntries is not null && TopLevelGridEntries.Count > 0;
 

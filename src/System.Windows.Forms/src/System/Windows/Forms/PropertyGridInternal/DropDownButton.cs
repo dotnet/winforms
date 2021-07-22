@@ -20,8 +20,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             SetAccessibleName();
         }
 
-        // when the holder is open, we don't fire clicks
-        //
+        // When the holder is open, we don't fire clicks.
         public bool IgnoreMouse { get; set; }
 
         /// <summary>
@@ -74,19 +73,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (Application.RenderWithVisualStyles & _useComboBoxTheme)
             {
-                ComboBoxState cbState = ComboBoxState.Normal;
+                ComboBoxState state = ComboBoxState.Normal;
 
                 if (MouseIsDown)
                 {
-                    cbState = ComboBoxState.Pressed;
+                    state = ComboBoxState.Pressed;
                 }
                 else if (MouseIsOver)
                 {
-                    cbState = ComboBoxState.Hot;
+                    state = ComboBoxState.Hot;
                 }
 
                 Rectangle dropDownButtonRect = new Rectangle(0, 0, Width, Height);
-                if (cbState == ComboBoxState.Normal)
+                if (state == ComboBoxState.Normal)
                 {
                     pevent.Graphics.FillRectangle(SystemBrushes.Window, dropDownButtonRect);
                 }
@@ -96,13 +95,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ComboBoxRenderer.DrawDropDownButtonForHandle(
                         hdc,
                         dropDownButtonRect,
-                        cbState,
+                        state,
                         DpiHelper.IsScalingRequirementMet ? HandleInternal : IntPtr.Zero);
                 }
 
-                // Redraw focus cues
-                // For consistency with other PropertyGrid buttons, i.e. those opening system dialogs ("..."), that always show visual cues when focused,
-                // we need to do the same for this custom button, painted as ComboBox control part (drop-down).
+                // Redraw focus cues.
+                //
+                // For consistency with other PropertyGrid buttons, i.e. those opening system dialogs ("..."), that
+                // always show visual cues when focused, we need to do the same for this custom button, painted as
+                // a ComboBox control part (drop-down).
                 if (Focused)
                 {
                     dropDownButtonRect.Inflate(-1, -1);
@@ -121,28 +122,17 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void SetAccessibleName()
         {
-            if (_useComboBoxTheme)
-            {
-                AccessibleName = SR.PropertyGridDropDownButtonComboBoxAccessibleName;
-            }
-            else
-            {
-                AccessibleName = SR.PropertyGridDropDownButtonAccessibleName;
-            }
+            AccessibleName = _useComboBoxTheme
+                ? SR.PropertyGridDropDownButtonComboBoxAccessibleName
+                : SR.PropertyGridDropDownButtonAccessibleName;
         }
 
         /// <summary>
         ///  Constructs the new instance of the accessibility object for this control.
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new DropDownButtonAccessibleObject(this);
-        }
+        protected override AccessibleObject CreateAccessibilityInstance() => new DropDownButtonAccessibleObject(this);
 
-        internal override ButtonBaseAdapter CreateStandardAdapter()
-        {
-            return new DropDownButtonAdapter(this);
-        }
+        internal override ButtonBaseAdapter CreateStandardAdapter() => new DropDownButtonAdapter(this);
     }
 }

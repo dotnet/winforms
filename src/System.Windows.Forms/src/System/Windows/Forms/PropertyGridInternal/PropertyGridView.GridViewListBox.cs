@@ -53,14 +53,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <returns>The accessibility object instance.</returns>
             protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new GridViewListBoxAccessibleObject(this);
-            }
+                => new GridViewListBoxAccessibleObject(this);
 
-            public virtual bool InSetSelectedIndex()
-            {
-                return _inSetSelectedIndex;
-            }
+            public virtual bool InSetSelectedIndex() => _inSetSelectedIndex;
 
             protected override void OnSelectedIndexChanged(EventArgs e)
             {

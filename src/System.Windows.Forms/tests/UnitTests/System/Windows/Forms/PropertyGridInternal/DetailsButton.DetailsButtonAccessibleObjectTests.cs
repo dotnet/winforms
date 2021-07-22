@@ -13,7 +13,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         public void DetailsButtonAccessibleObject_Ctor_Default()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
-            using GridErrorDlg gridErrorDlg = new GridErrorDlg(propertyGrid);
+            using GridErrorDialog gridErrorDlg = new GridErrorDialog(propertyGrid);
             using DetailsButton detailsButton = new DetailsButton(gridErrorDlg);
             DetailsButton.DetailsButtonAccessibleObject accessibleObject = new DetailsButton.DetailsButtonAccessibleObject(detailsButton);
 
@@ -27,7 +27,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         public void DetailsButtonAccessibleObject_ControlType_IsButton_IfAccessibleRoleIsDefault()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
-            using GridErrorDlg gridErrorDlg = new GridErrorDlg(propertyGrid);
+            using GridErrorDialog gridErrorDlg = new GridErrorDialog(propertyGrid);
             using DetailsButton detailsButton = new DetailsButton(gridErrorDlg);
             // AccessibleRole is not set = Default
 
@@ -45,7 +45,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         public void DetailsButtonAccessibleObject_Role_IsPushButton_ByDefault(bool createControl, AccessibleRole expectedRole)
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
-            using GridErrorDlg gridErrorDlg = new GridErrorDlg(propertyGrid);
+            using GridErrorDialog gridErrorDlg = new GridErrorDialog(propertyGrid);
             using DetailsButton detailsButton = new DetailsButton(gridErrorDlg);
             // AccessibleRole is not set = Default
 

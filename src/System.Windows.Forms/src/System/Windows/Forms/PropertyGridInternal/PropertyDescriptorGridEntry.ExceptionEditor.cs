@@ -19,29 +19,28 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
             {
-                if (value is Exception except)
+                if (value is Exception ex)
                 {
-                    IUIService uis = null;
-
-                    if (context is not null)
+                    if (context.TryGetService(out IUIService uiService))
                     {
-                        uis = (IUIService)context.GetService(typeof(IUIService));
-                    }
-
-                    if (uis is not null)
-                    {
-                        uis.ShowError(except);
+                        uiService.ShowError(ex);
                     }
                     else
                     {
-                        string message = except.Message;
+                        string message = ex.Message;
                         if (message is null || message.Length == 0)
                         {
-                            message = except.ToString();
+                            message = ex.ToString();
                         }
 
-                        RTLAwareMessageBox.Show(null, message, SR.PropertyGridExceptionInfo,
-                            MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
+                        RTLAwareMessageBox.Show(
+                            null,
+                            message,
+                            SR.PropertyGridExceptionInfo,
+                            MessageBoxButtons.OK,
+                            MessageBoxIcon.Error,
+                            MessageBoxDefaultButton.Button1,
+                            0);
                     }
                 }
 
@@ -53,9 +52,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  is not supported, this will return None.
             /// </summary>
             public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
-            {
-                return UITypeEditorEditStyle.Modal;
-            }
+                => UITypeEditorEditStyle.Modal;
         }
     }
 }

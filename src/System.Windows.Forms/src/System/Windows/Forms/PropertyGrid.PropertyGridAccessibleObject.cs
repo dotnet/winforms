@@ -120,13 +120,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
             /// <summary>
             ///  Gets the accessible child corresponding to the specified index.

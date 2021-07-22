@@ -1151,10 +1151,10 @@ override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~static readonly System.Windows.Forms.FontDialog.EventApply -> object
 ~static readonly System.Windows.Forms.OSFeature.LayeredWindows -> object
 ~static readonly System.Windows.Forms.OSFeature.Themes -> object
-~static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Commands -> System.ComponentModel.Design.CommandID
-~static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Description -> System.ComponentModel.Design.CommandID
-~static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Hide -> System.ComponentModel.Design.CommandID
-~static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Reset -> System.ComponentModel.Design.CommandID
+static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Commands -> System.ComponentModel.Design.CommandID!
+static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Description -> System.ComponentModel.Design.CommandID!
+static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Hide -> System.ComponentModel.Design.CommandID!
+static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Reset -> System.ComponentModel.Design.CommandID!
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents) -> System.Resources.ResXResourceReader
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.ComponentModel.Design.ITypeResolutionService typeResolver) -> System.Resources.ResXResourceReader
 ~static System.Resources.ResXResourceReader.FromFileContents(string fileContents, System.Reflection.AssemblyName[] assemblyNames) -> System.Resources.ResXResourceReader

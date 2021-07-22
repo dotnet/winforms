@@ -109,6 +109,9 @@ namespace System.Windows.Forms
         private static Size s_normalButtonSize = s_defaultNormalButtonSize;
         private static bool s_isScalingInitialized;
 
+        private string _propertyName;
+        private int _copyDataMessage;
+
         private Flags _flags;
 
         private bool GetFlag(Flags flag) => (_flags & flag) != 0;
@@ -121,7 +124,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                _flags &= (Flags)~flag;
+                _flags &= ~flag;
             }
         }
 
@@ -388,13 +391,10 @@ namespace System.Windows.Forms
                     _browsableAttributes = new(attributes);
                 }
 
-                if (_currentObjects is not null && _currentObjects.Length > 0)
+                if (_currentObjects is not null && _currentObjects.Length > 0 && _mainEntry is not null)
                 {
-                    if (_mainEntry is not null)
-                    {
-                        _mainEntry.BrowsableAttributes = BrowsableAttributes;
-                        Refresh(true);
-                    }
+                    _mainEntry.BrowsableAttributes = BrowsableAttributes;
+                    Refresh(clearCached: true);
                 }
             }
         }
@@ -534,7 +534,7 @@ namespace System.Windows.Forms
 
                 if (hotcommandsVisible != _hotCommands.Visible)
                 {
-                    OnLayoutInternal(false);
+                    OnLayoutInternal(dividerOnly: false);
                     _hotCommands.Invalidate();
                 }
             }
@@ -913,14 +913,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    SelectedObjects = Array.Empty<object>();
-                }
-                else
-                {
-                    SelectedObjects = new object[] { value };
-                }
+                SelectedObjects = value is null ? Array.Empty<object>() : (new object[] { value });
             }
         }
 
@@ -1013,7 +1006,7 @@ namespace System.Windows.Forms
 
                         SetStatusBox(string.Empty, string.Empty);
 
-                        ClearCachedProps();
+                        ClearCachedProperties();
 
                         // The default selected entry might still reference the previous selected
                         // objects. Set it to null to avoid leaks.
@@ -1150,12 +1143,12 @@ namespace System.Windows.Forms
                             // Get the active designer and see if we've stashed away state for it.
                             if (designerKey is not null && _designerSelections is not null && _designerSelections.ContainsKey(designerKey.GetHashCode()))
                             {
-                                int nButton = (int)_designerSelections[designerKey.GetHashCode()];
+                                int buttonIndex = (int)_designerSelections[designerKey.GetHashCode()];
 
                                 // Yes, we know this one.  Make sure it's selected.
-                                if (nButton < _viewTabs.Length && (nButton == PropertiesTabIndex || _viewTabButtons[nButton].Visible))
+                                if (buttonIndex < _viewTabs.Length && (buttonIndex == PropertiesTabIndex || _viewTabButtons[buttonIndex].Visible))
                                 {
-                                    SelectViewTabButton(_viewTabButtons[nButton], true);
+                                    SelectViewTabButton(_viewTabButtons[buttonIndex], true);
                                 }
                             }
                             else
@@ -1312,15 +1305,7 @@ namespace System.Windows.Forms
 
         protected ToolStripRenderer ToolStripRenderer
         {
-            get
-            {
-                if (_toolStrip is not null)
-                {
-                    return _toolStrip.Renderer;
-                }
-
-                return null;
-            }
+            get => _toolStrip?.Renderer;
             set
             {
                 if (_toolStrip is not null)
@@ -1517,7 +1502,7 @@ namespace System.Windows.Forms
 
         internal void AddTab(Type tabType, PropertyTabScope scope)
         {
-            AddRefTab(tabType, null, scope, true);
+            AddRefTab(tabType, component: null, scope, setupToolbar: true);
         }
 
         internal void AddRefTab(Type tabType, object component, PropertyTabScope type, bool setupToolbar)
@@ -1588,7 +1573,7 @@ namespace System.Windows.Forms
                                 continue;
                             }
 
-                            if (string.Compare(tab.TabName, _viewTabs[i].TabName, false, CultureInfo.InvariantCulture) < 0)
+                            if (string.Compare(tab.TabName, _viewTabs[i].TabName, ignoreCase: false, CultureInfo.InvariantCulture) < 0)
                             {
                                 tabIndex = i;
                                 break;
@@ -1619,22 +1604,22 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    object[] tabComps = tab.Components;
-                    int oldArraySize = tabComps is null ? 0 : tabComps.Length;
+                    object[] tabComponents = tab.Components;
+                    int oldArraySize = tabComponents is null ? 0 : tabComponents.Length;
 
-                    object[] newComps = new object[oldArraySize + 1];
+                    object[] newComponents = new object[oldArraySize + 1];
                     if (oldArraySize > 0)
                     {
-                        Array.Copy(tabComps, newComps, oldArraySize);
+                        Array.Copy(tabComponents, newComponents, oldArraySize);
                     }
 
-                    newComps[oldArraySize] = component;
-                    tab.Components = newComps;
+                    newComponents[oldArraySize] = component;
+                    tab.Components = newComponents;
                 }
                 catch (Exception e)
                 {
                     Debug.Fail("Bad tab. We're going to remove it.", e.ToString());
-                    RemoveTab(tabIndex, false);
+                    RemoveTab(tabIndex, setupToolbar: false);
                 }
             }
 
@@ -1649,7 +1634,7 @@ namespace System.Windows.Forms
         public void CollapseAllGridItems()
             => _gridView.RecursivelyExpand(_mainEntry, initialize: false, expand: false, maxExpands: -1);
 
-        private void ClearCachedProps() => _viewTabProps?.Clear();
+        private void ClearCachedProperties() => _viewTabProps?.Clear();
 
         internal void ClearCachedValues() => _mainEntry?.ClearCachedValues();
 
@@ -1663,7 +1648,7 @@ namespace System.Windows.Forms
         {
             if (tabScope < PropertyTabScope.Document)
             {
-                throw new ArgumentException(SR.PropertyGridTabScope);
+                throw new ArgumentException(SR.PropertyGridTabScope, nameof(tabScope));
             }
 
             RemoveTabs(tabScope, true);
@@ -1722,7 +1707,7 @@ namespace System.Windows.Forms
             if (tab is null)
             {
                 ConstructorInfo constructor = tabType.GetConstructor(new Type[] { typeof(IServiceProvider) });
-                object param = null;
+                object parameter = null;
                 if (constructor is null)
                 {
                     // Try a IDesignerHost constructor.
@@ -1730,17 +1715,17 @@ namespace System.Windows.Forms
 
                     if (constructor is not null)
                     {
-                        param = host;
+                        parameter = host;
                     }
                 }
                 else
                 {
-                    param = Site;
+                    parameter = Site;
                 }
 
-                if (param is not null && constructor is not null)
+                if (parameter is not null && constructor is not null)
                 {
-                    tab = (PropertyTab)constructor.Invoke(new object[] { param });
+                    tab = (PropertyTab)constructor.Invoke(new object[] { parameter });
                 }
                 else
                 {
@@ -1851,7 +1836,7 @@ namespace System.Windows.Forms
 
                 if (hotCommandsDisplayed != _hotCommands.Visible)
                 {
-                    OnLayoutInternal(false);
+                    OnLayoutInternal(dividerOnly: false);
                 }
             }
         }
@@ -1916,7 +1901,7 @@ namespace System.Windows.Forms
                     SinkPropertyNotifyEvents();
                 }
 
-                ClearCachedProps();
+                ClearCachedProperties();
                 _currentEntries = null;
             }
 
@@ -1943,9 +1928,9 @@ namespace System.Windows.Forms
 
             if (_hotCommands.Visible)
             {
-                Point locDoc = _hotCommands.Location;
-                if (y >= (locDoc.Y - s_cyDivider) &&
-                    y <= (locDoc.Y + 1))
+                Point location = _hotCommands.Location;
+                if (y >= (location.Y - s_cyDivider) &&
+                    y <= (location.Y + 1))
                 {
                     return _hotCommands;
                 }
@@ -1955,9 +1940,9 @@ namespace System.Windows.Forms
 
             if (_docComment.Visible)
             {
-                Point locDoc = _docComment.Location;
-                if (y >= (locDoc.Y - s_cyDivider) &&
-                    y <= (locDoc.Y + 1))
+                Point location = _docComment.Location;
+                if (y >= (location.Y - s_cyDivider) &&
+                    y <= (location.Y + 1))
                 {
                     return _docComment;
                 }
@@ -2211,9 +2196,7 @@ namespace System.Windows.Forms
         }
 
         public void ExpandAllGridItems()
-        {
-            _gridView.RecursivelyExpand(_mainEntry, false, true, PropertyGridView.MaxRecurseExpand);
-        }
+            => _gridView.RecursivelyExpand(_mainEntry, initialize: false, expand: true, PropertyGridView.MaxRecurseExpand);
 
         private static Type[] GetCommonTabs(object[] objs, PropertyTabScope tabScope)
         {
@@ -2445,7 +2428,7 @@ namespace System.Windows.Forms
 
                 if (update)
                 {
-                    OnLayoutInternal(false);
+                    OnLayoutInternal(dividerOnly: false);
                 }
             }
         }
@@ -2490,7 +2473,7 @@ namespace System.Windows.Forms
             {
                 if (!_gridView.GetInPropertySet() || fullRefresh)
                 {
-                    Refresh(fullRefresh);
+                    Refresh(clearCached: fullRefresh);
                 }
 
                 // This is so changes to names of native objects will be reflected in the combo box.
@@ -2507,13 +2490,13 @@ namespace System.Windows.Forms
         /// <summary>
         ///  We forward messages from several of our children to our mouse move so we can put up the splitter over their borders
         /// </summary>
-        private void OnChildMouseMove(object sender, MouseEventArgs me)
+        private void OnChildMouseMove(object sender, MouseEventArgs e)
         {
-            Point newPt = Point.Empty;
-            if (ShouldForwardChildMouseMessage((Control)sender, me, ref newPt))
+            Point newPoint = Point.Empty;
+            if (ShouldForwardChildMouseMessage((Control)sender, e, ref newPoint))
             {
                 // Forward the message
-                OnMouseMove(new MouseEventArgs(me.Button, me.Clicks, newPt.X, newPt.Y, me.Delta));
+                OnMouseMove(new MouseEventArgs(e.Button, e.Clicks, newPoint.X, newPoint.Y, e.Delta));
                 return;
             }
         }
@@ -2522,14 +2505,14 @@ namespace System.Windows.Forms
         ///  We forward messages from several of our children
         ///  to our mouse move so we can put up the splitter over their borders
         /// </summary>
-        private void OnChildMouseDown(object sender, MouseEventArgs me)
+        private void OnChildMouseDown(object sender, MouseEventArgs e)
         {
-            Point newPt = Point.Empty;
+            Point newPoint = Point.Empty;
 
-            if (ShouldForwardChildMouseMessage((Control)sender, me, ref newPt))
+            if (ShouldForwardChildMouseMessage((Control)sender, e, ref newPoint))
             {
                 // Forward the message
-                OnMouseDown(new MouseEventArgs(me.Button, me.Clicks, newPt.X, newPt.Y, me.Delta));
+                OnMouseDown(new MouseEventArgs(e.Button, e.Clicks, newPoint.X, newPoint.Y, e.Delta));
                 return;
             }
         }
@@ -2572,7 +2555,7 @@ namespace System.Windows.Forms
             {
                 if (_currentObjects[i] == e.Component)
                 {
-                    Refresh(false);
+                    Refresh(clearCached: false);
                     break;
                 }
             }
@@ -2642,17 +2625,17 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            OnLayoutInternal(false);
-            TypeDescriptor.Refreshed += new RefreshEventHandler(OnTypeDescriptorRefreshed);
+            OnLayoutInternal(dividerOnly: false);
+            TypeDescriptor.Refreshed += OnTypeDescriptorRefreshed;
             if (_currentObjects is not null && _currentObjects.Length > 0)
             {
-                Refresh(true);
+                Refresh(clearCached: true);
             }
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            TypeDescriptor.Refreshed -= new RefreshEventHandler(OnTypeDescriptorRefreshed);
+            TypeDescriptor.Refreshed -= OnTypeDescriptorRefreshed;
             base.OnHandleDestroyed(e);
         }
 
@@ -2932,7 +2915,7 @@ namespace System.Windows.Forms
                 size.Height = Math.Max(0, yNew);
                 _targetMove.Size = size;
                 _targetMove.UserSized = true;
-                OnLayoutInternal(true);
+                OnLayoutInternal(dividerOnly: true);
 
                 // Invalidate the divider area so we cleanup anything left by the xor.
                 Invalidate(new Rectangle(0, me.Y - s_cyDivider, Size.Width, me.Y + s_cyDivider));
@@ -2963,7 +2946,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && Visible)
             {
-                OnLayoutInternal(false);
+                OnLayoutInternal(dividerOnly: false);
             }
 
             base.OnResize(e);
@@ -3146,9 +3129,9 @@ namespace System.Windows.Forms
                 Type typeChanged = e.TypeChanged;
                 if (_currentObjects[i] == e.ComponentChanged || typeChanged?.IsAssignableFrom(_currentObjects[i].GetType()) == true)
                 {
-                    // clear our property hashes
-                    ClearCachedProps();
-                    Refresh(true);
+                    // Clear our property hashes.
+                    ClearCachedProperties();
+                    Refresh(clearCached: true);
                     return;
                 }
             }
@@ -3198,8 +3181,8 @@ namespace System.Windows.Forms
 
                 OnPropertySortChanged(EventArgs.Empty);
 
-                Refresh(false);
-                OnLayoutInternal(false);
+                Refresh(clearCached: false);
+                OnLayoutInternal(dividerOnly: false);
             }
             finally
             {
@@ -3215,7 +3198,7 @@ namespace System.Windows.Forms
             {
                 FreezePainting = true;
                 SelectViewTabButton((ToolStripButton)sender, true);
-                OnLayoutInternal(false);
+                OnLayoutInternal(dividerOnly: false);
                 SaveTabSelection();
             }
             finally
@@ -3322,7 +3305,7 @@ namespace System.Windows.Forms
             base.OnVisibleChanged(e);
             if (Visible && IsHandleCreated)
             {
-                OnLayoutInternal(false);
+                OnLayoutInternal(dividerOnly: false);
                 SetupToolbar();
             }
         }
@@ -3479,7 +3462,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Refresh(true);
+            Refresh(clearCached: true);
             base.Refresh();
         }
 
@@ -3497,7 +3480,7 @@ namespace System.Windows.Forms
 
                 if (clearCached)
                 {
-                    ClearCachedProps();
+                    ClearCachedProperties();
                 }
 
                 RefreshProperties(clearCached);
@@ -3829,7 +3812,7 @@ namespace System.Windows.Forms
                 if (_currentObjects[i] == oldObject)
                 {
                     _currentObjects[i] = newObject;
-                    Refresh(true);
+                    Refresh(clearCached: true);
                     break;
                 }
             }
@@ -4177,7 +4160,7 @@ namespace System.Windows.Forms
                 if (_viewTabsDirty)
                 {
                     // If we're redoing our tabs make sure we setup the toolbar area correctly.
-                    OnLayoutInternal(false);
+                    OnLayoutInternal(dividerOnly: false);
                 }
 
                 _viewTabsDirty = false;
@@ -4449,32 +4432,16 @@ namespace System.Windows.Forms
             }
         }
 
-        private string _propName;
-        private int _dwMsg;
-
-        private unsafe void GetDataFromCopyData(IntPtr lparam)
-        {
-            var cds = (User32.COPYDATASTRUCT*)lparam;
-
-            if (cds is not null && cds->lpData != IntPtr.Zero)
-            {
-                _propName = Marshal.PtrToStringAuto(cds->lpData);
-                _dwMsg = (int)cds->dwData;
-            }
-        }
-
         protected override void OnSystemColorsChanged(EventArgs e)
         {
-            // refresh the toolbar buttons
-            SetupToolbar(true);
+            // Refresh the toolbar buttons.
+            SetupToolbar(fullRebuild: true);
 
-            // this doesn't stick the first time we do it...
-            // either probably a toolbar issue, maybe GDI+, so we call it again
-            // fortunately this doesn't happen very often.
-            //
+            // This doesn't stick the first time we do it, so we call it again.
+            // Fortunately this doesn't happen very often.
             if (!GetFlag(Flags.SysColorChangeRefresh))
             {
-                SetupToolbar(true);
+                SetupToolbar(fullRebuild: true);
                 SetFlag(Flags.SysColorChangeRefresh, true);
             }
 
@@ -4492,7 +4459,7 @@ namespace System.Windows.Forms
             _toolStripButtonPaddingY = LogicalToDeviceUnits(ToolStripButtonPaddingY);
         }
 
-        protected override void WndProc(ref Message m)
+        protected unsafe override void WndProc(ref Message m)
         {
             switch (m.Msg)
             {
@@ -4544,7 +4511,14 @@ namespace System.Windows.Forms
                     return;
 
                 case (int)User32.WM.COPYDATA:
-                    GetDataFromCopyData(m.LParam);
+                    var cds = (User32.COPYDATASTRUCT*)m.LParam;
+
+                    if (cds is not null && cds->lpData != IntPtr.Zero)
+                    {
+                        _propertyName = Marshal.PtrToStringAuto(cds->lpData);
+                        _copyDataMessage = (int)cds->dwData;
+                    }
+
                     m.Result = (IntPtr)1;
                     return;
                 case AutomationMessages.PGM_GETBUTTONCOUNT:
@@ -4645,9 +4619,9 @@ namespace System.Windows.Forms
                     }
 
                 case AutomationMessages.PGM_GETROWCOORDS:
-                    if (m.Msg == _dwMsg)
+                    if (m.Msg == _copyDataMessage)
                     {
-                        m.Result = (IntPtr)_gridView.GetPropertyLocation(_propName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
+                        m.Result = (IntPtr)_gridView.GetPropertyLocation(_propertyName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
                         return;
                     }
 

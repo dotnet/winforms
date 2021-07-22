@@ -14,12 +14,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 private readonly PropertyGridView _owningPropertyGridView;
                 private readonly TextBoxBaseUiaTextProvider _textProvider;
-                private readonly GridViewEdit _owningGridViewEdit;
 
                 public GridViewEditAccessibleObject(GridViewEdit owner) : base(owner)
                 {
                     _owningPropertyGridView = owner.PropertyGridView;
-                    _owningGridViewEdit = owner;
                     _textProvider = new TextBoxBaseUiaTextProvider(owner);
                     UseTextProviders(_textProvider, _textProvider);
                 }
@@ -83,43 +81,28 @@ namespace System.Windows.Forms.PropertyGridInternal
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                     => _owningPropertyGridView.AccessibilityObject;
 
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+                internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                 {
-                    switch (propertyID)
-                    {
-                        case UiaCore.UIA.RuntimeIdPropertyId:
-                            return RuntimeId;
-                        case UiaCore.UIA.ControlTypePropertyId:
-                            return UiaCore.UIA.EditControlTypeId;
-                        case UiaCore.UIA.NamePropertyId:
-                            return Name;
-                        case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                            return Owner.Focused;
-                        case UiaCore.UIA.IsEnabledPropertyId:
-                            return !IsReadOnly;
-                        case UiaCore.UIA.ClassNamePropertyId:
-                            return Owner.GetType().ToString();
-                        case UiaCore.UIA.FrameworkIdPropertyId:
-                            return NativeMethods.WinFormFrameworkId;
-                        case UiaCore.UIA.IsValuePatternAvailablePropertyId:
-                            return IsPatternSupported(UiaCore.UIA.ValuePatternId);
-                        case UiaCore.UIA.IsTextPatternAvailablePropertyId:
-                            return IsPatternSupported(UiaCore.UIA.TextPatternId);
-                        case UiaCore.UIA.IsTextPattern2AvailablePropertyId:
-                            return IsPatternSupported(UiaCore.UIA.TextPattern2Id);
-                    }
+                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
+                    UiaCore.UIA.NamePropertyId => Name,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
+                    UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
+                    UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
+                    UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
+                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
+                    UiaCore.UIA.IsTextPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPatternId),
+                    UiaCore.UIA.IsTextPattern2AvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPattern2Id),
+                    _ => base.GetPropertyValue(propertyID),
+                };
 
-                    return base.GetPropertyValue(propertyID);
-                }
-
-                internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                    => patternId switch
-                    {
-                        UiaCore.UIA.ValuePatternId => true,
-                        UiaCore.UIA.TextPatternId => true,
-                        UiaCore.UIA.TextPattern2Id => true,
-                        _ => base.IsPatternSupported(patternId)
-                    };
+                internal override bool IsPatternSupported(UiaCore.UIA patternId) => patternId switch
+                {
+                    UiaCore.UIA.ValuePatternId => true,
+                    UiaCore.UIA.TextPatternId => true,
+                    UiaCore.UIA.TextPattern2Id => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
                 internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
                 {
@@ -160,7 +143,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     get
                     {
-                        var selectedGridEntryAccessibleRuntimeId =
+                        int[]? selectedGridEntryAccessibleRuntimeId =
                             _owningPropertyGridView?.SelectedGridEntry?.AccessibilityObject?.RuntimeId;
 
                         if (selectedGridEntryAccessibleRuntimeId is null)
@@ -174,28 +157,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                             runtimeId[i] = selectedGridEntryAccessibleRuntimeId[i];
                         }
 
-                        runtimeId[runtimeId.Length - 1] = 1;
+                        runtimeId[^1] = 1;
 
                         return runtimeId;
                     }
                 }
 
-                #region IValueProvider
-
                 internal override bool IsReadOnly
-                {
-                    get
-                    {
-                        return !(_owningPropertyGridView.SelectedGridEntry is PropertyDescriptorGridEntry propertyDescriptorGridEntry) || propertyDescriptorGridEntry.IsPropertyReadOnly;
-                    }
-                }
-
-                #endregion
+                    => _owningPropertyGridView.SelectedGridEntry is not PropertyDescriptorGridEntry propertyDescriptorGridEntry
+                        || propertyDescriptorGridEntry.IsPropertyReadOnly;
 
                 internal override void SetFocus()
                 {
                     RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-
                     base.SetFocus();
                 }
             }

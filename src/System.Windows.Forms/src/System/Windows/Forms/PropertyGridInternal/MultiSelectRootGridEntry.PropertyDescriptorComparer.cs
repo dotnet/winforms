@@ -10,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class MultiSelectRootGridEntry
     {
-        private class PDComparer : IComparer
+        private class PropertyDescriptorComparer : IComparer
         {
             public int Compare(object? obj1, object? obj2)
             {
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (result == 0)
                 {
-                    result = string.Compare(a1.PropertyType.FullName, a2.PropertyType.FullName, true, System.Globalization.CultureInfo.CurrentCulture);
+                    result = string.Compare(a1.PropertyType.FullName, a2.PropertyType.FullName, true, CultureInfo.CurrentCulture);
                 }
 
                 return result;

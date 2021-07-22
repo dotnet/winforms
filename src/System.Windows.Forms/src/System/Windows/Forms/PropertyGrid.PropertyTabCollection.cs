@@ -39,21 +39,9 @@ namespace System.Windows.Forms
                 }
             }
 
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => this;
 
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => false;
 
             /// <summary>
             ///  Retrieves the member attribute with the specified index.
@@ -114,7 +102,7 @@ namespace System.Windows.Forms
 
                 if (_ownerPropertyGrid._viewTabs.Length > 0)
                 {
-                    System.Array.Copy(_ownerPropertyGrid._viewTabs, 0, dest, index, _ownerPropertyGrid._viewTabs.Length);
+                    Array.Copy(_ownerPropertyGrid._viewTabs, 0, dest, index, _ownerPropertyGrid._viewTabs.Length);
                 }
             }
 

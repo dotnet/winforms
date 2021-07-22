@@ -13,7 +13,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         private class MultiMergeCollection : ICollection
         {
             private object[] _items;
-            private bool _locked;
 
             public MultiMergeCollection(ICollection original)
             {
@@ -23,51 +22,16 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Retrieves the number of items.
             /// </summary>
-            public int Count
-            {
-                get
-                {
-                    if (_items is not null)
-                    {
-                        return _items.Length;
-                    }
-                    else
-                    {
-                        return 0;
-                    }
-                }
-            }
+            public int Count => _items?.Length ?? 0;
 
-            bool ICollection.IsSynchronized
-            {
-                get
-                {
-                    return false;
-                }
-            }
+            bool ICollection.IsSynchronized => false;
 
             /// <summary>
             ///  Prevents the contents of the collection from being re-initialized;
             /// </summary>
-            public bool Locked
-            {
-                get
-                {
-                    return _locked;
-                }
-                set
-                {
-                    _locked = value;
-                }
-            }
+            public bool Locked { get; set; }
 
-            object ICollection.SyncRoot
-            {
-                get
-                {
-                    return this;
-                }
-            }
+            object ICollection.SyncRoot => this;
 
             public void CopyTo(Array array, int index)
             {
@@ -79,17 +43,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Array.Copy(_items, 0, array, index, _items.Length);
             }
 
-            public IEnumerator GetEnumerator()
-            {
-                if (_items is not null)
-                {
-                    return _items.GetEnumerator();
-                }
-                else
-                {
-                    return Array.Empty<object>().GetEnumerator();
-                }
-            }
+            public IEnumerator GetEnumerator() => _items?.GetEnumerator() ?? Array.Empty<object>().GetEnumerator();
 
             /// <summary>
             ///  Ensures that the new collection equals the existing one.
@@ -97,7 +51,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             public bool MergeCollection(ICollection newCollection)
             {
-                if (_locked)
+                if (Locked)
                 {
                     return true;
                 }
@@ -125,7 +79,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public void SetItems(ICollection collection)
             {
-                if (_locked)
+                if (Locked)
                 {
                     return;
                 }

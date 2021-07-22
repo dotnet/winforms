@@ -34,8 +34,6 @@ namespace System.Windows.Forms
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new PropertyGridToolStripAccessibleObject(this, _parentPropertyGrid);
-        }
+            => new PropertyGridToolStripAccessibleObject(this, _parentPropertyGrid);
     }
 }
