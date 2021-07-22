@@ -95,10 +95,9 @@ csharp_indent_switch_labels = true
 csharp_indent_labels = one_less_than_current
 
 # only use var when it's obvious what the variable type is
-csharp_style_var_for_built_in_types = false:suggestion
-csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_var_for_built_in_types = false:silent
+csharp_style_var_when_type_is_apparent = true:silent
 csharp_style_var_elsewhere = false:silent
-
 
 # Code style defaults
 csharp_preserve_single_line_blocks = true
@@ -146,6 +145,10 @@ csharp_space_between_parentheses = false
 csharp_space_between_square_brackets = false
 
 # Visual Basic files
+
+# IDE0008: Use explicit type
+dotnet_diagnostic.IDE0008.severity = silent
+
 [*.vb]
 # Modifier preferences
 visual_basic_preferred_modifier_order = Partial,Default,Private,Protected,Public,Friend,NotOverridable,Overridable,MustOverride,Overloads,Overrides,MustInherit,NotInheritable,Static,Shared,Shadows,ReadOnly,WriteOnly,Dim,Const,WithEvents,Widening,Narrowing,Custom,Async:suggestion

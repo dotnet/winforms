@@ -13,7 +13,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class PropertyGridView
     {
-        internal class MouseHook
+        internal partial class MouseHook
         {
             private readonly PropertyGridView _gridView;
             private readonly Control _control;
@@ -40,7 +40,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             private readonly string _callingStack;
             ~MouseHook()
             {
-                Debug.Assert(_mouseHookHandle == IntPtr.Zero, "Finalizing an active mouse hook.  This will crash the process.  Calling stack: " + _callingStack);
+                if (_mouseHookHandle != IntPtr.Zero)
+                {
+                    throw new InvalidOperationException($"Finalizing an active mouse hook. This will crash the process. Calling stack: {_callingStack}");
+                }
             }
 #endif
 
@@ -76,10 +79,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public void Dispose()
-            {
-                UnhookMouse();
-            }
+            public void Dispose() => UnhookMouse();
 
             /// <summary>
             ///  Sets up the needed windows hooks to catch messages.
@@ -87,6 +87,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private void HookMouse()
             {
                 GC.KeepAlive(this);
+
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
@@ -120,7 +121,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 GC.KeepAlive(this);
                 if (nCode == User32.HC.ACTION)
                 {
-                    User32.MOUSEHOOKSTRUCT* mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
+                    var mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
                     if (mhs is not null)
                     {
                         switch (unchecked((User32.WM)(long)wparam))
@@ -132,7 +133,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             case User32.WM.NCMBUTTONDOWN:
                             case User32.WM.NCRBUTTONDOWN:
                             case User32.WM.MOUSEACTIVATE:
-                                if (ProcessMouseDown(mhs->hWnd, mhs->pt.X, mhs->pt.Y))
+                                if (ProcessMouseDown(mhs->hWnd))
                                 {
                                     return (IntPtr)1;
                                 }
@@ -151,6 +152,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private void UnhookMouse()
             {
                 GC.KeepAlive(this);
+
                 // Locking 'this' here is ok since this is an internal class.
                 lock (this)
                 {
@@ -164,53 +166,44 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            /*
-           * Here is where we force validation on any clicks outside the
-           */
-            private bool ProcessMouseDown(IntPtr hWnd, int x, int y)
+            private bool ProcessMouseDown(IntPtr hwnd)
             {
-                // If we put up the "invalid" message box, it appears this
-                // method is getting called reentrantly when it shouldn't be.
-                // this prevents us from recursing.
+                // If we put up the "invalid" message box, it appears this method is getting called reentrantly
+                // when it shouldn't be. This prevents us from recursing.
                 if (_processing)
                 {
                     return false;
                 }
 
-                IntPtr hWndAtPoint = hWnd;
-                IntPtr handle = _control.Handle;
-                Control ctrlAtPoint = FromHandle(hWndAtPoint);
+                IntPtr handle = _control.HandleInternal;
 
-                // if it's us or one of our children, just process as normal
-                if (hWndAtPoint != handle && !_control.Contains(ctrlAtPoint))
+                // If it is us or one of our children just process as normal.
+                if (hwnd != handle
+                    && FromHandle(hwnd) is Control targetControl
+                    && !_control.Contains(targetControl))
                 {
                     Debug.Assert(_thisProcessId != 0, "Didn't get our process id!");
 
-                    // Make sure the window is in our process
-                    User32.GetWindowThreadProcessId(hWndAtPoint, out uint pid);
+                    // Make sure the window is in our process.
+                    User32.GetWindowThreadProcessId(hwnd, out uint pid);
 
-                    // if this isn't our process, unhook the mouse.
+                    // If this isn't our process, unhook the mouse.
                     if (pid != _thisProcessId)
                     {
                         HookMouseDown = false;
                         return false;
                     }
 
-                    bool needCommit = false;
-
-                    // if this a sibling control (e.g. the drop down or buttons), just forward the message and skip the commit
-                    needCommit = ctrlAtPoint is null ? true : !_gridView.IsSiblingControl(_control, ctrlAtPoint);
+                    // If this a sibling control (e.g. the drop down or buttons), just forward the message and skip the commit
+                    bool needCommit = targetControl is null || !_gridView.IsSiblingControl(_control, targetControl);
 
                     try
                     {
                         _processing = true;
 
-                        if (needCommit)
+                        if (needCommit && _client.OnClickHooked())
                         {
-                            if (_client.OnClickHooked())
-                            {
-                                return true; // there was an error, so eat the mouse
-                            }
+                            return true; // there was an error, so eat the mouse
                         }
                     }
                     finally
@@ -218,44 +211,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                         _processing = false;
                     }
 
-                    // cancel our hook at this point
+                    // Cancel our hook at this point.
                     HookMouseDown = false;
-                    //gridView.UnfocusSelection();
                 }
 
                 return false;
-            }
-
-            /// <summary>
-            ///  Forwards messageHook calls to ToolTip.messageHookProc
-            /// </summary>
-            private class MouseHookObject
-            {
-                internal WeakReference reference;
-
-                public MouseHookObject(MouseHook parent)
-                {
-                    reference = new WeakReference(parent, false);
-                }
-
-                public virtual IntPtr Callback(User32.HC nCode, IntPtr wparam, IntPtr lparam)
-                {
-                    IntPtr ret = IntPtr.Zero;
-                    try
-                    {
-                        MouseHook control = (MouseHook)reference.Target;
-                        if (control is not null)
-                        {
-                            ret = control.MouseHookProc(nCode, wparam, lparam);
-                        }
-                    }
-                    catch
-                    {
-                        // ignore
-                    }
-
-                    return ret;
-                }
             }
         }
     }

@@ -29,20 +29,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             // when the dropdown closes.
             public bool DontFocus
             {
-                set
-                {
-                    _dontFocus = value;
-                }
+                set => _dontFocus = value;
             }
 
             public virtual bool Filter
             {
-                get { return _filter; }
-
-                set
-                {
-                    _filter = value;
-                }
+                get => _filter;
+                set => _filter = value;
             }
 
             /// <summary>
@@ -51,18 +44,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             internal override bool SupportsUiaProviders => true;
 
-            public override bool Focused
-            {
-                get
-                {
-                    if (_dontFocus)
-                    {
-                        return false;
-                    }
-
-                    return base.Focused;
-                }
-            }
+            public override bool Focused => !_dontFocus && base.Focused;
 
             public override string Text
             {
@@ -77,18 +59,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public bool DisableMouseHook
             {
-                set
-                {
-                    _mouseHook.DisableMouseHook = value;
-                }
+                set => _mouseHook.DisableMouseHook = value;
             }
 
             public virtual bool HookMouseDown
             {
-                get
-                {
-                    return _mouseHook.HookMouseDown;
-                }
+                get => _mouseHook.HookMouseDown;
                 set
                 {
                     _mouseHook.HookMouseDown = value;
@@ -99,10 +75,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public GridViewEdit(PropertyGridView psheet)
+            public GridViewEdit(PropertyGridView gridView)
             {
-                PropertyGridView = psheet;
-                _mouseHook = new MouseHook(this, this, psheet);
+                PropertyGridView = gridView;
+                _mouseHook = new MouseHook(this, this, gridView);
             }
 
             /// <summary>
@@ -112,10 +88,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>
             ///  AccessibleObject for this GridViewEdit instance.
             /// </returns>
-            protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new GridViewEditAccessibleObject(this);
-            }
+            protected override AccessibleObject CreateAccessibilityInstance() => new GridViewEditAccessibleObject(this);
 
             protected override void DestroyHandle()
             {
@@ -169,17 +142,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  Overridden to handle TAB key.
             /// </summary>
-            protected override bool IsInputChar(char keyChar)
+            protected override bool IsInputChar(char keyChar) => (Keys)keyChar switch
             {
-                switch ((Keys)(int)keyChar)
-                {
-                    case Keys.Tab:
-                    case Keys.Return:
-                        return false;
-                }
-
-                return base.IsInputChar(keyChar);
-            }
+                Keys.Tab or Keys.Return => false,
+                _ => base.IsInputChar(keyChar),
+            };
 
             protected override void OnGotFocus(EventArgs e)
             {
@@ -188,37 +155,30 @@ namespace System.Windows.Forms.PropertyGridInternal
                 AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
 
-            protected override void OnKeyDown(KeyEventArgs ke)
+            protected override void OnKeyDown(KeyEventArgs e)
             {
-                // this is because on a dialog we may
-                // not get a chance to pre-process
-                //
-                if (ProcessDialogKey(ke.KeyData))
+                // This is because on a dialog we may not get a chance to pre-process.
+                if (ProcessDialogKey(e.KeyData))
                 {
-                    ke.Handled = true;
+                    e.Handled = true;
                     return;
                 }
 
-                base.OnKeyDown(ke);
+                base.OnKeyDown(e);
             }
 
-            protected override void OnKeyPress(KeyPressEventArgs ke)
+            protected override void OnKeyPress(KeyPressEventArgs e)
             {
-                if (!IsInputChar(ke.KeyChar))
+                if (!IsInputChar(e.KeyChar))
                 {
-                    ke.Handled = true;
+                    e.Handled = true;
                     return;
                 }
 
-                base.OnKeyPress(ke);
+                base.OnKeyPress(e);
             }
 
-            public bool OnClickHooked()
-            {
-                // can we commit this value?
-                // eat the value if we failed to commit.
-                return !PropertyGridView._Commit();
-            }
+            public bool OnClickHooked() => !PropertyGridView._Commit();
 
             protected override void OnMouseEnter(EventArgs e)
             {
@@ -226,30 +186,25 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (!Focused)
                 {
-                    Graphics g = CreateGraphics();
+                    using Graphics graphics = CreateGraphics();
                     if (PropertyGridView.SelectedGridEntry is not null &&
-                        ClientRectangle.Width <= PropertyGridView.SelectedGridEntry.GetValueTextWidth(Text, g, Font))
+                        ClientRectangle.Width <= PropertyGridView.SelectedGridEntry.GetValueTextWidth(Text, graphics, Font))
                     {
                         PropertyGridView.ToolTip.ToolTip = PasswordProtect ? "" : Text;
                     }
-
-                    g.Dispose();
                 }
             }
 
             protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
             {
-                // make sure we allow the Edit to handle ctrl-z
+                // Make sure we allow the Edit to handle ctrl-z
                 switch (keyData & Keys.KeyCode)
                 {
                     case Keys.Z:
                     case Keys.C:
                     case Keys.X:
                     case Keys.V:
-                        if (
-                           ((keyData & Keys.Control) != 0) &&
-                           ((keyData & Keys.Shift) == 0) &&
-                           ((keyData & Keys.Alt) == 0))
+                        if (((keyData & Keys.Control) != 0) && ((keyData & Keys.Shift) == 0) && ((keyData & Keys.Alt) == 0))
                         {
                             return false;
                         }
@@ -257,10 +212,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         break;
 
                     case Keys.A:
-                        if (
-                           ((keyData & Keys.Control) != 0) &&
-                           ((keyData & Keys.Shift) == 0) &&
-                           ((keyData & Keys.Alt) == 0))
+                        if (((keyData & Keys.Control) != 0) && ((keyData & Keys.Shift) == 0) && ((keyData & Keys.Alt) == 0))
                         {
                             SelectAll();
                             return true;
@@ -280,23 +232,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                         break;
 
                     case Keys.Delete:
-                        if (
-                          ((keyData & Keys.Control) == 0) &&
-                          ((keyData & Keys.Shift) != 0) &&
-                          ((keyData & Keys.Alt) == 0))
+                        if (((keyData & Keys.Control) == 0) && ((keyData & Keys.Shift) != 0) && ((keyData & Keys.Alt) == 0))
                         {
                             return false;
                         }
-                        else if (
-                              ((keyData & Keys.Control) == 0) &&
-                              ((keyData & Keys.Shift) == 0) &&
-                              ((keyData & Keys.Alt) == 0)
-                                )
+                        else if (((keyData & Keys.Control) == 0) && ((keyData & Keys.Shift) == 0) && ((keyData & Keys.Alt) == 0))
                         {
-                            // if this is just the delete key and we're on a non-text editable property that is resettable,
-                            // reset it now.
-                            //
-                            if (PropertyGridView.SelectedGridEntry is not null && !PropertyGridView.SelectedGridEntry.Enumerable && !PropertyGridView.SelectedGridEntry.IsTextEditable && PropertyGridView.SelectedGridEntry.CanResetPropertyValue())
+                            // If this is just the delete key and we're on a non-text editable property that
+                            // is resettable, reset it now.
+                            if (PropertyGridView.SelectedGridEntry is not null
+                                && !PropertyGridView.SelectedGridEntry.Enumerable
+                                && !PropertyGridView.SelectedGridEntry.IsTextEditable
+                                && PropertyGridView.SelectedGridEntry.CanResetPropertyValue())
                             {
                                 object oldValue = PropertyGridView.SelectedGridEntry.PropertyValue;
                                 PropertyGridView.SelectedGridEntry.ResetPropertyValue();
@@ -311,14 +258,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.ProcessCmdKey(ref msg, keyData);
             }
 
-            /// <summary>
-            ///  Overrides Control.ProcessDialogKey to handle the Escape and Return
-            ///  keys.
-            /// </summary>
             protected override bool ProcessDialogKey(Keys keyData)
             {
                 // We don't do anything with modified keys here.
-                //
                 if ((keyData & (Keys.Shift | Keys.Control | Keys.Alt)) == 0)
                 {
                     switch (keyData & Keys.KeyCode)
@@ -340,7 +282,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                // for the tab key, we want to commit before we allow it to be processed.
+                // For the tab key we want to commit before we allow it to be processed.
                 if ((keyData & Keys.KeyCode) == Keys.Tab && ((keyData & (Keys.Control | Keys.Alt)) == 0))
                 {
                     return !PropertyGridView._Commit();
@@ -351,22 +293,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void SetVisibleCore(bool value)
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:Visible(" + (value.ToString()) + ")");
-                // make sure we don't have the mouse captured if
-                // we're going invisible
+                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"DropDownHolder:Visible({value})");
+
+                // make sure we don't have the mouse captured if we're going invisible.
                 if (value == false && HookMouseDown)
                 {
                     _mouseHook.HookMouseDown = false;
                 }
 
                 base.SetVisibleCore(value);
-            }
-
-            // a mini version of process dialog key
-            // for responding to WM_GETDLGCODE
-            internal bool WantsTab(bool forward)
-            {
-                return PropertyGridView.WantsTab(forward);
             }
 
             private unsafe bool WmNotify(ref Message m)
@@ -395,12 +330,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void WndProc(ref Message m)
             {
-                if (_filter)
+                if (_filter && PropertyGridView.FilterEditWndProc(ref m))
                 {
-                    if (PropertyGridView.FilterEditWndProc(ref m))
-                    {
-                        return;
-                    }
+                    return;
                 }
 
                 switch ((User32.WM)m.Msg)
@@ -441,7 +373,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case User32.WM.GETDLGCODE:
 
                         m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS);
-                        if (PropertyGridView.NeedsCommit || WantsTab((ModifierKeys & Keys.Shift) == 0))
+                        if (PropertyGridView.NeedsCommit || PropertyGridView.WantsTab(forward: (ModifierKeys & Keys.Shift) == 0))
                         {
                             m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTALLKEYS | (int)User32.DLGC.WANTTAB);
                         }
@@ -460,10 +392,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.WndProc(ref m);
             }
 
-            public virtual bool InSetText()
-            {
-                return _inSetText;
-            }
+            public virtual bool InSetText() => _inSetText;
         }
     }
 }

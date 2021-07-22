@@ -46,8 +46,8 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsFact]
         public void PropertyDescriptorGridEntryAccessibleObject_ExpandCollapseState_collapsed_by_default()
         {
-            using PropertyGrid propertyGrid = new PropertyGrid();
-            TestPropertyDescriptorGridEntry propertyDescriptorGridEntryTestEntity = new TestPropertyDescriptorGridEntry(propertyGrid, null, false);
+            using PropertyGrid propertyGrid = new();
+            TestPropertyDescriptorGridEntry propertyDescriptorGridEntryTestEntity = new(propertyGrid, null, false);
             AccessibleObject propertyDescriptorGridEntryAccessibleObject = propertyDescriptorGridEntryTestEntity.AccessibilityObject;
 
             UiaCore.ExpandCollapseState expandCollapseState = propertyDescriptorGridEntryAccessibleObject.ExpandCollapseState;
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
         private class TestGridEntry : GridEntry
         {
-            PropertyGridView _propertyGridView;
+            readonly PropertyGridView _propertyGridView;
 
             public TestGridEntry(PropertyGrid ownerGrid, GridEntry peParent, PropertyGridView propertyGridView)
                 : base(ownerGrid, peParent)
@@ -89,13 +89,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
                 _propertyGridView = propertyGridView;
             }
 
-            internal override PropertyGridView GridEntryHost
-            {
-                get
-                {
-                    return _propertyGridView;
-                }
-            }
+            internal override PropertyGridView GridEntryHost => _propertyGridView;
         }
 
         private class TestPropertyDescriptorGridEntry : PropertyDescriptorGridEntry

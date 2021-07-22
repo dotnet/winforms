@@ -21,12 +21,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="owningGridViewListBox">The owning GridViewListBox.</param>
             public GridViewListBoxAccessibleObject(GridViewListBox owningGridViewListBox) : base(owningGridViewListBox)
             {
-                if (owningGridViewListBox.OwningPropertyGridView is null)
+                if (owningGridViewListBox.OwningPropertyGridView is not PropertyGridView owningPropertyGridView)
                 {
-                    throw new ArgumentNullException(nameof(owningGridViewListBox.OwningPropertyGridView));
+                    throw new ArgumentException(null, nameof(owningGridViewListBox));
                 }
 
-                _owningPropertyGridView = owningGridViewListBox.OwningPropertyGridView;
+                _owningPropertyGridView = owningPropertyGridView;
             }
 
             /// <summary>

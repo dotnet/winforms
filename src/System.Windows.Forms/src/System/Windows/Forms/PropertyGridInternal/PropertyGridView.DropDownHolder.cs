@@ -54,8 +54,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             private const int MoveTypeLeft = 0x2;
             private const int MoveTypeTop = 0x4;
 
-            internal DropDownHolder(PropertyGridView gridView)
-                : base()
+            internal DropDownHolder(PropertyGridView gridView) : base()
             {
                 ShowInTaskbar = false;
                 ControlBox = false;
@@ -628,7 +627,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         CreateNewLink.Height = linkHeight + DropDownHolderBorder;
 
-                        //Add the total height plus some border
+                        // Add the total height plus some border.
                         size.Height += (linkHeight + (DropDownHolderBorder * 2));
                     }
 

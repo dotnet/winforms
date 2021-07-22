@@ -61,19 +61,11 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  The set of attributes that will be used for browse filtering
+        ///  The set of attributes that will be used for browse filtering.
         /// </summary>
         public override AttributeCollection BrowsableAttributes
         {
-            get
-            {
-                if (_browsableAttributes is null)
-                {
-                    _browsableAttributes = new AttributeCollection(new Attribute[] { BrowsableAttribute.Yes });
-                }
-
-                return _browsableAttributes;
-            }
+            get => _browsableAttributes ??= new(BrowsableAttribute.Yes);
             set
             {
                 if (value is null)
@@ -146,8 +138,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_forceReadOnlyChecked)
                 {
-                    var readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(_value)[typeof(ReadOnlyAttribute)];
-                    if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute())
+                    var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(_value)[typeof(ReadOnlyAttribute)];
+                    if ((readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute())
                         || TypeDescriptor.GetAttributes(_value).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
                         SetForceReadOnlyFlag();
@@ -201,12 +193,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return site.Name;
                 }
 
-                if (_value is not null)
-                {
-                    return _value.ToString();
-                }
-
-                return null;
+                return _value?.ToString();
             }
         }
 
@@ -227,9 +214,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override bool CreateChildren()
         {
-            bool fReturn = base.CreateChildren();
+            bool expandable = base.CreateChildren();
             CategorizePropEntries();
-            return fReturn;
+            return expandable;
         }
 
         protected override void Dispose(bool disposing)
@@ -253,18 +240,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             => _host?.GetService(serviceType) ?? _baseProvider?.GetService(serviceType);
 
         /// <summary>
-        ///  Reset the Browsable attributes to the default (BrowsableAttribute.Yes).
+        ///  Reset the Browsable attributes to the default (<see cref="BrowsableAttribute.Yes"/>).
         /// </summary>
         public void ResetBrowsableAttributes() => _browsableAttributes = new(BrowsableAttribute.Yes);
 
         /// <summary>
         ///  Sets the value of this GridEntry from text.
         /// </summary>
-        public virtual void ShowCategories(bool fCategories)
+        public virtual void ShowCategories(bool sortByCategories)
         {
-            if ((_propertySort &= PropertySort.Categorized) != 0 != fCategories)
+            if ((_propertySort &= PropertySort.Categorized) != 0 != sortByCategories)
             {
-                if (fCategories)
+                if (sortByCategories)
                 {
                     _propertySort |= PropertySort.Categorized;
                 }

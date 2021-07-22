@@ -206,9 +206,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         public object GetValue(Array components, out bool allEqual)
         {
             allEqual = true;
-            object obj = _descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
+            object @object = _descriptors[0].GetValue(GetPropertyOwnerForComponent(components, 0));
 
-            if (obj is ICollection collection)
+            if (@object is ICollection collection)
             {
                 if (_collection is null)
                 {
@@ -226,18 +226,17 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = 1; i < _descriptors.Length; i++)
             {
-                object objCur = _descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
+                object currentObject = _descriptors[i].GetValue(GetPropertyOwnerForComponent(components, i));
 
                 if (_collection is not null)
                 {
-                    if (!_collection.MergeCollection((ICollection)objCur))
+                    if (!_collection.MergeCollection((ICollection)currentObject))
                     {
                         allEqual = false;
                         return null;
                     }
                 }
-                else if ((obj is null && objCur is null) ||
-                         (obj is not null && obj.Equals(objCur)))
+                else if ((@object is null && currentObject is null) || (@object is not null && @object.Equals(currentObject)))
                 {
                     continue;
                 }
@@ -253,7 +252,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            return (_collection ?? obj);
+            return _collection ?? @object;
         }
 
         internal object[] GetValues(Array components)
@@ -295,15 +294,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 for (int i = 0; i < _descriptors.Length; i++)
                 {
-                    if (_descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is not IList propList)
+                    if (_descriptors[i].GetValue(GetPropertyOwnerForComponent(a, i)) is not IList properties)
                     {
                         continue;
                     }
 
-                    propList.Clear();
-                    foreach (object val in values)
+                    properties.Clear();
+                    foreach (object value in values)
                     {
-                        propList.Add(val);
+                        properties.Add(value);
                     }
                 }
             }

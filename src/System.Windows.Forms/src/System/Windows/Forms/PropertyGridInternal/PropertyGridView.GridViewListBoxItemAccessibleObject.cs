@@ -24,31 +24,19 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
                 => _owningGridViewListBox.AccessibilityObject;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
             {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.AccessKeyPropertyId:
-                        return KeyboardShortcut;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
+                UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut,
+                _ => base.GetPropertyValue(propertyID),
+            };
 
             /// <summary>
             ///  Indicates whether specified pattern is supported.
             /// </summary>
             /// <param name="patternId">The pattern ID.</param>
-            /// <returns>True if specified </returns>
+            /// <returns>True if supported.</returns>
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.InvokePatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                => patternId == UiaCore.UIA.InvokePatternId || base.IsPatternSupported(patternId);
 
             /// <summary>
             ///  Gets or sets the accessible name.
@@ -70,17 +58,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
-            {
-                get
+                => new int[]
                 {
-                    var runtimeId = new int[3];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owningGridViewListBox.Handle;
-                    runtimeId[2] = _owningItem.GetHashCode();
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    (int)(long)_owningGridViewListBox.Handle,
+                    _owningItem.GetHashCode()
+                };
         }
     }
 }

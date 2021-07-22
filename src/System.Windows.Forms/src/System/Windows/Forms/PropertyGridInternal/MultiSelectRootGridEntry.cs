@@ -13,7 +13,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class MultiSelectRootGridEntry : SingleSelectRootGridEntry
     {
-        private static readonly PDComparer s_propertyComparer = new();
+        private static readonly PropertyDescriptorComparer s_propertyComparer = new();
 
         internal MultiSelectRootGridEntry(
             PropertyGridView view,

@@ -25,23 +25,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual bool AllowVisible
         {
-            get
-            {
-                return _allowVisible;
-            }
+            get => _allowVisible;
             set
             {
                 if (_allowVisible != value)
                 {
                     _allowVisible = value;
-                    if (value && WouldBeVisible)
-                    {
-                        Visible = true;
-                    }
-                    else
-                    {
-                        Visible = false;
-                    }
+                    Visible = value && WouldBeVisible;
                 }
             }
         }
@@ -51,16 +41,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new HotCommandsAccessibleObject(this, OwnerPropertyGrid);
-        }
+            => new HotCommandsAccessibleObject(this, OwnerPropertyGrid);
 
         public override Rectangle DisplayRectangle
         {
             get
             {
-                Size sz = ClientSize;
-                return new Rectangle(4, 4, sz.Width - 8, sz.Height - 8);
+                Size size = ClientSize;
+                return new Rectangle(4, 4, size.Width - 8, size.Height - 8);
             }
         }
 
@@ -75,10 +63,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                         Dock = DockStyle.Fill,
                         LinkBehavior = LinkBehavior.AlwaysUnderline,
 
-                        // use default LinkLabel colors for regular, active, and visited
+                        // Use default LinkLabel colors for regular, active, and visited.
                         DisabledLinkColor = SystemColors.ControlDark
                     };
-                    _label.LinkClicked += new LinkLabelLinkClickedEventHandler(LinkClicked);
+
+                    _label.LinkClicked += LinkClicked;
                     Controls.Add(_label);
                 }
 
@@ -86,13 +75,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual bool WouldBeVisible
-        {
-            get
-            {
-                return (_component is not null);
-            }
-        }
+        public virtual bool WouldBeVisible => _component is not null;
 
         public override int GetOptimalHeight(int width)
         {
@@ -111,10 +94,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return _optimalHeight;
         }
 
-        public override int SnapHeightRequest(int request)
-        {
-            return request;
-        }
+        public override int SnapHeightRequest(int request) => request;
 
         /// <summary>
         ///  Indicates whether or not the control supports UIA Providers via
@@ -135,15 +115,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             catch (Exception ex)
             {
-                RTLAwareMessageBox.Show(this, ex.Message, SR.PBRSErrorTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning,
-                        MessageBoxDefaultButton.Button1, 0);
+                RTLAwareMessageBox.Show(
+                    this,
+                    ex.Message,
+                    SR.PBRSErrorTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning,
+                    MessageBoxDefaultButton.Button1,
+                    0);
             }
         }
 
-        private void OnCommandChanged(object sender, EventArgs e)
-        {
-            SetupLabel();
-        }
+        private void OnCommandChanged(object sender, EventArgs e) => SetupLabel();
 
         protected override void OnGotFocus(EventArgs e)
         {
@@ -167,10 +150,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Label.DisabledLinkColor = disabledLink;
         }
 
-        public void FocusLabel()
-        {
-            Label.Focus();
-        }
+        public void FocusLabel() => Label.Focus();
 
         public virtual void SetVerbs(object component, DesignerVerb[] verbs)
         {
@@ -178,7 +158,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 for (int i = 0; i < _verbs.Length; i++)
                 {
-                    _verbs[i].CommandChanged -= new EventHandler(OnCommandChanged);
+                    _verbs[i].CommandChanged -= OnCommandChanged;
                 }
 
                 _component = null;
@@ -198,7 +178,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 for (int i = 0; i < verbs.Length; i++)
                 {
-                    verbs[i].CommandChanged += new EventHandler(OnCommandChanged);
+                    verbs[i].CommandChanged += OnCommandChanged;
                 }
 
                 if (_allowVisible)

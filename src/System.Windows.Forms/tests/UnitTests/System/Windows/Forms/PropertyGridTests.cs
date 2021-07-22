@@ -343,12 +343,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.BackColorChanged += handler;
 
             // Set different.
@@ -427,12 +429,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.BackgroundImageChanged += handler;
 
             // Set different.
@@ -486,12 +490,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.BackgroundImageLayoutChanged += handler;
 
             // Set different.
@@ -2268,12 +2274,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Equal(control, sender);
                 Assert.Equal(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.PaddingChanged += handler;
 
             // Set different.
@@ -2308,6 +2316,7 @@ namespace System.Windows.Forms.Tests
             {
                 PropertySort = value
             };
+
             Assert.Equal(value, control.PropertySort);
             Assert.False(control.IsHandleCreated);
 
@@ -2940,12 +2949,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Equal(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.TextChanged += handler;
 
             // Set different.
@@ -2981,6 +2992,7 @@ namespace System.Windows.Forms.Tests
             {
                 Visible = visible
             };
+
             int layoutCallCount = 0;
             control.Layout += (sender, e) => layoutCallCount++;
 
@@ -3019,6 +3031,7 @@ namespace System.Windows.Forms.Tests
             {
                 Visible = visible
             };
+
             int layoutCallCount = 0;
             control.Layout += (sender, e) => layoutCallCount++;
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -3070,6 +3083,7 @@ namespace System.Windows.Forms.Tests
             {
                 ToolStripRenderer = value
             };
+
             Assert.Same(value, control.ToolStripRenderer);
             Assert.False(control.IsHandleCreated);
 
@@ -3093,6 +3107,7 @@ namespace System.Windows.Forms.Tests
             {
                 ViewBackColor = value
             };
+
             Assert.Equal(expected, control.ViewBackColor);
             Assert.False(control.IsHandleCreated);
 
@@ -3398,12 +3413,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.HandleCreated += handler;
@@ -3425,12 +3441,13 @@ namespace System.Windows.Forms.Tests
             using var control = new SubPropertyGrid();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.HandleCreated += handler;
@@ -3451,12 +3468,12 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.HandleDestroyed += handler;
@@ -3478,12 +3495,13 @@ namespace System.Windows.Forms.Tests
             using var control = new SubPropertyGrid();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.HandleDestroyed += handler;
@@ -3504,12 +3522,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            KeyEventHandler handler = (sender, e) =>
+
+            void handler(object sender, KeyEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.KeyDown += handler;
@@ -3530,12 +3549,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            KeyPressEventHandler handler = (sender, e) =>
+
+            void handler(object sender, KeyPressEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.KeyPress += handler;
@@ -3556,12 +3576,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            KeyEventHandler handler = (sender, e) =>
+
+            void handler(object sender, KeyEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.KeyUp += handler;
@@ -3595,12 +3616,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            MouseEventHandler handler = (sender, e) =>
+
+            void handler(object sender, MouseEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseDown += handler;
@@ -3628,12 +3650,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseEnter += handler;
@@ -3654,12 +3677,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseLeave += handler;
@@ -3693,12 +3717,12 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            MouseEventHandler handler = (sender, e) =>
+            void handler(object sender, MouseEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseMove += handler;
@@ -3726,12 +3750,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            MouseEventHandler handler = (sender, e) =>
+
+            void handler(object sender, MouseEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseUp += handler;

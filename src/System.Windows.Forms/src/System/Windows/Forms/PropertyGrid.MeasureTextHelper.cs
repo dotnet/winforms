@@ -14,14 +14,10 @@ namespace System.Windows.Forms
         internal static class MeasureTextHelper
         {
             public static SizeF MeasureText(PropertyGrid owner, Graphics g, string text, Font font)
-            {
-                return MeasureTextSimple(owner, g, text, font, new SizeF(0, 0));
-            }
+                => MeasureTextSimple(owner, g, text, font, new SizeF(0, 0));
 
             public static SizeF MeasureText(PropertyGrid owner, Graphics g, string text, Font font, int width)
-            {
-                return MeasureText(owner, g, text, font, new SizeF(width, 999999));
-            }
+                => MeasureText(owner, g, text, font, new SizeF(width, 999999));
 
             public static SizeF MeasureTextSimple(PropertyGrid owner, Graphics g, string text, Font font, SizeF size)
             {
@@ -32,7 +28,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    bindingSize = (SizeF)TextRenderer.MeasureText(g, text, font, Size.Ceiling(size), GetTextRendererFlags());
+                    bindingSize = TextRenderer.MeasureText(g, text, font, Size.Ceiling(size), GetTextRendererFlags());
                 }
 
                 return bindingSize;
@@ -60,10 +56,7 @@ namespace System.Windows.Forms
             }
 
             public static TextFormatFlags GetTextRendererFlags()
-            {
-                return TextFormatFlags.PreserveGraphicsClipping |
-                        TextFormatFlags.PreserveGraphicsTranslateTransform;
-            }
+                => TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform;
         }
     }
 }

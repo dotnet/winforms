@@ -68,11 +68,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                if (_foundAttributes is null)
-                {
-                    _foundAttributes = new Hashtable();
-                }
-
+                _foundAttributes ??= new Hashtable();
                 _foundAttributes[attributeType] = value;
                 return value;
             }

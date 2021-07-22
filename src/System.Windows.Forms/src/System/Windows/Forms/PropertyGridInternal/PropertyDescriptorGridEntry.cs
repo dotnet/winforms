@@ -18,8 +18,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private TypeConverter _exceptionConverter;
         private UITypeEditor _exceptionEditor;
-        private bool _isSerializeContentsProp;
-        private byte _parensAroundName = ParensAroundNameUnknown;
+        private bool _isSerializeContentsProperty;
+        private bool? _parensAroundName;
         private IPropertyValueUIService _propertyValueUIService;
         protected IEventBindingService _eventBindings;
         private bool _propertyValueUIServiceChecked;
@@ -35,9 +35,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         private static bool s_isScalingInitialized;
 
         private const int ImageSize = 8;
-        private const byte ParensAroundNameUnknown = 0xFF;
-        private const byte ParensAroundNameNo = 0;
-        private const byte ParensAroundNameYes = 1;
 
         private static IEventBindingService s_targetBindingService;
         private static IComponent s_targetComponent;
@@ -60,13 +57,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Specify that this grid entry should be allowed to be merged for multi-select.
         /// </summary>
         public override bool AllowMerge
-        {
-            get
-            {
-                var mpa = (MergablePropertyAttribute)_propertyInfo.Attributes[typeof(MergablePropertyAttribute)];
-                return mpa is null || mpa.IsDefaultAttribute();
-            }
-        }
+            => ((MergablePropertyAttribute)_propertyInfo.Attributes[typeof(MergablePropertyAttribute)])?.IsDefaultAttribute() ?? true;
 
         internal override AttributeCollection Attributes => _propertyInfo.Attributes;
 
@@ -106,7 +97,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                         entry = entry.ParentGridEntry;
 
                         // For value classes, the equality will never work, so just try the type equality
-                        if (entry.PropertyValue == owner || (owner.GetType().IsValueType && owner.GetType() == entry.PropertyValue.GetType()))
+                        if (entry.PropertyValue == owner
+                            || (owner.GetType().IsValueType && owner.GetType() == entry.PropertyValue.GetType()))
                         {
                             _helpKeyword = $"{entry.PropertyName}.{_helpKeyword}";
                             break;
@@ -162,19 +154,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (ParensAroundNameUnknown == _parensAroundName)
+                if (!_parensAroundName.HasValue)
                 {
-                    if (((ParenthesizePropertyNameAttribute)_propertyInfo.Attributes[typeof(ParenthesizePropertyNameAttribute)]).NeedParenthesis)
-                    {
-                        _parensAroundName = ParensAroundNameYes;
-                    }
-                    else
-                    {
-                        _parensAroundName = ParensAroundNameNo;
-                    }
+                    _parensAroundName = ((ParenthesizePropertyNameAttribute)_propertyInfo.Attributes[typeof(ParenthesizePropertyNameAttribute)]).NeedParenthesis;
                 }
 
-                return _parensAroundName == ParensAroundNameYes;
+                return _parensAroundName.Value;
             }
         }
 
@@ -256,7 +241,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             set
             {
-                SetPropertyValue(GetValueOwner(), value, false, null);
+                SetPropertyValue(GetValueOwner(), value, reset: false, undoText: null);
             }
         }
 
@@ -298,15 +283,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 _readOnlyVerified = true;
 
-                if (base.ShouldRenderReadOnly)
-                {
-                    if (!_isSerializeContentsProp && !base.NeedsCustomEditorButton)
-                    {
-                        return true;
-                    }
-                }
-
-                return false;
+                return base.ShouldRenderReadOnly && !_isSerializeContentsProperty && !base.NeedsCustomEditorButton;
             }
         }
 
@@ -396,21 +373,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 target = descriptor.GetPropertyOwner(_propertyInfo);
             }
 
-            try
-            {
-                return _propertyInfo.GetValue(target);
-            }
-            catch
-            {
-                throw;
-            }
+            return _propertyInfo.GetValue(target);
         }
 
         protected void Initialize(PropertyDescriptor propInfo)
         {
             _propertyInfo = propInfo;
 
-            _isSerializeContentsProp = _propertyInfo.SerializationVisibility == DesignerSerializationVisibility.Content;
+            _isSerializeContentsProperty = _propertyInfo.SerializationVisibility == DesignerSerializationVisibility.Content;
 
             Debug.Assert(propInfo is not null, "Can't create propEntry because of null prop info");
 
@@ -419,7 +389,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 SetFlag(Flags.TextEditable, false);
             }
 
-            if (_isSerializeContentsProp && TypeConverter.GetPropertiesSupported())
+            if (_isSerializeContentsProperty && TypeConverter.GetPropertiesSupported())
             {
                 SetFlag(Flags.Expandable, true);
             }
