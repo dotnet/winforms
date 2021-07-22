@@ -1207,4 +1207,10 @@ Press Ctrl+Enter to accept Text.</value>
   <data name="WindowsFormsTabOrderReadOnly" xml:space="preserve">
     <value>- Read Only</value>
   </data>
+  <data name="AccessibleActionCheck" xml:space="preserve">
+    <value>Check</value>
+  </data>
+  <data name="AccessibleActionUncheck" xml:space="preserve">
+    <value>Uncheck</value>
+  </data>
 </root>
