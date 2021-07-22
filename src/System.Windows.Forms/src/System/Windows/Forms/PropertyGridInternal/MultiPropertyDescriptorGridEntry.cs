@@ -141,16 +141,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ChildCollection.AddRange(mergedProperties);
                 }
 
-                bool fExpandable = Children.Count > 0;
-                if (!fExpandable)
+                bool expandable = Children.Count > 0;
+                if (!expandable)
                 {
                     SetFlag(Flags.ExpandableFailed, true);
                 }
 
-                return fExpandable;
+                return expandable;
             }
-            catch
+            catch (Exception e)
             {
+                Debug.Fail(e.Message);
                 return false;
             }
         }

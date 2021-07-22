@@ -258,6 +258,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.ProcessCmdKey(ref msg, keyData);
             }
 
+            /// <inheritdoc />
             protected override bool ProcessDialogKey(Keys keyData)
             {
                 // We don't do anything with modified keys here.
@@ -315,7 +316,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         switch ((ComCtl32.TTN)nmhdr->code)
                         {
                             case ComCtl32.TTN.SHOW:
-                                PropertyGridView.PositionTooltip(this, PropertyGridView.ToolTip, ClientRectangle);
+                                PositionTooltip(this, PropertyGridView.ToolTip, ClientRectangle);
                                 m.Result = (IntPtr)1;
                                 return true;
                             default:

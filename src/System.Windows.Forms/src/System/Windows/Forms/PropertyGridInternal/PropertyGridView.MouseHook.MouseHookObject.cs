@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Diagnostics;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -34,9 +35,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                             result = hook.MouseHookProc(nCode, wparam, lparam);
                         }
                     }
-                    catch
+                    catch (Exception ex)
                     {
-                        // ignore
+                        Debug.Fail(ex.Message);
                     }
 
                     return result;

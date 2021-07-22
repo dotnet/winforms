@@ -30,17 +30,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _ => base.GetPropertyValue(propertyID),
             };
 
-            /// <summary>
-            ///  Indicates whether specified pattern is supported.
-            /// </summary>
-            /// <param name="patternId">The pattern ID.</param>
-            /// <returns>True if supported.</returns>
+            /// <inheritdoc />
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 => patternId == UiaCore.UIA.InvokePatternId || base.IsPatternSupported(patternId);
 
-            /// <summary>
-            ///  Gets or sets the accessible name.
-            /// </summary>
+            /// <inheritdoc />
             public override string? Name
             {
                 get
@@ -54,9 +48,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            /// <summary>
-            ///  Gets the runtime ID.
-            /// </summary>
+            /// <inheritdoc />
             internal override int[] RuntimeId
                 => new int[]
                 {
