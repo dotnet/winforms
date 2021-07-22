@@ -295,7 +295,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"DropDownHolder:Visible({value})");
 
-                // make sure we don't have the mouse captured if we're going invisible.
+                // Make sure we don't have the mouse captured if we're going invisible.
                 if (value == false && HookMouseDown)
                 {
                     _mouseHook.HookMouseDown = false;
