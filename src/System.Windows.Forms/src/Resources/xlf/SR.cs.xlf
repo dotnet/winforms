@@ -5222,11 +5222,6 @@ Chcete jej nahradit?</target>
         <target state="translated">Maximální velikost, na niž lze nastavit tento formulář.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
-        <source>Gets or sets the anchoring for minimized MDI children.</source>
-        <target state="translated">Získá nebo nastaví ukotvení pro minimalizované podřízené položky MDI.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">Určuje primární hodnotu MenuStrip pro formulář. Tato vlastnost se používá k aktivování klávesnice a automatickému sloučení v MDI.</target>
