@@ -1442,7 +1442,10 @@ namespace System.Windows.Forms
         internal static void DrawHighContrastFocusRectangle(Graphics graphics, Rectangle rectangle, Color color)
             => DrawFocusRectangle(graphics, rectangle, color, highContrast: true);
 
-        private static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color color, bool highContrast)
+        internal static void DrawBlackWhiteFocusRectangle(Graphics graphics, Rectangle rectangle, Color color)
+            => DrawFocusRectangle(graphics, rectangle, color, highContrast: false, blackAndWhite: true);
+
+        private static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color color, bool highContrast, bool blackAndWhite = false)
         {
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -1451,7 +1454,7 @@ namespace System.Windows.Forms
             rectangle.Height--;
             graphics.DrawRectangle(
                 // We want the corner to be penned see GetFocusPen for more explanation
-                GetFocusPen(color, (rectangle.X + rectangle.Y) % 2 == 1, highContrast),
+                GetFocusPen(color, (rectangle.X + rectangle.Y) % 2 == 1, highContrast, blackAndWhite),
                 rectangle);
         }
 
@@ -2246,7 +2249,7 @@ namespace System.Windows.Forms
         ///  Retrieves the pen used to draw a focus rectangle around a control. The focus rectangle is typically drawn
         ///  when the control has keyboard focus.
         /// </summary>
-        private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast)
+        private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast, bool blackAndWhite)
         {
             if (t_focusPen is null
                 || t_hcFocusPen != highContrast
@@ -2271,6 +2274,11 @@ namespace System.Windows.Forms
                 {
                     // In highcontrast mode "baseColor" itself is used as the focus pen color.
                     color2 = baseColor;
+                }
+                else if (blackAndWhite)
+                {
+                    color1 = Color.White;
+                    color2 = Color.Black;
                 }
                 else
                 {
