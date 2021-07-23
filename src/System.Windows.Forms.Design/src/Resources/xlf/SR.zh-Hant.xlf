@@ -7,16 +7,6 @@
         <target state="translated">因為尚未正確註冊，所以無法建立 ActiveX 控制項 '{0}'。</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleActionCheck">
-        <source>Check</source>
-        <target state="new">Check</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="AccessibleActionUncheck">
-        <source>Uncheck</source>
-        <target state="new">Uncheck</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
         <target state="translated">錨定編輯器</target>
