@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -50,10 +50,17 @@ internal partial class Interop
             Debug.Assert(flags == CreateObjectFlags.UniqueInstance);
 
             Guid pictureIID = IID.IPicture;
-            int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr comObject);
+            int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr pictureComObject);
             if (hr == S_OK)
             {
-                return new PictureWrapper(comObject);
+                return new PictureWrapper(pictureComObject);
+            }
+
+            Guid fileOpenDialogIID = IID.IFileOpenDialog;
+            hr = Marshal.QueryInterface(externalComObject, ref fileOpenDialogIID, out IntPtr fileOpenDialogComObject);
+            if (hr == S_OK)
+            {
+                return new FileOpenDialogWrapper(fileOpenDialogComObject);
             }
 
             throw new NotImplementedException();
