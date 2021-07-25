@@ -9,12 +9,12 @@
       </trans-unit>
       <trans-unit id="AccessibleActionCheck">
         <source>Check</source>
-        <target state="new">Check</target>
+        <target state="translated">Установить</target>
         <note />
       </trans-unit>
       <trans-unit id="AccessibleActionUncheck">
         <source>Uncheck</source>
-        <target state="new">Uncheck</target>
+        <target state="translated">Снять</target>
         <note />
       </trans-unit>
       <trans-unit id="AnchorEditorAccName">
