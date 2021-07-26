@@ -64,7 +64,7 @@ namespace WinformsControlsTest
             this.btnOpenFileDialog.Name = "btnOpenFileDialog";
             this.btnOpenFileDialog.Size = new System.Drawing.Size(163, 23);
             this.btnOpenFileDialog.TabIndex = 1;
-            this.btnOpenFileDialog.Text = "Open file dialog";
+            this.btnOpenFileDialog.Text = "Open &file dialog";
             this.btnOpenFileDialog.UseVisualStyleBackColor = true;
             this.btnOpenFileDialog.Click += new System.EventHandler(this.btnOpenFileDialog_Click);
             // 
@@ -74,7 +74,7 @@ namespace WinformsControlsTest
             this.btnThreadExceptionDialog.Name = "btnThreadExceptionDialog";
             this.btnThreadExceptionDialog.Size = new System.Drawing.Size(163, 23);
             this.btnThreadExceptionDialog.TabIndex = 2;
-            this.btnThreadExceptionDialog.Text = "Thread exception dialog";
+            this.btnThreadExceptionDialog.Text = "&Thread exception dialog";
             this.btnThreadExceptionDialog.UseVisualStyleBackColor = true;
             this.btnThreadExceptionDialog.Click += new System.EventHandler(this.btnThreadExceptionDialog_Click);
             // 
@@ -84,7 +84,7 @@ namespace WinformsControlsTest
             this.btnPrintDialog.Name = "btnPrintDialog";
             this.btnPrintDialog.Size = new System.Drawing.Size(163, 23);
             this.btnPrintDialog.TabIndex = 3;
-            this.btnPrintDialog.Text = "Print dialog";
+            this.btnPrintDialog.Text = "&Print dialog";
             this.btnPrintDialog.UseVisualStyleBackColor = true;
             this.btnPrintDialog.Click += new System.EventHandler(this.btnPrintDialog_Click);
             // 
@@ -94,7 +94,7 @@ namespace WinformsControlsTest
             this.btnFolderBrowserDialog.Name = "btnFolderBrowserDialog";
             this.btnFolderBrowserDialog.Size = new System.Drawing.Size(163, 23);
             this.btnFolderBrowserDialog.TabIndex = 4;
-            this.btnFolderBrowserDialog.Text = "Folder browser dialog";
+            this.btnFolderBrowserDialog.Text = "Folder &browser dialog";
             this.btnFolderBrowserDialog.UseVisualStyleBackColor = true;
             this.btnFolderBrowserDialog.Click += new System.EventHandler(this.btnFolderBrowserDialog_Click);
             // 
@@ -104,7 +104,7 @@ namespace WinformsControlsTest
             this.btnSaveFileDialog.Name = "btnSaveFileDialog";
             this.btnSaveFileDialog.Size = new System.Drawing.Size(163, 23);
             this.btnSaveFileDialog.TabIndex = 5;
-            this.btnSaveFileDialog.Text = "Save file dialog";
+            this.btnSaveFileDialog.Text = "&Save file dialog";
             this.btnSaveFileDialog.UseVisualStyleBackColor = true;
             this.btnSaveFileDialog.Click += new System.EventHandler(this.btnSaveFileDialog_Click);
             // 

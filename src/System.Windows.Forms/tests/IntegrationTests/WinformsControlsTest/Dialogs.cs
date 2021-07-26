@@ -23,10 +23,10 @@ namespace WinformsControlsTest
             TypeDescriptor.AddProvider(new AssociatedMetadataTypeTypeDescriptionProvider(saveFileDialog1.GetType(), typeof(ExposedClientGuidMetadata)), saveFileDialog1);
             TypeDescriptor.AddProvider(new AssociatedMetadataTypeTypeDescriptionProvider(folderBrowserDialog1.GetType(), typeof(ExposedClientGuidMetadata)), folderBrowserDialog1);
 
-            _btnOpen = new("Open dialog")
+            _btnOpen = new("&Open dialog")
             {
                 Image = (System.Drawing.Bitmap?)(resources.GetObject("OpenDialog")),
-                Enabled = false
+                Enabled = false,
             };
 
             _btnOpen.Click += (s, e) =>

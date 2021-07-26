@@ -307,6 +307,18 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
+        ///  Presses Alt plus choosen letter on the given process if it can be made the foreground process
+        /// </summary>
+        /// <param name="process">The process to send the Alt and key to</param>
+        /// <param name="letter">Letter in addition to Alt to send to process.</param>
+        /// <returns>Whether or not the Up key was pressed on the process</returns>
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendAltKeyToProcess(Process process, char letter, bool switchToMainWindow = true)
+        {
+            return SendKeysToProcess(process, "%{" + letter + "}", switchToMainWindow);
+        }
+
+        /// <summary>
         ///  Presses Tab any number of times on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Tab key(s) to</param>

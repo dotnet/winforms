@@ -153,6 +153,25 @@ namespace System.Windows.Forms.IntegrationTests
         }
 
         [Fact]
+        public void WinformsControlsTest_OpenFolderBrowserDialogTest()
+        {
+            Process process = TestHelpers.StartProcess(_exePath);
+            TestHelpers.SendTabKeysToProcess(process, MainFormControlsTabOrder.DialogsButton);
+            TestHelpers.SendEnterKeyToProcess(process);
+            TestHelpers.SendEnterKeyToProcess(process, switchToMainWindow: false);
+
+            TestHelpers.SendAltKeyToProcess(process, 'b', switchToMainWindow: false);
+            TestHelpers.SendAltKeyToProcess(process, 'o', switchToMainWindow: false);
+
+            Assert.False(process.HasExited);
+
+            process.Kill();
+            process.WaitForExit();
+
+            Assert.True(process.HasExited);
+        }
+
+        [Fact]
         public void DataBindings_remove_should_unsubscribe_INotifyPropertyChanged_PropertyChanged_event()
         {
             var mainObject = new Mocks.MainObject();
