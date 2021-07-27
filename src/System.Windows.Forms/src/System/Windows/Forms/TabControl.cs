@@ -808,6 +808,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         /// <summary>
         ///  Returns the number of tabs in the strip
         /// </summary>
@@ -965,6 +967,8 @@ namespace System.Windows.Forms
         {
             BeginUpdateInternal();
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new TabControlAccessibleObject(this);
 
         protected override Control.ControlCollection CreateControlsInstance()
         {
@@ -1278,6 +1282,8 @@ namespace System.Windows.Forms
         {
             NotifyAboutFocusState(SelectedTab, focused: true);
             base.OnGotFocus(e);
+
+            SelectedTab?.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
 
         /// <summary>
@@ -2050,6 +2056,12 @@ namespace System.Windows.Forms
             {
                 OnSelected(new TabControlEventArgs(SelectedTab, SelectedIndex, TabControlAction.Selected));
                 OnSelectedIndexChanged(EventArgs.Empty);
+
+                if (SelectedTab?.ParentInternal is TabControl)
+                {
+                    SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
+                    SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
             }
             else
             {
