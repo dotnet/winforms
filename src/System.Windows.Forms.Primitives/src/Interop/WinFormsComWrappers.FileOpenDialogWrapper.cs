@@ -325,7 +325,7 @@ internal partial class Interop
                     Marshal.ThrowExceptionForHR(result);
                 }
 
-                ppsi = local_0 == IntPtr.Zero ? null! : (Shell32.IShellItem)Marshal.GetObjectForIUnknown(local_0);
+                ppsi = local_0 == IntPtr.Zero ? null! : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(local_0, CreateObjectFlags.Unwrap);
             }
 
             HRESULT Shell32.IFileOpenDialog.GetCurrentSelection(out Shell32.IShellItem ppsi)
@@ -334,7 +334,7 @@ internal partial class Interop
                 int retVal;
                 retVal = ((delegate* unmanaged<IntPtr, IntPtr*, int>)(*(*(void***)_wrappedInstance + 14)))
                     (_wrappedInstance, &local_0);
-                ppsi = local_0 == IntPtr.Zero ? null! : (Shell32.IShellItem)Marshal.GetObjectForIUnknown(local_0);
+                ppsi = local_0 == IntPtr.Zero ? null! : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(local_0, CreateObjectFlags.Unwrap);
                 return (HRESULT)retVal;
             }
 
@@ -411,7 +411,7 @@ internal partial class Interop
                     Marshal.ThrowExceptionForHR(result);
                 }
 
-                ppsi = local_0 == IntPtr.Zero ? null! : (Shell32.IShellItem)Marshal.GetObjectForIUnknown(local_0);
+                ppsi = local_0 == IntPtr.Zero ? null! : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(local_0, CreateObjectFlags.Unwrap);
             }
 
             HRESULT Shell32.IFileOpenDialog.AddPlace(Shell32.IShellItem psi, Shell32.FDAP fdap)

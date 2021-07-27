@@ -63,6 +63,13 @@ internal partial class Interop
                 return new FileOpenDialogWrapper(fileOpenDialogComObject);
             }
 
+            Guid shellItemIID = IID.IShellItem;
+            hr = Marshal.QueryInterface(externalComObject, ref shellItemIID, out IntPtr shellItemComObject);
+            if (hr == S_OK)
+            {
+                return new ShellItemWrapper(shellItemComObject);
+            }
+
             throw new NotImplementedException();
         }
 
