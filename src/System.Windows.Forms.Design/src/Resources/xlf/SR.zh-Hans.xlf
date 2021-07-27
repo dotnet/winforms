@@ -7,16 +7,6 @@
         <target state="translated">ActiveX 控件“{0}”未正确注册，因此未能创建该控件。</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleActionCheck">
-        <source>Check</source>
-        <target state="translated">选中</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="AccessibleActionUncheck">
-        <source>Uncheck</source>
-        <target state="translated">取消选中</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
         <target state="translated">定位点编辑器</target>

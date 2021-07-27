@@ -7,16 +7,6 @@
         <target state="translated">No se pudo crear el control ActiveX '{0}' porque no está registrado correctamente.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleActionCheck">
-        <source>Check</source>
-        <target state="translated">Comprobar</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="AccessibleActionUncheck">
-        <source>Uncheck</source>
-        <target state="translated">Desactivar</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
         <target state="translated">Editor de delimitadores</target>
