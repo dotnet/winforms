@@ -5222,11 +5222,6 @@ Deseja substituí-lo?</target>
         <target state="translated">O tamanho máximo para redimensionamento do formulário.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
-        <source>Gets or sets the anchoring for minimized MDI children.</source>
-        <target state="translated">Obtém ou define a ancoragem para filhos MDI minimizados.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">Especifica a MenuStrip primário do formulário. Essa propriedade é usada para ativação do teclado e mesclagem automática em MDI.</target>
