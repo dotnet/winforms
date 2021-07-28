@@ -7,16 +7,6 @@
         <target state="translated">Das ActiveX-Steuerelement {0} konnte nicht erstellt werden, da es nicht ordnungsgemäß registriert ist.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleActionCheck">
-        <source>Check</source>
-        <target state="translated">Aktivieren</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="AccessibleActionUncheck">
-        <source>Uncheck</source>
-        <target state="translated">Deaktivieren</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
         <target state="translated">Anker-Editor</target>
