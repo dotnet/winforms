@@ -6,6 +6,7 @@ trigger:
 - main
 - release/*
 - internal/release/*
+- internal/experimental/*
 
 # trigger ci builds on pull requests into main and any release branches
 pr:

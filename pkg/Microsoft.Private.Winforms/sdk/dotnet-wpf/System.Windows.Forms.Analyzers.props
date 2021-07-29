@@ -1,0 +1,29 @@
+<!--
+    This props file comes from dotnet/winforms. It gets ingested by dotnet/wpf and processed by
+    packaging/Microsoft.NET.Sdk.WindowsDesktop project.
+    
+    It is referenced via Microsoft.NET.Sdk.WindowsDesktop.WindowsForms.props.
+   -->
+
+<Project>
+  <!-- Import for Windows Forms applications or when developing/testing locally -->
+  <ItemGroup Condition="('$(UseWindowsForms)' == 'true') or ('$(ResolveWinFormsAnalyzersFromSdkRefPack)' == 'false')">
+    <!-- Known Application properties -->
+    <CompilerVisibleProperty Include="ApplicationManifest" />
+    <CompilerVisibleProperty Include="StartupObject" />
+
+    <!-- 
+      Custom Application properties
+      See for more details: https://github.com/dotnet/designs/blob/main/accepted/2021/winforms/streamline-application-bootstrap.md#msbuild-properties
+      -->
+    <CompilerVisibleProperty Include="ApplicationDefaultFont" />
+    <CompilerVisibleProperty Include="ApplicationHighDpiMode" />
+    <CompilerVisibleProperty Include="ApplicationUseCompatibleTextRendering" />
+    <CompilerVisibleProperty Include="ApplicationVisualStyles" />
+
+    <!-- If there is an app.manifest - let the generator explore it -->
+    <AdditionalFiles Include="$(ApplicationManifest)" Condition="'$(ApplicationManifest)' != ''" />
+
+  </ItemGroup>
+
+</Project>

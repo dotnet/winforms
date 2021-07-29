@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project>
   <Import Project="Sdk.props" Sdk="Microsoft.DotNet.Arcade.Sdk" />
-  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />  
+  <Import Project="$(RepositoryEngineeringDir)CodeStyle.props" />
   <Import Project="$(RepositoryEngineeringDir)FacadeAssemblies.props" />
   <Import Project="$(RepositoryEngineeringDir)ApiCompatibility\PublicApiAnalyzer.props" />
 
@@ -15,6 +15,11 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <LangVersion>preview</LangVersion>
     <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+  </PropertyGroup>
+
+  <!-- ApplicationConfiguration specific settings -->
+  <PropertyGroup>
+    <ApplicationDefaultFont>Calibri, 11pt, style=regular</ApplicationDefaultFont>
   </PropertyGroup>
 
   <!-- SDK flipped to 'true' by default https://github.com/dotnet/sdk/pull/12720 -->

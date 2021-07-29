@@ -24,4 +24,7 @@
     <Import Include="System.Windows.Forms" />
   </ItemGroup>
 
+  <!-- Windows Forms source generator and analyzers -->
+  <Import Project="System.Windows.Forms.Analyzers.props" />
+
 </Project>
