@@ -2717,9 +2717,9 @@ namespace System.Windows.Forms
         private ISite GetSitedParentSite(Control control, bool checkTopLevelControl) =>
             control is null
                 ? throw new ArgumentNullException(nameof(control))
-                : control.Site != null ||
+                : control.Site is not null ||
                   control.Parent is null ||
-                  (!checkTopLevelControl && control.Site is not null && control.Site.DesignMode)
+                  (!checkTopLevelControl && control.Site.DesignMode)
                     ? control.Site
                     : GetSitedParentSite(control.Parent, checkTopLevelControl);
 
