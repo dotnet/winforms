@@ -2711,17 +2711,16 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public bool IsAncestorSiteInDesignMode(bool checkTopLevelControl) =>
-            GetSitedParentSite(this, checkTopLevelControl) is ISite parentSite ? parentSite.DesignMode : false;
+        public bool IsAncestorSiteInDesignMode =>
+            GetSitedParentSite(this) is ISite parentSite ? parentSite.DesignMode : false;
 
-        private ISite GetSitedParentSite(Control control, bool checkTopLevelControl) =>
+        private ISite GetSitedParentSite(Control control) =>
             control is null
                 ? throw new ArgumentNullException(nameof(control))
-                : control.Site is not null ||
-                  control.Parent is null ||
-                  (!checkTopLevelControl && control.Site.DesignMode)
+                : (control.Site is not null && control.Site.DesignMode) ||
+                  control.Parent is null
                     ? control.Site
-                    : GetSitedParentSite(control.Parent, checkTopLevelControl);
+                    : GetSitedParentSite(control.Parent);
 
         // If the control on which GetContainerControl( ) is called is a ContainerControl, then we don't return the parent
         // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
