@@ -1897,11 +1897,11 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Windows.Forms.DataGridViewColumnCollection.IndexOf(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> int
 ~System.Windows.Forms.DataGridViewColumnCollection.this[int index].get -> System.Windows.Forms.DataGridViewColumn
 ~System.Windows.Forms.DataGridViewColumnCollection.this[string columnName].get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewColumnDividerDoubleClickEventArgs.DataGridViewColumnDividerDoubleClickEventArgs(int columnIndex, System.Windows.Forms.HandledMouseEventArgs e) -> void
-~System.Windows.Forms.DataGridViewColumnEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewColumnEventArgs.DataGridViewColumnEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn) -> void
-~System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.DataGridViewColumnStateChangedEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
+System.Windows.Forms.DataGridViewColumnDividerDoubleClickEventArgs.DataGridViewColumnDividerDoubleClickEventArgs(int columnIndex, System.Windows.Forms.HandledMouseEventArgs? e) -> void
+System.Windows.Forms.DataGridViewColumnEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn!
+System.Windows.Forms.DataGridViewColumnEventArgs.DataGridViewColumnEventArgs(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn) -> void
+System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn!
+System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.DataGridViewColumnStateChangedEventArgs(System.Windows.Forms.DataGridViewColumn! dataGridViewColumn, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.Add(object item) -> int
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(params object[] items) -> void
 ~System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection.AddRange(System.Windows.Forms.DataGridViewComboBoxCell.ObjectCollection value) -> void
