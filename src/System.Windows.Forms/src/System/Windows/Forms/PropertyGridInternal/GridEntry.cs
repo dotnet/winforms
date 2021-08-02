@@ -1733,10 +1733,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                VisualStyleElement element = expanded
-                    ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
-                    : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
-
                 // Invert color if it is not overriden by developer.
                 if (ColorInversionNeededInHC)
                 {
@@ -1745,13 +1741,21 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         using var brush = textColor.GetCachedSolidBrushScope();
                         g.FillRectangle(brush, outline);
+
+                        VisualStyleElement element = expanded
+                            ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
+                            : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
+
+                        VisualStyleRenderer explorerTreeRenderer = new(element);
+                        using var hdc = new DeviceContextHdcScope(g);
+                        explorerTreeRenderer.DrawBackground(hdc, outline, handle);
                     }
                 }
-
-                VisualStyleRenderer explorerTreeRenderer = new(element);
-
-                using var hdc = new DeviceContextHdcScope(g);
-                explorerTreeRenderer.DrawBackground(hdc, outline, handle);
+                else
+                {
+                    string state = expanded ? "OpenedGlyph" : "ClosedGlyph";
+                    ControlPaint.DrawImageColorized(g, DpiHelper.GetBitmapFromIcon(typeof(PropertyGrid), state), outline, OwnerGrid.CategoryForeColor);
+                }
             }
         }
 

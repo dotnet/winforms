@@ -403,11 +403,17 @@
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\arrow.ico">
       <LogicalName>System.Windows.Forms.Arrow</LogicalName>
     </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\ClosedGlyph.ico">
+      <LogicalName>System.Windows.Forms.ClosedGlyph</LogicalName>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\dotdotdot.ico">
       <LogicalName>System.Windows.Forms.dotdotdot</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\EventsTab.ico">
       <LogicalName>System.Windows.Forms.Design.EventsTab</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\OpenedGlyph.ico">
+      <LogicalName>System.Windows.Forms.OpenedGlyph</LogicalName>
     </EmbeddedResource>
     <EmbeddedResource Include="Resources\System\Windows\Forms\PropertyGrid\PBAlpha.ico">
       <LogicalName>System.Windows.Forms.PBAlpha</LogicalName>
