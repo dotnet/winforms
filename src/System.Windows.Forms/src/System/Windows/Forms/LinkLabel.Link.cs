@@ -13,12 +13,13 @@ namespace System.Windows.Forms
     public partial class LinkLabel
     {
         [TypeConverter(typeof(LinkConverter))]
-        public class Link
+        public partial class Link
         {
             private int _start;
             private bool _enabled = true;
             internal int _length;
             private string _name;
+            private LinkAccessibleObject _accessibleObject;
 
             public Link()
             {
@@ -41,6 +42,9 @@ namespace System.Windows.Forms
             {
                 Owner = owner;
             }
+
+            internal LinkAccessibleObject AccessibleObject
+                => _accessibleObject ??= Owner is not null ? new(this, Owner) : null;
 
             /// <summary>
             ///  Description for accessibility
