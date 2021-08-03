@@ -10,7 +10,7 @@ parameters:
   GithubPat: $(BotAccount-dotnet-bot-repo-PAT)
 
   SourcesDirectory: $(Build.SourcesDirectory)
-  CreatePr: true
+  CreatePr: false
   AutoCompletePr: false
   UseLfLineEndings: true
   UseCheckedInLocProjectJson: false
