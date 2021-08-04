@@ -17,14 +17,14 @@ namespace MyProject
         ///  <code>
         ///  Application.EnableVisualStyles();
         ///  Application.SetCompatibleTextRenderingDefault(false);
-        ///  Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+        ///  Application.SetHighDpiMode(HighDpiMode.SystemAware);
         /// </code>
         /// </summary>
         public static void Initialize()
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
         }
     }
 }

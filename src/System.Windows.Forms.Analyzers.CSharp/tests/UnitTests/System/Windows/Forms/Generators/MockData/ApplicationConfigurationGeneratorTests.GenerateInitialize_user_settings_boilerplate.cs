@@ -18,7 +18,7 @@ namespace MyProject
         ///  Application.EnableVisualStyles();
         ///  Application.SetCompatibleTextRenderingDefault(true);
         ///  Application.SetDefaultFont(new Font(new FontFamily("Microsoft Sans Serif"), 8.25f, (FontStyle)0, (GraphicsUnit)2));
-        ///  Application.SetHighDpiMode(HighDpiMode.SystemAware);
+        ///  Application.SetHighDpiMode(HighDpiMode.DpiUnawareGdiScaled);
         /// </code>
         /// </summary>
         public static void Initialize()
@@ -26,7 +26,7 @@ namespace MyProject
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(true);
             Application.{|CS0117:SetDefaultFont|}(new Font(new FontFamily("Microsoft Sans Serif"), 8.25f, (FontStyle)0, (GraphicsUnit)2));
-            Application.{|CS0117:SetHighDpiMode|}({|CS0103:HighDpiMode|}.SystemAware);
+            Application.{|CS0117:SetHighDpiMode|}({|CS0103:HighDpiMode|}.DpiUnawareGdiScaled);
         }
     }
 }

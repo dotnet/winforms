@@ -15,7 +15,7 @@ internal static partial class ApplicationConfiguration
     ///  Bootstrap the application as follows:
     ///  <code>
     ///  Application.SetCompatibleTextRenderingDefault(false);
-    ///  Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+    ///  Application.SetHighDpiMode(HighDpiMode.SystemAware);
     /// </code>
     /// </summary>
     public static void Initialize()
@@ -25,6 +25,6 @@ internal static partial class ApplicationConfiguration
         Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
 
         Application.SetCompatibleTextRenderingDefault(false);
-        Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+        Application.SetHighDpiMode(HighDpiMode.SystemAware);
     }
 }
