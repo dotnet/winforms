@@ -4,47 +4,47 @@
     <body>
       <trans-unit id="GdiplusFontFamilyNotFound">
         <source>Font '{0}' cannot be found.</source>
-        <target state="new">Font '{0}' cannot be found.</target>
+        <target state="translated">フォント '{0}' が見つかりません。</target>
         <note />
       </trans-unit>
       <trans-unit id="GdiplusNotTrueTypeFont">
         <source>Only TrueType fonts are supported. '{0}' is not a TrueType font.</source>
-        <target state="new">Only TrueType fonts are supported. '{0}' is not a TrueType font.</target>
+        <target state="translated">TrueType フォントのみがサポートされています。'{0}' は TrueType フォントではありません。</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgumentValueFontConverter">
         <source>Value of '{0}' is not valid for font size unit.</source>
-        <target state="new">Value of '{0}' is not valid for font size unit.</target>
+        <target state="translated">'{0}' の値は、フォント サイズの単位として有効ではありません。</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Text "{0}" cannot be parsed. The expected text format is "{1}".</source>
-        <target state="new">Text "{0}" cannot be parsed. The expected text format is "{1}".</target>
+        <target state="translated">テキスト "{0}" を解析できません。必要なテキストの形式は "{1}" です。</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC001Message">
         <source>Only projects with 'OutputType={0}' supported</source>
-        <target state="new">Only projects with 'OutputType={0}' supported</target>
+        <target state="translated">'OutputType ={0}' のプロジェクトのみがサポートされています</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC001Title">
         <source>Unsupported project type</source>
-        <target state="new">Unsupported project type</target>
+        <target state="translated">サポートされていないプロジェクトの種類</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC002Message">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
-        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'</target>
+        <target state="translated">ArgumentException: プロジェクト プロパティ '{0}' を '{1}' に設定することはできません</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC002MessageWithReason">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
-        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</target>
+        <target state="translated">ArgumentException: プロジェクト プロパティ '{0}' を '{1}' に設定することはできません。理由: {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC002Title">
         <source>Unsupported property value</source>
-        <target state="new">Unsupported property value</target>
+        <target state="translated">サポートされていないプロパティの値</target>
         <note />
       </trans-unit>
     </body>
