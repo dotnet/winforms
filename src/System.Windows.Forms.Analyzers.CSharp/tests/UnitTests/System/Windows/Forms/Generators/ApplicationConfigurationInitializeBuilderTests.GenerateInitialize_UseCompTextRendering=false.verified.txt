@@ -16,7 +16,7 @@ internal static partial class ApplicationConfiguration
     ///  <code>
     ///  Application.EnableVisualStyles();
     ///  Application.SetCompatibleTextRenderingDefault(false);
-    ///  Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+    ///  Application.SetHighDpiMode(HighDpiMode.SystemAware);
     /// </code>
     /// </summary>
     public static void Initialize()
@@ -27,6 +27,6 @@ internal static partial class ApplicationConfiguration
 
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(false);
-        Application.SetHighDpiMode(HighDpiMode.PerMonitorV2);
+        Application.SetHighDpiMode(HighDpiMode.SystemAware);
     }
 }

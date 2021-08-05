@@ -125,7 +125,7 @@ namespace MyProject
                 {
                     ($"build_property.{PropertyNameCSharp.DefaultFont}", "Microsoft Sans Serif, 8.25px"),
                     ($"build_property.{PropertyNameCSharp.EnableVisualStyles}", ""),
-                    ($"build_property.{PropertyNameCSharp.HighDpiMode}", HighDpiMode.SystemAware.ToString()),
+                    ($"build_property.{PropertyNameCSharp.HighDpiMode}", HighDpiMode.DpiUnawareGdiScaled.ToString()),
                     ($"build_property.{PropertyNameCSharp.UseCompatibleTextRendering}", "true"),
                 },
                 TestState =
@@ -182,7 +182,7 @@ ApplicationConfiguration.Initialize();
                 {
                     ($"build_property.{PropertyNameCSharp.DefaultFont}", "Microsoft Sans Serif, 8.25px"),
                     ($"build_property.{PropertyNameCSharp.EnableVisualStyles}", ""),
-                    ($"build_property.{PropertyNameCSharp.HighDpiMode}", HighDpiMode.SystemAware.ToString()),
+                    ($"build_property.{PropertyNameCSharp.HighDpiMode}", HighDpiMode.DpiUnawareGdiScaled.ToString()),
                     ($"build_property.{PropertyNameCSharp.UseCompatibleTextRendering}", "true"),
                 },
                 TestState =
