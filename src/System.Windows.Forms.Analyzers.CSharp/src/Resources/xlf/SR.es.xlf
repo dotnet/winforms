@@ -4,47 +4,47 @@
     <body>
       <trans-unit id="GdiplusFontFamilyNotFound">
         <source>Font '{0}' cannot be found.</source>
-        <target state="new">Font '{0}' cannot be found.</target>
+        <target state="translated">No se puede encontrar la fuente '{0}'.</target>
         <note />
       </trans-unit>
       <trans-unit id="GdiplusNotTrueTypeFont">
         <source>Only TrueType fonts are supported. '{0}' is not a TrueType font.</source>
-        <target state="new">Only TrueType fonts are supported. '{0}' is not a TrueType font.</target>
+        <target state="translated">Sólo son compatibles las fuentes TrueType. '{0}' no es una fuente TrueType.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgumentValueFontConverter">
         <source>Value of '{0}' is not valid for font size unit.</source>
-        <target state="new">Value of '{0}' is not valid for font size unit.</target>
+        <target state="translated">El valor de '{0}' no es válido para la unidad de tamaño de fuente.</target>
         <note />
       </trans-unit>
       <trans-unit id="TextParseFailedFormat">
         <source>Text "{0}" cannot be parsed. The expected text format is "{1}".</source>
-        <target state="new">Text "{0}" cannot be parsed. The expected text format is "{1}".</target>
+        <target state="translated">No se pudo analizar el texto "{0}". Se esperaba el formato de texto "{1}".</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC001Message">
         <source>Only projects with 'OutputType={0}' supported</source>
-        <target state="new">Only projects with 'OutputType={0}' supported</target>
+        <target state="translated">Solo se admiten proyectos con "OutputType={0}".</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC001Title">
         <source>Unsupported project type</source>
-        <target state="new">Unsupported project type</target>
+        <target state="translated">Tipo de proyecto incompatible</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC002Message">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
-        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'</target>
+        <target state="translated">ArgumentException: la propiedad de proyecto '{0}' no se puede establecer en '{1}'</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC002MessageWithReason">
         <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
-        <target state="new">ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</target>
+        <target state="translated">ArgumentException: la propiedad de proyecto '{0}' no se puede establecer en '{1}'. Motivo: {2}</target>
         <note />
       </trans-unit>
       <trans-unit id="WFAC002Title">
         <source>Unsupported property value</source>
-        <target state="new">Unsupported property value</target>
+        <target state="translated">Valor de propiedad no admitido</target>
         <note />
       </trans-unit>
     </body>
