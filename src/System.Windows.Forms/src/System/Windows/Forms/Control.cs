@@ -18,7 +18,6 @@ using System.Runtime.InteropServices.ComTypes;
 using System.Text;
 using System.Windows.Forms.Automation;
 using System.Windows.Forms.Layout;
-using Accessibility;
 using Microsoft.Win32;
 using static Interop;
 using Encoding = System.Text.Encoding;
@@ -9921,8 +9920,7 @@ namespace System.Windows.Forms
 
             if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
             {
-                var intAccessibleObject = new InternalAccessibleObject(AccessibilityObject);
-                UiaCore.UiaDisconnectProvider(intAccessibleObject);
+                UiaCore.UiaDisconnectProvider(AccessibilityObject);
             }
         }
 
@@ -11915,83 +11913,52 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + GetType().FullName + ", lParam = " + m.LParam.ToString());
 
-            InternalAccessibleObject intAccessibleObject = null;
-
             if (m.Msg == (int)User32.WM.GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId && SupportsUiaProviders)
             {
                 // If the requested object identifier is UiaRootObjectId,
                 // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                intAccessibleObject = new InternalAccessibleObject(AccessibilityObject);
                 m.Result = UiaCore.UiaReturnRawElementProvider(
                     new HandleRef(this, Handle),
                     m.WParam,
                     m.LParam,
-                    intAccessibleObject);
+                    AccessibilityObject);
 
                 return;
             }
 
-            AccessibleObject ctrlAccessibleObject = GetAccessibilityObject(unchecked((int)(long)m.LParam));
+            AccessibleObject accessibleObject = GetAccessibilityObject(PARAM.ToInt(m.LParam));
 
-            if (ctrlAccessibleObject is not null)
+            // See "How to Handle WM_GETOBJECT" in MSDN.
+            if (accessibleObject is null)
             {
-                intAccessibleObject = new InternalAccessibleObject(ctrlAccessibleObject);
+                // Some accessible object requested that we don't care about, so do default message processing.
+                DefWndProc(ref m);
+
+                return;
             }
 
-            // See "How to Handle WM_GETOBJECT" in MSDN
-            if (intAccessibleObject is not null)
-            {
-                // Get the IAccessible GUID
-                Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
+            // Get the IAccessible GUID.
+            Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
 
-                // Get an Lresult for the accessibility Object for this control
-                IntPtr punkAcc;
+            // Get an Lresult for the accessibility Object for this control.
+            try
+            {
+                // Obtain the Lresult.
+                IntPtr pUnknown = Marshal.GetIUnknownForObject(accessibleObject);
+
                 try
                 {
-                    // It is critical that we never pass out a raw IAccessible object here,
-                    // but always pass out an IAccessibleInternal wrapper. This may not be possible in the current implementation
-                    // of WmGetObject - but its important enough to keep this check here in case the code changes in the future in
-                    // a way that breaks this assumption.
-
-                    object tempObject = intAccessibleObject;
-                    if (tempObject is IAccessible iAccCheck)
-                    {
-                        throw new InvalidOperationException(SR.ControlAccessibleObjectInvalid);
-                    }
-
-                    // Check that we have an IAccessibleInternal implementation and return this
-                    UiaCore.IAccessibleInternal iacc = (UiaCore.IAccessibleInternal)intAccessibleObject;
-
-                    if (iacc is null)
-                    {
-                        // Accessibility is not supported on this control
-                        Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "AccessibilityObject returned null");
-                        m.Result = (IntPtr)0;
-                    }
-                    else
-                    {
-                        // Obtain the Lresult
-                        punkAcc = Marshal.GetIUnknownForObject(iacc);
-
-                        try
-                        {
-                            m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(ctrlAccessibleObject, punkAcc));
-                            Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "LresultFromObject returned " + m.Result.ToString());
-                        }
-                        finally
-                        {
-                            Marshal.Release(punkAcc);
-                        }
-                    }
+                    m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(accessibleObject, pUnknown));
+                    Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "LresultFromObject returned " + m.Result.ToString());
                 }
-                catch (Exception e)
+                finally
                 {
-                    throw new InvalidOperationException(SR.RichControlLresult, e);
+                    Marshal.Release(pUnknown);
                 }
             }
-            else
-            {  // some accessible object requested that we don't care about, so do default message processing
-                DefWndProc(ref m);
+            catch (Exception e)
+            {
+                throw new InvalidOperationException(SR.RichControlLresult, e);
             }
         }
 

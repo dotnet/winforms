@@ -15,7 +15,6 @@ namespace System.Windows.Forms
         private class ComboBoxChildNativeWindow : NativeWindow
         {
             private readonly ComboBox _owner;
-            private InternalAccessibleObject _accessibilityObject;
             private readonly ChildWindowType _childWindowType;
 
             public ComboBoxChildNativeWindow(ComboBox comboBox, ChildWindowType childWindowType)
@@ -88,55 +87,38 @@ namespace System.Windows.Forms
             {
                 if (m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
                 {
-                    AccessibleObject uiaProvider = GetChildAccessibleObject(_childWindowType);
-
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    InternalAccessibleObject internalAccessibleObject = new InternalAccessibleObject(uiaProvider);
                     m.Result = UiaCore.UiaReturnRawElementProvider(
                         new HandleRef(this, Handle),
                         m.WParam,
                         m.LParam,
-                        internalAccessibleObject);
+                        GetChildAccessibleObject(_childWindowType));
 
                     return;
                 }
 
                 // See "How to Handle WM_GETOBJECT" in MSDN
                 //
-                if (unchecked((int)(long)m.LParam) == OBJID.CLIENT)
+                if (PARAM.ToInt(m.LParam) == OBJID.CLIENT)
                 {
                     // Get the IAccessible GUID
                     //
                     Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
 
                     // Get an Lresult for the accessibility Object for this control
-                    //
-                    IntPtr punkAcc;
                     try
                     {
-                        AccessibleObject wfAccessibleObject = null;
-                        UiaCore.IAccessibleInternal iacc = null;
-
-                        if (_accessibilityObject is null)
-                        {
-                            wfAccessibleObject = GetChildAccessibleObject(_childWindowType);
-                            _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
-                        }
-
-                        iacc = (UiaCore.IAccessibleInternal)_accessibilityObject;
-
                         // Obtain the Lresult
-                        //
-                        punkAcc = Marshal.GetIUnknownForObject(iacc);
+                        IntPtr pUnknown = Marshal.GetIUnknownForObject(GetChildAccessibleObject(_childWindowType));
 
                         try
                         {
-                            m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(this, punkAcc));
+                            m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(this, pUnknown));
                         }
                         finally
                         {
-                            Marshal.Release(punkAcc);
+                            Marshal.Release(pUnknown);
                         }
                     }
                     catch (Exception e)

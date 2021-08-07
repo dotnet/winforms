@@ -159,7 +159,7 @@ namespace System.Windows.Forms.Tests
                 using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
                 comboBox.CreateControl();
                 ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
-                Assert.Equal(comboBox.ChildEditAccessibleObject, provider.DocumentRange.GetEnclosingElement().TestAccessor().Dynamic.publicIAccessible);
+                Assert.Equal(comboBox.ChildEditAccessibleObject, provider.DocumentRange.GetEnclosingElement());
                 Assert.Equal(provider, provider.DocumentRange.TestAccessor().Dynamic._provider);
                 Assert.NotNull(comboBox.TestAccessor().Dynamic._childEdit);
             }

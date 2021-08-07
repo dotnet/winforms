@@ -430,12 +430,11 @@ namespace System.Windows.Forms
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    InternalAccessibleObject intAccessibleObject = new InternalAccessibleObject(AccessibilityObject);
                     m.Result = UiaCore.UiaReturnRawElementProvider(
                         new HandleRef(this, Handle),
                         m.WParam,
                         m.LParam,
-                        intAccessibleObject);
+                        AccessibilityObject);
 
                     return;
                 }
