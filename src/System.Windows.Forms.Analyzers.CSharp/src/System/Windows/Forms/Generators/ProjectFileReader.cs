@@ -11,32 +11,32 @@ namespace System.Windows.Forms.Generators
 {
     internal static partial class ProjectFileReader
     {
-        public static ApplicationConfig? ReadApplicationConfig(GeneratorExecutionContext context)
-        {
-            Diagnostic? diagnostic;
-            if (!TryReadBool(context.AnalyzerConfigOptions, PropertyNameCSharp.EnableVisualStyles,
-                             defaultValue: PropertyDefaultValue.EnableVisualStyles,
-                             out bool enableVisualStyles, out diagnostic) ||
-                !TryReadBool(context.AnalyzerConfigOptions, PropertyNameCSharp.UseCompatibleTextRendering,
-                             defaultValue: PropertyDefaultValue.UseCompatibleTextRendering,
-                             out bool useCompatibleTextRendering, out diagnostic) ||
-                !TryReadFont(context.AnalyzerConfigOptions, out FontDescriptor? font, out diagnostic) ||
-                !TryReadHighDpiMode(context.AnalyzerConfigOptions, out HighDpiMode highDpiMode, out diagnostic))
-            {
-                context.ReportDiagnostic(diagnostic!);
-                return null;
-            }
+        public static IncrementalValueProvider<(ApplicationConfig? ApplicationConfig, Diagnostic? Diagnostic)> ReadApplicationConfig(IncrementalValueProvider<AnalyzerConfigOptionsProvider> configOptionsProvider)
+            => configOptionsProvider.Select(
+                (analyzerConfigOptions, cancellationToken) =>
+                {
+                    Diagnostic? diagnostic;
+                    if (!TryReadBool(analyzerConfigOptions, PropertyNameCSharp.EnableVisualStyles,
+                                     defaultValue: PropertyDefaultValue.EnableVisualStyles,
+                                     out bool enableVisualStyles, out diagnostic) ||
+                        !TryReadBool(analyzerConfigOptions, PropertyNameCSharp.UseCompatibleTextRendering,
+                                     defaultValue: PropertyDefaultValue.UseCompatibleTextRendering,
+                                     out bool useCompatibleTextRendering, out diagnostic) ||
+                        !TryReadFont(analyzerConfigOptions, out FontDescriptor? font, out diagnostic) ||
+                        !TryReadHighDpiMode(analyzerConfigOptions, out HighDpiMode highDpiMode, out diagnostic))
+                    {
+                        return ((ApplicationConfig?)null, diagnostic);
+                    }
 
-            ApplicationConfig projectConfig = new()
-            {
-                EnableVisualStyles = enableVisualStyles,
-                DefaultFont = font,
-                HighDpiMode = highDpiMode,
-                UseCompatibleTextRendering = useCompatibleTextRendering
-            };
-
-            return projectConfig;
-        }
+                    ApplicationConfig projectConfig = new()
+                    {
+                        EnableVisualStyles = enableVisualStyles,
+                        DefaultFont = font,
+                        HighDpiMode = highDpiMode,
+                        UseCompatibleTextRendering = useCompatibleTextRendering
+                    };
+                    return (projectConfig, null);
+                });
 
         private static bool TryReadBool(AnalyzerConfigOptionsProvider configOptions, string propertyName, bool defaultValue, out bool value, out Diagnostic? diagnostic)
         {

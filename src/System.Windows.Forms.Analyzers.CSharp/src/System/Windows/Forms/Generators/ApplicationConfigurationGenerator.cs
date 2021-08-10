@@ -13,10 +13,25 @@ namespace System.Windows.Forms.Generators
     [Generator(LanguageNames.CSharp)]
     internal class ApplicationConfigurationGenerator : IIncrementalGenerator
     {
-        private void Execute(Compilation compilation, ImmutableArray<SyntaxNode> syntaxNodes, SourceProductionContext context)
+        private void Execute(
+            SourceProductionContext context,
+            Compilation compilation,
+            ImmutableArray<SyntaxNode> syntaxNodes,
+            ApplicationConfig? applicationConfig,
+            Diagnostic? applicationConfigDiagnostics)
         {
             if (syntaxNodes.IsEmpty)
             {
+                return;
+            }
+
+            if (applicationConfig is null)
+            {
+                if (applicationConfigDiagnostics is not null)
+                {
+                    context.ReportDiagnostic(applicationConfigDiagnostics);
+                }
+
                 return;
             }
 
@@ -30,13 +45,7 @@ namespace System.Windows.Forms.Generators
                 return;
             }
 
-            ApplicationConfig? projectConfig = ProjectFileReader.ReadApplicationConfig(compilation);
-            if (projectConfig is null)
-            {
-                return;
-            }
-
-            string? code = ApplicationConfigurationInitializeBuilder.GenerateInitialize(projectNamespace: GetUserProjectNamespace(syntaxNodes[0]), projectConfig);
+            string? code = ApplicationConfigurationInitializeBuilder.GenerateInitialize(projectNamespace: GetUserProjectNamespace(syntaxNodes[0]), applicationConfig);
             if (code is not null)
             {
                 context.AddSource("ApplicationConfiguration.g.cs", code);
@@ -62,9 +71,19 @@ namespace System.Windows.Forms.Generators
                 transform: (generatorSyntaxContext, _) => generatorSyntaxContext.Node
                 );
 
-            IncrementalValueProvider<(Compilation Compilation, ImmutableArray<SyntaxNode> Nodes)> compilationProvider = context.CompilationProvider.Combine(syntaxProvider.Collect());
+            var globalConfig = ProjectFileReader.ReadApplicationConfig(context.AnalyzerConfigOptionsProvider);
 
-            context.RegisterSourceOutput(compilationProvider, (spc, source) => Execute(source.Compilation, source.Nodes, spc));
+            var inputs = context.CompilationProvider
+                .Combine(syntaxProvider.Collect())
+                .Combine(globalConfig)
+                .Select((data, cancellationToken)
+                    => (Compilation: data.Left.Left,
+                        Nodes: data.Left.Right,
+                        ApplicationConfig: data.Right.ApplicationConfig,
+                        ApplicationConfigDiagnostics: data.Right.Diagnostic));
+
+            context.RegisterSourceOutput(inputs, (context, source)
+                => Execute(context, source.Compilation, source.Nodes, source.ApplicationConfig, source.ApplicationConfigDiagnostics));
         }
 
         public static bool IsSupportedSyntaxNode(SyntaxNode syntaxNode)

@@ -54,7 +54,7 @@ namespace MyProject
         [MemberData(nameof(UnsupportedProjectTypes_TestData))]
         public async Task ApplicationConfigurationGenerator_GenerateInitialize_fails_if_project_type_unsupported(OutputKind projectType)
         {
-            var test = new CSharpSourceGeneratorTest<ApplicationConfigurationGenerator>
+            var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
             {
                 TestState =
                 {
@@ -77,7 +77,7 @@ namespace MyProject
         {
             SourceText generatedCode = LoadFileContent("GenerateInitialize_default_boilerplate");
 
-            var test = new CSharpSourceGeneratorTest<ApplicationConfigurationGenerator>
+            var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
             {
                 TestState =
                 {
@@ -98,7 +98,7 @@ namespace MyProject
         {
             SourceText generatedCode = LoadFileContent("GenerateInitialize_default_boilerplate");
 
-            var test = new CSharpSourceGeneratorTest<ApplicationConfigurationGenerator>
+            var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
             {
                 TestState =
                 {
@@ -119,7 +119,7 @@ namespace MyProject
         {
             SourceText generatedCode = LoadFileContent("GenerateInitialize_user_settings_boilerplate");
 
-            var test = new CSharpSourceGeneratorTest<ApplicationConfigurationGenerator>
+            var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
             {
                 GlobalOptions =
                 {
@@ -151,7 +151,7 @@ ApplicationConfiguration.Initialize();
 
             SourceText generatedCode = LoadFileContent("GenerateInitialize_default_top_level");
 
-            var test = new CSharpSourceGeneratorTest<ApplicationConfigurationGenerator>
+            var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
             {
                 TestState =
                 {
@@ -176,7 +176,7 @@ ApplicationConfiguration.Initialize();
 
             SourceText generatedCode = LoadFileContent("GenerateInitialize_user_top_level");
 
-            var test = new CSharpSourceGeneratorTest<ApplicationConfigurationGenerator>
+            var test = new CSharpIncrementalSourceGeneratorVerifier<ApplicationConfigurationGenerator>.Test
             {
                 GlobalOptions =
                 {
