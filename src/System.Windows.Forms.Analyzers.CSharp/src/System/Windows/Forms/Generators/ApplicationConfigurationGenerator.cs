@@ -15,8 +15,8 @@ namespace System.Windows.Forms.Generators
     {
         private void Execute(
             SourceProductionContext context,
-            Compilation compilation,
             ImmutableArray<SyntaxNode> syntaxNodes,
+            OutputKind outputKind,
             ApplicationConfig? applicationConfig,
             Diagnostic? applicationConfigDiagnostics)
         {
@@ -35,11 +35,11 @@ namespace System.Windows.Forms.Generators
                 return;
             }
 
-            if (compilation.Options.OutputKind != OutputKind.WindowsApplication &&
+            if (outputKind != OutputKind.WindowsApplication &&
                 // Starting in the 5.0.100 version of the .NET SDK, when OutputType is set to Exe, it is automatically changed to WinExe
                 // for WPF and Windows Forms apps that target any framework version, including .NET Framework.
                 // https://docs.microsoft.com/en-us/dotnet/core/compatibility/sdk/5.0/automatically-infer-winexe-output-type
-                compilation.Options.OutputKind != OutputKind.ConsoleApplication)
+                outputKind != OutputKind.ConsoleApplication)
             {
                 context.ReportDiagnostic(Diagnostic.Create(DiagnosticDescriptors.s_errorUnsupportedProjectType, Location.None, nameof(OutputKind.WindowsApplication)));
                 return;
@@ -82,8 +82,9 @@ namespace System.Windows.Forms.Generators
                         ApplicationConfig: data.Right.ApplicationConfig,
                         ApplicationConfigDiagnostics: data.Right.Diagnostic));
 
-            context.RegisterSourceOutput(inputs, (context, source)
-                => Execute(context, source.Compilation, source.Nodes, source.ApplicationConfig, source.ApplicationConfigDiagnostics));
+            context.RegisterSourceOutput(
+                inputs,
+                (context, source) => Execute(context, source.Nodes, source.Compilation.Options.OutputKind, source.ApplicationConfig, source.ApplicationConfigDiagnostics));
         }
 
         public static bool IsSupportedSyntaxNode(SyntaxNode syntaxNode)
@@ -93,7 +94,7 @@ namespace System.Windows.Forms.Generators
                 {
                     ArgumentList:
                     {
-                        Arguments: { Count: < 1 }
+                        Arguments: { Count: 0 }
                     },
                     Expression: MemberAccessExpressionSyntax
                     {
