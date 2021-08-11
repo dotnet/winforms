@@ -163,7 +163,7 @@ namespace System.Windows.Forms.IntegrationTests
             TestHelpers.SendAltKeyToProcess(process, 'b', switchToMainWindow: false);
             TestHelpers.SendAltKeyToProcess(process, 'o', switchToMainWindow: false);
 
-            Process.WaitForExit(2_000);
+            process.WaitForExit(2_000);
             Assert.False(process.HasExited);
 
             process.Kill();
