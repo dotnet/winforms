@@ -6,7 +6,6 @@
 
 using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
 using System.Runtime.InteropServices;
@@ -25,6 +24,7 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionToolTip))]
     public partial class ToolTip : Component, IExtenderProvider, IHandle
     {
+        // These values are copied from the comctl32's tooltip.
         private const int DefaultDelay = 500;
         private const int ReshowRatio = 5;
         private const int AutoPopRatio = 10;
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         private const int LocationIndexBottom = 2;
         private const int LocationIndexLeft = 3;
         private const int LocationTotal = 4;
-        private readonly Hashtable _tools = new Hashtable();
+        private readonly Hashtable _tools = new();
         private readonly int[] _delayTimes = new int[4];
         private bool _auto = true;
         private bool _showAlways;
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         private string _toolTipTitle = string.Empty;
         private ToolTipIcon _toolTipIcon = ToolTipIcon.None;
         private ToolTipTimer _timer;
-        private readonly Hashtable _owners = new Hashtable();
+        private readonly Hashtable _owners = new();
         private bool _stripAmpersands;
         private bool _useAnimation = true;
         private bool _useFading = true;
@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         ///  Adding a tool twice breaks the ToolTip, so we need to track which
         ///  tools are created to prevent this.
         /// </summary>
-        private readonly Hashtable _created = new Hashtable();
+        private readonly Hashtable _created = new();
 
         private bool _cancelled;
 
@@ -78,10 +78,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolTip(IContainer cont) : this()
         {
-            if (cont is null)
-            {
-                throw new ArgumentNullException(nameof(cont));
-            }
+            _ = cont ?? throw new ArgumentNullException(nameof(cont));
 
             cont.Add(this);
         }
@@ -142,7 +139,7 @@ namespace System.Windows.Forms
             {
                 if (value < 0)
                 {
-                   throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutomaticDelay), value, 0));
+                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(AutomaticDelay), value, 0));
                 }
 
                 SetDelayTime((int)TTDT.AUTOMATIC, value);
@@ -151,7 +148,6 @@ namespace System.Windows.Forms
 
         internal string GetCaptionForTool(Control tool)
         {
-            Debug.Assert(tool is not null, "tool should not be null");
             return ((TipInfo)_tools[tool])?.Caption;
         }
 
@@ -307,18 +303,18 @@ namespace System.Windows.Forms
             // We want to enter in the if block only if ShowParams does not return SW_SHOWNOACTIVATE.
             // for ToolStripDropDown ShowParams returns SW_SHOWNOACTIVATE, in which case we don't
             // want to check IsWindowActive and hence return true.
-            if (window is Control windowControl &&
-                (windowControl.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
+            if (window is Control control &&
+                (control.ShowParams & (User32.SW)0xF) != User32.SW.SHOWNOACTIVATE)
             {
                 IntPtr hWnd = User32.GetActiveWindow();
-                IntPtr rootHwnd = User32.GetAncestor(windowControl, User32.GA.ROOT);
+                IntPtr rootHwnd = User32.GetAncestor(control, User32.GA.ROOT);
                 if (hWnd != rootHwnd)
                 {
-                    TipInfo tt = (TipInfo)_tools[windowControl];
+                    TipInfo tt = (TipInfo)_tools[control];
                     if (tt is not null && (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
                     {
-                        _tools.Remove(windowControl);
-                        DestroyRegion(windowControl);
+                        _tools.Remove(control);
+                        DestroyRegion(control);
                     }
 
                     return false;
@@ -449,7 +445,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(this, (User32.WM)TTM.SETTITLEW, (IntPtr)_toolTipIcon, title);
 
                         // Tooltip need to be updated to reflect the changes in the icon because
-                        // this operation directly affects the size of the tooltip
+                        // this operation directly affects the size of the tooltip.
                         User32.SendMessageW(this, (User32.WM)TTM.UPDATE);
                     }
                 }
@@ -478,8 +474,8 @@ namespace System.Windows.Forms
                     {
                         User32.SendMessageW(this, (User32.WM)TTM.SETTITLEW, (IntPtr)_toolTipIcon, _toolTipTitle);
 
-                        // Tooltip need to be updated to reflect the changes in the titletext because
-                        // this operation directly affects the size of the tooltip
+                        // Tooltip need to be updated to reflect the changes in the title text because
+                        // this operation directly affects the size of the tooltip.
                         User32.SendMessageW(this, (User32.WM)TTM.UPDATE);
                     }
                 }
@@ -495,36 +491,36 @@ namespace System.Windows.Forms
                     return _topLevelControl;
                 }
 
-                Control baseVar = null;
-                Control[] regions = new Control[_tools.Keys.Count];
+                Control currentTopLevel = null;
+                var regions = new Control[_tools.Keys.Count];
                 _tools.Keys.CopyTo(regions, 0);
                 for (int i = 0; i < regions.Length; i++)
                 {
-                    Control ctl = regions[i];
-                    baseVar = ctl.TopLevelControlInternal;
-                    if (baseVar is not null)
+                    var control = regions[i];
+                    currentTopLevel = control.TopLevelControlInternal;
+                    if (currentTopLevel is not null)
                     {
                         break;
                     }
 
-                    if (ctl.IsActiveX)
+                    if (control.IsActiveX)
                     {
-                        baseVar = ctl;
+                        currentTopLevel = control;
                         break;
                     }
 
                     // In the designer, baseVar can be null since the Parent is not a TopLevel control
-                    if (baseVar is null)
+                    if (currentTopLevel is null)
                     {
-                        if (ctl is not null && ctl.ParentInternal is not null)
+                        if (control is not null && control.ParentInternal is not null)
                         {
-                            while (ctl.ParentInternal is not null)
+                            while (control.ParentInternal is not null)
                             {
-                                ctl = ctl.ParentInternal;
+                                control = control.ParentInternal;
                             }
 
-                            baseVar = ctl;
-                            if (baseVar is not null)
+                            currentTopLevel = control;
+                            if (currentTopLevel is not null)
                             {
                                 break;
                             }
@@ -532,20 +528,20 @@ namespace System.Windows.Forms
                     }
                 }
 
-                _topLevelControl = baseVar;
-                if (baseVar is not null)
+                _topLevelControl = currentTopLevel;
+                if (currentTopLevel is not null)
                 {
-                    baseVar.HandleCreated += new EventHandler(TopLevelCreated);
-                    baseVar.HandleDestroyed += new EventHandler(TopLevelDestroyed);
-                    if (baseVar.IsHandleCreated)
+                    currentTopLevel.HandleCreated += TopLevelCreated;
+                    currentTopLevel.HandleDestroyed += TopLevelDestroyed;
+                    if (currentTopLevel.IsHandleCreated)
                     {
-                        TopLevelCreated(baseVar, EventArgs.Empty);
+                        TopLevelCreated(currentTopLevel, EventArgs.Empty);
                     }
 
-                    baseVar.ParentChanged += new EventHandler(OnTopLevelPropertyChanged);
+                    currentTopLevel.ParentChanged += OnTopLevelPropertyChanged;
                 }
 
-                return baseVar;
+                return currentTopLevel;
             }
         }
 
@@ -620,13 +616,14 @@ namespace System.Windows.Forms
         /// </summary>
         private void AdjustBaseFromAuto()
         {
-            _delayTimes[(int)TTDT.RESHOW] = _delayTimes[(int)TTDT.AUTOMATIC] / ReshowRatio;
-            _delayTimes[(int)TTDT.AUTOPOP] = _delayTimes[(int)TTDT.AUTOMATIC] * AutoPopRatio;
-            _delayTimes[(int)TTDT.INITIAL] = _delayTimes[(int)TTDT.AUTOMATIC];
+            int delay = _delayTimes[(int)TTDT.AUTOMATIC];
+            _delayTimes[(int)TTDT.RESHOW] = delay / ReshowRatio;
+            _delayTimes[(int)TTDT.AUTOPOP] = delay * AutoPopRatio;
+            _delayTimes[(int)TTDT.INITIAL] = delay;
         }
 
         /// <summary>
-        ///  ScreenReader announces ToolTip text for an element
+        ///  Screen reader announces ToolTip text for an element.
         /// </summary>
         private void AnnounceText(Control tool, string text)
         {
@@ -638,7 +635,7 @@ namespace System.Windows.Forms
 
         private void HandleCreated(object sender, EventArgs eventargs)
         {
-            // Reset the toplevel control when the owner's handle is recreated.
+            // Reset the top level control when the owner's handle is recreated.
             ClearTopLevelControlEvents();
             _topLevelControl = null;
 
@@ -658,12 +655,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Fires the Draw event.
+        ///  Raises the Draw event.
         /// </summary>
         private void OnDraw(DrawToolTipEventArgs e) => _onDraw?.Invoke(this, e);
 
         /// <summary>
-        ///  Fires the Popup event.
+        ///  Raises the Popup event.
         /// </summary>
         private void OnPopup(PopupEventArgs e) => _onPopup?.Invoke(this, e);
 
@@ -686,12 +683,14 @@ namespace System.Windows.Forms
 
         private void ClearTopLevelControlEvents()
         {
-            if (_topLevelControl is not null)
+            if (_topLevelControl is null)
             {
-                _topLevelControl.ParentChanged -= new EventHandler(OnTopLevelPropertyChanged);
-                _topLevelControl.HandleCreated -= new EventHandler(TopLevelCreated);
-                _topLevelControl.HandleDestroyed -= new EventHandler(TopLevelDestroyed);
+                return;
             }
+
+            _topLevelControl.ParentChanged -= OnTopLevelPropertyChanged;
+            _topLevelControl.HandleCreated -= TopLevelCreated;
+            _topLevelControl.HandleDestroyed -= TopLevelDestroyed;
         }
 
         /// <summary>
@@ -713,7 +712,8 @@ namespace System.Windows.Forms
                 };
                 InitCommonControlsEx(ref icc);
 
-                CreateParams cp = CreateParams; // Avoid reentrant call to CreateHandle
+                // Avoid reentrant call to CreateHandle.
+                CreateParams cp = CreateParams;
                 if (GetHandleCreated())
                 {
                     return;
@@ -783,36 +783,36 @@ namespace System.Windows.Forms
 
         private void CreateAllRegions()
         {
-            Control[] ctls = new Control[_tools.Keys.Count];
-            _tools.Keys.CopyTo(ctls, 0);
-            for (int i = 0; i < ctls.Length; i++)
+            var controls = new Control[_tools.Keys.Count];
+            _tools.Keys.CopyTo(controls, 0);
+            foreach (Control control in controls)
             {
-                CreateRegion(ctls[i]);
+                CreateRegion(control);
             }
         }
 
         private void DestroyAllRegions()
         {
-            Control[] ctls = new Control[_tools.Keys.Count];
-            _tools.Keys.CopyTo(ctls, 0);
-            for (int i = 0; i < ctls.Length; i++)
+            var controls = new Control[_tools.Keys.Count];
+            _tools.Keys.CopyTo(controls, 0);
+            foreach (Control control in controls)
             {
                 // DataGridView manages its own tool tip.
-                if (ctls[i] is DataGridView)
+                if (control is DataGridView)
                 {
                     return;
                 }
 
-                DestroyRegion(ctls[i]);
+                DestroyRegion(control);
             }
         }
 
-        private void SetToolInfo(Control ctl, string caption)
+        private void SetToolInfo(Control control, string caption)
         {
-            IntPtr result = GetTOOLINFO(ctl, caption).SendMessage(this, (User32.WM)TTM.ADDTOOLW);
+            IntPtr result = GetTOOLINFO(control, caption).SendMessage(this, (User32.WM)TTM.ADDTOOLW);
 
-            if ((ctl is TreeView tv && tv.ShowNodeToolTips)
-                || (ctl is ListView lv && lv.ShowItemToolTips))
+            if ((control is TreeView tv && tv.ShowNodeToolTips)
+                || (control is ListView lv && lv.ShowItemToolTips))
             {
                 return;
             }
@@ -823,39 +823,41 @@ namespace System.Windows.Forms
             }
         }
 
-        private void CreateRegion(Control ctl)
+        private void CreateRegion(Control control)
         {
-            string caption = GetToolTip(ctl);
-            bool handlesCreated = ctl.IsHandleCreated
+            string caption = GetToolTip(control);
+            bool handlesCreated = control.IsHandleCreated
                                   && TopLevelControl is not null
                                   && TopLevelControl.IsHandleCreated;
-            if (!_created.ContainsKey(ctl) && !string.IsNullOrEmpty(caption)
+
+            if (!_created.ContainsKey(control)
+                && !string.IsNullOrEmpty(caption)
                 && handlesCreated && !DesignMode)
             {
                 // Call the SendMessage through a function.
-                SetToolInfo(ctl, caption);
-                _created[ctl] = ctl;
+                SetToolInfo(control, caption);
+                _created[control] = control;
             }
 
-            if (ctl.IsHandleCreated && _topLevelControl is null)
+            if (control.IsHandleCreated && _topLevelControl is null)
             {
                 // Remove first to purge any duplicates.
-                ctl.MouseMove -= new MouseEventHandler(MouseMove);
-                ctl.MouseMove += new MouseEventHandler(MouseMove);
+                control.MouseMove -= MouseMove;
+                control.MouseMove += MouseMove;
             }
         }
 
         private void MouseMove(object sender, MouseEventArgs me)
         {
-            Control ctl = (Control)sender;
-            if (!_created.ContainsKey(ctl) && ctl.IsHandleCreated && TopLevelControl is not null)
+            var control = (Control)sender;
+            if (!_created.ContainsKey(control) && control.IsHandleCreated && TopLevelControl is not null)
             {
-                CreateRegion(ctl);
+                CreateRegion(control);
             }
 
-            if (_created.ContainsKey(ctl))
+            if (_created.ContainsKey(control))
             {
-                ctl.MouseMove -= new MouseEventHandler(MouseMove);
+                control.MouseMove -= MouseMove;
             }
         }
 
@@ -871,25 +873,25 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DestroyRegion(Control ctl)
+        private void DestroyRegion(Control control)
         {
             // When the toplevelControl is a form and is Modal, the Handle of the tooltip is released
             // before we come here. In such a case the tool won't get deleted from the tooltip.
-            // So we don't check "Handle" in the handlesCreate but check it only foe Non-Nodal dialogs later
-            bool handlesCreated = ctl.IsHandleCreated
+            // So we don't check "Handle" in the handlesCreate but check it only for non-modal dialogs later.
+            bool handlesCreated = control.IsHandleCreated
                                 && _topLevelControl is not null
                                 && _topLevelControl.IsHandleCreated
                                 && !_isDisposing;
-            if (!(_topLevelControl is Form topForm) || (topForm is not null && !topForm.Modal))
+            if (_topLevelControl is not Form topForm || (topForm is not null && !topForm.Modal))
             {
                 handlesCreated = handlesCreated && GetHandleCreated();
             }
 
-            if (_created.ContainsKey(ctl) && handlesCreated && !DesignMode)
+            if (_created.ContainsKey(control) && handlesCreated && !DesignMode)
             {
-                new ToolInfoWrapper<Control>(ctl).SendMessage(this, (User32.WM)TTM.DELTOOLW);
-                _created.Remove(ctl);
-                ctl.RemoveToolTip(this);
+                new ToolInfoWrapper<Control>(control).SendMessage(this, (User32.WM)TTM.DELTOOLW);
+                _created.Remove(control);
+                control.RemoveToolTip(this);
             }
         }
 
@@ -916,7 +918,7 @@ namespace System.Windows.Forms
                     // up to the Deactivated event to Hide the Shown tooltip
                     if (TopLevelControl is Form baseFrom)
                     {
-                        baseFrom.Deactivate -= new EventHandler(BaseFormDeactivate);
+                        baseFrom.Deactivate -= BaseFormDeactivate;
                     }
                 }
                 finally
@@ -929,7 +931,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns the delayTime based on the NativeMethods.TTDT_* values.
+        ///  Returns the delay time based on the NativeMethods.TTDT_* values.
         /// </summary>
         internal int GetDelayTime(TTDT type)
         {
@@ -950,7 +952,7 @@ namespace System.Windows.Forms
         {
             TTF flags = TTF.TRANSPARENT | TTF.SUBCLASS;
 
-            // RightToLeft reading order
+            // RightToLeft reading order.
             if (TopLevelControl?.RightToLeft == RightToLeft.Yes && !control.IsMirrored)
             {
                 // Indicates that the ToolTip text will be displayed in the opposite direction
@@ -996,8 +998,8 @@ namespace System.Windows.Forms
                 return string.Empty;
             }
 
-            TipInfo tt = (TipInfo)_tools[control];
-            return tt?.Caption ?? string.Empty;
+            var tipInfo = (TipInfo)_tools[control];
+            return tipInfo?.Caption ?? string.Empty;
         }
 
         /// <summary>
@@ -1006,17 +1008,19 @@ namespace System.Windows.Forms
         /// </summary>
         private IntPtr GetWindowFromPoint(Point screenCoords, ref bool success)
         {
-            Control baseVar = TopLevelControl;
+            Control current = TopLevelControl;
 
             // Special case ActiveX Controls.
-            if (baseVar is not null && baseVar.IsActiveX)
+            if (current is not null && current.IsActiveX)
             {
                 // Find the matching HWnd matching the ScreenCoord and find if the Control has a Tooltip.
                 IntPtr hwndControl = User32.WindowFromPoint(screenCoords);
                 if (hwndControl != IntPtr.Zero)
                 {
                     Control currentControl = Control.FromHandle(hwndControl);
-                    if (currentControl is not null && _tools is not null && _tools.ContainsKey(currentControl))
+                    if (currentControl is not null &&
+                        _tools is not null &&
+                        _tools.ContainsKey(currentControl))
                     {
                         return hwndControl;
                     }
@@ -1025,15 +1029,15 @@ namespace System.Windows.Forms
                 return IntPtr.Zero;
             }
 
-            IntPtr baseHwnd = baseVar?.Handle ?? IntPtr.Zero;
+            IntPtr baseHwnd = current?.Handle ?? IntPtr.Zero;
             IntPtr hwnd = IntPtr.Zero;
             bool finalMatch = false;
             while (!finalMatch)
             {
                 Point pt = screenCoords;
-                if (baseVar is not null)
+                if (current is not null)
                 {
-                    pt = baseVar.PointToClient(screenCoords);
+                    pt = current.PointToClient(screenCoords);
                 }
 
                 IntPtr found = User32.ChildWindowFromPointEx(baseHwnd, pt, User32.CWP.SKIPINVISIBLE);
@@ -1048,30 +1052,30 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    baseVar = Control.FromHandle(found);
-                    if (baseVar is null)
+                    current = Control.FromHandle(found);
+                    if (current is null)
                     {
-                        baseVar = Control.FromChildHandle(found);
-                        if (baseVar is not null)
+                        current = Control.FromChildHandle(found);
+                        if (current is not null)
                         {
-                            hwnd = baseVar.Handle;
+                            hwnd = current.Handle;
                         }
 
                         finalMatch = true;
                     }
                     else
                     {
-                        baseHwnd = baseVar.Handle;
+                        baseHwnd = current.Handle;
                     }
                 }
             }
 
             if (hwnd != IntPtr.Zero)
             {
-                Control ctl = Control.FromHandle(hwnd);
-                if (ctl is not null)
+                Control control = Control.FromHandle(hwnd);
+                if (control is not null)
                 {
-                    Control current = ctl;
+                    current = control;
                     while (current is not null && current.Visible)
                     {
                         current = current.ParentInternal;
@@ -1102,17 +1106,19 @@ namespace System.Windows.Forms
 
         private void RecreateHandle()
         {
-            if (!DesignMode)
+            if (DesignMode)
             {
-                if (GetHandleCreated())
-                {
-                    DestroyHandle();
-                }
-
-                _created.Clear();
-                CreateHandle();
-                CreateAllRegions();
+                return;
             }
+
+            if (GetHandleCreated())
+            {
+                DestroyHandle();
+            }
+
+            _created.Clear();
+            CreateHandle();
+            CreateAllRegions();
         }
 
         /// <summary>
@@ -1122,17 +1128,17 @@ namespace System.Windows.Forms
         {
             Control[] regions = new Control[_tools.Keys.Count];
             _tools.Keys.CopyTo(regions, 0);
-            for (int i = 0; i < regions.Length; i++)
+            foreach (Control control in regions)
             {
-                if (regions[i].IsHandleCreated)
+                if (control.IsHandleCreated)
                 {
-                    DestroyRegion(regions[i]);
+                    DestroyRegion(control);
                 }
 
-                regions[i].HandleCreated -= new EventHandler(HandleCreated);
-                regions[i].HandleDestroyed -= new EventHandler(HandleDestroyed);
+                control.HandleCreated -= HandleCreated;
+                control.HandleDestroyed -= HandleDestroyed;
 
-                KeyboardToolTipStateMachine.Instance.Unhook(regions[i], this);
+                KeyboardToolTipStateMachine.Instance.Unhook(control, toolTip: this);
             }
 
             _created.Clear();
@@ -1176,7 +1182,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetToolTip(Control control, string caption)
         {
-            TipInfo info = new (caption, TipInfo.Type.Auto);
+            TipInfo info = new(caption, TipInfo.Type.Auto);
             SetToolTipInternal(control, info);
         }
 
@@ -1203,8 +1209,8 @@ namespace System.Windows.Forms
 
             if (!empty && !exists)
             {
-                control.HandleCreated += new EventHandler(HandleCreated);
-                control.HandleDestroyed += new EventHandler(HandleDestroyed);
+                control.HandleCreated += HandleCreated;
+                control.HandleDestroyed += HandleDestroyed;
 
                 if (control.IsHandleCreated)
                 {
@@ -1225,8 +1231,8 @@ namespace System.Windows.Forms
                 }
                 else if (empty && exists && !DesignMode)
                 {
-                    control.HandleCreated -= new EventHandler(HandleCreated);
-                    control.HandleDestroyed -= new EventHandler(HandleDestroyed);
+                    control.HandleCreated -= HandleCreated;
+                    control.HandleDestroyed -= HandleDestroyed;
 
                     if (control.IsHandleCreated)
                     {
@@ -1278,27 +1284,27 @@ namespace System.Windows.Forms
 
             if (window is Control associatedControl)
             {
-                var r = new RECT();
-                User32.GetWindowRect(associatedControl, ref r);
+                var rect = new RECT();
+                User32.GetWindowRect(associatedControl, ref rect);
 
-                Cursor currentCursor = Cursor.Current;
+                _ = Cursor.Current;
                 Point cursorLocation = Cursor.Position;
                 Point p = cursorLocation;
 
                 Screen screen = Screen.FromPoint(cursorLocation);
 
-                // Place the tool tip on the associated control if its not already there
-                if (cursorLocation.X < r.left || cursorLocation.X > r.right ||
-                     cursorLocation.Y < r.top || cursorLocation.Y > r.bottom)
+                // Place the tool tip on the associated control if its not already there.
+                if (cursorLocation.X < rect.left || cursorLocation.X > rect.right ||
+                     cursorLocation.Y < rect.top || cursorLocation.Y > rect.bottom)
                 {
                     // Calculate the dimensions of the visible rectangle which
-                    // is used to estimate the upper x,y of the tooltip placement
+                    // is used to estimate the upper x,y of the tooltip placement.
                     RECT visibleRect = new RECT
                     {
-                        left = (r.left < screen.WorkingArea.Left) ? screen.WorkingArea.Left : r.left,
-                        top = (r.top < screen.WorkingArea.Top) ? screen.WorkingArea.Top : r.top,
-                        right = (r.right > screen.WorkingArea.Right) ? screen.WorkingArea.Right : r.right,
-                        bottom = (r.bottom > screen.WorkingArea.Bottom) ? screen.WorkingArea.Bottom : r.bottom
+                        left = (rect.left < screen.WorkingArea.Left) ? screen.WorkingArea.Left : rect.left,
+                        top = (rect.top < screen.WorkingArea.Top) ? screen.WorkingArea.Top : rect.top,
+                        right = (rect.right > screen.WorkingArea.Right) ? screen.WorkingArea.Right : rect.right,
+                        bottom = (rect.bottom > screen.WorkingArea.Bottom) ? screen.WorkingArea.Bottom : rect.bottom
                     };
 
                     p.X = visibleRect.left + (visibleRect.right - visibleRect.left) / 2;
@@ -1314,18 +1320,18 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    TipInfo tt = (TipInfo)_tools[associatedControl];
-                    if (tt is null)
+                    var tipInfo = (TipInfo)_tools[associatedControl];
+                    if (tipInfo is null)
                     {
-                        tt = new TipInfo(text, TipInfo.Type.SemiAbsolute);
+                        tipInfo = new TipInfo(text, TipInfo.Type.SemiAbsolute);
                     }
                     else
                     {
-                        tt.TipType |= TipInfo.Type.SemiAbsolute;
-                        tt.Caption = text;
+                        tipInfo.TipType |= TipInfo.Type.SemiAbsolute;
+                        tipInfo.Caption = text;
                     }
 
-                    tt.Position = p;
+                    tipInfo.Position = p;
                     if (duration > 0)
                     {
                         if (_originalPopupDelay == 0)
@@ -1336,7 +1342,7 @@ namespace System.Windows.Forms
                         AutoPopDelay = duration;
                     }
 
-                    SetToolTipInternal(associatedControl, tt);
+                    SetToolTipInternal(associatedControl, tipInfo);
                 }
             }
         }
@@ -1349,7 +1355,7 @@ namespace System.Windows.Forms
             // Check if the foreground window is the TopLevelWindow
             if (IsWindowActive(window))
             {
-                ShowTooltip(text, window, 0);
+                ShowTooltip(text, window, duration: 0);
             }
         }
 
@@ -1487,28 +1493,28 @@ namespace System.Windows.Forms
             }
 
             Rectangle toolRectangle = tool.GetNativeScreenRectangle();
-            // At first, place the tooltip at the middle of the tool (default location)
+            // At first, place the tooltip at the middle of the tool (default location).
             int pointX = (toolRectangle.Left + toolRectangle.Right) / 2;
             int pointY = (toolRectangle.Top + toolRectangle.Bottom) / 2;
             SetTool(tool.GetOwnerWindow(), text, TipInfo.Type.Absolute, new Point(pointX, pointY));
 
-            // Then look for a better ToolTip location
+            // Then look for a better ToolTip location.
             if (TryGetBubbleSize(tool, toolRectangle, out Size bubbleSize))
             {
                 Point optimalPoint = GetOptimalToolTipPosition(tool, toolRectangle, bubbleSize.Width, bubbleSize.Height);
 
-                // The optimal point should be used as a tracking position
+                // The optimal point should be used as a tracking position.
                 pointX = optimalPoint.X;
                 pointY = optimalPoint.Y;
 
-                // Update TipInfo for the tool with optimal position
-                TipInfo tipInfo = (_tools[tool] ?? _tools[tool.GetOwnerWindow()]) as TipInfo;
+                // Update TipInfo for the tool with optimal position.
+                var tipInfo = (_tools[tool] ?? _tools[tool.GetOwnerWindow()]) as TipInfo;
                 if (tipInfo is not null)
                 {
                     tipInfo.Position = new Point(pointX, pointY);
                 }
 
-                // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip
+                // Ensure that the tooltip bubble is moved to the optimal position even when a mouse tooltip is being replaced with a keyboard tooltip.
                 Reposition(optimalPoint, bubbleSize);
             }
 
@@ -1538,12 +1544,13 @@ namespace System.Windows.Forms
             int width = PARAM.LOWORD(result);
             int height = PARAM.HIWORD(result);
             bubbleSize = new Size(width, height);
+
             return true;
         }
 
         private Point GetOptimalToolTipPosition(IKeyboardToolTip tool, Rectangle toolRectangle, int width, int height)
         {
-            // Possible tooltip locations are tied to the tool rectangle bounds
+            // Possible tooltip locations are tied to the tool rectangle bounds.
             int centeredX = toolRectangle.Left + toolRectangle.Width / 2 - width / 2; // tooltip will be aligned with tool vertically
             int centeredY = toolRectangle.Top + toolRectangle.Height / 2 - height / 2; // tooltip will be aligned with tool horizontally
 
@@ -1553,13 +1560,13 @@ namespace System.Windows.Forms
             possibleLocations[LocationIndexBottom] = new Rectangle(centeredX, toolRectangle.Bottom, width, height);
             possibleLocations[LocationIndexLeft] = new Rectangle(toolRectangle.Left - width, centeredY, width, height);
 
-            // Neighboring tools should not be overlapped (ideally) by tooltip
+            // Neighboring tools should not be overlapped (ideally) by tooltip.
             IList<Rectangle> neighboringToolsRectangles = tool.GetNeighboringToolsRectangles();
 
-            // Weights are used to determine which one of the possible location overlaps least area of the neighboring tools
+            // Weights are used to determine which one of the possible location overlaps least area of the neighboring tools.
             long[] locationWeights = new long[LocationTotal];
 
-            // Check if the possible locations intersect with the neighboring tools
+            // Check if the possible locations intersect with the neighboring tools.
             for (int i = 0; i < possibleLocations.Length; i++)
             {
                 foreach (Rectangle neighboringToolRectangle in neighboringToolsRectangles)
@@ -1572,7 +1579,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Calculate clipped area of possible locations i.e. area which is located outside the screen area
+            // Calculate clipped area of possible locations i.e. area which is located outside the screen area.
             Rectangle screenBounds = SystemInformation.VirtualScreen;
             long[] locationClippedAreas = new long[LocationTotal];
             for (int i = 0; i < possibleLocations.Length; i++)
@@ -1600,13 +1607,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Pick optimal location
+            // Pick optimal location.
             long leastWeight = locationWeights[0];
             long leastClippedArea = locationClippedAreas[0];
             long biggestAreaWithinTopControl = locationWithinTopControlAreas[0];
             int locationIndex = 0;
             Rectangle optimalLocation = possibleLocations[0];
             bool rtlEnabled = tool.HasRtlModeEnabled();
+
             for (int i = 1; i < possibleLocations.Length; i++)
             {
                 if (IsCompetingLocationBetter(leastClippedArea, leastWeight, biggestAreaWithinTopControl, locationIndex,
@@ -1636,17 +1644,17 @@ namespace System.Windows.Forms
         {
             if (competingLocationClippedArea < originalLocationClippedArea)
             {
-                // Prefer location with less clipped area
+                // Prefer location with less clipped area.
                 return true;
             }
             else if (competingLocationWeight < originalLocationWeight)
             {
-                // Otherwise prefer location with less weight
+                // Otherwise prefer location with less weight.
                 return true;
             }
             else if (competingLocationWeight == originalLocationWeight && competingLocationClippedArea == originalLocationClippedArea)
             {
-                // Prefer locations located within top level control
+                // Prefer locations located within top level control.
                 if (competingLocationAreaWithinTopControl > originalLocationAreaWithinTopControl)
                 {
                     return true;
@@ -1656,10 +1664,10 @@ namespace System.Windows.Forms
                     switch (originalIndex)
                     {
                         case LocationIndexTop:
-                            // Top location is the least preferred location
+                            // Top location is the least preferred location.
                             return true;
                         case LocationIndexBottom:
-                            // Right and Left locations are preferred instead of Bottom location
+                            // Right and Left locations are preferred instead of Bottom location.
                             if (competingIndex == LocationIndexLeft || competingIndex == LocationIndexRight)
                             {
                                 return true;
@@ -1667,7 +1675,7 @@ namespace System.Windows.Forms
 
                             break;
                         case LocationIndexRight:
-                            // When RTL is enabled Left location is preferred
+                            // When RTL is enabled Left location is preferred.
                             if (rtlEnabled && competingIndex == LocationIndexLeft)
                             {
                                 return true;
@@ -1675,7 +1683,7 @@ namespace System.Windows.Forms
 
                             break;
                         case LocationIndexLeft:
-                            // When RTL is disabled Right location is preferred
+                            // When RTL is disabled Right location is preferred.
                             if (!rtlEnabled && competingIndex == LocationIndexRight)
                             {
                                 return true;
@@ -1732,7 +1740,7 @@ namespace System.Windows.Forms
             StopTimer();
 
             // Check if the passed in IWin32Window is a Control.
-            if (!(win is Control tool))
+            if (win is not Control tool)
             {
                 _owners.Remove(win.Handle);
             }
@@ -1748,11 +1756,11 @@ namespace System.Windows.Forms
                 }
 
                 // Find the Form for associated Control and hook up to the Deactivated event
-                // to hide the shown tooltip
+                // to hide the shown tooltip.
                 Form baseFrom = tool.FindForm();
                 if (baseFrom is not null)
                 {
-                    baseFrom.Deactivate -= new EventHandler(BaseFormDeactivate);
+                    baseFrom.Deactivate -= BaseFormDeactivate;
                 }
             }
 
@@ -1778,9 +1786,9 @@ namespace System.Windows.Forms
             }
         }
 
-        private void SetTool(IWin32Window win, string text, TipInfo.Type type, Point position)
+        private void SetTool(IWin32Window window, string text, TipInfo.Type type, Point position)
         {
-            Control tool = win as Control;
+            Control tool = window as Control;
             if (tool is not null && _tools.ContainsKey(tool))
             {
                 var toolInfo = new ToolInfoWrapper<Control>(tool);
@@ -1796,47 +1804,47 @@ namespace System.Windows.Forms
                     toolInfo.Text = text;
                 }
 
-                TipInfo tt = (TipInfo)_tools[tool];
-                if (tt is null)
+                var tipInfo = (TipInfo)_tools[tool];
+                if (tipInfo is null)
                 {
-                    tt = new TipInfo(text, type);
+                    tipInfo = new TipInfo(text, type);
                 }
                 else
                 {
-                    tt.TipType |= type;
-                    tt.Caption = text;
+                    tipInfo.TipType |= type;
+                    tipInfo.Caption = text;
                 }
 
-                tt.Position = position;
-                _tools[tool] = tt;
+                tipInfo.Position = position;
+                _tools[tool] = tipInfo;
 
                 IntPtr result = toolInfo.SendMessage(this, (User32.WM)TTM.SETTOOLINFOW);
                 result = toolInfo.SendMessage(this, (User32.WM)TTM.TRACKACTIVATE, BOOL.TRUE);
             }
             else
             {
-                Hide(win);
+                Hide(window);
 
                 // Need to do this BEFORE we call GetWinTOOLINFO, since it relies on the tools array to be populated
-                // in order to find the toplevelparent.
-                TipInfo tt = (TipInfo)_tools[tool];
-                if (tt is null)
+                // in order to find the top level parent.
+                var tipInfo = (TipInfo)_tools[window];
+                if (tipInfo is null)
                 {
-                    tt = new TipInfo(text, type);
+                    tipInfo = new TipInfo(text, type);
                 }
                 else
                 {
-                    tt.TipType |= type;
-                    tt.Caption = text;
+                    tipInfo.TipType |= type;
+                    tipInfo.Caption = text;
                 }
 
-                tt.Position = position;
-                _tools[tool] = tt;
+                tipInfo.Position = position;
+                _tools[window] = tipInfo;
 
-                IntPtr hWnd = Control.GetSafeHandle(win);
-                _owners[hWnd] = win;
+                IntPtr hWnd = Control.GetSafeHandle(window);
+                _owners[hWnd] = window;
 
-                var toolInfo = GetWinTOOLINFO(win);
+                var toolInfo = GetWinTOOLINFO(window);
                 toolInfo.Info.uFlags |= TTF.TRACK;
 
                 if (type == TipInfo.Type.Absolute || type == TipInfo.Type.SemiAbsolute)
@@ -1851,18 +1859,18 @@ namespace System.Windows.Forms
 
             if (tool is not null)
             {
-                // Lets find the Form for associated Control .
-                // and hook up to the Deactivated event to Hide the Shown tooltip
+                // Lets find the Form for associated Control
+                // and hook up to the Deactivated event to Hide the Shown tooltip.
                 Form baseFrom = tool.FindForm();
                 if (baseFrom is not null)
                 {
-                    baseFrom.Deactivate += new EventHandler(BaseFormDeactivate);
+                    baseFrom.Deactivate += BaseFormDeactivate;
                 }
             }
         }
 
         /// <summary>
-        ///  Starts the timer hiding Positioned ToolTips
+        ///  Starts the timer hiding Positioned ToolTips.
         /// </summary>
         private void StartTimer(IWin32Window owner, int interval)
         {
@@ -1870,7 +1878,7 @@ namespace System.Windows.Forms
             {
                 _timer = new ToolTipTimer(owner);
                 // Add the timer handler
-                _timer.Tick += new EventHandler(TimerHandler);
+                _timer.Tick += TimerHandler;
             }
 
             _timer.Interval = interval;
@@ -1878,12 +1886,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Stops the timer for hiding Positioned ToolTips
+        ///  Stops the timer for hiding Positioned ToolTips.
         /// </summary>
         protected void StopTimer()
         {
-            // Hold a local ref to timer so that a posted message doesn't null this out during
-            // disposal.
+            // Hold a local ref to timer so that a posted message doesn't null this out during disposal.
             ToolTipTimer timerRef = _timer;
 
             if (timerRef is not null)
@@ -1969,26 +1976,26 @@ namespace System.Windows.Forms
             if (window is null)
                 return;
 
-            TipInfo tt = (TipInfo)_tools[window];
-            if (window is null || tt is null)
+            var tipInfo = (TipInfo)_tools[window];
+            if (tipInfo is null)
             {
                 return;
             }
 
             // Reposition the tooltip when its about to be shown since the tooltip can go out of screen
             // working area bounds Reposition would check the bounds for us.
-            var r = new RECT();
-            User32.GetWindowRect(this, ref r);
-            if (tt.Position != Point.Empty)
+            var rectangle = new RECT();
+            User32.GetWindowRect(this, ref rectangle);
+            if (tipInfo.Position != Point.Empty)
             {
-                Reposition(tt.Position, r.Size);
+                Reposition(tipInfo.Position, rectangle.Size);
             }
         }
 
         /// <summary>
         ///  Handles the WM_MOUSEACTIVATE message.
         /// </summary>
-        private void WmMouseActivate(ref Message msg)
+        private void WmMouseActivate(ref Message message)
         {
             IWin32Window window = GetCurrentToolWindow();
             if (window is null)
@@ -1999,22 +2006,22 @@ namespace System.Windows.Forms
             Point cursorLocation = Cursor.Position;
 
             // Do not activate the mouse if its within the bounds of the
-            // the associated tool
+            // the associated tool.
             if (cursorLocation.X >= r.left && cursorLocation.X <= r.right &&
                 cursorLocation.Y >= r.top && cursorLocation.Y <= r.bottom)
             {
-                msg.Result = (IntPtr)User32.MA.NOACTIVATE;
+                message.Result = (IntPtr)User32.MA.NOACTIVATE;
             }
         }
 
         /// <summary>
         ///  Handles the WM_WINDOWFROMPOINT message.
         /// </summary>
-        private void WmWindowFromPoint(ref Message msg)
+        private void WmWindowFromPoint(ref Message message)
         {
-            var sc = (Point)msg.GetLParam(typeof(Point));
+            var point = (Point)message.GetLParam(typeof(Point));
             bool result = false;
-            msg.Result = GetWindowFromPoint(sc, ref result);
+            message.Result = GetWindowFromPoint(point, ref result);
         }
 
         /// <summary>
@@ -2027,12 +2034,12 @@ namespace System.Windows.Forms
                 return;
 
             // Get the bounds.
-            var r = new RECT();
-            User32.GetWindowRect(this, ref r);
+            var rect = new RECT();
+            User32.GetWindowRect(this, ref rect);
 
             Control toolControl = window as Control;
 
-            Size currentTooltipSize = r.Size;
+            Size currentTooltipSize = rect.Size;
             PopupEventArgs e = new PopupEventArgs(window, toolControl, IsBalloon, currentTooltipSize);
             OnPopup(e);
 
@@ -2050,17 +2057,17 @@ namespace System.Windows.Forms
             // We need to re-get the rectangle of the tooltip here because
             // any of the tooltip attributes/properties could have been updated
             // during the popup event; in which case the size of the tooltip is
-            // affected. e.ToolTipSize is respected over r.Size
-            User32.GetWindowRect(this, ref r);
-            currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? r.Size : e.ToolTipSize;
+            // affected. e.ToolTipSize is respected over rect.Size
+            User32.GetWindowRect(this, ref rect);
+            currentTooltipSize = (e.ToolTipSize == currentTooltipSize) ? rect.Size : e.ToolTipSize;
 
             if (IsBalloon)
             {
                 // Get the text display rectangle
-                User32.SendMessageW(this, (User32.WM)TTM.ADJUSTRECT, PARAM.FromBool(true), ref r);
-                if (r.Size.Height > currentTooltipSize.Height)
+                User32.SendMessageW(this, (User32.WM)TTM.ADJUSTRECT, PARAM.FromBool(true), ref rect);
+                if (rect.Size.Height > currentTooltipSize.Height)
                 {
-                    currentTooltipSize.Height = r.Size.Height;
+                    currentTooltipSize.Height = rect.Size.Height;
                 }
             }
 
@@ -2068,7 +2075,7 @@ namespace System.Windows.Forms
             // This prevents the operating system from drawing incorrect rectangles
             // when determining the correct display rectangle
             // Set the MaxWidth only if user has changed the width.
-            if (currentTooltipSize != r.Size)
+            if (currentTooltipSize != rect.Size)
             {
                 Screen screen = Screen.FromPoint(Cursor.Position);
                 int maxwidth = (IsBalloon)
@@ -2093,8 +2100,8 @@ namespace System.Windows.Forms
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     User32.HWND_TOPMOST,
-                    r.left,
-                    r.top,
+                    rect.left,
+                    rect.top,
                     currentTooltipSize.Width,
                     currentTooltipSize.Height,
                     User32.SWP.NOACTIVATE | User32.SWP.NOOWNERZORDER);
@@ -2120,14 +2127,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Handles the WM_WINDOWPOSCHANGING message.
         /// </summary>
-        private unsafe void WmWindowPosChanging(ref Message m)
+        private unsafe void WmWindowPosChanging(ref Message message)
         {
             if (_cancelled || _isDisposing)
             {
                 return;
             }
 
-            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParam;
+            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)message.LParam;
 
             Cursor currentCursor = Cursor.Current;
             Point cursorPos = Cursor.Position;
@@ -2135,11 +2142,11 @@ namespace System.Windows.Forms
             IWin32Window window = GetCurrentToolWindow();
             if (window is not null)
             {
-                TipInfo tt = null;
+                TipInfo tipInfo = null;
                 if (window is not null)
                 {
-                    tt = (TipInfo)_tools[window];
-                    if (tt is null)
+                    tipInfo = (TipInfo)_tools[window];
+                    if (tipInfo is null)
                     {
                         return;
                     }
@@ -2160,13 +2167,13 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if ((tt.TipType & TipInfo.Type.Auto) != 0 && _window is not null)
+                if ((tipInfo.TipType & TipInfo.Type.Auto) != 0 && _window is not null)
                 {
-                    _window.DefWndProc(ref m);
+                    _window.DefWndProc(ref message);
                     return;
                 }
 
-                if (((tt.TipType & TipInfo.Type.SemiAbsolute) != 0) && tt.Position == Point.Empty)
+                if (((tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0) && tipInfo.Position == Point.Empty)
                 {
                     Screen screen = Screen.FromPoint(cursorPos);
                     if (currentCursor is not null)
@@ -2188,16 +2195,16 @@ namespace System.Windows.Forms
                         wp->x = screen.WorkingArea.Right - wp->cx;
                     }
                 }
-                else if ((tt.TipType & TipInfo.Type.SemiAbsolute) != 0 && tt.Position != Point.Empty)
+                else if ((tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0 && tipInfo.Position != Point.Empty)
                 {
-                    Screen screen = Screen.FromPoint(tt.Position);
-                    wp->x = tt.Position.X;
+                    Screen screen = Screen.FromPoint(tipInfo.Position);
+                    wp->x = tipInfo.Position.X;
                     if (wp->x + wp->cx > screen.WorkingArea.Right)
                     {
                         wp->x = screen.WorkingArea.Right - wp->cx;
                     }
 
-                    wp->y = tt.Position.Y;
+                    wp->y = tipInfo.Position.Y;
                     if (wp->y + wp->cy > screen.WorkingArea.Bottom)
                     {
                         wp->y = screen.WorkingArea.Bottom - wp->cy;
@@ -2205,11 +2212,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            m.Result = IntPtr.Zero;
+            message.Result = IntPtr.Zero;
         }
 
         /// <summary>
-        ///  Called just before the tooltip is hidden
+        ///  Called just before the tooltip is hidden.
         /// </summary>
         private void WmPop()
         {
@@ -2217,15 +2224,15 @@ namespace System.Windows.Forms
             if (window is null)
                 return;
 
-            Control control = window as Control;
-            TipInfo tt = (TipInfo)_tools[window];
-            if (tt is null)
+            var control = window as Control;
+            var tipInfo = (TipInfo)_tools[window];
+            if (tipInfo is null)
             {
                 return;
             }
 
             // Must reset the maxwidth to the screen size.
-            if ((tt.TipType & TipInfo.Type.Auto) != 0 || (tt.TipType & TipInfo.Type.SemiAbsolute) != 0)
+            if ((tipInfo.TipType & TipInfo.Type.Auto) != 0 || (tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0)
             {
                 Screen screen = Screen.FromPoint(Cursor.Position);
                 User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)screen.WorkingArea.Width);
@@ -2233,13 +2240,13 @@ namespace System.Windows.Forms
 
             // For non-auto tips (those shown through the show(.) methods, we need to
             // disassociate them from the tip control.
-            if ((tt.TipType & TipInfo.Type.Auto) == 0)
+            if ((tipInfo.TipType & TipInfo.Type.Auto) == 0)
             {
                 _tools.Remove(control);
                 _owners.Remove(window.Handle);
 
-                control.HandleCreated -= new EventHandler(HandleCreated);
-                control.HandleDestroyed -= new EventHandler(HandleDestroyed);
+                control.HandleCreated -= HandleCreated;
+                control.HandleDestroyed -= HandleDestroyed;
                 _created.Remove(control);
 
                 if (_originalPopupDelay != 0)
@@ -2251,21 +2258,18 @@ namespace System.Windows.Forms
             else
             {
                 // Clear all other flags except for the Auto flag to ensure automatic tips can still show
-                tt.TipType = TipInfo.Type.Auto;
-                tt.Position = Point.Empty;
-                _tools[control] = tt;
+                tipInfo.TipType = TipInfo.Type.Auto;
+                tipInfo.Position = Point.Empty;
+                _tools[control] = tipInfo;
             }
         }
 
-        /// <summary>
-        ///  WNDPROC
-        /// </summary>
-        private void WndProc(ref Message msg)
+        private void WndProc(ref Message message)
         {
-            switch (msg.Msg)
+            switch (message.Msg)
             {
                 case (int)(User32.WM.REFLECT_NOTIFY):
-                    User32.NMHDR nmhdr = (User32.NMHDR)msg.GetLParam(typeof(User32.NMHDR));
+                    User32.NMHDR nmhdr = (User32.NMHDR)message.GetLParam(typeof(User32.NMHDR));
                     if (nmhdr.code == (int)TTN.SHOW && !_trackPosition)
                     {
                         WmShow();
@@ -2273,25 +2277,25 @@ namespace System.Windows.Forms
                     else if (nmhdr.code == (int)TTN.POP)
                     {
                         WmPop();
-                        _window?.DefWndProc(ref msg);
+                        _window?.DefWndProc(ref message);
                     }
 
                     break;
 
                 case (int)User32.WM.WINDOWPOSCHANGING:
-                    WmWindowPosChanging(ref msg);
+                    WmWindowPosChanging(ref message);
                     break;
 
                 case (int)User32.WM.WINDOWPOSCHANGED:
                     if (!WmWindowPosChanged() && _window is not null)
                     {
-                        _window.DefWndProc(ref msg);
+                        _window.DefWndProc(ref message);
                     }
 
                     break;
 
                 case (int)User32.WM.MOUSEACTIVATE:
-                    WmMouseActivate(ref msg);
+                    WmMouseActivate(ref message);
                     break;
 
                 case (int)User32.WM.MOVE:
@@ -2299,7 +2303,7 @@ namespace System.Windows.Forms
                     break;
 
                 case (int)TTM.WINDOWFROMPOINT:
-                    WmWindowFromPoint(ref msg);
+                    WmWindowFromPoint(ref message);
                     break;
 
                 case (int)User32.WM.PRINTCLIENT:
@@ -2315,7 +2319,7 @@ namespace System.Windows.Forms
                             return;
                         }
 
-                        using Graphics g = paintScope.HDC.CreateGraphics();
+                        using Graphics graphics = paintScope.HDC.CreateGraphics();
 
                         IWin32Window window = GetCurrentToolWindow();
                         if (window is not null)
@@ -2334,16 +2338,16 @@ namespace System.Windows.Forms
 
                             Control control = window as Control ?? Control.FromHandle(window.Handle);
                             OnDraw(new DrawToolTipEventArgs(
-                                g, window, control, bounds, GetToolTip(control), BackColor, ForeColor, font));
+                                graphics, window, control, bounds, GetToolTip(control), BackColor, ForeColor, font));
 
                             break;
                         }
                     }
 
-                    // If not OwnerDraw, fall through
+                    // If not OwnerDraw, fall through.
                     goto default;
                 default:
-                    _window?.DefWndProc(ref msg);
+                    _window?.DefWndProc(ref message);
                     break;
             }
         }
