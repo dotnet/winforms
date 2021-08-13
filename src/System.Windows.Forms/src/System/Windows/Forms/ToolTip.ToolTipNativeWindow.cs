@@ -8,14 +8,14 @@ namespace System.Windows.Forms
     {
         private class ToolTipNativeWindow : NativeWindow
         {
-            private readonly ToolTip _control;
+            private readonly ToolTip _toolTip;
 
-            internal ToolTipNativeWindow(ToolTip control)
+            internal ToolTipNativeWindow(ToolTip toolTip)
             {
-                _control = control;
+                _toolTip = toolTip ?? throw new ArgumentNullException(nameof(toolTip));
             }
 
-            protected override void WndProc(ref Message m) => _control?.WndProc(ref m);
+            protected override void WndProc(ref Message m) => _toolTip.WndProc(ref m);
         }
     }
 }
