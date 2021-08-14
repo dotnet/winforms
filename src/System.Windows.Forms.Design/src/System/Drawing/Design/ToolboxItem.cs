@@ -6,6 +6,7 @@ using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -556,6 +557,7 @@ namespace System.Drawing.Design
         ///  locate the type.  If reference is true, the given assembly name will be added
         ///  to the designer host's set of references.
         /// </summary>
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
         protected virtual Type GetType(IDesignerHost host, AssemblyName assemblyName, string typeName, bool reference)
         {
             ITypeResolutionService ts = null;
