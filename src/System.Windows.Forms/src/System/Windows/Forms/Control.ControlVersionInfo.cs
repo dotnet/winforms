@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.Windows.Forms
@@ -25,6 +26,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The company name associated with the component.
             /// </summary>
+            [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
             internal string CompanyName
             {
                 get
@@ -37,7 +39,7 @@ namespace System.Windows.Forms
                             _companyName = ((AssemblyCompanyAttribute)attrs[0]).Company;
                         }
 
-                        if (_companyName is null || _companyName.Length == 0)
+                        if ((_companyName is null || _companyName.Length == 0) && !OwnerIsInMemoryAssembly)
                         {
                             _companyName = GetFileVersionInfo().CompanyName;
                             if (_companyName is not null)
@@ -74,6 +76,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The product name associated with this component.
             /// </summary>
+            [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
             internal string ProductName
             {
                 get
@@ -86,7 +89,7 @@ namespace System.Windows.Forms
                             _productName = ((AssemblyProductAttribute)attrs[0]).Product;
                         }
 
-                        if (_productName is null || _productName.Length == 0)
+                        if ((_productName is null || _productName.Length == 0) && !OwnerIsInMemoryAssembly)
                         {
                             _productName = GetFileVersionInfo().ProductName;
                             if (_productName is not null)
@@ -123,6 +126,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The product version associated with this component.
             /// </summary>
+            [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
             internal string ProductVersion
             {
                 get
@@ -137,7 +141,7 @@ namespace System.Windows.Forms
                         }
 
                         // win32 version info
-                        if (_productVersion is null || _productVersion.Length == 0)
+                        if ((_productVersion is null || _productVersion.Length == 0) && !OwnerIsInMemoryAssembly)
                         {
                             _productVersion = GetFileVersionInfo().ProductVersion;
                             if (_productVersion is not null)
@@ -161,6 +165,7 @@ namespace System.Windows.Forms
             ///  Retrieves the FileVersionInfo associated with the main module for
             ///  the component.
             /// </summary>
+            [RequiresAssemblyFiles("Throws if " + nameof(_owner) + " is an in-memory assembly. Check " + nameof(OwnerIsInMemoryAssembly) + " first")]
             private FileVersionInfo GetFileVersionInfo()
             {
                 if (_versionInfo is null)
@@ -172,6 +177,8 @@ namespace System.Windows.Forms
 
                 return _versionInfo;
             }
+
+            private bool OwnerIsInMemoryAssembly => _owner.GetType().Assembly.Location.Length == 0;
         }
     }
 }

@@ -6,6 +6,7 @@
 
 using System.Collections;
 using System.ComponentModel.Design;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 
 namespace System.Resources
@@ -29,6 +30,7 @@ namespace System.Resources
             return GetAssembly(name, true);
         }
 
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Handles single file case")]
         public Assembly GetAssembly(AssemblyName name, bool throwOnError)
         {
             Assembly result = null;
@@ -76,6 +78,7 @@ namespace System.Resources
             return result;
         }
 
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Returns null if in a single file")]
         public string GetPathOfAssembly(AssemblyName name)
         {
             return name.CodeBase;

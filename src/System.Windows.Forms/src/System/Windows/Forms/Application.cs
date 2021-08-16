@@ -6,6 +6,7 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Globalization;
 using System.Reflection;
@@ -54,9 +55,6 @@ namespace System.Windows.Forms
         /// </summary>
         private static readonly object s_eventApplicationExit = new object();
         private static readonly object s_eventThreadExit = new object();
-
-        // Constant string used in Application.Restart()
-        private const string IEEXEC = "ieexec.exe";
 
         // Defines a new callback delegate type
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -819,6 +817,7 @@ namespace System.Windows.Forms
         ///  Enables visual styles for all subsequent <see cref="Run()"/> and <see cref="Control.CreateHandle"/> calls.
         ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
         public static void EnableVisualStyles()
         {
             // Pull manifest from our resources
@@ -951,6 +950,7 @@ namespace System.Windows.Forms
         ///  Retrieves the FileVersionInfo associated with the main module for
         ///  the application.
         /// </summary>
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
         private static FileVersionInfo GetAppFileVersionInfo()
         {
             lock (s_internalSyncObject)
@@ -958,7 +958,7 @@ namespace System.Windows.Forms
                 if (s_appFileVersion is null)
                 {
                     Type t = GetAppMainType();
-                    if (t is not null)
+                    if (t is not null && t.Assembly.Location.Length > 0)
                     {
                         s_appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
                     }
@@ -1140,21 +1140,6 @@ namespace System.Windows.Forms
 
             Process process = Process.GetCurrentProcess();
             Debug.Assert(process is not null);
-            if (string.Equals(process.MainModule.ModuleName, IEEXEC, StringComparison.OrdinalIgnoreCase))
-            {
-                string clrPath = Path.GetDirectoryName(typeof(object).Module.FullyQualifiedName);
-
-                if (string.Equals(clrPath + "\\" + IEEXEC, process.MainModule.FileName, StringComparison.OrdinalIgnoreCase))
-                {
-                    // HRef exe case
-                    hrefExeCase = true;
-                    Exit();
-                    if (AppDomain.CurrentDomain.GetData("APP_LAUNCH_URL") is string launchUrl)
-                    {
-                        Process.Start(process.MainModule.FileName, launchUrl);
-                    }
-                }
-            }
 
             if (!hrefExeCase)
             {

@@ -16,6 +16,11 @@
     <CoverletOutput>$(TargetDir)coverage\$(MSBuildProjectName).coverage</CoverletOutput>
   </PropertyGroup>
 
+  <!-- Turn on single-file publishing analysis for everything except the test projects -->
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(IsTestProject)' == 'true' ">
     <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
     <Platform Condition="'$(Platform)' == 'AnyCPU' or '$(Platform)' == 'Any CPU'">$(TargetArchitecture)</Platform>
@@ -52,7 +57,7 @@
 
   <ItemGroup>
     <!-- Set TargetingPackVersion -->
-    <FrameworkReference Update="Microsoft.NETCore.App" 
+    <FrameworkReference Update="Microsoft.NETCore.App"
       Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)'!='' And $(TargetFramework.StartsWith('net6.')) ">
     <TargetingPackVersion>$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)</TargetingPackVersion>
     </FrameworkReference>
