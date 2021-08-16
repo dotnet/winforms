@@ -1,4 +1,3 @@
-~override System.Windows.Forms.TrackBar.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 static System.Windows.Forms.ProfessionalColors.StatusStripBorder.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.StatusStripBorder.get -> System.Drawing.Color
 System.Windows.Forms.Control.IsAncestorSiteInDesignMode.get -> bool
