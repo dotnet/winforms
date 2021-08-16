@@ -108,7 +108,7 @@
       "continueOnError": true
     },
     {
-      "id": "editor",
+      "id": "open-file",
       "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
       "description": "Opens UserControl1.vb in the editor",
       "manualInstructions": [ ],

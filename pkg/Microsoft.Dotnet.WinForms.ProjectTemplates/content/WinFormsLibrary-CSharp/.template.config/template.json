@@ -113,7 +113,7 @@
       "continueOnError": true
     },
     {
-      "id": "editor",
+      "id": "open-file",
       "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
       "description": "Opens Class1.cs in the editor",
       "manualInstructions": [ ],
