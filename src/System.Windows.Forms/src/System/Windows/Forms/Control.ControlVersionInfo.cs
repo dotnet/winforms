@@ -178,7 +178,6 @@ namespace System.Windows.Forms
                 return _versionInfo;
             }
 
-            //[UnconditionalSuppressMessage("SingleFile", "IL3000")]
             private bool OwnerIsInMemoryAssembly => _owner.GetType().Assembly.Location.Length == 0;
         }
     }
