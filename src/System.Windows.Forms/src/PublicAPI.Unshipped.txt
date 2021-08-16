@@ -1,3 +1,5 @@
+static System.Windows.Forms.ProfessionalColors.StatusStripBorder.get -> System.Drawing.Color
+virtual System.Windows.Forms.ProfessionalColorTable.StatusStripBorder.get -> System.Drawing.Color
 System.Windows.Forms.Control.IsAncestorSiteInDesignMode.get -> bool
 System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.get -> bool
 System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.set -> void

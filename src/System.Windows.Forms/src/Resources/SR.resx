@@ -6776,4 +6776,7 @@ Stack trace where the illegal operation occurred was:
   <data name="TrackBarPositionButtonName" xml:space="preserve">
     <value>Position</value>
   </data>
+  <data name="ProfessionalColorsStatusStripBorderDescr" xml:space="preserve">
+    <value>Border color to use on the top edge of the StatusStrip.</value>
+  </data>
 </root>

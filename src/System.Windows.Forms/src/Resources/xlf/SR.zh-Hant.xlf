@@ -7941,6 +7941,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">分隔符號醒目提示效果所使用的色彩。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">StatusStrip 中所使用漸層的開始色彩。</target>

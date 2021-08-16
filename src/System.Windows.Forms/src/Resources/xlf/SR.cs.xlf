@@ -7941,6 +7941,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Barva, která se má použít pro efekty zvýraznění na oddělovači</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">Počáteční barva přechodu použitá v ovládacím prvku StatusStrip</target>

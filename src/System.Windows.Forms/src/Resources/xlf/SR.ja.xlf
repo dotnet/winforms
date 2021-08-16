@@ -7941,6 +7941,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">区切り記号に強調表示効果で使用する色です。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">StatusStrip で使用されるグラデーションの開始色です。</target>
