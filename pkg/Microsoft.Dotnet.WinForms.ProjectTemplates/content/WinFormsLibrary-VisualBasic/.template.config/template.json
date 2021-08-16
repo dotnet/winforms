@@ -97,6 +97,7 @@
   "defaultName": "WinFormsLibrary1",
   "postActions": [
     {
+      "id": "restore",
       "condition": "(!skipRestore)",
       "description": "Restore NuGet packages required by this project.",
       "manualInstructions": [
@@ -106,6 +107,7 @@
       "continueOnError": true
     },
     {
+      "id": "editor",
       "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
       "description": "Opens Class1.vb in the editor",
       "manualInstructions": [ ],
