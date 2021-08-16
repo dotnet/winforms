@@ -70,6 +70,23 @@
       "datatype": "bool",
       "defaultValue": "true",
       "description": "Whether to enable nullable reference types for this project."
+    },
+    "csharp10orLater": {
+      "type": "generated",
+      "generator": "regexMatch",
+      "datatype": "bool",
+      "parameters": {
+        "pattern": "^(|10\\.0|10|preview|latest|default|latestMajor)$",
+        "source": "langVersion"
+      }
+    },
+    "csharpFeature_ImplicitUsings": {
+      "type": "computed",
+      "value": "Framework == \"net6.0\" && csharp10orLater == \"true\""
+    },
+    "csharpFeature_FileScopedNamespaces": {
+      "type": "computed",
+      "value": "(Framework == \"net6.0\" || langVersion != \"\") && csharp10orLater == \"true\""
     }
   },
   "primaryOutputs": [
