@@ -6,16 +6,5 @@
    -->
 
 <Project>
-  <!--
-    ============================================================
-                      GenerateImplicitNamespaceImports
-    Controls the implicit namespace imports for Windows Forms projects
-    ============================================================
-    -->
-  <PropertyGroup>
-    <DisableImplicitNamespaceImports_WindowsForms
-        Condition="'$(DisableImplicitNamespaceImports_WindowsForms)' == ''
-                   and '$(DisableImplicitNamespaceImports)' != 'true'">false</DisableImplicitNamespaceImports_WindowsForms>
-  </PropertyGroup>
 
 </Project>
