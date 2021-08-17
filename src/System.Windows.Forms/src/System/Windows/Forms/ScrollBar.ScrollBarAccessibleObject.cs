@@ -37,23 +37,6 @@ namespace System.Windows.Forms
             internal ScrollBarLastPageButtonAccessibleObject LastPageButtonAccessibleObject
                 => _lastPageButtonAccessibleObject ??= new(_owningScrollBar);
 
-            internal override int[]? RuntimeId
-            {
-                get
-                {
-                    if (!_owningScrollBar.IsHandleCreated)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    var runtimeId = new int[2];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = Interop.PARAM.ToInt(_owningScrollBar.InternalHandle);
-
-                    return runtimeId;
-                }
-            }
-
             internal ScrollBarThumbAccessibleObject ThumbAccessibleObject
                 => _thumbAccessibleObject ??= new(_owningScrollBar);
 

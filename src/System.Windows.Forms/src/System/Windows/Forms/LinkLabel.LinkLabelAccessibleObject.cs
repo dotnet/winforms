@@ -91,7 +91,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override int[] RuntimeId
+            internal override int[]? RuntimeId
                 => new int[]
                 {
                     RuntimeIDFirstItem,

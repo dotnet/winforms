@@ -56,22 +56,6 @@ namespace System.Windows.Forms
             internal override UiaCore.RowOrColumnMajor RowOrColumnMajor
                 => UiaCore.RowOrColumnMajor.RowMajor;
 
-            internal override int[]? RuntimeId
-            {
-                get
-                {
-                    if (!_owningListView.IsHandleCreated)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    var runtimeId = new int[2];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = PARAM.ToInt(_owningListView.Handle);
-                    return runtimeId;
-                }
-            }
-
             internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
             {
                 AccessibleObject? element = HitTest((int)x, (int)y);

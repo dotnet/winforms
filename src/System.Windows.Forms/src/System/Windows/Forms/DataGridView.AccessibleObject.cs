@@ -219,7 +219,7 @@ namespace System.Windows.Forms
             }
             */
 
-            internal override int[] RuntimeId
+            internal override int[]? RuntimeId
             {
                 get
                 {

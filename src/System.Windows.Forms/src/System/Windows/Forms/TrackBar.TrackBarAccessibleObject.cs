@@ -70,23 +70,6 @@ namespace System.Windows.Forms
             internal bool RTLLayoutDisabled
                 => _owningTrackBar.RightToLeft == RightToLeft.Yes && !_owningTrackBar.RightToLeftLayout;
 
-            internal override int[]? RuntimeId
-            {
-                get
-                {
-                    if (!_owningTrackBar.IsHandleCreated)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    var runtimeId = new int[2];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = PARAM.ToInt(_owningTrackBar.InternalHandle);
-
-                    return runtimeId;
-                }
-            }
-
             internal TrackBarThumbAccessibleObject ThumbAccessibleObject
                 => _thumbAccessibleObject ??= new TrackBarThumbAccessibleObject(_owningTrackBar);
 
