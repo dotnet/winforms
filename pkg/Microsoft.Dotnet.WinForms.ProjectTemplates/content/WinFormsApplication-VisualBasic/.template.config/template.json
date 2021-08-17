@@ -21,7 +21,8 @@
       "description": "Overrides the target framework",
       "replaces": "TargetFrameworkOverride",
       "datatype": "string",
-      "defaultValue": ""
+      "defaultValue": "",
+      "displayName": "Target framework override"
     },
     "UseAppFramework": {
       "type": "parameter",
@@ -36,19 +37,23 @@
       "choices": [
         {
           "choice": "netcoreapp3.1",
-          "description": "Target netcoreapp3.1"
+          "description": "Target netcoreapp3.1",
+          "displayName": ".NET Core 3.1"
         },
         {
           "choice": "net5.0",
-          "description": "Target net5.0"
+          "description": "Target net5.0",
+          "displayName": ".NET 5.0"
         },
         {
           "choice": "net6.0",
-          "description": "Target net6.0"
+          "description": "Target net6.0",
+          "displayName": ".NET 6.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net6.0"
+      "defaultValue": "net6.0",
+      "displayName": "Framework"
     },
     "UseWindowsDesktopSdk": {
       "type": "computed",
@@ -59,7 +64,8 @@
       "datatype": "text",
       "description": "Sets langVersion in the created project file",
       "defaultValue": "",
-      "replaces": "$(ProjectLanguageVersion)"
+      "replaces": "$(ProjectLanguageVersion)",
+      "displayName": "Language Version"
     },
     "HostIdentifier": {
       "type": "bind",
@@ -69,7 +75,8 @@
       "type": "parameter",
       "datatype": "bool",
       "description": "If specified, skips the automatic restore of the project on create.",
-      "defaultValue": "false"
+      "defaultValue": "false",
+      "displayName": "Skip restore"
     },
     "hostIsCli": {
       "type": "computed",
@@ -133,6 +140,7 @@
     "defaultName": "WinFormsApp1",
     "postActions": [
       {
+        "id": "restore",
         "condition": "(!skipRestore)",
         "description": "Restore NuGet packages required by this project.",
         "manualInstructions": [
@@ -142,6 +150,7 @@
         "continueOnError": true
       },
       {
+        "id": "open-file",
         "condition": "(HostIdentifier != \"dotnetcli\" && HostIdentifier != \"dotnetcli-preview\")",
         "description": "Opens Form1.vb in the editor",
         "manualInstructions": [],
