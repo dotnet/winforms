@@ -13,10 +13,13 @@
     ============================================================
     -->
   <ItemGroup Condition="'$(UseWindowsForms)' == 'true' and ('$(ImplicitUsings)' == 'true' or '$(ImplicitUsings)' == 'enable')">
-    <Using Include="System" />
-    <Using Include="System.Collections.Generic" />
-    <Using Include="System.IO" />
-    <Using Include="System.Linq" />
+    <!--
+      SDK defines the following global usings:
+      * System
+      * System.Collections.Generic
+      * System.Linq
+      * System.Threading.Tasks
+    -->
     <Using Include="System.Drawing" />
     <Using Include="System.Windows.Forms" />
   </ItemGroup>
