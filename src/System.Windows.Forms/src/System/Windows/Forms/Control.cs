@@ -13834,7 +13834,7 @@ namespace System.Windows.Forms
                 return HRESULT.E_POINTER;
             }
 
-            if ((dwAspect & Ole32.DVASPECT.CONTENT) != 0)
+            if ((dwAspect & Ole32.DVASPECT.CONTENT) == 0)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetMiscStatus.  Status: ERROR, wrong aspect.");
                 *pdwStatus = 0;
