@@ -11,6 +11,7 @@ trigger:
 # trigger ci builds on pull requests into main and any release branches
 pr:
 - main
+- vnext
 - release/*
 - internal/release/*
 - internal/experimental/*
