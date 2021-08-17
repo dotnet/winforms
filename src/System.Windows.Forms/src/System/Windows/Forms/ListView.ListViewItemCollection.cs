@@ -16,30 +16,12 @@ namespace System.Windows.Forms
         ///  Represents the collection of items in a ListView or ListViewGroup
         /// </summary>
         [ListBindable(false)]
-        public class ListViewItemCollection : IList
+        public partial class ListViewItemCollection : IList
         {
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
             ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
-
-            internal interface IInnerList
-            {
-                int Count { get; }
-                bool OwnerIsVirtualListView { get; }
-                bool OwnerIsDesignMode { get; }
-                ListViewItem this[int index] { get; set; }
-                ListViewItem Add(ListViewItem item);
-                void AddRange(ListViewItem[] items);
-                void Clear();
-                bool Contains(ListViewItem item);
-                void CopyTo(Array dest, int index);
-                IEnumerator GetEnumerator();
-                int IndexOf(ListViewItem item);
-                ListViewItem Insert(int index, ListViewItem item);
-                void Remove(ListViewItem item);
-                void RemoveAt(int index);
-            }
 
             private readonly IInnerList innerList;
 
