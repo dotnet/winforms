@@ -21,7 +21,6 @@ namespace System.Windows.Forms
             private static IntPtr s_oleAccAvailable = NativeMethods.InvalidIntPtr;
 
             private IntPtr _handle = IntPtr.Zero;   // Associated window handle (if any)
-            private int[]? _runtimeId;              // Used by UIAutomation
             private bool _getOwnerControlHandle;
 
             public ControlAccessibleObject(Control ownerControl)
@@ -192,18 +191,7 @@ namespace System.Windows.Forms
             public override string? DefaultAction => Owner.AccessibleDefaultActionDescription ?? base.DefaultAction;
 
             // This is used only if control supports IAccessibleEx
-            internal override int[]? RuntimeId
-            {
-                get
-                {
-                    if (_runtimeId is null)
-                    {
-                        _runtimeId = new int[] { 0x2a, (int)(long)HandleInternal };
-                    }
-
-                    return _runtimeId;
-                }
-            }
+            internal override int[]? RuntimeId => new int[] { RuntimeIDFirstItem, PARAM.ToInt(HandleInternal) };
 
             public override string? Description => Owner.AccessibleDescription ?? base.Description;
 
