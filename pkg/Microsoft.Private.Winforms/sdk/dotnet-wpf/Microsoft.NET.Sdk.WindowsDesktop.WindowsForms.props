@@ -12,16 +12,13 @@
     Generates implicit namespace imports source to intermediate directory for Windows Forms projects
     ============================================================
     -->
-  <ItemGroup Condition="'$(DisableImplicitNamespaceImports_WindowsForms)' != 'true'
-                        and '$(TargetFrameworkIdentifier)' == '.NETCoreApp'
-                        and $([MSBuild]::VersionGreaterThanOrEquals($(_TargetFrameworkVersionWithoutV), '6.0'))
-                        and '$(UseWindowsForms)' == 'true'">
-    <Import Include="System" />
-    <Import Include="System.Collections.Generic" />
-    <Import Include="System.IO" />
-    <Import Include="System.Linq" />
-    <Import Include="System.Drawing" />
-    <Import Include="System.Windows.Forms" />
+  <ItemGroup Condition="'$(UseWindowsForms)' == 'true' and ('$(ImplicitUsings)' == 'true' or '$(ImplicitUsings)' == 'enable')">
+    <Using Include="System" />
+    <Using Include="System.Collections.Generic" />
+    <Using Include="System.IO" />
+    <Using Include="System.Linq" />
+    <Using Include="System.Drawing" />
+    <Using Include="System.Windows.Forms" />
   </ItemGroup>
 
   <!-- Windows Forms source generator and analyzers -->
