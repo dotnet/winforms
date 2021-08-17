@@ -644,9 +644,9 @@ namespace System.Windows.Forms
         {
             base.OnKeyUp(e);
 
-            if (IsHandleCreated && ContainsNavigationKeyCode(e.KeyCode))
+            if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
             {
-                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
         }
 
@@ -672,7 +672,7 @@ namespace System.Windows.Forms
         {
             base.OnMouseDown(e);
 
-            if (IsHandleCreated)
+            if (IsHandleCreated && IsAccessibilityObjectCreated)
             {
                 // As there is no corresponding windows notification
                 // about text selection changed for TextBox assuming

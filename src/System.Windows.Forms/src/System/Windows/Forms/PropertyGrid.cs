@@ -2979,7 +2979,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (dropDown && !_gridView.DropDownVisible)
+            if (IsAccessibilityObjectCreated && dropDown && !_gridView.DropDownVisible)
             {
                 AccessibilityObject.RaiseAutomationNotification(
                     Automation.AutomationNotificationKind.ActionCompleted,

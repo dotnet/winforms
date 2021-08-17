@@ -1752,7 +1752,7 @@ namespace System.Windows.Forms
 
         protected override void OnGotFocus(EventArgs e)
         {
-            if (IsHandleCreated)
+            if (IsHandleCreated && IsAccessibilityObjectCreated)
             {
                 AccessibleObject item = AccessibilityObject.GetFocused();
 
@@ -1921,7 +1921,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnSelectedIndexChanged(EventArgs e)
         {
-            if (IsHandleCreated)
+            if (IsHandleCreated && IsAccessibilityObjectCreated)
             {
                 if (Focused && FocusedItemIsChanged())
                 {

@@ -452,8 +452,11 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
             // UIA events:
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Name, Name);
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Name, Name);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+            }
 
             if (FlatStyle == FlatStyle.System)
             {

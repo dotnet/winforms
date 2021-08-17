@@ -2500,10 +2500,13 @@ namespace System.Windows.Forms
         {
             base.OnGotFocus(e);
 
-            AccessibilityObject.RaiseAutomationNotification(
-                Automation.AutomationNotificationKind.Other,
-                Automation.AutomationNotificationProcessing.MostRecent,
-                Text);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationNotification(
+                        Automation.AutomationNotificationKind.Other,
+                        Automation.AutomationNotificationProcessing.MostRecent,
+                        Text);
+            }
         }
 
         protected override void OnHandleCreated(EventArgs e)

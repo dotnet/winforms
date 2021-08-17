@@ -9948,7 +9948,7 @@ namespace System.Windows.Forms
                 UiaCore.UiaReturnRawElementProvider(handle, 0, 0, null);
             }
 
-            if (OsVersion.IsWindows8OrGreater && IsAccessibilityObjectCreated)
+            if (IsAccessibilityObjectCreated && OsVersion.IsWindows8OrGreater)
             {
                 UiaCore.UiaDisconnectProvider(AccessibilityObject);
             }

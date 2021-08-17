@@ -245,7 +245,10 @@ namespace System.Windows.Forms
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -321,7 +324,8 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             if (IsHandleCreated)
             {
-                _dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
+                // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
+                _dataGridView?.SetAccessibleObjectParent(AccessibilityObject);
             }
         }
     }

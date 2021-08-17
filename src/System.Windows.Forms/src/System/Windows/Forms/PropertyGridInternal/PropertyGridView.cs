@@ -812,7 +812,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (_selectedRow != -1)
                 {
                     GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
-                    if (gridEntry is not null)
+                    if (gridEntry is not null && IsAccessibilityObjectCreated)
                     {
                         gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                         gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
@@ -1503,7 +1503,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             EditTextBox.SelectAll();
 
             var gridEntry = GetGridEntryFromRow(_selectedRow);
-            if (gridEntry is not null)
+            if (gridEntry is not null && IsAccessibilityObjectCreated)
             {
                 gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
@@ -2230,7 +2230,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnDropDownButtonGotFocus(object sender, EventArgs e)
         {
-            if (sender is DropDownButton dropDownButton)
+            if (sender is DropDownButton dropDownButton && dropDownButton.IsAccessibilityObjectCreated)
             {
                 dropDownButton.AccessibilityObject.SetFocus();
             }
@@ -2491,9 +2491,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "adding gridEntry focus");
                 _selectedGridEntry.HasFocus = true;
                 InvalidateRow(_selectedRow);
-                (EditTextBox.AccessibilityObject as ControlAccessibleObject).NotifyClients(AccessibleEvents.Focus);
 
-                EditTextBox.AccessibilityObject.SetFocus();
+                if (EditTextBox.IsAccessibilityObjectCreated)
+                {
+                    (EditTextBox.AccessibilityObject as ControlAccessibleObject).NotifyClients(AccessibleEvents.Focus);
+                    EditTextBox.AccessibilityObject.SetFocus();
+                }
             }
             else
             {
@@ -4658,12 +4661,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             entry.InternalExpanded = value;
 
-            var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
-            var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-            _selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                oldExpandedState,
-                newExpandedState);
+            if (_selectedGridEntry is not null && IsAccessibilityObjectCreated)
+            {
+                var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
+                var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                _selectedGridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    oldExpandedState,
+                    newExpandedState);
+            }
 
             RecalculateProperties();
             GridEntry selectedEntry = _selectedGridEntry;

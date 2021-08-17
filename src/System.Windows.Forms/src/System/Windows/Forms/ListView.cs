@@ -2238,9 +2238,9 @@ namespace System.Windows.Forms
                 lvhi.pt.X += si.nPos;
             }
 
-            if (User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, 0, ref lvhi) != -1 && lvhi.iItem > -1)
+            if (IsAccessibilityObjectCreated && User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, 0, ref lvhi) != -1 && lvhi.iItem > -1)
             {
-                AccessibilityObject?.InternalRaiseAutomationNotification(
+                AccessibilityObject.InternalRaiseAutomationNotification(
                     Automation.AutomationNotificationKind.Other,
                     Automation.AutomationNotificationProcessing.MostRecent,
                     Columns[lvhi.iItem].Text);
@@ -4746,7 +4746,7 @@ namespace System.Windows.Forms
                 NotifyAboutGotFocus(focusedItem);
             }
 
-            if (IsHandleCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
+            if (IsHandleCreated && IsAccessibilityObjectCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
             {
                 focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
@@ -4785,10 +4785,13 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ListViewItem item = e.Item;
-            UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
-            UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
-            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, oldValue, newValue);
+            if (IsAccessibilityObjectCreated)
+            {
+                ListViewItem item = e.Item;
+                UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
+                UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+                item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, oldValue, newValue);
+            }
         }
 
         protected virtual void OnItemDrag(ItemDragEventArgs e)
@@ -4891,7 +4894,10 @@ namespace System.Windows.Forms
             if (firstSelectedItem.Focused && _selectedItem != firstSelectedItem)
             {
                 _selectedItem = firstSelectedItem;
-                firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                if (IsAccessibilityObjectCreated)
+                {
+                    firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
             }
         }
 
@@ -5941,9 +5947,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            Point screenPoint = PointToScreen(point);
-            AccessibleObject accessibilityObject = AccessibilityObject.HitTest(screenPoint.X, screenPoint.Y);
-            accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                Point screenPoint = PointToScreen(point);
+                AccessibleObject accessibilityObject = AccessibilityObject.HitTest(screenPoint.X, screenPoint.Y);
+                accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         private unsafe bool WmNotify(ref Message m)

@@ -135,7 +135,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.OnGotFocus(e);
 
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                if (IsAccessibilityObjectCreated)
+                {
+                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
             }
 
             protected override void OnKeyDown(KeyEventArgs e)

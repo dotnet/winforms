@@ -637,7 +637,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void AnnounceText(Control tool, string text)
         {
-            tool?.AccessibilityObject?.RaiseAutomationNotification(
+            if (tool is null || !tool.IsAccessibilityObjectCreated)
+            {
+                return;
+            }
+
+            tool.AccessibilityObject.RaiseAutomationNotification(
                 Automation.AutomationNotificationKind.ActionCompleted,
                 Automation.AutomationNotificationProcessing.All,
                 $"{ToolTipTitle} {text}");
