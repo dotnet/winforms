@@ -897,7 +897,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Create the base prop entries given an object or set of objects
+        ///  Create the base property entries given an object or set of objects.
         /// </summary>
         internal static IRootGridEntry Create(
             PropertyGridView view,
