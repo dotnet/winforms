@@ -24,10 +24,9 @@ namespace System.Windows.Forms.Design
             {
                 if (!_checkedBitmap && _bitmap is null)
                 {
-                    string bitmapName = GetType().Name;
                     try
                     {
-                        _bitmap = DpiHelper.GetBitmapFromIcon(GetType(), bitmapName);
+                        _bitmap = DpiHelper.GetBitmapFromIcon(GetType(), GetType().Name);
                     }
                     catch (Exception)
                     {
@@ -79,24 +78,26 @@ namespace System.Windows.Forms.Design
         ~PropertyTab() => Dispose(disposing: false);
 
         /// <summary>
-        ///  Gets the default property of the specified component.
+        ///  Gets the default property of the specified <paramref name="component"/>.
         /// </summary>
         public virtual PropertyDescriptor? GetDefaultProperty(object component)
             => TypeDescriptor.GetDefaultProperty(component);
 
         /// <summary>
-        ///  Gets the properties of the specified component.
+        ///  Gets the properties of the specified <paramref name="component"/>.
         /// </summary>
         public virtual PropertyDescriptorCollection GetProperties(object component)
             => GetProperties(component, attributes: null);
 
         /// <summary>
-        ///  Gets the properties of the specified component which match the specified attributes.
+        ///  Gets the properties of the specified <paramref name="component"/> which match the specified
+        ///  <paramref name="attributes"/>.
         /// </summary>
         public abstract PropertyDescriptorCollection GetProperties(object component, Attribute[]? attributes);
 
         /// <summary>
-        ///  Gets the properties of the specified component.
+        ///  Gets the properties of the specified <paramref name="component"/> that match the specified
+        ///  <paramref name="attributes"/> and <paramref name="context"/>.
         /// </summary>
         public virtual PropertyDescriptorCollection GetProperties(
             ITypeDescriptorContext? context,

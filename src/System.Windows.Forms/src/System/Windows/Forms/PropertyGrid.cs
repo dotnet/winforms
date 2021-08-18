@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         private bool _drawFlatToolBar;
         private PropertyTab[] _viewTabs = Array.Empty<PropertyTab>();
         private PropertyTabScope[] _viewTabScopes = Array.Empty<PropertyTabScope>();
-        private Hashtable _viewTabProps;
+        private Hashtable _viewTabProperties;
 
         private ToolStripButton[] _viewTabButtons;
         private int _selectedViewTab;
@@ -892,7 +892,7 @@ namespace System.Windows.Forms
         public PropertyTabCollection PropertyTabs => new(this);
 
         /// <summary>
-        ///  Sets a single Object into the grid to be browsed.  If multiple
+        ///  Sets a single object into the grid to be browsed.  If multiple
         ///  objects are being browsed, this property will return the first
         ///  one in the list.  If no objects are selected, null is returned.
         /// </summary>
@@ -902,276 +902,235 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(SelectedObjectConverter))]
         public object SelectedObject
         {
-            get
-            {
-                if (_currentObjects is null || _currentObjects.Length == 0)
-                {
-                    return null;
-                }
-
-                return _currentObjects[0];
-            }
-            set
-            {
-                SelectedObjects = value is null ? Array.Empty<object>() : (new object[] { value });
-            }
+            get => _currentObjects is null || _currentObjects.Length == 0 ? null : _currentObjects[0];
+            set => SelectedObjects = value is null ? Array.Empty<object>() : (new object[] { value });
         }
 
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object[] SelectedObjects
         {
-            get
-            {
-                if (_currentObjects is null)
-                {
-                    return Array.Empty<object>();
-                }
-
-                return (object[])_currentObjects.Clone();
-            }
+            get => _currentObjects is null ? Array.Empty<object>() : (object[])_currentObjects.Clone();
             set
             {
-                try
-                {
-                    FreezePainting = true;
+                using var _ = new FreezePaintScope(this);
 
-                    SetFlag(Flags.FullRefreshAfterBatch, false);
-                    if (GetFlag(Flags.BatchMode))
+                SetFlag(Flags.FullRefreshAfterBatch, false);
+                if (GetFlag(Flags.BatchMode))
+                {
+                    SetFlag(Flags.BatchModeChange, false);
+                }
+
+                _gridView.EnsurePendingChangesCommitted();
+
+                bool isSame = false;
+                bool classesSame = false;
+                bool showEvents = true;
+
+                // Validate the array coming in.
+                if (value is not null && value.Length > 0)
+                {
+                    for (int count = 0; count < value.Length; count++)
                     {
-                        SetFlag(Flags.BatchModeChange, false);
+                        if (value[count] is null)
+                        {
+                            throw new ArgumentException(string.Format(SR.PropertyGridSetNull, count, value.Length));
+                        }
+                    }
+                }
+                else
+                {
+                    // Removing binding, no need to show events.
+                    showEvents = false;
+                }
+
+                // Make sure we actually changed something before we inspect tabs.
+                if (_currentObjects is not null
+                    && value is not null
+                    && _currentObjects.Length == value.Length)
+                {
+                    isSame = true;
+                    classesSame = true;
+
+                    for (int i = 0; i < value.Length && (isSame || classesSame); i++)
+                    {
+                        if (isSame && _currentObjects[i] != value[i])
+                        {
+                            isSame = false;
+                        }
+
+                        if (!classesSame)
+                        {
+                            continue;
+                        }
+
+                        Type oldType = GetUnwrappedObject(i).GetType();
+
+                        object newObject = value[i];
+
+                        if (newObject is ICustomTypeDescriptor descriptor)
+                        {
+                            newObject = descriptor.GetPropertyOwner(pd: null);
+                        }
+
+                        Type newType = newObject.GetType();
+
+                        // Check if the types are the same. If they are COM objects assume the classes are different.
+                        if (classesSame && (oldType != newType || (oldType.IsCOMObject && newType.IsCOMObject)))
+                        {
+                            classesSame = false;
+                        }
+                    }
+                }
+
+                if (!isSame)
+                {
+                    // Ensure we've hooked ActiveDesignerChanged if possible.
+                    if (!GetFlag(Flags.GotDesignerEventService) && TryGetService(out _designerEventService))
+                    {
+                        SetFlag(Flags.GotDesignerEventService, true);
+                        _designerEventService.ActiveDesignerChanged += OnActiveDesignerChanged;
+                        OnActiveDesignerChanged(sender: null, new(oldDesigner: null, _designerEventService.ActiveDesigner));
                     }
 
-                    _gridView.EnsurePendingChangesCommitted();
+                    showEvents = showEvents && GetFlag(Flags.GotDesignerEventService);
 
-                    bool isSame = false;
-                    bool classesSame = false;
-                    bool showEvents = true;
+                    SetStatusBox(string.Empty, string.Empty);
 
-                    // Validate the array coming in.
-                    if (value is not null && value.Length > 0)
+                    ClearCachedProperties();
+
+                    // The default selected entry might still reference the previous selected
+                    // objects. Set it to null to avoid leaks.
+                    _defaultEntry = null;
+
+                    _currentObjects = value is null ? Array.Empty<object>() : (object[])value.Clone();
+
+                    SinkPropertyNotifyEvents();
+                    SetFlag(Flags.PropertiesChanged, true);
+
+                    // Since we are changing the selection, we need to make sure that the
+                    // keywords for the currently selected grid entry get removed.
+                    try
                     {
-                        for (int count = 0; count < value.Length; count++)
+                        _gridView?.RemoveSelectedEntryHelpAttributes();
+                    }
+                    catch (COMException)
+                    {
+                        // TypeResolutionService is needed to access the HelpKeyword. However,
+                        // TypeResolutionService might be disposed when project is closing. We
+                        // need swallow the exception in this case.
+                    }
+
+                    _mainEntry?.Dispose();
+                    _mainEntry = null;
+
+                    if (!classesSame && !GetFlag(Flags.TabsChanging) && _selectedViewTab < _viewTabButtons.Length)
+                    {
+                        // Throw away any extra component only tabs.
+
+                        Type tabType = _selectedViewTab == -1 ? null : _viewTabs[_selectedViewTab].GetType();
+                        ToolStripButton viewTabButton = null;
+                        RefreshTabs(PropertyTabScope.Component);
+                        EnableTabs();
+
+                        if (tabType is not null)
                         {
-                            if (value[count] is null)
+                            for (int i = 0; i < _viewTabs.Length; i++)
                             {
-                                throw new ArgumentException(string.Format(SR.PropertyGridSetNull, count, value.Length));
+                                if (_viewTabs[i].GetType() == tabType && _viewTabButtons[i].Visible)
+                                {
+                                    viewTabButton = _viewTabButtons[i];
+                                    break;
+                                }
                             }
+                        }
+
+                        SelectViewTabButtonDefault(viewTabButton);
+                    }
+
+                    // Make sure we've also got events on all the objects.
+                    if (showEvents && _viewTabs is not null && _viewTabs.Length > EventsTabIndex && (_viewTabs[EventsTabIndex] is EventsTab eventsTab))
+                    {
+                        showEvents = _viewTabButtons[EventsTabIndex].Visible;
+                        PropertyDescriptorCollection events;
+                        var attributes = new Attribute[BrowsableAttributes.Count];
+                        BrowsableAttributes.CopyTo(attributes, 0);
+
+                        HashSet<Type> eventTypes = _currentObjects.Length > 10 ? new() : null;
+
+                        for (int i = 0; i < _currentObjects.Length && showEvents; i++)
+                        {
+                            object currentObject = _currentObjects[i];
+
+                            if (currentObject is ICustomTypeDescriptor descriptor)
+                            {
+                                currentObject = descriptor.GetPropertyOwner(null);
+                            }
+
+                            Type objectType = currentObject.GetType();
+
+                            if (eventTypes is not null && eventTypes.Contains(objectType))
+                            {
+                                continue;
+                            }
+
+                            // Make sure these things are sited components as well.
+                            showEvents = showEvents && (currentObject is IComponent component && component.Site is not null);
+
+                            // Make sure we've also got events on all the objects.
+                            events = eventsTab.GetProperties(currentObject, attributes);
+                            showEvents = showEvents && events is not null && events.Count > 0;
+
+                            if (showEvents && eventTypes is not null)
+                            {
+                                eventTypes.Add(objectType);
+                            }
+                        }
+                    }
+
+                    ShowEventsButton(showEvents && _currentObjects.Length > 0);
+                    DisplayHotCommands();
+                    EnablePropPageButton(_currentObjects.Length == 1 ? _currentObjects[0] : null);
+                    OnSelectedObjectsChanged(EventArgs.Empty);
+                }
+
+                if (GetFlag(Flags.TabsChanging))
+                {
+                    return;
+                }
+
+                // If you select an events tab for your designer and double click to go to code, it should
+                // be the events tab when you get back to the designer. Check for that state here and
+                // make sure we select and refresh that tab when we load.
+                if (_currentObjects.Length > 0 && GetFlag(Flags.ReInitTab))
+                {
+                    object designerKey = ActiveDesigner;
+
+                    // Get the active designer and see if we've stashed away state for it.
+                    if (designerKey is not null && _designerSelections is not null && _designerSelections.ContainsKey(designerKey.GetHashCode()))
+                    {
+                        int buttonIndex = (int)_designerSelections[designerKey.GetHashCode()];
+
+                        if (buttonIndex < _viewTabs.Length && (buttonIndex == PropertiesTabIndex || _viewTabButtons[buttonIndex].Visible))
+                        {
+                            SelectViewTabButton(_viewTabButtons[buttonIndex], true);
                         }
                     }
                     else
                     {
-                        showEvents = false;
+                        Refresh(clearCached: false);
                     }
 
-                    // Make sure we actually changed something before we inspect tabs.
-                    if (_currentObjects is not null && value is not null &&
-                        _currentObjects.Length == value.Length)
-                    {
-                        isSame = true;
-                        classesSame = true;
-                        for (int i = 0; i < value.Length && (isSame || classesSame); i++)
-                        {
-                            if (isSame && _currentObjects[i] != value[i])
-                            {
-                                isSame = false;
-                            }
-
-                            Type oldType = GetUnwrappedObject(i).GetType();
-
-                            object objTemp = value[i];
-
-                            if (objTemp is ICustomTypeDescriptor descriptor)
-                            {
-                                objTemp = descriptor.GetPropertyOwner(null);
-                            }
-
-                            Type newType = objTemp.GetType();
-
-                            // Check if the types are the same.  If they are, and they are COM objects,
-                            // check their GUID's.  If they are different or Guid.Emtpy, assume the
-                            // classes are different.
-                            if (classesSame && (oldType != newType || (oldType.IsCOMObject && newType.IsCOMObject)))
-                            {
-                                classesSame = false;
-                            }
-                        }
-                    }
-
-                    if (!isSame)
-                    {
-                        EnsureDesignerEventService();
-
-                        showEvents = showEvents && GetFlag(Flags.GotDesignerEventService);
-
-                        SetStatusBox(string.Empty, string.Empty);
-
-                        ClearCachedProperties();
-
-                        // The default selected entry might still reference the previous selected
-                        // objects. Set it to null to avoid leaks.
-                        _defaultEntry = null;
-
-                        if (value is null)
-                        {
-                            _currentObjects = Array.Empty<object>();
-                        }
-                        else
-                        {
-                            _currentObjects = (object[])value.Clone();
-                        }
-
-                        SinkPropertyNotifyEvents();
-                        SetFlag(Flags.PropertiesChanged, true);
-
-                        // Since we are changing the selection, we need to make sure that the
-                        // keywords for the currently selected grid entry gets removed
-                        if (_gridView is not null)
-                        {
-                            // TypeResolutionService is needed to access the HelpKeyword. However,
-                            // TypeResolutionService might be disposed when project is closing. We
-                            // need swallow the exception in this case.
-                            try
-                            {
-                                _gridView.RemoveSelectedEntryHelpAttributes();
-                            }
-                            catch (COMException) { }
-                        }
-
-                        if (_mainEntry is not null)
-                        {
-                            _mainEntry.Dispose();
-                        }
-
-                        // Throw away any extra component only tabs.
-                        if (!classesSame && !GetFlag(Flags.TabsChanging) && _selectedViewTab < _viewTabButtons.Length)
-                        {
-                            Type tabType = _selectedViewTab == -1 ? null : _viewTabs[_selectedViewTab].GetType();
-                            ToolStripButton viewTabButton = null;
-                            RefreshTabs(PropertyTabScope.Component);
-                            EnableTabs();
-                            if (tabType is not null)
-                            {
-                                for (int i = 0; i < _viewTabs.Length; i++)
-                                {
-                                    if (_viewTabs[i].GetType() == tabType && _viewTabButtons[i].Visible)
-                                    {
-                                        viewTabButton = _viewTabButtons[i];
-                                        break;
-                                    }
-                                }
-                            }
-
-                            SelectViewTabButtonDefault(viewTabButton);
-                        }
-
-                        // Make sure we've also got events on all the objects.
-                        if (showEvents && _viewTabs is not null && _viewTabs.Length > EventsTabIndex && (_viewTabs[EventsTabIndex] is EventsTab tab))
-                        {
-                            showEvents = _viewTabButtons[EventsTabIndex].Visible;
-                            object tempObj;
-                            PropertyDescriptorCollection events;
-                            var attrs = new Attribute[BrowsableAttributes.Count];
-                            BrowsableAttributes.CopyTo(attrs, 0);
-
-                            Hashtable eventTypes = null;
-
-                            if (_currentObjects.Length > 10)
-                            {
-                                eventTypes = new Hashtable();
-                            }
-
-                            for (int i = 0; i < _currentObjects.Length && showEvents; i++)
-                            {
-                                tempObj = _currentObjects[i];
-
-                                if (tempObj is ICustomTypeDescriptor descriptor)
-                                {
-                                    tempObj = descriptor.GetPropertyOwner(null);
-                                }
-
-                                Type objType = tempObj.GetType();
-
-                                if (eventTypes is not null && eventTypes.Contains(objType))
-                                {
-                                    continue;
-                                }
-
-                                // Make sure these things are sited components as well.
-                                showEvents = showEvents && (tempObj is IComponent component && component.Site is not null);
-
-                                // Make sure we've also got events on all the objects.
-                                events = tab.GetProperties(tempObj, attrs);
-                                showEvents = showEvents && events is not null && events.Count > 0;
-
-                                if (showEvents && eventTypes is not null)
-                                {
-                                    eventTypes[objType] = objType;
-                                }
-                            }
-                        }
-
-                        ShowEventsButton(showEvents && _currentObjects.Length > 0);
-                        DisplayHotCommands();
-
-                        if (_currentObjects.Length == 1)
-                        {
-                            EnablePropPageButton(_currentObjects[0]);
-                        }
-                        else
-                        {
-                            EnablePropPageButton(null);
-                        }
-
-                        OnSelectedObjectsChanged(EventArgs.Empty);
-                    }
-
-                    // This won't be a big perf problem, but it looks like we need to refresh
-                    // even if we didn't change the selected objects.
-                    if (!GetFlag(Flags.TabsChanging))
-                    {
-                        // ReInitTab means that we should set the tab back to what is used to be for a given designer.
-                        // Basically, if you select an events tab for your designer and double click to go to code, it should
-                        // be the events tab when you get back to the designer.
-                        //
-                        // So we set that bit when designers get switched, and make sure we select and refresh that tab
-                        // when we load.
-                        if (_currentObjects.Length > 0 && GetFlag(Flags.ReInitTab))
-                        {
-                            object designerKey = ActiveDesigner;
-
-                            // Get the active designer and see if we've stashed away state for it.
-                            if (designerKey is not null && _designerSelections is not null && _designerSelections.ContainsKey(designerKey.GetHashCode()))
-                            {
-                                int buttonIndex = (int)_designerSelections[designerKey.GetHashCode()];
-
-                                // Yes, we know this one.  Make sure it's selected.
-                                if (buttonIndex < _viewTabs.Length && (buttonIndex == PropertiesTabIndex || _viewTabButtons[buttonIndex].Visible))
-                                {
-                                    SelectViewTabButton(_viewTabButtons[buttonIndex], true);
-                                }
-                            }
-                            else
-                            {
-                                Refresh(clearCached: false);
-                            }
-
-                            SetFlag(Flags.ReInitTab, false);
-                        }
-                        else
-                        {
-                            Refresh(clearCached: true);
-                        }
-
-                        if (_currentObjects.Length > 0)
-                        {
-                            SaveTabSelection();
-                        }
-                    }
+                    SetFlag(Flags.ReInitTab, false);
                 }
-                finally
+                else
                 {
-                    FreezePainting = false;
+                    Refresh(clearCached: true);
+                }
+
+                if (_currentObjects.Length > 0)
+                {
+                    SaveTabSelection();
                 }
             }
         }
@@ -1634,7 +1593,7 @@ namespace System.Windows.Forms
         public void CollapseAllGridItems()
             => _gridView.RecursivelyExpand(_mainEntry, initialize: false, expand: false, maxExpands: -1);
 
-        private void ClearCachedProperties() => _viewTabProps?.Clear();
+        private void ClearCachedProperties() => _viewTabProperties?.Clear();
 
         internal void ClearCachedValues() => _mainEntry?.ClearCachedValues();
 
@@ -2095,21 +2054,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private void EnsureDesignerEventService()
-        {
-            if (GetFlag(Flags.GotDesignerEventService))
-            {
-                return;
-            }
-
-            if (TryGetService(out _designerEventService))
-            {
-                SetFlag(Flags.GotDesignerEventService, true);
-                _designerEventService.ActiveDesignerChanged += OnActiveDesignerChanged;
-                OnActiveDesignerChanged(sender: null, new(oldDesigner: null, _designerEventService.ActiveDesigner));
-            }
-        }
-
         private void EnsureLargeButtons()
         {
             if (_imageList[LargeButtonSize] is not null)
@@ -2335,13 +2279,8 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            object obj = _currentObjects[index];
-            if (obj is ICustomTypeDescriptor descriptor)
-            {
-                obj = descriptor.GetPropertyOwner(null);
-            }
-
-            return obj;
+            object @object = _currentObjects[index];
+            return @object is ICustomTypeDescriptor descriptor ? descriptor.GetPropertyOwner(pd: null) : @object;
         }
 
         internal GridEntryCollection GetPropEntries()
@@ -2674,181 +2613,174 @@ namespace System.Windows.Forms
                 return;
             }
 
-            try
+            using var _ = new FreezePaintScope(this);
+
+            if (!dividerOnly)
             {
-                FreezePainting = true;
-
-                if (!dividerOnly)
+                // PropertyGrid does a special handling on scaling and positioning its
+                // child controls. These are not scaled by their parent when Dpi/Font change.
+                if (_oldDeviceDpi != _deviceDpi)
                 {
-                    // PropertyGrid does a special handling on scaling and positioning its
-                    // child controls. These are not scaled by their parent when Dpi/Font change.
-                    if (_oldDeviceDpi != _deviceDpi)
-                    {
-                        RescaleConstants();
-                        SetupToolbar(true);
-                    }
-
-                    // No toolbar or doc comment or commands, just fill the whole thing with the grid
-                    if (!_toolStrip.Visible && !_docComment.Visible && !_hotCommands.Visible)
-                    {
-                        _gridView.Location = new Point(0, 0);
-                        _gridView.Size = Size;
-                        return;
-                    }
-
-                    if (_toolStrip.Visible)
-                    {
-                        int toolStripWidth = Width;
-                        int toolStripHeight = ((LargeButtons) ? s_largeButtonSize : s_normalButtonSize).Height + _toolStripButtonPaddingY;
-                        Rectangle toolStripBounds = new(0, 1, toolStripWidth, toolStripHeight);
-                        _toolStrip.Bounds = toolStripBounds;
-
-                        _gridView.Location = new Point(0, _toolStrip.Height + _toolStrip.Top);
-                    }
-                    else
-                    {
-                        _gridView.Location = new Point(0, 0);
-                    }
+                    RescaleConstants();
+                    SetupToolbar(true);
                 }
 
-                // Now work up from the bottom.
-                int endSize = Size.Height;
-
-                if (endSize < MinGridHeight)
+                // No toolbar or doc comment or commands, just fill the whole thing with the grid
+                if (!_toolStrip.Visible && !_docComment.Visible && !_hotCommands.Visible)
                 {
+                    _gridView.Location = new Point(0, 0);
+                    _gridView.Size = Size;
                     return;
                 }
 
-                int maxSpace = endSize - (_gridView.Location.Y + MinGridHeight);
-                int height;
-
-                // If we're just moving the divider, set the requested heights.
-                int dcRequestedHeight = 0;
-                int hcRequestedHeight = 0;
-                int dcOptHeight = 0;
-                int hcOptHeight = 0;
-
-                if (dividerOnly)
+                if (_toolStrip.Visible)
                 {
-                    dcRequestedHeight = _docComment.Visible ? _docComment.Size.Height : 0;
-                    hcRequestedHeight = _hotCommands.Visible ? _hotCommands.Size.Height : 0;
+                    int toolStripWidth = Width;
+                    int toolStripHeight = ((LargeButtons) ? s_largeButtonSize : s_normalButtonSize).Height + _toolStripButtonPaddingY;
+                    Rectangle toolStripBounds = new(0, 1, toolStripWidth, toolStripHeight);
+                    _toolStrip.Bounds = toolStripBounds;
+
+                    _gridView.Location = new Point(0, _toolStrip.Height + _toolStrip.Top);
                 }
                 else
                 {
-                    if (_docComment.Visible)
-                    {
-                        dcOptHeight = _docComment.GetOptimalHeight(Size.Width - s_cyDivider);
-                        if (_docComment.UserSized)
-                        {
-                            dcRequestedHeight = _docComment.Size.Height;
-                        }
-                        else if (_docCommentSizeRatio != -1)
-                        {
-                            dcRequestedHeight = (Height * _docCommentSizeRatio) / 100;
-                        }
-                        else
-                        {
-                            dcRequestedHeight = dcOptHeight;
-                        }
-                    }
-
-                    if (_hotCommands.Visible)
-                    {
-                        hcOptHeight = _hotCommands.GetOptimalHeight(Size.Width - s_cyDivider);
-                        if (_hotCommands.UserSized)
-                        {
-                            hcRequestedHeight = _hotCommands.Size.Height;
-                        }
-                        else if (_hotCommandsSizeRatio != -1)
-                        {
-                            hcRequestedHeight = (Height * _hotCommandsSizeRatio) / 100;
-                        }
-                        else
-                        {
-                            hcRequestedHeight = hcOptHeight;
-                        }
-                    }
+                    _gridView.Location = new Point(0, 0);
                 }
-
-                // Place the help comment window.
-                if (dcRequestedHeight > 0)
-                {
-                    maxSpace -= s_cyDivider;
-
-                    if (hcRequestedHeight == 0 || (dcRequestedHeight + hcRequestedHeight) < maxSpace)
-                    {
-                        // Full size.
-                        height = Math.Min(dcRequestedHeight, maxSpace);
-                    }
-                    else if (hcRequestedHeight > 0 && hcRequestedHeight < maxSpace)
-                    {
-                        // Give most of the space to the hot commands.
-                        height = maxSpace - hcRequestedHeight;
-                    }
-                    else
-                    {
-                        // Split the difference.
-                        height = Math.Min(dcRequestedHeight, maxSpace / 2 - 1);
-                    }
-
-                    height = Math.Max(height, s_cyDivider * 2);
-
-                    _docComment.SetBounds(0, endSize - height, Size.Width, height);
-
-                    // If we've modified the height to less than the optimal, clear the userSized item.
-                    if (height <= dcOptHeight && height < dcRequestedHeight)
-                    {
-                        _docComment.UserSized = false;
-                    }
-                    else if (_docCommentSizeRatio != -1 || _docComment.UserSized)
-                    {
-                        _docCommentSizeRatio = (_docComment.Height * 100) / Height;
-                    }
-
-                    _docComment.Invalidate();
-                    endSize = _docComment.Location.Y - s_cyDivider;
-                    maxSpace -= height;
-                }
-
-                // Place the hot commands.
-                if (hcRequestedHeight > 0)
-                {
-                    maxSpace -= s_cyDivider;
-
-                    if (maxSpace > hcRequestedHeight)
-                    {
-                        // Full size.
-                        height = Math.Min(hcRequestedHeight, maxSpace);
-                    }
-                    else
-                    {
-                        // What's left.
-                        height = maxSpace;
-                    }
-
-                    height = Math.Max(height, s_cyDivider * 2);
-
-                    // If we've modified the height, clear the userSized item.
-                    if (height <= hcOptHeight && height < hcRequestedHeight)
-                    {
-                        _hotCommands.UserSized = false;
-                    }
-                    else if (_hotCommandsSizeRatio != -1 || _hotCommands.UserSized)
-                    {
-                        _hotCommandsSizeRatio = (_hotCommands.Height * 100) / Height;
-                    }
-
-                    _hotCommands.SetBounds(0, endSize - height, Size.Width, height);
-                    _hotCommands.Invalidate();
-                    endSize = _hotCommands.Location.Y - s_cyDivider;
-                }
-
-                _gridView.Size = new Size(Size.Width, endSize - _gridView.Location.Y);
             }
-            finally
+
+            // Now work up from the bottom.
+            int endSize = Size.Height;
+
+            if (endSize < MinGridHeight)
             {
-                FreezePainting = false;
+                return;
             }
+
+            int maxSpace = endSize - (_gridView.Location.Y + MinGridHeight);
+            int height;
+
+            // If we're just moving the divider, set the requested heights.
+            int dcRequestedHeight = 0;
+            int hcRequestedHeight = 0;
+            int dcOptHeight = 0;
+            int hcOptHeight = 0;
+
+            if (dividerOnly)
+            {
+                dcRequestedHeight = _docComment.Visible ? _docComment.Size.Height : 0;
+                hcRequestedHeight = _hotCommands.Visible ? _hotCommands.Size.Height : 0;
+            }
+            else
+            {
+                if (_docComment.Visible)
+                {
+                    dcOptHeight = _docComment.GetOptimalHeight(Size.Width - s_cyDivider);
+                    if (_docComment.UserSized)
+                    {
+                        dcRequestedHeight = _docComment.Size.Height;
+                    }
+                    else if (_docCommentSizeRatio != -1)
+                    {
+                        dcRequestedHeight = (Height * _docCommentSizeRatio) / 100;
+                    }
+                    else
+                    {
+                        dcRequestedHeight = dcOptHeight;
+                    }
+                }
+
+                if (_hotCommands.Visible)
+                {
+                    hcOptHeight = _hotCommands.GetOptimalHeight(Size.Width - s_cyDivider);
+                    if (_hotCommands.UserSized)
+                    {
+                        hcRequestedHeight = _hotCommands.Size.Height;
+                    }
+                    else if (_hotCommandsSizeRatio != -1)
+                    {
+                        hcRequestedHeight = (Height * _hotCommandsSizeRatio) / 100;
+                    }
+                    else
+                    {
+                        hcRequestedHeight = hcOptHeight;
+                    }
+                }
+            }
+
+            // Place the help comment window.
+            if (dcRequestedHeight > 0)
+            {
+                maxSpace -= s_cyDivider;
+
+                if (hcRequestedHeight == 0 || (dcRequestedHeight + hcRequestedHeight) < maxSpace)
+                {
+                    // Full size.
+                    height = Math.Min(dcRequestedHeight, maxSpace);
+                }
+                else if (hcRequestedHeight > 0 && hcRequestedHeight < maxSpace)
+                {
+                    // Give most of the space to the hot commands.
+                    height = maxSpace - hcRequestedHeight;
+                }
+                else
+                {
+                    // Split the difference.
+                    height = Math.Min(dcRequestedHeight, maxSpace / 2 - 1);
+                }
+
+                height = Math.Max(height, s_cyDivider * 2);
+
+                _docComment.SetBounds(0, endSize - height, Size.Width, height);
+
+                // If we've modified the height to less than the optimal, clear the userSized item.
+                if (height <= dcOptHeight && height < dcRequestedHeight)
+                {
+                    _docComment.UserSized = false;
+                }
+                else if (_docCommentSizeRatio != -1 || _docComment.UserSized)
+                {
+                    _docCommentSizeRatio = (_docComment.Height * 100) / Height;
+                }
+
+                _docComment.Invalidate();
+                endSize = _docComment.Location.Y - s_cyDivider;
+                maxSpace -= height;
+            }
+
+            // Place the hot commands.
+            if (hcRequestedHeight > 0)
+            {
+                maxSpace -= s_cyDivider;
+
+                if (maxSpace > hcRequestedHeight)
+                {
+                    // Full size.
+                    height = Math.Min(hcRequestedHeight, maxSpace);
+                }
+                else
+                {
+                    // What's left.
+                    height = maxSpace;
+                }
+
+                height = Math.Max(height, s_cyDivider * 2);
+
+                // If we've modified the height, clear the userSized item.
+                if (height <= hcOptHeight && height < hcRequestedHeight)
+                {
+                    _hotCommands.UserSized = false;
+                }
+                else if (_hotCommandsSizeRatio != -1 || _hotCommands.UserSized)
+                {
+                    _hotCommandsSizeRatio = (_hotCommands.Height * 100) / Height;
+                }
+
+                _hotCommands.SetBounds(0, endSize - height, Size.Width, height);
+                _hotCommands.Invalidate();
+                endSize = _hotCommands.Location.Y - s_cyDivider;
+            }
+
+            _gridView.Size = new Size(Size.Width, endSize - _gridView.Location.Y);
         }
 
 #pragma warning disable CA1725 // Parameter name shipped as 'me'
@@ -3139,10 +3071,8 @@ namespace System.Windows.Forms
 
         private void OnViewSortButtonClick(object sender, EventArgs e)
         {
-            try
+            using (var _ = new FreezePaintScope(this))
             {
-                FreezePainting = true;
-
                 // Is this tab selected? If so, do nothing.
                 if (sender == _viewSortButtons[_selectedViewSort])
                 {
@@ -3184,26 +3114,17 @@ namespace System.Windows.Forms
                 Refresh(clearCached: false);
                 OnLayoutInternal(dividerOnly: false);
             }
-            finally
-            {
-                FreezePainting = false;
-            }
 
             OnButtonClick(sender, e);
         }
 
         private void OnViewTabButtonClick(object sender, EventArgs e)
         {
-            try
+            using (var _ = new FreezePaintScope(this))
             {
-                FreezePainting = true;
                 SelectViewTabButton((ToolStripButton)sender, true);
                 OnLayoutInternal(dividerOnly: false);
                 SaveTabSelection();
-            }
-            finally
-            {
-                FreezePainting = false;
             }
 
             OnButtonClick(sender, e);
@@ -3278,16 +3199,16 @@ namespace System.Windows.Forms
                 }
                 catch (Exception ex)
                 {
-                    string errString = SR.ErrorPropertyPageFailed;
+                    string error = SR.ErrorPropertyPageFailed;
                     if (uiService is not null)
                     {
-                        uiService.ShowError(ex, errString);
+                        uiService.ShowError(ex, error);
                     }
                     else
                     {
                         RTLAwareMessageBox.Show(
                             null,
-                            errString,
+                            error,
                             SR.PropertyGridTitle,
                             MessageBoxButtons.OK,
                             MessageBoxIcon.Error,
@@ -3315,144 +3236,139 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            switch (keyData & Keys.KeyCode)
+            if ((keyData & Keys.KeyCode) != Keys.Tab
+                || keyData.HasFlag(Keys.Control)
+                || keyData.HasFlag(Keys.Alt))
             {
-                case Keys.Tab:
-                    if (((keyData & Keys.Control) != 0) ||
-                        ((keyData & Keys.Alt) != 0))
-                    {
-                        break;
-                    }
+                return base.ProcessDialogKey(keyData);
+            }
 
-                    // Are we going forward?
-                    if ((keyData & Keys.Shift) != 0)
+            // Are we going forward?
+            if (keyData.HasFlag(Keys.Shift))
+            {
+                // This is backward
+                if (_hotCommands.Visible && _hotCommands.ContainsFocus)
+                {
+                    _gridView.ReverseFocus();
+                }
+                else if (_gridView.FocusInside)
+                {
+                    if (_toolStrip.Visible)
                     {
-                        // This is backward
-                        if (_hotCommands.Visible && _hotCommands.ContainsFocus)
+                        _toolStrip.Focus();
+
+                        // We need to select first ToolStrip item, otherwise ToolStrip container has the focus.
+                        if (_toolStrip.Items.Count > 0)
+                        {
+                            _toolStrip.SelectNextToolStripItem(null, forward: true);
+                        }
+                    }
+                    else
+                    {
+                        return base.ProcessDialogKey(keyData);
+                    }
+                }
+                else
+                {
+                    if (_toolStrip.Focused || !_toolStrip.Visible)
+                    {
+                        // If we get here and the toolbar has focus it means we're processing normally, so
+                        // pass the focus to the parent.
+                        return base.ProcessDialogKey(keyData);
+                    }
+                    else
+                    {
+                        // Otherwise, we're processing a message from elsewhere so we select our bottom item.
+                        if (_hotCommands.Visible)
+                        {
+                            _hotCommands.FocusLabel();
+                        }
+                        else if (_mainEntry is not null)
                         {
                             _gridView.ReverseFocus();
                         }
-                        else if (_gridView.FocusInside)
+                        else if (_toolStrip.Visible)
                         {
-                            if (_toolStrip.Visible)
-                            {
-                                _toolStrip.Focus();
-
-                                // We need to select first ToolStrip item, otherwise ToolStrip container has the focus.
-                                if (_toolStrip.Items.Count > 0)
-                                {
-                                    _toolStrip.SelectNextToolStripItem(null, forward: true);
-                                }
-                            }
-                            else
-                            {
-                                return base.ProcessDialogKey(keyData);
-                            }
+                            _toolStrip.Focus();
                         }
                         else
                         {
-                            if (_toolStrip.Focused || !_toolStrip.Visible)
-                            {
-                                // If we get here and the toolbar has focus it means we're processing normally, so
-                                // pass the focus to the parent.
-                                return base.ProcessDialogKey(keyData);
-                            }
-                            else
-                            {
-                                // Otherwise, we're processing a message from elsewhere so we select our bottom item.
-                                if (_hotCommands.Visible)
-                                {
-                                    _hotCommands.FocusLabel();
-                                }
-                                else if (_mainEntry is not null)
-                                {
-                                    _gridView.ReverseFocus();
-                                }
-                                else if (_toolStrip.Visible)
-                                {
-                                    _toolStrip.Focus();
-                                }
-                                else
-                                {
-                                    return base.ProcessDialogKey(keyData);
-                                }
-                            }
+                            return base.ProcessDialogKey(keyData);
                         }
+                    }
+                }
 
+                return true;
+            }
+            else
+            {
+                bool passToParent = false;
+
+                // This is forward.
+                if (_toolStrip.Focused)
+                {
+                    // Normal stuff, just do the propsheet.
+                    if (_mainEntry is not null)
+                    {
+                        _gridView.Focus();
+                    }
+                    else
+                    {
+                        base.ProcessDialogKey(keyData);
+                    }
+
+                    return true;
+                }
+                else if (_gridView.FocusInside)
+                {
+                    if (_hotCommands.Visible)
+                    {
+                        _hotCommands.FocusLabel();
                         return true;
                     }
                     else
                     {
-                        bool passToParent = false;
+                        passToParent = true;
+                    }
+                }
+                else if (_hotCommands.ContainsFocus)
+                {
+                    passToParent = true;
+                }
+                else
+                {
+                    // Coming from out side, start with the toolStrip.
+                    if (_toolStrip.Visible)
+                    {
+                        _toolStrip.Focus();
+                    }
+                    else
+                    {
+                        _gridView.Focus();
+                    }
+                }
 
-                        // This is forward.
-                        if (_toolStrip.Focused)
-                        {
-                            // Normal stuff, just do the propsheet.
-                            if (_mainEntry is not null)
-                            {
-                                _gridView.Focus();
-                            }
-                            else
-                            {
-                                base.ProcessDialogKey(keyData);
-                            }
+                // Nobody's claimed the focus, pass it on.
+                if (passToParent)
+                {
+                    // Properties window is already selected, pass on to parent.
+                    bool result = base.ProcessDialogKey(keyData);
 
-                            return true;
-                        }
-                        else if (_gridView.FocusInside)
+                    // If we're not hosted in a windows forms thing, just give the parent the focus.
+                    if (!result && Parent is null)
+                    {
+                        IntPtr hWndParent = User32.GetParent(this);
+                        if (hWndParent != IntPtr.Zero)
                         {
-                            if (_hotCommands.Visible)
-                            {
-                                _hotCommands.FocusLabel();
-                                return true;
-                            }
-                            else
-                            {
-                                passToParent = true;
-                            }
-                        }
-                        else if (_hotCommands.ContainsFocus)
-                        {
-                            passToParent = true;
-                        }
-                        else
-                        {
-                            // Coming from out side, start with the toolStrip.
-                            if (_toolStrip.Visible)
-                            {
-                                _toolStrip.Focus();
-                            }
-                            else
-                            {
-                                _gridView.Focus();
-                            }
-                        }
-
-                        // Nobody's claimed the focus, pass it on.
-                        if (passToParent)
-                        {
-                            // Properties window is already selected, pass on to parent.
-                            bool result = base.ProcessDialogKey(keyData);
-
-                            // If we're not hosted in a windows forms thing, just give the parent the focus.
-                            if (!result && Parent is null)
-                            {
-                                IntPtr hWndParent = User32.GetParent(this);
-                                if (hWndParent != IntPtr.Zero)
-                                {
-                                    User32.SetFocus(hWndParent);
-                                }
-                            }
-
-                            return result;
+                            User32.SetFocus(hWndParent);
                         }
                     }
 
-                    return true;
+                    return result;
+                }
             }
 
-            return base.ProcessDialogKey(keyData);
+            return true;
         }
 
         public override void Refresh()
@@ -3500,10 +3416,10 @@ namespace System.Windows.Forms
             if (clearCached && _selectedViewTab != -1 && _viewTabs is not null)
             {
                 PropertyTab tab = _viewTabs[_selectedViewTab];
-                if (tab is not null && _viewTabProps is not null)
+                if (tab is not null && _viewTabProperties is not null)
                 {
                     string tabName = tab.TabName + _propertySortValue.ToString();
-                    _viewTabProps.Remove(tabName);
+                    _viewTabProperties.Remove(tabName);
                 }
             }
 
@@ -3543,27 +3459,20 @@ namespace System.Windows.Forms
             }
 
             // Check the document level tabs.
-            if (tabScope <= PropertyTabScope.Document && _designerHost is not null)
+            if (tabScope <= PropertyTabScope.Document
+                && _designerHost?.Container?.Components is ComponentCollection components)
             {
-                IContainer container = _designerHost.Container;
-                if (container is not null)
+                foreach (IComponent component in components)
                 {
-                    ComponentCollection components = container.Components;
-                    if (components is not null)
-                    {
-                        foreach (IComponent comp in components)
-                        {
-                            var attribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(comp.GetType())[typeof(PropertyTabAttribute)];
+                    var attribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(component.GetType())[typeof(PropertyTabAttribute)];
 
-                            if (attribute is not null)
+                    if (attribute is not null)
+                    {
+                        for (int j = 0; j < attribute.TabClasses.Length; j++)
+                        {
+                            if (attribute.TabScopes[j] == PropertyTabScope.Document)
                             {
-                                for (int j = 0; j < attribute.TabClasses.Length; j++)
-                                {
-                                    if (attribute.TabScopes[j] == PropertyTabScope.Document)
-                                    {
-                                        AddRefTab(attribute.TabClasses[j], comp, PropertyTabScope.Document, false);
-                                    }
-                                }
+                                AddRefTab(attribute.TabClasses[j], component, PropertyTabScope.Document, false);
                             }
                         }
                     }
@@ -3981,194 +3890,187 @@ namespace System.Windows.Forms
                 return;
             }
 
-            try
+            using var _ = new FreezePaintScope(this);
+
+            if (_imageList[NormalButtonSize] is null || fullRebuild)
             {
-                FreezePainting = true;
-
-                if (_imageList[NormalButtonSize] is null || fullRebuild)
+                _imageList[NormalButtonSize]?.Dispose();
+                _imageList[NormalButtonSize] = new ImageList();
+                if (DpiHelper.IsScalingRequired)
                 {
-                    _imageList[NormalButtonSize]?.Dispose();
-                    _imageList[NormalButtonSize] = new ImageList();
-                    if (DpiHelper.IsScalingRequired)
-                    {
-                        _imageList[NormalButtonSize].ImageSize = s_normalButtonSize;
-                    }
+                    _imageList[NormalButtonSize].ImageSize = s_normalButtonSize;
                 }
+            }
 
-                // Setup our event handlers.
-                EventHandler ehViewTab = new(OnViewTabButtonClick);
-                EventHandler ehViewType = new(OnViewSortButtonClick);
-                EventHandler ehPP = new(OnViewButtonClickPP);
+            // Setup our event handlers.
+            EventHandler ehViewTab = new(OnViewTabButtonClick);
+            EventHandler ehViewType = new(OnViewSortButtonClick);
+            EventHandler ehPP = new(OnViewButtonClickPP);
 
-                Bitmap b;
-                int i;
+            Bitmap b;
+            int i;
 
-                // We manage the buttons as a separate list so the toolbar doesn't flash.
-                ArrayList buttonList;
+            // We manage the buttons as a separate list so the toolbar doesn't flash.
+            ArrayList buttonList;
 
-                if (fullRebuild)
-                {
-                    buttonList = new ArrayList();
-                }
-                else
-                {
-                    buttonList = new ArrayList(_toolStrip.Items);
-                }
+            if (fullRebuild)
+            {
+                buttonList = new ArrayList();
+            }
+            else
+            {
+                buttonList = new ArrayList(_toolStrip.Items);
+            }
 
-                // Setup the view type buttons.  We only need to do this once.
-                if (_viewSortButtons is null || fullRebuild)
-                {
-                    _viewSortButtons = new ToolStripButton[3];
+            // Setup the view type buttons.  We only need to do this once.
+            if (_viewSortButtons is null || fullRebuild)
+            {
+                _viewSortButtons = new ToolStripButton[3];
 
-                    int alphaIndex = -1;
-                    int categoryIndex = -1;
-
-                    try
-                    {
-                        if (_alphaBitmap is null)
-                        {
-                            _alphaBitmap = SortByPropertyImage;
-                        }
-
-                        alphaIndex = AddImage(_alphaBitmap);
-                    }
-                    catch (Exception)
-                    {
-                    }
-
-                    try
-                    {
-                        if (_categoryBitmap is null)
-                        {
-                            _categoryBitmap = SortByCategoryImage;
-                        }
-
-                        categoryIndex = AddImage(_categoryBitmap);
-                    }
-                    catch (Exception)
-                    {
-                    }
-
-                    _viewSortButtons[AlphaSortButtonIndex] = CreatePushButton(SR.PBRSToolTipAlphabetic, alphaIndex, ehViewType, true);
-                    _viewSortButtons[CategorySortButtonIndex] = CreatePushButton(SR.PBRSToolTipCategorized, categoryIndex, ehViewType, true);
-
-                    // We create a dummy hidden button for view sort.
-                    _viewSortButtons[NoSortButtonIndex] = CreatePushButton(string.Empty, 0, ehViewType, true);
-                    _viewSortButtons[NoSortButtonIndex].Visible = false;
-
-                    // Add the viewType buttons and a separator.
-                    for (i = 0; i < _viewSortButtons.Length; i++)
-                    {
-                        buttonList.Add(_viewSortButtons[i]);
-                    }
-                }
-                else
-                {
-                    // Clear all the items from the toolStrip and image list after the first two.
-                    int items = buttonList.Count;
-
-                    for (i = items - 1; i >= 2; i--)
-                    {
-                        buttonList.RemoveAt(i);
-                    }
-
-                    items = _imageList[NormalButtonSize].Images.Count;
-
-                    for (i = items - 1; i >= 2; i--)
-                    {
-                        RemoveImage(i);
-                    }
-                }
-
-                buttonList.Add(_separator1);
-
-                // Here's our buttons array.
-                _viewTabButtons = new ToolStripButton[_viewTabs.Length];
-
-                // If we've only got the properties tab, don't add the button
-                // (or we'll just have a properties button that you can't do anything with).
-                bool doAdd = _viewTabs.Length > 1;
-
-                // Setup the view tab buttons.
-                for (i = 0; i < _viewTabs.Length; i++)
-                {
-                    try
-                    {
-                        b = _viewTabs[i].Bitmap;
-                        _viewTabButtons[i] = CreatePushButton(_viewTabs[i].TabName, AddImage(b), ehViewTab, true);
-                        if (doAdd)
-                        {
-                            buttonList.Add(_viewTabButtons[i]);
-                        }
-                    }
-                    catch (Exception ex)
-                    {
-                        Debug.Fail(ex.ToString());
-                    }
-                }
-
-                // If we didn't add anything, we don't need another separator either.
-                if (doAdd)
-                {
-                    buttonList.Add(_separator2);
-                }
-
-                // Add the design page button.
-                int designPage = 0;
+                int alphaIndex = -1;
+                int categoryIndex = -1;
 
                 try
                 {
-                    if (_propertyPageBitmap is null)
+                    if (_alphaBitmap is null)
                     {
-                        _propertyPageBitmap = ShowPropertyPageImage;
+                        _alphaBitmap = SortByPropertyImage;
                     }
 
-                    designPage = AddImage(_propertyPageBitmap);
+                    alphaIndex = AddImage(_alphaBitmap);
                 }
                 catch (Exception)
                 {
                 }
 
-                // We recreate this every time to ensure it's at the end.
-                _viewPropertyPagesButton = CreatePushButton(SR.PBRSToolTipPropertyPages, designPage, ehPP, false);
-                _viewPropertyPagesButton.Enabled = false;
-                buttonList.Add(_viewPropertyPagesButton);
-
-                // Dispose this so it will get recreated for any new buttons.
-                if (_imageList[LargeButtonSize] is not null)
+                try
                 {
-                    _imageList[LargeButtonSize].Dispose();
-                    _imageList[LargeButtonSize] = null;
+                    if (_categoryBitmap is null)
+                    {
+                        _categoryBitmap = SortByCategoryImage;
+                    }
+
+                    categoryIndex = AddImage(_categoryBitmap);
+                }
+                catch (Exception)
+                {
                 }
 
-                if (_buttonType != NormalButtonSize)
+                _viewSortButtons[AlphaSortButtonIndex] = CreatePushButton(SR.PBRSToolTipAlphabetic, alphaIndex, ehViewType, true);
+                _viewSortButtons[CategorySortButtonIndex] = CreatePushButton(SR.PBRSToolTipCategorized, categoryIndex, ehViewType, true);
+
+                // We create a dummy hidden button for view sort.
+                _viewSortButtons[NoSortButtonIndex] = CreatePushButton(string.Empty, 0, ehViewType, true);
+                _viewSortButtons[NoSortButtonIndex].Visible = false;
+
+                // Add the viewType buttons and a separator.
+                for (i = 0; i < _viewSortButtons.Length; i++)
                 {
-                    EnsureLargeButtons();
+                    buttonList.Add(_viewSortButtons[i]);
                 }
-
-                _toolStrip.ImageList = _imageList[_buttonType];
-
-                _toolStrip.SuspendLayout();
-                _toolStrip.Items.Clear();
-                for (int j = 0; j < buttonList.Count; j++)
-                {
-                    _toolStrip.Items.Add(buttonList[j] as ToolStripItem);
-                }
-
-                _toolStrip.ResumeLayout();
-
-                if (_viewTabsDirty)
-                {
-                    // If we're redoing our tabs make sure we setup the toolbar area correctly.
-                    OnLayoutInternal(dividerOnly: false);
-                }
-
-                _viewTabsDirty = false;
             }
-            finally
+            else
             {
-                FreezePainting = false;
+                // Clear all the items from the toolStrip and image list after the first two.
+                int count = buttonList.Count;
+
+                for (i = count - 1; i >= 2; i--)
+                {
+                    buttonList.RemoveAt(i);
+                }
+
+                count = _imageList[NormalButtonSize].Images.Count;
+
+                for (i = count - 1; i >= 2; i--)
+                {
+                    RemoveImage(i);
+                }
             }
+
+            buttonList.Add(_separator1);
+
+            // Here's our buttons array.
+            _viewTabButtons = new ToolStripButton[_viewTabs.Length];
+
+            // If we've only got the properties tab, don't add the button
+            // (or we'll just have a properties button that you can't do anything with).
+            bool doAdd = _viewTabs.Length > 1;
+
+            // Setup the view tab buttons.
+            for (i = 0; i < _viewTabs.Length; i++)
+            {
+                try
+                {
+                    b = _viewTabs[i].Bitmap;
+                    _viewTabButtons[i] = CreatePushButton(_viewTabs[i].TabName, AddImage(b), ehViewTab, true);
+                    if (doAdd)
+                    {
+                        buttonList.Add(_viewTabButtons[i]);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Debug.Fail(ex.ToString());
+                }
+            }
+
+            // If we didn't add anything, we don't need another separator either.
+            if (doAdd)
+            {
+                buttonList.Add(_separator2);
+            }
+
+            // Add the design page button.
+            int designPage = 0;
+
+            try
+            {
+                if (_propertyPageBitmap is null)
+                {
+                    _propertyPageBitmap = ShowPropertyPageImage;
+                }
+
+                designPage = AddImage(_propertyPageBitmap);
+            }
+            catch (Exception)
+            {
+            }
+
+            // We recreate this every time to ensure it's at the end.
+            _viewPropertyPagesButton = CreatePushButton(SR.PBRSToolTipPropertyPages, designPage, ehPP, false);
+            _viewPropertyPagesButton.Enabled = false;
+            buttonList.Add(_viewPropertyPagesButton);
+
+            // Dispose this so it will get recreated for any new buttons.
+            if (_imageList[LargeButtonSize] is not null)
+            {
+                _imageList[LargeButtonSize].Dispose();
+                _imageList[LargeButtonSize] = null;
+            }
+
+            if (_buttonType != NormalButtonSize)
+            {
+                EnsureLargeButtons();
+            }
+
+            _toolStrip.ImageList = _imageList[_buttonType];
+
+            _toolStrip.SuspendLayout();
+            _toolStrip.Items.Clear();
+            for (int j = 0; j < buttonList.Count; j++)
+            {
+                _toolStrip.Items.Add(buttonList[j] as ToolStripItem);
+            }
+
+            _toolStrip.ResumeLayout();
+
+            if (_viewTabsDirty)
+            {
+                // If we're redoing our tabs make sure we setup the toolbar area correctly.
+                OnLayoutInternal(dividerOnly: false);
+            }
+
+            _viewTabsDirty = false;
         }
 
         protected void ShowEventsButton(bool value)
@@ -4226,7 +4128,7 @@ namespace System.Windows.Forms
         private bool ShouldSerializeCommandsDisabledLinkColor() => _hotCommands.Label.ShouldSerializeDisabledLinkColor();
 
         /// <summary>
-        ///  Sinks the property notify events on all the objects we are currently browsing.
+        ///  Sinks the property notify events on all the COM objects we are currently browsing.
         ///
         ///  <see cref="Ole32.IPropertyNotifySink"/>
         /// </summary>
@@ -4336,9 +4238,9 @@ namespace System.Windows.Forms
 
             string tabName = _viewTabs[_selectedViewTab].TabName + _propertySortValue.ToString();
 
-            if (_viewTabProps is not null && _viewTabProps.ContainsKey(tabName))
+            if (_viewTabProperties is not null && _viewTabProperties.ContainsKey(tabName))
             {
-                _mainEntry = (GridEntry)_viewTabProps[tabName];
+                _mainEntry = (GridEntry)_viewTabProperties[tabName];
                 if (_mainEntry is not null)
                 {
                     _mainEntry.Refresh();
@@ -4373,12 +4275,12 @@ namespace System.Windows.Forms
                     _mainEntry.BrowsableAttributes = BrowsableAttributes;
                 }
 
-                if (_viewTabProps is null)
+                if (_viewTabProperties is null)
                 {
-                    _viewTabProps = new Hashtable();
+                    _viewTabProperties = new Hashtable();
                 }
 
-                _viewTabProps[tabName] = _mainEntry;
+                _viewTabProperties[tabName] = _mainEntry;
             }
 
             // Get entries.
