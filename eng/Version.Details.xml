@@ -19,6 +19,10 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>69de57bcf2677238bbfb88e601bc38b89dc11dc0</Sha>
     </Dependency>
+    <Dependency Name="Microsoft.Windows.Compatibility" Version="7.0.0-alpha.1.21418.2">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>69de57bcf2677238bbfb88e601bc38b89dc11dc0</Sha>
+    </Dependency>
     <Dependency Name="System.CodeDom" Version="7.0.0-alpha.1.21418.2">
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>69de57bcf2677238bbfb88e601bc38b89dc11dc0</Sha>

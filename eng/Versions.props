@@ -64,7 +64,7 @@
   <PropertyGroup>
     <VerifyXunitVersion>11.18.2</VerifyXunitVersion>
     <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
-    <MicrosoftWindowsCompatibilityVersion>6.0.0-preview.4.21253.7</MicrosoftWindowsCompatibilityVersion>
+    <MicrosoftWindowsCompatibilityVersion>7.0.0-alpha.1.21418.2</MicrosoftWindowsCompatibilityVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
