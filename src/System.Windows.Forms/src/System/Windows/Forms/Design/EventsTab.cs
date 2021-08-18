@@ -51,10 +51,13 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  Returns the most relevant <see cref="IEventBindingService"/>.
-        ///
-        ///  This looks first at the current <see cref="IDesignerHost"/>, then the <paramref name="object"/>'s
-        ///  <see cref="ISite"/>, then finally the passed in <paramref name="context"/>.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   This looks first at the current <see cref="IDesignerHost"/>, then the <paramref name="object"/>'s
+        ///   <see cref="ISite"/>, then finally the passed in <paramref name="context"/>.
+        ///  </para>
+        /// </remarks>
         private IEventBindingService? GetEventBindingService(object @object, ITypeDescriptorContext? context)
         {
             if (!_hookedDesignerChanged)

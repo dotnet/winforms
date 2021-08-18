@@ -3237,14 +3237,14 @@ namespace System.Windows.Forms
         protected override bool ProcessDialogKey(Keys keyData)
         {
             if ((keyData & Keys.KeyCode) != Keys.Tab
-                || (keyData & Keys.Control) != 0
-                || (keyData & Keys.Alt) != 0)
+                || keyData.HasFlag(Keys.Control)
+                || keyData.HasFlag(Keys.Alt))
             {
                 return base.ProcessDialogKey(keyData);
             }
 
             // Are we going forward?
-            if ((keyData & Keys.Shift) != 0)
+            if (keyData.HasFlag(Keys.Shift))
             {
                 // This is backward
                 if (_hotCommands.Visible && _hotCommands.ContainsFocus)
@@ -3972,16 +3972,16 @@ namespace System.Windows.Forms
             else
             {
                 // Clear all the items from the toolStrip and image list after the first two.
-                int items = buttonList.Count;
+                int count = buttonList.Count;
 
-                for (i = items - 1; i >= 2; i--)
+                for (i = count - 1; i >= 2; i--)
                 {
                     buttonList.RemoveAt(i);
                 }
 
-                items = _imageList[NormalButtonSize].Images.Count;
+                count = _imageList[NormalButtonSize].Images.Count;
 
-                for (i = items - 1; i >= 2; i--)
+                for (i = count - 1; i >= 2; i--)
                 {
                     RemoveImage(i);
                 }

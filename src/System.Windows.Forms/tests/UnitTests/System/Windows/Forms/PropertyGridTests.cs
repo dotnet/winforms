@@ -10,6 +10,7 @@ using System.Windows.Forms.PropertyGridInternal;
 using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms.Tests
 {
@@ -2011,7 +2012,13 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false, 10, 2, 10, 13)]
         [InlineData(false, true, 1, 1, 2, 2)]
         [InlineData(false, false, 0, 1, 0, 1)]
-        public void PropertyGrid_HelpVisible_SetWithHandle_GetReturnsExpected(bool visible, bool value, int expectedLayoutCallCount1, int expectedInvalidatedCallCount, int expectedLayoutCallCount2, int expectedLayoutCallCount3)
+        public void PropertyGrid_HelpVisible_SetWithHandle_GetReturnsExpected(
+            bool visible,
+            bool value,
+            int expectedLayoutCallCount1,
+            int expectedInvalidatedCallCount,
+            int expectedLayoutCallCount2,
+            int expectedLayoutCallCount3)
         {
             using var control = new PropertyGrid
             {
@@ -3825,6 +3832,44 @@ namespace System.Windows.Forms.Tests
             Assert.True(entry.EntryFlags != 0);
             Assert.False(propertyGrid.IsHandleCreated);
             Assert.False(button.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PropertyGrid_BindObject()
+        {
+            using PropertyGrid propertyGrid = new();
+            object @object = new();
+            propertyGrid.SelectedObject = @object;
+            GridItem selectedItem = propertyGrid.SelectedGridItem;
+            Assert.True(selectedItem != null);
+            Assert.Equal("System.Object", selectedItem.Label);
+            Assert.IsAssignableFrom<IRootGridEntry>(selectedItem);
+            SingleSelectRootGridEntry gridEntry = Assert.IsAssignableFrom<SingleSelectRootGridEntry>(selectedItem);
+            AttributeCollection browsableAttributes = gridEntry.BrowsableAttributes;
+            Assert.Single(browsableAttributes);
+            Assert.Equal(BrowsableAttribute.Yes, browsableAttributes[0]);
+            Type propertyType = gridEntry.PropertyType;
+            Assert.True(propertyType == typeof(object));
+
+            AttributeCollection attributes = gridEntry.Attributes;
+            bool foundTypeForward = false;
+            foreach (object attribute in attributes)
+            {
+                if (attribute is TypeForwardedFromAttribute forwardedFrom)
+                {
+                    Assert.Equal(
+                        "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                        forwardedFrom.AssemblyFullName);
+                    foundTypeForward = true;
+                    break;
+                }
+            }
+
+            Assert.True(foundTypeForward, "Did not find TypeForwardedAttribute.");
+
+            TypeConverter typeConverter = gridEntry.TypeConverter;
+            Assert.IsType<TypeConverter>(typeConverter);
+            propertyGrid.Enabled = true;
         }
 
         private class SubToolStripRenderer : ToolStripRenderer
