@@ -21,7 +21,7 @@ Windows Forms requires the following workloads and components be selected when i
   choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
   ```
 
-  :warning: If you have VS 2022 installed CMake 3.21.0-rc2 or later is required.
+  :warning: If you have VS 2022 installed CMake 3.21.0 or later is required.
   
 
 ## Workflow
