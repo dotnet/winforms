@@ -5164,6 +5164,7 @@ static System.Windows.Forms.ProfessionalColors.RaftingContainerGradientBegin.get
 static System.Windows.Forms.ProfessionalColors.RaftingContainerGradientEnd.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.SeparatorDark.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.SeparatorLight.get -> System.Drawing.Color
+static System.Windows.Forms.ProfessionalColors.StatusStripBorder.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.StatusStripGradientBegin.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.StatusStripGradientEnd.get -> System.Drawing.Color
 static System.Windows.Forms.ProfessionalColors.ToolStripBorder.get -> System.Drawing.Color
@@ -6672,6 +6673,7 @@ System.Windows.Forms.Control.Invalidated -> System.Windows.Forms.InvalidateEvent
 System.Windows.Forms.Control.InvokeRequired.get -> bool
 System.Windows.Forms.Control.IsAccessible.get -> bool
 System.Windows.Forms.Control.IsAccessible.set -> void
+System.Windows.Forms.Control.IsAncestorSiteInDesignMode.get -> bool
 System.Windows.Forms.Control.IsDisposed.get -> bool
 System.Windows.Forms.Control.IsHandleCreated.get -> bool
 System.Windows.Forms.Control.IsMirrored.get -> bool
@@ -6691,6 +6693,8 @@ System.Windows.Forms.Control.LostFocus -> System.EventHandler
 System.Windows.Forms.Control.Margin.get -> System.Windows.Forms.Padding
 System.Windows.Forms.Control.Margin.set -> void
 System.Windows.Forms.Control.MarginChanged -> System.EventHandler
+System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.get -> bool
+System.Windows.Forms.Form.MdiChildrenMinimizedAnchorBottom.set -> void
 System.Windows.Forms.Control.MouseCaptureChanged -> System.EventHandler
 System.Windows.Forms.Control.MouseClick -> System.Windows.Forms.MouseEventHandler
 System.Windows.Forms.Control.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler
@@ -13264,6 +13268,7 @@ virtual System.Windows.Forms.ProfessionalColorTable.OverflowButtonGradientEnd.ge
 virtual System.Windows.Forms.ProfessionalColorTable.OverflowButtonGradientMiddle.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.RaftingContainerGradientBegin.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.RaftingContainerGradientEnd.get -> System.Drawing.Color
+virtual System.Windows.Forms.ProfessionalColorTable.StatusStripBorder.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.SeparatorDark.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.SeparatorLight.get -> System.Drawing.Color
 virtual System.Windows.Forms.ProfessionalColorTable.StatusStripGradientBegin.get -> System.Drawing.Color
