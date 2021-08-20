@@ -10,10 +10,10 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class PropertyGridView_GridViewEdit_GridViewEditAccessibleObjectTests
+    public class PropertyGridView_GridViewTextBox_GridViewTextBoxAccessibleObjectTests
     {
         [WinFormsFact]
-        public void GridViewEditAccessibleObject_created_for_string_property()
+        public void GridViewTextBoxAccessibleObject_created_for_string_property()
         {
             TestEntityWithTextField testEntity = new TestEntityWithTextField
             {
@@ -36,11 +36,11 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             UiaCore.IRawElementProviderFragment editFieldAccessibleObject = selectedGridEntryAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.NotNull(editFieldAccessibleObject);
 
-            Assert.Equal("GridViewEditAccessibleObject", editFieldAccessibleObject.GetType().Name);
+            Assert.Equal("GridViewTextBoxAccessibleObject", editFieldAccessibleObject.GetType().Name);
         }
 
         [WinFormsFact]
-        public void GridViewEditAccessibleObject_FragmentNavigate_navigates_correctly()
+        public void GridViewTextBoxAccessibleObject_FragmentNavigate_navigates_correctly()
         {
             using PropertyGrid propertyGrid = new PropertyGrid
             {
@@ -55,7 +55,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
             UiaCore.IRawElementProviderFragment editFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
-            Assert.Equal("GridViewEditAccessibleObject", editFieldAccessibleObject.GetType().Name);
+            Assert.Equal("GridViewTextBoxAccessibleObject", editFieldAccessibleObject.GetType().Name);
 
             // The case with drop down holder:
             using TestDropDownHolder dropDownHolder = new TestDropDownHolder(propertyGridView);
@@ -89,28 +89,28 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         }
 
         [WinFormsFact]
-        public void GridViewEditAccessibleObject_ctor_default()
+        public void GridViewTextBoxAccessibleObject_ctor_default()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
-            Type gridViewEditType = typeof(PropertyGridView).GetNestedType("GridViewEdit", BindingFlags.NonPublic);
-            Assert.NotNull(gridViewEditType);
-            TextBox gridViewEdit = (TextBox)Activator.CreateInstance(gridViewEditType, gridView);
-            Type accessibleObjectType = gridViewEditType.GetNestedType("GridViewEditAccessibleObject", BindingFlags.NonPublic);
+            Type gridViewTextBoxType = typeof(PropertyGridView).GetNestedType("GridViewTextBox", BindingFlags.NonPublic);
+            Assert.NotNull(gridViewTextBoxType);
+            TextBox gridViewTextBox = (TextBox)Activator.CreateInstance(gridViewTextBoxType, gridView);
+            Type accessibleObjectType = gridViewTextBoxType.GetNestedType("GridViewTextBoxAccessibleObject", BindingFlags.NonPublic);
             Assert.NotNull(accessibleObjectType);
-            ControlAccessibleObject accessibleObject = (ControlAccessibleObject)Activator.CreateInstance(accessibleObjectType, gridViewEdit);
-            Assert.Equal(gridViewEdit, accessibleObject.Owner);
+            ControlAccessibleObject accessibleObject = (ControlAccessibleObject)Activator.CreateInstance(accessibleObjectType, gridViewTextBox);
+            Assert.Equal(gridViewTextBox, accessibleObject.Owner);
         }
 
         [WinFormsFact]
-        public void GridViewEditAccessibleObject_ctor_ThrowsException_IfOwnerIsNull()
+        public void GridViewTextBoxAccessibleObject_ctor_ThrowsException_IfOwnerIsNull()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
-            Type gridViewEditType = typeof(PropertyGridView).GetNestedType("GridViewEdit", BindingFlags.NonPublic);
-            Assert.NotNull(gridViewEditType);
-            TextBox gridViewEdit = (TextBox)Activator.CreateInstance(gridViewEditType, gridView);
-            Type accessibleObjectType = gridViewEditType.GetNestedType("GridViewEditAccessibleObject", BindingFlags.NonPublic);
+            Type gridViewTextBoxType = typeof(PropertyGridView).GetNestedType("GridViewTextBox", BindingFlags.NonPublic);
+            Assert.NotNull(gridViewTextBoxType);
+            TextBox gridViewTextBox = (TextBox)Activator.CreateInstance(gridViewTextBoxType, gridView);
+            Type accessibleObjectType = gridViewTextBoxType.GetNestedType("GridViewTextBoxAccessibleObject", BindingFlags.NonPublic);
             Assert.NotNull(accessibleObjectType);
             Assert.Throws<TargetInvocationException>(() => Activator.CreateInstance(accessibleObjectType, (TextBox)null));
         }
@@ -119,7 +119,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [InlineData((int)UiaCore.UIA.IsTextPatternAvailablePropertyId)]
         [InlineData((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId)]
         [InlineData((int)UiaCore.UIA.IsValuePatternAvailablePropertyId)]
-        public void GridViewEditAccessibleObject_GetPropertyValue_PatternsSuported(int propertyID)
+        public void GridViewTextBoxAccessibleObject_GetPropertyValue_PatternsSuported(int propertyID)
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
@@ -131,7 +131,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [InlineData((int)UiaCore.UIA.ValuePatternId)]
         [InlineData((int)UiaCore.UIA.TextPatternId)]
         [InlineData((int)UiaCore.UIA.TextPattern2Id)]
-        public void GridViewEditAccessibleObject_IsPatternSupported_PatternsSuported(int patternId)
+        public void GridViewTextBoxAccessibleObject_IsPatternSupported_PatternsSuported(int patternId)
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
@@ -140,11 +140,12 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         }
 
         [WinFormsFact]
-        public void GridViewEditAccessibleObject_ControlType_IsEdit_IfAccessibleRoleIsDefault()
+        public void GridViewTextBoxAccessibleObject_ControlType_IsEdit_IfAccessibleRoleIsDefault()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
             AccessibleObject accessibleObject = gridView.EditAccessibleObject;
+
             // AccessibleRole is not set = Default
 
             object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
@@ -156,15 +157,16 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsTheory]
         [InlineData(true, AccessibleRole.Text)]
         [InlineData(false, AccessibleRole.None)]
-        public void GridViewEditAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+        public void GridViewTextBoxAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             PropertyGridView gridView = propertyGrid.TestAccessor().GridView;
+
             // AccessibleRole is not set = Default
 
             if (createControl)
             {
-                gridView.TestAccessor().Dynamic.Edit.CreateControl(true); // "true" means ignoring Visible value
+                gridView.TestAccessor().Dynamic.EditTextBox.CreateControl(true); // "true" means ignoring Visible value
             }
 
             AccessibleRole actual = gridView.EditAccessibleObject.Role;

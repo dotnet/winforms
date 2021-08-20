@@ -1315,7 +1315,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal bool PreTranslateMessage(ref User32.MSG msg)
             {
-                if (ProcessFilters(ref msg, out bool modified))
+                if (ProcessFilters(ref msg, out _))
                 {
                     return true;
                 }

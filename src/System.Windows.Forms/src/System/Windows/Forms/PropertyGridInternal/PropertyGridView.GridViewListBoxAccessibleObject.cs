@@ -43,7 +43,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (direction == UiaCore.NavigateDirection.NextSibling)
                 {
-                    return _owningPropertyGridView.Edit.AccessibilityObject;
+                    return _owningPropertyGridView.EditTextBox.AccessibilityObject;
                 }
 
                 return base.FragmentNavigate(direction);

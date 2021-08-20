@@ -8,14 +8,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class PropertyGridView
     {
-        private partial class GridViewEdit
+        private partial class GridViewTextBox
         {
-            protected class GridViewEditAccessibleObject : ControlAccessibleObject
+            private class GridViewTextBoxAccessibleObject : ControlAccessibleObject
             {
                 private readonly PropertyGridView _owningPropertyGridView;
                 private readonly TextBoxBaseUiaTextProvider _textProvider;
 
-                public GridViewEditAccessibleObject(GridViewEdit owner) : base(owner)
+                public GridViewTextBoxAccessibleObject(GridViewTextBox owner) : base(owner)
                 {
                     _owningPropertyGridView = owner.PropertyGridView;
                     _textProvider = new TextBoxBaseUiaTextProvider(owner);

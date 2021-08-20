@@ -14,15 +14,18 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         public void PropertyDescriptorGridEntryAccessibleObject_Navigates_to_DropDownControlHolder()
         {
             using PropertyGrid propertyGrid = new();
-            using TestPropertyGridView testPropertyGridView = new(null, propertyGrid);
+            using PropertyGridView propertyGridView = new(serviceProvider: null, propertyGrid);
+
+            TestPropertyGridViewAccessibleObject accessibleObject = new(propertyGridView, parentPropertyGrid: null);
+            propertyGridView.Properties.SetObject(propertyGrid.TestAccessor().Dynamic.s_accessibilityProperty, accessibleObject);
 
             TestPropertyDescriptorGridEntry gridEntry = new(propertyGrid, null, false);
-            testPropertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
+            propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
-            TestDropDownHolder dropDownHolder = new(testPropertyGridView);
+            TestDropDownHolder dropDownHolder = new(propertyGridView);
             dropDownHolder.SetState(0x00000002, true); // Control class States.Visible flag
-            testPropertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
-            gridEntry.TestAccessor().Dynamic._parent = new TestGridEntry(propertyGrid, null, testPropertyGridView);
+            propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
+            gridEntry.TestAccessor().Dynamic._parent = new TestGridEntry(propertyGrid, null, propertyGridView);
 
             UiaCore.IRawElementProviderFragment firstChild = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.NotNull(firstChild);
@@ -115,28 +118,6 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             }
 
             internal override bool Enumerable => false;
-        }
-
-        private class TestPropertyGridView : PropertyGridView
-        {
-            private Control _parent;
-
-            public TestPropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
-                : base(serviceProvider, propertyGrid)
-            {
-                _parent = propertyGrid;
-            }
-
-            protected override AccessibleObject CreateAccessibilityInstance()
-            {
-                return new TestPropertyGridViewAccessibleObject(this, null);
-            }
-
-            internal override Control ParentInternal
-            {
-                get => _parent;
-                set => _parent = value;
-            }
         }
 
         private class TestPropertyGridViewAccessibleObject : PropertyGridView.PropertyGridViewAccessibleObject
