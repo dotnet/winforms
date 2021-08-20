@@ -3971,16 +3971,16 @@ namespace System.Windows.Forms
             else
             {
                 // Clear all the items from the toolStrip and image list after the first two.
-                int items = buttonList.Count;
+                int count = buttonList.Count;
 
-                for (i = items - 1; i >= 2; i--)
+                for (i = count - 1; i >= 2; i--)
                 {
                     buttonList.RemoveAt(i);
                 }
 
-                items = _imageList[NormalButtonSize].Images.Count;
+                count = _imageList[NormalButtonSize].Images.Count;
 
-                for (i = items - 1; i >= 2; i--)
+                for (i = count - 1; i >= 2; i--)
                 {
                     RemoveImage(i);
                 }

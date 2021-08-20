@@ -783,7 +783,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void ClearGridEntries()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ClearClearGridEntries");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ClearGridEntries");
 
             if (!HasEntries)
             {
@@ -902,7 +902,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             try
             {
                 // We do this because the Focus call above doesn't always stick, so
-                // we make the Edit think that it doesn't have focus. This prevents
+                // we make the EditTextBox think that it doesn't have focus. This prevents
                 // ActiveControl code on the container control from moving focus elsewhere
                 // when the dropdown closes.
 
