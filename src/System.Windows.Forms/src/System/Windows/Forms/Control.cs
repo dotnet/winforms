@@ -500,9 +500,10 @@ namespace System.Windows.Forms
                 if (accessibleObject is null)
                 {
                     accessibleObject = CreateAccessibilityInstance();
-                    // this is a security check. we want to enforce that we only return
-                    // ControlAccessibleObject and not some other derived class
-                    if (!(accessibleObject is ControlAccessibleObject))
+
+                    // This is a security check. We want to enforce that we only return
+                    // ControlAccessibleObject and not some other derived class.
+                    if (accessibleObject is not ControlAccessibleObject)
                     {
                         Debug.Fail("Accessible objects for controls must be derived from ControlAccessibleObject.");
                         return null;
@@ -4906,7 +4907,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  constructs the new instance of the accessibility object for this control. Subclasses
+        ///  Constructs a new instance of the accessibility object for this control. Subclasses
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -6698,19 +6699,20 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if charCode is an input character that the control
-        ///  wants. This method is called during window message pre-processing to
-        ///  determine whether the given input character should be pre-processed or
-        ///  sent directly to the control. If isInputChar returns true, the
-        ///  given character is sent directly to the control. If isInputChar
-        ///  returns false, the character is pre-processed and only sent to the
-        ///  control if it is not consumed by the pre-processing phase. The
-        ///  pre-processing of a character includes checking whether the character
-        ///  is a mnemonic of another control.
+        ///  Determines if <paramref name="charCode"/> is an input character that the control wants.
         /// </summary>
+        /// <remarks>
+        ///  This method is called during window message pre-processing to determine whether the given input
+        ///  character should be pre-processed or sent directly to the control. The pre-processing of a character
+        ///  includes checking whether the character is a mnemonic of another control.
+        ///  (<see cref="PreProcessControlMessage(ref Message)"/>)
+        /// </remarks>
+        /// <returns>
+        ///  'true' if the <paramref name="charCode"/> should be sent directly to the control.
+        /// </returns>
         protected virtual bool IsInputChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.IsInputChar 0x" + ((int)charCode).ToString("X", CultureInfo.InvariantCulture));
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.IsInputChar 0x{((int)charCode):X}");
 
             int mask = 0;
             if (charCode == (char)(int)Keys.Tab)
@@ -6726,18 +6728,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if keyData is an input key that the control wants.
-        ///  This method is called during window message pre-processing to determine
-        ///  whether the given input key should be pre-processed or sent directly to
-        ///  the control. If isInputKey returns true, the given key is sent
-        ///  directly to the control. If isInputKey returns false, the key is
-        ///  pre-processed and only sent to the control if it is not consumed by the
-        ///  pre-processing phase. Keys that are pre-processed include TAB, RETURN,
-        ///  ESCAPE, and arrow keys.
+        ///  Determines if <paramref name="keyData"/> is an input key that the control wants.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   This method is called during window message pre-processing to determine whether the given input key
+        ///   should be pre-processed or sent directly to the control.Keys that are pre-processed include TAB, RETURN,
+        ///   ESCAPE, and arrow keys. (<see cref="PreProcessControlMessage(ref Message)"/>)
+        ///  </para>
+        /// </remarks>
+        /// <returns>
+        ///  'true' if the <paramref name="keyData"/> should be sent directly to the control.
+        /// </returns>
         protected virtual bool IsInputKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.IsInputKey " + keyData.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.IsInputKey {keyData}");
 
             if ((keyData & Keys.Alt) == Keys.Alt)
             {
@@ -6758,18 +6763,12 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if (IsHandleCreated)
-            {
-                return (unchecked((int)(long)User32.SendMessageW(this, User32.WM.GETDLGCODE)) & (int)mask) != 0;
-            }
-            else
-            {
-                return false;
-            }
+            return IsHandleCreated
+                && (unchecked((int)(long)User32.SendMessageW(this, User32.WM.GETDLGCODE)) & (int)mask) != 0;
         }
 
         /// <summary>
-        ///  Determines if charCode is the mnemonic character in text.
+        ///  Determines if <paramref name="charCode"/> is the mnemonic character in <paramref name="text"/>.
         ///  The mnemonic character is the character immediately following the first
         ///  instance of "&amp;" in text
         /// </summary>
@@ -6778,7 +6777,7 @@ namespace System.Windows.Forms
 #if DEBUG
             if (s_controlKeyboardRouting.TraceVerbose)
             {
-                Debug.Write("Control.IsMnemonic(" + charCode.ToString() + ", ");
+                Debug.Write($"Control.IsMnemonic({charCode}, ");
 
                 if (text is not null)
                 {
@@ -6793,7 +6792,7 @@ namespace System.Windows.Forms
             }
 #endif
 
-            //Special case handling:
+            // Special case handling:
             if (charCode == '&')
             {
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning false");
@@ -6818,7 +6817,7 @@ namespace System.Windows.Forms
                     }
 
                     char c1 = char.ToUpper(text[pos], CultureInfo.CurrentCulture);
-                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...& found... char=" + c1.ToString());
+                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"   ...& found... char={c1}");
                     if (c1 == c2 || char.ToLower(c1, CultureInfo.CurrentCulture) == char.ToLower(c2, CultureInfo.CurrentCulture))
                     {
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "   ...returning true");
@@ -9025,38 +9024,48 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  This method is called by the application's message loop to pre-process
-        ///  input messages before they are dispatched. Possible values for the
-        ///  msg.message field are WM_KEYDOWN, WM_SYSKEYDOWN, WM_CHAR, and WM_SYSCHAR.
-        ///  If this method processes the message it must return true, in which case
-        ///  the message loop will not dispatch the message.
-        ///  For WM_KEYDOWN and WM_SYSKEYDOWN messages, preProcessMessage() first
-        ///  calls processCmdKey() to check for command keys such as accelerators and
-        ///  menu shortcuts. If processCmdKey() doesn't process the message, then
-        ///  isInputKey() is called to check whether the key message represents an
-        ///  input key for the control. Finally, if isInputKey() indicates that the
-        ///  control isn't interested in the key message, then processDialogKey() is
-        ///  called to check for dialog keys such as TAB, arrow keys, and mnemonics.
-        ///  For WM_CHAR messages, preProcessMessage() first calls isInputChar() to
-        ///  check whether the character message represents an input character for
-        ///  the control. If isInputChar() indicates that the control isn't interested
-        ///  in the character message, then processDialogChar() is called to check for
-        ///  dialog characters such as mnemonics.
-        ///  For WM_SYSCHAR messages, preProcessMessage() calls processDialogChar()
-        ///  to check for dialog characters such as mnemonics.
-        ///  When overriding preProcessMessage(), a control should return true to
-        ///  indicate that it has processed the message. For messages that aren't
-        ///  processed by the control, the result of "base.preProcessMessage()"
-        ///  should be returned. Controls will typically override one of the more
-        ///  specialized methods (isInputChar(), isInputKey(), processCmdKey(),
-        ///  processDialogChar(), or processDialogKey()) instead of overriding
-        ///  preProcessMessage().
+        ///  This method is called by the application's message loop to pre-process input messages before they
+        ///  are dispatched. If this method processes the message it must return true, in which case the message
+        ///  loop will not dispatch the message.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   The messages that this method handles are WM_KEYDOWN, WM_SYSKEYDOWN, WM_CHAR, and WM_SYSCHAR.
+        ///  </para>
+        ///  <para>
+        ///   For WM_KEYDOWN and WM_SYSKEYDOWN messages, this first calls <see cref="ProcessCmdKey(ref Message, Keys)"/>
+        ///   to check for command keys such as accelerators and menu shortcuts. If it doesn't process the message, then
+        ///   <see cref="IsInputKey(Keys)"/> is called to check whether the key message represents an input key for the
+        ///   control. Finally, if <see cref="IsInputKey(Keys)"/> indicates that the control isn't interested in the key
+        ///   message, then <see cref="ProcessDialogKey(Keys)"/> is called to check for dialog keys such as TAB, arrow
+        ///   keys, and mnemonics.
+        ///  </para>
+        ///  <para>
+        ///   For WM_CHAR messages, <see cref="IsInputChar(char)"/> is first called to check whether the character
+        ///   message represents an input character for the control. If <see cref="IsInputChar(char)"/> indicates that
+        ///   the control isn't interested in the character message, then <see cref="ProcessDialogChar(char)"/> is
+        ///   called to check for dialog characters such as mnemonics.
+        ///  </para>
+        ///  <para>
+        ///   For WM_SYSCHAR messages, this calls <see cref="ProcessDialogChar(char)"/> to check for dialog characters
+        ///   such as mnemonics.
+        ///  </para>
+        ///  <para>
+        ///   When overriding this method, a control should return true to indicate that it has processed the message.
+        ///   For messages that aren't  processed by the control, the result of "base.PreProcessMessage()" should be
+        ///   returned.
+        ///  </para>
+        ///  <para>
+        ///   Controls will typically override one of the more specialized methods (<see cref="IsInputChar(char)"/>,
+        ///   <see cref="IsInputKey(Keys)"/>, <see cref="ProcessCmdKey(ref Message, Keys)"/>, <see cref="ProcessDialogChar(char)"/>,
+        ///   or <see cref="ProcessDialogKey(Keys)"/>) instead of overriding this method.
+        ///  </para>
+        /// </remarks>
         public virtual bool PreProcessMessage(ref Message msg)
         {
             //   Debug.WriteLineIf(ControlKeyboardRouting.TraceVerbose, "Control.PreProcessMessage " + msg.ToString());
 
-            bool ret;
+            bool result;
 
             if (msg.Msg == (int)User32.WM.KEYDOWN || msg.Msg == (int)User32.WM.SYSKEYDOWN)
             {
@@ -9068,16 +9077,16 @@ namespace System.Windows.Forms
                 Keys keyData = (Keys)(unchecked((int)(long)msg.WParam) | (int)ModifierKeys);
                 if (ProcessCmdKey(ref msg, keyData))
                 {
-                    ret = true;
+                    result = true;
                 }
                 else if (IsInputKey(keyData))
                 {
                     SetExtendedState(ExtendedStates.InputKey, true);
-                    ret = false;
+                    result = false;
                 }
                 else
                 {
-                    ret = ProcessDialogKey(keyData);
+                    result = ProcessDialogKey(keyData);
                 }
             }
             else if (msg.Msg == (int)User32.WM.CHAR || msg.Msg == (int)User32.WM.SYSCHAR)
@@ -9085,71 +9094,62 @@ namespace System.Windows.Forms
                 if (msg.Msg == (int)User32.WM.CHAR && IsInputChar((char)msg.WParam))
                 {
                     SetExtendedState(ExtendedStates.InputChar, true);
-                    ret = false;
+                    result = false;
                 }
                 else
                 {
-                    ret = ProcessDialogChar((char)msg.WParam);
+                    result = ProcessDialogChar((char)msg.WParam);
                 }
             }
             else
             {
-                ret = false;
+                result = false;
             }
 
-            return ret;
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public PreProcessControlState PreProcessControlMessage(ref Message msg)
-        {
-            return PreProcessControlMessageInternal(null, ref msg);
+            return result;
         }
 
         /// <summary>
-        ///  This method is similar to PreProcessMessage, but instead of indicating
-        ///  that the message was either processed or it wasn't, it has three return
-        ///  values:
-        ///
-        ///  MessageProcessed - PreProcessMessage() returns true, and the message
-        ///                  needs no further processing
-        ///
-        ///  MessageNeeded    - PreProcessMessage() returns false, but IsInputKey/Char
-        ///                  return true.  This means the message wasn't processed,
-        ///                  but the control is interested in it.
-        ///
-        ///  MessageNotNeeded - PreProcessMessage() returns false, and IsInputKey/Char
-        ///                  return false.
+        ///  <see cref="PreProcessControlMessage(ref Message)"/> calls <see cref="PreProcessMessage(ref Message)"/>
+        ///  on the <see cref="Control"/> referenced by the <paramref name="msg"/> <see cref="Message.HWnd"/>. It
+        ///  handles dispatching of <see cref="OnPreviewKeyDown(PreviewKeyDownEventArgs)"/> and determines whether
+        ///  to forward input messages when <see cref="PreProcessMessage(ref Message)"/> indicates it did not handle
+        ///  the message by returning false.
         /// </summary>
-        internal static PreProcessControlState PreProcessControlMessageInternal(Control target, ref Message msg)
+        /// <remarks>
+        ///  <para>
+        ///   This is the method that is called directly by the <see cref="Application"/>'s message loop.
+        ///   See <see cref="Application.ThreadContext.PreTranslateMessage(ref User32.MSG)"/>.
+        ///  </para>
+        /// </remarks>
+        [EditorBrowsable(EditorBrowsableState.Advanced)]
+        public PreProcessControlState PreProcessControlMessage(ref Message msg)
+            => PreProcessControlMessageInternal(target: null, ref msg);
+
+        internal static PreProcessControlState PreProcessControlMessageInternal(Control target, ref Message message)
         {
-            if (target is null)
-            {
-                target = FromChildHandle(msg.HWnd);
-            }
+            target ??= FromChildHandle(message.HWnd);
 
             if (target is null)
             {
                 return PreProcessControlState.MessageNotNeeded;
             }
 
-            // reset state that is used to make sure IsInputChar, IsInputKey and
-            // ProcessUICues are not called multiple times.
-            // ISSUE: Which control should these state bits be set on? probably the target.
+            // Reset state that is used to make sure IsInputChar, IsInputKey and ProcessUICues are not called multiple times.
             target.SetExtendedState(ExtendedStates.InputKey, false);
             target.SetExtendedState(ExtendedStates.InputChar, false);
             target.SetExtendedState(ExtendedStates.UiCues, true);
 
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.PreProcessControlMessageInternal " + msg.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.PreProcessControlMessageInternal {message}");
 
             try
             {
-                Keys keyData = (Keys)(unchecked((int)(long)msg.WParam) | (int)ModifierKeys);
+                Keys keyData = (Keys)(unchecked((int)(long)message.WParam) | (int)ModifierKeys);
 
                 // Allow control to preview key down message.
-                if (msg.Msg == (int)User32.WM.KEYDOWN || msg.Msg == (int)User32.WM.SYSKEYDOWN)
+                if (message.Msg == (int)User32.WM.KEYDOWN || message.Msg == (int)User32.WM.SYSKEYDOWN)
                 {
-                    target.ProcessUICues(ref msg);
+                    target.ProcessUICues(ref message);
 
                     PreviewKeyDownEventArgs args = new PreviewKeyDownEventArgs(keyData);
                     target.OnPreviewKeyDown(args);
@@ -9157,6 +9157,7 @@ namespace System.Windows.Forms
                     if (args.IsInputKey)
                     {
                         Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "PreviewKeyDown indicated this is an input key.");
+
                         // Control wants this message - indicate it should be dispatched.
                         return PreProcessControlState.MessageNeeded;
                     }
@@ -9164,11 +9165,11 @@ namespace System.Windows.Forms
 
                 PreProcessControlState state = PreProcessControlState.MessageNotNeeded;
 
-                if (!target.PreProcessMessage(ref msg))
+                if (!target.PreProcessMessage(ref message))
                 {
-                    if (msg.Msg == (int)User32.WM.KEYDOWN || msg.Msg == (int)User32.WM.SYSKEYDOWN)
+                    if (message.Msg == (int)User32.WM.KEYDOWN || message.Msg == (int)User32.WM.SYSKEYDOWN)
                     {
-                        // check if IsInputKey has already processed this message
+                        // Check if IsInputKey has already processed this message
                         // or if it is safe to call - we only want it to be called once.
                         if (target.GetExtendedState(ExtendedStates.InputKey) || target.IsInputKey(keyData))
                         {
@@ -9176,11 +9177,11 @@ namespace System.Windows.Forms
                             state = PreProcessControlState.MessageNeeded;
                         }
                     }
-                    else if (msg.Msg == (int)User32.WM.CHAR || msg.Msg == (int)User32.WM.SYSCHAR)
+                    else if (message.Msg == (int)User32.WM.CHAR || message.Msg == (int)User32.WM.SYSCHAR)
                     {
-                        // check if IsInputChar has already processed this message
+                        // Check if IsInputChar has already processed this message
                         // or if it is safe to call - we only want it to be called once.
-                        if (target.GetExtendedState(ExtendedStates.InputChar) || target.IsInputChar((char)msg.WParam))
+                        if (target.GetExtendedState(ExtendedStates.InputChar) || target.IsInputChar((char)message.WParam))
                         {
                             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control didn't preprocess this message but it needs to be dispatched");
                             state = PreProcessControlState.MessageNeeded;

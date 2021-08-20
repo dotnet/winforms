@@ -218,7 +218,7 @@ namespace System.Windows.Forms
                 SetToolStripRenderer();
 
                 // Always add the property tab here.
-                AddRefTab(DefaultTabType, null, PropertyTabScope.Static, setupToolbar: true);
+                AddTab(DefaultTabType, PropertyTabScope.Static);
 
                 _docComment = new(this);
                 _docComment.SuspendLayout();
@@ -877,9 +877,9 @@ namespace System.Windows.Forms
                     }
                     catch (ArgumentException)
                     {
-                        // When no row is selected, SelectedGridItem returns grid entry for root
+                        // When no row is selected, SelectedGridItem returns the grid entry for the root
                         // object. But this is not a selectable item. So don't worry if setting SelectedGridItem
-                        // cause an argument exception when trying to re-select the root object. Just leave the
+                        // causes an argument exception when trying to re-select the root object. Just leave the
                         // the grid with no selected row.
                     }
                 }
@@ -892,9 +892,8 @@ namespace System.Windows.Forms
         public PropertyTabCollection PropertyTabs => new(this);
 
         /// <summary>
-        ///  Sets a single object into the grid to be browsed.  If multiple
-        ///  objects are being browsed, this property will return the first
-        ///  one in the list.  If no objects are selected, null is returned.
+        ///  Sets a single object into the grid to be browsed. If multiple objects are being browsed, this property
+        ///  will return the first one in the list. If no objects are selected, null is returned.
         /// </summary>
         [DefaultValue(null)]
         [SRDescription(nameof(SR.PropertyGridSelectedObjectDesc))]
@@ -1461,10 +1460,10 @@ namespace System.Windows.Forms
 
         internal void AddTab(Type tabType, PropertyTabScope scope)
         {
-            AddRefTab(tabType, component: null, scope, setupToolbar: true);
+            AddTab(tabType, @object: null, scope, setupToolbar: true);
         }
 
-        internal void AddRefTab(Type tabType, object component, PropertyTabScope type, bool setupToolbar)
+        internal void AddTab(Type tabType, object @object, PropertyTabScope type, bool setupToolbar)
         {
             PropertyTab tab = null;
             int tabIndex = -1;
@@ -1493,7 +1492,7 @@ namespace System.Windows.Forms
                 // The tabs need service providers. The one we hold onto is not good enough,
                 // so try to get the one off of the component's site.
                 IDesignerHost host = null;
-                if (component is IComponent component1 && component1.Site is ISite site)
+                if (@object is IComponent component && component.Site is ISite site)
                 {
                     host = site.GetService<IDesignerHost>();
                 }
@@ -1559,7 +1558,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_viewTabs is not null, "Tab array destroyed!");
             }
 
-            if (tab is not null && component is not null)
+            if (tab is not null && @object is not null)
             {
                 try
                 {
@@ -1572,7 +1571,7 @@ namespace System.Windows.Forms
                         Array.Copy(tabComponents, newComponents, oldArraySize);
                     }
 
-                    newComponents[oldArraySize] = component;
+                    newComponents[oldArraySize] = @object;
                     tab.Components = newComponents;
                 }
                 catch (Exception e)
@@ -2470,7 +2469,7 @@ namespace System.Windows.Forms
             {
                 if (attribute.TabScopes[i] == PropertyTabScope.Document)
                 {
-                    AddRefTab(attribute.TabClasses[i], e.Component, PropertyTabScope.Document, true);
+                    AddTab(attribute.TabClasses[i], e.Component, PropertyTabScope.Document, true);
                 }
             }
         }
@@ -2537,7 +2536,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // Otherwise, just dump the selection.
-                        _gridView.ClearProps();
+                        _gridView.ClearGridEntries();
                         _currentObjects = newObjects;
                         SetFlag(Flags.FullRefreshAfterBatch, true);
                     }
@@ -2901,7 +2900,7 @@ namespace System.Windows.Forms
         protected void OnNotifyPropertyValueUIItemsChanged(object sender, EventArgs e)
         {
             _gridView.LabelPaintMargin = 0;
-            _gridView.Invalidate(true);
+            _gridView.Invalidate(invalidateChildren: true);
         }
 
 #pragma warning disable CA1725 // Parameter name shipped as 'pevent'
@@ -3452,7 +3451,7 @@ namespace System.Windows.Forms
                     {
                         for (int j = 0; j < _currentObjects.Length; j++)
                         {
-                            AddRefTab(tabTypes[i], _currentObjects[j], PropertyTabScope.Component, false);
+                            AddTab(tabTypes[i], _currentObjects[j], PropertyTabScope.Component, false);
                         }
                     }
                 }
@@ -3472,7 +3471,7 @@ namespace System.Windows.Forms
                         {
                             if (attribute.TabScopes[j] == PropertyTabScope.Document)
                             {
-                                AddRefTab(attribute.TabClasses[j], component, PropertyTabScope.Document, false);
+                                AddTab(attribute.TabClasses[j], component, PropertyTabScope.Document, false);
                             }
                         }
                     }
@@ -3972,16 +3971,16 @@ namespace System.Windows.Forms
             else
             {
                 // Clear all the items from the toolStrip and image list after the first two.
-                int count = buttonList.Count;
+                int items = buttonList.Count;
 
-                for (i = count - 1; i >= 2; i--)
+                for (i = items - 1; i >= 2; i--)
                 {
                     buttonList.RemoveAt(i);
                 }
 
-                count = _imageList[NormalButtonSize].Images.Count;
+                items = _imageList[NormalButtonSize].Images.Count;
 
-                for (i = count - 1; i >= 2; i--)
+                for (i = items - 1; i >= 2; i--)
                 {
                     RemoveImage(i);
                 }
@@ -4266,7 +4265,7 @@ namespace System.Windows.Forms
                 if (_mainEntry is null)
                 {
                     _currentEntries = new GridEntryCollection(null, Array.Empty<GridEntry>());
-                    _gridView.ClearProps();
+                    _gridView.ClearGridEntries();
                     return;
                 }
 

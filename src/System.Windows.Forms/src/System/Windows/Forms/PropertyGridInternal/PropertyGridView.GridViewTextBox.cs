@@ -13,47 +13,48 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class PropertyGridView
     {
-        private partial class GridViewEdit : TextBox, IMouseHookClient
+        private sealed partial class GridViewTextBox : TextBox, IMouseHookClient
         {
-            private bool _inSetText;
             private bool _filter;
-            internal PropertyGridView PropertyGridView { get; }
-            private bool _dontFocus;
             private int _lastMove;
 
             private readonly MouseHook _mouseHook;
 
-            // We do this because the Focus call above doesn't always stick, so
-            // we make the Edit think that it doesn't have focus.  this prevents
-            // ActiveControl code on the containercontrol from moving focus elsewhere
-            // when the dropdown closes.
-            public bool DontFocus
+            public GridViewTextBox(PropertyGridView gridView)
             {
-                set => _dontFocus = value;
+                PropertyGridView = gridView;
+                _mouseHook = new MouseHook(this, this, gridView);
             }
 
-            public virtual bool Filter
+            internal PropertyGridView PropertyGridView { get; }
+
+            public bool InSetText { get; private set; }
+
+            /// <summary>
+            ///  Setting this to true will cause this <see cref="GridViewTextBox"/> to always
+            ///  report that it is not focused.
+            /// </summary>
+            public bool HideFocusState { private get; set; }
+
+            public bool Filter
             {
                 get => _filter;
                 set => _filter = value;
             }
 
-            /// <summary>
-            ///  Indicates whether or not the control supports UIA Providers via
-            ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces
-            /// </summary>
+            /// <inheritdoc />
             internal override bool SupportsUiaProviders => true;
 
-            public override bool Focused => !_dontFocus && base.Focused;
+            public override bool Focused => !HideFocusState && base.Focused;
 
             public override string Text
             {
                 get => base.Text;
                 set
                 {
-                    _inSetText = true;
+                    InSetText = true;
                     base.Text = value;
-                    _inSetText = false;
+                    InSetText = false;
                 }
             }
 
@@ -62,7 +63,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 set => _mouseHook.DisableMouseHook = value;
             }
 
-            public virtual bool HookMouseDown
+            public bool HookMouseDown
             {
                 get => _mouseHook.HookMouseDown;
                 set
@@ -75,20 +76,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public GridViewEdit(PropertyGridView gridView)
-            {
-                PropertyGridView = gridView;
-                _mouseHook = new MouseHook(this, this, gridView);
-            }
-
-            /// <summary>
-            ///  Creates a new AccessibleObject for this GridViewEdit instance.
-            ///  The AccessibleObject instance returned by this method overrides several UIA properties.
-            /// </summary>
-            /// <returns>
-            ///  AccessibleObject for this GridViewEdit instance.
-            /// </returns>
-            protected override AccessibleObject CreateAccessibilityInstance() => new GridViewEditAccessibleObject(this);
+            /// <inheritdoc />
+            protected override AccessibleObject CreateAccessibilityInstance() => new GridViewTextBoxAccessibleObject(this);
 
             protected override void DestroyHandle()
             {
@@ -139,11 +128,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.IsInputKey(keyData);
             }
 
-            /// <summary>
-            ///  Overridden to handle TAB key.
-            /// </summary>
             protected override bool IsInputChar(char keyChar) => (Keys)keyChar switch
             {
+                // Overridden to handle TAB key.
                 Keys.Tab or Keys.Return => false,
                 _ => base.IsInputChar(keyChar),
             };
@@ -178,7 +165,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.OnKeyPress(e);
             }
 
-            public bool OnClickHooked() => !PropertyGridView._Commit();
+            public bool OnClickHooked() => !PropertyGridView.Commit();
 
             protected override void OnMouseEnter(EventArgs e)
             {
@@ -286,7 +273,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // For the tab key we want to commit before we allow it to be processed.
                 if ((keyData & Keys.KeyCode) == Keys.Tab && ((keyData & (Keys.Control | Keys.Alt)) == 0))
                 {
-                    return !PropertyGridView._Commit();
+                    return !PropertyGridView.Commit();
                 }
 
                 return base.ProcessDialogKey(keyData);
@@ -392,8 +379,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 base.WndProc(ref m);
             }
-
-            public virtual bool InSetText() => _inSetText;
         }
     }
 }
