@@ -20,19 +20,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!OwningTrackBar.IsHandleCreated || !IsDisplayed)
+                    if (!OwningTrackBar.IsHandleCreated || !IsDisplayed || ParentInternal.GetSystemIAccessibleInternal() is not Accessibility.IAccessible systemIAccessible)
                     {
                         return Rectangle.Empty;
                     }
 
-                    int left = 0;
-                    int top = 0;
-                    int width = 0;
-                    int height = 0;
-
                     // The "GetChildId" method returns to the id of the trackbar element,
                     // which allows to use the native "accLocation" method to get the "Bounds" property
-                    ParentInternal.GetSystemIAccessibleInternal()?.accLocation(out left, out top, out width, out height, GetChildId());
+                    systemIAccessible.accLocation(out int left, out int top, out int width, out int height, GetChildId());
 
                     return new(left, top, width, height);
                 }
