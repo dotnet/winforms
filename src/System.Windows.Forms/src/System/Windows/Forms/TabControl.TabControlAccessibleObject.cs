@@ -27,10 +27,8 @@ namespace System.Windows.Forms
                         return Rectangle.Empty;
                     }
 
-                    int left = 0;
-                    int top = 0;
-                    int width = 0;
-                    int height = 0;
+                    int left, top, width, height;
+                    left = top = width = height = 0;
 
                     // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
                     // which allows to use the native "accLocation" method to get the "Bounds" property
@@ -75,6 +73,11 @@ namespace System.Windows.Forms
             {
                 if (!_owningTabControl.IsHandleCreated)
                 {
+                    // We return -1 instead of 0 when the Handle has not been created,
+                    // so that the user can distinguish between the situation
+                    // when something went wrong (in this case, the Handle was not created)
+                    // and the situation when the Handle was created, but the TabControl,
+                    // for example, does not contain TabPages.
                     return -1;
                 }
 
@@ -122,9 +125,7 @@ namespace System.Windows.Forms
 
                 return direction switch
                 {
-                    NavigateDirection.FirstChild => _owningTabControl.TabPages.Count > 0
-                                                            ? _owningTabControl.SelectedTab?.AccessibilityObject
-                                                            : null,
+                    NavigateDirection.FirstChild => _owningTabControl.SelectedTab?.AccessibilityObject,
                     NavigateDirection.LastChild => _owningTabControl.TabPages.Count > 0
                                                             ? _owningTabControl.TabPages[^1].TabAccessibilityObject
                                                             : null,
@@ -139,8 +140,9 @@ namespace System.Windows.Forms
                     UIA.AutomationIdPropertyId => _owningTabControl.Name,
                     UIA.IsEnabledPropertyId => _owningTabControl.Enabled,
                     UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
-                    UIA.HasKeyboardFocusPropertyId => false,
+                    UIA.HasKeyboardFocusPropertyId => _owningTabControl.Focused,
                     UIA.NamePropertyId => Name,
+                    UIA.AccessKeyPropertyId => KeyboardShortcut,
                     UIA.NativeWindowHandlePropertyId => _owningTabControl.InternalHandle,
                     UIA.IsSelectionPatternAvailablePropertyId => IsPatternSupported(UIA.SelectionPatternId),
                     UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UIA.LegacyIAccessiblePatternId),
@@ -152,14 +154,14 @@ namespace System.Windows.Forms
                 };
 
             internal override IRawElementProviderSimple[]? GetSelection()
-                => !_owningTabControl.IsHandleCreated || _owningTabControl.SelectedTab is null
-                    ? Array.Empty<IRawElementProviderSimple>()
-                    : new IRawElementProviderSimple[] { _owningTabControl.SelectedTab.TabAccessibilityObject };
+                => !_owningTabControl.IsHandleCreated
+                    || _owningTabControl.SelectedTab is null
+                        ? Array.Empty<IRawElementProviderSimple>()
+                        : new IRawElementProviderSimple[] { _owningTabControl.SelectedTab.TabAccessibilityObject };
 
             internal override bool IsPatternSupported(UIA patternId)
                 => patternId switch
                 {
-                    UIA.LegacyIAccessiblePatternId => true,
                     UIA.SelectionPatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };

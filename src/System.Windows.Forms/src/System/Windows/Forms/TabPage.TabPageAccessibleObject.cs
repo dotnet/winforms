@@ -27,10 +27,8 @@ namespace System.Windows.Forms
                         return Rectangle.Empty;
                     }
 
-                    int left = 0;
-                    int top = 0;
-                    int width = 0;
-                    int height = 0;
+                    int left, top, width, height;
+                    left = top = width = height = 0;
 
                     // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
                     // which allows to use the native "accLocation" method to get the "Bounds" property
@@ -95,6 +93,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningTabPage.Focused,
                     UiaCore.UIA.NamePropertyId => Name,
+                    UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut,
                     UiaCore.UIA.NativeWindowHandlePropertyId => _owningTabPage.InternalHandle,
                     UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                     UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId),
@@ -108,7 +107,6 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 => patternId switch
                 {
-                    UiaCore.UIA.LegacyIAccessiblePatternId => true,
                     UiaCore.UIA.ValuePatternId => false,
                     _ => base.IsPatternSupported(patternId)
                 };

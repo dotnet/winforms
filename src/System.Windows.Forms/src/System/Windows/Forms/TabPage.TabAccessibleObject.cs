@@ -12,22 +12,20 @@ namespace System.Windows.Forms
     {
         internal class TabAccessibleObject : AccessibleObject
         {
-            private readonly TabControl _owningTabControl;
+            private TabControl? OwningTabControl => _owningTabPage.ParentInternal as TabControl;
 
             private readonly TabPage _owningTabPage;
 
             public TabAccessibleObject(TabPage owningTabPage)
             {
                 _owningTabPage = owningTabPage ?? throw new ArgumentNullException(nameof(owningTabPage));
-                _owningTabControl = owningTabPage.ParentInternal as TabControl
-                                    ?? throw new ArgumentNullException(nameof(owningTabPage.ParentInternal));
             }
 
             public override Rectangle Bounds
             {
                 get
                 {
-                    if (!_owningTabControl.IsHandleCreated)
+                    if (OwningTabControl is null || !OwningTabControl.IsHandleCreated)
                     {
                         return Rectangle.Empty;
                     }
@@ -39,10 +37,8 @@ namespace System.Windows.Forms
                         return Rectangle.Empty;
                     }
 
-                    int left = 0;
-                    int top = 0;
-                    int width = 0;
-                    int height = 0;
+                    int left, top, width, height;
+                    left = top = width = height = 0;
 
                     // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
                     // which allows to use the native "accLocation" method to get the "Bounds" property
@@ -66,25 +62,32 @@ namespace System.Windows.Forms
                     ? (AccessibleStates)accState
                     : AccessibleStates.None;
 
-            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => _owningTabControl.AccessibilityObject;
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot => OwningTabControl?.AccessibilityObject;
 
-            internal override bool IsItemSelected => _owningTabControl.SelectedTab == _owningTabPage;
+            internal override bool IsItemSelected => OwningTabControl?.SelectedTab == _owningTabPage;
 
-            internal override UiaCore.IRawElementProviderSimple? ItemSelectionContainer => _owningTabControl.AccessibilityObject;
+            internal override UiaCore.IRawElementProviderSimple? ItemSelectionContainer => OwningTabControl?.AccessibilityObject;
 
             internal override int[]? RuntimeId
-                => new int[] { RuntimeIDFirstItem, PARAM.ToInt(_owningTabControl.InternalHandle), GetChildId() };
+                => new int[]
+                {
+                    RuntimeIDFirstItem,
+                    OwningTabControl is null
+                        ? PARAM.ToInt(IntPtr.Zero)
+                        : PARAM.ToInt(OwningTabControl.InternalHandle),
+                    GetChildId()
+                };
 
-            private int CurrentIndex => _owningTabControl.TabPages.IndexOf(_owningTabPage);
+            private int CurrentIndex => OwningTabControl?.TabPages.IndexOf(_owningTabPage) ?? -1;
 
             private IAccessible? SystemIAccessibleInternal
-                => _owningTabControl.AccessibilityObject.GetSystemIAccessibleInternal();
+                => OwningTabControl?.AccessibilityObject.GetSystemIAccessibleInternal();
 
             public override void DoDefaultAction()
             {
-                if (_owningTabControl.IsHandleCreated && _owningTabControl.Enabled)
+                if (OwningTabControl is not null && OwningTabControl.IsHandleCreated && OwningTabControl.Enabled)
                 {
-                    _owningTabControl.SelectedTab = _owningTabPage;
+                    OwningTabControl.SelectedTab = _owningTabPage;
                 }
             }
 
@@ -92,16 +95,16 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (!_owningTabControl.IsHandleCreated)
+                if (OwningTabControl is null || !OwningTabControl.IsHandleCreated)
                 {
                     return null;
                 }
 
                 return direction switch
                 {
-                    UiaCore.NavigateDirection.Parent => _owningTabControl.AccessibilityObject,
-                    UiaCore.NavigateDirection.NextSibling => _owningTabControl.AccessibilityObject.GetChild(GetChildId() + 1),
-                    UiaCore.NavigateDirection.PreviousSibling => _owningTabControl.AccessibilityObject.GetChild(GetChildId() - 1),
+                    UiaCore.NavigateDirection.Parent => OwningTabControl.AccessibilityObject,
+                    UiaCore.NavigateDirection.NextSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() + 1),
+                    UiaCore.NavigateDirection.PreviousSibling => OwningTabControl.AccessibilityObject.GetChild(GetChildId() - 1),
                     _ => null
                 };
             }
@@ -109,16 +112,20 @@ namespace System.Windows.Forms
             // +1 is needed because 0 is the Pane id of the selected tab
             internal override int GetChildId() => CurrentIndex + 1;
 
+            public override string? Help => SystemIAccessibleInternal?.get_accHelp(GetChildId());
+
+            public override string? KeyboardShortcut => SystemIAccessibleInternal?.get_accKeyboardShortcut(GetChildId());
+
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TabItemControlTypeId,
                     UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                     UiaCore.UIA.AutomationIdPropertyId => _owningTabPage.Name,
-                    UiaCore.UIA.AccessKeyPropertyId => string.Empty,
+                    UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut ?? string.Empty,
                     UiaCore.UIA.IsPasswordPropertyId => false,
-                    UiaCore.UIA.HelpTextPropertyId => string.Empty,
-                    UiaCore.UIA.IsEnabledPropertyId => _owningTabControl.Enabled,
+                    UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
+                    UiaCore.UIA.IsEnabledPropertyId => OwningTabControl?.Enabled ?? false,
                     UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,
                     UiaCore.UIA.NamePropertyId => Name,
@@ -135,9 +142,9 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 => patternId switch
                 {
-                    UiaCore.UIA.LegacyIAccessiblePatternId => true,
                     UiaCore.UIA.InvokePatternId => false,
                     UiaCore.UIA.SelectionItemPatternId => true,
+                    UiaCore.UIA.LegacyIAccessiblePatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };
 

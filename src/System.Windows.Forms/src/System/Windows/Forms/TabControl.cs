@@ -1283,7 +1283,10 @@ namespace System.Windows.Forms
             NotifyAboutFocusState(SelectedTab, focused: true);
             base.OnGotFocus(e);
 
-            SelectedTab?.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            if (IsAccessibilityObjectCreated && SelectedTab is not null)
+            {
+                SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         /// <summary>
@@ -2057,7 +2060,7 @@ namespace System.Windows.Forms
                 OnSelected(new TabControlEventArgs(SelectedTab, SelectedIndex, TabControlAction.Selected));
                 OnSelectedIndexChanged(EventArgs.Empty);
 
-                if (SelectedTab?.ParentInternal is TabControl)
+                if (IsAccessibilityObjectCreated && SelectedTab?.ParentInternal is TabControl)
                 {
                     SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
                     SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);

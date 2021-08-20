@@ -4,6 +4,7 @@
 
 using Xunit;
 using static Interop.UiaCore;
+using static System.Windows.Forms.TabControl;
 using static System.Windows.Forms.TabPage;
 
 namespace System.Windows.Forms.Tests
@@ -203,16 +204,18 @@ namespace System.Windows.Forms.Tests
         public void TabPageAccessibleObject_FragmentNaviage_ReturnsNull_IfHandleIsNotCreated()
         {
             using TabControl tabControl = new();
-            tabControl.TabPages.Add(new TabPage());
+            TabPageCollection pages = tabControl.TabPages;
+            pages.Add(new TabPage());
 
-            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabControl.TabPages[0].AccessibilityObject);
+            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
 
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.Parent));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
-            Assert.False(tabControl.TabPages[0].IsHandleCreated);
+            Assert.False(pages[0].IsHandleCreated);
+            Assert.False(tabControl.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -220,35 +223,39 @@ namespace System.Windows.Forms.Tests
         {
             using TabControl tabControl = new();
             tabControl.CreateControl();
-            tabControl.TabPages.Add(new TabPage());
+            TabPageCollection pages = tabControl.TabPages;
+            pages.Add(new TabPage());
 
-            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabControl.TabPages[0].AccessibilityObject);
+            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
 
             Assert.Equal(tabControl.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-            Assert.Equal(tabControl.TabPages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
-            Assert.True(tabControl.TabPages[0].IsHandleCreated);
+            Assert.True(pages[0].IsHandleCreated);
+            Assert.True(tabControl.IsHandleCreated);
         }
 
         [WinFormsFact]
         public void TabPageAccessibleObject_FragmentNaviage_ReturnsExpected_IfThreeItem()
         {
             using TabControl tabControl = new();
+            TabPageCollection pages = tabControl.TabPages;
+            pages.AddRange(new TabPage[] { new(), new(), new() });
             tabControl.CreateControl();
-            tabControl.TabPages.Add(new TabPage());
-            tabControl.TabPages.Add(new TabPage());
-            tabControl.TabPages.Add(new TabPage());
 
-            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabControl.TabPages[0].AccessibilityObject);
+            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
 
             Assert.Equal(tabControl.AccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.Parent));
-            Assert.Equal(tabControl.TabPages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject.FragmentNavigate(NavigateDirection.NextSibling));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
             Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
-            Assert.True(tabControl.TabPages[0].IsHandleCreated);
+            Assert.True(pages[0].IsHandleCreated);
+            Assert.False(pages[1].IsHandleCreated);
+            Assert.False(pages[2].IsHandleCreated);
+            Assert.True(tabControl.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -256,17 +263,16 @@ namespace System.Windows.Forms.Tests
         {
             using TabControl tabControl = new();
             tabControl.CreateControl();
-            tabControl.TabPages.Add(new TabPage());
-            tabControl.TabPages.Add(new TabPage());
-            tabControl.TabPages.Add(new TabPage());
+            TabPageCollection pages = tabControl.TabPages;
+            pages.AddRange(new TabPage[] { new(), new(), new() });
 
-            TabPageAccessibleObject accessibleObject1 = Assert.IsType<TabPageAccessibleObject>(tabControl.TabPages[0].AccessibilityObject);
-            TabPageAccessibleObject accessibleObject2 = Assert.IsType<TabPageAccessibleObject>(tabControl.TabPages[1].AccessibilityObject);
-            TabPageAccessibleObject accessibleObject3 = Assert.IsType<TabPageAccessibleObject>(tabControl.TabPages[2].AccessibilityObject);
+            TabPageAccessibleObject accessibleObject1 = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
+            TabPageAccessibleObject accessibleObject2 = Assert.IsType<TabPageAccessibleObject>(pages[1].AccessibilityObject);
+            TabPageAccessibleObject accessibleObject3 = Assert.IsType<TabPageAccessibleObject>(pages[2].AccessibilityObject);
 
             // First tab is selected
             Assert.Equal(tabControl.AccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.Parent));
-            Assert.Equal(tabControl.TabPages[0].TabAccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling));
             Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.PreviousSibling));
             Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.FirstChild));
             Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.LastChild));
@@ -293,7 +299,7 @@ namespace System.Windows.Forms.Tests
             Assert.Null(accessibleObject1.FragmentNavigate(NavigateDirection.LastChild));
 
             Assert.Equal(tabControl.AccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.Parent));
-            Assert.Equal(tabControl.TabPages[0].TabAccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling));
             Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.PreviousSibling));
             Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.FirstChild));
             Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.LastChild));
@@ -320,12 +326,15 @@ namespace System.Windows.Forms.Tests
             Assert.Null(accessibleObject2.FragmentNavigate(NavigateDirection.LastChild));
 
             Assert.Equal(tabControl.AccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.Parent));
-            Assert.Equal(tabControl.TabPages[0].TabAccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.NextSibling));
+            Assert.Equal(pages[0].TabAccessibilityObject, accessibleObject3.FragmentNavigate(NavigateDirection.NextSibling));
             Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.PreviousSibling));
             Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.FirstChild));
             Assert.Null(accessibleObject3.FragmentNavigate(NavigateDirection.LastChild));
 
-            Assert.True(tabControl.TabPages[0].IsHandleCreated);
+            Assert.True(pages[0].IsHandleCreated);
+            Assert.True(pages[1].IsHandleCreated);
+            Assert.True(pages[2].IsHandleCreated);
+            Assert.True(tabControl.IsHandleCreated);
         }
 
         [WinFormsFact]
@@ -402,13 +411,14 @@ namespace System.Windows.Forms.Tests
         public void TabPageAccessibleObject_GetPropertyValue_IsEnabledPropertyId_ReturnsExpected(bool tabControlEnabled, bool tabPageEnabled, bool expectedEnabled)
         {
             using TabControl tabControl = new() { Enabled = tabControlEnabled };
-            using TabPage tabPage = new() { Enabled = tabPageEnabled };
-            tabControl.TabPages.Add(tabPage);
+            TabPageCollection pages = tabControl.TabPages;
+            pages.Add(new TabPage() { Enabled = tabPageEnabled });
 
-            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabPage.AccessibilityObject);
+            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(pages[0].AccessibilityObject);
 
             Assert.Equal(expectedEnabled, (bool)accessibleObject.GetPropertyValue(UIA.IsEnabledPropertyId));
-            Assert.False(tabPage.IsHandleCreated);
+            Assert.False(pages[0].IsHandleCreated);
+            Assert.False(tabControl.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -426,6 +436,46 @@ namespace System.Windows.Forms.Tests
             TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabPage.AccessibilityObject);
 
             Assert.Equal(tabPage.InternalHandle, (IntPtr)accessibleObject.GetPropertyValue(UIA.NativeWindowHandlePropertyId));
+            Assert.Equal(createControl, tabPage.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, "&Name", "Alt+n")]
+        [InlineData(false, "&Name", "Alt+n")]
+        [InlineData(true, "Name", null)]
+        [InlineData(false, "Name", null)]
+        public void TabPageAccessibleObject_KeyboardShortcut_ReturnExpected(bool createControl, string text, string expectedKeyboardShortcut)
+        {
+            using TabPage tabPage = new() { Text = text };
+
+            if (createControl)
+            {
+                tabPage.CreateControl();
+            }
+
+            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabPage.AccessibilityObject);
+
+            Assert.Equal(expectedKeyboardShortcut, accessibleObject.KeyboardShortcut);
+            Assert.Equal(createControl, tabPage.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, "&Name", "Alt+n")]
+        [InlineData(false, "&Name", "Alt+n")]
+        [InlineData(true, "Name", null)]
+        [InlineData(false, "Name", null)]
+        public void TabPageAccessibleObject_GetPropertyValue_AccessKey_ReturnExpected(bool createControl, string text, string expectedKeyboardShortcut)
+        {
+            using TabPage tabPage = new() { Text = text };
+
+            if (createControl)
+            {
+                tabPage.CreateControl();
+            }
+
+            TabPageAccessibleObject accessibleObject = Assert.IsType<TabPageAccessibleObject>(tabPage.AccessibilityObject);
+
+            Assert.Equal(expectedKeyboardShortcut, accessibleObject.GetPropertyValue(UIA.AccessKeyPropertyId));
             Assert.Equal(createControl, tabPage.IsHandleCreated);
         }
     }
