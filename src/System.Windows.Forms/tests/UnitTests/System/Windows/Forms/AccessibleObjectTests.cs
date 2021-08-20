@@ -2471,23 +2471,6 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void AccessibleObject_AsIAccessible_Invoke_DoesntReturnWrapper()
-        {
-            using Panel panel = new Panel();
-            panel.CreateControl();
-            using Button button = new Button();
-            button.CreateControl();
-            panel.Controls.Add(button);
-
-            IAccessible iAccessible = panel.AccessibilityObject.Navigate(AccessibleNavigation.FirstChild);
-            var wrapper = ((AccessibleObject)iAccessible).TestAccessor().Dynamic.systemIAccessible;
-            var child = iAccessible.get_accChild(0);
-
-            Assert.NotSame(wrapper, child);
-            Assert.Same(((AccessibleObject)iAccessible).GetSystemIAccessibleInternal(), child);
-        }
-
-        [WinFormsFact]
         public void AccessibleObject_GetSystemIAccessibleInternal_Invoke_DoesntReturnWrapper()
         {
             using Button button = new Button();

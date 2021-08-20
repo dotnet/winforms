@@ -1,3 +1,4 @@
+~override System.Windows.Forms.Panel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 *REMOVED*override System.Windows.Forms.MonthCalendar.Dispose(bool disposing) -> void
 ~override System.Windows.Forms.ContainerControl.OnResize(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
