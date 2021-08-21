@@ -50,7 +50,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             using PropertyGrid control = new();
             using Button button = new();
             control.SelectedObject = button;
-            control.SelectedGridItem = control.GetPropEntries()[1].GridItems[5]; // FlatStyle property
+            control.SelectedGridItem = control.GetCurrentEntries()[1].GridItems[5]; // FlatStyle property
 
             PropertyGridView gridView = control.TestAccessor().GridView;
             DropDownButton dropDownButton = gridView.DropDownButton;
@@ -83,7 +83,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             using PropertyGrid control = new();
             using Button button = new();
             control.SelectedObject = button;
-            control.SelectedGridItem = control.GetPropEntries()[1].GridItems[5]; // FlatStyle property
+            control.SelectedGridItem = control.GetCurrentEntries()[1].GridItems[5]; // FlatStyle property
 
             PropertyGridView gridView = control.TestAccessor().GridView;
             DropDownButton dropDownButton = gridView.DropDownButton;

@@ -2361,10 +2361,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void PropertyGrid_SelectedGridItem_SetNull_ThrowsArgumentException()
+        public void PropertyGrid_SelectedGridItem_SetNull_ThrowsArgumentNullException()
         {
             using var control = new PropertyGrid();
-            Assert.Throws<ArgumentException>(null, () => control.SelectedGridItem = null);
+            Assert.Throws<ArgumentNullException>("items", () => control.SelectedGridItem = null);
         }
 
         [WinFormsFact]

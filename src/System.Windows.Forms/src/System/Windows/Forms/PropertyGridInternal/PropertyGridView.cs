@@ -542,7 +542,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                GridEntry equivalentEntry = FindEquivalentGridEntry(new GridEntryCollection(null, new GridEntry[] { value }));
+                GridEntry equivalentEntry = FindEquivalentGridEntry(new GridEntryCollection(new[] { value }, disposeItems: false));
 
                 if (equivalentEntry is not null)
                 {
@@ -710,17 +710,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = startIndex; i < (startIndex + count); i++)
             {
-                if (entries[i] is not null)
-                {
-                    GridEntry entry = entries.GetEntry(i);
-                    entry.AddOnValueClick(_valueClick);
-                    entry.AddOnLabelClick(_labelClick);
-                    entry.AddOnOutlineClick(_outlineClick);
-                    entry.AddOnOutlineDoubleClick(_outlineClick);
-                    entry.AddOnValueDoubleClick(_valueDoubleClick);
-                    entry.AddOnLabelDoubleClick(_labelDoubleClick);
-                    entry.AddOnRecreateChildren(_recreateChildren);
-                }
+                GridEntry entry = entries[i];
+                entry.AddOnValueClick(_valueClick);
+                entry.AddOnLabelClick(_labelClick);
+                entry.AddOnOutlineClick(_outlineClick);
+                entry.AddOnOutlineDoubleClick(_outlineClick);
+                entry.AddOnValueDoubleClick(_valueDoubleClick);
+                entry.AddOnLabelDoubleClick(_labelDoubleClick);
+                entry.AddOnRecreateChildren(_recreateChildren);
             }
         }
 
@@ -767,17 +764,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = startIndex; i < (startIndex + count); i++)
             {
-                if (entries[i] is not null)
-                {
-                    GridEntry entry = entries.GetEntry(i);
-                    entry.RemoveOnValueClick(_valueClick);
-                    entry.RemoveOnLabelClick(_labelClick);
-                    entry.RemoveOnOutlineClick(_outlineClick);
-                    entry.RemoveOnOutlineDoubleClick(_outlineClick);
-                    entry.RemoveOnValueDoubleClick(_valueDoubleClick);
-                    entry.RemoveOnLabelDoubleClick(_labelDoubleClick);
-                    entry.RemoveOnRecreateChildren(_recreateChildren);
-                }
+                GridEntry entry = entries[i];
+                entry.RemoveOnValueClick(_valueClick);
+                entry.RemoveOnLabelClick(_labelClick);
+                entry.RemoveOnOutlineClick(_outlineClick);
+                entry.RemoveOnOutlineDoubleClick(_outlineClick);
+                entry.RemoveOnValueDoubleClick(_valueDoubleClick);
+                entry.RemoveOnLabelDoubleClick(_labelDoubleClick);
+                entry.RemoveOnRecreateChildren(_recreateChildren);
             }
         }
 
@@ -1440,11 +1434,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = 0; i < _allGridEntries.Count; i++)
             {
-                if (0 == string.Compare(propName, _allGridEntries.GetEntry(i).PropertyLabel, true, CultureInfo.InvariantCulture))
+                if (0 == string.Compare(propName, _allGridEntries[i].PropertyLabel, true, CultureInfo.InvariantCulture))
                 {
                     if (getXY)
                     {
-                        int row = GetRowFromGridEntry(_allGridEntries.GetEntry(i));
+                        int row = GetRowFromGridEntry(_allGridEntries[i]);
 
                         if (row < 0 || row >= _visibleRows)
                         {
@@ -1680,27 +1674,27 @@ namespace System.Windows.Forms.PropertyGridInternal
             EditTextBox.FilterKeyPress(keyChar);
         }
 
-        private GridEntry FindEquivalentGridEntry(GridEntryCollection ipeHier)
+        private GridEntry FindEquivalentGridEntry(GridEntryCollection gridEntries)
         {
-            if (ipeHier is null || ipeHier.Count == 0)
+            if (gridEntries is null || gridEntries.Count == 0)
             {
                 return null;
             }
 
-            GridEntryCollection rgipes = GetAllGridEntries();
+            GridEntryCollection allGridEntries = GetAllGridEntries();
 
-            if (rgipes is null || rgipes.Count == 0)
+            if (allGridEntries is null || allGridEntries.Count == 0)
             {
                 return null;
             }
 
             GridEntry targetEntry = null;
             int row = 0;
-            int count = rgipes.Count;
+            int count = allGridEntries.Count;
 
-            for (int i = 0; i < ipeHier.Count; i++)
+            for (int i = 0; i < gridEntries.Count; i++)
             {
-                if (ipeHier[i] is null)
+                if (gridEntries[i] is null)
                 {
                     continue;
                 }
@@ -1712,7 +1706,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (!targetEntry.InternalExpanded)
                     {
                         SetExpand(targetEntry, true);
-                        rgipes = GetAllGridEntries();
+                        allGridEntries = GetAllGridEntries();
                     }
 
                     count = targetEntry.VisibleChildCount;
@@ -1722,11 +1716,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 targetEntry = null;
 
                 // Now, we will only go as many as were expanded.
-                for (; row < rgipes.Count && ((row - start) <= count); row++)
+                for (; row < allGridEntries.Count && ((row - start) <= count); row++)
                 {
-                    if (ipeHier.GetEntry(i).NonParentEquals(rgipes[row]))
+                    if (gridEntries[i].NonParentEquals(allGridEntries[row]))
                     {
-                        targetEntry = rgipes.GetEntry(row);
+                        targetEntry = allGridEntries[row];
                         row++;
                         break;
                     }
@@ -1792,17 +1786,17 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return _allGridEntries;
             }
 
-            var rgipes = new GridEntry[TotalProperties];
+            var newEntries = new GridEntry[TotalProperties];
             try
             {
-                GetGridEntriesFromOutline(TopLevelGridEntries, 0, 0, rgipes);
+                GetGridEntriesFromOutline(TopLevelGridEntries, 0, 0, newEntries);
             }
             catch (Exception ex)
             {
                 Debug.Fail(ex.ToString());
             }
 
-            _allGridEntries = new GridEntryCollection(null, rgipes);
+            _allGridEntries = new GridEntryCollection(newEntries, disposeItems: false);
             AddGridEntryEvents(_allGridEntries, 0, -1);
             return _allGridEntries;
         }
@@ -1924,22 +1918,22 @@ namespace System.Windows.Forms.PropertyGridInternal
                     depth = gridEntry.PropertyDepth;
                 }
 
-                return new GridEntryCollection(null, entries);
+                return new GridEntryCollection(entries, disposeItems: false);
             }
 
-            return new GridEntryCollection(null, new GridEntry[] { gridEntry });
+            return new GridEntryCollection(new GridEntry[] { gridEntry }, disposeItems: false);
         }
 
         private GridEntry GetGridEntryFromRow(int row) => GetGridEntryFromOffset(row + GetScrollOffset());
 
         private GridEntry GetGridEntryFromOffset(int offset)
         {
-            GridEntryCollection rgipesAll = GetAllGridEntries();
-            if (rgipesAll is not null)
+            GridEntryCollection allGridEntries = GetAllGridEntries();
+            if (allGridEntries is not null)
             {
-                if (offset >= 0 && offset < rgipesAll.Count)
+                if (offset >= 0 && offset < allGridEntries.Count)
                 {
-                    return rgipesAll.GetEntry(offset);
+                    return allGridEntries[offset];
                 }
             }
 
@@ -1964,7 +1958,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     break;
                 }
 
-                GridEntry currentEntry = entries.GetEntry(i);
+                GridEntry currentEntry = entries[i];
                 if (current >= target)
                 {
                     targetEntries[current - target] = currentEntry;
@@ -2042,23 +2036,23 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal int GetRowFromGridEntry(GridEntry gridEntry)
         {
-            GridEntryCollection rgipesAll = GetAllGridEntries();
-            if (gridEntry is null || rgipesAll is null)
+            GridEntryCollection allGridEntries = GetAllGridEntries();
+            if (gridEntry is null || allGridEntries is null)
             {
                 return -1;
             }
 
             int bestMatch = -1;
 
-            for (int i = 0; i < rgipesAll.Count; i++)
+            for (int i = 0; i < allGridEntries.Count; i++)
             {
                 // Try for an exact match. Semantics of equals are a bit loose here.
 
-                if (gridEntry == rgipesAll[i])
+                if (gridEntry == allGridEntries[i])
                 {
                     return i - GetScrollOffset();
                 }
-                else if (bestMatch == -1 && gridEntry.Equals(rgipesAll[i]))
+                else if (bestMatch == -1 && gridEntry.Equals(allGridEntries[i]))
                 {
                     bestMatch = i - GetScrollOffset();
                 }
@@ -2944,7 +2938,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             if (entry.InternalExpanded)
                             {
-                                SelectGridEntry(entry.Children.GetEntry(0), pageIn: true);
+                                SelectGridEntry(entry.Children[0], pageIn: true);
                             }
                             else
                             {
@@ -2972,7 +2966,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case Keys.Home:
                     case Keys.End:
                         GridEntryCollection allEntries = GetAllGridEntries();
-                        SelectGridEntry(allEntries.GetEntry(keyCode == Keys.Home ? 0 : allEntries.Count - 1), pageIn: true);
+                        SelectGridEntry(allEntries[keyCode == Keys.Home ? 0 : allEntries.Count - 1], pageIn: true);
                         return;
                     case Keys.Add:
                     case Keys.Oemplus:
@@ -3751,7 +3745,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Replace the changed items.
                 for (int i = 0; i < childCount; i++)
                 {
-                    entries[parentIndex + i + 1] = children.GetEntry(i);
+                    entries[parentIndex + i + 1] = children[i];
                 }
 
                 // Reset the array, rehook the handlers.
@@ -4132,7 +4126,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 for (int i = 0; i < children.Count; i++)
                 {
-                    RecursivelyExpand(children.GetEntry(i), false, expand, maxExpands);
+                    RecursivelyExpand(children[i], initialize: false, expand, maxExpands);
                 }
             }
 
@@ -4201,7 +4195,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 int oldLength = TotalProperties;
                 object oldObject = TopLevelGridEntries is null
-                    || TopLevelGridEntries.Count == 0 ? null : ((GridEntry)TopLevelGridEntries[0]).GetValueOwner();
+                    || TopLevelGridEntries.Count == 0 ? null : TopLevelGridEntries[0].GetValueOwner();
 
                 // Walk up to the main IPE and refresh it.
                 if (fullRefresh)
@@ -4218,7 +4212,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 UpdateHelpAttributes(_selectedGridEntry, null);
                 _selectedGridEntry = null;
                 SetFlag(FlagIsNewSelection, true);
-                TopLevelGridEntries = OwnerGrid.GetPropEntries();
+                TopLevelGridEntries = OwnerGrid.GetCurrentEntries();
 
                 ClearGridEntryEvents(_allGridEntries, 0, -1);
                 _allGridEntries = null;
@@ -4323,9 +4317,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal ArrayList SaveHierarchyState(GridEntryCollection entries) => SaveHierarchyState(entries, null);
-
-        private ArrayList SaveHierarchyState(GridEntryCollection entries, ArrayList expandedItems)
+        internal ArrayList SaveHierarchyState(GridEntryCollection entries, ArrayList expandedItems = null)
         {
             if (entries is null)
             {
@@ -4339,10 +4331,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = 0; i < entries.Count; i++)
             {
-                if (((GridEntry)entries[i]).InternalExpanded)
+                if (entries[i].InternalExpanded)
                 {
-                    GridEntry entry = entries.GetEntry(i);
-                    expandedItems.Add(GetGridEntryHierarchy(entry.Children.GetEntry(0)));
+                    GridEntry entry = entries[i];
+                    expandedItems.Add(GetGridEntryHierarchy(entry.Children[0]));
                     SaveHierarchyState(entry.Children, expandedItems);
                 }
             }

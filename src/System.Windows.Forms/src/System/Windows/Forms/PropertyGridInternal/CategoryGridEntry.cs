@@ -48,7 +48,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 childGridEntries[i].ParentGridEntry = this;
             }
 
-            ChildCollection = new GridEntryCollection(this, childGridEntries);
+            ChildCollection = new GridEntryCollection(childGridEntries);
 
             lock (s_lock)
             {
