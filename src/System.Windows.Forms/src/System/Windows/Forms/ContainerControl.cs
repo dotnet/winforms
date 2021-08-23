@@ -913,6 +913,12 @@ namespace System.Windows.Forms
             base.OnLayoutResuming(performLayout);
         }
 
+        protected override void OnMove(EventArgs e)
+        {
+            base.OnMove(e);
+            ResetToolTip();
+        }
+
         /// <summary>
         ///  Called when the parent changes. Container controls prefer to have their parents scale
         ///  themselves, but when a parent is first changed, and as a result the font changes as
@@ -924,6 +930,12 @@ namespace System.Windows.Forms
         {
             _state[s_stateParentChanged] = !RequiredScalingEnabled;
             base.OnParentChanged(e);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            ResetToolTip();
         }
 
         /// <summary>
@@ -1007,6 +1019,14 @@ namespace System.Windows.Forms
             if (_state[s_stateScalingNeededOnLayout])
             {
                 PerformAutoScale(_state[s_stateScalingNeededOnLayout], false);
+            }
+        }
+
+        private void ResetToolTip()
+        {
+            if (GetTopLevel())
+            {
+                KeyboardToolTipStateMachine.Reset();
             }
         }
 
