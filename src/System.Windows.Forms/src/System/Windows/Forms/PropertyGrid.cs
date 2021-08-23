@@ -2282,7 +2282,7 @@ namespace System.Windows.Forms
             return @object is ICustomTypeDescriptor descriptor ? descriptor.GetPropertyOwner(pd: null) : @object;
         }
 
-        internal GridEntryCollection GetPropEntries()
+        internal GridEntryCollection GetCurrentEntries()
         {
             if (_currentEntries is null)
             {
@@ -4264,7 +4264,7 @@ namespace System.Windows.Forms
 
                 if (_mainEntry is null)
                 {
-                    _currentEntries = new GridEntryCollection(null, Array.Empty<GridEntry>());
+                    _currentEntries = new GridEntryCollection(disposeItems: false);
                     _gridView.ClearGridEntries();
                     return;
                 }

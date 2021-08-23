@@ -143,7 +143,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
                 {
-                    return _owningPropertyDescriptorGridEntry.Children.GetEntry(0).AccessibilityObject;
+                    return _owningPropertyDescriptorGridEntry.Children[0].AccessibilityObject;
                 }
 
                 PropertyGridView propertyGridView = GetPropertyGridView();
@@ -182,8 +182,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
                 {
-                    return _owningPropertyDescriptorGridEntry.Children
-                        .GetEntry(_owningPropertyDescriptorGridEntry.ChildCount - 1).AccessibilityObject;
+                    return _owningPropertyDescriptorGridEntry.Children[_owningPropertyDescriptorGridEntry.ChildCount - 1].AccessibilityObject;
                 }
 
                 PropertyGridView propertyGridView = GetPropertyGridView();

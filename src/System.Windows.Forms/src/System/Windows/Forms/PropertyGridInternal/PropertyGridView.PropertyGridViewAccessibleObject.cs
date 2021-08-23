@@ -366,7 +366,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 GridEntryCollection properties = ((PropertyGridView)Owner).AccessibilityGetGridEntries();
                 if (properties is not null && index >= 0 && index < properties.Count)
                 {
-                    return properties.GetEntry(index).AccessibilityObject;
+                    return properties[index].AccessibilityObject;
                 }
                 else
                 {
