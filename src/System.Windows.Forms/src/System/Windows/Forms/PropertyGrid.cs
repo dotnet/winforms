@@ -798,7 +798,7 @@ namespace System.Windows.Forms
             }
         }
 
-        bool IComPropertyBrowser.InPropertySet => GetPropertyGridView().GetInPropertySet();
+        bool IComPropertyBrowser.InPropertySet => GetPropertyGridView().InPropertySet;
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridLineColorDesc))]
@@ -1974,7 +1974,7 @@ namespace System.Windows.Forms
             }
         }
 
-        void IComPropertyBrowser.DropDownDone() => GetPropertyGridView().DropDownDone();
+        void IComPropertyBrowser.DropDownDone() => GetPropertyGridView().CloseDropDown();
 
         private bool EnablePropPageButton(object obj)
         {
@@ -2409,7 +2409,7 @@ namespace System.Windows.Forms
 
             if (!GetFlag(Flags.RefreshingProperties))
             {
-                if (!_gridView.GetInPropertySet() || fullRefresh)
+                if (!_gridView.InPropertySet || fullRefresh)
                 {
                     Refresh(clearCached: fullRefresh);
                 }
@@ -2477,10 +2477,10 @@ namespace System.Windows.Forms
         private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
         {
             bool batchMode = GetFlag(Flags.BatchMode);
-            if (batchMode || GetFlag(Flags.InternalChange) || _gridView.GetInPropertySet() ||
+            if (batchMode || GetFlag(Flags.InternalChange) || _gridView.InPropertySet ||
                (_currentObjects is null) || (_currentObjects.Length == 0))
             {
-                if (batchMode && !_gridView.GetInPropertySet())
+                if (batchMode && !_gridView.InPropertySet)
                 {
                     SetFlag(Flags.BatchModeChange, true);
                 }

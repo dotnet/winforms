@@ -22,8 +22,8 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             TestPropertyDescriptorGridEntry gridEntry = new(propertyGrid, null, false);
             propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
-            TestDropDownHolder dropDownHolder = new(propertyGridView);
-            dropDownHolder.SetState(0x00000002, true); // Control class States.Visible flag
+            PropertyGridView.DropDownHolder dropDownHolder = new(propertyGridView);
+            dropDownHolder.TestAccessor().Dynamic.SetState(0x00000002, true); // Control class States.Visible flag
             propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
             gridEntry.TestAccessor().Dynamic._parent = new TestGridEntry(propertyGrid, null, propertyGridView);
 
@@ -125,19 +125,6 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             public TestPropertyGridViewAccessibleObject(PropertyGridView owner, PropertyGrid parentPropertyGrid)
                 : base(owner, parentPropertyGrid)
             {
-            }
-        }
-
-        private class TestDropDownHolder : PropertyGridView.DropDownHolder
-        {
-            public TestDropDownHolder(PropertyGridView psheet)
-                : base(psheet)
-            {
-            }
-
-            internal void SetState(int flag, bool value)
-            {
-                SetState((States)flag, value);
             }
         }
 
