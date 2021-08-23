@@ -22,18 +22,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!_owningTabPage.IsHandleCreated)
+                    if (!_owningTabPage.IsHandleCreated || GetSystemIAccessibleInternal() is null)
                     {
                         return Rectangle.Empty;
                     }
 
-                    int left, top, width, height;
-                    left = top = width = height = 0;
-
-                    // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
+                    // The "NativeMethods.CHILDID_SELF" constant returns to the id of the TabPage,
                     // which allows to use the native "accLocation" method to get the "Bounds" property
-                    GetSystemIAccessibleInternal()?.accLocation(out left, out top, out width, out height, NativeMethods.CHILDID_SELF);
-
+                    GetSystemIAccessibleInternal()!.accLocation(out int left, out int top, out int width, out int height, NativeMethods.CHILDID_SELF);
                     return new(left, top, width, height);
                 }
             }

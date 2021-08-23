@@ -271,6 +271,19 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void TabControlAccessibleObject_HitTest_ReturnsTabControlAccessibleObject_IfTabPagesListIsEmpty()
+        {
+            using TabControl tabControl = new();
+            TabPageCollection pages = tabControl.TabPages;
+            tabControl.CreateControl();
+
+            TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+            Assert.Equal(accessibleObject, accessibleObject.HitTest(10, 33));
+            Assert.True(tabControl.IsHandleCreated);
+        }
+
+        [WinFormsFact]
         public void TabControlAccessibleObject_HitTest_ReturnsTabPane()
         {
             using TabControl tabControl = new();
@@ -338,6 +351,19 @@ namespace System.Windows.Forms.Tests
             Assert.False(pages[0].IsHandleCreated);
             Assert.False(pages[1].IsHandleCreated);
             Assert.False(tabControl.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TabControlAccessibleObject_FragmentNavigate_Child_ReturnsNull_IfTabPagesListIsEmpty()
+        {
+            using TabControl tabControl = new();
+            tabControl.CreateControl();
+
+            TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.FirstChild));
+            Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+            Assert.True(tabControl.IsHandleCreated);
         }
 
         [WinFormsFact]

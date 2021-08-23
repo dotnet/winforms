@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (OwningTabControl is null || !OwningTabControl.IsHandleCreated)
+                    if (OwningTabControl is null || !OwningTabControl.IsHandleCreated || SystemIAccessibleInternal is null)
                     {
                         return Rectangle.Empty;
                     }
@@ -37,13 +37,9 @@ namespace System.Windows.Forms
                         return Rectangle.Empty;
                     }
 
-                    int left, top, width, height;
-                    left = top = width = height = 0;
-
-                    // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
+                    // The "GetChildId" method returns to the id of the TabControl element,
                     // which allows to use the native "accLocation" method to get the "Bounds" property
-                    SystemIAccessibleInternal?.accLocation(out left, out top, out width, out height, GetChildId());
-
+                    SystemIAccessibleInternal.accLocation(out int left, out int top, out int width, out int height, GetChildId());
                     return new(left, top, width, height);
                 }
             }
@@ -142,8 +138,10 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 => patternId switch
                 {
-                    UiaCore.UIA.InvokePatternId => false,
+                    // The "Enabled" property of the TabControl does not affect the behavior of that property,
+                    // so it is always true
                     UiaCore.UIA.SelectionItemPatternId => true,
+                    UiaCore.UIA.InvokePatternId => false,
                     UiaCore.UIA.LegacyIAccessiblePatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };

@@ -22,18 +22,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (!_owningTabControl.IsHandleCreated)
+                    if (!_owningTabControl.IsHandleCreated || GetSystemIAccessibleInternal() is null)
                     {
                         return Rectangle.Empty;
                     }
 
-                    int left, top, width, height;
-                    left = top = width = height = 0;
-
-                    // The "NativeMethods.CHILDID_SELF" constant returns to the id of the trackbar,
+                    // The "NativeMethods.CHILDID_SELF" constant returns to the id of the TabPage,
                     // which allows to use the native "accLocation" method to get the "Bounds" property
-                    GetSystemIAccessibleInternal()?.accLocation(out left, out top, out width, out height, NativeMethods.CHILDID_SELF);
-
+                    GetSystemIAccessibleInternal()!.accLocation(out int left, out int top, out int width, out int height, NativeMethods.CHILDID_SELF);
                     return new(left, top, width, height);
                 }
             }
@@ -65,7 +61,7 @@ namespace System.Windows.Forms
                 }
 
                 return index == 0
-                    ? _owningTabControl.SelectedTab.AccessibilityObject
+                    ? _owningTabControl.SelectedTab?.AccessibilityObject
                     : _owningTabControl.TabPages[index - 1].TabAccessibilityObject;
             }
 
@@ -86,6 +82,8 @@ namespace System.Windows.Forms
                     return 0;
                 }
 
+                // We add 1 to the number of TabPages, since the TabControl, in addition to the elements
+                // for the TabPages,contains an element for the Panel of the selected TabPage.
                 return _owningTabControl.TabPages.Count + 1;
             }
 
@@ -97,7 +95,8 @@ namespace System.Windows.Forms
                 }
 
                 Point point = new(x, y);
-                if (_owningTabControl.SelectedTab.AccessibilityObject.Bounds.Contains(point))
+                if (_owningTabControl.SelectedTab is not null
+                    && _owningTabControl.SelectedTab.AccessibilityObject.Bounds.Contains(point))
                 {
                     return _owningTabControl.SelectedTab.AccessibilityObject;
                 }
@@ -162,6 +161,8 @@ namespace System.Windows.Forms
             internal override bool IsPatternSupported(UIA patternId)
                 => patternId switch
                 {
+                    // The "Enabled" property of the TabControl does not affect the behavior of that property,
+                    // so it is always true
                     UIA.SelectionPatternId => true,
                     _ => base.IsPatternSupported(patternId)
                 };
