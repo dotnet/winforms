@@ -169,11 +169,11 @@ namespace System.ComponentModel.Design
         {
             PropertyInfo[] properties = TypeDescriptor.GetReflectionType(CollectionType).GetProperties(BindingFlags.Public | BindingFlags.Instance);
 
-            for (int i = 0; i < properties.Length; i++)
+            foreach (var property in properties)
             {
-                if (properties[i].Name.Equals("Item") || properties[i].Name.Equals("Items"))
+                if (property.Name.Equals("Item") || property.Name.Equals("Items"))
                 {
-                    return properties[i].PropertyType;
+                    return property.PropertyType;
                 }
             }
 
@@ -261,16 +261,14 @@ namespace System.ComponentModel.Design
             {
                 localCollectionForm.EditValue = null;
                 _currentContext = lastContext;
-                if (transaction is not null)
+
+                if (commitChange)
                 {
-                    if (commitChange)
-                    {
-                        transaction.Commit();
-                    }
-                    else
-                    {
-                        transaction.Cancel();
-                    }
+                    transaction?.Commit();
+                }
+                else
+                {
+                    transaction?.Cancel();
                 }
 
                 if (changeService is not null)

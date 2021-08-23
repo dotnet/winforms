@@ -22,10 +22,7 @@ namespace System.ComponentModel.Design
                 return value;
             }
 
-            if (_editorUI is null)
-            {
-                _editorUI = new MultilineStringEditorUI();
-            }
+            _editorUI ??= new MultilineStringEditorUI();
 
             _editorUI.BeginEdit(editorService, value);
             editorService.DropDownControl(_editorUI);

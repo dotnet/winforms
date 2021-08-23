@@ -49,8 +49,6 @@ namespace System.Windows.Forms.Design
 
             // If the instances are different, then we need to re-acquire our image list.
 
-            Image image = null;
-
             PropertyDescriptor currentProperty = _currentImageListPropertyReference?.Target as PropertyDescriptor;
 
             if (_currentImageList is null
@@ -96,24 +94,18 @@ namespace System.Windows.Forms.Design
             {
                 if (useIntIndex)
                 {
-                    if (_currentImageList != null && index < _currentImageList.Images.Count)
+                    if (index < _currentImageList.Images.Count)
                     {
-                        index = (index > 0) ? index : 0;
-                        image = _currentImageList.Images[index];
+                        return _currentImageList.Images[index];
                     }
                 }
                 else
                 {
-                    image = _currentImageList.Images[key];
+                    return _currentImageList.Images[key];
                 }
             }
-            else
-            {
-                // No image list, no image.
-                image = null;
-            }
 
-            return image;
+            return null;
         }
 
         /// <inheritdoc />
