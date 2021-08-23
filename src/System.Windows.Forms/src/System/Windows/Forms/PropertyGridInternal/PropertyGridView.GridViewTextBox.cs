@@ -120,7 +120,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return false;
                 }
 
-                if (PropertyGridView.NeedsCommit)
+                if (PropertyGridView.EditTextBoxNeedsCommit)
                 {
                     return false;
                 }
@@ -165,7 +165,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 base.OnKeyPress(e);
             }
 
-            public bool OnClickHooked() => !PropertyGridView.Commit();
+            public bool OnClickHooked() => !PropertyGridView.CommitEditTextBox();
 
             protected override void OnMouseEnter(EventArgs e)
             {
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     switch (keyData & Keys.KeyCode)
                     {
                         case Keys.Return:
-                            bool fwdReturn = !PropertyGridView.NeedsCommit;
+                            bool fwdReturn = !PropertyGridView.EditTextBoxNeedsCommit;
                             if (PropertyGridView.UnfocusSelection() && fwdReturn && PropertyGridView.SelectedGridEntry is not null)
                             {
                                 PropertyGridView.SelectedGridEntry.OnValueReturnKey();
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // For the tab key we want to commit before we allow it to be processed.
                 if ((keyData & Keys.KeyCode) == Keys.Tab && ((keyData & (Keys.Control | Keys.Alt)) == 0))
                 {
-                    return !PropertyGridView.Commit();
+                    return !PropertyGridView.CommitEditTextBox();
                 }
 
                 return base.ProcessDialogKey(keyData);
@@ -361,7 +361,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case User32.WM.GETDLGCODE:
 
                         m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS);
-                        if (PropertyGridView.NeedsCommit || PropertyGridView.WantsTab(forward: (ModifierKeys & Keys.Shift) == 0))
+                        if (PropertyGridView.EditTextBoxNeedsCommit || PropertyGridView.WantsTab(forward: (ModifierKeys & Keys.Shift) == 0))
                         {
                             m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTALLKEYS | (int)User32.DLGC.WANTTAB);
                         }

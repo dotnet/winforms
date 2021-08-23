@@ -58,11 +58,11 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.Equal("GridViewTextBoxAccessibleObject", editFieldAccessibleObject.GetType().Name);
 
             // The case with drop down holder:
-            using TestDropDownHolder dropDownHolder = new TestDropDownHolder(propertyGridView);
+            using PropertyGridView.DropDownHolder dropDownHolder = new(propertyGridView);
             dropDownHolder.CreateControl();
             propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
 
-            dropDownHolder.SetState(0x00000002, true); // Control class States.Visible flag
+            dropDownHolder.TestAccessor().Dynamic.SetState(0x00000002, true); // Control class States.Visible flag
 
             Assert.True(propertyGridView.DropDownVisible);
             object previousAccessibleObject = editFieldAccessibleObject.Navigate(UiaCore.NavigateDirection.PreviousSibling);
@@ -73,19 +73,6 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         public class TestEntityWithTextField
         {
             public string TextProperty { get; set; }
-        }
-
-        private class TestDropDownHolder : PropertyGridView.DropDownHolder
-        {
-            public TestDropDownHolder(PropertyGridView psheet)
-                : base(psheet)
-            {
-            }
-
-            internal void SetState(int flag, bool value)
-            {
-                SetState((States)flag, value);
-            }
         }
 
         [WinFormsFact]

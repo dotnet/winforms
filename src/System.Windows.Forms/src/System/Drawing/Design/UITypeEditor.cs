@@ -83,13 +83,13 @@ namespace System.Drawing.Design
         /// <summary>
         ///  Gets a value indicating whether this editor supports painting a representation of an object's value.
         /// </summary>
-        /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information. </param>
+        /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
         public virtual bool GetPaintValueSupported(ITypeDescriptorContext context) => false;
 
         /// <summary>
         ///  Gets the editing style of the Edit method.
         /// </summary>
-        /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information. </param>
+        /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
         public virtual UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.None;
 
         /// <summary>

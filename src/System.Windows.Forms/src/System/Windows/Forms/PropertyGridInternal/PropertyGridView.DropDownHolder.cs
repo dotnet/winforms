@@ -15,13 +15,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class PropertyGridView
     {
-        internal partial class DropDownHolder : Form, IMouseHookClient
+        internal sealed partial class DropDownHolder : Form, IMouseHookClient
         {
             private Control _currentControl;             // the control that is hosted in the holder
             private readonly PropertyGridView _gridView; // the owner gridview
             private readonly MouseHook _mouseHook;       // we use this to hook mouse downs, etc. to know when to close the dropdown.
 
-            private LinkLabel _createNewLink;
+            private LinkLabel _createNewLinkLabel;
 
             // Resizing
 
@@ -90,17 +90,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (_createNewLink is null)
+                    if (_createNewLinkLabel is null)
                     {
-                        _createNewLink = new LinkLabel();
-                        _createNewLink.LinkClicked += OnNewLinkClicked;
+                        _createNewLinkLabel = new LinkLabel();
+                        _createNewLinkLabel.LinkClicked += OnNewLinkClicked;
                     }
 
-                    return _createNewLink;
+                    return _createNewLinkLabel;
                 }
             }
 
-            public virtual bool HookMouseDown
+            public bool HookMouseDown
             {
                 get => _mouseHook.HookMouseDown;
                 set => _mouseHook.HookMouseDown = value;
@@ -153,10 +153,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void Dispose(bool disposing)
             {
-                if (disposing && _createNewLink is not null)
+                if (disposing && _createNewLinkLabel is not null)
                 {
-                    _createNewLink.Dispose();
-                    _createNewLink = null;
+                    _createNewLinkLabel.Dispose();
+                    _createNewLinkLabel = null;
                 }
 
                 base.Dispose(disposing);
@@ -173,7 +173,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            public virtual Control Component => _currentControl;
+            public Control Component => _currentControl;
 
             private InstanceCreationEditor GetInstanceCreationEditor(PropertyDescriptorGridEntry entry)
             {
@@ -186,16 +186,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return null;
                 }
 
-                InstanceCreationEditor editor = null;
-
                 // Check the property type itself. This is the default path.
-                PropertyDescriptor pd = entry.PropertyDescriptor;
-                if (pd is not null)
-                {
-                    editor = pd.GetEditor(typeof(InstanceCreationEditor)) as InstanceCreationEditor;
-                }
+                var editor = entry.PropertyDescriptor?.GetEditor(typeof(InstanceCreationEditor)) as InstanceCreationEditor;
 
-                // Now check if there is a dropdown UI type editor.  If so, use that.
+                // Now check if there is a dropdown UI type editor. If so, use that.
                 if (editor is null)
                 {
                     UITypeEditor ute = entry.UITypeEditor;
@@ -251,9 +245,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return _sizeGripGlyph;
             }
 
-            public virtual bool GetUsed() => _currentControl is not null;
+            public bool GetUsed() => _currentControl is not null;
 
-            public virtual void FocusComponent()
+            public void FocusComponent()
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:FocusComponent()");
                 if (_currentControl is not null && Visible)
@@ -554,13 +548,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.ProcessDialogKey(keyData);
             }
 
-            public void SetComponent(Control control, bool resizable)
+            /// <summary>
+            ///  Set the control to host in this <see cref="DropDownHolder"/>.
+            /// </summary>
+            public void SetDropDownControl(Control control, bool resizable)
             {
                 _resizable = resizable;
                 Font = _gridView.Font;
 
                 // Check to see if we're going to be adding an InstanceCreationEditor.
-                InstanceCreationEditor editor = (control is null ? null : GetInstanceCreationEditor(_gridView.SelectedGridEntry as PropertyDescriptorGridEntry));
+                InstanceCreationEditor editor = control is not null
+                    ? GetInstanceCreationEditor(_gridView.SelectedGridEntry as PropertyDescriptorGridEntry)
+                    : null;
 
                 // Clear any existing control we have.
                 if (_currentControl is not null)
@@ -571,12 +570,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Remove the InstanceCreationEditor link.
-                if (_createNewLink is not null && _createNewLink.Parent == this)
+                if (_createNewLinkLabel is not null && _createNewLinkLabel.Parent == this)
                 {
-                    Controls.Remove(_createNewLink);
+                    Controls.Remove(_createNewLinkLabel);
                 }
 
-                // Now set up the new control, top to bottom.
                 if (control is null)
                 {
                     Enabled = false;
@@ -584,7 +582,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 _currentControl = control;
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"DropDownHolder:SetComponent({control.GetType().Name})");
+                Debug.WriteLineIf(
+                    CompModSwitches.DebugGridView.TraceVerbose,
+                    $"DropDownHolder:SetComponent({control.GetType().Name})");
 
                 DockPadding.All = 0;
 
@@ -597,7 +597,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                // Parent the control now.  That way it can inherit our font and scale itself if it wants to.
+                // Parent the control now. That way it can inherit our font and scale itself if it wants to.
                 try
                 {
                     SuspendLayout();
