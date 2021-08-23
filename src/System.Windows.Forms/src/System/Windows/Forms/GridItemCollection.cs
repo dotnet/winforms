@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     public class GridItemCollection : ICollection
     {
 #pragma warning disable IDE1006 // Naming Styles - this is public API
-        public static GridItemCollection Empty = new(null);
+        public static GridItemCollection Empty = new(entries: null);
 #pragma warning restore IDE1006
 
         private protected IReadOnlyList<GridItem> _entries;
