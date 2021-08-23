@@ -123,6 +123,10 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
       <Uri>https://github.com/dotnet/runtime</Uri>
       <Sha>3d5d26181cd7bc07ea6c6f87710c14ccd043b415</Sha>
     </Dependency>
+    <Dependency Name="Microsoft.Internal.Runtime.WindowsDesktop.Transport" Version="7.0.0-alpha.1.21422.3">
+      <Uri>https://github.com/dotnet/runtime</Uri>
+      <Sha>3d5d26181cd7bc07ea6c6f87710c14ccd043b415</Sha>
+    </Dependency>
   </ProductDependencies>
   <ToolsetDependencies>
     <!-- Arcade -->
