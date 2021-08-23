@@ -5,12 +5,10 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.Threading;
 using static Interop;
 using static Interop.Mso;
 
@@ -82,7 +80,7 @@ namespace System.Windows.Forms
 #if DEBUG
             private int _debugModalCounter;
 #endif
-            // We need to set this flag if we have started the ModalMessageLoop so that we dont create the ThreadWindows
+            // We need to set this flag if we have started the ModalMessageLoop so that we don't create the ThreadWindows
             // when the ComponentManager calls on us (as IMSOComponent) during the OnEnterState.
             private bool _ourModalLoop;
 
@@ -309,10 +307,10 @@ namespace System.Windows.Forms
 
                 // Legacy OS/target framework scenario where ControlDpiContext is set to DPI_AWARENESS_CONTEXT.DPI_AWARENESS_CONTEXT_UNSPECIFIED
                 // because of 'ThreadContextDpiAwareness' API unavailability or this feature is not enabled.
-
-                if (!DpiHelper.IsScalingRequirementMet || User32.AreDpiAwarenessContextsEqual(context, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
+                if (User32.AreDpiAwarenessContextsEqual(context, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT))
                 {
                     Debug.Assert(_parkingWindows.Count == 1, "parkingWindows count can not be > 1 for legacy OS/target framework versions");
+
                     return _parkingWindows[0];
                 }
 
@@ -337,6 +335,7 @@ namespace System.Windows.Forms
                     {
                         return _activatingControlRef.Target as Control;
                     }
+
                     return null;
                 }
                 set
@@ -374,6 +373,7 @@ namespace System.Windows.Forms
 
                             _marshalingControl = new MarshalingControl();
                         }
+
                         return _marshalingControl;
                     }
                 }
@@ -389,10 +389,12 @@ namespace System.Windows.Forms
                 {
                     _messageFilters = new List<IMessageFilter>();
                 }
+
                 if (_messageFilterSnapshot is null)
                 {
                     _messageFilterSnapshot = new List<IMessageFilter>();
                 }
+
                 if (f is not null)
                 {
                     SetState(STATE_FILTERSNAPSHOTVALID, false);
@@ -532,6 +534,7 @@ namespace System.Windows.Forms
                                         {
                                             s_contextHash.Remove(_id);
                                         }
+
                                         if (t_currentThreadContext == this)
                                         {
                                             t_currentThreadContext = null;
@@ -580,6 +583,7 @@ namespace System.Windows.Forms
                             _parkingWindows[i] = null;
                         }
                     }
+
                     _parkingWindows.Clear();
                 }
             }
@@ -654,7 +658,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    // Reset the flag since we are exiting out of a ModalMesaageLoop..
+                    // Reset the flag since we are exiting out of a ModalMessageLoop..
                     _ourModalLoop = wasOurLoop;
                 }
 
@@ -893,6 +897,7 @@ namespace System.Windows.Forms
                             {
                                 td.Dispose();
                             }
+
                             switch (result)
                             {
                                 case DialogResult.Abort:
@@ -904,6 +909,7 @@ namespace System.Windows.Forms
                                     {
                                         Help.ShowHelp(null, w.HelpUrl, w.HelpTopic);
                                     }
+
                                     break;
                             }
                         }
@@ -930,7 +936,7 @@ namespace System.Windows.Forms
                 // When that occurs, we rely on the STATE_POSTEDQUIT to be caught in the next
                 // idle, at which point we can tear down.
                 //
-                // We can't follow the KB article exactly, becasue we don't have an HWND to PostMessage
+                // We can't follow the KB article exactly, because we don't have an HWND to PostMessage
                 // to.
                 User32.PostThreadMessageW(_id, User32.WM.QUIT, IntPtr.Zero, IntPtr.Zero);
                 SetState(STATE_POSTEDQUIT, true);
@@ -1075,7 +1081,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    // The second half of the the modalEnabled flag above.  Here, if we were previously
+                    // The second half of the modalEnabled flag above.  Here, if we were previously
                     // enabled, make sure that's still the case.
                     if (_currentForm is not null && _currentForm.IsHandleCreated && User32.IsWindowEnabled(_currentForm).IsTrue() != modalEnabled)
                     {
@@ -1227,6 +1233,7 @@ namespace System.Windows.Forms
                             User32.WaitMessage();
                         }
                     }
+
                     return continueLoop;
                 }
                 catch
@@ -1254,6 +1261,7 @@ namespace System.Windows.Forms
                     {
                         _messageFilterSnapshot.AddRange(_messageFilters);
                     }
+
                     SetState(STATE_FILTERSNAPSHOTVALID, true);
                 }
 
@@ -1307,7 +1315,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal bool PreTranslateMessage(ref User32.MSG msg)
             {
-                if (ProcessFilters(ref msg, out bool modified))
+                if (ProcessFilters(ref msg, out _))
                 {
                     return true;
                 }
@@ -1329,6 +1337,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     Control target = Control.FromChildHandle(msg.hwnd);
                     bool retValue = false;
 
@@ -1362,7 +1371,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // See if this is a dialog message -- this is for handling any native dialogs that are launched from
-                        // winforms code.  This can happen with ActiveX controls that launch dialogs specificially
+                        // winforms code.  This can happen with ActiveX controls that launch dialogs specifically
 
                         // First, get the first top-level window in the hierarchy.
                         IntPtr hwndRoot = User32.GetAncestor(msg.hwnd, User32.GA.ROOT);
@@ -1526,6 +1535,7 @@ namespace System.Windows.Forms
                             {
                                 continueLoop = false;
                             }
+
                             break;
 
                         case msoloop.ModalAlert:
@@ -1539,6 +1549,7 @@ namespace System.Windows.Forms
                             {
                                 continueLoop = false;
                             }
+
                             break;
 
                         case msoloop.DoEvents:

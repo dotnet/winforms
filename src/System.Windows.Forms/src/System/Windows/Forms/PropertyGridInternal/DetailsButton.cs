@@ -8,23 +8,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class DetailsButton : Button
     {
-        private readonly GridErrorDlg parent;
+        private readonly GridErrorDialog _parent;
 
-        public DetailsButton(GridErrorDlg form)
+        public DetailsButton(GridErrorDialog form)
         {
-            parent = form;
+            _parent = form;
         }
 
-        public bool Expanded
-        {
-            get
-            {
-                return parent.DetailsButtonExpanded;
-            }
-        }
-        protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new DetailsButtonAccessibleObject(this);
-        }
+        public bool Expanded => _parent.DetailsButtonExpanded;
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new DetailsButtonAccessibleObject(this);
     }
 }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Windows.Forms;
 
 namespace AccessibilityTests
@@ -25,7 +24,7 @@ namespace AccessibilityTests
             listView1.LargeImageList = imageListLarge;
             listView1.SmallImageList = imageListSmall;
 
-           // comboBox8.SelectedText = "row6";
+            // comboBox8.SelectedText = "row6";
             //comboBox9.SelectedItem = "selected";
         }
 
@@ -46,7 +45,7 @@ namespace AccessibilityTests
 
         private void button3_Click(object sender, EventArgs e)
         {
-           listView1.View = View.List;
+            listView1.View = View.List;
         }
 
         private void button11_Click(object sender, EventArgs e)

@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 using static Interop.ComCtl32;
@@ -27,7 +26,7 @@ namespace System.Windows.Forms
     [DefaultBindingProperty(nameof(Value))]
     [Designer("System.Windows.Forms.Design.TrackBarDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionTrackBar))]
-    public class TrackBar : Control, ISupportInitialize
+    public partial class TrackBar : Control, ISupportInitialize
     {
         private static readonly object s_scrollEvent = new object();
         private static readonly object s_valueChangedEvent = new object();
@@ -489,6 +488,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [Bindable(false)]
@@ -712,11 +713,14 @@ namespace System.Windows.Forms
             {
                 Value = _minimum;
             }
+
             if (Value > _maximum)
             {
                 Value = _maximum;
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance() => new TrackBarAccessibleObject(this);
 
         protected override void CreateHandle()
         {
@@ -913,6 +917,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
         {
+            // UIA events:
+            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ValueValuePropertyId, Name, Name);
+            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+
             ((EventHandler)Events[s_valueChangedEvent])?.Invoke(this, e);
         }
 
@@ -959,7 +967,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Lets you set the the entire range for the TrackBar control at once.
+        ///  Lets you set the entire range for the TrackBar control at once.
         ///  The values passed are both the lower and upper limits to the range
         ///  with which the control will work.
         /// </summary>
@@ -997,6 +1005,7 @@ namespace System.Windows.Forms
                 {
                     _value = _minimum;
                 }
+
                 if (_value > _maximum)
                 {
                     _value = _maximum;
@@ -1060,8 +1069,10 @@ namespace System.Windows.Forms
                                 OnScroll(EventArgs.Empty);
                                 OnValueChanged(EventArgs.Empty);
                             }
+
                             break;
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -172,10 +171,10 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false, 0x56210000)]
         [InlineData(false, true, 0x56210000)]
         [InlineData(false, false, 0x56010000)]
-        public void ScrollableControl_CreateParams_GetVScroll_ReturnsExpected(bool vScroll, bool verticalScrollVisbile, int expectedStyle)
+        public void ScrollableControl_CreateParams_GetVScroll_ReturnsExpected(bool vScroll, bool verticalScrollVisible, int expectedStyle)
         {
             using var control = new SubScrollableControl();
-            control.VerticalScroll.Visible = verticalScrollVisbile;
+            control.VerticalScroll.Visible = verticalScrollVisible;
             control.VScroll = vScroll;
 
             CreateParams createParams = control.CreateParams;
@@ -473,7 +472,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
         public void ScrollableControl_AutoScrollPosition_Set_GetReturnsExpected(Point value)
         {
             using var control = new ScrollableControl
@@ -490,7 +489,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
         public void ScrollableControl_AutoScrollPosition_SetWithHandle_GetReturnsExpected(Point value)
         {
             using var control = new ScrollableControl();
@@ -519,7 +518,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
         public void ScrollableControl_AutoScrollPosition_SetWithAutoScroll_GetReturnsExpected(Point value)
         {
             using var control = new ScrollableControl
@@ -537,7 +536,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
         public void ScrollableControl_AutoScrollPosition_SetWithVisibleBars_GetReturnsExpected(Point value)
         {
             using var control = new ScrollableControl();
@@ -725,7 +724,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_HScroll_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollableControl
@@ -750,7 +749,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_HScroll_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollableControl();
@@ -853,7 +852,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void ScrollableControl_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new ScrollableControl
@@ -868,7 +867,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_Visible_Set_GetReturnsExpected(bool value)
         {
             using var control = new ScrollableControl
@@ -887,7 +886,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_VScroll_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollableControl
@@ -912,7 +911,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ScrollableControl_VScroll_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubScrollableControl();
@@ -1397,7 +1396,7 @@ namespace System.Windows.Forms.Tests
 
             yield return new object[] { false, null, 1, null };
             yield return new object[] { false, new LayoutEventArgs(null, null), 1, null };
-            yield return new object[] { false, new LayoutEventArgs(affectedControl = new Control(), "affectedProperty"), 1 , affectedControl };
+            yield return new object[] { false, new LayoutEventArgs(affectedControl = new Control(), "affectedProperty"), 1, affectedControl };
         }
 
         [WinFormsTheory]
@@ -1431,7 +1430,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollableControl_OnPaddingChanged_Invoke_CallsPaddingChanged(EventArgs eventArgs)
         {
             using var control = new SubScrollableControl();
@@ -1892,7 +1891,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollableControl_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubScrollableControl();
@@ -1928,7 +1927,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void ScrollableControl_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubScrollableControl();
@@ -2543,6 +2542,7 @@ namespace System.Windows.Forms.Tests
             {
                 control.Controls.Add(activeControl.Parent ?? activeControl);
             }
+
             control.ScrollControlIntoView(activeControl);
             Assert.Equal(expectedDisplayRectangle, control.DisplayRectangle);
 

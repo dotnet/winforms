@@ -65,9 +65,10 @@ namespace System.Windows.Forms
                 item.ImageScaling = ToolStripItemImageScaling.SizeToFit;
             }
 
-            // set up the sytem menu
+            // set up the system menu
 
             _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
             _system.Alignment = ToolStripItemAlignment.Left;
             _system.DropDownOpening += new EventHandler(OnSystemMenuDropDownOpening);
             _system.ImageScaling = ToolStripItemImageScaling.None;
@@ -107,6 +108,14 @@ namespace System.Windows.Forms
             return systemIcon;
         }
 
+        private bool GetTargetWindowIconVisibility() => _target is not Form formTarget || formTarget.ShowIcon;
+
+        public void updateIcon()
+        {
+            _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
+        }
+
         protected internal override void OnItemAdded(ToolStripItemEventArgs e)
         {
             base.OnItemAdded(e);
@@ -144,11 +153,12 @@ namespace System.Windows.Forms
             }
 
             _system.Image = GetTargetWindowIcon();
+            _system.Visible = GetTargetWindowIconVisibility();
         }
 
         private void OnSystemMenuDropDownOpening(object sender, EventArgs e)
         {
-            if (!_system.HasDropDownItems && (_target != null))
+            if (!_system.HasDropDownItems && (_target is not null))
             {
                 _system.DropDown = ToolStripDropDownMenu.FromHMenu(User32.GetSystemMenu(new HandleRef(this, Control.GetSafeHandle(_target)), bRevert: BOOL.FALSE), _target);
             }
@@ -170,18 +180,20 @@ namespace System.Windows.Forms
                 UnhookTarget();
                 _target = null;
             }
+
             base.Dispose(disposing);
         }
 
         private void UnhookTarget()
         {
-            if (_target != null)
+            if (_target is not null)
             {
                 if (_target is Control controlTarget)
                 {
                     controlTarget.HandleCreated -= new EventHandler(OnTargetWindowHandleRecreated);
                     controlTarget.Disposed -= new EventHandler(OnTargetWindowDisposed);
                 }
+
                 _target = null;
             }
         }

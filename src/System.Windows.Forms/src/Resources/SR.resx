@@ -781,7 +781,7 @@
   <data name="ContextMenuStripSourceControlDescr" xml:space="preserve">
     <value>The last control that caused this context menu strip to be displayed.</value>
   </data>
-  <data name="ControlAccessibileObjectInvalid" xml:space="preserve">
+  <data name="ControlAccessibleObjectInvalid" xml:space="preserve">
     <value>Control's accessible object is in an invalid state.</value>
   </data>
   <data name="ControlAccessibilityObjectDescr" xml:space="preserve">
@@ -2863,12 +2863,12 @@ just-in-time (JIT) debugging instead of this dialog box.
   <data name="ExDlgMsgLoadedAssembliesSection" xml:space="preserve">
     <value>Loaded Assemblies</value>
   </data>
-  <data name="ExDlgMsgSectionSeperator" xml:space="preserve">
+  <data name="ExDlgMsgSectionSeparator" xml:space="preserve">
     <value>
 ************** {0} **************
 </value>
   </data>
-  <data name="ExDlgMsgSeperator" xml:space="preserve">
+  <data name="ExDlgMsgSeparator" xml:space="preserve">
     <value>----------------------------------------
 </value>
   </data>
@@ -3125,6 +3125,9 @@ Do you want to replace it?</value>
   </data>
   <data name="FormMDIChildrenDescr" xml:space="preserve">
     <value>Retrieves the MDI children of this form.</value>
+  </data>
+  <data name="FormMdiChildrenMinimizedAnchorBottomDescr" xml:space="preserve">
+    <value>Gets or sets the anchoring for minimized MDI children.</value>
   </data>
   <data name="FormMDIParentAndChild" xml:space="preserve">
     <value>Form cannot be both an MDI child and MDI parent.</value>
@@ -6495,7 +6498,7 @@ Stack trace where the illegal operation occurred was:
     <value>Width must be greater than MinWidth.</value>
   </data>
   <data name="Win32WindowAlreadyCreated" xml:space="preserve">
-    <value>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</value>
+    <value>{0} must be called before the first IWin32Window object is created in the application.</value>
   </data>
   <data name="WindowsFormsSetEvent" xml:space="preserve">
     <value>Setting event '{0}'</value>
@@ -6745,5 +6748,35 @@ Stack trace where the illegal operation occurred was:
   </data>
   <data name="ComboboxDropDownButtonOpenName" xml:space="preserve">
     <value>Open</value>
+  </data>
+  <data name="CalendarPreviousButtonAccessibleObjectDescription" xml:space="preserve">
+    <value>Go to previous time frame</value>
+  </data>
+  <data name="CalendarNextButtonAccessibleObjectDescription" xml:space="preserve">
+    <value>Go to next time frame</value>
+  </data>
+  <data name="CalendarTodayLinkAccessibleObjectDescription" xml:space="preserve">
+    <value>Go to and select today's date</value>
+  </data>
+  <data name="MonthCalendarWeekNumberDescription" xml:space="preserve">
+    <value>Week {0}</value>
+  </data>
+  <data name="ListViewItemAccessibilityObjectInvalidViewException" xml:space="preserve">
+    <value>The current accessibility object is only for the ListView in {0} view</value>
+  </data>
+  <data name="ListViewItemAccessibilityObjectInvalidViewsException" xml:space="preserve">
+    <value>The current accessibility object is only for the ListView in {0}, {1} or {2} view</value>
+  </data>
+  <data name="TrackBarLargeDecreaseButtonName" xml:space="preserve">
+    <value>Large decrease</value>
+  </data>
+  <data name="TrackBarLargeIncreaseButtonName" xml:space="preserve">
+    <value>Large increase</value>
+  </data>
+  <data name="TrackBarPositionButtonName" xml:space="preserve">
+    <value>Position</value>
+  </data>
+  <data name="ProfessionalColorsStatusStripBorderDescr" xml:space="preserve">
+    <value>Border color to use on the top edge of the StatusStrip.</value>
   </data>
 </root>

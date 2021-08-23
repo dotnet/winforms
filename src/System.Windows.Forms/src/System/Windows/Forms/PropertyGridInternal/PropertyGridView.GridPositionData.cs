@@ -12,47 +12,49 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         internal class GridPositionData
         {
-            readonly ArrayList expandedState;
-            readonly GridEntryCollection selectedItemTree;
-            readonly int itemRow;
-            readonly int itemCount;
+            private readonly ArrayList _expandedState;
+            private readonly GridEntryCollection _selectedItemTree;
+            private readonly int _itemRow;
 
             public GridPositionData(PropertyGridView gridView)
             {
-                selectedItemTree = gridView.GetGridEntryHierarchy(gridView.selectedGridEntry);
-                expandedState = gridView.SaveHierarchyState(gridView.topLevelGridEntries);
-                itemRow = gridView.selectedRow;
-                itemCount = gridView.totalProps;
+                _selectedItemTree = gridView.GetGridEntryHierarchy(gridView._selectedGridEntry);
+                _expandedState = gridView.SaveHierarchyState(gridView.TopLevelGridEntries);
+                _itemRow = gridView._selectedRow;
             }
 
             public GridEntry Restore(PropertyGridView gridView)
             {
-                gridView.RestoreHierarchyState(expandedState);
-                GridEntry entry = gridView.FindEquivalentGridEntry(selectedItemTree);
+                gridView.RestoreHierarchyState(_expandedState);
+                GridEntry entry = gridView.FindEquivalentGridEntry(_selectedItemTree);
 
-                if (entry is not null)
+                if (entry is null)
                 {
-                    gridView.SelectGridEntry(entry, true);
+                    return null;
+                }
 
-                    int delta = gridView.selectedRow - itemRow;
-                    if (delta != 0 && gridView.ScrollBar.Visible)
+                gridView.SelectGridEntry(entry, pageIn: true);
+
+                int delta = gridView._selectedRow - _itemRow;
+                if (delta != 0 && gridView.ScrollBar.Visible)
+                {
+                    if (_itemRow < gridView._visibleRows)
                     {
-                        if (itemRow < gridView.visibleRows)
-                        {
-                            delta += gridView.GetScrollOffset();
+                        delta += gridView.GetScrollOffset();
 
-                            if (delta < 0)
-                            {
-                                delta = 0;
-                            }
-                            else if (delta > gridView.ScrollBar.Maximum)
-                            {
-                                delta = gridView.ScrollBar.Maximum - 1;
-                            }
-                            gridView.SetScrollOffset(delta);
+                        if (delta < 0)
+                        {
+                            delta = 0;
                         }
+                        else if (delta > gridView.ScrollBar.Maximum)
+                        {
+                            delta = gridView.ScrollBar.Maximum - 1;
+                        }
+
+                        gridView.SetScrollOffset(delta);
                     }
                 }
+
                 return entry;
             }
         }

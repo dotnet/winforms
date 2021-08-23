@@ -238,6 +238,7 @@ namespace System.Windows.Forms
             get { return ComboBox.IntegralHeight; }
             set { ComboBox.IntegralHeight = value; }
         }
+
         /// <summary>
         ///  Collection of the items contained in this ComboBox.
         /// </summary>
@@ -367,10 +368,12 @@ namespace System.Windows.Forms
 
             return preferredSize;
         }
+
         private void HandleDropDown(object sender, EventArgs e)
         {
             OnDropDown(e);
         }
+
         private void HandleDropDownClosed(object sender, EventArgs e)
         {
             OnDropDownClosed(e);
@@ -380,14 +383,17 @@ namespace System.Windows.Forms
         {
             OnDropDownStyleChanged(e);
         }
+
         private void HandleSelectedIndexChanged(object sender, EventArgs e)
         {
             OnSelectedIndexChanged(e);
         }
+
         private void HandleSelectionChangeCommitted(object sender, EventArgs e)
         {
             OnSelectionChangeCommitted(e);
         }
+
         private void HandleTextUpdate(object sender, EventArgs e)
         {
             OnTextUpdate(e);
@@ -395,36 +401,43 @@ namespace System.Windows.Forms
 
         protected virtual void OnDropDown(EventArgs e)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.SuspendMenuMode();
             }
+
             RaiseEvent(s_eventDropDown, e);
         }
+
         protected virtual void OnDropDownClosed(EventArgs e)
         {
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 // PERF,
 
                 Application.ThreadContext.FromCurrent().RemoveMessageFilter(ParentInternal.RestoreFocusFilter);
                 ToolStripManager.ModalMenuFilter.ResumeMenuMode();
             }
+
             RaiseEvent(s_eventDropDownClosed, e);
         }
+
         protected virtual void OnDropDownStyleChanged(EventArgs e)
         {
             RaiseEvent(s_eventDropDownStyleChanged, e);
         }
+
         protected virtual void OnSelectedIndexChanged(EventArgs e)
         {
             RaiseEvent(s_eventSelectedIndexChanged, e);
         }
+
         protected virtual void OnSelectionChangeCommitted(EventArgs e)
         {
             RaiseEvent(s_eventSelectionChangeCommitted, e);
         }
+
         protected virtual void OnTextUpdate(EventArgs e)
         {
             RaiseEvent(s_eventTextUpdate, e);
@@ -460,6 +473,7 @@ namespace System.Windows.Forms
                 comboBox.SelectionChangeCommitted -= new EventHandler(HandleSelectionChangeCommitted);
                 comboBox.TextUpdate -= new EventHandler(HandleTextUpdate);
             }
+
             base.OnUnsubscribeControlEvents(control);
         }
 

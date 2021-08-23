@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -20,6 +19,7 @@ namespace System.Windows.Forms
             private const string COMBO_BOX_EDIT_AUTOMATION_ID = "1001";
 
             private readonly ComboBox _owner;
+            private readonly ComboBoxUiaTextProvider _textProvider;
             private readonly IntPtr _handle;
 
             /// <summary>
@@ -31,6 +31,8 @@ namespace System.Windows.Forms
             {
                 _owner = owner;
                 _handle = childEditControlhandle;
+                _textProvider = new ComboBoxUiaTextProvider(owner);
+                UseTextProviders(_textProvider, _textProvider);
             }
 
             /// <summary>
@@ -48,7 +50,6 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        Debug.WriteLine("Edit parent " + _owner.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
                         return _owner.AccessibilityObject;
                     case UiaCore.NavigateDirection.PreviousSibling:
                         return _owner.DroppedDown
@@ -110,7 +111,12 @@ namespace System.Windows.Forms
                         return _handle;
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-
+                    case UiaCore.UIA.IsTextPatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.TextPatternId);
+                    case UiaCore.UIA.IsTextPattern2AvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.TextPattern2Id);
+                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
+                        return IsPatternSupported(UiaCore.UIA.ValuePatternId);
                     default:
                         return base.GetPropertyValue(propertyID);
                 }
@@ -126,6 +132,15 @@ namespace System.Windows.Forms
             }
 
             internal override bool IsIAccessibleExSupported() => true;
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId) =>
+                patternId switch
+                {
+                    UiaCore.UIA.ValuePatternId => true,
+                    UiaCore.UIA.TextPatternId => true,
+                    UiaCore.UIA.TextPattern2Id => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
             /// <summary>
             ///  Gets the runtime ID.

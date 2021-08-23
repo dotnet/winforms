@@ -33,7 +33,7 @@ namespace System.ComponentModel.Design.Serialization
         private readonly CodeDomSerializer _currentSerializer;
 
         /// <summary>
-        ///  Only we can create an instance of this. Everyonen else accesses it though
+        ///  Only we can create an instance of this. Everyone else accesses it though
         ///  static properties.
         /// </summary>
         internal LocalizationCodeDomSerializer(CodeDomLocalizationModel model, object currentSerializer)
@@ -103,12 +103,10 @@ namespace System.ComponentModel.Design.Serialization
                 // reflecting model.  In this case we'll skip it and fall through to the
                 // property assignment model.
                 bool skipPropertyReflect = false;
-                ExtenderProvidedPropertyAttribute attr = null;
 
                 if (desc != null)
                 {
-                    attr = desc.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
-
+                    var attr = desc.Attributes[typeof(ExtenderProvidedPropertyAttribute)] as ExtenderProvidedPropertyAttribute;
                     if (attr != null && attr.ExtenderProperty != null)
                     {
                         skipPropertyReflect = true;
@@ -122,9 +120,9 @@ namespace System.ComponentModel.Design.Serialization
 
                     if (name != null && ownerExpression != null)
                     {
-                        RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
+                        RootContext rootCtx = manager.Context[typeof(RootContext)] as RootContext;
 
-                        if (rootCxt != null && rootCxt.Value == tree.Owner)
+                        if (rootCtx != null && rootCtx.Value == tree.Owner)
                         {
                             name = "$this";
                         }

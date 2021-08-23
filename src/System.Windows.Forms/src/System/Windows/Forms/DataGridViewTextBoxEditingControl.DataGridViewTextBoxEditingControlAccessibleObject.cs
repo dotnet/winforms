@@ -36,13 +36,22 @@ namespace System.Windows.Forms
             }
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-                => direction switch
+            {
+                switch (direction)
                 {
-                    UiaCore.NavigateDirection.Parent => (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
-                                               ? _parentAccessibleObject
-                                               : null,
-                    _ => base.FragmentNavigate(direction),
-                };
+                    case UiaCore.NavigateDirection.Parent:
+                        if (Owner is IDataGridViewEditingControl owner
+                            && owner.EditingControlDataGridView?.EditingControl == owner
+                            && Owner.ToolStripControlHost is null)
+                        {
+                            return _parentAccessibleObject;
+                        }
+
+                        break;
+                }
+
+                return base.FragmentNavigate(direction);
+            }
 
             internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
                 => (Owner as IDataGridViewEditingControl)?.EditingControlDataGridView?.AccessibilityObject;
@@ -75,7 +84,7 @@ namespace System.Windows.Forms
             internal override bool IsReadOnly => _owningDataGridViewTextBoxEditingControl.ReadOnly;
 
             /// <summary>
-            ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+            ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
             /// </summary>
             /// <param name="parent">The parent accessible object.</param>
             internal override void SetParent(AccessibleObject? parent) => _parentAccessibleObject = parent;

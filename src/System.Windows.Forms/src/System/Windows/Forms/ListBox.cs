@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         public const int NoMatches = LB_ERR;
 
         /// <summary>
-        ///  The default item height for an owner-draw ListBox. The ListBox's non-ownderdraw
+        ///  The default item height for an owner-draw ListBox. The ListBox's non-ownerdraw
         ///  item height is 13 for the default font on Windows.
         /// </summary>
         public const int DefaultItemHeight = 13;
@@ -163,7 +163,7 @@ namespace System.Windows.Forms
             {
                 scaledListItemStartPosition = LogicalToDeviceUnits(defaultListItemStartPos);
 
-                // height inlude 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number
+                // height include 2 borders ( top and bottom). we are using multiplication by 2 instead of scaling doubled value to get an even number
                 // that might helps us in positioning control in the center for list items.
                 scaledListItemBordersHeight = 2 * LogicalToDeviceUnits(defaultListItemBorderHeight);
                 scaledListItemPaddingBuffer = LogicalToDeviceUnits(defaultListItemPaddingBuffer);
@@ -423,6 +423,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
+
                     drawMode = value;
                     RecreateHandle();
                     if (drawMode == DrawMode.OwnerDrawVariable)
@@ -621,6 +622,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidExBoundArgument, nameof(ItemHeight), value, 0, 256));
                 }
+
                 if (itemHeight != value)
                 {
                     itemHeight = value;
@@ -661,6 +663,7 @@ namespace System.Windows.Forms
                 {
                     itemsCollection = CreateItemCollection();
                 }
+
                 return itemsCollection;
             }
         }
@@ -728,6 +731,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentException(SR.ListBoxVarHeightMultiCol, nameof(value));
                     }
+
                     multiColumn = value;
                     RecreateHandle();
                 }
@@ -757,7 +761,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (itemsCollection != null)
+                        if (itemsCollection is not null)
                         {
                             int count = itemsCollection.Count;
                             for (int i = 0; i < count; i++)
@@ -771,7 +775,7 @@ namespace System.Windows.Forms
                 {
                     height = GetItemHeight(0);
 
-                    if (itemsCollection != null)
+                    if (itemsCollection is not null)
                     {
                         int count = itemsCollection.Count;
                         if (count != 0)
@@ -875,7 +879,7 @@ namespace System.Windows.Forms
                     return unchecked((int)(long)SendMessageW(this, (WM)LB.GETCURSEL));
                 }
 
-                if (itemsCollection != null && SelectedItems.Count > 0)
+                if (itemsCollection is not null && SelectedItems.Count > 0)
                 {
                     return Items.IndexOfIdentifier(SelectedItems.GetObjectAt(0));
                 }
@@ -907,6 +911,7 @@ namespace System.Windows.Forms
                         {
                             SelectedItems.SetSelected(currentIndex, false);
                         }
+
                         SelectedItems.SetSelected(value, true);
 
                         if (IsHandleCreated)
@@ -936,6 +941,7 @@ namespace System.Windows.Forms
                         {
                             NativeSetSelected(value, true);
                         }
+
                         OnSelectedIndexChanged(EventArgs.Empty);
                     }
                 }
@@ -958,6 +964,7 @@ namespace System.Windows.Forms
                 {
                     selectedIndices = new SelectedIndexCollection(this);
                 }
+
                 return selectedIndices;
             }
         }
@@ -987,9 +994,9 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (itemsCollection != null)
+                if (itemsCollection is not null)
                 {
-                    if (value != null)
+                    if (value is not null)
                     {
                         int index = itemsCollection.IndexOf(value);
                         if (index != -1)
@@ -1019,6 +1026,7 @@ namespace System.Windows.Forms
                 {
                     selectedItems = new SelectedObjectCollection(this);
                 }
+
                 return selectedItems;
             }
         }
@@ -1082,7 +1090,7 @@ namespace System.Windows.Forms
                 {
                     sorted = value;
 
-                    if (sorted && itemsCollection != null && itemsCollection.Count >= 1)
+                    if (sorted && itemsCollection is not null && itemsCollection.Count >= 1)
                     {
                         Sort();
                     }
@@ -1100,7 +1108,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (SelectionMode != SelectionMode.None && SelectedItem != null)
+                if (SelectionMode != SelectionMode.None && SelectedItem is not null)
                 {
                     if (FormattingEnabled)
                     {
@@ -1123,7 +1131,7 @@ namespace System.Windows.Forms
                 // Scan through the list items looking for the supplied text string.  If we find it,
                 // select it.
                 //
-                if (SelectionMode != SelectionMode.None && value != null && (SelectedItem is null || !value.Equals(GetItemText(SelectedItem))))
+                if (SelectionMode != SelectionMode.None && value is not null && (SelectedItem is null || !value.Equals(GetItemText(SelectedItem))))
                 {
                     int cnt = Items.Count;
                     for (int index = 0; index < cnt; ++index)
@@ -1202,6 +1210,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         ///  Allows to set the width of the tabs between the items in the list box.
         ///  The integer array should have the tab spaces in the ascending order.
@@ -1218,6 +1227,7 @@ namespace System.Windows.Forms
                 {
                     customTabOffsets = new IntegerCollection(this);
                 }
+
                 return customTabOffsets;
             }
         }
@@ -1330,7 +1340,7 @@ namespace System.Windows.Forms
 
         private void CheckNoDataSource()
         {
-            if (DataSource != null)
+            if (DataSource is not null)
             {
                 throw new ArgumentException(SR.DataSourceLocksItems);
             }
@@ -1365,7 +1375,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Unselects all currently selected items.
+        ///  Deselects all currently selected items.
         /// </summary>
         public void ClearSelected()
         {
@@ -1429,7 +1439,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Finds the first item after the given index that matches the given string.
-        ///  The strings must match excatly, except for differences in casing.
+        ///  The strings must match exactly, except for differences in casing.
         /// </summary>
         public int FindStringExact(string s, int startIndex)
         {
@@ -1534,14 +1544,16 @@ namespace System.Windows.Forms
                 {
                     throw new Win32Exception();
                 }
+
                 return sel > 0;
             }
             else
             {
-                if (itemsCollection != null && SelectedItems.GetSelected(index))
+                if (itemsCollection is not null && SelectedItems.GetSelected(index))
                 {
                     return true;
                 }
+
                 return false;
             }
         }
@@ -1773,7 +1785,7 @@ namespace System.Windows.Forms
             {
                 AccessibleObject item = AccessibilityObject.GetFocused();
 
-                if (item != null)
+                if (item is not null)
                 {
                     HasKeyboardFocus = false;
                     item.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
@@ -1817,6 +1829,7 @@ namespace System.Windows.Forms
             {
                 SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, (IntPtr)columnWidth);
             }
+
             if (drawMode == DrawMode.OwnerDrawFixed)
             {
                 SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
@@ -1827,7 +1840,7 @@ namespace System.Windows.Forms
                 SendMessageW(this, (WM)LB.SETTOPINDEX, (IntPtr)topIndex);
             }
 
-            if (UseCustomTabOffsets && CustomTabOffsets != null)
+            if (UseCustomTabOffsets && CustomTabOffsets is not null)
             {
                 int wpar = CustomTabOffsets.Count;
                 int[] offsets = new int[wpar];
@@ -1839,7 +1852,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (itemsCollection != null)
+            if (itemsCollection is not null)
             {
                 int count = itemsCollection.Count;
 
@@ -1849,14 +1862,15 @@ namespace System.Windows.Forms
 
                     if (selectionMode != SelectionMode.None)
                     {
-                        if (selectedItems != null)
+                        if (selectedItems is not null)
                         {
                             selectedItems.PushSelectionIntoNativeListBox(i);
                         }
                     }
                 }
             }
-            if (selectedItems != null)
+
+            if (selectedItems is not null)
             {
                 if (selectedItems.Count > 0 && selectionMode == SelectionMode.One)
                 {
@@ -1864,6 +1878,7 @@ namespace System.Windows.Forms
                     SelectedItems.EnsureUpToDate();
                 }
             }
+
             UpdateHorizontalExtent();
         }
 
@@ -1879,6 +1894,7 @@ namespace System.Windows.Forms
             {
                 itemsCollection = null;
             }
+
             base.OnHandleDestroyed(e);
         }
 
@@ -1907,7 +1923,7 @@ namespace System.Windows.Forms
             base.OnParentChanged(e);
             //No need to RecreateHandle if we are removing the Listbox from controls collection...
             //so check the parent before recreating the handle...
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 RecreateHandle();
             }
@@ -1943,6 +1959,7 @@ namespace System.Windows.Forms
                     {
                         focused?.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
                     }
+
                     focused?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 }
                 else if (ItemsCountIsChanged())
@@ -1959,7 +1976,7 @@ namespace System.Windows.Forms
             // calls CurrencyManager::EndCurrentEdit, and that will pull the dataFrom the controls
             // into the backEnd. We do not need to do that.
             //
-            if (DataManager != null && DataManager.Position != SelectedIndex)
+            if (DataManager is not null && DataManager.Position != SelectedIndex)
             {
                 //read this as "if everett or   (whidbey and selindex is valid)"
                 if (!FormattingEnabled || SelectedIndex != -1)
@@ -1990,6 +2007,7 @@ namespace System.Windows.Forms
                 Items.ClearInternal();
                 EndUpdate();
             }
+
             base.OnDataSourceChanged(e);
             RefreshItems();
         }
@@ -2001,7 +2019,7 @@ namespace System.Windows.Forms
             // we want to use the new DisplayMember even if there is no data source
             RefreshItems();
 
-            if (SelectionMode != SelectionMode.None && DataManager != null)
+            if (SelectionMode != SelectionMode.None && DataManager is not null)
             {
                 SelectedIndex = DataManager.Position;
             }
@@ -2032,8 +2050,10 @@ namespace System.Windows.Forms
                     graphics.Dispose();
                 }
             }
+
             base.Refresh();
         }
+
         /// <summary>
         ///  Reparses the objects, getting new text strings for them.
         /// </summary>
@@ -2058,7 +2078,7 @@ namespace System.Windows.Forms
             // If we have a DataSource and a DisplayMember, then use it
             // to populate the Items collection
             //
-            if (DataManager != null && DataManager.Count != -1)
+            if (DataManager is not null && DataManager.Count != -1)
             {
                 newItems = new object[DataManager.Count];
                 for (int i = 0; i < newItems.Length; i++)
@@ -2066,7 +2086,7 @@ namespace System.Windows.Forms
                     newItems[i] = DataManager[i];
                 }
             }
-            else if (savedItems != null)
+            else if (savedItems is not null)
             {
                 newItems = new object[savedItems.Count];
                 savedItems.CopyTo(newItems, 0);
@@ -2074,7 +2094,7 @@ namespace System.Windows.Forms
 
             // Store the current list of items
             //
-            if (newItems != null)
+            if (newItems is not null)
             {
                 Items.AddRangeInternal(newItems);
             }
@@ -2083,14 +2103,14 @@ namespace System.Windows.Forms
             //
             if (SelectionMode != SelectionMode.None)
             {
-                if (DataManager != null)
+                if (DataManager is not null)
                 {
                     // Put the selectedIndex in sync with the position in the dataManager
                     SelectedIndex = DataManager.Position;
                 }
                 else
                 {
-                    if (savedItems != null)
+                    if (savedItems is not null)
                     {
                         int cnt = savedItems.Count;
                         for (int index = 0; index < cnt; index++)
@@ -2134,6 +2154,7 @@ namespace System.Windows.Forms
             {
                 UpdateFontCache();
             }
+
             base.ScaleControl(factor, specified);
         }
 
@@ -2172,7 +2193,7 @@ namespace System.Windows.Forms
             // if the list changed, we want to keep the same selected index
             // CurrencyManager will provide the PositionChanged event
             // it will be provided before changing the list though...
-            if (DataManager != null)
+            if (DataManager is not null)
             {
                 if (DataSource is ICurrencyManagerProvider)
                 {
@@ -2192,6 +2213,7 @@ namespace System.Windows.Forms
                     selectedValueChangedFired = false;
                 }
             }
+
             EndUpdate();
         }
 
@@ -2222,6 +2244,7 @@ namespace System.Windows.Forms
             {
                 NativeSetSelected(index, value);
             }
+
             SelectedItems.Dirty();
             OnSelectedIndexChanged(EventArgs.Empty);
         }
@@ -2240,7 +2263,7 @@ namespace System.Windows.Forms
             SelectedObjectCollection currentSelections = SelectedItems;
             currentSelections.EnsureUpToDate();
 
-            if (sorted && itemsCollection != null)
+            if (sorted && itemsCollection is not null)
             {
                 itemsCollection.InnerArray.Sort();
 
@@ -2268,7 +2291,7 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             string s = base.ToString();
-            if (itemsCollection != null)
+            if (itemsCollection is not null)
             {
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 if (Items.Count > 0)
@@ -2278,8 +2301,10 @@ namespace System.Windows.Forms
                     s += ", Items[0]: " + txt;
                 }
             }
+
             return s;
         }
+
         private void UpdateFontCache()
         {
             fontIsChanged = true;
@@ -2292,6 +2317,7 @@ namespace System.Windows.Forms
             {
                 integralHeightAdjust = false;
             }
+
             maxWidth = -1;
             UpdateHorizontalExtent();
             // clear the preferred size cache.
@@ -2307,6 +2333,7 @@ namespace System.Windows.Forms
                 {
                     width = MaxItemWidth;
                 }
+
                 SendMessageW(this, (WM)LB.SETHORIZONTALEXTENT, (IntPtr)width);
             }
         }
@@ -2360,7 +2387,7 @@ namespace System.Windows.Forms
 
         private unsafe void UpdateCustomTabOffsets()
         {
-            if (IsHandleCreated && UseCustomTabOffsets && CustomTabOffsets != null)
+            if (IsHandleCreated && UseCustomTabOffsets && CustomTabOffsets is not null)
             {
                 int wpar = CustomTabOffsets.Count;
                 int[] offsets = new int[wpar];
@@ -2369,6 +2396,7 @@ namespace System.Windows.Forms
                 {
                     SendMessageW(this, (WM)LB.SETTABSTOPS, (IntPtr)wpar, (IntPtr)pOffsets);
                 }
+
                 Invalidate();
             }
         }
@@ -2392,10 +2420,11 @@ namespace System.Windows.Forms
             switch (PARAM.HIWORD(m.WParam))
             {
                 case (int)LBN.SELCHANGE:
-                    if (selectedItems != null)
+                    if (selectedItems is not null)
                     {
                         selectedItems.Dirty();
                     }
+
                     OnSelectedIndexChanged(EventArgs.Empty);
                     break;
                 case (int)LBN.DBLCLK:
@@ -2471,10 +2500,11 @@ namespace System.Windows.Forms
                     WmPrint(ref m);
                     break;
                 case WM.LBUTTONDOWN:
-                    if (selectedItems != null)
+                    if (selectedItems is not null)
                     {
                         selectedItems.Dirty();
                     }
+
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
@@ -2534,11 +2564,12 @@ namespace System.Windows.Forms
                     bool rCaptured = Capture;
                     if (rCaptured && WindowFromPoint(rpt) == Handle)
                     {
-                        if (selectedItems != null)
+                        if (selectedItems is not null)
                         {
                             selectedItems.Dirty();
                         }
                     }
+
                     base.WndProc(ref m);
                     break;
 
@@ -2558,6 +2589,7 @@ namespace System.Windows.Forms
                         Height = Math.Max(Height, ItemHeight);
                         fontIsChanged = false;
                     }
+
                     break;
 
                 default:

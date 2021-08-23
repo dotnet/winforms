@@ -96,10 +96,12 @@ namespace System.Windows.Forms
                     {
                         result.X = (szCtl.Width - result.Width) / 2;
                     }
+
                     if (szCtl.Height > result.Height)
                     {
                         result.Y = (szCtl.Height - result.Height) / 2;
                     }
+
                     break;
 
                 case ImageLayout.Zoom:
@@ -768,6 +770,7 @@ namespace System.Windows.Forms
 
                         break;
                     }
+
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
@@ -783,6 +786,7 @@ namespace System.Windows.Forms
                             // Need to add one to the destination point for GDI to render the same as GDI+
                             hdc.DrawLine(hpen, topLineLefts[i], bounds.Y + i, topLineRights[i] + 1, bounds.Y + i);
                         }
+
                         break;
                     }
             }
@@ -822,8 +826,10 @@ namespace System.Windows.Forms
                                 graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
                             }
                         }
+
                         break;
                     }
+
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
@@ -839,6 +845,7 @@ namespace System.Windows.Forms
                             // Need to add one to the destination point for GDI to render the same as GDI+
                             hdc.DrawLine(hpen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i] + 1);
                         }
+
                         break;
                     }
             }
@@ -888,8 +895,10 @@ namespace System.Windows.Forms
                                     bounds.Y + bounds.Height - 1 - i);
                             }
                         }
+
                         break;
                     }
+
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
@@ -910,6 +919,7 @@ namespace System.Windows.Forms
                                 bottomLineRights[i] + 1,
                                 bounds.Y + bounds.Height - 1 - i);
                         }
+
                         break;
                     }
             }
@@ -959,8 +969,10 @@ namespace System.Windows.Forms
                                     rightLineBottoms[i]);
                             }
                         }
+
                         break;
                     }
+
                 case ButtonBorderStyle.Inset:
                 case ButtonBorderStyle.Outset:
                     {
@@ -980,6 +992,7 @@ namespace System.Windows.Forms
                                 bounds.X + bounds.Width - 1 - i,
                                 rightLineBottoms[i] + 1);
                         }
+
                         break;
                     }
             }
@@ -1429,7 +1442,10 @@ namespace System.Windows.Forms
         internal static void DrawHighContrastFocusRectangle(Graphics graphics, Rectangle rectangle, Color color)
             => DrawFocusRectangle(graphics, rectangle, color, highContrast: true);
 
-        private static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color color, bool highContrast)
+        internal static void DrawBlackWhiteFocusRectangle(Graphics graphics, Rectangle rectangle, Color color)
+            => DrawFocusRectangle(graphics, rectangle, color, highContrast: false, blackAndWhite: true);
+
+        private static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color color, bool highContrast, bool blackAndWhite = false)
         {
             if (graphics is null)
                 throw new ArgumentNullException(nameof(graphics));
@@ -1438,7 +1454,7 @@ namespace System.Windows.Forms
             rectangle.Height--;
             graphics.DrawRectangle(
                 // We want the corner to be penned see GetFocusPen for more explanation
-                GetFocusPen(color, (rectangle.X + rectangle.Y) % 2 == 1, highContrast),
+                GetFocusPen(color, (rectangle.X + rectangle.Y) % 2 == 1, highContrast, blackAndWhite),
                 rectangle);
         }
 
@@ -1506,7 +1522,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Draws a standard selection grab handle with the given dimensions. Grab
         ///  handles are used by components to indicate to the user that they can
-        ///  be directly maniupulated.
+        ///  be directly manipulated.
         /// </summary>
         public static void DrawGrabHandle(Graphics graphics, Rectangle rectangle, bool primary, bool enabled)
         {
@@ -1652,7 +1668,7 @@ namespace System.Windows.Forms
                 // The idea is to scale everything down (more than just a grayscale does, therefore the small numbers
                 // in the scaling part of matrix). White becomes some shade of gray and black stays black.
                 //
-                // Second part of the matrix is to translate everything, so all colors are a bit brigher. Grays become
+                // Second part of the matrix is to translate everything, so all colors are a bit brighter. Grays become
                 // lighter and washed out looking black becomes a shade of gray as well.
 
                 float[][] array = new float[5][];
@@ -1681,6 +1697,7 @@ namespace System.Windows.Forms
                         GraphicsUnit.Pixel,
                         t_disabledImageAttr);
                 }
+
                 graphics.DrawImageUnscaled(bmp, imageBounds);
             }
             else
@@ -2232,7 +2249,7 @@ namespace System.Windows.Forms
         ///  Retrieves the pen used to draw a focus rectangle around a control. The focus rectangle is typically drawn
         ///  when the control has keyboard focus.
         /// </summary>
-        private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast)
+        private static Pen GetFocusPen(Color baseColor, bool odds, bool highContrast, bool blackAndWhite)
         {
             if (t_focusPen is null
                 || t_hcFocusPen != highContrast
@@ -2257,6 +2274,11 @@ namespace System.Windows.Forms
                 {
                     // In highcontrast mode "baseColor" itself is used as the focus pen color.
                     color2 = baseColor;
+                }
+                else if (blackAndWhite)
+                {
+                    color1 = Color.White;
+                    color2 = Color.Black;
                 }
                 else
                 {
@@ -2407,6 +2429,7 @@ namespace System.Windows.Forms
                     {
                         s += row[k] * column[k];
                     }
+
                     result[i][j] = s;
                 }
             }
@@ -2626,6 +2649,7 @@ namespace System.Windows.Forms
             {
                 result = StringAlignment.Near;
             }
+
             return result;
         }
 

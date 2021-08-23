@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -29,15 +29,17 @@ namespace System.Windows.Forms
                 {
                     if (parentInstance is null)
                     {
-                        Debug.Fail("A property specified in the path is null or not yet instanciated at this time");
+                        Debug.Fail("A property specified in the path is null or not yet instantiated at this time");
                         break; // path is wrong
                     }
+
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(parentInstance)[pathInfo[i]];
                     if (prop is null)
                     {
                         Debug.Fail("The path specified to the property is wrong");
                         break; // path is wrong
                     }
+
                     if (i == pathInfo.Length - 1)
                     {
                         // we're on the last one, look if that's our guy

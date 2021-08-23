@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Xunit;
 using static System.Windows.Forms.ToolStripProgressBar;
 using static Interop;
@@ -81,6 +80,62 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(role, accessibleObject.Role);
             Assert.Equal(expected, actual);
             Assert.False(toolStripProgressBarControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.NavigateDirection.FirstChild)]
+        [InlineData((int)UiaCore.NavigateDirection.LastChild)]
+        public void ToolStripProgressBarControlAccessibleObject_FragmentNavigate_ChildrenAreNull(int direction)
+        {
+            using ToolStripProgressBarControl control = new();
+
+            object actual = control.AccessibilityObject.FragmentNavigate((UiaCore.NavigateDirection)direction);
+
+            Assert.Null(actual);
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripProgressBarControlAccessibleObject_FragmentNavigate_ParentIsToolStrip()
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStripProgressBarControl control = new();
+            using ToolStripProgressBar item = new();
+            using ToolStrip toolStrip = new();
+            control.Owner = item;
+            item.Parent = toolStrip;
+
+            object actual = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+
+            Assert.Equal(toolStrip.AccessibilityObject, actual);
+            Assert.False(control.IsHandleCreated);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripProgressBarControlAccessibleObject_FragmentNavigate_SiblingsAreExpected()
+        {
+            using NoAssertContext noAssertContext = new();
+            using ToolStripProgressBarControl control = new();
+            using ToolStripProgressBar item = new();
+            using ToolStrip toolStrip = new() { Size = new Drawing.Size(500, 25)};
+            using ToolStripLabel label = new() { Text = "Label"};
+            using ToolStripButton button = new() { Text = "Button"};
+
+            toolStrip.CreateControl();
+            control.Owner = item;
+            item.Parent = toolStrip;
+            toolStrip.Items.Add(label);
+            toolStrip.Items.Add(item);
+            toolStrip.Items.Add(button);
+
+            object nextSibling = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            object previousSibling = control.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+
+            Assert.Equal(button.AccessibilityObject, nextSibling);
+            Assert.Equal(label.AccessibilityObject, previousSibling);
+            Assert.False(control.IsHandleCreated);
+            Assert.True(toolStrip.IsHandleCreated);
         }
     }
 }

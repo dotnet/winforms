@@ -8,7 +8,9 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+#if DEBUG
 using System.Globalization;
+#endif
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -154,7 +156,7 @@ namespace System.Windows.Forms
             get
             {
                 ToolStripPanelCell cell = RowManager.GetNextVisibleCell(0, /*forward*/true);
-                if (cell != null && cell.DraggedControl != null)
+                if (cell is not null && cell.DraggedControl is not null)
                 {
                     if (cell.DraggedControl.Stretch)
                     {
@@ -170,9 +172,11 @@ namespace System.Windows.Forms
                             padding.Top = 0;
                             padding.Bottom = 0;
                         }
+
                         return padding;
                     }
                 }
+
                 return ToolStripPanel.RowMargin;
             }
         }
@@ -221,7 +225,9 @@ namespace System.Windows.Forms
         public Padding Margin
         {
             get { return CommonProperties.GetMargin(this); }
-            set { if (Margin != value)
+            set
+            {
+                if (Margin != value)
                 {
                     CommonProperties.SetMargin(this, value);
                 }
@@ -320,6 +326,7 @@ namespace System.Windows.Forms
             {
                 controlToBeDragged.ToolStripPanelRow = this;
             }
+
             RowManager.OnControlAdded(control, index);
         }
 
@@ -395,7 +402,7 @@ namespace System.Windows.Forms
                     CachedBoundsMode = true;
                     try
                     {
-                        // dont layout in the constructor that's just tacky.
+                        // don't layout in the constructor that's just tacky.
                         bool parentNeedsLayout = LayoutEngine.Layout(this, e);
                     }
                     finally
@@ -432,6 +439,7 @@ namespace System.Windows.Forms
                 ApplyCachedBounds();
                 return;
             }
+
             // figure out how much space we actually need to free.
             int spaceToFree = cell.CachedBounds.Right - RowManager.DisplayRectangle.Right;
 
@@ -441,9 +449,10 @@ namespace System.Windows.Forms
                 ApplyCachedBounds();
                 return;
             }
+
             // STEP 1 remove empty space in the row.
 
-            // since layout sisuspended, we'll need to watch changes to the margin
+            // since layout is suspended, we'll need to watch changes to the margin
             // as a result of calling FreeSpaceFromRow.
             int[] margins = new int[Cells.Count];
             for (int i = 0; i < Cells.Count; i++)
@@ -469,7 +478,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // STEP 2 change the size of the remaing ToolStrips from Right to Left.
+            // STEP 2 change the size of the remaining ToolStrips from Right to Left.
             int[] cellOffsets = null;
             for (int i = Cells.Count - 1; i >= 0; i--)
             {
@@ -483,21 +492,24 @@ namespace System.Windows.Forms
                     if (cachedBounds.Width > minSize.Width)
                     {
                         spaceToFree -= (cachedBounds.Width - minSize.Width);
-                        // make sure we dont take more space than we need - if spaceToFree is less than 0, add back in.
+                        // make sure we don't take more space than we need - if spaceToFree is less than 0, add back in.
                         cachedBounds.Width = (spaceToFree < 0) ? minSize.Width + -spaceToFree : minSize.Width;
 
-                        // we're not reperforming a layout, so we need to adjust the next cell
+                        // we're not re-performing a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
                             if (cellOffsets is null)
                             {
                                 cellOffsets = new int[Cells.Count];
                             }
+
                             cellOffsets[j] += Math.Max(0, currentCell.CachedBounds.Width - cachedBounds.Width);
                         }
+
                         currentCell.CachedBounds = cachedBounds;
                     }
                 }
+
                 if (spaceToFree <= 0)
                 {
                     break;
@@ -505,7 +517,7 @@ namespace System.Windows.Forms
             }
 
             // fixup for items before it shrinking.
-            if (cellOffsets != null)
+            if (cellOffsets is not null)
             {
                 for (int i = 0; i < Cells.Count; i++)
                 {
@@ -531,9 +543,10 @@ namespace System.Windows.Forms
                 ApplyCachedBounds();
                 return;
             }
+
             // STEP 1 remove empty space in the row.
 
-            // since layout sisuspended, we'll need to watch changes to the margin
+            // since layout is suspended, we'll need to watch changes to the margin
             // as a result of calling FreeSpaceFromRow.
             int[] margins = new int[Cells.Count];
             for (int i = 0; i < Cells.Count; i++)
@@ -559,7 +572,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // STEP 2 change the size of the remaing ToolStrips from Bottom to Top.
+            // STEP 2 change the size of the remaining ToolStrips from Bottom to Top.
             int[] cellOffsets = null;
             for (int i = Cells.Count - 1; i >= 0; i--)
             {
@@ -573,21 +586,24 @@ namespace System.Windows.Forms
                     if (cachedBounds.Height > minSize.Height)
                     {
                         spaceToFree -= (cachedBounds.Height - minSize.Height);
-                        // make sure we dont take more space than we need - if spaceToFree is less than 0, add back in.
+                        // make sure we don't take more space than we need - if spaceToFree is less than 0, add back in.
                         cachedBounds.Height = (spaceToFree < 0) ? minSize.Height + -spaceToFree : minSize.Height;
 
-                        // we're not reperforming a layout, so we need to adjust the next cell
+                        // we're not re-performing a layout, so we need to adjust the next cell
                         for (int j = i + 1; j < Cells.Count; j++)
                         {
                             if (cellOffsets is null)
                             {
                                 cellOffsets = new int[Cells.Count];
                             }
+
                             cellOffsets[j] += Math.Max(0, currentCell.CachedBounds.Height - cachedBounds.Height);
                         }
+
                         currentCell.CachedBounds = cachedBounds;
                     }
                 }
+
                 if (spaceToFree <= 0)
                 {
                     break;
@@ -595,7 +611,7 @@ namespace System.Windows.Forms
             }
 
             // fixup for items before it shrinking.
-            if (cellOffsets != null)
+            if (cellOffsets is not null)
             {
                 for (int i = 0; i < Cells.Count; i++)
                 {
@@ -683,7 +699,7 @@ namespace System.Windows.Forms
         {
             Size preferredSize = LayoutEngine.GetPreferredSize(this, constrainingSize - Padding.Size) + Padding.Size;
 
-            if (Orientation == Orientation.Horizontal && ParentInternal != null)
+            if (Orientation == Orientation.Horizontal && ParentInternal is not null)
             {
                 preferredSize.Width = DisplayRectangle.Width;
             }
@@ -698,7 +714,7 @@ namespace System.Windows.Forms
         // Sets the bounds for an element.
         void IArrangedElement.SetBounds(Rectangle bounds, BoundsSpecified specified)
         {
-            // in this case the parent is telling us to refresh our bounds - dont
+            // in this case the parent is telling us to refresh our bounds - don't
             // call PerformLayout
             SetBounds(bounds);
         }
@@ -711,7 +727,7 @@ namespace System.Windows.Forms
             }
         }
 
-        #region MouseStuff
+#region MouseStuff
 
 #if DEBUG
         internal static readonly TraceSwitch ToolStripPanelMouseDebug = new TraceSwitch("ToolStripPanelMouse", "Debug ToolStrip WM_MOUSEACTIVATE code");
@@ -749,6 +765,6 @@ namespace System.Windows.Forms
             }
         }
 
-        #endregion
+#endregion
     }
 }

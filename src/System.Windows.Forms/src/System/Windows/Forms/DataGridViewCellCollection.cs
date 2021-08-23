@@ -127,14 +127,17 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
+
                 if (dataGridViewCell.DataGridView is not null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridView);
                 }
+
                 if (dataGridViewCell.OwningRow is not null)
                 {
                     throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
                 }
+
                 if (_owner.DataGridView is not null)
                 {
                     _owner.DataGridView.OnReplacingCell(_owner, index);
@@ -158,6 +161,7 @@ namespace System.Windows.Forms
                 {
                     oldDataGridViewCell.ReadOnlyInternal = false;
                 }
+
                 if (oldDataGridViewCell.Selected)
                 {
                     oldDataGridViewCell.SelectedInternal = false;
@@ -177,10 +181,12 @@ namespace System.Windows.Forms
                 {
                     dataGridViewColumn = _owner.DataGridView.Columns[columnName];
                 }
+
                 if (dataGridViewColumn is null)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), nameof(columnName));
                 }
+
                 return (DataGridViewCell)_items[dataGridViewColumn.Index];
             }
             set
@@ -190,10 +196,12 @@ namespace System.Windows.Forms
                 {
                     dataGridViewColumn = _owner.DataGridView.Columns[columnName];
                 }
+
                 if (dataGridViewColumn is null)
                 {
                     throw new ArgumentException(string.Format(SR.DataGridViewColumnCollection_ColumnNotFound, columnName), nameof(columnName));
                 }
+
                 this[dataGridViewColumn.Index] = value;
             }
         }
@@ -213,6 +221,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
+
             if (dataGridViewCell.OwningRow is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
@@ -231,6 +240,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.OwningColumn = dataGridView.Columns[index];
             }
+
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
             return index;
         }
@@ -242,10 +252,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewCells));
             }
+
             if (_owner.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
+
             foreach (DataGridViewCell dataGridViewCell in dataGridViewCells)
             {
                 if (dataGridViewCell is null)
@@ -278,6 +290,7 @@ namespace System.Windows.Forms
                 dataGridViewCell.OwningRow = _owner;
                 Debug.Assert(!dataGridViewCell.Selected);
             }
+
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
 
@@ -287,10 +300,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
+
             foreach (DataGridViewCell dataGridViewCell in _items)
             {
                 dataGridViewCell.OwningRow = null;
             }
+
             _items.Clear();
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }
@@ -320,10 +335,12 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
+
             if (dataGridViewCell.OwningRow is not null)
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_CellAlreadyBelongsToDataGridViewRow);
             }
+
             Debug.Assert(!dataGridViewCell.ReadOnly);
             Debug.Assert(!dataGridViewCell.Selected);
             _items.Insert(index, dataGridViewCell);
@@ -341,6 +358,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.OwningColumn = dataGridView.Columns[index];
             }
+
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Add, dataGridViewCell));
         }
 
@@ -355,6 +373,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
+
             int cellIndex = -1;
             int itemsCount = _items.Count;
             for (int i = 0; i < itemsCount; ++i)
@@ -365,6 +384,7 @@ namespace System.Windows.Forms
                     break;
                 }
             }
+
             if (cellIndex == -1)
             {
                 throw new ArgumentException(SR.DataGridViewCellCollection_CellNotFound);
@@ -381,6 +401,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridViewCellCollection_OwningRowAlreadyBelongsToDataGridView);
             }
+
             RemoveAtInternal(index);
         }
 
@@ -394,10 +415,12 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.ReadOnlyInternal = false;
             }
+
             if (dataGridViewCell.Selected)
             {
                 dataGridViewCell.SelectedInternal = false;
             }
+
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Remove, dataGridViewCell));
         }
     }

@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -57,6 +56,7 @@ namespace System.Windows.Forms
                     {
                         LayoutTransaction.DoLayoutIf(owner.AutoSize, owner.ParentInternal, owner, PropertyNames.FlatAppearanceBorderSize);
                     }
+
                     owner.Invalidate();
                 }
             }
@@ -171,42 +171,6 @@ namespace System.Windows.Forms
                     owner.Invalidate();
                 }
             }
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.All)]
-    internal sealed class ApplicableToButtonAttribute : Attribute
-    {
-        public ApplicableToButtonAttribute()
-        {
-        }
-    }
-
-    internal class FlatButtonAppearanceConverter : ExpandableObjectConverter
-    {
-        // Don't let the property grid display the full type name in the value cell
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
-        {
-            if (destinationType == typeof(string))
-            {
-                return "";
-            }
-
-            return base.ConvertTo(context, culture, value, destinationType);
-        }
-
-        // Don't let the property grid display the CheckedBackColor property for Button controls
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
-        {
-            if (context != null && context.Instance is Button)
-            {
-                Attribute[] attributes2 = new Attribute[attributes.Length + 1];
-                attributes.CopyTo(attributes2, 0);
-                attributes2[attributes.Length] = new ApplicableToButtonAttribute();
-                attributes = attributes2;
-            }
-
-            return TypeDescriptor.GetProperties(value, attributes);
         }
     }
 }

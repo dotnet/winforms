@@ -6,12 +6,12 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
+using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading;
 using System.Windows.Forms.VisualStyles;
 using Microsoft.Win32;
 using static Interop;
@@ -30,6 +30,8 @@ namespace System.Windows.Forms
         ///  Hash table for our event list
         /// </summary>
         private static EventHandlerList s_eventHandlers;
+        private static Font s_defaultFont;
+        private static Font s_defaultFontScaled;
         private static string s_startupPath;
         private static string s_executablePath;
         private static object s_appFileVersion;
@@ -53,9 +55,6 @@ namespace System.Windows.Forms
         /// </summary>
         private static readonly object s_eventApplicationExit = new object();
         private static readonly object s_eventThreadExit = new object();
-
-        // Constant string used in Application.Restart()
-        private const string IEEXEC = "ieexec.exe";
 
         // Defines a new callback delegate type
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -97,6 +96,7 @@ namespace System.Windows.Forms
                     s_comCtlSupportsVisualStyles = InitializeComCtlSupportsVisualStyles();
                     s_comCtlSupportsVisualStylesInitialized = true;
                 }
+
                 return s_comCtlSupportsVisualStyles;
             }
         }
@@ -174,6 +174,7 @@ namespace System.Windows.Forms
                         // Key is of wrong type: use default value (false)
                     }
                 }
+
                 return s_useEverettThreadAffinity;
             }
         }
@@ -277,6 +278,8 @@ namespace System.Windows.Forms
         internal static bool CustomThreadExceptionHandlerAttached
             => ThreadContext.FromCurrent().CustomThreadExceptionHandlerAttached;
 
+        internal static Font DefaultFont => s_defaultFontScaled ?? s_defaultFont;
+
         /// <summary>
         ///  Gets the path for the executable file that started the application.
         /// </summary>
@@ -300,14 +303,6 @@ namespace System.Windows.Forms
         /// <value>One of the enumeration values that indicates the high DPI mode.</value>
         public static HighDpiMode HighDpiMode
             => DpiHelper.GetWinformsApplicationDpiAwareness();
-
-        /// <summary>
-        ///  Sets the <see cref="HighDpiMode"/> mode for process.
-        /// </summary>
-        /// <param name="highDpiMode">One of the enumeration values that specifies the high DPI mode to set.</param>
-        /// <returns><see langword="true" /> if the high DPI mode was set; otherwise, <see langword="false" />.</returns>
-        public static bool SetHighDpiMode(HighDpiMode highDpiMode)
-            => !DpiHelper.FirstParkingWindowCreated && DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
 
         /// <summary>
         ///  Gets the path for the application data specific to a local, non-roaming user.
@@ -468,6 +463,7 @@ namespace System.Windows.Forms
                 {
                     s_safeTopLevelCaptionSuffix = SR.SafeTopLevelCaptionFormat; // 0 - original, 1 - zone, 2 - site
                 }
+
                 return s_safeTopLevelCaptionSuffix;
             }
             set
@@ -494,6 +490,7 @@ namespace System.Windows.Forms
                     // startupPath = Path.GetDirectoryName(sb.ToString());
                     s_startupPath = AppContext.BaseDirectory;
                 }
+
                 return s_startupPath;
             }
         }
@@ -608,6 +605,7 @@ namespace System.Windows.Forms
                     IntPtr.Zero,
                     User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
             }
+
             return BOOL.TRUE;
         }
 
@@ -644,6 +642,7 @@ namespace System.Windows.Forms
                 {
                     s_eventHandlers = new EventHandlerList();
                 }
+
                 s_eventHandlers.AddHandler(key, value);
             }
         }
@@ -656,6 +655,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 s_eventHandlers.RemoveHandler(key, value);
             }
         }
@@ -817,6 +817,7 @@ namespace System.Windows.Forms
         ///  Enables visual styles for all subsequent <see cref="Run()"/> and <see cref="Control.CreateHandle"/> calls.
         ///  Uses the default theming manifest file shipped with the redist.
         /// </summary>
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
         public static void EnableVisualStyles()
         {
             // Pull manifest from our resources
@@ -872,8 +873,10 @@ namespace System.Windows.Forms
                     {
                         e.Cancel = false;
                     }
+
                     return;
                 }
+
                 s_exiting = true;
 
                 try
@@ -890,6 +893,7 @@ namespace System.Windows.Forms
                                 {
                                     e.Cancel = true;
                                 }
+
                                 return;
                             }
                         }
@@ -946,6 +950,7 @@ namespace System.Windows.Forms
         ///  Retrieves the FileVersionInfo associated with the main module for
         ///  the application.
         /// </summary>
+        [UnconditionalSuppressMessage("SingleFile", "IL3002", Justification = "Single-file case is handled")]
         private static FileVersionInfo GetAppFileVersionInfo()
         {
             lock (s_internalSyncObject)
@@ -953,7 +958,7 @@ namespace System.Windows.Forms
                 if (s_appFileVersion is null)
                 {
                     Type t = GetAppMainType();
-                    if (t is not null)
+                    if (t is not null && t.Assembly.Location.Length > 0)
                     {
                         s_appFileVersion = FileVersionInfo.GetVersionInfo(t.Module.FullyQualifiedName);
                     }
@@ -993,19 +998,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Locates a thread context given a window handle.
         /// </summary>
-        private static ThreadContext GetContextForHandle(HandleRef handle)
+        internal static ThreadContext GetContextForHandle(HandleRef handle)
         {
-            ThreadContext cxt = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
+            ThreadContext threadContext = ThreadContext.FromId(User32.GetWindowThreadProcessId(handle.Handle, out _));
             Debug.Assert(
-                cxt is not null,
+                threadContext is not null,
                 "No thread context for handle.  This is expected if you saw a previous assert about the handle being invalid.");
 
             GC.KeepAlive(handle.Wrapper);
-            return cxt;
+            return threadContext;
         }
 
         /// <summary>
-        ///  Returns a string that is the combination of the basePath + CompanyName + ProducName + ProductVersion. This
+        ///  Returns a string that is the combination of the basePath + CompanyName + ProductName + ProductVersion. This
         ///  will also create the directory if it doesn't exist.
         /// </summary>
         private static string GetDataPath(string basePath)
@@ -1019,6 +1024,7 @@ namespace System.Windows.Forms
                     Directory.CreateDirectory(path);
                 }
             }
+
             return path;
         }
 
@@ -1052,8 +1058,6 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static void ParkHandle(HandleRef handle) => ParkHandle(handle, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
-
         /// <summary>
         ///  "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
         ///  be parked.
@@ -1061,16 +1065,14 @@ namespace System.Windows.Forms
         internal static void ParkHandle(HandleRef handle, IntPtr dpiAwarenessContext)
         {
             Debug.Assert(User32.IsWindow(handle).IsTrue(), "Handle being parked is not a valid window handle");
-            Debug.Assert(((int)User32.GetWindowLong(handle, User32.GWL.STYLE) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
+            Debug.Assert((PARAM.ToInt(User32.GetWindowLong(handle, User32.GWL.STYLE)) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
 
-            ThreadContext cxt = GetContextForHandle(handle);
-            if (cxt is not null)
+            ThreadContext threadContext = GetContextForHandle(handle);
+            if (threadContext is not null)
             {
-                cxt.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
+                threadContext.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
             }
         }
-
-        internal static void ParkHandle(CreateParams cp) => ParkHandle(cp, User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT);
 
         /// <summary>
         ///  Park control handle on a parkingwindow that has matching DpiAwareness.
@@ -1079,10 +1081,10 @@ namespace System.Windows.Forms
         /// <param name="dpiAwarenessContext"> dpi awareness</param>
         internal static void ParkHandle(CreateParams cp, IntPtr dpiAwarenessContext)
         {
-            ThreadContext cxt = ThreadContext.FromCurrent();
-            if (cxt is not null)
+            ThreadContext threadContext = ThreadContext.FromCurrent();
+            if (threadContext is not null)
             {
-                cp.Parent = cxt.GetParkingWindow(dpiAwarenessContext).Handle;
+                cp.Parent = threadContext.GetParkingWindow(dpiAwarenessContext).Handle;
             }
         }
 
@@ -1104,10 +1106,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal static void UnparkHandle(HandleRef handle, IntPtr context)
         {
-            ThreadContext cxt = GetContextForHandle(handle);
-            if (cxt is not null)
+            ThreadContext threadContext = GetContextForHandle(handle);
+            if (threadContext is not null)
             {
-                cxt.GetParkingWindow(context).UnparkHandle(handle);
+                threadContext.GetParkingWindow(context).UnparkHandle(handle);
             }
         }
 
@@ -1138,21 +1140,6 @@ namespace System.Windows.Forms
 
             Process process = Process.GetCurrentProcess();
             Debug.Assert(process is not null);
-            if (string.Equals(process.MainModule.ModuleName, IEEXEC, StringComparison.OrdinalIgnoreCase))
-            {
-                string clrPath = Path.GetDirectoryName(typeof(object).Module.FullyQualifiedName);
-
-                if (string.Equals(clrPath + "\\" + IEEXEC, process.MainModule.FileName, StringComparison.OrdinalIgnoreCase))
-                {
-                    // HRef exe case
-                    hrefExeCase = true;
-                    Exit();
-                    if (AppDomain.CurrentDomain.GetData("APP_LAUNCH_URL") is string launchUrl)
-                    {
-                        Process.Start(process.MainModule.FileName, launchUrl);
-                    }
-                }
-            }
 
             if (!hrefExeCase)
             {
@@ -1166,18 +1153,21 @@ namespace System.Windows.Forms
                     sb.Append(arguments[argumentIndex]);
                     sb.Append("\" ");
                 }
+
                 if (arguments.Length > 1)
                 {
                     sb.Append('"');
                     sb.Append(arguments[arguments.Length - 1]);
                     sb.Append('"');
                 }
+
                 ProcessStartInfo currentStartInfo = new ProcessStartInfo();
                 currentStartInfo.FileName = ExecutablePath;
                 if (sb.Length > 0)
                 {
                     currentStartInfo.Arguments = sb.ToString();
                 }
+
                 Exit();
                 Process.Start(currentStartInfo);
             }
@@ -1213,6 +1203,31 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().RunMessageLoop(Interop.Mso.msoloop.ModalForm, new ModalApplicationContext(form));
 
         /// <summary>
+        /// Scale the default font (if it is set) as per the Settings display text scale settings.
+        /// </summary>
+        /// <param name="textScaleFactor">The scaling factor in the range [1.0, 2.25].</param>
+        internal static void ScaleDefaultFont(float textScaleFactor)
+        {
+            if (s_defaultFont is null || !OsVersion.IsWindows10_1507OrGreater)
+            {
+                return;
+            }
+
+            if (s_defaultFontScaled is not null)
+            {
+                s_defaultFontScaled.Dispose();
+                s_defaultFontScaled = null;
+            }
+
+            // Restore the text scale if it isn't the default value in the valid text scale factor value
+            textScaleFactor = Math.Min(DpiHelper.MaxTextScaleFactorValue, textScaleFactor);
+            if (textScaleFactor > DpiHelper.MinTextScaleFactorValue)
+            {
+                s_defaultFontScaled = s_defaultFont.WithSize(s_defaultFont.Size * textScaleFactor);
+            }
+        }
+
+        /// <summary>
         ///  Sets the static UseCompatibleTextRenderingDefault field on Control to the value passed in.
         ///  This switch determines the default text rendering engine to use by some controls that support
         ///  switching rendering engine.
@@ -1221,9 +1236,70 @@ namespace System.Windows.Forms
         {
             if (NativeWindow.AnyHandleCreated)
             {
-                throw new InvalidOperationException(SR.Win32WindowAlreadyCreated);
+                throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetCompatibleTextRenderingDefault)));
             }
+
             Control.UseCompatibleTextRenderingDefault = defaultValue;
+        }
+
+        /// <summary>
+        ///  Sets the default <see cref="Font"/> for process.
+        /// </summary>
+        /// <param name="font">The font to be used as a default across the application.</param>
+        /// <exception cref="ArgumentNullException"><paramref name="font"/> is <see langword="null"/>.</exception>
+        /// <exception cref="InvalidOperationException">
+        /// You can only call this method before the first window is created by your Windows Forms application.
+        /// </exception>
+        /// <remarks>
+        ///  <para>
+        ///    The system text scale factor will be applied to the font, i.e. if the default font is set to "Calibri, 11f"
+        ///    and the text scale factor is set to 150% the resulting default font will be set to "Calibri, 16.5f".
+        ///  </para>
+        ///  <para>
+        ///    Users can adjust text scale with the Make text bigger slider on the Settings -> Ease of Access -> Vision/Display screen.
+        ///  </para>
+        /// </remarks>
+        /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
+        public static void SetDefaultFont(Font font)
+        {
+            if (font is null)
+                throw new ArgumentNullException(nameof(font));
+
+            if (NativeWindow.AnyHandleCreated)
+                throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetDefaultFont)));
+
+            // If user made a prior call to this API with a different custom fonts, we want to clean it up.
+            if (s_defaultFont is not null)
+            {
+                s_defaultFont?.Dispose();
+                s_defaultFont = null;
+                s_defaultFontScaled?.Dispose();
+                s_defaultFontScaled = null;
+            }
+
+            if (font.IsSystemFont)
+            {
+                // The system font is managed the .NET runtime, and it is already scaled to the current text scale factor.
+                // We need to clone it because our reference will no longer be scaled by the .NET runtime.
+                s_defaultFont = (Font)font.Clone();
+            }
+            else
+            {
+                s_defaultFont = font;
+                ScaleDefaultFont(DpiHelper.GetTextScaleFactor());
+            }
+        }
+
+        /// <summary>
+        ///  Sets the <see cref="HighDpiMode"/> mode for process.
+        /// </summary>
+        /// <param name="highDpiMode">One of the enumeration values that specifies the high DPI mode to set.</param>
+        /// <returns><see langword="true" /> if the high DPI mode was set; otherwise, <see langword="false" />.</returns>
+        public static bool SetHighDpiMode(HighDpiMode highDpiMode)
+        {
+            SourceGenerated.EnumValidator.Validate(highDpiMode, nameof(highDpiMode));
+
+            return !DpiHelper.FirstParkingWindowCreated && DpiHelper.SetWinformsApplicationDpiAwareness(highDpiMode);
         }
 
         /// <summary>

@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#nullable enable
+
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -14,7 +16,8 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  This constructor extends from the standard SelectionGlyphBase constructor.
         /// </summary>
-        internal NoResizeSelectionBorderGlyph(Rectangle controlBounds, SelectionRules rules, SelectionBorderGlyphType type, Behavior behavior) : base(behavior)
+        internal NoResizeSelectionBorderGlyph(Rectangle controlBounds, SelectionRules rules, SelectionBorderGlyphType type, Behavior? behavior)
+            : base(behavior)
         {
             InitializeGlyph(controlBounds, rules, type);
         }

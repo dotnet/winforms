@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
-using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -59,7 +57,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_All_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -102,7 +100,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Left_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -145,7 +143,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Top_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -188,7 +186,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Right_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -231,7 +229,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void DockPaddingEdges_Bottom_SetWithoutOwner_GetReturnsExpected(int value)
         {
             using var owner = new ScrollableControl
@@ -258,10 +256,11 @@ namespace System.Windows.Forms.Tests
                 };
                 return owner.DockPadding;
             }
+
             ScrollableControl.DockPaddingEdges CreateClonedPadding(int left, int top, int right, int bottom)
             {
-                ICloneable clonable = CreatePadding(left, top, right, bottom);
-                return Assert.IsType<ScrollableControl.DockPaddingEdges>(clonable.Clone());
+                ICloneable cloneable = CreatePadding(left, top, right, bottom);
+                return Assert.IsType<ScrollableControl.DockPaddingEdges>(cloneable.Clone());
             }
 
             yield return new object[] { CreatePadding(1, 2, 3, 4), CreatePadding(1, 2, 3, 4), true };
@@ -296,6 +295,7 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.Equal(expected, padding.GetHashCode().Equals(other.GetHashCode()));
             }
+
             Assert.Equal(expected, padding.Equals(other));
         }
 

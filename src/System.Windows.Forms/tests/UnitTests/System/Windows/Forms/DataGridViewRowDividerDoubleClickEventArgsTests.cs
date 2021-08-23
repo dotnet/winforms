@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -34,7 +33,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void DataGridViewRowDividerDoubleClickEventArgs_Ctor_NegativeRowIndex_ThrowsArgumentOutOfRangeException()
         {
-            Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => new DataGridViewRowDividerDoubleClickEventArgs(-2, null));
+            Assert.Throws<ArgumentNullException>("e", () => new DataGridViewRowDividerDoubleClickEventArgs(-2, null));
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => new DataGridViewRowDividerDoubleClickEventArgs(-2, new HandledMouseEventArgs(MouseButtons.Left, 1, 2, 3, 4, true)));
         }
 

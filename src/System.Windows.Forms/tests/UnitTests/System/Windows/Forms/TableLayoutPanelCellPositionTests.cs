@@ -3,11 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Globalization;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -47,7 +45,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void TableLayoutPanelCellPosition_Column_Set_GetReturnsExpected(int value)
         {
             var style = new TableLayoutPanelCellPosition
@@ -58,7 +56,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void TableLayoutPanelCellPosition_Row_Set_GetReturnsExpected(int value)
         {
             var style = new TableLayoutPanelCellPosition
@@ -88,6 +86,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(expected, position == otherPosition);
                 Assert.Equal(!expected, position != otherPosition);
             }
+
             Assert.Equal(expected, position.Equals(other));
         }
 
@@ -223,6 +222,7 @@ namespace System.Windows.Forms.Tests
             TypeConverter converter = TypeDescriptor.GetConverter(typeof(TableLayoutPanelCellPosition));
             Assert.Throws<ArgumentNullException>("propertyValues", () => converter.CreateInstance(null, null));
         }
+
         public static IEnumerable<object[]> CreateInstance_InvalidPropertyValueType_TestData()
         {
             yield return new object[]

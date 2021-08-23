@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var timer = new Timer
@@ -58,7 +58,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Enabled_SetDesignMode_GetReturnsExpected(bool value)
         {
             using var timer = new SubTimer();
@@ -82,7 +82,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Enabled_SetDesignModeAfterEnabling_GetReturnsExpected(bool value)
         {
             using var timer = new SubTimer();
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Timer_Tag_Set_GetReturnsExpected(object value)
         {
             using var timer = new Timer
@@ -241,7 +241,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Timer_Tag_SetDesignMode_GetReturnsExpected(object value)
         {
             using var timer = new SubTimer();
@@ -265,7 +265,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Start_Stop_Success(bool designMode)
         {
             using var timer = new SubTimer();
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Start_MultipleTimes_Success(bool designMode)
         {
             using var timer = new SubTimer();
@@ -315,7 +315,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Stop_Restart_Success(bool designMode)
         {
             using var timer = new SubTimer();
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Timer_Stop_MultipleTimes_Success(bool designMode)
         {
             using var timer = new SubTimer();
@@ -401,7 +401,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Timer_Dispose_NotStarted_Succcess()
+        public void Timer_Dispose_NotStarted_Success()
         {
             using var timer = new Timer();
             timer.Dispose();
@@ -413,7 +413,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Timer_Dispose_Started_Succcess()
+        public void Timer_Dispose_Started_Success()
         {
             using var timer = new Timer();
             timer.Start();
@@ -427,7 +427,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void Timer_Dispose_Stopped_Succcess()
+        public void Timer_Dispose_Stopped_Success()
         {
             using var timer = new Timer();
             timer.Start();

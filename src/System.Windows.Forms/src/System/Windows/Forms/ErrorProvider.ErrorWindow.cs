@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -107,6 +106,7 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
+
                     CreateParams cparams = new CreateParams
                     {
                         Caption = string.Empty,
@@ -157,6 +157,7 @@ namespace System.Windows.Forms
                     _timer.Dispose();
                     _timer = null;
                 }
+
                 if (_tipWindow != null)
                 {
                     _tipWindow.DestroyHandle();
@@ -165,7 +166,7 @@ namespace System.Windows.Forms
 
                 // Hide the window and invalidate the parent to ensure
                 // that we leave no visual artifacts. given that we
-                // have a bizare region window, this is needed.
+                // have a bizarre region window, this is needed.
                 User32.SetWindowPos(
                     new HandleRef(this, Handle),
                     User32.HWND_TOP,
@@ -220,7 +221,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  This is called when an error icon is flashing, and the view needs to be updatd.
+            ///  This is called when an error icon is flashing, and the view needs to be updated.
             /// </summary>
             private void OnTimer(object sender, EventArgs e)
             {
@@ -229,11 +230,13 @@ namespace System.Windows.Forms
                 {
                     blinkPhase += _items[i].BlinkPhase;
                 }
+
                 if (blinkPhase == 0 && _provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
                 {
                     Debug.Assert(_timer != null);
                     _timer.Stop();
                 }
+
                 Update(timerCaused: true);
             }
 
@@ -255,6 +258,7 @@ namespace System.Windows.Forms
                         shownTooltips++;
                     }
                 }
+
                 Debug.Assert(shownTooltips <= 1);
 #endif
             }
@@ -456,6 +460,7 @@ namespace System.Windows.Forms
                         {
                             OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);
                         }
+
                         break;
                     case User32.WM.ERASEBKGND:
                         break;

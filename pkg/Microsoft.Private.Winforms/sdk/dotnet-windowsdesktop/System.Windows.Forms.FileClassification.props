@@ -1,0 +1,20 @@
+﻿<!--
+    This props file comes from dotnet/winforms. It gets ingested by dotnet/windowsdesktop and processed by
+    pkg\windowsdesktop\sfx\Microsoft.WindowsDesktop.App.Ref.sfxproj.
+   -->
+<Project>
+  <ItemGroup Condition="'$(PackageTargetRuntime)' == ''">
+    <FrameworkListFileClass Include="Microsoft.VisualBasic.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="Microsoft.VisualBasic.Forms.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Design.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Drawing.Common.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Drawing.Design.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Drawing.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.CSharp.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Analyzers.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Design.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Design.Editors.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.dll" Profile="WindowsForms" />
+    <FrameworkListFileClass Include="System.Windows.Forms.Primitives.dll" Profile="WindowsForms" />
+  </ItemGroup>
+</Project>

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Drawing;
 using System.Reflection;
 using System.Resources;
@@ -115,10 +114,12 @@ namespace VisualBasicRuntimeTest
             {
                 throw new InvalidOperationException();
             }
+
             if (!loaded && !isFirstInstance)
             {
                 throw new InvalidOperationException();
             }
+
             if (!valid)
             {
                 throw new InvalidOperationException();

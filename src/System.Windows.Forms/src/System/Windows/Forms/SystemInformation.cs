@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Text;
 using Microsoft.Win32;
 using static Interop;
 using static Interop.User32;
@@ -128,7 +127,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the width andheight of a window border in pixels.
+        ///  Gets the width and height of a window border in pixels.
         /// </summary>
         public static Size GetBorderSizeForDpi(int dpi)
         {
@@ -268,7 +267,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the width, in pixels, of the arrow bitmap on the horizontal scrollbar.
         /// </summary>
-        public static int HorizontalScrollBarArrowWidth =>GetSystemMetrics(SystemMetric.SM_CXHSCROLL);
+        public static int HorizontalScrollBarArrowWidth => GetSystemMetrics(SystemMetric.SM_CXHSCROLL);
 
         /// <summary>
         ///  Gets the width of the horizontal scroll bar arrow bitmap in pixels.

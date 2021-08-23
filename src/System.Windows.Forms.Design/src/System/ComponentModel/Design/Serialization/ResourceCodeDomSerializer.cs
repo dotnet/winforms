@@ -6,7 +6,6 @@ using System.CodeDom;
 using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Resources;
 using System.Runtime.Serialization;
 
@@ -31,6 +30,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     s_defaultSerializer = new ResourceCodeDomSerializer();
                 }
+
                 return s_defaultSerializer;
             }
         }
@@ -63,6 +63,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 name = base.GetTargetComponentName(statement, expression, type);
             }
+
             return name;
         }
 
@@ -75,7 +76,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Deserilizes the given CodeDom object into a real object. This will use the serialization manager to create objects and resolve data types. The root of the object graph is returned.
+        ///  Deserializes the given CodeDom object into a real object. This will use the serialization manager to create objects and resolve data types. The root of the object graph is returned.
         /// </summary>
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
@@ -99,7 +100,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         foreach (CodeStatement element in statements)
                         {
-                            // We create the resource manager ouselves here because it's not just a straight parse of the code. Do special parsing of the resources statement
+                            // We create the resource manager ourselves here because it's not just a straight parse of the code. Do special parsing of the resources statement
                             if (element is CodeVariableDeclarationStatement statement)
                             {
                                 TraceWarningIf(!statement.Name.Equals(ResourceManagerName), "WARNING: Resource manager serializer being invoked to deserialize a collection we didn't create.");
@@ -133,6 +134,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return instance;
         }
 
@@ -146,6 +148,7 @@ namespace System.ComponentModel.Design.Serialization
                 sm.DeclarationAdded = true;
                 manager.SetName(sm, ResourceManagerName);
             }
+
             return sm;
         }
 
@@ -158,6 +161,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(manager));
             }
+
             if (type is null)
             {
                 throw new ArgumentNullException(nameof(type));
@@ -175,7 +179,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Deserilizes the given CodeDom object into a real object.  This will use the serialization manager to create objects and resolve data types.  It uses the invariant resource blob to obtain resources.
+        ///  Deserializes the given CodeDom object into a real object.  This will use the serialization manager to create objects and resolve data types.  It uses the invariant resource blob to obtain resources.
         /// </summary>
         public object DeserializeInvariant(IDesignerSerializationManager manager, string resourceName)
         {
@@ -203,8 +207,10 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     castTo = castTo.BaseType;
                 }
+
                 return castTo;
             }
+
             // Object is null. Nothing we can do
             TraceError("We need to supply a cast, but we cannot determine the cast type.");
             return null;
@@ -238,6 +244,7 @@ namespace System.ComponentModel.Design.Serialization
                 sm = new SerializationResourceManager(manager);
                 manager.Context.Append(sm);
             }
+
             return sm;
         }
 
@@ -291,9 +298,9 @@ namespace System.ComponentModel.Design.Serialization
                         if (statements != null)
                         {
                             CodeExpression[] parameters;
-                            if (manager.Context[typeof(RootContext)] is RootContext rootCxt)
+                            if (manager.Context[typeof(RootContext)] is RootContext rootCtx)
                             {
-                                string baseType = manager.GetName(rootCxt.Value);
+                                string baseType = manager.GetName(rootCtx.Value);
                                 parameters = new CodeExpression[] { new CodeTypeOfExpression(baseType) };
                             }
                             else
@@ -317,10 +324,12 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 SetExpression(manager, sm, new CodeVariableReferenceExpression(ResourceManagerName));
                             }
+
                             sm.ExpressionAdded = true;
                         }
                     }
                 }
+
                 // Retrieve the ExpressionContext on the context stack, and save the value as a resource.
                 ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
                 TraceWarningIf(tree is null, "No ExpressionContext on stack.  We can serialize, but we cannot create a well-formed name.");
@@ -365,6 +374,7 @@ namespace System.ComponentModel.Design.Serialization
                     expression = methodInvoke;
                 }
             }
+
             return expression;
         }
 
@@ -488,7 +498,7 @@ namespace System.ComponentModel.Design.Serialization
             public bool DeclarationAdded { get; set; }
 
             /// <summary>
-            ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at diffrerent times, if the declaration was added by a cached component.
+            ///  When a declaration is added, we also setup an expression other serializers can use to reference our resource declaration.  This bit tracks if we have setup this expression yet.  Note that the expression and declaration may be added at different times, if the declaration was added by a cached component.
             /// </summary>
             public bool ExpressionAdded { get; set; }
 
@@ -502,17 +512,19 @@ namespace System.ComponentModel.Design.Serialization
                     if (!_checkedLocalizationLanguage)
                     {
                         // Check to see if our base component's localizable prop is true
-                        if (_manager.Context[typeof(RootContext)] is RootContext rootCxt)
+                        if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
                         {
-                            object comp = rootCxt.Value;
+                            object comp = rootCtx.Value;
                             PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
                             if (prop != null && prop.PropertyType == typeof(CultureInfo))
                             {
                                 _localizationLanguage = (CultureInfo)prop.GetValue(comp);
                             }
                         }
+
                         _checkedLocalizationLanguage = true;
                     }
+
                     return _localizationLanguage;
                 }
             }
@@ -536,6 +548,7 @@ namespace System.ComponentModel.Design.Serialization
                             _readCulture = CultureInfo.InvariantCulture;
                         }
                     }
+
                     return _readCulture;
                 }
             }
@@ -551,6 +564,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         _resourceSets = new Hashtable();
                     }
+
                     return _resourceSets;
                 }
             }
@@ -564,11 +578,12 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     if (_rootComponent is null)
                     {
-                        if (_manager.Context[typeof(RootContext)] is RootContext rootCxt)
+                        if (_manager.Context[typeof(RootContext)] is RootContext rootCtx)
                         {
-                            _rootComponent = rootCxt.Value;
+                            _rootComponent = rootCtx.Value;
                         }
                     }
+
                     return _rootComponent;
                 }
             }
@@ -596,6 +611,7 @@ namespace System.ComponentModel.Design.Serialization
                             _writer = new ResourceWriter(new MemoryStream());
                         }
                     }
+
                     return _writer;
                 }
             }
@@ -643,10 +659,12 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     added = _propertyFillAdded.ContainsKey(value);
                 }
+
                 if (!added)
                 {
                     _propertyFillAdded[value] = value;
                 }
+
                 return !added;
             }
 
@@ -791,13 +809,16 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                             }
                         }
+
                         _mergedMetadata = t;
                     }
                 }
+
                 if (_mergedMetadata != null)
                 {
                     return _mergedMetadata.GetEnumerator();
                 }
+
                 return null;
             }
 
@@ -847,6 +868,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
                 }
+
                 return _metadata;
             }
 
@@ -892,6 +914,7 @@ namespace System.ComponentModel.Design.Serialization
                         break;
                     }
                 }
+
                 return value;
             }
 
@@ -920,6 +943,7 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 reader.Close();
                             }
+
                             ResourceTable[culture] = rs;
                         }
                         else
@@ -946,6 +970,7 @@ namespace System.ComponentModel.Design.Serialization
                         Debug.Assert(objRs == s_resourceSetSentinel, "unknown object in resourceSets: " + objRs);
                     }
                 }
+
                 return rs;
             }
 
@@ -964,7 +989,8 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     lastCulture = culture;
                     culture = culture.Parent;
-                } while (tryParents && !lastCulture.Equals(culture));
+                }
+                while (tryParents && !lastCulture.Equals(culture));
 
                 if (createIfNotExists)
                 {
@@ -1018,6 +1044,7 @@ namespace System.ComponentModel.Design.Serialization
                                 object value = resEnum.Value;
                                 invariantWriter.AddResource(name, value);
                             }
+
                             _invariantCultureResourcesDirty = false;
 
                             // Followed by the metadata.
@@ -1033,6 +1060,7 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 Debug.Fail("Metadata not supported, but it's dirty?");
                             }
+
                             _metadataResourcesDirty = false;
                         }
                         finally
@@ -1101,6 +1129,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             invariant.Remove(resourceName);
                         }
+
                         _metadataResourcesDirty = true;
                     }
                     else
@@ -1121,6 +1150,7 @@ namespace System.ComponentModel.Design.Serialization
                             t.Remove(resourceName);
                         }
                     }
+
                     _mergedMetadata = null;
                 }
 
@@ -1164,6 +1194,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             resourceSet.Remove(resourceName);
                         }
+
                         _invariantCultureResourcesDirty = true;
                     }
                 }
@@ -1220,6 +1251,7 @@ namespace System.ComponentModel.Design.Serialization
                                     }
                                 }
                             }
+
                             break;
                         default:
                             Debug.Fail("Unknown CompareValue " + comparison);
@@ -1259,6 +1291,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                         }
                     }
+
                     CodeExpression expression = tree.Expression;
                     string expressionName;
                     if (expression is CodePropertyReferenceExpression)

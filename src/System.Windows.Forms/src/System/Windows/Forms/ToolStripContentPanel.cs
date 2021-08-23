@@ -105,6 +105,7 @@ namespace System.Windows.Forms
                 {
                     ParentInternal.BackColor = Color.Transparent;
                 }
+
                 base.BackColor = value;
             }
         }
@@ -143,6 +144,7 @@ namespace System.Windows.Forms
             get => base.Dock;
             set => base.Dock = value;
         }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -249,6 +251,7 @@ namespace System.Windows.Forms
                     HandleRendererChanged(this, EventArgs.Empty);
                     rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
                 }
+
                 return rendererSwitcher;
             }
         }
@@ -326,7 +329,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRendererChanged(EventArgs e)
         {
-            // we dont want to be greedy.... if we're using TSProfessionalRenderer go DBuf, else dont.
+            // we don't want to be greedy.... if we're using TSProfessionalRenderer go DBuf, else don't.
             if (Renderer is ToolStripProfessionalRenderer)
             {
                 state[stateLastDoubleBuffer] = DoubleBuffered;

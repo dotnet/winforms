@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -28,7 +27,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Ctor_Int(int all)
         {
             var padding = new Padding(all);
@@ -79,7 +78,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_All_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -134,7 +133,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_All_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(2)
@@ -149,7 +148,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Left_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -184,7 +183,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Left_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(5)
@@ -199,7 +198,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Top_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -234,7 +233,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Top_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(5)
@@ -249,7 +248,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Right_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -284,7 +283,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Right_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(5)
@@ -299,7 +298,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Bottom_Set_GetReturnsExpected(int value)
         {
             var padding = new Padding(1, 2, 3, 4)
@@ -334,7 +333,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetIntTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetIntTheoryData))]
         public void Padding_Bottom_SetOnAll_GetReturnsExpected(int value)
         {
             var padding = new Padding(5)

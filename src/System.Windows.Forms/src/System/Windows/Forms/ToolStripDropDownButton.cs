@@ -28,26 +28,32 @@ namespace System.Windows.Forms
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text) : base(text, null, (EventHandler)null)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(Image image) : base(null, image, (EventHandler)null)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text, Image image) : base(text, image, (EventHandler)null)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text, Image image, EventHandler onClick) : base(text, image, onClick)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text, Image image, EventHandler onClick, string name) : base(text, image, onClick, name)
         {
             Initialize();
         }
+
         public ToolStripDropDownButton(string text, Image image, params ToolStripItem[] dropDownItems) : base(text, image, dropDownItems)
         {
             Initialize();
@@ -91,6 +97,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         ///  Creates an instance of the object that defines how image and text
         ///  gets laid out in the ToolStripItem
@@ -129,11 +136,12 @@ namespace System.Windows.Forms
                 else
                 {
                     // opening should happen on mouse down.
-                    Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
+                    Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
                     openMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                     ShowDropDown(/*mousePush =*/true);
                 }
             }
+
             base.OnMouseDown(e);
         }
 
@@ -142,7 +150,7 @@ namespace System.Windows.Forms
             if ((Control.ModifierKeys != Keys.Alt) &&
                 (e.Button == MouseButtons.Left))
             {
-                Debug.Assert(ParentInternal != null, "Parent is null here, not going to get accurate ID");
+                Debug.Assert(ParentInternal is not null, "Parent is null here, not going to get accurate ID");
                 byte closeMouseId = (ParentInternal is null) ? (byte)0 : ParentInternal.GetMouseId();
                 if (closeMouseId != openMouseId)
                 {
@@ -151,6 +159,7 @@ namespace System.Windows.Forms
                     Select();
                 }
             }
+
             base.OnMouseUp(e);
         }
 
@@ -159,12 +168,13 @@ namespace System.Windows.Forms
             openMouseId = 0;  // reset the mouse id, we should never get this value from toolstrip.
             base.OnMouseLeave(e);
         }
+
         /// <summary>
         ///  Inheriting classes should override this method to handle this event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 ToolStripRenderer renderer = Renderer;
                 Graphics g = e.Graphics;
@@ -180,6 +190,7 @@ namespace System.Windows.Forms
                 {
                     renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, InternalLayout.TextRectangle, ForeColor, Font, InternalLayout.TextFormat));
                 }
+
                 if (ShowDropDownArrow)
                 {
                     Rectangle dropDownArrowRect = (InternalLayout is ToolStripDropDownButtonInternalLayout layout) ? layout.DropDownArrowRect : Rectangle.Empty;
@@ -193,6 +204,7 @@ namespace System.Windows.Forms
                     {
                         arrowColor = Enabled ? SystemColors.ControlText : SystemColors.ControlDark;
                     }
+
                     renderer.DrawArrow(new ToolStripArrowRenderEventArgs(g, this, dropDownArrowRect, arrowColor, ArrowDirection.Down));
                 }
             }
@@ -200,13 +212,14 @@ namespace System.Windows.Forms
 
         protected internal override bool ProcessMnemonic(char charCode)
         {
-            // checking IsMnemonic is not necesssary - toolstrip does this for us.
+            // checking IsMnemonic is not necessary - toolstrip does this for us.
             if (HasDropDownItems)
             {
                 Select();
                 ShowDropDown();
                 return true;
             }
+
             return false;
         }
     }

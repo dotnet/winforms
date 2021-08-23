@@ -1,12 +1,11 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -43,7 +42,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void PropertyTab_CanExtend_Invoke_ReturnsTrue(object extendee)
         {
             var tab = new SubPropertyTab();
@@ -79,7 +78,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PropertyTab_Dispose_NoBitmapDisposing_Success(bool disposing)
         {
             var tab = new SubPropertyTab();
@@ -92,7 +91,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PropertyTab_Dispose_WithBitmapDisposing_Success(bool disposing)
         {
             var tab = new CustomPropertyTab();
@@ -144,7 +143,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void PropertyTab_GetProperties_Invoke_ReturnsExpected(object component)
         {
             var tab = new SubPropertyTab();

@@ -2,8 +2,9 @@
 
   <PropertyGroup>
     <OutputType>WinExe</OutputType>
-    <TargetFramework>net5.0-windows</TargetFramework>
-    <RootNamespace>Company.WinFormsApplication1</RootNamespace>
+    <TargetFramework Condition="'$(TargetFrameworkOverride)' == ''">FrameworkParameter-windows</TargetFramework>
+    <TargetFramework Condition="'$(TargetFrameworkOverride)' != ''">TargetFrameworkOverride-windows</TargetFramework>
+    <RootNamespace Condition="'$(name)' != '$(name{-VALUE-FORMS-}safe_namespace)'">Company.WinFormsApplication1</RootNamespace>
     <StartupObject>Sub Main</StartupObject>
     <LangVersion Condition="'$(langVersion)' != ''">$(ProjectLanguageVersion)</LangVersion>
     <UseWindowsForms>true</UseWindowsForms>

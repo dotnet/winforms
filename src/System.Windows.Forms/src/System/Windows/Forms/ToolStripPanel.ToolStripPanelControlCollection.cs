@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
             internal override void AddInternal(Control value)
             {
-                if (value != null)
+                if (value is not null)
                 {
                     using (new LayoutTransaction(value, value, PropertyNames.Parent))
                     {

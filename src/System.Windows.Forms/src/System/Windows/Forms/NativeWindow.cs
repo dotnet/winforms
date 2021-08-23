@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -73,11 +72,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Cache window DpiContext awareness information that helps to create handle with right context at the later time.
+        /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
-        internal IntPtr DpiAwarenessContext { get; } = DpiHelper.IsScalingRequirementMet
-            ? User32.GetThreadDpiAwarenessContext()
-            : User32.UNSPECIFIED_DPI_AWARENESS_CONTEXT;
+        internal IntPtr DpiAwarenessContext { get; } = User32.GetThreadDpiAwarenessContext();
 
         /// <summary>
         ///  Override's the base object's finalize method.
@@ -274,6 +271,7 @@ namespace System.Windows.Forms
                             Debug.Assert(window.PreviousWindow._nextWindow is null, "Last window in chain should have null next ptr");
                             window.PreviousWindow._nextWindow = window;
                         }
+
                         oldRoot.Free();
                     }
                 }
@@ -367,7 +365,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (_weakThisPtr.IsAlive && _weakThisPtr.Target != null)
+                if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
                 {
                     WndProc(ref m);
                 }
@@ -382,6 +380,7 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 OnThreadException(e);
             }
             finally
@@ -452,7 +451,7 @@ namespace System.Windows.Forms
                                 // CreateWindowEx throws if WindowText is greater than the max
                                 // length of a 16 bit int (32767).
                                 // If it exceeds the max, we should take the substring....
-                                if (cp.Caption != null && cp.Caption.Length > short.MaxValue)
+                                if (cp.Caption is not null && cp.Caption.Length > short.MaxValue)
                                 {
                                     cp.Caption = cp.Caption.Substring(0, short.MaxValue);
                                 }
@@ -490,6 +489,7 @@ namespace System.Windows.Forms
                     {
                         throw new Win32Exception(lastWin32Error, SR.ErrorCreatingHandle);
                     }
+
                     _ownHandle = true;
                 }
             }
@@ -512,6 +512,7 @@ namespace System.Windows.Forms
                     m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return;
                 }
+
                 m.Result = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
             else
@@ -563,6 +564,7 @@ namespace System.Windows.Forms
             {
                 return (NativeWindow)value.Target;
             }
+
             return null;
         }
 
@@ -604,7 +606,7 @@ namespace System.Windows.Forms
             // If we still have windows allocated, we must sling them to userDefWindowProc
             // or else they will AV if they get a message after the managed code has been
             // removed.  In debug builds, we assert and give the "ToString" of the native
-            // window. In retail we just detatch the window proc and let it go.  Note that
+            // window. In retail we just detach the window proc and let it go.  Note that
             // we cannot call DestroyWindow because this API will fail if called from
             // an incorrect thread.
 
@@ -628,7 +630,7 @@ namespace System.Windows.Forms
                             if (entry.Value.IsAllocated)
                             {
                                 NativeWindow w = (NativeWindow)entry.Value.Target;
-                                if (w != null)
+                                if (w is not null)
                                 {
                                     w.Handle = IntPtr.Zero;
                                 }
@@ -691,7 +693,7 @@ namespace System.Windows.Forms
 
                 Handle = IntPtr.Zero;
 
-                if (_weakThisPtr.IsAlive && _weakThisPtr.Target != null)
+                if (_weakThisPtr.IsAlive && _weakThisPtr.Target is not null)
                 {
                     // We're not already finalizing.
                     OnHandleChange();
@@ -714,13 +716,13 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (window.PreviousWindow != null)
+                if (window.PreviousWindow is not null)
                 {
                     // Connect the prior window directly to the next window (if any)
                     window.PreviousWindow._nextWindow = window._nextWindow;
                 }
 
-                if (window._nextWindow != null)
+                if (window._nextWindow is not null)
                 {
                     // Connect the next window to the prior window
                     window._nextWindow._priorWindowProcHandle = window._priorWindowProcHandle;
@@ -737,7 +739,7 @@ namespace System.Windows.Forms
                         root.Free();
                     }
 
-                    if (window.PreviousWindow != null)
+                    if (window.PreviousWindow is not null)
                     {
                         s_windowHandles[handle] = GCHandle.Alloc(window.PreviousWindow, GCHandleType.Weak);
                     }
@@ -785,6 +787,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.ApplicationCannotChangeApplicationExceptionMode);
             }
+
             if (threadScope && t_anyHandleCreated)
             {
                 throw new InvalidOperationException(SR.ApplicationCannotChangeThreadExceptionMode);
@@ -801,6 +804,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = 0;
                     }
+
                     break;
                 case UnhandledExceptionMode.ThrowException:
                     if (threadScope)
@@ -811,6 +815,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = UseDebuggableWndProc | InitializedFlags;
                     }
+
                     break;
                 case UnhandledExceptionMode.CatchException:
                     if (threadScope)
@@ -821,6 +826,7 @@ namespace System.Windows.Forms
                     {
                         s_userSetProcFlagsForApp = InitializedFlags;
                     }
+
                     break;
                 default:
                     throw new InvalidEnumArgumentException(nameof(mode), (int)mode, typeof(UnhandledExceptionMode));

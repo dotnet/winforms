@@ -234,6 +234,7 @@ namespace System.Windows.Forms
                             break;
                     }
                 }
+
                 return cp;
             }
         }
@@ -729,7 +730,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            Debug.Assert(_wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too smal");
+            Debug.Assert(_wheelDelta > -NativeMethods.WHEEL_DELTA, "wheelDelta is too small");
             Debug.Assert(_wheelDelta < NativeMethods.WHEEL_DELTA, "wheelDelta is too big");
             _wheelDelta += e.Delta;
 
@@ -830,14 +831,14 @@ namespace System.Windows.Forms
             clientArea.Inflate(-borderWidth, -borderWidth);
 
             // Reposition and resize the upDownEdit control
-            if (_upDownEdit != null)
+            if (_upDownEdit is not null)
             {
                 upDownEditBounds = clientArea;
                 upDownEditBounds.Size = new Size(clientArea.Width - _defaultButtonsWidth, clientArea.Height);
             }
 
             // Reposition and resize the updown buttons
-            if (_upDownButtons != null)
+            if (_upDownButtons is not null)
             {
                 int borderFixup = (themed) ? 1 : 2;
                 if (borderStyle == BorderStyle.None)
@@ -865,11 +866,12 @@ namespace System.Windows.Forms
             }
 
             // Apply locations
-            if (_upDownEdit != null)
+            if (_upDownEdit is not null)
             {
                 _upDownEdit.Bounds = upDownEditBounds;
             }
-            if (_upDownButtons != null)
+
+            if (_upDownButtons is not null)
             {
                 _upDownButtons.Bounds = upDownButtonsBounds;
                 _upDownButtons.Invalidate();
@@ -886,7 +888,7 @@ namespace System.Windows.Forms
         /// </summary>
         private MouseEventArgs TranslateMouseEvent(Control child, MouseEventArgs e)
         {
-            if (child != null && IsHandleCreated)
+            if (child is not null && IsHandleCreated)
             {
                 // Same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.
@@ -946,8 +948,10 @@ namespace System.Windows.Forms
                         {
                             User32.SetFocus(new HandleRef(TextBox, TextBox.Handle));
                         }
+
                         base.WndProc(ref m);
                     }
+
                     break;
                 case User32.WM.KILLFOCUS:
                     DefWndProc(ref m);
@@ -958,8 +962,14 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void SetToolTip(ToolTip toolTip, string caption)
+        internal override void SetToolTip(ToolTip toolTip)
         {
+            if (toolTip is null)
+            {
+                return;
+            }
+
+            string caption = toolTip.GetToolTip(this);
             toolTip.SetToolTip(_upDownEdit, caption);
             toolTip.SetToolTip(_upDownButtons, caption);
         }

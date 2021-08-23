@@ -25,6 +25,7 @@ namespace System.ComponentModel.Design.Serialization
                     GetReflectionTypeFromTypeHelper(manager, typeof(IContainer))
                 };
             }
+
             return _containerConstructor;
         }
 
@@ -70,6 +71,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     props = TypeDescriptor.GetProperties(comp);
                 }
+
                 foreach (PropertyDescriptor property in props)
                 {
                     if (typeof(IComponent).IsAssignableFrom(property.PropertyType) &&
@@ -155,7 +157,7 @@ namespace System.ComponentModel.Design.Serialization
 
                     statements = new CodeStatementCollection();
                     CodeTypeDeclaration typeDecl = manager.Context[typeof(CodeTypeDeclaration)] as CodeTypeDeclaration;
-                    RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
+                    RootContext rootCtx = manager.Context[typeof(RootContext)] as RootContext;
                     CodeExpression assignLhs = null;
                     CodeExpression assignRhs;
 
@@ -183,7 +185,7 @@ namespace System.ComponentModel.Design.Serialization
                             // property and would still serialize it.  This code reverses what the
                             // outer if block does for this specific case.  We also need this
                             // for Everett / 1.0 backwards compat.
-                            if (!(manager.Context[typeof(ExpressionContext)] is ExpressionContext expCxt) || expCxt.PresetValue != value)
+                            if (!(manager.Context[typeof(ExpressionContext)] is ExpressionContext expCtx) || expCtx.PresetValue != value)
                             {
                                 isComplete = true;
                             }
@@ -210,7 +212,7 @@ namespace System.ComponentModel.Design.Serialization
                             generateObject = false;
                         }
 
-                        if (rootCxt is null)
+                        if (rootCtx is null)
                         {
                             generateLocal = true;
                             generateField = false;
@@ -238,17 +240,17 @@ namespace System.ComponentModel.Design.Serialization
                                     // We need to generate the field declaration.  See if there is a modifiers property on
                                     // the object.  If not, look for a DefaultModifies, and finally assume it's private.
                                     CodeMemberField field = new CodeMemberField(typeName, name);
-                                    PropertyDescriptor modifersProp = props["Modifiers"];
+                                    PropertyDescriptor modifiersProp = props["Modifiers"];
                                     MemberAttributes fieldAttrs;
 
-                                    if (modifersProp is null)
+                                    if (modifiersProp is null)
                                     {
-                                        modifersProp = props["DefaultModifiers"];
+                                        modifiersProp = props["DefaultModifiers"];
                                     }
 
-                                    if (modifersProp != null && modifersProp.PropertyType == typeof(MemberAttributes))
+                                    if (modifiersProp != null && modifiersProp.PropertyType == typeof(MemberAttributes))
                                     {
-                                        fieldAttrs = (MemberAttributes)modifersProp.GetValue(value);
+                                        fieldAttrs = (MemberAttributes)modifiersProp.GetValue(value);
                                     }
                                     else
                                     {
@@ -262,7 +264,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
 
                                 // Next, create a nice LHS for our pending assign statement, when we hook up the variable.
-                                assignLhs = new CodeFieldReferenceExpression(rootCxt.Expression, name);
+                                assignLhs = new CodeFieldReferenceExpression(rootCtx.Expression, name);
                             }
                             else
                             {
@@ -352,6 +354,7 @@ namespace System.ComponentModel.Design.Serialization
                                 string fullName = typeof(ISupportInitialize).FullName;
                                 supportInitialize = manager.GetType(fullName) != null;
                             }
+
                             Type reflectionType = null;
                             if (supportInitialize)
                             {
@@ -371,11 +374,13 @@ namespace System.ComponentModel.Design.Serialization
                                 string fullName = typeof(IPersistComponentSettings).FullName;
                                 persistSettings = manager.GetType(fullName) != null;
                             }
+
                             if (persistSettings)
                             {
                                 reflectionType = reflectionType ?? GetReflectionTypeHelper(manager, value);
                                 persistSettings = GetReflectionTypeFromTypeHelper(manager, typeof(IPersistComponentSettings)).IsAssignableFrom(reflectionType);
                             }
+
                             // We implement statement caching only for the main code generation phase.  We don't implement it for other
                             // serialization managers.  How do we tell the difference?  The main serialization manager exists as a service.
                             IDesignerSerializationManager mainManager = manager.GetService(typeof(IDesignerSerializationManager)) as IDesignerSerializationManager;
@@ -431,12 +436,13 @@ namespace System.ComponentModel.Design.Serialization
                                         }
                                     }
                                 }
+
                                 entry.Component = value;
                                 // we need to link the cached entry with its corresponding component right away, before it's put in the context
                                 // see CodeDomSerializerBase.cs::GetExpression for usage
 
                                 // This entry will only be used if the valid bit is set.
-                                // This is useful because we still need to setup depedency relationships
+                                // This is useful because we still need to setup dependency relationships
                                 // between components even if they are not cached.  See VSWhidbey 263053.
                                 bool correctManager = manager == mainManager;
                                 entry.Valid = correctManager && CanCacheComponent(manager, value, props);
@@ -472,7 +478,7 @@ namespace System.ComponentModel.Design.Serialization
 
                                         //
                                         // cache the statements for future usage if possible. We only do this for the main serialization manager, not
-                                        // for any other seriallization managers that may be calling us for undo or clipboard functions.
+                                        // for any other serialization managers that may be calling us for undo or clipboard functions.
                                         if (correctManager && cache != null && cache.Enabled)
                                         {
                                             cache[value] = entry;
@@ -500,7 +506,7 @@ namespace System.ComponentModel.Design.Serialization
                                 }
                             }
 
-                            // Regarless, apply statements.  Either we created them or we got them
+                            // Regardless, apply statements.  Either we created them or we got them
                             // out of the cache.
                             statements.AddRange(entry.Statements);
 

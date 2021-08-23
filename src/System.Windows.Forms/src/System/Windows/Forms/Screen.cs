@@ -4,9 +4,7 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Drawing;
-using System.Threading;
 using Microsoft.Win32;
 using static Interop;
 
@@ -15,7 +13,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  Represents a display device or multiple display devices on a single system.
     /// </summary>
-    public class Screen
+    public partial class Screen
     {
         readonly IntPtr hmonitor;
         /// <summary>
@@ -38,7 +36,7 @@ namespace System.Windows.Forms
 
         readonly int bitDepth;
 
-        private static readonly object syncLock = new object();//used to lock this class before sync'ing to SystemEvents
+        private static readonly object syncLock = new object();//used to lock this class before syncing to SystemEvents
 
         private static int desktopChangedCount = -1;//static counter of desktop size changes
 
@@ -87,6 +85,7 @@ namespace System.Windows.Forms
                     screenDC = Gdi32.CreateDC(deviceName, null, null, IntPtr.Zero);
                 }
             }
+
             hmonitor = monitor;
 
             bitDepth = Gdi32.GetDeviceCaps(screenDC, Gdi32.DeviceCapability.BITSPIXEL);
@@ -202,6 +201,7 @@ namespace System.Windows.Forms
                             return screens[i];
                         }
                     }
+
                     return null;
                 }
                 else
@@ -270,6 +270,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return desktopChangedCount;
             }
         }
@@ -287,6 +288,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -362,6 +364,7 @@ namespace System.Windows.Forms
         {
             return Screen.FromPoint(pt).WorkingArea;
         }
+
         /// <summary>
         ///  Retrieves the working area for the monitor that contains the largest region
         ///  of the specified rectangle.
@@ -370,6 +373,7 @@ namespace System.Windows.Forms
         {
             return Screen.FromRectangle(rect).WorkingArea;
         }
+
         /// <summary>
         ///  Retrieves the working area for the monitor that contains the largest
         ///  region of the specified control.
@@ -387,6 +391,7 @@ namespace System.Windows.Forms
         {
             return Screen.FromPoint(pt).Bounds;
         }
+
         /// <summary>
         ///  Retrieves the bounds of the monitor that contains the largest region of the
         ///  specified rectangle.
@@ -395,6 +400,7 @@ namespace System.Windows.Forms
         {
             return Screen.FromRectangle(rect).Bounds;
         }
+
         /// <summary>
         ///  Retrieves the bounds of the monitor
         ///  that contains the largest region of the specified control.
@@ -407,7 +413,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Computes and retrieves a hash code for an object.
         /// </summary>
-        public override int GetHashCode() => (int)hmonitor;
+        public override int GetHashCode() => PARAM.ToInt(hmonitor);
 
         /// <summary>
         ///  Called by the SystemEvents class when our display settings are
@@ -445,17 +451,6 @@ namespace System.Windows.Forms
         public override string ToString()
         {
             return GetType().Name + "[Bounds=" + bounds.ToString() + " WorkingArea=" + WorkingArea.ToString() + " Primary=" + primary.ToString() + " DeviceName=" + deviceName;
-        }
-
-        private class MonitorEnumCallback
-        {
-            public ArrayList screens = new ArrayList();
-
-            public virtual BOOL Callback(IntPtr monitor, Gdi32.HDC hdc, IntPtr lprcMonitor, IntPtr lparam)
-            {
-                screens.Add(new Screen(monitor, hdc));
-                return BOOL.TRUE;
-            }
         }
     }
 }

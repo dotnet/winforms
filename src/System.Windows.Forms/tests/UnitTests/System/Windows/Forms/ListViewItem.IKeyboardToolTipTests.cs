@@ -2,15 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Reflection;
 using Xunit;
 using static System.Windows.Forms.ListViewItem;
-using static System.Windows.Forms.ListViewItem.ListViewSubItem;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -423,10 +417,7 @@ namespace System.Windows.Forms.Tests
             IList<Rectangle> neighboringToolsRectangles = ((IKeyboardToolTip)listView.Items[0]).GetNeighboringToolsRectangles();
             Assert.Equal(2, neighboringToolsRectangles.Count);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[1]), neighboringToolsRectangles);
-
-            // Due to a https://github.com/dotnet/winforms/issues/4205 the bottom element is detected incorrectly.
-            // We will need to update this test after the fix.
-            Assert.Contains(GetNativeScreenRectangle(listView.Items[6]), neighboringToolsRectangles);
+            Assert.Contains(GetNativeScreenRectangle(listView.Items[3]), neighboringToolsRectangles);
         }
 
         // The ListView is configured to display items as follows:
@@ -447,10 +438,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(3, neighboringToolsRectangles.Count);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[0]), neighboringToolsRectangles);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[2]), neighboringToolsRectangles);
-
-            // Due to a https://github.com/dotnet/winforms/issues/4205 the bottom element is detected incorrectly.
-            // We will need to update this test after the fix.
-            Assert.Contains(GetNativeScreenRectangle(listView.Items[7]), neighboringToolsRectangles);
+            Assert.Contains(GetNativeScreenRectangle(listView.Items[4]), neighboringToolsRectangles);
         }
 
         // The ListView is configured to display items as follows:
@@ -470,10 +458,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(2, neighboringToolsRectangles.Count);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[1]), neighboringToolsRectangles);
-
-            // Due to a https://github.com/dotnet/winforms/issues/4205 the bottom element is detected incorrectly.
-            // We will need to update this test after the fix.
-            Assert.Contains(GetNativeScreenRectangle(listView.Items[8]), neighboringToolsRectangles);
+            Assert.Contains(GetNativeScreenRectangle(listView.Items[5]), neighboringToolsRectangles);
         }
 
         // The ListView is configured to display items as follows:
@@ -491,12 +476,10 @@ namespace System.Windows.Forms.Tests
 
             IList<Rectangle> neighboringToolsRectangles = ((IKeyboardToolTip)listView.Items[3]).GetNeighboringToolsRectangles();
 
-            Assert.Equal(2, neighboringToolsRectangles.Count);
+            Assert.Equal(3, neighboringToolsRectangles.Count);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[0]), neighboringToolsRectangles);
-
-            // Due to a https://github.com/dotnet/winforms/issues/4205 the bottom element is detected incorrectly.
-            // We will need to update this test after the fix.
             Assert.Contains(GetNativeScreenRectangle(listView.Items[4]), neighboringToolsRectangles);
+            Assert.Contains(GetNativeScreenRectangle(listView.Items[6]), neighboringToolsRectangles);
         }
 
         // The ListView is configured to display items as follows:
@@ -514,12 +497,11 @@ namespace System.Windows.Forms.Tests
 
             IList<Rectangle> neighboringToolsRectangles = ((IKeyboardToolTip)listView.Items[4]).GetNeighboringToolsRectangles();
 
-            // Due to a https://github.com/dotnet/winforms/issues/4205 the bottom element is detected incorrectly.
-            // We will need to update this test after the fix.
-            Assert.Equal(3, neighboringToolsRectangles.Count);
+            Assert.Equal(4, neighboringToolsRectangles.Count);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[1]), neighboringToolsRectangles);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[3]), neighboringToolsRectangles);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[5]), neighboringToolsRectangles);
+            Assert.Contains(GetNativeScreenRectangle(listView.Items[7]), neighboringToolsRectangles);
         }
 
         // The ListView is configured to display items as follows:
@@ -537,11 +519,10 @@ namespace System.Windows.Forms.Tests
 
             IList<Rectangle> neighboringToolsRectangles = ((IKeyboardToolTip)listView.Items[5]).GetNeighboringToolsRectangles();
 
-            // Due to a https://github.com/dotnet/winforms/issues/4205 the bottom element is detected incorrectly.
-            // We will need to update this test after the fix.
-            Assert.Equal(2, neighboringToolsRectangles.Count);
+            Assert.Equal(3, neighboringToolsRectangles.Count);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[2]), neighboringToolsRectangles);
             Assert.Contains(GetNativeScreenRectangle(listView.Items[4]), neighboringToolsRectangles);
+            Assert.Contains(GetNativeScreenRectangle(listView.Items[8]), neighboringToolsRectangles);
         }
 
         // The ListView is configured to display items as follows:

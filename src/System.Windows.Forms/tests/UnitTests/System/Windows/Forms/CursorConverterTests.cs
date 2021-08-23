@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
-using System.Linq;
-using System.IO;
 using System.Reflection;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -17,7 +14,7 @@ namespace System.Windows.Forms.Tests
     public class CursorConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(string), true)]
         [InlineData(typeof(byte[]), true)]
         [InlineData(typeof(Cursor), false)]

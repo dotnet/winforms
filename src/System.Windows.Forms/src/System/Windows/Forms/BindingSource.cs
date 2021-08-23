@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -32,7 +31,7 @@ namespace System.Windows.Forms
         private static readonly object s_eventBindingComplete = new object();
         private static readonly object s_eventCurrentChanged = new object();
         private static readonly object s_eventCurrentItemChanged = new object();
-        private static readonly object s_eventDataErrror = new object();
+        private static readonly object s_eventDataError = new object();
         private static readonly object s_eventDataMemberChanged = new object();
         private static readonly object s_eventDataSourceChanged = new object();
         private static readonly object s_eventListChanged = new object();
@@ -122,6 +121,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             if (_allowNewIsSet)
             {
                 return _allowNewSetValue;
@@ -426,8 +426,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.BindingSourceDataErrorEventHandlerDescr))]
         public event BindingManagerDataErrorEventHandler DataError
         {
-            add => Events.AddHandler(s_eventDataErrror, value);
-            remove => Events.RemoveHandler(s_eventDataErrror, value);
+            add => Events.AddHandler(s_eventDataError, value);
+            remove => Events.RemoveHandler(s_eventDataError, value);
         }
 
         [SRCategory(nameof(SR.CatData))]
@@ -603,7 +603,7 @@ namespace System.Windows.Forms
         ///  global object who's lifetime exceeds the lifetime of the parent form. Otherwise
         ///  the BindingSource (and any components bound through it) will end up in limbo,
         ///  still processing list change events, etc. And when unhooking from the data source,
-        ///  take care not to trigger any events that could confuse compoents bound to us.
+        ///  take care not to trigger any events that could confuse components bound to us.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -621,6 +621,7 @@ namespace System.Windows.Forms
                 _needToSetList = true;
                 RaiseListChangedEvents = false;
             }
+
             _disposedOrFinalized = true;
             base.Dispose(disposing);
         }
@@ -784,6 +785,7 @@ namespace System.Windows.Forms
             {
                 index = ((IList)this).IndexOf(sender);
             }
+
             OnListChanged(new ListChangedEventArgs(ListChangedType.ItemChanged, index));
         }
 
@@ -840,7 +842,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnDataError(BindingManagerDataErrorEventArgs e)
         {
-            BindingManagerDataErrorEventHandler eh = Events[s_eventDataErrror] as BindingManagerDataErrorEventHandler;
+            BindingManagerDataErrorEventHandler eh = Events[s_eventDataError] as BindingManagerDataErrorEventHandler;
             eh?.Invoke(this, e);
         }
 
@@ -893,6 +895,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             try
             {
                 _parentsCurrentItemChanging = true;
@@ -1044,6 +1047,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNotAllowed);
             }
+
             if (Position < 0 || Position >= Count)
             {
                 throw new InvalidOperationException(SR.BindingSourceRemoveCurrentNoCurrentItem);
@@ -1136,6 +1140,7 @@ namespace System.Windows.Forms
                         _listExtractedFromEnumerable = true;
                     }
                 }
+
                 // If it's not an IList, IListSource or IEnumerable
                 if (bindingList is null)
                 {
@@ -1196,7 +1201,7 @@ namespace System.Windows.Forms
             // Determine whether the new list converts PropertyChanged events on its items into ListChanged events.
             // If it does, then the BindingSource won't need to hook the PropertyChanged events itself. If the list
             // implements IRaiseItemChangedEvents, we can ask it directly. Otherwise we will assume that any list
-            // which impements IBindingList automatically supports this capability.
+            // which implements IBindingList automatically supports this capability.
             if (listInternal is IRaiseItemChangedEvents)
             {
                 _listRaisesItemChangedEvents = (listInternal as IRaiseItemChangedEvents).RaisesItemChangedEvents;
@@ -1235,6 +1240,7 @@ namespace System.Windows.Forms
                 {
                     InnerListSort = Sort;
                 }
+
                 if (Filter is not null)
                 {
                     InnerListFilter = Filter;
@@ -1253,7 +1259,7 @@ namespace System.Windows.Forms
         internal virtual bool ShouldSerializeAllowNew() => _allowNewIsSet;
 
         /// <summary>
-        ///  Hooks property changed events for the NEW current item, if nececssary
+        ///  Hooks property changed events for the NEW current item, if necessary
         /// </summary>
         private void HookItemChangedEventsForNewCurrent()
         {
@@ -1460,6 +1466,7 @@ namespace System.Windows.Forms
                     {
                         return 0;
                     }
+
                     if (_recursionDetectionFlag)
                     {
                         throw new InvalidOperationException(SR.BindingSourceRecursionDetected);
@@ -1602,7 +1609,7 @@ namespace System.Windows.Forms
             // Remember this since EndEdit() below will clear it
             int saveAddNew = _addNewPos;
 
-            // Commit any uncomitted list changes now
+            // Commit any uncommitted list changes now
             EndEdit();
 
             // We just committed a new item; mimic DataView and fire an ItemAdded event for it here

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -230,6 +229,10 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ProfessionalColorsSeparatorLightDescr))]
         public virtual Color SeparatorLight => FromKnownColor(KnownColors.msocbvcrCBSplitterLineLight);
 
+        [SRDescription(nameof(SR.ProfessionalColorsStatusStripBorderDescr))]
+        // Note: the color is retained for backwards compatibility
+        public virtual Color StatusStripBorder => SystemColors.ButtonHighlight;
+
         [SRDescription(nameof(SR.ProfessionalColorsStatusStripGradientBeginDescr))]
         public virtual Color StatusStripGradientBegin => FromKnownColor(KnownColors.msocbvcrCBGradMainMenuHorzBegin);
 
@@ -334,7 +337,7 @@ namespace System.Windows.Forms
         private void InitCommonColors(ref Dictionary<KnownColors, Color> rgbTable)
         {
             // We need to calculate our own alpha blended color based on the Highlight and Window
-            // colors on the system. Since terminalserver + alphablending doesnt work we cant just do a
+            // colors on the system. Since terminalserver + alphablending doesnt work we can't just do a
             // FromARGB here. So we have a simple function which calculates the blending for us.
             if (!DisplayInformation.LowResolution)
             {
@@ -365,7 +368,7 @@ namespace System.Windows.Forms
 
             InitCommonColors(ref rgbTable);
 
-            // use locals so we arent fetching again and again.
+            // use locals so we aren't fetching again and again.
             Color buttonFace = SystemColors.ButtonFace;
             Color buttonShadow = SystemColors.ButtonShadow;
             Color highlight = SystemColors.Highlight;
@@ -431,6 +434,7 @@ namespace System.Windows.Forms
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBMenuBkgd] = GetAlphaBlendedColorHighRes(null, buttonFace, window, 143);
                 rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBSplitterLine] = GetAlphaBlendedColorHighRes(null, buttonShadow, window, 70);
             }
+
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBCtlBkgdSelected] = (lowResolution) ? SystemColors.ControlLight : highlight;
 
             rgbTable[ProfessionalColorTable.KnownColors.msocbvcrCBBdrOuterDocked] = buttonFace;

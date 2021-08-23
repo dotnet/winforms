@@ -29,7 +29,7 @@ namespace System.ComponentModel.Design
         private bool _ignoreChangingEvents;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor'/> class using the specified collection type.
+        ///  Initializes a new instance of the <see cref='CollectionEditor'/> class using the specified collection type.
         /// </summary>
         public CollectionEditor(Type type)
         {
@@ -127,7 +127,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This Function gets the object from the givem object. The input is an arrayList returned as an Object.
+        ///  This Function gets the object from the given object. The input is an arrayList returned as an Object.
         ///  The output is a arraylist which contains the individual objects that need to be created.
         /// </summary>
         protected virtual IList GetObjectsFromInstance(object instance) => new ArrayList { instance };
@@ -219,7 +219,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Edits the specified object value using the editor style  provided by <see cref='System.ComponentModel.Design.CollectionEditor.GetEditStyle'/>.
+        ///  Edits the specified object value using the editor style  provided by <see cref='GetEditStyle'/>.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
@@ -532,6 +532,7 @@ namespace System.ComponentModel.Design
                     base.OnLostFocus(e);
                     return;
                 }
+
                 if (!State.Equals(PushButtonState.Pressed) && !State.Equals(PushButtonState.Disabled))
                 {
                     State = PushButtonState.Normal;
@@ -645,7 +646,7 @@ namespace System.ComponentModel.Design
 
                 PaintArrow(g, _dropDownRectangle);
 
-                // If we dont' use mnemonic, set formatFlag to NoPrefix as this will show ampersand.
+                // If we don't use mnemonic, set formatFlag to NoPrefix as this will show ampersand.
                 if (!UseMnemonic)
                 {
                     formatFlags |= TextFormatFlags.NoPrefix;
@@ -675,7 +676,8 @@ namespace System.ComponentModel.Design
                 // If the width is odd - favor pushing it over one pixel right.
                 middle.X += (dropDownRect.Width % 2);
 
-                Point[] arrow = new Point[] {
+                Point[] arrow = new Point[]
+                {
                     new Point(middle.X - s_offset2X, middle.Y - 1),
                     new Point(middle.X + s_offset2X + 1, middle.Y - 1),
                     new Point(middle.X, middle.Y + s_offset2Y)
@@ -765,6 +767,7 @@ namespace System.ComponentModel.Design
                     ScaleButtonImageLogicalToDevice(_downButton);
                     ScaleButtonImageLogicalToDevice(_upButton);
                 }
+
                 Text = string.Format(SR.CollectionEditorCaption, CollectionItemType.Name);
 
                 HookEvents();
@@ -781,6 +784,7 @@ namespace System.ComponentModel.Design
                         _addDownMenu.Items.Add(new TypeMenuItem(newItemTypes[i], addDownMenuClick));
                     }
                 }
+
                 AdjustListBoxItemHeight();
             }
 
@@ -805,6 +809,7 @@ namespace System.ComponentModel.Design
                             }
                         }
                     }
+
                     return true;
                 }
             }
@@ -878,9 +883,10 @@ namespace System.ComponentModel.Design
                     {
                         items[i] = ((ListItem)_listbox.Items[i]).Value;
                     }
+
                     Items = items;
 
-                    // If omeone changes the edit value which resets the selindex, we
+                    // If someone changes the edit value which resets the selindex, we
                     // should keep the new index.
                     if (_listbox.Items.Count > 0 && _listbox.SelectedIndex != _listbox.Items.Count - 1)
                     {
@@ -920,7 +926,7 @@ namespace System.ComponentModel.Design
                 int c = Math.Max(2, _listbox.Items.Count);
                 SizeF sizeW = g.MeasureString(c.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
-                int charactersInNumber = ((int)(Math.Log((double)(c - 1)) / s_log10) + 1);
+                int charactersInNumber = ((int)(Math.Log(c - 1) / s_log10) + 1);
                 int w = 4 + charactersInNumber * (Font.Height / 2);
 
                 w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
@@ -932,6 +938,7 @@ namespace System.ComponentModel.Design
                 {
                     pic = PaintWidth + TextIndent;
                 }
+
                 return (int)Math.Ceiling(size.Width) + w + pic + SystemInformation.BorderSize.Width * 4;
             }
 
@@ -958,18 +965,21 @@ namespace System.ComponentModel.Design
                         if (items.Length > 0 && items[0] is IComponent && ((IComponent)items[0]).Site != null)
                         {
                             // here we bail now because we don't want to do the "undo" manually,
-                            // we're part of a trasaction, we've added item, the rollback will be
+                            // we're part of a transaction, we've added item, the rollback will be
                             // handled by the undo engine because the component in the collection are sited
-                            // doing it here kills perfs because the undo of the transaction has to rollback the remove and then
+                            // doing it here kills perf because the undo of the transaction has to roll back the remove and then
                             // rollback the add. This is useless and is only needed for non sited component or other classes
                             return;
                         }
+
                         for (int i = 0; i < items.Length; i++)
                         {
                             DestroyInstance(items[i]);
                         }
+
                         _createdItems.Clear();
                     }
+
                     if (_removedItems != null)
                     {
                         _removedItems.Clear();
@@ -985,6 +995,7 @@ namespace System.ComponentModel.Design
                         {
                             items[i] = _originalItems[i];
                         }
+
                         Items = items;
                         _originalItems.Clear();
                     }
@@ -1245,6 +1256,7 @@ namespace System.ComponentModel.Design
                                 max = w;
                             }
                         }
+
                         _listbox.HorizontalExtent = max;
                     }
                 }
@@ -1266,7 +1278,7 @@ namespace System.ComponentModel.Design
                     // We add the +4 is a fudge factor...
                     SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
-                    int charactersInNumber = ((int)(Math.Log((double)maxC) / s_log10) + 1);// Luckily, this is never called if count = 0
+                    int charactersInNumber = ((int)(Math.Log(maxC) / s_log10) + 1);// Luckily, this is never called if count = 0
                     int w = 4 + charactersInNumber * (Font.Height / 2);
 
                     w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));
@@ -1286,6 +1298,7 @@ namespace System.ComponentModel.Design
                         backColor = SystemColors.Highlight;
                         textColor = SystemColors.HighlightText;
                     }
+
                     Rectangle res = new Rectangle(e.Bounds.X + offset, e.Bounds.Y,
                                                   e.Bounds.Width - offset,
                                                   e.Bounds.Height);
@@ -1294,6 +1307,7 @@ namespace System.ComponentModel.Design
                     {
                         ControlPaint.DrawFocusRectangle(g, res);
                     }
+
                     offset += 2;
 
                     if (item.Editor != null && item.Editor.GetPaintValueSupported())
@@ -1406,6 +1420,7 @@ namespace System.ComponentModel.Design
                         {
                             DestroyInstance(deadItems[i]);
                         }
+
                         _removedItems.Clear();
                     }
 
@@ -1457,6 +1472,7 @@ namespace System.ComponentModel.Design
                 {
                     _originalItems = new ArrayList();
                 }
+
                 _originalItems.Clear();
 
                 // Now update the list box.
@@ -1473,6 +1489,7 @@ namespace System.ComponentModel.Design
                             _listbox.Items.Add(new ListItem(_editor, items[i]));
                             _originalItems.Add(items[i]);
                         }
+
                         if (_listbox.Items.Count > 0)
                         {
                             _listbox.SelectedIndex = 0;
@@ -1532,6 +1549,7 @@ namespace System.ComponentModel.Design
                         {
                             RemoveInternal((ListItem)_listbox.SelectedItem);
                         }
+
                         if (index < _listbox.Items.Count)
                         {
                             _listbox.SelectedIndex = index;
@@ -1658,6 +1676,7 @@ namespace System.ComponentModel.Design
                     BeginInvoke(new MethodInvoker(UpdateEnabled));
                 }
             }
+
             /// <summary>
             ///  Used to prevent flicker when playing with the list box selection call resume when done.
             ///  Calls to UpdateEnabled will return silently until Resume is called
@@ -1936,6 +1955,7 @@ namespace System.ComponentModel.Design
                     {
                         li.Value = value;
                     }
+
                     _control.Invalidate();
                     OnValueChanged(component, EventArgs.Empty);
                 }
@@ -2028,7 +2048,7 @@ namespace System.ComponentModel.Design
                 /// <summary>
                 ///  Retrieves the object that directly depends on this value being edited.
                 ///  This is generally the object that is required for the PropertyDescriptor's GetValue and SetValue  methods.
-                ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descripotor implemementation should return the default object,
+                ///  If 'null' is passed for the PropertyDescriptor, the ICustomComponent descriptor implementation should return the default object,
                 ///  that is the main object that exposes the properties and attributes
                 /// </summary>
                 object ICustomTypeDescriptor.GetPropertyOwner(PropertyDescriptor pd)
@@ -2166,6 +2186,7 @@ namespace System.ComponentModel.Design
                                 User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
                             }
                         }
+
                         break;
 
                     case User32.WM.CHAR:
@@ -2194,14 +2215,16 @@ namespace System.ComponentModel.Design
                             User32.SendMessageW(hWnd, User32.WM.CHAR, m.WParam, m.LParam);
                             return;
                         }
+
                         break;
                 }
+
                 base.WndProc(ref m);
             }
         }
 
         /// <summary>
-        ///  The <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> provides a modal dialog for editing the contents of a collection.
+        ///  The <see cref='CollectionForm'/> provides a modal dialog for editing the contents of a collection.
         /// </summary>
         protected abstract class CollectionForm : Form
         {
@@ -2214,7 +2237,7 @@ namespace System.ComponentModel.Design
             private const short EditableNo = 2;
 
             /// <summary>
-            ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> class.
+            ///  Initializes a new instance of the <see cref='CollectionForm'/> class.
             /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
@@ -2373,7 +2396,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  This is called when the value property in the <see cref='System.ComponentModel.Design.CollectionEditor.CollectionForm'/> has changed.
+            ///  This is called when the value property in the <see cref='CollectionForm'/> has changed.
             /// </summary>
             protected abstract void OnEditValueChanged();
         }

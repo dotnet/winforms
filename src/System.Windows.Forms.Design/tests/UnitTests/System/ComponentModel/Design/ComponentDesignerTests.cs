@@ -3,11 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Configuration;
 using Moq;
 using Moq.Protected;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -147,7 +146,7 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> Children_GetInvalidService_TestData()
         {
-            foreach (ICollection associatedComponents in new object[] { null, Array.Empty<object>(), new object[] { new Component() }})
+            foreach (ICollection associatedComponents in new object[] { null, Array.Empty<object>(), new object[] { new Component() } })
             {
                 yield return new object[] { associatedComponents, null };
                 yield return new object[] { associatedComponents, new object() };
@@ -602,7 +601,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentDesigner_Dispose_InvokeBoolWithComponent_Success(bool disposing)
         {
             using var designer = new SubComponentDesigner();
@@ -657,7 +656,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentDesigner_Dispose_InvokeBoolWithoutComponent_Success(bool disposing)
         {
             using var designer = new SubComponentDesigner();
@@ -1893,7 +1892,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithComponentWithSite_ReturnsNull(Type serviceType)
         {
             var service = new object();
@@ -1926,7 +1925,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithComponentWithoutSite_ReturnsNull(Type serviceType)
         {
             using var designer = new SubComponentDesigner();
@@ -1935,7 +1934,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void ComponentDesigner_GetService_InvokeWithoutComponent_ReturnsNull(Type serviceType)
         {
             using var designer = new SubComponentDesigner();
@@ -2258,8 +2257,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(7, descriptor.Attributes.Count);
-            Assert.Equal(8, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Fact]
@@ -2278,8 +2277,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(7, descriptor.Attributes.Count);
-            Assert.Equal(8, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Theory]
@@ -2418,7 +2417,7 @@ namespace System.ComponentModel.Design.Tests
         public void ComponentDesigner_PostFilterEvents_InvokeWithInvalidEvents_ThrowsArrayTypeMismatchException()
         {
             using var designer = new CustomInheritanceAttributeComponentDesigner(InheritanceAttribute.InheritedReadOnly);
-            Assert.Throws<ArrayTypeMismatchException>(() => designer.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } } ));
+            Assert.Throws<ArrayTypeMismatchException>(() => designer.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } }));
         }
 
         public static IEnumerable<object[]> RaiseComponentChanged_TestData()
@@ -2688,8 +2687,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(7, descriptor.Attributes.Count);
-            Assert.Equal(8, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Fact]
@@ -2709,8 +2708,8 @@ namespace System.ComponentModel.Design.Tests
             Assert.NotSame(descriptor, result);
             Assert.Equal(typeof(ComponentDesigner), result.ComponentType);
             Assert.Equal(descriptor.Name, result.Name);
-            Assert.Equal(7, descriptor.Attributes.Count);
-            Assert.Equal(8, result.Attributes.Count);
+            Assert.True(descriptor.Attributes.Count >= 7);
+            Assert.True(result.Attributes.Count >= 8);
         }
 
         [Theory]
@@ -2844,7 +2843,7 @@ namespace System.ComponentModel.Design.Tests
         {
             var designer = new CustomInheritanceAttributeComponentDesigner(InheritanceAttribute.InheritedReadOnly);
             IDesignerFilter filter = designer;
-            Assert.Throws<ArrayTypeMismatchException>(() => filter.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } } ));
+            Assert.Throws<ArrayTypeMismatchException>(() => filter.PostFilterEvents(new Dictionary<object, object> { { "key", new object() } }));
         }
 
         [Fact]

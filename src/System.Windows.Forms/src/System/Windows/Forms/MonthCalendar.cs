@@ -4,14 +4,11 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Linq;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.Internal;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
@@ -20,7 +17,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  This control is an encapsulateion of the Windows month calendar control.
+    ///  This control is an encapsulation of the Windows month calendar control.
     ///  A month calendar control implements a calendar-like user interface, that
     ///  provides the user with a very intuitive and recognizable method of entering
     ///  or selecting a date.
@@ -112,6 +109,8 @@ namespace System.Windows.Forms
         private DateTime _todayDate = DateTime.Now.Date;
         private DateTime _selectionStart;
         private DateTime _selectionEnd;
+        private DateTime _focusedDate;
+        private SelectionRange _currentDisplayRange;
         private Day _firstDayOfWeek = DefaultFirstDayOfWeek;
         private MCMV _mcCurView = MCMV.MONTH;
         private MCMV _mcOldView = MCMV.MONTH;
@@ -137,6 +136,8 @@ namespace System.Windows.Forms
         private DateRangeEventHandler _onDateChanged;
         private DateRangeEventHandler _onDateSelected;
         private EventHandler _onRightToLeftLayoutChanged;
+        private EventHandler _onCalendarViewChanged;
+        private EventHandler _onDisplayRangeChanged;
 
         /// <summary>
         ///  Creates a new MonthCalendar object. Styles are the default for a regular
@@ -148,6 +149,7 @@ namespace System.Windows.Forms
 
             _selectionStart = _todayDate;
             _selectionEnd = _todayDate;
+            _focusedDate = _todayDate;
             SetStyle(ControlStyles.UserPaint, false);
             SetStyle(ControlStyles.StandardClick, false);
 
@@ -189,7 +191,7 @@ namespace System.Windows.Forms
                     _monthsOfYear[i] = 0;
                 }
 
-                if (value != null && value.Length > 0)
+                if (value is not null && value.Length > 0)
                 {
                     // Add each bolded date to our List.
                     foreach (var dateTime in value)
@@ -262,7 +264,7 @@ namespace System.Windows.Forms
             set
             {
                 _arrayOfDates.Clear();
-                if (value != null && value.Length > 0)
+                if (value is not null && value.Length > 0)
                 {
                     // Add each bolded date to our List.
                     foreach (var dateTime in value)
@@ -382,6 +384,10 @@ namespace System.Windows.Forms
                     {
                         User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, IntPtr.Zero, (IntPtr)value);
                     }
+
+                    UpdateDisplayRange();
+                    // Add the extra call to make the accessibility tree to rebuild correctly
+                    OnDisplayRangeChanged(EventArgs.Empty);
                 }
             }
         }
@@ -500,6 +506,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDate(value), nameof(MaxDate)));
                 }
+
                 if (value < DateTimePicker.MinimumDateTime)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinDate), FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
@@ -524,7 +531,7 @@ namespace System.Windows.Forms
                 _monthlyArrayOfDates.Clear();
                 _datesToBoldMonthly = 0;
 
-                if (value != null && value.Length > 0)
+                if (value is not null && value.Length > 0)
                 {
                     // Add each bolded date to our List.
                     foreach (var dateTime in value)
@@ -607,6 +614,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
                 }
+
                 if (value > MaxScrollChange)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), MaxScrollChange.ToString("D")));
@@ -642,6 +650,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MinDate)));
                 }
+
                 if (value > MaxDate)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MaxDate)));
@@ -685,6 +694,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MinDate)));
                 }
+
                 if (value > _maxDate)
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MaxDate)));
@@ -1006,6 +1016,12 @@ namespace System.Windows.Forms
             _datesToBoldMonthly |= 0x00000001 << (date.Day - 1);
         }
 
+        private event EventHandler CalendarViewChanged
+        {
+            add => _onCalendarViewChanged += value;
+            remove => _onCalendarViewChanged -= value;
+        }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
         public new event EventHandler Click
@@ -1028,6 +1044,12 @@ namespace System.Windows.Forms
         {
             add => _onDateSelected += value;
             remove => _onDateSelected -= value;
+        }
+
+        private event EventHandler DisplayRangeChanged
+        {
+            add => _onDisplayRangeChanged += value;
+            remove => _onDisplayRangeChanged -= value;
         }
 
         [Browsable(false)]
@@ -1398,6 +1420,7 @@ namespace System.Windows.Forms
             {
                 User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, (IntPtr)_maxSelectionCount);
             }
+
             AdjustSize();
 
             if (_todayDateSet)
@@ -1440,6 +1463,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Fires the event indicating that the currently
+        ///  calendar view has changed.
+        /// </summary>
+        private void OnCalendarViewChanged(EventArgs e)
+            => _onCalendarViewChanged?.Invoke(this, e);
+
+        /// <summary>
         ///  Fires the event indicating that the currently selected date
         ///  or range of dates has changed.
         /// </summary>
@@ -1456,8 +1486,14 @@ namespace System.Windows.Forms
         {
             base.OnGotFocus(e);
 
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            ((MonthCalendarAccessibleObject)AccessibilityObject).FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
         }
+
+        /// <summary>
+        ///  Fires the event indicating that the current display range is changed.
+        /// </summary>
+        private void OnDisplayRangeChanged(EventArgs e)
+            => _onDisplayRangeChanged?.Invoke(this, e);
 
         protected override void OnFontChanged(EventArgs e)
         {
@@ -1475,6 +1511,12 @@ namespace System.Windows.Forms
         {
             base.OnBackColorChanged(e);
             SetControlColor(MCSC.MONTHBK, BackColor);
+        }
+
+        protected override void OnResize(EventArgs e)
+        {
+            base.OnResize(e);
+            UpdateDisplayRange();
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -1704,6 +1746,7 @@ namespace System.Windows.Forms
 
                 width = GetPreferredWidth(width, updateRowsAndColumns);
             }
+
             if (height != oldBounds.Height)
             {
                 if (height > max.Height)
@@ -1713,6 +1756,7 @@ namespace System.Windows.Forms
 
                 height = GetPreferredHeight(height, updateRowsAndColumns);
             }
+
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
@@ -1742,18 +1786,32 @@ namespace System.Windows.Forms
             {
                 _selectionStart = minDate;
             }
+
             if (_selectionStart > maxDate)
             {
                 _selectionStart = maxDate;
             }
+
             if (_selectionEnd < minDate)
             {
                 _selectionEnd = minDate;
             }
+
             if (_selectionEnd > maxDate)
             {
                 _selectionEnd = maxDate;
             }
+
+            if (_selectionStart > _focusedDate)
+            {
+                _focusedDate = _selectionStart.Date;
+            }
+
+            if (_selectionEnd < _focusedDate)
+            {
+                _focusedDate = _selectionEnd.Date;
+            }
+
             SetSelRange(_selectionStart, _selectionEnd);
 
             // Updated the calendar range
@@ -1763,10 +1821,12 @@ namespace System.Windows.Forms
                 sa[0] = DateTimePicker.DateTimeToSysTime(minDate);
                 sa[1] = DateTimePicker.DateTimeToSysTime(maxDate);
                 GDTR flags = GDTR.MIN | GDTR.MAX;
-                if ((int)User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (IntPtr)flags, ref sa[0]) == 0)
+                if (User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (IntPtr)flags, ref sa[0]) == IntPtr.Zero)
                 {
                     throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
                 }
+
+                UpdateDisplayRange();
             }
         }
 
@@ -1779,6 +1839,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(x), string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
             }
+
             if (y < 1)
             {
                 throw new ArgumentOutOfRangeException(nameof(y), string.Format(SR.MonthCalendarInvalidDimensions, (x).ToString("D", CultureInfo.CurrentCulture), (y).ToString("D", CultureInfo.CurrentCulture)));
@@ -1819,6 +1880,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidLowBoundArgumentEx, nameof(date), FormatDate(date), nameof(MinDate)));
             }
+
             if (date.Ticks > _maxDate.Ticks)
             {
                 throw new ArgumentOutOfRangeException(nameof(date), date, string.Format(SR.InvalidHighBoundArgumentEx, nameof(date), FormatDate(date), nameof(MaxDate)));
@@ -1889,14 +1951,17 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date1), nameof(MinDate)));
             }
+
             if (date1.Ticks > _maxDate.Ticks)
             {
                 throw new ArgumentOutOfRangeException(nameof(date1), date1, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date1), nameof(MaxDate)));
             }
+
             if (date2.Ticks < _minDate.Ticks)
             {
                 throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(date2), nameof(MinDate)));
             }
+
             if (date2.Ticks > _maxDate.Ticks)
             {
                 throw new ArgumentOutOfRangeException(nameof(date2), date2, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(date2), nameof(MaxDate)));
@@ -2026,6 +2091,35 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Updates the current display range of the calendar.
+        ///  Includes gray dates of previous and next calendars.
+        ///  This method is called when Size, MaxDate, MinDate, TodayDate,
+        ///  the current calendar view are changed and
+        ///  if Next and Previous buttons in the title is clicked.
+        /// </summary>
+        private void UpdateDisplayRange()
+        {
+            if (!IsHandleCreated)
+            {
+                return;
+            }
+
+            SelectionRange newRange = GetDisplayRange(false);
+
+            if (_currentDisplayRange is null)
+            {
+                _currentDisplayRange = newRange;
+                return;
+            }
+
+            if (_currentDisplayRange.Start != newRange.Start || _currentDisplayRange.End != newRange.End)
+            {
+                _currentDisplayRange = newRange;
+                OnDisplayRangeChanged(EventArgs.Empty);
+            }
+        }
+
+        /// <summary>
         ///  Updates the current setting for "TODAY" in the MonthCalendar control
         ///  If the today date is set, the control will be set to that. Otherwise,
         ///  it will be set to null (running clock mode - the today date will be
@@ -2076,14 +2170,29 @@ namespace System.Windows.Forms
         private unsafe void WmDateChanged(ref Message m)
         {
             NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m.LParam;
-            DateTime start = _selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc->stSelStart);
-            DateTime end = _selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc->stSelEnd);
+            DateTime start = nmmcsc->stSelStart;
+            DateTime end = nmmcsc->stSelEnd;
+
+            // Windows doesn't provide API to get the focused cell.
+            // To get the correct focused cell consider 3 cases:
+            // 1) One cell is selected:
+            //    In this case, the previous _selectionStart value changes.
+            //    Moreover the selected start equals the end. So, take the start value as focused.
+            // 2) Several cells are selected. Forward selection:
+            //    It means that a user selects cells to the right (moves from early dates to late).
+            //    In this case, the previous _selectionStart value doesn't change (start == _selectionStart)
+            //    and _selectionEnd changes. So, the focused date is the end of the selection range.
+            // 3) Several cells are selected. Backward selection:
+            //    It means that a user selects cells to the left (moves from late dates to early).
+            //    In this case, the previous _selectionStart value changes (start != _selectionStart)
+            //    and _selectionEnd doesn't change. So, the focused date is the start of the selection range.
+            _focusedDate = start == _selectionStart ? end.Date : start.Date;
+
+            _selectionStart = start;
+            _selectionEnd = end;
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
-
-            MonthCalendarAccessibleObject calendarAccessibleObject = (MonthCalendarAccessibleObject)AccessibilityObject;
-            calendarAccessibleObject.RaiseAutomationEventForChild(UiaCore.UIA.AutomationFocusChangedEventId, _selectionStart, _selectionEnd);
 
             if (start.Ticks < _minDate.Ticks || end.Ticks < _minDate.Ticks)
             {
@@ -2093,6 +2202,14 @@ namespace System.Windows.Forms
             {
                 SetSelRange(_maxDate, _maxDate);
             }
+
+            if (IsHandleCreated)
+            {
+                UpdateDisplayRange();
+            }
+
+            MonthCalendarAccessibleObject calendarAccessibleObject = (MonthCalendarAccessibleObject)AccessibilityObject;
+            calendarAccessibleObject.RaiseAutomationEventForChild(UiaCore.UIA.AutomationFocusChangedEventId);
 
             OnDateChanged(new DateRangeEventArgs(start, end));
         }
@@ -2125,6 +2242,7 @@ namespace System.Windows.Forms
                 _mcOldView = _mcCurView;
                 _mcCurView = nmmcvm->uNewView;
 
+                OnCalendarViewChanged(EventArgs.Empty);
                 AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
                 AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             }
@@ -2171,6 +2289,7 @@ namespace System.Windows.Forms
             if (m.HWnd == Handle)
             {
                 User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+
                 switch ((MCN)nmhdr->code)
                 {
                     case MCN.SELECT:
@@ -2181,6 +2300,7 @@ namespace System.Windows.Forms
                         break;
                     case MCN.GETDAYSTATE:
                         WmDateBold(ref m);
+                        UpdateDisplayRange();
                         break;
                     case MCN.VIEWCHANGE:
                         WmCalViewChanged(ref m);
@@ -2199,6 +2319,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
                 case User32.WM.GETDLGCODE:
                     WmGetDlgCode(ref m);
@@ -2209,6 +2330,19 @@ namespace System.Windows.Forms
                     break;
                 case User32.WM.DESTROY:
                     base.WndProc(ref m);
+                    break;
+                case User32.WM.PAINT:
+                    base.WndProc(ref m);
+
+                    if (_mcCurView != MCMV.MONTH)
+                    {
+                        // Check if the display range is changed and update it.
+                        // Win32 doesn't provide a notification about the display range is changed,
+                        // so we have to use WM.PAINT and check it manually in the Year, Decade and Century views.
+                        // MCN.GETDAYSTATE handles the display range changes in the Month view.
+                        UpdateDisplayRange();
+                    }
+
                     break;
                 default:
                     base.WndProc(ref m);

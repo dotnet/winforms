@@ -22,42 +22,9 @@ namespace System.Windows.Forms
 
                     public DirectionButtonAccessibleObject(UpDownButtonsAccessibleObject parent, bool up)
                     {
-                        _parent = parent;
+                        _parent = parent ?? throw new ArgumentNullException(nameof(parent));
                         _up = up;
                     }
-
-                    /// <summary>
-                    ///  Gets the runtime ID.
-                    /// </summary>
-                    internal override int[] RuntimeId => new int[]
-                    {
-                        _parent.RuntimeId[0],
-                        _parent.RuntimeId[1],
-                        _parent.RuntimeId[2],
-                        _up ? 1 : 0
-                    };
-
-                    internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
-                    {
-                        UiaCore.UIA.NamePropertyId => Name,
-                        UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
-                        UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
-                        UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
-                        UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
-                        _ => base.GetPropertyValue(propertyID),
-                    };
-
-                    internal override UiaCore.IRawElementProviderFragment FragmentNavigate(
-                        UiaCore.NavigateDirection direction) => direction switch
-                        {
-                            UiaCore.NavigateDirection.Parent => Parent,
-                            UiaCore.NavigateDirection.NextSibling => _up ? Parent.GetChild(1) : null,
-                            UiaCore.NavigateDirection.PreviousSibling => _up ? null : Parent.GetChild(0),
-                            _ => base.FragmentNavigate(direction),
-                        };
-
-                    internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
 
                     public override Rectangle Bounds
                     {
@@ -77,9 +44,54 @@ namespace System.Windows.Forms
                                 bounds.Y += bounds.Height;
                             }
 
-                            // Convert to screen co-ords
+                            // Convert to screen coords
                             return (((UpDownButtons)_parent.Owner).ParentInternal).RectangleToScreen(bounds);
                         }
+                    }
+
+                    public override string DefaultAction => SR.AccessibleActionPress;
+
+                    public override void DoDefaultAction()
+                    {
+                        UpDownButtons ownerControl = _parent._owner;
+                        if (!ownerControl.IsHandleCreated)
+                        {
+                            return;
+                        }
+
+                        int buttonId = _up ? (int)ButtonID.Up : (int)ButtonID.Down;
+                        ownerControl.OnUpDown(new UpDownEventArgs(buttonId));
+                    }
+
+                    internal override UiaCore.IRawElementProviderFragment FragmentNavigate(
+                        UiaCore.NavigateDirection direction) => direction switch
+                        {
+                            UiaCore.NavigateDirection.Parent => Parent,
+                            UiaCore.NavigateDirection.NextSibling => _up ? Parent.GetChild(1) : null,
+                            UiaCore.NavigateDirection.PreviousSibling => _up ? null : Parent.GetChild(0),
+                            _ => base.FragmentNavigate(direction),
+                        };
+
+                    internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
+
+                    internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+                    {
+                        UiaCore.UIA.NamePropertyId => Name,
+                        UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
+                        UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
+                        UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
+                        UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
+                        UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
+                        UiaCore.UIA.LegacyIAccessiblePatternId => IsPatternSupported(propertyID),
+                        UiaCore.UIA.InvokePatternId => IsPatternSupported(propertyID),
+                        _ => base.GetPropertyValue(propertyID),
+                    };
+
+                    internal override bool IsPatternSupported(UiaCore.UIA patternId)
+                    {
+                        return patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
+                            patternId == UiaCore.UIA.InvokePatternId ||
+                            base.IsPatternSupported(patternId);
                     }
 
                     public override string Name
@@ -91,6 +103,17 @@ namespace System.Windows.Forms
                     public override AccessibleObject Parent => _parent;
 
                     public override AccessibleRole Role => AccessibleRole.PushButton;
+
+                    /// <summary>
+                    ///  Gets the runtime ID.
+                    /// </summary>
+                    internal override int[] RuntimeId => new int[]
+                    {
+                        _parent.RuntimeId[0],
+                        _parent.RuntimeId[1],
+                        _parent.RuntimeId[2],
+                        _up ? 1 : 0
+                    };
                 }
             }
         }

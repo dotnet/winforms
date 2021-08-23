@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace System.Windows.Forms.Design
@@ -13,8 +12,8 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class MaskDescriptorComparer : IComparer<MaskDescriptor>
     {
-        private SortOrder _sortOrder;
-        private SortType _sortType;
+        private readonly SortOrder _sortOrder;
+        private readonly SortType _sortType;
 
         public enum SortType
         {

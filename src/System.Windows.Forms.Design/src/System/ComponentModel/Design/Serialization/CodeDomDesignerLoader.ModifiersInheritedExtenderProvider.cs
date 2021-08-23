@@ -80,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
             /// <summary>
             ///  This is an extender property that we offer to all components
             ///  on the form.  It implements the "Modifiers" property, which
-            ///  is an enum represneing the "public/protected/private" scope
+            ///  is an enum representing the "public/protected/private" scope
             ///  of a component.
             /// </summary>
             [DesignOnly(true)]

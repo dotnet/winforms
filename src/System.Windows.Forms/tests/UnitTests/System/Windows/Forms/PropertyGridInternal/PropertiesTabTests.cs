@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -47,7 +47,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [Fact]
         public void PropertiesTab_GetDefaultProperty_InvokeNullGetProperties_ReturnsExpected()
         {
-            var tab = new NullGetProperiesPropertiesTab();
+            var tab = new NullGetPropertiesPropertiesTab();
             Assert.Null(tab.GetDefaultProperty(new ClassWithNameProperty()));
         }
 
@@ -196,7 +196,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.Empty(tab.GetProperties(null, null, null));
         }
 
-        private class NullGetProperiesPropertiesTab : PropertiesTab
+        private class NullGetPropertiesPropertiesTab : PropertiesTab
         {
             public override PropertyDescriptorCollection GetProperties(object component) => null;
         }

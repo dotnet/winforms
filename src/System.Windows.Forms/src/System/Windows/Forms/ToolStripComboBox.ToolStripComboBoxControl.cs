@@ -22,13 +22,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner != null)
+                    if (Owner is not null)
                     {
                         if (Owner.Renderer is ToolStripProfessionalRenderer renderer)
                         {
                             return renderer.ColorTable;
                         }
                     }
+
                     return ProfessionalColors.ColorTable;
                 }
             }

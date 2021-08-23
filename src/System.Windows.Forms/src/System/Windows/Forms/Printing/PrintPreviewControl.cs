@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Printing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -238,6 +237,7 @@ namespace System.Windows.Forms
                 {
                     value = Math.Min(value, pageInfo.Length - (rows * columns));
                 }
+
                 value = Math.Max(value, 0);
 
                 return value;
@@ -248,6 +248,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(StartPage), value, 0));
                 }
+
                 int oldValue = StartPage;
                 startPage = value;
                 if (oldValue != startPage)
@@ -308,17 +309,18 @@ namespace System.Windows.Forms
             }
         }
 
-        private int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
+        private unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
             switch ((User32.SBH)PARAM.LOWORD(m.WParam))
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
-                    var si = new User32.SCROLLINFO
+                    User32.SCROLLINFO si = new()
                     {
-                        cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                        cbSize = (uint)sizeof(User32.SCROLLINFO),
                         fMask = User32.SIF.TRACKPOS
                     };
+
                     User32.SB direction = horizontal ? User32.SB.HORZ : User32.SB.VERT;
                     if (User32.GetScrollInfo(m.HWnd, direction, ref si).IsTrue())
                     {
@@ -328,6 +330,7 @@ namespace System.Windows.Forms
                     {
                         pos = PARAM.HIWORD(m.WParam);
                     }
+
                     break;
                 case User32.SBH.LINELEFT:
                     if (pos > SCROLL_LINE)
@@ -338,6 +341,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBH.LINERIGHT:
                     if (pos < maxPos - SCROLL_LINE)
@@ -348,6 +352,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
                 case User32.SBH.PAGELEFT:
                     if (pos > SCROLL_PAGE)
@@ -358,6 +363,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     break;
                 case User32.SBH.PAGERIGHT:
                     if (pos < maxPos - SCROLL_PAGE)
@@ -368,8 +374,10 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     break;
             }
+
             return pos;
         }
 
@@ -609,11 +617,13 @@ namespace System.Windows.Forms
                         {
                             pevent.Graphics.FillRectangle(brush, box);
                         }
+
                         box.Inflate(-1, -1);
                         if (pageInfo[i + StartPage].Image != null)
                         {
                             pevent.Graphics.DrawImage(pageInfo[i + StartPage].Image, box);
                         }
+
                         box.Width--;
                         box.Height--;
                         pevent.Graphics.DrawRectangle(Pens.Black, box);
@@ -735,19 +745,20 @@ namespace System.Windows.Forms
             User32.SetScrollPos(this, User32.SB.VERT, position.Y, BOOL.TRUE);
         }
 
-        internal void SetVirtualSizeNoInvalidate(Size value)
+        internal unsafe void SetVirtualSizeNoInvalidate(Size value)
         {
             virtualSize = value;
             SetPositionNoInvalidate(position); // Make sure it's within range
 
-            var info = new User32.SCROLLINFO
+            User32.SCROLLINFO info = new()
             {
-                cbSize = (uint)Marshal.SizeOf<User32.SCROLLINFO>(),
+                cbSize = (uint)sizeof(User32.SCROLLINFO),
                 fMask = User32.SIF.RANGE | User32.SIF.PAGE,
                 nMin = 0,
                 nMax = Math.Max(Height, virtualSize.Height) - 1,
                 nPage = (uint)Height
             };
+
             User32.SetScrollInfo(this, User32.SB.VERT, ref info, BOOL.TRUE);
 
             info.fMask = User32.SIF.RANGE | User32.SIF.PAGE;
@@ -784,7 +795,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKeyDown(ref Message msg)
         {
-            Keys keyData = (Keys)((int)msg.WParam | (int)ModifierKeys);
+            Keys keyData = (Keys)(PARAM.ToInt(msg.WParam) | (int)ModifierKeys);
             Point locPos = Position;
             int pos = 0;
             int maxPos = 0;
@@ -803,6 +814,7 @@ namespace System.Windows.Forms
                         {
                             pos = 0;
                         }
+
                         locPos.X = pos;
                         Position = locPos;
                     }
@@ -810,6 +822,7 @@ namespace System.Windows.Forms
                     {
                         StartPage--;
                     }
+
                     break;
                 case Keys.PageDown:
                     if ((keyData & Keys.Modifiers) == Keys.Control)
@@ -824,6 +837,7 @@ namespace System.Windows.Forms
                         {
                             pos = maxPos;
                         }
+
                         locPos.X = pos;
                         Position = locPos;
                     }
@@ -831,6 +845,7 @@ namespace System.Windows.Forms
                     {
                         StartPage++;
                     }
+
                     break;
                 case Keys.Home:
                     if ((keyData & Keys.Modifiers) == Keys.Control)
@@ -857,6 +872,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     locPos.Y = pos;
                     Position = locPos;
                     break;
@@ -873,6 +889,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     locPos.Y = pos;
                     Position = locPos;
                     break;
@@ -887,6 +904,7 @@ namespace System.Windows.Forms
                     {
                         pos = 0;
                     }
+
                     locPos.X = pos;
                     Position = locPos;
                     break;
@@ -901,6 +919,7 @@ namespace System.Windows.Forms
                     {
                         pos = maxPos;
                     }
+
                     locPos.X = pos;
                     Position = locPos;
                     break;

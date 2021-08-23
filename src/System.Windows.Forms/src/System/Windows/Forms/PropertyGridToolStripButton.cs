@@ -8,54 +8,38 @@ using System.Drawing;
 
 namespace System.Windows.Forms
 {
-    internal class PropertyGridToolStripButton : ToolStripButton
+    internal partial class PropertyGridToolStripButton : ToolStripButton
     {
-        /// <summary>
-        ///  Inheriting classes should override this method to handle this event.
-        /// </summary>
-        protected override void OnPaint(PaintEventArgs e)
+        private readonly PropertyGrid _owningPropertyGrid;
+
+        private readonly bool _selectItemEnabled;
+
+        internal PropertyGridToolStripButton(PropertyGrid propertyGrid, bool selectItemEnabled) : base()
         {
-            base.OnPaint(e);
-
-            if (Selected)
-            {
-                var bounds = ClientBounds;
-
-                // It is necessary so that when HighContrast is off, the size of the dotted borders
-                // coincides with the size of the button background
-                // For normal mode we use the "ToolStripSystemRenderer.RenderItemInternal" method
-                // which calls the "VisualStyleRenderer.DrawBackground" method for drawing
-                // For high contrast mode we use the "ToolStripHighContrastRenderer.OnRenderButtonBackground" method
-                // which calls the "Graphics.DrawRectangle" method for drawing
-                if (SystemInformation.HighContrast)
-                {
-                    DrawHightContrastDashedBorer(e.Graphics);
-                }
-                else
-                {
-                    DrawDashedBorer(e.Graphics);
-                }
-            }
+            _owningPropertyGrid = propertyGrid;
+            _selectItemEnabled = selectItemEnabled;
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new PropertyGridToolStripButtonAccessibleObject(this);
 
         private void DrawDashedBorer(Graphics graphics)
         {
             var bounds = ClientBounds;
 
-            // It is necessary so that when HighContrast is off, the size of the dotted borders
-            // coincides with the size of the button background
-            // For normal mode we use the "ToolStripSystemRenderer.RenderItemInternal" method
-            // which calls the "VisualStyleRenderer.DrawBackground" method for drawing
-            // For high contrast mode we use the "ToolStripHighContrastRenderer.OnRenderButtonBackground" method
-            // which calls the "Graphics.DrawRectangle" method for drawing
+            // This is necessary so that when HighContrast is off, the size of the dotted borders coincides with the
+            // size of the button background. For normal mode we use the "ToolStripSystemRenderer.RenderItemInternal"
+            // method which calls the "VisualStyleRenderer.DrawBackground" method for drawing. For high contrast mode
+            // we use the "ToolStripHighContrastRenderer.OnRenderButtonBackground" method which calls the
+            // "Graphics.DrawRectangle" method for drawing.
             bounds.Height -= 1;
 
             // We support only one type of settings for all borders since it is consistent with the behavior of the same controls
             ControlPaint.DrawBorder(graphics, bounds,
-                leftColor: Color.Black, leftWidth: 1, leftStyle: ButtonBorderStyle.Dashed, // left
-                topColor: Color.Black, topWidth: 1, topStyle: ButtonBorderStyle.Dashed, // top
-                rightColor: Color.Black, rightWidth: 1, rightStyle: ButtonBorderStyle.Dashed, // right
-                bottomColor: Color.Black, bottomWidth: 1, bottomStyle: ButtonBorderStyle.Dashed); // bottom;
+                leftColor: Color.Black, leftWidth: 1, leftStyle: ButtonBorderStyle.Dashed,
+                topColor: Color.Black, topWidth: 1, topStyle: ButtonBorderStyle.Dashed,
+                rightColor: Color.Black, rightWidth: 1, rightStyle: ButtonBorderStyle.Dashed,
+                bottomColor: Color.Black, bottomWidth: 1, bottomStyle: ButtonBorderStyle.Dashed);
         }
 
         private void DrawHightContrastDashedBorer(Graphics graphics)
@@ -77,6 +61,28 @@ namespace System.Windows.Forms
 
             graphics.DrawRectangle(focusPen1, bounds);
             graphics.DrawRectangle(focusPen2, bounds);
+        }
+
+        /// <summary>
+        ///  Inheriting classes should override this method to handle this event.
+        /// </summary>
+        protected override void OnPaint(PaintEventArgs e)
+        {
+            base.OnPaint(e);
+
+            if (!Selected)
+            {
+                return;
+            }
+
+            if (SystemInformation.HighContrast)
+            {
+                DrawHightContrastDashedBorer(e.Graphics);
+            }
+            else
+            {
+                DrawDashedBorer(e.Graphics);
+            }
         }
     }
 }

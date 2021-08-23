@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -17,7 +16,7 @@ namespace System.Windows.Forms
     public sealed partial class Application
     {
         /// <summary>
-        ///  This is our implementation of the MSO ComponentManager.  The Componoent Manager is
+        ///  This is our implementation of the MSO ComponentManager.  The Component Manager is
         ///  an object that is responsible for handling all message loop activity in a process.
         ///  The idea is that someone in the process implements the component manager and then
         ///  anyone who wants access to the message loop can get to it.  We implement this
@@ -64,6 +63,7 @@ namespace System.Windows.Forms
                 {
                     *ppvObj = null;
                 }
+
                 return HRESULT.E_NOINTERFACE;
             }
 
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
 
                 if (!OleComponents.TryGetValue(dwComponentID, out ComponentHashtableEntry entry))
                 {
-                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Compoenent not registered.");
+                    Debug.WriteLineIf(CompModSwitches.MSOComponentManager.TraceInfo, "Component not registered.");
                     return BOOL.FALSE;
                 }
 
@@ -120,6 +120,7 @@ namespace System.Windows.Forms
                 {
                     _activeComponent = null;
                 }
+
                 if (entry.component == _trackingComponent)
                 {
                     _trackingComponent = null;
@@ -321,7 +322,7 @@ namespace System.Windows.Forms
 
                                     if (uReason != msoloop.Main)
                                     {
-                                        User32.PostQuitMessage((int)msg.wParam);
+                                        User32.PostQuitMessage(PARAM.ToInt(msg.wParam));
                                     }
 
                                     continueLoop = BOOL.FALSE;
@@ -426,6 +427,7 @@ namespace System.Windows.Forms
                 {
                     *ppvObj = null;
                 }
+
                 return BOOL.FALSE;
             }
 
@@ -437,6 +439,7 @@ namespace System.Windows.Forms
                 {
                     *ppicm = null;
                 }
+
                 return BOOL.FALSE;
             }
 

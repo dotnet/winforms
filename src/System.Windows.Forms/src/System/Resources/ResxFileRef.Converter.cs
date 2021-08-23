@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Text;
 
@@ -154,6 +153,7 @@ namespace System.Resources
                     {
                         return memStream;
                     }
+
                     if (toCreate == typeof(Bitmap) && fileName.EndsWith(".ico"))
                     {
                         // we special case the .ico bitmaps because GDI+ destroy the alpha channel component and

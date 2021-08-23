@@ -677,6 +677,21 @@
         <target state="translated">처리되지 않은 VT입니다. {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">다음 기간으로 이동</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">이전 기간으로 이동</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">오늘 날짜로 이동하여 선택합니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">취소</target>
@@ -1114,12 +1129,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">닫기</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">열기</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1227,7 +1242,7 @@
         <target state="translated">상황에 맞는 메뉴 스트립을 표시한 마지막 컨트롤입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">컨트롤의 액세스 가능한 개체가 잘못된 상태입니다.</target>
         <note />
@@ -4749,7 +4764,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">로드된 어셈블리</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4758,7 +4773,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -5205,6 +5220,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">조정할 수 있는 폼의 최대 크기입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">최소화된 MDI 자식에 대한 앵커링을 가져오거나 설정합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -6466,6 +6486,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">삽입 표시 특성의 변경을 허용합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">현재 접근성 개체는 {0} 보기의 ListView에만 해당됩니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">현재 접근성 개체는 {0}, {1} 또는 {2} 보기의 ListView에만 해당됩니다.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">ListView 항목의 Checked 속성이 변경되면 이벤트가 발생합니다.</target>
@@ -7074,6 +7104,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarTrailingForeColorDescr">
         <source>The color used to display the previous and following months that appear on the month calendar.</source>
         <target state="translated">달력에 나타나는 이전 달과 다음 달을 표시하는 데 사용할 색입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">{0}주</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -7904,6 +7939,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ProfessionalColorsSeparatorLightDescr">
         <source>Color to use to for highlight effects on the separator.</source>
         <target state="translated">구분 기호에 대한 강조 효과에 사용할 색입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
@@ -10371,6 +10411,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">LargeChange: '{0}' 값은 0보다 크거나 같아야 합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">크게 감소</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">크게 증가</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">TrackBar에서 슬라이더 위치의 최대값입니다.</target>
@@ -10389,6 +10439,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">컨트롤의 방향입니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">위치</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -11032,8 +11087,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault는 애플리케이션에 첫 번째 IWin32Window 개체가 만들어지기 전에 호출해야 합니다.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">{0}은(는) 응용 프로그램에 첫 번째 IWin32Window 개체가 만들어지기 전에 호출해야 합니다.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

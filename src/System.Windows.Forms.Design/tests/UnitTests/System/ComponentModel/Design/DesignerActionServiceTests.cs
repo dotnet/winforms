@@ -1,14 +1,12 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Linq;
 using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -356,8 +354,8 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ComponentActionsType))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ComponentActionsType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
         public void GetComponentActions_NoSuchComponentNotEmpty_ReturnsEmpty(ComponentActionsType type)
         {
             var service = new SubDesignerActionService(null);
@@ -369,8 +367,8 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ComponentActionsType))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ComponentActionsType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
         public void GetComponentActions_NoSuchComponentEmpty_ReturnsEmpty(ComponentActionsType type)
         {
             var service = new SubDesignerActionService(null);
@@ -378,7 +376,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ComponentActionsType))]
         public void GetComponentActions_NoSuchAction_ReturnsEmpty(ComponentActionsType type)
         {
             var service = new SubDesignerActionService(null);
@@ -641,7 +639,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Fact]
-        public void GetComponentServiceActions_NoSuchComponenEmpty_ReturnsEmpty()
+        public void GetComponentServiceActions_NoSuchComponentEmpty_ReturnsEmpty()
         {
             var service = new SubDesignerActionService(null);
             var actionListBuffer = new DesignerActionListCollection();
@@ -799,6 +797,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.Empty(service.GetComponentActions(component2));
                 Assert.Equal(new DesignerActionListCollection { actionList3 }, service.GetComponentActions(component3));
             }
+
             Assert.Equal(new DesignerActionListCollection { actionList4, actionList4 }, service.GetComponentActions(component4));
             Assert.False(service.Contains(component1));
             if (service.GetComponentActions(component2).Count == 1)
@@ -811,6 +810,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.False(service.Contains(component2));
                 Assert.True(service.Contains(component3));
             }
+
             Assert.True(service.Contains(component4));
 
             // Remove duplicates.
@@ -827,6 +827,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.Empty(service.GetComponentActions(component2));
                 Assert.Equal(new DesignerActionListCollection { actionList3 }, service.GetComponentActions(component3));
             }
+
             Assert.Empty(service.GetComponentActions(component4));
             Assert.False(service.Contains(component1));
             if (service.GetComponentActions(component2).Count == 1)
@@ -839,6 +840,7 @@ namespace System.ComponentModel.Design.Tests
                 Assert.False(service.Contains(component2));
                 Assert.True(service.Contains(component3));
             }
+
             Assert.True(service.Contains(component4));
         }
 

@@ -23,6 +23,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return;
             }
+
             for (int i = 0; i < propDesc.Length; i++)
             {
                 propDesc[i].QueryGetDynamicAttributes += new GetAttributesEventHandler(OnGetAttributes);
@@ -110,7 +111,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     }
                     else
                     {
-                        // somethings odd
+                        // something's odd
                         Debug.Fail("No dot in class name?");
                         continue;
                     }
@@ -168,7 +169,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 Attribute attr = null;
 
                 // okay, if we got here, we need to build the attribute...
-                // get the initalizer value if we've got a one item ctor
+                // get the initializer value if we've got a one item ctor
 
                 if (!Convert.IsDBNull(varParams[i]) && varParams[i] is not null)
                 {
@@ -188,7 +189,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             catch
                             {
                                 // nevermind
-                                Debug.Fail("Attribute " + t.FullName + " did not have a initalizer specified and has no default constructor");
+                                Debug.Fail("Attribute " + t.FullName + " did not have a initializer specified and has no default constructor");
                                 continue;
                             }
                         }
@@ -205,7 +206,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     catch
                     {
                         // nevermind
-                        Debug.Fail("Attribute " + t.FullName + " did not have a initalizer specified and has no default constructor");
+                        Debug.Fail("Attribute " + t.FullName + " did not have a initializer specified and has no default constructor");
                         continue;
                     }
                 }
@@ -242,6 +243,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         Debug.Fail("Failed to marshal component attribute BSTR " + i.ToString(CultureInfo.InvariantCulture), ex.ToString());
                     }
                 }
+
                 try
                 {
                     Marshal.FreeCoTaskMem(ptr);
@@ -250,6 +252,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     Debug.Fail("Failed to free BSTR array memory", ex.ToString());
                 }
+
                 return strs;
             }
             else
@@ -273,6 +276,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     Debug.Fail("Failed to marshal component attribute VARIANT " + i, ex.ToString());
                 }
             }
+
             try
             {
                 Marshal.FreeCoTaskMem((IntPtr)ptr);

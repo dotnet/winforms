@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -86,6 +85,7 @@ namespace System.Windows.Forms
                     Debug.Assert(displayOrder is null);
                     Initialize();
                 }
+
                 return keyNames;
             }
         }
@@ -99,6 +99,7 @@ namespace System.Windows.Forms
                     Debug.Assert(keyNames is null);
                     Initialize();
                 }
+
                 return displayOrder;
             }
         }
@@ -113,6 +114,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -126,6 +128,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -192,6 +195,7 @@ namespace System.Windows.Forms
                                 {
                                     throw new FormatException(SR.KeysConverterInvalidKeyCombination);
                                 }
+
                                 foundKeyCode = true;
                             }
 
@@ -217,6 +221,7 @@ namespace System.Windows.Forms
                 {
                     finalValue |= Convert.ToInt64(e, CultureInfo.InvariantCulture);
                 }
+
                 return Enum.ToObject(typeof(Keys), finalValue);
             }
 
@@ -305,6 +310,7 @@ namespace System.Windows.Forms
                             {
                                 terms.Add(keyValue);
                             }
+
                             added = true;
                             foundKey = true;
                             break;
@@ -334,6 +340,7 @@ namespace System.Windows.Forms
                         {
                             b.Append(t);
                         }
+
                         return b.ToString();
                     }
                     else
@@ -369,6 +376,7 @@ namespace System.Windows.Forms
 
                 values = new StandardValuesCollection(list.ToArray());
             }
+
             return values;
         }
 

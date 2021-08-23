@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
-using System.Threading;
 using static Interop;
 using static Interop.Ole32;
 
@@ -268,7 +267,7 @@ namespace System.Windows.Forms
                 return HRESULT.S_OK;
             }
 
-            unsafe HRESULT IOleControlSite.TransformCoords(Point *pPtlHimetric, PointF *pPtfContainer, XFORMCOORDS dwFlags)
+            unsafe HRESULT IOleControlSite.TransformCoords(Point* pPtlHimetric, PointF* pPtfContainer, XFORMCOORDS dwFlags)
             {
                 if (pPtlHimetric is null || pPtfContainer is null)
                 {
@@ -394,6 +393,7 @@ namespace System.Windows.Forms
                     Debug.Fail("we can't be in showobject if we own our window...");
                     return HRESULT.S_OK;
                 }
+
                 if (host.GetAxState(AxHost.fFakingWindow))
                 {
                     // we really should not be here...
@@ -407,6 +407,7 @@ namespace System.Windows.Forms
                     host.TransitionDownTo(OC_LOADED);
                     host.TransitionUpTo(OC_INPLACE);
                 }
+
                 if (host.GetOcState() < OC_INPLACE)
                 {
                     return HRESULT.S_OK;
@@ -635,30 +636,19 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    ISite site = host.Site;
-                    if (site is not null)
+                    if (host.Site.TryGetService(out IComponentChangeService changeService))
                     {
-                        IComponentChangeService changeService = (IComponentChangeService)site.GetService(typeof(IComponentChangeService));
-
-                        if (changeService is not null)
+                        try
                         {
-                            try
-                            {
-                                changeService.OnComponentChanging(host, prop);
-                            }
-                            catch (CheckoutException coEx)
-                            {
-                                if (coEx == CheckoutException.Canceled)
-                                {
-                                    return HRESULT.S_OK;
-                                }
-                                throw;
-                            }
-
-                            // Now notify the change service that the change was successful.
-                            //
-                            changeService.OnComponentChanged(host, prop, null, (prop?.GetValue(host)));
+                            changeService.OnComponentChanging(host, prop);
                         }
+                        catch (CheckoutException e) when (e == CheckoutException.Canceled)
+                        {
+                            return HRESULT.S_OK;
+                        }
+
+                        // Now notify the change service that the change was successful.
+                        changeService.OnComponentChanged(host, prop, oldValue: null, prop?.GetValue(host));
                     }
                 }
                 catch (Exception t)

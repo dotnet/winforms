@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.ComCtl32;
@@ -65,7 +64,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Ctor_String(string imageKey, string expectedImageKey)
         {
             using var header = new SubColumnHeader(imageKey);
@@ -505,7 +504,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_ImageKey_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
             using var header = new ColumnHeader
@@ -542,7 +541,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_ImageKey_SetWithListView_GetReturnsExpected(string value, string expected)
         {
             using var listView = new ListView();
@@ -562,7 +561,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_ImageKey_SetWithListViewWithEmptyList_GetReturnsExpected(string value, string expected)
         {
             using var imageList = new ImageList();
@@ -619,7 +618,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_ImageKey_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var listView = new ListView();
@@ -759,7 +758,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Name_GetWithSite_ReturnsExpected(string name, string expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -777,7 +776,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Name_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
             using var header = new ColumnHeader
@@ -792,7 +791,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Name_SetWithListView_GetReturnsExpected(string value, string expected)
         {
             using var listView = new ListView();
@@ -810,7 +809,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Name_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var listView = new ListView();
@@ -841,7 +840,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Name_SetWithSite_GetReturnsExpected(string value, string expected)
         {
             using var header = new ColumnHeader
@@ -939,7 +938,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ColumnHeader_Tag_Set_GetReturnsExpected(object value)
         {
             using var header = new ColumnHeader
@@ -954,7 +953,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Text_SetWithoutListView_GetReturnsExpected(string value, string expected)
         {
             using var header = new ColumnHeader
@@ -969,7 +968,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Text_SetWithListView_GetReturnsExpected(string value, string expected)
         {
             using var listView = new ListView();
@@ -985,7 +984,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ColumnHeader_Text_SetWithListViewWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var listView = new ListView();
@@ -1002,7 +1001,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public unsafe void ColumnHeader_Text_GetColumn_Success(string value, string expected)
         {
             using var listView = new ListView();
@@ -1109,7 +1108,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(HorizontalAlignment))]
         public void ColumnHeader_TextAlign_SetWithoutListView_GetReturnsExpected(HorizontalAlignment value)
         {
             using var header = new ColumnHeader
@@ -1212,7 +1211,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HorizontalAlignment))]
         public void ColumnHeader_TextAlign_SetInvalid_ThrowsInvalidEnumArgumentException(HorizontalAlignment value)
         {
             using var header = new ColumnHeader();
@@ -1387,7 +1386,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColumnHeaderAutoResizeStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColumnHeaderAutoResizeStyle))]
         public void ColumnHeader_AutoSize_WithoutListView_Nop(ColumnHeaderAutoResizeStyle headerAutoResize)
         {
             using var header = new ColumnHeader();
@@ -1400,7 +1399,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColumnHeaderAutoResizeStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColumnHeaderAutoResizeStyle))]
         public void ColumnHeader_AutoSize_WithListView_Success(ColumnHeaderAutoResizeStyle headerAutoResize)
         {
             using var listView = new ListView();
@@ -1418,7 +1417,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColumnHeaderAutoResizeStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ColumnHeaderAutoResizeStyle))]
         public void ColumnHeader_AutoSize_WithListViewWithHandle_Success(ColumnHeaderAutoResizeStyle headerAutoResize)
         {
             using var listView = new ListView();
@@ -1449,7 +1448,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ColumnHeaderAutoResizeStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ColumnHeaderAutoResizeStyle))]
         public void ColumnHeader_AutoSize_InvalidHeaderAutoResize_ThrowsInvalidEnumArgumentException(ColumnHeaderAutoResizeStyle headerAutoResize)
         {
             using var header = new ColumnHeader();
@@ -1600,7 +1599,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ColumnHeader_ToString_InvokeWithText_ReturnsExpected(string value)
         {
             using var header = new ColumnHeader

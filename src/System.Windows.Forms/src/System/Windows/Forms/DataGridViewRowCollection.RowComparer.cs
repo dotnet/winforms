@@ -35,6 +35,7 @@ namespace System.Windows.Forms
                 {
                     sortedColumnIndex = dataGridViewSortedColumn.Index;
                 }
+
                 this.customComparer = customComparer;
                 this.ascending = ascending;
             }
@@ -49,6 +50,7 @@ namespace System.Windows.Forms
                         return max;
                     }
                 }
+
                 if (customComparer is null)
                 {
                     DataGridViewRow dataGridViewRow = dataGridViewRows.SharedRow(rowIndex);
@@ -72,6 +74,7 @@ namespace System.Windows.Forms
                 {
                     return -1;
                 }
+
                 int result = 0;
                 if (customComparer is null)
                 {
@@ -103,6 +106,7 @@ namespace System.Windows.Forms
                         {
                             result = Comparer.Default.Compare(value1, value2);
                         }
+
                         if (result == 0)
                         {
                             if (ascending)

@@ -43,14 +43,17 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 if (!(value is Form) || !((Form)value).IsMdiChild)
                 {
                     throw new ArgumentException(SR.MDIChildAddToNonMDIParent, nameof(value));
                 }
+
                 if (owner.CreateThreadId != value.CreateThreadId)
                 {
                     throw new ArgumentException(SR.AddDifferentThreads, nameof(value));
                 }
+
                 owner.children.Add((Form)value);
                 base.Add(value);
             }

@@ -1,11 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
-using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -104,7 +102,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewAutoSizeColumnMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewAutoSizeColumnMode))]
         public void DataGridViewColumn_AutoSizeMode_Set_GetReturnsExpected(DataGridViewAutoSizeColumnMode value)
         {
             using var column = new DataGridViewColumn
@@ -123,7 +121,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewAutoSizeColumnMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewAutoSizeColumnMode))]
         public void DataGridViewColumn_AutoSizeMode_SetNotVisible_GetReturnsExpected(DataGridViewAutoSizeColumnMode value)
         {
             using var column = new DataGridViewColumn
@@ -174,6 +172,7 @@ namespace System.Windows.Forms.Tests
                 {
                     yield return new object[] { dataGridMode, true, true, DataGridViewAutoSizeColumnMode.ColumnHeader, DataGridViewAutoSizeColumnMode.ColumnHeader };
                 }
+
                 yield return new object[] { dataGridMode, true, false, DataGridViewAutoSizeColumnMode.ColumnHeader, DataGridViewAutoSizeColumnMode.ColumnHeader };
             }
         }
@@ -488,7 +487,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewAutoSizeColumnMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewAutoSizeColumnMode))]
         public void DataGridViewColumn_AutoSizeMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(DataGridViewAutoSizeColumnMode value)
         {
             using var column = new DataGridViewColumn();
@@ -660,7 +659,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewColumn_DataPropertyName_SetWithoutDataGridView_GetReturnsExpected(string value, string expected)
         {
             using var column = new DataGridViewColumn
@@ -675,7 +674,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewColumn_DataPropertyName_SetWithDataGridView_GetReturnsExpected(string value, string expected)
         {
             using var control = new DataGridView();
@@ -1240,7 +1239,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewColumn_Frozen_SetWithPreviousColumns_SetsToFrozen(bool previousVisible)
         {
             using var control = new DataGridView();
@@ -1408,7 +1407,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewRow_ReadOnly_GetWithDataGridView_ReturnsExpected(bool dataGridViewReadOnly)
         {
             using var control = new DataGridView
@@ -1425,7 +1424,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewColumn_ReadOnly_Set_GetReturnsExpected(bool value)
         {
             using var column = new DataGridViewColumn
@@ -1535,7 +1534,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewColumn_Visible_GetWithDataGridView_ReturnsExpected(bool visible)
         {
             using var control = new DataGridView
@@ -1641,7 +1640,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewColumn_Visible_SetWithPreviousColumns_SetsToVisible(bool previousVisible)
         {
             using var control = new DataGridView();
@@ -1779,7 +1778,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewAutoSizeColumnMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewAutoSizeColumnMode))]
         public void DataGridViewColumn_GetPreferredWidth_NotApplicableAutoSizeColumnMode_ThrowsInvalidEnumArgumentException(DataGridViewAutoSizeColumnMode autoSizeColumnMode)
         {
             using var column = new SubDataGridViewColumn();

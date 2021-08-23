@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Windows.Forms;
-using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -55,7 +52,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
         public void BorderSidesEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new BorderSidesEditor();
@@ -63,7 +60,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void BorderSidesEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new BorderSidesEditor();
@@ -71,7 +68,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void BorderSidesEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new BorderSidesEditor();

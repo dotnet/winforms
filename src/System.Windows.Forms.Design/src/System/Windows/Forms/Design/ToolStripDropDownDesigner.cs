@@ -59,6 +59,7 @@ namespace System.Windows.Forms.Design
                 {
                     actionLists.Add(cmActionList);
                 }
+
                 // finally add the verbs for this component there...
                 DesignerVerbCollection cmVerbs = Verbs;
                 if (cmVerbs != null && cmVerbs.Count != 0)
@@ -67,6 +68,7 @@ namespace System.Windows.Forms.Design
                     cmVerbs.CopyTo(cmverbsArray, 0);
                     actionLists.Add(new DesignerActionVerbList(cmverbsArray));
                 }
+
                 return actionLists;
             }
         }
@@ -74,7 +76,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  The ToolStripItems are the associated components.   We want those to come with in any cut, copy opreations.
         /// </summary>
-        public override System.Collections.ICollection AssociatedComponents
+        public override ICollection AssociatedComponents
         {
             get => ((ToolStrip)Component).Items;
         }
@@ -114,6 +116,7 @@ namespace System.Windows.Forms.Design
                 {
                     return InheritanceAttribute.InheritedReadOnly;
                 }
+
                 return base.InheritanceAttribute;
             }
         }
@@ -176,10 +179,12 @@ namespace System.Windows.Forms.Design
                                 ShadowProperties[SettingsKeyName] = Component.Site.Name;
                             }
                         }
+
                         persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
                         return persistableComponent.SettingsKey;
                     }
                 }
+
                 return ShadowProperties[SettingsKeyName] as string;
             }
             set
@@ -195,7 +200,7 @@ namespace System.Windows.Forms.Design
         // We have to add the glyphs ourselves.
         private void AddSelectionGlyphs(SelectionManager selectionManager, ISelectionService selectionService)
         {
-            //If one or many of our items are selected then Add Selection Glyphs ourselces since this is a ComponentDesigner which wont get called on the "GetGlyphs"
+            //If one or many of our items are selected then Add Selection Glyphs ourselves since this is a ComponentDesigner which won't get called on the "GetGlyphs"
             ICollection selComponents = selectionService.GetSelectedComponents();
             GlyphCollection glyphs = new GlyphCollection();
             foreach (object selComp in selComponents)
@@ -247,15 +252,18 @@ namespace System.Windows.Forms.Design
                     designMenu.Dispose();
                     designMenu = null;
                 }
+
                 if (dummyToolStripGlyph != null)
                 {
                     dummyToolStripGlyph = null;
                 }
+
                 if (_undoEngine != null)
                 {
                     _undoEngine.Undone -= new EventHandler(OnUndone);
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -271,6 +279,7 @@ namespace System.Windows.Forms.Design
                 {
                     form.Controls.Remove(designMenu);
                 }
+
                 if (menuItem != null)
                 {
                     if (_nestedContainer != null)
@@ -278,6 +287,7 @@ namespace System.Windows.Forms.Design
                         _nestedContainer.Dispose();
                         _nestedContainer = null;
                     }
+
                     menuItem.Dispose();
                     menuItem = null;
                 }
@@ -373,6 +383,7 @@ namespace System.Windows.Forms.Design
                 {
                     _selectionService.SetSelectedComponents(new IComponent[] { host.RootComponent }, SelectionTypes.Replace);
                 }
+
                 _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
                 _selectionService.SelectionChanged += new EventHandler(OnSelectionChanged);
             }
@@ -459,6 +470,7 @@ namespace System.Windows.Forms.Design
                     // Try if the item has not laid out...
                     parent = ((ToolStripItem)comp).Owner as ToolStripDropDown;
                 }
+
                 if (parent != null && parent.Visible)
                 {
                     ToolStripItem ownerItem = parent.OwnerItem;
@@ -476,6 +488,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             if (topmost != null)
             {
                 ToolStripItem topMostItem = topmost.OwnerItem;
@@ -484,6 +497,7 @@ namespace System.Windows.Forms.Design
                     showDesignMenu = true;
                 }
             }
+
             return showDesignMenu;
         }
 
@@ -510,6 +524,7 @@ namespace System.Windows.Forms.Design
             {
                 return;
             }
+
             ISelectionService selectionService = (ISelectionService)sender;
             // Select the container if TopLevel Dummy MenuItem is selected.
             if (selectionService.GetComponentSelected(menuItem))
@@ -615,7 +630,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
+        ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The editor node will be selected by default.
         /// </summary>
         public void ShowMenu()
         {
@@ -631,7 +646,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Show the MenuDesigner; used by ToolStripmenuItemdesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
+        ///  Show the MenuDesigner; used by ToolStripMenuItemDesigner to show the menu when the user selects the dropDown item through the PG or Document outline. The input toolstrip item will be selected.
         /// </summary>
         public void ShowMenu(ToolStripItem selectedItem)
         {
@@ -640,7 +655,7 @@ namespace System.Windows.Forms.Design
                 return;
             }
 
-            Control parent = designMenu.Parent as Control;
+            Control parent = designMenu.Parent;
             if (parent is Form parentForm)
             {
                 parentFormDesigner = host.GetDesigner(parentForm) as FormDocumentDesigner;
@@ -660,7 +675,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // Everytime you hide/show .. set the DropDown of the designer MenuItem to the component dropDown beign designed.
+            // Every time you hide/show .. set the DropDown of the designer MenuItem to the component dropDown being designed.
             menuItem.DropDown = dropDown;
             menuItem.DropDown.OwnerItem = menuItem;
             if (dropDown.Items.Count > 0)
@@ -739,7 +754,7 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  This is an internal class which provides the Behavior for our MenuStrip Body Glyph. This will just eat the MouseUps...
         /// </summary>
-        internal class ContextMenuStripBehavior : System.Windows.Forms.Design.Behavior.Behavior
+        internal class ContextMenuStripBehavior : Behavior.Behavior
         {
             readonly ToolStripMenuItem _item;
             internal ContextMenuStripBehavior(ToolStripMenuItem menuItem)
@@ -753,6 +768,7 @@ namespace System.Windows.Forms.Design
                 {
                     return true;
                 }
+
                 return false;
             }
         }

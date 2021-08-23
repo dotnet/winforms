@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -42,7 +40,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  otherwise return this element if the point is on this element,
             ///  otherwise return null.
             /// </returns>
-            internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
                 => Owner.IsHandleCreated ? HitTest((int)x, (int)y) : null;
 
             /// <summary>
@@ -50,10 +48,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_parentPropertyGrid.IsHandleCreated &&
-                    _parentPropertyGrid.AccessibilityObject is PropertyGridAccessibleObject propertyGridAccessibleObject)
+                    _parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
                 {
                     UiaCore.IRawElementProviderFragment navigationTarget = propertyGridAccessibleObject.ChildFragmentNavigate(this, direction);
                     if (navigationTarget is not null)
@@ -62,62 +60,32 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                if (_owningPropertyGridView.OwnerGrid.SortedByCategories)
+                return direction switch
                 {
-                    switch (direction)
-                    {
-                        case UiaCore.NavigateDirection.FirstChild:
-                            return GetFirstCategory();
-                        case UiaCore.NavigateDirection.LastChild:
-                            return GetLastCategory();
-                    }
-                }
-                else
-                {
-                    switch (direction)
-                    {
-                        case UiaCore.NavigateDirection.FirstChild:
-                            return GetChild(0);
-                        case UiaCore.NavigateDirection.LastChild:
-                            int childCount = GetChildCount();
-                            if (childCount > 0)
-                            {
-                                return GetChild(childCount - 1);
-                            }
-
-                            return null;
-                    }
-                }
-
-                return base.FragmentNavigate(direction);
+                    UiaCore.NavigateDirection.FirstChild => IsSortedByCategories ? GetCategory(0) : GetChild(0),
+                    UiaCore.NavigateDirection.LastChild => IsSortedByCategories ? GetLastCategory() : GetLastChild(),
+                    _ => base.FragmentNavigate(direction)
+                };
             }
 
             /// <summary>
             ///  Return the element that is the root node of this fragment of UI.
             /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
-            {
-                get
-                {
-                    return _owningPropertyGridView.OwnerGrid?.AccessibilityObject;
-                }
-            }
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
+                => _owningPropertyGridView.OwnerGrid?.AccessibilityObject;
 
             /// <summary>
             ///  Gets the accessible object for the currently focused grid entry.
             /// </summary>
             /// <returns>The accessible object for the currently focused grid entry.</returns>
-            internal override UiaCore.IRawElementProviderFragment GetFocus()
-            {
-                return GetFocused();
-            }
+            internal override UiaCore.IRawElementProviderFragment? GetFocus() => GetFocused();
 
             /// <summary>
             ///  Request value of specified property from an element.
             /// </summary>
             /// <param name="propertyID">Identifier indicating the property to return</param>
             /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TableControlTypeId,
@@ -135,53 +103,32 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _ => base.IsPatternSupported(patternId)
                 };
 
-            public override string Name
-            {
-                get
-                {
-                    string name = Owner.AccessibleName;
-                    if (name is not null)
-                    {
-                        return name;
-                    }
+            private bool IsSortedByCategories
+                => _owningPropertyGridView.OwnerGrid is not null && _owningPropertyGridView.OwnerGrid.SortedByCategories;
 
-                    return string.Format(SR.PropertyGridDefaultAccessibleNameTemplate, _owningPropertyGridView?.OwnerGrid?.AccessibilityObject.Name);
-                }
-            }
+            public override string Name => Owner.AccessibleName
+                ?? string.Format(SR.PropertyGridDefaultAccessibleNameTemplate, _owningPropertyGridView?.OwnerGrid?.AccessibilityObject.Name);
 
             public override AccessibleRole Role
             {
                 get
                 {
                     AccessibleRole role = Owner.AccessibleRole;
-                    if (role != AccessibleRole.Default)
-                    {
-                        return role;
-                    }
-                    else
-                    {
-                        return AccessibleRole.Table;
-                    }
+                    return role != AccessibleRole.Default ? role : AccessibleRole.Table;
                 }
             }
 
-            public AccessibleObject Next(GridEntry current)
+            public AccessibleObject? Next(GridEntry current)
             {
                 int row = ((PropertyGridView)Owner).GetRowFromGridEntry(current);
                 GridEntry nextEntry = ((PropertyGridView)Owner).GetGridEntryFromRow(++row);
-                if (nextEntry is not null)
-                {
-                    return nextEntry.AccessibilityObject;
-                }
-                return null;
+                return nextEntry?.AccessibilityObject;
             }
 
-            internal AccessibleObject GetCategory(int categoryIndex)
+            internal AccessibleObject? GetCategory(int categoryIndex)
             {
-                GridEntry[] targetEntries = new GridEntry[1];
                 GridEntryCollection topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
-                var topLevelGridEntriesCount = topLevelGridEntries.Count;
-                if (topLevelGridEntriesCount > 0)
+                if (topLevelGridEntries.Count > 0)
                 {
                     GridItem targetEntry = topLevelGridEntries[categoryIndex];
                     if (targetEntry is CategoryGridEntry categoryGridEntry)
@@ -193,16 +140,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            internal AccessibleObject GetFirstCategory()
-            {
-                return GetCategory(0);
-            }
+            internal AccessibleObject? GetLastCategory()
+                => GetCategory(_owningPropertyGridView.TopLevelGridEntries.Count - 1);
 
-            internal AccessibleObject GetLastCategory()
+            internal AccessibleObject? GetLastChild()
             {
-                GridEntryCollection topLevelGridEntries = _owningPropertyGridView.TopLevelGridEntries;
-                var topLevelGridEntriesCount = topLevelGridEntries.Count;
-                return GetCategory(topLevelGridEntries.Count - 1);
+                int childCount = GetChildCount();
+                return childCount > 0 ? GetChild(childCount - 1) : null;
             }
 
             /// <summary>
@@ -212,9 +156,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="gridEntryCollection">The grid entry collection.</param>
             /// <param name="currentGridEntryFound">Indicates whether the current grid entry is found.</param>
             /// <returns>The previous grid entry.</returns>
-            internal AccessibleObject GetPreviousGridEntry(GridEntry currentGridEntry, GridEntryCollection gridEntryCollection, out bool currentGridEntryFound)
+            internal AccessibleObject? GetPreviousGridEntry(GridEntry currentGridEntry, GridEntryCollection gridEntryCollection, out bool currentGridEntryFound)
             {
-                GridEntry previousGridEntry = null;
+                GridEntry? previousGridEntry = null;
                 currentGridEntryFound = false;
 
                 foreach (GridEntry gridEntry in gridEntryCollection)
@@ -238,7 +182,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         previousGridEntry = gridEntry;
                         if (gridEntry.ChildCount > 0)
                         {
-                            AccessibleObject foundChild = GetPreviousGridEntry(currentGridEntry, gridEntry.Children, out currentGridEntryFound);
+                            AccessibleObject? foundChild = GetPreviousGridEntry(currentGridEntry, gridEntry.Children, out currentGridEntryFound);
                             if (foundChild is not null)
                             {
                                 // Return some down-level child if found.
@@ -263,7 +207,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="gridEntryCollection">The grid entry collection.</param>
             /// <param name="currentGridEntryFound">Indicates whether the current grid entry is found.</param>
             /// <returns>The next grid entry.</returns>
-            internal AccessibleObject GetNextGridEntry(GridEntry currentGridEntry, GridEntryCollection gridEntryCollection, out bool currentGridEntryFound)
+            internal AccessibleObject? GetNextGridEntry(GridEntry currentGridEntry, GridEntryCollection gridEntryCollection, out bool currentGridEntryFound)
             {
                 currentGridEntryFound = false;
 
@@ -282,7 +226,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     else if (gridEntry.ChildCount > 0)
                     {
-                        AccessibleObject foundChild = GetNextGridEntry(currentGridEntry, gridEntry.Children, out currentGridEntryFound);
+                        AccessibleObject? foundChild = GetNextGridEntry(currentGridEntry, gridEntry.Children, out currentGridEntryFound);
                         if (foundChild is not null)
                         {
                             // Return some down-level child if found.
@@ -304,14 +248,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="current">The current grid entry.</param>
             /// <returns>The first child property.</returns>
-            internal AccessibleObject GetFirstChildProperty(CategoryGridEntry current)
+            internal AccessibleObject? GetFirstChildProperty(CategoryGridEntry current)
             {
                 if (current.ChildCount > 0)
                 {
                     GridEntryCollection subGridEntry = current.Children;
                     if (subGridEntry is not null && subGridEntry.Count > 0)
                     {
-                        GridEntry[] targetEntries = new GridEntry[1];
+                        var targetEntries = new GridEntry[1];
                         try
                         {
                             _owningPropertyGridView.GetGridEntriesFromOutline(subGridEntry, 0, 0, targetEntries);
@@ -333,14 +277,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="current">The current grid entry.</param>
             /// <returns>The last child property.</returns>
-            internal AccessibleObject GetLastChildProperty(CategoryGridEntry current)
+            internal AccessibleObject? GetLastChildProperty(CategoryGridEntry current)
             {
                 if (current.ChildCount > 0)
                 {
                     GridEntryCollection subGridEntry = current.Children;
                     if (subGridEntry is not null && subGridEntry.Count > 0)
                     {
-                        GridEntry[] targetEntries = new GridEntry[1];
+                        var targetEntries = new GridEntry[1];
                         try
                         {
                             _owningPropertyGridView.GetGridEntriesFromOutline(subGridEntry, 0, subGridEntry.Count - 1, targetEntries);
@@ -362,7 +306,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="current">The current grid entry.</param>
             /// <returns>The next category.</returns>
-            internal AccessibleObject GetNextCategory(CategoryGridEntry current)
+            internal AccessibleObject? GetNextCategory(CategoryGridEntry current)
             {
                 int row = _owningPropertyGridView.GetRowFromGridEntry(current);
 
@@ -381,15 +325,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return null;
             }
 
-            public AccessibleObject Previous(GridEntry current)
+            public AccessibleObject? Previous(GridEntry current)
             {
                 int row = ((PropertyGridView)Owner).GetRowFromGridEntry(current);
-                GridEntry prevEntry = ((PropertyGridView)Owner).GetGridEntryFromRow(--row);
-                if (prevEntry is not null)
-                {
-                    return prevEntry.AccessibilityObject;
-                }
-                return null;
+                GridEntry previousEntry = ((PropertyGridView)Owner).GetGridEntryFromRow(--row);
+                return previousEntry?.AccessibilityObject;
             }
 
             /// <summary>
@@ -397,7 +337,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// </summary>
             /// <param name="current">The current grid entry.</param>
             /// <returns>The previous category.</returns>
-            internal AccessibleObject GetPreviousCategory(CategoryGridEntry current)
+            internal AccessibleObject? GetPreviousCategory(CategoryGridEntry current)
             {
                 int row = _owningPropertyGridView.GetRowFromGridEntry(current);
 
@@ -421,12 +361,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  The accessible children of a PropertyGridView are accessible objects
             ///  corresponding to the property grid entries.
             /// </summary>
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 GridEntryCollection properties = ((PropertyGridView)Owner).AccessibilityGetGridEntries();
                 if (properties is not null && index >= 0 && index < properties.Count)
                 {
-                    return properties.GetEntry(index).AccessibilityObject;
+                    return properties[index].AccessibilityObject;
                 }
                 else
                 {
@@ -439,52 +379,34 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  The accessible children of a PropertyGridView are accessible objects
             ///  corresponding to the property grid entries.
             /// </summary>
-            public override int GetChildCount()
-            {
-                GridEntryCollection properties = ((PropertyGridView)Owner).AccessibilityGetGridEntries();
-
-                if (properties is not null)
-                {
-                    return properties.Count;
-                }
-                else
-                {
-                    return 0;
-                }
-            }
+            public override int GetChildCount() => ((PropertyGridView)Owner).AccessibilityGetGridEntries()?.Count ?? 0;
 
             /// <summary>
             ///  Get the accessible object for the currently focused grid entry.
             /// </summary>
-            public override AccessibleObject GetFocused()
+            public override AccessibleObject? GetFocused()
             {
                 GridEntry gridEntry = ((PropertyGridView)Owner).SelectedGridEntry;
-                if (gridEntry is not null && gridEntry.Focus)
+                if (gridEntry is not null && gridEntry.HasFocus)
                 {
                     return gridEntry.AccessibilityObject;
                 }
+
                 return null;
             }
 
             /// <summary>
             ///  Get the accessible object for the currently selected grid entry.
             /// </summary>
-            public override AccessibleObject GetSelected()
-            {
-                GridEntry gridEntry = ((PropertyGridView)Owner).SelectedGridEntry;
-                if (gridEntry is not null)
-                {
-                    return gridEntry.AccessibilityObject;
-                }
-                return null;
-            }
+            public override AccessibleObject? GetSelected()
+                => ((PropertyGridView)Owner).SelectedGridEntry?.AccessibilityObject;
 
             /// <summary>
             ///  Get the accessible child at the given screen location.
             ///  The accessible children of a PropertyGridView are accessible objects
             ///  corresponding to the property grid entries.
             /// </summary>
-            public override AccessibleObject HitTest(int x, int y)
+            public override AccessibleObject? HitTest(int x, int y)
             {
                 if (!Owner.IsHandleCreated)
                 {
@@ -492,32 +414,29 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Convert to client coordinates
-                var pt = new Point(x, y);
-                User32.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref pt);
+                var point = new Point(x, y);
+                User32.ScreenToClient(new HandleRef(Owner, Owner.Handle), ref point);
 
                 // Find the grid entry at the given client coordinates
-                //
-                Point pos = ((PropertyGridView)Owner).FindPosition(pt.X, pt.Y);
-                if (pos != PropertyGridView.InvalidPosition)
+                Point position = ((PropertyGridView)Owner).FindPosition(point.X, point.Y);
+                if (position != InvalidPosition)
                 {
-                    GridEntry gridEntry = ((PropertyGridView)Owner).GetGridEntryFromRow(pos.Y);
+                    GridEntry gridEntry = ((PropertyGridView)Owner).GetGridEntryFromRow(position.Y);
                     if (gridEntry is not null)
                     {
                         // Return the accessible object for this grid entry
-                        //
                         return gridEntry.AccessibilityObject;
                     }
                 }
 
                 // No grid entry at this point
-                //
                 return null;
             }
 
             /// <summary>
             ///  Navigate to another object.
             /// </summary>
-            public override AccessibleObject Navigate(AccessibleNavigation navdir)
+            public override AccessibleObject? Navigate(AccessibleNavigation navdir)
             {
                 if (GetChildCount() > 0)
                 {
@@ -530,13 +449,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                             return GetChild(GetChildCount() - 1);
                     }
                 }
+
                 return null;    // Perform default behavior
             }
 
-            internal override UiaCore.IRawElementProviderSimple GetItem(int row, int column)
-            {
-                return GetChild(row);
-            }
+            internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column) => GetChild(row);
 
             internal override int RowCount
             {
@@ -548,7 +465,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return 0;
                     }
 
-                    if (!_owningPropertyGridView.OwnerGrid.SortedByCategories)
+                    if (!IsSortedByCategories)
                     {
                         return topLevelGridEntries.Count;
                     }

@@ -96,6 +96,7 @@ namespace System.Windows.Forms
                         {
                             UpdateStyles();
                         }
+
                         OnAppearanceChanged(EventArgs.Empty);
                     }
                 }
@@ -138,10 +139,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (_checkAlign != value)
                 {
@@ -223,6 +221,7 @@ namespace System.Windows.Forms
                     {
                         OnCheckedChanged(EventArgs.Empty);
                     }
+
                     OnCheckStateChanged(EventArgs.Empty);
                 }
             }
@@ -509,12 +508,14 @@ namespace System.Windows.Forms
                         {
                             CheckState = CheckState.Unchecked;
                         }
+
                         break;
                     default:
                         CheckState = CheckState.Unchecked;
                         break;
                 }
             }
+
             base.OnClick(e);
         }
 
@@ -553,11 +554,13 @@ namespace System.Windows.Forms
                             {
                                 OnClick(mevent);
                             }
+
                             OnMouseClick(mevent);
                         }
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -593,8 +596,10 @@ namespace System.Windows.Forms
                         OnClick(EventArgs.Empty);
                     }
                 }
+
                 return true;
             }
+
             return false;
         }
 

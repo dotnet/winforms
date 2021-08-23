@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns the culture of the current input language.
         /// </summary>
-        public CultureInfo Culture => new CultureInfo((int)_handle & 0xFFFF);
+        public CultureInfo Culture => new CultureInfo(PARAM.ToInt(_handle) & 0xFFFF);
 
         /// <summary>
         ///  Gets or sets the input language for the current thread.
@@ -50,6 +50,7 @@ namespace System.Windows.Forms
                 {
                     value = DefaultInputLanguage;
                 }
+
                 IntPtr handleOld = User32.ActivateKeyboardLayout(value.Handle, 0);
                 if (handleOld == IntPtr.Zero)
                 {
@@ -86,7 +87,7 @@ namespace System.Windows.Forms
                 int size = User32.GetKeyboardLayoutList(0, null);
 
                 var handles = new IntPtr[size];
-                fixed (IntPtr *pHandles = handles)
+                fixed (IntPtr* pHandles = handles)
                 {
                     User32.GetKeyboardLayoutList(size, pHandles);
                 }

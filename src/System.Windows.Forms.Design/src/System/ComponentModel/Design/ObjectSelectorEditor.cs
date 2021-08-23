@@ -40,6 +40,7 @@ namespace System.ComponentModel.Design
             {
                 return value;
             }
+
             if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
             {
                 return value;
@@ -148,6 +149,7 @@ namespace System.ComponentModel.Design
                 {
                     Nodes.Add(newNode);
                 }
+
                 return newNode;
             }
 
@@ -165,6 +167,7 @@ namespace System.ComponentModel.Design
                         return true;
                     }
                 }
+
                 return false;
             }
 
@@ -196,6 +199,7 @@ namespace System.ComponentModel.Design
                         {
                             e.Handled = true;
                         }
+
                         break;
 
                     case Keys.Escape:
@@ -204,6 +208,7 @@ namespace System.ComponentModel.Design
                         _edSvc.CloseDropDown();
                         break;
                 }
+
                 base.OnKeyDown(e);
             }
 
@@ -215,6 +220,7 @@ namespace System.ComponentModel.Design
                         e.Handled = true;
                         break;
                 }
+
                 base.OnKeyPress(e);
             }
 
@@ -225,6 +231,7 @@ namespace System.ComponentModel.Design
                 {
                     ChooseSelectedNodeIfEqual();
                 }
+
                 base.OnNodeMouseClick(e);
             }
 
@@ -259,6 +266,7 @@ namespace System.ComponentModel.Design
                         SelectedNode = treeNodes[i];
                         return true;
                     }
+
                     if ((treeNodes[i].Nodes != null) && (treeNodes[i].Nodes.Count != 0))
                     {
                         treeNodes[i].Expand();
@@ -266,9 +274,11 @@ namespace System.ComponentModel.Design
                         {
                             return true;
                         }
+
                         treeNodes[i].Collapse();
                     }
                 }
+
                 return false;
             }
 
@@ -302,6 +312,7 @@ namespace System.ComponentModel.Design
                         {
                             clickSeen = false;
                         }
+
                         break;
                     case User32.WM.REFLECT_NOTIFY:
                         User32.NMHDR* nmtv = (User32.NMHDR*)m.LParam;
@@ -309,8 +320,10 @@ namespace System.ComponentModel.Design
                         {
                             clickSeen = true;
                         }
+
                         break;
                 }
+
                 base.WndProc(ref m);
             }
         }

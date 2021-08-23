@@ -4,9 +4,7 @@
 
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
-using System.Threading;
 using Newtonsoft.Json.Linq;
 using static Interop.User32;
 
@@ -124,6 +122,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
             catch (Exception)
             {
             }
+
             process.WaitForExit(timeout);
             return process.ExitCode;
         }
@@ -234,8 +233,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
                     var ret = Path.Combine(currentDirectory, seek);
                     return ret;
                 }
+
                 currentDirectory = Directory.GetParent(currentDirectory).FullName;
             }
+
             throw new DirectoryNotFoundException($"No {seek} folder was found among siblings of subfolders of {codeBasePath}.");
         }
 
@@ -303,6 +304,18 @@ namespace System.Windows.Forms.IntegrationTests.Common
         public static bool SendUpArrowKeyToProcess(Process process, bool switchToMainWindow = true)
         {
             return SendKeysToProcess(process, "{UP}");
+        }
+
+        /// <summary>
+        ///  Presses Alt plus choosen letter on the given process if it can be made the foreground process
+        /// </summary>
+        /// <param name="process">The process to send the Alt and key to</param>
+        /// <param name="letter">Letter in addition to Alt to send to process.</param>
+        /// <returns>Whether or not the Up key was pressed on the process</returns>
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendAltKeyToProcess(Process process, char letter, bool switchToMainWindow = true)
+        {
+            return SendKeysToProcess(process, "%{" + letter + "}", switchToMainWindow);
         }
 
         /// <summary>

@@ -93,7 +93,7 @@ namespace System.Windows.Forms
             {
                 int index = -1;
 
-                if (innerArray != null)
+                if (innerArray is not null)
                 {
                     index = Array.IndexOf(innerArray, item);
 
@@ -138,6 +138,7 @@ namespace System.Windows.Forms
                     Array.Sort(innerArray, 0, count);
                     index = IndexOf(item);
                 }
+
                 return index;
             }
 
@@ -160,6 +161,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(nameof(item));
                 }
+
                 return Add((int)item);
             }
 
@@ -182,6 +184,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(items));
                 }
+
                 owner.BeginUpdate();
                 try
                 {
@@ -197,6 +200,7 @@ namespace System.Windows.Forms
                             AddInternal((int)item);
                         }
                     }
+
                     owner.UpdateCustomTabOffsets();
                 }
                 finally
@@ -240,6 +244,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(nameof(value));
                 }
+
                 Remove((int)value);
             }
 
@@ -299,6 +304,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
+
                     innerArray[index] = (int)value;
                     owner.UpdateCustomTabOffsets();
                 }

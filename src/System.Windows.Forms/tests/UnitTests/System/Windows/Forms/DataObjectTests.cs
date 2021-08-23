@@ -2,17 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.Shell32;
@@ -66,7 +63,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataObject_ContainsAudio_InvokeMocked_CallsGetDataPresent(bool result)
         {
             var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
@@ -89,7 +86,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataObject_ContainsFileDropList_InvokeMocked_CallsGetDataPresent(bool result)
         {
             var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
@@ -112,7 +109,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataObject_ContainsImage_InvokeMocked_CallsGetDataPresent(bool result)
         {
             var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
@@ -135,7 +132,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataObject_ContainsText_InvokeMocked_CallsGetDataPresent(bool result)
         {
             var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
@@ -151,7 +148,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
         public void DataObject_ContainsText_InvokeTextDataFormat_ReturnsFalse(TextDataFormat format)
         {
             var dataObject = new DataObject();
@@ -187,7 +184,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
         public void DataObject_ContainsText_InvokeInvalidTextDataFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             var dataObject = new DataObject();
@@ -241,6 +238,7 @@ namespace System.Windows.Forms.Tests
             {
                 yield return new object[] { format };
             }
+
             foreach (string format in s_mappedFormats)
             {
                 yield return new object[] { format };
@@ -319,6 +317,7 @@ namespace System.Windows.Forms.Tests
                 {
                     yield return new object[] { format, autoConvert };
                 }
+
                 foreach (string format in s_mappedFormats)
                 {
                     yield return new object[] { format, autoConvert };
@@ -407,6 +406,7 @@ namespace System.Windows.Forms.Tests
             {
                 yield return new object[] { format };
             }
+
             foreach (string format in s_mappedFormats)
             {
                 yield return new object[] { format };
@@ -485,6 +485,7 @@ namespace System.Windows.Forms.Tests
                 {
                     yield return new object[] { format, autoConvert };
                 }
+
                 foreach (string format in s_mappedFormats)
                 {
                     yield return new object[] { format, autoConvert };
@@ -679,7 +680,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataObject_GetFormats_InvokeBoolDefault_ReturnsEmpty(bool autoConvert)
         {
             var dataObject = new DataObject();
@@ -799,7 +800,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataObject_GetText_InvokeMocked_ReturnsExpected(string result)
         {
             var mockDataObject = new Mock<DataObject>(MockBehavior.Strict);
@@ -815,7 +816,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(TextDataFormat))]
         public void DataObject_GetText_InvokeTextDataFormatDefault_ReturnsEmpty(TextDataFormat format)
         {
             var dataObject = new DataObject();
@@ -881,7 +882,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
         public void DataObject_GetText_InvokeInvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             var dataObject = new DataObject();
@@ -1593,7 +1594,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataObject_SetText_NullOrEmptyTextData_ThrowsArgumentNullException(string textData)
         {
             var dataObject = new DataObject();
@@ -1602,7 +1603,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TextDataFormat))]
         public void DataObject_SetText_InvalidFormat_ThrowsInvalidEnumArgumentException(TextDataFormat format)
         {
             var dataObject = new DataObject();

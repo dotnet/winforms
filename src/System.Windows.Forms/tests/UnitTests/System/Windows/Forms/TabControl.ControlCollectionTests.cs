@@ -1,11 +1,9 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using Moq;
 using Xunit;
 using static Interop;
@@ -64,6 +62,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -186,6 +185,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -345,6 +345,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -485,6 +486,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -911,6 +913,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -1006,6 +1009,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -1130,6 +1134,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -1241,6 +1246,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;

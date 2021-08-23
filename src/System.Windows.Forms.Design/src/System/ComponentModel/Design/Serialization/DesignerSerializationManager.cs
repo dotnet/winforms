@@ -69,6 +69,7 @@ namespace System.ComponentModel.Design.Serialization
                         container = host.Container;
                     }
                 }
+
                 return container;
             }
             set
@@ -79,7 +80,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This retrieves the collection of errors that have been reported to the serialization manager.  Additionaly, new errors can be added to the list by accessing this property.
+        ///  This retrieves the collection of errors that have been reported to the serialization manager.  Additionally, new errors can be added to the list by accessing this property.
         /// </summary>
         public IList Errors
         {
@@ -90,6 +91,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     errorList = new ArrayList();
                 }
+
                 return errorList;
             }
         }
@@ -108,7 +110,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This property returns the object that should be used to provide properties to the serialization manager's Propeties property.  This object's  public properties will be inspected and wrapped in new property descriptors that have a target object of the serialization manager.
+        ///  This property returns the object that should be used to provide properties to the serialization manager's Properties property.  This object's  public properties will be inspected and wrapped in new property descriptors that have a target object of the serialization manager.
         /// </summary>
         public object PropertyProvider
         {
@@ -124,7 +126,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This property determines the behavior of the CreateInstance method.  If false, CreateInstance will always create a new instance of an object.  If true, CreateInstance will first search the nametable and container for an object of the same name.  If such an object exists and is of the same type, CreateInstance will return the existing object instance.  This second variation is useful for implemeting a serializer that applies serialization state to an existing set of objects, rather than always creating a new tree.  Undo often uses this type of serializer. The default value of this property is false.
+        ///  This property determines the behavior of the CreateInstance method.  If false, CreateInstance will always create a new instance of an object.  If true, CreateInstance will first search the nametable and container for an object of the same name.  If such an object exists and is of the same type, CreateInstance will return the existing object instance.  This second variation is useful for implementing a serializer that applies serialization state to an existing set of objects, rather than always creating a new tree.  Undo often uses this type of serializer. The default value of this property is false.
         /// </summary>
         public bool RecycleInstances
         {
@@ -137,7 +139,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  This property determines the behavior of the CreateInstance method and only applies if RecyleInstances is true.  If true, and  an existing instance is found for the given name, it will only be returned if the two types match.  If false, the instance will be returned even if the two types do not match.  This is useful for "morphing" one type of object to another if they have similar properties but share no common parent or interface. The default value of this property is true.
+        ///  This property determines the behavior of the CreateInstance method and only applies if RecycleInstances is true.  If true, and  an existing instance is found for the given name, it will only be returned if the two types match.  If false, the instance will be returned even if the two types do not match.  This is useful for "morphing" one type of object to another if they have similar properties but share no common parent or interface. The default value of this property is true.
         /// </summary>
         public bool ValidateRecycledTypes
         {
@@ -190,7 +192,7 @@ namespace System.ComponentModel.Design.Serialization
         }
 
         /// <summary>
-        ///  Creates an instance of the specified type.  The default implementation will create the object.  If the object implements IComponent and only requires an empty or IContainer style constructor, this will search for IDesignerHost and create through the host.  Otherwise it will use reflection.  If addToContainer is true, this will add to the container using this class's Conainer property, using the name provided if it is not null.
+        ///  Creates an instance of the specified type.  The default implementation will create the object.  If the object implements IComponent and only requires an empty or IContainer style constructor, this will search for IDesignerHost and create through the host.  Otherwise it will use reflection.  If addToContainer is true, this will add to the container using this class's Container property, using the name provided if it is not null.
         /// </summary>
         protected virtual object CreateInstance(Type type, ICollection arguments, string name, bool addToContainer)
         {
@@ -227,7 +229,7 @@ namespace System.ComponentModel.Design.Serialization
             // 2.  addToContainer is true.
             // 3.  The type has a null ctor or an IContainer ctor.
             // 4.  The host is available and its container matches our container.
-            // The reason for this is that if we went through activator, and if the object already specified a constructor that took an IContainer, our deserialization mechanism would equate the container to the designer host.  This is the correct thing to do, but it has the side effect of adding the compnent to the designer host twice -- once with a default name, and a second time with the name we provide.  This equates to a component rename, which isn't cheap,  so we don't want to do it when we load each and every component.
+            // The reason for this is that if we went through activator, and if the object already specified a constructor that took an IContainer, our deserialization mechanism would equate the container to the designer host.  This is the correct thing to do, but it has the side effect of adding the component to the designer host twice -- once with a default name, and a second time with the name we provide.  This equates to a component rename, which isn't cheap,  so we don't want to do it when we load each and every component.
             if (instance is null && addToContainer && typeof(IComponent).IsAssignableFrom(type) && (argArray is null || argArray.Length == 0 || (argArray.Length == 1 && argArray[0] == Container)))
             {
                 if (GetService(typeof(IDesignerHost)) is IDesignerHost host && host.Container == Container)
@@ -260,7 +262,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     try
                     {
-                        // First, just try to create the object directly with the arguments.  generaly this should work.
+                        // First, just try to create the object directly with the arguments.  generally this should work.
                         instance = TypeDescriptor.CreateInstance(provider, type, null, argArray);
                     }
                     catch (MissingMethodException)
@@ -306,9 +308,11 @@ namespace System.ComponentModel.Design.Serialization
                                         {
                                         }
                                     }
+
                                     match = false;
                                     break;
                                 }
+
                                 // all of the parameters were converted or matched, so try the creation again. if that works, we're in the money.
                                 if (match)
                                 {
@@ -344,6 +348,7 @@ namespace System.ComponentModel.Design.Serialization
                             argTypes.Append("null");
                         }
                     }
+
                     Exception ex = new SerializationException(string.Format(SR.SerializationManagerNoMatchingCtor, type.FullName, argTypes.ToString()))
                     {
                         HelpLink = SR.SerializationManagerNoMatchingCtor
@@ -374,6 +379,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return instance;
         }
 
@@ -384,7 +390,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (session != null)
             {
-                throw new InvalidOperationException(SR.SerializationManagerAreadyInSession);
+                throw new InvalidOperationException(SR.SerializationManagerAlreadyInSession);
             }
 
             session = new SerializationSession(this);
@@ -441,6 +447,7 @@ namespace System.ComponentModel.Design.Serialization
                             }
                         }
                     }
+
                     // And stash this little guy for later, but only if we're in a session. If we're outside of a session this should still be useable for resolving serializers, but we don't cache them.
                     if (serializer != null && session != null)
                     {
@@ -448,6 +455,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             serializers = new Hashtable();
                         }
+
                         serializers[objectType] = serializer;
                     }
                 }
@@ -473,6 +481,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     defaultProviderTable = new Hashtable();
                 }
+
                 defaultProviderTable[serializerType] = defaultSerializerType;
             }
 
@@ -494,6 +503,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return serializer;
         }
 
@@ -511,6 +521,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return provider.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -531,6 +542,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return type;
         }
 
@@ -554,6 +566,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 type = typeResolver.GetType(typeName);
             }
+
             return type;
         }
 
@@ -611,6 +624,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(property));
             }
+
             // owner can be null for static properties.
             return new WrappedPropertyDescriptor(property, owner);
         }
@@ -627,6 +641,7 @@ namespace System.ComponentModel.Design.Serialization
                     CheckSession();
                     contextStack = new ContextStack();
                 }
+
                 return contextStack;
             }
         }
@@ -655,8 +670,10 @@ namespace System.ComponentModel.Design.Serialization
                             propArray[i] = WrapProperty(props[i], propObject);
                         }
                     }
+
                     properties = new PropertyDescriptorCollection(propArray);
                 }
+
                 return properties;
             }
         }
@@ -696,6 +713,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 designerSerializationProviders = new ArrayList();
             }
+
             if (!designerSerializationProviders.Contains(provider))
             {
                 designerSerializationProviders.Add(provider);
@@ -732,9 +750,11 @@ namespace System.ComponentModel.Design.Serialization
                     instancesByName = new Hashtable();
                     namesByInstance = new Hashtable(new ReferenceComparer());
                 }
+
                 instancesByName[name] = instance;
                 namesByInstance[instance] = name;
             }
+
             return instance;
         }
 
@@ -767,6 +787,7 @@ namespace System.ComponentModel.Design.Serialization
                 OnResolveName(e);
                 instance = e.Value;
             }
+
             return instance;
         }
 
@@ -803,6 +824,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return name;
         }
 
@@ -836,9 +858,11 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         break;
                     }
+
                     typeName = typeName.Substring(0, dotIndex) + "+" + typeName.Substring(dotIndex + 1, typeName.Length - dotIndex - 1);
                 }
             }
+
             return t;
         }
 
@@ -901,6 +925,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentException(string.Format(SR.SerializationManagerObjectHasName, name, (string)namesByInstance[instance]), nameof(instance));
             }
+
             instancesByName[name] = instance;
             namesByInstance[instance] = name;
         }
@@ -938,7 +963,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             bool IEqualityComparer.Equals(object x, object y)
             {
-                return object.ReferenceEquals(x, y);
+                return ReferenceEquals(x, y);
             }
 
             int IEqualityComparer.GetHashCode(object x)
@@ -947,6 +972,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     return x.GetHashCode();
                 }
+
                 return 0;
             }
         }

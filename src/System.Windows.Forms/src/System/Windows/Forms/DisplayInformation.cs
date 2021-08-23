@@ -33,12 +33,13 @@ namespace System.Windows.Forms
                 if (s_bitsPerPixel == 0)
                 {
                     // we used to iterate through all screens, but
-                    // for some reason unused screens can temparily appear
+                    // for some reason unused screens can temporarily appear
                     // in the AllScreens collection - we would honor the display
                     // setting of an unused screen.
                     // According to EnumDisplayMonitors, a primary screen check should be sufficient
                     s_bitsPerPixel = (short)Screen.PrimaryScreen.BitsPerPixel;
                 }
+
                 return s_bitsPerPixel;
             }
         }
@@ -54,7 +55,8 @@ namespace System.Windows.Forms
                 {
                     return s_lowRes;
                 }
-                // dont cache if we're in low resolution.
+
+                // don't cache if we're in low resolution.
                 s_lowRes = BitsPerPixel <= 8;
                 s_lowResSettingValid = true;
                 return s_lowRes;
@@ -72,6 +74,7 @@ namespace System.Windows.Forms
                 {
                     return s_highContrast;
                 }
+
                 s_highContrast = SystemInformation.HighContrast;
                 s_highContrastSettingValid = true;
                 return s_highContrast;
@@ -86,6 +89,7 @@ namespace System.Windows.Forms
                 {
                     return s_dropShadowEnabled;
                 }
+
                 s_dropShadowEnabled = SystemInformation.IsDropShadowEnabled;
                 s_dropShadowSettingValid = true;
                 return s_dropShadowEnabled;
@@ -101,6 +105,7 @@ namespace System.Windows.Forms
                 {
                     return s_menuAccessKeysUnderlined;
                 }
+
                 s_menuAccessKeysUnderlined = SystemInformation.MenuAccessKeysUnderlined;
                 s_menuAccessKeysUnderlinedValid = true;
                 return s_menuAccessKeysUnderlined;

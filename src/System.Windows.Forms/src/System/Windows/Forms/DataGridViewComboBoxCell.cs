@@ -81,6 +81,7 @@ namespace System.Windows.Forms
                     s_nonXPTriangleWidth = (byte)DpiHelper.LogicalToDeviceUnitsX(NonXPTriangleWidth);
                     s_nonXPTriangleHeight = (byte)DpiHelper.LogicalToDeviceUnitsY(NonXPTriangleHeight);
                 }
+
                 s_isScalingInitialized = true;
             }
         }
@@ -117,6 +118,7 @@ namespace System.Windows.Forms
                     {
                         _flags = (byte)(_flags & ~CellAutoComplete);
                     }
+
                     if (OwnsEditingComboBox(RowIndex))
                     {
                         if (value)
@@ -163,6 +165,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentException(SR.BadDataSourceForComplexBinding);
                 }
+
                 if (DataSource != value)
                 {
                     // Invalidate the currency manager
@@ -188,6 +191,7 @@ namespace System.Windows.Forms
                         {
                             throw;
                         }
+
                         Debug.Assert(DisplayMember is not null && DisplayMember.Length > 0);
                         DisplayMemberInternal = null;
                     }
@@ -202,6 +206,7 @@ namespace System.Windows.Forms
                         {
                             throw;
                         }
+
                         Debug.Assert(ValueMember is not null && ValueMember.Length > 0);
                         ValueMemberInternal = null;
                     }
@@ -293,6 +298,7 @@ namespace System.Windows.Forms
                 {
                     return (DataGridViewComboBoxDisplayStyle)displayStyle;
                 }
+
                 return DataGridViewComboBoxDisplayStyle.DropDownButton;
             }
             set
@@ -339,6 +345,7 @@ namespace System.Windows.Forms
                 {
                     return displayStyleForCurrentCellOnly == 0 ? false : true;
                 }
+
                 return false;
             }
             set
@@ -421,6 +428,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(DropDownWidth), value, string.Format(SR.DataGridViewComboBoxCell_DropDownWidthOutOfRange, 1));
                 }
+
                 Properties.SetInteger(s_propComboBoxCellDropDownWidth, (int)value);
                 if (OwnsEditingComboBox(RowIndex))
                 {
@@ -462,6 +470,7 @@ namespace System.Windows.Forms
                 {
                     return (FlatStyle)flatStyle;
                 }
+
                 return FlatStyle.Standard;
             }
             set
@@ -523,6 +532,7 @@ namespace System.Windows.Forms
                 {
                     return maxDropDownItems;
                 }
+
                 return DefaultMaxDropDownItems;
             }
             set
@@ -532,6 +542,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(MaxDropDownItems), value, string.Format(SR.DataGridViewComboBoxCell_MaxDropDownItemsOutOfRange, 1, 100));
                 }
+
                 Properties.SetInteger(s_propComboBoxCellMaxDropDownItems, (int)value);
                 if (OwnsEditingComboBox(RowIndex))
                 {
@@ -579,12 +590,14 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentException(SR.ComboBoxSortWithDataSource);
                         }
+
                         _flags |= (byte)CellSorted;
                     }
                     else
                     {
                         _flags = (byte)(_flags & ~CellSorted);
                     }
+
                     if (OwnsEditingComboBox(RowIndex))
                     {
                         EditingComboBox.Sorted = value;
@@ -682,6 +695,7 @@ namespace System.Windows.Forms
                     {
                         return baseValueType;
                     }
+
                     return s_defaultValueType;
                 }
             }
@@ -783,8 +797,10 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             s_cachedDropDownWidth = maxPreferredWidth + 2 + SystemInformation.VerticalScrollBarWidth;
                         }
+
                         Debug.Assert(s_cachedDropDownWidth >= 1);
                         User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, (IntPtr)s_cachedDropDownWidth);
                     }
@@ -816,6 +832,7 @@ namespace System.Windows.Forms
                 //
                 dataGridViewCell = (DataGridViewComboBoxCell)System.Activator.CreateInstance(thisType);
             }
+
             base.CloneInternal(dataGridViewCell);
             dataGridViewCell.DropDownWidth = DropDownWidth;
             dataGridViewCell.MaxDropDownItems = MaxDropDownItems;
@@ -827,6 +844,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.Items.AddRangeInternal(Items.InnerArray.ToArray());
             }
+
             dataGridViewCell.AutoComplete = AutoComplete;
             dataGridViewCell.Sorted = Sorted;
             dataGridViewCell.FlatStyleInternal = FlatStyle;
@@ -973,6 +991,7 @@ namespace System.Windows.Forms
                     DataManager = cm;
                 }
             }
+
             return cm;
         }
 
@@ -1000,6 +1019,7 @@ namespace System.Windows.Forms
                     adjustment = 6;
                 }
             }
+
             return DataGridViewCell.MeasureTextHeight(graphics, " ", cellStyle.Font, int.MaxValue, TextFormatFlags.Default) + adjustment;
         }
 
@@ -1089,6 +1109,7 @@ namespace System.Windows.Forms
                 {
                     return base.GetFormattedValue(null, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
                 }
+
                 if (DataGridView is not null)
                 {
                     DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(
@@ -1100,6 +1121,7 @@ namespace System.Windows.Forms
                         throw dgvdee.Exception;
                     }
                 }
+
                 return base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
             }
 
@@ -1135,6 +1157,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return base.GetFormattedValue(displayValue, rowIndex, ref cellStyle, DisplayTypeConverter, formattedValueTypeConverter, context);
             }
             else
@@ -1164,6 +1187,7 @@ namespace System.Windows.Forms
                         value = string.Empty;
                     }
                 }
+
                 return base.GetFormattedValue(value, rowIndex, ref cellStyle, valueTypeConverter, formattedValueTypeConverter, context);
             }
         }
@@ -1207,10 +1231,12 @@ namespace System.Windows.Forms
                     displayValueSet = true;
                 }
             }
+
             if (!displayValueSet)
             {
                 displayValue = item;
             }
+
             return displayValue;
         }
 
@@ -1222,6 +1248,7 @@ namespace System.Windows.Forms
                 items = new ObjectCollection(this);
                 Properties.SetObject(s_propComboBoxCellItems, items);
             }
+
             if (CreateItemsFromDataSource)
             {
                 items.ClearInternal();
@@ -1233,14 +1260,17 @@ namespace System.Windows.Forms
                     {
                         newItems[i] = dataManager[i];
                     }
+
                     items.AddRangeInternal(newItems);
                 }
+
                 // Do not clear the CreateItemsFromDataSource flag when the data source has not been initialized yet
                 if (dataManager is not null || (_flags & DataSourceInitializedHookedUp) == 0x00)
                 {
                     CreateItemsFromDataSource = false;
                 }
             }
+
             return items;
         }
 
@@ -1267,6 +1297,7 @@ namespace System.Windows.Forms
                     valueSet = true;
                 }
             }
+
             if (!valueSet && !string.IsNullOrEmpty(DisplayMember))
             {
                 PropertyDescriptor propDesc = TypeDescriptor.GetProperties(item).Find(DisplayMember, true /*caseInsensitive*/);
@@ -1276,10 +1307,12 @@ namespace System.Windows.Forms
                     valueSet = true;
                 }
             }
+
             if (!valueSet)
             {
                 value = item;
             }
+
             return value;
         }
 
@@ -1330,6 +1363,7 @@ namespace System.Windows.Forms
                     preferredSize.Width = Math.Max(preferredSize.Width, borderAndPaddingWidths + SystemInformation.HorizontalScrollBarThumbWidth + 1 + IconMarginWidth * 2 + s_iconsWidth);
                 }
             }
+
             if (freeDimension != DataGridViewFreeDimension.Width)
             {
                 if (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup)
@@ -1340,6 +1374,7 @@ namespace System.Windows.Forms
                 {
                     preferredSize.Height += 8;
                 }
+
                 preferredSize.Height += borderAndPaddingHeights;
                 if (DataGridView.ShowCellErrors)
                 {
@@ -1347,6 +1382,7 @@ namespace System.Windows.Forms
                     preferredSize.Height = Math.Max(preferredSize.Height, borderAndPaddingHeights + IconMarginHeight * 2 + s_iconsHeight);
                 }
             }
+
             return preferredSize;
         }
 
@@ -1382,6 +1418,7 @@ namespace System.Windows.Forms
                 {
                     h = comboBox.ParentInternal.Handle;
                 }
+
                 h = comboBox.Handle; // make sure that assigning the DataSource property does not assert.
                 comboBox.DropDownStyle = ComboBoxStyle.DropDownList;
                 comboBox.FormattingEnabled = true;
@@ -1408,6 +1445,7 @@ namespace System.Windows.Forms
                 {
                     comboBox.Items.AddRange(Items.InnerArray.ToArray());
                 }
+
                 comboBox.Sorted = Sorted;
                 comboBox.FlatStyle = FlatStyle;
                 if (AutoComplete)
@@ -1425,6 +1463,7 @@ namespace System.Windows.Forms
                 {
                     initialFormattedValueStr = string.Empty;
                 }
+
                 comboBox.Text = initialFormattedValueStr;
 
                 if ((_flags & DropDownHookedUp) == 0x00)
@@ -1432,6 +1471,7 @@ namespace System.Windows.Forms
                     comboBox.DropDown += new EventHandler(ComboBox_DropDown);
                     _flags |= (byte)DropDownHookedUp;
                 }
+
                 s_cachedDropDownWidth = -1;
 
                 EditingComboBox = DataGridView.EditingControl as DataGridViewComboBoxEditingControl;
@@ -1545,6 +1585,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return item;
         }
 
@@ -1563,12 +1604,14 @@ namespace System.Windows.Forms
                 {
                     displayValue = propDesc.GetValue(item);
                 }
+
                 if (displayValue is null || !displayValue.Equals(key))
                 {
                     // No, the selected item is not looked for.
                     item = null; // Need to loop through all the items
                 }
             }
+
             if (item is null)
             {
                 foreach (object itemCandidate in Items)
@@ -1579,6 +1622,7 @@ namespace System.Windows.Forms
                     {
                         displayValue = propDesc.GetValue(itemCandidate);
                     }
+
                     if (displayValue is not null && displayValue.Equals(key))
                     {
                         // Found the item.
@@ -1587,6 +1631,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             if (item is null)
             {
                 // The provided field could be wrong - try to match the key against an actual item
@@ -1599,11 +1644,13 @@ namespace System.Windows.Forms
                         item = null;
                     }
                 }
+
                 if (item is null && Items.Contains(key))
                 {
                     item = key;
                 }
             }
+
             return item;
         }
 
@@ -1620,6 +1667,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.KeyEntersEditMode(e);
         }
 
@@ -1648,6 +1696,7 @@ namespace System.Windows.Forms
                 //Find the item in the Items collection based on the provided ValueMember or DisplayMember
                 item = ItemFromComboBoxItems(rowIndex, string.IsNullOrEmpty(ValueMember) ? DisplayMember : ValueMember, value);
             }
+
             if (item is null)
             {
                 displayValue = null;
@@ -1690,6 +1739,7 @@ namespace System.Windows.Forms
                 //Find the item in the Items collection based on the provided DisplayMember or ValueMember
                 item = ItemFromComboBoxItems(RowIndex, string.IsNullOrEmpty(DisplayMember) ? ValueMember : DisplayMember, formattedValue);
             }
+
             if (item is null)
             {
                 value = null;
@@ -1709,6 +1759,7 @@ namespace System.Windows.Forms
                 InitializeDisplayMemberPropertyDescriptor(DisplayMember);
                 InitializeValueMemberPropertyDescriptor(ValueMember);
             }
+
             base.OnDataGridViewChanged();
         }
 
@@ -1718,6 +1769,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (throughMouseClick && DataGridView.EditMode != DataGridViewEditMode.EditOnEnter)
             {
                 _flags |= (byte)IgnoreNextMouseClick;
@@ -1731,6 +1783,7 @@ namespace System.Windows.Forms
                 Debug.Assert(TemplateComboBoxColumn.CellTemplate == this);
                 TemplateComboBoxColumn.OnItemsCollectionChanged();
             }
+
             s_cachedDropDownWidth = -1;
             if (OwnsEditingComboBox(RowIndex))
             {
@@ -1748,6 +1801,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             _flags = (byte)(_flags & ~IgnoreNextMouseClick);
         }
 
@@ -1757,6 +1811,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             Debug.Assert(e.ColumnIndex == ColumnIndex);
             Point ptCurrentCell = DataGridView.CurrentCellAddress;
             if (ptCurrentCell.X == e.ColumnIndex && ptCurrentCell.Y == e.RowIndex)
@@ -1825,6 +1880,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if ((FlatStyle == FlatStyle.Standard || FlatStyle == FlatStyle.System) && DataGridView.ApplyVisualStylesToInnerCells)
             {
                 int rowIndex = e.RowIndex;
@@ -1883,6 +1939,7 @@ namespace System.Windows.Forms
                     DataGridView.InvalidateCell(e.ColumnIndex, rowIndex);
                 }
             }
+
             base.OnMouseMove(e);
         }
 
@@ -2022,6 +2079,7 @@ namespace System.Windows.Forms
                 {
                     valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                 }
+
                 valBounds.Width -= cellStyle.Padding.Horizontal;
                 valBounds.Height -= cellStyle.Padding.Vertical;
             }
@@ -2259,7 +2317,7 @@ namespace System.Windows.Forms
                                 Point pt1 = new Point(middle.X - (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
                                 Point pt2 = new Point(middle.X + (s_nonXPTriangleWidth - 1) / 2, middle.Y - s_nonXPTriangleHeight);
                                 g.FillPolygon(SystemBrushes.ControlText, new Point[] { pt1, pt2, middle });
-                                // quirk in GDI+ : if we dont draw the line below then the top right most pixel of the DropDown triangle will not paint
+                                // quirk in GDI+ : if we don't draw the line below then the top right most pixel of the DropDown triangle will not paint
                                 // Would think that g.FillPolygon would have painted that...
                                 g.DrawLine(SystemPens.ControlText, pt1.X, pt1.Y, pt2.X, pt2.Y);
 
@@ -2289,6 +2347,7 @@ namespace System.Windows.Forms
                 {
                     textBounds.X--;
                 }
+
                 textBounds.Width++;
             }
 
@@ -2333,6 +2392,7 @@ namespace System.Windows.Forms
                         {
                             focusBounds.X--;
                         }
+
                         focusBounds.Width++;
                         focusBounds.Y--;
                         focusBounds.Height += 2;
@@ -2380,6 +2440,7 @@ namespace System.Windows.Forms
                         textBounds.Offset(HorizontalTextMarginLeft - 1, verticalTextMarginTop);
                         textBounds.Width += 1 - HorizontalTextMarginLeft;
                     }
+
                     textBounds.Height -= verticalTextMarginTop;
 
                     if (textBounds.Width > 0 && textBounds.Height > 0)
@@ -2393,6 +2454,7 @@ namespace System.Windows.Forms
                                 {
                                     flags |= TextFormatFlags.EndEllipsis;
                                 }
+
                                 Color textColor;
                                 if (paintPostXPThemes && (drawDropDownButton || drawComboBox))
                                 {
@@ -2481,6 +2543,7 @@ namespace System.Windows.Forms
                         throw new FormatException(string.Format(CultureInfo.CurrentCulture, SR.Formatter_CantConvert, value, DisplayType));
                     }
                 }
+
                 return value;
             }
             else

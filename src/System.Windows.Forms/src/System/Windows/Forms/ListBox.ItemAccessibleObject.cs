@@ -19,14 +19,12 @@ namespace System.Windows.Forms
             private readonly ItemArray.Entry _itemEntry;
             private readonly ListBoxAccessibleObject _owningAccessibleObject;
             private readonly ListBox _owningListBox;
-            private readonly IAccessible? _systemIAccessible;
 
             public ListBoxItemAccessibleObject(ListBox owningListBox, ItemArray.Entry itemEntry, ListBoxAccessibleObject owningAccessibleObject)
             {
                 _owningListBox = owningListBox ?? throw new ArgumentNullException(nameof(owningListBox));
                 _itemEntry = itemEntry ?? throw new ArgumentNullException(nameof(itemEntry));
                 _owningAccessibleObject = owningAccessibleObject ?? throw new ArgumentNullException(nameof(owningAccessibleObject));
-                _systemIAccessible = owningAccessibleObject.GetSystemIAccessibleInternal();
             }
 
             private int CurrentIndex
@@ -105,13 +103,13 @@ namespace System.Windows.Forms
             ///  Gets the <see cref="ListBox"/> item default action.
             /// </summary>
             public override string? DefaultAction
-                => _systemIAccessible?.accDefaultAction[GetChildId()];
+                => SystemIAccessible?.accDefaultAction[GetChildId()];
 
             /// <summary>
             ///  Gets the help text.
             /// </summary>
             public override string? Help
-                => _systemIAccessible?.accHelp[GetChildId()];
+                => SystemIAccessible?.accHelp[GetChildId()];
 
             /// <summary>
             ///  Gets or sets the item accessible name.
@@ -132,8 +130,8 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    var accRole = _systemIAccessible?.get_accRole(GetChildId());
-                    return accRole != null
+                    var accRole = SystemIAccessible?.get_accRole(GetChildId());
+                    return accRole is not null
                         ? (AccessibleRole)accRole
                         : AccessibleRole.None;
                 }
@@ -153,8 +151,8 @@ namespace System.Windows.Forms
                         return state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
 
-                    var systemIAccessibleState = _systemIAccessible?.get_accState(GetChildId());
-                    if (systemIAccessibleState != null)
+                    var systemIAccessibleState = SystemIAccessible?.get_accState(GetChildId());
+                    if (systemIAccessibleState is not null)
                     {
                         return state |= (AccessibleStates)systemIAccessibleState;
                     }
@@ -162,6 +160,8 @@ namespace System.Windows.Forms
                     return state;
                 }
             }
+
+            private IAccessible? SystemIAccessible => _owningAccessibleObject.GetSystemIAccessibleInternal();
 
             internal override void AddToSelection()
             {
@@ -194,12 +194,14 @@ namespace System.Windows.Forms
                         {
                             return _owningAccessibleObject.GetChild(currentIndex - 1);
                         }
+
                         return null;
                     case UiaCore.NavigateDirection.NextSibling:
                         if (currentIndex >= firstItemIndex && currentIndex < lastItemIndex)
                         {
                             return _owningAccessibleObject.GetChild(currentIndex + 1);
                         }
+
                         return null;
                 }
 
@@ -330,7 +332,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    _systemIAccessible?.accSelect((int)flags, GetChildId());
+                    SystemIAccessible?.accSelect((int)flags, GetChildId());
                 }
                 catch (ArgumentException)
                 {

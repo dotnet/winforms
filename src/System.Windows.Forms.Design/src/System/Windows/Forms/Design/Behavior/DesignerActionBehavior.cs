@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -85,6 +84,7 @@ namespace System.Windows.Forms.Design.Behavior
                 Debug.Fail("Why are we trying to 'showui' on a glyph that's not a DesignerActionGlyph?");
                 return;
             }
+
             DesignerActionPanel dap = CreateDesignerActionPanel(RelatedComponent);
             ParentUI.ShowDesignerActionPanel(RelatedComponent, dap, glyph);
         }
@@ -117,6 +117,7 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 return true;
             }
+
             bool returnValue = true;
             if (ParentUI.IsDesignerActionPanelVisible)
             {
@@ -139,12 +140,14 @@ namespace System.Windows.Forms.Design.Behavior
                         }
                     }
                 }
+
                 ShowUI(g);
             }
             else
             {
                 returnValue = false;
             }
+
             _ignoreNextMouseUp = false;
             return returnValue;
         }

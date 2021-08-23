@@ -4,7 +4,6 @@
 
 using System.CodeDom;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Globalization;
@@ -30,6 +29,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     s_defaultSerializer = new CollectionCodeDomSerializer();
                 }
+
                 return s_defaultSerializer;
             }
         }
@@ -50,6 +50,7 @@ namespace System.ComponentModel.Design.Serialization
                 Debug.Fail("Collection of type " + modified.GetType().FullName + " doesn't return an enumerator");
                 return modified;
             }
+
             // first hash up the values so we can quickly decide if it's a new one or not
             IDictionary originalValues = new HybridDictionary();
             foreach (object originalValue in original)
@@ -84,9 +85,11 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             result.Add(modifiedEnum.Current);
                         }
+
                         // and finally skip the one we're on
                         modifiedEnum.MoveNext();
                     }
+
                     // decrement the count if we've got more than one...
                     int count = (int)originalValues[value];
 
@@ -104,6 +107,7 @@ namespace System.ComponentModel.Design.Serialization
                     // this one isn't in the old list, so add it to our  result list.
                     result.Add(value);
                 }
+
                 // this item isn't in the list and we haven't yet created our array list so just keep on going.
             }
 
@@ -111,6 +115,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return result;
             }
+
             return modified;
         }
 
@@ -152,36 +157,38 @@ namespace System.ComponentModel.Design.Serialization
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             object result = null;
             using (TraceScope("CollectionCodeDomSerializer::" + nameof(Serialize)))
             {
                 // We serialize collections as follows:
                 //      If the collection is an array, we write out the array.
                 //      If the collection has a method called AddRange, we will call that, providing an array.
-                //      If the colleciton has an Add method, we will call it repeatedly.
+                //      If the collection has an Add method, we will call it repeatedly.
                 //      If the collection is an IList, we will cast to IList and add to it.
                 //      If the collection has no add method, but is marked with PersistContents, we will enumerate the collection and serialize each element.
                 // Check to see if there is a CodePropertyReferenceExpression on the stack.  If there is, we can use it as a guide for serialization.
                 CodeExpression target;
-                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt && cxt.PresetValue == value && manager.Context[typeof(PropertyDescriptor)] is PropertyDescriptor prop && prop.PropertyType == cxt.ExpressionType)
+                if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx && ctx.PresetValue == value && manager.Context[typeof(PropertyDescriptor)] is PropertyDescriptor prop && prop.PropertyType == ctx.ExpressionType)
                 {
                     // We only want to give out an expression target if  this is our context (we find this out by comparing types above) and if the context type is not an array.  If it is an array, we will  just return the array create expression.
-                    target = cxt.Expression;
+                    target = ctx.Expression;
                     Trace("Valid context and property descriptor found on context stack.");
                 }
                 else
                 {
                     // This context is either the wrong context or doesn't match the property descriptor we found.
                     target = null;
-                    cxt = null;
+                    ctx = null;
                     prop = null;
                     Trace("No valid context.  We can only serialize if this is an array.");
                 }
-                // If we have a target expression see if we can create a delta for the collection. We want to do this only if the propery the collection is associated with is inherited, and if the collection is not an array.
+
+                // If we have a target expression see if we can create a delta for the collection. We want to do this only if the property the collection is associated with is inherited, and if the collection is not an array.
                 if (value is ICollection collection)
                 {
                     ICollection subset = collection;
-                    Type collectionType = cxt is null ? collection.GetType() : cxt.ExpressionType;
+                    Type collectionType = ctx is null ? collection.GetType() : ctx.ExpressionType;
                     bool isArray = typeof(Array).IsAssignableFrom(collectionType);
                     // If we don't have a target expression and this isn't an array, let's try to create one.
                     if (target is null && !isArray)
@@ -219,6 +226,7 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     resultCol.Add(resultStmt);
                                 }
+
                                 result = resultCol;
                             }
 
@@ -237,6 +245,7 @@ namespace System.ComponentModel.Design.Serialization
                     TraceError("Collection serializer invoked for non collection: {0}", (value is null ? "(null)" : value.GetType().Name));
                 }
             }
+
             return result;
         }
 
@@ -299,6 +308,7 @@ namespace System.ComponentModel.Design.Serialization
                     finalType = candidateType;
                 }
             }
+
             return final;
         }
 
@@ -343,7 +353,6 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         result = arrayCreate;
                     }
-                    serialized = true;
                 }
             }
             else if (valuesToSerialize.Count > 0)
@@ -355,6 +364,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     provider = TypeDescriptor.GetProvider(originalCollection);
                 }
+
                 MethodInfo[] methods = provider.GetReflectionType(originalCollection).GetMethods(BindingFlags.Public | BindingFlags.Instance);
                 ParameterInfo[] parameters;
                 List<MethodInfo> addRangeMethods = new List<MethodInfo>();
@@ -454,11 +464,11 @@ namespace System.ComponentModel.Design.Serialization
 
                         CodeExpression expression = null;
                         // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the array element type.
-                        ExpressionContext newCxt = null;
-                        if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt)
+                        ExpressionContext newCtx = null;
+                        if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx)
                         {
-                            newCxt = new ExpressionContext(cxt.Expression, elementType, cxt.Owner);
-                            manager.Context.Push(newCxt);
+                            newCtx = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
+                            manager.Context.Push(newCtx);
                         }
 
                         try
@@ -467,9 +477,9 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         finally
                         {
-                            if (newCxt != null)
+                            if (newCtx != null)
                             {
-                                Debug.Assert(manager.Context.Current == newCxt, "Context stack corrupted.");
+                                Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                                 manager.Context.Pop();
                             }
                         }
@@ -481,7 +491,7 @@ namespace System.ComponentModel.Design.Serialization
                                 expression = new CodeCastExpression(elementType, expression);
                             }
 
-                            arrayCreate.Initializers.Add((CodeExpression)expression);
+                            arrayCreate.Initializers.Add(expression);
                         }
                         else
                         {
@@ -554,12 +564,12 @@ namespace System.ComponentModel.Design.Serialization
 
                             // If there is an expression context on the stack at this point,
                             // we need to fix up the ExpressionType on it to be the element type.
-                            ExpressionContext newCxt = null;
+                            ExpressionContext newCtx = null;
 
-                            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt)
+                            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx)
                             {
-                                newCxt = new ExpressionContext(cxt.Expression, elementType, cxt.Owner);
-                                manager.Context.Push(newCxt);
+                                newCtx = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
+                                manager.Context.Push(newCtx);
                             }
 
                             try
@@ -568,9 +578,9 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             finally
                             {
-                                if (newCxt != null)
+                                if (newCtx != null)
                                 {
-                                    Debug.Assert(manager.Context.Current == newCxt, "Context stack corrupted.");
+                                    Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                                     manager.Context.Pop();
                                 }
                             }
@@ -589,6 +599,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return statements;
         }
 
@@ -640,12 +651,12 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             CodeExpression exp = null;
                             // If there is an expression context on the stack at this point, we need to fix up the ExpressionType on it to be the element type.
-                            ExpressionContext newCxt = null;
+                            ExpressionContext newCtx = null;
 
-                            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext cxt)
+                            if (manager.Context[typeof(ExpressionContext)] is ExpressionContext ctx)
                             {
-                                newCxt = new ExpressionContext(cxt.Expression, elementType, cxt.Owner);
-                                manager.Context.Push(newCxt);
+                                newCtx = new ExpressionContext(ctx.Expression, elementType, ctx.Owner);
+                                manager.Context.Push(newCtx);
                             }
 
                             try
@@ -654,9 +665,9 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             finally
                             {
-                                if (newCxt != null)
+                                if (newCtx != null)
                                 {
-                                    Debug.Assert(manager.Context.Current == newCxt, "Context stack corrupted.");
+                                    Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                                     manager.Context.Pop();
                                 }
                             }
@@ -668,6 +679,7 @@ namespace System.ComponentModel.Design.Serialization
                                 {
                                     exp = new CodeCastExpression(elementType, exp);
                                 }
+
                                 arrayList.Add(exp);
                             }
                         }
@@ -697,6 +709,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
             }
+
             return statements;
         }
 
@@ -730,6 +743,7 @@ namespace System.ComponentModel.Design.Serialization
                     shouldClear = false;
                 }
             }
+
             return shouldClear;
         }
     }

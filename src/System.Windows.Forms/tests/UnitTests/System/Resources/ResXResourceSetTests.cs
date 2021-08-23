@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.IO;
-using System.Linq;
 using Xunit;
 
 namespace System.Resources.Tests
@@ -45,7 +43,7 @@ namespace System.Resources.Tests
         {
             Assert.True(File.Exists(resxFileName), $@"RESX file ""{resxFileName}"" not found, make sure it's in the root folder of the unit test project");
 
-            using(FileStream fs = new FileStream(resxFileName, FileMode.Open))
+            using (FileStream fs = new FileStream(resxFileName, FileMode.Open))
             {
                 using (ResXResourceSet resxSet = new ResXResourceSet(fs))
                 {

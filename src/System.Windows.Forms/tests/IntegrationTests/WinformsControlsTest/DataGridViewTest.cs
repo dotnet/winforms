@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -10,10 +9,13 @@ namespace WinformsControlsTest
 {
     public partial class DataGridViewTest : Form
     {
-        private static readonly Font[] s_fonts = new Font[] { new Font("Tahoma", 12F, FontStyle.Regular),
-                                                              new Font("Consolas", 14F, FontStyle.Italic),
-                                                              new Font("Arial", 9F, FontStyle.Bold),
-                                                              new Font("Microsoft Sans Serif", 11F, FontStyle.Regular)};
+        private static readonly Font[] s_fonts = new[]
+        {
+            new Font("Tahoma", 12F, FontStyle.Regular),
+            new Font("Consolas", 14F, FontStyle.Italic),
+            new Font("Arial", 9F, FontStyle.Bold),
+            new Font("Microsoft Sans Serif", 11F, FontStyle.Regular)
+        };
         private int _cellFontIndex;
         private int _columnHeaderFontIndex;
         private int _rowHeaderFontIndex;

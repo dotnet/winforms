@@ -12,9 +12,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ComboBoxesButton,
         ComboBoxesWithScrollBarsButton,
         DateTimePickerButton,
-        FolderBrowserDialogButton,
-        ThreadExceptionDialogButton,
-        PrintDialogButton,
+        DialogsButton,
         DataGridViewButton,
         DataGridViewInVirtualModeButton,
         TreeViewButton,
@@ -33,6 +31,10 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ToggleIconButton,
         FileDialogButton,
         ErrorProviderButton,
-        TaskDialogButton
+        TaskDialogButton,
+        MessageBoxButton,
+        ToolStripsButton,
+        TrackBarsButton,
+        ScrollBarsButton
     }
 }

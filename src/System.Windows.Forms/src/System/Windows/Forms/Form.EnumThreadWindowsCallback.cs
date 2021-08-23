@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -38,8 +37,10 @@ namespace System.Windows.Forms
                     {
                         ownedWindows = new List<HandleRef>();
                     }
+
                     ownedWindows.Add(hRef);
                 }
+
                 return BOOL.TRUE;
             }
 

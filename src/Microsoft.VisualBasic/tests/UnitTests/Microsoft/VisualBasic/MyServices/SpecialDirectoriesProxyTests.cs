@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using Microsoft.VisualBasic.Devices;
 using Xunit;
 
@@ -36,6 +35,7 @@ namespace Microsoft.VisualBasic.MyServices.Tests
             {
                 return;
             }
+
             string actual = getActual();
             Assert.Equal(expected, actual);
         }

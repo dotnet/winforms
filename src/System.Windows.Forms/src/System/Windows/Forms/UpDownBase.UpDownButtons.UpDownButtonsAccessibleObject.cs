@@ -4,10 +4,7 @@
 
 #nullable disable
 
-using System.Diagnostics;
-using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Windows.Forms.VisualStyles;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -32,7 +29,7 @@ namespace System.Windows.Forms
                 {
                     AccessibleObject element = HitTest((int)x, (int)y);
 
-                    if (element != null)
+                    if (element is not null)
                     {
                         return element;
                     }

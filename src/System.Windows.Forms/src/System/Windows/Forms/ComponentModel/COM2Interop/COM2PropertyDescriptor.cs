@@ -37,12 +37,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private bool readOnly;
 
         /// <summary>
-        ///  The resoved native type -> clr type
+        ///  The resolved native type -> clr type
         /// </summary>
         private readonly Type propertyType;
 
         /// <summary>
-        ///  The dispid. This is also in a DispIDAttiribute, but we
+        ///  The dispid. This is also in a DispIDAttribute, but we
         ///  need it a lot.
         /// </summary>
         private readonly DispatchID dispid;
@@ -103,7 +103,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         private bool inAttrQuery;
 
         /// <summary>
-        ///  Our event signitures.
+        ///  Our event signatures.
         /// </summary>
         private static readonly object EventGetBaseAttributes = new object();
         private static readonly object EventGetDynamicAttributes = new object();
@@ -256,6 +256,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         newAttributes = new ArrayList(AttributeArray);
                     }
+
                     newAttributes.Add(new BrowsableAttribute(false));
                 }
                 else if (hrHidden)
@@ -274,6 +275,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 newAttributes = new ArrayList(AttributeArray);
                             }
+
                             newAttributes.Add(new BrowsableAttribute(true));
                             hrHidden = false;
                         }
@@ -325,7 +327,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the attributes are valid.  Asks any clients if they
-        ///  would like attributes requeried.
+        ///  would like attributes required.
         /// </summary>
         protected bool AttributesValid
         {
@@ -374,6 +376,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     editor = typeEd;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
                 }
+
                 SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
 
                 return converter;
@@ -428,13 +431,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     displayName = gni.NameString;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.DisplayName, false);
                 }
+
                 return displayName;
             }
         }
 
         /// <summary>
         ///  Checks if the property display name is valid
-        ///  asks clients if they would like display name requeried.
+        ///  asks clients if they would like display name required.
         /// </summary>
         protected bool DisplayNameValid
         {
@@ -454,6 +458,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     events = new EventHandlerList();
                 }
+
                 return events;
             }
         }
@@ -481,6 +486,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     readOnly = gbv.Value;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.ReadOnly, false);
                 }
+
                 return readOnly;
             }
         }
@@ -518,7 +524,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the read only state is valid.
-        ///  Asks clients if they would like read-only requeried.
+        ///  Asks clients if they would like read-only required.
         /// </summary>
         protected bool ReadOnlyValid
         {
@@ -547,6 +553,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return com2props.TargetObject;
                 }
+
                 return null;
             }
         }
@@ -646,6 +653,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 OnCanResetValue(gbv);
                 return gbv.Value;
             }
+
             return false;
         }
 
@@ -655,7 +663,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         }
 
         /// <summary>
-        ///  Creates a converter Object, first by looking for a ctor with a Com2ProeprtyDescriptor
+        ///  Creates a converter Object, first by looking for a ctor with a Com2PropertyDescriptor
         ///  parameter, then using the default ctor if it is not found.
         /// </summary>
         private Com2DataTypeToManagedDataTypeConverter CreateOleTypeConverter(Type t)
@@ -675,6 +683,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 converter = (Com2DataTypeToManagedDataTypeConverter)Activator.CreateInstance(t);
             }
+
             return converter;
         }
 
@@ -741,6 +750,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 localConverter = new TypeConverter();
             }
+
             return localConverter;
         }
 
@@ -775,16 +785,18 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             }
                             catch (Exception ex)
                             {
-                                Debug.Fail("Failed to create edtior of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString());
+                                Debug.Fail("Failed to create editor of type '" + attr.EditorTypeName + "' from Attribute", ex.ToString());
                             }
                         }
                     }
                 }
             }
+
             if (localEditor is null)
             {
                 localEditor = base.GetEditor(editorBaseType);
             }
+
             return localEditor;
         }
 
@@ -826,12 +838,14 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     converter = c;
                     SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeConverter, false);
                 }
+
                 SetNeedsRefresh(Com2PropertyDescriptorRefresh.TypeEditor, false);
             }
             else
             {
                 editor = base.GetEditor(editorBaseType);
             }
+
             return editor;
         }
 
@@ -886,6 +900,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     {
                         lastValue = pVarResult[0];
                     }
+
                     return lastValue;
                 case HRESULT.DISP_E_EXCEPTION:
                     return null;
@@ -928,6 +943,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                 }
             }
+
             return lastValue;
         }
 
@@ -966,6 +982,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     editorType = value.GetType();
                 }
+
                 ComNativeDescriptor.ResolveVariantTypeConverterAndTypeEditor(value, ref localConverter, editorBaseType, ref localEditor);
             }
 
@@ -1289,11 +1306,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         g = typeof(Oleaut32.IDispatch).GUID;
                         if (iSupportErrorInfo.InterfaceSupportsErrorInfo(&g) == HRESULT.S_OK)
                         {
-                            Oleaut32.IErrorInfo pErrorInfo = null;
-                            Oleaut32.GetErrorInfo(0, ref pErrorInfo);
+                            Oleaut32.IErrorInfo pErrorInfo;
+                            Oleaut32.GetErrorInfo(0, out pErrorInfo);
 
-                            string info = null;
-                            if (pErrorInfo is not null && pErrorInfo.GetDescription(ref info).Succeeded())
+                            string info;
+                            if (pErrorInfo is not null && pErrorInfo.GetDescription(out info).Succeeded())
                             {
                                 errorInfo = info;
                             }
@@ -1321,6 +1338,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             errorInfo = TrimNewline(strMessage);
                         }
                     }
+
                     throw new ExternalException(errorInfo, (int)hr);
             }
         }
@@ -1341,7 +1359,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  other words, it indicates whether the state of the property is distinct
         ///  from when the component is first instantiated. If there is a default
         ///  value specified in this PropertyDescriptor, it will be compared against the
-        ///  property's current value to determine this.  If there is't, the
+        ///  property's current value to determine this.  If there isn't, the
         ///  shouldPersistXXX method is looked for and invoked if found.  If both
         ///  these routes fail, true will be returned.
         ///
@@ -1353,6 +1371,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             OnShouldSerializeValue(gbv);
             return gbv.Value;
         }
+
         /// <summary>
         ///  we wrap all value editors in this one so we can intercept
         ///  the GetTextFromValue calls for objects that would like
@@ -1364,7 +1383,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             private const int CheckSubprops = 0;
             private const int AllowSubprops = 1;
-            private const int SupressSubprops = 2;
+            private const int SuppressSubprops = 2;
 
             private int subprops = CheckSubprops;
 
@@ -1398,6 +1417,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                     }
                 }
+
                 return baseConversion;
             }
 
@@ -1423,7 +1443,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     if (!base.GetPropertiesSupported(context))
                     {
-                        subprops = SupressSubprops;
+                        subprops = SuppressSubprops;
                     }
                     else
                     {
@@ -1435,6 +1455,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         }
                     }
                 }
+
                 return (subprops == AllowSubprops);
             }
         }
@@ -1488,6 +1509,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return nameItem.ToString();
                 }
+
                 return "";
             }
         }

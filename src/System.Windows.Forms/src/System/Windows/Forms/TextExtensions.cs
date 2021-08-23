@@ -265,7 +265,7 @@ namespace System.Windows.Forms
             if (proposedSize.Width == TextRenderer.MaxSize.Width)
             {
                 // PERF: No constraining width means no word break.
-                // in this case, we dont care about word wrapping - there should be enough room to fit it all
+                // in this case, we don't care about word wrapping - there should be enough room to fit it all
                 dt &= ~(User32.DT.WORDBREAK);
             }
 

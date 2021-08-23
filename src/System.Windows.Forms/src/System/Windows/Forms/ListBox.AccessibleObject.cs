@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -88,7 +87,7 @@ namespace System.Windows.Forms
 
                 AccessibleObject? element = HitTest((int)x, (int)y);
 
-                if (element != null)
+                if (element is not null)
                 {
                     return element;
                 }
@@ -107,7 +106,7 @@ namespace System.Windows.Forms
 
                 if (childCount == 0)
                 {
-                    return null;
+                    return base.FragmentNavigate(direction);
                 }
 
                 return direction switch
@@ -146,6 +145,7 @@ namespace System.Windows.Forms
                         {
                             _owningListBox.HasKeyboardFocus = false;
                         }
+
                         return result;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _owningListBox.InternalHandle;
@@ -163,7 +163,7 @@ namespace System.Windows.Forms
             internal override UiaCore.IRawElementProviderSimple[] GetSelection()
             {
                 AccessibleObject? itemAccessibleObject = GetSelected();
-                if (itemAccessibleObject != null)
+                if (itemAccessibleObject is not null)
                 {
                     return new UiaCore.IRawElementProviderSimple[]
                     {
@@ -176,7 +176,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported()
             {
-                if (_owningListBox != null)
+                if (_owningListBox is not null)
                 {
                     return true;
                 }
@@ -292,8 +292,8 @@ namespace System.Windows.Forms
                 for (int index = 0; index < count; ++index)
                 {
                     AccessibleObject? child = GetChild(index);
-                    Debug.Assert(child != null, $"GetChild({index}) returned null");
-                    if (child != null && child.Bounds.Contains(x, y))
+                    Debug.Assert(child is not null, $"GetChild({index}) returned null");
+                    if (child is not null && child.Bounds.Contains(x, y))
                     {
                         _owningListBox.HasKeyboardFocus = false;
                         return child;

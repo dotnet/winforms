@@ -2,10 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
@@ -20,8 +18,8 @@ namespace System.Drawing.Design
     /// </summary>
     public class IconEditor : UITypeEditor
     {
-        private static List<string> s_iconExtensions = new List<string>() { "ico" };
-        private static Type[] s_imageExtenders = Array.Empty<Type>();
+        private static readonly List<string> s_iconExtensions = new List<string>() { "ico" };
+        private static readonly Type[] s_imageExtenders = Array.Empty<Type>();
         private FileDialog _fileDialog;
 
         protected static string CreateExtensionsString(string[] extensions, string sep)
@@ -145,6 +143,7 @@ namespace System.Drawing.Design
                 rectangle.X = (rectangle.Width - icon.Width) / 2;
                 rectangle.Width = icon.Width;
             }
+
             if (icon.Height < rectangle.Height)
             {
                 rectangle.X = (rectangle.Height - icon.Height) / 2;

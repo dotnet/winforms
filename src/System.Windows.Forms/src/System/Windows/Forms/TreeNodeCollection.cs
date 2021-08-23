@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -54,6 +53,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
+
                 return owner.children[index];
             }
             set
@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 TreeView tv = owner.treeView;
                 TreeNode actual = owner.children[index];
 
-                if (value.treeView != null && value.treeView.Handle != tv.Handle)
+                if (value.treeView is not null && value.treeView.Handle != tv.Handle)
                 {
                     throw new ArgumentException(string.Format(SR.TreeNodeBoundToAnotherTreeView), nameof(value));
                 }
@@ -140,6 +140,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         // Make this property available to Intellisense. (Removed the EditorBrowsable attribute.)
         [Browsable(false)]
         public int Count
@@ -271,24 +272,27 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(nodes));
             }
+
             if (nodes.Length == 0)
             {
                 return;
             }
 
             TreeView tv = owner.TreeView;
-            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.BeginUpdate();
             }
+
             owner.Nodes.FixedIndex = owner.childCount;
             owner.EnsureCapacity(nodes.Length);
             for (int i = nodes.Length - 1; i >= 0; i--)
             {
                 AddInternal(nodes[i], i);
             }
+
             owner.Nodes.FixedIndex = -1;
-            if (tv != null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
+            if (tv is not null && nodes.Length > TreeNode.MAX_TREENODES_OPS)
             {
                 tv.EndUpdate();
             }
@@ -332,7 +336,8 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
-                    if ((treeNodeCollectionToLookIn[i].Nodes != null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
+
+                    if ((treeNodeCollectionToLookIn[i].Nodes is not null) && treeNodeCollectionToLookIn[i].Nodes.Count > 0)
                     {
                         // If it has a valid child collection, append those results to our collection.
                         foundTreeNodes = FindInternal(key, searchAllChildren, treeNodeCollectionToLookIn[i].Nodes, foundTreeNodes);
@@ -357,6 +362,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(node));
             }
+
             if (node.handle != IntPtr.Zero)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
@@ -376,10 +382,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (tv != null && tv.Sorted)
+            if (tv is not null && tv.Sorted)
             {
                 return owner.AddSorted(node);
             }
+
             node.parent = owner;
             int fixedIndex = owner.Nodes.FixedIndex;
             if (fixedIndex != -1)
@@ -393,16 +400,17 @@ namespace System.Windows.Forms
                 owner.EnsureCapacity(1);
                 node.index = owner.childCount;
             }
+
             owner.children[node.index] = node;
             owner.childCount++;
             node.Realize(false);
 
-            if (tv != null && node == tv.selectedNode)
+            if (tv is not null && node == tv.selectedNode)
             {
                 tv.SelectedNode = node; // communicate this to the handle
             }
 
-            if (tv != null && tv.TreeViewNodeSorter != null)
+            if (tv is not null && tv.TreeViewNodeSorter is not null)
             {
                 tv.Sort();
             }
@@ -460,6 +468,7 @@ namespace System.Windows.Forms
                     return index;
                 }
             }
+
             return -1;
         }
 
@@ -483,7 +492,7 @@ namespace System.Windows.Forms
             // Step 0 - Arg validation
             if (string.IsNullOrEmpty(key))
             {
-                return -1; // we dont support empty or null keys.
+                return -1; // we don't support empty or null keys.
             }
 
             // step 1 - check the last cached item
@@ -534,7 +543,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (tv != null && tv.Sorted)
+            if (tv is not null && tv.Sorted)
             {
                 owner.AddSorted(node);
                 return;

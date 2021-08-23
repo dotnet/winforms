@@ -41,15 +41,20 @@ namespace System.Windows.Forms
                             object before = _owner.SelectedItem;
                             DefWndProc(ref m);
                             object after = _owner.SelectedItem;
-                            if (before != after)
+
+                            // Call the focus event for the new selected item accessible object provided by ComboBoxAccessibleObject.
+                            // If the owning ComboBox has a custom accessible object,
+                            // it should override the logic and implement setting an item focus by itself.
+                            if (before != after && _owner.AccessibilityObject is ComboBoxAccessibleObject comboBoxAccessibleObject)
                             {
-                                (_owner.AccessibilityObject as ComboBoxAccessibleObject).SetComboBoxItemFocus();
+                                comboBoxAccessibleObject.SetComboBoxItemFocus();
                             }
                         }
                         else
                         {
                             _owner.ChildWndProc(ref m);
                         }
+
                         break;
                     default:
                         if (_childWindowType == ChildWindowType.DropDownList)
@@ -60,6 +65,7 @@ namespace System.Windows.Forms
                         {
                             _owner.ChildWndProc(ref m);
                         }
+
                         break;
                 }
             }
@@ -117,6 +123,7 @@ namespace System.Windows.Forms
                             wfAccessibleObject = GetChildAccessibleObject(_childWindowType);
                             _accessibilityObject = new InternalAccessibleObject(wfAccessibleObject);
                         }
+
                         iacc = (UiaCore.IAccessibleInternal)_accessibilityObject;
 
                         // Obtain the Lresult

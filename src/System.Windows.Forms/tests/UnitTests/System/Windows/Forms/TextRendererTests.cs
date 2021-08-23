@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
-using System.IO;
 using System.Windows.Forms.Metafiles;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -520,7 +518,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void TextRenderer_MeasureText_NullOrEmptyString_ReturnsEmpty(string text)
         {
             using var image = new Bitmap(10, 10);
@@ -683,7 +681,7 @@ namespace System.Windows.Forms.Tests
                 new HdcDeviceContextAdapter(emf),
                 "Sparkling Cider",
                 SystemFonts.DefaultFont,
-                (Point) default,
+                (Point)default,
                 Color.Red,
                 flags);
 
@@ -833,7 +831,7 @@ namespace System.Windows.Forms.Tests
         public static TheoryData<TextFormatFlags, Size> TextRenderer_MeasureText_ApplyState_TestData
             => new TheoryData<TextFormatFlags, Size>
             {
-                // State application doesn't practially impact size measurements, but we still want to have a regession test
+                // State application doesn't practically impact size measurements, but we still want to have a regression test
                 // here in case something sneaks in.
                 { TextFormatFlags.Default, new Size(57, 13) },
                 { TextFormatFlags.PreserveGraphicsTranslateTransform, new Size(57, 13) },

@@ -29,6 +29,7 @@ namespace System.Windows.Forms.ButtonInternal
                 {
                     layout.TextBounds.Offset(-1, -1);
                 }
+
                 layout.ImageBounds.Offset(-1, -1);
 
                 AdjustFocusRectangle(layout);
@@ -41,6 +42,7 @@ namespace System.Windows.Forms.ButtonInternal
                     {
                         focusRectFixup = 1 - focusRectFixup;
                     }
+
                     layout.Focus.Offset(-(focusRectFixup + 1), -2);
                     layout.Focus.Width = layout.TextBounds.Width + layout.ImageBounds.Width - 1;
                     layout.Focus.Intersect(layout.TextBounds);

@@ -135,6 +135,7 @@ namespace System.Windows.Forms
                     {
                         messageFormat = SR.ExDlgErrorText;
                     }
+
                     buttons = new Button[] { detailsButton, continueButton, quitButton };
                 }
                 else
@@ -147,6 +148,7 @@ namespace System.Windows.Forms
                     {
                         messageFormat = SR.ExDlgContinueErrorText;
                     }
+
                     buttons = new Button[] { detailsButton, continueButton };
                 }
             }
@@ -155,6 +157,7 @@ namespace System.Windows.Forms
             {
                 messageText = t.GetType().Name;
             }
+
             if (t is Security.SecurityException)
             {
                 messageText = string.Format(messageFormat, t.GetType().Name, Trim(messageText));
@@ -166,8 +169,8 @@ namespace System.Windows.Forms
 
             StringBuilder detailsTextBuilder = new StringBuilder();
             string newline = "\r\n";
-            string separator = SR.ExDlgMsgSeperator;
-            string sectionseparator = SR.ExDlgMsgSectionSeperator;
+            string separator = SR.ExDlgMsgSeparator;
+            string sectionseparator = SR.ExDlgMsgSectionSeparator;
             if (Application.CustomThreadExceptionHandlerAttached)
             {
                 detailsTextBuilder.Append(SR.ExDlgMsgHeaderNonSwitchable);
@@ -176,6 +179,7 @@ namespace System.Windows.Forms
             {
                 detailsTextBuilder.Append(SR.ExDlgMsgHeaderSwitchable);
             }
+
             detailsTextBuilder.Append(string.Format(CultureInfo.CurrentCulture, sectionseparator, SR.ExDlgMsgExceptionSection));
             detailsTextBuilder.Append(t.ToString());
             detailsTextBuilder.Append(newline);
@@ -201,6 +205,7 @@ namespace System.Windows.Forms
                 catch (IO.FileNotFoundException)
                 {
                 }
+
                 detailsTextBuilder.Append(string.Format(SR.ExDlgMsgLoadedAssembliesEntry, name.Name, name.Version, fileVer, name.EscapedCodeBase));
                 detailsTextBuilder.Append(separator);
             }
@@ -282,6 +287,7 @@ namespace System.Windows.Forms
             {
                 pictureBox.Image = SystemIcons.Error.ToBitmap();
             }
+
             Controls.Add(pictureBox);
             message.SetBounds(scaledPictureWidth,
                               scaledMessageTopPadding + (scaledMaxTextHeight - Math.Min(textSize.Height, scaledMaxTextHeight)) / 2,
@@ -361,12 +367,14 @@ namespace System.Windows.Forms
             {
                 expandImage.Dispose();
             }
+
             expandImage = DpiHelper.GetBitmapFromIcon(GetType(), DownBitmapName);
 
             if (collapseImage is not null)
             {
                 collapseImage.Dispose();
             }
+
             collapseImage = DpiHelper.GetBitmapFromIcon(GetType(), UpBitmapName);
 
             ScaleBitmapLogicalToDevice(ref expandImage);

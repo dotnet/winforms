@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.Drawing;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
-using System.Globalization;
-using WinForms.Common.Tests;
+using System.Drawing;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests

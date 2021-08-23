@@ -35,8 +35,7 @@ namespace System.Windows.Forms.Metafiles
         public override string ToString()
         {
             RECT dest = new Rectangle(xDest, yDest, cxDest, cyDest);
-            return $@"[{nameof(EMRBITBLT)}] Bounds: {rclBounds} Destination: {dest} Rop: {
-                dwRop} Source DC Color: {crBkColorSrc.ToSystemColorString()}";
+            return $@"[{nameof(EMRBITBLT)}] Bounds: {rclBounds} Destination: {dest} Rop: {dwRop}Source DC Color: {crBkColorSrc.ToSystemColorString()}";
         }
     }
 }

@@ -20,39 +20,28 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-                {
-                    switch (direction)
+                    => direction switch
                     {
-                        case UiaCore.NavigateDirection.Parent:
-                            return ExistsInAccessibleTree
-                                ? _owningDropDownHolder.gridView?.SelectedGridEntry?.AccessibilityObject
-                                : null;
-                        case UiaCore.NavigateDirection.NextSibling:
-                            return ExistsInAccessibleTree
-                                ? _owningDropDownHolder.gridView?.EditAccessibleObject
-                                : null;
-                        case UiaCore.NavigateDirection.PreviousSibling:
-                            return null;
-                    }
-
-                    return base.FragmentNavigate(direction);
-                }
+                        UiaCore.NavigateDirection.Parent => ExistsInAccessibleTree
+                            ? _owningDropDownHolder._gridView?.SelectedGridEntry?.AccessibilityObject
+                            : null,
+                        UiaCore.NavigateDirection.NextSibling => ExistsInAccessibleTree
+                            ? _owningDropDownHolder._gridView?.EditAccessibleObject
+                            : null,
+                        UiaCore.NavigateDirection.PreviousSibling => null,
+                        _ => base.FragmentNavigate(direction),
+                    };
 
                 internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot =>
-                    _owningDropDownHolder.gridView?.OwnerGrid?.AccessibilityObject;
+                    _owningDropDownHolder._gridView?.OwnerGrid?.AccessibilityObject;
 
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                {
-                    if (propertyID == UiaCore.UIA.NamePropertyId)
-                    {
-                        return SR.PropertyGridViewDropDownControlHolderAccessibleName;
-                    }
+                    => propertyID == UiaCore.UIA.NamePropertyId
+                        ? SR.PropertyGridViewDropDownControlHolderAccessibleName
+                        : base.GetPropertyValue(propertyID);
 
-                    return base.GetPropertyValue(propertyID);
-                }
-
-                private bool ExistsInAccessibleTree =>
-                    _owningDropDownHolder.IsHandleCreated && _owningDropDownHolder.Visible;
+                private bool ExistsInAccessibleTree
+                    => _owningDropDownHolder.IsHandleCreated && _owningDropDownHolder.Visible;
             }
         }
     }

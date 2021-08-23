@@ -276,6 +276,7 @@ namespace System.Windows.Forms
                         // is in the middle of doing that already.
                         return;
                     }
+
                     if (dataGridView.IsCurrentCellInEditMode)
                     {
                         // stop editing
@@ -330,6 +331,7 @@ namespace System.Windows.Forms
                 {
                     cellLeft = rowRect.Left + leftToRightRowHeadersWidth;
                 }
+
                 cellRect.X = cellLeft;
 
                 if (cellRight > rowRect.Right - rightToLeftRowHeadersWidth)
@@ -555,16 +557,19 @@ namespace System.Windows.Forms
                 {
                     _owner.DataGridView.Focus();
                 }
+
                 if ((flags & AccessibleSelection.TakeSelection) == AccessibleSelection.TakeSelection)
                 {
                     _owner.Selected = true;
                     _owner.DataGridView.CurrentCell = _owner; // Do not change old selection
                 }
+
                 if ((flags & AccessibleSelection.AddSelection) == AccessibleSelection.AddSelection)
                 {
                     // it seems that in any circumstances a cell can become selected
                     _owner.Selected = true;
                 }
+
                 if ((flags & AccessibleSelection.RemoveSelection) == AccessibleSelection.RemoveSelection &&
                     (flags & (AccessibleSelection.AddSelection | AccessibleSelection.TakeSelection)) == 0)
                 {
@@ -573,7 +578,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
+            ///  Sets the detachable child accessible object which may be added or removed to/from hierarchy nodes.
             /// </summary>
             /// <param name="child">The child accessible object.</param>
             internal override void SetDetachableChild(AccessibleObject? child)
@@ -662,6 +667,7 @@ namespace System.Windows.Forms
                         {
                             return _child;
                         }
+
                         break;
 
                     default:

@@ -48,6 +48,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(seconds), value, SR.NumericUpDownLessThanZeroError);
                 }
+
                 seconds = value;
             }
         }
@@ -68,6 +69,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(increment), value, SR.NumericUpDownLessThanZeroError);
                 }
+
                 increment = value;
             }
         }

@@ -677,6 +677,21 @@
         <target state="translated">VT non géré : {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">Aller à la période suivante</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">Aller à la période précédente</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">Sélectionner la date du jour</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Annuler</target>
@@ -1114,12 +1129,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Fermer</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Ouvrir</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1227,7 +1242,7 @@
         <target state="translated">Dernier contrôle ayant provoqué l'affichage de cette bande de menus contextuels.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">L'objet accessible du contrôle est dans un état non valide.</target>
         <note />
@@ -4749,7 +4764,7 @@ juste-à-temps (JIT) à la place de cette boîte de dialogue.
         <target state="translated">Assemblys chargés</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4758,7 +4773,7 @@ juste-à-temps (JIT) à la place de cette boîte de dialogue.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -5205,6 +5220,11 @@ Voulez-vous le remplacer ?</target>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">La taille maximale à laquelle le formulaire peut être redimensionné.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">Obtient ou définit l’ancrage pour les enfants MDI réduits.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -6466,6 +6486,16 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Autorise la modification des attributs des marques d'insertion.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">L’objet d’accessibilité actuel est uniquement destiné à ListView dans l’affichage {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">L’objet d’accessibilité actuel est uniquement destiné à ListView dans l’affichage {0}, {1} ou {2}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Événement déclenché lorsque la propriété Checked d'un élément ListView est modifiée.</target>
@@ -7074,6 +7104,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="MonthCalendarTrailingForeColorDescr">
         <source>The color used to display the previous and following months that appear on the month calendar.</source>
         <target state="translated">La couleur utilisée pour afficher les mois précédents et suivants qui s'affichent dans le calendrier mensuel.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">Semaine {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -7904,6 +7939,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="ProfessionalColorsSeparatorLightDescr">
         <source>Color to use to for highlight effects on the separator.</source>
         <target state="translated">Couleur à utiliser pour les effets de surbrillance sur le séparateur.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
@@ -10371,6 +10411,16 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">LargeChange : la valeur '{0}' doit être supérieure ou égale à 0.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">Forte diminution</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">Forte augmentation</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">La valeur maximale pour la position du curseur sur le TrackBar.</target>
@@ -10389,6 +10439,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">L'orientation du contrôle.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">Position</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -10423,7 +10478,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
         <source>Text length must be less than 128 characters long.</source>
-        <target state="translated">La longueur du texte doit être inférieure à 128 caractères.</target>
+        <target state="translated">Le texte doit comporter moins de 128 caractères.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -11032,8 +11087,8 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault doit être appelé avant la création du premier objet IWin32Window dans l'application.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">{0} doit être appelé avant la création du premier objet IWin32Window dans l'application.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

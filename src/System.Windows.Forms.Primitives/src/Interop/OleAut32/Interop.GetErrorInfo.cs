@@ -8,7 +8,7 @@ internal partial class Interop
 {
     internal static partial class Oleaut32
     {
-        [DllImport(Libraries.Oleaut32, ExactSpelling = true, PreserveSig = false)]
-        public static extern HRESULT GetErrorInfo(uint dwReserved, ref IErrorInfo pperrinfo);
+        [DllImport(Libraries.Oleaut32, ExactSpelling = true)]
+        public static extern HRESULT GetErrorInfo(uint dwReserved, out IErrorInfo pperrinfo);
     }
 }

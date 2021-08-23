@@ -11,7 +11,6 @@
 Option Strict On
 Option Explicit On
 
-
 Namespace My
 
     'NOTE: This file is auto-generated; do not modify it directly.  To make changes,

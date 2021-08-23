@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -9,7 +9,6 @@ using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -42,9 +41,9 @@ namespace System.Resources
         // this is going to be used to check if a ResXDataNode is of type ResXFileRef
         private static readonly ITypeResolutionService s_internalTypeResolver = new AssemblyNamesTypeResolutionService(new AssemblyName[] { new AssemblyName("System.Windows.Forms") });
 
-        // call back function to get type name for multitargeting.
+        // callback function to get type name for multitargeting.
         // No public property to force using constructors for the following reasons:
-        // 1. one of the constructors needs this field (if used) to initialize the object, make it consistent with the other ctrs to avoid errors.
+        // 1. one of the constructors needs this field (if used) to initialize the object, make it consistent with the other constructors to avoid errors.
         // 2. once the object is constructed the delegate should not be changed to avoid getting inconsistent results.
         private Func<Type, string> _typeNameConverter;
 
@@ -172,6 +171,7 @@ namespace System.Resources
                 {
                     result = _nodeInfo.Comment;
                 }
+
                 return result ?? string.Empty;
             }
             set
@@ -189,6 +189,7 @@ namespace System.Resources
                 {
                     result = _nodeInfo.Name;
                 }
+
                 return result;
             }
             set
@@ -197,10 +198,12 @@ namespace System.Resources
                 {
                     throw new ArgumentNullException(nameof(Name));
                 }
+
                 if (value.Length == 0)
                 {
                     throw new ArgumentException(nameof(Name));
                 }
+
                 _name = value;
             }
         }
@@ -213,6 +216,7 @@ namespace System.Resources
                 {
                     return null;
                 }
+
                 if (_fileRef is null)
                 {
                     _fileRef =
@@ -220,6 +224,7 @@ namespace System.Resources
                             ? new ResXFileRef(FileRefFullPath, FileRefType)
                             : new ResXFileRef(FileRefFullPath, FileRefType, Encoding.GetEncoding(FileRefTextEncoding));
                 }
+
                 return _fileRef;
             }
         }
@@ -264,6 +269,7 @@ namespace System.Resources
                     output.Append(prefix);
                     output.Append(raw, current, lineWrap);
                 }
+
                 output.Append(crlf);
                 output.Append(prefix);
                 output.Append(raw, current, raw.Length - current);
@@ -314,7 +320,7 @@ namespace System.Resources
                 catch (Exception ex)
                 {
                     // Some custom type converters will throw in ConvertTo(string)
-                    // to indicate that this object should be serialized through ISeriazable
+                    // to indicate that this object should be serialized through ISerializable
                     // instead of as a string. This is semi-wrong, but something we will have to
                     // live with to allow user created Cursors to be serializable.
                     if (ClientUtils.IsCriticalException(ex))
@@ -366,7 +372,7 @@ namespace System.Resources
         {
             object result = null;
             string mimeTypeName = dataNodeInfo.MimeType;
-            // default behavior: if we dont have a type name, it's a string
+            // default behavior: if we don't have a type name, it's a string
             string typeName =
                 string.IsNullOrEmpty(dataNodeInfo.TypeName)
                     ? MultitargetUtil.GetAssemblyQualifiedName(typeof(string), _typeNameConverter)
@@ -498,6 +504,7 @@ namespace System.Resources
             {
                 _nodeInfo = new DataNodeInfo();
             }
+
             _nodeInfo.Name = Name;
             _nodeInfo.Comment = Comment;
 
@@ -505,7 +512,7 @@ namespace System.Resources
             // so someone could have modified it.
             if (shouldSerialize || FileRefFullPath is not null)
             {
-                // if we dont have a datanodeinfo it could be either
+                // if we don't have a datanodeinfo it could be either
                 // a direct object OR a fileref
                 if (FileRefFullPath is not null)
                 {
@@ -519,6 +526,7 @@ namespace System.Resources
                     FillDataNodeInfoFromObject(_nodeInfo, _value);
                 }
             }
+
             return _nodeInfo;
         }
 
@@ -545,6 +553,7 @@ namespace System.Resources
                         ? MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter)
                         : _typeName;
             }
+
             string result = FileRefType;
             Type objectType = null;
             // do we have a fileref?
@@ -555,12 +564,12 @@ namespace System.Resources
             }
             else if (_nodeInfo is not null)
             {
-                // we dont have a fileref, try to resolve the type of the datanode
+                // we don't have a fileref, try to resolve the type of the datanode
                 result = _nodeInfo.TypeName;
                 // if typename is null, the default is just a string
                 if (string.IsNullOrEmpty(result))
                 {
-                    // we still dont know... do we have a mimetype? if yes, our only option is to
+                    // we still don't know... do we have a mimetype? if yes, our only option is to
                     // deserialize to know what we're dealing with... very inefficient...
                     if (!string.IsNullOrEmpty(_nodeInfo.MimeType))
                     {
@@ -578,6 +587,7 @@ namespace System.Resources
                             {
                                 throw;
                             }
+
                             // something went wrong, type is not specified at all or stream is corrupted
                             // return system.object
                             result = MultitargetUtil.GetAssemblyQualifiedName(typeof(object), _typeNameConverter);
@@ -599,6 +609,7 @@ namespace System.Resources
                     objectType = ResolveType(_nodeInfo.TypeName, typeResolver);
                 }
             }
+
             if (objectType is not null)
             {
                 if (objectType == typeof(ResXNullRef))
@@ -610,6 +621,7 @@ namespace System.Resources
                     result = MultitargetUtil.GetAssemblyQualifiedName(objectType, _typeNameConverter);
                 }
             }
+
             return result;
         }
 
@@ -664,6 +676,7 @@ namespace System.Resources
                 // we need to return null here
                 return null;
             }
+
             return result;
         }
 
@@ -693,6 +706,7 @@ namespace System.Resources
                             break;
                     }
                 }
+
                 return Convert.FromBase64String(sb.ToString());
             }
 

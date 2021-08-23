@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
 
@@ -371,7 +370,7 @@ namespace System.Windows.Forms
             /// </summary>
             protected void StopTimer()
             {
-                if (_timer != null)
+                if (_timer is not null)
                 {
                     _timer.Stop();
                     _timer.Dispose();
@@ -399,7 +398,7 @@ namespace System.Windows.Forms
                 // process the mouse button up event, which results in timer being disposed
                 OnUpDown(new UpDownEventArgs((int)_pushed));
 
-                if (_timer != null)
+                if (_timer is not null)
                 {
                     // Accelerate timer.
                     _timerInterval *= 7;

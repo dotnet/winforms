@@ -9,7 +9,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms.Layout;
@@ -37,6 +36,7 @@ namespace System.Windows.Forms
                 {
                     richTextDbg = new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
                 }
+
                 return richTextDbg;
             }
         }
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         internal const int RTF = 0x0040;
         internal const int KINDMASK = TEXTLF | TEXTCRLF | RTF;
 
-        // This is where we store the reched library.
+        // This is where we store the Rich Edit library.
         private static IntPtr moduleHandle;
 
         private const string SZ_RTF_TAG = "{\\rtf";
@@ -292,6 +292,7 @@ namespace System.Windows.Forms
                 {
                     return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.CANREDO)) != 0;
                 }
+
                 return false;
             }
         }
@@ -502,6 +503,7 @@ namespace System.Windows.Forms
             {
                 scrollBarPadding.Height += SystemInformation.HorizontalScrollBarHeight;
             }
+
             if (Multiline && (ScrollBars & RichTextBoxScrollBars.Vertical) != 0)
             {
                 scrollBarPadding.Width += SystemInformation.VerticalScrollBarWidth;
@@ -564,6 +566,7 @@ namespace System.Windows.Forms
             get => base.MaxLength;
             set => base.MaxLength = value;
         }
+
         [DefaultValue(true)]
         public override bool Multiline
         {
@@ -620,6 +623,7 @@ namespace System.Windows.Forms
                 {
                     shortcutsToDisable = new int[] { (int)Shortcut.CtrlL, (int)Shortcut.CtrlR, (int)Shortcut.CtrlE, (int)Shortcut.CtrlJ };
                 }
+
                 richTextBoxFlags[richTextShortcutsEnabledSection] = value ? 1 : 0;
             }
         }
@@ -872,6 +876,7 @@ namespace System.Windows.Forms
                     pf.wNumbering = PFN.BULLET;
                     pf.dxOffset = Pixel2Twip(bulletIndent, true);
                 }
+
                 // set the format for our current paragraph or selection
                 User32.SendMessageW(this, (User32.WM)EM.SETPARAFORMAT, IntPtr.Zero, ref pf);
             }
@@ -984,6 +989,7 @@ namespace System.Windows.Forms
                 {
                     selColor = selectionBackColorToSetOnHandleCreated;
                 }
+
                 return selColor;
             }
             set
@@ -1449,6 +1455,7 @@ namespace System.Windows.Forms
                         {
                             value = string.Empty;
                         }
+
                         StreamIn(value, SF.TEXT | SF.UNICODE);
                         // reset Modified
                         User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY);
@@ -1559,6 +1566,7 @@ namespace System.Windows.Forms
                     {
                         zoomMultiplier = 1.0f;
                     }
+
                     return zoomMultiplier;
                 }
                 else
@@ -1760,12 +1768,14 @@ namespace System.Windows.Forms
                                                     pBuffer++;
                                                     continue;
                                                 }
+
                                                 *pChars = *pBuffer;
                                                 pChars++;
                                                 pBuffer++;
                                                 consumedCharCount++;
                                             }
                                         }
+
                                         editStream.Write(bytes, 0, consumedCharCount * 2);
                                     }
                                     else
@@ -1785,14 +1795,17 @@ namespace System.Windows.Forms
                                                     pBuffer++;
                                                     continue;
                                                 }
+
                                                 *pChars = *pBuffer;
                                                 pChars++;
                                                 pBuffer++;
                                                 consumedCharCount++;
                                             }
                                         }
+
                                         editStream.Write(bytes, 0, consumedCharCount);
                                     }
+
                                     break;
                             }
 
@@ -1804,9 +1817,9 @@ namespace System.Windows.Forms
                     case RichTextBox.INPUT:
                         {
                             // Several customers complained that they were getting Random NullReference exceptions inside EditStreamProc.
-                            // We had a case of  acustomer using Everett bits and another case of a customer using Whidbey Beta1 bits.
+                            // We had a case of a customer using Everett bits and another case of a customer using Whidbey Beta1 bits.
                             // We don't have a repro in house which makes it problematic to determine the cause for this behavior.
-                            // Looking at the code it seems that the only posibility for editStream to be null is when the user
+                            // Looking at the code it seems that the only possibility for editStream to be null is when the user
                             // calls RichTextBox::LoadFile(Stream, RichTextBoxStreamType) with a null Stream.
                             // However, the user said that his app is not using LoadFile method.
                             // The only possibility left open is that the native Edit control sends random calls into EditStreamProc.
@@ -1840,7 +1853,8 @@ namespace System.Windows.Forms
                 ret = 1;
             }
 #else
-            catch (IOException) {
+            catch (IOException)
+            {
                 transferred = 0;
                 ret = 1;
             }
@@ -1888,6 +1902,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(start), start, string.Format(SR.InvalidBoundArgument, nameof(start), start, 0, textLen));
             }
+
             if (end < -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(end), end, string.Format(SR.RichTextFindEndInvalid, end));
@@ -1994,6 +2009,7 @@ namespace System.Windows.Forms
                             foundCursor++;
                         }
                     }
+
                     chrg.cpMax = foundCursor;
                 }
 
@@ -2060,6 +2076,7 @@ namespace System.Windows.Forms
                 start = 0;
                 end = textLen;
             }
+
             if (end == -1)
             {
                 end = textLen;
@@ -2313,6 +2330,7 @@ namespace System.Windows.Forms
             {
                 index = Math.Max(t.Length - 1, 0);
             }
+
             return index;
         }
 
@@ -2410,6 +2428,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(data));
             }
+
             SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 
             SF flags;
@@ -2485,6 +2504,16 @@ namespace System.Windows.Forms
         protected virtual void OnContentsResized(ContentsResizedEventArgs e)
         {
             ((ContentsResizedEventHandler)Events[EVENT_REQUESTRESIZE])?.Invoke(this, e);
+        }
+
+        protected override void OnGotFocus(EventArgs e)
+        {
+            base.OnGotFocus(e);
+
+            AccessibilityObject.RaiseAutomationNotification(
+                Automation.AutomationNotificationKind.Other,
+                Automation.AutomationNotificationProcessing.MostRecent,
+                Text);
         }
 
         protected override void OnHandleCreated(EventArgs e)
@@ -2676,6 +2705,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return base.ProcessCmdKey(ref m, keyData);
         }
 
@@ -3002,7 +3032,7 @@ namespace System.Windows.Forms
 
                 // If we failed to load because of protected
                 // text then return protect event was fired so no
-                // exception is required for the the error
+                // exception is required for the error
                 if (GetProtectedError())
                 {
                     return;
@@ -3079,6 +3109,7 @@ namespace System.Windows.Forms
                 {
                     cookieVal = OUTPUT | ANSI;
                 }
+
                 if ((flags & SF.RTF) != 0)
                 {
                     cookieVal |= RTF;
@@ -3094,6 +3125,7 @@ namespace System.Windows.Forms
                         cookieVal |= TEXTLF;
                     }
                 }
+
                 es.dwCookie = (UIntPtr)cookieVal;
                 var callback = new EDITSTREAMCALLBACK(EditStreamProc);
                 es.pfnCallback = Marshal.GetFunctionPointerForDelegate(callback);
@@ -3171,6 +3203,7 @@ namespace System.Windows.Forms
                         {
                             pText[index] = '\n';
                         }
+
                         index++;
                     }
                 }
@@ -3232,6 +3265,7 @@ namespace System.Windows.Forms
                 {
                     User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
                 }
+
                 if (ForeColor.IsSystemColor)
                 {
                     InternalSetForeColor(ForeColor);
@@ -3279,11 +3313,13 @@ namespace System.Windows.Forms
                     string linktext = CharRangeToString(enlink.charrange);
                     if (!string.IsNullOrEmpty(linktext))
                     {
-                        OnLinkClicked(new LinkClickedEventArgs(linktext));
+                        OnLinkClicked(new LinkClickedEventArgs(linktext, enlink.charrange.cpMin, enlink.charrange.cpMax - enlink.charrange.cpMin));
                     }
+
                     m.Result = (IntPtr)1;
                     return;
             }
+
             m.Result = IntPtr.Zero;
             return;
         }
@@ -3399,6 +3435,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         m.Result = (IntPtr)1;   // tell them we did the drop
                         break;
 
@@ -3410,8 +3447,10 @@ namespace System.Windows.Forms
                             {
                                 reqResize->rc.bottom++;
                             }
+
                             OnContentsResized(new ContentsResizedEventArgs(reqResize->rc));
                         }
+
                         break;
 
                     case EN.SELCHANGE:
@@ -3444,6 +3483,7 @@ namespace System.Windows.Forms
                                         m.Result = IntPtr.Zero;
                                         return;
                                     }
+
                                     break;
 
                                 // Throw an exception for the following
@@ -3634,6 +3674,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.SETFONT:
@@ -3661,12 +3702,13 @@ namespace System.Windows.Forms
                     {
                         m.Result = (IntPtr)(65536 + 30);
                     }
+
                     break;
 
                 case User32.WM.RBUTTONUP:
                     //since RichEdit eats up the WM_CONTEXTMENU message, we need to force DefWndProc
                     //to spit out this message again on receiving WM_RBUTTONUP message. By setting UserMouse
-                    //style to true, we effectily let the WmMouseUp method in Control.cs to generate
+                    //style to true, we effectively let the WmMouseUp method in Control.cs to generate
                     //the WM_CONTEXTMENU message for us.
                     bool oldStyle = GetStyle(ControlStyles.UserMouse);
                     SetStyle(ControlStyles.UserMouse, true);
@@ -3686,8 +3728,10 @@ namespace System.Windows.Forms
                         {
                             OnVScroll(EventArgs.Empty);
                         }
+
                         break;
                     }
+
                 case User32.WM.HSCROLL:
                     {
                         base.WndProc(ref m);
@@ -3700,8 +3744,10 @@ namespace System.Windows.Forms
                         {
                             OnHScroll(EventArgs.Empty);
                         }
+
                         break;
                     }
+
                 default:
                     base.WndProc(ref m);
                     break;

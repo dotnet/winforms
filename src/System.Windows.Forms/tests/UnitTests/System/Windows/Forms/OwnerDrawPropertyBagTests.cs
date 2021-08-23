@@ -1,12 +1,10 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -25,7 +23,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void OwnerDrawPropertyBag_BackColor_Set_GetReturnsExpected(Color value)
         {
             using var treeView = new SubTreeView();
@@ -42,7 +40,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void OwnerDrawPropertyBag_Font_Set_GetReturnsExpected(Font value)
         {
             using var treeView = new SubTreeView();
@@ -59,7 +57,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void OwnerDrawPropertyBag_ForeColor_Set_GetReturnsExpected(Color value)
         {
             using var treeView = new SubTreeView();
@@ -106,7 +104,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void OwnerDrawPropertyBag_Serailize_Deserialize_Success()
+        public void OwnerDrawPropertyBag_Serialize_Deserialize_Success()
         {
             using var treeView = new SubTreeView();
             OwnerDrawPropertyBag original = treeView.GetItemRenderStyles(null, 0);

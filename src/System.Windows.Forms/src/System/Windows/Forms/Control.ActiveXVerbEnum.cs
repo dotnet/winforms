@@ -4,7 +4,9 @@
 
 #nullable disable
 
+#if DEBUG
 using System.ComponentModel;
+#endif
 using System.Diagnostics;
 using static Interop;
 
@@ -61,6 +63,7 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLine($"{i}: {_verbs[i].lVerb} {_verbs[i].lpszVerbName ?? string.Empty}");
                     }
+
                     Debug.Unindent();
                 }
 #endif

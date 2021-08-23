@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using static System.Windows.Forms.ItemArray;
@@ -12,14 +11,14 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///  This is similar to ArrayList except that it also
-    ///  mantains a bit-flag based state element for each item
+    ///  maintains a bit-flag based state element for each item
     ///  in the array.
     ///
     ///  The methods to enumerate, count and get data support
     ///  virtualized indexes.  Indexes are virtualized according
     ///  to the state mask passed in.  This allows ItemArray
     ///  to be the backing store for one read-write "master"
-    ///  collection and serveral read-only collections based
+    ///  collection and several read-only collections based
     ///  on masks.  ItemArray supports up to 31 masks.
     /// </summary>
     internal partial class ItemArray : IComparer<Entry>
@@ -181,6 +180,7 @@ namespace System.Windows.Forms
 
             return _entries[actualIndex];
         }
+
         /// <summary>
         ///  Returns true if the requested state mask is set.
         ///  The index is the actual index to the array.
@@ -276,6 +276,7 @@ namespace System.Windows.Forms
             {
                 _entries[index].State &= ~stateMask;
             }
+
             Version++;
         }
 
@@ -311,6 +312,7 @@ namespace System.Windows.Forms
 
                 return -1; //item1 is null, but item2 is valid (greater)
             }
+
             if (entry2 is null)
             {
                 return 1; //item2 is null, so item 1 is greater

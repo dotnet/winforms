@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
-  <file datatype="xml" source-language="en" target-language="zh-HANT" original="../SR.resx">
+  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../SR.resx">
     <body>
       <trans-unit id="AXAddInvalidEvent">
         <source>Event {0} is not valid on this ActiveX control.</source>
@@ -677,6 +677,21 @@
         <target state="translated">未處理的 VT: {0}。</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">移至下一個時間範圍</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">移至上一個時間範圍</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">移至並選取今天的日期</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">取消</target>
@@ -1114,12 +1129,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">關閉</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">開啟</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1227,7 +1242,7 @@
         <target state="translated">造成顯示此內容功能表區域的最後控制項。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">控制項的可存取物件的狀態無效。</target>
         <note />
@@ -4749,7 +4764,7 @@ just-in-time (JIT) debugging instead of this dialog box.
         <target state="translated">已載入的組件</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4758,7 +4773,7 @@ just-in-time (JIT) debugging instead of this dialog box.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -5205,6 +5220,11 @@ Do you want to replace it?</source>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">可以重新調整表單的最大值。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">為最小化的 MDI 子項目獲得或設定錨定。</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -6466,6 +6486,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">允許變更插入標記屬性。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">目前的協助工具物件僅適用於 {0} 檢視中的 ListView</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">目前的協助工具物件僅適用於 {0}、 {1} 或 {2} 檢視中的 ListView</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">ListView 項目的核取屬性變更時引發的事件。</target>
@@ -7074,6 +7104,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="MonthCalendarTrailingForeColorDescr">
         <source>The color used to display the previous and following months that appear on the month calendar.</source>
         <target state="translated">用來顯示出現於月曆上之前與之後月份的色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">第 {0} 週</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -7738,7 +7773,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ProfessionalColorsButtonSelectedBorderDescr">
         <source>Border color to use with the selected button gradient colors (ButtonCheckedGradient*).</source>
-        <target state="translated">與已選取的按鈕漸層色彩  (ButtonCheckedGradient*) 搭配使用的框線色彩。</target>
+        <target state="translated">與已選取的按鈕漸層色彩 (ButtonCheckedGradient*) 搭配使用的框線色彩。</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsButtonSelectedGradientBeginDescr">
@@ -7904,6 +7939,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ProfessionalColorsSeparatorLightDescr">
         <source>Color to use to for highlight effects on the separator.</source>
         <target state="translated">分隔符號醒目提示效果所使用的色彩。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
@@ -10371,6 +10411,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">LargeChange: 值 '{0}' 必須大於或等於 0。</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">大幅減少</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">大幅增加</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">TrackBar 上滑桿位置的最大值。</target>
@@ -10389,6 +10439,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">控制項的方向。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">位置</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -11032,8 +11087,8 @@ Stack trace where the illegal operation occurred was:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">在應用程式中建立第一個 IWin32Window 物件之前，必須先呼叫 SetCompatibleTextRenderingDefault。</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">在應用程式中建立第一個 IWin32Window 物件之前，必須先呼叫 {0}。</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

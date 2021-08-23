@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Design
     internal class ControlCodeDomSerializer : CodeDomSerializer
     {
         /// <summary>
-        ///  Deserilizes the given CodeDom object into a real object.  This
+        ///  Deserializes the given CodeDom object into a real object.  This
         ///  will use the serialization manager to create objects and resolve
         ///  data types.  The root of the object graph is returned.
         /// </summary>
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Design
             {
                 if (c.Site != null && c.Site.DesignMode)
                 {
-                    // We only emit Size/Location information for controls that are sited and not inherrited readonly.
+                    // We only emit Size/Location information for controls that are sited and not inherited readonly.
                     InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(c)[typeof(InheritanceAttribute)];
 
                     if (ia != null && ia.InheritanceLevel != InheritanceLevel.InheritedReadOnly)

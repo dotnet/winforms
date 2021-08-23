@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             {
                 if (_cachedItemHDC.IsNull)
                 {
-                    // Create a new DC - we dont have one yet.
+                    // Create a new DC - we don't have one yet.
                     _cachedItemHDC = Gdi32.CreateCompatibleDC(toolStripHDC);
                 }
 

@@ -71,6 +71,7 @@ namespace System.Windows.Forms
                     {
                         _items = new ItemArray(_owner);
                     }
+
                     return _items;
                 }
             }
@@ -133,6 +134,7 @@ namespace System.Windows.Forms
                     Debug.Assert(index >= 0 && index <= Count, "Wrong index for insert");
                     InnerArray.InsertEntry(index, entry);
                 }
+
                 bool successful = false;
 
                 try
@@ -143,7 +145,7 @@ namespace System.Windows.Forms
                         {
                             _owner.NativeInsert(index, item);
                             _owner.UpdateMaxItemWidth(item, false);
-                            if (_owner.selectedItems != null)
+                            if (_owner.selectedItems is not null)
                             {
                                 // Sorting may throw the LB contents and the selectedItem array out of synch.
                                 _owner.selectedItems.Dirty();
@@ -159,6 +161,7 @@ namespace System.Windows.Forms
                             _owner.UpdateMaxItemWidth(item, false);
                         }
                     }
+
                     successful = true;
                 }
                 finally
@@ -198,7 +201,7 @@ namespace System.Windows.Forms
 
             internal void AddRangeInternal(ICollection items)
             {
-                Debug.Assert(items != null);
+                Debug.Assert(items is not null);
 
                 _owner.BeginUpdate();
                 try
@@ -274,6 +277,7 @@ namespace System.Windows.Forms
                 {
                     _owner.NativeClear();
                 }
+
                 InnerArray.Clear();
                 _owner.maxWidth = -1;
                 _owner.UpdateHorizontalExtent();
@@ -485,6 +489,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 _owner.UpdateHorizontalExtent();
             }
         }

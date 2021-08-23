@@ -97,6 +97,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(value));
             }
+
             data.AddRange(value);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));
         }

@@ -2,11 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Drawing;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -15,24 +11,142 @@ namespace System.Windows.Forms
     {
         internal class ScrollBarAccessibleObject : ControlAccessibleObject
         {
-            private ScrollBar _owningScrollBar;
+            private readonly ScrollBar _owningScrollBar;
+            private ScrollBarFirstLineButtonAccessibleObject? _firstLineButtonAccessibleObject;
+            private ScrollBarFirstPageButtonAccessibleObject? _firstPageButtonAccessibleObject;
+            private ScrollBarLastLineButtonAccessibleObject? _lastLineButtonAccessibleObject;
+            private ScrollBarLastPageButtonAccessibleObject? _lastPageButtonAccessibleObject;
+            private ScrollBarThumbAccessibleObject? _thumbAccessibleObject;
 
-            internal ScrollBarAccessibleObject(ScrollBar owner) : base(owner)
+            internal ScrollBarAccessibleObject(ScrollBar owningScrollBar) : base(owningScrollBar)
             {
-                _owningScrollBar = owner;
+                _owningScrollBar = owningScrollBar;
             }
 
-            internal override bool IsIAccessibleExSupported() => true;
+            internal ScrollBarFirstLineButtonAccessibleObject FirstLineButtonAccessibleObject
+                => _firstLineButtonAccessibleObject ??= new(_owningScrollBar);
 
-            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            internal ScrollBarFirstPageButtonAccessibleObject FirstPageButtonAccessibleObject
+                => _firstPageButtonAccessibleObject ??= new(_owningScrollBar);
+
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
+
+            internal ScrollBarLastLineButtonAccessibleObject LastLineButtonAccessibleObject
+                => _lastLineButtonAccessibleObject ??= new(_owningScrollBar);
+
+            internal ScrollBarLastPageButtonAccessibleObject LastPageButtonAccessibleObject
+                => _lastPageButtonAccessibleObject ??= new(_owningScrollBar);
+
+            internal override int[]? RuntimeId
             {
-                if (patternId == UiaCore.UIA.ValuePatternId)
+                get
                 {
-                    return true;
+                    if (!_owningScrollBar.IsHandleCreated)
+                    {
+                        return base.RuntimeId;
+                    }
+
+                    var runtimeId = new int[2];
+                    runtimeId[0] = RuntimeIDFirstItem;
+                    runtimeId[1] = Interop.PARAM.ToInt(_owningScrollBar.InternalHandle);
+
+                    return runtimeId;
+                }
+            }
+
+            internal ScrollBarThumbAccessibleObject ThumbAccessibleObject
+                => _thumbAccessibleObject ??= new(_owningScrollBar);
+
+            // The maximum value can only be reached programmatically. The value of a scroll bar cannot reach its maximum
+            // value through user interaction at run time. The maximum value that can be reached through user interaction
+            // is equal to 1 plus the Maximum property value minus the LargeChange property value.
+            internal int UIMaximum => _owningScrollBar.Maximum - _owningScrollBar.LargeChange + 1;
+
+            private bool ArePageButtonsDisplayed
+                => FirstPageButtonAccessibleObject.IsDisplayed && LastPageButtonAccessibleObject.IsDisplayed;
+
+            private bool ArePageButtonsHidden
+                => !FirstPageButtonAccessibleObject.IsDisplayed && !LastPageButtonAccessibleObject.IsDisplayed;
+
+            public override AccessibleObject? GetChild(int index)
+            {
+                if (!_owningScrollBar.IsHandleCreated)
+                {
+                    return null;
                 }
 
-                return base.IsPatternSupported(patternId);
+                return index switch
+                {
+                    0 => FirstLineButtonAccessibleObject,
+                    1 => FirstPageButtonAccessibleObject.IsDisplayed ? FirstPageButtonAccessibleObject : ThumbAccessibleObject,
+                    2 => FirstPageButtonAccessibleObject.IsDisplayed
+                        ? ThumbAccessibleObject
+                        : ArePageButtonsHidden ? LastLineButtonAccessibleObject : LastPageButtonAccessibleObject,
+                    3 => ArePageButtonsDisplayed
+                        ? LastPageButtonAccessibleObject
+                        : ArePageButtonsHidden ? null : LastLineButtonAccessibleObject,
+                    4 => ArePageButtonsDisplayed ? LastLineButtonAccessibleObject : null,
+                    _ => null
+                };
             }
+
+            public override int GetChildCount()
+                => _owningScrollBar.IsHandleCreated
+                    ? ArePageButtonsDisplayed
+                        ? 5
+                        : ArePageButtonsHidden ? 3 : 4
+                    : -1;
+
+            public override AccessibleObject? HitTest(int x, int y)
+            {
+                if (!_owningScrollBar.IsHandleCreated)
+                {
+                    return null;
+                }
+
+                Point point = new(x, y);
+                if (ThumbAccessibleObject.Bounds.Contains(point))
+                {
+                    return ThumbAccessibleObject;
+                }
+
+                if (FirstLineButtonAccessibleObject.Bounds.Contains(point))
+                {
+                    return FirstLineButtonAccessibleObject;
+                }
+
+                if (FirstPageButtonAccessibleObject.Bounds.Contains(point))
+                {
+                    return FirstPageButtonAccessibleObject;
+                }
+
+                if (LastPageButtonAccessibleObject.Bounds.Contains(point))
+                {
+                    return LastPageButtonAccessibleObject;
+                }
+
+                if (LastLineButtonAccessibleObject.Bounds.Contains(point))
+                {
+                    return LastLineButtonAccessibleObject;
+                }
+
+                return null;
+            }
+
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+            {
+                AccessibleObject? element = HitTest((int)x, (int)y);
+
+                return element ?? base.ElementProviderFromPoint(x, y);
+            }
+
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+                => direction switch
+                {
+                    UiaCore.NavigateDirection.FirstChild => FirstLineButtonAccessibleObject,
+                    UiaCore.NavigateDirection.LastChild => LastLineButtonAccessibleObject,
+                    _ => base.FragmentNavigate(direction)
+                };
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
@@ -45,10 +159,25 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => _owningScrollBar.AccessibleRole == AccessibleRole.Default
                                                          ? UiaCore.UIA.ScrollBarControlTypeId
                                                          : base.GetPropertyValue(propertyID),
-                    UiaCore.UIA.IsKeyboardFocusablePropertyId => true,
+                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
+                    UiaCore.UIA.IsEnabledPropertyId => _owningScrollBar.Enabled,
+                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => _owningScrollBar.Focused,
                     UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                     _ => base.GetPropertyValue(propertyID)
                 };
+
+            internal override bool IsIAccessibleExSupported() => true;
+
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+            {
+                if (patternId == UiaCore.UIA.ValuePatternId)
+                {
+                    return true;
+                }
+
+                return base.IsPatternSupported(patternId);
+            }
         }
     }
 }

@@ -39,10 +39,11 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (owner.savedSelectedItems != null)
+                        if (owner.savedSelectedItems is not null)
                         {
                             return owner.savedSelectedItems.Count;
                         }
+
                         return 0;
                     }
                 }
@@ -74,7 +75,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.Assert(owner.savedSelectedItems != null || count == 0, "if the count of selectedItems is greater than 0 then the selectedItems should have been saved by now");
+                        Debug.Assert(owner.savedSelectedItems is not null || count == 0, "if the count of selectedItems is greater than 0 then the selectedItems should have been saved by now");
                         for (int i = 0; i < count; i++)
                         {
                             indices[i] = owner.savedSelectedItems[i].Index;
@@ -113,7 +114,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.Assert(owner.savedSelectedItems != null, "Null selected items collection");
+                        Debug.Assert(owner.savedSelectedItems is not null, "Null selected items collection");
                         return owner.savedSelectedItems[index].Index;
                     }
                 }
@@ -195,6 +196,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 
@@ -257,6 +259,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
                     }
+
                     if (owner.IsHandleCreated)
                     {
                         owner.SetItemState(itemIndex, LVIS.SELECTED, LVIS.SELECTED);
@@ -273,6 +276,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
                     }
+
                     owner.Items[itemIndex].Selected = true;
                     return Count;
                 }
@@ -284,6 +288,7 @@ namespace System.Windows.Forms
                 {
                     owner.savedSelectedItems = null;
                 }
+
                 if (owner.IsHandleCreated)
                 {
                     owner.SetItemState(-1, 0, LVIS.SELECTED);
@@ -301,7 +306,7 @@ namespace System.Windows.Forms
             public IEnumerator GetEnumerator()
             {
                 int[] indices = IndicesArray;
-                if (indices != null)
+                if (indices is not null)
                 {
                     return indices.GetEnumerator();
                 }
@@ -319,6 +324,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
                     }
+
                     if (owner.IsHandleCreated)
                     {
                         owner.SetItemState(itemIndex, 0, LVIS.SELECTED);
@@ -330,6 +336,7 @@ namespace System.Windows.Forms
                     {
                         throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
                     }
+
                     owner.Items[itemIndex].Selected = false;
                 }
             }

@@ -66,6 +66,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return;
             }
+
             for (int i = 0; i < propDesc.Length; i++)
             {
                 propDesc[i].QueryGetBaseAttributes += new GetAttributesEventHandler(OnGetAttributes);

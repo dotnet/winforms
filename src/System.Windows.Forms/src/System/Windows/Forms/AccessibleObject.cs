@@ -189,6 +189,8 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual AccessibleObject? GetChild(int index) => null;
 
+        internal virtual int GetChildIndex(AccessibleObject? child) => -1;
+
         /// <summary>
         ///  When overridden in a derived class, gets the number of children
         ///  belonging to an accessible object.
@@ -449,6 +451,8 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.ToggleState ToggleState => UiaCore.ToggleState.Indeterminate;
 
+        private protected virtual UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot => null;
+
         internal virtual UiaCore.IRawElementProviderSimple[]? GetRowHeaders() => null;
 
         internal virtual UiaCore.IRawElementProviderSimple[]? GetColumnHeaders() => null;
@@ -556,7 +560,7 @@ namespace System.Windows.Forms
         internal virtual UiaCore.IRawElementProviderSimple? ItemSelectionContainer => null;
 
         /// <summary>
-        ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+        ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
         /// </summary>
         /// <param name="parent">The parent accessible object.</param>
         internal virtual void SetParent(AccessibleObject? parent)
@@ -564,7 +568,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the detachable child accessible object which may be added or removed to/from hierachy nodes.
+        ///  Sets the detachable child accessible object which may be added or removed to/from hierarchy nodes.
         /// </summary>
         /// <param name="child">The child accessible object.</param>
         internal virtual void SetDetachableChild(AccessibleObject? child)
@@ -577,6 +581,7 @@ namespace System.Windows.Forms
             {
                 return HRESULT.E_NOINTERFACE;
             }
+
             if (ppvObject is null)
             {
                 return HRESULT.E_POINTER;
@@ -654,7 +659,13 @@ namespace System.Windows.Forms
 
         UiaCore.UiaRect UiaCore.IRawElementProviderFragment.BoundingRectangle => new UiaCore.UiaRect(BoundingRectangle);
 
-        UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot => FragmentRoot;
+        // An accessible object should provide info about its correct root object,
+        // even its owner is used like a ToolStrip item via ToolStripControlHost.
+        // This change was made here to not to rework FragmentRoot implementations
+        // for all accessible object. Moreover, this change will work for new accessible object
+        // classes, where it is enough to implement FragmentRoot for a common case.
+        UiaCore.IRawElementProviderFragmentRoot? UiaCore.IRawElementProviderFragment.FragmentRoot
+            => ToolStripFragmentRoot ?? FragmentRoot;
 
         object? UiaCore.IRawElementProviderFragmentRoot.ElementProviderFromPoint(double x, double y) => ElementProviderFromPoint(x, y);
 
@@ -1540,6 +1551,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         break;
                     case AccessibleNavigation.Next:
                     case AccessibleNavigation.Down:
@@ -1548,6 +1560,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         break;
                 }
             }
@@ -1743,7 +1756,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Return the requested method if it is implemented by the Reflection object. The
-        ///  match is based upon the name of the method. If the object implementes multiple methods
+        ///  match is based upon the name of the method. If the object implemented multiple methods
         ///  with the same name an AmbiguousMatchException is thrown.
         /// </summary>
         MethodInfo? IReflect.GetMethod(string name, BindingFlags bindingAttr)

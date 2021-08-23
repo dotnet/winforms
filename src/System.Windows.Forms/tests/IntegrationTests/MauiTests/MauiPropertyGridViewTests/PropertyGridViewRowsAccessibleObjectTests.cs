@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Threading;
 using System.Windows.Forms.IntegrationTests.Common;
 using System.Windows.Forms.PropertyGridInternal;
 using ReflectTools;
@@ -44,7 +43,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             int heightSum = 0;
             int entriesBorders = 0;
 
-            GridEntryCollection entries = _propertyGrid.GetPropEntries();
+            GridEntryCollection entries = _propertyGrid.GetCurrentEntries();
             PropertyGridView propertyGridView = (PropertyGridView)_propertyGrid.ActiveControl;
 
             foreach (GridEntry entry in entries)

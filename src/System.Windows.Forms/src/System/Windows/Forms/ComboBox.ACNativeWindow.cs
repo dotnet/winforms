@@ -39,6 +39,7 @@ namespace System.Windows.Forms
                 {
                     ACNativeWindow newAC = new ACNativeWindow(handle);
                 }
+
                 return BOOL.TRUE;
             }
 
@@ -52,6 +53,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     foreach (object o in s_ACWindows.Values)
                     {
                         if (o is ACNativeWindow window && window.Visible)
@@ -59,6 +61,7 @@ namespace System.Windows.Forms
                             return true;
                         }
                     }
+
                     return false;
                 }
             }
@@ -88,7 +91,7 @@ namespace System.Windows.Forms
                 {
                     if (s_ACWindows[acHandle] is null)
                     {
-                        s_ACWindows.Remove(acHandle); //if an external handle got destroyed, dont let it stop us.
+                        s_ACWindows.Remove(acHandle); //if an external handle got destroyed, don't let it stop us.
                     }
                 }
 
@@ -119,6 +122,7 @@ namespace System.Windows.Forms
                         nulllist.Add(e.Key);
                     }
                 }
+
                 foreach (IntPtr handle in nulllist)
                 {
                     s_ACWindows.Remove(handle);

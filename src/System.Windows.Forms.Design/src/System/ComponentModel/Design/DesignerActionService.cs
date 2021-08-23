@@ -17,7 +17,7 @@ namespace System.ComponentModel.Design
         private readonly IServiceProvider _serviceProvider; // standard service provider
         private readonly ISelectionService _selSvc; // selection service
         private readonly Hashtable _componentToVerbsEventHookedUp; //table component true/false
-        // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accesssed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
+        // Guard against ReEntrant Code. The Infragistics TabControlDesigner, Sets the Commands Status when the Verbs property is accessed. This property is used in the OnVerbStatusChanged code here and hence causes recursion leading to Stack Overflow Exception.
         private bool _reEntrantCode;
 
         /// <summary>
@@ -32,10 +32,12 @@ namespace System.ComponentModel.Design
                 {
                     host.AddService(typeof(DesignerActionService), this);
                 }
+
                 if (serviceProvider.GetService(typeof(IComponentChangeService)) is IComponentChangeService cs)
                 {
                     cs.ComponentRemoved += new ComponentEventHandler(OnComponentRemoved);
                 }
+
                 _selSvc = serviceProvider.GetService(typeof(ISelectionService)) as ISelectionService;
             }
 
@@ -61,6 +63,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(comp));
             }
+
             if (designerActionListCollection is null)
             {
                 throw new ArgumentNullException(nameof(designerActionListCollection));
@@ -98,7 +101,7 @@ namespace System.ComponentModel.Design
                 return;
             }
 
-            //this will represent the list of componets we just cleared
+            //this will represent the list of components we just cleared
             ArrayList compsRemoved = new ArrayList(_designerActionLists.Count);
             foreach (DictionaryEntry entry in _designerActionLists)
             {
@@ -123,6 +126,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(comp));
             }
+
             return _designerActionLists.Contains(comp);
         }
 
@@ -161,6 +165,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(component));
             }
+
             DesignerActionListCollection result = new DesignerActionListCollection();
             switch (type)
             {
@@ -175,6 +180,7 @@ namespace System.ComponentModel.Design
                     GetComponentServiceActions(component, result);
                     break;
             }
+
             return result;
         }
 
@@ -212,6 +218,7 @@ namespace System.ComponentModel.Design
                             {
                                 _componentToVerbsEventHookedUp[component] = true;
                             }
+
                             foreach (DesignerVerb verb in verbs)
                             {
                                 if (verb is null)
@@ -223,11 +230,13 @@ namespace System.ComponentModel.Design
                                 {
                                     verb.CommandChanged += new EventHandler(OnVerbStatusChanged);
                                 }
+
                                 if (verb.Enabled && verb.Visible)
                                 {
                                     verbsArray.Add(verb);
                                 }
                             }
+
                             if (verbsArray.Count != 0)
                             {
                                 DesignerActionVerbList davl = new DesignerActionVerbList((DesignerVerb[])verbsArray.ToArray(typeof(DesignerVerb)));
@@ -331,7 +340,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        ///  This will remove all DesignerActions associated with the 'comp' object.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
         /// </summary>
         public void Remove(IComponent comp)
         {
@@ -350,7 +359,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChagned event will be fired.
+        ///  This will remove the specified Designeraction from the DesignerActionService.  All alarms will be unhooked and the DesignerActionsChanged event will be fired.
         /// </summary>
         public void Remove(DesignerActionList actionList)
         {
@@ -379,10 +388,12 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(comp));
             }
+
             if (actionList is null)
             {
                 throw new ArgumentNullException(nameof(actionList));
             }
+
             if (!_designerActionLists.Contains(comp))
             {
                 return;
@@ -416,6 +427,7 @@ namespace System.ComponentModel.Design
                 {
                     actionLists.Remove(t);
                 }
+
                 OnDesignerActionListsChanged(new DesignerActionListsChangedEventArgs(comp, DesignerActionListsChangedType.ActionListsRemoved, GetComponentActions(comp)));
             }
         }

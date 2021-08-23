@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -25,6 +25,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     s_defaultSerializer = new EnumCodeDomSerializer();
                 }
+
                 return s_defaultSerializer;
             }
         }
@@ -75,7 +76,7 @@ namespace System.ComponentModel.Design.Serialization
                     foreach (Enum term in values)
                     {
                         string termString = enumConverter?.ConvertToString(term);
-                        CodeExpression newExpression = !String.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
+                        CodeExpression newExpression = !string.IsNullOrEmpty(termString) ? new CodeFieldReferenceExpression(enumType, termString) : null;
 
                         if (newExpression != null)
                         {

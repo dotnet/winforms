@@ -40,11 +40,12 @@ namespace System.Windows.Forms
                     int count = 0;
                     foreach (ListViewItem item in owner.Items)
                     {
-                        if (item != null && item.Checked)
+                        if (item is not null && item.Checked)
                         {
                             count++;
                         }
                     }
+
                     return count;
                 }
             }
@@ -62,6 +63,7 @@ namespace System.Windows.Forms
                             indices[index++] = i;
                         }
                     }
+
                     return indices;
                 }
             }
@@ -92,6 +94,7 @@ namespace System.Windows.Forms
                             {
                                 return i;
                             }
+
                             nChecked++;
                         }
                     }
@@ -179,6 +182,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 
@@ -230,7 +234,7 @@ namespace System.Windows.Forms
             public IEnumerator GetEnumerator()
             {
                 int[] indices = IndicesArray;
-                if (indices != null)
+                if (indices is not null)
                 {
                     return indices.GetEnumerator();
                 }

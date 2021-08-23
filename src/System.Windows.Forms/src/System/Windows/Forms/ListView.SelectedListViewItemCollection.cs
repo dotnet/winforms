@@ -60,13 +60,14 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (owner.savedSelectedItems != null)
+                        if (owner.savedSelectedItems is not null)
                         {
                             ListViewItem[] cloned = new ListViewItem[owner.savedSelectedItems.Count];
                             for (int i = 0; i < owner.savedSelectedItems.Count; i++)
                             {
                                 cloned[i] = owner.savedSelectedItems[i];
                             }
+
                             return cloned;
                         }
                         else
@@ -96,10 +97,11 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (owner.savedSelectedItems != null)
+                        if (owner.savedSelectedItems is not null)
                         {
                             return owner.savedSelectedItems.Count;
                         }
+
                         return 0;
                     }
                 }
@@ -138,7 +140,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        Debug.Assert(owner.savedSelectedItems != null, "Null selected items collection");
+                        Debug.Assert(owner.savedSelectedItems is not null, "Null selected items collection");
                         return owner.savedSelectedItems[index];
                     }
                 }
@@ -258,7 +260,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Unselects all items.
+            ///  Deselects all items.
             /// </summary>
             public void Clear()
             {
@@ -335,7 +337,7 @@ namespace System.Windows.Forms
                 }
 
                 ListViewItem[] items = SelectedItemArray;
-                if (items != null)
+                if (items is not null)
                 {
                     return items.GetEnumerator();
                 }
@@ -360,6 +362,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 
@@ -393,7 +396,7 @@ namespace System.Windows.Forms
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
                 {
-                    return -1; // we dont support empty or null keys.
+                    return -1; // we don't support empty or null keys.
                 }
 
                 // step 1 - check the last cached item

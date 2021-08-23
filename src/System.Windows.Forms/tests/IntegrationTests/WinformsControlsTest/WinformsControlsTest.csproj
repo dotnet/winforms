@@ -9,12 +9,9 @@
     <ApplicationManifest>app1.manifest</ApplicationManifest>
     <EnableXlfLocalization>false</EnableXlfLocalization>
     <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <PropertyGroup Condition="$([System.Text.RegularExpressions.Regex]::IsMatch('$(TargetFramework)', '^netcoreapp\d'))">
-    <DefineConstants>NETCORE</DefineConstants>
-  </PropertyGroup>
-  
   <ItemGroup>
     <ProjectReference Include="..\..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
@@ -22,7 +19,6 @@
     <ProjectReference Include="..\System.Windows.Forms.IntegrationTests.Common\System.Windows.Forms.IntegrationTests.Common.csproj" />
   </ItemGroup>
 
-  
   <ItemGroup>
     <EmbeddedResource Include="Images\SmallA.bmp">
       <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
@@ -51,5 +47,22 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
   </ItemGroup>
+
+  <!--
+
+      Reference local analyzers for test purposes
+
+    -->
+  <PropertyGroup>
+    <!-- Don't try to resolve analyzers from <repo root>\.dotnet\packs\Microsoft.WindowsDesktop.App.Ref\<version>\ref\net6.0 -->
+    <ResolveWinFormsAnalyzersFromSdkRefPack>false</ResolveWinFormsAnalyzersFromSdkRefPack>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers\src\System.Windows.Forms.Analyzers.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+    <ProjectReference Include="..\..\..\..\System.Windows.Forms.Analyzers.CSharp\src\System.Windows.Forms.Analyzers.CSharp.csproj" ReferenceOutputAssembly="false" OutputItemType="Analyzer" />
+  </ItemGroup>
+
+  <Import Project="..\..\..\..\..\pkg\Microsoft.Private.Winforms\sdk\dotnet-wpf\System.Windows.Forms.Analyzers.props" />
 
 </Project>

@@ -10,9 +10,18 @@
       <IncludeResourcesInPackage>true</IncludeResourcesInPackage>
     </PropertyGroup>
 
+    <!-- Analyzers and source generators -->
+    <PropertyGroup Condition="'$(IsAnalyzerProject)' == 'true'">
+      <_AnalyzerTargetLanguage>$(AssemblyName.Substring($(AssemblyName.LastIndexOf('.'))))</_AnalyzerTargetLanguage>
+      <AnalyzerTargetLanguage Condition="$(_AnalyzerTargetLanguage.Contains('.CSharp', StringComparison.OrdinalIgnoreCase))">/cs</AnalyzerTargetLanguage>
+      <AnalyzerTargetLanguage Condition="$(_AnalyzerTargetLanguage.Contains('.VisualBasic', StringComparison.OrdinalIgnoreCase))">/vb</AnalyzerTargetLanguage>
+    </PropertyGroup>
+
     <PropertyGroup Condition="'$(PackagePath)' == ''">
       <PackagePath>lib/$(TargetFramework)</PackagePath>
       <PackagePath Condition="'$(IsFacadeAssembly)' == 'true'">lib/$(TargetFramework);$(RefPackagePath)</PackagePath>
+      <!-- Note that we are packaging analyzers not for consumption, but for transport purposes into dotnet/windowsdesktop -->
+      <PackagePath Condition="'$(IsAnalyzerProject)' == 'true'">sdk/analyzers/dotnet$(AnalyzerTargetLanguage)</PackagePath>
     </PropertyGroup>
 
     <PropertyGroup>
@@ -30,7 +39,7 @@
       <!-- Set the xml destination (for a later step that copies files from the dotnet-api-docs to local build artifacts) -->
       <IntellisenseXmlDest Condition="'$(ProduceReferenceAssembly)' == 'true' And '$(PackageAsRefAndLib)' != 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetRefPath)', '.xml'))</IntellisenseXmlDest>
       <IntellisenseXmlDest Condition="'$(PackageAsRefAndLib)' == 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXmlDest>
-      <IntellisenseXmlDestDir Condition="'$(IntellisenseXmlDest)' != ''">$([System.IO.Path]::GetDirectoryName('$(IntellisenseXml)'))</IntellisenseXmlDestDir>
+      <IntellisenseXmlDestDir Condition="'$(IntellisenseXmlDest)' != ''">$([System.IO.Path]::GetDirectoryName('$(IntellisenseXmlDest)'))</IntellisenseXmlDestDir>
 
     </PropertyGroup>
 
@@ -39,7 +48,7 @@
       This means we build a real assembly that has no associated official intellisense docs.
       Contact the intellisense team for guidance.
     -->
-    <Error  Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true'" 
+    <Error  Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true' and '$(IsAnalyzerProject)' != 'true'" 
             Text="$(AssemblyName).xml not found in dotnet-api-docs package. Contact the intellisense team about adding the docs for this assembly."
     />
 

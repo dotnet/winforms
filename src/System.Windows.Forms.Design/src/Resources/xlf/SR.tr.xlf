@@ -2,6 +2,21 @@
 <xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
   <file datatype="xml" source-language="en" target-language="tr" original="../SR.resx">
     <body>
+      <trans-unit id="AXNotRegistered">
+        <source>Could not create ActiveX control '{0}' because it is not properly registered.</source>
+        <target state="translated">Uygun şekilde kayıtlı olmadığından '{0}' öğesinde ActiveX denetimi oluşturulamadı.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleActionCheck">
+        <source>Check</source>
+        <target state="translated">Onay işareti ekle</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AccessibleActionUncheck">
+        <source>Uncheck</source>
+        <target state="translated">Onay işaretini kaldır</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AnchorEditorAccName">
         <source>Anchor Editor</source>
         <target state="translated">Bağlantı Düzenleyicisi</target>
@@ -25,6 +40,16 @@
       <trans-unit id="AnchorEditorTopAccName">
         <source>Top</source>
         <target state="translated">Üst</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="AxImportFailed">
+        <source>Failed to import the ActiveX control.  Please ensure it is properly registered.</source>
+        <target state="translated">ActiveX denetimi içeri aktarılamadı. Lütfen uygun şekilde kayıtlı olduğundan emin olun.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="Ax_Control">
+        <source>ActiveX Control</source>
+        <target state="translated">ActiveX Denetimi</target>
         <note />
       </trans-unit>
       <trans-unit id="BasicDesignerLoaderAlreadyLoaded">
@@ -202,6 +227,21 @@
         <target state="translated">Seçili Önizleme</target>
         <note />
       </trans-unit>
+      <trans-unit id="ChooseImageDescription">
+        <source>Select the image displayed in the PictureBox</source>
+        <target state="translated">PictureBox içinde gösterilen görüntüyü seçin</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ChooseImageDisplayName">
+        <source>Choose Image...</source>
+        <target state="translated">Görüntü Seç...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ClipboardError">
+        <source>Requested Clipboard operation did not succeed.</source>
+        <target state="translated">İstenen Pano işlemi başarılı olmadı.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CodeDomComponentSerializationServiceClosedStore">
         <source>The serialization store is closed.  New objects cannot be added to a closed store.</source>
         <target state="translated">Serileştirme deposu kapalı. Kapalı depoya yeni nesneler eklenemez.</target>
@@ -354,6 +394,11 @@
         <target state="translated">{0} bileşeni kılavuza göre hizala</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandSetBringToFront">
+        <source>Bring {0} controls to front</source>
+        <target state="translated">{0} denetimi ön plana getir</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandSetCutMultiple">
         <source>Cut {0} Components</source>
         <target state="translated">{0} bileşeni kes</target>
@@ -376,9 +421,19 @@
         <target state="translated">{0} bileşeni biçimlendir (aralık)</target>
         <note />
       </trans-unit>
+      <trans-unit id="CommandSetLockControls">
+        <source>Lock {0} components</source>
+        <target state="translated">{0} bileşeni kilitle</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CommandSetPaste">
         <source>Paste components</source>
         <target state="translated">Bileşenleri yapıştır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CommandSetSendToBack">
+        <source>Send {0} controls to back</source>
+        <target state="translated">{0} denetimi arka plana gönder</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandSetSize">
@@ -601,9 +656,19 @@
         <target state="translated">'{0}' değerini '{1}' özelliğine ayarlama hatası. Ayrıntılar: {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerBatchCreateTool">
+        <source>Creating components in tool '{0}'</source>
+        <target state="translated">'{0}' aracında bileşenler oluşturuyor</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerBeginDragNotCalled">
         <source>Call to BeginDrag must succeed before calling drag functions.</source>
         <target state="translated">Sürükleme işlevleri çağrılmadan önce Call to BeginDrag başarıyla tamamlanmalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="DesignerCantParentType">
+        <source>Cannot add component of type '{0}' to container of type '{1}'</source>
+        <target state="translated">'{0}' türündeki bileşen '{1}' türündeki kapsayıcıya eklenemiyor</target>
         <note />
       </trans-unit>
       <trans-unit id="DesignerInherited">
@@ -800,6 +865,11 @@
         <target state="translated">Tasarımcıların dayama çizgileri kullanıp kullanmayacağını denetler. True ise, dayama çizgileri kılavuz olarak kullanılır. False ise, kılavuz çizgileri kullanılır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="DesignerPropName">
+        <source>Indicates the name used in code to identify the object.</source>
+        <target state="translated">Nesneyi tanımlamak üzere kodda kullanılan adı gösterir.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DesignerShortcutDockInParent">
         <source>Dock in Parent Container</source>
         <target state="translated">Ana Kapsayıcıda Yerleştir</target>
@@ -855,6 +925,11 @@
         <target state="translated">{0} bileşeni sürükle</target>
         <note />
       </trans-unit>
+      <trans-unit id="DragDropDropComponents">
+        <source>Drop components</source>
+        <target state="translated">Bileşenleri bırak</target>
+        <note />
+      </trans-unit>
       <trans-unit id="DragDropMoveComponent">
         <source>Move {0}</source>
         <target state="translated">{0} öğesini taşı</target>
@@ -878,6 +953,16 @@
       <trans-unit id="DragDropSizeComponents">
         <source>Size {0} components</source>
         <target state="translated">{0} bileşeni boyutlandır</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EditLinesDescription">
+        <source>Opens the Lines collection editor</source>
+        <target state="translated">Satır koleksiyonu düzenleyicisini açar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="EditLinesDisplayName">
+        <source>Edit Text Lines...</source>
+        <target state="translated">Metin Satırlarını Düzenle...</target>
         <note />
       </trans-unit>
       <trans-unit id="EventBindingServiceBadArgType">
@@ -910,6 +995,11 @@
         <target state="translated">{0} uzatma sağlayıcısı zaten bir uzatma olarak eklendi. Bir uzatma daha eklemek yinelenen özelliklere neden olabilir.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FailedToCreateComponent">
+        <source>Failed to create component '{0}'.  The error message follows:\r\n '{1}'</source>
+        <target state="translated">'{0}' bileşeni oluşturulamadı. Hata iletisi şöyledir:\r\n’{1}’</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormatStringDialogTitle">
         <source>Format String Dialog</source>
         <target state="translated">Dizeyi Biçimlendir İletişim Kutusu</target>
@@ -940,9 +1030,24 @@
         <target state="translated">Görüntüler Koleksiyonu Düzenleyicisi</target>
         <note />
       </trans-unit>
+      <trans-unit id="ImageListDescription">
+        <source>Chooses an ImageList to use with this TreeView</source>
+        <target state="translated">Bu TreeView'la kullanılacak ImageList'i seçer</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ImageListDisplayName">
+        <source>ImageList:</source>
+        <target state="translated">ImageList:</target>
+        <note />
+      </trans-unit>
       <trans-unit id="InheritanceServiceReadOnlyCollection">
         <source>Read-Only</source>
         <target state="translated">Salt Okunur</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InitialDirectoryEditorLabel">
+        <source>Select the directory that will initially be opened in the dialog.</source>
+        <target state="translated">Başlangıçta iletişim kutusunda açılacak olan dizini seçin.</target>
         <note />
       </trans-unit>
       <trans-unit id="InvalidArgument">
@@ -953,6 +1058,21 @@
       <trans-unit id="InvalidBoundArgument">
         <source>'{1}' is not a valid value for '{0}'. '{0}' should be between {2} and {3}.</source>
         <target state="translated">'{1}' değeri '{0}' öğesi için geçerli değil. '{0}' değeri {2} ile {3} arasında olmalıdır.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvokeNodesDialogDescription">
+        <source>Opens the Nodes collection editor</source>
+        <target state="translated">Düğümler koleksiyonu düzenleyicisini açar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvokeNodesDialogDisplayName">
+        <source>Edit Nodes...</source>
+        <target state="translated">Düğümleri Düzenle...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ItemsCategoryName">
+        <source>Items</source>
+        <target state="translated">Öğeler</target>
         <note />
       </trans-unit>
       <trans-unit id="LinkAreaEditorCancel">
@@ -975,6 +1095,81 @@
         <target state="translated">Tamam</target>
         <note />
       </trans-unit>
+      <trans-unit id="LinksCategoryName">
+        <source>Links</source>
+        <target state="translated">Bağlantılar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListControlUnboundActionListEditItemsDescription">
+        <source>Opens the Items collection editor</source>
+        <target state="translated">Öğeler koleksiyonu düzenleyicisini açar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListControlUnboundActionListEditItemsDisplayName">
+        <source>Edit Items...</source>
+        <target state="translated">Öğeleri Düzenle...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditColumnsDescription">
+        <source>Opens the Columns collection editor</source>
+        <target state="translated">Sütunlar koleksiyonu düzenleyicisini açar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditColumnsDisplayName">
+        <source>Edit Columns...</source>
+        <target state="translated">Sütunları Düzenle...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditGroupsDescription">
+        <source>Opens the Groups collection editor</source>
+        <target state="translated">Gruplar koleksiyonu düzenleyicisini açar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditGroupsDisplayName">
+        <source>Edit Groups...</source>
+        <target state="translated">Grupları Düzenle...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditItemsDescription">
+        <source>Opens the Items collection editor</source>
+        <target state="translated">Öğeler koleksiyonu düzenleyicisini açar</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListEditItemsDisplayName">
+        <source>Edit Items...</source>
+        <target state="translated">Öğeleri Düzenle...</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListLargeImagesDescription">
+        <source>Selects an ImageList to use with LargeIcon mode</source>
+        <target state="translated">LargeIcon modunda kullanılacak ImageList'i seçer</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListLargeImagesDisplayName">
+        <source>Large ImageList:</source>
+        <target state="translated">Büyük ImageList:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListSmallImagesDescription">
+        <source>Selects an ImageList to use with SmallIcon mode</source>
+        <target state="translated">SmallIcon modunda kullanılacak ImageList'i seçer</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListSmallImagesDisplayName">
+        <source>Small ImageList:</source>
+        <target state="translated">Küçük ImageList:</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListViewDescription">
+        <source>Changes the type of View this ListView shows</source>
+        <target state="translated">Bu ListView'un görüntüleyeceği Görünüm türünü değiştirir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewActionListViewDisplayName">
+        <source>View:</source>
+        <target state="translated">Görüntüleme:</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewSubItemBaseName">
         <source>ListViewSubItem</source>
         <target state="translated">ListViewSubItem</target>
@@ -988,6 +1183,11 @@
       <trans-unit id="LocalizationProviderMissingService">
         <source>The service {0} is required but could not be found.  If you have removed this service ensure that you provide a replacement.</source>
         <target state="translated">{0} hizmeti gerekiyordu ancak bulunamadı. Bu hizmeti kaldırdıysanız bunun yerine geçecek bir hizmet sağladığınızdan emin olun.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="LocalizingCannotAdd">
+        <source>Components cannot be added in localization mode.  Select (Default) in the Language property to return to the default form and add components.</source>
+        <target state="translated">Yerelleştirme modunda bileşenler eklenemiyor. Varsayılan forma dönmek için Dil özelliğinde (Varsayılan) öğesini seçin ve bileşenleri ekleyin.</target>
         <note />
       </trans-unit>
       <trans-unit id="MaskDescriptorNotMaskFullErrorMsg">
@@ -1100,6 +1300,16 @@
         <target state="translated">'{0}' menü komutu için zaten bir komut işleyicisi var.</target>
         <note />
       </trans-unit>
+      <trans-unit id="MultiLineDescription">
+        <source>Puts the TextBox in a mode where it can display multiple lines of text</source>
+        <target state="translated">TextBox'ı birden çok metin satırı görüntüleyebileceği bir moda getirir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MultiLineDisplayName">
+        <source>MultiLine</source>
+        <target state="translated">MultiLine</target>
+        <note />
+      </trans-unit>
       <trans-unit id="MultilineStringEditorWatermark">
         <source>Press Enter to begin a new line.
 Press Ctrl+Enter to accept Text.</source>
@@ -1122,9 +1332,24 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <target state="translated">Tasarım gereği, bu metot/nesne uygulanmadı.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ParentControlDesignerGridSizeDescr">
+        <source>Determines the size of the positioning grid.</source>
+        <target state="translated">Konumlandırma kılavuzunun boyutunu belirler.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ParentControlDesignerLassoShortcutRedo">
+        <source>Place existing controls in new container, '{0}'.</source>
+        <target state="translated">Varolan denetimleri yeni '{0}' kapsayıcısına yerleştirin.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PlatformNotSupported_WinformsDesigner">
         <source>Winforms Designer is not supported on this platform.</source>
         <target state="translated">Winforms Tasarımcısı bu platformda desteklenmiyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertiesCategoryName">
+        <source>Properties</source>
+        <target state="translated">Özellikler</target>
         <note />
       </trans-unit>
       <trans-unit id="RTL">
@@ -1137,7 +1362,7 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
         <target state="translated">FolderBrowserDialog iletişim kutusunda başlangıçta seçili olacak klasörün yolunu seçin.</target>
         <note />
       </trans-unit>
-      <trans-unit id="SerializationManagerAreadyInSession">
+      <trans-unit id="SerializationManagerAlreadyInSession">
         <source>You cannot create a new session because this serialization manager already has an active serialization session.</source>
         <target state="translated">Bu serileştirme yöneticisinin zaten etkin bir serileştirme oturumu bulunduğundan yeni oturum oluşturamazsınız.</target>
         <note />
@@ -1260,6 +1485,16 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
       <trans-unit id="ShortcutKeys_InvalidKey">
         <source>(Unknown)</source>
         <target state="translated">(Bilinmiyor)</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SizeModeDescription">
+        <source>Changes the sizing mode of the Image displayed in the PictureBox</source>
+        <target state="translated">PictureBox'ta gösterilen Görüntünün boyutlandırma modunu değiştirir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SizeModeDisplayName">
+        <source>Size Mode:</source>
+        <target state="translated">Boyut Modu:</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuAbout">
@@ -1660,6 +1895,11 @@ Metni kabul etmek için Ctrl+Enter tuşlarına basın.</target>
       <trans-unit id="WindowsFormsCommandCenterY">
         <source>Vertical center of {0} component(s)</source>
         <target state="translated">{0} bileşenlerinin dikey ortası</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WindowsFormsTabOrderReadOnly">
+        <source>- Read Only</source>
+        <target state="translated">- Salt Okunur</target>
         <note />
       </trans-unit>
       <trans-unit id="bitmapFileDescription">

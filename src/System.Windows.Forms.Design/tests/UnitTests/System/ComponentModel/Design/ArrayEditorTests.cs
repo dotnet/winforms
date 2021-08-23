@@ -3,11 +3,9 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Drawing.Design;
-using System.Globalization;
 using System.Reflection;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -136,7 +134,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void ArrayEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new ArrayEditor(null);
@@ -163,7 +161,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void ArrayEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new ArrayEditor(null);

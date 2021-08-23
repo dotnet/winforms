@@ -52,6 +52,7 @@ namespace System.Windows.Forms
 
                 CurrentCell?.AccessibilityObject.SetFocus();
             }
+
             AccessibilityNotifyClients(AccessibleEvents.Selection, objectID, childID);
         }
 
@@ -116,8 +117,10 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.None;
                             }
+
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         return dataGridViewAdvancedBorderStylePlaceholder;
@@ -145,8 +148,10 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.None;
                             }
+
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.None;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         return dataGridViewAdvancedBorderStylePlaceholder;
@@ -175,6 +180,7 @@ namespace System.Windows.Forms
                                 dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = dataGridViewAdvancedBorderStyleInput.All;
                                 dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.None;
                             }
+
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = dataGridViewAdvancedBorderStyleInput.All;
                             dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = dataGridViewAdvancedBorderStyleInput.All;
                             return dataGridViewAdvancedBorderStylePlaceholder;
@@ -208,8 +214,10 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.OutsetPartial;
                             }
+
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = isLastVisibleColumn ? DataGridViewAdvancedCellBorderStyle.Outset : DataGridViewAdvancedCellBorderStyle.OutsetPartial;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         return dataGridViewAdvancedBorderStylePlaceholder;
@@ -237,8 +245,10 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                             }
+
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.OutsetDouble;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.Outset;
                         return dataGridViewAdvancedBorderStylePlaceholder;
@@ -266,8 +276,10 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                             }
+
                             dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         }
+
                         dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.InsetDouble;
                         dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.Inset;
                         return dataGridViewAdvancedBorderStylePlaceholder;
@@ -285,10 +297,12 @@ namespace System.Windows.Forms
                                 dataGridViewAdvancedBorderStylePlaceholder.LeftInternal = DataGridViewAdvancedCellBorderStyle.None;
                                 dataGridViewAdvancedBorderStylePlaceholder.RightInternal = DataGridViewAdvancedCellBorderStyle.Single;
                             }
+
                             dataGridViewAdvancedBorderStylePlaceholder.TopInternal = DataGridViewAdvancedCellBorderStyle.Single;
                             dataGridViewAdvancedBorderStylePlaceholder.BottomInternal = DataGridViewAdvancedCellBorderStyle.Single;
                             return dataGridViewAdvancedBorderStylePlaceholder;
                         }
+
                         break;
                 }
             }
@@ -320,6 +334,7 @@ namespace System.Windows.Forms
                 {
                     preferredThickness = DataGridViewBand.MaxBandThickness;
                 }
+
                 if (dataGridViewColumn.Width < preferredThickness)
                 {
                     // Column needs to be expanded
@@ -351,10 +366,12 @@ namespace System.Windows.Forms
                 {
                     ret |= AdjustExpandingColumn(dataGridViewColumn, rowIndex);
                 }
+
                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                     DataGridViewElementStates.Visible,
                     DataGridViewElementStates.None);
             }
+
             return ret;
         }
 
@@ -390,6 +407,7 @@ namespace System.Windows.Forms
                     width = RowHeadersWidth;
                 }
             }
+
             int preferredThickness;
             if (fixedWidth)
             {
@@ -399,21 +417,25 @@ namespace System.Windows.Forms
             {
                 preferredThickness = dataGridViewCell.GetPreferredSize(rowIndex).Height;
             }
+
             Rows.SharedRow(rowIndex).GetHeightInfo(rowIndex, out int height, out int minimumHeight);
             if (preferredThickness < height)
             {
                 preferredThickness = height;
             }
+
             Debug.Assert(preferredThickness >= minimumHeight);
             if (preferredThickness > DataGridViewBand.MaxBandThickness)
             {
                 preferredThickness = DataGridViewBand.MaxBandThickness;
             }
+
             if (height != preferredThickness)
             {
                 Debug.Assert(_autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None);
                 Rows[rowIndex].Thickness = preferredThickness;   // unsharing the resized row
             }
+
             return preferredThickness;
         }
 
@@ -465,6 +487,7 @@ namespace System.Windows.Forms
                                         width = RowHeadersWidth;
                                     }
                                 }
+
                                 int preferredHeight;
                                 if (fixedWidth)
                                 {
@@ -474,6 +497,7 @@ namespace System.Windows.Forms
                                 {
                                     preferredHeight = dataGridViewCell.GetPreferredSize(rowIndex).Height;
                                 }
+
                                 if (Rows.SharedRow(rowIndex).Height < preferredHeight)
                                 {
                                     Rows[rowIndex].Height = preferredHeight;  // unsharing the row to be resized
@@ -571,6 +595,7 @@ namespace System.Windows.Forms
                                     imposedWidthSum += dataGridViewColumnTmp.MinimumWidth;
                                     otherFillingColumnExists = true;
                                 }
+
                                 weightSum += dataGridViewColumnTmp.FillWeight;
                             }
                             else
@@ -648,6 +673,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         foreach (DataGridViewColumn dataGridViewColumnTmp in Columns)
                         {
                             if (dataGridViewColumnTmp.Index != dataGridViewColumn.Index &&
@@ -660,6 +686,7 @@ namespace System.Windows.Forms
                                 usedFillWeights += dataGridViewColumnTmp.UsedFillWeight;
                             }
                         }
+
                         dataGridViewColumn.UsedFillWeight += weightSum - usedFillWeights;
                     }
                     else
@@ -685,6 +712,7 @@ namespace System.Windows.Forms
                             weightSumDbg += dataGridViewColumnTmp.UsedFillWeight;
                         }
                     }
+
                     Debug.Assert(Math.Abs(weightSum - weightSumDbg) < 1.0F);
 #endif
                 }
@@ -717,8 +745,10 @@ namespace System.Windows.Forms
                                         // Column is displayed before 'dataGridViewColumn', it is not allowed to shrink at all
                                         imposedWidthSum += dataGridViewColumnTmp.Width;
                                     }
+
                                     otherFillingColumnExists = true;
                                 }
+
                                 weightSum += dataGridViewColumnTmp.FillWeight;
                             }
                             else
@@ -801,6 +831,7 @@ namespace System.Windows.Forms
                                     {
                                         dataGridViewColumnTmp.UsedFillWeight = weightSum * dataGridViewColumnTmp.Width / availableWidth;
                                     }
+
                                     usedWeightSumNoneMinimal -= dataGridViewColumnTmp.UsedFillWeight;
                                     weightSumNoneMinimal -= dataGridViewColumnTmp.FillWeight;
                                     usedFillWeights += dataGridViewColumnTmp.UsedFillWeight;
@@ -814,6 +845,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         foreach (DataGridViewColumn dataGridViewColumnTmp in Columns)
                         {
                             if (Columns.DisplayInOrder(dataGridViewColumn.Index, dataGridViewColumnTmp.Index) &&
@@ -826,6 +858,7 @@ namespace System.Windows.Forms
                                 usedFillWeights += dataGridViewColumnTmp.UsedFillWeight;
                             }
                         }
+
                         dataGridViewColumn.UsedFillWeight += weightSum - usedFillWeights;
                     }
                     else
@@ -851,6 +884,7 @@ namespace System.Windows.Forms
                             weightSumDbg += dataGridViewColumnTmp.UsedFillWeight;
                         }
                     }
+
                     Debug.Assert(Math.Abs(weightSum - weightSumDbg) < 1.0F);
 #endif
                 }
@@ -900,6 +934,7 @@ namespace System.Windows.Forms
                             {
                                 autoFillColumns = new ArrayList(Columns.Count);
                             }
+
                             autoFillColumns.Add(dataGridViewColumn);
                         }
                         else
@@ -949,8 +984,10 @@ namespace System.Windows.Forms
                                 columnsAdjusted = true;
                                 dataGridViewColumn.ThicknessInternal = minimumWidth;
                             }
+
                             availableWidth += dataGridViewColumn.Thickness;
                         }
+
                         //if (this.dataGridViewState2[State2_UsedFillWeightsDirty])
                         {
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
@@ -959,9 +996,11 @@ namespace System.Windows.Forms
                                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
                                 dataGridViewColumn.UsedFillWeight = dataGridViewColumn.Width * weightSum / availableWidth;
                             }
+
                             _dataGridViewState2[State2_UsedFillWeightsDirty] = false;
                             _availableWidthForFillColumns = availableWidth;
                         }
+
                         return columnsAdjusted;
                     }
 
@@ -988,6 +1027,7 @@ namespace System.Windows.Forms
                                 dataGridViewColumn.DesiredFillWidth = (int)Math.Round(desiredFillWidth, MidpointRounding.AwayFromZero);
                                 usedWidth += dataGridViewColumn.DesiredFillWidth;
                             }
+
                             int minimumWidth = dataGridViewColumn.DesiredMinimumWidth > 0 ? dataGridViewColumn.DesiredMinimumWidth : dataGridViewColumn.MinimumWidth;
                             if (dataGridViewColumn.DesiredFillWidth < minimumWidth)
                             {
@@ -1013,6 +1053,7 @@ namespace System.Windows.Forms
                                     weightSumNoneMinimal -= dataGridViewColumn.FillWeight;
                                 }
                             }
+
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
                                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
@@ -1049,6 +1090,7 @@ namespace System.Windows.Forms
                                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
                                 dataGridViewColumn.DesiredFillWidth = dataGridViewColumn.Width;
                             }
+
                             float[] floatDesiredWidths = new float[autoFillColumns.Count];
                             for (int gain = 0; gain < widthGain; gain++)
                             {
@@ -1063,6 +1105,7 @@ namespace System.Windows.Forms
                                         minimumColumnExists = true;
                                     }
                                 }
+
                                 for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                                 {
                                     DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
@@ -1070,6 +1113,7 @@ namespace System.Windows.Forms
                                     {
                                         floatDesiredWidths[columnEntry] = _availableWidthForFillColumns * dataGridViewColumn.UsedFillWeight / weightSum;
                                     }
+
                                     if (minimumColumnExists)
                                     {
                                         floatDesiredWidths[columnEntry] += dataGridViewColumn.FillWeight / dataGridViewColumn.UsedFillWeight / fillWeightRatioSum;
@@ -1080,6 +1124,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             for (columnEntry = 0; columnEntry < autoFillColumns.Count; columnEntry++)
                             {
                                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
@@ -1096,6 +1141,7 @@ namespace System.Windows.Forms
                                 DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
                                 dataGridViewColumn.DesiredFillWidth = dataGridViewColumn.Width;
                             }
+
                             // the width loss is accounted for in steps of 10%
                             do
                             {
@@ -1123,6 +1169,7 @@ namespace System.Windows.Forms
                                             }
                                         }
                                     }
+
                                     if (mostDeservingDataGridViewColumn is not null)
                                     {
                                         float floatDesiredWidth = (stepDownAvailableWidthForFillColumns * mostDeservingDataGridViewColumn.UsedFillWeight / weightSum) - widthLoss * mostDeservingDataGridViewColumn.UsedFillWeight / mostDeservingDataGridViewColumn.FillWeight / fillWeightRatioSum;
@@ -1130,6 +1177,7 @@ namespace System.Windows.Forms
                                         {
                                             floatDesiredWidth = (int)mostDeservingDataGridViewColumn.MinimumWidth;
                                         }
+
                                         int oldDesiredWidth = mostDeservingDataGridViewColumn.DesiredFillWidth;
                                         mostDeservingDataGridViewColumn.DesiredFillWidth = Math.Min(oldDesiredWidth, (int)Math.Round(floatDesiredWidth, MidpointRounding.AwayFromZero));
                                         changeDone = (oldDesiredWidth != mostDeservingDataGridViewColumn.DesiredFillWidth);
@@ -1138,6 +1186,7 @@ namespace System.Windows.Forms
                                             mostDeservingDataGridViewColumn.DesiredFillWidth--;
                                             changeDone = true;
                                         }
+
                                         Debug.Assert(oldDesiredWidth >= mostDeservingDataGridViewColumn.DesiredFillWidth);
                                         widthLoss -= oldDesiredWidth - mostDeservingDataGridViewColumn.DesiredFillWidth;
                                         if (changeDone)
@@ -1149,6 +1198,7 @@ namespace System.Windows.Forms
                                                 dataGridViewColumn.UsedFillWeight = weightSum / stepDownAvailableWidthForFillColumns * dataGridViewColumn.DesiredFillWidth;
                                             }
                                         }
+
                                         Debug.Assert(widthLoss >= 0);
                                     }
                                 }
@@ -1156,6 +1206,7 @@ namespace System.Windows.Forms
                             }
                             while (cumulatedWidthLoss < totalWidthLoss);
                         }
+
                         _availableWidthForFillColumns = availableWidth;
                     }
 
@@ -1166,6 +1217,7 @@ namespace System.Windows.Forms
                         DataGridViewColumn dataGridViewColumn = (DataGridViewColumn)autoFillColumns[columnEntry];
                         weightSumDbg += dataGridViewColumn.UsedFillWeight;
                     }
+
                     Debug.Assert(Math.Abs(weightSum - weightSumDbg) < 1.0F);
 #endif
 
@@ -1197,12 +1249,14 @@ namespace System.Windows.Forms
                                         biggestWeightDiscrepancy = weightDiscrepancy;
                                     }
                                 }
+
                                 float floatDesiredWidth = (mostDeservingDataGridViewColumn.UsedFillWeight * availableWidth / weightSum) + carryover;
                                 mostDeservingDataGridViewColumn.DesiredFillWidth = Math.Max(mostDeservingDataGridViewColumn.MinimumWidth, (int)Math.Round(floatDesiredWidth, MidpointRounding.AwayFromZero));
                                 carryover = floatDesiredWidth - mostDeservingDataGridViewColumn.DesiredFillWidth;
                                 usedWidth += mostDeservingDataGridViewColumn.DesiredFillWidth;
                                 autoFillColumns.Remove(mostDeservingDataGridViewColumn);
                             }
+
                             if (mostDeservingDataGridViewColumn.DesiredFillWidth != mostDeservingDataGridViewColumn.Thickness)
                             {
                                 columnsAdjusted = true;
@@ -1242,6 +1296,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 if (nonMinColumnExists)
                 {
                     Debug.Assert(widthSum == _availableWidthForFillColumns);
@@ -1323,6 +1378,7 @@ namespace System.Windows.Forms
                                         AutoResizeRowInternal(rowAboveFirstVisibleScrollingRow, MapAutoSizeRowsModeToRowMode(autoSizeRowsMode), fixedWidth, internalAutosizing);
                                     }
                                 }
+
                                 cy = cyFrozen;
                                 rowIndex = DisplayedBandsInfo.FirstDisplayedScrollingRow;
                                 while (rowIndex != -1 && cy < displayHeight)
@@ -1349,6 +1405,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             if (!includeInvisibleCells &&
                 (Rows.GetFirstRow(DataGridViewElementStates.Visible) == -1 ||
                  Columns.GetFirstColumn(DataGridViewElementStates.Visible) is null))
@@ -1382,14 +1439,17 @@ namespace System.Windows.Forms
                                     {
                                         return false;
                                     }
+
                                     dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                                         DataGridViewElementStates.Visible,
                                         DataGridViewElementStates.None);
                                 }
                             }
+
                             return true;
                         }
                     }
+
                 case DataGridViewSelectionMode.FullColumnSelect:
                 case DataGridViewSelectionMode.ColumnHeaderSelect:
                     {
@@ -1416,13 +1476,16 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                                     DataGridViewElementStates.Visible,
                                     DataGridViewElementStates.None);
                             }
+
                             return true;
                         }
                     }
+
                 case DataGridViewSelectionMode.FullRowSelect:
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     {
@@ -1449,16 +1512,19 @@ namespace System.Windows.Forms
                                         {
                                             return false;
                                         }
+
                                         dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                                             DataGridViewElementStates.Visible,
                                             DataGridViewElementStates.None);
                                     }
                                 }
                             }
+
                             return true;
                         }
                     }
             }
+
             Debug.Fail("DataGridView.AreAllCellsSelected - Shouldn't reach this code");
             return false;
         }
@@ -1472,6 +1538,7 @@ namespace System.Windows.Forms
             {
                 _toolTipControl.Activate(false /*activate*/);
             }
+
             base.AssignParent(value);
         }
 
@@ -1486,7 +1553,7 @@ namespace System.Windows.Forms
             // 2. Delete all the currently bound columns.
             // 3. Sort the cloned columns in order of their DisplayIndex.
             // 4. Add the new data bound columns. Here are the rules:
-            //      a. if the cloned collection contains (possible multiple) columns with DataProperyHame == current data field,
+            //      a. if the cloned collection contains (possible multiple) columns with DataPropertyName == current data field,
             //          add the first cloned column that maps to the data field.
             //      b. other wise add the new bound column.
             // 5. Add the remaining cloned columns in the order of their DisplayIndex.
@@ -1624,10 +1691,12 @@ namespace System.Windows.Forms
                 {
                     ret |= AutoResizeColumnInternal(dataGridViewColumn.Index, inheritedAutoSizeColumnCriteria, fixedHeight);
                 }
+
                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                     DataGridViewElementStates.Visible,
                     DataGridViewElementStates.None);
             }
+
             return ret;
         }
 
@@ -1720,6 +1789,7 @@ namespace System.Windows.Forms
                         preferredHeight = TopLeftHeaderCell.GetPreferredSize(-1).Height;
                     }
                 }
+
                 int columnsCount = Columns.Count;
                 for (int columnIndex = 0; columnIndex < columnsCount; columnIndex++)
                 {
@@ -1735,14 +1805,17 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 if (preferredHeight < MinimumColumnHeadersHeight)
                 {
                     preferredHeight = MinimumColumnHeadersHeight;
                 }
+
                 if (preferredHeight > MaxHeadersThickness)
                 {
                     preferredHeight = MaxHeadersThickness;
                 }
+
                 if (preferredHeight != ColumnHeadersHeight)
                 {
                     SetColumnHeadersHeightInternal(preferredHeight, !fixedColumnsWidth /*invalidInAdjustFillingColumns*/);
@@ -1792,6 +1865,7 @@ namespace System.Windows.Forms
                         preferredHeight = TopLeftHeaderCell.GetPreferredSize(-1).Height;
                     }
                 }
+
                 int columnsCount = Columns.Count;
                 for (int columnIndexTmp = 0; columnIndexTmp < columnsCount; columnIndexTmp++)
                 {
@@ -1807,14 +1881,17 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 if (preferredHeight < MinimumColumnHeadersHeight)
                 {
                     preferredHeight = MinimumColumnHeadersHeight;
                 }
+
                 if (preferredHeight > MaxHeadersThickness)
                 {
                     preferredHeight = MaxHeadersThickness;
                 }
+
                 if (preferredHeight != ColumnHeadersHeight)
                 {
                     SetColumnHeadersHeightInternal(preferredHeight, !fixedColumnWidth /*invalidInAdjustFillingColumns*/);
@@ -1857,10 +1934,12 @@ namespace System.Windows.Forms
                 {
                     preferredColumnWidth = dataGridViewColumn.MinimumThickness;
                 }
+
                 if (preferredColumnWidth > DataGridViewBand.MaxBandThickness)
                 {
                     preferredColumnWidth = DataGridViewBand.MaxBandThickness;
                 }
+
                 if (preferredColumnWidth != dataGridViewColumn.Thickness)
                 {
                     if (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill)
@@ -1871,6 +1950,7 @@ namespace System.Windows.Forms
                     {
                         Columns[columnIndex].ThicknessInternal = preferredColumnWidth;
                     }
+
                     ret = true;
                 }
             }
@@ -1879,6 +1959,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_noAutoSizeCount > 0);
                 _noAutoSizeCount--;
             }
+
             return ret;
         }
 
@@ -1916,15 +1997,18 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             // not using ClientUtils here because it's a flags enum, masking instead.
             if (((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode & InvalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
             {
                 throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int)autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
             }
+
             if (autoSizeRowMode == DataGridViewAutoSizeRowMode.RowHeader && !RowHeadersVisible)
             {
                 throw new InvalidOperationException(SR.DataGridView_CannotAutoSizeRowInvisibleRowHeader);
             }
+
             AutoResizeRowInternal(rowIndex, autoSizeRowMode, fixedWidth, false /*internalAutosizing*/);
         }
 
@@ -1946,6 +2030,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_NeedAutoSizingCriteria, "rowHeadersWidthSizeMode"));
             }
+
             // custom range checking, not using ClientUtils.
             if (rowHeadersWidthSizeMode < DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders || rowHeadersWidthSizeMode > DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader)
             {
@@ -1982,6 +2067,7 @@ namespace System.Windows.Forms
                         preferredWidth = TopLeftHeaderCell.GetPreferredSize(-1).Width;
                     }
                 }
+
                 switch (rowHeadersWidthSizeMode)
                 {
                     case DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader:
@@ -1998,8 +2084,10 @@ namespace System.Windows.Forms
                                     preferredWidth = Math.Max(preferredWidth, Rows.SharedRow(rowIndex).HeaderCell.GetPreferredSize(rowIndex).Width);
                                 }
                             }
+
                             break;
                         }
+
                     case DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders:
                         {
                             int displayHeight = _layout.Data.Height, cy = 0;
@@ -2017,9 +2105,11 @@ namespace System.Windows.Forms
                                 {
                                     preferredWidth = Math.Max(preferredWidth, dataGridViewRow.HeaderCell.GetPreferredSize(rowIndex).Width);
                                 }
+
                                 rowIndex = Rows.GetNextRow(rowIndex,
                                                                 DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                             }
+
                             if (cy < displayHeight)
                             {
                                 rowIndex = DisplayedBandsInfo.FirstDisplayedScrollingRow;
@@ -2036,11 +2126,14 @@ namespace System.Windows.Forms
                                     {
                                         preferredWidth = Math.Max(preferredWidth, dataGridViewRow.HeaderCell.GetPreferredSize(rowIndex).Width);
                                     }
+
                                     rowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
                                 }
                             }
+
                             break;
                         }
+
                     case DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders:
                         {
                             for (rowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -2056,18 +2149,22 @@ namespace System.Windows.Forms
                                     preferredWidth = Math.Max(preferredWidth, Rows.SharedRow(rowIndex).HeaderCell.GetPreferredSize(rowIndex).Width);
                                 }
                             }
+
                             break;
                         }
+
                     default:
                         {
                             Debug.Fail("Unexpected rowHeadersWidthSizeMode value in AutoResizeRowHeadersWidth");
                             break;
                         }
                 }
+
                 if (preferredWidth < MinimumRowHeadersWidth)
                 {
                     preferredWidth = MinimumRowHeadersWidth;
                 }
+
                 if (preferredWidth != RowHeadersWidth)
                 {
                     RowHeadersWidthInternal = preferredWidth;
@@ -2097,11 +2194,13 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             if (rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing ||
                 rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.DisableResizing)
             {
                 throw new ArgumentException(string.Format(SR.DataGridView_NeedAutoSizingCriteria, "rowHeadersWidthSizeMode"));
             }
+
             if (rowHeadersWidthSizeMode < DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders || rowHeadersWidthSizeMode > DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader)
             {
                 throw new InvalidEnumArgumentException(nameof(rowHeadersWidthSizeMode), (int)rowHeadersWidthSizeMode, typeof(DataGridViewRowHeadersWidthSizeMode));
@@ -2111,12 +2210,14 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader &&
                 rowIndex != -1 &&
                 rowIndex != Rows.GetFirstRow(DataGridViewElementStates.Visible))
             {
                 return;
             }
+
             if (rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders &&
                 rowIndex != -1)
             {
@@ -2153,6 +2254,7 @@ namespace System.Windows.Forms
                         preferredWidth = TopLeftHeaderCell.GetPreferredSize(-1).Width;
                     }
                 }
+
                 switch (rowHeadersWidthSizeMode)
                 {
                     case DataGridViewRowHeadersWidthSizeMode.AutoSizeToFirstHeader:
@@ -2169,8 +2271,10 @@ namespace System.Windows.Forms
                                     preferredWidth = Math.Max(preferredWidth, Rows.SharedRow(rowIndexTmp).HeaderCell.GetPreferredSize(rowIndexTmp).Width);
                                 }
                             }
+
                             break;
                         }
+
                     case DataGridViewRowHeadersWidthSizeMode.AutoSizeToDisplayedHeaders:
                         {
                             int displayHeight = _layout.Data.Height, cy = 0;
@@ -2188,9 +2292,11 @@ namespace System.Windows.Forms
                                 {
                                     preferredWidth = Math.Max(preferredWidth, dataGridViewRow.HeaderCell.GetPreferredSize(rowIndexTmp).Width);
                                 }
+
                                 rowIndexTmp = Rows.GetNextRow(rowIndexTmp,
                                                                 DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                             }
+
                             if (cy < displayHeight)
                             {
                                 rowIndexTmp = DisplayedBandsInfo.FirstDisplayedScrollingRow;
@@ -2207,11 +2313,14 @@ namespace System.Windows.Forms
                                     {
                                         preferredWidth = Math.Max(preferredWidth, dataGridViewRow.HeaderCell.GetPreferredSize(rowIndexTmp).Width);
                                     }
+
                                     rowIndexTmp = Rows.GetNextRow(rowIndexTmp, DataGridViewElementStates.Visible);
                                 }
                             }
+
                             break;
                         }
+
                     case DataGridViewRowHeadersWidthSizeMode.AutoSizeToAllHeaders:
                         {
                             for (rowIndexTmp = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -2227,18 +2336,22 @@ namespace System.Windows.Forms
                                     preferredWidth = Math.Max(preferredWidth, Rows.SharedRow(rowIndexTmp).HeaderCell.GetPreferredSize(rowIndexTmp).Width);
                                 }
                             }
+
                             break;
                         }
+
                     default:
                         {
                             Debug.Fail("Unexpected rowHeadersWidthSizeMode value in AutoResizeRowHeadersWidth");
                             break;
                         }
                 }
+
                 if (preferredWidth < MinimumRowHeadersWidth)
                 {
                     preferredWidth = MinimumRowHeadersWidth;
                 }
+
                 if (preferredWidth != RowHeadersWidth)
                 {
                     RowHeadersWidthInternal = preferredWidth;
@@ -2277,10 +2390,12 @@ namespace System.Windows.Forms
                 {
                     preferredThickness = minimumHeight;
                 }
+
                 if (preferredThickness > DataGridViewBand.MaxBandThickness)
                 {
                     preferredThickness = DataGridViewBand.MaxBandThickness;
                 }
+
                 if (height != preferredThickness)
                 {
                     if (_autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None)
@@ -2352,7 +2467,7 @@ namespace System.Windows.Forms
 
         protected void AutoResizeRows(int rowIndexStart, int rowsCount, DataGridViewAutoSizeRowMode autoSizeRowMode, bool fixedWidth)
         {
-            // not using ClientUtils.IsEnumValid here because DataGridViewAutoSizeRowCriteriaInternal is a flags enum.
+            // not using EnumValidator.Validate here because DataGridViewAutoSizeRowCriteriaInternal is a flags enum.
             if (((DataGridViewAutoSizeRowCriteriaInternal)autoSizeRowMode & InvalidDataGridViewAutoSizeRowCriteriaInternalMask) != 0)
             {
                 throw new InvalidEnumArgumentException(nameof(autoSizeRowMode), (int)autoSizeRowMode, typeof(DataGridViewAutoSizeRowMode));
@@ -2416,6 +2531,7 @@ namespace System.Windows.Forms
             {
                 clip = Rectangle.Union(_layout.TopLeftHeader, clip);
             }
+
             clip.Y += MinimumColumnHeadersHeight - mouseBarOffset - 1;
             // No need to limit the bottom edge of the cursor clip since maxHeadersThickness is very large.
             CaptureMouse(clip);
@@ -2444,6 +2560,7 @@ namespace System.Windows.Forms
                 {
                     cursorClip.X += cursorClip.Width - frozenWidth;
                 }
+
                 cursorClip.Width = Math.Min(frozenWidth, _layout.Data.Width);
             }
             else
@@ -2457,8 +2574,10 @@ namespace System.Windows.Forms
                 {
                     cursorClip.X += _layout.Data.Width - frozenWidth - scrollingWidth;
                 }
+
                 cursorClip.Width = Math.Min(scrollingWidth, _layout.Data.Width);
             }
+
             CaptureMouse(cursorClip);
             _dataGridViewOper[OperationTrackColRelocation] = true;
             _dataGridViewState2[State2_ShowColumnRelocationInsertion] = false;
@@ -2561,6 +2680,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridView_BeginEditNotReentrant);
             }
+
             try
             {
                 _dataGridViewOper[OperationInBeginEdit] = true;
@@ -2594,6 +2714,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 Debug.Assert(!IsCurrentCellInEditMode);
 
                 if (_ptCurrentCell.X > -1)
@@ -2643,6 +2764,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidCastException(SR.DataGridView_InvalidEditingControl);
                 }
+
                 if (_latestEditingControl is not null &&
                     editControlType.IsInstanceOfType(_latestEditingControl) &&
                     !_latestEditingControl.GetType().IsSubclassOf(editControlType))
@@ -2669,6 +2791,7 @@ namespace System.Windows.Forms
                 {
                     EditingControl.AccessibleName = SR.DataGridView_AccEditingControlAccName;
                 }
+
                 EditingControl.ImeMode = ImeMode;
 
                 ((IDataGridViewEditingControl)EditingControl).EditingControlRowIndex = _ptCurrentCell.Y;
@@ -2686,6 +2809,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 _editingPanel.BackColor = dgvese.CellStyle.BackColor;
                 ((IDataGridViewEditingControl)EditingControl).ApplyCellStyleToEditingControl(dgvese.CellStyle);
 
@@ -2729,6 +2853,7 @@ namespace System.Windows.Forms
             {
                 clip = Rectangle.Union(_layout.TopLeftHeader, clip);
             }
+
             if (RightToLeftInternal)
             {
                 clip.X -= mouseBarOffset + 1;
@@ -2740,6 +2865,7 @@ namespace System.Windows.Forms
                 clip.X += MinimumRowHeadersWidth - mouseBarOffset - 1;
                 // No need to limit the right edge of the cursor clip since maxHeadersThickness is very large.
             }
+
             CaptureMouse(clip);
 
             _dataGridViewOper[OperationTrackRowHeadersResize] = true;
@@ -2969,6 +3095,7 @@ namespace System.Windows.Forms
             {
                 inside = Rectangle.Union(_layout.TopLeftHeader, inside);
             }
+
             if (RightToLeftInternal)
             {
                 r = new Rectangle(mouseX + _mouseBarOffset - Columns[_trackColumn].Thickness + 1,
@@ -2984,6 +3111,7 @@ namespace System.Windows.Forms
                 r.X = Math.Min(inside.Right - r.Width, r.X);
                 r.X = Math.Max(r.X, inside.Left);
             }
+
             return r;
         }
 
@@ -3000,6 +3128,7 @@ namespace System.Windows.Forms
                 r.X = Math.Min(inside.Right - 3, r.X);
                 r.X = Math.Max(r.X, 0);
             }
+
             return r;
         }
 
@@ -3082,6 +3211,7 @@ namespace System.Windows.Forms
                             {
                                 throw;
                             }
+
                             dgvdee2 = new DataGridViewDataErrorEventArgs(exception, _ptCurrentCell.X,
                                 _ptCurrentCell.Y,
                                 DataGridViewDataErrorContexts.InitialValueRestoration);
@@ -3090,6 +3220,7 @@ namespace System.Windows.Forms
                         {
                             _dataGridViewState1[State1_IgnoringEditingChanges] = false;
                         }
+
                         if (dgvdee2 is not null)
                         {
                             OnDataErrorInternal(dgvdee2);
@@ -3139,6 +3270,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return true;
         }
 
@@ -3161,6 +3293,7 @@ namespace System.Windows.Forms
                     Debug.Assert(_dataGridViewState1[State1_CurrentCellInEditMode]);
                     ((IDataGridViewEditingCell)CurrentCellInternal).EditingCellValueChanged = false;
                 }
+
                 IsCurrentCellDirtyInternal = false;
             }
 
@@ -3178,6 +3311,7 @@ namespace System.Windows.Forms
                         OnCancelRowEdit(qe);
                         discardNewRow &= qe.Response;
                     }
+
                     if (DataSource is not null)
                     {
                         int oldCurrentCellX = _ptCurrentCell.X;
@@ -3197,7 +3331,7 @@ namespace System.Windows.Forms
                                                                    true,  /*setAnchorCellAddress*/
                                                                    false, /*validateCurrentCell*/
                                                                    false,  /*throughMouseClick*/
-                                                                   true /*clearSelecttion*/,
+                                                                   true /*clearSelection*/,
                                                                    false /*forceCurrentCellSelection (unused)*/);
                                 }
                             }
@@ -3211,6 +3345,7 @@ namespace System.Windows.Forms
                         // CancelRowEdit discarded the new row if we were editing the new row.
                         discardNewRow = false;
                     }
+
                     if (_ptCurrentCell.Y > -1)
                     {
                         InvalidateRowPrivate(_ptCurrentCell.Y);
@@ -3233,6 +3368,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     if (discardNewRow && _ptCurrentCell.Y == NewRowIndex - 1)
                     {
                         DiscardNewRow();
@@ -3248,6 +3384,7 @@ namespace System.Windows.Forms
                     DiscardNewRow();
                 }
             }
+
             return null;
         }
 
@@ -3378,6 +3515,7 @@ namespace System.Windows.Forms
                 _inBulkPaintCount++;
                 switchedToBulkPaint = true;
             }
+
             try
             {
                 RemoveIndividuallySelectedCells();
@@ -3398,12 +3536,13 @@ namespace System.Windows.Forms
                                 SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
                             }
 
-                            // Force repainting of the current collumn's header cell to remove highlighting
+                            // Force repainting of the current column's header cell to remove highlighting
                             if (_ptCurrentCell.X != -1 &&
                                 SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                             {
                                 InvalidateCellPrivate(_ptCurrentCell.X, -1);
                             }
+
                             break;
                         }
 
@@ -3414,6 +3553,7 @@ namespace System.Windows.Forms
                             {
                                 SetSelectedColumnCore(_selectedBandIndexes.HeadInt, false);
                             }
+
                             break;
                         }
                 }
@@ -3442,6 +3582,7 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentOutOfRangeException(nameof(columnIndexException));
                         }
+
                         break;
                     }
 
@@ -3452,6 +3593,7 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentOutOfRangeException(nameof(columnIndexException));
                         }
+
                         break;
                     }
             }
@@ -3466,6 +3608,7 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentOutOfRangeException(nameof(rowIndexException));
                         }
+
                         break;
                     }
 
@@ -3476,6 +3619,7 @@ namespace System.Windows.Forms
                         {
                             throw new ArgumentOutOfRangeException(nameof(rowIndexException));
                         }
+
                         break;
                     }
             }
@@ -3492,6 +3636,7 @@ namespace System.Windows.Forms
                 _inBulkPaintCount++;
                 switchedToBulkPaint = true;
             }
+
             try
             {
                 switch (SelectionMode)
@@ -3520,10 +3665,12 @@ namespace System.Windows.Forms
                                     bandIndex++;
                                 }
                             }
+
                             if (SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                             {
                                 RemoveIndividuallySelectedCells(columnIndexException, rowIndexException);
                             }
+
                             break;
                         }
 
@@ -3543,13 +3690,16 @@ namespace System.Windows.Forms
                                     bandIndex++;
                                 }
                             }
+
                             if (SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                             {
                                 RemoveIndividuallySelectedCells(columnIndexException, rowIndexException);
                             }
+
                             break;
                         }
                 }
+
                 if (selectExceptionElement)
                 {
                     SetSelectedElementCore(columnIndexException, rowIndexException, true);
@@ -3576,6 +3726,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             return true;
         }
 
@@ -3596,6 +3747,7 @@ namespace System.Windows.Forms
                 {
                     return DisplayedBandsInfo.NumDisplayedFrozenCols > 0;
                 }
+
                 Debug.Assert(Columns.DisplayInOrder(firstVisibleFrozenColumn.Index, dataGridViewColumn.Index));
                 return Columns.GetColumnCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen, firstVisibleFrozenColumn.Index, dataGridViewColumn.Index) < DisplayedBandsInfo.NumDisplayedFrozenCols;
             }
@@ -3608,12 +3760,14 @@ namespace System.Windows.Forms
                     {
                         return DisplayedBandsInfo.NumDisplayedScrollingCols > 0;
                     }
+
                     if (Columns.DisplayInOrder(firstDisplayedScrollingColumnIndex, dataGridViewColumn.Index))
                     {
                         return Columns.GetColumnCount(DataGridViewElementStates.Visible, firstDisplayedScrollingColumnIndex, dataGridViewColumn.Index) < DisplayedBandsInfo.NumDisplayedScrollingCols;
                     }
                 }
             }
+
             return false;
         }
 
@@ -3656,6 +3810,7 @@ namespace System.Windows.Forms
                     previousColumnIndex = (hti._typeInternal == DataGridViewHitTestTypeInternal.ColumnResizeRight || hti._typeInternal == DataGridViewHitTestTypeInternal.ColumnHeaderRight) ?
                                           hti._col : hti._adjacentCol;
                 }
+
                 DataGridViewColumn dataGridViewColumnNext = null;
                 if (previousColumnIndex != -1)
                 {
@@ -3663,6 +3818,7 @@ namespace System.Windows.Forms
                                                                                  DataGridViewElementStates.Visible,
                                                                                  DataGridViewElementStates.None);
                 }
+
                 if (_trackColumn != previousColumnIndex &&
                     !(previousColumnIndex == -1 && hti._col == _trackColumn) &&
                     (dataGridViewColumnNext is null || _trackColumn != dataGridViewColumnNext.Index))
@@ -3679,6 +3835,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -3710,12 +3867,14 @@ namespace System.Windows.Forms
                     {
                         throw dgvdee.Exception;
                     }
+
                     if (dgvdee.Cancel)
                     {
                         return false;
                     }
                 }
             }
+
             return true;
         }
 
@@ -3737,16 +3896,20 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
+
                     OnCellLeave(ref dataGridViewCurrentCell, _ptCurrentCell.X, _ptCurrentCell.Y);
                 }
+
                 if (fireRowLeave)
                 {
                     if (_ptCurrentCell.X == -1)
                     {
                         return null;
                     }
+
                     OnRowLeave(ref dataGridViewCurrentCell, _ptCurrentCell.X, _ptCurrentCell.Y);
                 }
+
                 if (fireLeave)
                 {
                     base.OnLeave(EventArgs.Empty);
@@ -3760,6 +3923,7 @@ namespace System.Windows.Forms
                         InvalidateCellPrivate(_ptCurrentCell.X /*columnIndex*/, _ptCurrentCell.Y /*rowIndex*/);
                     }
                 }
+
                 // OnCellValidating returns true if the dev cancelled the validation.
                 bool validateFormattedValue = CanValidateDataBoundDataGridViewCell(dataGridViewCurrentCell);
                 if (validateFormattedValue)
@@ -3768,6 +3932,7 @@ namespace System.Windows.Forms
                     {
                         return null;
                     }
+
                     if (OnCellValidating(ref dataGridViewCurrentCell, _ptCurrentCell.X, _ptCurrentCell.Y, context))
                     {
                         if (fireRowEnter)
@@ -3776,20 +3941,25 @@ namespace System.Windows.Forms
                             {
                                 return null;
                             }
+
                             OnRowEnter(ref dataGridViewCurrentCell, _ptCurrentCell.X, _ptCurrentCell.Y, true /*canCreateNewRow*/, true /*validationFailureOccurred*/);
                         }
+
                         if (fireCellEnter)
                         {
                             if (_ptCurrentCell.X == -1)
                             {
                                 return null;
                             }
+
                             OnCellEnter(ref dataGridViewCurrentCell, _ptCurrentCell.X, _ptCurrentCell.Y);
                         }
+
                         if (_ptCurrentCell.X == -1)
                         {
                             return null;
                         }
+
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(null,
                                                                                     _ptCurrentCell.X,
                                                                                     _ptCurrentCell.Y,
@@ -3808,6 +3978,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         OnCellValidated(ref dataGridViewCurrentCell, _ptCurrentCell.X, _ptCurrentCell.Y);
                     }
                 }
@@ -3837,12 +4008,14 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         if (OnCellValidating(ref dataGridViewCurrentCell, _ptCurrentCell.X, _ptCurrentCell.Y, context))
                         {
                             if (_ptCurrentCell.X == -1)
                             {
                                 return null;
                             }
+
                             DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(null,
                                                                                                        _ptCurrentCell.X,
                                                                                                        _ptCurrentCell.Y,
@@ -3872,6 +4045,7 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         DataGridViewDataErrorEventArgs dgvdee = new DataGridViewDataErrorEventArgs(exception,
                                                                                     _ptCurrentCell.X,
                                                                                     _ptCurrentCell.Y,
@@ -3884,10 +4058,12 @@ namespace System.Windows.Forms
                         OnDataErrorInternal(dgvdee);
                         return dgvdee;
                     }
+
                     if (!IsCurrentCellInEditMode)
                     {
                         return null;
                     }
+
                     _uneditedFormattedValue = formattedValue;
                 }
 
@@ -3900,6 +4076,7 @@ namespace System.Windows.Forms
                     Debug.Assert(_dataGridViewState1[State1_CurrentCellInEditMode]);
                     ((IDataGridViewEditingCell)CurrentCellInternal).EditingCellValueChanged = false;
                 }
+
                 IsCurrentCellDirtyInternal = false;
                 IsCurrentRowDirtyInternal = true;
 
@@ -3912,10 +4089,12 @@ namespace System.Windows.Forms
                         {
                             return null;
                         }
+
                         OnCellValidated(ref dataGridViewCurrentCell, _ptCurrentCell.X, _ptCurrentCell.Y);
                     }
                 }
             }
+
             return null;
         }
 
@@ -3944,6 +4123,7 @@ namespace System.Windows.Forms
                 {
                     throw dgvdee.Exception;
                 }
+
                 if (dgvdee.Cancel)
                 {
                     return false;
@@ -3957,6 +4137,7 @@ namespace System.Windows.Forms
                     {
                         throw dgvdee.Exception;
                     }
+
                     if (dgvdee.Cancel)
                     {
                         return false;
@@ -3972,6 +4153,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 int columnIndex = _ptCurrentCell.X;
                 int rowIndex = _ptCurrentCell.Y;
                 // OnRowValidating returns true when the row validation was cancelled.
@@ -3981,20 +4163,25 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
+
                     OnRowEnter(ref dataGridViewCurrentCell, columnIndex, rowIndex, true /*canCreateNewRow*/, true /*validationFailureOccurred*/);
                     if (IsInnerCellOutOfBounds(columnIndex, rowIndex))
                     {
                         return false;
                     }
+
                     OnCellEnter(ref dataGridViewCurrentCell, columnIndex, rowIndex);
                     return false;
                 }
+
                 if (IsInnerCellOutOfBounds(columnIndex, rowIndex))
                 {
                     return false;
                 }
+
                 OnRowValidated(ref dataGridViewCurrentCell, columnIndex, rowIndex);
             }
+
             return true;
         }
 
@@ -4015,6 +4202,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 if (_ptCurrentCell.Y != rowIndex && _ptCurrentCell.Y != -1)
                 {
                     DataGridViewCell dataGridViewCellTmp = null;
@@ -4027,11 +4215,13 @@ namespace System.Windows.Forms
                         {
                             return false;
                         }
+
                         OnRowEnter(ref dataGridViewCellTmp, columnIndexTmp, rowIndexTmp, true /*canCreateNewRow*/, true /*validationFailureOccurred*/);
                         if (IsInnerCellOutOfBounds(columnIndexTmp, rowIndexTmp))
                         {
                             return false;
                         }
+
                         OnCellEnter(ref dataGridViewCellTmp, columnIndexTmp, rowIndexTmp);
                         if (IsInnerCellOutOfBounds(columnIndexTmp, rowIndexTmp))
                         {
@@ -4048,10 +4238,12 @@ namespace System.Windows.Forms
 
                         return false;
                     }
+
                     if (IsInnerCellOutOfBounds(columnIndexTmp, rowIndexTmp))
                     {
                         return false;
                     }
+
                     OnRowValidated(ref dataGridViewCellTmp, columnIndexTmp, rowIndexTmp);
                 }
             }
@@ -4071,6 +4263,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             if (rowIndex >= Rows.Count)
             {
                 // CurrentCell was reset because the commit deleted row(s).
@@ -4085,14 +4278,17 @@ namespace System.Windows.Forms
                     bool success = SetAndSelectCurrentCellAddress(columnIndex, lastVisibleRowIndex, true, false, false, false /*clearSelection*/, false /*forceCurrentCellSelection*/);
                     Debug.Assert(success);
                 }
+
                 // Interrupt operation because it has become invalid.
                 return false;
             }
+
             if (rowIndex > -1 && (Rows.GetRowState(rowIndex) & DataGridViewElementStates.Visible) == 0)
             {
                 // Interrupt operation because target row has become invisible.
                 return false;
             }
+
             return true;
         }
 
@@ -4110,10 +4306,12 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException(SR.DataGridView_AColumnHasNoCellTemplate);
                     }
+
                     DataGridViewCell dgvcNew = (DataGridViewCell)Columns[columnIndex].CellTemplate.Clone();
                     cells[cellCount] = dgvcNew;
                     cellCount++;
                 }
+
                 dataGridViewRow.Cells.AddRange(cells);
             }
         }
@@ -4147,6 +4345,7 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
+
                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                     DataGridViewElementStates.Visible,
                     DataGridViewElementStates.None);
@@ -4167,6 +4366,7 @@ namespace System.Windows.Forms
                     {
                         FirstDisplayedScrollingColumnHiddenWidth = 0;
                     }
+
                     return dataGridViewColumn.Index;
                 }
             }
@@ -4198,6 +4398,7 @@ namespace System.Windows.Forms
             {
                 return 0;
             }
+
             if ((rowState & DataGridViewElementStates.Visible) == 0)
             {
                 indexTmp = Rows.GetPreviousRow(indexTmp,
@@ -4246,6 +4447,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return height;
         }
 
@@ -4257,6 +4459,7 @@ namespace System.Windows.Forms
                 return Rows.GetRowsHeight(DataGridViewElementStates.Visible, DisplayedBandsInfo.FirstDisplayedScrollingRow, lastVisibleRowIndex) +
                        Rows.SharedRow(lastVisibleRowIndex).GetHeight(lastVisibleRowIndex);
             }
+
             return 0;
         }
 
@@ -4276,6 +4479,7 @@ namespace System.Windows.Forms
             {
                 newLayout.Inside = ClientRectangle;
             }
+
             Rectangle inside = newLayout.Inside;
             int borderWidth = BorderWidth;
             inside.Inflate(-borderWidth, -borderWidth);
@@ -4283,6 +4487,7 @@ namespace System.Windows.Forms
             {
                 inside.Height = 0;
             }
+
             if (inside.Width < 0)
             {
                 inside.Width = 0;
@@ -4317,6 +4522,7 @@ namespace System.Windows.Forms
                 {
                     insideLeft.X += rowHeaders.Width;
                 }
+
                 insideLeft.Width -= rowHeaders.Width;
                 Debug.Assert(insideLeft.Width >= 0);
                 newLayout.RowHeaders = rowHeaders;
@@ -4336,6 +4542,7 @@ namespace System.Windows.Forms
                     {
                         colHeaders.X += topLeft.Width;
                     }
+
                     Debug.Assert(colHeaders.Width >= 0);
                     newLayout.TopLeftHeader = topLeft;
                     newLayout.ColumnHeaders = colHeaders;
@@ -4358,11 +4565,13 @@ namespace System.Windows.Forms
                 {
                     insideLeft.X++;
                 }
+
                 if (insideLeft.Width > 0)
                 {
                     insideLeft.Width--;
                 }
             }
+
             if (SingleHorizontalBorderAdded)
             {
                 insideLeft.Y++;
@@ -4459,6 +4668,7 @@ namespace System.Windows.Forms
                     // Only update the vertical scroll bar is the thumb moved or resized.
                     _vertScrollBar.Invalidate();
                 }
+
                 Debug.Assert(VerticalScrollingOffset == _vertScrollBar.Value);
             }
         }
@@ -4491,12 +4701,14 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
+
                 if (dataGridViewColumn.Visible)
                 {
                     if (firstDisplayedFrozenCol == -1)
                     {
                         firstDisplayedFrozenCol = dataGridViewColumn.Index;
                     }
+
                     cx += dataGridViewColumn.Width;
                     numDisplayedFrozenCols++;
                     lastDisplayedFrozenCol = dataGridViewColumn.Index;
@@ -4505,6 +4717,7 @@ namespace System.Windows.Forms
                         break;
                     }
                 }
+
                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.None, DataGridViewElementStates.None);
             }
 
@@ -4542,6 +4755,7 @@ namespace System.Windows.Forms
                         DataGridViewElementStates.Visible,
                         DataGridViewElementStates.None);
                 }
+
                 numVisibleScrollingCols = visibleScrollingColumnsTmp;
 
                 // if we inflate the data area then we paint columns to the left of firstDisplayedScrollingCol
@@ -4566,6 +4780,7 @@ namespace System.Windows.Forms
                             cx = displayWidth;
                         }
                     }
+
                     // second try to scroll entire columns
                     if (cx < displayWidth && _horizontalOffset > 0)
                     {
@@ -4585,6 +4800,7 @@ namespace System.Windows.Forms
                                 DataGridViewElementStates.Frozen);
                         }
                     }
+
                     // third try to partially scroll in first scrolled off column
                     if (cx < displayWidth && _horizontalOffset > 0 && firstDisplayedScrollingCol != 0)
                     {
@@ -4637,6 +4853,7 @@ namespace System.Windows.Forms
                             DataGridViewElementStates.None);
                         Debug.Assert(dataGridViewColumn is not null);
                     }
+
                     DisplayedBandsInfo.LastTotallyDisplayedScrollingCol = dataGridViewColumn.Index;
                 }
             }
@@ -4644,6 +4861,7 @@ namespace System.Windows.Forms
             {
                 DisplayedBandsInfo.LastTotallyDisplayedScrollingCol = -1;
             }
+
             DisplayedBandsInfo.FirstDisplayedFrozenCol = firstDisplayedFrozenCol;
             DisplayedBandsInfo.LastDisplayedFrozenCol = lastDisplayedFrozenCol;
             DisplayedBandsInfo.NumDisplayedFrozenCols = numDisplayedFrozenCols;
@@ -4686,6 +4904,7 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
+
                 if ((rowState & DataGridViewElementStates.Visible) != 0)
                 {
                     cy += Rows.SharedRow(rowIndex).GetHeight(rowIndex);
@@ -4693,11 +4912,13 @@ namespace System.Windows.Forms
                     {
                         firstDisplayedFrozenRow = rowIndex;
                     }
+
                     lastDisplayedFrozenRow = rowIndex;
                     if (cy <= displayHeight)
                     {
                         numTotallyDisplayedFrozenRows++;
                     }
+
                     if (cy >= displayHeight)
                     {
                         break;
@@ -4744,6 +4965,7 @@ namespace System.Windows.Forms
                         visibleScrollingRows++;
                         lastDisplayedScrollingRow = i;
                     }
+
                     if (cy >= displayHeight)
                     {
                         break;
@@ -4761,6 +4983,7 @@ namespace System.Windows.Forms
                             {
                                 break;
                             }
+
                             cy += height;
                             firstDisplayedScrollingRow = i;
                             visibleScrollingRows++;
@@ -4778,6 +5001,7 @@ namespace System.Windows.Forms
                 {
                     DisplayedBandsInfo.NumTotallyDisplayedScrollingRows = visibleScrollingRows;
                 }
+
                 if (visibleScrollingRows == 0)
                 {
                     firstDisplayedScrollingRow = -1;
@@ -4968,6 +5192,7 @@ namespace System.Windows.Forms
                 dataGridViewColumnClone.DisplayIndex = dataGridViewColumn.DisplayIndex;
                 dataGridViewTmp.Columns.Add(dataGridViewColumnClone);
             }
+
             foreach (DataGridViewColumn dataGridViewColumn in dataGridViewColumns)
             {
                 dataGridViewColumnClone = (DataGridViewColumn)dataGridViewColumn.Clone();
@@ -4995,6 +5220,7 @@ namespace System.Windows.Forms
                         dataGridViewColumnTmp = dataGridViewColumnFirst;
                     }
                 }
+
                 while (dataGridViewColumnTmp is not null && Columns.DisplayInOrder(dataGridViewColumnTmp.Index, dataGridViewColumn.Index))
                 {
                     dataGridViewColumnTmp.Frozen = true;
@@ -5028,6 +5254,7 @@ namespace System.Windows.Forms
                         dataGridViewColumnTmp = dataGridViewColumnLast;
                     }
                 }
+
                 while (dataGridViewColumnTmp is not null && Columns.DisplayInOrder(dataGridViewColumn.Index, dataGridViewColumnTmp.Index))
                 {
                     dataGridViewColumnTmp.Frozen = false;
@@ -5181,6 +5408,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridView_CannotAddFrozenRow);
                 }
+
                 previousRowFrozen = currentRowFrozen;
                 if (arrayIndex == dataGridViewRows.Length - 1 &&
                     !currentRowFrozen &&
@@ -5210,6 +5438,7 @@ namespace System.Windows.Forms
                         rowIndexTmp = dataGridViewRowFirst;
                     }
                 }
+
                 while (rowIndexTmp != -1 && rowIndexTmp < rowIndex)
                 {
                     Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Frozen, true);
@@ -5242,6 +5471,7 @@ namespace System.Windows.Forms
                         rowIndexTmp = dataGridViewRowLast;
                     }
                 }
+
                 while (rowIndexTmp != -1 && rowIndexTmp > rowIndex)
                 {
                     Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Frozen, false);
@@ -5411,8 +5641,10 @@ namespace System.Windows.Forms
                 {
                     rectScrollingArea.X += frozenVisibleColumnsWidth;
                 }
+
                 rectScrollingArea.Width -= frozenVisibleColumnsWidth;
             }
+
             if (discardFrozenRows)
             {
                 // Discard frozen rows
@@ -5446,6 +5678,7 @@ namespace System.Windows.Forms
                     cx -= FirstDisplayedScrollingColumnHiddenWidth;
                     completeColumns--;
                 }
+
                 dataGridViewColumn = (DataGridViewColumn)Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol];
                 Debug.Assert(dataGridViewColumn.Visible && !dataGridViewColumn.Frozen);
 
@@ -5564,6 +5797,7 @@ namespace System.Windows.Forms
                             offsetFromCenter = InsertionBarWidth / 2 + 1;
                         }
                     }
+
                     if (RightToLeftInternal)
                     {
                         rectInsertionBar.X = Math.Max(_layout.ColumnHeaders.X,
@@ -5669,6 +5903,7 @@ namespace System.Windows.Forms
             {
                 mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
             }
+
             DataGridViewCellMouseEventArgs dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, me.Y - hti.RowY, me);
 
             try
@@ -5704,8 +5939,10 @@ namespace System.Windows.Forms
                                     {
                                         OnCellMouseDown(dgvcme);
                                     }
+
                                     break;
                                 }
+
                             case DataGridViewMouseEvent.Click:
                                 {
                                     OnDoubleClick(me);
@@ -5715,8 +5952,10 @@ namespace System.Windows.Forms
                                     {
                                         OnCellDoubleClick(new DataGridViewCellEventArgs(dgvcme.ColumnIndex, dgvcme.RowIndex));
                                     }
+
                                     break;
                                 }
+
                             case DataGridViewMouseEvent.MouseClick:
                                 {
                                     // Set the flag that prevents the triple-click to be exposed as a double-click
@@ -5727,9 +5966,11 @@ namespace System.Windows.Forms
                                     {
                                         OnCellMouseDoubleClick(dgvcme);
                                     }
+
                                     break;
                                 }
                         }
+
                         return;
                     }
                 }
@@ -5746,6 +5987,7 @@ namespace System.Windows.Forms
                                                 e.Delta);
                         dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, me.Y - hti.RowY, me);
                     }
+
                     switch (dgvme)
                     {
                         case DataGridViewMouseEvent.DoubleClick:
@@ -5767,6 +6009,7 @@ namespace System.Windows.Forms
                         {
                             OnCellClick(new DataGridViewCellEventArgs(dgvcme.ColumnIndex, dgvcme.RowIndex));
                         }
+
                         break;
                     case DataGridViewMouseEvent.DoubleClick:
                         OnDoubleClick(me);
@@ -5776,6 +6019,7 @@ namespace System.Windows.Forms
                         {
                             OnCellDoubleClick(new DataGridViewCellEventArgs(dgvcme.ColumnIndex, dgvcme.RowIndex));
                         }
+
                         break;
                     case DataGridViewMouseEvent.MouseClick:
                         OnMouseClick(me);
@@ -5784,6 +6028,7 @@ namespace System.Windows.Forms
                         {
                             OnCellMouseClick(dgvcme);
                         }
+
                         break;
                     case DataGridViewMouseEvent.MouseDoubleClick:
                         OnMouseDoubleClick(me);
@@ -5792,6 +6037,7 @@ namespace System.Windows.Forms
                         {
                             OnCellMouseDoubleClick(dgvcme);
                         }
+
                         break;
                     case DataGridViewMouseEvent.MouseDown:
                         OnMouseDown(me);
@@ -5800,6 +6046,7 @@ namespace System.Windows.Forms
                         {
                             OnCellMouseDown(dgvcme);
                         }
+
                         break;
                     case DataGridViewMouseEvent.MouseUp:
                         if (_dataGridViewState2[State2_NextMouseUpIsDouble])
@@ -5811,6 +6058,7 @@ namespace System.Windows.Forms
                                                                       e.Delta);
                             dgvcme = new DataGridViewCellMouseEventArgs(dgvcme.ColumnIndex, dgvcme.RowIndex, dgvcme.X, dgvcme.Y, meTmp);
                         }
+
                         OnCellMouseUp(dgvcme);
                         OnMouseUp(me);
                         break;
@@ -5936,7 +6184,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -5970,7 +6218,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -5982,7 +6230,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -6065,6 +6313,7 @@ namespace System.Windows.Forms
                     {
                         throw dgvdee.Exception;
                     }
+
                     if (dgvdee.Cancel)
                     {
                         return false;
@@ -6078,6 +6327,7 @@ namespace System.Windows.Forms
                         {
                             throw dgvdee.Exception;
                         }
+
                         if (dgvdee.Cancel)
                         {
                             return false;
@@ -6124,10 +6374,12 @@ namespace System.Windows.Forms
                             Debug.Assert(success);
                         }
                     }
+
                     if (keepFocus)
                     {
                         Focus();
                     }
+
                     ImeMode = editingControlImeMode;
                 }
                 else
@@ -6172,6 +6424,7 @@ namespace System.Windows.Forms
                     x = Math.Min(e.X + _mouseBarOffset, _layout.Data.Right - 1);
                     delta = x - _layout.RowHeaders.X - RowHeadersWidth + 1;
                 }
+
                 if (_trackColAnchor != x && delta != 0)
                 {
                     RowHeadersWidth += delta;
@@ -6179,7 +6432,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -6207,6 +6460,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewRow = Rows[_trackRow];  // Unsharing row
                         }
+
                         Debug.Assert(_autoSizeRowsMode == DataGridViewAutoSizeRowsMode.None);
                         dataGridViewRow.ThicknessInternal = proposedHeight;
                     }
@@ -6214,7 +6468,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                RealeaseMouse();
+                ReleaseMouse();
             }
         }
 
@@ -6302,6 +6556,7 @@ namespace System.Windows.Forms
                             {
                                 Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Displayed, true);
                             }
+
                             rowIndexTmp = Rows.GetNextRow(rowIndexTmp, DataGridViewElementStates.Visible);
                             numDisplayedScrollingRows--;
                         }
@@ -6325,6 +6580,7 @@ namespace System.Windows.Forms
                         // No displayed scrolling rows. Make sure all non-frozen rows have their Displayed state set to false (next loop)
                         rowIndexTmp = Rows.GetFirstRow(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
                     }
+
                     while (rowIndexTmp != -1 && (Rows.GetRowState(rowIndexTmp) & DataGridViewElementStates.Displayed) != 0)
                     {
                         Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Displayed, false);
@@ -6341,6 +6597,7 @@ namespace System.Windows.Forms
                         {
                             Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Displayed, true);
                         }
+
                         rowIndexTmp = Rows.GetNextRow(rowIndexTmp, DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                         numDisplayedFrozenRows--;
                     }
@@ -6429,6 +6686,7 @@ namespace System.Windows.Forms
                             {
                                 rowIndexTmp = Rows.GetLastRow(DataGridViewElementStates.Visible);
                             }
+
                             int rowCount = 0;
                             while (rowIndexTmp != -1 &&
                                    rowCount <= maxDisplayedRows &&
@@ -6438,6 +6696,7 @@ namespace System.Windows.Forms
                                 {
                                     Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Displayed, false);
                                 }
+
                                 rowIndexTmp = Rows.GetPreviousRow(rowIndexTmp, DataGridViewElementStates.Visible);
                                 rowCount++;
                             }
@@ -6452,6 +6711,7 @@ namespace System.Windows.Forms
                             {
                                 rowIndexTmp = Rows.GetLastRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                             }
+
                             int rowCount = 0;
                             while (rowIndexTmp != -1 &&
                                    rowCount <= maxDisplayedRows &&
@@ -6461,6 +6721,7 @@ namespace System.Windows.Forms
                                 {
                                     Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Displayed, false);
                                 }
+
                                 rowIndexTmp = Rows.GetPreviousRow(rowIndexTmp, DataGridViewElementStates.Visible);
                                 rowCount++;
                             }
@@ -6504,6 +6765,7 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewColumnTmp.Displayed = true;
                             }
+
                             dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                             numDisplayedScrollingCols--;
                         }
@@ -6527,6 +6789,7 @@ namespace System.Windows.Forms
                         // No displayed scrolling columns. Make sure all non-frozen columns have their Displayed state set to false (next loop)
                         dataGridViewColumnTmp = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
                     }
+
                     while (dataGridViewColumnTmp is not null && dataGridViewColumnTmp.Displayed)
                     {
                         dataGridViewColumnTmp.Displayed = false;
@@ -6543,6 +6806,7 @@ namespace System.Windows.Forms
                         {
                             dataGridViewColumnTmp.Displayed = true;
                         }
+
                         dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen, DataGridViewElementStates.None);
                         numDisplayedFrozenCols--;
                     }
@@ -6607,6 +6871,7 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewColumnTmp.Displayed = false;
                             }
+
                             dataGridViewColumnTmp = Columns.GetPreviousColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                         }
                     }
@@ -6653,7 +6918,7 @@ namespace System.Windows.Forms
 
         protected override AccessibleObject GetAccessibilityObjectById(int objectId)
         {
-            // decrement the objectId because in our implementation of AccessibilityClient notitification objectId's are 1 - based.
+            // decrement the objectId because in our implementation of AccessibilityClient notification objectId's are 1 - based.
             // 0 == NativeMethods.CHILDID_SELF corresponds to the AccessibleObject itself
             return AccessibilityObject.GetChild(objectId - 1);
         }
@@ -6681,14 +6946,17 @@ namespace System.Windows.Forms
                     {
                         rect.X--;
                     }
+
                     rect.Width++;
                 }
+
                 if (SingleHorizontalBorderAdded && rowIndex == FirstDisplayedRowIndex)
                 {
                     rect.Y--;
                     rect.Height++;
                 }
             }
+
             return rect;
         }
 
@@ -6716,11 +6984,13 @@ namespace System.Windows.Forms
                                 // we need to take the bands into account.
                                 return cellCount;
                             }
+
                         case DataGridViewSelectionMode.FullColumnSelect:
                         case DataGridViewSelectionMode.ColumnHeaderSelect:
                             {
                                 return cellCount + _selectedBandIndexes.Count * Rows.Count;
                             }
+
                         case DataGridViewSelectionMode.FullRowSelect:
                         case DataGridViewSelectionMode.RowHeaderSelect:
                             {
@@ -6742,6 +7012,7 @@ namespace System.Windows.Forms
                         cellCount++;
                     }
                 }
+
                 switch (SelectionMode)
                 {
                     case DataGridViewSelectionMode.CellSelect:
@@ -6750,6 +7021,7 @@ namespace System.Windows.Forms
                             // we need to take the bands into account.
                             return cellCount;
                         }
+
                     case DataGridViewSelectionMode.FullColumnSelect:
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
                         {
@@ -6765,8 +7037,10 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             return cellCount;
                         }
+
                     case DataGridViewSelectionMode.FullRowSelect:
                     case DataGridViewSelectionMode.RowHeaderSelect:
                         {
@@ -6781,6 +7055,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             return cellCount;
                         }
                 }
@@ -6812,6 +7087,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return cellCount;
         }
 
@@ -6835,6 +7111,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
+
             if (frozenRequired)
             {
                 bool cellFrozen = (rowState & DataGridViewElementStates.Frozen) != 0 ||
@@ -6845,6 +7122,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
+
             if (resizableRequired)
             {
                 if (!RowIsResizable(rowIndex) && dataGridViewCell.OwningColumn.Resizable != DataGridViewTriState.True)
@@ -6852,6 +7130,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
+
             if (readOnlyRequired)
             {
                 bool cellReadOnly = ReadOnly ||
@@ -6863,6 +7142,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
+
             if (visibleRequired)
             {
                 bool cellVisible = (rowState & DataGridViewElementStates.Visible) != 0 &&
@@ -6872,6 +7152,7 @@ namespace System.Windows.Forms
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -6886,6 +7167,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(columnIndex));
                 }
+
                 columnRect = GetColumnDisplayRectanglePrivate(columnIndex, cutOverflow);
             }
             else
@@ -6894,6 +7176,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(columnIndex));
                 }
+
                 if (rowIndex >= 0)
                 {
                     columnRect = _layout.RowHeaders;
@@ -6910,6 +7193,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 rowRect = GetRowDisplayRectanglePrivate(rowIndex, cutOverflow);
             }
             else
@@ -6918,6 +7202,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(rowIndex));
                 }
+
                 if (columnIndex >= 0)
                 {
                     rowRect = _layout.ColumnHeaders;
@@ -6935,6 +7220,7 @@ namespace System.Windows.Forms
                 {
                     columnRect.Height += height;
                 }
+
                 int width;
                 if (RightToLeftInternal)
                 {
@@ -7060,6 +7346,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     while (prevDataGridViewColumn is not null)
                                     {
                                         dataGridViewColumn = prevDataGridViewColumn;
@@ -7076,6 +7363,7 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 if (includeRowHeaders)
                                 {
                                     cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
@@ -7105,6 +7393,7 @@ namespace System.Windows.Forms
                                         sbContent.Append(cellContent);
                                     }
                                 }
+
                                 // Cycle through the visible columns in their display order
                                 dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                                 if (dataGridViewColumn is not null)
@@ -7120,6 +7409,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     while (nextDataGridViewColumn is not null)
                                     {
                                         dataGridViewColumn = nextDataGridViewColumn;
@@ -7138,6 +7428,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         // Cycle through the visible selected rows.
                         bool firstRowIndex = true;
                         int rowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected);
@@ -7163,6 +7454,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     while (prevDataGridViewColumn is not null)
                                     {
                                         dataGridViewColumn = prevDataGridViewColumn;
@@ -7228,6 +7520,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     while (nextDataGridViewColumn is not null)
                                     {
                                         dataGridViewColumn = nextDataGridViewColumn;
@@ -7245,13 +7538,16 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             rowIndex = nextRowIndex;
                             if (rowIndex != -1)
                             {
                                 nextRowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible | DataGridViewElementStates.Selected);
                             }
+
                             firstRowIndex = false;
                         }
+
                         if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
                             GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
@@ -7262,6 +7558,7 @@ namespace System.Windows.Forms
                             dataObject.SetData(format, false /*autoConvert*/, sbContent.ToString());
                         }
                     }
+
                     break;
 
                 case DataGridViewSelectionMode.FullColumnSelect:
@@ -7317,6 +7614,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     while (prevDataGridViewColumn is not null)
                                     {
                                         dataGridViewColumn = prevDataGridViewColumn;
@@ -7333,6 +7631,7 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 if (includeRowHeaders)
                                 {
                                     cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
@@ -7364,6 +7663,7 @@ namespace System.Windows.Forms
                                         sbContent.Append(cellContent);
                                     }
                                 }
+
                                 // Cycle through the visible & selected columns in their display order
                                 Debug.Assert(dataGridViewColumn is not null);
                                 if (dataGridViewColumn is not null)
@@ -7379,6 +7679,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     while (nextDataGridViewColumn is not null)
                                     {
                                         dataGridViewColumn = nextDataGridViewColumn;
@@ -7397,6 +7698,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         // Cycle through the visible rows.
                         bool firstRowIndex = true;
                         int rowIndex = firstVisibleRowIndex;
@@ -7405,6 +7707,7 @@ namespace System.Windows.Forms
                         {
                             nextRowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
                         }
+
                         while (rowIndex != -1)
                         {
                             if (RightToLeftInternal)
@@ -7426,6 +7729,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     while (prevDataGridViewColumn is not null)
                                     {
                                         dataGridViewColumn = prevDataGridViewColumn;
@@ -7491,6 +7795,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     while (nextDataGridViewColumn is not null)
                                     {
                                         dataGridViewColumn = nextDataGridViewColumn;
@@ -7508,13 +7813,16 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             rowIndex = nextRowIndex;
                             if (rowIndex != -1)
                             {
                                 nextRowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
                             }
+
                             firstRowIndex = false;
                         }
+
                         if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
                             GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
@@ -7525,6 +7833,7 @@ namespace System.Windows.Forms
                             dataObject.SetData(format, false /*autoConvert*/, sbContent.ToString());
                         }
                     }
+
                     break;
 
                 case DataGridViewSelectionMode.CellSelect:
@@ -7543,6 +7852,7 @@ namespace System.Windows.Forms
                         selectedVisibleColumnExists = Columns.GetColumnCount(DataGridViewElementStates.Visible | DataGridViewElementStates.Selected) != 0;
                         selectedVisibleCellExists = selectedVisibleColumnExists && Rows.GetRowCount(DataGridViewElementStates.Visible) != 0;
                     }
+
                     if (!selectedVisibleCellExists && _individualSelectedCells.Count > 0)
                     {
                         foreach (DataGridViewCell dataGridViewCell in _individualSelectedCells)
@@ -7554,6 +7864,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     if (!selectedVisibleCellExists)
                     {
                         return null;
@@ -7620,10 +7931,12 @@ namespace System.Windows.Forms
                                 {
                                     lRowIndex = rowIndex;
                                 }
+
                                 if (rowIndex > uRowIndex)
                                 {
                                     uRowIndex = rowIndex;
                                 }
+
                                 lColumn = firstVisibleColumn;
                                 uColumn = lastVisibleColumn;
                             }
@@ -7643,10 +7956,12 @@ namespace System.Windows.Forms
                                 {
                                     lColumn = Columns[columnIndex];
                                 }
+
                                 if (uColumn is null || Columns.DisplayInOrder(uColumn.Index, columnIndex))
                                 {
                                     uColumn = Columns[columnIndex];
                                 }
+
                                 lRowIndex = firstVisibleRowIndex;
                                 uRowIndex = lastVisibleRowIndex;
                             }
@@ -7662,14 +7977,17 @@ namespace System.Windows.Forms
                             {
                                 lRowIndex = dataGridViewCell.RowIndex;
                             }
+
                             if (dataGridViewCell.RowIndex > uRowIndex)
                             {
                                 uRowIndex = dataGridViewCell.RowIndex;
                             }
+
                             if (lColumn is null || Columns.DisplayInOrder(dataGridViewCell.ColumnIndex, lColumn.Index))
                             {
                                 lColumn = dataGridViewCell.OwningColumn;
                             }
+
                             if (uColumn is null || Columns.DisplayInOrder(uColumn.Index, dataGridViewCell.ColumnIndex))
                             {
                                 uColumn = dataGridViewCell.OwningColumn;
@@ -7713,6 +8031,7 @@ namespace System.Windows.Forms
                                     {
                                         prevDataGridViewColumn = null;
                                     }
+
                                     cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
                                                                                                             dataGridViewColumn == uColumn /*firstCell*/,
                                                                                                             !includeRowHeaders && prevDataGridViewColumn is null /*lastCell*/,
@@ -7723,8 +8042,10 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     dataGridViewColumn = prevDataGridViewColumn;
                                 }
+
                                 if (includeRowHeaders)
                                 {
                                     cellContent = TopLeftHeaderCell.GetClipboardContentInternal(-1,
@@ -7754,6 +8075,7 @@ namespace System.Windows.Forms
                                         sbContent.Append(cellContent);
                                     }
                                 }
+
                                 // Cycle through the visible columns from lColumn to uColumn
                                 dataGridViewColumn = lColumn;
                                 Debug.Assert(dataGridViewColumn is not null);
@@ -7768,6 +8090,7 @@ namespace System.Windows.Forms
                                     {
                                         nextDataGridViewColumn = null;
                                     }
+
                                     cellContent = dataGridViewColumn.HeaderCell.GetClipboardContentInternal(-1,
                                                                                                             !includeRowHeaders && dataGridViewColumn == lColumn /*firstCell*/,
                                                                                                             nextDataGridViewColumn is null /*lastCell*/,
@@ -7778,10 +8101,12 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     dataGridViewColumn = nextDataGridViewColumn;
                                 }
                             }
                         }
+
                         // Cycle through the visible rows from lRowIndex to uRowIndex.
                         bool firstRowIndex = true;
                         int rowIndex = lRowIndex;
@@ -7826,6 +8151,7 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     dataGridViewColumn = prevDataGridViewColumn;
                                 }
 
@@ -7886,12 +8212,15 @@ namespace System.Windows.Forms
                                     {
                                         sbContent.Append(cellContent);
                                     }
+
                                     dataGridViewColumn = nextDataGridViewColumn;
                                 }
                             }
+
                             rowIndex = nextRowIndex;
                             firstRowIndex = false;
                         }
+
                         if (string.Equals(format, DataFormats.Html, StringComparison.OrdinalIgnoreCase))
                         {
                             GetClipboardContentForHtml(sbContent, out IO.MemoryStream utf8Stream);
@@ -7902,8 +8231,10 @@ namespace System.Windows.Forms
                             dataObject.SetData(format, false /*autoConvert*/, sbContent.ToString());
                         }
                     }
+
                     break;
             }
+
             return dataObject;
         }
 
@@ -7940,6 +8271,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             return GetColumnDisplayRectanglePrivate(columnIndex, cutOverflow);
         }
 
@@ -7964,6 +8296,7 @@ namespace System.Windows.Forms
             {
                 cx = data.X;
             }
+
             for (dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                 dataGridViewColumn is not null && !columnFound;
                 )
@@ -7973,6 +8306,7 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
+
                 if (dataGridViewColumn.Index == columnIndex)
                 {
                     columnFound = true;
@@ -7987,6 +8321,7 @@ namespace System.Windows.Forms
                     {
                         cx += dataGridViewColumn.Thickness;
                     }
+
                     dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                         DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen,
                         DataGridViewElementStates.None);
@@ -8004,6 +8339,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     if (dataGridViewColumn.Index == columnIndex)
                     {
                         columnFound = true;
@@ -8018,6 +8354,7 @@ namespace System.Windows.Forms
                         {
                             cx += dataGridViewColumn.Thickness;
                         }
+
                         if (dataGridViewColumn.Index == DisplayedBandsInfo.FirstDisplayedScrollingCol)
                         {
                             if (RightToLeftInternal)
@@ -8029,6 +8366,7 @@ namespace System.Windows.Forms
                                 cx -= FirstDisplayedScrollingColumnHiddenWidth;
                             }
                         }
+
                         dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                             DataGridViewElementStates.Visible,
                             DataGridViewElementStates.None);
@@ -8044,6 +8382,7 @@ namespace System.Windows.Forms
                 {
                     viewedColumnWidth -= FirstDisplayedScrollingColumnHiddenWidth;
                 }
+
                 if (cutOverflow &&
                     ((!RightToLeftInternal && cx + viewedColumnWidth > data.Right) ||
                      (RightToLeftInternal && cx - viewedColumnWidth < data.X)))
@@ -8071,11 +8410,13 @@ namespace System.Windows.Forms
                 {
                     columnRect = new Rectangle(cx, data.Y, displayWidth, data.Height);
                 }
+
                 if (_layout.ColumnHeadersVisible)
                 {
                     columnRect.Height += _layout.ColumnHeaders.Height;
                     columnRect.Y -= _layout.ColumnHeaders.Height;
                 }
+
                 return columnRect;
             }
 
@@ -8122,6 +8463,7 @@ namespace System.Windows.Forms
                 {
                     cx += dataGridViewColumn.Thickness;
                 }
+
                 if (!RightToLeftInternal && cx > x)
                 {
                     xColumnLeftEdge = cx - dataGridViewColumn.Thickness;
@@ -8132,6 +8474,7 @@ namespace System.Windows.Forms
                     xColumnLeftEdge = cx + dataGridViewColumn.Thickness;
                     return dataGridViewColumn.Index;
                 }
+
                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                     DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen,
                     DataGridViewElementStates.None);
@@ -8162,6 +8505,7 @@ namespace System.Windows.Forms
                     {
                         cx += dataGridViewColumn.Thickness;
                     }
+
                     if (!RightToLeftInternal && cx > x)
                     {
                         xColumnLeftEdge = cx - dataGridViewColumn.Thickness;
@@ -8172,6 +8516,7 @@ namespace System.Windows.Forms
                         xColumnLeftEdge = cx + dataGridViewColumn.Thickness;
                         return dataGridViewColumn.Index;
                     }
+
                     dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                         DataGridViewElementStates.Visible,
                         DataGridViewElementStates.None);
@@ -8190,18 +8535,22 @@ namespace System.Windows.Forms
             {
                 return 480;     // Two columns per second
             }
+
             if (xOffset <= 15)
             {
                 return 313;     // Three columns per second
             }
+
             if (xOffset <= 25)
             {
                 return 180;     // Five columns per second
             }
+
             if (xOffset <= 35)
             {
                 return 123;     // Seven columns per second
             }
+
             return Math.Max(1, 4000 / xOffset);
         }
 
@@ -8235,6 +8584,7 @@ namespace System.Windows.Forms
                 {
                     return x;
                 }
+
                 if (RightToLeftInternal)
                 {
                     x -= dataGridViewColumn.Thickness;
@@ -8243,6 +8593,7 @@ namespace System.Windows.Forms
                 {
                     x += dataGridViewColumn.Thickness;
                 }
+
                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                     DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen,
                     DataGridViewElementStates.None);
@@ -8267,6 +8618,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen);
             }
+
             Debug.Assert(dataGridViewColumn.Visible && !dataGridViewColumn.Frozen);
 
             while (dataGridViewColumn is not null)
@@ -8275,6 +8627,7 @@ namespace System.Windows.Forms
                 {
                     return x;
                 }
+
                 if (RightToLeftInternal)
                 {
                     x -= dataGridViewColumn.Thickness;
@@ -8283,6 +8636,7 @@ namespace System.Windows.Forms
                 {
                     x += dataGridViewColumn.Thickness;
                 }
+
                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn,
                     DataGridViewElementStates.Visible,
                     DataGridViewElementStates.None);
@@ -8304,10 +8658,12 @@ namespace System.Windows.Forms
                 {
                     x -= dataGridViewColumn.Thickness;
                 }
+
                 if (index == dataGridViewColumn.Index)
                 {
                     return x;
                 }
+
                 dataGridViewColumn = Columns.GetPreviousColumn(dataGridViewColumn,
                     DataGridViewElementStates.Visible,
                     DataGridViewElementStates.Frozen);
@@ -8325,6 +8681,7 @@ namespace System.Windows.Forms
                 horizontalOffset -= dataGridViewColumn.Thickness;
                 dataGridViewColumn = Columns.GetNextColumn(dataGridViewColumn, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
             }
+
             return horizontalOffset;
         }
 
@@ -8350,6 +8707,7 @@ namespace System.Windows.Forms
                     // Include row headers
                     rectScrollingArea = Rectangle.Union(rectScrollingArea, _layout.RowHeaders);
                 }
+
                 // Discard frozen rows
                 DiscardZonesInScrollingArea(ref rectScrollingArea, emptyBackgroundWidth, emptyBackgroundHeight, frozenVisibleRowsHeight,
                                             false /*discardFrozenColumns*/, true /*discardFrozenRows*/);
@@ -8378,15 +8736,18 @@ namespace System.Windows.Forms
                             DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
                             firstColumnIndex = (dataGridViewColumn is null) ? -1 : dataGridViewColumn.Index;
                         }
+
                         if (firstColumnIndex >= 0 && firstUnfrozenRowIndex >= 0)
                         {
                             if (!ScrollIntoView(firstColumnIndex, firstUnfrozenRowIndex, false /*forCurrentCellChange*/))
                             {
                                 return false;
                             }
+
                             hti = HitTest(RightToLeftInternal ? rectScrollingArea.Right : rectScrollingArea.Left, mouseY);
                         }
                     }
+
                     return true;
                 }
 
@@ -8436,6 +8797,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return true;
             }
 
@@ -8474,15 +8836,18 @@ namespace System.Windows.Forms
                         {
                             firstRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
                         }
+
                         if (firstRowIndex >= 0 && firstUnfrozenColumnIndex >= 0)
                         {
                             if (!ScrollIntoView(firstUnfrozenColumnIndex, firstRowIndex, false /*forCurrentCellChange*/))
                             {
                                 return false;
                             }
+
                             hti = HitTest(mouseX, rectScrollingArea.Top);
                         }
                     }
+
                     return true;
                 }
 
@@ -8508,6 +8873,7 @@ namespace System.Windows.Forms
                             // Left scrolling is required
                             xOffset = mouseX - rectScrollingArea.Left;
                         }
+
                         mouseY = rectScrollingArea.Top + 1;
                     }
                     else
@@ -8554,10 +8920,12 @@ namespace System.Windows.Forms
                                 // Right scrolling is required
                                 xOffset = mouseX - rectScrollingArea.Right;
                             }
+
                             mouseY = rectScrollingArea.Top + 1;
                         }
                     }
                 }
+
                 return true;
             }
 
@@ -8692,6 +9060,7 @@ namespace System.Windows.Forms
                         {
                             newColOffset += dataGridViewColumn.Thickness;
                         }
+
                         if (HorizontalOffset != newColOffset)
                         {
                             // xOffset strictly positive
@@ -8717,6 +9086,7 @@ namespace System.Windows.Forms
                             {
                                 mouseX = rectScrollingArea.Right - 1;
                             }
+
                             recomputeHitTestInfo = true;
                         }
                     }
@@ -8731,6 +9101,7 @@ namespace System.Windows.Forms
                         {
                             mouseX = rectScrollingArea.Right - 1;
                         }
+
                         recomputeHitTestInfo = true;
                     }
                 }
@@ -8746,6 +9117,7 @@ namespace System.Windows.Forms
                     hti = HitTest(mouseX, mouseY);
                 }
             }
+
             return true;
         }
 
@@ -8762,10 +9134,12 @@ namespace System.Windows.Forms
             {
                 minimumWidth += _vertScrollBar.Width;
             }
+
             if (RowHeadersVisible)
             {
                 minimumWidth += RowHeadersWidth;
             }
+
             int preferredWidth = Math.Min(minimumWidth + Columns.GetColumnsWidth(DataGridViewElementStates.Visible), proposedConstraints.Width);
             if (preferredWidth < minimumWidth)
             {
@@ -8777,10 +9151,12 @@ namespace System.Windows.Forms
             {
                 minimumHeight += _horizScrollBar.Height;
             }
+
             if (ColumnHeadersVisible)
             {
                 minimumHeight += ColumnHeadersHeight;
             }
+
             int preferredHeight = Math.Min(minimumHeight + Rows.GetRowsHeight(DataGridViewElementStates.Visible), proposedConstraints.Height);
             if (preferredHeight < minimumHeight)
             {
@@ -8797,6 +9173,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             return GetRowDisplayRectanglePrivate(rowIndex, cutOverflow);
         }
 
@@ -8821,6 +9198,7 @@ namespace System.Windows.Forms
                 {
                     break;
                 }
+
                 if (indexTmp == rowIndex)
                 {
                     rowFound = true;
@@ -8842,6 +9220,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     if (indexTmp == rowIndex)
                     {
                         rowFound = true;
@@ -8878,6 +9257,7 @@ namespace System.Windows.Forms
                         rowRect.X -= _layout.RowHeaders.Width;
                     }
                 }
+
                 return rowRect;
             }
 
@@ -8908,6 +9288,7 @@ namespace System.Windows.Forms
                     yRowTopEdge = cy - rowHeight;
                     return indexTmp;
                 }
+
                 indexTmp = Rows.GetNextRow(indexTmp,
                     DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             }
@@ -8928,6 +9309,7 @@ namespace System.Windows.Forms
                         yRowTopEdge = cy - rowHeight;
                         return indexTmp;
                     }
+
                     indexTmp = Rows.GetNextRow(indexTmp,
                         DataGridViewElementStates.Visible);
                 }
@@ -8945,18 +9327,22 @@ namespace System.Windows.Forms
             {
                 return 90;      // Ten rows per second
             }
+
             if (yOffset <= 15)
             {
                 return 57;     // Fifteen rows per second
             }
+
             if (yOffset <= 25)
             {
                 return 30;     // Twenty-five rows per second
             }
+
             if (yOffset <= 35)
             {
                 return 18;     // Thirty-five rows per second
             }
+
             return Math.Max(1, 600 / yOffset);
         }
 
@@ -8980,6 +9366,7 @@ namespace System.Windows.Forms
                 {
                     return y;
                 }
+
                 y += Rows.SharedRow(indexTmp).GetHeight(indexTmp);
                 indexTmp = Rows.GetNextRow(indexTmp,
                     DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
@@ -9018,6 +9405,7 @@ namespace System.Windows.Forms
                     {
                         return y;
                     }
+
                     y += Rows.SharedRow(indexTmp).GetHeight(indexTmp);
                     indexTmp = Rows.GetNextRow(indexTmp, DataGridViewElementStates.Visible);
                 }
@@ -9036,6 +9424,7 @@ namespace System.Windows.Forms
                 {
                     return y;
                 }
+
                 indexTmp = Rows.GetPreviousRow(indexTmp,
                     DataGridViewElementStates.Visible,
                     DataGridViewElementStates.Frozen);
@@ -9094,6 +9483,7 @@ namespace System.Windows.Forms
                 {
                     hti._colStart = _layout.TopLeftHeader.Left;
                 }
+
                 hti._rowStart = _layout.TopLeftHeader.Top;
                 if ((!RightToLeftInternal && _layout.TopLeftHeader.Right - x < ColumnSizingHotZone) ||
                     (RightToLeftInternal && x - _layout.TopLeftHeader.Left < ColumnSizingHotZone))
@@ -9121,6 +9511,7 @@ namespace System.Windows.Forms
                         hti._mouseBarOffset = _layout.TopLeftHeader.Top + _layout.TopLeftHeader.Height - y - 1;
                     }
                 }
+
                 return hti;
             }
 
@@ -9133,6 +9524,7 @@ namespace System.Windows.Forms
                 {
                     return HitTestInfo.Nowhere;
                 }
+
                 Debug.Assert(xColumnLeftEdge == GetColumnXFromIndex(hti._col));
                 hti._type = DataGridViewHitTestType.ColumnHeader;
                 hti._typeInternal = DataGridViewHitTestTypeInternal.ColumnHeader;
@@ -9151,6 +9543,7 @@ namespace System.Windows.Forms
                     {
                         hti._mouseBarOffset = xColumnLeftEdge + columnWidth - x - 1;
                     }
+
                     DataGridViewColumn dataGridViewColumn = Columns[hti._col];
                     if (dataGridViewColumn.Resizable == DataGridViewTriState.True &&
                         (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.None || dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill))
@@ -9183,6 +9576,7 @@ namespace System.Windows.Forms
                         {
                             hti._mouseBarOffset = xColumnLeftEdge - x - 1;
                         }
+
                         if (dataGridViewColumn.Resizable == DataGridViewTriState.True &&
                             (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.None || dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill))
                         {
@@ -9232,6 +9626,7 @@ namespace System.Windows.Forms
                 {
                     return HitTestInfo.Nowhere;
                 }
+
                 Debug.Assert(yRowTopEdge == GetRowYFromIndex(hti._row));
                 hti._type = DataGridViewHitTestType.RowHeader;
                 hti._typeInternal = DataGridViewHitTestTypeInternal.RowHeader;
@@ -9244,6 +9639,7 @@ namespace System.Windows.Forms
                 {
                     hti._colStart = _layout.RowHeaders.Left;
                 }
+
                 int rowHeight = Rows.SharedRow(hti._row).GetHeight(hti._row);
                 if (yRowTopEdge + rowHeight - y < RowSizingHotZone)
                 {
@@ -9263,6 +9659,7 @@ namespace System.Windows.Forms
                     {
                         indexTmp = Rows.GetPreviousRow(hti._row, DataGridViewElementStates.Visible);
                     }
+
                     if (indexTmp != -1)
                     {
                         if (RowIsResizable(indexTmp) && AutoSizeRowsMode == DataGridViewAutoSizeRowsMode.None)
@@ -9308,6 +9705,7 @@ namespace System.Windows.Forms
                 {
                     return HitTestInfo.Nowhere;
                 }
+
                 Debug.Assert(xColumnLeftEdge == GetColumnXFromIndex(hti._col));
                 Debug.Assert(yRowTopEdge == GetRowYFromIndex(hti._row));
                 hti._type = DataGridViewHitTestType.Cell;
@@ -9328,12 +9726,14 @@ namespace System.Windows.Forms
                         {
                             hti._mouseBarOffset = xColumnLeftEdge + columnWidth - x - 1;
                         }
+
                         DataGridViewColumn dataGridViewColumn = Columns[hti._col];
                         if (dataGridViewColumn.Resizable == DataGridViewTriState.True &&
                             (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.None || dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill))
                         {
                             hti._typeInternal = DataGridViewHitTestTypeInternal.ColumnResizeRight;
                         }
+
                         return hti;
                     }
                     else if ((!RightToLeftInternal && x - xColumnLeftEdge < ColumnSizingHotZone) ||
@@ -9346,6 +9746,7 @@ namespace System.Windows.Forms
                                 DataGridViewElementStates.Visible,
                                 DataGridViewElementStates.None);
                         }
+
                         if (dataGridViewColumn is not null)
                         {
                             hti._adjacentCol = dataGridViewColumn.Index;
@@ -9357,11 +9758,13 @@ namespace System.Windows.Forms
                             {
                                 hti._mouseBarOffset = xColumnLeftEdge - x - 1;
                             }
+
                             if (dataGridViewColumn.Resizable == DataGridViewTriState.True &&
                                 (dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.None || dataGridViewColumn.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill))
                             {
                                 hti._typeInternal = DataGridViewHitTestTypeInternal.ColumnResizeLeft;
                             }
+
                             return hti;
                         }
                         else
@@ -9377,6 +9780,7 @@ namespace System.Windows.Forms
                                 {
                                     hti._mouseBarOffset = xColumnLeftEdge - x - 1;
                                 }
+
                                 return hti;
                             }
                         }
@@ -9400,6 +9804,7 @@ namespace System.Windows.Forms
                         {
                             hti._mouseBarOffset = xColumnLeftEdge - x - 1;
                         }
+
                         return hti;
                     }
                 }
@@ -9423,6 +9828,7 @@ namespace System.Windows.Forms
                             indexTmp = Rows.GetPreviousRow(hti._row,
                                 DataGridViewElementStates.Visible);
                         }
+
                         if (indexTmp != -1)
                         {
                             if (RowIsResizable(indexTmp) && AutoSizeRowsMode == DataGridViewAutoSizeRowsMode.None)
@@ -9496,6 +9902,7 @@ namespace System.Windows.Forms
                         {
                             hti = HitTest(ptMouse.X + (RightToLeftInternal ? 1 : -1) * (xOffset + normOffset), mouseY);
                         }
+
                         if (hti._col >= 0 && hti._row >= 0)
                         {
                             OnCellSelectMouseMove(hti);
@@ -9512,6 +9919,7 @@ namespace System.Windows.Forms
                     {
                         OnCellSelectMouseMove(hti);
                     }
+
                     HorizScrollTimer.Enabled = false;
                 }
             }
@@ -9546,6 +9954,7 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 dgvdee = new DataGridViewDataErrorEventArgs(exception, _ptCurrentCell.X,
                     _ptCurrentCell.Y,
                     DataGridViewDataErrorContexts.InitialValueRestoration);
@@ -9555,14 +9964,17 @@ namespace System.Windows.Forms
             {
                 _dataGridViewState1[State1_IgnoringEditingChanges] = false;
             }
+
             if (dgvdee is not null)
             {
                 if (dgvdee.ThrowException)
                 {
                     throw dgvdee.Exception;
                 }
+
                 return !dgvdee.Cancel;
             }
+
             return true;
         }
 
@@ -9587,6 +9999,7 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 dgvdee = new DataGridViewDataErrorEventArgs(exception, _ptCurrentCell.X,
                     _ptCurrentCell.Y,
                     DataGridViewDataErrorContexts.InitialValueRestoration);
@@ -9597,12 +10010,14 @@ namespace System.Windows.Forms
                 _dataGridViewState1[State1_EditingControlChanging] = false;
                 _dataGridViewState1[State1_IgnoringEditingChanges] = false;
             }
+
             if (dgvdee is not null)
             {
                 if (dgvdee.ThrowException)
                 {
                     throw dgvdee.Exception;
                 }
+
                 return !dgvdee.Cancel;
             }
 
@@ -9617,10 +10032,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewCell));
             }
+
             if (dataGridViewCell.DataGridView != this)
             {
                 throw new ArgumentException(SR.DataGridView_CellDoesNotBelongToDataGridView);
             }
+
             InvalidateCellPrivate(dataGridViewCell);
         }
 
@@ -9637,10 +10054,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < -1 || rowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             InvalidateCellPrivate(columnIndex, rowIndex);
         }
 
@@ -9665,6 +10084,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             InvalidateColumnInternal(columnIndex);
         }
 
@@ -9710,6 +10130,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             InvalidateRowPrivate(rowIndex);
         }
 
@@ -9881,6 +10302,7 @@ namespace System.Windows.Forms
             {
                 _horizScrollBar.Invalidate();
             }
+
             if (_vertScrollBar is not null && _vertScrollBar.Visible)
             {
                 _vertScrollBar.Invalidate();
@@ -9922,6 +10344,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             switch (keyData & Keys.KeyCode)
             {
                 case Keys.Escape:
@@ -9940,6 +10363,7 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         break;
                     }
 
@@ -9950,6 +10374,7 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         break;
                     }
 
@@ -9962,6 +10387,7 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         break;
                     }
 
@@ -9983,6 +10409,7 @@ namespace System.Windows.Forms
                         return true;
                     }
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -10015,7 +10442,7 @@ namespace System.Windows.Forms
                 int totalVisibleWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible);
                 int totalVisibleFrozenWidth = Columns.GetColumnsWidth(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
 
-                // Expensive call - dataGridView could have a mode where no row is resizable which would result in better perfs
+                // Expensive call - dataGridView could have a mode where no row is resizable which would result in better perf
                 int totalVisibleHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible);
                 int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
 
@@ -10042,6 +10469,7 @@ namespace System.Windows.Forms
                         {
                             needHorizScrollbar = (totalVisibleFrozenWidth < _layout.Data.Width - vertScrollBarWidth);
                         }
+
                         DisplayedBandsInfo.FirstDisplayedScrollingRow = oldfirstDisplayedScrollingRow;
                     }
 
@@ -10076,6 +10504,7 @@ namespace System.Windows.Forms
                     {
                         _layout.Data.X += vertScrollBarWidth;
                     }
+
                     if (_layout.ColumnHeadersVisible)
                     {
                         _layout.ColumnHeaders.Width -= vertScrollBarWidth;
@@ -10085,6 +10514,7 @@ namespace System.Windows.Forms
                             _layout.ColumnHeaders.X += vertScrollBarWidth;
                         }
                     }
+
                     needVertScrollbar = true;
                 }
 
@@ -10106,11 +10536,13 @@ namespace System.Windows.Forms
                             _layout.ColumnHeaders.X -= vertScrollBarWidth;
                         }
                     }
+
                     _layout.Data.Width += vertScrollBarWidth;
                     if (rightToLeftInternal)
                     {
                         _layout.Data.X -= vertScrollBarWidth;
                     }
+
                     _layout.Data.Height -= horizScrollBarHeight;
                     Debug.Assert(_layout.Data.Height >= 0);
                     needVertScrollbar = false;
@@ -10128,6 +10560,7 @@ namespace System.Windows.Forms
                         {
                             _layout.Data.X += vertScrollBarWidth;
                         }
+
                         if (_layout.ColumnHeadersVisible)
                         {
                             _layout.ColumnHeaders.Width -= vertScrollBarWidth;
@@ -10137,8 +10570,10 @@ namespace System.Windows.Forms
                                 _layout.ColumnHeaders.X += vertScrollBarWidth;
                             }
                         }
+
                         needVertScrollbar = true;
                     }
+
                     if (needVertScrollbar)
                     {
                         needHorizScrollbar = true;
@@ -10295,6 +10730,7 @@ namespace System.Windows.Forms
                 EditingControl.Invalidate();
                 EditingControl.Update();
             }
+
             Invalidate(lastSplitBarRect);
             Invalidate(CalcRowResizeFeedbackRect(_currentRowSplitBar));
         }
@@ -10360,6 +10796,7 @@ namespace System.Windows.Forms
                 EditingControl.Invalidate();
                 EditingControl.Update();
             }
+
             Invalidate(lastSplitBarRect);
             Invalidate(CalcColResizeFeedbackRect(_currentColSplitBar));
         }
@@ -10488,12 +10925,13 @@ namespace System.Windows.Forms
                     autoSizeRow = true;
                 }
 
-                // Auto size columms also if needed
+                // Auto size columns also if needed
                 DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
                 if (rowDisplayed)
                 {
                     autoSizeColumnCriteriaFilter |= DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows;
                 }
+
                 bool columnAutoSized;
                 if (Rows.GetRowCount(DataGridViewElementStates.Visible) > 1)
                 {
@@ -10504,6 +10942,7 @@ namespace System.Windows.Forms
                 {
                     columnAutoSized = AutoResizeAllVisibleColumnsInternal(autoSizeColumnCriteriaFilter, true /*fixedHeight*/);
                 }
+
                 bool fixedColumnHeadersHeight = ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize;
                 bool rowHeadersAutoSize = _rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.EnableResizing &&
                                           _rowHeadersWidthSizeMode != DataGridViewRowHeadersWidthSizeMode.DisableResizing;
@@ -10565,6 +11004,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataGridViewColumn));
             }
+
             if (dataGridViewColumn.DataGridView is not null)
             {
                 throw new InvalidOperationException(SR.DataGridView_ColumnAlreadyBelongsToDataGridView);
@@ -10640,6 +11080,7 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewCellNew.SetValueInternal(rowIndex, dataGridViewCellNew.DefaultNewRowValue);
                             }
+
                             dataGridViewCellNew.DataGridView = this;
                             dataGridViewCellNew.OwningRow = dataGridViewRow;
                             dataGridViewCellNew.OwningColumn = dataGridViewColumn;
@@ -10663,6 +11104,7 @@ namespace System.Windows.Forms
                             break;
                         }
                     }
+
                     throw;
                 }
             }
@@ -10682,10 +11124,12 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridView_AtLeastOneColumnIsNull);
                 }
+
                 if (dataGridViewColumn.DataGridView is not null)
                 {
                     throw new InvalidOperationException(SR.DataGridView_ColumnAlreadyBelongsToDataGridView);
                 }
+
                 // Only require a default cell type when there are rows to fill
                 if (Rows.Count > 0 && dataGridViewColumn.CellType is null)
                 {
@@ -10781,6 +11225,7 @@ namespace System.Windows.Forms
                                 {
                                     dataGridViewCellNew.Value = dataGridViewCellNew.DefaultNewRowValue;
                                 }
+
                                 dataGridViewCellNew.DataGridView = this;
                                 dataGridViewCellNew.OwningRow = dataGridViewRow;
                                 dataGridViewCellNew.OwningColumn = dataGridViewColumn;
@@ -10798,6 +11243,7 @@ namespace System.Windows.Forms
                             dataGridViewRow.Cells.RemoveAtInternal(dataGridViewRow.Cells.Count - 1);
                         }
                     }
+
                     throw;
                 }
             }
@@ -10986,6 +11432,7 @@ namespace System.Windows.Forms
                 // refresh the list of columns and the rows
                 RefreshColumnsAndRows();
             }
+
             if (Events[s_autoGenerateColumnsChangedEvent] is EventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -11006,6 +11453,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(SR.InvalidNullArgument, "e.Column"));
             }
+
             DataGridViewAutoSizeColumnMode autoSizeColumnMode = dataGridViewColumn.InheritedAutoSizeMode;
             Debug.Assert(autoSizeColumnMode != DataGridViewAutoSizeColumnMode.NotSet);
 
@@ -11032,6 +11480,7 @@ namespace System.Windows.Forms
                         // Save current column width for later reuse
                         dataGridViewColumn.CachedThickness = dataGridViewColumn.Thickness;
                     }
+
                     AutoResizeColumnInternal(dataGridViewColumn.Index,
                                              (DataGridViewAutoSizeColumnCriteriaInternal)autoSizeColumnMode,
                                              fixedHeight);
@@ -11077,6 +11526,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(e.PreviousModes));
             }
+
             if (previousModes.Length != Columns.Count)
             {
                 throw new ArgumentException(SR.DataGridView_PreviousModesHasWrongLength);
@@ -11108,6 +11558,7 @@ namespace System.Windows.Forms
                                 // Save current column width for later reuse
                                 dataGridViewColumn.CachedThickness = dataGridViewColumn.Thickness;
                             }
+
                             AutoResizeColumnInternal(dataGridViewColumn.Index,
                                                      (DataGridViewAutoSizeColumnCriteriaInternal)autoSizeColumnMode,
                                                      (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) == 0 /*fixedHeight*/);
@@ -11176,6 +11627,7 @@ namespace System.Windows.Forms
                         Rows.SharedRow(rowIndex).CachedThickness = rowHeight;
                     }
                 }
+
                 AdjustShrinkingRows(_autoSizeRowsMode, true /*fixedWidth*/, true /*internalAutosizing*/);
             }
 
@@ -11319,6 +11771,7 @@ namespace System.Windows.Forms
                             throw;
                         }
                     }
+
                     RefreshColumnsAndRows();
                     base.OnBindingContextChanged(e);
                     if (DataConnection.CurrencyManager is not null)
@@ -11360,10 +11813,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellBeginEditEvent] is DataGridViewCellCancelEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -11392,10 +11847,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.ClickUnsharesRowInternal(e))
@@ -11451,6 +11908,7 @@ namespace System.Windows.Forms
                     {
                         AutoResizeRowInternal(rowIndex, MapAutoSizeRowsModeToRowMode(_autoSizeRowsMode), !autoSizeColumn /*fixedWidth*/, true /*internalAutosizing*/);
                     }
+
                     if (autoSizeColumn)
                     {
                         AutoResizeColumnInternal(columnIndex, autoSizeColumnCriteriaInternal, true /*fixedHeight*/);
@@ -11475,10 +11933,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.ContentClickUnsharesRowInternal(e))
@@ -11508,10 +11968,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.ContentDoubleClickUnsharesRowInternal(e))
@@ -11542,10 +12004,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellContextMenuStripChangedEvent] is DataGridViewCellEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -11565,10 +12029,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellContextMenuStripNeededEvent] is DataGridViewCellContextMenuStripNeededEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -11581,10 +12047,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.DoubleClickUnsharesRowInternal(e))
@@ -11609,10 +12077,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellEndEditEvent] is DataGridViewCellEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -11642,10 +12112,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             try
             {
                 _noDimensionChangeCount++;
@@ -11676,10 +12148,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             UpdateCellErrorText(e.ColumnIndex, e.RowIndex);
 
             if (Events[s_cellErrorTextChangedEvent] is DataGridViewCellEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -11703,10 +12177,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellErrorTextNeededEvent] is DataGridViewCellErrorTextNeededEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -11730,10 +12206,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellFormattingEvent] is DataGridViewCellFormattingEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -11763,10 +12241,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             try
             {
                 _noDimensionChangeCount++;
@@ -11789,10 +12269,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseClickUnsharesRowInternal(e))
@@ -11804,6 +12286,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.OnMouseClickInternal(e);
             }
+
             _dataGridViewState2[State2_NextMouseUpIsDouble] = false;
 
             if (Events[s_cellMouseClickEvent] is DataGridViewCellMouseEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -11818,10 +12301,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseDoubleClickUnsharesRowInternal(e))
@@ -11833,6 +12318,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewCell.OnMouseDoubleClickInternal(e);
             }
+
             _dataGridViewState2[State2_NextMouseUpIsDouble] = true;
 
             if (Events[s_cellMouseDoubleClickEvent] is DataGridViewCellMouseEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -11847,6 +12333,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
@@ -11926,6 +12413,7 @@ namespace System.Windows.Forms
                                 {
                                     BeginMouseColumnResize(ptGridCoord.X, hti._mouseBarOffset, columnIndex);
                                 }
+
                                 break;
                             }
 
@@ -11938,6 +12426,7 @@ namespace System.Windows.Forms
                                 {
                                     BeginRowResize(ptGridCoord.Y, hti._mouseBarOffset, rowIndex);
                                 }
+
                                 break;
                             }
 
@@ -11957,6 +12446,7 @@ namespace System.Windows.Forms
                                 {
                                     OnColumnHeaderMouseDown(hti, isShiftDown, isControlDown);
                                 }
+
                                 break;
                             }
 
@@ -11991,6 +12481,7 @@ namespace System.Windows.Forms
                                 {
                                     BeginRowHeadersResize(ptGridCoord.X, hti._mouseBarOffset);
                                 }
+
                                 break;
                             }
 
@@ -12004,9 +12495,11 @@ namespace System.Windows.Forms
                                 {
                                     BeginColumnHeadersResize(ptGridCoord.Y, hti._mouseBarOffset);
                                 }
+
                                 break;
                             }
                     }
+
                     // Make sure that there is a current cell after this mouse down event.
                     if (_ptCurrentCell.X == -1)
                     {
@@ -12035,6 +12528,7 @@ namespace System.Windows.Forms
                     // Return silently if validating/commit/abort failed
                     return;
                 }
+
                 if (_ptCurrentCell != ptOriginalCurrentCell)
                 {
                     // Somehow the fact that the current cell was committed altered the current cell value.
@@ -12059,6 +12553,7 @@ namespace System.Windows.Forms
                     return;
                 }
             }
+
             if (hti._row >= Rows.Count)
             {
                 int lastVisibleRowIndex = Rows.GetLastRow(DataGridViewElementStates.Visible);
@@ -12090,6 +12585,7 @@ namespace System.Windows.Forms
                             {
                                 select = false;
                             }
+
                             if (select)
                             {
                                 if ((!MultiSelect || !isControlDown) && !(MultiSelect && isShiftDown))
@@ -12097,12 +12593,14 @@ namespace System.Windows.Forms
                                     Debug.Assert(MultiSelect || _individualSelectedCells.Count <= 1);
                                     RemoveIndividuallySelectedCells(hti._col, hti._row);
                                 }
+
                                 if (MultiSelect)
                                 {
                                     if (_dataGridViewOper[OperationTrackMouseMoves])
                                     {
                                         _dataGridViewOper[OperationTrackCellSelect] = true;
                                     }
+
                                     if (isShiftDown)
                                     {
                                         int oldEdgeColumnIndex = _ptCurrentCell.X;
@@ -12111,6 +12609,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, hti._col,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, hti._row);
                                     }
@@ -12128,6 +12627,7 @@ namespace System.Windows.Forms
                             {
                                 SetSelectedCellCore(hti._col, hti._row, false);
                             }
+
                             bool success = SetCurrentCellAddressCore(hti._col, hti._row, !isShiftDown, false, true);
                             Debug.Assert(success);
                             break;
@@ -12139,6 +12639,7 @@ namespace System.Windows.Forms
                             {
                                 select = false;
                             }
+
                             if (select)
                             {
                                 bool selectColumnRange = false;
@@ -12151,6 +12652,7 @@ namespace System.Windows.Forms
                                 {
                                     selectColumnRange = true;
                                 }
+
                                 if (!MultiSelect || !isControlDown || isShiftDown)
                                 {
                                     Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
@@ -12161,6 +12663,7 @@ namespace System.Windows.Forms
                                         _inBulkPaintCount++;
                                         switchedToBulkPaint = true;
                                     }
+
                                     try
                                     {
                                         while (bandIndex < _selectedBandIndexes.Count)
@@ -12184,10 +12687,12 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 if (MultiSelect && _dataGridViewOper[OperationTrackMouseMoves])
                                 {
                                     _dataGridViewOper[OperationTrackColSelect] = true;
                                 }
+
                                 if (selectColumnRange)
                                 {
                                     if (Columns.DisplayInOrder(_ptAnchorCell.X, hti._col))
@@ -12209,6 +12714,7 @@ namespace System.Windows.Forms
                                 Debug.Assert(_selectedBandIndexes.Contains(hti._col));
                                 SetSelectedColumnCore(hti._col, false);
                             }
+
                             bool success = SetCurrentCellAddressCore(hti._col, hti._row, !isShiftDown, false, true);
                             Debug.Assert(success);
                             break;
@@ -12222,6 +12728,7 @@ namespace System.Windows.Forms
                             {
                                 select = false;
                             }
+
                             if (select)
                             {
                                 if (!MultiSelect)
@@ -12235,6 +12742,7 @@ namespace System.Windows.Forms
                                     {
                                         RemoveIndividuallySelectedCells();
                                     }
+
                                     SetSelectedCellCore(hti._col, hti._row, true);
                                 }
                                 else
@@ -12247,12 +12755,14 @@ namespace System.Windows.Forms
                                             _inBulkPaintCount++;
                                             switchedToBulkPaint = true;
                                         }
+
                                         try
                                         {
                                             while (_selectedBandIndexes.Count > 0)
                                             {
                                                 SetSelectedColumnCore(_selectedBandIndexes.HeadInt, false);
                                             }
+
                                             RemoveIndividuallySelectedCells(hti._col, hti._row);
                                         }
                                         finally
@@ -12263,10 +12773,12 @@ namespace System.Windows.Forms
                                             }
                                         }
                                     }
+
                                     if (_dataGridViewOper[OperationTrackMouseMoves])
                                     {
                                         _dataGridViewOper[OperationTrackCellSelect] = true;
                                     }
+
                                     if (isShiftDown)
                                     {
                                         int oldEdgeColumnIndex = _ptCurrentCell.X;
@@ -12275,6 +12787,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, hti._col,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, hti._row);
                                     }
@@ -12303,6 +12816,7 @@ namespace System.Windows.Forms
                                     SetSelectedCellCore(hti._col, hti._row, false);
                                 }
                             }
+
                             bool success = SetCurrentCellAddressCore(hti._col, hti._row, !isShiftDown, false, true);
                             Debug.Assert(success);
                             break;
@@ -12315,6 +12829,7 @@ namespace System.Windows.Forms
                             {
                                 select = false;
                             }
+
                             if (select)
                             {
                                 bool selectRowRange = false;
@@ -12337,6 +12852,7 @@ namespace System.Windows.Forms
                                         _inBulkPaintCount++;
                                         switchedToBulkPaint = true;
                                     }
+
                                     try
                                     {
                                         while (bandIndex < _selectedBandIndexes.Count)
@@ -12360,10 +12876,12 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 if (MultiSelect && _dataGridViewOper[OperationTrackMouseMoves])
                                 {
                                     _dataGridViewOper[OperationTrackRowSelect] = true;
                                 }
+
                                 if (selectRowRange)
                                 {
                                     if (hti._row >= _ptAnchorCell.Y)
@@ -12387,6 +12905,7 @@ namespace System.Windows.Forms
                                 Debug.Assert(_selectedBandIndexes.Contains(hti._row));
                                 SetSelectedRowCore(hti._row, false);
                             }
+
                             bool success = SetCurrentCellAddressCore(hti._col, hti._row, !isShiftDown, false, true);
                             Debug.Assert(success);
                             break;
@@ -12401,6 +12920,7 @@ namespace System.Windows.Forms
                             {
                                 select = false;
                             }
+
                             if (select)
                             {
                                 if (!MultiSelect)
@@ -12414,6 +12934,7 @@ namespace System.Windows.Forms
                                     {
                                         RemoveIndividuallySelectedCells();
                                     }
+
                                     SetSelectedCellCore(hti._col, hti._row, true);
                                 }
                                 else
@@ -12426,12 +12947,14 @@ namespace System.Windows.Forms
                                             _inBulkPaintCount++;
                                             switchedToBulkPaint = true;
                                         }
+
                                         try
                                         {
                                             while (_selectedBandIndexes.Count > 0)
                                             {
                                                 SetSelectedRowCore(_selectedBandIndexes.HeadInt, false);
                                             }
+
                                             RemoveIndividuallySelectedCells(hti._col, hti._row);
                                         }
                                         finally
@@ -12442,10 +12965,12 @@ namespace System.Windows.Forms
                                             }
                                         }
                                     }
+
                                     if (_dataGridViewOper[OperationTrackMouseMoves])
                                     {
                                         _dataGridViewOper[OperationTrackCellSelect] = true;
                                     }
+
                                     if (isShiftDown)
                                     {
                                         int oldEdgeColumnIndex = _ptCurrentCell.X;
@@ -12454,6 +12979,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, hti._col,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, hti._row);
                                     }
@@ -12500,10 +13026,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             _ptMouseEnteredCell.X = e.ColumnIndex;
             _ptMouseEnteredCell.Y = e.RowIndex;
 
@@ -12531,10 +13059,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             _ptMouseEnteredCell.X = -2;
             _ptMouseEnteredCell.Y = -2;
 
@@ -12562,10 +13092,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseMoveUnsharesRowInternal(e))
@@ -12615,6 +13147,7 @@ namespace System.Windows.Forms
                             {
                                 BeginColumnRelocation(_ptMouseDownGridCoord.X, _ptMouseDownCell.X);
                             }
+
                             break;
                         }
                 }
@@ -12627,10 +13160,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             DataGridViewCell dataGridViewCell = GetCellInternal(e.ColumnIndex, e.RowIndex);
             Debug.Assert(dataGridViewCell is not null);
             if (e.RowIndex >= 0 && dataGridViewCell.MouseUpUnsharesRowInternal(e))
@@ -12655,10 +13190,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellPaintingEvent] is DataGridViewCellPaintingEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -12681,10 +13218,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellParsingEvent] is DataGridViewCellParsingEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -12702,6 +13241,7 @@ namespace System.Windows.Forms
                 // Return silently if validating/commit/abort failed
                 return;
             }
+
             _noSelectionChangeCount++;
             try
             {
@@ -12709,6 +13249,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, hti._col,
                     _ptAnchorCell.Y, ref oldEdgeRowIndex, hti._row);
                 if (hti._col != _ptCurrentCell.X || hti._row != _ptCurrentCell.Y)
@@ -12774,10 +13315,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             OnCellCommonChange(e.ColumnIndex, e.RowIndex);
 
             if (Events[s_cellStyleChangedEvent] is DataGridViewCellEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -12796,14 +13339,17 @@ namespace System.Windows.Forms
                     {
                         _dataGridViewState1[State1_AmbientFont] = false;
                     }
+
                     if ((dataGridViewCellStyle.Scope & DataGridViewCellStyleScopes.ColumnHeaders) != 0 && _dataGridViewState1[State1_AmbientColumnHeadersFont])
                     {
                         _dataGridViewState1[State1_AmbientColumnHeadersFont] = false;
                     }
+
                     if ((dataGridViewCellStyle.Scope & DataGridViewCellStyleScopes.RowHeaders) != 0 && _dataGridViewState1[State1_AmbientRowHeadersFont])
                     {
                         _dataGridViewState1[State1_AmbientRowHeadersFont] = false;
                     }
+
                     break;
 
                 case DataGridViewCellStyle.DataGridViewCellStylePropertyInternal.ForeColor:
@@ -12811,6 +13357,7 @@ namespace System.Windows.Forms
                     {
                         _dataGridViewState1[State1_AmbientForeColor] = false;
                     }
+
                     break;
             }
 
@@ -12864,7 +13411,8 @@ namespace System.Windows.Forms
                     {
                         AdjustShrinkingRows(_autoSizeRowsMode, false /*fixedWidth*/, true /*internalAutosizing*/);
                     }
-                    // Auto size columms also if needed
+
+                    // Auto size columns also if needed
                     // Impossible to figure out if DisplayedRows filter should be added or not. Adding it to be on the conservative side.
                     AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows |
                                                         DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
@@ -12885,6 +13433,7 @@ namespace System.Windows.Forms
                     repositionEditingControl = false;
                     // OnDefaultCellStyleChanged will reposition the editing control.
                 }
+
                 OnDefaultCellStyleChanged(CellStyleChangedEventArgs);
             }
 
@@ -12896,6 +13445,7 @@ namespace System.Windows.Forms
                     repositionEditingControl = false;
                     // OnColumnHeadersDefaultCellStyleChanged will reposition the editing control.
                 }
+
                 OnColumnHeadersDefaultCellStyleChanged(CellStyleChangedEventArgs);
             }
 
@@ -12907,6 +13457,7 @@ namespace System.Windows.Forms
                     repositionEditingControl = false;
                     // OnRowHeadersDefaultCellStyleChanged will reposition the editing control.
                 }
+
                 OnRowHeadersDefaultCellStyleChanged(CellStyleChangedEventArgs);
             }
 
@@ -12918,6 +13469,7 @@ namespace System.Windows.Forms
                     repositionEditingControl = false;
                     // OnRowsDefaultCellStyleChanged will reposition the editing control.
                 }
+
                 OnRowsDefaultCellStyleChanged(CellStyleChangedEventArgs);
             }
 
@@ -12929,6 +13481,7 @@ namespace System.Windows.Forms
                     repositionEditingControl = false;
                     // OnAlternatingRowsDefaultCellStyleChanged will reposition the editing control.
                 }
+
                 OnAlternatingRowsDefaultCellStyleChanged(CellStyleChangedEventArgs);
             }
 
@@ -12955,10 +13508,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellTooltipTextChangedEvent] is DataGridViewCellEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -12978,10 +13533,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellTooltipTextNeededEvent] is DataGridViewCellToolTipTextNeededEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -13011,10 +13568,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             try
             {
                 _noDimensionChangeCount++;
@@ -13052,6 +13611,7 @@ namespace System.Windows.Forms
                     dataGridViewCell = Rows.SharedRow(rowIndex).Cells[columnIndex];
                 }
             }
+
             return dgvcfvce.Cancel;
         }
 
@@ -13061,10 +13621,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             try
             {
                 _noDimensionChangeCount++;
@@ -13096,10 +13658,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             OnCellCommonChange(e.ColumnIndex, e.RowIndex);
 
             if (Events[s_cellValueChangedEvent] is DataGridViewCellEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -13122,6 +13686,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex < 0 || e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
@@ -13146,10 +13711,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException("e.ColumnIndex");
             }
+
             if (e.RowIndex < 0 || e.RowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException("e.RowIndex");
             }
+
             if (Events[s_cellValuePushedEvent] is DataGridViewCellValueEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -13168,6 +13735,7 @@ namespace System.Windows.Forms
                     OnRowStateChanged(-1 /*rowIndex*/, dgvrsce);
                 }
             }
+
             _lstRows.Clear();
         }
 
@@ -13215,6 +13783,7 @@ namespace System.Windows.Forms
             {
                 _selectedBandSnapshotIndexes.Clear();
             }
+
             _individualSelectedCells.Clear();
             _individualReadOnlyCells.Clear();
         }
@@ -13225,6 +13794,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             if (Events[s_columnAddedEvent] is DataGridViewColumnEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -13273,6 +13843,7 @@ namespace System.Windows.Forms
                     AddNewRow(false);
                 }
             }
+
             if (AutoSize && (dataGridViewColumn is null || dataGridViewColumn.Visible))
             {
                 LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Columns);
@@ -13290,6 +13861,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             if (Events[s_columnContextMenuStripChangedEvent] is DataGridViewColumnEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -13307,6 +13879,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             // map the dataGridView column to some data field
             if (DataSource is not null && e.Column.DataPropertyName.Length != 0 && !_dataGridViewOper[OperationInRefreshColumns])
             {
@@ -13335,6 +13908,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             OnColumnGlobalAutoSize(e.Column.Index);
 
             if (Events[s_columnDefaultCellStyleChangedEvent] is DataGridViewColumnEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -13434,6 +14008,7 @@ namespace System.Windows.Forms
             {
                 PositionEditingControl(true, true, false);
             }
+
             Invalidate(Rectangle.Union(_layout.ColumnHeaders, _layout.Data));
         }
 
@@ -13479,6 +14054,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             OnColumnGlobalAutoSize(e.Column.Index);
 
             if (Events[s_columnDividerWidthChangedEvent] is DataGridViewColumnEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -13543,10 +14119,12 @@ namespace System.Windows.Forms
             {
                 AdjustShrinkingRows(_autoSizeRowsMode, true /*fixedWidth*/, true /*internalAutosizing*/);
             }
+
             if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
             {
                 AutoResizeColumnHeadersHeight(columnIndex, true /*fixedRowHeadersWidth*/, true /*fixedColumnWidth*/);
             }
+
             if (!fixedHeight &&
                 autoSizeColumnCriteriaInternal != DataGridViewAutoSizeColumnCriteriaInternal.None &&
                 autoSizeColumnCriteriaInternal != DataGridViewAutoSizeColumnCriteriaInternal.Fill)
@@ -13606,6 +14184,7 @@ namespace System.Windows.Forms
                     // Second round of column autosizing with 1 degree of freedom
                     AutoResizeColumnInternal(columnIndex, autoSizeColumnCriteriaInternal, true /*fixedHeight*/);
                 }
+
                 if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
                 {
                     // Second round of column headers autosizing with 1 degree of freedom
@@ -13681,6 +14260,7 @@ namespace System.Windows.Forms
                             {
                                 select = false;
                             }
+
                             if (select)
                             {
                                 int rowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -13703,6 +14283,7 @@ namespace System.Windows.Forms
                                         // Just cancel operation silently instead of throwing InvalidOperationException
                                         return;
                                     }
+
                                     if (rowIndex != oldCurrentCellY && oldCurrentCellY != -1)
                                     {
                                         DataGridViewCell dataGridViewCellTmp = null;
@@ -13710,6 +14291,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         if (OnRowValidating(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY))
                                         {
                                             // Row validation was cancelled
@@ -13717,21 +14299,26 @@ namespace System.Windows.Forms
                                             {
                                                 return;
                                             }
+
                                             OnRowEnter(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY, true /*canCreateNewRow*/, true /*validationFailureOccurred*/);
                                             if (IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                                             {
                                                 return;
                                             }
+
                                             OnCellEnter(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY);
                                             return;
                                         }
+
                                         if (IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                                         {
                                             return;
                                         }
+
                                         OnRowValidated(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY);
                                     }
                                 }
+
                                 if (IsColumnOutOfBounds(hti._col))
                                 {
                                     return;
@@ -13747,6 +14334,7 @@ namespace System.Windows.Forms
                                 {
                                     selectColumnRange = true;
                                 }
+
                                 if (!MultiSelect || !isControlDown || isShiftDown)
                                 {
                                     Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
@@ -13757,6 +14345,7 @@ namespace System.Windows.Forms
                                         _inBulkPaintCount++;
                                         switchedToBulkPaint = true;
                                     }
+
                                     try
                                     {
                                         while (bandIndex < _selectedBandIndexes.Count)
@@ -13771,6 +14360,7 @@ namespace System.Windows.Forms
                                                 bandIndex++;
                                             }
                                         }
+
                                         if (SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                                         {
                                             RemoveIndividuallySelectedCells();
@@ -13788,10 +14378,12 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 if (MultiSelect && _dataGridViewOper[OperationTrackMouseMoves])
                                 {
                                     _dataGridViewOper[OperationTrackColSelect] = true;
                                 }
+
                                 if (selectColumnRange)
                                 {
                                     if (Columns.DisplayInOrder(_ptAnchorCell.X, hti._col))
@@ -13807,6 +14399,7 @@ namespace System.Windows.Forms
                                 {
                                     SetSelectedColumnCore(hti._col, true);
                                 }
+
                                 // set current cell to the top most visible cell in the column
                                 if (rowIndex != -1)
                                 {
@@ -13816,12 +14409,14 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         bool success = ScrollIntoView(hti._col, rowIndex, false);
                                         Debug.Assert(success);
                                         if (IsInnerCellOutOfBounds(hti._col, rowIndex))
                                         {
                                             return;
                                         }
+
                                         success = SetCurrentCellAddressCore(hti._col, rowIndex, !isShiftDown, false, true);
                                         Debug.Assert(success);
                                     }
@@ -13842,6 +14437,7 @@ namespace System.Windows.Forms
                                 Debug.Assert(_selectedBandIndexes.Contains(hti._col));
                                 SetSelectedColumnCore(hti._col, false);
                             }
+
                             break;
                         }
                 }
@@ -13957,6 +14553,7 @@ namespace System.Windows.Forms
                     // Save current column headers height for later reuse
                     _cachedColumnHeadersHeight = ColumnHeadersHeight;
                 }
+
                 AutoResizeColumnHeadersHeight(true /*fixedRowHeadersWidth*/, true /*fixedColumnsWidth*/);
             }
             else if (e.PreviousModeAutoSized)
@@ -13996,6 +14593,7 @@ namespace System.Windows.Forms
                 {
                     dataGridViewColumn.DesiredMinimumWidth = 0;
                 }
+
                 Debug.Assert(dataGridViewColumn.Width == minimumWidth);
             }
         }
@@ -14006,6 +14604,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             if (e.Column.InheritedAutoSizeMode == DataGridViewAutoSizeColumnMode.Fill)
             {
                 // Column's width may adjust smaller
@@ -14031,6 +14630,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             // Check if the column name is used as is in the column header
             DataGridViewColumn dataGridViewColumn = e.Column;
 
@@ -14046,6 +14646,7 @@ namespace System.Windows.Forms
                 {
                     AutoResizeColumnHeadersHeight(dataGridViewColumn.Index, true /*fixedRowHeadersWidth*/, fixedColumnWidth);
                 }
+
                 if (!fixedColumnWidth)
                 {
                     bool fixedHeight = (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) == 0;
@@ -14056,6 +14657,7 @@ namespace System.Windows.Forms
                         // Second round of column autosizing
                         AutoResizeColumnInternal(dataGridViewColumn.Index, autoSizeColumnCriteriaInternal, true /*fixedHeight*/);
                     }
+
                     if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
                     {
                         // Second round of column headers autosizing
@@ -14097,6 +14699,7 @@ namespace System.Windows.Forms
                 // Return silently if validating/commit/abort failed
                 return;
             }
+
             if (IsColumnOutOfBounds(hti._col))
             {
                 return;
@@ -14179,6 +14782,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 bool success = SetCurrentCellAddressCore(hti._col,
                     _ptCurrentCell.Y,
                     false /*setAnchorCellAddress*/,
@@ -14197,7 +14801,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Auto-size columms if needed
+            // Auto-size columns if needed
             bool fixedHeight = (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) == 0;
             bool columnAutoSized = AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows, fixedHeight);
             // Autosize rows if needed
@@ -14207,6 +14811,7 @@ namespace System.Windows.Forms
                 {
                     AdjustShrinkingRows(_autoSizeRowsMode, true /*fixedWidth*/, true /*internalAutosizing*/);
                 }
+
                 // Second round of columns autosizing
                 AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows | DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows, true /*fixedHeight*/);
             }
@@ -14225,6 +14830,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             DataGridViewColumn dataGridViewColumn = e.Column;
 
             if (dataGridViewColumn.HasHeaderCell)
@@ -14236,6 +14842,7 @@ namespace System.Windows.Forms
                     // This call will trigger OnSortGlyphDirectionChanged which in turn does
                     // this.sortedColumn = null; and InvalidateCellPrivate(e.Column.Index, -1);
                 }
+
                 // Potential resizing of the column headers and/or affected column.
                 DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaInternal = (DataGridViewAutoSizeColumnCriteriaInternal)dataGridViewColumn.InheritedAutoSizeMode;
                 DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFiltered = autoSizeColumnCriteriaInternal & DataGridViewAutoSizeColumnCriteriaInternal.Header;
@@ -14244,6 +14851,7 @@ namespace System.Windows.Forms
                 {
                     AutoResizeColumnHeadersHeight(dataGridViewColumn.Index, true /*fixedRowHeadersWidth*/, fixedColumnWidth);
                 }
+
                 if (!fixedColumnWidth)
                 {
                     bool fixedHeight = (((DataGridViewAutoSizeRowsModeInternal)_autoSizeRowsMode) & DataGridViewAutoSizeRowsModeInternal.AllColumns) == 0;
@@ -14254,6 +14862,7 @@ namespace System.Windows.Forms
                         // Second round of column autosizing
                         AutoResizeColumnInternal(dataGridViewColumn.Index, autoSizeColumnCriteriaInternal, true /*fixedHeight*/);
                     }
+
                     if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
                     {
                         // Second round of column headers autosizing
@@ -14284,6 +14893,7 @@ namespace System.Windows.Forms
                     {
                         InvalidateColumnInternal(dataGridViewColumn.Index);
                     }
+
                     break;
 
                 case DataGridViewElementStates.Frozen:
@@ -14307,6 +14917,7 @@ namespace System.Windows.Forms
                             // column was unfrozen - make it the first visible scrolling column if there is room
                             _horizontalOffset = FirstDisplayedScrollingColumnHiddenWidth = 0;
                         }
+
                         if (_horizScrollBar.Enabled)
                         {
                             _horizScrollBar.Value = _horizontalOffset;
@@ -14318,6 +14929,7 @@ namespace System.Windows.Forms
                         PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
                         Invalidate();
                     }
+
                     break;
 
                 case DataGridViewElementStates.Visible:
@@ -14367,6 +14979,7 @@ namespace System.Windows.Forms
                         {
                             AdjustShrinkingRows(_autoSizeRowsMode, true /*fixedWidth*/, true /*internalAutosizing*/);
                         }
+
                         if (autoSizeColumn)
                         {
                             // Second round of column autosizing
@@ -14377,6 +14990,7 @@ namespace System.Windows.Forms
                     {
                         Invalidate();
                     }
+
                     break;
             }
 
@@ -14415,6 +15029,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             if (Events[s_columnTooltipTextChangedEvent] is DataGridViewColumnEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -14427,6 +15042,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_ColumnDoesNotBelongToDataGridView);
             }
+
             Columns.InvalidateCachedColumnsWidths();
 
             // don't do any layout logic if the handle was not created already
@@ -14444,6 +15060,7 @@ namespace System.Windows.Forms
                     rightArea.Y--;
                     rightArea.Height++;
                 }
+
                 if (rightArea.Width > 0 && rightArea.Height > 0)
                 {
                     int leftEdge = GetColumnXFromIndex(e.Column.Index);
@@ -14456,6 +15073,7 @@ namespace System.Windows.Forms
                         rightArea.Width -= leftEdge - rightArea.X;
                         rightArea.X = leftEdge;
                     }
+
                     if (rightArea.Width > 0 && rightArea.Height > 0)
                     {
                         Invalidate(rightArea);
@@ -14529,11 +15147,12 @@ namespace System.Windows.Forms
                 // Force the pencil to appear in the row header
                 InvalidateCellPrivate(-1, _ptCurrentCell.Y);
             }
+
             if (IsCurrentCellDirty && NewRowIndex == _ptCurrentCell.Y)
             {
                 Debug.Assert(AllowUserToAddRowsInternal);
                 // First time the 'new' row gets edited.
-                // It becomes a regular row and a new 'new' row is appened.
+                // It becomes a regular row and a new 'new' row is appended.
                 NewRowIndex = -1;
                 AddNewRow(true /*createdByEditing*/);
             }
@@ -14583,6 +15202,7 @@ namespace System.Windows.Forms
                         {
                             errorText = string.Format(SR.DataGridView_ErrorMessageText_WithException, e.Exception);
                         }
+
                         if (RightToLeftInternal)
                         {
                             MessageBox.Show(errorText, SR.DataGridView_ErrorMessageCaption, MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, MessageBoxOptions.RightAlign | MessageBoxOptions.RtlReading);
@@ -14591,6 +15211,7 @@ namespace System.Windows.Forms
                         {
                             MessageBox.Show(errorText, SR.DataGridView_ErrorMessageCaption, MessageBoxButtons.OK, MessageBoxIcon.Error);
                         }
+
                         CorrectFocus(true /*onlyIfGridHasFocus*/);
                     }
                 }
@@ -14685,6 +15306,7 @@ namespace System.Windows.Forms
                                 // Microsoft: Should the current cell be set to some cell after the operation?
                             }
                         }
+
                         if (elementState == DataGridViewElementStates.Frozen &&
                             !dataGridViewColumn.Frozen &&
                             dataGridViewColumn.Visible &&
@@ -14693,6 +15315,7 @@ namespace System.Windows.Forms
                             // Removing the Fill auto size mode when visible column becomes frozen (instead of throwing an exception)
                             dataGridViewColumn.AutoSizeMode = DataGridViewAutoSizeColumnMode.None;
                         }
+
                         CorrectColumnFrozenStates(dataGridViewColumn, elementState == DataGridViewElementStates.Frozen);
                         break;
 
@@ -14718,6 +15341,7 @@ namespace System.Windows.Forms
                                 throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
                             }
                         }
+
                         break;
 
                     default:
@@ -14744,13 +15368,15 @@ namespace System.Windows.Forms
                                     Debug.Assert(DataConnection is not null);
                                     Debug.Assert(DataConnection.CurrencyManager is not null);
                                     Debug.Assert(DataConnection.CurrencyManager.Position == _ptCurrentCell.Y);
-                                    // the row associated with the currency manager's position cannot be made invisble.
+                                    // the row associated with the currency manager's position cannot be made invisible.
                                     throw new InvalidOperationException(SR.DataGridView_CurrencyManagerRowCannotBeInvisible);
                                 }
+
                                 // Trying to reset the current cell. May throw an exception.
                                 ResetCurrentCell();
                                 // Microsoft: Should the current cell be set to some cell after the operation?
                             }
+
                             CorrectRowFrozenStates(dataGridViewRow, rowIndex, elementState == DataGridViewElementStates.Frozen);
                             break;
 
@@ -14776,6 +15402,7 @@ namespace System.Windows.Forms
                                     throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
                                 }
                             }
+
                             break;
 
                         default:
@@ -14815,6 +15442,7 @@ namespace System.Windows.Forms
                                         throw new InvalidOperationException(SR.DataGridView_CommitFailedCannotCompleteOperation);
                                     }
                                 }
+
                                 break;
 
                             default:
@@ -14961,6 +15589,7 @@ namespace System.Windows.Forms
 
                     _vertScrollBar.Enabled = true;
                 }
+
                 if (_horizScrollBar is not null && _horizScrollBar.Visible)
                 {
                     _horizScrollBar.Enabled = true;
@@ -14996,9 +15625,10 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 OnCellEnter(ref dataGridViewCell, _ptCurrentCell.X, _ptCurrentCell.Y);
 
-                // Force repainting of the current collumn's header cell to highlight it
+                // Force repainting of the current column's header cell to highlight it
                 if (SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                 {
                     InvalidateCellPrivate(_ptCurrentCell.X, -1);
@@ -15120,6 +15750,7 @@ namespace System.Windows.Forms
             {
                 AutoResizeColumnHeadersHeight(fixedRowHeadersWidth: true, fixedColumnsWidth: false);
             }
+
             if (_autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None)
             {
                 AdjustShrinkingRows(_autoSizeRowsMode, false /*fixedWidth*/, true /*internalAutosizing*/);
@@ -15133,11 +15764,13 @@ namespace System.Windows.Forms
                 // Second round of row headers autosizing
                 AutoResizeRowHeadersWidth(_rowHeadersWidthSizeMode, true /*fixedColumnHeadersHeight*/, true /*fixedRowsHeight*/);
             }
+
             if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
             {
                 // Second round of column headers autosizing
                 AutoResizeColumnHeadersHeight(true /*fixedRowHeadersWidth*/, true /*fixedColumnsWidth*/);
             }
+
             if (_autoSizeRowsMode != DataGridViewAutoSizeRowsMode.None)
             {
                 // Second round of rows autosizing
@@ -15189,6 +15822,7 @@ namespace System.Windows.Forms
             {
                 PerformLayoutPrivate(false /*useRowShortcut*/, true /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, false /*repositionEditingControl*/);
             }
+
             if (_ptCurrentCell.X == -1)
             {
                 MakeFirstDisplayedCellCurrentCell(false /*includeNewRow*/);
@@ -15204,6 +15838,7 @@ namespace System.Windows.Forms
                 _dataGridViewState2[State2_AutoSizedWithoutHandle] = false;
                 OnGlobalAutoSize();
             }
+
             SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnUserPreferenceChanged);
         }
 
@@ -15393,6 +16028,7 @@ namespace System.Windows.Forms
                             {
                                 dataGridViewCellNew.Value = dataGridViewCellNew.DefaultNewRowValue;
                             }
+
                             dataGridViewCellNew.DataGridView = this;
                             dataGridViewCellNew.OwningRow = dataGridViewRow;
                             dataGridViewCellNew.OwningColumn = dataGridViewColumn;
@@ -15415,6 +16051,7 @@ namespace System.Windows.Forms
                             break;
                         }
                     }
+
                     throw;
                 }
             }
@@ -15433,8 +16070,10 @@ namespace System.Windows.Forms
                         {
                             _selectedBandIndexes[columnEntry] = columnIndex + 1;
                         }
+
                         columnEntry++;
                     }
+
                     if (_selectedBandSnapshotIndexes is not null)
                     {
                         columnEntries = _selectedBandSnapshotIndexes.Count;
@@ -15446,9 +16085,11 @@ namespace System.Windows.Forms
                             {
                                 _selectedBandSnapshotIndexes[columnEntry] = columnIndex + 1;
                             }
+
                             columnEntry++;
                         }
                     }
+
                     break;
             }
         }
@@ -15513,8 +16154,10 @@ namespace System.Windows.Forms
                         {
                             _selectedBandIndexes[rowEntry] = rowIndex + insertionCount;
                         }
+
                         rowEntry++;
                     }
+
                     if (_selectedBandSnapshotIndexes is not null)
                     {
                         rowEntries = _selectedBandSnapshotIndexes.Count;
@@ -15526,9 +16169,11 @@ namespace System.Windows.Forms
                             {
                                 _selectedBandSnapshotIndexes[rowEntry] = rowIndex + insertionCount;
                             }
+
                             rowEntry++;
                         }
                     }
+
                     break;
             }
         }
@@ -15569,8 +16214,10 @@ namespace System.Windows.Forms
                         {
                             _selectedBandIndexes[rowEntry] = rowIndex + dataGridViewRows.Length;
                         }
+
                         rowEntry++;
                     }
+
                     if (_selectedBandSnapshotIndexes is not null)
                     {
                         rowEntries = _selectedBandSnapshotIndexes.Count;
@@ -15582,9 +16229,11 @@ namespace System.Windows.Forms
                             {
                                 _selectedBandSnapshotIndexes[rowEntry] = rowIndex + dataGridViewRows.Length;
                             }
+
                             rowEntry++;
                         }
                     }
+
                     break;
             }
         }
@@ -15719,6 +16368,7 @@ namespace System.Windows.Forms
             {
                 Invalidate();
             }
+
             if (EditingControl is not null)
             {
                 PositionEditingControl(true, true, false);
@@ -15735,6 +16385,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 OnRowLeave(ref dataGridViewCell, _ptCurrentCell.X, _ptCurrentCell.Y);
             }
 
@@ -15801,12 +16452,14 @@ namespace System.Windows.Forms
                         {
                             mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
                         }
+
                         dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, e.Y - hti.RowY, e);
                         RecordCellMouseClick(dgvcme);
                         if (e.Button == MouseButtons.Left)
                         {
                             OnCellClick(new DataGridViewCellEventArgs(hti._col, hti._row));
                         }
+
                         base.OnMouseClick(e);
                         mouseClickRaised = true;
                         if (dgvcme.ColumnIndex < Columns.Count && dgvcme.RowIndex < Rows.Count)
@@ -15834,6 +16487,7 @@ namespace System.Windows.Forms
                                     {
                                         OnColumnHeaderMouseClick(dgvcme);
                                     }
+
                                     break;
                                 }
 
@@ -15844,12 +16498,14 @@ namespace System.Windows.Forms
                                     {
                                         OnRowHeaderMouseClick(dgvcme);
                                     }
+
                                     break;
                                 }
                         }
                     }
                 }
             }
+
             if (!mouseClickRaised)
             {
                 base.OnMouseClick(e);
@@ -15880,6 +16536,7 @@ namespace System.Windows.Forms
                         {
                             mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
                         }
+
                         dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, e.Y - hti.RowY, e);
                         OnCellMouseDoubleClick(dgvcme);
                     }
@@ -15898,6 +16555,7 @@ namespace System.Windows.Forms
                                     {
                                         OnColumnHeaderMouseDoubleClick(dgvcme);
                                     }
+
                                     break;
                                 }
 
@@ -15912,6 +16570,7 @@ namespace System.Windows.Forms
                                         Debug.Assert(Columns[columnIndex].Resizable == DataGridViewTriState.True);
                                         OnColumnDividerDoubleClick(dgvcddce);
                                     }
+
                                     break;
                                 }
 
@@ -15934,6 +16593,7 @@ namespace System.Windows.Forms
                                     {
                                         OnRowHeaderMouseDoubleClick(dgvcme);
                                     }
+
                                     break;
                                 }
 
@@ -15948,6 +16608,7 @@ namespace System.Windows.Forms
                                         Debug.Assert(Rows[rowIndex].Resizable == DataGridViewTriState.True);
                                         OnRowDividerDoubleClick(dgvrddce);
                                     }
+
                                     break;
                                 }
 
@@ -16003,6 +16664,7 @@ namespace System.Windows.Forms
                 {
                     mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
                 }
+
                 DataGridViewCellMouseEventArgs dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, e.Y - hti.RowY, e);
                 OnCellMouseDown(dgvcme);
             }
@@ -16110,6 +16772,7 @@ namespace System.Windows.Forms
                     _dataGridViewState1[State1_CustomCursorSet] = true;
                     _oldCursor = Cursor;
                 }
+
                 CursorInternal = Cursors.SizeWE;
                 return;
             }
@@ -16132,9 +16795,11 @@ namespace System.Windows.Forms
                     _dataGridViewState1[State1_CustomCursorSet] = true;
                     _oldCursor = Cursor;
                 }
+
                 CursorInternal = Cursors.SizeNS;
                 return;
             }
+
             /* Whidbey
 
 */
@@ -16241,6 +16906,7 @@ namespace System.Windows.Forms
                         {
                             mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
                         }
+
                         DataGridViewCellMouseEventArgs dgvcme;
                         if (_dataGridViewState2[State2_NextMouseUpIsDouble])
                         {
@@ -16251,6 +16917,7 @@ namespace System.Windows.Forms
                         {
                             dgvcme = new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, e.Y - hti.RowY, e);
                         }
+
                         if (hti._col >= 0 && _ptMouseDownCell.X == hti._col &&
                             hti._row >= 0 && _ptMouseDownCell.Y == hti._row &&
                             EditMode == DataGridViewEditMode.EditOnEnter &&
@@ -16315,12 +16982,14 @@ namespace System.Windows.Forms
                         {
                             mouseX += ((hti._col == -1) ? RowHeadersWidth : Columns[hti._col].Thickness);
                         }
+
                         OnCellMouseUp(new DataGridViewCellMouseEventArgs(hti._col, hti._row, mouseX, e.Y - hti.RowY, e));
                     }
                 }
 
                 ResetTrackingState();
             }
+
             base.OnMouseUp(e);
         }
 
@@ -16392,6 +17061,7 @@ namespace System.Windows.Forms
                         // Could not commit edited cell value
                         return;
                     }
+
                     if (verticalScroll)
                     {
                         int originalVerticalOffset = VerticalOffset;
@@ -16433,6 +17103,7 @@ namespace System.Windows.Forms
                         // Could not commit edited cell value
                         return;
                     }
+
                     int absScrollBands;
                     if (verticalScroll)
                     {
@@ -16444,6 +17115,7 @@ namespace System.Windows.Forms
                                 ScrollRowsByCount(-1, ScrollEventType.SmallDecrement);
                                 absScrollBands--;
                             }
+
                             if (_vertScrollBar.Value == _vertScrollBar.Minimum)
                             {
                                 _cumulativeVerticalWheelDelta = 0;
@@ -16468,6 +17140,7 @@ namespace System.Windows.Forms
                                 Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingRow >= 0);
                                 absScrollBands--;
                             }
+
                             if (_vertScrollBar.Value + Rows.SharedRow(DisplayedBandsInfo.FirstDisplayedScrollingRow).GetHeight(DisplayedBandsInfo.FirstDisplayedScrollingRow) >
                                 _vertScrollBar.Maximum - ComputeHeightOfFittingTrailingScrollingRows(totalVisibleFrozenHeight))
                             {
@@ -16492,12 +17165,14 @@ namespace System.Windows.Forms
                             extremeScrollBarValue = _horizScrollBar.Maximum;
                             scrollBand = 1;
                         }
+
                         absScrollBands = Math.Abs(scrollBands);
                         while (_horizScrollBar.Value != extremeScrollBarValue && absScrollBands > 0)
                         {
                             ScrollColumns(scrollBand);
                             absScrollBands--;
                         }
+
                         if (_horizScrollBar.Value == extremeScrollBarValue)
                         {
                             _cumulativeHorizontalWheelDelta = 0;
@@ -16531,6 +17206,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
+
             if (Events[s_newRowNeededEvent] is DataGridViewRowEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -16628,6 +17304,7 @@ namespace System.Windows.Forms
                 {
                     gridRect.X--;
                 }
+
                 gridRect.Width++;
             }
 
@@ -16671,6 +17348,7 @@ namespace System.Windows.Forms
                 {
                     focusRect.Width -= change;
                 }
+
                 // Scroll left
                 else
                 {
@@ -16685,6 +17363,7 @@ namespace System.Windows.Forms
                 {
                     focusRect.Height -= change;
                 }
+
                 // Scroll up
                 else
                 {
@@ -16759,6 +17438,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewColumn.HeaderCell.SortGlyphDirectionInternal = SortOrder.None;
             }
+
             // Intentionally keep the DisplayIndex intact after detaching the column.
             CorrectColumnIndexesAfterDeletion(dataGridViewColumn);
 
@@ -16861,12 +17541,13 @@ namespace System.Windows.Forms
                 dataGridViewRow.ThicknessInternal = Math.Max(dataGridViewRow.MinimumHeight, dataGridViewRow.CachedThickness);
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
             if (rowDisplayed)
             {
                 autoSizeColumnCriteriaFilter |= DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows;
             }
+
             bool columnAutoSized = AutoResizeAllVisibleColumnsInternal(autoSizeColumnCriteriaFilter, true /*fixedHeight*/);
             bool fixedColumnHeadersHeight = ColumnHeadersHeightSizeMode != DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             bool fixedRowHeadersWidth = _rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing ||
@@ -16953,6 +17634,7 @@ namespace System.Windows.Forms
                 {
                     newX = _ptCurrentCell.X - 1;
                 }
+
                 newCurrentCell = new Point(newX, (newX == -1) ? -1 : _ptCurrentCell.Y);
                 if (columnIndex == _ptCurrentCell.X)
                 {
@@ -17101,9 +17783,11 @@ namespace System.Windows.Forms
                             {
                                 _selectedBandIndexes[columnEntry] = columnIndexSelected - 1;
                             }
+
                             columnEntry++;
                         }
                     }
+
                     break;
             }
 
@@ -17161,6 +17845,7 @@ namespace System.Windows.Forms
                             newY = rowIndexPrevious;
                         }
                     }
+
                     // Since the current row is deleted, the dirty states need to be reset
                     IsCurrentCellDirtyInternal = false;
                     IsCurrentRowDirtyInternal = false;
@@ -17170,6 +17855,7 @@ namespace System.Windows.Forms
                     Debug.Assert(rowIndexDeleted < _ptCurrentCell.Y);
                     newY = _ptCurrentCell.Y - 1;
                 }
+
                 newCurrentCell = new Point(_ptCurrentCell.X, newY);
                 if (rowIndexDeleted == _ptCurrentCell.Y)
                 {
@@ -17216,9 +17902,11 @@ namespace System.Windows.Forms
                             {
                                 _selectedBandIndexes[rowEntry] = rowIndex - 1;
                             }
+
                             rowEntry++;
                         }
                     }
+
                     if (_selectedBandSnapshotIndexes is not null)
                     {
                         rowEntries = _selectedBandSnapshotIndexes.Count;
@@ -17237,10 +17925,12 @@ namespace System.Windows.Forms
                                 {
                                     _selectedBandSnapshotIndexes[rowEntry] = rowIndex - 1;
                                 }
+
                                 rowEntry++;
                             }
                         }
                     }
+
                     break;
             }
 
@@ -17256,6 +17946,7 @@ namespace System.Windows.Forms
             {
                 _individualSelectedCells.Add(dataGridViewCell);
             }
+
             if (_dataGridViewState2[State2_ReplacedCellReadOnly])
             {
                 _individualReadOnlyCells.Add(dataGridViewCell);
@@ -17270,6 +17961,7 @@ namespace System.Windows.Forms
                 {
                     SetCurrentCellAddressCore(_ptCurrentCellCache.X, _ptCurrentCellCache.Y, false, false, false);
                 }
+
                 _ptCurrentCellCache.X = -1;
                 _ptCurrentCellCache.Y = -1;
             }
@@ -17292,12 +17984,14 @@ namespace System.Windows.Forms
                 _ptCurrentCellCache.X = -1;
                 _ptCurrentCellCache.Y = -1;
             }
+
             DataGridViewCell dataGridViewCell = dataGridViewRow.Cells[columnIndex];
             _dataGridViewState2[State2_ReplacedCellSelected] = _individualSelectedCells.Contains(dataGridViewCell);
             if (_dataGridViewState2[State2_ReplacedCellSelected])
             {
                 _individualSelectedCells.Remove(dataGridViewCell);
             }
+
             _dataGridViewState2[State2_ReplacedCellReadOnly] = _individualReadOnlyCells.Contains(dataGridViewCell);
             if (_dataGridViewState2[State2_ReplacedCellReadOnly])
             {
@@ -17341,6 +18035,7 @@ namespace System.Windows.Forms
                     newClientRectangle.Height);
                 Invalidate(right);
             }
+
             if (newClientRectangle.Height != oldClientRectangle.Height)
             {
                 Invalidate(bottom);
@@ -17374,6 +18069,7 @@ namespace System.Windows.Forms
             {
                 Invalidate(_layout.ResizeBoxRect);
             }
+
             _layout.ClientRectangle = newClientRectangle;
 
             int oldfirstDisplayedScrollingRow = DisplayedBandsInfo.FirstDisplayedScrollingRow;
@@ -17433,6 +18129,7 @@ namespace System.Windows.Forms
                         break;
                         // case CollectionChangeAction.Refresh: invalidatePreferredSizeCache stays true
                 }
+
                 if (invalidatePreferredSizeCache)
                 {
                     LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Rows);
@@ -17446,6 +18143,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
+
             if (Events[s_rowContextMenuStripChangedEvent] is DataGridViewRowEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -17540,6 +18238,7 @@ namespace System.Windows.Forms
             {
                 _dataGridViewState1[State1_NewRowEdited] = false;
             }
+
             if (rowIndex < Rows.Count &&
                 columnIndex < Columns.Count)
             {
@@ -17558,6 +18257,7 @@ namespace System.Windows.Forms
                                 DataConnection.OnNewRowNeeded();
                                 calledAddNewOnTheDataConnection = true;
                             }
+
                             if (VirtualMode)
                             {
                                 OnNewRowNeeded(dgvre);
@@ -17645,6 +18345,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
+
             UpdateRowErrorText(e.Row.Index);
 
             if (Events[s_rowErrorTextChangedEvent] is DataGridViewRowEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -17694,12 +18395,13 @@ namespace System.Windows.Forms
                 autoSizeRow = true;
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
             if (rowDisplayed)
             {
                 autoSizeColumnCriteriaFilter |= DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows;
             }
+
             AutoResizeAllVisibleColumnsInternal(autoSizeColumnCriteriaFilter, true /*fixedHeight*/);
 
             bool fixedRowHeadersWidth = _rowHeadersWidthSizeMode == DataGridViewRowHeadersWidthSizeMode.EnableResizing ||
@@ -17781,10 +18483,12 @@ namespace System.Windows.Forms
                                           fixedRowHeight);
                 autoSizeRowHeaders = true;
             }
+
             if (!fixedColumnHeadersHeight)
             {
                 AutoResizeColumnHeadersHeight(-1, true /*fixedRowHeadersWidth*/, true /*fixedColumnsWidth*/);
             }
+
             if (!fixedRowHeight)
             {
                 AutoResizeRowInternal(rowIndex, MapAutoSizeRowsModeToRowMode(_autoSizeRowsMode), true /*fixedWidth*/, true /*internalAutosizing*/);
@@ -17838,6 +18542,7 @@ namespace System.Windows.Forms
                             {
                                 select = false;
                             }
+
                             if (select)
                             {
                                 DataGridViewColumn dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible);
@@ -17860,6 +18565,7 @@ namespace System.Windows.Forms
                                         // Just cancel operation silently instead of throwing InvalidOperationException
                                         return;
                                     }
+
                                     if (oldCurrentCellY != -1)
                                     {
                                         DataGridViewCell dataGridViewCellTmp = null;
@@ -17867,6 +18573,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         if (OnRowValidating(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY))
                                         {
                                             // Row validation was cancelled
@@ -17874,18 +18581,22 @@ namespace System.Windows.Forms
                                             {
                                                 return;
                                             }
+
                                             OnRowEnter(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY, true /*canCreateNewRow*/, true /*validationFailureOccurred*/);
                                             if (IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                                             {
                                                 return;
                                             }
+
                                             OnCellEnter(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY);
                                             return;
                                         }
+
                                         if (IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                                         {
                                             return;
                                         }
+
                                         OnRowValidated(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY);
 
                                         // Row validation was not cancelled, but operation needs to be re-evaluated.
@@ -17902,6 +18613,7 @@ namespace System.Windows.Forms
                                                 {
                                                     return;
                                                 }
+
                                                 bool success = SetAndSelectCurrentCellAddress(oldCurrentCellX,
                                                                                               lastVisibleRowIndex,
                                                                                               true,
@@ -17911,6 +18623,7 @@ namespace System.Windows.Forms
                                                                                               false /*forceCurrentCellSelection*/);
                                                 Debug.Assert(success);
                                             }
+
                                             return;
                                         }
                                         else if ((Rows.GetRowState(hti._row) & DataGridViewElementStates.Visible) == 0)
@@ -17919,6 +18632,7 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 bool selectRowRange = false;
                                 _trackRow = hti._row;
                                 _trackRowEdge = -1;
@@ -17929,6 +18643,7 @@ namespace System.Windows.Forms
                                 {
                                     selectRowRange = true;
                                 }
+
                                 if (!MultiSelect || !isControlDown || isShiftDown)
                                 {
                                     Debug.Assert(MultiSelect || _selectedBandIndexes.Count <= 1);
@@ -17939,6 +18654,7 @@ namespace System.Windows.Forms
                                         _inBulkPaintCount++;
                                         switchedToBulkPaint = true;
                                     }
+
                                     try
                                     {
                                         while (bandIndex < _selectedBandIndexes.Count)
@@ -17971,10 +18687,12 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 if (MultiSelect && _dataGridViewOper[OperationTrackMouseMoves])
                                 {
                                     _dataGridViewOper[OperationTrackRowSelect] = true;
                                 }
+
                                 if (selectRowRange)
                                 {
                                     if (hti._row >= _ptAnchorCell.Y)
@@ -17992,6 +18710,7 @@ namespace System.Windows.Forms
                                                  ((Rows.GetRowState(hti._row) & DataGridViewElementStates.Selected) != 0));
                                     SetSelectedRowCore(hti._row, true);
                                 }
+
                                 if (dataGridViewColumn is not null)
                                 {
                                     if (hti._row != _ptCurrentCell.Y)
@@ -18000,6 +18719,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         // set current cell to the left most visible cell in the row
                                         bool success = ScrollIntoView(dataGridViewColumn.Index, hti._row, false);
                                         Debug.Assert(success);
@@ -18007,6 +18727,7 @@ namespace System.Windows.Forms
                                         {
                                             return;
                                         }
+
                                         success = SetCurrentCellAddressCore(dataGridViewColumn.Index, hti._row, !selectRowRange, false, true);
                                         Debug.Assert(success);
                                     }
@@ -18030,6 +18751,7 @@ namespace System.Windows.Forms
                                 Debug.Assert(_selectedBandIndexes.Contains(hti._row));
                                 SetSelectedRowCore(hti._row, false);
                             }
+
                             break;
                         }
                 }
@@ -18138,6 +18860,7 @@ namespace System.Windows.Forms
                     // Save current row headers width for later reuse
                     _cachedRowHeadersWidth = RowHeadersWidth;
                 }
+
                 AutoResizeRowHeadersWidth(_rowHeadersWidthSizeMode,
                                           true /*fixedColumnHeadersHeight*/,
                                           true /*fixedRowsHeight*/);
@@ -18159,6 +18882,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
+
             UpdateRowHeightInfoPrivate(e.Row.Index, false, false /*invalidInAdjustFillingColumns*/);
 
             if (Events[s_rowHeightChangedEvent] is DataGridViewRowEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
@@ -18199,6 +18923,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -18257,6 +18982,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
+
             if (Events[s_rowMinimumHeightChangeEvent] is DataGridViewRowEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -18325,6 +19051,7 @@ namespace System.Windows.Forms
                 // Return silently if validating/commit/abort failed
                 return;
             }
+
             if (IsRowOutOfBounds(hti._row))
             {
                 return;
@@ -18402,6 +19129,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 bool success = SetCurrentCellAddressCore(_ptCurrentCell.X,
                     hti._row,
                     false /*setAnchorCellAddress*/,
@@ -18426,7 +19154,7 @@ namespace System.Windows.Forms
                 AdjustShrinkingRows(_autoSizeRowsMode, false /*fixedWidth*/, true /*internalAutosizing*/);
             }
 
-            // Auto size columms also if needed
+            // Auto size columns also if needed
             AutoResizeAllVisibleColumnsInternal(DataGridViewAutoSizeColumnCriteriaInternal.AllRows |
                                                 DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows,
                                                 true /*fixedHeight*/);
@@ -18485,6 +19213,7 @@ namespace System.Windows.Forms
                 newState = Rows.GetRowState(rowIndex);
                 rowVisible = ((newState & DataGridViewElementStates.Visible) != 0);
             }
+
             switch (e.StateChanged)
             {
                 // At this point we assume that only the Selected state has an influence on the rendering of the row.
@@ -18497,6 +19226,7 @@ namespace System.Windows.Forms
                     {
                         InvalidateRowPrivate(rowIndex);
                     }
+
                     break;
 
                 case DataGridViewElementStates.Frozen:
@@ -18507,9 +19237,11 @@ namespace System.Windows.Forms
                             // row was unfrozen - make it the first visible scrolling row if there is room
                             FirstVisibleScrollingRowTempted(rowIndex);
                         }
+
                         PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, true /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
                         Invalidate();
                     }
+
                     break;
 
                 case DataGridViewElementStates.Visible:
@@ -18551,16 +19283,18 @@ namespace System.Windows.Forms
                                 {
                                     dataGridViewRow = Rows[rowIndex];
                                 }
+
                                 dataGridViewRow.ThicknessInternal = Math.Max(dataGridViewRow.MinimumHeight, dataGridViewRow.CachedThickness);
                             }
                         }
 
-                        // Auto size columms also if needed
+                        // Auto size columns also if needed
                         DataGridViewAutoSizeColumnCriteriaInternal autoSizeColumnCriteriaFilter = DataGridViewAutoSizeColumnCriteriaInternal.AllRows;
                         if (rowDisplayed)
                         {
                             autoSizeColumnCriteriaFilter |= DataGridViewAutoSizeColumnCriteriaInternal.DisplayedRows;
                         }
+
                         if (rowVisible && Rows.GetRowCount(DataGridViewElementStates.Visible) > 1)
                         {
                             // Columns can only expand, and not collapse.
@@ -18576,6 +19310,7 @@ namespace System.Windows.Forms
                             // Second round of row autosizing
                             AutoResizeRowInternal(rowIndex, MapAutoSizeRowsModeToRowMode(_autoSizeRowsMode), true /*fixedWidth*/, true /*internalAutosizing*/);
                         }
+
                         break;
                     }
             }
@@ -18611,6 +19346,7 @@ namespace System.Windows.Forms
             {
                 CurrentCellInternal.CacheEditingControl();
             }
+
             DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(dataGridViewRow);
             OnRowUnshared(dgvre);
         }
@@ -18621,6 +19357,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
+
             if (Events[s_rowUnsharedEvent] is DataGridViewRowEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -18641,10 +19378,12 @@ namespace System.Windows.Forms
                     DataConnection.OnRowValidating(dgvcce);
                 }
             }
+
             if (dataGridViewCell is not null && rowIndex < Rows.Count && columnIndex < Columns.Count)
             {
                 dataGridViewCell = Rows.SharedRow(rowIndex).Cells[columnIndex];
             }
+
             return dgvcce.Cancel;
         }
 
@@ -18717,7 +19456,7 @@ namespace System.Windows.Forms
             Point pt = PointToScreen(Location);
             int step = newValue - oldValue;
 
-            // horizontal scrool left
+            // horizontal scroll left
             if (pt.X < 0 && step < 0)
             {
                 Invalidate(new Rectangle(new Point(-pt.X, ColumnHeadersHeight),
@@ -18728,21 +19467,21 @@ namespace System.Windows.Forms
             pt.Y += Height;
             Rectangle rect = Screen.GetBounds(pt);
 
-            // horizontal scrool right
+            // horizontal scroll right
             if (pt.X > rect.Right && step > 0)
             {
                 Invalidate(new Rectangle(new Point(ClientSize.Width - (pt.X - rect.Right) - step, ColumnHeadersHeight),
                                          new Size(step, ClientSize.Height)));
             }
 
-            // vertical scrool up
+            // vertical scroll up
             if (pt.Y < 0 && step < 0)
             {
                 Invalidate(new Rectangle(new Point(0, -pt.Y),
                                          new Size(-step, ClientSize.Width)));
             }
 
-            // vertical scrool down
+            // vertical scroll down
             if (pt.Y > rect.Bottom && step > 0)
             {
                 Invalidate(new Rectangle(new Point(0, ColumnHeadersHeight),
@@ -18759,6 +19498,7 @@ namespace System.Windows.Forms
             {
                 InvalidateGridFocusOnScroll(newValue - oldValue, orientation);
             }
+
             if (ScrollOrientation.VerticalScroll == orientation)
             {
                 if (se.NewValue != newValue)
@@ -18775,10 +19515,12 @@ namespace System.Windows.Forms
                             rowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
                             newValue--;
                         }
+
                         if (rowIndex != -1)
                         {
                             rowIndexPrevious = rowIndex;
                         }
+
                         if (rowIndexPrevious != -1)
                         {
                             FirstDisplayedScrollingRowIndex = rowIndexPrevious;
@@ -18911,6 +19653,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(SR.DataGridView_RowDoesNotBelongToDataGridView, "e.Row");
             }
+
             if (Events[s_userAddedRowEvent] is DataGridViewRowEventHandler eh && !_dataGridViewOper[OperationInDispose] && !IsDisposed)
             {
                 eh(this, e);
@@ -18952,6 +19695,7 @@ namespace System.Windows.Forms
                         // next time editing mode is exited, simply discard the control.
                         _dataGridViewState2[State2_DiscardEditingControl] = true;
                     }
+
                     PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, false /*invalidInAdjustFillingColumns*/, true /*repositionEditingControl*/);
                 }
             }
@@ -18989,10 +19733,12 @@ namespace System.Windows.Forms
                         e.Cancel = true;
                         return;
                     }
+
                     if (_ptCurrentCell.X == -1)
                     {
                         return;
                     }
+
                     OnRowValidated(ref dataGridViewCellTmp, _ptCurrentCell.X, _ptCurrentCell.Y);
                     // Row validation was not cancelled, but does operation need to be re-evaluated.
                     if (DataSource is not null &&
@@ -19023,6 +19769,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.OnValidating(e);
         }
 
@@ -19151,6 +19898,7 @@ namespace System.Windows.Forms
                     {
                         rcNextRows.X += _layout.RowHeaders.Width;
                     }
+
                     rcNextRows.Width -= _layout.RowHeaders.Width;
                 }
                 else if (SingleVerticalBorderAdded && visibleColumnsWidth > 0)
@@ -19159,9 +19907,11 @@ namespace System.Windows.Forms
                     {
                         rcNextRows.X++;
                     }
+
                     rcNextRows.Width--;
                 }
             }
+
             int rowsWidth = visibleColumnsWidth - _horizontalOffset;
             if (!RightToLeftInternal)
             {
@@ -19266,6 +20016,7 @@ namespace System.Windows.Forms
                     {
                         cellBounds.Width++;
                     }
+
                     Debug.Assert(cellBounds.Width > 0);
                     if (RightToLeftInternal)
                     {
@@ -19315,6 +20066,7 @@ namespace System.Windows.Forms
                 {
                     scrollingBounds.X -= FirstDisplayedScrollingColumnHiddenWidth;
                 }
+
                 scrollingBounds.Width += FirstDisplayedScrollingColumnHiddenWidth;
 
                 if (DisplayedBandsInfo.FirstDisplayedScrollingCol >= 0 && cx < scrollingBounds.Width)
@@ -19328,6 +20080,7 @@ namespace System.Windows.Forms
                         {
                             rowRect.X += cx;
                         }
+
                         rowRect.Width -= cx;
                         g.SetClip(rowRect);
                     }
@@ -19343,6 +20096,7 @@ namespace System.Windows.Forms
                         {
                             cellBounds.Width++;
                         }
+
                         Debug.Assert(cellBounds.Width > 0);
                         if (RightToLeftInternal)
                         {
@@ -19421,6 +20175,7 @@ namespace System.Windows.Forms
                 {
                     columnHeadersClip.Width++;
                 }
+
                 if (clipRect.IntersectsWith(columnHeadersClip) || _lastHeaderShadow != -1)
                 {
                     using (Region clipRegion = g.Clip)
@@ -19430,6 +20185,7 @@ namespace System.Windows.Forms
                         g.Clip = clipRegion;
                     }
                 }
+
                 int columnHeadersHeight = _layout.ColumnHeaders.Height;
                 rc.Y += columnHeadersHeight;
                 rc.Height -= columnHeadersHeight;
@@ -19496,6 +20252,7 @@ namespace System.Windows.Forms
                 {
                     rowBounds.Height++;
                 }
+
                 rowBounds.Y = boundingRect.Y + cy;
 
                 indexTmpNext = Rows.GetNextRow(indexTmp, DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
@@ -19511,11 +20268,13 @@ namespace System.Windows.Forms
                         isFirstDisplayedRow,
                         (indexTmpNext == -1) && (DisplayedBandsInfo.FirstDisplayedScrollingRow == -1));
                 }
+
                 cy += rowBounds.Height;
                 if (cy >= boundingRect.Height)
                 {
                     break;
                 }
+
                 indexTmp = indexTmpNext;
                 isFirstDisplayedRow = false;
             }
@@ -19549,6 +20308,7 @@ namespace System.Windows.Forms
                     {
                         rowBounds.Height++;
                     }
+
                     rowBounds.Y = boundingRect.Y + cy;
 
                     indexTmpNext = Rows.GetNextRow(indexTmp, DataGridViewElementStates.Visible);
@@ -19564,11 +20324,13 @@ namespace System.Windows.Forms
                             isFirstDisplayedRow,
                             indexTmpNext == -1);
                     }
+
                     cy += rowBounds.Height;
                     if (cy >= boundingRect.Height)
                     {
                         break;
                     }
+
                     indexTmp = indexTmpNext;
                     isFirstDisplayedRow = false;
                 }
@@ -19621,6 +20383,7 @@ namespace System.Windows.Forms
                     {
                         columnsAdjusted = ComputeLayout();
                     }
+
                     FlushDisplayedChanged();
                     if (columnsAdjusted && _inPerformLayoutCount < 3)
                     {
@@ -19629,11 +20392,13 @@ namespace System.Windows.Forms
                         {
                             AdjustShrinkingRows(_autoSizeRowsMode, true /*fixedWidth*/, true /*internalAutosizing*/);
                         }
+
                         if (ColumnHeadersHeightSizeMode == DataGridViewColumnHeadersHeightSizeMode.AutoSize)
                         {
                             AutoResizeColumnHeadersHeight(true /*fixedRowHeadersWidth*/, true /*fixedColumnWidth*/);
                         }
                     }
+
                     if (repositionEditingControl && EditingControl is not null)
                     {
                         PositionEditingControl(true /*setLocation*/, false /*setSize*/, false /*setFocus*/);
@@ -19681,6 +20446,7 @@ namespace System.Windows.Forms
                         break;
                     }
                 }
+
                 foreach (DataGridViewCell dataGridViewCell in newRowCells)
                 {
                     dataGridViewCell.SetValueInternal(NewRowIndex, dataGridViewCell.DefaultNewRowValue);
@@ -19719,6 +20485,7 @@ namespace System.Windows.Forms
                 {
                     leftEdge -= Columns[_ptCurrentCell.X].Width - 1;
                 }
+
                 Rectangle cellBounds = new Rectangle(leftEdge, GetRowYFromIndex(_ptCurrentCell.Y),
                                                      Columns[_ptCurrentCell.X].Width, Rows.SharedRow(_ptCurrentCell.Y).GetHeight(_ptCurrentCell.Y));
                 Rectangle cellClip = cellBounds;
@@ -19730,13 +20497,16 @@ namespace System.Windows.Forms
                     {
                         editingZone.X += totalVisibleFrozenWidth;
                     }
+
                     editingZone.Width = Math.Max(0, editingZone.Width - totalVisibleFrozenWidth);
                 }
+
                 if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Frozen) == 0)
                 {
                     int totalVisibleFrozenHeight = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                     editingZone.Y += totalVisibleFrozenHeight;
                 }
+
                 cellClip.Intersect(editingZone);
 
                 if (cellClip.Width == 0 || cellClip.Height == 0)
@@ -19762,9 +20532,11 @@ namespace System.Windows.Forms
                             cellBounds.X--;
                             cellClip.X--;
                         }
+
                         cellBounds.Width++;
                         cellClip.Width++;
                     }
+
                     if (singleHorizontalBorderAdded && isFirstDisplayedRow)
                     {
                         cellBounds.Y--;
@@ -19781,6 +20553,7 @@ namespace System.Windows.Forms
                         isFirstDisplayedColumn, isFirstDisplayedRow);
                     _dataGridViewState1[State1_EditingControlHidden] = false;
                 }
+
                 _editingPanel.Visible = true;
                 if (setFocus)
                 {
@@ -19801,6 +20574,7 @@ namespace System.Windows.Forms
                 SelectAll();
                 return true;
             }
+
             return false;
         }
 
@@ -19813,6 +20587,7 @@ namespace System.Windows.Forms
                     // editing control gets a chance to handle the Delete key first
                     return false;
                 }
+
                 switch (SelectionMode)
                 {
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -19868,6 +20643,7 @@ namespace System.Windows.Forms
                                                 {
                                                     throw;
                                                 }
+
                                                 // this is tricky.
                                                 // the back-end threw an exception. At that stage, we did not delete the dataGridView row
                                                 // from our collection of dataGridView rows.
@@ -19920,9 +20696,11 @@ namespace System.Windows.Forms
                         {
                             _selectedBandSnapshotIndexes = null;
                         }
+
                         return true;
                 }
             }
+
             return false;
         }
 
@@ -19960,6 +20738,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return ret;
             }
             else if (key == Keys.D0 || key == Keys.NumPad0)
@@ -20017,6 +20796,7 @@ namespace System.Windows.Forms
                     return ret;
                 }
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
@@ -20036,11 +20816,13 @@ namespace System.Windows.Forms
                 moved = false;
                 return false;
             }
+
             int nextVisibleRowIndex = -1;
             if (_ptCurrentCell.Y != -1)
             {
                 nextVisibleRowIndex = Rows.GetNextRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible);
             }
+
             moved = true;
 
             _noSelectionChangeCount++;
@@ -20065,6 +20847,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20083,6 +20866,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         Debug.Assert(_ptAnchorCell.Y >= 0);
                                         int oldEdgeColumnIndex = _ptCurrentCell.X;
                                         int oldEdgeRowIndex = _ptCurrentCell.Y;
@@ -20092,6 +20876,7 @@ namespace System.Windows.Forms
                                             moved = false;
                                             return true;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, lastVisibleRowIndex);
                                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, false, false, false);
@@ -20106,11 +20891,13 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(lastVisibleRowIndex))
                                         {
                                             moved = false;
                                             return true;
                                         }
+
                                         ClearSelection();
                                         SetSelectedCellCore(_ptCurrentCell.X, lastVisibleRowIndex, true);
                                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, true, false, false);
@@ -20134,6 +20921,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20146,11 +20934,13 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(lastVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedCellCore(_ptCurrentCell.X, lastVisibleRowIndex, true);
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, true, false, false);
@@ -20176,6 +20966,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20189,15 +20980,18 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     if (MultiSelect)
                                     {
                                         int oldEdgeColumnIndex = _ptCurrentCell.X;
@@ -20207,6 +21001,7 @@ namespace System.Windows.Forms
                                             moved = false;
                                             return true;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, nextVisibleRowIndex);
                                     }
@@ -20215,6 +21010,7 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(_ptCurrentCell.X, nextVisibleRowIndex, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextVisibleRowIndex, !MultiSelect, false, false);
                                     if (!success)
                                     {
@@ -20235,6 +21031,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20248,15 +21045,18 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, true /*forCurrentCellChange*/))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedCellCore(_ptCurrentCell.X, nextVisibleRowIndex, true);
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X,
@@ -20271,6 +21071,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -20289,6 +21090,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20303,12 +21105,14 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptAnchorCell.Y == -1 || _ptCurrentCell.X == -1 ||
                                             IsRowOutOfBounds(lastVisibleRowIndex))
                                         {
                                             moved = false;
                                             return true;
                                         }
+
                                         ClearSelection();
                                         Debug.Assert(_ptAnchorCell.Y >= 0);
                                         SelectRowRange(_ptAnchorCell.Y, lastVisibleRowIndex, true);
@@ -20324,11 +21128,13 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(lastVisibleRowIndex))
                                         {
                                             moved = false;
                                             return true;
                                         }
+
                                         SetSelectedRowCore(_ptCurrentCell.Y, false);
                                         SetSelectedRowCore(lastVisibleRowIndex, true);
                                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, true, false, false);
@@ -20352,6 +21158,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20364,11 +21171,13 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(lastVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedRowCore(lastVisibleRowIndex, true);
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, true, false, false);
@@ -20394,6 +21203,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20407,15 +21217,18 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     ClearSelection();
                                     if (MultiSelect)
                                     {
@@ -20424,6 +21237,7 @@ namespace System.Windows.Forms
                                             moved = false;
                                             return true;
                                         }
+
                                         if (nextVisibleRowIndex >= _ptAnchorCell.Y)
                                         {
                                             SelectRowRange(_ptAnchorCell.Y, nextVisibleRowIndex, true);
@@ -20437,6 +21251,7 @@ namespace System.Windows.Forms
                                     {
                                         SetSelectedRowCore(nextVisibleRowIndex, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextVisibleRowIndex, !MultiSelect, false, false);
                                     if (!success)
                                     {
@@ -20457,6 +21272,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20470,15 +21286,18 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedRowCore(nextVisibleRowIndex, true);
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextVisibleRowIndex, true, false, false);
@@ -20489,6 +21308,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.RowHeaderSelect:
@@ -20507,6 +21327,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20521,6 +21342,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         Debug.Assert(_ptAnchorCell.Y >= 0);
                                         if (_ptAnchorCell.Y == -1 || _ptCurrentCell.Y == -1 ||
                                             IsRowOutOfBounds(lastVisibleRowIndex))
@@ -20528,6 +21350,7 @@ namespace System.Windows.Forms
                                             moved = false;
                                             return true;
                                         }
+
                                         if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                         {
                                             ClearSelection();
@@ -20540,6 +21363,7 @@ namespace System.Windows.Forms
                                             UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                                 _ptAnchorCell.Y, ref oldEdgeRowIndex, lastVisibleRowIndex);
                                         }
+
                                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, false, false, false);
                                         if (!success)
                                         {
@@ -20552,11 +21376,13 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptCurrentCell.Y == -1 || IsRowOutOfBounds(lastVisibleRowIndex))
                                         {
                                             moved = false;
                                             return true;
                                         }
+
                                         if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                         {
                                             SetSelectedRowCore(_ptCurrentCell.Y, false);
@@ -20567,6 +21393,7 @@ namespace System.Windows.Forms
                                             SetSelectedCellCore(_ptCurrentCell.X, _ptCurrentCell.Y, false);
                                             SetSelectedCellCore(_ptCurrentCell.X, lastVisibleRowIndex, true);
                                         }
+
                                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, true, false, false);
                                         if (!success)
                                         {
@@ -20588,6 +21415,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20600,11 +21428,13 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsRowOutOfBounds(lastVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                     {
                                         ClearSelection();
@@ -20615,6 +21445,7 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(_ptCurrentCell.X, lastVisibleRowIndex, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20638,6 +21469,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20651,15 +21483,18 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsRowOutOfBounds(nextVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                     {
                                         ClearSelection();
@@ -20670,6 +21505,7 @@ namespace System.Windows.Forms
                                                 moved = false;
                                                 return true;
                                             }
+
                                             if (nextVisibleRowIndex >= _ptAnchorCell.Y)
                                             {
                                                 SelectRowRange(_ptAnchorCell.Y, nextVisibleRowIndex, true);
@@ -20695,6 +21531,7 @@ namespace System.Windows.Forms
                                                 moved = false;
                                                 return true;
                                             }
+
                                             UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                                 _ptAnchorCell.Y, ref oldEdgeRowIndex, nextVisibleRowIndex);
                                         }
@@ -20704,6 +21541,7 @@ namespace System.Windows.Forms
                                             SetSelectedCellCore(_ptCurrentCell.X, nextVisibleRowIndex, true);
                                         }
                                     }
+
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextVisibleRowIndex, !MultiSelect, false, false);
                                     if (!success)
                                     {
@@ -20724,6 +21562,7 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20737,15 +21576,18 @@ namespace System.Windows.Forms
                                         moved = false;
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsRowOutOfBounds(nextVisibleRowIndex))
                                     {
                                         moved = false;
                                         return true;
                                     }
+
                                     if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                     {
                                         ClearSelection();
@@ -20756,6 +21598,7 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(_ptCurrentCell.X, nextVisibleRowIndex, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextVisibleRowIndex, true, false, false);
                                     if (!success)
                                     {
@@ -20764,6 +21607,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -20780,6 +21624,7 @@ namespace System.Windows.Forms
                                     moved = false;
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                 if (!success)
                                 {
@@ -20792,11 +21637,13 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(lastVisibleRowIndex))
                                 {
                                     moved = false;
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(_ptCurrentCell.X, lastVisibleRowIndex, true, false, false);
                                 if (!success)
                                 {
@@ -20817,6 +21664,7 @@ namespace System.Windows.Forms
                                     moved = false;
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                                 if (!success)
                                 {
@@ -20830,15 +21678,18 @@ namespace System.Windows.Forms
                                     moved = false;
                                     return true;
                                 }
+
                                 if (!ScrollIntoView(_ptCurrentCell.X, nextVisibleRowIndex, true))
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextVisibleRowIndex))
                                 {
                                     moved = false;
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextVisibleRowIndex, true, false, false);
                                 if (!success)
                                 {
@@ -20846,6 +21697,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
                 }
             }
@@ -20853,6 +21705,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -20884,10 +21737,12 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (IsInnerCellOutOfBounds(lastVisibleColumnIndex, lastVisibleRowIndex))
                             {
                                 return true;
                             }
+
                             if ((keyData & Keys.Shift) == Keys.Shift)
                             {
                                 if (MultiSelect && _ptAnchorCell.X >= 0)
@@ -20902,6 +21757,7 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                 }
+
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
@@ -20911,6 +21767,7 @@ namespace System.Windows.Forms
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.RowHeaderSelect:
@@ -20924,10 +21781,12 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (IsInnerCellOutOfBounds(lastVisibleColumnIndex, lastVisibleRowIndex))
                             {
                                 return true;
                             }
+
                             if ((keyData & Keys.Shift) == Keys.Shift)
                             {
                                 if (MultiSelect && _ptAnchorCell.X >= 0)
@@ -20960,6 +21819,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                     }
                                 }
+
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
@@ -20975,9 +21835,11 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                 }
+
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -20991,10 +21853,12 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (IsInnerCellOutOfBounds(lastVisibleColumnIndex, lastVisibleRowIndex))
                             {
                                 return true;
                             }
+
                             ClearSelection();
                             if ((keyData & Keys.Shift) == Keys.Shift)
                             {
@@ -21006,6 +21870,7 @@ namespace System.Windows.Forms
                                 {
                                     SetSelectedColumnCore(lastVisibleColumnIndex, true);
                                 }
+
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
@@ -21014,6 +21879,7 @@ namespace System.Windows.Forms
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
@@ -21029,10 +21895,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (IsInnerCellOutOfBounds(lastVisibleColumnIndex, lastVisibleRowIndex))
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X >= 0 && Columns[_ptCurrentCell.X].Selected)
                                 {
                                     ClearSelection();
@@ -21042,8 +21910,10 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         SelectColumnRange(_ptAnchorCell.X, lastVisibleColumnIndex, true);
                                     }
+
                                     SetSelectedColumnCore(lastVisibleColumnIndex, true);
                                 }
                                 else
@@ -21056,6 +21926,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, lastVisibleColumnIndex,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, lastVisibleRowIndex);
                                     }
@@ -21065,6 +21936,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                     }
                                 }
+
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
@@ -21073,10 +21945,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (IsInnerCellOutOfBounds(lastVisibleColumnIndex, lastVisibleRowIndex))
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X >= 0 && Columns[_ptCurrentCell.X].Selected)
                                 {
                                     ClearSelection();
@@ -21087,9 +21961,11 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(lastVisibleColumnIndex, lastVisibleRowIndex, true);
                                 }
+
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -21103,10 +21979,12 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (IsInnerCellOutOfBounds(lastVisibleColumnIndex, lastVisibleRowIndex))
                             {
                                 return true;
                             }
+
                             ClearSelection();
                             if ((keyData & Keys.Shift) == Keys.Shift)
                             {
@@ -21116,6 +21994,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     SelectRowRange(_ptAnchorCell.Y, lastVisibleRowIndex, true);
                                 }
                                 else
@@ -21131,6 +22010,7 @@ namespace System.Windows.Forms
                                 SetCurrentCellAddressCore(lastVisibleColumnIndex, lastVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
                 }
             }
@@ -21138,6 +22018,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -21195,6 +22076,7 @@ namespace System.Windows.Forms
                         true /*resetCurrentCell unused here*/,
                         true /*resetAnchorCell unused here*/);
                 }
+
                 if (/*commitRow && */IsCurrentRowDirty)
                 {
                     dataGridViewCurrentCell = null;
@@ -21204,16 +22086,19 @@ namespace System.Windows.Forms
                     {
                         return ret;
                     }
+
                     if (!OnRowValidating(ref dataGridViewCurrentCell, columnIndex, rowIndex))
                     {
                         if (IsInnerCellOutOfBounds(columnIndex, rowIndex))
                         {
                             return ret;
                         }
+
                         OnRowValidated(ref dataGridViewCurrentCell, columnIndex, rowIndex);
                     }
                 }
             }
+
             return ret;
         }
 
@@ -21229,8 +22114,10 @@ namespace System.Windows.Forms
                 {
                     CancelEdit(true /*endEdit, DataGridViewDataErrorContexts.Parsing | DataGridViewDataErrorContexts.InitialValueRestoration*/);
                 }
+
                 return true;
             }
+
             return false;
         }
 
@@ -21255,6 +22142,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -21277,6 +22165,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -21306,10 +22195,12 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                             {
                                 return true;
                             }
+
                             if ((keyData & Keys.Shift) == Keys.Shift)
                             {
                                 if (MultiSelect && _ptAnchorCell.X >= 0)
@@ -21324,6 +22215,7 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                 }
+
                                 SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
@@ -21333,6 +22225,7 @@ namespace System.Windows.Forms
                                 SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.RowHeaderSelect:
@@ -21346,10 +22239,12 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                             {
                                 return true;
                             }
+
                             if ((keyData & Keys.Shift) == Keys.Shift)
                             {
                                 if (MultiSelect && _ptAnchorCell.X >= 0)
@@ -21382,6 +22277,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                     }
                                 }
+
                                 SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
@@ -21397,9 +22293,11 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                 }
+
                                 SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -21413,10 +22311,12 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                             {
                                 return true;
                             }
+
                             ClearSelection();
                             if ((keyData & Keys.Shift) == Keys.Shift)
                             {
@@ -21426,12 +22326,14 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     SelectColumnRange(firstVisibleColumnIndex, _ptAnchorCell.X, true);
                                 }
                                 else
                                 {
                                     SetSelectedColumnCore(firstVisibleColumnIndex, true);
                                 }
+
                                 SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
@@ -21440,6 +22342,7 @@ namespace System.Windows.Forms
                                 SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
@@ -21455,10 +22358,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X >= 0 && Columns[_ptCurrentCell.X].Selected)
                                 {
                                     ClearSelection();
@@ -21468,8 +22373,10 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         SelectColumnRange(firstVisibleColumnIndex, _ptAnchorCell.X, true);
                                     }
+
                                     SetSelectedColumnCore(firstVisibleColumnIndex, true);
                                 }
                                 else
@@ -21482,6 +22389,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, firstVisibleColumnIndex,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, firstVisibleRowIndex);
                                     }
@@ -21491,6 +22399,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                     }
                                 }
+
                                 SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, !MultiSelect, false, false);
                             }
                             else
@@ -21499,10 +22408,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X >= 0 && Columns[_ptCurrentCell.X].Selected)
                                 {
                                     ClearSelection();
@@ -21513,9 +22424,11 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                                 }
+
                                 SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -21529,14 +22442,17 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                             {
                                 return true;
                             }
+
                             ClearSelection();
                             SetSelectedRowCore(firstVisibleRowIndex, true);
                             SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                         }
+
                         return true;
                 }
             }
@@ -21544,6 +22460,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -21560,6 +22477,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -21619,6 +22537,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return base.ProcessKeyEventArgs(ref m);
         }
 
@@ -21630,7 +22549,7 @@ namespace System.Windows.Forms
             // Refactor the special keys into two parts.
             // 1. Escape and Space exist in both WM_CHAR and WM_KEYDOWN, WM_KEYUP.
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
-            // w/ some of the key code. (Like character code of lowcase "q" is 0x71, it's overlapped w/ Keys.F2). This
+            // w/ some of the key code. (Like character code of lowercase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
             if (m.Msg == (int)User32.WM.CHAR)
             {
@@ -21703,6 +22622,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return base.ProcessKeyPreview(ref m);
         }
 
@@ -21719,6 +22639,7 @@ namespace System.Windows.Forms
                         BeginKeyboardColumnResize(_ptCurrentCell.X);
                         return true;
                     }
+
                     return false;
                 }
                 else
@@ -21729,6 +22650,7 @@ namespace System.Windows.Forms
                         MoveRowHeadersOrColumnResize(x);
                         return true;
                     }
+
                     return false;
                 }
             }
@@ -21789,6 +22711,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             int previousVisibleColumnIndex = -1;
             if (_ptCurrentCell.X != -1)
             {
@@ -21826,6 +22749,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -21835,14 +22759,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(previousVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(previousVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     if (MultiSelect)
                                     {
                                         Debug.Assert(_ptAnchorCell.X >= 0);
@@ -21852,6 +22779,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, previousVisibleColumnIndex,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, oldEdgeRowIndex);
                                     }
@@ -21860,6 +22788,7 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(previousVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(previousVisibleColumnIndex, _ptCurrentCell.Y, !MultiSelect, false, false);
                                     Debug.Assert(success);
                                 }
@@ -21876,6 +22805,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -21885,14 +22815,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(previousVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(previousVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedCellCore(previousVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     success = SetCurrentCellAddressCore(previousVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
@@ -21900,6 +22833,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -21921,6 +22855,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -21930,14 +22865,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(previousVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(previousVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     if (MultiSelect)
                                     {
@@ -21945,6 +22883,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (Columns.DisplayInOrder(_ptAnchorCell.X, previousVisibleColumnIndex))
                                         {
                                             SelectColumnRange(_ptAnchorCell.X, previousVisibleColumnIndex, true);
@@ -21958,6 +22897,7 @@ namespace System.Windows.Forms
                                     {
                                         SetSelectedColumnCore(previousVisibleColumnIndex, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(previousVisibleColumnIndex, _ptCurrentCell.Y, !MultiSelect, false, false);
                                     Debug.Assert(success);
                                 }
@@ -21974,6 +22914,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -21983,14 +22924,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(previousVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(previousVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedColumnCore(previousVisibleColumnIndex, true);
                                     success = SetCurrentCellAddressCore(previousVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
@@ -21998,6 +22942,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
@@ -22019,6 +22964,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -22028,14 +22974,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(previousVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsColumnOutOfBounds(previousVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     if (Columns[_ptCurrentCell.X].Selected)
                                     {
                                         ClearSelection();
@@ -22045,6 +22994,7 @@ namespace System.Windows.Forms
                                             {
                                                 return true;
                                             }
+
                                             if (Columns.DisplayInOrder(_ptAnchorCell.X, previousVisibleColumnIndex))
                                             {
                                                 SelectColumnRange(_ptAnchorCell.X, previousVisibleColumnIndex, true);
@@ -22054,6 +23004,7 @@ namespace System.Windows.Forms
                                                 SelectColumnRange(previousVisibleColumnIndex, _ptAnchorCell.X, true);
                                             }
                                         }
+
                                         SetSelectedColumnCore(previousVisibleColumnIndex, true);
                                     }
                                     else
@@ -22066,6 +23017,7 @@ namespace System.Windows.Forms
                                             {
                                                 return true;
                                             }
+
                                             UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, previousVisibleColumnIndex,
                                                 _ptAnchorCell.Y, ref oldEdgeRowIndex, oldEdgeRowIndex);
                                         }
@@ -22075,6 +23027,7 @@ namespace System.Windows.Forms
                                             SetSelectedCellCore(previousVisibleColumnIndex, _ptCurrentCell.Y, true);
                                         }
                                     }
+
                                     success = SetCurrentCellAddressCore(previousVisibleColumnIndex, _ptCurrentCell.Y, !MultiSelect, false, false);
                                     Debug.Assert(success);
                                 }
@@ -22091,6 +23044,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -22100,14 +23054,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(previousVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsColumnOutOfBounds(previousVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     if (Columns[_ptCurrentCell.X].Selected)
                                     {
                                         ClearSelection();
@@ -22118,11 +23075,13 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(previousVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(previousVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                     Debug.Assert(success);
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -22142,6 +23101,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -22151,18 +23111,22 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (!ScrollIntoView(previousVisibleColumnIndex, _ptCurrentCell.Y, true))
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(previousVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(previousVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                 Debug.Assert(success);
                             }
                         }
+
                         return true;
                 }
             }
@@ -22170,6 +23134,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -22198,6 +23163,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -22209,6 +23175,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     Debug.Assert(_ptAnchorCell.X >= 0);
                                     int oldEdgeColumnIndex = _ptCurrentCell.X;
                                     int oldEdgeRowIndex = _ptCurrentCell.Y;
@@ -22217,6 +23184,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, firstVisibleColumnIndex,
                                         _ptAnchorCell.Y, ref oldEdgeRowIndex, oldEdgeRowIndex);
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, false, false, false);
@@ -22228,10 +23196,12 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(firstVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
@@ -22251,6 +23221,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -22260,16 +23231,19 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(firstVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 ClearSelection();
                                 SetSelectedCellCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true);
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                 Debug.Assert(success);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -22285,6 +23259,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -22296,11 +23271,13 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptAnchorCell.X == -1 || _ptCurrentCell.Y == -1 ||
                                         IsColumnOutOfBounds(firstVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     Debug.Assert(_ptAnchorCell.X >= 0);
                                     SelectColumnRange(firstVisibleColumnIndex, _ptAnchorCell.X, true);
@@ -22313,10 +23290,12 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsColumnOutOfBounds(firstVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     SetSelectedColumnCore(_ptCurrentCell.X, false);
                                     SetSelectedColumnCore(firstVisibleColumnIndex, true);
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
@@ -22336,6 +23315,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -22345,16 +23325,19 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(firstVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 ClearSelection();
                                 SetSelectedColumnCore(firstVisibleColumnIndex, true);
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                 Debug.Assert(success);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
@@ -22370,6 +23353,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -22381,11 +23365,13 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptAnchorCell.X == -1 || _ptCurrentCell.X == -1 ||
                                         IsColumnOutOfBounds(firstVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     Debug.Assert(_ptAnchorCell.X >= 0);
                                     if (Columns[_ptCurrentCell.X].Selected)
                                     {
@@ -22399,6 +23385,7 @@ namespace System.Windows.Forms
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, firstVisibleColumnIndex,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, oldEdgeRowIndex);
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, false, false, false);
                                     Debug.Assert(success);
                                 }
@@ -22408,11 +23395,13 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 ||
                                         IsInnerCellOutOfBounds(firstVisibleColumnIndex, firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     if (Columns[_ptCurrentCell.X].Selected)
                                     {
                                         SetSelectedColumnCore(_ptCurrentCell.X, false);
@@ -22423,6 +23412,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(_ptCurrentCell.X, _ptCurrentCell.Y, false);
                                         SetSelectedCellCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -22440,6 +23430,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -22449,10 +23440,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X == -1 || IsColumnOutOfBounds(firstVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 if (Columns[_ptCurrentCell.X].Selected)
                                 {
                                     ClearSelection();
@@ -22463,10 +23456,12 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true);
                                 }
+
                                 success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                 Debug.Assert(success);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -22480,6 +23475,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             success = SetCurrentCellAddressCore(firstVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             Debug.Assert(success);
                         }
@@ -22489,13 +23485,16 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(firstVisibleColumnIndex))
                             {
                                 return true;
                             }
+
                             success = SetCurrentCellAddressCore(firstVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                             Debug.Assert(success);
                         }
+
                         return true;
                 }
             }
@@ -22503,6 +23502,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -22515,6 +23515,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             int nextScreenVisibleRowIndexTmp, nextScreenVisibleRowIndex = -1, jumpRows = 0;
             if (_ptCurrentCell.Y == -1)
             {
@@ -22540,6 +23541,7 @@ namespace System.Windows.Forms
                     {
                         return true;
                     }
+
                     jumpRows = Rows.GetRowCount(DataGridViewElementStates.Visible,
                         _ptCurrentCell.Y,
                         firstDisplayedScrollingRowIndex) - 1;
@@ -22549,6 +23551,7 @@ namespace System.Windows.Forms
                     jumpRows = DisplayedBandsInfo.NumTotallyDisplayedFrozenRows;
                 }
             }
+
             jumpRows += DisplayedBandsInfo.NumTotallyDisplayedScrollingRows;
 
             nextScreenVisibleRowIndexTmp = nextScreenVisibleRowIndex;
@@ -22557,6 +23560,7 @@ namespace System.Windows.Forms
             {
                 jumpRows = 1;
             }
+
             while (jumpRows > 0 && nextScreenVisibleRowIndexTmp != -1)
             {
                 nextScreenVisibleRowIndexTmp = Rows.GetNextRow(nextScreenVisibleRowIndex, DataGridViewElementStates.Visible);
@@ -22587,6 +23591,7 @@ namespace System.Windows.Forms
                             SetSelectedColumnCore(firstVisibleColumnIndex, true);
                             break;
                     }
+
                     success = ScrollIntoView(firstVisibleColumnIndex, nextScreenVisibleRowIndex, false);
                     Debug.Assert(success);
                     if (IsInnerCellOutOfBounds(firstVisibleColumnIndex, nextScreenVisibleRowIndex))
@@ -22606,10 +23611,12 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextScreenVisibleRowIndex))
                         {
                             return true;
                         }
+
                         if ((keyData & Keys.Shift) == Keys.Shift && MultiSelect)
                         {
                             Debug.Assert(_ptAnchorCell.Y >= 0);
@@ -22619,6 +23626,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                 _ptAnchorCell.Y, ref oldEdgeRowIndex, nextScreenVisibleRowIndex);
                         }
@@ -22627,6 +23635,7 @@ namespace System.Windows.Forms
                             ClearSelection();
                             SetSelectedCellCore(_ptCurrentCell.X, nextScreenVisibleRowIndex, true);
                         }
+
                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextScreenVisibleRowIndex, false, false, false);
                         Debug.Assert(success);
                         return true;
@@ -22636,10 +23645,12 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextScreenVisibleRowIndex))
                         {
                             return true;
                         }
+
                         ClearSelection();
                         if ((keyData & Keys.Shift) == Keys.Shift && MultiSelect)
                         {
@@ -22648,6 +23659,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (_ptAnchorCell.Y < nextScreenVisibleRowIndex)
                             {
                                 SelectRowRange(_ptAnchorCell.Y, nextScreenVisibleRowIndex, true);
@@ -22661,6 +23673,7 @@ namespace System.Windows.Forms
                         {
                             SetSelectedRowCore(nextScreenVisibleRowIndex, true);
                         }
+
                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextScreenVisibleRowIndex, false, false, false);
                         return true;
 
@@ -22669,10 +23682,12 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextScreenVisibleRowIndex))
                         {
                             return true;
                         }
+
                         if ((keyData & Keys.Shift) == Keys.Shift && MultiSelect)
                         {
                             Debug.Assert(_ptAnchorCell.Y >= 0);
@@ -22680,6 +23695,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                             {
                                 ClearSelection();
@@ -22713,6 +23729,7 @@ namespace System.Windows.Forms
                                 SetSelectedCellCore(_ptCurrentCell.X, nextScreenVisibleRowIndex, true);
                             }
                         }
+
                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextScreenVisibleRowIndex, !MultiSelect, false, false);
                         return true;
 
@@ -22721,10 +23738,12 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(nextScreenVisibleRowIndex))
                         {
                             return true;
                         }
+
                         success = SetCurrentCellAddressCore(_ptCurrentCell.X, nextScreenVisibleRowIndex, true, false, false);
                         return true;
                 }
@@ -22733,6 +23752,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -22744,6 +23764,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             int previousScreenVisibleRowIndexTmp, previousScreenVisibleRowIndex = -1;
             if (_ptCurrentCell.Y == -1)
             {
@@ -22767,10 +23788,12 @@ namespace System.Windows.Forms
             {
                 jumpRows = DisplayedBandsInfo.NumTotallyDisplayedScrollingRows;
             }
+
             if (jumpRows == 0)
             {
                 jumpRows = 1;
             }
+
             previousScreenVisibleRowIndexTmp = previousScreenVisibleRowIndex;
             Debug.Assert(previousScreenVisibleRowIndexTmp != -1);
             while (jumpRows > 0 && previousScreenVisibleRowIndexTmp != -1)
@@ -22780,6 +23803,7 @@ namespace System.Windows.Forms
                 {
                     previousScreenVisibleRowIndex = previousScreenVisibleRowIndexTmp;
                 }
+
                 jumpRows--;
             }
 
@@ -22793,9 +23817,11 @@ namespace System.Windows.Forms
                 {
                     return true;
                 }
+
                 // Also, first visible frozen row should become current one - there is no reason to jump to another frozen row.
                 previousScreenVisibleRowIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             }
+
             Debug.Assert(previousScreenVisibleRowIndex != -1);
 
             _noSelectionChangeCount++;
@@ -22837,10 +23863,12 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousScreenVisibleRowIndex))
                         {
                             return true;
                         }
+
                         if ((keyData & Keys.Shift) == Keys.Shift && MultiSelect)
                         {
                             Debug.Assert(_ptAnchorCell.Y >= 0);
@@ -22850,6 +23878,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                 _ptAnchorCell.Y, ref oldEdgeRowIndex, previousScreenVisibleRowIndex);
                         }
@@ -22858,6 +23887,7 @@ namespace System.Windows.Forms
                             ClearSelection();
                             SetSelectedCellCore(_ptCurrentCell.X, previousScreenVisibleRowIndex, true);
                         }
+
                         SetCurrentCellAddressCore(_ptCurrentCell.X, previousScreenVisibleRowIndex, false, false, false);
                         return true;
 
@@ -22866,10 +23896,12 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousScreenVisibleRowIndex))
                         {
                             return true;
                         }
+
                         ClearSelection();
                         if ((keyData & Keys.Shift) == Keys.Shift && MultiSelect)
                         {
@@ -22878,6 +23910,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (_ptAnchorCell.Y < previousScreenVisibleRowIndex)
                             {
                                 SelectRowRange(_ptAnchorCell.Y, previousScreenVisibleRowIndex, true);
@@ -22891,6 +23924,7 @@ namespace System.Windows.Forms
                         {
                             SetSelectedRowCore(previousScreenVisibleRowIndex, true);
                         }
+
                         SetCurrentCellAddressCore(_ptCurrentCell.X, previousScreenVisibleRowIndex, false, false, false);
                         return true;
 
@@ -22899,10 +23933,12 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousScreenVisibleRowIndex))
                         {
                             return true;
                         }
+
                         if ((keyData & Keys.Shift) == Keys.Shift && MultiSelect)
                         {
                             Debug.Assert(_ptAnchorCell.Y >= 0);
@@ -22910,6 +23946,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                             {
                                 ClearSelection();
@@ -22952,6 +23989,7 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousScreenVisibleRowIndex))
                         {
                             return true;
@@ -22965,6 +24003,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -22997,6 +24036,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             int nextVisibleColumnIndex = -1;
             if (_ptCurrentCell.X != -1)
             {
@@ -23034,6 +24074,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23043,14 +24084,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(nextVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(nextVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     if (MultiSelect)
                                     {
                                         int oldEdgeColumnIndex = _ptCurrentCell.X;
@@ -23059,6 +24103,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, nextVisibleColumnIndex,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, oldEdgeRowIndex);
                                     }
@@ -23067,6 +24112,7 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(nextVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(nextVisibleColumnIndex, _ptCurrentCell.Y, !MultiSelect, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23083,6 +24129,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23092,14 +24139,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(nextVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(nextVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedCellCore(nextVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     success = SetCurrentCellAddressCore(nextVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
@@ -23107,6 +24157,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -23128,6 +24179,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23137,14 +24189,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(nextVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(nextVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     if (MultiSelect)
                                     {
@@ -23152,6 +24207,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (Columns.DisplayInOrder(_ptAnchorCell.X, nextVisibleColumnIndex))
                                         {
                                             SelectColumnRange(_ptAnchorCell.X, nextVisibleColumnIndex, true);
@@ -23165,6 +24221,7 @@ namespace System.Windows.Forms
                                     {
                                         SetSelectedColumnCore(nextVisibleColumnIndex, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(nextVisibleColumnIndex, _ptCurrentCell.Y, !MultiSelect, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23181,6 +24238,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23190,14 +24248,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(nextVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(nextVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedColumnCore(nextVisibleColumnIndex, true);
                                     success = SetCurrentCellAddressCore(nextVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
@@ -23205,6 +24266,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
@@ -23226,6 +24288,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23235,14 +24298,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(nextVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(nextVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     if (Columns[_ptCurrentCell.X].Selected)
                                     {
                                         ClearSelection();
@@ -23252,6 +24318,7 @@ namespace System.Windows.Forms
                                             {
                                                 return true;
                                             }
+
                                             if (Columns.DisplayInOrder(_ptAnchorCell.X, nextVisibleColumnIndex))
                                             {
                                                 SelectColumnRange(_ptAnchorCell.X, nextVisibleColumnIndex, true);
@@ -23274,6 +24341,7 @@ namespace System.Windows.Forms
                                             {
                                                 return true;
                                             }
+
                                             int oldEdgeColumnIndex = _ptCurrentCell.X;
                                             int oldEdgeRowIndex = _ptCurrentCell.Y;
                                             UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, nextVisibleColumnIndex,
@@ -23285,6 +24353,7 @@ namespace System.Windows.Forms
                                             SetSelectedCellCore(nextVisibleColumnIndex, _ptCurrentCell.Y, true);
                                         }
                                     }
+
                                     success = SetCurrentCellAddressCore(nextVisibleColumnIndex, _ptCurrentCell.Y, !MultiSelect, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23301,6 +24370,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23310,14 +24380,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(nextVisibleColumnIndex, _ptCurrentCell.Y, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsColumnOutOfBounds(nextVisibleColumnIndex))
                                     {
                                         return true;
                                     }
+
                                     if (Columns[_ptCurrentCell.X].Selected)
                                     {
                                         ClearSelection();
@@ -23328,11 +24401,13 @@ namespace System.Windows.Forms
                                         ClearSelection();
                                         SetSelectedCellCore(nextVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(nextVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                     Debug.Assert(success);
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -23352,6 +24427,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -23361,18 +24437,22 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (!ScrollIntoView(nextVisibleColumnIndex, _ptCurrentCell.Y, true))
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(nextVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(nextVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                 Debug.Assert(success);
                             }
                         }
+
                         return true;
                 }
             }
@@ -23380,6 +24460,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -23408,6 +24489,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -23417,10 +24499,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(lastVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 if (MultiSelect)
                                 {
                                     Debug.Assert(_ptAnchorCell.X >= 0);
@@ -23428,6 +24512,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     int oldEdgeColumnIndex = _ptCurrentCell.X;
                                     int oldEdgeRowIndex = _ptCurrentCell.Y;
                                     UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, lastVisibleColumnIndex,
@@ -23456,6 +24541,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -23465,16 +24551,19 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(lastVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 ClearSelection();
                                 SetSelectedCellCore(lastVisibleColumnIndex, _ptCurrentCell.Y, true);
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                 Debug.Assert(success);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -23490,6 +24579,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -23499,16 +24589,19 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(lastVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 if (MultiSelect)
                                 {
                                     if (_ptAnchorCell.X == -1)
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     Debug.Assert(_ptAnchorCell.X >= 0);
                                     SelectColumnRange(_ptAnchorCell.X, lastVisibleColumnIndex, true);
@@ -23536,6 +24629,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -23545,16 +24639,19 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(lastVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 ClearSelection();
                                 SetSelectedColumnCore(lastVisibleColumnIndex, true);
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                 Debug.Assert(success);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.ColumnHeaderSelect:
@@ -23570,6 +24667,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -23579,10 +24677,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(lastVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 if (MultiSelect)
                                 {
                                     Debug.Assert(_ptAnchorCell.X >= 0);
@@ -23590,6 +24690,7 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (Columns[_ptCurrentCell.X].Selected)
                                     {
                                         ClearSelection();
@@ -23602,6 +24703,7 @@ namespace System.Windows.Forms
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, lastVisibleColumnIndex,
                                             _ptAnchorCell.Y, ref oldEdgeRowIndex, oldEdgeRowIndex);
                                     }
+
                                     success = SetCurrentCellAddressCore(lastVisibleColumnIndex, _ptCurrentCell.Y, false, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23617,6 +24719,7 @@ namespace System.Windows.Forms
                                         SetSelectedCellCore(_ptCurrentCell.X, _ptCurrentCell.Y, false);
                                         SetSelectedCellCore(lastVisibleColumnIndex, _ptCurrentCell.Y, true);
                                     }
+
                                     success = SetCurrentCellAddressCore(lastVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                     Debug.Assert(success);
                                 }
@@ -23634,6 +24737,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                                 Debug.Assert(success);
                             }
@@ -23643,10 +24747,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(lastVisibleColumnIndex))
                                 {
                                     return true;
                                 }
+
                                 if (Columns[_ptCurrentCell.X].Selected)
                                 {
                                     ClearSelection();
@@ -23657,10 +24763,12 @@ namespace System.Windows.Forms
                                     ClearSelection();
                                     SetSelectedCellCore(lastVisibleColumnIndex, _ptCurrentCell.Y, true);
                                 }
+
                                 success = SetCurrentCellAddressCore(lastVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                                 Debug.Assert(success);
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -23674,6 +24782,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             success = SetCurrentCellAddressCore(lastVisibleColumnIndex, firstVisibleRowIndex, true, false, false);
                             Debug.Assert(success);
                         }
@@ -23683,13 +24792,16 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             if (_ptCurrentCell.Y == -1 || IsColumnOutOfBounds(lastVisibleColumnIndex))
                             {
                                 return true;
                             }
+
                             success = SetCurrentCellAddressCore(lastVisibleColumnIndex, _ptCurrentCell.Y, true, false, false);
                             Debug.Assert(success);
                         }
+
                         return true;
                 }
             }
@@ -23697,6 +24809,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -23712,6 +24825,7 @@ namespace System.Windows.Forms
                     _inBulkPaintCount++;
                     switchedToBulkPaint = true;
                 }
+
                 try
                 {
                     if (SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
@@ -23731,12 +24845,14 @@ namespace System.Windows.Forms
                                 bandIndex++;
                             }
                         }
+
                         RemoveIndividuallySelectedCells();
                         if (!Columns[_ptCurrentCell.X].Selected)
                         {
                             Debug.Assert(!_selectedBandIndexes.Contains(_ptCurrentCell.X));
                             SetSelectedColumnCore(_ptCurrentCell.X, true);
                         }
+
                         return true;
                     }
                     else if (SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
@@ -23756,12 +24872,14 @@ namespace System.Windows.Forms
                                 bandIndex++;
                             }
                         }
+
                         RemoveIndividuallySelectedCells();
                         if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) == 0)
                         {
                             Debug.Assert(!_selectedBandIndexes.Contains(_ptCurrentCell.Y));
                             SetSelectedRowCore(_ptCurrentCell.Y, true);
                         }
+
                         return true;
                     }
                 }
@@ -23774,6 +24892,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return false;
         }
 
@@ -23867,85 +24986,105 @@ namespace System.Windows.Forms
                     {
                         return ProcessTabKey(e.KeyData);
                     }
+
                 case Keys.Up:
                     {
                         return ProcessUpKey(e.KeyData);
                     }
+
                 case Keys.Down:
                     {
                         return ProcessDownKey(e.KeyData);
                     }
+
                 case Keys.Next:
                     {
                         return ProcessNextKey(e.KeyData);
                     }
+
                 case Keys.Prior:
                     {
                         return ProcessPriorKey(e.KeyData);
                     }
+
                 case Keys.Left:
                     {
                         return ProcessLeftKey(e.KeyData);
                     }
+
                 case Keys.Right:
                     {
                         return ProcessRightKey(e.KeyData);
                     }
+
                 case Keys.F2:
                     {
                         return ProcessF2Key(e.KeyData);
                     }
+
                 case Keys.F3:
                     {
                         return ProcessF3Key(e.KeyData);
                     }
+
                 case Keys.F10:
                     {
                         if (e.Control && e.Shift)
                         {
                             return ProcessControlShiftF10Keys(e.KeyData);
                         }
+
                         break;
                     }
+
                 case Keys.Home:
                     {
                         return ProcessHomeKey(e.KeyData);
                     }
+
                 case Keys.D0:
                 case Keys.NumPad0:
                     {
                         return ProcessZeroKey(e.KeyData);
                     }
+
                 case Keys.Delete:
                     {
                         return ProcessDeleteKey(e.KeyData);
                     }
+
                 case Keys.End:
                     {
                         return ProcessEndKey(e.KeyData);
                     }
+
                 case Keys.Enter:
                     {
                         return ProcessEnterKey(e.KeyData);
                     }
+
                 case Keys.Escape:
                     {
                         return ProcessEscapeKey(e.KeyData);
                     }
+
                 case Keys.A:
                     {
                         return ProcessAKey(e.KeyData);
                     }
+
                 case Keys.C:
                 case Keys.Insert:
                     {
                         return ProcessInsertKey(e.KeyData);
                     }
+
                 case Keys.Space:
                     {
                         return ProcessSpaceKey(e.KeyData);
                     }
             }
+
             return false;
         }
 
@@ -23958,6 +25097,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             int previousVisibleRowIndex = -1;
             if (_ptCurrentCell.Y != -1)
             {
@@ -23995,11 +25135,13 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptAnchorCell.X == -1 || _ptCurrentCell.X == -1 ||
                                             IsRowOutOfBounds(firstVisibleRowIndex))
                                         {
                                             return true;
                                         }
+
                                         Debug.Assert(_ptAnchorCell.Y >= 0);
                                         int oldEdgeColumnIndex = _ptCurrentCell.X;
                                         int oldEdgeRowIndex = _ptCurrentCell.Y;
@@ -24013,10 +25155,12 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(firstVisibleRowIndex))
                                         {
                                             return true;
                                         }
+
                                         ClearSelection();
                                         SetSelectedCellCore(_ptCurrentCell.X, firstVisibleRowIndex, true);
                                         SetCurrentCellAddressCore(_ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
@@ -24043,10 +25187,12 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedCellCore(_ptCurrentCell.X, firstVisibleRowIndex, true);
                                     SetCurrentCellAddressCore(_ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
@@ -24075,14 +25221,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, previousVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     if (MultiSelect)
                                     {
                                         Debug.Assert(_ptAnchorCell.Y >= 0);
@@ -24090,6 +25239,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         int oldEdgeColumnIndex = _ptCurrentCell.X;
                                         int oldEdgeRowIndex = _ptCurrentCell.Y;
                                         UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
@@ -24124,20 +25274,24 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, previousVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedCellCore(_ptCurrentCell.X, previousVisibleRowIndex, true);
                                     SetCurrentCellAddressCore(_ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -24165,11 +25319,13 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptAnchorCell.X == -1 || _ptCurrentCell.X == -1 ||
                                             IsRowOutOfBounds(firstVisibleRowIndex))
                                         {
                                             return true;
                                         }
+
                                         ClearSelection();
                                         Debug.Assert(_ptAnchorCell.Y >= 0);
                                         SelectRowRange(firstVisibleRowIndex, _ptAnchorCell.Y, true);
@@ -24181,10 +25337,12 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(firstVisibleRowIndex))
                                         {
                                             return true;
                                         }
+
                                         SetSelectedRowCore(_ptCurrentCell.Y, false);
                                         SetSelectedRowCore(firstVisibleRowIndex, true);
                                         SetCurrentCellAddressCore(_ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
@@ -24211,10 +25369,12 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedRowCore(firstVisibleRowIndex, true);
                                     SetCurrentCellAddressCore(_ptCurrentCell.X, firstVisibleRowIndex, true, false, false);
@@ -24243,14 +25403,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, previousVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     if (MultiSelect)
                                     {
@@ -24258,6 +25421,7 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptAnchorCell.Y >= previousVisibleRowIndex)
                                         {
                                             SelectRowRange(previousVisibleRowIndex, _ptAnchorCell.Y, true);
@@ -24295,20 +25459,24 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, previousVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     ClearSelection();
                                     SetSelectedRowCore(previousVisibleRowIndex, true);
                                     SetCurrentCellAddressCore(_ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.RowHeaderSelect:
@@ -24336,11 +25504,13 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptAnchorCell.X == -1 || _ptCurrentCell.X == -1 ||
                                             IsRowOutOfBounds(firstVisibleRowIndex))
                                         {
                                             return true;
                                         }
+
                                         Debug.Assert(_ptAnchorCell.Y >= 0);
                                         if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                         {
@@ -24363,10 +25533,12 @@ namespace System.Windows.Forms
                                         {
                                             return true;
                                         }
+
                                         if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(firstVisibleRowIndex))
                                         {
                                             return true;
                                         }
+
                                         if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                         {
                                             SetSelectedRowCore(_ptCurrentCell.Y, false);
@@ -24402,10 +25574,12 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(firstVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                     {
                                         ClearSelection();
@@ -24443,14 +25617,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, previousVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                     {
                                         ClearSelection();
@@ -24460,6 +25637,7 @@ namespace System.Windows.Forms
                                             {
                                                 return true;
                                             }
+
                                             if (_ptAnchorCell.Y >= previousVisibleRowIndex)
                                             {
                                                 SelectRowRange(previousVisibleRowIndex, _ptAnchorCell.Y, true);
@@ -24469,6 +25647,7 @@ namespace System.Windows.Forms
                                                 SelectRowRange(_ptAnchorCell.Y, previousVisibleRowIndex, true);
                                             }
                                         }
+
                                         SetSelectedRowCore(previousVisibleRowIndex, true);
                                     }
                                     else
@@ -24481,6 +25660,7 @@ namespace System.Windows.Forms
                                             {
                                                 return true;
                                             }
+
                                             UpdateSelectedCellsBlock(_ptAnchorCell.X, ref oldEdgeColumnIndex, oldEdgeColumnIndex,
                                                 _ptAnchorCell.Y, ref oldEdgeRowIndex, previousVisibleRowIndex);
                                         }
@@ -24514,14 +25694,17 @@ namespace System.Windows.Forms
                                     {
                                         return true;
                                     }
+
                                     if (!ScrollIntoView(_ptCurrentCell.X, previousVisibleRowIndex, true))
                                     {
                                         return true;
                                     }
+
                                     if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousVisibleRowIndex))
                                     {
                                         return true;
                                     }
+
                                     if ((Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Selected) != 0)
                                     {
                                         ClearSelection();
@@ -24537,6 +25720,7 @@ namespace System.Windows.Forms
                                 }
                             }
                         }
+
                         return true;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -24560,6 +25744,7 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(firstVisibleRowIndex))
                                 {
                                     return true;
@@ -24588,10 +25773,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 if (!ScrollIntoView(_ptCurrentCell.X, previousVisibleRowIndex, true))
                                 {
                                     return true;
                                 }
+
                                 if (_ptCurrentCell.X == -1 || IsRowOutOfBounds(previousVisibleRowIndex))
                                 {
                                     return true;
@@ -24600,6 +25787,7 @@ namespace System.Windows.Forms
                                 SetCurrentCellAddressCore(_ptCurrentCell.X, previousVisibleRowIndex, true, false, false);
                             }
                         }
+
                         return true;
                 }
             }
@@ -24607,6 +25795,7 @@ namespace System.Windows.Forms
             {
                 NoSelectionChangeCount--;
             }
+
             return true;
         }
 
@@ -24655,11 +25844,14 @@ namespace System.Windows.Forms
                         dataGridViewEditingCell.PrepareEditingCellForEdit(true /*selectAll*/);
                         InvalidateCellPrivate(_ptCurrentCell.X, _ptCurrentCell.Y);
                     }
+
                     NotifyCurrentCellDirty(true);
                     return true;
                 }
+
                 return false;
             }
+
             return false;
         }
 
@@ -24702,6 +25894,7 @@ namespace System.Windows.Forms
                 {
                     dataGridViewCurrentCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X]; // unsharing the row before pushing the new value
                 }
+
                 return dataGridViewCurrentCell.SetValueInternal(_ptCurrentCell.Y, dgvcpe.Value);
             }
 
@@ -24716,13 +25909,16 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 exception = e;
                 return false;
             }
+
             if (dataGridViewCurrentCell.RowIndex == -1)
             {
                 dataGridViewCurrentCell = Rows[_ptCurrentCell.Y].Cells[_ptCurrentCell.X]; // unsharing the row before pushing the new value
             }
+
             return dataGridViewCurrentCell.SetValueInternal(_ptCurrentCell.Y, val);
         }
 
@@ -24821,11 +26017,13 @@ namespace System.Windows.Forms
                         {
                             PositionEditingControl(true /*setLocation*/, true /*setSize*/, false /*setFocus*/);
                         }
+
                         ((IDataGridViewEditingControl)EditingControl).PrepareEditingControlForEdit(true /*selectAll*/);
                         ((IDataGridViewEditingControl)EditingControl).EditingControlValueChanged = false;
                         IsCurrentCellDirtyInternal = false;
                         return true;
                     }
+
                     return false;
                 }
                 else
@@ -24840,9 +26038,11 @@ namespace System.Windows.Forms
                         IsCurrentCellDirtyInternal = false;
                         return true;
                     }
+
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -24883,6 +26083,7 @@ namespace System.Windows.Forms
                             // But only if the data grid view will set the position in the currency manager after recreating the rows collection.
                             DataConnection.DoNotChangePositionInTheCurrencyManager = true;
                         }
+
                         try
                         {
                             Rows.AddInternal(RowTemplateClone);
@@ -24891,6 +26092,7 @@ namespace System.Windows.Forms
                             {
                                 Rows.AddCopiesInternal(0, rowsCount - 1);
                             }
+
                             // Add selected Columns back in selectedBandIndexes
                             foreach (DataGridViewColumn column in Columns)
                             {
@@ -24922,7 +26124,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RealeaseMouse()
+        private void ReleaseMouse()
         {
             Cursor.Clip = Rectangle.Empty;
             Capture = false;
@@ -24971,6 +26173,7 @@ namespace System.Windows.Forms
                 _inBulkPaintCount++;
                 switchedToBulkPaint = true;
             }
+
             try
             {
                 while (_individualSelectedCells.Count > 0)
@@ -24997,6 +26200,7 @@ namespace System.Windows.Forms
                 _inBulkPaintCount++;
                 switchedToBulkPaint = true;
             }
+
             try
             {
                 while (_individualSelectedCells.Count > 0)
@@ -25014,6 +26218,7 @@ namespace System.Windows.Forms
                             Debug.Assert(dataGridViewCell.ColumnIndex != columnIndexException || dataGridViewCell.RowIndex != rowIndexException);
                             SetSelectedCellCore(dataGridViewCell.ColumnIndex, dataGridViewCell.RowIndex, false);
                         }
+
                         break;
                     }
                 }
@@ -25117,10 +26322,12 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (_horizScrollTimer is not null && _horizScrollTimer.Enabled)
             {
                 _horizScrollTimer.Enabled = false;
             }
+
             if (_vertScrollTimer is not null && _vertScrollTimer.Enabled)
             {
                 _vertScrollTimer.Enabled = false;
@@ -25140,11 +26347,13 @@ namespace System.Windows.Forms
                 Invalidate(CalcRowResizeFeedbackRect(_currentRowSplitBar), true);
                 _lastRowSplitBar = _currentRowSplitBar = -1;
             }
+
             if (_currentColSplitBar != -1)
             {
                 Invalidate(CalcColResizeFeedbackRect(_currentColSplitBar), true);
                 _lastColSplitBar = _currentColSplitBar = -1;
             }
+
             if (_lastHeaderShadow != -1)
             {
                 _dataGridViewState2[State2_ShowColumnRelocationInsertion] = false;
@@ -25152,7 +26361,8 @@ namespace System.Windows.Forms
                 _lastHeaderShadow = -1;
                 Invalidate(Rectangle.Union(_layout.TopLeftHeader, _layout.ColumnHeaders));
             }
-            RealeaseMouse();
+
+            ReleaseMouse();
         }
 
         // Re-initializes all state that is related to tracking keyboard operations
@@ -25162,6 +26372,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             _dataGridViewOper[OperationKeyboardOperationMask] = false;
             _trackColumn = -1;
             if (_currentColSplitBar != -1)
@@ -25260,6 +26471,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return false;
         }
 
@@ -25269,6 +26481,7 @@ namespace System.Windows.Forms
             {
                 OnMouseEnter(EventArgs.Empty);
             }
+
             UpdateMouseEnteredCell(hti: null, e: null);
         }
 
@@ -25306,6 +26519,7 @@ namespace System.Windows.Forms
                     {
                         columnsToScroll++;
                     }
+
                     ScrollColumns(-columnsToScroll);
                 }
                 else if (columnIndex == DisplayedBandsInfo.FirstDisplayedScrollingCol && FirstDisplayedScrollingColumnHiddenWidth > 0)
@@ -25317,6 +26531,7 @@ namespace System.Windows.Forms
                     {
                         return false;
                     }
+
                     ScrollColumns(-1);
                 }
                 else if (DisplayedBandsInfo.LastTotallyDisplayedScrollingCol == -1 ||
@@ -25345,6 +26560,7 @@ namespace System.Windows.Forms
                             {
                                 xColumnRightEdge -= FirstDisplayedScrollingColumnHiddenWidth;
                             }
+
                             columnsToScroll++;
                             if (xColumnRightEdge < _layout.Data.X)
                             {
@@ -25364,6 +26580,7 @@ namespace System.Windows.Forms
                             {
                                 xColumnRightEdge += FirstDisplayedScrollingColumnHiddenWidth;
                             }
+
                             columnsToScroll++;
                             if (xColumnRightEdge > _layout.Data.Right)
                             {
@@ -25373,12 +26590,14 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     if (columnsToScroll != 0)
                     {
                         ScrollColumns(columnsToScroll);
                     }
                 }
             }
+
             return true;
         }
 
@@ -25406,6 +26625,7 @@ namespace System.Windows.Forms
                         return;
                     }
                 }
+
                 Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingCol >= 0);
                 dataGridViewColumnTmp = Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol];
                 colCount = 0;
@@ -25416,6 +26636,7 @@ namespace System.Windows.Forms
                         DataGridViewElementStates.None);
                     colCount++;
                 }
+
                 newFirstVisibleScrollingCol = dataGridViewColumnTmp;
             }
 
@@ -25427,6 +26648,7 @@ namespace System.Windows.Forms
                 {
                     colCount++;
                 }
+
                 while (colCount < -columns && dataGridViewColumnTmp is not null)
                 {
                     dataGridViewColumnTmp = Columns.GetPreviousColumn(dataGridViewColumnTmp,
@@ -25434,6 +26656,7 @@ namespace System.Windows.Forms
                         DataGridViewElementStates.Frozen);
                     colCount++;
                 }
+
                 newFirstVisibleScrollingCol = dataGridViewColumnTmp;
                 if (newFirstVisibleScrollingCol is null)
                 {
@@ -25482,6 +26705,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 committed = true;
                 if (IsInnerCellOutOfBounds(columnIndex, rowIndex))
                 {
@@ -25563,6 +26787,7 @@ namespace System.Windows.Forms
                             Debug.Assert(firstDisplayedScrollingRow != -1);
                         }
                     }
+
                     if (rowsToScroll != 0)
                     {
                         if (!committed && _ptCurrentCell.X >= 0 &&
@@ -25572,10 +26797,12 @@ namespace System.Windows.Forms
                         {
                             return false;
                         }
+
                         ScrollRowsByCount(rowsToScroll, rowsToScroll > 1 ? ScrollEventType.LargeIncrement : ScrollEventType.SmallIncrement);
                     }
                 }
             }
+
             return true;
         }
 
@@ -25590,6 +26817,7 @@ namespace System.Windows.Forms
             {
                 _vertScrollBar.Value = VerticalScrollingOffset;
             }
+
             ClearRegionCache();
             int frozenRowsThickness = Rows.GetRowsHeight(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
             Rectangle rowsRect = _layout.Data;
@@ -25609,6 +26837,7 @@ namespace System.Windows.Forms
                 rowsRect.X--;
                 rowsRect.Width++;
             }
+
             rowsRect.Y += frozenRowsThickness;
             rowsRect.Height -= frozenRowsThickness;
             Debug.Assert(rowsRect.Height >= 0);
@@ -25638,6 +26867,7 @@ namespace System.Windows.Forms
                 rowsRect.Height = 1;
                 Invalidate(rowsRect);
             }
+
             if (!_dataGridViewState2[State2_StopRaisingVerticalScroll])
             {
                 Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingRow >= 0);
@@ -25668,6 +26898,7 @@ namespace System.Windows.Forms
 
                     Debug.Assert(newFirstVisibleScrollingRow != -1);
                 }
+
                 if (newFirstVisibleScrollingRow != -1)
                 {
                     int oldFirstVisibleScrollingRow = DisplayedBandsInfo.FirstDisplayedScrollingRow;
@@ -25700,6 +26931,7 @@ namespace System.Windows.Forms
                         deltaY += Rows.SharedRow(newFirstVisibleScrollingRow).GetHeight(newFirstVisibleScrollingRow);
                     }
                 }
+
                 if (newFirstVisibleScrollingRow != -1)
                 {
                     DisplayedBandsInfo.FirstDisplayedScrollingRow = newFirstVisibleScrollingRow;
@@ -25784,6 +27016,7 @@ namespace System.Windows.Forms
                 rowCount = -Rows.GetRowCount(DataGridViewElementStates.Visible, DisplayedBandsInfo.FirstDisplayedScrollingRow, oldFirstVisibleScrollingRow);
                 scrollEventType = rowCount < -1 ? ScrollEventType.LargeDecrement : ScrollEventType.SmallDecrement;
             }
+
             if (scrollHeight != 0)
             {
                 ScrollRows(rowCount, -scrollHeight, scrollEventType);
@@ -25798,6 +27031,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             _inBulkPaintCount++;
             _noDimensionChangeCount++;
             _noSelectionChangeCount++;
@@ -25820,8 +27054,10 @@ namespace System.Windows.Forms
                                     SetSelectedCellCore(columnIndex, rowIndex, true);
                                     columnIndex++;
                                 }
+
                                 rowIndex++;
                             }
+
                             break;
                         }
 
@@ -25836,8 +27072,10 @@ namespace System.Windows.Forms
                                 {
                                     SetSelectedRowCore(rowIndex, true);
                                 }
+
                                 rowIndex++;
                             }
+
                             break;
                         }
 
@@ -25851,8 +27089,10 @@ namespace System.Windows.Forms
                                 {
                                     SetSelectedColumnCore(columnIndex, true);
                                 }
+
                                 columnIndex++;
                             }
+
                             break;
                         }
                 }
@@ -25898,8 +27138,10 @@ namespace System.Windows.Forms
                         {
                             return _individualSelectedCells[index];
                         }
+
                         break;
                     }
+
                 case DataGridViewSelectionMode.FullColumnSelect:
                 case DataGridViewSelectionMode.ColumnHeaderSelect:
                     {
@@ -25923,8 +27165,10 @@ namespace System.Windows.Forms
                         {
                             return _individualSelectedCells[index];
                         }
+
                         break;
                     }
+
                 case DataGridViewSelectionMode.FullRowSelect:
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     {
@@ -25948,9 +27192,11 @@ namespace System.Windows.Forms
                         {
                             return _individualSelectedCells[index];
                         }
+
                         break;
                     }
             }
+
             return null;
         }
 
@@ -25974,6 +27220,7 @@ namespace System.Windows.Forms
                         InvalidateInside();
                     }
                 }
+
                 OnColumnHeadersHeightChanged(EventArgs.Empty);
             }
         }
@@ -25990,6 +27237,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < -1 ||
                 (columnIndex == -1 && rowIndex >= 0) ||
                 rowIndex >= Rows.Count)
@@ -26035,6 +27283,7 @@ namespace System.Windows.Forms
                                 _cachedEditingControl = null;
                                 PositionEditingControl(true, true, false);
                             }
+
                             OnCurrentCellChanged(EventArgs.Empty);
                             return true;
                         }
@@ -26058,6 +27307,7 @@ namespace System.Windows.Forms
                             {
                                 return false;
                             }
+
                             if (!IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                             {
                                 currentCell = Rows.SharedRow(oldCurrentCellY).Cells[oldCurrentCellX];
@@ -26065,12 +27315,15 @@ namespace System.Windows.Forms
                                 {
                                     currentCell = Rows[oldCurrentCellY].Cells[oldCurrentCellX]; // unsharing the current row
                                 }
+
                                 currentCell.OnLeaveInternal(oldCurrentCellY, throughMouseClick);
                             }
+
                             if (IsInnerCellOutOfBounds(columnIndex, rowIndex))
                             {
                                 return false;
                             }
+
                             if (oldCurrentCellY != rowIndex)
                             {
                                 if (validateCurrentCell)
@@ -26089,8 +27342,10 @@ namespace System.Windows.Forms
                                                 OnCellEnter(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY);
                                             }
                                         }
+
                                         return false;
                                     }
+
                                     if (!IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                                     {
                                         OnRowValidated(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY);
@@ -26111,7 +27366,7 @@ namespace System.Windows.Forms
                                 }
                             }
 
-                            // Force repainting of the current and previous collumns` header cells to update highlighting
+                            // Force repainting of the current and previous columns` header cells to update highlighting
                             if (oldCurrentCellX != columnIndex &&
                                 SelectionMode == DataGridViewSelectionMode.FullRowSelect)
                             {
@@ -26119,6 +27374,7 @@ namespace System.Windows.Forms
                                 {
                                     InvalidateCellPrivate(oldCurrentCellX, -1);
                                 }
+
                                 InvalidateCellPrivate(columnIndex, -1);
                             }
 
@@ -26132,6 +27388,7 @@ namespace System.Windows.Forms
                                 {
                                     return false;
                                 }
+
                                 // rowIndex = Math.Min(rowIndex, this.Rows.GetRowCount(DataGridViewElementStates.Visible) - 1);
                             }
 
@@ -26146,6 +27403,7 @@ namespace System.Windows.Forms
                             {
                                 ((IDataGridViewEditingControl)EditingControl).EditingControlRowIndex = rowIndex;
                             }
+
                             OnCurrentCellChanged(EventArgs.Empty);
                             if (setAnchorCellAddress)
                             {
@@ -26158,6 +27416,7 @@ namespace System.Windows.Forms
                             {
                                 currentCell = Rows[rowIndex].Cells[columnIndex]; // unsharing the row
                             }
+
                             currentCell.OnEnterInternal(rowIndex, throughMouseClick);
                             OnCellEnter(ref dataGridViewCellTmp, _ptCurrentCell.X, _ptCurrentCell.Y);
                             if (oldCurrentCellX >= 0)
@@ -26167,16 +27426,19 @@ namespace System.Windows.Forms
                                 {
                                     InvalidateCellPrivate(oldCurrentCellX, oldCurrentCellY);
                                 }
+
                                 if (oldCurrentCellY != _ptCurrentCell.Y && RowHeadersVisible && oldCurrentCellY < Rows.Count)
                                 {
                                     InvalidateCellPrivate(-1, oldCurrentCellY);
                                 }
                             }
+
                             InvalidateCellPrivate(_ptCurrentCell.X, _ptCurrentCell.Y);
                             if (RowHeadersVisible && oldCurrentCellY != _ptCurrentCell.Y)
                             {
                                 InvalidateCellPrivate(-1, _ptCurrentCell.Y);
                             }
+
                             if (Focused &&
                                 _ptCurrentCell.X != -1 &&
                                 !IsCurrentCellInEditMode &&
@@ -26207,6 +27469,7 @@ namespace System.Windows.Forms
                             _ptAnchorCell.X = columnIndex;
                             _ptAnchorCell.Y = rowIndex;
                         }
+
                         if (Focused &&
                             (!IsCurrentCellInEditMode && (EditMode == DataGridViewEditMode.EditOnEnter ||
                             (EditMode != DataGridViewEditMode.EditProgrammatically && CurrentCellInternal.EditType is null))))
@@ -26241,6 +27504,7 @@ namespace System.Windows.Forms
                         {
                             return false;
                         }
+
                         if (!IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                         {
                             currentCell = Rows.SharedRow(oldCurrentCellY).Cells[oldCurrentCellX];
@@ -26248,8 +27512,10 @@ namespace System.Windows.Forms
                             {
                                 currentCell = Rows[oldCurrentCellY].Cells[oldCurrentCellX]; // unsharing the current row
                             }
+
                             currentCell.OnLeaveInternal(oldCurrentCellY, throughMouseClick);
                         }
+
                         if (validateCurrentCell)
                         {
                             if (OnRowValidating(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY))
@@ -26266,25 +27532,30 @@ namespace System.Windows.Forms
                                         OnCellEnter(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY);
                                     }
                                 }
+
                                 return false;
                             }
+
                             if (!IsInnerCellOutOfBounds(oldCurrentCellX, oldCurrentCellY))
                             {
                                 OnRowValidated(ref dataGridViewCellTmp, oldCurrentCellX, oldCurrentCellY);
                             }
                         }
                     }
+
                     if (_ptCurrentCell.X != -1)
                     {
                         _ptCurrentCell.X = -1;
                         _ptCurrentCell.Y = -1;
                         OnCurrentCellChanged(EventArgs.Empty);
                     }
+
                     if (setAnchorCellAddress)
                     {
                         _ptAnchorCell.X = -1;
                         _ptAnchorCell.Y = -1;
                     }
+
                     if (_dataGridViewState1[State1_TemporarilyResetCurrentCell])
                     {
                         if (EditingControl is not null)
@@ -26297,6 +27568,7 @@ namespace System.Windows.Forms
                             {
                                 _cachedEditingControl = EditingControl;
                             }
+
                             EditingControl = null;
                         }
                     }
@@ -26307,6 +27579,7 @@ namespace System.Windows.Forms
                         {
                             InvalidateCellPrivate(oldCurrentCellX, oldCurrentCellY);
                         }
+
                         if (RowHeadersVisible && oldCurrentCellY < Rows.Count)
                         {
                             InvalidateCellPrivate(-1, oldCurrentCellY);
@@ -26318,6 +27591,7 @@ namespace System.Windows.Forms
             {
                 _dataGridViewOper[OperationInCurrentCellChange] = false;
             }
+
             return true;
         }
 
@@ -26345,6 +27619,7 @@ namespace System.Windows.Forms
                 _inBulkPaintCount++;
                 switchedToBulkPaint = true;
             }
+
             try
             {
                 // Selection and deselection are done in reverse order for perf. reasons.
@@ -26357,6 +27632,7 @@ namespace System.Windows.Forms
                         {
                             SetSelectedCellCore(columnIndex, rowIndex, true);
                         }
+
                         if (columnIndex != columnIndexTo)
                         {
                             DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[columnIndex],
@@ -26385,6 +27661,7 @@ namespace System.Windows.Forms
                         {
                             SetSelectedCellCore(columnIndex, rowIndex, false);
                         }
+
                         if (columnIndex != columnIndexFrom)
                         {
                             DataGridViewColumn dataGridViewColumn = Columns.GetPreviousColumn(Columns[columnIndex],
@@ -26465,6 +27742,7 @@ namespace System.Windows.Forms
                     Debug.Assert(_selectedBandIndexes.Contains(columnIndex));
                     SetSelectedColumnCore(columnIndex, false);
                 }
+
                 if (columnIndex != columnIndexTo)
                 {
                     DataGridViewColumn dataGridViewColumn = Columns.GetNextColumn(Columns[columnIndex],
@@ -26506,6 +27784,7 @@ namespace System.Windows.Forms
                 _inBulkPaintCount++;
                 switchedToBulkPaint = true;
             }
+
             try
             {
                 // Selecting and deselecting rows in reverse order for perf. reasons
@@ -26563,10 +27842,12 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             if (IsInnerCellOutOfBounds(columnIndex, rowIndex))
             {
                 return false;
             }
+
             if (clearSelection)
             {
                 ClearSelection(columnIndex, rowIndex, true /*selectException*/);    // we always select the new current cell when clearSelection is true
@@ -26583,6 +27864,7 @@ namespace System.Windows.Forms
                     {
                         return true;   // Do not discard the multi-selection
                     }
+
                     if (_individualSelectedCells.Count == 1)
                     {
                         DataGridViewCell dataGridViewCell = _individualSelectedCells.HeadCell;
@@ -26602,8 +27884,10 @@ namespace System.Windows.Forms
                                     {
                                         return true;  // Do not change a single selection that does not match the new current cell
                                     }
+
                                     break;
                                 }
+
                             case DataGridViewSelectionMode.FullRowSelect:
                             case DataGridViewSelectionMode.RowHeaderSelect:
                                 {
@@ -26611,13 +27895,16 @@ namespace System.Windows.Forms
                                     {
                                         return true;  // Do not change a single selection that does not match the new current cell
                                     }
+
                                     break;
                                 }
                         }
                     }
+
                     SetSelectedElementCore(columnIndex, rowIndex, true);
                 }
             }
+
             return true;
         }
 
@@ -26627,10 +27914,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(width), width, string.Format(SR.DataGridView_SizeTooLarge, (UpperSize).ToString(CultureInfo.CurrentCulture)));
             }
+
             if ((specified & BoundsSpecified.Height) == BoundsSpecified.Height && height > UpperSize)
             {
                 throw new ArgumentOutOfRangeException(nameof(height), height, string.Format(SR.DataGridView_SizeTooLarge, (UpperSize).ToString(CultureInfo.CurrentCulture)));
             }
+
             base.SetBoundsCore(x, y, width, height, specified);
         }
 
@@ -26674,6 +27963,7 @@ namespace System.Windows.Forms
                                 dataGridViewCellTmp.ReadOnlyInternal = true;
                                 _individualReadOnlyCells.Add(dataGridViewCellTmp);
                             }
+
                             for (int row = rowIndex + 1; row < Rows.Count; row++)
                             {
                                 dataGridViewCellTmp = Rows[row].Cells[columnIndex];
@@ -26681,6 +27971,7 @@ namespace System.Windows.Forms
                                 _individualReadOnlyCells.Add(dataGridViewCellTmp);
                             }
                         }
+
                         if ((rowState & DataGridViewElementStates.ReadOnly) != 0)
                         {
                             Rows.SetRowState(rowIndex, DataGridViewElementStates.ReadOnly, false);
@@ -26690,6 +27981,7 @@ namespace System.Windows.Forms
                                 dataGridViewCellTmp.ReadOnlyInternal = true;
                                 _individualReadOnlyCells.Add(dataGridViewCellTmp);
                             }
+
                             for (int column = columnIndex + 1; column < Columns.Count; column++)
                             {
                                 dataGridViewCellTmp = Rows[rowIndex].Cells[column];
@@ -26698,6 +27990,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     if (dataGridViewCell.ReadOnly)
                     {
                         dataGridViewCell.ReadOnlyInternal = false;
@@ -26726,6 +28019,7 @@ namespace System.Windows.Forms
                     {
                         _dataGridViewOper[OperationInReadOnlyChange] = false;
                     }
+
                     Columns[columnIndex].ReadOnlyInternal = true;
                 }
                 else
@@ -26762,6 +28056,7 @@ namespace System.Windows.Forms
                     {
                         _dataGridViewOper[OperationInReadOnlyChange] = false;
                     }
+
                     Rows.SetRowState(rowIndex, DataGridViewElementStates.ReadOnly, true);
                 }
                 else
@@ -26823,6 +28118,7 @@ namespace System.Windows.Forms
                                 _inBulkPaintCount++;
                                 switchedToBulkPaint = true;
                             }
+
                             try
                             {
                                 Debug.Assert(_selectedBandIndexes.Contains(columnIndex));
@@ -26835,6 +28131,7 @@ namespace System.Windows.Forms
                                     dataGridViewCellTmp.SelectedInternal = true;
                                     _individualSelectedCells.Add(dataGridViewCellTmp);
                                 }
+
                                 for (int row = rowIndex + 1; row < Rows.Count; row++)
                                 {
                                     dataGridViewCellTmp = Rows[row].Cells[columnIndex];
@@ -26857,6 +28154,7 @@ namespace System.Windows.Forms
                                 _inBulkPaintCount++;
                                 switchedToBulkPaint = true;
                             }
+
                             try
                             {
                                 Debug.Assert(_selectedBandIndexes.Contains(rowIndex));
@@ -26868,6 +28166,7 @@ namespace System.Windows.Forms
                                     dataGridViewCellTmp.SelectedInternal = true;
                                     _individualSelectedCells.Add(dataGridViewCellTmp);
                                 }
+
                                 for (int column = columnIndex + 1; column < Columns.Count; column++)
                                 {
                                     dataGridViewCellTmp = Rows[rowIndex].Cells[column];
@@ -26884,6 +28183,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     if (dataGridViewCell.Selected)
                     {
                         dataGridViewCell.SelectedInternal = false;
@@ -26907,6 +28207,7 @@ namespace System.Windows.Forms
                 {
                     return;
                 }
+
                 if (IsInnerCellOutOfBounds(columnIndex, rowIndex))
                 {
                     return;
@@ -26925,6 +28226,7 @@ namespace System.Windows.Forms
                                 Debug.Assert(_individualSelectedCells.Count <= 1);
                                 RemoveIndividuallySelectedCells();
                             }
+
                             SetSelectedCellCore(columnIndex, rowIndex, selected);
                             break;
                         }
@@ -26950,6 +28252,7 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 if (!_selectedBandIndexes.Contains(columnIndex))
                                 {
                                     SetSelectedColumnCore(columnIndex, true);
@@ -26962,6 +28265,7 @@ namespace System.Windows.Forms
                                     SetSelectedColumnCore(columnIndex, false);
                                 }
                             }
+
                             break;
                         }
 
@@ -26981,6 +28285,7 @@ namespace System.Windows.Forms
                                         RemoveIndividuallySelectedCells();
                                     }
                                 }
+
                                 SetSelectedCellCore(columnIndex, rowIndex, true);
                             }
                             else
@@ -27002,6 +28307,7 @@ namespace System.Windows.Forms
                                     SetSelectedCellCore(columnIndex, rowIndex, false);
                                 }
                             }
+
                             break;
                         }
 
@@ -27026,6 +28332,7 @@ namespace System.Windows.Forms
                                         }
                                     }
                                 }
+
                                 if ((Rows.GetRowState(rowIndex) & DataGridViewElementStates.Selected) == 0)
                                 {
                                     Debug.Assert(_selectedBandIndexes.Contains(rowIndex) ==
@@ -27042,6 +28349,7 @@ namespace System.Windows.Forms
                                     SetSelectedRowCore(rowIndex, false);
                                 }
                             }
+
                             break;
                         }
 
@@ -27061,6 +28369,7 @@ namespace System.Windows.Forms
                                         RemoveIndividuallySelectedCells();
                                     }
                                 }
+
                                 SetSelectedCellCore(columnIndex, rowIndex, true);
                             }
                             else
@@ -27082,6 +28391,7 @@ namespace System.Windows.Forms
                                     SetSelectedCellCore(columnIndex, rowIndex, false);
                                 }
                             }
+
                             break;
                         }
                 }
@@ -27158,6 +28468,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 SetSelectedColumnCore(columnIndex, selected);
             }
             finally
@@ -27175,6 +28486,7 @@ namespace System.Windows.Forms
                         SetSelectedCellCore(columnIndex, rowIndex, selected);
                         break;
                     }
+
                 case DataGridViewSelectionMode.RowHeaderSelect:
                     {
                         if (columnIndex == -1)
@@ -27185,8 +28497,10 @@ namespace System.Windows.Forms
                         {
                             SetSelectedCellCore(columnIndex, rowIndex, selected);
                         }
+
                         break;
                     }
+
                 case DataGridViewSelectionMode.ColumnHeaderSelect:
                     {
                         if (rowIndex == -1)
@@ -27197,13 +28511,16 @@ namespace System.Windows.Forms
                         {
                             SetSelectedCellCore(columnIndex, rowIndex, selected);
                         }
+
                         break;
                     }
+
                 case DataGridViewSelectionMode.FullRowSelect:
                     {
                         SetSelectedRowCore(rowIndex, selected);
                         break;
                     }
+
                 case DataGridViewSelectionMode.FullColumnSelect:
                     {
                         SetSelectedColumnCore(columnIndex, selected);
@@ -27273,6 +28590,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 SetSelectedRowCore(rowIndex, selected);
             }
             finally
@@ -27391,7 +28709,7 @@ namespace System.Windows.Forms
                 if (!SetCurrentCellAddressCore(-1, -1, true, true, false))
                 {
                     // Just cancel operation silently instead of throwing InvalidOperationException
-                    // 'finally' below resets this.dataGridViewOper[OperationinSort] to false
+                    // 'finally' below resets this.dataGridViewOper[OperationInSort] to false
                     return;
                 }
 
@@ -27455,6 +28773,7 @@ namespace System.Windows.Forms
                                                    false /*forceCurrentCellSelection*/);
                     }
                 }
+
                 if (visibleFrozenRows > 0)
                 {
                     int rowVIndex = Rows.GetFirstRow(DataGridViewElementStates.Visible);
@@ -27465,8 +28784,10 @@ namespace System.Windows.Forms
                         Debug.Assert(rowVIndex != -1);
                         visibleFrozenRows--;
                     }
+
                     Rows.SetRowState(rowVIndex, DataGridViewElementStates.Frozen, true);
                 }
+
                 DisplayedBandsInfo.FirstDisplayedScrollingRow = firstDisplayedScrollingRowCache;
             }
             finally
@@ -27474,6 +28795,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_dataGridViewOper[OperationInSort]);
                 _dataGridViewOper[OperationInSort] = false;
             }
+
             // Same effect as changing a top level cell style
             OnGlobalAutoSize();
             if (DataSource is null)
@@ -27481,6 +28803,7 @@ namespace System.Windows.Forms
                 // Ensure that the Displayed states get set properly because they were wiped out by UpdateRowsDisplayedState above.
                 DisplayedBandsInfo.EnsureDirtyState();
             }
+
             ResetUIState(false /*useRowShortcut*/, false /*computeVisibleRows*/);
             OnSorted(EventArgs.Empty);
 
@@ -27521,6 +28844,7 @@ namespace System.Windows.Forms
                     {
                         _selectedBandIndexes[row2Selected] = rowIndex1;
                     }
+
                     if (_selectedBandSnapshotIndexes is not null)
                     {
                         row1Selected = _selectedBandSnapshotIndexes.IndexOf(rowIndex1);
@@ -27534,6 +28858,7 @@ namespace System.Windows.Forms
                             _selectedBandSnapshotIndexes[row2Selected] = rowIndex1;
                         }
                     }
+
                     break;
             }
         }
@@ -27585,18 +28910,22 @@ namespace System.Windows.Forms
                         {
                             ScrollRowsByCount(1, ScrollEventType.SmallIncrement);
                         }
+
                         se.NewValue = VerticalOffset;
                         break;
                     }
+
                 case ScrollEventType.SmallDecrement:
                     {
                         if (_vertScrollBar.Value != _vertScrollBar.Minimum)
                         {
                             ScrollRowsByCount(-1, ScrollEventType.SmallDecrement);
                         }
+
                         se.NewValue = VerticalOffset;
                         break;
                     }
+
                 case ScrollEventType.LargeIncrement:
                     {
                         Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingRow >= 0);
@@ -27605,12 +28934,14 @@ namespace System.Windows.Forms
                         se.NewValue = VerticalOffset;
                         break;
                     }
+
                 case ScrollEventType.LargeDecrement:
                     {
                         VerticalOffset -= _vertScrollBar.LargeChange;
                         se.NewValue = VerticalOffset;
                         break;
                     }
+
                 case ScrollEventType.ThumbTrack:
                 case ScrollEventType.First:
                 case ScrollEventType.Last:
@@ -27624,6 +28955,7 @@ namespace System.Windows.Forms
                         {
                             VerticalOffset = se.NewValue;
                         }
+
                         break;
                     }
             }
@@ -27638,6 +28970,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             int nextVisibleColumnIndex = -1;
             if (_ptCurrentCell.X != -1)
             {
@@ -27649,11 +28982,13 @@ namespace System.Windows.Forms
                     nextVisibleColumnIndex = dataGridViewColumn.Index;
                 }
             }
+
             int nextVisibleRowIndex = -1;
             if (_ptCurrentCell.Y != -1)
             {
                 nextVisibleRowIndex = Rows.GetNextRow(_ptCurrentCell.Y, DataGridViewElementStates.Visible);
             }
+
             int targetRowIndex = -1, targetColumnIndex = -1;
 
             _noSelectionChangeCount++;
@@ -27675,6 +29010,7 @@ namespace System.Windows.Forms
                         targetRowIndex = _ptCurrentCell.Y;
                         targetColumnIndex = nextVisibleColumnIndex;
                     }
+
                     if (!ScrollIntoView(targetColumnIndex, targetRowIndex, true))
                     {
                         return true;
@@ -27692,6 +29028,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                         }
                         else
@@ -27700,9 +29037,11 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             ClearSelection();
                             SetSelectedCellCore(targetColumnIndex, targetRowIndex, true);
                         }
+
                         break;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -27712,6 +29051,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             SetSelectedColumnCore(firstVisibleColumnIndex, true);
                         }
                         else
@@ -27720,9 +29060,11 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             ClearSelection();
                             SetSelectedColumnCore(targetColumnIndex, true);
                         }
+
                         break;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -27732,6 +29074,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             SetSelectedRowCore(firstVisibleRowIndex, true);
                         }
                         else
@@ -27742,10 +29085,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 ClearSelection();
                                 SetSelectedRowCore(targetRowIndex, true);
                             }
                         }
+
                         break;
                 }
             }
@@ -27773,6 +29118,7 @@ namespace System.Windows.Forms
 
                 SetCurrentCellAddressCore(targetColumnIndex, targetRowIndex, true, false, false);
             }
+
             return true;
         }
 
@@ -27832,6 +29178,7 @@ namespace System.Windows.Forms
                         targetRowIndex = _ptCurrentCell.Y;
                         targetColumnIndex = previousVisibleColumnIndex;
                     }
+
                     if (!ScrollIntoView(targetColumnIndex, targetRowIndex, true))
                     {
                         return true;
@@ -27849,6 +29196,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             SetSelectedCellCore(firstVisibleColumnIndex, firstVisibleRowIndex, true);
                         }
                         else
@@ -27857,9 +29205,11 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             ClearSelection();
                             SetSelectedCellCore(targetColumnIndex, targetRowIndex, true);
                         }
+
                         break;
 
                     case DataGridViewSelectionMode.FullColumnSelect:
@@ -27869,6 +29219,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             SetSelectedColumnCore(firstVisibleColumnIndex, true);
                         }
                         else
@@ -27877,9 +29228,11 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             ClearSelection();
                             SetSelectedColumnCore(targetColumnIndex, true);
                         }
+
                         break;
 
                     case DataGridViewSelectionMode.FullRowSelect:
@@ -27889,6 +29242,7 @@ namespace System.Windows.Forms
                             {
                                 return true;
                             }
+
                             SetSelectedRowCore(firstVisibleRowIndex, true);
                         }
                         else
@@ -27899,10 +29253,12 @@ namespace System.Windows.Forms
                                 {
                                     return true;
                                 }
+
                                 ClearSelection();
                                 SetSelectedRowCore(targetRowIndex, true);
                             }
                         }
+
                         break;
                 }
             }
@@ -27966,6 +29322,7 @@ namespace System.Windows.Forms
                 _horizScrollBar.MouseEnter -= new EventHandler(ScrollBar_MouseEnter);
                 _horizScrollBar.MouseLeave -= new EventHandler(ScrollBar_MouseLeave);
             }
+
             if (_vertScrollBar is not null)
             {
                 _vertScrollBar.MouseEnter -= new EventHandler(ScrollBar_MouseEnter);
@@ -27979,10 +29336,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < -1 || rowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             if (IsHandleCreated)
             {
                 InvalidateCellPrivate(columnIndex, rowIndex);
@@ -27995,10 +29354,12 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < 0 || rowIndex >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             if (IsHandleCreated)
             {
                 OnCellCommonChange(columnIndex, rowIndex);
@@ -28021,6 +29382,7 @@ namespace System.Windows.Forms
                         dataGridViewColumnTmp.Displayed = displayed;
                         Debug.Assert(ColumnNeedsDisplayedState(dataGridViewColumnTmp));
                     }
+
                     dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen, DataGridViewElementStates.None);
                     numDisplayedFrozenCols--;
                 }
@@ -28041,6 +29403,7 @@ namespace System.Windows.Forms
                         dataGridViewColumnTmp.Displayed = displayed;
                         Debug.Assert(ColumnNeedsDisplayedState(dataGridViewColumnTmp));
                     }
+
                     dataGridViewColumnTmp = Columns.GetNextColumn(dataGridViewColumnTmp, DataGridViewElementStates.Visible, DataGridViewElementStates.None);
                     numDisplayedScrollingCols--;
                 }
@@ -28053,6 +29416,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             if (IsHandleCreated && _layout.RowHeadersVisible)
             {
                 InvalidateCellPrivate(-1, rowIndex);
@@ -28065,14 +29429,17 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndexStart));
             }
+
             if (rowIndexEnd < 0 || rowIndexEnd >= Rows.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndexEnd));
             }
+
             if (rowIndexEnd < rowIndexStart)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndexEnd));
             }
+
             if (IsHandleCreated && _layout.RowHeadersVisible)
             {
                 Rectangle rectUpper = GetCellAdjustedDisplayRectangle(-1, rowIndexStart, true);
@@ -28134,6 +29501,7 @@ namespace System.Windows.Forms
                         {
                             bottomArea.X--;
                         }
+
                         bottomArea.Width++;
                     }
 
@@ -28141,6 +29509,7 @@ namespace System.Windows.Forms
                     {
                         rowIndex = Rows.GetNextRow(rowIndex, DataGridViewElementStates.Visible);
                     }
+
                     if (rowIndex != -1)
                     {
                         int topEdge = GetRowYFromIndex(oldFirstVisibleScrollingRow == DisplayedBandsInfo.FirstDisplayedScrollingRow ? rowIndex : DisplayedBandsInfo.FirstDisplayedScrollingRow);
@@ -28166,6 +29535,7 @@ namespace System.Windows.Forms
                         {
                             PerformLayoutPrivate(false /*useRowShortcut*/, false /*computeVisibleRows*/, invalidInAdjustFillingColumns, false /*repositionEditingControl*/);
                         }
+
                         Invalidate();
                     }
                     else
@@ -28198,8 +29568,10 @@ namespace System.Windows.Forms
                                 {
                                     bottomArea.X--;
                                 }
+
                                 bottomArea.Width++;
                             }
+
                             int topEdge = GetRowYFromIndex(oldFirstVisibleScrollingRow == DisplayedBandsInfo.FirstDisplayedScrollingRow ? rowIndex : DisplayedBandsInfo.FirstDisplayedScrollingRow);
                             bottomArea.Height -= bottomArea.Y - topEdge;
                             bottomArea.Y = topEdge;
@@ -28231,6 +29603,7 @@ namespace System.Windows.Forms
                     {
                         Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Displayed, displayed);
                     }
+
                     rowIndexTmp = Rows.GetNextRow(rowIndexTmp, DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
                     numDisplayedFrozenRows--;
                 }
@@ -28249,6 +29622,7 @@ namespace System.Windows.Forms
                     {
                         Rows.SetRowState(rowIndexTmp, DataGridViewElementStates.Displayed, displayed);
                     }
+
                     rowIndexTmp = Rows.GetNextRow(rowIndexTmp, DataGridViewElementStates.Visible);
                     numDisplayedScrollingRows--;
                 }
@@ -28289,9 +29663,11 @@ namespace System.Windows.Forms
                         dgvce = new DataGridViewCellEventArgs(_ptMouseEnteredCell.X, _ptMouseEnteredCell.Y);
                         OnCellMouseLeave(dgvce);
                     }
+
                     dgvce = new DataGridViewCellEventArgs(htiToUse._col, htiToUse._row);
                     OnCellMouseEnter(dgvce);
                 }
+
                 if (e is not null)
                 {
                     int mouseX = e.X - htiToUse.ColumnX;
@@ -28299,6 +29675,7 @@ namespace System.Windows.Forms
                     {
                         mouseX += ((htiToUse._col == -1) ? RowHeadersWidth : Columns[htiToUse._col].Thickness);
                     }
+
                     DataGridViewCellMouseEventArgs dgvcme = new DataGridViewCellMouseEventArgs(htiToUse._col, htiToUse._row, mouseX, e.Y - htiToUse.RowY, e);
                     OnCellMouseMove(dgvcme);
                 }
@@ -28812,6 +30189,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             oldEdgeColumnIndex = newEdgeColumnIndex;
             oldEdgeRowIndex = newEdgeRowIndex;
         }
@@ -28855,6 +30233,7 @@ namespace System.Windows.Forms
                         {
                             hti = HitTest(mouseX, ptMouse.Y - yOffset - normOffset);
                         }
+
                         if (hti._col >= 0 && hti._row >= 0)
                         {
                             OnCellSelectMouseMove(hti);
@@ -28871,6 +30250,7 @@ namespace System.Windows.Forms
                     {
                         OnCellSelectMouseMove(hti);
                     }
+
                     VertScrollTimer.Enabled = false;
                 }
             }
@@ -28908,6 +30288,7 @@ namespace System.Windows.Forms
                 _horizScrollBar.MouseEnter += new EventHandler(ScrollBar_MouseEnter);
                 _horizScrollBar.MouseLeave += new EventHandler(ScrollBar_MouseLeave);
             }
+
             if (_vertScrollBar is not null)
             {
                 _vertScrollBar.MouseEnter += new EventHandler(ScrollBar_MouseEnter);
@@ -28958,6 +30339,7 @@ namespace System.Windows.Forms
                         dataGridViewCell = TopLeftHeaderCell;
                         break;
                 }
+
                 if (dataGridViewCell is not null)
                 {
                     contextMenuStrip = dataGridViewCell.GetInheritedContextMenuStrip(hti._row);
@@ -29046,6 +30428,7 @@ namespace System.Windows.Forms
                     {
                         _dataGridViewOper[OperationInMouseDown] = false;
                     }
+
                     return;
                 case User32.WM.NOTIFY:
                     if (WmNotify(ref m))
@@ -29053,6 +30436,7 @@ namespace System.Windows.Forms
                         // we are done - skip default handling
                         return;
                     }
+
                     break;
 
                 case User32.WM.IME_STARTCOMPOSITION:
@@ -29062,6 +30446,7 @@ namespace System.Windows.Forms
                         // Make sure that the first character is forwarded to the editing control.
                         User32.SendMessageW(EditingControl, (User32.WM)m.Msg, m.WParam, m.LParam);
                     }
+
                     break;
             }
 

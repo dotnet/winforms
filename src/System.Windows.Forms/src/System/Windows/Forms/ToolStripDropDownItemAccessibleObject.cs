@@ -17,6 +17,7 @@ namespace System.Windows.Forms
         {
             owner = item;
         }
+
         public override AccessibleRole Role
         {
             get
@@ -26,6 +27,7 @@ namespace System.Windows.Forms
                 {
                     return role;
                 }
+
                 return AccessibleRole.MenuItem;
             }
         }
@@ -44,7 +46,7 @@ namespace System.Windows.Forms
 
         internal override bool IsIAccessibleExSupported()
         {
-            if (owner != null)
+            if (owner is not null)
             {
                 return true;
             }
@@ -68,7 +70,7 @@ namespace System.Windows.Forms
 
         internal override object GetPropertyValue(UiaCore.UIA propertyID)
         {
-            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && owner != null && owner.Owner is ToolStripDropDown)
+            if (propertyID == UiaCore.UIA.IsOffscreenPropertyId && owner is not null && owner.Owner is ToolStripDropDown)
             {
                 return !((ToolStripDropDown)owner.Owner).Visible;
             }
@@ -81,7 +83,7 @@ namespace System.Windows.Forms
 
         internal override void Collapse()
         {
-            if (owner != null && owner.DropDown != null && owner.DropDown.Visible)
+            if (owner is not null && owner.DropDown is not null && owner.DropDown.Visible)
             {
                 owner.DropDown.Close();
             }
@@ -101,6 +103,7 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             return owner.DropDown.AccessibilityObject.GetChild(index);
         }
 
@@ -123,6 +126,7 @@ namespace System.Windows.Forms
             {
                 LayoutTransaction.DoLayout(owner.DropDown, owner.DropDown, PropertyNames.Items);
             }
+
             return owner.DropDown.AccessibilityObject.GetChildCount();
         }
 
@@ -167,11 +171,11 @@ namespace System.Windows.Forms
             return count;
         }
 
-        internal AccessibleObject GetChildFragment(int index)
+        internal AccessibleObject GetChildFragment(int index, UiaCore.NavigateDirection direction)
         {
             if (owner.DropDown.AccessibilityObject is ToolStrip.ToolStripAccessibleObject toolStripAccessibleObject)
             {
-                return toolStripAccessibleObject.GetChildFragment(index);
+                return toolStripAccessibleObject.GetChildFragment(index, direction);
             }
 
             return null;
@@ -192,6 +196,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     int index = dropDown.Items.IndexOf(owner);
 
                     if (index == -1)

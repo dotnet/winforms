@@ -5,11 +5,8 @@
 #nullable disable
 
 using System.Collections.Specialized;
-using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
-using System.Threading;
 using static Interop;
 using IComDataObject = System.Runtime.InteropServices.ComTypes.IDataObject;
 
@@ -137,7 +134,7 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            // We need to retry the GetDataObject() since the clipBaord is busy sometimes and hence the GetDataObject would fail with ClipBoardException.
+            // We need to retry the GetDataObject() since the clipBoard is busy sometimes and hence the GetDataObject would fail with ClipBoardException.
             return GetDataObject(retryTimes: 10, retryDelay: 100);
         }
 
@@ -365,6 +362,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
+
             if (filePaths.Count == 0)
             {
                 throw new ArgumentException(SR.CollectionEmptyException);
@@ -413,6 +411,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(text));
             }
+
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = new DataObject();

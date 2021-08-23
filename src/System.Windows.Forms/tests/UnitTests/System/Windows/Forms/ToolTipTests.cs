@@ -2,13 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
 using Moq;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -97,7 +95,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolTip_Active_Set_GetReturnsExpected(bool value)
         {
             using var toolTip = new ToolTip
@@ -116,7 +114,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolTip_Active_SetDesignMode_GetReturnsExpected(bool value)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -238,7 +236,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void ToolTip_BackColor_Set_GetReturnsExpected(Color value)
         {
             using var toolTip = new ToolTip
@@ -253,7 +251,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
         public void ToolTip_ForeColor_Set_GetReturnsExpected(Color value)
         {
             using var toolTip = new ToolTip
@@ -322,7 +320,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolTip_IsBalloon_Set_GetReturnsExpected(bool value)
         {
             using var toolTip = new ToolTip
@@ -341,7 +339,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolTip_OwnerDraw_Set_GetReturnsExpected(bool value)
         {
             using var toolTip = new ToolTip
@@ -407,7 +405,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolTip_ShowAlways_Set_GetReturnsExpected(bool value)
         {
             using var toolTip = new ToolTip
@@ -426,7 +424,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolTip_StripAmpersands_Set_GetReturnsExpected(bool value)
         {
             using var toolTip = new ToolTip
@@ -445,7 +443,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolTip_Tag_Set_GetReturnsExpected(object value)
         {
             using var toolTip = new ToolTip
@@ -460,7 +458,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolTipIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ToolTipIcon))]
         public void ToolTip_ToolTipIcon_Set_GetReturnsExpected(ToolTipIcon value)
         {
             using var toolTip = new ToolTip
@@ -475,7 +473,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolTipIcon))]
         public void ToolTip_ToolTipIcon_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolTipIcon value)
         {
             using var toolTip = new ToolTip();
@@ -483,7 +481,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolTip_ToolTipTitle_Set_GetReturnsExpected(string value, string expected)
         {
             using var toolTip = new ToolTip
@@ -498,7 +496,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolTip_UseAnimation_Set_GetReturnsExpected(bool value)
         {
             using var toolTip = new ToolTip
@@ -517,7 +515,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolTip_UseFading_Set_GetReturnsExpected(bool value)
         {
             using var toolTip = new ToolTip
@@ -587,7 +585,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolTip_SetToolTip_Invoke_GetToolTipReturnsExpected(string caption, string expected)
         {
             using var toolTip = new ToolTip();
@@ -601,7 +599,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ToolTip_SetToolTip_InvokeDesignMode_GetToolTipReturnsExpected(string caption, string expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -626,7 +624,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolTip_SetToolTip_NullControl_ThrowsArgumentNullException(string caption)
         {
             using var toolTip = new ToolTip();
@@ -634,7 +632,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolTip_Show_InvokeStringIWin32WindowControlWindow_Nop(string text)
         {
             using var toolTip = new ToolTip();
@@ -643,7 +641,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ToolTip_Show_InvokeStringIWin32WindowNonControlWindow_Nop(string text)
         {
             using var toolTip = new ToolTip();
@@ -702,6 +700,41 @@ namespace System.Windows.Forms.Tests
             Assert.Equal("System.Windows.Forms.ToolTip InitialDelay: 500, ShowAlways: False", toolTip.ToString());
         }
 
+        [WinFormsFact]
+        public void ToolTip_SetToolTipToControl_Invokes_SetToolTip_OfControl()
+        {
+            using ToolTip toolTip = new ToolTip();
+            SubControl control = new SubControl();
+            control.CreateControl();
+
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
+
+            toolTip.SetToolTip(control, "Some test text");
+
+            Assert.Equal(1, control.InvokeSetCount);
+        }
+
+        [WinFormsFact]
+        public void ToolTip_RemoveAll_Invokes_RemoveToolTip_OfControl()
+        {
+            using ToolTip toolTip = new ToolTip();
+            using SubControl control = new SubControl();
+
+            // Create a top level control to the toolTip consider
+            // the tested control as created when destroying regions
+            using Control topLevelControl = new Control();
+            topLevelControl.Controls.Add(control);
+            topLevelControl.CreateControl();
+            control.CreateControl();
+
+            Assert.True(toolTip.Handle != IntPtr.Zero); // A workaround to create the toolTip native window Handle
+
+            toolTip.SetToolTip(control, "Some test text");
+            toolTip.RemoveAll();
+
+            Assert.Equal(1, control.InvokeRemoveCount);
+        }
+
         private class SubToolTip : ToolTip
         {
             public SubToolTip() : base()
@@ -719,6 +752,24 @@ namespace System.Windows.Forms.Tests
             public new bool DesignMode => base.DesignMode;
 
             public new EventHandlerList Events => base.Events;
+        }
+
+        private class SubControl : Control
+        {
+            public int InvokeSetCount { get; set; }
+            public int InvokeRemoveCount { get; set; }
+
+            internal override void SetToolTip(ToolTip toolTip)
+            {
+                InvokeSetCount++;
+                base.SetToolTip(toolTip);
+            }
+
+            internal override void RemoveToolTip(ToolTip toolTip)
+            {
+                InvokeRemoveCount++;
+                base.RemoveToolTip(toolTip);
+            }
         }
     }
 }

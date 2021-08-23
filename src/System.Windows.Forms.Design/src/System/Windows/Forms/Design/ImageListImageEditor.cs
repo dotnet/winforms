@@ -5,7 +5,6 @@
 using System.Collections;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.IO;
 using System.Reflection;
 using static Interop;
 
@@ -48,7 +47,7 @@ namespace System.Windows.Forms.Design
                 Type[] imageExtenders = GetImageExtenders();
                 for (int i = 0; i < imageExtenders.Length; i++)
                 {
-                    var myClass = this.GetType();
+                    var myClass = GetType();
                     var editor = (ImageEditor)Activator.CreateInstance(imageExtenders[i],
                                                                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
                                                                        null, null, null);
@@ -59,6 +58,7 @@ namespace System.Windows.Forms.Design
                         filter += "|" + CreateFilterEntry(editor);
                     }
                 }
+
                 _fileDialog.Filter = filter;
             }
 

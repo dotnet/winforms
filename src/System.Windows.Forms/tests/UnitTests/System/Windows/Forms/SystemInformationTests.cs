@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using Xunit;
 
@@ -200,7 +199,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
-        public void SystemInformation_HighContrasst_Get_ReturnsExpected()
+        public void SystemInformation_HighContrast_Get_ReturnsExpected()
         {
             Assert.Equal(SystemInformation.HighContrast, SystemInformation.HighContrast);
         }

@@ -6,7 +6,6 @@
 
 using System.Collections;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Xml;
@@ -199,8 +198,10 @@ namespace System.Resources
                 {
                     _xmlTextWriter.WriteString(ResMimeType);
                 }
+
                 _xmlTextWriter.WriteEndElement();
             }
+
             _xmlTextWriter.WriteEndElement();
 
             _xmlTextWriter.WriteStartElement(ResHeaderStr);
@@ -210,8 +211,10 @@ namespace System.Resources
                 {
                     _xmlTextWriter.WriteString(Version);
                 }
+
                 _xmlTextWriter.WriteEndElement();
             }
+
             _xmlTextWriter.WriteEndElement();
 
             _xmlTextWriter.WriteStartElement(ResHeaderStr);
@@ -221,8 +224,10 @@ namespace System.Resources
                 {
                     _xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceReader), _typeNameConverter));
                 }
+
                 _xmlTextWriter.WriteEndElement();
             }
+
             _xmlTextWriter.WriteEndElement();
 
             _xmlTextWriter.WriteStartElement(ResHeaderStr);
@@ -232,8 +237,10 @@ namespace System.Resources
                 {
                     _xmlTextWriter.WriteString(MultitargetUtil.GetAssemblyQualifiedName(typeof(ResXResourceWriter), _typeNameConverter));
                 }
+
                 _xmlTextWriter.WriteEndElement();
             }
+
             _xmlTextWriter.WriteEndElement();
 
             _initialized = true;
@@ -373,6 +380,7 @@ namespace System.Resources
                         AddDataRow(elementName, info.Name, info.ValueData, info.TypeName, info.MimeType, info.Comment);
                         break;
                     }
+
                 default:
                     {
                         ResXDataNode node = new ResXDataNode(name, value, _typeNameConverter);
@@ -473,6 +481,7 @@ namespace System.Resources
                         Writer.WriteString(value);
                     }
                 }
+
                 Writer.WriteEndElement();
 
                 if (!string.IsNullOrEmpty(comment))
@@ -481,9 +490,11 @@ namespace System.Resources
                     {
                         Writer.WriteString(comment);
                     }
+
                     Writer.WriteEndElement();
                 }
             }
+
             Writer.WriteEndElement();
         }
 
@@ -501,6 +512,7 @@ namespace System.Resources
                     Writer.WriteAttributeString(NameStr, name);
                 }
             }
+
             Writer.WriteEndElement();
         }
 
@@ -599,6 +611,7 @@ namespace System.Resources
                     output.Append(prefix);
                     output.Append(raw, current, lineWrap);
                 }
+
                 output.Append(crlf);
                 output.Append(prefix);
                 output.Append(raw, current, raw.Length - current);

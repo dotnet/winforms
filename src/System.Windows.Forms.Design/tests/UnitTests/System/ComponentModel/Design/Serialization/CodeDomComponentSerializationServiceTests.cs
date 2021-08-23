@@ -1,19 +1,15 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Text.RegularExpressions;
 using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Serialization.Tests
@@ -770,7 +766,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
         }
 
         [Fact]
-        public void CreateStore_ISerializableGetObjectDataSeriaized_Success()
+        public void CreateStore_ISerializableGetObjectDataSerialized_Success()
         {
             var service = new CodeDomComponentSerializationService();
             SerializationStore store = service.CreateStore();
@@ -1805,6 +1801,7 @@ namespace System.ComponentModel.Design.Serialization.Tests
                 remove { }
             }
         }
+
         private static void DumpState(Hashtable state)
         {
             Console.WriteLine("---- DUMPING ----");

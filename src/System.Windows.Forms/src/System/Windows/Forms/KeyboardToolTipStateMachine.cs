@@ -4,9 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-using System.Threading;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -26,7 +23,7 @@ namespace System.Windows.Forms
     ///  one ToolTip-enabled control to another, the keyboard ToolTip will be shown after a time interval specified
     ///  with TTDT_RESHOW flag has passed.
     /// </remarks>
-    internal sealed class KeyboardToolTipStateMachine
+    internal sealed partial class KeyboardToolTipStateMachine
     {
         public static KeyboardToolTipStateMachine Instance
         {
@@ -36,6 +33,7 @@ namespace System.Windows.Forms
                 {
                     s_instance = new KeyboardToolTipStateMachine();
                 }
+
                 return s_instance;
             }
         }
@@ -43,14 +41,14 @@ namespace System.Windows.Forms
         [ThreadStatic]
         private static KeyboardToolTipStateMachine s_instance;
 
-        private readonly ToolToTipDictionary _toolToTip = new ToolToTipDictionary();
+        private readonly ToolToTipDictionary _toolToTip = new();
 
         private SmState _currentState = SmState.Hidden;
         private IKeyboardToolTip _currentTool;
-        private readonly InternalStateMachineTimer _timer = new InternalStateMachineTimer();
+        private readonly InternalStateMachineTimer _timer = new();
         private SendOrPostCallback _refocusDelayExpirationCallback;
 
-        private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new WeakReference<IKeyboardToolTip>(null);
+        private readonly WeakReference<IKeyboardToolTip> _lastFocusedTool = new(null);
 
         private KeyboardToolTipStateMachine()
         {
@@ -198,6 +196,7 @@ namespace System.Windows.Forms
             {
                 toolTip.ShowKeyboardToolTip(toolTipText, _currentTool, autoPopDelay);
             }
+
             StartTimer(autoPopDelay,
                 GetOneRunTickHandler((Timer sender) => Transit(SmEvent.AutoPopupDelayTimerExpired, _currentTool)));
             return SmState.Shown;
@@ -271,6 +270,7 @@ namespace System.Windows.Forms
                     currentToolTip.HideToolTip(_currentTool);
                 }
             }
+
             ResetTimer();
             _currentTool = null;
             return _currentState = SmState.Hidden;
@@ -325,63 +325,6 @@ namespace System.Windows.Forms
             Shown,
             ReadyForReshow,
             WaitForRefocus
-        }
-
-        private sealed class InternalStateMachineTimer : Timer
-        {
-            public void ClearTimerTickHandlers() => _onTimer = null;
-        }
-
-        private sealed class ToolToTipDictionary
-        {
-            private readonly ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>> table = new ConditionalWeakTable<IKeyboardToolTip, WeakReference<ToolTip>>();
-
-            public ToolTip this[IKeyboardToolTip tool]
-            {
-                get
-                {
-                    ToolTip toolTip = null;
-                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
-                    {
-                        if (!toolTipReference.TryGetTarget(out toolTip))
-                        {
-                            // removing dead reference
-                            table.Remove(tool);
-                        }
-                    }
-                    return toolTip;
-                }
-                set
-                {
-                    if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
-                    {
-                        toolTipReference.SetTarget(value);
-                    }
-                    else
-                    {
-                        table.Add(tool, new WeakReference<ToolTip>(value));
-                    }
-                }
-            }
-
-            public void Remove(IKeyboardToolTip tool, ToolTip toolTip)
-            {
-                if (table.TryGetValue(tool, out WeakReference<ToolTip> toolTipReference))
-                {
-                    if (toolTipReference.TryGetTarget(out ToolTip existingToolTip))
-                    {
-                        if (existingToolTip == toolTip)
-                        {
-                            table.Remove(tool);
-                        }
-                    }
-                    else
-                    {
-                        // removing dead reference
-                        table.Remove(tool);
-                    }
-                }
-            }
         }
     }
 }

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -6,7 +6,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
-using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
@@ -15,7 +14,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class helps determine where the image and text should be drawn.
         /// </summary>
-        internal class ToolStripItemInternalLayout
+        internal partial class ToolStripItemInternalLayout
         {
             private ToolStripItemLayoutOptions _currentLayoutOptions;
             private readonly ToolStripItem _ownerItem;
@@ -72,7 +71,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_currentLayoutOptions != null)
+                    if (_currentLayoutOptions is not null)
                     {
                         return _currentLayoutOptions.GdiTextFormatFlags;
                     }
@@ -157,6 +156,7 @@ namespace System.Windows.Forms
                 ButtonBaseAdapter.LayoutData data = _currentLayoutOptions.Layout();
                 return data;
             }
+
             public virtual Size GetPreferredSize(Size constrainingSize)
             {
                 Size preferredSize = Size.Empty;
@@ -167,11 +167,12 @@ namespace System.Windows.Forms
                 // bigger than the ToolStrip itself.  Note this is "Parent" not
                 // "Owner" because we care in this instance what we're currently displayed on.
 
-                if (_ownerItem != null)
+                if (_ownerItem is not null)
                 {
                     _lastPreferredSize = _currentLayoutOptions.GetPreferredSizeCore(constrainingSize);
                     return _lastPreferredSize;
                 }
+
                 return Size.Empty;
             }
 
@@ -179,7 +180,7 @@ namespace System.Windows.Forms
             {
                 _layoutData = GetLayoutData();
                 ToolStrip parent = ParentInternal;
-                if (parent != null)
+                if (parent is not null)
                 {
                     _parentLayoutData = new ToolStripLayoutData(parent);
                 }
@@ -187,43 +188,6 @@ namespace System.Windows.Forms
                 {
                     _parentLayoutData = null;
                 }
-            }
-
-            internal class ToolStripItemLayoutOptions : ButtonBaseAdapter.LayoutOptions
-            {
-                private Size _cachedSize = LayoutUtils.InvalidSize;
-                private Size _cachedProposedConstraints = LayoutUtils.InvalidSize;
-
-                // override GetTextSize to provide simple text caching.
-                protected override Size GetTextSize(Size proposedConstraints)
-                {
-                    if (_cachedSize != LayoutUtils.InvalidSize
-                        && (_cachedProposedConstraints == proposedConstraints
-                        || _cachedSize.Width <= proposedConstraints.Width))
-                    {
-                        return _cachedSize;
-                    }
-
-                    _cachedSize = base.GetTextSize(proposedConstraints);
-                    _cachedProposedConstraints = proposedConstraints;
-                    return _cachedSize;
-                }
-            }
-
-            private class ToolStripLayoutData
-            {
-                private readonly ToolStripLayoutStyle _layoutStyle;
-                private readonly bool _autoSize;
-                private Size _size;
-
-                public ToolStripLayoutData(ToolStrip toolStrip)
-                {
-                    _layoutStyle = toolStrip.LayoutStyle;
-                    _autoSize = toolStrip.AutoSize;
-                    _size = toolStrip.Size;
-                }
-                public bool IsCurrent(ToolStrip toolStrip)
-                    => toolStrip != null && toolStrip.Size == _size && toolStrip.LayoutStyle == _layoutStyle && toolStrip.AutoSize == _autoSize;
             }
         }
     }

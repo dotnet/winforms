@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -15,7 +14,7 @@ internal static partial class Interop
         }
 
         /// <remarks>
-        ///  WM_MOUSEACTIVATE Note (for top level compoenents and host)
+        ///  WM_MOUSEACTIVATE Note (for top level components and host)
         ///
         ///  If the active (or tracking) comp's reg info indicates that it wants mouse
         ///  messages, then no MA_xxxANDEAT value should be returned  from WM_MOUSEACTIVATE,

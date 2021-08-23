@@ -33,22 +33,27 @@ namespace System.Windows.Forms
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text) : base(text, null, false, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(Image image) : base(null, image, false, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text, Image image) : base(text, image, false, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text, Image image, EventHandler onClick) : base(text, image,/*isLink=*/false, onClick, null)
         {
             Initialize();
         }
+
         public ToolStripStatusLabel(string text, Image image, EventHandler onClick, string name) : base(text, image,/*isLink=*/false, onClick, name)
         {
             Initialize();
@@ -155,7 +160,7 @@ namespace System.Windows.Forms
                 if (spring != value)
                 {
                     spring = value;
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.Spring);
                     }
@@ -211,7 +216,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 ToolStripRenderer renderer = Renderer;
 

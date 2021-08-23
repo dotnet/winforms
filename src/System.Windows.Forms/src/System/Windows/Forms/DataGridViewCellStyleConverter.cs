@@ -23,6 +23,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 

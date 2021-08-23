@@ -16,10 +16,15 @@
     <CoverletOutput>$(TargetDir)coverage\$(MSBuildProjectName).coverage</CoverletOutput>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(IsTestProject)' == 'true'">
-    <Platforms Condition="'$(Platform)' == 'x86'">AnyCPU;x86</Platforms>
-    <TestArchitectures Condition="'$(Platform)' == 'x86'">x86</TestArchitectures>
-    <TestArchitectures Condition="'$(Platform)' != 'x86'">x64;x86</TestArchitectures>
+  <!-- Turn on single-file publishing analysis for everything except the test projects -->
+  <PropertyGroup Condition="'$(IsTestProject)' != 'true'">
+    <EnableSingleFileAnalyzer>true</EnableSingleFileAnalyzer>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(IsTestProject)' == 'true' ">
+    <TargetArchitecture Condition="'$(TargetArchitecture)' == ''">x64</TargetArchitecture>
+    <Platform Condition="'$(Platform)' == 'AnyCPU' or '$(Platform)' == 'Any CPU'">$(TargetArchitecture)</Platform>
+    <TestArchitectures>$(TargetArchitecture)</TestArchitectures>
   </PropertyGroup>
 
   <Target Name="InstrumentModulesNoBuild" BeforeTargets="RunTests" Condition="'$(IsUnitTestProject)' == 'true'">
@@ -52,15 +57,15 @@
 
   <ItemGroup>
     <!-- Set TargetingPackVersion -->
-    <FrameworkReference Update="Microsoft.NETCore.App" 
-      Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)'!='' And $(TargetFramework.StartsWith('net6.')) ">
-    <TargetingPackVersion>$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)</TargetingPackVersion>
+    <FrameworkReference Update="Microsoft.NETCore.App"
+      Condition=" '$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)'!='' And $(TargetFramework.StartsWith('net6.')) ">
+    <TargetingPackVersion>$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)</TargetingPackVersion>
     </FrameworkReference>
   </ItemGroup>
 
   <PropertyGroup>
-    <!-- Set RuntimeFrameworkVersion to VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion from Core Setup to prevent large SDK cycle -->
-    <RuntimeFrameworkVersion Condition="'$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)'!='' And $(TargetFramework.StartsWith('net6.')) ">$(VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion)</RuntimeFrameworkVersion>
+    <!-- Set RuntimeFrameworkVersion to VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion from Core Setup to prevent large SDK cycle -->
+    <RuntimeFrameworkVersion Condition="'$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)'!='' And $(TargetFramework.StartsWith('net6.')) ">$(VSRedistCommonNetCoreSharedFrameworkx6470PackageVersion)</RuntimeFrameworkVersion>
 
     <!-- If TargetFramework is not net6.x, then reset RuntimeFrameworkVersion -->
     <RuntimeFrameworkVersion Condition="!$(TargetFramework.StartsWith('net6.'))" />

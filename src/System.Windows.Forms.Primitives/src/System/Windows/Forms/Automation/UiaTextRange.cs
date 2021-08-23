@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -157,6 +156,7 @@ namespace System.Windows.Forms.Automation
                     {
                         End = MoveEndpointForward(End, TextUnit.Character, 1, out int moved);
                     }
+
                     break;
 
                 case TextUnit.Word:
@@ -179,6 +179,7 @@ namespace System.Windows.Forms.Automation
                             End++;
                         }
                     }
+
                     break;
 
                 case TextUnit.Line:
@@ -207,6 +208,7 @@ namespace System.Windows.Forms.Automation
                             MoveTo(0, _provider.TextLength);
                         }
                     }
+
                     break;
 
                 case TextUnit.Paragraph:
@@ -229,6 +231,7 @@ namespace System.Windows.Forms.Automation
                             End++;
                         }
                     }
+
                     break;
 
                 case TextUnit.Format:
@@ -273,6 +276,22 @@ namespace System.Windows.Forms.Automation
 
         double[] ITextRangeProvider.GetBoundingRectangles()
         {
+            Rectangle ownerBounds = Drawing.Rectangle.Empty;
+
+            if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is Rectangle boundsPropertyValue)
+            {
+                ownerBounds = boundsPropertyValue;
+            }
+
+            // We accumulate rectangles onto a list.
+            List<Rectangle> rectangles = new List<Rectangle>();
+
+            if (_provider.TextLength == 0)
+            {
+                rectangles.Add(ownerBounds);
+                return _provider.RectListToDoubleArray(rectangles);
+            }
+
             // if this is an end of line
             if (Start == _provider.TextLength)
             {
@@ -292,12 +311,6 @@ namespace System.Windows.Forms.Automation
 
             string text = _provider.Text;
             ValidateEndpoints();
-            Rectangle ownerBounds = Drawing.Rectangle.Empty;
-
-            if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is object boundsPropertyValue)
-            {
-                ownerBounds = (Rectangle)boundsPropertyValue;
-            }
 
             // Get the mapping from client coordinates to screen coordinates.
             Point mapClientToScreen = new Point(ownerBounds.X, ownerBounds.Y);
@@ -305,16 +318,11 @@ namespace System.Windows.Forms.Automation
             // Clip the rectangles to the edit control's formatting rectangle.
             Rectangle clippingRectangle = _provider.BoundingRectangle;
 
-            // We accumulate rectangles onto a list.
-            List<Rectangle> rectangles;
-
             if (_provider.IsMultiline)
             {
                 rectangles = GetMultilineBoundingRectangles(text, mapClientToScreen, clippingRectangle);
                 return _provider.RectListToDoubleArray(rectangles);
             }
-
-            rectangles = new List<Rectangle>();
 
             // Figure out the rectangle for this one line.
             Point startPoint = _provider.GetPositionFromChar(Start);
@@ -712,6 +720,7 @@ namespace System.Windows.Forms.Automation
 
                         index = index > limit ? limit : index;
                     }
+
                     break;
 
                 case TextUnit.Word:
@@ -732,6 +741,7 @@ namespace System.Windows.Forms.Automation
                             moved++;
                         }
                     }
+
                     break;
 
                 case TextUnit.Line:
@@ -758,6 +768,7 @@ namespace System.Windows.Forms.Automation
                             moved = 1;
                         }
                     }
+
                     break;
 
                 case TextUnit.Paragraph:
@@ -780,6 +791,7 @@ namespace System.Windows.Forms.Automation
                             moved++;
                         }
                     }
+
                     break;
 
                 case TextUnit.Format:
@@ -797,6 +809,7 @@ namespace System.Windows.Forms.Automation
                         moved = index < limit ? 1 : 0;
                         index = limit;
                     }
+
                     break;
 
                 default:
@@ -821,6 +834,7 @@ namespace System.Windows.Forms.Automation
                         index = index + moved;
                         index = index < 0 ? 0 : index;
                     }
+
                     break;
 
                 case TextUnit.Word:
@@ -838,6 +852,7 @@ namespace System.Windows.Forms.Automation
                             }
                         }
                     }
+
                     break;
 
                 case TextUnit.Line:
@@ -888,6 +903,7 @@ namespace System.Windows.Forms.Automation
                             index = _provider.GetLineIndex(line + actualCount) - LineSeparator.Length;
                         }
                     }
+
                     break;
 
                 case TextUnit.Paragraph:
@@ -907,6 +923,7 @@ namespace System.Windows.Forms.Automation
                             }
                         }
                     }
+
                     break;
 
                 case TextUnit.Format:
@@ -922,6 +939,7 @@ namespace System.Windows.Forms.Automation
                         moved = index > 0 ? -1 : 0;
                         index = 0;
                     }
+
                     break;
 
                 default:

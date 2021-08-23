@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using Xunit;
 
 namespace Microsoft.VisualBasic.Devices.Tests
@@ -52,7 +51,7 @@ namespace Microsoft.VisualBasic.Devices.Tests
             System.Threading.Thread.Sleep(10);
 
             var after = clock.TickCount;
-            Assert.True(before <=  after);
+            Assert.True(before <= after);
         }
     }
 }

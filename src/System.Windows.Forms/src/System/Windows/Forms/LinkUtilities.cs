@@ -5,8 +5,8 @@
 #nullable disable
 
 using System.Drawing;
-using Microsoft.Win32;
 using System.Globalization;
+using Microsoft.Win32;
 
 namespace System.Windows.Forms
 {
@@ -31,14 +31,14 @@ namespace System.Windows.Forms
         {
             RegistryKey key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
 
-            if (key != null)
+            if (key is not null)
             {
                 // Since this comes from the registry, be very careful about its contents.
                 //
                 string s = (string)key.GetValue(name);
                 key.Close();
 
-                if (s != null)
+                if (s is not null)
                 {
                     string[] rgbs = s.Split(new char[] { ',' });
                     int[] rgb = new int[3];
@@ -81,6 +81,7 @@ namespace System.Windows.Forms
                 {
                     s_ielinkColor = GetIEColor(IEAnchorColor);
                 }
+
                 return s_ielinkColor;
             }
         }
@@ -93,9 +94,11 @@ namespace System.Windows.Forms
                 {
                     s_ieactiveLinkColor = GetIEColor(IEAnchorColorHover);
                 }
+
                 return s_ieactiveLinkColor;
             }
         }
+
         public static Color IEVisitedLinkColor
         {
             get
@@ -104,6 +107,7 @@ namespace System.Windows.Forms
                 {
                     s_ievisitedLinkColor = GetIEColor(IEAnchorColorVisited);
                 }
+
                 return s_ievisitedLinkColor;
             }
         }
@@ -134,16 +138,17 @@ namespace System.Windows.Forms
                 // Catch SecurityException silently and let the return value fallback to AlwaysUnderline.
             }
 
-            if (key != null)
+            if (key is not null)
             {
                 string s = (string)key.GetValue("Anchor Underline");
                 key.Close();
 
-                if (s != null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0)
+                if (s is not null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0)
                 {
                     return LinkBehavior.NeverUnderline;
                 }
-                if (s != null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0)
+
+                if (s is not null && string.Compare(s, "hover", true, CultureInfo.InvariantCulture) == 0)
                 {
                     return LinkBehavior.HoverUnderline;
                 }
@@ -158,7 +163,7 @@ namespace System.Windows.Forms
 
         public static void EnsureLinkFonts(Font baseFont, LinkBehavior link, ref Font linkFont, ref Font hoverLinkFont)
         {
-            if (linkFont != null && hoverLinkFont != null)
+            if (linkFont is not null && hoverLinkFont is not null)
             {
                 return;
             }
@@ -203,6 +208,7 @@ namespace System.Windows.Forms
                 {
                     style &= ~FontStyle.Underline;
                 }
+
                 hoverLinkFont = new Font(f, style);
                 linkFont = hoverLinkFont;
             }

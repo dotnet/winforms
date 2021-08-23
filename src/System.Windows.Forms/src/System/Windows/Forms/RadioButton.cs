@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -54,7 +53,7 @@ namespace System.Windows.Forms
                 flatSystemStyleMinimumHeight = LogicalToDeviceUnits(FlatSystemStyleMinimumHeight);
             }
 
-            // Radiobuttons shouldn't respond to right clicks, so we need to do all our own click logic
+            // Radio buttons shouldn't respond to right clicks, so we need to do all our own click logic
             SetStyle(ControlStyles.StandardClick, false);
 
             TextAlign = ContentAlignment.MiddleLeft;
@@ -156,10 +155,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 checkAlign = value;
                 if (OwnerDraw)
@@ -252,6 +248,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.BS.RIGHTBUTTON;
                     }
                 }
+
                 return cp;
             }
         }
@@ -419,6 +416,7 @@ namespace System.Windows.Forms
             {
                 Checked = true;
             }
+
             base.OnClick(e);
         }
 
@@ -450,6 +448,7 @@ namespace System.Windows.Forms
                     TabStop = true;
                 }
             }
+
             base.OnEnter(e);
         }
 
@@ -461,6 +460,7 @@ namespace System.Windows.Forms
                 {
                     WipeTabStops(tabbedInto);
                 }
+
                 TabStop = isChecked;
                 if (isChecked)
                 {
@@ -504,6 +504,7 @@ namespace System.Windows.Forms
                         {
                             button.firstfocus = false;
                         }
+
                         if (button.autoCheck)
                         {
                             button.TabStop = false;
@@ -559,6 +560,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -592,8 +594,10 @@ namespace System.Windows.Forms
                 {
                     PerformClick();     // Generate a click if already focused
                 }
+
                 return true;
             }
+
             return false;
         }
 

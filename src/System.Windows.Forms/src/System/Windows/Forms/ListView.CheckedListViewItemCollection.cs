@@ -57,6 +57,7 @@ namespace System.Windows.Forms
                             items[index++] = owner.Items[i];
                         }
                     }
+
                     return items;
                 }
             }
@@ -165,7 +166,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode);
                 }
 
-                if (item != null && item.ListView == owner && item.Checked)
+                if (item is not null && item.ListView == owner && item.Checked)
                 {
                     return true;
                 }
@@ -220,6 +221,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 
@@ -236,7 +238,7 @@ namespace System.Windows.Forms
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
                 {
-                    return -1; // we dont support empty or null keys.
+                    return -1; // we don't support empty or null keys.
                 }
 
                 // step 1 - check the last cached item
@@ -334,7 +336,7 @@ namespace System.Windows.Forms
                 }
 
                 ListViewItem[] items = ItemArray;
-                if (items != null)
+                if (items is not null)
                 {
                     return items.GetEnumerator();
                 }

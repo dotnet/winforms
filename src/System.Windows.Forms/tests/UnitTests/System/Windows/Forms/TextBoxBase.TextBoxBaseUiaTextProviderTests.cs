@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.Automation;
 using Xunit;
@@ -202,7 +201,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void TextBoxBaseUiaTextProvider_FirstVisibleLine_Get_ReturnsMinuOne_WithoutHandle()
+        public void TextBoxBaseUiaTextProvider_FirstVisibleLine_Get_ReturnsMinusOne_WithoutHandle()
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase();
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
@@ -409,7 +408,7 @@ namespace System.Windows.Forms.Tests
 #pragma warning disable xUnit1026 // Disable xUnit1026 warning: The method doesn't use parameter 'expectedPoint'
         [WinFormsTheory]
         [MemberData(nameof(TextBoxBaseUiaTextProvider_GetPositionFromChar_TestData))]
-        public void TextBoxBaseUiaTextProvider_GetPositionFromChar_ReturnsEmpty_WithoutHanlde(Size size, string text, bool multiline, int charIndex, Point expectedPoint)
+        public void TextBoxBaseUiaTextProvider_GetPositionFromChar_ReturnsEmpty_WithoutHandle(Size size, string text, bool multiline, int charIndex, Point expectedPoint)
         {
             using SubTextBoxBase textBoxBase = new SubTextBoxBase() { Size = size, Text = text, Multiline = multiline };
             TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
@@ -898,7 +897,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(0)]
         [InlineData(2)]
-        public void TextBoxBaseUiaTextProvider_LineScroll_DoesntWork_WitoutHandle(int expectedLine)
+        public void TextBoxBaseUiaTextProvider_LineScroll_DoesntWork_WithoutHandle(int expectedLine)
         {
             using TextBoxBase textBoxBase = new SubTextBoxBase
             {

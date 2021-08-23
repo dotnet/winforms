@@ -4,7 +4,6 @@
 
 using System.Drawing;
 using System.Runtime.InteropServices;
-using System.Threading;
 using static Interop;
 using static Interop.User32;
 
@@ -59,7 +58,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 int vscreenLeft = GetSystemMetrics(SystemMetric.SM_XVIRTUALSCREEN);
                 int vscreenTop = GetSystemMetrics(SystemMetric.SM_YVIRTUALSCREEN);
 
-                const int DesktopNormilizedMax = 65536;
+                const int DesktopNormalizedMax = 65536;
 
                 // Absolute input requires that input is in 'normalized' coords - with the entire
                 // desktop being (0,0)...(65535,65536). Need to convert input x,y coords to this
@@ -69,7 +68,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 // of normalized coords - eg. on a 1024x768 screen,
                 // y pixel 0 corresponds to range 0 to 85.333,
                 // y pixel 1 corresponds to range 85.333 to 170.666,
-                // y pixel 2 correpsonds to range 170.666 to 256 - and so on.
+                // y pixel 2 corresponds to range 170.666 to 256 - and so on.
                 // Doing basic scaling math - (x-top)*65536/Width - gets us the start of the range.
                 // However, because int math is used, this can end up being rounded into the wrong
                 // pixel. For example, if we wanted pixel 1, we'd get 85.333, but that comes out as
@@ -81,8 +80,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 // The key ting here is that unlike points in coordinate geometry, pixels take up
                 // space, so are often better treated like rectangles - and if you want to target
                 // a particular pixel, target its rectangle's midpoint, not its edge.
-                x = ((x - vscreenLeft) * DesktopNormilizedMax) / vscreenWidth + DesktopNormilizedMax / (vscreenWidth * 2);
-                y = ((y - vscreenTop) * DesktopNormilizedMax) / vscreenHeight + DesktopNormilizedMax / (vscreenHeight * 2);
+                x = ((x - vscreenLeft) * DesktopNormalizedMax) / vscreenWidth + DesktopNormalizedMax / (vscreenWidth * 2);
+                y = ((y - vscreenTop) * DesktopNormalizedMax) / vscreenHeight + DesktopNormalizedMax / (vscreenHeight * 2);
 
                 flags |= MOUSEEVENTF.VIRTUALDESK;
             }

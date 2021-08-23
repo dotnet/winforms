@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="zh-Hant" original="../SR.resx">
+    <body>
+      <trans-unit id="GdiplusFontFamilyNotFound">
+        <source>Font '{0}' cannot be found.</source>
+        <target state="translated">找不到字型 '{0}'。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="GdiplusNotTrueTypeFont">
+        <source>Only TrueType fonts are supported. '{0}' is not a TrueType font.</source>
+        <target state="translated">僅支援 TrueType 字型。'{0}' 不是 TrueType 字型。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentValueFontConverter">
+        <source>Value of '{0}' is not valid for font size unit.</source>
+        <target state="translated">'{0}' 不是有效的字型大小單位值。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextParseFailedFormat">
+        <source>Text "{0}" cannot be parsed. The expected text format is "{1}".</source>
+        <target state="translated">文字 "{0}" 無法剖析。預期的文字格式是 "{1}"。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC001Message">
+        <source>Only projects with 'OutputType={0}' supported</source>
+        <target state="translated">只支援 'OutputType={0}' 的專案</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC001Title">
+        <source>Unsupported project type</source>
+        <target state="translated">不支援的專案類型</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002Message">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
+        <target state="translated">ArgumentException: 專案屬性 '{0}' 不能設定為 '{1}'</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002MessageWithReason">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
+        <target state="translated">ArgumentException: 專案屬性 '{0}' 不能設定為 '{1}'。理由: {2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002Title">
+        <source>Unsupported property value</source>
+        <target state="translated">不支援的屬性值</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

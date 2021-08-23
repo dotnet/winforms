@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Metafiles
         /// <param name="stateValidators">Optional device context state validation to perform.</param>
         public RectangleValidator(
             RECT? bounds,
-            params IStateValidator[] stateValidators) : base (stateValidators)
+            params IStateValidator[] stateValidators) : base(stateValidators)
         {
             _bounds = bounds;
         }

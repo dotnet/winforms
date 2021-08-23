@@ -149,7 +149,7 @@ namespace System.Windows.Forms
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
                 {
-                    return -1; // we dont support empty or null keys.
+                    return -1; // we don't support empty or null keys.
                 }
 
                 // step 1 - check the last cached item
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
             public virtual void Clear()
             {
                 // Delete the columns
-                if (owner.columnHeaders != null)
+                if (owner.columnHeaders is not null)
                 {
                     if (owner.View == View.Tile)
                     {
@@ -338,6 +338,7 @@ namespace System.Windows.Forms
                             int w = owner.columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             owner.columnHeaders[colIdx].OwnerListview = null;
                         }
+
                         owner.columnHeaders = null;
                         if (owner.IsHandleCreated)
                         {
@@ -353,8 +354,10 @@ namespace System.Windows.Forms
                             {
                                 User32.SendMessageW(owner, (User32.WM)LVM.DELETECOLUMN, (IntPtr)colIdx);
                             }
+
                             owner.columnHeaders[colIdx].OwnerListview = null;
                         }
+
                         owner.columnHeaders = null;
                     }
                 }
@@ -371,6 +374,7 @@ namespace System.Windows.Forms
                 {
                     return Contains((ColumnHeader)value);
                 }
+
                 return false;
             }
 
@@ -399,6 +403,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 
@@ -408,6 +413,7 @@ namespace System.Windows.Forms
                 {
                     return IndexOf((ColumnHeader)value);
                 }
+
                 return -1;
             }
 
@@ -417,6 +423,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
+
                 owner.InsertColumn(index, value);
             }
 
@@ -542,6 +549,7 @@ namespace System.Windows.Forms
                         {
                             hdr.DisplayIndexInternal--;
                         }
+
                         indices[i > index ? i - 1 : i] = hdr.DisplayIndexInternal;
                     }
                 }
@@ -599,7 +607,7 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                if (owner.columnHeaders != null)
+                if (owner.columnHeaders is not null)
                 {
                     return owner.columnHeaders.GetEnumerator();
                 }

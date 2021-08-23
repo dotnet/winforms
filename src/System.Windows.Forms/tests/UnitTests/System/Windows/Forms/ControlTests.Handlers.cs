@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -14,7 +13,7 @@ namespace System.Windows.Forms.Tests
     public partial class ControlTests
     {
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnAutoSizeChanged_Invoke_CallsAutoSizeChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -38,7 +37,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -64,7 +63,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackColorChanged_InvokeWithHandle_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -128,7 +127,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackColorChanged_InvokeWithChildren_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -175,7 +174,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackColorChanged_InvokeWithChildrenWithBackColor_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var child1 = new Control
@@ -228,7 +227,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageChanged_Invoke_CallsBackgroundImageChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -254,7 +253,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageChanged_InvokeWithHandle_CallsBackgroundImageChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -323,7 +322,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageChanged_InvokeWithChildren_CallsBackgroundImageChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -374,7 +373,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageChanged_InvokeWithChildrenWithBackgroundImage_CallsBackgroundImageChanged(EventArgs eventArgs)
         {
             using var child1 = new Control
@@ -429,8 +428,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, child1CallCount);
             Assert.Equal(1, child2CallCount);
         }
+
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageLayoutChanged_Invoke_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -456,7 +456,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageLayoutChanged_InvokeWithHandle_CallsBackgroundImageLayoutChangedAndInvalidated(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -503,7 +503,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageLayoutChanged_InvokeWithChildren_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -550,7 +550,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBackgroundImageLayoutChanged_InvokeWithChildrenWithBackgroundImageLayout_CallsBackgroundImageLayoutChanged(EventArgs eventArgs)
         {
             using var child1 = new Control
@@ -627,7 +627,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBindingContextChanged_Invoke_CallsBindingContextChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -651,7 +651,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBindingContextChanged_InvokeWithChildren_CallsBindingContextChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -698,7 +698,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnBindingContextChanged_InvokeWithChildrenWithBindingContext_CallsBindingContextChanged(EventArgs eventArgs)
         {
             var childContext1 = new BindingContext();
@@ -753,7 +753,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnCausesValidationChanged_Invoke_CallsCausesValidationChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -808,7 +808,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnClick_Invoke_CallsClick(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -832,7 +832,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnClientSizeChanged_Invoke_CallsClientSizeChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -870,7 +870,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnClientSizeChanged_InvokeWithHandle_CallsClientSizeChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -927,7 +927,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnClientSizeChanged_InvokeWithResizeRedraw_CallsClientSizeChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -985,7 +985,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnContextMenuStripChanged_Invoke_CallsContextMenuStripChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1077,7 +1077,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnCursorChanged_Invoke_CallsCursorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1101,7 +1101,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnCursorChanged_InvokeWithChildren_CallsCursorChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -1148,7 +1148,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnCursorChanged_InvokeWithChildrenWithCursor_CallsCursorChanged(EventArgs eventArgs)
         {
             var childCursor1 = new Cursor((IntPtr)1);
@@ -1203,7 +1203,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnDockChanged_Invoke_CallsDockChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1227,7 +1227,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnDoubleClick_Invoke_CallsDoubleClick(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnDpiChangedBeforeParent_Invoke_CallsDpiChangedAfterParent(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1275,7 +1275,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnDpiChangedBeforeParent_Invoke_CallsDpiChangedBeforeParent(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1353,7 +1353,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnDragLeave_Invoke_CallsDragLeave(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1401,7 +1401,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnEnabledChanged_Invoke_CallsEnabledChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1431,7 +1431,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnEnabledChanged_InvokeWithHandle_CallsEnabledChangedCallsInvalidated(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1464,7 +1464,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnEnabledChanged_InvokeWithHandleNoUserPaint_CallsEnabledChangedDoesNotCallInvalidated(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1498,7 +1498,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnEnabledChanged_InvokeWithChildren_CallsEnabledChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -1545,7 +1545,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnEnabledChanged_InvokeWithChildrenDisabled_CallsEnabledChanged(EventArgs eventArgs)
         {
             using var child1 = new Control
@@ -1598,7 +1598,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnEnter_Invoke_CallsEnter(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1622,7 +1622,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1650,7 +1650,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnFontChanged_InvokeWithFontHeight_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubControl
@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnFontChanged_InvokeWithChildren_CallsFontChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -1780,7 +1780,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnFontChanged_InvokeWithChildrenWithFont_CallsFontChanged(EventArgs eventArgs)
         {
             using var childFont1 = new Font("Arial", 1);
@@ -1859,7 +1859,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1885,7 +1885,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnForeColorChanged_InvokeWithHandle_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -1954,7 +1954,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnForeColorChanged_InvokeWithChildren_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -2001,7 +2001,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnForeColorChanged_InvokeWithChildrenWithForeColor_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var child1 = new Control
@@ -2084,7 +2084,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnGotFocus_Invoke_CallsGotFocus(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -2110,7 +2110,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -2267,7 +2267,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnHandleCreated_InvokeWithHandleAllowDrop_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubControl
@@ -2302,7 +2302,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -2415,7 +2415,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnHandleDestroyed_InvokeAllowDrop_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubControl
@@ -2448,7 +2448,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -2548,7 +2548,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnHandleDestroyed_InvokeWithHandleAllowDrop_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubControl
@@ -2710,7 +2710,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnImeModeChanged_Invoke_CallsImeModeChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -2990,7 +2990,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void Control_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3016,7 +3016,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void Control_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3042,7 +3042,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void Control_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3068,7 +3068,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void Control_OnLayout_Invoke_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3092,7 +3092,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void Control_OnLayout_InvokeWithHandle_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3131,7 +3131,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetLayoutEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetLayoutEventArgsTheoryData))]
         public void Control_OnLayout_InvokeWithParent_CallsLayout(LayoutEventArgs eventArgs)
         {
             using var parent = new Control();
@@ -3159,7 +3159,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void Control_OnLeave_Invoke_CallsLeave(KeyEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3183,7 +3183,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnLocationChanged_Invoke_CallsLocationChangedAndMove(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3218,7 +3218,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnLocationChanged_InvokeWithHandle_CallsLocationChangedAndMove(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3316,7 +3316,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnLostFocus_Invoke_CallsLostFocus(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3340,7 +3340,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnMarginChanged_Invoke_CallsMarginChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3364,7 +3364,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnMouseCaptureChanged_Invoke_CallsMouseCaptureChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3390,7 +3390,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Control_OnMouseClick_Invoke_CallsMouseClick(MouseEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3416,7 +3416,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Control_OnMouseDoubleClick_Invoke_CallsMouseDoubleClick(MouseEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3442,7 +3442,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Control_OnMouseDown_Invoke_CallsMouseDown(MouseEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3468,7 +3468,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3494,7 +3494,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnMouseHover_Invoke_CallsMouseHover(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3520,7 +3520,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3546,7 +3546,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Control_OnMouseMove_Invoke_CallsMouseMove(MouseEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3572,7 +3572,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Control_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3598,7 +3598,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void Control_OnMouseWheel_Invoke_CallsMouseWheel(MouseEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3645,7 +3645,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnMove_Invoke_CallsMove(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3669,7 +3669,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnMove_InvokeWithHandle_CallsMove(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3736,7 +3736,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnPaddingChanged_Invoke_CallsPaddingChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -3810,7 +3810,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaintEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaintEventArgsTheoryData))]
         public void Control_OnPaint_Invoke_CallsPaint(PaintEventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4173,7 +4173,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentChanged_Invoke_CallsParentChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4197,7 +4197,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentBackColorChanged_Invoke_CallsBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4221,7 +4221,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentBackColorChanged_InvokeWithBackColor_DoesNotCallBackColorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl
@@ -4249,7 +4249,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentBackgroundImageChanged_Invoke_CallsBackgroundImageChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4273,7 +4273,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentBackgroundImageChanged_InvokeWithBackgroundImage_CallsBackgroundImageChanged(EventArgs eventArgs)
         {
             var image = new Bitmap(10, 10);
@@ -4302,7 +4302,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentBindingContextChanged_Invoke_CallsBindingContextChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4326,7 +4326,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentBindingContextChanged_InvokeWithBindingContext_DoesNotCallBindingContextChanged(EventArgs eventArgs)
         {
             var context = new BindingContext();
@@ -4355,7 +4355,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentCursorChanged_Invoke_CallsCursorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4379,7 +4379,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentCursorChanged_InvokeWithCursor_DoesNotCallCursorChanged(EventArgs eventArgs)
         {
             var cursor = new Cursor((IntPtr)1);
@@ -4408,7 +4408,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentEnabledChanged_Invoke_CallsEnabledChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4432,7 +4432,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentEnabledChanged_InvokeDisabled_DoesNotCallEnabledChanged(EventArgs eventArgs)
         {
             using var control = new SubControl
@@ -4460,7 +4460,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentFontChanged_Invoke_CallsFontChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4484,7 +4484,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentFontChanged_InvokeWithFont_DoesNotCallFontChanged(EventArgs eventArgs)
         {
             var font = new Font("Arial", 8.25f);
@@ -4513,7 +4513,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentForeColorChanged_Invoke_CallsForeColorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4537,7 +4537,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentForeColorChanged_InvokeWithForeColor_DoesNotCallForeColorChanged(EventArgs eventArgs)
         {
             using var control = new SubControl
@@ -4565,7 +4565,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentVisibleChanged_Invoke_CallsVisibleChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4589,7 +4589,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnParentVisibleChanged_InvokeDisabled_DoesNotCallVisibleChanged(EventArgs eventArgs)
         {
             using var control = new SubControl
@@ -4804,7 +4804,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnRegionChanged_Invoke_CallsRegionChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4833,7 +4833,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnResize_Invoke_CallsResize(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4927,7 +4927,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnRightToLeftChanged_Invoke_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -4957,7 +4957,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnRightToLeftChanged_InvokeWithHandle_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5025,7 +5025,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnRightToLeftChanged_InvokeWithChildren_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -5075,7 +5075,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnRightToLeftChanged_InvokeWithChildrenWithRightToLeft_CallsRightToLeftChanged(EventArgs eventArgs)
         {
             using var child1 = new Control
@@ -5128,7 +5128,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnSizeChanged_Invoke_CallsSizeChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5154,7 +5154,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnSizeChanged_Invoke_CallsSizeChangedAndResize(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5210,7 +5210,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnSizeChanged_InvokeWithResizeRedraw_CallsSizeChangedAndResizeAndInvalidate(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5267,7 +5267,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnStyleChanged_Invoke_CallsStyleChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5291,7 +5291,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnSystemColorsChanged_Invoke_CallsSystemColorsChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5317,7 +5317,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnSystemColorsChanged_InvokeWithHandle_CallsSystemColorsChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5356,7 +5356,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnSystemColorsChanged_InvokeWithChildren_CallsSystemColorsChanged(EventArgs eventArgs)
         {
             using var child1 = new Control();
@@ -5409,7 +5409,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnTabIndexChanged_Invoke_CallsTabIndexChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5433,7 +5433,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnTabStopChanged_Invoke_CallsTabStopChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5457,7 +5457,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnTextChanged_Invoke_CallsTextChanged(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5481,7 +5481,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void Control_OnValidated_Invoke_CallsValidated(EventArgs eventArgs)
         {
             using var control = new SubControl();
@@ -5744,21 +5744,24 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(grandchild1, sender);
                 Assert.Same(eventArgs, e);
                 grandchildCallCount1++;
-            };
+            }
+
             grandchild1.VisibleChanged += grandchildHandler1;
             void childHandler1(object sender, EventArgs e)
             {
                 Assert.Same(child1, sender);
                 Assert.Same(eventArgs, e);
                 childCallCount1++;
-            };
+            }
+
             child1.VisibleChanged += childHandler1;
             void childHandler2(object sender, EventArgs e)
             {
                 Assert.Same(child2, sender);
                 Assert.Same(eventArgs, e);
                 childCallCount2++;
-            };
+            }
+
             child2.VisibleChanged += childHandler2;
 
             try

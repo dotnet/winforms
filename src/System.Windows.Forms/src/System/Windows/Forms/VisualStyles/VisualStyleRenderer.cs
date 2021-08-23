@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.ComponentModel;
 using System.Drawing;
 using Microsoft.Win32;
 using static Interop;
@@ -244,12 +243,13 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 RECT rect = bounds;
                 _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, null);
             }
             else
             {
-                RECT rect  = bounds;
+                RECT rect = bounds;
                 _lastHResult = DrawThemeBackground(this, dc, Part, State, ref rect, null);
             }
         }
@@ -278,6 +278,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 RECT rect = bounds;
                 RECT clipRect = clipRectangle;
                 _lastHResult = DrawThemeBackground(htheme, dc, Part, State, ref rect, &clipRect);
@@ -551,6 +552,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 _lastHResult = GetThemeFilename(this, Part, State, (int)prop, pFilename, filename.Length);
             }
+
             return filename.SliceAtFirstNull().ToString();
         }
 
@@ -627,6 +629,7 @@ namespace System.Windows.Forms.VisualStyles
                 {
                     throw new InvalidOperationException(SR.VisualStyleHandleCreationFailed);
                 }
+
                 _lastHResult = GetThemePartSize(htheme, dc, Part, State, null, type, out Size dpiSize);
                 return dpiSize;
             }
@@ -694,6 +697,7 @@ namespace System.Windows.Forms.VisualStyles
             {
                 _lastHResult = GetThemeString(this, Part, State, (int)prop, pString, aString.Length);
             }
+
             return aString.SliceAtFirstNull().ToString();
         }
 

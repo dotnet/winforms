@@ -8,7 +8,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
 
@@ -51,6 +50,7 @@ namespace System.Windows.Forms
                 {
                     s_leftArrowBmp = GetBitmapFromIcon("DataGridViewRow.left");
                 }
+
                 return s_leftArrowBmp;
             }
         }
@@ -63,6 +63,7 @@ namespace System.Windows.Forms
                 {
                     s_leftArrowStarBmp = GetBitmapFromIcon("DataGridViewRow.leftstar");
                 }
+
                 return s_leftArrowStarBmp;
             }
         }
@@ -75,6 +76,7 @@ namespace System.Windows.Forms
                 {
                     s_pencilLTRBmp = GetBitmapFromIcon("DataGridViewRow.pencil_ltr");
                 }
+
                 return s_pencilLTRBmp;
             }
         }
@@ -87,6 +89,7 @@ namespace System.Windows.Forms
                 {
                     s_pencilRTLBmp = GetBitmapFromIcon("DataGridViewRow.pencil_rtl");
                 }
+
                 return s_pencilRTLBmp;
             }
         }
@@ -99,6 +102,7 @@ namespace System.Windows.Forms
                 {
                     s_rightArrowBmp = GetBitmapFromIcon("DataGridViewRow.right");
                 }
+
                 return s_rightArrowBmp;
             }
         }
@@ -111,6 +115,7 @@ namespace System.Windows.Forms
                 {
                     s_rightArrowStarBmp = GetBitmapFromIcon("DataGridViewRow.rightstar");
                 }
+
                 return s_rightArrowStarBmp;
             }
         }
@@ -123,6 +128,7 @@ namespace System.Windows.Forms
                 {
                     s_starBmp = GetBitmapFromIcon("DataGridViewRow.star");
                 }
+
                 return s_starBmp;
             }
         }
@@ -142,6 +148,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewRowHeaderCell)System.Activator.CreateInstance(thisType);
             }
+
             base.CloneInternal(dataGridViewCell);
             dataGridViewCell.Value = Value;
             return dataGridViewCell;
@@ -178,6 +185,7 @@ namespace System.Windows.Forms
                     b = scaledBitmap;
                 }
             }
+
             return b;
         }
 
@@ -192,6 +200,7 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (rowIndex < 0 || rowIndex >= DataGridView.Rows.Count)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
@@ -209,6 +218,7 @@ namespace System.Windows.Forms
                 {
                     sb.Append("<TABLE>");
                 }
+
                 sb.Append("<TR>");
                 sb.Append("<TD ALIGN=\"center\">");
                 if (val is not null)
@@ -222,6 +232,7 @@ namespace System.Windows.Forms
                 {
                     sb.Append("&nbsp;");
                 }
+
                 sb.Append("</TD>");
                 if (lastCell)
                 {
@@ -231,6 +242,7 @@ namespace System.Windows.Forms
                         sb.Append("</TABLE>");
                     }
                 }
+
                 return sb.ToString();
             }
             else
@@ -252,6 +264,7 @@ namespace System.Windows.Forms
                             sb.Insert(insertionPoint, '"');
                         }
                     }
+
                     if (lastCell)
                     {
                         if (!inLastRow)
@@ -264,6 +277,7 @@ namespace System.Windows.Forms
                     {
                         sb.Append(csv ? ',' : (char)Keys.Tab);
                     }
+
                     return sb.ToString();
                 }
                 else
@@ -643,6 +657,7 @@ namespace System.Windows.Forms
             {
                 val = null;
             }
+
             return DataGridViewUtilities.GetPreferredRowHeaderSize(graphics,
                                                                    (string)val,
                                                                    cellStyle,
@@ -662,6 +677,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             return Properties.GetObject(s_propCellValue);
         }
 
@@ -760,6 +776,7 @@ namespace System.Windows.Forms
                     {
                         valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                     }
+
                     valBounds.Width -= cellStyle.Padding.Horizontal;
                     valBounds.Height -= cellStyle.Padding.Vertical;
                 }
@@ -788,6 +805,7 @@ namespace System.Windows.Forms
                                 state = (int)HeaderItemState.Pressed;
                             }
                         }
+
                         // Flip the column header background
                         using (Bitmap bmFlipXPThemes = new Bitmap(backgroundBounds.Height, backgroundBounds.Width))
                         {
@@ -803,6 +821,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     // update the val bounds
                     Rectangle rectThemeMargins = GetThemeMargins(graphics);
                     if (DataGridView.RightToLeftInternal)
@@ -813,6 +832,7 @@ namespace System.Windows.Forms
                     {
                         valBounds.X += rectThemeMargins.Y;
                     }
+
                     valBounds.Width -= rectThemeMargins.Y + rectThemeMargins.Height;
                     valBounds.Height -= rectThemeMargins.X + rectThemeMargins.Width;
                     valBounds.Y += rectThemeMargins.X;
@@ -844,6 +864,7 @@ namespace System.Windows.Forms
                     {
                         valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                     }
+
                     valBounds.Width -= cellStyle.Padding.Horizontal;
                     valBounds.Height -= cellStyle.Padding.Vertical;
                 }
@@ -903,6 +924,7 @@ namespace System.Windows.Forms
                             {
                                 bmp = DataGridViewRowHeaderCell.StarBitmap;
                             }
+
                             if (bmp is not null)
                             {
                                 Color iconColor;
@@ -914,20 +936,24 @@ namespace System.Windows.Forms
                                 {
                                     iconColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
                                 }
+
                                 lock (bmp)
                                 {
                                     PaintIcon(graphics, bmp, valBounds, iconColor);
                                 }
                             }
                         }
+
                         if (!DataGridView.RightToLeftInternal)
                         {
                             valBounds.X += s_iconsWidth + 2 * RowHeaderIconMarginWidth;
                         }
+
                         valBounds.Width -= s_iconsWidth + 2 * RowHeaderIconMarginWidth;
                         Debug.Assert(valBounds.Width >= 0);
                         Debug.Assert(valBounds.Height >= 0);
                     }
+
                     // Second priority is text
                     // Font independent margins
                     valBounds.Offset(HorizontalTextMarginLeft + ContentMarginWidth, VerticalTextMargin);
@@ -951,6 +977,7 @@ namespace System.Windows.Forms
                                 {
                                     valBounds.X += s_iconsWidth + 2 * RowHeaderIconMarginWidth;
                                 }
+
                                 valBounds.Width -= s_iconsWidth + 2 * RowHeaderIconMarginWidth;
                             }
                         }
@@ -968,10 +995,12 @@ namespace System.Windows.Forms
                                 {
                                     textColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
                                 }
+
                                 if ((flags & TextFormatFlags.SingleLine) != 0)
                                 {
                                     flags |= TextFormatFlags.EndEllipsis;
                                 }
+
                                 TextRenderer.DrawText(graphics,
                                                       formattedString,
                                                       cellStyle.Font,
@@ -985,6 +1014,7 @@ namespace System.Windows.Forms
                             }
                         }
                     }
+
                     // Third priority is the row error icon, which may be painted on top of text
                     if (errorBounds.Width >= 3 * RowHeaderIconMarginWidth +
                                              2 * s_iconsWidth)
@@ -1049,6 +1079,7 @@ namespace System.Windows.Forms
                             {
                                 bmp = DataGridViewRowHeaderCell.StarBitmap;
                             }
+
                             if (bmp is not null)
                             {
                                 lock (bmp)
@@ -1062,6 +1093,7 @@ namespace System.Windows.Forms
                                     {
                                         iconColor = cellSelected ? cellStyle.SelectionForeColor : cellStyle.ForeColor;
                                     }
+
                                     PaintIcon(graphics, bmp, valBounds, iconColor);
                                 }
                             }
@@ -1086,6 +1118,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             // else no room for content or error icon, resultBounds = Rectangle.Empty
 
             return resultBounds;
@@ -1115,10 +1148,12 @@ namespace System.Windows.Forms
             {
                 Properties.SetObject(s_propCellValue, value);
             }
+
             if (DataGridView is not null && originalValue != value)
             {
                 RaiseCellValueChanged(new DataGridViewCellEventArgs(-1, rowIndex));
             }
+
             return true;
         }
 

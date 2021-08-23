@@ -23,13 +23,14 @@ namespace System.Windows.Forms
 
         public MenuTimer()
         {
-            // MenuShowDelay can be set to 0.  In this case, set to something low so it's inperceptable.
+            // MenuShowDelay can be set to 0.  In this case, set to something low so it's imperceptible.
             autoMenuExpandTimer.Tick += new EventHandler(OnTick);
 
             // since MenuShowDelay is registry tweakable we've gotta make sure we've got some sort
             // of interval
             slowShow = Math.Max(quickShow, SystemInformation.MenuShowDelay);
         }
+
         // the current item to autoexpand.
         private ToolStripMenuItem CurrentItem
         {
@@ -43,6 +44,7 @@ namespace System.Windows.Forms
                 currentItem = value;
             }
         }
+
         public bool InTransition
         {
             get { return inTransition; }
@@ -55,6 +57,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             StartCore(item);
         }
 
@@ -64,8 +67,9 @@ namespace System.Windows.Forms
             {
                 Cancel(CurrentItem);
             }
+
             CurrentItem = item;
-            if (item != null)
+            if (item is not null)
             {
                 CurrentItem = item;
                 autoMenuExpandTimer.Interval = item.IsOnDropDown ? slowShow : quickShow;
@@ -92,6 +96,7 @@ namespace System.Windows.Forms
                 CancelCore();
                 StartCore(toItem);
             }
+
             // set up the current item to be the toItem so it will be auto expanded when complete.
             CurrentItem = toItem;
             InTransition = true;
@@ -103,8 +108,10 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             CancelCore();
         }
+
         /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
         /// </summary>
@@ -114,6 +121,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (item == CurrentItem)
             {
                 CancelCore();
@@ -125,6 +133,7 @@ namespace System.Windows.Forms
             autoMenuExpandTimer.Enabled = false;
             CurrentItem = null;
         }
+
         private void EndTransition(bool forceClose)
         {
             ToolStripMenuItem lastSelected = fromItem;
@@ -133,14 +142,15 @@ namespace System.Windows.Forms
             {
                 InTransition = false;
 
-                // we should roolup if the current item has changed and is selected.
-                bool rollup = forceClose || (CurrentItem != null && CurrentItem != lastSelected && CurrentItem.Selected);
-                if (rollup && lastSelected != null && lastSelected.HasDropDownItems)
+                // we should rollup if the current item has changed and is selected.
+                bool rollup = forceClose || (CurrentItem is not null && CurrentItem != lastSelected && CurrentItem.Selected);
+                if (rollup && lastSelected is not null && lastSelected.HasDropDownItems)
                 {
                     lastSelected.HideDropDown();
                 }
             }
         }
+
         internal void HandleToolStripMouseLeave(ToolStrip toolStrip)
         {
             if (InTransition && toolStrip == fromItem.ParentInternal)
@@ -149,7 +159,7 @@ namespace System.Windows.Forms
                 // we're about to fall off the edge of the toolstrip, something should be selected
                 // at all times while we're InTransition mode - otherwise it looks really funny
                 // to have an auto expanded item
-                if (CurrentItem != null)
+                if (CurrentItem is not null)
                 {
                     CurrentItem.Select();
                 }
@@ -161,7 +171,7 @@ namespace System.Windows.Forms
                 if (toolStrip.IsDropDown && toolStrip.ActiveDropDowns.Count > 0)
                 {
                     ToolStripMenuItem menuItem = (!(toolStrip.ActiveDropDowns[0] is ToolStripDropDown dropDown)) ? null : dropDown.OwnerItem as ToolStripMenuItem;
-                    if (menuItem != null && menuItem.Pressed)
+                    if (menuItem is not null && menuItem.Pressed)
                     {
                         menuItem.Select();
                     }
@@ -177,8 +187,9 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             EndTransition(/*forceClose*/false);
-            if (CurrentItem != null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
+            if (CurrentItem is not null && !CurrentItem.IsDisposed && CurrentItem.Selected && CurrentItem.Enabled && ToolStripManager.ModalMenuFilter.InMenuMode)
             {
                 Debug.WriteLineIf(ToolStrip.s_menuAutoExpandDebug.TraceVerbose, "[MenuTimer.OnTick] calling OnMenuAutoExpand");
                 CurrentItem.OnMenuAutoExpand();

@@ -4,9 +4,9 @@
 
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using Moq;
 using Xunit;
 using static Interop;
-using Moq;
 
 namespace System.Windows.Forms.Tests
 {

@@ -33,7 +33,7 @@ namespace System.Windows.Forms
                     RECT rect = new RECT();
                     CreateParams cp = CreateParams;
 
-                    AdjustWindowRectEx(ref rect, cp.Style, false, cp.ExStyle);
+                    AdjustWindowRectExForControlDpi(ref rect, cp.Style, false, cp.ExStyle);
 
                     // the coordinates we get back are negative, we need to translate this back to positive.
                     int offsetX = -rect.left; // one to get back to 0,0, another to translate
@@ -50,6 +50,7 @@ namespace System.Windows.Forms
                     return rect;
                 }
             }
+
             private Rectangle AbsoluteClientRectangle
             {
                 get
@@ -63,13 +64,14 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (Owner != null)
+                    if (Owner is not null)
                     {
                         if (Owner.Renderer is ToolStripProfessionalRenderer renderer)
                         {
                             return renderer.ColorTable;
                         }
                     }
+
                     return ProfessionalColors.ColorTable;
                 }
             }
@@ -79,7 +81,7 @@ namespace System.Windows.Forms
                 get
                 {
                     return ((BorderStyle == BorderStyle.Fixed3D) &&
-                             (Owner != null && (Owner.Renderer is ToolStripProfessionalRenderer)));
+                             (Owner is not null && (Owner.Renderer is ToolStripProfessionalRenderer)));
                 }
             }
 
@@ -226,6 +228,7 @@ namespace System.Windows.Forms
                 {
                     HookStaticEvents(false);
                 }
+
                 base.Dispose(disposing);
             }
 
@@ -275,6 +278,7 @@ namespace System.Windows.Forms
                 // We've handled WM_NCPAINT.
                 m.Result = IntPtr.Zero;
             }
+
             protected override void WndProc(ref Message m)
             {
                 if (m.Msg == (int)User32.WM.NCPAINT)

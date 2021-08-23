@@ -113,8 +113,8 @@ namespace System.Windows.Forms
             set => base.AutoScrollMinSize = value;
         }
 
-        [    DefaultValue(true)]
-            [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
+        [DefaultValue(true)]
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Visible)]
         public override bool AutoSize
         {
             get => base.AutoSize;
@@ -134,6 +134,7 @@ namespace System.Windows.Forms
         {
             get { return Padding.Empty; }
         }
+
         protected override Padding DefaultMargin
         {
             get { return Padding.Empty; }
@@ -237,6 +238,7 @@ namespace System.Windows.Forms
                     HandleRendererChanged(this, EventArgs.Empty);
                     _rendererSwitcher.RendererChanged += new EventHandler(HandleRendererChanged);
                 }
+
                 return _rendererSwitcher;
             }
         }
@@ -294,6 +296,7 @@ namespace System.Windows.Forms
                     rowCollection = CreateToolStripPanelRowCollection();
                     Properties.SetObject(s_propToolStripPanelRowCollection, rowCollection);
                 }
+
                 return rowCollection;
             }
         }
@@ -414,6 +417,7 @@ namespace System.Windows.Forms
             {
                 ToolStripManager.ToolStripPanels.Remove(this);
             }
+
             base.Dispose(disposing);
         }
 
@@ -427,8 +431,10 @@ namespace System.Windows.Forms
             {
                 FlowLayout.SetFlowDirection(this, FlowDirection.LeftToRight);
             }
+
             FlowLayout.SetWrapContents(this, false);
         }
+
         private Point GetStartLocation(ToolStrip toolStripToDrag)
         {
             if (toolStripToDrag.IsCurrentlyDragging
@@ -438,6 +444,7 @@ namespace System.Windows.Forms
                 // the grip is on the right side, not left.
                 return new Point(toolStripToDrag.Right, toolStripToDrag.Top);
             }
+
             return toolStripToDrag.Location;
         }
 
@@ -481,12 +488,13 @@ namespace System.Windows.Forms
             {
                 controlToBeDragged.ToolStripPanelRow?.ControlsInternal.Remove(e.Control);
             }
+
             base.OnControlRemoved(e);
         }
 
         protected override void OnLayout(LayoutEventArgs e)
         {
-            if (e.AffectedComponent != ParentInternal && e.AffectedComponent as Control != null)
+            if (e.AffectedComponent != ParentInternal && e.AffectedComponent as Control is not null)
             {
                 if (e.AffectedComponent is ISupportToolStripPanel draggedControl && RowsInternal.Contains(draggedControl.ToolStripPanelRow))
                 {
@@ -495,6 +503,7 @@ namespace System.Windows.Forms
                     LayoutTransaction.DoLayout(draggedControl.ToolStripPanelRow, e.AffectedComponent as IArrangedElement, e.AffectedProperty);
                 }
             }
+
             base.OnLayout(e);
         }
 
@@ -581,6 +590,7 @@ namespace System.Windows.Forms
         {
             PerformUpdate(false);
         }
+
         internal void PerformUpdate(bool forceLayout)
         {
             if (!_state[s_stateBeginInit] && !_state[s_stateInJoin])
@@ -588,6 +598,7 @@ namespace System.Windows.Forms
                 JoinControls(forceLayout);
             }
         }
+
         private void ResetRenderMode()
         {
             RendererSwitcher.ResetRenderMode();
@@ -607,6 +618,7 @@ namespace System.Windows.Forms
         {
             JoinControls(false);
         }
+
         private void JoinControls(bool forceLayout)
         {
             // undone: config - shift to other container
@@ -622,7 +634,7 @@ namespace System.Windows.Forms
                 {
                     int numRows = RowsInternal.Count;
 
-                    if (controlArray[i] is ISupportToolStripPanel draggedControl && draggedControl.ToolStripPanelRow != null && !draggedControl.IsCurrentlyDragging)
+                    if (controlArray[i] is ISupportToolStripPanel draggedControl && draggedControl.ToolStripPanelRow is not null && !draggedControl.IsCurrentlyDragging)
                     {
                         ToolStripPanelRow row = draggedControl.ToolStripPanelRow;
                         if (row.Bounds.Contains(controlArray[i].Location))
@@ -631,10 +643,12 @@ namespace System.Windows.Forms
                             continue;
                         }
                     }
+
                     if (controlArray[i].AutoSize)
                     {
                         controlArray[i].Size = controlArray[i].PreferredSize;
                     }
+
                     Point controlLocation = controlArray[i].Location;
 
                     // right to left has changed while layout was deferred...
@@ -642,17 +656,19 @@ namespace System.Windows.Forms
                     {
                         controlLocation = new Point(Width - controlArray[i].Right, controlLocation.Y);
                     }
+
                     Join(controlArray[i] as ToolStrip, controlArray[i].Location);
                     if (numRows < RowsInternal.Count || forceLayout)
                     {
                         // OK this is weird but here we're in the midst of a suspend layout.
                         // the only way we can deterministically place these guys is to force a layout
-                        // each time we've added a new row.  Otherwise we wont find the correct
+                        // each time we've added a new row.  Otherwise we won't find the correct
                         // row to add the control to (PointToRow will fail as Row.Bounds isn't set yet)
                         OnLayout(new LayoutEventArgs(this, PropertyNames.Rows));
                     }
                 }
             }
+
             _state[s_stateRightToLeftChanged] = false;
         }
 
@@ -668,6 +684,7 @@ namespace System.Windows.Forms
                 // paint the feedback in the correct location when RTL.Yes
                 screenLocation.Offset(-toolStripToDrag.Width, 0);
             }
+
             if (CurrentFeedbackRect is null)
             {
                 Debug.WriteLineIf(s_toolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: creating NEW feedback at " + screenLocation.ToString());
@@ -678,7 +695,7 @@ namespace System.Windows.Forms
             if (!CurrentFeedbackRect.Visible)
             {
                 Debug.WriteLineIf(s_toolStripPanelFeedbackDebug.TraceVerbose, "FEEDBACK: Showing NEW feedback at " + screenLocation.ToString());
-                toolStripToDrag.SuspendCaputureMode();
+                toolStripToDrag.SuspendCaptureMode();
                 try
                 {
                     CurrentFeedbackRect.Show(screenLocation);
@@ -686,7 +703,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    toolStripToDrag.ResumeCaputureMode();
+                    toolStripToDrag.ResumeCaptureMode();
                 }
             }
             else
@@ -706,7 +723,7 @@ namespace System.Windows.Forms
 #endif
             FeedbackRectangle oldFeedback = feedbackRect;
             feedbackRect = null;
-            if (oldFeedback != null)
+            if (oldFeedback is not null)
             {
                 oldFeedback.Dispose();
             }
@@ -774,6 +791,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(toolStripToDrag));
             }
+
             if (!_state[s_stateBeginInit] && !_state[s_stateInJoin])
             {
                 try
@@ -832,7 +850,7 @@ namespace System.Windows.Forms
             ClearDragFeedback();
 
             // In design mode we get bogus values for client location.
-            if (toolStripToDrag.Site != null && toolStripToDrag.Site.DesignMode && IsHandleCreated)
+            if (toolStripToDrag.Site is not null && toolStripToDrag.Site.DesignMode && IsHandleCreated)
             {
                 if (clientLocation.X < 0 || clientLocation.Y < 0)
                 {
@@ -851,12 +869,12 @@ namespace System.Windows.Forms
             ToolStripPanelRow currentToolStripPanelRow = draggedControl.ToolStripPanelRow;
 
 #if DEBUG
-            bool debugModeOnly_ChangedContainers = currentToolStripPanelRow != null ?
+            bool debugModeOnly_ChangedContainers = currentToolStripPanelRow is not null ?
                                 (currentToolStripPanelRow.ToolStripPanel != this) : true;
 #endif
 
             bool pointInCurrentRow = false;
-            if (currentToolStripPanelRow != null && currentToolStripPanelRow.Visible && currentToolStripPanelRow.ToolStripPanel == this)
+            if (currentToolStripPanelRow is not null && currentToolStripPanelRow.Visible && currentToolStripPanelRow.ToolStripPanel == this)
             {
                 if (toolStripToDrag.IsCurrentlyDragging)
                 {
@@ -913,7 +931,8 @@ namespace System.Windows.Forms
                             previousRow = RowsInternal[index - 1];
                         }
                     }
-                    if (previousRow != null /* there was a previous row */
+
+                    if (previousRow is not null /* there was a previous row */
                         && previousRow.ControlsInternal.Count == 1 /*toolStripToDrag*/
                         && previousRow.ControlsInternal.Contains(toolStripToDrag))
                     {
@@ -941,13 +960,13 @@ namespace System.Windows.Forms
                 }
                 else if (!row.CanMove(toolStripToDrag))
                 {
-                    Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we cant add the control to it, creating/inserting new row."));
+                    Debug.WriteLineIf(ToolStripPanelRow.s_toolStripPanelRowCreationDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tThere was a row, but we can't add the control to it, creating/inserting new row."));
 
                     // we have a row at that point, but its too full or doesnt want
                     // anyone to join it.
                     int index = RowsInternal.IndexOf(row);
 
-                    if (currentToolStripPanelRow != null && currentToolStripPanelRow.ControlsInternal.Count == 1)
+                    if (currentToolStripPanelRow is not null && currentToolStripPanelRow.ControlsInternal.Count == 1)
                     {
                         if (index > 0 && index - 1 == RowsInternal.IndexOf(currentToolStripPanelRow))
                         {
@@ -955,6 +974,7 @@ namespace System.Windows.Forms
                             return;
                         }
                     }
+
                     row = new ToolStripPanelRow(this);
                     RowsInternal.Insert(index, row);
                     clientLocation.Y = row.Bounds.Y;
@@ -963,7 +983,7 @@ namespace System.Windows.Forms
                 changedRow = (currentToolStripPanelRow != row);
                 if (!changedRow)
                 {
-                    if (currentToolStripPanelRow != null && currentToolStripPanelRow.ControlsInternal.Count > 1)
+                    if (currentToolStripPanelRow is not null && currentToolStripPanelRow.ControlsInternal.Count > 1)
                     {
                         // force a leave/re-enter to occur.
                         currentToolStripPanelRow.LeaveRow(toolStripToDrag);
@@ -971,13 +991,15 @@ namespace System.Windows.Forms
                         changedRow = true;
                     }
                 }
+
                 if (changedRow)
                 {
                     Debug.WriteLineIf(s_toolStripPanelDebug.TraceVerbose, string.Format(CultureInfo.CurrentCulture, "\tCalling JoinRow."));
-                    if (currentToolStripPanelRow != null)
+                    if (currentToolStripPanelRow is not null)
                     {
                         currentToolStripPanelRow.LeaveRow(toolStripToDrag);
                     }
+
                     row.JoinRow(toolStripToDrag, clientLocation);
                 }
 
@@ -1004,6 +1026,7 @@ namespace System.Windows.Forms
                             cursorLoc.Y += toolStripToDrag.GripRectangle.Height / 2;
                             cursorLoc.X = Cursor.Position.X;
                         }
+
                         Cursor.Position = cursorLoc;
                     }
                 }
@@ -1024,12 +1047,13 @@ namespace System.Windows.Forms
         {
             // look for another rafting container.
             ToolStripPanel panel = ToolStripManager.ToolStripPanelFromPoint(toolStripToDrag, screenLocation);
-            if (panel != null)
+            if (panel is not null)
             {
                 using (new LayoutTransaction(panel, panel, null))
                 {
                     panel.MoveControl(toolStripToDrag, screenLocation);
                 }
+
                 toolStripToDrag.PerformLayout();
 #if DEBUG
                 ISupportToolStripPanel draggedControl = toolStripToDrag as ISupportToolStripPanel;
@@ -1058,7 +1082,7 @@ namespace System.Windows.Forms
                 Rectangle bounds = LayoutUtils.InflateRect(row.Bounds, row.Margin);
 
                 // at this point we may not be sized correctly.  Guess.
-                if (ParentInternal != null)
+                if (ParentInternal is not null)
                 {
                     if (Orientation == Orientation.Horizontal && (bounds.Width == 0))
                     {
@@ -1075,6 +1099,7 @@ namespace System.Windows.Forms
                     return row;
                 }
             }
+
             return null;
         }
 
@@ -1088,12 +1113,12 @@ namespace System.Windows.Forms
                 ToolStripPanelRow row = RowsInternal[i];
                 foreach (ToolStripPanelCell cell in row.Cells)
                 {
-                    if (cell.Control != null)
+                    if (cell.Control is not null)
                     {
                         ToolStripPanelRow currentlyAssignedRow = ((ISupportToolStripPanel)cell.Control).ToolStripPanelRow;
                         if (currentlyAssignedRow != row)
                         {
-                            int goodRowIndex = (currentlyAssignedRow != null) ? RowsInternal.IndexOf(currentlyAssignedRow) : -1;
+                            int goodRowIndex = (currentlyAssignedRow is not null) ? RowsInternal.IndexOf(currentlyAssignedRow) : -1;
                             if (goodRowIndex == -1)
                             {
                                 Debug.Fail(string.Format(CultureInfo.CurrentCulture, "ToolStripPanelRow has not been assigned!  Should be set to {0}.", i));
@@ -1122,6 +1147,7 @@ namespace System.Windows.Forms
                 {
                     Debug.Write(string.Format(CultureInfo.CurrentCulture, "[{0} {1}] ", RowsInternal[i].ControlsInternal[j].Name, ((ToolStripPanelCell)RowsInternal[i].Cells[j]).Margin));
                 }
+
                 Debug.Write("\r\n");
             }
         }
@@ -1143,6 +1169,7 @@ namespace System.Windows.Forms
                     {
                         continue;
                     }
+
                     Rectangle intersection = c1.Bounds;
                     intersection.Intersect(c2.Bounds);
 

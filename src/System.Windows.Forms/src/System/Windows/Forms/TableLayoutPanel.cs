@@ -90,11 +90,12 @@ namespace System.Windows.Forms
             {
                 _tableLayoutSettings.CellBorderStyle = value;
 
-                // PERF: dont turn on ResizeRedraw unless we know we need it.
+                // PERF: don't turn on ResizeRedraw unless we know we need it.
                 if (value != TableLayoutPanelCellBorderStyle.None)
                 {
                     SetStyle(ControlStyles.ResizeRedraw, true);
                 }
+
                 Invalidate();
                 Debug.Assert(CellBorderStyle == value, "CellBorderStyle should be the same as we set it");
             }
@@ -323,6 +324,7 @@ namespace System.Windows.Forms
             {
                 cw[i] = containerInfo.Columns[i].MinSize;
             }
+
             return cw;
         }
 
@@ -344,6 +346,7 @@ namespace System.Windows.Forms
             {
                 rh[i] = containerInfo.Rows[i].MinSize;
             }
+
             return rh;
         }
 
@@ -455,6 +458,7 @@ namespace System.Windows.Forms
                         // Paint the table border on top.
                         ControlPaint.PaintTableCellBorder(cellBorderStyle, g, outsideCellBounds);
                     }
+
                     starty += rowStrips[j].MinSize;
 
                     // Only sum this up once...
@@ -580,6 +584,7 @@ namespace System.Windows.Forms
                         cs.Width = (float)Math.Round(cs.Width * factor.Width);
                     }
                 }
+
                 i++;
             }
 

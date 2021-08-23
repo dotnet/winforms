@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -44,6 +43,7 @@ namespace System.Windows.Forms
                 shim = new HtmlDocument.HtmlDocumentShim(doc);
                 htmlDocumentShims[doc] = shim;
             }
+
             if (shim != null)
             {
                 OnShimAdded(shim);
@@ -67,6 +67,7 @@ namespace System.Windows.Forms
                 shim = new HtmlWindow.HtmlWindowShim(window);
                 htmlWindowShims[window] = shim;
             }
+
             if (shim != null)
             {
                 // strictly not necessary, but here for future use.
@@ -92,6 +93,7 @@ namespace System.Windows.Forms
                 shim = new HtmlElement.HtmlElementShim(element);
                 htmlElementShims[element] = shim;
             }
+
             if (shim != null)
             {
                 OnShimAdded(shim);
@@ -104,10 +106,12 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (htmlDocumentShims.ContainsKey(document))
             {
                 return htmlDocumentShims[document];
             }
+
             return null;
         }
 
@@ -117,10 +121,12 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (htmlElementShims.ContainsKey(element))
             {
                 return htmlElementShims[element];
             }
+
             return null;
         }
 
@@ -130,10 +136,12 @@ namespace System.Windows.Forms
             {
                 return null;
             }
+
             if (htmlWindowShims.ContainsKey(window))
             {
                 return htmlWindowShims[window];
             }
+
             return null;
         }
 
@@ -152,6 +160,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         /// <summary>
         ///  HtmlWindowShim calls back on us when it has unloaded the page.  At this point we need to
         ///  walk through our lists and make sure we've cleaned up
@@ -178,6 +187,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 //
                 // prune elements
                 //
@@ -227,6 +237,7 @@ namespace System.Windows.Forms
                         shim.Dispose();
                     }
                 }
+
                 if (htmlDocumentShims != null)
                 {
                     foreach (HtmlDocument.HtmlDocumentShim shim in htmlDocumentShims.Values)
@@ -242,11 +253,13 @@ namespace System.Windows.Forms
                         shim.Dispose();
                     }
                 }
+
                 htmlWindowShims = null;
                 htmlDocumentShims = null;
                 htmlWindowShims = null;
             }
         }
+
         ~HtmlShimManager()
         {
             Dispose(false);

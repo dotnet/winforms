@@ -4,9 +4,8 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Windows.Forms.Design;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -221,6 +220,67 @@ namespace System.Windows.Forms.Tests
         {
             using var label = new Label();
             Assert.True(label.SupportsUiaProviders);
+        }
+
+        [WinFormsFact]
+        public void Label_Invokes_SetToolTip_IfExternalToolTipIsSet()
+        {
+            using Label label = new Label();
+            using ToolTip toolTip = new ToolTip();
+            label.CreateControl();
+
+            dynamic labelDynamic = label.TestAccessor().Dynamic;
+            bool actual = labelDynamic._controlToolTip;
+
+            Assert.False(actual);
+            Assert.NotEqual(IntPtr.Zero, toolTip.Handle); // A workaround to create the toolTip native window Handle
+
+            toolTip.SetToolTip(label, "Some test text"); // Invokes Label's SetToolTip inside
+            actual = labelDynamic._controlToolTip;
+
+            Assert.True(actual);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ContentAlignment))]
+        public void Label_ImageAlign_SetInvalidValue_ThrowsInvalidEnumArgumentException(ContentAlignment value)
+        {
+            using var control = new Label();
+            Assert.Throws<InvalidEnumArgumentException>("value", () => control.ImageAlign = value);
+        }
+
+        public static IEnumerable<object[]> ImageAlign_Set_TestData()
+        {
+            foreach (bool autoSize in new bool[] { true, false })
+            {
+                foreach (ContentAlignment value in Enum.GetValues(typeof(ContentAlignment)))
+                {
+                    yield return new object[] { autoSize, value };
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ImageAlign_Set_TestData))]
+        public void Label_ImageAlign_Set_GetReturnsExpected(bool autoSize, ContentAlignment value)
+        {
+            using var control = new Label
+            {
+                AutoSize = autoSize
+            };
+            int layoutCallCount = 0;
+            control.Layout += (sender, e) => layoutCallCount++;
+
+            control.ImageAlign = value;
+            Assert.Equal(value, control.ImageAlign);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
+
+            // Set same.
+            control.ImageAlign = value;
+            Assert.Equal(value, control.ImageAlign);
+            Assert.Equal(0, layoutCallCount);
+            Assert.False(control.IsHandleCreated);
         }
 
         public class SubLabel : Label

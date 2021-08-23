@@ -4,7 +4,6 @@
 
 #nullable enable
 
-using System.Drawing;
 using System.Runtime.InteropServices;
 using static Interop;
 

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -32,12 +31,12 @@ internal static partial class Interop
             object? /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
 
             /// <summary>
-            ///  Gets the runtime ID of an elemenent. This should be unique
+            ///  Gets the runtime ID of an element. This should be unique
             ///  among elements on a desktop.
             /// </summary>
             /// <remarks>
             ///  Proxy implementations should return null for the top-level proxy which
-            ///  correpsonds to the HWND; and should return an array which starts
+            ///  corresponds to the HWND; and should return an array which starts
             ///  with AutomationInteropProvider.AppendRuntimeId, followed by values
             ///  which are then unique within that proxy's HWNDs.
             /// </remarks>

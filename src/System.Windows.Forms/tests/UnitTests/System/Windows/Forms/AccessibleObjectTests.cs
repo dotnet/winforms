@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -32,7 +31,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AccessibleObject_Name_Set_GetReturnsNull(string value)
         {
             var accessibleObject = new AccessibleObject
@@ -47,7 +46,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void AccessibleObject_Value_Set_GetReturnsEmpty(string value)
         {
             var accessibleObject = new AccessibleObject
@@ -408,8 +407,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleNavigation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleNavigation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleNavigation))]
         public void AccessibleObject_Navigate_InvokeDefault_ReturnsNull(AccessibleNavigation navdir)
         {
             var accessibleObject = new AccessibleObject();
@@ -530,8 +529,8 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleSelection))]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleSelection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleSelection))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleSelection))]
         public void AccessibleObject_Navigate_InvokeDefault_Nop(AccessibleSelection flags)
         {
             var accessibleObject = new AccessibleObject();
@@ -854,7 +853,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(accFocus_TestData))]
-        public void AccessibleObject_IAccessiblget_accFocus_InvokeDefault_ReturnsExpected(AccessibleObject result)
+        public void AccessibleObject_IAccessibleget_accFocus_InvokeDefault_ReturnsExpected(AccessibleObject result)
         {
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -1319,7 +1318,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(accSelection_TestData))]
-        public void AccessibleObject_IAccessiblget_accSelection_InvokeDefault_ReturnsExpected(AccessibleObject result)
+        public void AccessibleObject_IAccessibleget_accSelection_InvokeDefault_ReturnsExpected(AccessibleObject result)
         {
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -2320,8 +2319,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(3, "value")]
         public void AccessibleObject_IAccessibleset_accName_InvokeDefaultChild_ReturnsExpected(object varChild, string value)
         {
-            var childAccesibleObject1 = new AccessibleObject();
-            var childAccesibleObject2 = new AccessibleObject();
+            var childAccessibleObject1 = new AccessibleObject();
+            var childAccessibleObject2 = new AccessibleObject();
 
             var mockAccessibleObject = new Mock<AccessibleObject>
             {
@@ -2332,10 +2331,10 @@ namespace System.Windows.Forms.Tests
                 .Returns((AccessibleObject)null);
             mockAccessibleObject
                 .Setup(a => a.GetChild(1))
-                .Returns(childAccesibleObject1);
+                .Returns(childAccessibleObject1);
             mockAccessibleObject
                 .Setup(a => a.GetChild(2))
-                .Returns(childAccesibleObject2);
+                .Returns(childAccessibleObject2);
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
@@ -2343,8 +2342,8 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = mockAccessibleObject.Object;
             iAccessible.set_accName(varChild, value);
             Assert.Null(iAccessible.get_accName(varChild));
-            Assert.Null(childAccesibleObject1.Name);
-            Assert.Null(childAccesibleObject2.Name);
+            Assert.Null(childAccessibleObject1.Name);
+            Assert.Null(childAccessibleObject2.Name);
         }
 
         [WinFormsTheory]
@@ -2356,8 +2355,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(4, "value")]
         public void AccessibleObject_IAccessibleset_accName_InvokeDefaultNoSuchChild_ReturnsNull(object varChild, string value)
         {
-            var childAccesibleObject1 = new AccessibleObject();
-            var childAccesibleObject2 = new AccessibleObject();
+            var childAccessibleObject1 = new AccessibleObject();
+            var childAccessibleObject2 = new AccessibleObject();
 
             var mockAccessibleObject = new Mock<AccessibleObject>
             {
@@ -2368,10 +2367,10 @@ namespace System.Windows.Forms.Tests
                 .Returns((AccessibleObject)null);
             mockAccessibleObject
                 .Setup(a => a.GetChild(1))
-                .Returns(childAccesibleObject1);
+                .Returns(childAccessibleObject1);
             mockAccessibleObject
                 .Setup(a => a.GetChild(2))
-                .Returns(childAccesibleObject2);
+                .Returns(childAccessibleObject2);
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
@@ -2379,8 +2378,8 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = mockAccessibleObject.Object;
             iAccessible.set_accName(varChild, value);
             Assert.Null(iAccessible.get_accName(varChild));
-            Assert.Null(childAccesibleObject1.Name);
-            Assert.Null(childAccesibleObject2.Name);
+            Assert.Null(childAccessibleObject1.Name);
+            Assert.Null(childAccessibleObject2.Name);
         }
 
         [WinFormsTheory]
@@ -2414,8 +2413,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(3, "value")]
         public void AccessibleObject_IAccessibleset_accValue_InvokeDefaultChild_ReturnsExpected(object varChild, string value)
         {
-            var childAccesibleObject1 = new AccessibleObject();
-            var childAccesibleObject2 = new AccessibleObject();
+            var childAccessibleObject1 = new AccessibleObject();
+            var childAccessibleObject2 = new AccessibleObject();
 
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -2423,10 +2422,10 @@ namespace System.Windows.Forms.Tests
                 .Returns((AccessibleObject)null);
             mockAccessibleObject
                 .Setup(a => a.GetChild(1))
-                .Returns(childAccesibleObject1);
+                .Returns(childAccessibleObject1);
             mockAccessibleObject
                 .Setup(a => a.GetChild(2))
-                .Returns(childAccesibleObject2);
+                .Returns(childAccessibleObject2);
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
@@ -2434,8 +2433,8 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = mockAccessibleObject.Object;
             iAccessible.set_accValue(varChild, value);
             Assert.Empty(iAccessible.get_accValue(varChild));
-            Assert.Empty(childAccesibleObject1.Value);
-            Assert.Empty(childAccesibleObject2.Value);
+            Assert.Empty(childAccessibleObject1.Value);
+            Assert.Empty(childAccessibleObject2.Value);
         }
 
         [WinFormsTheory]
@@ -2447,8 +2446,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(4, "value")]
         public void AccessibleObject_IAccessibleset_accValue_InvokeDefaultNoSuchChild_ReturnsNull(object varChild, string value)
         {
-            var childAccesibleObject1 = new AccessibleObject();
-            var childAccesibleObject2 = new AccessibleObject();
+            var childAccessibleObject1 = new AccessibleObject();
+            var childAccessibleObject2 = new AccessibleObject();
 
             var mockAccessibleObject = new Mock<AccessibleObject>(MockBehavior.Strict);
             mockAccessibleObject
@@ -2456,10 +2455,10 @@ namespace System.Windows.Forms.Tests
                 .Returns((AccessibleObject)null);
             mockAccessibleObject
                 .Setup(a => a.GetChild(1))
-                .Returns(childAccesibleObject1);
+                .Returns(childAccessibleObject1);
             mockAccessibleObject
                 .Setup(a => a.GetChild(2))
-                .Returns(childAccesibleObject2);
+                .Returns(childAccessibleObject2);
             mockAccessibleObject
                 .Setup(a => a.GetChildCount())
                 .Returns(3);
@@ -2467,8 +2466,8 @@ namespace System.Windows.Forms.Tests
             IAccessible iAccessible = mockAccessibleObject.Object;
             iAccessible.set_accValue(varChild, value);
             Assert.Null(iAccessible.get_accValue(varChild));
-            Assert.Empty(childAccesibleObject1.Value);
-            Assert.Empty(childAccesibleObject2.Value);
+            Assert.Empty(childAccessibleObject1.Value);
+            Assert.Empty(childAccessibleObject2.Value);
         }
 
         [WinFormsFact]

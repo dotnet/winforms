@@ -4,7 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -142,7 +142,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripPanel_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var panel = new ToolStripPanel
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void AutoScroll_Set_GetReturnsExpected(bool value)
         {
             using var panel = new ToolStripPanel
@@ -179,7 +179,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoNegatives)]
         public void AutoScrollMargin_Set_GetReturnsExpected(Size value)
         {
             using var panel = new ToolStripPanel
@@ -194,7 +194,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData), TestIncludeType.NoPositives)]
         public void AutoScrollMargin_SetInvalid_ThrowsArgumentOutOfRangeException(Size value)
         {
             using var panel = new ToolStripPanel();
@@ -202,7 +202,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetSizeTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetSizeTheoryData))]
         public void AutoScrollMinSize_Set_GetReturnsExpected(Size value)
         {
             using var panel = new ToolStripPanel
@@ -219,7 +219,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ToolStripPanel_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new ToolStripPanel();
@@ -283,7 +283,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingTheoryData))]
         public void RowMargin_Set_GetReturnsExpected(Padding value)
         {
             using var panel = new ToolStripPanel
@@ -296,6 +296,7 @@ namespace System.Windows.Forms.Tests
             panel.RowMargin = value;
             Assert.Equal(value, panel.RowMargin);
         }
+
         [WinFormsFact]
         public void ToolStripPanel_GetAutoSizeMode_Invoke_ReturnsExpected()
         {

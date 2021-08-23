@@ -25,6 +25,7 @@ namespace System.Windows.Forms
             this.start = start;
             this.length = length;
         }
+
         public int Start
         {
             get => start;

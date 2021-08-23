@@ -112,11 +112,13 @@ namespace System.Windows.Forms
                     {
                         return GetChild(0);
                     }
+
                     if (direction == AccessibleNavigation.LastChild)
                     {
                         return GetChild(GetChildCount() - 1);
                     }
                 }
+
                 return base.Navigate(direction);
             }
         }

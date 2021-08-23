@@ -6,7 +6,7 @@ The [Issue Guide](issue-guide.md) describes our approach to using GitHub issues.
 
 ## Machine Setup
 
-Windows Forms requires the following workloads and components be selected when installing Visual Studio 2019 (16.8+):
+Windows Forms requires the following workloads and components be selected when installing Visual Studio 2019 (16.11):
 
 * Required Workloads:
   * .NET Desktop Development
@@ -20,6 +20,9 @@ Windows Forms requires the following workloads and components be selected when i
   ```
   choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
   ```
+
+  :warning: If you have VS 2022 installed CMake 3.21.0 or later is required.
+  
 
 ## Workflow
 

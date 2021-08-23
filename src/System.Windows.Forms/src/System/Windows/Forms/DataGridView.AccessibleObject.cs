@@ -183,6 +183,7 @@ namespace System.Windows.Forms
                         {
                             return TopRowAccessibilityObject.GetChild(actualDisplayIndex);
                         }
+
                     case DataGridViewHitTestType.RowHeader:
                         return _ownerDataGridView.Rows[hti.RowIndex].AccessibilityObject;
                     case DataGridViewHitTestType.TopLeftHeader:
@@ -239,6 +240,10 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
+                    case UiaCore.UIA.ControlTypePropertyId:
+                        return _ownerDataGridView.AccessibleRole == AccessibleRole.Default
+                               ? UiaCore.UIA.DataGridControlTypeId
+                               : base.GetPropertyValue(propertyID);
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
@@ -308,6 +313,7 @@ namespace System.Windows.Forms
                 {
                     result[i] = _ownerDataGridView.Rows[i].HeaderCell.AccessibilityObject;
                 }
+
                 return result;
             }
 
@@ -323,6 +329,7 @@ namespace System.Windows.Forms
                 {
                     result[i] = _ownerDataGridView.Columns[i].HeaderCell.AccessibilityObject;
                 }
+
                 return result;
             }
 
@@ -389,6 +396,7 @@ namespace System.Windows.Forms
                         {
                             return GetChild(0);
                         }
+
                         break;
                     case UiaCore.NavigateDirection.LastChild:
                         childCount = GetChildCount();
@@ -397,10 +405,11 @@ namespace System.Windows.Forms
                             int lastChildIndex = childCount - 1;
                             return GetChild(lastChildIndex);
                         }
+
                         break;
                 }
 
-                return null;
+                return base.FragmentNavigate(direction);
             }
 
             internal override void SetFocus()

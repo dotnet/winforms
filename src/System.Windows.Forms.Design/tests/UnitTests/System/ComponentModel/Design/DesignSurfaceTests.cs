@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel.Design.Serialization;
 using System.Reflection;
 using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -183,7 +182,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignSurface_DtelLoading_Set_GetReturnsExpected(bool value)
         {
             using var surface = new DesignSurface()
@@ -450,7 +449,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DesignSurface_BeginLoad_ThrowsExceptionWithoutMessage_SetsLoadErrors(string message)
         {
             var mockException = new Mock<Exception>(MockBehavior.Strict);
@@ -1140,7 +1139,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public void DesignSurface_CreateNestedContainer_InvokeObjectString_ReturnsExpected(string containerName)
         {
             using var surface = new DesignSurface();
@@ -1257,7 +1256,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DesignSurface_Dispose_InvokeDisposingMultipleTimes_Success(bool disposing)
         {
             using var surface = new SubDesignSurface();
@@ -1459,11 +1458,11 @@ namespace System.ComponentModel.Design.Tests
             surface.Flush();
             Assert.Equal(1, callCount);
 
-            // Fush again.
+            // Flush again.
             surface.Flush();
             Assert.Equal(2, callCount);
 
-            // Fush when disposed.
+            // Flush when disposed.
             surface.Dispose();
             surface.Flush();
             Assert.Equal(3, callCount);
@@ -1569,7 +1568,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnLoading_Invoke_Success(EventArgs eventArgs)
         {
             using var surface = new SubDesignSurface();
@@ -1631,7 +1630,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnUnloaded_Invoke_Success(EventArgs eventArgs)
         {
             using var surface = new SubDesignSurface();
@@ -1659,7 +1658,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnUnloading_Invoke_Success(EventArgs eventArgs)
         {
             using var surface = new SubDesignSurface();
@@ -1687,7 +1686,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void DesignSurface_OnViewActivate_Invoke_Success(EventArgs eventArgs)
         {
             using var surface = new SubDesignSurface();

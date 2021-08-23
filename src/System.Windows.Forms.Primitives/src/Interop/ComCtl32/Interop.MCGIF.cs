@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-
 internal static partial class Interop
 {
     internal static partial class ComCtl32
@@ -16,17 +14,17 @@ internal static partial class Interop
         public enum MCGIF
         {
             /// <summary>
-            /// Represetns MCGIF_DATE const.
+            /// Represents MCGIF_DATE const.
             /// </summary>
             DATE = 0x00000001,
 
             /// <summary>
-            /// Represents MCGIF_RECT cosnt.
+            /// Represents MCGIF_RECT const.
             /// </summary>
             RECT = 0x00000002,
 
             /// <summary>
-            /// Represetns MCGIF_NAME const.
+            /// Represents MCGIF_NAME const.
             /// </summary>
             NAME = 0x00000004
         }

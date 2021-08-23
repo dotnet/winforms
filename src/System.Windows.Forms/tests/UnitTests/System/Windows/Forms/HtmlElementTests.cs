@@ -2,13 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 using static Interop.Mshtml;
@@ -212,7 +209,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public async Task HtmlElement_Enabled_GetCustomValueSet_ReturnsExpected(bool disabled)
         {
             using var parent = new Control();
@@ -230,7 +227,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public async Task HtmlElement_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -618,7 +615,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public async Task HtmlElement_Name_GetCustomValueSet_ReturnsExpected(string id, string expected)
         {
             using var parent = new Control();
@@ -1459,6 +1456,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             element.AttachEventHandler(eventName, handler);
             Assert.Equal(0, callCount);
 
@@ -1491,6 +1489,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             element.AttachEventHandler(eventName, handler);
             Assert.Equal(0, callCount);
 
@@ -1522,6 +1521,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             element.AttachEventHandler(eventName, handler);
             Assert.Equal(0, callCount);
 
@@ -2151,7 +2151,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HtmlElementInsertionOrientation))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(HtmlElementInsertionOrientation))]
         public async Task HtmlElement_InsertAdjacentElement_InvalidOrient_ThrowsArgumentException(HtmlElementInsertionOrientation orient)
         {
             using var parent = new Control();
@@ -2245,7 +2245,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public async Task HtmlElement_ScrollIntoView_Invoke_Success(bool alignWithTop)
         {
             using var parent = new Control();
@@ -2264,7 +2264,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringTheoryData))]
         public async Task HtmlElement_SetAttribute_Invoke_GetAttributeReturnsExpected(string value)
         {
             using var parent = new Control();

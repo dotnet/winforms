@@ -239,6 +239,7 @@ namespace System.Windows.Forms
                 {
                     boundDialog.RadioButtonClickedStackCount++;
                 }
+
                 try
                 {
                     HandleRadioButtonClicked();

@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         LargeIcon = (int)LV_VIEW.ICON,
 
         /// <summary>
-        ///  Each item appears on a seperate line with further
+        ///  Each item appears on a separate line with further
         ///  information about each item arranged in columns. The left
         ///  most column
         ///  contains a small icon and

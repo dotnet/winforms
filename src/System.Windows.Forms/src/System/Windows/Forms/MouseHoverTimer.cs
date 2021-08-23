@@ -25,8 +25,9 @@ namespace System.Windows.Forms
             {
                 Cancel(_currentItem);
             }
+
             _currentItem = item;
-            if (_currentItem != null)
+            if (_currentItem is not null)
             {
                 _mouseHoverTimer.Enabled = true;
             }
@@ -51,7 +52,7 @@ namespace System.Windows.Forms
 
         public void Dispose()
         {
-            if (_mouseHoverTimer != null)
+            if (_mouseHoverTimer is not null)
             {
                 Cancel();
                 _mouseHoverTimer.Dispose();
@@ -62,7 +63,7 @@ namespace System.Windows.Forms
         private void OnTick(object sender, EventArgs e)
         {
             _mouseHoverTimer.Enabled = false;
-            if (_currentItem != null && !_currentItem.IsDisposed)
+            if (_currentItem is not null && !_currentItem.IsDisposed)
             {
                 _currentItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseHover);
             }

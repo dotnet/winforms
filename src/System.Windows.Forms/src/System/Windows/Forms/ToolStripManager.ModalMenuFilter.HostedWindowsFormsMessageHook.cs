@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                         {
                             // only process messages we've pulled off the queue
                             User32.MSG* msg = (User32.MSG*)lparam;
-                            if (msg != null)
+                            if (msg is not null)
                             {
                                 // call pretranslate on the message - this should execute
                                 // the message filters and preprocess message.

@@ -34,6 +34,7 @@ namespace System.Windows.Forms
             {
                 defaultCellStyle.NullValue = false;
             }
+
             DefaultCellStyle = defaultCellStyle;
         }
 
@@ -48,6 +49,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidCastException(string.Format(SR.DataGridViewTypeColumn_WrongCellTemplateType, "System.Windows.Forms.DataGridViewCheckBoxCell"));
                 }
+
                 base.CellTemplate = value;
             }
         }
@@ -81,6 +83,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.FalseValue;
             }
             set
@@ -100,6 +103,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.FalseValueInternal = value;
                             }
                         }
+
                         DataGridView.InvalidateColumn(Index);
                     }
                 }
@@ -117,6 +121,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.FlatStyle;
             }
             set
@@ -136,6 +141,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.FlatStyleInternal = value;
                             }
                         }
+
                         DataGridView.OnColumnCommonChange(Index);
                     }
                 }
@@ -154,6 +160,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.IndeterminateValue;
             }
             set
@@ -173,6 +180,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.IndeterminateValueInternal = value;
                             }
                         }
+
                         DataGridView.InvalidateColumn(Index);
                     }
                 }
@@ -190,6 +198,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.ThreeState;
             }
             set
@@ -209,6 +218,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.ThreeStateInternal = value;
                             }
                         }
+
                         DataGridView.InvalidateColumn(Index);
                     }
 
@@ -240,6 +250,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridViewColumn_CellTemplateRequired);
                 }
+
                 return CheckBoxCellTemplate.TrueValue;
             }
             set
@@ -259,6 +270,7 @@ namespace System.Windows.Forms
                                 dataGridViewCell.TrueValueInternal = value;
                             }
                         }
+
                         DataGridView.InvalidateColumn(Index);
                     }
                 }

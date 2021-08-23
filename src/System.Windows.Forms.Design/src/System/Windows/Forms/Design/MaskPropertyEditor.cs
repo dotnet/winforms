@@ -14,9 +14,9 @@ namespace System.Windows.Forms.Design
     internal class MaskPropertyEditor : UITypeEditor
     {
         /// <summary>
-        /// Gets the mask property value fromt the MaskDesignerDialog.
+        /// Gets the mask property value from the MaskDesignerDialog.
         /// The IUIService is used to show the mask designer dialog within VS so it doesn't get blocked if focus
-        /// is moved to anoter app.
+        /// is moved to another app.
         /// </summary>
         internal static string EditMask(ITypeDiscoveryService discoverySvc, IUIService uiSvc, MaskedTextBox instance, IHelpService helpService)
         {
@@ -64,7 +64,7 @@ namespace System.Windows.Forms.Design
             ITypeDiscoveryService discoverySvc = (ITypeDiscoveryService)provider.GetService(typeof(ITypeDiscoveryService));  // fine if service is not found.
             IUIService uiSvc = (IUIService)provider.GetService(typeof(IUIService));
             IHelpService helpService = (IHelpService)provider.GetService(typeof(IHelpService));
-            string mask = MaskPropertyEditor.EditMask(discoverySvc, uiSvc, context.Instance as MaskedTextBox, helpService);
+            string mask = EditMask(discoverySvc, uiSvc, context.Instance as MaskedTextBox, helpService);
 
             if (mask != null)
             {

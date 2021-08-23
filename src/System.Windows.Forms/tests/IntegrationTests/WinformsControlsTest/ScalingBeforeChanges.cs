@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -100,6 +99,7 @@ namespace WinformsControlsTest
 
                         checkBox1.Scale(new SizeF(factorX, factorY));
                     }
+
                     m.Result = IntPtr.Zero;
                     break;
             }
@@ -129,6 +129,7 @@ namespace WinformsControlsTest
                     m.Result = (IntPtr)1;
                     break;
             }
+
             base.WndProc(ref m);
         }
     }

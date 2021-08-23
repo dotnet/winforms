@@ -3,8 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
-using static System.Windows.Forms.ComboBox.ObjectCollection;
 
 namespace System.Windows.Forms
 {

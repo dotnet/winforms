@@ -26,6 +26,7 @@ namespace System.Windows.Forms.Design
                 Renderer = (ToolStripProfessionalRenderer)uis.Styles["VsRenderer"];
             }
         }
+
         protected override void OnOpening(CancelEventArgs e)
         {
             Groups["StandardList"].Items.Clear();
@@ -44,6 +45,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             foreach (ToolStripItem item in ToolStripDesignerUtils.GetCustomItemMenuItems(_component, _onClick, _convertTo, _serviceProvider))
             {
                 Groups["CustomList"].Items.Add(item);
@@ -55,13 +57,14 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             base.OnOpening(e);
         }
 
-        // We dont want the runtime behavior for this Design Time only DropDown and hence we overide the ProcessDialogKey and just close the DropDown instead of running through the runtime implementation for RIGHT/LEFT Keys which ends up setting ModalMenuFilter.
+        // We don't want the runtime behavior for this Design Time only DropDown and hence we override the ProcessDialogKey and just close the DropDown instead of running through the runtime implementation for RIGHT/LEFT Keys which ends up setting ModalMenuFilter.
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            Keys keyCode = (Keys)keyData & Keys.KeyCode;
+            Keys keyCode = keyData & Keys.KeyCode;
             switch (keyCode)
             {
                 case Keys.Left:
@@ -69,6 +72,7 @@ namespace System.Windows.Forms.Design
                     Close();
                     return true;
             }
+
             return base.ProcessDialogKey(keyData);
         }
     }

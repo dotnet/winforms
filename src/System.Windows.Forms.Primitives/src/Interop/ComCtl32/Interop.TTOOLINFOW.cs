@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 
@@ -67,6 +66,7 @@ internal static partial class Interop
                     {
                         Info.lpszText = c;
                     }
+
                     IntPtr result = User32.SendMessageW(sender, message, (IntPtr)state, (IntPtr)i);
                     GC.KeepAlive(_handle);
                     return result;

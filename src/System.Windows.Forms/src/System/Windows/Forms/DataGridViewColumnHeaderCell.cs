@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using System.Windows.Forms.VisualStyles;
 
@@ -50,8 +49,10 @@ namespace System.Windows.Forms
                     {
                         s_sortGlyphWidth++;
                     }
+
                     s_sortGlyphHeight = (byte)DpiHelper.LogicalToDeviceUnitsY(SortGlyphHeight);
                 }
+
                 s_isScalingInitialized = true;
             }
 
@@ -81,12 +82,14 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(SR.DataGridView_CellDoesNotYetBelongToDataGridView);
                 }
+
                 if (value != _sortGlyphDirection)
                 {
                     if (OwningColumn.SortMode == DataGridViewColumnSortMode.NotSortable && value != SortOrder.None)
                     {
                         throw new InvalidOperationException(string.Format(SR.DataGridViewColumnHeaderCell_SortModeAndSortGlyphDirectionClash, (value).ToString()));
                     }
+
                     _sortGlyphDirection = value;
                     DataGridView.OnSortGlyphDirectionChanged(this);
                 }
@@ -117,6 +120,7 @@ namespace System.Windows.Forms
 
                 dataGridViewCell = (DataGridViewColumnHeaderCell)System.Activator.CreateInstance(thisType);
             }
+
             base.CloneInternal(dataGridViewCell);
             dataGridViewCell.Value = Value;
             return dataGridViewCell;
@@ -157,6 +161,7 @@ namespace System.Windows.Forms
                     sb.Append("<TABLE>");
                     sb.Append("<THEAD>");
                 }
+
                 sb.Append("<TH>");
                 if (val is not null)
                 {
@@ -167,6 +172,7 @@ namespace System.Windows.Forms
                 {
                     sb.Append("&nbsp;");
                 }
+
                 sb.Append("</TH>");
                 if (lastCell)
                 {
@@ -176,6 +182,7 @@ namespace System.Windows.Forms
                         sb.Append("</TABLE>");
                     }
                 }
+
                 return sb.ToString();
             }
             else
@@ -197,6 +204,7 @@ namespace System.Windows.Forms
                             sb.Insert(insertionPoint, '"');
                         }
                     }
+
                     if (lastCell)
                     {
                         if (!inLastRow)
@@ -209,6 +217,7 @@ namespace System.Windows.Forms
                     {
                         sb.Append(csv ? ',' : (char)Keys.Tab);
                     }
+
                     return sb.ToString();
                 }
                 else
@@ -302,6 +311,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(SR.DataGridView_CellNeedsDataGridViewForInheritedStyle);
             }
+
             if (rowIndex != -1)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
@@ -557,6 +567,7 @@ namespace System.Windows.Forms
                                                          0);
                             }
                         }
+
                         if (constraintSize.Height - borderAndPaddingHeights - 2 * VerticalMargin > s_sortGlyphHeight &&
                             OwningColumn is not null &&
                             OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
@@ -568,9 +579,11 @@ namespace System.Windows.Forms
                                 preferredSize.Width += s_sortGlyphSeparatorWidth;
                             }
                         }
+
                         preferredSize.Width = Math.Max(preferredSize.Width, 1);
                         break;
                     }
+
                 case DataGridViewFreeDimension.Height:
                     {
                         int allowedWidth = constraintSize.Width - borderAndPaddingWidths;
@@ -633,10 +646,12 @@ namespace System.Windows.Forms
                                                                                           flags).Height);
                             }
                         }
+
                         preferredSize.Height = Math.Max(preferredSize.Height, glyphSize.Height);
                         preferredSize.Height = Math.Max(preferredSize.Height, 1);
                         break;
                     }
+
                 default:
                     {
                         if (!string.IsNullOrEmpty(valStr))
@@ -654,6 +669,7 @@ namespace System.Windows.Forms
                         {
                             preferredSize = new Size(0, 0);
                         }
+
                         if (OwningColumn is not null &&
                             OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                         {
@@ -663,8 +679,10 @@ namespace System.Windows.Forms
                             {
                                 preferredSize.Width += s_sortGlyphSeparatorWidth;
                             }
+
                             preferredSize.Height = Math.Max(preferredSize.Height, s_sortGlyphHeight);
                         }
+
                         preferredSize.Width = Math.Max(preferredSize.Width, 1);
                         preferredSize.Height = Math.Max(preferredSize.Height, 1);
                         break;
@@ -677,12 +695,15 @@ namespace System.Windows.Forms
                 {
                     preferredSize.Width += HorizontalTextMarginLeft + HorizontalTextMarginRight;
                 }
+
                 preferredSize.Width += borderAndPaddingWidths;
             }
+
             if (freeDimension != DataGridViewFreeDimension.Width)
             {
                 preferredSize.Height += 2 * VerticalMargin + borderAndPaddingHeights;
             }
+
             if (DataGridView.ApplyVisualStylesToHeaderCells)
             {
                 Rectangle rectThemeMargins = DataGridViewHeaderCell.GetThemeMargins(graphics);
@@ -690,11 +711,13 @@ namespace System.Windows.Forms
                 {
                     preferredSize.Width += rectThemeMargins.X + rectThemeMargins.Width;
                 }
+
                 if (freeDimension != DataGridViewFreeDimension.Width)
                 {
                     preferredSize.Height += rectThemeMargins.Y + rectThemeMargins.Height;
                 }
             }
+
             return preferredSize;
         }
 
@@ -704,6 +727,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
             }
+
             if (ContainsLocalValue)
             {
                 return Properties.GetObject(s_propCellValue);
@@ -797,19 +821,19 @@ namespace System.Windows.Forms
                         {
                             valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                         }
+
                         valBounds.Width -= cellStyle.Padding.Horizontal;
                         valBounds.Height -= cellStyle.Padding.Vertical;
                     }
                 }
+
                 // Theming
                 if (paint && DataGridViewCell.PaintBackground(paintParts) && backgroundBounds.Width > 0 && backgroundBounds.Height > 0)
                 {
                     int state = (int)HeaderItemState.Normal;
 
                     // Set the state to Pressed/Hot only if the column can be sorted or selected
-#pragma warning disable SA1408 // Conditional expressions should declare precedence
-                    if (OwningColumn is not null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable ||
-#pragma warning restore SA1408 // Conditional expressions should declare precedence
+                    if ((OwningColumn is not null && OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable) ||
                         DataGridView.SelectionMode == DataGridViewSelectionMode.FullColumnSelect ||
                         DataGridView.SelectionMode == DataGridViewSelectionMode.ColumnHeaderSelect)
                     {
@@ -846,6 +870,7 @@ namespace System.Windows.Forms
                         {
                             bmFlipXPThemes = FlipXPThemesBitmap = new Bitmap(backgroundBounds.Width, backgroundBounds.Height);
                         }
+
                         Graphics gFlip = Graphics.FromImage(bmFlipXPThemes);
                         DataGridViewColumnHeaderCellRenderer.DrawHeader(gFlip, new Rectangle(0, 0, backgroundBounds.Width, backgroundBounds.Height), state);
                         bmFlipXPThemes.RotateFlip(RotateFlipType.RotateNoneFlipX);
@@ -856,6 +881,7 @@ namespace System.Windows.Forms
                         DataGridViewColumnHeaderCellRenderer.DrawHeader(g, backgroundBounds, state);
                     }
                 }
+
                 // update the value bounds
                 Rectangle rectThemeMargins = DataGridViewHeaderCell.GetThemeMargins(g);
                 valBounds.Y += rectThemeMargins.Y;
@@ -895,6 +921,7 @@ namespace System.Windows.Forms
                     {
                         valBounds.Offset(cellStyle.Padding.Left, cellStyle.Padding.Top);
                     }
+
                     valBounds.Width -= cellStyle.Padding.Horizontal;
                     valBounds.Height -= cellStyle.Padding.Vertical;
                 }
@@ -966,6 +993,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(DataGridView.RightToLeftInternal, cellStyle.Alignment, cellStyle.WrapMode);
                 if (paint)
                 {
@@ -975,6 +1003,7 @@ namespace System.Windows.Forms
                         {
                             flags |= TextFormatFlags.EndEllipsis;
                         }
+
                         TextRenderer.DrawText(g,
                                               formattedValueStr,
                                               cellStyle.Font,
@@ -1080,6 +1109,7 @@ namespace System.Windows.Forms
                                     sortGlyphLocation.X + s_sortGlyphWidth - line - 1,
                                     sortGlyphLocation.Y + s_sortGlyphHeight - line - 1);
                             }
+
                             g.DrawLine(penControlDark,
                                 sortGlyphLocation.X + s_sortGlyphWidth / 2,
                                 sortGlyphLocation.Y + s_sortGlyphHeight - s_sortGlyphWidth / 2 - 1,
@@ -1163,6 +1193,7 @@ namespace System.Windows.Forms
                                     sortGlyphLocation.X + s_sortGlyphWidth - line - 1,
                                     sortGlyphLocation.Y + line + 2);
                             }
+
                             g.DrawLine(penControlDark,
                                 sortGlyphLocation.X + s_sortGlyphWidth / 2,
                                 sortGlyphLocation.Y + s_sortGlyphWidth / 2 + 1,
@@ -1196,6 +1227,7 @@ namespace System.Windows.Forms
             {
                 RaiseCellValueChanged(new DataGridViewCellEventArgs(ColumnIndex, -1));
             }
+
             return true;
         }
 

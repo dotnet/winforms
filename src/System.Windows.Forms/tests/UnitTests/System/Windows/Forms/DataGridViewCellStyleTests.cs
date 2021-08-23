@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
-using System.Collections.Generic;
 using System.ComponentModel;
+using System.Drawing;
 using System.Globalization;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -111,7 +110,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewContentAlignment))]
         public void DataGridViewCellStyle_Alignment_Set_GetReturnsExpected(DataGridViewContentAlignment value)
         {
             var style = new DataGridViewCellStyle
@@ -126,7 +125,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewContentAlignment))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewContentAlignment))]
         public void DataGridViewCellStyle_Alignment_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewContentAlignment value)
         {
             var style = new DataGridViewCellStyle();
@@ -134,7 +133,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void DataGridViewCellStyle_BackColor_Set_GetReturnsExpected(Color value)
         {
             var style = new DataGridViewCellStyle
@@ -292,7 +291,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
         public void DataGridViewCellStyle_ForeColor_Set_GetReturnsExpected(Color value)
         {
             var style = new DataGridViewCellStyle
@@ -318,7 +317,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCellStyle_Format_Set_GetReturnsExpected(string value, string expected)
         {
             var style = new DataGridViewCellStyle
@@ -333,7 +332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCellStyle_Format_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             var style = new DataGridViewCellStyle
@@ -510,7 +509,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorWithEmptyTheoryData))]
         public void DataGridViewCellStyle_SelectionBackColor_Set_GetReturnsExpected(Color value)
         {
             var style = new DataGridViewCellStyle
@@ -536,7 +535,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetColorTheoryData))]
         public void DataGridViewCellStyle_SelectionForeColor_Set_GetReturnsExpected(Color value)
         {
             var style = new DataGridViewCellStyle
@@ -562,7 +561,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCellStyle_Tag_Set_GetReturnsExpected(object value)
         {
             var style = new DataGridViewCellStyle
@@ -577,7 +576,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCellStyle_Tag_SetWithNonNullOldValue_GetReturnsExpected(object value)
         {
             var style = new DataGridViewCellStyle
@@ -593,7 +592,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
         public void DataGridViewCellStyle_WrapMode_Set_GetReturnsExpected(DataGridViewTriState value)
         {
             var style = new DataGridViewCellStyle
@@ -608,7 +607,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewTriState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DataGridViewTriState))]
         public void DataGridViewCellStyle_WrapMode_SetInvalid_ThrowsInvalidEnumArgumentException(DataGridViewTriState value)
         {
             var style = new DataGridViewCellStyle();
@@ -1034,7 +1033,7 @@ namespace System.Windows.Forms.Tests
 
         [Theory]
         [MemberData(nameof(Equals_TestData))]
-        public void DataGridViewCellStyle_Equals_Invoke_ReturnsExpecte(DataGridViewCellStyle style, object other, bool expected, bool? expectedEqualHashCode = null)
+        public void DataGridViewCellStyle_Equals_Invoke_ReturnsExpected(DataGridViewCellStyle style, object other, bool expected, bool? expectedEqualHashCode = null)
         {
             if (other is DataGridViewCellStyle)
             {

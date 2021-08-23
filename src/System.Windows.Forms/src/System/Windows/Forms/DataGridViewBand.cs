@@ -102,6 +102,7 @@ namespace System.Windows.Forms
                     style = DefaultCellStyle;
                     style.RemoveScope(IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
                 }
+
                 if (value is not null || Properties.ContainsObject(s_propDefaultCellStyle))
                 {
                     value?.AddScope(DataGridView, IsRow ? DataGridViewCellStyleScopes.Row : DataGridViewCellStyleScopes.Column);
@@ -171,6 +172,7 @@ namespace System.Windows.Forms
                 {
                     State = State & ~DataGridViewElementStates.Displayed;
                 }
+
                 if (DataGridView is not null)
                 {
                     OnStateChanged(DataGridViewElementStates.Displayed);
@@ -198,6 +200,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(DataGridViewColumn.DividerWidth), value, 0));
                     }
                 }
+
                 if (value > MaxBandThickness)
                 {
                     if (IsRow)
@@ -239,6 +242,7 @@ namespace System.Windows.Forms
                     {
                         State = State & ~DataGridViewElementStates.Frozen;
                     }
+
                     OnStateChanged(DataGridViewElementStates.Frozen);
                 }
             }
@@ -329,6 +333,7 @@ namespace System.Windows.Forms
                             {
                                 value.OwningRow.HeaderCell = null;
                             }
+
                             Debug.Assert(value.OwningRow is null);
                             value.OwningRow = (DataGridViewRow)this;   // may be a shared row
                         }
@@ -344,16 +349,19 @@ namespace System.Windows.Forms
                             {
                                 value.OwningColumn.HeaderCell = null;
                             }
+
                             Debug.Assert(dataGridViewColumnHeaderCell.SortGlyphDirection == SortOrder.None);
                             Debug.Assert(value.OwningColumn is null);
                             value.OwningColumn = (DataGridViewColumn)this;
                         }
+
                         Debug.Assert(value.DataGridView is null);
                         value.DataGridView = DataGridView;
                     }
 
                     Properties.SetObject(s_propHeaderCell, value);
                 }
+
                 if (((value is null && headerCell is not null) || (value is not null && headerCell is null) || (value is not null && headerCell is not null && !headerCell.Equals(value))) && DataGridView is not null)
                 {
                     DataGridView.OnBandHeaderCellChanged(this);
@@ -474,6 +482,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             State = State | DataGridViewElementStates.ReadOnly;
                         }
                         else
@@ -514,6 +523,7 @@ namespace System.Windows.Forms
                 {
                     return ((State & DataGridViewElementStates.Resizable) != 0) ? DataGridViewTriState.True : DataGridViewTriState.False;
                 }
+
                 if (DataGridView is null)
                 {
                     return DataGridViewTriState.NotSet;
@@ -576,6 +586,7 @@ namespace System.Windows.Forms
                         {
                             throw new InvalidOperationException(string.Format(SR.DataGridView_InvalidPropertySetOnSharedRow, nameof(Selected)));
                         }
+
                         if (DataGridView.SelectionMode == DataGridViewSelectionMode.FullRowSelect || DataGridView.SelectionMode == DataGridViewSelectionMode.RowHeaderSelect)
                         {
                             DataGridView.SetSelectedRowCoreInternal(Index, value);
@@ -652,6 +663,7 @@ namespace System.Windows.Forms
                 {
                     value = minimumThickness;
                 }
+
                 if (value > MaxBandThickness)
                 {
                     if (IsRow)
@@ -735,7 +747,7 @@ namespace System.Windows.Forms
                         DataGridView.NewRowIndex == Index &&
                         !value)
                     {
-                        // the 'new' row cannot be made invisble.
+                        // the 'new' row cannot be made invisible.
                         throw new InvalidOperationException(SR.DataGridViewBand_NewRowCannotBeInvisible);
                     }
 
@@ -748,6 +760,7 @@ namespace System.Windows.Forms
                     {
                         State = State & ~DataGridViewElementStates.Visible;
                     }
+
                     OnStateChanged(DataGridViewElementStates.Visible);
                 }
             }
@@ -768,6 +781,7 @@ namespace System.Windows.Forms
             {
                 dataGridViewBand.State = State & ~(DataGridViewElementStates.Selected | DataGridViewElementStates.Displayed);
             }
+
             dataGridViewBand._thickness = Thickness;
             dataGridViewBand.MinimumThickness = MinimumThickness;
             dataGridViewBand.CachedThickness = CachedThickness;
@@ -777,10 +791,12 @@ namespace System.Windows.Forms
             {
                 dataGridViewBand.DefaultCellStyle = new DataGridViewCellStyle(DefaultCellStyle);
             }
+
             if (HasDefaultHeaderCellType)
             {
                 dataGridViewBand.DefaultHeaderCellType = DefaultHeaderCellType;
             }
+
             if (ContextMenuStripInternal is not null)
             {
                 dataGridViewBand.ContextMenuStrip = ContextMenuStripInternal.Clone();

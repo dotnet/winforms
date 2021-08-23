@@ -40,12 +40,14 @@ namespace System.Windows.Forms
                 switch (direction)
                 {
                     case UiaCore.NavigateDirection.Parent:
-                        if (Owner is IDataGridViewEditingControl owner && owner.EditingControlDataGridView.EditingControl == owner)
+                        if (Owner is IDataGridViewEditingControl owner
+                            && owner.EditingControlDataGridView?.EditingControl == owner
+                            && Owner.ToolStripControlHost is null)
                         {
                             return _parentAccessibleObject;
                         }
 
-                        return null;
+                        break;
                 }
 
                 return base.FragmentNavigate(direction);
@@ -88,7 +90,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Sets the parent accessible object for the node which can be added or removed to/from hierachy nodes.
+            ///  Sets the parent accessible object for the node which can be added or removed to/from hierarchy nodes.
             /// </summary>
             /// <param name="parent">The parent accessible object.</param>
             internal override void SetParent(AccessibleObject parent)

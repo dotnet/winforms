@@ -11,50 +11,74 @@ namespace System.Windows.Forms
     {
         internal class LinkLabelAccessibleObject : LabelAccessibleObject
         {
+            private readonly LinkLabel _owningLinkLabel;
+
             public LinkLabelAccessibleObject(LinkLabel owner) : base(owner)
             {
+                _owningLinkLabel = owner;
             }
 
-            internal override bool IsIAccessibleExSupported() => true;
+            internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
+            {
+                if (!_owningLinkLabel.IsHandleCreated)
+                {
+                    return base.ElementProviderFromPoint(x, y);
+                }
+
+                return HitTest((int)x, (int)y) ?? base.ElementProviderFromPoint(x, y);
+            }
+
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+                => direction switch
+                {
+                    UiaCore.NavigateDirection.FirstChild
+                        => _owningLinkLabel.Links.Count != 0
+                            ? _owningLinkLabel.Links[0].AccessibleObject
+                            : null,
+                    UiaCore.NavigateDirection.LastChild
+                        => _owningLinkLabel.Links.Count != 0
+                            ? _owningLinkLabel.Links[^1].AccessibleObject
+                            : null,
+                    _ => base.FragmentNavigate(direction),
+                };
+
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
             public override AccessibleObject? GetChild(int index)
             {
-                if (index >= 0 && index < ((LinkLabel)Owner).Links.Count)
+                if (index >= 0 && index < GetChildCount())
                 {
-                    return new LinkAccessibleObject(((LinkLabel)Owner).Links[index]);
+                    return _owningLinkLabel.Links[index].AccessibleObject;
                 }
-                else
-                {
-                    return null;
-                }
+
+                return null;
             }
+
+            public override int GetChildCount() => _owningLinkLabel.Links.Count;
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.IsEnabledPropertyId)
+                => propertyID switch
                 {
-                    if (!Owner.Enabled)
-                    {
-                        return false;
-                    }
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
+                    UiaCore.UIA.IsEnabledPropertyId => _owningLinkLabel.Enabled,
+                    UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => false,
+                    UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             public override AccessibleObject? HitTest(int x, int y)
             {
-                if (!Owner.IsHandleCreated)
+                if (!_owningLinkLabel.IsHandleCreated)
                 {
                     return null;
                 }
 
                 Point p = Owner.PointToClient(new Point(x, y));
-                Link hit = ((LinkLabel)Owner).PointInLink(p.X, p.Y);
+                Link hit = _owningLinkLabel.PointInLink(p.X, p.Y);
 
-                if (hit != null)
+                if (hit is not null)
                 {
-                    return new LinkAccessibleObject(hit);
+                    return hit.AccessibleObject;
                 }
 
                 if (Bounds.Contains(x, y))
@@ -65,12 +89,15 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            /// <summary>
-            /// </summary>
-            public override int GetChildCount()
-            {
-                return ((LinkLabel)Owner).Links.Count;
-            }
+            internal override bool IsIAccessibleExSupported() => true;
+
+            internal override int[]? RuntimeId
+                => new int[]
+                {
+                    RuntimeIDFirstItem,
+                    (int)(long)_owningLinkLabel.InternalHandle,
+                    _owningLinkLabel.GetHashCode()
+                };
         }
     }
 }

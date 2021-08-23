@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Linq;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -456,7 +455,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false)]
         [InlineData(false, true)]
         [InlineData(false, false)]
-        public void ListBoxIntegerCollection_AddRange_InvokeIntAray_Success(bool sorted, bool useCustomTabOffsets)
+        public void ListBoxIntegerCollection_AddRange_InvokeIntArray_Success(bool sorted, bool useCustomTabOffsets)
         {
             using var owner = new ListBox
             {
@@ -484,7 +483,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false)]
         [InlineData(false, true)]
         [InlineData(false, false)]
-        public void ListBoxIntegerCollection_AddRange_InvokeIntArayCustomTabOffsets_Success(bool sorted, bool useCustomTabOffsets)
+        public void ListBoxIntegerCollection_AddRange_InvokeIntArrayCustomTabOffsets_Success(bool sorted, bool useCustomTabOffsets)
         {
             using var owner = new ListBox
             {
@@ -512,7 +511,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false, 1)]
         [InlineData(false, true, 2)]
         [InlineData(false, false, 1)]
-        public void ListBoxIntegerCollection_AddRange_InvokeIntArayWithHandle_Success(bool sorted, bool useCustomTabOffset, int expectedInvalidatedCallCount)
+        public void ListBoxIntegerCollection_AddRange_InvokeIntArrayWithHandle_Success(bool sorted, bool useCustomTabOffset, int expectedInvalidatedCallCount)
         {
             using var owner = new ListBox
             {
@@ -553,7 +552,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false, 1)]
         [InlineData(false, true, 2)]
         [InlineData(false, false, 1)]
-        public void ListBoxIntegerCollection_AddRange_InvokeIntArayCustomTabOffsetsWithHandle_Success(bool sorted, bool useCustomTabOffset, int expectedInvalidatedCallCount)
+        public void ListBoxIntegerCollection_AddRange_InvokeIntArrayCustomTabOffsetsWithHandle_Success(bool sorted, bool useCustomTabOffset, int expectedInvalidatedCallCount)
         {
             using var owner = new ListBox
             {
@@ -868,7 +867,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_Clear_InvokeEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_Clear_InvokeEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             var collection = new ListBox.IntegerCollection(owner);
@@ -903,7 +902,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_Clear_InvokeCustomTabOffsetsEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_Clear_InvokeCustomTabOffsetsEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             ListBox.IntegerCollection collection = owner.CustomTabOffsets;
@@ -938,7 +937,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_Clear_InvokeNotEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_Clear_InvokeNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             var collection = new ListBox.IntegerCollection(owner);
@@ -974,7 +973,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_Clear_InvokeCustomTabOffsetNotEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_Clear_InvokeCustomTabOffsetNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             ListBox.IntegerCollection collection = owner.CustomTabOffsets;
@@ -2065,7 +2064,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_IListClear_InvokeEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_IListClear_InvokeEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
@@ -2100,7 +2099,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_IListClear_InvokeCustomTabOffsetsEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_IListClear_InvokeCustomTabOffsetsEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = owner.CustomTabOffsets;
@@ -2135,7 +2134,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_IListClear_InvokeNotEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_IListClear_InvokeNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = new ListBox.IntegerCollection(owner);
@@ -2171,7 +2170,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListBoxIntegerCollection_IListClear_InvokeCustomTabOffsetNotEmptyWithHande_Success()
+        public void ListBoxIntegerCollection_IListClear_InvokeCustomTabOffsetNotEmptyWithHandle_Success()
         {
             using var owner = new ListBox();
             IList collection = owner.CustomTabOffsets;

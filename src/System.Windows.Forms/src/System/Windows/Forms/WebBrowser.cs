@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Interop;
@@ -82,7 +81,7 @@ namespace System.Windows.Forms
             set
             {
                 webBrowserState[WEBBROWSERSTATE_allowNavigation] = value;
-                if (webBrowserEvent != null)
+                if (webBrowserEvent is not null)
                 {
                     webBrowserEvent.AllowNavigation = value;
                 }
@@ -90,7 +89,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Specifies whether the WebBrowser control will receive drop notifcations.
+        ///  Specifies whether the WebBrowser control will receive drop notifications.
         ///  Maps to IWebBrowser2:RegisterAsDropTarget.
         ///  Note that this does not mean that the WebBrowser control integrates with
         ///  Windows Forms drag/drop i.e. the DragDrop event does not fire.  It does
@@ -239,7 +238,7 @@ namespace System.Windows.Forms
             get
             {
                 object objDoc = AxIWebBrowser2.Document;
-                if (objDoc != null)
+                if (objDoc is not null)
                 {
                     // Document is not necessarily an IHTMLDocument, it might be an office document as well.
                     IHTMLDocument2 iHTMLDocument2 = null;
@@ -250,10 +249,11 @@ namespace System.Windows.Forms
                     catch (InvalidCastException)
                     {
                     }
-                    if (iHTMLDocument2 != null)
+
+                    if (iHTMLDocument2 is not null)
                     {
                         IHTMLLocation iHTMLLocation = iHTMLDocument2.GetLocation();
-                        if (iHTMLLocation != null)
+                        if (iHTMLLocation is not null)
                         {
                             string href = iHTMLLocation.GetHref();
                             if (!string.IsNullOrEmpty(href))
@@ -264,13 +264,14 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return null;
             }
         }
 
         /// <summary>
         ///  Get/sets the stream for the html document.
-        ///  Uses the IPersisteStreamInit interface on the HtmlDocument to set/retrieve the html stream.
+        ///  Uses the IPersistStreamInit interface on the HtmlDocument to set/retrieve the html stream.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -286,7 +287,7 @@ namespace System.Windows.Forms
                 else
                 {
                     Ole32.IPersistStreamInit psi = htmlDocument.DomDocument as Ole32.IPersistStreamInit;
-                    Debug.Assert(psi != null, "Object isn't an IPersistStreamInit!");
+                    Debug.Assert(psi is not null, "Object isn't an IPersistStreamInit!");
                     if (psi is null)
                     {
                         return null;
@@ -341,6 +342,7 @@ namespace System.Windows.Forms
                 {
                     value = string.Empty;
                 }
+
                 //string length is a good initial guess for capacity --
                 //if it needs more room, it'll take it.
                 MemoryStream ms = new MemoryStream(value.Length);
@@ -372,7 +374,7 @@ namespace System.Windows.Forms
                 else
                 {
                     IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                    Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
+                    Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
                         documentTitle = htmlDocument2.GetTitle();
@@ -382,6 +384,7 @@ namespace System.Windows.Forms
                         documentTitle = string.Empty;
                     }
                 }
+
                 return documentTitle;
             }
         }
@@ -398,10 +401,10 @@ namespace System.Windows.Forms
             {
                 string docType = string.Empty;
                 HtmlDocument htmlDocument = Document;
-                if (htmlDocument != null)
+                if (htmlDocument is not null)
                 {
                     IHTMLDocument2 htmlDocument2 = htmlDocument.DomDocument as IHTMLDocument2;
-                    Debug.Assert(htmlDocument2 != null, "The HtmlDocument object must implement IHTMLDocument2.");
+                    Debug.Assert(htmlDocument2 is not null, "The HtmlDocument object must implement IHTMLDocument2.");
                     try
                     {
                         docType = htmlDocument2.GetMimeType();
@@ -411,6 +414,7 @@ namespace System.Windows.Forms
                         docType = string.Empty;
                     }
                 }
+
                 return docType;
             }
         }
@@ -429,6 +433,7 @@ namespace System.Windows.Forms
                 {
                     encryptionLevel = WebBrowserEncryptionLevel.Unknown;
                 }
+
                 return encryptionLevel;
             }
         }
@@ -491,7 +496,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Allows the host application to provide an object that the contained html
-        ///  pages can access programatically in script.  The object specified here
+        ///  pages can access programmatically in script.  The object specified here
         ///  will be accessible in script as the "window.external" object via IDispatch
         ///  COM interop. Maps to an implementation of the IDocUIHandler.GetExternal event.
         /// </summary>
@@ -505,7 +510,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null)
+                if (value is not null)
                 {
                     if (!Marshal.IsTypeVisibleFromCom(value.GetType()))
                     {
@@ -574,6 +579,7 @@ namespace System.Windows.Forms
                 {
                     statusText = string.Empty;
                 }
+
                 return statusText;
             }
         }
@@ -599,6 +605,7 @@ namespace System.Windows.Forms
                 {
                     return null;
                 }
+
                 try
                 {
                     return new Uri(urlString);
@@ -610,10 +617,11 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value != null && value.ToString().Length == 0)
+                if (value is not null && value.ToString().Length == 0)
                 {
                     value = null;
                 }
+
                 PerformNavigateHelper(ReadyNavigateToUrl(value), false, null, null, null);
             }
         }
@@ -655,6 +663,7 @@ namespace System.Windows.Forms
             {
                 retVal = false;
             }
+
             return retVal;
         }
 
@@ -675,6 +684,7 @@ namespace System.Windows.Forms
             {
                 retVal = false;
             }
+
             return retVal;
         }
 
@@ -970,7 +980,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Occurs when the document hosted in the web browser control is fully loaded.
-        ///  This is conceptially similar to Form.Load().  You need to wait until this event fires
+        ///  This is conceptually similar to Form.Load().  You need to wait until this event fires
         ///  before doing anything that manipulates the html page, ex. reading the Document
         ///  property of the webbrowser control. Maps to DWebBrowserEvents2:DocumentComplete.
         /// </summary>
@@ -1073,13 +1083,15 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (htmlShimManager != null)
+                if (htmlShimManager is not null)
                 {
                     htmlShimManager.Dispose();
                 }
+
                 DetachSink();
                 ActiveXSite.Dispose();
             }
+
             base.Dispose(disposing);
         }
 
@@ -1124,7 +1136,7 @@ namespace System.Windows.Forms
         protected override void CreateSink()
         {
             object ax = activeXInstance;
-            if (ax != null)
+            if (ax is not null)
             {
                 webBrowserEvent = new WebBrowserEvent(this)
                 {
@@ -1140,7 +1152,7 @@ namespace System.Windows.Forms
         protected override void DetachSink()
         {
             // If we have a cookie get rid of it
-            if (cookie != null)
+            if (cookie is not null)
             {
                 cookie.Disconnect();
                 cookie = null;
@@ -1257,6 +1269,7 @@ namespace System.Windows.Forms
                 {
                     htmlShimManager = new HtmlShimManager();
                 }
+
                 return htmlShimManager;
             }
         }
@@ -1355,7 +1368,7 @@ namespace System.Windows.Forms
         private bool ShowContextMenu(int x, int y)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 Point client;
                 bool keyboardActivated = false;
@@ -1373,7 +1386,7 @@ namespace System.Windows.Forms
 
                 if (ClientRectangle.Contains(client))
                 {
-                    if (contextMenuStrip != null)
+                    if (contextMenuStrip is not null)
                     {
                         contextMenuStrip.ShowInternal(this, client, keyboardActivated);
                     }
@@ -1403,6 +1416,7 @@ namespace System.Windows.Forms
                     {
                         DefWndProc(ref m);
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);
@@ -1426,11 +1440,13 @@ namespace System.Windows.Forms
                         throw new ObjectDisposedException(GetType().Name);
                     }
                 }
+
                 // We still don't have this.axIWebBrowser2. Throw an exception.
                 if (axIWebBrowser2 is null)
                 {
                     throw new InvalidOperationException(SR.WebBrowserNoCastToIWebBrowser2);
                 }
+
                 return axIWebBrowser2;
             }
         }

@@ -5,14 +5,11 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace System.Windows.Forms
@@ -54,6 +51,7 @@ namespace System.Windows.Forms
                 {
                     baseVar = dse.data;
                 }
+
                 object original = baseVar;
 
                 if (autoConvert
@@ -72,6 +70,7 @@ namespace System.Windows.Forms
                                 {
                                     baseVar = found.data;
                                 }
+
                                 if (baseVar is not null && !(baseVar is MemoryStream))
                                 {
                                     original = null;
@@ -203,6 +202,7 @@ namespace System.Windows.Forms
                             return true;
                         }
                     }
+
                     Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetDataPresent: returning false");
                     return false;
                 }
@@ -250,7 +250,8 @@ namespace System.Windows.Forms
 
                     baseVar = distinctFormats.ToArray();
                 }
-                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: returing " + baseVar.Length.ToString(CultureInfo.InvariantCulture) + " formats from GetFormats");
+
+                Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: returning " + baseVar.Length.ToString(CultureInfo.InvariantCulture) + " formats from GetFormats");
                 return baseVar;
             }
 

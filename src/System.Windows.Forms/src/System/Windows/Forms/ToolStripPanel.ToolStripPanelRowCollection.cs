@@ -6,7 +6,9 @@
 
 using System.Collections;
 using System.ComponentModel;
+#if DEBUG
 using System.Diagnostics;
+#endif
 using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
@@ -46,6 +48,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(value));
                 }
+
                 int retVal = InnerList.Add(value);
                 OnAdd(value, retVal);
                 return retVal;
@@ -59,10 +62,11 @@ namespace System.Windows.Forms
                 }
 
                 ToolStripPanel currentOwner = _owner;
-                if (currentOwner != null)
+                if (currentOwner is not null)
                 {
                     currentOwner.SuspendLayout();
                 }
+
                 try
                 {
                     for (int i = 0; i < value.Length; i++)
@@ -72,12 +76,13 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner != null)
+                    if (currentOwner is not null)
                     {
                         currentOwner.ResumeLayout();
                     }
                 }
             }
+
             public void AddRange(ToolStripPanelRowCollection value)
             {
                 if (value is null)
@@ -86,10 +91,11 @@ namespace System.Windows.Forms
                 }
 
                 ToolStripPanel currentOwner = _owner;
-                if (currentOwner != null)
+                if (currentOwner is not null)
                 {
                     currentOwner.SuspendLayout();
                 }
+
                 try
                 {
                     int currentCount = value.Count;
@@ -100,7 +106,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (currentOwner != null)
+                    if (currentOwner is not null)
                     {
                         currentOwner.ResumeLayout();
                     }
@@ -114,10 +120,11 @@ namespace System.Windows.Forms
 
             public virtual void Clear()
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     _owner.SuspendLayout();
                 }
+
                 try
                 {
                     while (Count != 0)
@@ -127,7 +134,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    if (_owner != null)
+                    if (_owner is not null)
                     {
                         _owner.ResumeLayout();
                     }
@@ -168,7 +175,7 @@ namespace System.Windows.Forms
 
             private void OnAdd(ToolStripPanelRow value, int index)
             {
-                if (_owner != null)
+                if (_owner is not null)
                 {
                     LayoutTransaction.DoLayout(_owner, value, PropertyNames.Parent);
                 }
@@ -182,7 +189,7 @@ namespace System.Windows.Forms
 #if DEBUG
                 if (s_toolStripPanelMissingRowDebug.TraceVerbose)
                 {
-                    if (row != null)
+                    if (row is not null)
                     {
                         Debug.Write("Removing row: ");
                         row.Debug_PrintRowID();
@@ -206,6 +213,7 @@ namespace System.Windows.Forms
                 {
                     item = (ToolStripPanelRow)(InnerList[index]);
                 }
+
                 InnerList.RemoveAt(index);
                 OnAfterRemove(item);
             }

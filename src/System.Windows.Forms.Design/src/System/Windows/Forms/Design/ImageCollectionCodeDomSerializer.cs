@@ -67,11 +67,13 @@ namespace System.Windows.Forms.Design
                             {
                                 if ((imageKeys[i] != null) || (imageKeys[i].Length != 0))
                                 {
-                                    CodeMethodInvokeExpression setNameMethodCall = new CodeMethodInvokeExpression(imageListImagesProperty, "SetKeyName",
-                                                                                   new CodeExpression[] {
-                                                                                            new CodePrimitiveExpression(i),         // SetKeyName(int,
-                                                                                            new CodePrimitiveExpression(imageKeys[i])        // string);
-                                                                                            });
+                                    CodeMethodInvokeExpression setNameMethodCall
+                                        = new(imageListImagesProperty, "SetKeyName",
+                                              new CodeExpression[]
+                                              {
+                                                  new CodePrimitiveExpression(i),         // SetKeyName(int,
+                                                  new CodePrimitiveExpression(imageKeys[i])        // string);
+                                              });
 
                                     ((CodeStatementCollection)codeObject).Add(setNameMethodCall);
                                 }

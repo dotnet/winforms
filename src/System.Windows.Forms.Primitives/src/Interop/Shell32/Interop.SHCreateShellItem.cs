@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
-using System.IO;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -15,8 +13,7 @@ internal static partial class Interop
 
         public static IShellItem GetShellItemForPath(string path)
         {
-            uint zero = 0;
-            if (SHILCreateFromPath(path, out IntPtr pidl, ref zero).Succeeded())
+            if (SHParseDisplayName(path, IntPtr.Zero, out IntPtr pidl, 0, out uint _).Succeeded())
             {
                 // No parent specified
                 if (SHCreateShellItem(IntPtr.Zero, IntPtr.Zero, pidl, out IShellItem ret).Succeeded())

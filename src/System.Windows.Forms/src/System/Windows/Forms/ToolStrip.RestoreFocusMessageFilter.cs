@@ -27,6 +27,7 @@ namespace System.Windows.Forms
                 {
                     return false;
                 }
+
                 // if the app has changed activation, restore focus
 
                 switch ((User32.WM)m.Msg)
@@ -46,17 +47,19 @@ namespace System.Windows.Forms
                                 IntPtr rootHwnd = User32.GetAncestor(_ownerToolStrip, User32.GA.ROOT);
                                 if (rootHwnd == m.HWnd || User32.IsChild(rootHwnd, m.HWnd).IsTrue())
                                 {
-                                    // Only RestoreFocus if the hwnd is a child of the root window and isnt on the toolstrip.
+                                    // Only RestoreFocus if the hwnd is a child of the root window and isn't on the toolstrip.
                                     RestoreFocusInternal();
                                 }
                             }
                         }
+
                         return false;
 
                     default:
                         return false;
                 }
             }
+
             private void RestoreFocusInternal()
             {
                 Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, "[ToolStrip.RestoreFocusFilter] Detected a click, restoring focus.");

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -12,7 +11,7 @@ namespace System.Windows.Forms.Tests
     {
         public static IEnumerable<object[]> Ctor_DataGridViewRow_DataGridViewElementStates_TestData()
         {
-            yield return new object[] { null, (DataGridViewElementStates)7 };
+            yield return new object[] { new DataGridViewRow(), (DataGridViewElementStates)7 };
             yield return new object[] { new DataGridViewRow(), DataGridViewElementStates.Displayed };
         }
 

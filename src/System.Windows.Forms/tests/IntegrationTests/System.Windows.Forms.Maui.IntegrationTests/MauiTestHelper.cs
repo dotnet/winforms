@@ -2,12 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace System.Windows.Forms.Maui.IntegrationTests
 {
@@ -75,7 +73,7 @@ namespace System.Windows.Forms.Maui.IntegrationTests
         /// </summary>
         /// <param name="projectName">The name of the maui project</param>
         /// <param name="scenarioName">The name of the scenario</param>
-        public static void ValidateScenarioPassed(string projectName, string scenarioName)
+        public static void ValidateScenarioPassed(string projectName, string scenarioName, ITestOutputHelper output = null)
         {
             // if the test hasn't run yet for the specified projectName, run it
             if (!s_testResults.ContainsKey(projectName))
@@ -84,8 +82,15 @@ namespace System.Windows.Forms.Maui.IntegrationTests
             }
 
             var scenario = s_testResults[projectName].ScenarioGroup.Scenarios.SingleOrDefault(x => x.Name == scenarioName);
+
             Assert.NotNull(scenario);
             Assert.NotNull(scenario.Result);
+
+            if (output is not null && scenario.Result.Type != "Pass" && scenario.Text?.Length > 0)
+            {
+                output.WriteLine($"Log:{string.Join("\r\n", scenario.Text)}");
+            }
+
             Assert.Equal("Pass", scenario.Result.Type);
         }
 

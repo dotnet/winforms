@@ -21,6 +21,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Is Windows 10 first release or later. (Threshold 1, build 10240, version 1507)
+        /// </summary>
+        public static bool IsWindows10_1507OrGreater
+            => s_versionInfo.dwMajorVersion >= 10 && s_versionInfo.dwBuildNumber >= 10240;
+
+        /// <summary>
         ///  Is Windows 10 Anniversary Update or later. (Redstone 1, build 14393, version 1607)
         /// </summary>
         public static bool IsWindows10_1607OrGreater

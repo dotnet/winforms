@@ -35,12 +35,13 @@ namespace System.Windows.Forms.Layout
                     Rectangle bounds = GetCachedBounds(element);
 
                     AnchorStyles anchor = GetAnchor(element);
-                    Size proposedConstraints = LayoutUtils.MaxSize;
+                    Size proposedConstraints = LayoutUtils.s_maxSize;
 
                     if ((anchor & (AnchorStyles.Left | AnchorStyles.Right)) == (AnchorStyles.Left | AnchorStyles.Right))
                     {
                         proposedConstraints.Width = bounds.Width;
                     }
+
                     if ((anchor & (AnchorStyles.Top | AnchorStyles.Bottom)) == (AnchorStyles.Top | AnchorStyles.Bottom))
                     {
                         proposedConstraints.Height = bounds.Height;
@@ -74,7 +75,7 @@ namespace System.Windows.Forms.Layout
 
         /// <summary>
         ///  Gets the bounds of the element after growing to newSize (note that depending on
-        ///  anchoring the element may grow to the left/updwards rather than to the
+        ///  anchoring the element may grow to the left/upwards rather than to the
         ///  right/downwards. i.e., it may be translated.)
         /// </summary>
         private static Rectangle GetGrowthBounds(IArrangedElement element, Size newSize)
@@ -151,7 +152,7 @@ namespace System.Windows.Forms.Layout
         /// </summary>
         private static Rectangle GetAnchorDestination(IArrangedElement element, Rectangle displayRect, bool measureOnly)
         {
-            // Container can not be null since we AschorControls takes a non-null container.
+            // Container can not be null since we AnchorControls takes a non-null container.
             //
             // NB: DO NOT convert the following into Debug.WriteLineIf(CompModSwitches.RichLayout.TraceInfo, "...")
             // because it WILL execute GetCachedBounds(element).ToString() calls even if CompModSwitches.RichLayout.TraceInfo=false
@@ -241,6 +242,7 @@ namespace System.Windows.Forms.Layout
                     {
                         left = Math.Max(Math.Abs(left), Math.Abs(cachedBounds.Left));
                     }
+
                     right = left + Math.Max(element.Bounds.Width, cachedBounds.Width) + Math.Abs(right);
                 }
                 else
@@ -258,6 +260,7 @@ namespace System.Windows.Forms.Layout
                     {
                         top = Math.Max(Math.Abs(top), Math.Abs(cachedBounds.Top));
                     }
+
                     bottom = top + Math.Max(element.Bounds.Height, cachedBounds.Height) + Math.Abs(bottom);
                 }
                 else
@@ -285,7 +288,7 @@ namespace System.Windows.Forms.Layout
             Rectangle displayRectangle = container.DisplayRectangle;
             if (CommonProperties.GetAutoSize(container) && ((displayRectangle.Width == 0) || (displayRectangle.Height == 0)))
             {
-                // we havent set oursleves to the preferred size yet. proceeding will
+                // we haven't set ourselves to the preferred size yet. proceeding will
                 // just set all the control widths to zero. let's return here
                 return;
             }
@@ -339,6 +342,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Height -= element.Bounds.Height;
                                 break;
                             }
+
                         case DockStyle.Bottom:
                             {
                                 Size elementSize = GetVerticalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -351,6 +355,7 @@ namespace System.Windows.Forms.Layout
 
                                 break;
                             }
+
                         case DockStyle.Left:
                             {
                                 Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -363,6 +368,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Width -= element.Bounds.Width;
                                 break;
                             }
+
                         case DockStyle.Right:
                             {
                                 Size elementSize = GetHorizontalDockedSize(element, remainingBounds.Size, measureOnly);
@@ -374,6 +380,7 @@ namespace System.Windows.Forms.Layout
                                 remainingBounds.Width -= element.Bounds.Width;
                                 break;
                             }
+
                         case DockStyle.Fill:
                             if (element is MdiClient)
                             {
@@ -387,6 +394,7 @@ namespace System.Windows.Forms.Layout
 
                                 TryCalculatePreferredSizeDockedControl(element, newElementBounds, measureOnly, ref preferredSize, ref remainingBounds);
                             }
+
                             break;
                         default:
                             Debug.Fail("Unsupported value for dock.");
@@ -421,10 +429,12 @@ namespace System.Windows.Forms.Layout
                 {
                     neededSize.Width = 0;
                 }
+
                 if ((dockStyle == DockStyle.Left) || (dockStyle == DockStyle.Right))
                 {
                     neededSize.Height = 0;
                 }
+
                 if (dockStyle != DockStyle.Fill)
                 {
                     preferredSize += neededSize;
@@ -571,7 +581,7 @@ namespace System.Windows.Forms.Layout
             if (anchor && !measureOnly)
             {
                 // In the case of anchor, where we currently are defines the preferred size,
-                // so dont recalculate the positions of everything.
+                // so don't recalculate the positions of everything.
                 LayoutAnchoredControls(container);
             }
 
@@ -751,6 +761,7 @@ namespace System.Windows.Forms.Layout
                         // check for this in OnLayout, we just detect the case her and force a relayout.
                         LayoutTransaction.DoLayout(element.Container.Container, element, PropertyNames.Anchor);
                     }
+
                     LayoutTransaction.DoLayout(element.Container, element, PropertyNames.Anchor);
                 }
             }
@@ -772,7 +783,7 @@ namespace System.Windows.Forms.Layout
                 using (new LayoutTransaction(element.Container as Control, element, PropertyNames.Dock))
                 {
                     // if the item is autosized, calling setbounds performs a layout, which
-                    // if we havent set the anchor info properly yet makes dock/anchor layout cranky.
+                    // if we haven't set the anchor info properly yet makes dock/anchor layout cranky.
                     if (value == DockStyle.None)
                     {
                         if (dockNeedsLayout)

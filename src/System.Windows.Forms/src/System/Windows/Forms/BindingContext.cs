@@ -114,6 +114,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(dataSource));
             }
+
             if (listManager is null)
             {
                 throw new ArgumentNullException(nameof(listManager));
@@ -195,6 +196,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentNullException(nameof(dataSource));
                 }
+
                 if (dataMember is null)
                 {
                     dataMember = string.Empty;
@@ -285,6 +287,7 @@ namespace System.Windows.Forms
             {
                 bindingManagerBase = (BindingManagerBase)wRef.Target;
             }
+
             if (bindingManagerBase is not null)
             {
                 return bindingManagerBase;
@@ -330,7 +333,7 @@ namespace System.Windows.Forms
             }
 
             // if wRef is null, then it is the first time we want this bindingManagerBase: so add it
-            // if wRef is not null, then the bindingManagerBase was GC'ed at some point: keep the old wRef and change its target
+            // if wRef is not null, then the bindingManagerBase was GC'd at some point: keep the old wRef and change its target
             if (wRef is null)
             {
                 _listManagers.Add(key, new WeakReference(bindingManagerBase, false));
@@ -385,6 +388,7 @@ namespace System.Windows.Forms
                     {
                         cleanupList = new ArrayList();
                     }
+
                     cleanupList.Add(de.Key);
                 }
             }

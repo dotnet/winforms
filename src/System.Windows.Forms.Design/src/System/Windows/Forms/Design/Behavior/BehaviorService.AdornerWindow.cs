@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
-using System.ComponentModel.Design;
 using System.Drawing;
 using static Interop;
 
@@ -36,7 +34,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             /// <summary>
-            ///  The key here is to set the appropriate TransparetWindow style.
+            ///  The key here is to set the appropriate TransparentWindow style.
             /// </summary>
             protected override CreateParams CreateParams
             {
@@ -281,7 +279,7 @@ namespace System.Windows.Forms.Design.Behavior
 
             /// <summary>
             ///  Called by ControlDesigner when it receives a DragEnter message - we'll let listen to all Mouse
-            ///  Messages so we can send drag notifcations.
+            ///  Messages so we can send drag notifications.
             /// </summary>
             internal void StartDragNotification() => ProcessingDrag = true;
 
@@ -346,6 +344,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             m.Result = (IntPtr)User32.HT.CLIENT;
                         }
+
                         break;
 
                     case User32.WM.CAPTURECHANGED:
@@ -374,6 +373,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.RBUTTONDOWN:
@@ -381,6 +381,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.MOUSEMOVE:
@@ -388,6 +389,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.LBUTTONUP:
@@ -395,6 +397,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.RBUTTONUP:
@@ -402,6 +405,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.MOUSEHOVER:
@@ -409,6 +413,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.LBUTTONDBLCLK:
@@ -416,6 +421,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
 
                     case User32.WM.RBUTTONDBLCLK:
@@ -423,6 +429,7 @@ namespace System.Windows.Forms.Design.Behavior
                         {
                             return false;
                         }
+
                         break;
                 }
 

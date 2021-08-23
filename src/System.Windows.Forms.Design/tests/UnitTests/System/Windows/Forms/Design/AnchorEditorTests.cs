@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing.Design;
-using System.Windows.Forms;
-using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
+using System.Reflection;
 
 namespace System.Windows.Forms.Design.Tests
 {
@@ -55,7 +53,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
         public void AnchorEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new AnchorEditor();
@@ -63,7 +61,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void AnchorEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new AnchorEditor();
@@ -71,11 +69,31 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void AnchorEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new AnchorEditor();
             Assert.False(editor.GetPaintValueSupported(context));
+        }
+
+        [Theory]
+        [InlineData("left")]
+        [InlineData("right")]
+        [InlineData("top")]
+        [InlineData("bottom")]
+        public void AnchorEditor_AnchorUI_ControlType_IsCheckButton(string fieldName)
+        {
+            AnchorEditor editor = new();
+            Type type = editor.GetType()
+                .GetNestedType("AnchorUI", BindingFlags.NonPublic | BindingFlags.Instance);
+            var anchorUI = (Control)Activator.CreateInstance(type, new object[] { editor });
+            var item = (Control)anchorUI.GetType()
+                .GetField(fieldName, BindingFlags.NonPublic | BindingFlags.Instance).GetValue(anchorUI);
+
+            object actual = item.AccessibilityObject.TestAccessor().Dynamic
+                .GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId);
+
+            Assert.Equal(Interop.UiaCore.UIA.CheckBoxControlTypeId, actual);
         }
     }
 }

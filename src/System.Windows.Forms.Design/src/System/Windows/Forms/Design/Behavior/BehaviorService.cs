@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -38,7 +37,7 @@ namespace System.Windows.Forms.Design.Behavior
         private Glyph _hitTestedGlyph;                                  // the last valid glyph that was hit tested
         private IToolboxService _toolboxSvc;                            // allows us to have the toolbox choose a cursor
         private Control _dropSource;                                    // actual control used to call .dodragdrop
-        private DragEventArgs _validDragArgs;                           // if valid - this is used to fabricate drag enter/leave envents
+        private DragEventArgs _validDragArgs;                           // if valid - this is used to fabricate drag enter/leave events
         private BehaviorDragDropEventHandler _beginDragHandler;         // fired directly before we call .DoDragDrop()
         private BehaviorDragDropEventHandler _endDragHandler;           // fired directly after we call .DoDragDrop()
         private EventHandler _synchronizeEventHandler;                  // fired when we want to synchronize the selection
@@ -103,7 +102,7 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Read-only property that returns the AdornerCollection that the BehaivorService manages.
+        ///  Read-only property that returns the AdornerCollection that the BehaviorService manages.
         /// </summary>
         public BehaviorServiceAdornerCollection Adorners { get; }
 
@@ -269,6 +268,7 @@ namespace System.Windows.Forms.Design.Behavior
                     dropSourceBehavior.CleanupDrag();
                 }
             }
+
             return res;
         }
 
@@ -396,19 +396,19 @@ namespace System.Windows.Forms.Design.Behavior
         }
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate() => _adornerWindow.InvalidateAdornerWindow();
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Rectangle rect) => _adornerWindow.InvalidateAdornerWindow(rect);
 
         /// <summary>
-        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refesh of all Adorners
+        ///  Invalidates the BehaviorService's AdornerWindow.  This will force a refresh of all Adorners
         ///  and, in turn, all Glyphs.
         /// </summary>
         public void Invalidate(Region r) => _adornerWindow.InvalidateAdornerWindow(r);
@@ -571,6 +571,7 @@ namespace System.Windows.Forms.Design.Behavior
                         cursor = behavior.Cursor;
                     }
                 }
+
                 SetAppropriateCursor(cursor);
             }
 
@@ -859,17 +860,17 @@ namespace System.Windows.Forms.Design.Behavior
 
             if (Marshal.SystemDefaultCharSize == 1)
             {
-                bytes = System.Text.Encoding.Default.GetBytes(text);
-                nullBytes = System.Text.Encoding.Default.GetBytes(nullChar);
+                bytes = Text.Encoding.Default.GetBytes(text);
+                nullBytes = Text.Encoding.Default.GetBytes(nullChar);
             }
             else
             {
-                bytes = System.Text.Encoding.Unicode.GetBytes(text);
-                nullBytes = System.Text.Encoding.Unicode.GetBytes(nullChar);
+                bytes = Text.Encoding.Unicode.GetBytes(text);
+                nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
             }
 
             Marshal.Copy(bytes, 0, m.LParam, bytes.Length);
-            Marshal.Copy(nullBytes, 0, unchecked((IntPtr)((long)m.LParam + (long)bytes.Length)), nullBytes.Length);
+            Marshal.Copy(nullBytes, 0, unchecked((IntPtr)((long)m.LParam + bytes.Length)), nullBytes.Length);
             m.Result = (IntPtr)((bytes.Length + nullBytes.Length) / Marshal.SystemDefaultCharSize);
         }
 

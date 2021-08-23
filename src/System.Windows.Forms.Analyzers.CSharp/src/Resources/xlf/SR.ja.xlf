@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<xliff xmlns="urn:oasis:names:tc:xliff:document:1.2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.2" xsi:schemaLocation="urn:oasis:names:tc:xliff:document:1.2 xliff-core-1.2-transitional.xsd">
+  <file datatype="xml" source-language="en" target-language="ja" original="../SR.resx">
+    <body>
+      <trans-unit id="GdiplusFontFamilyNotFound">
+        <source>Font '{0}' cannot be found.</source>
+        <target state="translated">フォント '{0}' が見つかりません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="GdiplusNotTrueTypeFont">
+        <source>Only TrueType fonts are supported. '{0}' is not a TrueType font.</source>
+        <target state="translated">TrueType フォントのみがサポートされています。'{0}' は TrueType フォントではありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="InvalidArgumentValueFontConverter">
+        <source>Value of '{0}' is not valid for font size unit.</source>
+        <target state="translated">'{0}' の値は、フォント サイズの単位として有効ではありません。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TextParseFailedFormat">
+        <source>Text "{0}" cannot be parsed. The expected text format is "{1}".</source>
+        <target state="translated">テキスト "{0}" を解析できません。必要なテキストの形式は "{1}" です。</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC001Message">
+        <source>Only projects with 'OutputType={0}' supported</source>
+        <target state="translated">'OutputType ={0}' のプロジェクトのみがサポートされています</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC001Title">
+        <source>Unsupported project type</source>
+        <target state="translated">サポートされていないプロジェクトの種類</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002Message">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'</source>
+        <target state="translated">ArgumentException: プロジェクト プロパティ '{0}' を '{1}' に設定することはできません</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002MessageWithReason">
+        <source>ArgumentException: Project property '{0}' cannot be set to '{1}'. Reason: {2}</source>
+        <target state="translated">ArgumentException: プロジェクト プロパティ '{0}' を '{1}' に設定することはできません。理由: {2}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="WFAC002Title">
+        <source>Unsupported property value</source>
+        <target state="translated">サポートされていないプロパティの値</target>
+        <note />
+      </trans-unit>
+    </body>
+  </file>
+</xliff>

@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -32,7 +31,7 @@ namespace System.Windows.Forms
         private readonly int _savedHdcState;
 
         /// <summary>
-        ///  Gets the <see cref="Gdi32.HDC"/> from the the given <paramref name="deviceContext"/>.
+        ///  Gets the <see cref="Gdi32.HDC"/> from the given <paramref name="deviceContext"/>.
         /// </summary>
         /// <remarks>
         ///  When a <see cref="Graphics"/> object is created from a <see cref="Gdi32.HDC"/> the clipping region and
@@ -52,7 +51,7 @@ namespace System.Windows.Forms
         public DeviceContextHdcScope(
             IDeviceContext deviceContext,
             bool applyGraphicsState = true,
-            bool saveHdcState = false) : this (
+            bool saveHdcState = false) : this(
                 deviceContext,
                 applyGraphicsState ? ApplyGraphicsProperties.All : ApplyGraphicsProperties.None,
                 saveHdcState)
@@ -127,6 +126,7 @@ namespace System.Windows.Forms
                     {
                         throw new InvalidOperationException();
                     }
+
                     DeviceContext = graphics;
                 }
             }
@@ -145,56 +145,61 @@ namespace System.Windows.Forms
             bool applyTransform = applyGraphicsState.HasFlag(ApplyGraphicsProperties.TranslateTransform);
             bool applyClipping = applyGraphicsState.HasFlag(ApplyGraphicsProperties.Clipping);
 
-            // This API is very expensive and cannot be called after GetHdc()
-            object[]? data = applyTransform || applyClipping ? (object[])graphics.GetContextInfo() : null;
-
-            using Region? clipRegion = (Region?)data?[0];
-            using Matrix? worldTransform = (Matrix?)data?[1];
-
-            // elements (XFORM) = [eM11, eM12, eM21, eM22, eDx, eDy], eDx/eDy specify the translation offset.
-            float[]? elements = applyTransform ? worldTransform?.Elements : null;
-            int dx = elements is not null ? (int)elements[4] : 0;
-            int dy = elements is not null ? (int)elements[5] : 0;
-            applyTransform = applyTransform && elements is not null && (dx != 0 || dy != 0);
-
-            using var graphicsRegion = applyClipping ? new Gdi32.RegionScope(clipRegion!, graphics) : default;
-            applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
-
-            HDC = (Gdi32.HDC)graphics.GetHdc();
-
-            if (saveHdcState || applyClipping || applyTransform)
-            {
-                _savedHdcState = Gdi32.SaveDC(HDC);
-            }
-
+            Region? clipRegion = null;
+            PointF offset = default;
             if (applyClipping)
             {
-                // If the Graphics object was created from a native DC the actual clipping region is the intersection
-                // beteween the original DC clip region and the GDI+ one - for display Graphics it is the same as
-                // Graphics.VisibleClipBounds.
+                graphics.GetContextInfo(out offset, out clipRegion);
+            }
+            else if (applyTransform)
+            {
+                graphics.GetContextInfo(out offset);
+            }
 
-                RegionType type;
+            using (clipRegion)
+            {
+                applyTransform = applyTransform && !offset.IsEmpty;
+                applyClipping = clipRegion is not null;
 
-                using var dcRegion = new Gdi32.RegionScope(HDC);
-                if (!dcRegion.IsNull)
+                using var graphicsRegion = applyClipping ? new Gdi32.RegionScope(clipRegion!, graphics) : default;
+                applyClipping = applyClipping && !graphicsRegion!.Region.IsNull;
+
+                HDC = (Gdi32.HDC)graphics.GetHdc();
+
+                if (saveHdcState || applyClipping || applyTransform)
                 {
-                    type = Gdi32.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi32.RGN.AND);
+                    _savedHdcState = Gdi32.SaveDC(HDC);
+                }
+
+                if (applyClipping)
+                {
+                    // If the Graphics object was created from a native DC the actual clipping region is the intersection
+                    // between the original DC clip region and the GDI+ one - for display Graphics it is the same as
+                    // Graphics.VisibleClipBounds.
+
+                    RegionType type;
+
+                    using var dcRegion = new Gdi32.RegionScope(HDC);
+                    if (!dcRegion.IsNull)
+                    {
+                        type = Gdi32.CombineRgn(graphicsRegion!, dcRegion, graphicsRegion!, Gdi32.RGN.AND);
+                        if (type == RegionType.ERROR)
+                        {
+                            throw new Win32Exception();
+                        }
+                    }
+
+                    type = Gdi32.SelectClipRgn(HDC, graphicsRegion!);
                     if (type == RegionType.ERROR)
                     {
                         throw new Win32Exception();
                     }
                 }
 
-                type = Gdi32.SelectClipRgn(HDC, graphicsRegion!);
-                if (type == RegionType.ERROR)
+                if (applyTransform)
                 {
-                    throw new Win32Exception();
+                    Gdi32.OffsetViewportOrgEx(HDC, (int)offset.X, (int)offset.Y, null);
                 }
-            }
-
-            if (applyTransform)
-            {
-                Gdi32.OffsetViewportOrgEx(HDC, dx, dy, null);
             }
         }
 

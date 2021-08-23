@@ -53,9 +53,11 @@ namespace System.Windows.Forms
                             keysCollection.Add(string.Empty);
                         }
                     }
+
                     return keysCollection;
                 }
             }
+
             internal ImageCollection(ImageList owner)
             {
                 _owner = owner;
@@ -99,6 +101,7 @@ namespace System.Windows.Forms
                                 count += original._nImages;
                             }
                         }
+
                         return count;
                     }
                 }
@@ -348,6 +351,7 @@ namespace System.Windows.Forms
                     {
                         index = _owner._originals.Add(original);
                     }
+
                     if (_owner.HandleCreated)
                     {
                         index = _owner.AddIconToHandle(original, (Icon)original._image);
@@ -489,7 +493,7 @@ namespace System.Windows.Forms
             {
                 if (string.IsNullOrEmpty(key))
                 {
-                    // We dont support empty or null keys.
+                    // We don't support empty or null keys.
                     return -1;
                 }
 

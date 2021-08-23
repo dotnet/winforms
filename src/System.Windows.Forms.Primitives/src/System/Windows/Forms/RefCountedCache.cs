@@ -108,6 +108,7 @@ namespace System.Windows.Forms
                             // the node to the front of the list.
                             enumerator.MoveCurrentToFront();
                         }
+
                         success = true;
                         break;
                     }

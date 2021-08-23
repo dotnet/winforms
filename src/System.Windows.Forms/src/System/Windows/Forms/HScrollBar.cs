@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -26,8 +25,5 @@ namespace System.Windows.Forms
 
         protected override Size DefaultSize
             => new Size(80, SystemInformation.HorizontalScrollBarHeight);
-
-        protected override AccessibleObject CreateAccessibilityInstance()
-            => new HScrollBarAccessibleObject(this);
     }
 }

@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Windows.Forms;
 
 namespace WinformsControlsTest
@@ -40,6 +39,7 @@ namespace WinformsControlsTest
                 MainMenuStrip = null;
             }
         }
+
         private void chkSetParentMenustrip_CheckedChanged(object sender, EventArgs e)
         {
             if (chkSetParentMenustrip.Checked)
@@ -79,6 +79,11 @@ namespace WinformsControlsTest
         private void panel1_DoubleClick(object sender, System.EventArgs e)
         {
             WindowState = FormWindowState.Normal;
+        }
+
+        private void chkChildAlign_CheckedChanged(object sender, EventArgs e)
+        {
+            MyParent.MdiChildrenMinimizedAnchorBottom = !chkChildAlign.Checked;
         }
     }
 }

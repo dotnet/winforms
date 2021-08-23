@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms.Metafiles;
 using Xunit;
@@ -254,7 +253,7 @@ namespace System.Windows.Forms.Tests
                     State.PenColor(Color.Black),
                     State.PenStyle(Gdi32.PS.ENDCAP_ROUND),
                     State.BrushStyle(Gdi32.BS.NULL),       // Regressed in https://github.com/dotnet/winforms/pull/3667
-                    State.Rop2( Gdi32.R2.COPYPEN)));
+                    State.Rop2(Gdi32.R2.COPYPEN)));
         }
     }
 }

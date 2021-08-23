@@ -14,9 +14,9 @@ namespace System.ComponentModel.Design.Serialization
     /// </summary>
     internal class ResourcePropertyMemberCodeDomSerializer : MemberCodeDomSerializer
     {
-        private CodeDomLocalizationModel _model;
-        private MemberCodeDomSerializer _serializer;
-        private CodeDomLocalizationProvider.LanguageExtenders _extender;
+        private readonly CodeDomLocalizationModel _model;
+        private readonly MemberCodeDomSerializer _serializer;
+        private readonly CodeDomLocalizationProvider.LanguageExtenders _extender;
         private CultureInfo localizationLanguage;
 
         internal ResourcePropertyMemberCodeDomSerializer(MemberCodeDomSerializer serializer, CodeDomLocalizationProvider.LanguageExtenders extender, CodeDomLocalizationModel model)
@@ -54,11 +54,11 @@ namespace System.ComponentModel.Design.Serialization
             if (localizationLanguage is null)
             {
                 // Check to see if our base component's localizable prop is true
-                RootContext rootCxt = manager.Context[typeof(RootContext)] as RootContext;
+                RootContext rootCtx = manager.Context[typeof(RootContext)] as RootContext;
 
-                if (rootCxt != null)
+                if (rootCtx != null)
                 {
-                    object comp = rootCxt.Value;
+                    object comp = rootCtx.Value;
                     PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
 
                     if (prop != null && prop.PropertyType == typeof(CultureInfo))
@@ -106,11 +106,13 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 manager.SerializationComplete += new EventHandler(OnSerializationComplete);
                             }
+
                             if (GetLocalizationLanguage(manager) != CultureInfo.InvariantCulture)
                             {
                                 shouldSerialize = true;
                             }
                         }
+
                         break;
 
                     case CodeDomLocalizationModel.PropertyAssignment:

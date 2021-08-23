@@ -109,7 +109,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                if (_owningComboBox.AccessibilityObject is not  ComboBoxAccessibleObject comboBoxAccessibleObject)
+                if (_owningComboBox.AccessibilityObject is not ComboBoxAccessibleObject comboBoxAccessibleObject)
                 {
                     return null;
                 }
@@ -200,7 +200,8 @@ namespace System.Windows.Forms
 
                 if (itemAccessibleObject is not null)
                 {
-                    return new UiaCore.IRawElementProviderSimple[] {
+                    return new UiaCore.IRawElementProviderSimple[]
+                    {
                         itemAccessibleObject
                     };
                 }

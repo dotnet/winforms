@@ -4,8 +4,6 @@
 
 #nullable disable
 
-using System.Runtime.InteropServices;
-
 namespace System.Windows.Forms
 {
     /// <summary>

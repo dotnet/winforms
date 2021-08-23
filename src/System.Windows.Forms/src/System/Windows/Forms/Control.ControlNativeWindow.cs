@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         internal sealed class ControlNativeWindow : NativeWindow, IWindowTarget
         {
             private readonly Control _control;
-            private GCHandle _rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
+            private GCHandle _rootRef;   // We will root the control when we do not want to be eligible for garbage collection.
 
             internal ControlNativeWindow(Control control)
             {
@@ -78,6 +78,7 @@ namespace System.Windows.Forms
                 {
                     return _control.GetType().FullName;
                 }
+
                 return base.ToString();
             }
 #endif
@@ -107,6 +108,7 @@ namespace System.Windows.Forms
                                 _control.SetState(States.MouseEnterPending, false);
                             }
                         }
+
                         break;
 
                     case User32.WM.MOUSEWHEEL:

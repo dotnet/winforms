@@ -6,10 +6,10 @@
 
 #region Using directives
 
-using System.Drawing;
-using System.Drawing.Imaging;
 using System.Collections.Specialized;
+using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Drawing.Imaging;
 
 #endregion
 
@@ -34,16 +34,18 @@ namespace System.Windows.Forms
         {
             get { return options[optionsDottedBorder]; }
         }
+
         public bool DottedGrip
         {
             get { return options[optionsDottedGrip]; }
         }
+
         public bool FillWhenSelected
         {
             get { return options[optionsFillWhenSelected]; }
         }
 
-        // this is a renderer override, so return null so we dont get into an infinite loop.
+        // this is a renderer override, so return null so we don't get into an infinite loop.
         internal override ToolStripRenderer RendererOverride
         {
             get { return null; }
@@ -139,6 +141,7 @@ namespace System.Windows.Forms
         {
             // do nothing
         }
+
         protected override void OnRenderItemBackground(ToolStripItemRenderEventArgs e)
         {
             base.OnRenderItemBackground(e);
@@ -185,6 +188,7 @@ namespace System.Windows.Forms
                 base.OnRenderLabelBackground(e);
             }
         }
+
         protected override void OnRenderMenuItemBackground(ToolStripItemRenderEventArgs e)
         {
             base.OnRenderMenuItemBackground(e);
@@ -193,6 +197,7 @@ namespace System.Windows.Forms
                 e.Graphics.DrawRectangle(SystemPens.ButtonHighlight, 0, 0, e.Item.Width - 1, e.Item.Height - 1);
             }
         }
+
         protected override void OnRenderOverflowButtonBackground(ToolStripItemRenderEventArgs e)
         {
             if (FillWhenSelected)
@@ -302,7 +307,7 @@ namespace System.Windows.Forms
 
                 // connecting pixels
 
-                // top left conntecting pixel - always drawn
+                // top left connecting pixel - always drawn
                 g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, 1, 1, 1));
 
                 if (oddWidth)
@@ -310,14 +315,15 @@ namespace System.Windows.Forms
                     // top right pixel
                     g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(bounds.Width - 2, 1, 1, 1));
                 }
-                // bottom conntecting pixels - drawn only if height is odd
+
+                // bottom connecting pixels - drawn only if height is odd
                 if (oddHeight)
                 {
                     // bottom left
                     g.FillRectangle(SystemBrushes.ButtonShadow, new Rectangle(1, bounds.Height - 2, 1, 1));
                 }
 
-                // top and bottom right conntecting pixel - drawn only if height and width are odd
+                // top and bottom right connecting pixel - drawn only if height and width are odd
                 if (oddHeight && oddWidth)
                 {
                     // bottom right
@@ -332,6 +338,7 @@ namespace System.Windows.Forms
                 g.DrawRectangle(SystemPens.ButtonShadow, bounds);
             }
         }
+
         protected override void OnRenderSeparator(ToolStripSeparatorRenderEventArgs e)
         {
             Pen foreColorPen = SystemPens.ButtonShadow;
@@ -375,7 +382,7 @@ namespace System.Windows.Forms
         protected override void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
             Image image = e.Image;
-            if (image != null)
+            if (image is not null)
             {
                 if (Image.GetPixelFormatSize(image.PixelFormat) > 16)
                 {
@@ -384,6 +391,7 @@ namespace System.Windows.Forms
                     base.OnRenderItemImage(e);
                     return;
                 }
+
                 Graphics g = e.Graphics;
 
                 ToolStripItem item = e.Item;
@@ -406,6 +414,7 @@ namespace System.Windows.Forms
 
                         attrs.SetRemapTable(new ColorMap[] { cm1, cm2, cm3 }, ColorAdjustType.Bitmap);
                     }
+
                     if (item.ImageScaling == ToolStripItemImageScaling.None)
                     {
                         g.DrawImage(image, imageRect, 0, 0, imageRect.Width, imageRect.Height, GraphicsUnit.Pixel, attrs);
@@ -431,6 +440,7 @@ namespace System.Windows.Forms
                     {
                         g.FillRectangle(SystemBrushes.Highlight, bounds);
                     }
+
                     if (button.Selected)
                     {
                         g.DrawRectangle(SystemPens.Highlight, bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);

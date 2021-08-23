@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using Xunit;
 using static Interop;
@@ -57,7 +56,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = 1
             };
-            SAFEARRAY *psa = SafeArrayCreate((VARENUM)vt, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate((VARENUM)vt, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -94,7 +93,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
             IntPtr pRecord = Marshal.GetComInterfaceForObject<CustomRecordInfo, IRecordInfo>(record);
             try
             {
-                SAFEARRAY *psa = SafeArrayCreateEx(VARENUM.RECORD, 1, &saBound, pRecord);
+                SAFEARRAY* psa = SafeArrayCreateEx(VARENUM.RECORD, 1, &saBound, pRecord);
                 Assert.True(psa != null);
 
                 try
@@ -185,7 +184,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = 0
             };
-            SAFEARRAY *psa = SafeArrayCreate((VARENUM)vt, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate((VARENUM)vt, 2, saBounds);
             Assert.True(psa != null);
 
             try
@@ -220,7 +219,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = 0
             };
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -266,7 +265,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 10,
                 lLbound = -5
             };
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 1, &saBound);
             Assert.True(psa != null);
 
             try
@@ -318,7 +317,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = 0
             };
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
             Assert.True(psa != null);
 
             try
@@ -370,7 +369,7 @@ namespace System.Windows.Forms.Tests.Interop.Oleaut32
                 cElements = 20,
                 lLbound = -4
             };
-            SAFEARRAY *psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
+            SAFEARRAY* psa = SafeArrayCreate(VARENUM.I4, 2, saBounds);
             Assert.True(psa != null);
 
             try

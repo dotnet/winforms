@@ -83,6 +83,7 @@ namespace System.Windows.Forms
             {
                 list = currencyManager.List;
             }
+
             if (list is ITypedList typedList)
             {
                 PropertyDescriptor[] properties = new PropertyDescriptor[listAccessors.Count];
@@ -151,6 +152,7 @@ namespace System.Windows.Forms
                     {
                         list = dataSources[offset - 1] as IList;
                     }
+
                     if (list is not null && list.Count > 0)
                     {
                         itemProps = TypeDescriptor.GetProperties(list[0]);
@@ -308,6 +310,7 @@ namespace System.Windows.Forms
                     {
                         bi.BindingComplete += new BindingCompleteEventHandler(Binding_BindingComplete);
                     }
+
                     break;
             }
         }

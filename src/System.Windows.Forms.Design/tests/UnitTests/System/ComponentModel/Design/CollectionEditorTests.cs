@@ -3,14 +3,13 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Drawing.Design;
 using System.Reflection;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Moq;
 using Moq.Protected;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -346,7 +345,7 @@ namespace System.ComponentModel.Design.Tests
 
         public static IEnumerable<object[]> CreateInstance_InvokeWithoutContext_TestData()
         {
-            yield return new object[] { typeof(int), 0  };
+            yield return new object[] { typeof(int), 0 };
             yield return new object[] { typeof(string), string.Empty };
         }
 
@@ -756,7 +755,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEditValueInvalidProviderTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetEditValueInvalidProviderTestData))]
         public void CollectionEditor_EditValue_InvalidProvider_ReturnsValue(IServiceProvider provider, object value)
         {
             var editor = new SubCollectionEditor(null);
@@ -765,7 +764,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void CollectionEditor_GetEditStyle_Invoke_ReturnsModal(ITypeDescriptorContext context)
         {
             var editor = new CollectionEditor(null);
@@ -773,7 +772,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetITypeDescriptorContextTestData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetITypeDescriptorContextTestData))]
         public void CollectionEditor_GetPaintValueSupported_Invoke_ReturnsFalse(ITypeDescriptorContext context)
         {
             var editor = new CollectionEditor(null);
@@ -843,7 +842,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void CollectionEditor_GetService_WithContext_CallsContextGetService(Type serviceType)
         {
             var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
@@ -880,7 +879,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void CollectionEditor_GetService_InvokeWithoutContext_ReturnsNull(Type serviceType)
         {
             var editor = new SubCollectionEditor(serviceType);

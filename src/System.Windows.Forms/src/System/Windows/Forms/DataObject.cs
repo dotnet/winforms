@@ -8,8 +8,9 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
+#if DEBUG
 using System.Globalization;
-using System.IO;
+#endif
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
@@ -32,10 +33,12 @@ namespace System.Windows.Forms
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
         private static readonly TYMED[] ALLOWED_TYMEDS =
-        new TYMED[] {
+        new TYMED[]
+        {
             TYMED.TYMED_HGLOBAL,
             TYMED.TYMED_ISTREAM,
-            TYMED.TYMED_GDI};
+            TYMED.TYMED_GDI
+        };
 
         private readonly IDataObject innerData;
 
@@ -70,6 +73,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IComDataObject");
                 innerData = new OleConverter(data);
             }
+
             Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
@@ -103,6 +107,7 @@ namespace System.Windows.Forms
                 innerData = new DataStore();
                 SetData(data);
             }
+
             Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
         }
 
@@ -297,6 +302,7 @@ namespace System.Windows.Forms
             {
                 retVal.AddRange(strings);
             }
+
             return retVal;
         }
 
@@ -329,6 +335,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(audioBytes));
             }
+
             SetAudio(new MemoryStream(audioBytes));
         }
 
@@ -338,6 +345,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(audioStream));
             }
+
             SetData(DataFormats.WaveAudio, false, audioStream);
         }
 
@@ -347,6 +355,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(filePaths));
             }
+
             string[] strings = new string[filePaths.Count];
             filePaths.CopyTo(strings, 0);
             SetData(DataFormats.FileDrop, true, strings);
@@ -358,6 +367,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentNullException(nameof(image));
             }
+
             SetData(DataFormats.Bitmap, true, image);
         }
 
@@ -415,7 +425,8 @@ namespace System.Windows.Forms
                 || format.Equals(DataFormats.UnicodeText)
                 || format.Equals(DataFormats.StringFormat))
             {
-                return new string[] {
+                return new string[]
+                {
                     DataFormats.StringFormat,
                     DataFormats.UnicodeText,
                     DataFormats.Text,
@@ -426,7 +437,8 @@ namespace System.Windows.Forms
                 || format.Equals(CF_DEPRECATED_FILENAME)
                 || format.Equals(CF_DEPRECATED_FILENAMEW))
             {
-                return new string[] {
+                return new string[]
+                {
                     DataFormats.FileDrop,
                     CF_DEPRECATED_FILENAMEW,
                     CF_DEPRECATED_FILENAME,
@@ -436,7 +448,8 @@ namespace System.Windows.Forms
             if (format.Equals(DataFormats.Bitmap)
                 || format.Equals((typeof(Bitmap)).FullName))
             {
-                return new string[] {
+                return new string[]
+                {
                     (typeof(Bitmap)).FullName,
                     DataFormats.Bitmap,
                 };
@@ -457,6 +470,7 @@ namespace System.Windows.Forms
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -518,6 +532,7 @@ namespace System.Windows.Forms
             {
                 return ((OleConverter)innerData).OleDataObject.DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
             }
+
             pdwConnection = 0;
             return (int)HRESULT.E_NOTIMPL;
         }
@@ -533,6 +548,7 @@ namespace System.Windows.Forms
                 ((OleConverter)innerData).OleDataObject.DUnadvise(dwConnection);
                 return;
             }
+
             Marshal.ThrowExceptionForHR((int)HRESULT.E_NOTIMPL);
         }
 
@@ -561,6 +577,7 @@ namespace System.Windows.Forms
             {
                 return innerDataOleConverter.OleDataObject.EnumFormatEtc(dwDirection);
             }
+
             if (dwDirection == DATADIR.DATADIR_GET)
             {
                 return new FormatEnumerator(this);
@@ -579,6 +596,7 @@ namespace System.Windows.Forms
             {
                 return innerDataOleConverter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
             }
+
             pformatetcOut = new FORMATETC();
             return DATA_S_SAMEFORMATETC;
         }
@@ -659,6 +677,7 @@ namespace System.Windows.Forms
             {
                 return ((OleConverter)innerData).OleDataObject.QueryGetData(ref formatetc);
             }
+
             if (formatetc.dwAspect == DVASPECT.DVASPECT_CONTENT)
             {
                 if (GetTymedUseable(formatetc.tymed))
@@ -775,6 +794,7 @@ namespace System.Windows.Forms
             {
                 hr = SaveObjectToHandle(ref medium.unionmember, data, DataObject.RestrictDeserializationToSafeTypes(format));
             }
+
             return hr;
         }
 
@@ -822,6 +842,7 @@ namespace System.Windows.Forms
             {
                 return HRESULT.E_OUTOFMEMORY;
             }
+
             try
             {
                 var span = new Span<byte>(ptr.ToPointer(), size);
@@ -832,6 +853,7 @@ namespace System.Windows.Forms
             {
                 Kernel32.GlobalUnlock(handle);
             }
+
             return HRESULT.S_OK;
         }
 
@@ -862,6 +884,7 @@ namespace System.Windows.Forms
             {
                 sizeInBytes += ((uint)files[i].Length + 1) * 2;
             }
+
             sizeInBytes += 2;
 
             // Allocate the Win32 memory

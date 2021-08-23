@@ -8,7 +8,6 @@ using System.Buffers;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Runtime.InteropServices;
 using static Interop;
 using static Interop.Hhctl;
@@ -137,6 +136,7 @@ namespace System.Windows.Forms
             { // Can't assume we have a good url
                 pathAndFileName = file.AbsoluteUri;
             }
+
             if (file is null || file.IsFile)
             {
                 string localPath = (file != null && file.IsFile) ? file.LocalPath : url;
@@ -247,6 +247,7 @@ namespace System.Windows.Forms
                     {
                         file = new Uri(file.ToString() + "#" + (string)param);
                     }
+
                     break;
             }
 
@@ -298,7 +299,7 @@ namespace System.Windows.Forms
 
             if (file is null)
             {
-                Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "try appbase relative");
+                Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "try AppBase relative");
                 try
                 {
                     // try relative to AppBase...
@@ -405,6 +406,7 @@ namespace System.Windows.Forms
                             return HH.DISPLAY_INDEX;
                         }
                     }
+
                 case HelpNavigator.KeywordIndex:
                 case HelpNavigator.AssociateIndex:
                     {
@@ -417,6 +419,7 @@ namespace System.Windows.Forms
                         htmlParam = alink;
                         return command == HelpNavigator.KeywordIndex ? HH.KEYWORD_LOOKUP : HH.ALINK_LOOKUP;
                     }
+
                 default:
                     return (HH)command;
             }

@@ -56,13 +56,14 @@ namespace System.Windows.Forms
                         {
                             return currentCell.AccessibilityObject;
                         }
+
                         break;
                     case UiaCore.NavigateDirection.FirstChild:
                     case UiaCore.NavigateDirection.LastChild:
                         return _ownerDataGridView.EditingControlAccessibleObject;
                 }
 
-                return null;
+                return base.FragmentNavigate(direction);
             }
 
             internal override void SetFocus()

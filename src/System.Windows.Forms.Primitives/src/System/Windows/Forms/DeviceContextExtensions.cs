@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         ///  Draws lines with the <paramref name="hpen"/> using points defined in <paramref name="lines"/>.
         /// </summary>
         /// <param name="lines">
-        ///  MUST be a mulitple of 4. Each group of 4 represents x1, y1, x2, y2.
+        ///  MUST be a multiple of 4. Each group of 4 represents x1, y1, x2, y2.
         /// </param>
         internal unsafe static void DrawLines(this DeviceContextHdcScope hdc, Gdi32.HPEN hpen, ReadOnlySpan<int> lines)
             => DrawLines(hdc.HDC, hpen, lines);
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         ///  Draws lines with the <paramref name="hpen"/> using points defined in <paramref name="lines"/>.
         /// </summary>
         /// <param name="lines">
-        ///  MUST be a mulitple of 4. Each group of 4 represents x1, y1, x2, y2.
+        ///  MUST be a multiple of 4. Each group of 4 represents x1, y1, x2, y2.
         /// </param>
         internal unsafe static void DrawLines(this Gdi32.HDC hdc, Gdi32.HPEN hpen, ReadOnlySpan<int> lines)
         {

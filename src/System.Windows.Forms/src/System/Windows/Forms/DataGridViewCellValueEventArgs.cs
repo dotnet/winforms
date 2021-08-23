@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -22,6 +20,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
+
             if (rowIndex < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(rowIndex));
@@ -35,9 +34,9 @@ namespace System.Windows.Forms
 
         public int RowIndex { get; private set; }
 
-        public object Value { get; set; }
+        public object? Value { get; set; }
 
-        internal void SetProperties(int columnIndex, int rowIndex, object value)
+        internal void SetProperties(int columnIndex, int rowIndex, object? value)
         {
             Debug.Assert(columnIndex >= -1);
             Debug.Assert(rowIndex >= -1);

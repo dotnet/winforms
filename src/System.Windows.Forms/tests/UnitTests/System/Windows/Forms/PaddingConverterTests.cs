@@ -3,12 +3,11 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -17,7 +16,7 @@ namespace System.Windows.Forms.Tests
     public class PaddingConverterTests : IClassFixture<ThreadExceptionFixture>
     {
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetConvertFromTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetConvertFromTheoryData))]
         [InlineData(typeof(Padding), false)]
         [InlineData(typeof(string), true)]
         public void PaddingConverter_CanConvertFrom_Invoke_ReturnsExpected(Type sourceType, bool expected)

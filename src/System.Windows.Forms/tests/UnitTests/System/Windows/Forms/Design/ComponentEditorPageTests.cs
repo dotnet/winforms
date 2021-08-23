@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Design.Tests
@@ -152,7 +151,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubComponentEditorPage();
@@ -216,7 +215,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_CommitOnDeactivate_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubComponentEditorPage
@@ -266,7 +265,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_FirstActivate_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubComponentEditorPage
@@ -335,7 +334,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_LoadRequired_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubComponentEditorPage
@@ -381,7 +380,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ComponentEditorPage_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubComponentEditorPage
@@ -400,7 +399,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void ComponentEditorPage_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new SubComponentEditorPage();
@@ -495,7 +494,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_ApplyChanges_Invoke_CallsSaveComponent(bool loadRequired)
         {
             using var control = new SubComponentEditorPage
@@ -549,7 +548,7 @@ namespace System.Windows.Forms.Design.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void ComponentEditorPage_Deactivate_InvokeNotActivated_SetsInvisible(bool loadRequired)
         {
             using var control = new SubComponentEditorPage

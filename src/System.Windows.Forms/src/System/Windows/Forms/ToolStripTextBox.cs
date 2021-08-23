@@ -97,6 +97,7 @@ namespace System.Windows.Forms
                 return new Size(100, 22);
             }
         }
+
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public TextBox TextBox
@@ -119,58 +120,71 @@ namespace System.Windows.Forms
 
         public override Size GetPreferredSize(Size constrainingSize)
         {
-            // dont call TextBox.GPS because it will grow and shrink as the text changes.
+            // don't call TextBox.GPS because it will grow and shrink as the text changes.
             Rectangle bounds = CommonProperties.GetSpecifiedBounds(TextBox);
             return new Size(bounds.Width, TextBox.PreferredHeight);
         }
+
         private void HandleAcceptsTabChanged(object sender, EventArgs e)
         {
             OnAcceptsTabChanged(e);
         }
+
         private void HandleBorderStyleChanged(object sender, EventArgs e)
         {
             OnBorderStyleChanged(e);
         }
+
         private void HandleHideSelectionChanged(object sender, EventArgs e)
         {
             OnHideSelectionChanged(e);
         }
+
         private void HandleModifiedChanged(object sender, EventArgs e)
         {
             OnModifiedChanged(e);
         }
+
         private void HandleMultilineChanged(object sender, EventArgs e)
         {
             OnMultilineChanged(e);
         }
+
         private void HandleReadOnlyChanged(object sender, EventArgs e)
         {
             OnReadOnlyChanged(e);
         }
+
         private void HandleTextBoxTextAlignChanged(object sender, EventArgs e)
         {
             RaiseEvent(s_eventTextBoxTextAlignChanged, e);
         }
+
         protected virtual void OnAcceptsTabChanged(EventArgs e)
         {
             RaiseEvent(s_eventAcceptsTabChanged, e);
         }
+
         protected virtual void OnBorderStyleChanged(EventArgs e)
         {
             RaiseEvent(s_eventBorderStyleChanged, e);
         }
+
         protected virtual void OnHideSelectionChanged(EventArgs e)
         {
             RaiseEvent(s_eventHideSelectionChanged, e);
         }
+
         protected virtual void OnModifiedChanged(EventArgs e)
         {
             RaiseEvent(s_eventModifiedChanged, e);
         }
+
         protected virtual void OnMultilineChanged(EventArgs e)
         {
             RaiseEvent(s_eventMultilineChanged, e);
         }
+
         protected virtual void OnReadOnlyChanged(EventArgs e)
         {
             RaiseEvent(s_eventReadOnlyChanged, e);
@@ -208,6 +222,7 @@ namespace System.Windows.Forms
                 textBox.ReadOnlyChanged -= new EventHandler(HandleReadOnlyChanged);
                 textBox.TextAlignChanged -= new EventHandler(HandleTextBoxTextAlignChanged);
             }
+
             base.OnUnsubscribeControlEvents(control);
         }
 
@@ -356,6 +371,7 @@ namespace System.Windows.Forms
             get { return TextBox.ReadOnly; }
             set { TextBox.ReadOnly = value; }
         }
+
         [SRCategory(nameof(SR.CatAppearance))]
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -375,6 +391,7 @@ namespace System.Windows.Forms
             get { return TextBox.SelectionLength; }
             set { TextBox.SelectionLength = value; }
         }
+
         [SRCategory(nameof(SR.CatAppearance))]
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -384,6 +401,7 @@ namespace System.Windows.Forms
             get { return TextBox.SelectionStart; }
             set { TextBox.SelectionStart = value; }
         }
+
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
         [SRDescription(nameof(SR.TextBoxShortcutsEnabledDescr))]
@@ -392,6 +410,7 @@ namespace System.Windows.Forms
             get { return TextBox.ShortcutsEnabled; }
             set { TextBox.ShortcutsEnabled = value; }
         }
+
         [Browsable(false)]
         public int TextLength
         {

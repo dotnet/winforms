@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
@@ -35,6 +34,7 @@ namespace System.Windows.Forms.Design
                                                             //  ...which would cause a cycle.
         private bool _hasLocation;                          // Do we have a location property?
         private bool _locationChecked;                      // And did we check it
+        private bool _locked;                               // Signifies if this control is locked or not
         private bool _enabledchangerecursionguard;
 
         // Behavior work
@@ -70,7 +70,11 @@ namespace System.Windows.Forms.Design
         private bool _removalNotificationHooked;
         private bool _revokeDragDrop = true;
         private bool _hadDragDrop;
+
+        private DesignerControlCollection _controls;
+
         private static bool s_inContextMenu;
+
         private DockingActionList _dockingAction;
         private StatusCommandUI _statusCommandUI;           // UI for setting the StatusBar Information..
         private Dictionary<IntPtr, bool> _subclassedChildren;
@@ -79,8 +83,39 @@ namespace System.Windows.Forms.Design
 
         internal bool ForceVisible { get; set; } = true;
 
+        [DesignerSerializationVisibility(DesignerSerializationVisibility.Content)]
+        private DesignerControlCollection Controls => _controls ??= new DesignerControlCollection(Control);
+
+        private Point Location
+        {
+            get
+            {
+                Point loc = Control.Location;
+
+                ScrollableControl p = Control.Parent as ScrollableControl;
+                if (p != null)
+                {
+                    Point pt = p.AutoScrollPosition;
+                    loc.Offset(-pt.X, -pt.Y);
+                }
+
+                return loc;
+            }
+            set
+            {
+                ScrollableControl p = Control.Parent as ScrollableControl;
+                if (p != null)
+                {
+                    Point pt = p.AutoScrollPosition;
+                    value.Offset(pt.X, pt.Y);
+                }
+
+                Control.Location = value;
+            }
+        }
+
         /// <summary>
-        ///  Retrieves a list of associated components. These are components that should be incluced
+        ///  Retrieves a list of associated components. These are components that should be included
         ///  in a cut or copy operation on this component.
         /// </summary>
         public override ICollection AssociatedComponents
@@ -124,6 +159,38 @@ namespace System.Windows.Forms.Design
         ///  Determines whether drag rects can be drawn on this designer.
         /// </summary>
         protected virtual bool EnableDragRect => false;
+
+        /// <summary>
+        ///  Gets / Sets this controls locked property
+        /// </summary>
+        private bool Locked
+        {
+            get => _locked;
+            set
+            {
+                if (_locked != value)
+                {
+                    _locked = value;
+                }
+            }
+        }
+
+        private string Name
+        {
+            get
+            {
+                return Component.Site.Name;
+            }
+            set
+            {
+                // don't do anything here during loading, if a refactor changed it we don't want to do anything
+                IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+                if (host == null || (host != null && !host.Loading))
+                {
+                    Component.Site.Name = value;
+                }
+            }
+        }
 
         /// <summary>
         ///  Returns the parent component for this control designer. The default implementation just checks to see if
@@ -243,6 +310,7 @@ namespace System.Windows.Forms.Design
                         rules = SelectionRules.Locked | SelectionRules.Visible;
                     }
                 }
+
                 return rules;
             }
         }
@@ -264,6 +332,9 @@ namespace System.Windows.Forms.Design
             return (new Point(Math.Abs(nativeOffset.X - offset.X), nativeOffset.Y - offset.Y));
         }
 
+        /// <summary>
+        ///  Per AutoSize spec, determines if a control is resizable.
+        /// </summary>
         private bool IsResizableConsiderAutoSize(PropertyDescriptor autoSizeProp, PropertyDescriptor autoSizeModeProp)
         {
             object component = Component;
@@ -358,7 +429,7 @@ namespace System.Windows.Forms.Design
             => m.Result = User32.DefWindowProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
 
         /// <summary>
-        ///  Determines if the this designer can be parented to the specified desinger -- generally this means if the
+        ///  Determines if the this designer can be parented to the specified designer -- generally this means if the
         ///  control for this designer can be parented into the given ParentControlDesigner's designer.
         /// </summary>
         public virtual bool CanBeParentedTo(IDesigner parentDesigner)
@@ -423,6 +494,7 @@ namespace System.Windows.Forms.Design
                         {
                             csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                         }
+
                         _removalNotificationHooked = false;
                     }
 
@@ -516,6 +588,7 @@ namespace System.Windows.Forms.Design
                 {
                     csc.ComponentRemoved -= new ComponentEventHandler(DataSource_ComponentRemoved);
                 }
+
                 _removalNotificationHooked = false;
             }
 
@@ -529,8 +602,8 @@ namespace System.Windows.Forms.Design
         ///  Panel1 and Panel2.  These panels are exposed through read only Panel1 and Panel2 properties on the
         ///  SplitContainer class. SplitContainer's designer calls EnableDesignTime for each panel, which allows other
         ///  components to be dropped on them.  But, in order for the contents of Panel1 and Panel2 to be saved,
-        ///  SplitContainer itself needed to expose the panels as public properties. The child paramter is the control
-        ///  to enable.  The name paramter is the name of this control as exposed to the end user.  Names need to be
+        ///  SplitContainer itself needed to expose the panels as public properties. The child parameter is the control
+        ///  to enable.  The name parameter is the name of this control as exposed to the end user.  Names need to be
         ///  unique within a control designer, but do not have to be unique to other control designer's children. This
         ///  method returns true if the child control could be enabled for design time, or false if the hosting
         ///  infrastructure does not support it.  To support this feature, the hosting infrastructure must expose the
@@ -710,7 +783,7 @@ namespace System.Windows.Forms.Design
             bool primarySelection = (selectionType == GlyphSelectionType.SelectedPrimary);
             SelectionRules rules = SelectionRules;
 
-            if ((Locked) || (InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
+            if (Locked || (InheritanceAttribute == InheritanceAttribute.InheritedReadOnly))
             {
                 // the lock glyph
                 glyphs.Add(new LockedHandleGlyph(translatedBounds, primarySelection));
@@ -753,6 +826,7 @@ namespace System.Windows.Forms.Design
                     {
                         glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.UpperLeft, StandardBehavior, primarySelection));
                     }
+
                     if ((rules & SelectionRules.RightSizeable) != 0)
                     {
                         glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.UpperRight, StandardBehavior, primarySelection));
@@ -766,6 +840,7 @@ namespace System.Windows.Forms.Design
                     {
                         glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerLeft, StandardBehavior, primarySelection));
                     }
+
                     if ((rules & SelectionRules.RightSizeable) != 0)
                     {
                         glyphs.Add(new GrabHandleGlyph(translatedBounds, GrabHandleGlyphType.LowerRight, StandardBehavior, primarySelection));
@@ -803,6 +878,11 @@ namespace System.Windows.Forms.Design
             return glyphs;
         }
 
+        /// <summary>
+        ///  Demand creates the StandardBehavior related to this
+        ///  ControlDesigner.  This is used to associate the designer's
+        ///  selection glyphs to a common Behavior (resize in this case).
+        /// </summary>
         internal virtual Behavior.Behavior StandardBehavior => _resizeBehavior ??= new ResizeBehavior(Component.Site);
 
         internal virtual bool SerializePerformLayout => false;
@@ -1020,6 +1100,7 @@ namespace System.Windows.Forms.Design
                     {
                         csc.ComponentRemoved += new ComponentEventHandler(DataSource_ComponentRemoved);
                     }
+
                     _removalNotificationHooked = true;
                 }
             }
@@ -1051,6 +1132,9 @@ namespace System.Windows.Forms.Design
             set => ShadowProperties[nameof(AllowDrop)] = value;
         }
 
+        /// <summary>
+        ///  Accessor method for the enabled property on control. We shadow this property at design time.
+        /// </summary>
         private bool Enabled
         {
             get => (bool)ShadowProperties[nameof(Enabled)];
@@ -1148,7 +1232,7 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  Called when the designer is intialized.  This allows the designer to provide some meaningful default
+        ///  Called when the designer is initialized.  This allows the designer to provide some meaningful default
         ///  values in the component.  The default implementation of this sets the components's default property to
         ///  it's name, if that property is a string.
         /// </summary>
@@ -1514,10 +1598,10 @@ namespace System.Windows.Forms.Design
         ///
         ///  1.  If the toolbox service has a tool selected, it will allow the toolbox service to set the cursor.
         ///  2.  If the selection UI service shows a locked selection, or if there is no location property on the
-        ///       control, then the default arrow will be set.
+        ///  control, then the default arrow will be set.
         ///  3.  Otherwise, the four headed arrow will be set to indicate that the component can be clicked and moved.
         ///  4.  If the user is currently dragging a component, the crosshair cursor will be used instead of the four
-        ///       headed arrow.
+        ///  headed arrow.
         /// </remarks>
         protected virtual void OnSetCursor()
         {
@@ -1561,8 +1645,6 @@ namespace System.Windows.Forms.Design
             Cursor.Current = Cursors.SizeAll;
         }
 
-        private bool Locked { get; set; }
-
         /// <summary>
         ///  Allows a designer to filter the set of properties the component it is designing will expose through the
         ///  TypeDescriptor object.  This method is called immediately before its corresponding "Post" method. If you
@@ -1586,7 +1668,7 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            // replace this one seperately because it is of a different type (DesignerControlCollection) than the
+            // replace this one separately because it is of a different type (DesignerControlCollection) than the
             // original property (ControlCollection)
             PropertyDescriptor controlsProp = (PropertyDescriptor)properties["Controls"];
 
@@ -1707,10 +1789,11 @@ namespace System.Windows.Forms.Design
                         OnMouseDragEnd(true);
                     }
                 }
+
                 return;
             }
 
-            // Get the x and y coordniates of the mouse message
+            // Get the x and y coordinates of the mouse message
             int x = 0, y = 0;
 
             // Look for a mouse handler.
@@ -1760,6 +1843,7 @@ namespace System.Windows.Forms.Design
                     {
                         OnCreateHandle();
                     }
+
                     break;
 
                 case User32.WM.GETOBJECT:
@@ -1793,6 +1877,7 @@ namespace System.Windows.Forms.Design
                     {  // m.lparam != OBJID_CLIENT, so do default message processing
                         DefWndProc(ref m);
                     }
+
                     break;
 
                 case User32.WM.MBUTTONDOWN:
@@ -1815,6 +1900,7 @@ namespace System.Windows.Forms.Design
                     {
                         OnMouseHover();
                     }
+
                     break;
                 case User32.WM.MOUSELEAVE:
                     OnMouseLeave();
@@ -1832,6 +1918,7 @@ namespace System.Windows.Forms.Design
                     {
                         button = MouseButtons.Left;
                     }
+
                     if (button == MouseButtons.Left)
                     {
                         // We handle doubleclick messages, and we also process our own simulated double clicks for
@@ -1845,6 +1932,7 @@ namespace System.Windows.Forms.Design
                             OnMouseDoubleClick();
                         }
                     }
+
                     break;
                 case User32.WM.NCLBUTTONDOWN:
                 case User32.WM.LBUTTONDOWN:
@@ -1917,6 +2005,7 @@ namespace System.Windows.Forms.Design
                         _lastMoveScreenX = x;
                         _lastMoveScreenY = y;
                     }
+
                     break;
 
                 case User32.WM.NCMOUSEMOVE:
@@ -1956,6 +2045,7 @@ namespace System.Windows.Forms.Design
                             OnMouseDragMove(x, y);
                         }
                     }
+
                     _lastMoveScreenX = x;
                     _lastMoveScreenY = y;
 
@@ -1965,6 +2055,7 @@ namespace System.Windows.Forms.Design
                     {
                         BaseWndProc(ref m);
                     }
+
                     break;
                 case User32.WM.NCLBUTTONUP:
                 case User32.WM.LBUTTONUP:
@@ -2010,6 +2101,7 @@ namespace System.Windows.Forms.Design
                         DefWndProc(ref m);
                         OnPaintAdornments(e);
                     }
+
                     break;
                 case User32.WM.PAINT:
                     {
@@ -2075,6 +2167,7 @@ namespace System.Windows.Forms.Design
 
                         break;
                     }
+
                 case User32.WM.NCPAINT:
                 case User32.WM.NCACTIVATE:
                     if (m.Msg == (int)User32.WM.NCACTIVATE)
@@ -2086,9 +2179,9 @@ namespace System.Windows.Forms.Design
                         DefWndProc(ref m);
                     }
 
-                    // For some reason we dont always get an NCPAINT with the WM_NCACTIVATE usually this repros with
+                    // For some reason we don't always get an NCPAINT with the WM_NCACTIVATE usually this repros with
                     // themes on.... this can happen when someone calls RedrawWindow without the flags to send an
-                    // NCPAINT.  So that we dont double process this event, our calls to redraw window should not have
+                    // NCPAINT.  So that we don't double process this event, our calls to redraw window should not have
                     // RDW_ERASENOW | RDW_UPDATENOW.
                     if (OverlayService != null)
                     {
@@ -2103,6 +2196,7 @@ namespace System.Windows.Forms.Design
                             OverlayService.InvalidateOverlays(nonClient);
                         }
                     }
+
                     break;
 
                 case User32.WM.SETCURSOR:
@@ -2122,12 +2216,14 @@ namespace System.Windows.Forms.Design
                     {
                         OnSetCursor();
                     }
+
                     break;
                 case User32.WM.SIZE:
                     if (_thrownException != null)
                     {
                         Control.Invalidate();
                     }
+
                     DefWndProc(ref m);
                     break;
                 case User32.WM.CANCELMODE:
@@ -2158,6 +2254,7 @@ namespace System.Windows.Forms.Design
                             }
                         }
                     }
+
                     break;
                 case User32.WM.CONTEXTMENU:
                     if (s_inContextMenu)
@@ -2182,8 +2279,10 @@ namespace System.Windows.Forms.Design
                             x = p.X;
                             y = p.Y;
                         }
+
                         OnContextMenu(x, y);
                     }
+
                     break;
                 default:
                     if (m.Msg == (int)User32.RegisteredMessage.WM_MOUSEENTER)
@@ -2197,6 +2296,7 @@ namespace System.Windows.Forms.Design
                         // anyway, so this shouldn't happen. However, we want to prevent this as much as possible.
                         DefWndProc(ref m);
                     }
+
                     break;
             }
         }

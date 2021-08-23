@@ -6,7 +6,6 @@ using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -33,6 +32,7 @@ namespace System.Drawing.Design
             {
                 return value;
             }
+
             if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
             {
                 return value;
@@ -105,7 +105,8 @@ namespace System.Drawing.Design
             private static int marginX = MARGIN;
             private static int marginY = MARGIN;
 
-            private static readonly int[] staticCells = new int[] {
+            private static readonly int[] staticCells = new int[]
+            {
                 0x00ffffff, 0x00c0c0ff, 0x00c0e0ff, 0x00c0ffff,
                 0x00c0ffc0, 0x00ffffc0, 0x00ffc0c0, 0x00ffc0ff,
 
@@ -142,6 +143,7 @@ namespace System.Drawing.Design
                         marginX = DpiHelper.LogicalToDeviceUnitsX(MARGIN);
                         marginY = DpiHelper.LogicalToDeviceUnitsY(MARGIN);
                     }
+
                     isScalingInitialized = true;
                 }
 
@@ -222,6 +224,7 @@ namespace System.Drawing.Design
                         }
                     }
                 }
+
                 return Point.Empty;
             }
 
@@ -279,6 +282,7 @@ namespace System.Drawing.Design
                 {
                     return -1;
                 }
+
                 return x + CELLS_ACROSS * y;
             }
 
@@ -314,7 +318,7 @@ namespace System.Drawing.Design
                 NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), OBJID.CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
             }
 
-            protected override bool IsInputKey(System.Windows.Forms.Keys keyData)
+            protected override bool IsInputKey(Keys keyData)
             {
                 switch (keyData)
                 {
@@ -329,6 +333,7 @@ namespace System.Drawing.Design
                     case Keys.F2:
                         return false;
                 }
+
                 return base.IsInputKey(keyData);
             }
 
@@ -462,6 +467,7 @@ namespace System.Drawing.Design
                 {
                     g.FillRectangle(brush, ClientRectangle);
                 }
+
                 Rectangle rect = new Rectangle
                 {
                     Width = cellSizeX,
@@ -531,14 +537,17 @@ namespace System.Drawing.Design
                 {
                     newFocus.X = 0;
                 }
+
                 if (newFocus.Y < 0)
                 {
                     newFocus.Y = 0;
                 }
+
                 if (newFocus.X >= CELLS_ACROSS)
                 {
                     newFocus.X = CELLS_ACROSS - 1;
                 }
+
                 if (newFocus.Y >= CELLS_DOWN)
                 {
                     newFocus.Y = CELLS_DOWN - 1;
@@ -579,6 +588,7 @@ namespace System.Drawing.Design
                     {
                         cells[id] = new ColorCellAccessibleObject(this, ColorPalette.GetColorFromCell(id), id);
                     }
+
                     return cells[id];
                 }
 
@@ -652,9 +662,11 @@ namespace System.Drawing.Design
                             {
                                 state |= AccessibleStates.Focused;
                             }
+
                             return state;
                         }
                     }
+
                     public override string Value => color.ToString();
                 }
             }
@@ -708,6 +720,7 @@ namespace System.Drawing.Design
                             customColors[i] = Color.White;
                         }
                     }
+
                     return customColors;
                 }
 
@@ -743,8 +756,8 @@ namespace System.Drawing.Design
                 Size size = pal.Size;
                 Rectangle rectItemSize = tabControl.GetTabRect(0);
                 int CMARGIN = 0;
-                this.Size = new Size(size.Width + 2 * CMARGIN, size.Height + 2 * CMARGIN + rectItemSize.Height);
-                tabControl.Size = this.Size;
+                Size = new Size(size.Width + 2 * CMARGIN, size.Height + 2 * CMARGIN + rectItemSize.Height);
+                tabControl.Size = Size;
             }
 
             private void AdjustListBoxItemHeight()
@@ -767,6 +780,7 @@ namespace System.Drawing.Design
                         return (Color)colors[i];
                     }
                 }
+
                 return color;
             }
 
@@ -823,8 +837,8 @@ namespace System.Drawing.Design
                     Sorted = false
                 };
                 lbSystem.Click += new EventHandler(OnListClick);
-                lbSystem.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
-                lbSystem.KeyDown += new KeyEventHandler(this.OnListKeyDown);
+                lbSystem.DrawItem += new DrawItemEventHandler(OnListDrawItem);
+                lbSystem.KeyDown += new KeyEventHandler(OnListKeyDown);
                 lbSystem.Dock = DockStyle.Fill;
                 lbSystem.FontChanged += new EventHandler(OnFontChanged);
 
@@ -836,8 +850,8 @@ namespace System.Drawing.Design
                     Sorted = false
                 };
                 lbCommon.Click += new EventHandler(OnListClick);
-                lbCommon.DrawItem += new DrawItemEventHandler(this.OnListDrawItem);
-                lbCommon.KeyDown += new KeyEventHandler(this.OnListKeyDown);
+                lbCommon.DrawItem += new DrawItemEventHandler(OnListDrawItem);
+                lbCommon.KeyDown += new KeyEventHandler(OnListKeyDown);
                 lbCommon.Dock = DockStyle.Fill;
 
                 Array.Sort(ColorValues, new StandardColorComparer());
@@ -848,6 +862,7 @@ namespace System.Drawing.Design
                 {
                     lbCommon.Items.Add(color);
                 }
+
                 lbSystem.Items.Clear();
                 foreach (object color in SystemColorValues)
                 {
@@ -861,7 +876,7 @@ namespace System.Drawing.Design
                 systemTabPage.Controls.Add(lbSystem);
                 commonTabPage.Controls.Add(lbCommon);
 
-                this.Controls.Add(tabControl);
+                Controls.Add(tabControl);
             }
 
             protected override void OnGotFocus(EventArgs e)
@@ -882,6 +897,7 @@ namespace System.Drawing.Design
                 {
                     value = (Color)lb.SelectedItem;
                 }
+
                 edSvc.CloseDropDown();
             }
 
@@ -987,6 +1003,7 @@ namespace System.Drawing.Design
                         return true;
                     }
                 }
+
                 return base.ProcessDialogKey(keyData);
             }
 
@@ -1034,13 +1051,14 @@ namespace System.Drawing.Design
 
             private class ColorEditorListBox : ListBox
             {
-                protected override bool IsInputKey(System.Windows.Forms.Keys keyData)
+                protected override bool IsInputKey(Keys keyData)
                 {
                     switch (keyData)
                     {
                         case Keys.Return:
                             return true;
                     }
+
                     return base.IsInputKey(keyData);
                 }
             }
@@ -1053,7 +1071,7 @@ namespace System.Drawing.Design
 
                 protected override void OnGotFocus(EventArgs e)
                 {
-                    TabPage selectedTab = this.SelectedTab;
+                    TabPage selectedTab = SelectedTab;
                     if (selectedTab != null && selectedTab.Controls.Count > 0)
                     {
                         selectedTab.Controls[0].Focus();
@@ -1149,6 +1167,7 @@ namespace System.Drawing.Design
                             PostMessageW(hwnd, WM.COMMAND, PARAM.FromLowHigh((int)ID.OK, 0), GetDlgItem(hwnd, (DialogItemID)ID.OK));
                             break;
                         }
+
                         break;
                 }
 

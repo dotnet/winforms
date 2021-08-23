@@ -8,12 +8,19 @@ Namespace My
     ' StartupNextInstance: Raised when launching a single-instance application and the application is already active. 
     ' NetworkAvailabilityChanged: Raised when the network connection is connected or disconnected.
 
-    ' **NEW** ApplyHighDpiMode: Raised when the application queries the HighDpiMode to set it for the application.
+    ' **NEW** ApplyApplicationDefaults: Raised when the application queries default values to be set for the application.
 
     ' Example:
-
-    ' Private Sub MyApplication_ApplyHighDpiMode(sender As Object, e As ApplyHighDpiModeEventArgs) Handles Me.ApplyHighDpiMode
-    '     e.HighDpiMode = HighDpiMode.PerMonitorV2
+    ' Private Sub MyApplication_ApplyApplicationDefaults(sender As Object, e As ApplyApplicationDefaultsEventArgs) Handles Me.ApplyApplicationDefaults
+    '
+    '   ' Setting the application-wide default Font:
+    '   e.Font = New Font(FontFamily.GenericSansSerif, 12, FontStyle.Regular)
+    '
+    '   ' Setting the HighDpiMode for the Application:
+    '   e.HighDpiMode = HighDpiMode.PerMonitorV2
+    '
+    '   ' If a splash dialog is used, this sets the minimum display time:
+    '   e.MinimumSplashScreenDisplayTime = 4000
     ' End Sub
 
     Partial Friend Class MyApplication

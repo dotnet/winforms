@@ -3,25 +3,24 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 
 namespace System.ComponentModel.Design
 {
     /// <summary>
-    ///     The menu command service allows designers to add and respond to
-    ///     menu and toolbar items.  It is based on two interfaces.  Designers
-    ///     request IMenuCommandService to add menu command handlers, while
-    ///     the document or tool window forwards IOleCommandTarget requests
-    ///     to this object.
+    ///  The menu command service allows designers to add and respond to
+    ///  menu and toolbar items.  It is based on two interfaces.  Designers
+    ///  request IMenuCommandService to add menu command handlers, while
+    ///  the document or tool window forwards IOleCommandTarget requests
+    ///  to this object.
     /// </summary>
     public class MenuCommandService : IMenuCommandService, IDisposable
     {
         private IServiceProvider _serviceProvider;
-        private Dictionary<Guid, ArrayList> _commandGroups;
-        private object _commandGroupsLock;
-        private EventHandler _commandChangedHandler;
+        private readonly Dictionary<Guid, ArrayList> _commandGroups;
+        private readonly object _commandGroupsLock;
+        private readonly EventHandler _commandChangedHandler;
         private MenuCommandsChangedEventHandler _commandsChangedHandler;
         private ArrayList _globalVerbs;
         private ISelectionService _selectionService;
@@ -41,20 +40,20 @@ namespace System.ComponentModel.Design
         private Type _verbSourceType;
 
         /// <summary>
-        ///     Creates a new menu command service.
+        ///  Creates a new menu command service.
         /// </summary>
         public MenuCommandService(IServiceProvider serviceProvider)
         {
             _serviceProvider = serviceProvider;
-            _commandGroupsLock = new Object();
+            _commandGroupsLock = new object();
             _commandGroups = new Dictionary<Guid, ArrayList>();
-            _commandChangedHandler = new EventHandler(this.OnCommandChanged);
-            TypeDescriptor.Refreshed += new RefreshEventHandler(this.OnTypeRefreshed);
+            _commandChangedHandler = new EventHandler(OnCommandChanged);
+            TypeDescriptor.Refreshed += new RefreshEventHandler(OnTypeRefreshed);
         }
 
         /// <summary>
-        ///     This event is thrown whenever a MenuCommand is removed
-        ///     or added
+        ///  This event is thrown whenever a MenuCommand is removed
+        ///  or added
         /// </summary>
         public event MenuCommandsChangedEventHandler MenuCommandsChanged
         {
@@ -69,9 +68,9 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///      Retrieves a set of verbs that are global to all objects on the design
-        ///      surface.  This set of verbs will be merged with individual component verbs.
-        ///      In the case of a name conflict, the component verb will NativeMethods.
+        ///  Retrieves a set of verbs that are global to all objects on the design
+        ///  surface.  This set of verbs will be merged with individual component verbs.
+        ///  In the case of a name conflict, the component verb will NativeMethods.
         /// </summary>
         public virtual DesignerVerbCollection Verbs
         {
@@ -83,8 +82,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Adds a menu command to the document.  The menu command must already exist
-        ///     on a menu; this merely adds a handler for it.
+        ///  Adds a menu command to the document.  The menu command must already exist
+        ///  on a menu; this merely adds a handler for it.
         /// </summary>
         public virtual void AddCommand(MenuCommand command)
         {
@@ -124,10 +123,10 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///      Adds a verb to the set of global verbs.  Individual components should
-        ///      use the Verbs property of their designer, rather than call this method.
-        ///      This method is intended for objects that want to offer a verb that is
-        ///      available regardless of what components are selected.
+        ///  Adds a verb to the set of global verbs.  Individual components should
+        ///  use the Verbs property of their designer, rather than call this method.
+        ///  This method is intended for objects that want to offer a verb that is
+        ///  available regardless of what components are selected.
         /// </summary>
         public virtual void AddVerb(DesignerVerb verb)
         {
@@ -151,7 +150,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Disposes of this service.
+        ///  Disposes of this service.
         /// </summary>
         public void Dispose()
         {
@@ -159,7 +158,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Disposes of this service.
+        ///  Disposes of this service.
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
@@ -167,15 +166,16 @@ namespace System.ComponentModel.Design
             {
                 if (_selectionService != null)
                 {
-                    _selectionService.SelectionChanging -= new EventHandler(this.OnSelectionChanging);
+                    _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
                     _selectionService = null;
                 }
 
                 if (_serviceProvider != null)
                 {
                     _serviceProvider = null;
-                    TypeDescriptor.Refreshed -= new RefreshEventHandler(this.OnTypeRefreshed);
+                    TypeDescriptor.Refreshed -= new RefreshEventHandler(OnTypeRefreshed);
                 }
+
                 lock (_commandGroupsLock)
                 {
                     foreach (KeyValuePair<Guid, ArrayList> group in _commandGroups)
@@ -185,6 +185,7 @@ namespace System.ComponentModel.Design
                         {
                             command.CommandChanged -= _commandChangedHandler;
                         }
+
                         commands.Clear();
                     }
                 }
@@ -192,7 +193,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///      Ensures that the verb list has been created.
+        ///  Ensures that the verb list has been created.
         /// </summary>
         protected void EnsureVerbs()
         {
@@ -212,13 +213,13 @@ namespace System.ComponentModel.Design
 
                     if (_selectionService != null)
                     {
-                        _selectionService.SelectionChanging += new EventHandler(this.OnSelectionChanging);
+                        _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
                     }
                 }
 
                 int verbCount = 0;
                 DesignerVerbCollection localVerbs = null;
-                DesignerVerbCollection designerActionVerbs = new DesignerVerbCollection(); // we instanciate this one here...
+                DesignerVerbCollection designerActionVerbs = new DesignerVerbCollection(); // we instantiate this one here...
                 IDesignerHost designerHost = GetService(typeof(IDesignerHost)) as IDesignerHost;
 
                 if (_selectionService != null && designerHost != null && _selectionService.SelectionCount == 1)
@@ -299,6 +300,7 @@ namespace System.ComponentModel.Design
                         buildVerbs[key] = verbsOrder.Add(_globalVerbs[i]);
                     }
                 }
+
                 if (designerActionVerbs.Count > 0)
                 {
                     for (int i = 0; i < designerActionVerbs.Count; i++)
@@ -307,6 +309,7 @@ namespace System.ComponentModel.Design
                         buildVerbs[key] = verbsOrder.Add(designerActionVerbs[i]);
                     }
                 }
+
                 if (localVerbs != null && localVerbs.Count > 0)
                 {
                     for (int i = 0; i < localVerbs.Count; i++)
@@ -335,8 +338,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Searches for the given command ID and returns the MenuCommand
-        ///     associated with it.
+        ///  Searches for the given command ID and returns the MenuCommand
+        ///  associated with it.
         /// </summary>
         public MenuCommand FindCommand(CommandID commandID)
         {
@@ -344,8 +347,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Locates the requested command. This will throw an appropriate
-        ///     ComFailException if the command couldn't be found.
+        ///  Locates the requested command. This will throw an appropriate
+        ///  ComFailException if the command couldn't be found.
         /// </summary>
         protected MenuCommand FindCommand(Guid guid, int id)
         {
@@ -357,6 +360,7 @@ namespace System.ComponentModel.Design
             {
                 _commandGroups.TryGetValue(guid, out commands);
             }
+
             if (commands != null)
             {
                 Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found group");
@@ -414,7 +418,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Get the command list for a given GUID
+        ///  Get the command list for a given GUID
         /// </summary>
         protected ICollection GetCommandList(Guid guid)
         {
@@ -423,6 +427,7 @@ namespace System.ComponentModel.Design
             {
                 _commandGroups.TryGetValue(guid, out commands);
             }
+
             return commands;
         }
 
@@ -434,18 +439,20 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(serviceType));
             }
+
             if (_serviceProvider != null)
             {
                 return _serviceProvider.GetService(serviceType);
             }
+
             return null;
         }
 
         /// <summary>
-        ///     Invokes a command on the local form or in the global environment.
-        ///     The local form is first searched for the given command ID.  If it is
-        ///     found, it is invoked.  Otherwise the the command ID is passed to the
-        ///     global environment command handler, if one is available.
+        ///  Invokes a command on the local form or in the global environment.
+        ///  The local form is first searched for the given command ID.  If it is
+        ///  found, it is invoked.  Otherwise the command ID is passed to the
+        ///  global environment command handler, if one is available.
         /// </summary>
         public virtual bool GlobalInvoke(CommandID commandID)
         {
@@ -456,14 +463,15 @@ namespace System.ComponentModel.Design
                 cmd.Invoke();
                 return true;
             }
+
             return false;
         }
 
         /// <summary>
-        ///     Invokes a command on the local form or in the global environment.
-        ///     The local form is first searched for the given command ID.  If it is
-        ///     found, it is invoked.  Otherwise the the command ID is passed to the
-        ///     global environment command handler, if one is available.
+        ///  Invokes a command on the local form or in the global environment.
+        ///  The local form is first searched for the given command ID.  If it is
+        ///  found, it is invoked.  Otherwise the command ID is passed to the
+        ///  global environment command handler, if one is available.
         /// </summary>
         public virtual bool GlobalInvoke(CommandID commandId, object arg)
         {
@@ -474,11 +482,12 @@ namespace System.ComponentModel.Design
                 cmd.Invoke(arg);
                 return true;
             }
+
             return false;
         }
 
         /// <summary>
-        ///     This is called by a menu command when it's status has changed.
+        ///  This is called by a menu command when it's status has changed.
         /// </summary>
         private void OnCommandChanged(object sender, EventArgs e)
         {
@@ -498,8 +507,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Called by TypeDescriptor when a type changes.  If this type is currently holding
-        ///     our verb, invalidate the list.
+        ///  Called by TypeDescriptor when a type changes.  If this type is currently holding
+        ///  our verb, invalidate the list.
         /// </summary>
         private void OnTypeRefreshed(RefreshEventArgs e)
         {
@@ -510,8 +519,8 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///      This is called by the selection service when the selection has changed.  Here
-        ///      we invalidate our verb list.
+        ///  This is called by the selection service when the selection has changed.  Here
+        ///  we invalidate our verb list.
         /// </summary>
         private void OnSelectionChanging(object sender, EventArgs e)
         {
@@ -523,7 +532,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///     Removes the given menu command from the document.
+        ///  Removes the given menu command from the document.
         /// </summary>
         public virtual void RemoveCommand(MenuCommand command)
         {
@@ -531,6 +540,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(command));
             }
+
             ArrayList commands;
             lock (_commandGroupsLock)
             {
@@ -553,14 +563,16 @@ namespace System.ComponentModel.Design
                         // raise event
                         OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandRemoved, command));
                     }
+
                     return;
                 }
             }
+
             Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "Unable to remove command: " + command.ToString());
         }
 
         /// <summary>
-        ///     Removes the given verb from the document.
+        ///  Removes the given verb from the document.
         /// </summary>
         public virtual void RemoveVerb(DesignerVerb verb)
         {
@@ -580,14 +592,15 @@ namespace System.ComponentModel.Design
                     {
                         ((IMenuCommandService)this).Verbs.Remove(verb);
                     }
+
                     OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandRemoved, verb));
                 }
             }
         }
 
         /// <summary>
-        ///     Shows the context menu with the given command ID at the given
-        ///     location.
+        ///  Shows the context menu with the given command ID at the given
+        ///  location.
         /// </summary>
         public virtual void ShowContextMenu(CommandID menuID, int x, int y)
         {

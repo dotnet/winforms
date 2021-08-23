@@ -7,6 +7,11 @@
         <target state="translated">ハンドルされていない VT: {0}</target>
         <note />
       </trans-unit>
+      <trans-unit id="General_MissingService">
+        <source>The service '{0}' must be installed for this feature to work.  Ensure that this service is available.</source>
+        <target state="translated">この機能が動作するためにはサービス '{0}' をインストールする必要があります。サービスが利用可能であることを確認してください。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">1 つ以上の有効ではないエントリが IDictionary パラメーターにあります。すべての値がオブジェクトのプロパティに一致していることを確認してください。</target>

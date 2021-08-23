@@ -5,8 +5,8 @@
 Option Strict On
 Option Explicit On
 
-Imports System.Reflection
 Imports System.Collections.ObjectModel
+Imports System.Reflection
 Imports Microsoft.VisualBasic.CompilerServices.ExceptionUtils
 
 Namespace Microsoft.VisualBasic.ApplicationServices

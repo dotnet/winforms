@@ -2,17 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Drawing.Design;
-using System.Linq;
 using System.Windows.Forms.PropertyGridInternal;
 using Moq;
-using Moq.Protected;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms.Tests
 {
@@ -36,7 +34,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(SizeF.Empty, control.AutoScaleDimensions);
             Assert.Equal(new SizeF(1, 1), control.AutoScaleFactor);
             Assert.Equal(Size.Empty, control.AutoScrollMargin);
-            Assert.Equal(AutoScaleMode.None, control.AutoScaleMode);
+            Assert.Equal(AutoScaleMode.Inherit, control.AutoScaleMode);
             Assert.Equal(Size.Empty, control.AutoScrollMinSize);
             Assert.Equal(Point.Empty, control.AutoScrollPosition);
             Assert.False(control.AutoSize);
@@ -284,7 +282,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -344,12 +342,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.BackColorChanged += handler;
 
             // Set different.
@@ -407,7 +407,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void PropertyGrid_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new PropertyGrid
@@ -428,12 +428,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.BackgroundImageChanged += handler;
 
             // Set different.
@@ -466,7 +468,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void PropertyGrid_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new PropertyGrid
@@ -487,12 +489,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.BackgroundImageLayoutChanged += handler;
 
             // Set different.
@@ -518,7 +522,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void PropertyGrid_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new PropertyGrid();
@@ -633,7 +637,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PropertyGrid_CanShowVisualStyleGlyphs_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubPropertyGrid
@@ -655,7 +659,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PropertyGrid_CanShowVisualStyleGlyphs_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new PropertyGrid();
@@ -940,7 +944,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_CommandsBackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -957,7 +961,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_CommandsBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -1188,7 +1192,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_CommandsForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -1205,7 +1209,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_CommandsForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -1515,7 +1519,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PropertyGrid_DrawFlatToolbar_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubPropertyGrid
@@ -1570,7 +1574,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void PropertyGrid_DrawFlatToolbar_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubPropertyGrid();
@@ -1607,7 +1611,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -1670,6 +1674,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(EventArgs.Empty, e);
                 callCount++;
             }
+
             control.ForeColorChanged += handler;
 
             // Set different.
@@ -1727,7 +1732,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_HelpBackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -1744,7 +1749,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_HelpBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -1890,7 +1895,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_HelpForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
@@ -1907,7 +1912,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void PropertyGrid_HelpForeColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -2007,7 +2012,13 @@ namespace System.Windows.Forms.Tests
         [InlineData(true, false, 10, 2, 10, 13)]
         [InlineData(false, true, 1, 1, 2, 2)]
         [InlineData(false, false, 0, 1, 0, 1)]
-        public void PropertyGrid_HelpVisible_SetWithHandle_GetReturnsExpected(bool visible, bool value, int expectedLayoutCallCount1, int expectedInvalidatedCallCount, int expectedLayoutCallCount2, int expectedLayoutCallCount3)
+        public void PropertyGrid_HelpVisible_SetWithHandle_GetReturnsExpected(
+            bool visible,
+            bool value,
+            int expectedLayoutCallCount1,
+            int expectedInvalidatedCallCount,
+            int expectedLayoutCallCount2,
+            int expectedLayoutCallCount3)
         {
             using var control = new PropertyGrid
             {
@@ -2218,7 +2229,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void PropertyGrid_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new PropertyGrid
@@ -2235,7 +2246,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void PropertyGrid_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new PropertyGrid();
@@ -2268,12 +2279,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Equal(control, sender);
                 Assert.Equal(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.PaddingChanged += handler;
 
             // Set different.
@@ -2301,13 +2314,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(PropertySort))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(PropertySort))]
         public void PropertyGrid_PropertySort_Set_GetReturnsExpected(PropertySort value)
         {
             using var control = new PropertyGrid
             {
                 PropertySort = value
             };
+
             Assert.Equal(value, control.PropertySort);
             Assert.False(control.IsHandleCreated);
 
@@ -2318,7 +2332,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(PropertySort))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(PropertySort))]
         public void PropertyGrid_PropertySort_SetWithHandle_GetReturnsExpected(PropertySort value)
         {
             using var control = new PropertyGrid();
@@ -2347,10 +2361,10 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void PropertyGrid_SelectedGridItem_SetNull_ThrowsArgumentException()
+        public void PropertyGrid_SelectedGridItem_SetNull_ThrowsArgumentNullException()
         {
             using var control = new PropertyGrid();
-            Assert.Throws<ArgumentException>(null, () => control.SelectedGridItem = null);
+            Assert.Throws<ArgumentNullException>("items", () => control.SelectedGridItem = null);
         }
 
         [WinFormsFact]
@@ -2798,7 +2812,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void PropertyGrid_Site_SetInvalidDesignerHost_ThrowsInvalidCastException()
+        public void PropertyGrid_Site_SetInvalidDesignerHost_DoesNotThrowInvalidCastException()
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -2811,18 +2825,18 @@ namespace System.Windows.Forms.Tests
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(new object());
             using var control = new PropertyGrid();
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void PropertyGrid_Site_SetInvalidDesignerHostComponentChangeService_ThrowsInvalidCastException()
+        public void PropertyGrid_Site_SetInvalidDesignerHostComponentChangeService_DoesNotThrowInvalidCastException()
         {
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
@@ -2845,18 +2859,18 @@ namespace System.Windows.Forms.Tests
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(mockDesignerHost.Object);
             using var control = new PropertyGrid();
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsFact]
-        public void PropertyGrid_Site_SetInvalidDesignerHostPropertyValueUIService_ThrowsInvalidCastException()
+        public void PropertyGrid_Site_SetInvalidDesignerHostPropertyValueUIService_DoesNotThrowInvalidCastException()
         {
             var mockDesignerHost = new Mock<IDesignerHost>(MockBehavior.Strict);
             mockDesignerHost
@@ -2879,18 +2893,18 @@ namespace System.Windows.Forms.Tests
                 .Setup(s => s.GetService(typeof(IDesignerHost)))
                 .Returns(mockDesignerHost.Object);
             using var control = new PropertyGrid();
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
-            Assert.Throws<InvalidCastException>(() => control.Site = mockSite.Object);
+            control.Site = mockSite.Object;
             Assert.Same(mockSite.Object, control.Site);
             Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void PropertyGrid_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new PropertyGrid
@@ -2907,7 +2921,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void PropertyGrid_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new PropertyGrid();
@@ -2940,12 +2954,14 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new PropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Equal(EventArgs.Empty, e);
                 callCount++;
-            };
+            }
+
             control.TextChanged += handler;
 
             // Set different.
@@ -2981,6 +2997,7 @@ namespace System.Windows.Forms.Tests
             {
                 Visible = visible
             };
+
             int layoutCallCount = 0;
             control.Layout += (sender, e) => layoutCallCount++;
 
@@ -3019,6 +3036,7 @@ namespace System.Windows.Forms.Tests
             {
                 Visible = visible
             };
+
             int layoutCallCount = 0;
             control.Layout += (sender, e) => layoutCallCount++;
             Assert.NotEqual(IntPtr.Zero, control.Handle);
@@ -3070,6 +3088,7 @@ namespace System.Windows.Forms.Tests
             {
                 ToolStripRenderer = value
             };
+
             Assert.Same(value, control.ToolStripRenderer);
             Assert.False(control.IsHandleCreated);
 
@@ -3086,13 +3105,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_ViewBackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid
             {
                 ViewBackColor = value
             };
+
             Assert.Equal(expected, control.ViewBackColor);
             Assert.False(control.IsHandleCreated);
 
@@ -3103,7 +3123,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void PropertyGrid_ViewBackColor_SetWithHandle_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new PropertyGrid();
@@ -3252,7 +3272,7 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { Color.Empty, SystemColors.ControlText };
             yield return new object[] { Color.Red, Color.Red };
-            yield return new object[] { Color.FromArgb(254, 1, 2, 3),Color.FromArgb(254, 1, 2, 3) };
+            yield return new object[] { Color.FromArgb(254, 1, 2, 3), Color.FromArgb(254, 1, 2, 3) };
         }
 
         [WinFormsTheory]
@@ -3393,17 +3413,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PropertyGrid_OnHandleCreated_Invoke_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.HandleCreated += handler;
@@ -3419,18 +3440,19 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PropertyGrid_OnHandleCreated_InvokeWithHandle_CallsHandleCreated(EventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.HandleCreated += handler;
@@ -3446,17 +3468,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PropertyGrid_OnHandleDestroyed_Invoke_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.HandleDestroyed += handler;
@@ -3472,18 +3494,19 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PropertyGrid_OnHandleDestroyed_InvokeWithHandle_CallsHandleDestroyed(EventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.HandleDestroyed += handler;
@@ -3499,17 +3522,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void PropertyGrid_OnKeyDown_Invoke_CallsKeyDown(KeyEventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            KeyEventHandler handler = (sender, e) =>
+
+            void handler(object sender, KeyEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.KeyDown += handler;
@@ -3525,17 +3549,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void PropertyGrid_OnKeyPress_Invoke_CallsKeyPress(KeyPressEventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            KeyPressEventHandler handler = (sender, e) =>
+
+            void handler(object sender, KeyPressEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.KeyPress += handler;
@@ -3551,17 +3576,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void PropertyGrid_OnKeyUp_Invoke_CallsKeyUp(KeyEventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            KeyEventHandler handler = (sender, e) =>
+
+            void handler(object sender, KeyEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.KeyUp += handler;
@@ -3595,12 +3621,13 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            MouseEventHandler handler = (sender, e) =>
+
+            void handler(object sender, MouseEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseDown += handler;
@@ -3623,17 +3650,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PropertyGrid_OnMouseEnter_Invoke_CallsMouseEnter(EventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseEnter += handler;
@@ -3649,17 +3677,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEventArgsTheoryData))]
         public void PropertyGrid_OnMouseLeave_Invoke_CallsMouseLeave(EventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            EventHandler handler = (sender, e) =>
+
+            void handler(object sender, EventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseLeave += handler;
@@ -3693,12 +3722,12 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            MouseEventHandler handler = (sender, e) =>
+            void handler(object sender, MouseEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseMove += handler;
@@ -3721,17 +3750,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetMouseEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetMouseEventArgsTheoryData))]
         public void PropertyGrid_OnMouseUp_Invoke_CallsMouseUp(MouseEventArgs eventArgs)
         {
             using var control = new SubPropertyGrid();
             int callCount = 0;
-            MouseEventHandler handler = (sender, e) =>
+
+            void handler(object sender, MouseEventArgs e)
             {
                 Assert.Same(control, sender);
                 Assert.Same(eventArgs, e);
                 callCount++;
-            };
+            }
 
             // Call with handler.
             control.MouseUp += handler;
@@ -3744,6 +3774,102 @@ namespace System.Windows.Forms.Tests
             control.OnMouseUp(eventArgs);
             Assert.Equal(0, callCount);
             Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PropertyGrid_Buttons_AccessibleRole_IsRadiButton()
+        {
+            using PropertyGrid propertyGrid = new PropertyGrid();
+            ToolStripButton[] toolStripButtons = propertyGrid.TestAccessor().Dynamic._viewSortButtons;
+            ToolStripButton categoryButton = toolStripButtons[0];
+            ToolStripButton alphaButton = toolStripButtons[1];
+
+            Assert.Equal(AccessibleRole.RadioButton, categoryButton.AccessibleRole);
+            Assert.Equal(AccessibleRole.RadioButton, alphaButton.AccessibleRole);
+        }
+
+        [WinFormsFact]
+        public void PropertyGrid_SystemColorsChanged_DoesNotLeakImageList()
+        {
+            using SubPropertyGrid propertyGrid = new SubPropertyGrid();
+
+            var imageLists = propertyGrid.TestAccessor().Dynamic._imageList as ImageList[];
+
+            Assert.NotNull(imageLists);
+            Assert.Equal(2, imageLists.Length);
+            var imageList1 = imageLists[0];
+            Assert.NotNull(imageList1);
+
+            propertyGrid.OnSystemColorsChanged(EventArgs.Empty);
+
+            imageLists = propertyGrid.TestAccessor().Dynamic._imageList as ImageList[];
+
+            Assert.NotNull(imageLists);
+            Assert.Equal(2, imageLists.Length);
+            var imageList2 = imageLists[0];
+            Assert.NotNull(imageList2);
+            Assert.NotSame(imageList1, imageList2);
+
+            GC.Collect();
+            GC.WaitForPendingFinalizers();
+
+#if DEBUG
+            Assert.True(imageList1.IsDisposed);
+#endif
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void PropertyGrid_SetEnableFalse_DoesntBreakEntries_AndFlagsReturnCorrectValue(bool enable)
+        {
+            using PropertyGrid propertyGrid = new();
+            using Button button = new();
+            propertyGrid.SelectedObject = button;
+            propertyGrid.Enabled = enable;
+            var entry = (GridEntry)propertyGrid.SelectedGridItem;
+
+            Assert.True(entry.EntryFlags != 0);
+            Assert.False(propertyGrid.IsHandleCreated);
+            Assert.False(button.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PropertyGrid_BindObject()
+        {
+            using PropertyGrid propertyGrid = new();
+            object @object = new();
+            propertyGrid.SelectedObject = @object;
+            GridItem selectedItem = propertyGrid.SelectedGridItem;
+            Assert.True(selectedItem != null);
+            Assert.Equal("System.Object", selectedItem.Label);
+            Assert.IsAssignableFrom<IRootGridEntry>(selectedItem);
+            SingleSelectRootGridEntry gridEntry = Assert.IsAssignableFrom<SingleSelectRootGridEntry>(selectedItem);
+            AttributeCollection browsableAttributes = gridEntry.BrowsableAttributes;
+            Assert.Single(browsableAttributes);
+            Assert.Equal(BrowsableAttribute.Yes, browsableAttributes[0]);
+            Type propertyType = gridEntry.PropertyType;
+            Assert.True(propertyType == typeof(object));
+
+            AttributeCollection attributes = gridEntry.Attributes;
+            bool foundTypeForward = false;
+            foreach (object attribute in attributes)
+            {
+                if (attribute is TypeForwardedFromAttribute forwardedFrom)
+                {
+                    Assert.Equal(
+                        "mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089",
+                        forwardedFrom.AssemblyFullName);
+                    foundTypeForward = true;
+                    break;
+                }
+            }
+
+            Assert.True(foundTypeForward, "Did not find TypeForwardedAttribute.");
+
+            TypeConverter typeConverter = gridEntry.TypeConverter;
+            Assert.IsType<TypeConverter>(typeConverter);
+            propertyGrid.Enabled = true;
         }
 
         private class SubToolStripRenderer : ToolStripRenderer
@@ -3869,6 +3995,8 @@ namespace System.Windows.Forms.Tests
             public new void OnMouseMove(MouseEventArgs eventargs) => base.OnMouseMove(eventargs);
 
             public new void OnMouseUp(MouseEventArgs eventargs) => base.OnMouseUp(eventargs);
+
+            public new void OnSystemColorsChanged(EventArgs e) => base.OnSystemColorsChanged(e);
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
         }

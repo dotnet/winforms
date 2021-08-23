@@ -37,6 +37,26 @@ namespace System.Windows.Forms
                 InitHandle(ownerControl);
             }
 
+            // If the control is used as an item of a ToolStrip via ToolStripControlHost,
+            // its accessible object should provide info about the owning ToolStrip and items-siblings
+            // to build a correct ToolStrip accessibility tree.
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
+            {
+                if (Owner.ToolStripControlHost is not ToolStripControlHost host)
+                {
+                    return base.FragmentNavigate(direction);
+                }
+
+                if (direction == UiaCore.NavigateDirection.Parent
+                    || direction == UiaCore.NavigateDirection.PreviousSibling
+                    || direction == UiaCore.NavigateDirection.NextSibling)
+                {
+                    return host.AccessibilityObject.FragmentNavigate(direction);
+                }
+
+                return base.FragmentNavigate(direction);
+            }
+
             private void InitHandle(Control ownerControl)
             {
                 if (ownerControl.IsHandleCreated)
@@ -88,7 +108,7 @@ namespace System.Windows.Forms
             ///  We need to intercept first-child / last-child navigation from the container's
             ///  client object, and next-sibling / previous-sibling navigation from each child's
             ///  non-client object. All other navigation operations must be allowed to fall back
-            ///  on the system's deafult behavior (provided by OLEACC.DLL).
+            ///  on the system's default behavior (provided by OLEACC.DLL).
             ///
             ///  When combined with the re-ordering behavior of GetSysChildOrder() above, this
             ///  allows us to present the end user with the illusion of accessible objects in
@@ -115,6 +135,7 @@ namespace System.Windows.Forms
                             ctrls = Owner.GetChildControlsInTabOrder(true);
                             index = 0;
                         }
+
                         break;
                     case AccessibleNavigation.LastChild:
                         if (IsClientObject)
@@ -122,6 +143,7 @@ namespace System.Windows.Forms
                             ctrls = Owner.GetChildControlsInTabOrder(true);
                             index = ctrls.Length - 1;
                         }
+
                         break;
                     case AccessibleNavigation.Previous:
                         if (IsNonClientObject && parentControl is not null)
@@ -133,6 +155,7 @@ namespace System.Windows.Forms
                                 --index;
                             }
                         }
+
                         break;
                     case AccessibleNavigation.Next:
                         if (IsNonClientObject && parentControl is not null)
@@ -144,6 +167,7 @@ namespace System.Windows.Forms
                                 ++index;
                             }
                         }
+
                         break;
                 }
 
@@ -322,7 +346,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    // This control has no discernable MSAA name - return an empty string to indiciate 'nameless'.
+                    // This control has no discernable MSAA name - return an empty string to indicate 'nameless'.
                     return null;
                 }
             }
@@ -536,6 +560,12 @@ namespace System.Windows.Forms
                     return provider;
                 }
             }
+
+            // If the control is used as an item of a ToolStrip via ToolStripControlHost,
+            // its accessible object should provide info about the owning ToolStrip
+            // to build a correct ToolStrip accessibility tree.
+            private protected override UiaCore.IRawElementProviderFragmentRoot? ToolStripFragmentRoot
+                => Owner.ToolStripControlHost?.Owner?.AccessibilityObject;
 
             public override string ToString()
                 => $"{nameof(ControlAccessibleObject)}: Owner = {Owner?.ToString() ?? "null"}";

@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
-using System.Collections.Generic;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -68,6 +67,7 @@ namespace System.ComponentModel.Design.Serialization
                         return result;
                     }
                 }
+
                 return null;
             }
             set
@@ -76,6 +76,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     _cache = new Dictionary<object, Entry>();
                 }
+
                 // it's a 1:1 relationship so we can go back from entry to  component (if it's not setup yet.. which should not happen, see ComponentCodeDomSerializer.cs::Serialize for more info)
                 if (_cache != null && component is IComponent)
                 {
@@ -83,6 +84,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         value.Component = component;
                     }
+
                     _cache[component] = value;
                 }
             }
@@ -94,6 +96,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 return result;
             }
+
             return null;
         }
 
@@ -112,6 +115,7 @@ namespace System.ComponentModel.Design.Serialization
                     return true;
                 }
             }
+
             return false;
         }
 
@@ -335,6 +339,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     _metadata = new List<ResourceEntry>();
                 }
+
                 _metadata.Add(re);
             }
 
@@ -344,6 +349,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     _resources = new List<ResourceEntry>();
                 }
+
                 _resources.Add(re);
             }
         }

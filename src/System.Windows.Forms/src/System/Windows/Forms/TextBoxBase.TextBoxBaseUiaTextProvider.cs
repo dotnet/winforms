@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using static Interop;
 using static Interop.User32;
@@ -34,7 +33,7 @@ namespace System.Windows.Forms
                 // Last caret position of a selected text
                 int end = 0;
 
-                // Returns info about a selected text range.
+                // Returns info about the selected text range.
                 // If there is no selection, start and end parameters are the position of the caret.
                 SendMessageW(_owningTextBoxBase, (WM)EM.GETSEL, ref start, ref end);
 
@@ -63,7 +62,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            /// Returns the degenerate (empty) text range nearest to the specified screen coordinates.
+            ///  Returns the degenerate (empty) text range nearest to the specified screen coordinates.
             /// </summary>
             /// <param name="screenLocation">The location in screen coordinates.</param>
             /// <returns>A degenerate range nearest the specified location. Null is never returned.</returns>
@@ -126,14 +125,14 @@ namespace System.Windows.Forms
             public override Point PointToScreen(Point pt) => _owningTextBoxBase.PointToScreen(pt);
 
             /// <summary>
-            /// Exposes a text range that contains the text that is the target of the annotation associated with the specified annotation element.
+            ///  Exposes a text range that contains the text that is the target of the annotation associated with the specified annotation element.
             /// </summary>
             /// <param name="annotationElement">
-            /// The provider for an element that implements the IAnnotationProvider interface.
-            /// The annotation element is a sibling of the element that implements the <see cref="UiaCore.ITextProvider2"/> interface for the document.
+            ///  The provider for an element that implements the IAnnotationProvider interface.
+            ///  The annotation element is a sibling of the element that implements the <see cref="UiaCore.ITextProvider2"/> interface for the document.
             /// </param>
             /// <returns>
-            /// A text range that contains the annotation target text.
+            ///  A text range that contains the annotation target text.
             /// </returns>
             public override UiaCore.ITextRangeProvider RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
             {

@@ -677,6 +677,21 @@
         <target state="translated">İşlenmemiş VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">Sonraki zaman dilimine git</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">Önceki zaman dilimine git</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">Bugünün tarihine git ve seç</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">İptal</target>
@@ -1114,12 +1129,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Kapat</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Aç</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1227,7 +1242,7 @@
         <target state="translated">Bu içerik menüsü şeridinin görüntülenmesine neden olan en son denetim.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Denetimin erişilebilir nesnesi geçersiz bir durumda.</target>
         <note />
@@ -4749,7 +4764,7 @@ hakkında detaylı bilgi için bu iletinin sonuna bakın.
         <target state="translated">Yüklü Derlemeler</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4758,7 +4773,7 @@ hakkında detaylı bilgi için bu iletinin sonuna bakın.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -5205,6 +5220,11 @@ Bunu değiştirmek istiyor musunuz?</target>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">Formun yeniden boyutlandırılabileceği en büyük boyut.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">Simge durumuna küçültülmüş MDI alt öğeleri için bağlamayı alır veya ayarlar.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -6466,6 +6486,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Ekleme işareti özniteliklerinin değiştirilmesine olanak tanır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0} görünümündeki ListView içindir</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">Geçerli erişilebilirlik nesnesi yalnızca {0}, {1} veya {2} görünümündeki ListView içindir</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">ListView öğesinin Checked özelliği değiştiğinde harekete geçirilen olay.</target>
@@ -7074,6 +7104,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="MonthCalendarTrailingForeColorDescr">
         <source>The color used to display the previous and following months that appear on the month calendar.</source>
         <target state="translated">Aylık takvimde görünen önceki ve sonraki ayları görüntülemek için kullanılacak renk.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">Hafta {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -7904,6 +7939,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ProfessionalColorsSeparatorLightDescr">
         <source>Color to use to for highlight effects on the separator.</source>
         <target state="translated">Ayırıcıdaki vurgu efektleri için kullanılacak renk.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
@@ -10371,6 +10411,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">LargeChange: '{0}' değeri sıfırdan büyük veya eşit olmalıdır.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">Büyük azalma</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">Büyük artış</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">TrackBar üzerinde kaydırıcının en büyük konum değeri.</target>
@@ -10389,6 +10439,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">Denetimin yönlendirmesi.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">Konum</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -10423,7 +10478,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
         <source>Text length must be less than 128 characters long.</source>
-        <target state="translated">Metin uzunluğu 128 karakterden az olmalı.</target>
+        <target state="translated">Metin uzunluğu 128 karakterden az olmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -11032,8 +11087,8 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">Uygulamada ilk IWin32Window nesnesi oluşturulmadan önce SetCompatibleTextRenderingDefault çağrılmalıdır.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">Uygulamada ilk IWin32Window nesnesi oluşturulmadan önce {0} çağrılmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

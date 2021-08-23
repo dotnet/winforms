@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Imaging;
-using System.IO;
 
 namespace System.Windows.Forms.Design
 {
@@ -55,7 +54,7 @@ namespace System.Windows.Forms.Design
                 return new ImageListImage((new Icon(stream)).ToBitmap());
             }
 
-            return new ImageListImage((Bitmap)Bitmap.FromStream(stream));
+            return new ImageListImage((Bitmap)Image.FromStream(stream));
         }
     }
 }

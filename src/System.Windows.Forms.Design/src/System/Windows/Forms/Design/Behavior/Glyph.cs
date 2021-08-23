@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Design.Behavior
@@ -17,25 +16,27 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     public abstract class Glyph
     {
+        private Behavior _behavior;
+
         /// <summary>
         ///  Glyph's default constructor takes a Behavior.
         /// </summary>
         protected Glyph(Behavior behavior)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _behavior = behavior;
         }
 
         /// <summary>
         ///  This read-only property will return the Behavior associated with
         ///  this Glyph.  The Behavior can be null.
         /// </summary>
-        public virtual Behavior Behavior => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual Behavior Behavior => _behavior;
 
         /// <summary>
         ///  This read-only property will return the Bounds associated with
         ///  this Glyph.  The Bounds can be empty.
         /// </summary>
-        public virtual Rectangle Bounds => throw new NotImplementedException(SR.NotImplementedByDesign);
+        public virtual Rectangle Bounds => Rectangle.Empty;
 
         /// <summary>
         ///  Abstract method that forces Glyph implementations to provide
@@ -60,7 +61,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         protected void SetBehavior(Behavior behavior)
         {
-            throw new NotImplementedException(SR.NotImplementedByDesign);
+            _behavior = behavior;
         }
     }
 }

@@ -150,7 +150,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.AutoEllipsis);
                     }
@@ -218,14 +218,16 @@ namespace System.Windows.Forms
                 if (BorderStyle != value)
                 {
                     _labelState[s_stateBorderStyle] = (int)value;
-                    if (ParentInternal != null)
+                    if (ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayoutIf(AutoSize, ParentInternal, this, PropertyNames.BorderStyle);
                     }
+
                     if (AutoSize)
                     {
                         AdjustSize();
                     }
+
                     RecreateHandle();
                 }
             }
@@ -343,6 +345,7 @@ namespace System.Windows.Forms
                         {
                             AdjustSize();
                         }
+
                         RecreateHandle();
                     }
                     else
@@ -365,7 +368,7 @@ namespace System.Windows.Forms
             {
                 Image image = (Image)Properties.GetObject(s_propImage);
 
-                if (image is null && ImageList != null && ImageIndexer.ActualIndex >= 0)
+                if (image is null && ImageList is not null && ImageIndexer.ActualIndex >= 0)
                 {
                     return ImageList.Images[ImageIndexer.ActualIndex];
                 }
@@ -381,7 +384,7 @@ namespace System.Windows.Forms
                     StopAnimate();
 
                     Properties.SetObject(s_propImage, value);
-                    if (value != null)
+                    if (value is not null)
                     {
                         ImageIndex = -1;
                         ImageList = null;
@@ -410,14 +413,15 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ImageIndexer != null)
+                if (ImageIndexer is not null)
                 {
                     int index = ImageIndexer.Index;
 
-                    if (ImageList != null && (index >= ImageList.Images.Count))
+                    if (ImageList is not null && (index >= ImageList.Images.Count))
                     {
                         return ImageList.Images.Count - 1;
                     }
+
                     return index;
                 }
 
@@ -514,14 +518,14 @@ namespace System.Windows.Forms
 
                     // Remove the previous imagelist handle recreate handler
                     ImageList imageList = ImageList;
-                    if (imageList != null)
+                    if (imageList is not null)
                     {
                         imageList.RecreateHandle -= recreateHandler;
                         imageList.Disposed -= disposedHandler;
                     }
 
                     // Make sure we don't have an Image as well as an ImageList
-                    if (value != null)
+                    if (value is not null)
                     {
                         Properties.SetObject(s_propImage, null); // Image.set calls ImageList = null
                     }
@@ -529,7 +533,7 @@ namespace System.Windows.Forms
                     Properties.SetObject(s_propImageList, value);
 
                     // Add the new imagelist handle recreate handler
-                    if (value != null)
+                    if (value is not null)
                     {
                         value.RecreateHandle += recreateHandler;
                         value.Disposed += disposedHandler;
@@ -556,14 +560,13 @@ namespace System.Windows.Forms
                 {
                     return (ContentAlignment)imageAlign;
                 }
+
                 return ContentAlignment.MiddleCenter;
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
+
                 if (value != ImageAlign)
                 {
                     Properties.SetInteger(s_propImageAlign, (int)value);
@@ -718,10 +721,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (!WindowsFormsUtils.EnumValidator.IsValidContentAlignment(value))
-                {
-                    throw new InvalidEnumArgumentException(nameof(value), (int)value, typeof(ContentAlignment));
-                }
+                SourceGenerated.EnumValidator.Validate(value);
 
                 if (TextAlign != value)
                 {
@@ -733,6 +733,7 @@ namespace System.Windows.Forms
                     {
                         RecreateHandle();
                     }
+
                     OnTextAlignChanged(EventArgs.Empty);
                 }
             }
@@ -740,7 +741,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the text in the Label. Since we can have multiline support
-        ///  this property just overides the base to pluck in the Multiline editor.
+        ///  this property just overrides the base to pluck in the Multiline editor.
         /// </summary>
         [Editor("System.ComponentModel.Design.MultilineStringEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor)),
         SettingsBindable(true)]
@@ -830,6 +831,7 @@ namespace System.Windows.Forms
                         {
                             style &= ~(int)User32.SS.NOPREFIX;
                         }
+
                         WindowStyle = style;
                     }
                 }
@@ -874,7 +876,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void Animate() => Animate(!DesignMode && Visible && Enabled && ParentInternal != null);
+        internal void Animate() => Animate(!DesignMode && Visible && Enabled && ParentInternal is not null);
 
         internal void StopAnimate() => Animate(false);
 
@@ -886,7 +888,7 @@ namespace System.Windows.Forms
                 Image image = (Image)Properties.GetObject(s_propImage);
                 if (animate)
                 {
-                    if (image != null)
+                    if (image is not null)
                     {
                         ImageAnimator.Animate(image, new EventHandler(OnFrameChanged));
                         _labelState[s_stateAnimating] = animate ? 1 : 0;
@@ -894,7 +896,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (image != null)
+                    if (image is not null)
                     {
                         ImageAnimator.StopAnimate(image, new EventHandler(OnFrameChanged));
                         _labelState[s_stateAnimating] = animate ? 1 : 0;
@@ -955,7 +957,7 @@ namespace System.Windows.Forms
             //
             // Please read if you're adding a new TextFormatFlag.
             // whenever something can change the TextFormatFlags used
-            // MeasureTextCache.InvalidateCache() should be called so we can approprately clear.
+            // MeasureTextCache.InvalidateCache() should be called so we can appropriately clear.
 
             TextFormatFlags flags = ControlPaint.CreateTextFormatFlags(this, TextAlign, AutoEllipsis, UseMnemonic);
 
@@ -979,25 +981,28 @@ namespace System.Windows.Forms
             {
                 StopAnimate();
                 // Holding on to images and image list is a memory leak.
-                if (ImageList != null)
+                if (ImageList is not null)
                 {
                     ImageList.Disposed -= new EventHandler(DetachImageList);
                     ImageList.RecreateHandle -= new EventHandler(ImageListRecreateHandle);
                     Properties.SetObject(s_propImageList, null);
                 }
-                if (Image != null)
+
+                if (Image is not null)
                 {
                     Properties.SetObject(s_propImage, null);
                 }
 
-                //Dipose the tooltip if one present..
-                if (_textToolTip != null)
+                //Dispose the tooltip if one present..
+                if (_textToolTip is not null)
                 {
                     _textToolTip.Dispose();
                     _textToolTip = null;
                 }
+
                 _controlToolTip = false;
             }
+
             base.Dispose(disposing);
         }
 
@@ -1062,6 +1067,7 @@ namespace System.Windows.Forms
                     bordersAndPadding += new Size(2, 2);
                 }
             }
+
             return bordersAndPadding;
         }
 
@@ -1072,10 +1078,12 @@ namespace System.Windows.Forms
             {
                 proposedSize.Width = 0;
             }
+
             if (proposedSize.Height == 1)
             {
                 proposedSize.Height = 0;
             }
+
             return base.GetPreferredSize(proposedSize);
         }
 
@@ -1188,7 +1196,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseEnter(EventArgs e)
         {
-            if (!_controlToolTip && !DesignMode && AutoEllipsis && _showToolTip && _textToolTip != null)
+            if (!_controlToolTip && !DesignMode && AutoEllipsis && _showToolTip && _textToolTip is not null)
             {
                 try
                 {
@@ -1200,6 +1208,7 @@ namespace System.Windows.Forms
                     _controlToolTip = false;
                 }
             }
+
             base.OnMouseEnter(e);
         }
 
@@ -1208,7 +1217,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
-            if (!_controlToolTip && _textToolTip != null && _textToolTip.GetHandleCreated())
+            if (!_controlToolTip && _textToolTip is not null && _textToolTip.GetHandleCreated())
             {
                 _textToolTip.RemoveAll();
 
@@ -1245,7 +1254,7 @@ namespace System.Windows.Forms
         protected override void OnHandleDestroyed(EventArgs e)
         {
             base.OnHandleDestroyed(e);
-            if (_textToolTip != null && _textToolTip.GetHandleCreated())
+            if (_textToolTip is not null && _textToolTip.GetHandleCreated())
             {
                 _textToolTip.DestroyHandle();
             }
@@ -1288,19 +1297,14 @@ namespace System.Windows.Forms
 
             Rectangle face = LayoutUtils.DeflateRect(ClientRectangle, Padding);
             Image i = Image;
-            if (i != null)
+            if (i is not null)
             {
                 DrawImage(e, i, face, RtlTranslateAlignment(ImageAlign));
             }
 
             Color color;
-            if (Enabled && SystemInformation.HighContrast)
+            using (var hdc = new DeviceContextHdcScope(e))
             {
-                color = SystemColors.WindowText;
-            }
-            else
-            {
-                using var hdc = new DeviceContextHdcScope(e);
                 color = hdc.FindNearestColor(Enabled ? ForeColor : DisabledColor);
             }
 
@@ -1370,9 +1374,10 @@ namespace System.Windows.Forms
             if (SelfSizing)
             {
                 // In the case of SelfSizing
-                // we dont know what size to be until we're parented
+                // we don't know what size to be until we're parented
                 AdjustSize();
             }
+
             Animate();
         }
 
@@ -1406,15 +1411,17 @@ namespace System.Windows.Forms
             if (UseMnemonic && IsMnemonic(charCode, Text) && CanProcessMnemonic())
             {
                 Control parent = ParentInternal;
-                if (parent != null)
+                if (parent is not null)
                 {
                     if (parent.SelectNextControl(this, true, false, true, false) && !parent.ContainsFocus)
                     {
                         parent.Focus();
                     }
                 }
+
                 return true;
             }
+
             return false;
         }
 
@@ -1448,17 +1455,23 @@ namespace System.Windows.Forms
 
         private void ResetImage() => Image = null;
 
-        private bool ShouldSerializeImage() => Properties.GetObject(s_propImage) != null;
+        private bool ShouldSerializeImage() => Properties.GetObject(s_propImage) is not null;
 
         /// <summary>
         ///  Called by ToolTip to poke in that Tooltip into this ComCtl so that the Native ChildToolTip is not exposed.
         /// </summary>
-        internal void SetToolTip(ToolTip toolTip)
+        internal override void SetToolTip(ToolTip toolTip)
         {
-            if (toolTip != null && !_controlToolTip)
+            if (toolTip is null || _controlToolTip)
             {
-                _controlToolTip = true;
+                return;
             }
+
+            // Label now has its own Tooltip for AutoEllipsis.
+            // So this control too falls in special casing.
+            // We need to disable the LABEL AutoEllipsis tooltip and show
+            // this tooltip always.
+            _controlToolTip = true;
         }
 
         internal override bool SupportsUiaProviders => true;

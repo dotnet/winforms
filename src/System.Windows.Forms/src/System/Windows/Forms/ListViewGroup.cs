@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             _headerAlignment = headerAlignment;
         }
 
-        internal AccessibleObject? AccessibilityObject
+        internal AccessibleObject AccessibilityObject
         {
             get
             {
@@ -93,8 +93,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text displayed in the group header.
         /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
         [AllowNull]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string Header
         {
             get => _header ?? string.Empty;
@@ -135,8 +136,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text displayed in the group footer.
         /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
         [AllowNull]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string Footer
         {
             get => _footer ?? string.Empty;
@@ -214,8 +216,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The text displayed in the group subtitle.
         /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
         [AllowNull]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string Subtitle
         {
             get => _subtitle ?? string.Empty;
@@ -234,8 +237,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The name of the task link displayed in the group header.
         /// </summary>
-        [SRCategory(nameof(SR.CatAppearance))]
         [AllowNull]
+        [DefaultValue("")]
+        [SRCategory(nameof(SR.CatAppearance))]
         public string TaskLink
         {
             get => _taskLink ?? string.Empty;
@@ -387,6 +391,7 @@ namespace System.Windows.Forms
                     Name = (string)entry.Value!;
                 }
             }
+
             if (count > 0)
             {
                 ListViewItem[] items = new ListViewItem[count];
@@ -394,6 +399,7 @@ namespace System.Windows.Forms
                 {
                     items[i] = (ListViewItem)info.GetValue("Item" + i, typeof(ListViewItem))!;
                 }
+
                 Items.AddRange(items);
             }
         }
@@ -402,7 +408,7 @@ namespace System.Windows.Forms
 
         private void UpdateListView()
         {
-            if (ListView != null && ListView.IsHandleCreated)
+            if (ListView is not null && ListView.IsHandleCreated)
             {
                 ListView.UpdateGroupNative(this);
             }
@@ -424,7 +430,8 @@ namespace System.Windows.Forms
             {
                 info.AddValue(nameof(Name), Name);
             }
-            if (_items != null && _items.Count > 0)
+
+            if (_items is not null && _items.Count > 0)
             {
                 info.AddValue("ItemsCount", Items.Count);
                 for (int i = 0; i < Items.Count; i++)

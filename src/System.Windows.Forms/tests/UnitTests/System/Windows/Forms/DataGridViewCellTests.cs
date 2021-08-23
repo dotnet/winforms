@@ -2,13 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
 using System.Windows.Forms.Automation;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -391,7 +390,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Displayed_GetWithRow_ReturnsExpected(bool rowVisible)
         {
             using var row = new DataGridViewRow
@@ -863,7 +862,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_Set_GetReturnsExpected(string value, string expected)
         {
             using var cell = new SubDataGridViewCell
@@ -878,7 +877,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var cell = new SubDataGridViewCell
@@ -895,7 +894,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_SetWithRow_GetReturnsExpected(string value, string expected)
         {
             using var row = new DataGridViewRow();
@@ -911,7 +910,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_SetWithRowWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var row = new DataGridViewRow();
@@ -930,7 +929,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_SetWithColumn_GetReturnsExpected(string value, string expected)
         {
             using var column = new DataGridViewColumn();
@@ -946,7 +945,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_SetWithColumnWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var column = new DataGridViewColumn();
@@ -965,7 +964,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_SetWithDataGridView_GetReturnsExpected(string value, string expected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -992,7 +991,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -1020,7 +1019,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_Shared_GetReturnsExpected(string value, string expected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -1047,7 +1046,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ErrorText_SharedWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -1304,7 +1303,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Frozen_GetWithRow_ReturnsExpected(bool rowFrozen)
         {
             using var row = new DataGridViewRow
@@ -1317,7 +1316,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Frozen_GetWithColumn_ReturnsExpected(bool columnFrozen)
         {
             using var column = new DataGridViewColumn
@@ -1352,7 +1351,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Frozen_GetShared_ReturnsExpected(bool columnFrozen)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -1555,7 +1554,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_ReadOnly_GetWithRow_ReturnsExpected(bool rowReadOnly)
         {
             using var row = new DataGridViewRow
@@ -1631,7 +1630,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void SubDataGridViewCell_ReadOnly_SetWithRow_GetReturnsExpected(bool value)
         {
             using var row = new DataGridViewRow();
@@ -1739,7 +1738,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void SubDataGridViewCell_ReadOnly_SetWithDataGridView_GetReturnsExpected(bool value)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -1919,7 +1918,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_ReadOnly_SetShared_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -1991,7 +1990,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DataGridViewTriState))]
         public void DataGridViewCell_Resizable_GetShared_ReturnsExpected(DataGridViewTriState columnResizable)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2054,7 +2053,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Selected_GetShared_ReturnsExpected(bool columnSelected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2097,7 +2096,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Selected_SetWithColumn_ThrowsInvalidOperationException(bool value)
         {
             using var column = new DataGridViewColumn();
@@ -2109,7 +2108,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Selected_SetWithDataGridView_ReturnsExpected(bool value)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2140,7 +2139,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Selected_SetShared_ThrowsInvalidOperationException(bool value)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2461,7 +2460,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCell_Tag_Set_GetReturnsExpected(object value)
         {
             using var cell = new SubDataGridViewCell
@@ -2476,7 +2475,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCell_Tag_SetWithNonNullOldValue_GetReturnsExpected(object value)
         {
             using var cell = new SubDataGridViewCell
@@ -2538,7 +2537,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_Set_GetReturnsExpected(string value, string expected)
         {
             using var cell = new SubDataGridViewCell
@@ -2553,7 +2552,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var cell = new SubDataGridViewCell
@@ -2569,7 +2568,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetWithRow_GetReturnsExpected(string value, string expected)
         {
             using var row = new DataGridViewRow();
@@ -2585,7 +2584,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetWithRowWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var row = new DataGridViewRow();
@@ -2604,7 +2603,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetWithColumn_GetReturnsExpected(string value, string expected)
         {
             using var column = new DataGridViewColumn();
@@ -2620,7 +2619,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetWithColumnWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var column = new DataGridViewColumn();
@@ -2639,7 +2638,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetWithDataGridView_GetReturnsExpected(string value, string expected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2662,7 +2661,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2686,7 +2685,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetShared_GetReturnsExpected(string value, string expected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2709,7 +2708,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void DataGridViewCell_ToolTipText_SetSharedWithNonNullOldValue_GetReturnsExpected(string value, string expected)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2742,7 +2741,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_GetWithColumn_ReturnsExpected(Type valueType)
         {
             using var column = new DataGridViewColumn
@@ -2755,7 +2754,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_GetWithDataGridView_ReturnsExpected(Type valueType)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2772,7 +2771,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_Set_GetReturnsExpected(Type value)
         {
             using var cell = new SubDataGridViewCell
@@ -2789,7 +2788,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithNonNullOldValue_GetReturnsExpected(Type value)
         {
             using var cell = new SubDataGridViewCell
@@ -2807,7 +2806,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithRow_GetReturnsExpected(Type value)
         {
             using var row = new DataGridViewRow();
@@ -2825,7 +2824,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithRowWithNonNullOldValue_GetReturnsExpected(Type value)
         {
             using var row = new DataGridViewRow();
@@ -2892,7 +2891,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithDataGridView_GetReturnsExpected(Type value)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2917,7 +2916,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void DataGridViewCell_ValueType_SetWithDataGridViewWithNonNullOldValue_GetReturnsExpected(Type value)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -2957,7 +2956,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Visible_GetWithRow_ReturnsExpected(bool rowVisible)
         {
             using var row = new DataGridViewRow
@@ -3010,7 +3009,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Visible_GetShared_ReturnsExpected(bool columnVisible)
         {
             using var cellTemplate = new SubDataGridViewCell();
@@ -3484,7 +3483,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Dispose_InvokeDisposingWithoutContextMenuStrip_Nop(bool disposing)
         {
             using var cell = new SubDataGridViewCell();
@@ -3497,7 +3496,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DataGridViewCell_Dispose_InvokeDisposingWithContextMenuStrip_Success(bool disposing)
         {
             using var menu = new ContextMenuStrip();
@@ -4496,6 +4495,7 @@ namespace System.Windows.Forms.Tests
             DataGridViewCell cell = control.Rows.SharedRow(0).Cells[0];
             Assert.Throws<ArgumentOutOfRangeException>("rowIndex", () => cell.GetInheritedContextMenuStrip(rowIndex));
         }
+
         [WinFormsFact]
         public void DataGridViewCell_GetInheritedState_Invoke_ReturnsExpected()
         {
@@ -5326,7 +5326,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_MeasureTextHeight_NullOrEmptyText_ReturnsExpected(string text)
         {
             using var image = new Bitmap(10, 10);
@@ -5400,7 +5400,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_MeasureTextPreferredSize_NullOrEmptyText_ReturnsExpected(string text)
         {
             using var image = new Bitmap(10, 10);
@@ -5456,7 +5456,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_MeasureTextSize_NullOrEmptyText_ReturnsExpected(string text)
         {
             using var image = new Bitmap(10, 10);
@@ -5504,7 +5504,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_MeasureTextWidth_NullOrEmptyText_ReturnsExpected(string text)
         {
             using var image = new Bitmap(10, 10);
@@ -5847,7 +5847,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void DataGridViewCell_OnKeyDown_Invoke_Nop(KeyEventArgs e)
         {
             using var cell = new SubDataGridViewCell();
@@ -5855,7 +5855,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyPressEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyPressEventArgsTheoryData))]
         public void DataGridViewCell_OnKeyPress_Invoke_Nop(KeyPressEventArgs e)
         {
             using var cell = new SubDataGridViewCell();
@@ -5863,7 +5863,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetKeyEventArgsTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetKeyEventArgsTheoryData))]
         public void DataGridViewCell_OnKeyUp_Invoke_Nop(KeyEventArgs e)
         {
             using var cell = new SubDataGridViewCell();
@@ -6128,7 +6128,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNullOrEmptyStringTheoryData))]
         public void DataGridViewCell_PaintErrorIcon_InvokeNullOrEmptyText_Success(string errorText)
         {
             using var image = new Bitmap(10, 10);
@@ -6138,7 +6138,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void DataGridViewCell_PaintErrorIcon_NoDataGridView_Nop(string errorText)
         {
             using var image = new Bitmap(10, 10);
@@ -6569,7 +6569,7 @@ namespace System.Windows.Forms.Tests
                 Times.Exactly(2));
         }
 
-        private class SubDataGridViewCheckBoxCell: DataGridViewCheckBoxCell
+        private class SubDataGridViewCheckBoxCell : DataGridViewCheckBoxCell
         {
             public SubDataGridViewCheckBoxCell()
             {
@@ -6637,7 +6637,7 @@ namespace System.Windows.Forms.Tests
                 return base.GetClipboardContent(rowIndex, firstCell, lastCell, inFirstRow, inLastRow, format);
             }
 
-            public new Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) =>  base.GetContentBounds(graphics, cellStyle, rowIndex);
+            public new Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) => base.GetContentBounds(graphics, cellStyle, rowIndex);
 
             public new Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex) => base.GetErrorIconBounds(graphics, cellStyle, rowIndex);
 

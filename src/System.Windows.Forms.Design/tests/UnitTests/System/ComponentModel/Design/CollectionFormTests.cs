@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.ComponentModel.Design.Tests
@@ -38,7 +37,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void CollectionForm_EditValue_Set_GetReturnsExpected(object value)
         {
             var editor = new CollectionEditor(typeof(int[]));
@@ -489,6 +488,7 @@ namespace System.ComponentModel.Design.Tests
             var form = new SubCollectionForm(editor);
             Assert.True(form.CanSelectMultipleInstances());
         }
+
         public static IEnumerable<object[]> InvalidDesignerHost_TestData()
         {
             yield return new object[] { null };
@@ -755,7 +755,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void CollectionForm_GetService_WithContext_CallsContextGetService(Type serviceType)
         {
             var mockEditorService = new Mock<IWindowsFormsEditorService>(MockBehavior.Strict);
@@ -793,7 +793,7 @@ namespace System.ComponentModel.Design.Tests
         }
 
         [Theory]
-        [CommonMemberData(nameof(CommonTestHelper.GetTypeWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetTypeWithNullTheoryData))]
         public void CollectionForm_GetService_InvokeWithoutContext_ReturnsNull(Type serviceType)
         {
             var editor = new SubCollectionEditor(serviceType);

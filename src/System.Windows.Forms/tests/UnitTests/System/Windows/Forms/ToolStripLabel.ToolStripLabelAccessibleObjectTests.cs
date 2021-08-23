@@ -2,17 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Xunit;
 using static System.Windows.Forms.ToolStripLabel;
 using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripLabel_ToolStripLabelAccessibleObectTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripLabel_ToolStripLabelAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
-        public void ToolStripLabelAccessibleObect_Ctor_Default()
+        public void ToolStripLabelAccessibleObject_Ctor_Default()
         {
             using ToolStripLabel toolStripLabel = new ToolStripLabel();
             ToolStripLabelAccessibleObject accessibleObject = new ToolStripLabelAccessibleObject(toolStripLabel);
@@ -23,7 +22,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, (int)UiaCore.UIA.HyperlinkControlTypeId)]
         [InlineData(false, (int)UiaCore.UIA.TextControlTypeId)]
-        public void ToolStripLabelAccessibleObect_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, int expectedType)
+        public void ToolStripLabelAccessibleObject_ControlType_IsExpected_IfAccessibleRoleIsDefault(bool isLink, int expectedType)
         {
             using ToolStripLabel toolStripLabel = new ToolStripLabel();
             toolStripLabel.IsLink = isLink;
@@ -37,7 +36,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(true, AccessibleRole.Link)]
         [InlineData(false, AccessibleRole.StaticText)]
-        public void ToolStripLabelAccessibleObect_Role_IsExpected_ByDefault(bool isLink, AccessibleRole expectedRole)
+        public void ToolStripLabelAccessibleObject_Role_IsExpected_ByDefault(bool isLink, AccessibleRole expectedRole)
         {
             using ToolStripLabel toolStripLabel = new ToolStripLabel();
             toolStripLabel.IsLink = isLink;

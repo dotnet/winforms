@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Reflection;
@@ -141,12 +140,12 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsFact]
-        public void DataGridViewAccessibleObject_ControlType_IsTable_IfAccessibleRoleIsDefault()
+        public void DataGridViewAccessibleObject_ControlType_IsDataGrid_IfAccessibleRoleIsDefault()
         {
             using DataGridView dataGridView = new DataGridView();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            UiaCore.UIA expected = UiaCore.UIA.TableControlTypeId;
+            UiaCore.UIA expected = UiaCore.UIA.DataGridControlTypeId;
             Assert.Equal(expected, actual);
         }
 

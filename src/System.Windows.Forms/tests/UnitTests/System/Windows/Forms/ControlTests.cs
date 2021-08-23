@@ -2,16 +2,15 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    using Size = System.Drawing.Size;
     using Point = System.Drawing.Point;
+    using Size = System.Drawing.Size;
 
     public partial class ControlTests : IClassFixture<ThreadExceptionFixture>
     {
@@ -104,7 +103,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Ctor_String(string text, string expectedText)
         {
             using var control = new SubControl(text);

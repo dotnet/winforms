@@ -30,10 +30,11 @@ namespace System.Windows.Forms
                         return false;
                     }
                 }
+
                 foreach (Control c in Row.ControlsInternal)
                 {
                     raftingControl = c as ISupportToolStripPanel;
-                    if (raftingControl != null)
+                    if (raftingControl is not null)
                     {
                         if (raftingControl.Stretch)
                         {
@@ -42,6 +43,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return true;
             }
 
@@ -91,6 +93,7 @@ namespace System.Windows.Forms
                         freedSpace = cell.Grow(growBy);
                     }
                 }
+
                 return freedSpace;
             }
 
@@ -118,6 +121,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 return null;
             }
 
@@ -184,6 +188,7 @@ namespace System.Windows.Forms
             {
                 //     ToolStripPanel.Join(movingControl, endScreenLocation);
             }
+
             public virtual void LeaveRow(ToolStrip toolStripToDrag)
             {
             }

@@ -298,7 +298,7 @@ namespace System.Windows.Forms
                 {
                     _window = _provider.EnsureErrorWindow(_control.ParentInternal);
                     _window.Add(this);
-                    // Make sure that we blink if the style is set to AlwaysBlink or BlinkIfDifferrentError
+                    // Make sure that we blink if the style is set to AlwaysBlink or BlinkIfDifferentError
                     if (_provider.BlinkStyle != ErrorBlinkStyle.NeverBlink)
                     {
                         StartBlinking();

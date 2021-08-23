@@ -2,7 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+#if DEBUG
 using System.Diagnostics;
+#endif
 using System.Drawing;
 using System.Drawing.Text;
 using static Interop;
@@ -14,6 +16,13 @@ namespace System.Windows.Forms
     /// </summary>
     public static class TextRenderer
     {
+#if DEBUG
+        // In various cases the DC may have already been modified, and we don't pass TextFormatFlags.PreserveGraphicsClipping
+        // or TextFormatFlags.PreserveGraphicsTranslateTransform flags, that set off the asserts in GetApplyStateFlags
+        // method. This flags allows us to skip those assert for the cases we know we don't need these flags.
+        internal static TextFormatFlags SkipAssertFlag = (TextFormatFlags)0x4000_0000;
+#endif
+
         internal static Gdi32.QUALITY DefaultQuality { get; } = GetDefaultFontQuality();
 
         internal static Size MaxSize { get; } = new Size(int.MaxValue, int.MaxValue);
@@ -298,7 +307,7 @@ namespace System.Windows.Forms
             if (text.IsEmpty || foreColor == Color.Transparent)
                 return;
 
-            // This MUST come before retreiving the HDC, which locks the Graphics object
+            // This MUST come before retrieving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
@@ -327,7 +336,7 @@ namespace System.Windows.Forms
             Gdi32.HDC hdc = e.HDC;
             if (hdc.IsNull)
             {
-                // This MUST come before retreiving the HDC, which locks the Graphics object
+                // This MUST come before retrieving the HDC, which locks the Graphics object
                 Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(e.GraphicsInternal);
 
                 using var graphicsHdc = new DeviceContextHdcScope(e.GraphicsInternal, applyGraphicsState: false);
@@ -531,11 +540,11 @@ namespace System.Windows.Forms
             if (text.IsEmpty)
                 return Size.Empty;
 
-            // This MUST come before retreiving the HDC, which locks the Graphics object
+            // This MUST come before retrieving the HDC, which locks the Graphics object
             Gdi32.QUALITY quality = FontQualityFromTextRenderingHint(dc);
 
             // Applying state may not impact text size measurements. Rather than risk missing some
-            // case we'll apply as we have historically to avoid suprise regressions.
+            // case we'll apply as we have historically to avoid surprise regressions.
             using var hdc = new DeviceContextHdcScope(dc, GetApplyStateFlags(dc, flags));
             using var hfont = GdiCache.GetHFONT(font, quality, hdc);
             return hdc.HDC.MeasureText(text, hfont, proposedSize, flags);
@@ -620,15 +629,20 @@ namespace System.Windows.Forms
                 apply |= ApplyGraphicsProperties.TranslateTransform;
             }
 
-            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
-                || graphics.Clip is null
-                || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
-                "Must preserve Graphics clipping region!");
+#if DEBUG
+            if ((textFormatFlags & SkipAssertFlag) == 0)
+            {
+                Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.Clipping)
+                    || graphics.Clip is null
+                    || graphics.Clip.GetHrgn(graphics) == IntPtr.Zero,
+                    "Must preserve Graphics clipping region!");
 
-            Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
-                || graphics.Transform is null
-                || graphics.Transform.IsIdentity,
-                "Must preserve Graphics transformation!");
+                Debug.Assert(apply.HasFlag(ApplyGraphicsProperties.TranslateTransform)
+                    || graphics.Transform is null
+                    || graphics.Transform.IsIdentity,
+                    "Must preserve Graphics transformation!");
+            }
+#endif
 
             return apply;
         }

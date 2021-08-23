@@ -36,6 +36,7 @@ namespace System.Windows.Forms
                             Automation.AutomationNotificationProcessing.CurrentThenMostRecent, SR.UpDownEditLocalizedControlTypeName);
                         AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
                     }
+
                     base.Text = value;
                 }
             }
@@ -75,6 +76,7 @@ namespace System.Windows.Forms
                             _parent.OnMouseDoubleClick(me);
                         }
                     }
+
                     _doubleClickFired = false;
                 }
 
@@ -84,7 +86,7 @@ namespace System.Windows.Forms
             internal override void WmContextMenu(ref Message m)
             {
                 // Want to make the SourceControl to be the UpDownBase, not the Edit.
-                if (ContextMenuStrip != null)
+                if (ContextMenuStrip is not null)
                 {
                     WmContextMenu(ref m, _parent);
                 }

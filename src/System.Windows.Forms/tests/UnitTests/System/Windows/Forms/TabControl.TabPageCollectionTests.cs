@@ -3,12 +3,10 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -50,6 +48,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -175,6 +174,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -337,6 +337,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -480,6 +481,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -877,7 +879,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPageCollection_Add_InvokeString_Success(string text, string expectedText)
         {
             using var owner = new TabControl();
@@ -976,6 +978,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -1332,6 +1335,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Parent", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             int controlRemovedCallCount = 0;
             owner.ControlRemoved += (sender, e) => controlRemovedCallCount++;
@@ -1451,7 +1455,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(child3, e.AffectedControl);
                 Assert.Equal("Parent", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             owner.Layout += parentHandler;
 
             try
@@ -1614,7 +1619,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TabPageCollection_ContainsKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var owner = new TabControl();
@@ -1909,7 +1914,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TabPageCollection_IndexOfKey_InvokeEmpty_ReturnsExpected(string key)
         {
             using var owner = new TabControl();
@@ -1947,6 +1952,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -2067,6 +2073,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -2235,6 +2242,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -2384,6 +2392,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -2657,7 +2666,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void TabPageCollection_Insert_InvokeIntString_Success(string text, string expectedText)
         {
             using var owner = new TabControl();
@@ -2985,6 +2994,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -3246,7 +3256,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void TabPageCollection_Item_GetStringEmpty_ReturnsNull(string key)
         {
             using var owner = new TabControl();
@@ -3414,7 +3424,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
-        public void TabPageCollection_Item_SetValidIndexDesigModeWithHandle_ReturnsExpected(int index)
+        public void TabPageCollection_Item_SetValidIndexDesignModeWithHandle_ReturnsExpected(int index)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -3801,7 +3811,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(0)]
         [InlineData(1)]
         [InlineData(2)]
-        public void TabPageCollection_IListItem_SetValidIndexDesigModeWithHandle_ReturnsExpected(int index)
+        public void TabPageCollection_IListItem_SetValidIndexDesignModeWithHandle_ReturnsExpected(int index)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
             mockSite
@@ -3924,6 +3934,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -4022,6 +4033,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -4149,6 +4161,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
             int parentInvalidatedCallCount = 0;
@@ -4263,6 +4276,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, value1.Handle);
             int invalidatedCallCount1 = 0;
@@ -4624,6 +4638,7 @@ namespace System.Windows.Forms.Tests
                 events.Add(e);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -4732,6 +4747,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Parent", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try
@@ -4821,6 +4837,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Parent", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             owner.Layout += parentHandler;
 
             try

@@ -6,7 +6,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.ButtonInternal
@@ -68,6 +67,7 @@ namespace System.Windows.Forms.ButtonInternal
                     bounds.Width--;
                     bounds.Height--;
                 }
+
                 bounds.Inflate(-1, -1);
             }
 

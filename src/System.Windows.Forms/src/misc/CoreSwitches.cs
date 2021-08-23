@@ -21,6 +21,7 @@ namespace System.ComponentModel
                 {
                     perfTrack = new BooleanSwitch("PERFTRACK", "Debug performance critical sections.");
                 }
+
                 return perfTrack;
             }
         }

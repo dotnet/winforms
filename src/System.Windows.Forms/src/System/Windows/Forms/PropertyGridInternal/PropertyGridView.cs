@@ -18,91 +18,80 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal partial class PropertyGridView :
+    internal sealed partial class PropertyGridView :
         Control,
         IWin32Window,
         IWindowsFormsEditorService,
         IServiceProvider
     {
-        protected static readonly Point InvalidPoint = new Point(int.MinValue, int.MinValue);
+        private static Point InvalidPoint { get; } = new(int.MinValue, int.MinValue);
 
-        public const int RENDERMODE_LEFTDOT = 2;
-        public const int RENDERMODE_BOLD = 3;
-        public const int RENDERMODE_TRIANGLE = 4;
+        private static readonly TraceSwitch s_gridViewDebugPaint = new("GridViewDebugPaint", "PropertyGridView: Debug property painting");
 
-        public static int inheritRenderMode = RENDERMODE_BOLD;
+        // Constants
+        private const int EditIndent = 0;
+        private const int OutlineIndent = 10;
+        private const int OutlineSize = 9;
+        private int _outlineSize = OutlineSize;
+        private const int OutlineSizeExplorerTreeStyle = 16;
+        private int _outlineSizeExplorerTreeStyle = OutlineSizeExplorerTreeStyle;
+        private const int PaintWidth = 20;
+        private int _paintWidth = PaintWidth;
+        private const int PaintIndent = 26;
+        private int _paintIndent = PaintIndent;
+        private const int MaxListBoxHeight = 200;
+        private int _maxListBoxHeight = MaxListBoxHeight;
 
-        public static TraceSwitch GridViewDebugPaint = new TraceSwitch("GridViewDebugPaint", "PropertyGridView: Debug property painting");
-        private const int LEFTDOT_SIZE = 4;
-        // constants
-        private const int EDIT_INDENT = 0;
-        private const int OUTLINE_INDENT = 10;
-        private const int OUTLINE_SIZE = 9;
-        private const int OUTLINE_SIZE_EXPLORER_TREE_STYLE = 16;
-        private int outlineSize = OUTLINE_SIZE;
-        private int outlineSizeExplorerTreeStyle = OUTLINE_SIZE_EXPLORER_TREE_STYLE;
-        private const int PAINT_WIDTH = 20;
-        private int paintWidth = PAINT_WIDTH;
-        private const int PAINT_INDENT = 26;
-        private int paintIndent = PAINT_INDENT;
-        private const int ROWLABEL = 1;
-        private const int ROWVALUE = 2;
-        private const int MAX_LISTBOX_HEIGHT = 200;
-        private int maxListBoxHeight = MAX_LISTBOX_HEIGHT;
+        private const int RowLabel = 1;
+        private const int RowValue = 2;
 
-        private const short ERROR_NONE = 0;
-        private const short ERROR_THROWN = 1;
-        private const short ERROR_MSGBOX_UP = 2;
-        internal const short GDIPLUS_SPACE = 2;
+        internal const short GdiPlusSpace = 2;
         internal const int MaxRecurseExpand = 10;
 
-        private const int DOTDOTDOT_ICONWIDTH = 7;
-        private const int DOTDOTDOT_ICONHEIGHT = 8;
-        private const int DOWNARROW_ICONWIDTH = 16;
-        private const int DOWNARROW_ICONHEIGHT = 16;
+        private const int DotDotDotIconWidth = 7;
+        private const int DotDotDotIconHeight = 8;
+        private const int DownArrowIconWidth = 16;
+        private const int DownArrowIconHeight = 16;
 
-        private const int OFFSET_2PIXELS = 2;
-        private int offset_2Units = OFFSET_2PIXELS;
+        private const int Offset2Pixels = 2;
+        private int _offset2Units = Offset2Pixels;
 
-        protected static readonly Point InvalidPosition = new Point(int.MinValue, int.MinValue);
+        private static Point InvalidPosition { get; } = new(int.MinValue, int.MinValue);
 
-        // colors and fonts
-        private Font _fontBold;
+        private Font _boldFont;
         private Color _grayTextColor;
 
-        // for backwards compatibility of default colors
-        private bool grayTextColorModified; // true if someone has set the grayTextColor property
+        // For backwards compatibility of default colors
+        private bool _grayTextColorModified;
 
-        // property collections
-        private GridEntryCollection topLevelGridEntries;     // top level props
-        private GridEntryCollection allGridEntries;  // cache of viewable props
+        private GridEntryCollection _allGridEntries;
 
-        // row information
-        internal int totalProps = -1;        // # of viewable props
-        private int visibleRows = -1;         // # of visible rows
-        private int labelWidth = -1;
-        public double labelRatio = 2; // ratio of whole row to label width
+        // Row information
+        public int TotalProperties { get; private set; } = -1;
+        private int _visibleRows = -1;
+        private int _labelWidth = -1;
+        public double _labelRatio = 2;                          // ratio of whole row to label width
 
-        private short requiredLabelPaintMargin = GDIPLUS_SPACE;
+        private short _requiredLabelPaintMargin = GdiPlusSpace;
 
         // current selected row and tooltip.
-        private int selectedRow = -1;
-        private GridEntry selectedGridEntry;
-        private int tipInfo = -1;
+        private int _selectedRow = -1;
+        private GridEntry _selectedGridEntry;
+        private int _tipInfo = -1;
 
-        // editors & controls
-        private GridViewEdit edit;
-        private DropDownButton btnDropDown;
-        private DropDownButton btnDialog;
-        private GridViewListBox listBox;
-        private DropDownHolder dropDownHolder;
-        private Rectangle lastClientRect = Rectangle.Empty;
-        private Control currentEditor;
-        private ScrollBar scrollBar;
-        internal GridToolTip toolTip;
-        private GridErrorDlg errorDlg;
+        // Editors & controls
+        private GridViewTextBox _editTextBox;
+        private DropDownButton _dropDownButton;
+        private DropDownButton _dialogButton;
+        private GridViewListBox _listBox;
+        private DropDownHolder _dropDownHolder;
+        private Rectangle _lastClientRect = Rectangle.Empty;
+        private Control _currentEditor;
+        private ScrollBar _scrollBar;
+        private GridToolTip _toolTip;
+        private GridErrorDialog _errorDialog;
 
-        // flags
+        // Flags
         private const short FlagNeedsRefresh = 0x0001;
         private const short FlagIsNewSelection = 0x0002;
         private const short FlagIsSplitterMove = 0x0004;
@@ -115,59 +104,60 @@ namespace System.Windows.Forms.PropertyGridInternal
         private const short FlagNoDefault = 0x0200;
         private const short FlagResizableDropDown = 0x0400;
 
-        private short flags = FlagNeedsRefresh | FlagIsNewSelection | FlagNeedUpdateUIBasedOnFont;
-        private short errorState = ERROR_NONE;
+        private short _flags = FlagNeedsRefresh | FlagIsNewSelection | FlagNeedUpdateUIBasedOnFont;
+        private ErrorState _errorState = ErrorState.None;
 
-        private Point ptOurLocation = new Point(1, 1);
+        private Point _location = new(1, 1);
 
-        private string originalTextValue;     // original text, in case of ESC
-        private int cumulativeVerticalWheelDelta;
-        private long rowSelectTime;
-        private Point rowSelectPos = Point.Empty; // the position that we clicked on a row to test for double clicks
-        private Point lastMouseDown = InvalidPosition;
-        private int lastMouseMove;
-        private GridEntry lastClickedEntry;
+        private string _originalTextValue;          // original text, in case of ESC
+        private int _cumulativeVerticalWheelDelta;
+        private long _rowSelectTime;
+        private Point _rowSelectPos = Point.Empty;  // the position that we clicked on a row to test for double clicks
+        private Point _lastMouseDown = InvalidPosition;
+        private int _lastMouseMove;
+        private GridEntry _lastClickedEntry;
 
-        private IServiceProvider serviceProvider;
-        private IHelpService topHelpService;
-        private IHelpService helpService;
+        private IServiceProvider _serviceProvider;
+        private IHelpService _topHelpService;
+        private IHelpService _helpService;
 
-        private readonly EventHandler ehValueClick;
-        private readonly EventHandler ehLabelClick;
-        private readonly EventHandler ehOutlineClick;
-        private readonly EventHandler ehValueDblClick;
-        private readonly EventHandler ehLabelDblClick;
-        private readonly GridEntryRecreateChildrenEventHandler ehRecreateChildren;
+        private readonly EventHandler _valueClick;
+        private readonly EventHandler _labelClick;
+        private readonly EventHandler _outlineClick;
+        private readonly EventHandler _valueDoubleClick;
+        private readonly EventHandler _labelDoubleClick;
+        private readonly GridEntryRecreateChildrenEventHandler _recreateChildren;
 
-        private int cachedRowHeight = -1;
+        private int _cachedRowHeight = -1;
+
+        private GridPositionData _positionData;
 
         public PropertyGridView(IServiceProvider serviceProvider, PropertyGrid propertyGrid)
-        : base()
+            : base()
         {
             if (DpiHelper.IsScalingRequired)
             {
-                paintWidth = DpiHelper.LogicalToDeviceUnitsX(PAINT_WIDTH);
-                paintIndent = DpiHelper.LogicalToDeviceUnitsX(PAINT_INDENT);
-                outlineSizeExplorerTreeStyle = DpiHelper.LogicalToDeviceUnitsX(OUTLINE_SIZE_EXPLORER_TREE_STYLE);
-                outlineSize = DpiHelper.LogicalToDeviceUnitsX(OUTLINE_SIZE);
-                maxListBoxHeight = DpiHelper.LogicalToDeviceUnitsY(MAX_LISTBOX_HEIGHT);
+                _paintWidth = DpiHelper.LogicalToDeviceUnitsX(PaintWidth);
+                _paintIndent = DpiHelper.LogicalToDeviceUnitsX(PaintIndent);
+                _outlineSizeExplorerTreeStyle = DpiHelper.LogicalToDeviceUnitsX(OutlineSizeExplorerTreeStyle);
+                _outlineSize = DpiHelper.LogicalToDeviceUnitsX(OutlineSize);
+                _maxListBoxHeight = DpiHelper.LogicalToDeviceUnitsY(MaxListBoxHeight);
             }
 
-            ehValueClick = new EventHandler(OnGridEntryValueClick);
-            ehLabelClick = new EventHandler(OnGridEntryLabelClick);
-            ehOutlineClick = new EventHandler(OnGridEntryOutlineClick);
-            ehValueDblClick = new EventHandler(OnGridEntryValueDoubleClick);
-            ehLabelDblClick = new EventHandler(OnGridEntryLabelDoubleClick);
-            ehRecreateChildren = new GridEntryRecreateChildrenEventHandler(OnRecreateChildren);
+            _valueClick = OnGridEntryValueClick;
+            _labelClick = OnGridEntryLabelClick;
+            _outlineClick = OnGridEntryOutlineClick;
+            _valueDoubleClick = OnGridEntryValueDoubleClick;
+            _labelDoubleClick = OnGridEntryLabelDoubleClick;
+            _recreateChildren = OnRecreateChildren;
 
             OwnerGrid = propertyGrid;
-            this.serviceProvider = serviceProvider;
+            _serviceProvider = serviceProvider;
 
             SetStyle(ControlStyles.OptimizedDoubleBuffer, true);
             SetStyle(ControlStyles.ResizeRedraw, false);
             SetStyle(ControlStyles.UserMouse, true);
 
-            // properties
             BackColor = SystemColors.Window;
             ForeColor = SystemColors.WindowText;
             _grayTextColor = SystemColors.GrayText;
@@ -176,7 +166,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Text = "PropertyGridView";
 
             CreateUI();
-            LayoutWindow(true);
+            LayoutWindow(invalidate: true);
         }
 
         public override Color BackColor
@@ -184,47 +174,20 @@ namespace System.Windows.Forms.PropertyGridInternal
             get => base.BackColor;
             set => base.BackColor = value;
         }
+
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public bool CanCopy
-        {
-            get
-            {
-                if (selectedGridEntry is null)
-                {
-                    return false;
-                }
-
-                if (!Edit.Focused)
-                {
-                    string val = selectedGridEntry.GetPropertyTextValue();
-
-                    return val is not null && val.Length > 0;
-                }
-
-                return true;
-            }
-        }
+            => _selectedGridEntry is not null
+                && (EditTextBox.Focused || !string.IsNullOrEmpty(_selectedGridEntry.GetPropertyTextValue()));
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool CanCut
-        {
-            get
-            {
-                return CanCopy && selectedGridEntry is not null && selectedGridEntry.IsTextEditable;
-            }
-        }
+        public bool CanCut => CanCopy && _selectedGridEntry is not null && _selectedGridEntry.IsTextEditable;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public bool CanPaste
-        {
-            get
-            {
-                return selectedGridEntry is not null && selectedGridEntry.IsTextEditable; // return gridView.CanPaste;
-            }
-        }
+        public bool CanPaste => _selectedGridEntry is not null && _selectedGridEntry.IsTextEditable;
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -232,12 +195,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (!Edit.Visible || !Edit.Focused)
+                if (!EditTextBox.Visible || !EditTextBox.Focused)
                 {
                     return false;
                 }
 
-                return User32.SendMessageW(Edit, (User32.WM)User32.EM.CANUNDO) != IntPtr.Zero;
+                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != IntPtr.Zero;
             }
         }
 
@@ -245,31 +208,31 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (btnDropDown is null)
+                if (_dropDownButton is null)
                 {
-#if DEBUG
-                    if (OwnerGrid.inGridViewCreate)
-                    {
-                        throw new Exception("PERF REGRESSION - Creating item in grid view create");
-                    }
-#endif
+                    OwnerGrid.CheckInCreate();
 
-                    btnDropDown = new DropDownButton
+                    _dropDownButton = new()
                     {
                         UseComboBoxTheme = true
                     };
-                    Bitmap bitmap = CreateResizedBitmap("Arrow", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
-                    btnDropDown.Image = bitmap;
-                    btnDropDown.BackColor = SystemColors.Control;
-                    btnDropDown.ForeColor = SystemColors.ControlText;
-                    btnDropDown.Click += new EventHandler(OnBtnClick);
-                    btnDropDown.GotFocus += new EventHandler(OnDropDownButtonGotFocus);
-                    btnDropDown.LostFocus += new EventHandler(OnChildLostFocus);
-                    btnDropDown.TabIndex = 2;
-                    CommonEditorSetup(btnDropDown);
-                    btnDropDown.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+
+                    Bitmap bitmap = CreateResizedBitmap("Arrow", DownArrowIconWidth, DownArrowIconHeight);
+                    _dropDownButton.Image = bitmap;
+                    _dropDownButton.BackColor = SystemColors.Control;
+                    _dropDownButton.ForeColor = SystemColors.ControlText;
+                    _dropDownButton.Click += OnButtonClick;
+                    _dropDownButton.GotFocus += OnDropDownButtonGotFocus;
+                    _dropDownButton.LostFocus += OnChildLostFocus;
+                    _dropDownButton.TabIndex = 2;
+
+                    CommonEditorSetup(_dropDownButton);
+                    _dropDownButton.Size = DpiHelper.IsScalingRequirementMet
+                        ? new(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
+                        : new(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                 }
-                return btnDropDown;
+
+                return _dropDownButton;
             }
         }
 
@@ -277,65 +240,65 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (btnDialog is null)
+                if (_dialogButton is null)
                 {
-#if DEBUG
-                    if (OwnerGrid.inGridViewCreate)
-                    {
-                        throw new Exception("PERF REGRESSION - Creating item in grid view create");
-                    }
-#endif
-                    btnDialog = new DropDownButton
+                    OwnerGrid.CheckInCreate();
+
+                    _dialogButton = new DropDownButton
                     {
                         BackColor = SystemColors.Control,
                         ForeColor = SystemColors.ControlText,
                         TabIndex = 3,
-                        Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT)
+                        Image = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight)
                     };
-                    btnDialog.Click += new EventHandler(OnBtnClick);
-                    btnDialog.KeyDown += new KeyEventHandler(OnBtnKeyDown);
-                    btnDialog.GotFocus += new EventHandler(OnDropDownButtonGotFocus);
-                    btnDialog.LostFocus += new EventHandler(OnChildLostFocus);
-                    btnDialog.Size = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight) : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
-                    CommonEditorSetup(btnDialog);
+
+                    _dialogButton.Click += OnButtonClick;
+                    _dialogButton.KeyDown += OnButtonKeyDown;
+                    _dialogButton.GotFocus += OnDropDownButtonGotFocus;
+                    _dialogButton.LostFocus += OnChildLostFocus;
+                    _dialogButton.Size = DpiHelper.IsScalingRequirementMet
+                        ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
+                        : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+
+                    CommonEditorSetup(_dialogButton);
                 }
-                return btnDialog;
+
+                return _dialogButton;
             }
         }
 
-        private static Bitmap GetBitmapFromIcon(string iconName, int iconsWidth, int iconsHeight)
+        private static Bitmap GetBitmapFromIcon(string iconName, int iconWidth, int iconHeight)
         {
-            Size desiredSize = new Size(iconsWidth, iconsHeight);
-            Icon icon = new Icon(new Icon(typeof(PropertyGrid), iconName), desiredSize);
-            Bitmap b = icon.ToBitmap();
+            Size desiredSize = new(iconWidth, iconHeight);
+            Icon icon = new(new Icon(typeof(PropertyGrid), iconName), desiredSize);
+            var bitmap = icon.ToBitmap();
             icon.Dispose();
 
-            if ((b.Size.Width != iconsWidth || b.Size.Height != iconsHeight))
+            if (bitmap.Size.Width != iconWidth || bitmap.Size.Height != iconHeight)
             {
-                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(b, desiredSize);
+                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(bitmap, desiredSize);
                 if (scaledBitmap is not null)
                 {
-                    b.Dispose();
-                    b = scaledBitmap;
+                    bitmap.Dispose();
+                    bitmap = scaledBitmap;
                 }
             }
-            return b;
+
+            return bitmap;
         }
 
-        private GridViewEdit Edit
+        /// <summary>
+        ///  The common text box for editing values.
+        /// </summary>
+        private GridViewTextBox EditTextBox
         {
             get
             {
-                if (edit is null)
+                if (_editTextBox is null)
                 {
-#if DEBUG
-                    if (OwnerGrid.inGridViewCreate)
-                    {
-                        throw new Exception("PERF REGRESSION - Creating item in grid view create");
-                    }
-#endif
+                    OwnerGrid.CheckInCreate();
 
-                    edit = new GridViewEdit(this)
+                    _editTextBox = new(this)
                     {
                         BorderStyle = BorderStyle.None,
                         AutoSize = false,
@@ -344,58 +307,50 @@ namespace System.Windows.Forms.PropertyGridInternal
                         BackColor = BackColor,
                         ForeColor = ForeColor
                     };
-                    edit.KeyDown += new KeyEventHandler(OnEditKeyDown);
-                    edit.KeyPress += new KeyPressEventHandler(OnEditKeyPress);
-                    edit.GotFocus += new EventHandler(OnEditGotFocus);
-                    edit.LostFocus += new EventHandler(OnEditLostFocus);
-                    edit.MouseDown += new MouseEventHandler(OnEditMouseDown);
-                    edit.TextChanged += new EventHandler(OnEditChange);
-                    //edit.ImeModeChanged += new EventHandler(this.OnEditImeModeChanged);
-                    edit.TabIndex = 1;
-                    CommonEditorSetup(edit);
+
+                    _editTextBox.KeyDown += OnEditKeyDown;
+                    _editTextBox.KeyPress += OnEditKeyPress;
+                    _editTextBox.GotFocus += OnEditGotFocus;
+                    _editTextBox.LostFocus += OnEditLostFocus;
+                    _editTextBox.MouseDown += OnEditMouseDown;
+                    _editTextBox.TextChanged += OnEditChange;
+
+                    _editTextBox.TabIndex = 1;
+                    CommonEditorSetup(_editTextBox);
                 }
-                return edit;
+
+                return _editTextBox;
             }
         }
 
         /// <summary>
         ///  Represents the Editor's control accessible object.
         /// </summary>
-        internal AccessibleObject EditAccessibleObject
-        {
-            get
-            {
-                return Edit.AccessibilityObject;
-            }
-        }
+        internal AccessibleObject EditAccessibleObject => EditTextBox.AccessibilityObject;
 
         internal GridViewListBox DropDownListBox
         {
             get
             {
-                if (listBox is null)
+                if (_listBox is null)
                 {
-#if DEBUG
-                    if (OwnerGrid.inGridViewCreate)
-                    {
-                        throw new Exception("PERF REGRESSION - Creating item in grid view create");
-                    }
-#endif
+                    OwnerGrid.CheckInCreate();
 
-                    listBox = new GridViewListBox(this)
+                    _listBox = new(this)
                     {
                         DrawMode = DrawMode.OwnerDrawFixed
                     };
-                    //listBox.Click += new EventHandler(this.OnListClick);
-                    listBox.MouseUp += new MouseEventHandler(OnListMouseUp);
-                    listBox.DrawItem += new DrawItemEventHandler(OnListDrawItem);
-                    listBox.SelectedIndexChanged += new EventHandler(OnListChange);
-                    listBox.KeyDown += new KeyEventHandler(OnListKeyDown);
-                    listBox.LostFocus += new EventHandler(OnChildLostFocus);
-                    listBox.Visible = true;
-                    listBox.ItemHeight = RowHeight;
+
+                    _listBox.MouseUp += OnListMouseUp;
+                    _listBox.DrawItem += OnListDrawItem;
+                    _listBox.SelectedIndexChanged += OnListChange;
+                    _listBox.KeyDown += OnListKeyDown;
+                    _listBox.LostFocus += OnChildLostFocus;
+                    _listBox.Visible = true;
+                    _listBox.ItemHeight = RowHeight;
                 }
-                return listBox;
+
+                return _listBox;
             }
         }
 
@@ -403,25 +358,15 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Represents the DropDownListBox accessible object.
         /// </summary>
         internal AccessibleObject DropDownListBoxAccessibleObject
-        {
-            get
-            {
-                if (DropDownListBox.Visible)
-                {
-                    return DropDownListBox.AccessibilityObject;
-                }
-
-                return null;
-            }
-        }
+            => DropDownListBox.Visible ? DropDownListBox.AccessibilityObject : null;
 
         internal bool DrawValuesRightToLeft
         {
             get
             {
-                if (edit is not null && edit.IsHandleCreated)
+                if (_editTextBox is not null && _editTextBox.IsHandleCreated)
                 {
-                    int exStyle = unchecked((int)((long)User32.GetWindowLong(edit, User32.GWL.EXSTYLE)));
+                    int exStyle = unchecked((int)(long)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE));
                     return (exStyle & (int)User32.WS_EX.RTLREADING) != 0;
                 }
                 else
@@ -431,30 +376,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal DropDownHolder DropDownControlHolder => dropDownHolder;
+        internal DropDownHolder DropDownControlHolder => _dropDownHolder;
 
-        internal bool DropDownVisible
-        {
-            get
-            {
-                return dropDownHolder is not null && dropDownHolder.Visible;
-            }
-        }
+        internal bool DropDownVisible=> _dropDownHolder is not null && _dropDownHolder.Visible;
 
-        public bool FocusInside
-        {
-            get
-            {
-                return (ContainsFocus || (dropDownHolder is not null && dropDownHolder.ContainsFocus));
-            }
-        }
+        public bool FocusInside => ContainsFocus || DropDownVisible;
 
         internal Color GrayTextColor
         {
             get
             {
-                // if changed from the default, then the set value is returned
-                if (grayTextColorModified)
+                // If changed from the default, then the set value is returned.
+                if (_grayTextColorModified)
                 {
                     return _grayTextColor;
                 }
@@ -464,8 +397,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return SystemColors.GrayText;
                 }
 
-                // compute the new color by halving the value of the old one.
-                //
+                // Compute the new color by halving the value of the old one.
                 int colorRGB = ForeColor.ToArgb();
 
                 int alphaValue = (colorRGB >> 24) & 0xff;
@@ -479,40 +411,26 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     colorRGB /= 2;
                 }
+
                 return Color.FromArgb(colorRGB);
             }
             set
             {
                 _grayTextColor = value;
-                grayTextColorModified = true;
+                _grayTextColorModified = true;
             }
         }
 
-        //   This dialog's width is defined by the summary message
-        //   in the top pane. We don't restrict dialog width in any way.
-        //   Use caution and check at all DPI scaling factors if adding a new message
-        //   to be displayed in the top pane.
-        private GridErrorDlg ErrorDialog
-        {
-            get
-            {
-                if (errorDlg is null)
-                {
-                    errorDlg = new GridErrorDlg(OwnerGrid);
-                }
-                return errorDlg;
-            }
-        }
+        // This dialog's width is defined by the summary message
+        // in the top pane. We don't restrict dialog width in any way.
+        // Use caution and check at all DPI scaling factors if adding a new message
+        // to be displayed in the top pane.
 
-        private bool HasEntries
-        {
-            get
-            {
-                return topLevelGridEntries is not null && topLevelGridEntries.Count > 0;
-            }
-        }
+        private GridErrorDialog ErrorDialog => _errorDialog ??= new GridErrorDialog(OwnerGrid);
 
-        protected int InternalLabelWidth
+        private bool HasEntries => TopLevelGridEntries is not null && TopLevelGridEntries.Count > 0;
+
+        private int InternalLabelWidth
         {
             get
             {
@@ -520,55 +438,56 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     UpdateUIBasedOnFont(true);
                 }
-                if (labelWidth == -1)
+
+                if (_labelWidth == -1)
                 {
                     SetConstants();
                 }
-                return labelWidth;
+
+                return _labelWidth;
             }
         }
 
         internal int LabelPaintMargin
         {
-            set
-            {
-                requiredLabelPaintMargin = (short)Math.Max(Math.Max(value, requiredLabelPaintMargin), GDIPLUS_SPACE);
-            }
+            set => _requiredLabelPaintMargin = (short)Math.Max(Math.Max(value, _requiredLabelPaintMargin), GdiPlusSpace);
         }
 
-        protected bool NeedsCommit
+        private bool NeedsCommit
         {
             get
             {
                 string text;
 
-                if (edit is null || !Edit.Visible)
+                if (_editTextBox is null || !EditTextBox.Visible)
                 {
                     return false;
                 }
 
-                text = Edit.Text;
+                text = EditTextBox.Text;
 
-                if (((text is null || text.Length == 0) && (originalTextValue is null || originalTextValue.Length == 0)) ||
-                    (text is not null && originalTextValue is not null && text.Equals(originalTextValue)))
+                if ((string.IsNullOrEmpty(text) && string.IsNullOrEmpty(_originalTextValue))
+                    || text.Equals(_originalTextValue))
                 {
                     return false;
                 }
+
                 return true;
             }
         }
 
         public PropertyGrid OwnerGrid { get; private set; }
 
-        protected int RowHeight
+        private int RowHeight
         {
             get
             {
-                if (cachedRowHeight == -1)
+                if (_cachedRowHeight == -1)
                 {
-                    cachedRowHeight = (int)Font.Height + 2;
+                    _cachedRowHeight = Font.Height + 2;
                 }
-                return cachedRowHeight;
+
+                return _cachedRowHeight;
             }
         }
 
@@ -582,10 +501,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                // get the rect for the currently selected prop name, find the middle
-                Rectangle rect = GetRectangle(selectedRow, ROWLABEL);
-                Point pt = PointToScreen(new Point(rect.X, rect.Y));
-                return new Point(pt.X + (rect.Width / 2), pt.Y + (rect.Height / 2));
+                // Get the rect for the currently selected property name, find the middle.
+                Rectangle rect = GetRectangle(_selectedRow, RowLabel);
+                Point point = PointToScreen(new(rect.X, rect.Y));
+                return new Point(point.X + (rect.Width / 2), point.Y + (rect.Height / 2));
             }
         }
 
@@ -593,47 +512,41 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (scrollBar is null)
+                if (_scrollBar is null)
                 {
-#if DEBUG
-                    if (OwnerGrid.inGridViewCreate)
-                    {
-                        throw new Exception("PERF REGRESSION - Creating item in grid view create");
-                    }
-#endif
-                    scrollBar = new VScrollBar();
-                    scrollBar.Scroll += new ScrollEventHandler(OnScroll);
-                    Controls.Add(scrollBar);
+                    OwnerGrid.CheckInCreate();
+
+                    _scrollBar = new VScrollBar();
+                    _scrollBar.Scroll += OnScroll;
+                    Controls.Add(_scrollBar);
                 }
-                return scrollBar;
+
+                return _scrollBar;
             }
         }
 
         internal GridEntry SelectedGridEntry
         {
-            get
-            {
-                return selectedGridEntry;
-            }
+            get => _selectedGridEntry;
             set
             {
-                if (allGridEntries is not null)
+                if (_allGridEntries is not null)
                 {
-                    foreach (GridEntry e in allGridEntries)
+                    foreach (GridEntry entry in _allGridEntries)
                     {
-                        if (e == value)
+                        if (entry == value)
                         {
-                            SelectGridEntry(value, true);
+                            SelectGridEntry(value, pageIn: true);
                             return;
                         }
                     }
                 }
 
-                GridEntry gr = FindEquivalentGridEntry(new GridEntryCollection(null, new GridEntry[] { value }));
+                GridEntry equivalentEntry = FindEquivalentGridEntry(new GridEntryCollection(new[] { value }, disposeItems: false));
 
-                if (gr is not null)
+                if (equivalentEntry is not null)
                 {
-                    SelectGridEntry(gr, true);
+                    SelectGridEntry(equivalentEntry, pageIn: true);
                     return;
                 }
 
@@ -647,24 +560,21 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public IServiceProvider ServiceProvider
         {
-            get
-            {
-                return serviceProvider;
-            }
+            get => _serviceProvider;
             set
             {
-                if (value != serviceProvider)
+                if (value != _serviceProvider)
                 {
-                    serviceProvider = value;
+                    _serviceProvider = value;
 
-                    topHelpService = null;
+                    _topHelpService = null;
 
-                    if (helpService is not null && helpService is IDisposable)
+                    if (_helpService is IDisposable disposable)
                     {
-                        ((IDisposable)helpService).Dispose();
+                        disposable.Dispose();
                     }
 
-                    helpService = null;
+                    _helpService = null;
                 }
             }
         }
@@ -677,33 +587,27 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private int TipColumn
         {
-            get
-            {
-                return (tipInfo & unchecked((int)0xFFFF0000)) >> 16;
-            }
+            get => (_tipInfo & unchecked((int)0xFFFF0000)) >> 16;
             set
             {
-                // clear the column
-                tipInfo &= 0xFFFF;
+                // Clear the column
+                _tipInfo &= 0xFFFF;
 
-                // set the row
-                tipInfo |= ((value & 0xFFFF) << 16);
+                // Set the row
+                _tipInfo |= (value & 0xFFFF) << 16;
             }
         }
 
         private int TipRow
         {
-            get
-            {
-                return tipInfo & 0xFFFF;
-            }
+            get => _tipInfo & 0xFFFF;
             set
             {
-                // clear the row
-                tipInfo &= unchecked((int)0xFFFF0000);
+                // Clear the row
+                _tipInfo &= unchecked((int)0xFFFF0000);
 
-                // set the row
-                tipInfo |= (value & 0xFFFF);
+                // Set the row
+                _tipInfo |= value & 0xFFFF;
             }
         }
 
@@ -711,39 +615,27 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (toolTip is null)
+                if (_toolTip is null)
                 {
-#if DEBUG
-                    if (OwnerGrid.inGridViewCreate)
-                    {
-                        throw new Exception("PERF REGRESSION - Creating item in grid view create");
-                    }
-#endif
-                    toolTip = new GridToolTip(new Control[] { this, Edit })
+                    OwnerGrid.CheckInCreate();
+
+                    _toolTip = new GridToolTip(new Control[] { this, EditTextBox })
                     {
                         ToolTip = string.Empty,
                         Font = Font
                     };
                 }
-                return toolTip;
+
+                return _toolTip;
             }
         }
 
         /// <summary>
         ///  Gets the top level grid entries.
         /// </summary>
-        internal GridEntryCollection TopLevelGridEntries
-        {
-            get
-            {
-                return topLevelGridEntries;
-            }
-        }
+        internal GridEntryCollection TopLevelGridEntries { get; private set; }
 
-        internal GridEntryCollection AccessibilityGetGridEntries()
-        {
-            return GetAllGridEntries();
-        }
+        internal GridEntryCollection AccessibilityGetGridEntries() => GetAllGridEntries();
 
         internal Rectangle AccessibilityGetGridEntryBounds(GridEntry gridEntry)
         {
@@ -753,7 +645,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return Rectangle.Empty;
             }
 
-            Rectangle rect = GetRectangle(row, ROWVALUE | ROWLABEL);
+            Rectangle rect = GetRectangle(row, RowValue | RowLabel);
 
             // Translate rect to screen coordinates
             var pt = new Point(rect.X, rect.Y);
@@ -778,18 +670,18 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal int AccessibilityGetGridEntryChildID(GridEntry gridEntry)
         {
-            GridEntryCollection ipes = GetAllGridEntries();
+            GridEntryCollection entries = GetAllGridEntries();
 
-            if (ipes is null)
+            if (entries is null)
             {
                 return -1;
             }
 
             // Find the grid entry and return its ID
-            //
-            for (int index = 0; index < ipes.Count; ++index)
+
+            for (int index = 0; index < entries.Count; ++index)
             {
-                if (ipes[index].Equals(gridEntry))
+                if (entries[index].Equals(gridEntry))
                 {
                     return index;
                 }
@@ -800,41 +692,40 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal void AccessibilitySelect(GridEntry entry)
         {
-            SelectGridEntry(entry, true);
+            SelectGridEntry(entry, pageIn: true);
             Focus();
         }
 
-        private void AddGridEntryEvents(GridEntryCollection ipeArray, int startIndex, int count)
+        private void AddGridEntryEvents(GridEntryCollection entries, int startIndex, int count)
         {
-            if (ipeArray is null)
+            if (entries is null)
             {
                 return;
             }
 
             if (count == -1)
             {
-                count = ipeArray.Count - startIndex;
+                count = entries.Count - startIndex;
             }
 
             for (int i = startIndex; i < (startIndex + count); i++)
             {
-                if (ipeArray[i] is not null)
-                {
-                    GridEntry ge = ipeArray.GetEntry(i);
-                    ge.AddOnValueClick(ehValueClick);
-                    ge.AddOnLabelClick(ehLabelClick);
-                    ge.AddOnOutlineClick(ehOutlineClick);
-                    ge.AddOnOutlineDoubleClick(ehOutlineClick);
-                    ge.AddOnValueDoubleClick(ehValueDblClick);
-                    ge.AddOnLabelDoubleClick(ehLabelDblClick);
-                    ge.AddOnRecreateChildren(ehRecreateChildren);
-                }
+                GridEntry entry = entries[i];
+                entry.AddOnValueClick(_valueClick);
+                entry.AddOnLabelClick(_labelClick);
+                entry.AddOnOutlineClick(_outlineClick);
+                entry.AddOnOutlineDoubleClick(_outlineClick);
+                entry.AddOnValueDoubleClick(_valueDoubleClick);
+                entry.AddOnLabelDoubleClick(_labelDoubleClick);
+                entry.AddOnRecreateChildren(_recreateChildren);
             }
         }
 
-        protected virtual void AdjustOrigin(Graphics g, Point newOrigin, ref Rectangle r)
+        private void AdjustOrigin(Graphics g, Point newOrigin, ref Rectangle r)
         {
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Adjusting paint origin to (" + newOrigin.X.ToString(CultureInfo.InvariantCulture) + "," + newOrigin.Y.ToString(CultureInfo.InvariantCulture) + ")");
+            Debug.WriteLineIf(
+                s_gridViewDebugPaint.TraceVerbose,
+                $"Adjusting paint origin to ({newOrigin.X},{newOrigin.Y})");
 
             g.ResetTransform();
             g.TranslateTransform(newOrigin.X, newOrigin.Y);
@@ -849,50 +740,44 @@ namespace System.Windows.Forms.PropertyGridInternal
                 SetFlag(FlagIsSplitterMove, false);
                 Capture = false;
 
-                if (selectedRow != -1)
+                if (_selectedRow != -1)
                 {
-                    SelectRow(selectedRow);
+                    SelectRow(_selectedRow);
                 }
             }
         }
 
-        internal GridPositionData CaptureGridPositionData()
-        {
-            return new GridPositionData(this);
-        }
+        internal GridPositionData CaptureGridPositionData() => new(this);
 
-        private void ClearGridEntryEvents(GridEntryCollection ipeArray, int startIndex, int count)
+        private void ClearGridEntryEvents(GridEntryCollection entries, int startIndex, int count)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ClearGridEntryEvents");
-            if (ipeArray is null)
+            if (entries is null)
             {
                 return;
             }
 
             if (count == -1)
             {
-                count = ipeArray.Count - startIndex;
+                count = entries.Count - startIndex;
             }
 
             for (int i = startIndex; i < (startIndex + count); i++)
             {
-                if (ipeArray[i] is not null)
-                {
-                    GridEntry ge = ipeArray.GetEntry(i);
-                    ge.RemoveOnValueClick(ehValueClick);
-                    ge.RemoveOnLabelClick(ehLabelClick);
-                    ge.RemoveOnOutlineClick(ehOutlineClick);
-                    ge.RemoveOnOutlineDoubleClick(ehOutlineClick);
-                    ge.RemoveOnValueDoubleClick(ehValueDblClick);
-                    ge.RemoveOnLabelDoubleClick(ehLabelDblClick);
-                    ge.RemoveOnRecreateChildren(ehRecreateChildren);
-                }
+                GridEntry entry = entries[i];
+                entry.RemoveOnValueClick(_valueClick);
+                entry.RemoveOnLabelClick(_labelClick);
+                entry.RemoveOnOutlineClick(_outlineClick);
+                entry.RemoveOnOutlineDoubleClick(_outlineClick);
+                entry.RemoveOnValueDoubleClick(_valueDoubleClick);
+                entry.RemoveOnLabelDoubleClick(_labelDoubleClick);
+                entry.RemoveOnRecreateChildren(_recreateChildren);
             }
         }
 
-        public void ClearProps()
+        public void ClearGridEntries()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ClearProps");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ClearGridEntries");
 
             if (!HasEntries)
             {
@@ -900,88 +785,84 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             CommonEditorHide();
-            topLevelGridEntries = null;
-            ClearGridEntryEvents(allGridEntries, 0, -1);
-            allGridEntries = null;
-            selectedRow = -1;
+            TopLevelGridEntries = null;
+            ClearGridEntryEvents(_allGridEntries, 0, -1);
+            _allGridEntries = null;
+            _selectedRow = -1;
+
             // Don't clear selectedGridEntry because then we can't save where we were on a Refresh()
-            tipInfo = -1;
+            _tipInfo = -1;
         }
 
         /// <summary>
         ///  Closes a previously opened drop down.  This should be called by the
         ///  drop down when the user does something that should close it.
         /// </summary>
-        public void /* IWindowsFormsEditorService. */ CloseDropDown()
-        {
-            CloseDropDownInternal(true);
-        }
+        public void CloseDropDown() => CloseDropDownInternal(resetFocus: true);
 
         private void CloseDropDownInternal(bool resetFocus)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CloseDropDown");
 
-            // the activation code in the DropDownHolder can cause this to recurse...
+            // The activation code in the DropDownHolder can cause this to recurse.
 
-            if (GetFlag(FlagDropDownClosing))
+            if (GetFlag(FlagDropDownClosing) || _dropDownHolder is null || !_dropDownHolder.Visible)
             {
                 return;
             }
+
             try
             {
                 SetFlag(FlagDropDownClosing, true);
-                if (dropDownHolder is not null && dropDownHolder.Visible)
+
+                if (_dropDownHolder.Component == DropDownListBox && GetFlag(FlagDropDownCommit))
                 {
-                    if (dropDownHolder.Component == DropDownListBox && GetFlag(FlagDropDownCommit))
+                    OnListClick(null, null);
+                }
+
+                EditTextBox.Filter = false;
+
+                // Disable the ddh so it won't steal the focus back
+                _dropDownHolder.SetComponent(null, resizable: false);
+                _dropDownHolder.Visible = false;
+
+                // When we disable the dropdown holder focus will be lost,
+                // so put it onto one of our children first.
+                if (resetFocus)
+                {
+                    if (DialogButton.Visible)
                     {
-                        OnListClick(null, null);
+                        DialogButton.Focus();
+                    }
+                    else if (DropDownButton.Visible)
+                    {
+                        DropDownButton.Focus();
+                    }
+                    else if (EditTextBox.Visible)
+                    {
+                        EditTextBox.Focus();
+                    }
+                    else
+                    {
+                        Focus();
                     }
 
-                    Edit.Filter = false;
-
-                    // disable the ddh so it wont' steal the focus back
-                    //
-                    dropDownHolder.SetComponent(null, false);
-                    dropDownHolder.Visible = false;
-
-                    // when we disable the dropdown holder, focus will be lost,
-                    // so put it onto one of our children first.
-                    if (resetFocus)
+                    if (_selectedRow != -1)
                     {
-                        if (DialogButton.Visible)
-                        {
-                            DialogButton.Focus();
-                        }
-                        else if (DropDownButton.Visible)
-                        {
-                            DropDownButton.Focus();
-                        }
-                        else if (Edit.Visible)
-                        {
-                            Edit.Focus();
-                        }
-                        else
-                        {
-                            Focus();
-                        }
-
-                        if (selectedRow != -1)
-                        {
-                            SelectRow(selectedRow);
-                        }
+                        SelectRow(_selectedRow);
                     }
+                }
 
-                    if (selectedRow != -1)
+                if (_selectedRow != -1)
+                {
+                    GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
+                    if (gridEntry is not null)
                     {
-                        var gridEntry = GetGridEntryFromRow(selectedRow);
-                        if (gridEntry is not null)
-                        {
-                            gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-                            gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                                UiaCore.ExpandCollapseState.Expanded,
-                                UiaCore.ExpandCollapseState.Collapsed);
-                        }
+                        gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                        gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                            UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                            UiaCore.ExpandCollapseState.Expanded,
+                            UiaCore.ExpandCollapseState.Collapsed);
                     }
                 }
             }
@@ -991,12 +872,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void CommonEditorHide()
-        {
-            CommonEditorHide(false);
-        }
-
-        private void CommonEditorHide(bool always)
+        private void CommonEditorHide(bool always = false)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CommonEditorHide");
 
@@ -1007,117 +883,120 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             CloseDropDown();
 
-            bool gotfocus = false;
+            bool gotFocus = false;
 
-            if (Edit.Focused || DialogButton.Focused || DropDownButton.Focused)
+            if (EditTextBox.Focused || DialogButton.Focused || DropDownButton.Focused)
             {
                 if (IsHandleCreated && Visible && Enabled)
                 {
-                    gotfocus = IntPtr.Zero != User32.SetFocus(new HandleRef(this, Handle));
+                    gotFocus = User32.SetFocus(new HandleRef(this, Handle)) != IntPtr.Zero;
                 }
             }
 
             try
             {
                 // We do this because the Focus call above doesn't always stick, so
-                // we make the Edit think that it doesn't have focus.  this prevents
-                // ActiveControl code on the containercontrol from moving focus elsewhere
+                // we make the EditTextBox think that it doesn't have focus. This prevents
+                // ActiveControl code on the container control from moving focus elsewhere
                 // when the dropdown closes.
-                Edit.DontFocus = true;
-                if (Edit.Focused && !gotfocus)
-                {
-                    gotfocus = Focus();
-                }
-                Edit.Visible = false;
 
-                Edit.SelectionStart = 0;
-                Edit.SelectionLength = 0;
-
-                if (DialogButton.Focused && !gotfocus)
+                EditTextBox.HideFocusState = true;
+                if (EditTextBox.Focused && !gotFocus)
                 {
-                    gotfocus = Focus();
+                    gotFocus = Focus();
                 }
+
+                EditTextBox.Visible = false;
+
+                EditTextBox.SelectionStart = 0;
+                EditTextBox.SelectionLength = 0;
+
+                if (DialogButton.Focused && !gotFocus)
+                {
+                    gotFocus = Focus();
+                }
+
                 DialogButton.Visible = false;
 
-                if (DropDownButton.Focused && !gotfocus)
+                if (DropDownButton.Focused && !gotFocus)
                 {
-                    gotfocus = Focus();
+                    gotFocus = Focus();
                 }
+
                 DropDownButton.Visible = false;
-                currentEditor = null;
+                _currentEditor = null;
             }
             finally
             {
-                Edit.DontFocus = false;
+                EditTextBox.HideFocusState = false;
             }
         }
 
-        protected virtual void CommonEditorSetup(Control ctl)
+        private void CommonEditorSetup(Control control)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CommonEditorSetup");
-            ctl.Visible = false;
-            Controls.Add(ctl);
+            control.Visible = false;
+            Controls.Add(control);
         }
 
-        protected virtual void CommonEditorUse(Control ctl, Rectangle rectTarget)
+        private void CommonEditorUse(Control control, Rectangle targetRectangle)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CommonEditorUse");
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Showing common editors");
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "Showing common editors");
 
-            Debug.Assert(ctl is not null, "Null control passed to CommonEditorUse");
+            Debug.Assert(control is not null, "Null control passed to CommonEditorUse");
 
-            Rectangle rectCur = ctl.Bounds;
+            Rectangle rectCur = control.Bounds;
 
-            // the client rect minus the border line
+            // The client rect minus the border line.
             Rectangle clientRect = ClientRectangle;
 
             clientRect.Inflate(-1, -1);
 
             try
             {
-                rectTarget = Rectangle.Intersect(clientRect, rectTarget);
-                //if (ctl is Button)
-                //   Debug.WriteStackTrace();
+                targetRectangle = Rectangle.Intersect(clientRect, targetRectangle);
 
-                if (!rectTarget.IsEmpty)
+                if (!targetRectangle.IsEmpty)
                 {
-                    if (!rectTarget.Equals(rectCur))
+                    if (!targetRectangle.Equals(rectCur))
                     {
-                        ctl.SetBounds(rectTarget.X, rectTarget.Y,
-                                      rectTarget.Width, rectTarget.Height);
+                        control.SetBounds(targetRectangle.X, targetRectangle.Y, targetRectangle.Width, targetRectangle.Height);
                     }
-                    ctl.Visible = true;
+
+                    control.Visible = true;
                 }
             }
             catch
             {
-                rectTarget = Rectangle.Empty;
+                targetRectangle = Rectangle.Empty;
             }
 
-            if (rectTarget.IsEmpty)
+            if (targetRectangle.IsEmpty)
             {
-                ctl.Visible = false;
+                control.Visible = false;
             }
 
-            currentEditor = ctl;
+            _currentEditor = control;
         }
 
-        private /*protected virtual*/ int CountPropsFromOutline(GridEntryCollection rgipes)
+        private int CountPropsFromOutline(GridEntryCollection entries)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CountPropsFromOutLine");
-            if (rgipes is null)
+            if (entries is null)
             {
                 return 0;
             }
 
-            int cProps = rgipes.Count;
-            for (int i = 0; i < rgipes.Count; i++)
+            int cProps = entries.Count;
+            for (int i = 0; i < entries.Count; i++)
             {
-                if (((GridEntry)rgipes[i]).InternalExpanded)
+                if (((GridEntry)entries[i]).InternalExpanded)
                 {
-                    cProps += CountPropsFromOutline(((GridEntry)rgipes[i]).Children);
+                    cProps += CountPropsFromOutline(((GridEntry)entries[i]).Children);
                 }
             }
+
             return cProps;
         }
 
@@ -1126,18 +1005,16 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  should not call base.CreateAccessibilityObject.
         /// </summary>
         protected override AccessibleObject CreateAccessibilityInstance()
-        {
-            return new PropertyGridViewAccessibleObject(this, OwnerGrid);
-        }
+            => new PropertyGridViewAccessibleObject(this, OwnerGrid);
 
         private Bitmap CreateResizedBitmap(string icon, int width, int height)
         {
-            Bitmap bitmap = null;
-            var scaledIconWidth = width;
-            var scaledIconHeight = height;
+            Bitmap bitmap;
+            int scaledIconWidth = width;
+            int scaledIconHeight = height;
             try
             {
-                //scale for per-monitor DPI.
+                // Scale for per-monitor DPI.
                 if (DpiHelper.IsPerMonitorV2Awareness)
                 {
                     scaledIconWidth = LogicalToDeviceUnits(width);
@@ -1145,7 +1022,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else if (DpiHelper.IsScalingRequired)
                 {
-                    // only primary monitor scaling.
+                    // Only primary monitor scaling.
                     scaledIconWidth = DpiHelper.LogicalToDeviceUnitsX(width);
                     scaledIconHeight = DpiHelper.LogicalToDeviceUnitsY(height);
                 }
@@ -1157,81 +1034,53 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.Fail(e.ToString());
                 bitmap = new Bitmap(scaledIconWidth, scaledIconHeight);
             }
+
             return bitmap;
         }
 
-        protected virtual void CreateUI()
-        {
-            UpdateUIBasedOnFont(false);
-        }
+        private void CreateUI() => UpdateUIBasedOnFont(layoutRequired: false);
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Dispose");
-                if (scrollBar is not null)
-                {
-                    scrollBar.Dispose();
-                }
+                _scrollBar?.Dispose();
+                _listBox?.Dispose();
+                _dropDownHolder?.Dispose();
 
-                if (listBox is not null)
-                {
-                    listBox.Dispose();
-                }
-
-                if (dropDownHolder is not null)
-                {
-                    dropDownHolder.Dispose();
-                }
-
-                scrollBar = null;
-                listBox = null;
-                dropDownHolder = null;
+                _scrollBar = null;
+                _listBox = null;
+                _dropDownHolder = null;
 
                 OwnerGrid = null;
-                topLevelGridEntries = null;
-                allGridEntries = null;
-                serviceProvider = null;
+                TopLevelGridEntries = null;
+                _allGridEntries = null;
+                _serviceProvider = null;
 
-                topHelpService = null;
+                _topHelpService = null;
 
-                if (helpService is not null && helpService is IDisposable)
+                if (_helpService is not null && _helpService is IDisposable disposable)
                 {
-                    ((IDisposable)helpService).Dispose();
+                    disposable.Dispose();
                 }
 
-                helpService = null;
+                _helpService = null;
 
-                if (edit is not null)
-                {
-                    edit.Dispose();
-                    edit = null;
-                }
+                _editTextBox?.Dispose();
+                _editTextBox = null;
 
-                if (_fontBold is not null)
-                {
-                    _fontBold.Dispose();
-                    _fontBold = null;
-                }
+                _boldFont?.Dispose();
+                _boldFont = null;
 
-                if (btnDropDown is not null)
-                {
-                    btnDropDown.Dispose();
-                    btnDropDown = null;
-                }
+                _dropDownButton?.Dispose();
+                _dropDownButton = null;
 
-                if (btnDialog is not null)
-                {
-                    btnDialog.Dispose();
-                    btnDialog = null;
-                }
+                _dialogButton?.Dispose();
+                _dialogButton = null;
 
-                if (toolTip is not null)
-                {
-                    toolTip.Dispose();
-                    toolTip = null;
-                }
+                _toolTip?.Dispose();
+                _toolTip = null;
             }
 
             base.Dispose(disposing);
@@ -1241,13 +1090,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (CanCopy)
             {
-                if (Edit.Focused)
+                if (EditTextBox.Focused)
                 {
-                    Edit.Copy();
+                    EditTextBox.Copy();
                 }
-                else if (selectedGridEntry is not null)
+                else if (_selectedGridEntry is not null)
                 {
-                    Clipboard.SetDataObject(selectedGridEntry.GetPropertyTextValue());
+                    Clipboard.SetDataObject(_selectedGridEntry.GetPropertyTextValue());
                 }
             }
         }
@@ -1257,33 +1106,35 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (CanCut)
             {
                 DoCopyCommand();
-                if (Edit.Visible)
+                if (EditTextBox.Visible)
                 {
-                    Edit.Cut();
+                    EditTextBox.Cut();
                 }
             }
         }
 
         public void DoPasteCommand()
         {
-            if (CanPaste && Edit.Visible)
+            if (!CanPaste || !EditTextBox.Visible)
             {
-                if (Edit.Focused)
+                return;
+            }
+
+            if (EditTextBox.Focused)
+            {
+                EditTextBox.Paste();
+            }
+            else
+            {
+                IDataObject dataObj = Clipboard.GetDataObject();
+                if (dataObj is not null)
                 {
-                    Edit.Paste();
-                }
-                else
-                {
-                    IDataObject dataObj = Clipboard.GetDataObject();
-                    if (dataObj is not null)
+                    string data = (string)dataObj.GetData(typeof(string));
+                    if (data is not null)
                     {
-                        string data = (string)dataObj.GetData(typeof(string));
-                        if (data is not null)
-                        {
-                            Edit.Focus();
-                            Edit.Text = data;
-                            SetCommitError(ERROR_NONE, true);
-                        }
+                        EditTextBox.Focus();
+                        EditTextBox.Text = data;
+                        SetCommitError(ErrorState.None, capture: true);
                     }
                 }
             }
@@ -1291,59 +1142,33 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void DoUndoCommand()
         {
-            if (CanUndo && Edit.Visible)
+            if (CanUndo && EditTextBox.Visible)
             {
-                User32.SendMessageW(Edit, User32.WM.UNDO);
+                User32.SendMessageW(EditTextBox, User32.WM.UNDO);
             }
         }
 
-        internal void DumpPropsToConsole(GridEntry entry, string prefix)
-        {
-            Type propType = entry.PropertyType;
+        private int GetEntryLabelIndent(GridEntry gridEntry) => gridEntry.PropertyLabelIndent + 1;
 
-            if (entry.PropertyValue is not null)
-            {
-                propType = entry.PropertyValue.GetType();
-            }
-
-            System.Console.WriteLine(prefix + entry.PropertyLabel + ", value type=" + (propType is null ? "(null)" : propType.FullName) + ", value=" + (entry.PropertyValue is null ? "(null)" : entry.PropertyValue.ToString()) +
-                                     ", flags=" + entry.Flags.ToString(CultureInfo.InvariantCulture) +
-                                     ", TypeConverter=" + (entry.TypeConverter is null ? "(null)" : entry.TypeConverter.GetType().FullName) + ", UITypeEditor=" + ((entry.UITypeEditor is null ? "(null)" : entry.UITypeEditor.GetType().FullName)));
-            GridEntryCollection children = entry.Children;
-
-            if (children is not null)
-            {
-                foreach (GridEntry g in children)
-                {
-                    DumpPropsToConsole(g, prefix + "\t");
-                }
-            }
-        }
-
-        private int GetIPELabelIndent(GridEntry gridEntry)
-        {
-            return gridEntry.PropertyLabelIndent + 1;
-        }
-
-        private int GetIPELabelLength(Graphics g, GridEntry gridEntry)
+        private int GetEntryLabelLength(Graphics g, GridEntry gridEntry)
         {
             SizeF sizeF = PropertyGrid.MeasureTextHelper.MeasureText(OwnerGrid, g, gridEntry.PropertyLabel, Font);
-            Size size = Size.Ceiling(sizeF);
-            return ptOurLocation.X + GetIPELabelIndent(gridEntry) + size.Width;
+            var size = Size.Ceiling(sizeF);
+            return _location.X + GetEntryLabelIndent(gridEntry) + size.Width;
         }
 
-        private bool IsIPELabelLong(Graphics g, GridEntry gridEntry)
+        private bool IsEntryLabelLong(Graphics g, GridEntry gridEntry)
         {
             if (gridEntry is null)
             {
                 return false;
             }
 
-            int length = GetIPELabelLength(g, gridEntry);
-            return (length > ptOurLocation.X + InternalLabelWidth);
+            int length = GetEntryLabelLength(g, gridEntry);
+            return length > _location.X + InternalLabelWidth;
         }
 
-        protected virtual void DrawLabel(Graphics g, int row, Rectangle rect, bool selected, bool fLongLabelRequest, ref Rectangle clipRect)
+        private void DrawLabel(Graphics g, int row, Rectangle rect, bool selected, bool longLabelrequest, Rectangle clipRect)
         {
             GridEntry gridEntry = GetGridEntryFromRow(row);
 
@@ -1352,18 +1177,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing label for property " + gridEntry.PropertyLabel);
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Drawing label for property {gridEntry.PropertyLabel}");
 
-            Point newOrigin = new Point(rect.X, rect.Y);
-            Rectangle cr = Rectangle.Intersect(rect, clipRect);
+            var newOrigin = new Point(rect.X, rect.Y);
+            clipRect = Rectangle.Intersect(rect, clipRect);
 
-            if (cr.IsEmpty)
+            if (clipRect.IsEmpty)
             {
                 return;
             }
 
             AdjustOrigin(g, newOrigin, ref rect);
-            cr.Offset(-newOrigin.X, -newOrigin.Y);
+            clipRect.Offset(-newOrigin.X, -newOrigin.Y);
 
             try
             {
@@ -1371,15 +1196,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     bool fLongLabel = false;
                     int labelEnd = 0;
-                    int labelIndent = GetIPELabelIndent(gridEntry);
+                    int labelIndent = GetEntryLabelIndent(gridEntry);
 
-                    if (fLongLabelRequest)
+                    if (longLabelrequest)
                     {
-                        labelEnd = GetIPELabelLength(g, gridEntry);
-                        fLongLabel = IsIPELabelLong(g, gridEntry);
+                        labelEnd = GetEntryLabelLength(g, gridEntry);
+                        fLongLabel = IsEntryLabelLong(g, gridEntry);
                     }
 
-                    gridEntry.PaintLabel(g, rect, cr, selected, fLongLabel);
+                    gridEntry.PaintLabel(g, rect, clipRect, selected, fLongLabel);
                 }
                 catch (Exception ex)
                 {
@@ -1392,7 +1217,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected virtual void DrawValueEntry(Graphics g, int row, ref Rectangle clipRect)
+        private void DrawValueEntry(Graphics g, int row, Rectangle clipRect)
         {
             GridEntry gridEntry = GetGridEntryFromRow(row);
             if (gridEntry is null)
@@ -1400,19 +1225,19 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing value for property " + gridEntry.PropertyLabel);
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Drawing value for property {gridEntry.PropertyLabel}");
 
-            Rectangle r = GetRectangle(row, ROWVALUE);
-            Point newOrigin = new Point(r.X, r.Y);
-            Rectangle cr = Rectangle.Intersect(clipRect, r);
+            Rectangle rect = GetRectangle(row, RowValue);
+            var newOrigin = new Point(rect.X, rect.Y);
+            clipRect = Rectangle.Intersect(clipRect, rect);
 
-            if (cr.IsEmpty)
+            if (clipRect.IsEmpty)
             {
                 return;
             }
 
-            AdjustOrigin(g, newOrigin, ref r);
-            cr.Offset(-newOrigin.X, -newOrigin.Y);
+            AdjustOrigin(g, newOrigin, ref rect);
+            clipRect.Offset(-newOrigin.X, -newOrigin.Y);
 
             try
             {
@@ -1421,14 +1246,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     gridEntry.PaintValue(
                         null,
                         g,
-                        r,
-                        cr,
+                        rect,
+                        clipRect,
                         GridEntry.PaintValueFlags.FetchValue
                             | GridEntry.PaintValueFlags.PaintInPlace
                             | GridEntry.PaintValueFlags.CheckShouldSerialize);
                 }
-                catch
+                catch (Exception ex)
                 {
+                    Debug.Fail(ex.ToString());
                 }
             }
             finally
@@ -1439,39 +1265,40 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void F4Selection(bool popupModalDialog)
         {
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {
                 return;
             }
 
-            // if we are in an errorState, just put the focus back on the Edit
-            if (errorState != ERROR_NONE && Edit.Visible)
+            // If we are in an errorState, just put the focus back on the Edit.
+            if (_errorState != ErrorState.None && EditTextBox.Visible)
             {
-                Edit.Focus();
+                EditTextBox.Focus();
                 return;
             }
 
             if (DropDownButton.Visible)
             {
-                PopupDialog(selectedRow);
+                PopupDialog(_selectedRow);
             }
             else if (DialogButton.Visible)
             {
                 if (popupModalDialog)
                 {
-                    PopupDialog(selectedRow);
+                    PopupDialog(_selectedRow);
                 }
                 else
                 {
                     DialogButton.Focus();
                 }
             }
-            else if (Edit.Visible)
+            else if (EditTextBox.Visible)
             {
-                Edit.Focus();
-                SelectEdit(false);
+                EditTextBox.Focus();
+                EditTextBox.SelectAll();
             }
+
             return;
         }
 
@@ -1484,9 +1311,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Property " + gridEntry.PropertyLabel + " double clicked");
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Property {gridEntry.PropertyLabel} double clicked");
 
-            if (!toggleExpand || type == ROWVALUE)
+            if (!toggleExpand || type == RowValue)
             {
                 try
                 {
@@ -1499,15 +1326,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 catch (Exception ex)
                 {
-                    SetCommitError(ERROR_THROWN);
-                    ShowInvalidMessage(gridEntry.PropertyLabel, null, ex);
+                    SetCommitError(ErrorState.Thrown);
+                    ShowInvalidMessage(gridEntry.PropertyLabel, ex);
                     return;
                 }
             }
 
-            SelectGridEntry(gridEntry, true);
+            SelectGridEntry(gridEntry, pageIn: true);
 
-            if (type == ROWLABEL && toggleExpand && gridEntry.Expandable)
+            if (type == RowLabel && toggleExpand && gridEntry.Expandable)
             {
                 SetExpand(gridEntry, !gridEntry.InternalExpanded);
                 return;
@@ -1531,33 +1358,23 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     CommitValue(values[index]);
-                    SelectRow(selectedRow);
+                    SelectRow(_selectedRow);
                     Refresh();
                     return;
                 }
             }
 
-            if (Edit.Visible)
+            if (EditTextBox.Visible)
             {
-                Edit.Focus();
-                SelectEdit(false);
+                EditTextBox.Focus();
+                EditTextBox.SelectAll();
                 return;
             }
         }
 
-        public Font GetBaseFont()
-        {
-            return Font;
-        }
+        public Font GetBaseFont() => Font;
 
-        public Font GetBoldFont()
-        {
-            if (_fontBold is null)
-            {
-                _fontBold = new Font(Font, FontStyle.Bold);
-            }
-            return _fontBold;
-        }
+        public Font GetBoldFont() => _boldFont ??= new Font(Font, FontStyle.Bold);
 
         /// <summary>
         ///  Gets the element from point.
@@ -1567,9 +1384,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <returns>The found grid element.</returns>
         internal GridEntry GetElementFromPoint(int x, int y)
         {
-            Point point = new Point(x, y);
+            var point = new Point(x, y);
             GridEntryCollection allGridEntries = GetAllGridEntries();
-            GridEntry[] targetEntries = new GridEntry[allGridEntries.Count];
+            var targetEntries = new GridEntry[allGridEntries.Count];
             try
             {
                 GetGridEntriesFromOutline(allGridEntries, 0, allGridEntries.Count - 1, targetEntries);
@@ -1590,88 +1407,56 @@ namespace System.Windows.Forms.PropertyGridInternal
             return null;
         }
 
-        private bool GetFlag(short flag)
-        {
-            return (flags & flag) != 0;
-        }
+        private bool GetFlag(short flag) => (_flags & flag) != 0;
 
-        public virtual Color GetLineColor()
-        {
-            return OwnerGrid.LineColor;
-        }
+        public Color GetLineColor() => OwnerGrid.LineColor;
 
-        public virtual Color GetSelectedItemWithFocusForeColor()
-        {
-            return OwnerGrid.SelectedItemWithFocusForeColor;
-        }
+        public Color GetSelectedItemWithFocusForeColor() => OwnerGrid.SelectedItemWithFocusForeColor;
 
-        public virtual Color GetSelectedItemWithFocusBackColor()
-        {
-            return OwnerGrid.SelectedItemWithFocusBackColor;
-        }
+        public Color GetSelectedItemWithFocusBackColor() => OwnerGrid.SelectedItemWithFocusBackColor;
 
-        public virtual IntPtr GetHostHandle()
-        {
-            return Handle;
-        }
+        public IntPtr GetHostHandle() => Handle;
 
-        public virtual int GetLabelWidth()
-        {
-            return InternalLabelWidth;
-        }
+        public int GetLabelWidth() => InternalLabelWidth;
 
-        internal bool IsExplorerTreeSupported
-        {
-            get => OwnerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
-        }
+        internal bool IsExplorerTreeSupported => OwnerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
 
-        public virtual int GetOutlineIconSize()
-        {
-            if (IsExplorerTreeSupported)
-            {
-                return outlineSizeExplorerTreeStyle;
-            }
-            else
-            {
-                return outlineSize;
-            }
-        }
+        public int GetOutlineIconSize() => IsExplorerTreeSupported ? _outlineSizeExplorerTreeStyle : _outlineSize;
 
-        public virtual int GetGridEntryHeight()
-        {
-            return RowHeight;
-        }
+        public int GetGridEntryHeight() => RowHeight;
 
-        // for qa automation
         internal int GetPropertyLocation(string propName, bool getXY, bool rowValue)
         {
-            if (allGridEntries is not null && allGridEntries.Count > 0)
+            if (_allGridEntries is null || _allGridEntries.Count <= 0)
             {
-                for (int i = 0; i < allGridEntries.Count; i++)
-                {
-                    if (0 == string.Compare(propName, allGridEntries.GetEntry(i).PropertyLabel, true, CultureInfo.InvariantCulture))
-                    {
-                        if (getXY)
-                        {
-                            int row = GetRowFromGridEntry(allGridEntries.GetEntry(i));
+                return -1;
+            }
 
-                            if (row < 0 || row >= visibleRows)
-                            {
-                                return -1;
-                            }
-                            else
-                            {
-                                Rectangle r = GetRectangle(row, rowValue ? ROWVALUE : ROWLABEL);
-                                return PARAM.ToInt(r.X, r.Y);
-                            }
+            for (int i = 0; i < _allGridEntries.Count; i++)
+            {
+                if (0 == string.Compare(propName, _allGridEntries[i].PropertyLabel, true, CultureInfo.InvariantCulture))
+                {
+                    if (getXY)
+                    {
+                        int row = GetRowFromGridEntry(_allGridEntries[i]);
+
+                        if (row < 0 || row >= _visibleRows)
+                        {
+                            return -1;
                         }
                         else
                         {
-                            return i;
+                            Rectangle r = GetRectangle(row, rowValue ? RowValue : RowLabel);
+                            return PARAM.ToInt(r.X, r.Y);
                         }
+                    }
+                    else
+                    {
+                        return i;
                     }
                 }
             }
+
             return -1;
         }
 
@@ -1681,42 +1466,26 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return this;
             }
+
             if (ServiceProvider is not null)
             {
-                return serviceProvider.GetService(classService);
+                return _serviceProvider.GetService(classService);
             }
+
             return null;
         }
 
-        public virtual int GetSplitterWidth()
-        {
-            return 1;
-        }
+        public int GetSplitterWidth() => 1;
 
-        public virtual int GetTotalWidth()
-        {
-            return GetLabelWidth() + GetSplitterWidth() + GetValueWidth();
-        }
+        public int GetTotalWidth() => GetLabelWidth() + GetSplitterWidth() + GetValueWidth();
 
-        public virtual int GetValuePaintIndent()
-        {
-            return paintIndent;
-        }
+        public int GetValuePaintIndent() => _paintIndent;
 
-        public virtual int GetValuePaintWidth()
-        {
-            return paintWidth;
-        }
+        public int GetValuePaintWidth() => _paintWidth;
 
-        public virtual int GetValueStringIndent()
-        {
-            return EDIT_INDENT;
-        }
+        public int GetValueStringIndent() => EditIndent;
 
-        public virtual int GetValueWidth()
-        {
-            return (int)(InternalLabelWidth * (labelRatio - 1));
-        }
+        public int GetValueWidth() => (int)(InternalLabelWidth * (_labelRatio - 1));
 
         /// <summary>
         ///  Displays the provided control in a drop down.  When possible, the
@@ -1726,52 +1495,50 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  nicely.  If the user performs an action that would cause the drop down
         ///  to prematurely disappear the control will be hidden.
         /// </summary>
-        public void /* cpr IWindowsFormsEditorService. */ DropDownControl(Control ctl)
+        public void DropDownControl(Control control)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:DropDownControl");
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "DropDownControl(ctl = " + ctl.GetType().Name + ")");
-            if (dropDownHolder is null)
-            {
-                dropDownHolder = new DropDownHolder(this);
-            }
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"DropDownControl(ctl = {control.GetType().Name})");
 
-            dropDownHolder.Visible = false;
-            dropDownHolder.SetComponent(ctl, GetFlag(FlagResizableDropDown));
-            Rectangle rect = GetRectangle(selectedRow, ROWVALUE);
-            Size size = dropDownHolder.Size;
-            Point loc = PointToScreen(new Point(0, 0));
-            Rectangle rectScreen = Screen.FromControl(Edit).WorkingArea;
+            _dropDownHolder ??= new(this);
+            _dropDownHolder.Visible = false;
+            _dropDownHolder.SetComponent(control, GetFlag(FlagResizableDropDown));
+
+            Rectangle rect = GetRectangle(_selectedRow, RowValue);
+            Size size = _dropDownHolder.Size;
+            Point location = PointToScreen(new Point(0, 0));
+            Rectangle rectScreen = Screen.FromControl(EditTextBox).WorkingArea;
             size.Width = Math.Max(rect.Width + 1, size.Width);
 
-            // Not needed... CYMAXDDLHEIGHT used to be 200, but why limit it???
-            //size.Height = Math.Min(size.Height,CYMAXDDLHEIGHT);
+            location.X = Math.Min(
+                rectScreen.X + rectScreen.Width - size.Width,
+                Math.Max(rectScreen.X, location.X + rect.X + rect.Width - size.Width));
 
-            loc.X = Math.Min(rectScreen.X + rectScreen.Width - size.Width,
-                             Math.Max(rectScreen.X, loc.X + rect.X + rect.Width - size.Width));
-            loc.Y += rect.Y;
-            if (rectScreen.Y + rectScreen.Height < (size.Height + loc.Y + Edit.Height))
+            location.Y += rect.Y;
+            if (rectScreen.Y + rectScreen.Height < (size.Height + location.Y + EditTextBox.Height))
             {
-                loc.Y -= size.Height;
-                dropDownHolder.ResizeUp = true;
+                location.Y -= size.Height;
+                _dropDownHolder.ResizeUp = true;
             }
             else
             {
-                loc.Y += rect.Height + 1;
-                dropDownHolder.ResizeUp = false;
+                location.Y += rect.Height + 1;
+                _dropDownHolder.ResizeUp = false;
             }
 
-            // control is a top=level window. standard way of setparent on the control is prohibited for top-level controls.
+            // Control is a top level window. Standard way of setting parent on the control is prohibited for top-level controls.
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
-            // We are not touching this for this relase. We may revisit it in next release.
-            User32.SetWindowLong(dropDownHolder, User32.GWL.HWNDPARENT, new HandleRef(this, Handle));
-            dropDownHolder.SetBounds(loc.X, loc.Y, size.Width, size.Height);
-            User32.ShowWindow(dropDownHolder, User32.SW.SHOWNA);
-            Edit.Filter = true;
-            dropDownHolder.Visible = true;
-            dropDownHolder.FocusComponent();
-            SelectEdit(false);
+            // We are not touching this for this release. We may revisit it in next release.
 
-            var gridEntry = GetGridEntryFromRow(selectedRow);
+            User32.SetWindowLong(_dropDownHolder, User32.GWL.HWNDPARENT, new HandleRef(this, Handle));
+            _dropDownHolder.SetBounds(location.X, location.Y, size.Width, size.Height);
+            User32.ShowWindow(_dropDownHolder, User32.SW.SHOWNA);
+            EditTextBox.Filter = true;
+            _dropDownHolder.Visible = true;
+            _dropDownHolder.FocusComponent();
+            EditTextBox.SelectAll();
+
+            var gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is not null)
             {
                 gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
@@ -1784,33 +1551,30 @@ namespace System.Windows.Forms.PropertyGridInternal
             try
             {
                 DropDownButton.IgnoreMouse = true;
-                dropDownHolder.DoModalLoop();
+                _dropDownHolder.DoModalLoop();
             }
             finally
             {
                 DropDownButton.IgnoreMouse = false;
             }
 
-            if (selectedRow != -1)
+            if (_selectedRow != -1)
             {
                 Focus();
-                SelectRow(selectedRow);
+                SelectRow(_selectedRow);
             }
         }
 
-        public virtual void DropDownDone()
-        {
-            CloseDropDown();
-        }
+        public void DropDownDone() => CloseDropDown();
 
-        public virtual void DropDownUpdate()
+        public void DropDownUpdate()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:DropDownUpdate");
-            if (dropDownHolder is not null && dropDownHolder.GetUsed())
+            if (_dropDownHolder is not null && _dropDownHolder.GetUsed())
             {
-                int row = selectedRow;
+                int row = _selectedRow;
                 GridEntry gridEntry = GetGridEntryFromRow(row);
-                Edit.Text = gridEntry.GetPropertyTextValue();
+                EditTextBox.Text = gridEntry.GetPropertyTextValue();
             }
         }
 
@@ -1822,28 +1586,29 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool FilterEditWndProc(ref Message m)
         {
-            // if it's the TAB key, we keep it since we'll give them focus with it.
-            if (dropDownHolder is not null && dropDownHolder.Visible && m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam != (int)Keys.Tab)
+            // If it's the TAB key, we keep it since we'll give them focus with it.
+            if (_dropDownHolder is not null && _dropDownHolder.Visible && m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam != (int)Keys.Tab)
             {
-                Control ctl = dropDownHolder.Component;
+                Control ctl = _dropDownHolder.Component;
                 if (ctl is not null)
                 {
                     m.Result = User32.SendMessageW(ctl, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return true;
                 }
             }
+
             return false;
         }
 
         private bool FilterReadOnlyEditKeyPress(char keyChar)
         {
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry.Enumerable && gridEntry.IsValueEditable)
             {
                 int index = GetCurrentValueIndex(gridEntry);
 
                 object[] values = gridEntry.GetPropertyValueList();
-                string letter = new string(new char[] { keyChar });
+                string letter = new(new char[] { keyChar });
                 for (int i = 0; i < values.Length; i++)
                 {
                     object valueCur = values[(i + index + 1) % values.Length];
@@ -1851,43 +1616,43 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (text is not null && text.Length > 0 && string.Compare(text.Substring(0, 1), letter, true, CultureInfo.InvariantCulture) == 0)
                     {
                         CommitValue(valueCur);
-                        if (Edit.Focused)
+                        if (EditTextBox.Focused)
                         {
-                            SelectEdit(false);
+                            EditTextBox.SelectAll();
                         }
+
                         return true;
                     }
                 }
             }
+
             return false;
         }
 
-        public virtual bool WillFilterKeyPress(char charPressed)
+        public bool WillFilterKeyPress(char charPressed)
         {
-            if (!Edit.Visible)
+            if (!EditTextBox.Visible)
             {
                 return false;
             }
 
             Keys modifiers = ModifierKeys;
-            if ((int)(modifiers & ~Keys.Shift) != 0)
+            if ((modifiers & ~Keys.Shift) != 0)
             {
                 return false;
             }
 
-            // try to activate the Edit.
-            // we don't activate for +,-, or * on expandable items because they have special meaning
-            // for the tree.
-            //
+            // Try to activate the Edit.
+            // We don't activate for +, -, or * on expandable items because they have special meaning for the tree.
 
-            if (selectedGridEntry is not null)
+            if (_selectedGridEntry is not null)
             {
                 switch (charPressed)
                 {
                     case '+':
                     case '-':
                     case '*':
-                        return !selectedGridEntry.Expandable;
+                        return !_selectedGridEntry.Expandable;
                     case unchecked((char)(int)(long)Keys.Tab):
                         return false;
                 }
@@ -1898,7 +1663,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public void FilterKeyPress(char keyChar)
         {
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {
                 return;
@@ -1906,65 +1671,62 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:FilterKeyPress()");
 
-            Edit.FilterKeyPress(keyChar);
+            EditTextBox.FilterKeyPress(keyChar);
         }
 
-        private /*protected virtual*/ GridEntry FindEquivalentGridEntry(GridEntryCollection ipeHier)
+        private GridEntry FindEquivalentGridEntry(GridEntryCollection gridEntries)
         {
-            if (ipeHier is null || ipeHier.Count == 0)
+            if (gridEntries is null || gridEntries.Count == 0)
             {
                 return null;
             }
 
-            GridEntryCollection rgipes = GetAllGridEntries();
+            GridEntryCollection allGridEntries = GetAllGridEntries();
 
-            if (rgipes is null || rgipes.Count == 0)
+            if (allGridEntries is null || allGridEntries.Count == 0)
             {
                 return null;
             }
 
             GridEntry targetEntry = null;
             int row = 0;
-            int count = rgipes.Count;
+            int count = allGridEntries.Count;
 
-            for (int i = 0; i < ipeHier.Count; i++)
+            for (int i = 0; i < gridEntries.Count; i++)
             {
-                if (ipeHier[i] is null)
+                if (gridEntries[i] is null)
                 {
                     continue;
                 }
 
-                // if we've got one above, and it's expandable,
-                // expand it
+                // If we've got one above, and it's expandable, expand it.
                 if (targetEntry is not null)
                 {
-                    // how many do we have?
-                    int items = rgipes.Count;
-
-                    // expand and get the new count
+                    // Expand and get the new count.
                     if (!targetEntry.InternalExpanded)
                     {
                         SetExpand(targetEntry, true);
-                        rgipes = GetAllGridEntries();
+                        allGridEntries = GetAllGridEntries();
                     }
+
                     count = targetEntry.VisibleChildCount;
                 }
 
                 int start = row;
                 targetEntry = null;
 
-                // now, we will only go as many as were expanded...
-                for (; row < rgipes.Count && ((row - start) <= count); row++)
+                // Now, we will only go as many as were expanded.
+                for (; row < allGridEntries.Count && ((row - start) <= count); row++)
                 {
-                    if (ipeHier.GetEntry(i).NonParentEquals(rgipes[row]))
+                    if (gridEntries[i].NonParentEquals(allGridEntries[row]))
                     {
-                        targetEntry = rgipes.GetEntry(row);
+                        targetEntry = allGridEntries[row];
                         row++;
                         break;
                     }
                 }
 
-                // didn't find it...
+                // Didn't find it.
                 if (targetEntry is null)
                 {
                     break;
@@ -1974,7 +1736,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return targetEntry;
         }
 
-        protected virtual Point FindPosition(int x, int y)
+        private Point FindPosition(int x, int y)
         {
             if (RowHeight == -1)
             {
@@ -1983,25 +1745,25 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             Size size = GetOurSize();
 
-            if (x < 0 || x > size.Width + ptOurLocation.X)
+            if (x < 0 || x > size.Width + _location.X)
             {
                 return InvalidPosition;
             }
 
-            Point pt = new Point(ROWLABEL, 0);
-            if (x > InternalLabelWidth + ptOurLocation.X)
+            var pt = new Point(RowLabel, 0);
+            if (x > InternalLabelWidth + _location.X)
             {
-                pt.X = ROWVALUE;
+                pt.X = RowValue;
             }
 
-            pt.Y = (y - ptOurLocation.Y) / (1 + RowHeight);
+            pt.Y = (y - _location.Y) / (1 + RowHeight);
             return pt;
         }
 
-        public virtual void Flush()
+        public void Flush()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView::Flush()");
-            if (Commit() && Edit.Focused)
+            if (Commit() && EditTextBox.Focused)
             {
                 Focus();
             }
@@ -2009,33 +1771,34 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private GridEntryCollection GetAllGridEntries()
         {
-            return GetAllGridEntries(false);
+            return GetAllGridEntries(updateCache: false);
         }
 
-        private GridEntryCollection GetAllGridEntries(bool fUpdateCache)
+        private GridEntryCollection GetAllGridEntries(bool updateCache)
         {
-            if (visibleRows == -1 || totalProps == -1 || !HasEntries)
+            if (_visibleRows == -1 || TotalProperties == -1 || !HasEntries)
             {
                 return null;
             }
 
-            if (allGridEntries is not null && !fUpdateCache)
+            if (_allGridEntries is not null && !updateCache)
             {
-                return allGridEntries;
+                return _allGridEntries;
             }
 
-            GridEntry[] rgipes = new GridEntry[totalProps];
+            var newEntries = new GridEntry[TotalProperties];
             try
             {
-                GetGridEntriesFromOutline(topLevelGridEntries, 0, 0, rgipes);
+                GetGridEntriesFromOutline(TopLevelGridEntries, 0, 0, newEntries);
             }
             catch (Exception ex)
             {
                 Debug.Fail(ex.ToString());
             }
-            allGridEntries = new GridEntryCollection(null, rgipes);
-            AddGridEntryEvents(allGridEntries, 0, -1);
-            return allGridEntries;
+
+            _allGridEntries = new GridEntryCollection(newEntries, disposeItems: false);
+            AddGridEntryEvents(_allGridEntries, 0, -1);
+            return _allGridEntries;
         }
 
         private int GetCurrentValueIndex(GridEntry gridEntry)
@@ -2051,86 +1814,90 @@ namespace System.Windows.Forms.PropertyGridInternal
                 object value = gridEntry.PropertyValue;
                 string textValue = gridEntry.TypeConverter.ConvertToString(gridEntry, value);
 
-                if (values is not null && values.Length > 0)
+                if (values is null || values.Length == 0)
                 {
-                    string itemTextValue;
-                    int stringMatch = -1;
-                    int equalsMatch = -1;
-                    for (int i = 0; i < values.Length; i++)
+                    return -1;
+                }
+
+                string itemTextValue;
+                int stringMatch = -1;
+                int equalsMatch = -1;
+                for (int i = 0; i < values.Length; i++)
+                {
+                    object currentValue = values[i];
+
+                    // Check real values against string values.
+                    itemTextValue = gridEntry.TypeConverter.ConvertToString(currentValue);
+                    if (value == currentValue || 0 == string.Compare(textValue, itemTextValue, true, CultureInfo.InvariantCulture))
                     {
-                        object curValue = values[i];
-
-                        // check real values against string values.
-                        itemTextValue = gridEntry.TypeConverter.ConvertToString(curValue);
-                        if (value == curValue || 0 == string.Compare(textValue, itemTextValue, true, CultureInfo.InvariantCulture))
-                        {
-                            stringMatch = i;
-                        }
-                        // now try .equals if they are both non-null
-                        if (value is not null && curValue is not null && curValue.Equals(value))
-                        {
-                            equalsMatch = i;
-                        }
-
-                        if (stringMatch == equalsMatch && stringMatch != -1)
-                        {
-                            return stringMatch;
-                        }
+                        stringMatch = i;
                     }
 
-                    if (stringMatch != -1)
+                    // Now try .equals if they are both non-null
+                    if (value is not null && currentValue is not null && currentValue.Equals(value))
+                    {
+                        equalsMatch = i;
+                    }
+
+                    if (stringMatch == equalsMatch && stringMatch != -1)
                     {
                         return stringMatch;
                     }
-
-                    if (equalsMatch != -1)
-                    {
-                        return equalsMatch;
-                    }
                 }
+
+                if (stringMatch != -1)
+                {
+                    return stringMatch;
+                }
+
+                if (equalsMatch != -1)
+                {
+                    return equalsMatch;
+                }
+
+                return -1;
             }
             catch (Exception e)
             {
                 Debug.Fail(e.ToString());
             }
+
             return -1;
         }
 
-        public virtual int GetDefaultOutlineIndent()
+        public int GetDefaultOutlineIndent()
         {
-            return OUTLINE_INDENT;
+            return OutlineIndent;
         }
 
         private IHelpService GetHelpService()
         {
-            if (helpService is null && ServiceProvider is not null)
+            if (_helpService is null && ServiceProvider.TryGetService(out _topHelpService!))
             {
-                topHelpService = (IHelpService)ServiceProvider.GetService(typeof(IHelpService));
-                if (topHelpService is not null)
+                IHelpService localHelpService = _topHelpService.CreateLocalContext(HelpContextType.ToolWindowSelection);
+                if (localHelpService is not null)
                 {
-                    IHelpService localHelpService = topHelpService.CreateLocalContext(HelpContextType.ToolWindowSelection);
-                    if (localHelpService is not null)
-                    {
-                        helpService = localHelpService;
-                    }
+                    _helpService = localHelpService;
                 }
             }
-            return helpService;
+
+            return _helpService;
         }
 
-        public virtual int GetScrollOffset()
+        public int GetScrollOffset()
         {
-            if (scrollBar is null)
+            if (_scrollBar is null)
             {
                 return 0;
             }
+
             int pos = ScrollBar.Value;
             return pos;
         }
 
         /// <summary>
-        ///  returns an array of IPE specifying the current heirarchy of ipes from the given
-        ///  gridEntry through its parents to the root.
+        ///  Returns an array of entries specifying the current heirarchy of entries from the given
+        ///  <paramref name="gridEntry"/> through its parents to the root.
         /// </summary>
         private GridEntryCollection GetGridEntryHierarchy(GridEntry gridEntry)
         {
@@ -2142,7 +1909,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             int depth = gridEntry.PropertyDepth;
             if (depth > 0)
             {
-                GridEntry[] entries = new GridEntry[depth + 1];
+                var entries = new GridEntry[depth + 1];
 
                 while (gridEntry is not null && depth >= 0)
                 {
@@ -2150,66 +1917,64 @@ namespace System.Windows.Forms.PropertyGridInternal
                     gridEntry = gridEntry.ParentGridEntry;
                     depth = gridEntry.PropertyDepth;
                 }
-                return new GridEntryCollection(null, entries);
+
+                return new GridEntryCollection(entries, disposeItems: false);
             }
-            return new GridEntryCollection(null, new GridEntry[] { gridEntry });
+
+            return new GridEntryCollection(new GridEntry[] { gridEntry }, disposeItems: false);
         }
 
-        private /*protected virtual*/ GridEntry GetGridEntryFromRow(int row)
-        {
-            return GetGridEntryFromOffset(row + GetScrollOffset());
-        }
+        private GridEntry GetGridEntryFromRow(int row) => GetGridEntryFromOffset(row + GetScrollOffset());
 
-        private /*protected virtual*/ GridEntry GetGridEntryFromOffset(int offset)
+        private GridEntry GetGridEntryFromOffset(int offset)
         {
-            GridEntryCollection rgipesAll = GetAllGridEntries();
-            if (rgipesAll is not null)
+            GridEntryCollection allGridEntries = GetAllGridEntries();
+            if (allGridEntries is not null)
             {
-                if (offset >= 0 && offset < rgipesAll.Count)
+                if (offset >= 0 && offset < allGridEntries.Count)
                 {
-                    return rgipesAll.GetEntry(offset);
+                    return allGridEntries[offset];
                 }
             }
+
             return null;
         }
 
-        private /*protected virtual*/ int GetGridEntriesFromOutline(GridEntryCollection rgipe, int cCur,
-                                                 int cTarget, GridEntry[] rgipeTarget)
+        private int GetGridEntriesFromOutline(GridEntryCollection entries, int current, int target, GridEntry[] targetEntries)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:GetGridEntriesFromOutline");
-            if (rgipe is null || rgipe.Count == 0)
+            if (entries is null || entries.Count == 0)
             {
-                return cCur;
+                return current;
             }
 
-            cCur--; // want to account for each entry as we find it.
+            current--; // Want to account for each entry as we find it.
 
-            for (int cLocal = 0; cLocal < rgipe.Count; cLocal++)
+            for (int i = 0; i < entries.Count; i++)
             {
-                cCur++;
-                if (cCur >= cTarget + rgipeTarget.Length)
+                current++;
+                if (current >= target + targetEntries.Length)
                 {
                     break;
                 }
 
-                GridEntry ipeCur = rgipe.GetEntry(cLocal);
-                if (cCur >= cTarget)
+                GridEntry currentEntry = entries[i];
+                if (current >= target)
                 {
-                    rgipeTarget[cCur - cTarget] = ipeCur;
+                    targetEntries[current - target] = currentEntry;
                 }
 
-                if (ipeCur.InternalExpanded)
+                if (currentEntry.InternalExpanded)
                 {
-                    GridEntryCollection subGridEntry = ipeCur.Children;
-                    if (subGridEntry is not null && subGridEntry.Count > 0)
+                    GridEntryCollection childEntries = currentEntry.Children;
+                    if (childEntries is not null && childEntries.Count > 0)
                     {
-                        cCur = GetGridEntriesFromOutline(subGridEntry,
-                                                  cCur + 1, cTarget, rgipeTarget);
+                        current = GetGridEntriesFromOutline(childEntries, current + 1, target, targetEntries);
                     }
                 }
             }
 
-            return cCur;
+            return current;
         }
 
         private Size GetOurSize()
@@ -2225,11 +1990,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                     size.Height = sizeWindow.Height;
                 }
             }
+
             if (!GetScrollbarHidden())
             {
                 Size sizeScroll = ScrollBar.Size;
                 size.Width -= sizeScroll.Width;
             }
+
             size.Width -= 2;
             size.Height -= 2;
             return size;
@@ -2237,13 +2004,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public Rectangle GetRectangle(int row, int flRow)
         {
-            Rectangle rect = new Rectangle(0, 0, 0, 0);
+            var rect = new Rectangle(0, 0, 0, 0);
             Size size = GetOurSize();
 
-            rect.X = ptOurLocation.X;
+            rect.X = _location.X;
 
-            bool fLabel = ((flRow & ROWLABEL) != 0);
-            bool fValue = ((flRow & ROWVALUE) != 0);
+            bool fLabel = (flRow & RowLabel) != 0;
+            bool fValue = (flRow & RowValue) != 0;
 
             if (fLabel && fValue)
             {
@@ -2257,11 +2024,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else if (fValue)
             {
-                rect.X = ptOurLocation.X + InternalLabelWidth;
+                rect.X = _location.X + InternalLabelWidth;
                 rect.Width = size.Width - InternalLabelWidth;
             }
 
-            rect.Y = (row) * (RowHeight + 1) + 1 + ptOurLocation.Y;
+            rect.Y = row * (RowHeight + 1) + 1 + _location.Y;
             rect.Height = RowHeight;
 
             return rect;
@@ -2269,23 +2036,23 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal int GetRowFromGridEntry(GridEntry gridEntry)
         {
-            GridEntryCollection rgipesAll = GetAllGridEntries();
-            if (gridEntry is null || rgipesAll is null)
+            GridEntryCollection allGridEntries = GetAllGridEntries();
+            if (gridEntry is null || allGridEntries is null)
             {
                 return -1;
             }
 
             int bestMatch = -1;
 
-            for (int i = 0; i < rgipesAll.Count; i++)
+            for (int i = 0; i < allGridEntries.Count; i++)
             {
-                // try for an exact match.  semantics of equals are a bit loose here...
-                //
-                if (gridEntry == rgipesAll[i])
+                // Try for an exact match. Semantics of equals are a bit loose here.
+
+                if (gridEntry == allGridEntries[i])
                 {
                     return i - GetScrollOffset();
                 }
-                else if (bestMatch == -1 && gridEntry.Equals(rgipesAll[i]))
+                else if (bestMatch == -1 && gridEntry.Equals(allGridEntries[i]))
                 {
                     bestMatch = i - GetScrollOffset();
                 }
@@ -2299,50 +2066,30 @@ namespace System.Windows.Forms.PropertyGridInternal
             return -1 - GetScrollOffset();
         }
 
-        public virtual bool GetInPropertySet()
-        {
-            return GetFlag(FlagInPropertySet);
-        }
+        public bool GetInPropertySet() => GetFlag(FlagInPropertySet);
 
-        protected virtual bool GetScrollbarHidden()
-        {
-            if (scrollBar is null)
-            {
-                return true;
-            }
-            return !ScrollBar.Visible;
-        }
+        private bool GetScrollbarHidden() => _scrollBar is null || !ScrollBar.Visible;
 
         /// <summary>
         ///  Returns a string containing test info about a given GridEntry. Requires an offset into the top-level
         ///  entry collection (ie. nested entries are not accessible). Or specify -1 to get info for the current
         ///  selected entry (which can be any entry, top-level or nested).
         /// </summary>
-        public virtual string GetTestingInfo(int entry)
+        public string GetTestingInfo(int entry)
         {
-            GridEntry gridEntry = (entry < 0) ? GetGridEntryFromRow(selectedRow) : GetGridEntryFromOffset(entry);
+            GridEntry gridEntry = (entry < 0) ? GetGridEntryFromRow(_selectedRow) : GetGridEntryFromOffset(entry);
 
-            if (gridEntry is null)
-            {
-                return "";
-            }
-            else
-            {
-                return gridEntry.GetTestingInfo();
-            }
+            return gridEntry is null ? string.Empty : gridEntry.GetTestingInfo();
         }
 
-        public Color GetTextColor()
-        {
-            return ForeColor;
-        }
+        public Color GetTextColor() => ForeColor;
 
         private void LayoutWindow(bool invalidate)
         {
             Rectangle rect = ClientRectangle;
-            Size sizeWindow = new Size(rect.Width, rect.Height);
+            var sizeWindow = new Size(rect.Width, rect.Height);
 
-            if (scrollBar is not null)
+            if (_scrollBar is not null)
             {
                 Rectangle boundsScroll = ScrollBar.Bounds;
                 boundsScroll.X = sizeWindow.Width - boundsScroll.Width - 1;
@@ -2362,32 +2109,26 @@ namespace System.Windows.Forms.PropertyGridInternal
             int row = GetRowFromGridEntry(ge);
             if (row != -1)
             {
-                InvalidateRows(row, row, ROWVALUE);
+                InvalidateRows(row, row, RowValue);
             }
         }
 
-        private void InvalidateRow(int row)
-        {
-            InvalidateRows(row, row, ROWVALUE | ROWLABEL);
-        }
+        private void InvalidateRow(int row) => InvalidateRows(row, row, RowValue | RowLabel);
 
-        private void InvalidateRows(int startRow, int endRow)
-        {
-            InvalidateRows(startRow, endRow, ROWVALUE | ROWLABEL);
-        }
+        private void InvalidateRows(int startRow, int endRow) => InvalidateRows(startRow, endRow, RowValue | RowLabel);
 
         private void InvalidateRows(int startRow, int endRow, int type)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:InvalidateRows");
 
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Invalidating rows " + startRow.ToString(CultureInfo.InvariantCulture) + " through " + endRow.ToString(CultureInfo.InvariantCulture));
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Invalidating rows {startRow} through {endRow}");
             Rectangle rect;
 
-            // invalidate from the start row down
+            // Invalidate from the start row down.
             if (endRow == -1)
             {
                 rect = GetRectangle(startRow, type);
-                rect.Height = (Size.Height - rect.Y) - 1;
+                rect.Height = Size.Height - rect.Y - 1;
                 Invalidate(rect);
             }
             else
@@ -2413,60 +2154,58 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
 
                 case Keys.Return:
-                    if (Edit.Focused)
+                    if (EditTextBox.Focused)
                     {
                         return false;
                     }
+
                     break;
             }
+
             return base.IsInputKey(keyData);
         }
 
-        private bool IsMyChild(Control c)
+        private bool IsMyChild(Control control)
         {
-            if (c == this || c is null)
+            if (control == this || control is null)
             {
                 return false;
             }
 
-            Control cParent = c.ParentInternal;
+            Control parent = control.ParentInternal;
 
-            while (cParent is not null)
+            while (parent is not null)
             {
-                if (cParent == this)
+                if (parent == this)
                 {
                     return true;
                 }
-                cParent = cParent.ParentInternal;
+
+                parent = parent.ParentInternal;
             }
+
             return false;
         }
 
         private bool IsScrollValueValid(int newValue)
         {
-            /*Debug.WriteLine("se.newValue = " + se.newValue.ToString());
-            Debug.WriteLine("ScrollBar.Value = " + ScrollBar.Value.ToString());
-            Debug.WriteLine("visibleRows = " + visibleRows.ToString());
-            Debug.WriteLine("totalProps = " + totalProps.ToString());
-            Debug.WriteLine("ScrollBar.Max = " + ScrollBar.Maximum.ToString());
-            Debug.WriteLine("ScrollBar.LargeChange = " + ScrollBar.LargeChange.ToString());*/
-
-            // is this move valid?
+            // Is this move valid?
             if (newValue == ScrollBar.Value ||
                 newValue < 0 ||
                 newValue > ScrollBar.Maximum ||
-                (newValue + (ScrollBar.LargeChange - 1) >= totalProps))
+                (newValue + (ScrollBar.LargeChange - 1) >= TotalProperties))
             {
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView: move not needed, returning");
                 return false;
             }
+
             return true;
         }
 
-        internal bool IsSiblingControl(Control c1, Control c2)
+        internal bool IsSiblingControl(Control control1, Control control2)
         {
-            Control parent1 = c1.ParentInternal;
-            Control parent2 = c2.ParentInternal;
+            Control parent1 = control1.ParentInternal;
+            Control parent2 = control2.ParentInternal;
 
             while (parent2 is not null)
             {
@@ -2474,48 +2213,49 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     return true;
                 }
+
                 parent2 = parent2.ParentInternal;
             }
+
             return false;
         }
 
-        private void MoveSplitterTo(int xpos)
+        private void MoveSplitterTo(int xPosition)
         {
             int widthPS = GetOurSize().Width;
-            int startPS = ptOurLocation.X;
-            int pos = Math.Max(Math.Min(xpos, widthPS - 10), GetOutlineIconSize() * 2);
+            int startPS = _location.X;
+            int pos = Math.Max(Math.Min(xPosition, widthPS - 10), GetOutlineIconSize() * 2);
 
             int oldLabelWidth = InternalLabelWidth;
 
-            labelRatio = ((double)widthPS / (double)(pos - startPS));
+            _labelRatio = widthPS / (double)(pos - startPS);
 
             SetConstants();
 
-            if (selectedRow != -1)
+            if (_selectedRow != -1)
             {
-                // do this to move any editor we have
-                SelectRow(selectedRow);
+                // Do this to move any editor we have.
+                SelectRow(_selectedRow);
             }
 
             Rectangle r = ClientRectangle;
 
-            // if we're moving to the left, just invalidate the values
+            // If we're moving to the left, just invalidate the values.
             if (oldLabelWidth > InternalLabelWidth)
             {
-                int left = InternalLabelWidth - requiredLabelPaintMargin;
+                int left = InternalLabelWidth - _requiredLabelPaintMargin;
                 Invalidate(new Rectangle(left, 0, Size.Width - left, Size.Height));
             }
             else
             {
-                // to the right, just invalidate from where the splitter was
-                // to the right
-                r.X = oldLabelWidth - requiredLabelPaintMargin;
+                // To the right, just invalidate from where the splitter was.
+                r.X = oldLabelWidth - _requiredLabelPaintMargin;
                 r.Width -= r.X;
                 Invalidate(r);
             }
         }
 
-        private void OnBtnClick(object sender, EventArgs e)
+        private void OnButtonClick(object sender, EventArgs e)
         {
             if (GetFlag(FlagBtnLaunchedEditor))
             {
@@ -2526,13 +2266,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return;
             }
-            SetCommitError(ERROR_NONE);
+
+            SetCommitError(ErrorState.None);
 
             try
             {
                 Commit();
                 SetFlag(FlagBtnLaunchedEditor, true);
-                PopupDialog(selectedRow);
+                PopupDialog(_selectedRow);
             }
             finally
             {
@@ -2540,10 +2281,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void OnBtnKeyDown(object sender, KeyEventArgs ke)
-        {
-            OnKeyDown(sender, ke);
-        }
+        private void OnButtonKeyDown(object sender, KeyEventArgs ke) => OnKeyDown(sender, ke);
 
         private void OnChildLostFocus(object sender, EventArgs e)
         {
@@ -2569,37 +2307,35 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!Commit())
                 {
-                    Edit.Focus();
+                    EditTextBox.Focus();
                     return;
                 }
             }
 
-            if (selectedGridEntry is not null && GetRowFromGridEntry(selectedGridEntry) != -1)
+            if (_selectedGridEntry is not null && GetRowFromGridEntry(_selectedGridEntry) != -1)
             {
-                selectedGridEntry.Focus = true;
-                SelectGridEntry(selectedGridEntry, false);
+                _selectedGridEntry.HasFocus = true;
+                SelectGridEntry(_selectedGridEntry, pageIn: false);
             }
             else
             {
                 SelectRow(0);
             }
 
-            if (selectedGridEntry is not null && selectedGridEntry.GetValueOwner() is not null)
+            if (_selectedGridEntry is not null && _selectedGridEntry.GetValueOwner() is not null)
             {
-                UpdateHelpAttributes(null, selectedGridEntry);
+                UpdateHelpAttributes(null, _selectedGridEntry);
             }
 
-            // For empty GridView, draw a focus-indicator rectangle, just inside GridView borders
-            if (totalProps <= 0)
+            // For empty GridView, draw a focus-indicator rectangle, just inside GridView borders.
+            if (TotalProperties <= 0)
             {
-                int doubleOffset = 2 * offset_2Units;
+                int doubleOffset = 2 * _offset2Units;
 
                 if ((Size.Width > doubleOffset) && (Size.Height > doubleOffset))
                 {
-                    using (Graphics g = CreateGraphicsInternal())
-                    {
-                        ControlPaint.DrawFocusRectangle(g, new Rectangle(offset_2Units, offset_2Units, Size.Width - doubleOffset, Size.Height - doubleOffset));
-                    }
+                    using Graphics g = CreateGraphicsInternal();
+                    ControlPaint.DrawFocusRectangle(g, new Rectangle(_offset2Units, _offset2Units, Size.Width - doubleOffset, Size.Height - doubleOffset));
                 }
             }
         }
@@ -2607,19 +2343,20 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(OnSysColorChange);
+            SystemEvents.UserPreferenceChanged += OnSysColorChange;
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(OnSysColorChange);
+            SystemEvents.UserPreferenceChanged -= OnSysColorChange;
+
             // We can leak this if we aren't disposed.
-            //
-            if (toolTip is not null && !RecreatingHandle)
+            if (_toolTip is not null && !RecreatingHandle)
             {
-                toolTip.Dispose();
-                toolTip = null;
+                _toolTip.Dispose();
+                _toolTip = null;
             }
+
             base.OnHandleDestroyed(e);
         }
 
@@ -2628,11 +2365,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnListChange");
             if (!DropDownListBox.InSetSelectedIndex())
             {
-                GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
-                Edit.Text = gridEntry.GetPropertyTextValue(DropDownListBox.SelectedItem);
-                Edit.Focus();
-                SelectEdit(false);
+                GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
+                EditTextBox.Text = gridEntry.GetPropertyTextValue(DropDownListBox.SelectedItem);
+                EditTextBox.Focus();
+                EditTextBox.SelectAll();
             }
+
             SetFlag(FlagDropDownCommit, true);
         }
 
@@ -2644,63 +2382,62 @@ namespace System.Windows.Forms.PropertyGridInternal
         private void OnListClick(object sender, EventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnListClick");
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            _ = GetGridEntryFromRow(_selectedRow);
 
             if (DropDownListBox.Items.Count == 0)
             {
                 CommonEditorHide();
-                SetCommitError(ERROR_NONE);
-                SelectRow(selectedRow);
+                SetCommitError(ErrorState.None);
+                SelectRow(_selectedRow);
                 return;
             }
             else
             {
                 object value = DropDownListBox.SelectedItem;
 
-                // don't need the commit because we're committing anyway.
-                //
+                // Don't need the commit because we're committing anyway.
                 SetFlag(FlagDropDownCommit, false);
                 if (value is not null && !CommitText((string)value))
                 {
-                    SetCommitError(ERROR_NONE);
-                    SelectRow(selectedRow);
+                    SetCommitError(ErrorState.None);
+                    SelectRow(_selectedRow);
                 }
             }
         }
 
-        private void OnListDrawItem(object sender, DrawItemEventArgs die)
+        private void OnListDrawItem(object sender, DrawItemEventArgs e)
         {
-            int index = die.Index;
+            int index = e.Index;
 
-            if (index < 0 || selectedGridEntry is null)
+            if (index < 0 || _selectedGridEntry is null)
             {
                 return;
             }
 
-            string text = (string)DropDownListBox.Items[die.Index];
+            string text = (string)DropDownListBox.Items[e.Index];
 
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing list item, value='" + text + "'");
-            die.DrawBackground();
-            die.DrawFocusRectangle();
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Drawing list item, value='{text}'");
+            e.DrawBackground();
+            e.DrawFocusRectangle();
 
-            Rectangle drawBounds = die.Bounds;
+            Rectangle drawBounds = e.Bounds;
             drawBounds.Y += 1;
             drawBounds.X -= 1;
 
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
 
             try
             {
                 gridEntry.PaintValue(
                     gridEntry.ConvertTextToValue(text),
-                    die.GraphicsInternal,
+                    e.GraphicsInternal,
                     drawBounds,
                     drawBounds,
-                    die.State.HasFlag(DrawItemState.Selected) ? GridEntry.PaintValueFlags.DrawSelected : default);
+                    e.State.HasFlag(DrawItemState.Selected) ? GridEntry.PaintValueFlags.DrawSelected : default);
             }
             catch (FormatException ex)
             {
-                ShowFormatExceptionMessage(gridEntry.PropertyLabel, text, ex);
+                ShowFormatExceptionMessage(gridEntry.PropertyLabel, ex);
                 if (DropDownListBox.IsHandleCreated)
                 {
                     DropDownListBox.Visible = false;
@@ -2708,24 +2445,24 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void OnListKeyDown(object sender, KeyEventArgs ke)
+        private void OnListKeyDown(object sender, KeyEventArgs e)
         {
-            if (ke.KeyCode == Keys.Return)
+            if (e.KeyCode == Keys.Return)
             {
                 OnListClick(null, null);
-                if (selectedGridEntry is not null)
+                if (_selectedGridEntry is not null)
                 {
-                    selectedGridEntry.OnValueReturnKey();
+                    _selectedGridEntry.OnValueReturnKey();
                 }
             }
 
-            OnKeyDown(sender, ke);
+            OnKeyDown(sender, e);
         }
 
         protected override void OnLostFocus(EventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnLostFocus");
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "PropertyGridView lost focus");
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "PropertyGridView lost focus");
 
             if (e is not null)
             {
@@ -2738,21 +2475,22 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is not null)
             {
-                Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "removing gridEntry focus");
-                gridEntry.Focus = false;
+                Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "removing gridEntry focus");
+                gridEntry.HasFocus = false;
                 CommonEditorHide();
-                InvalidateRow(selectedRow);
+                InvalidateRow(_selectedRow);
             }
+
             base.OnLostFocus(e);
 
             // For empty GridView, clear the focus indicator that was painted in OnGotFocus()
-            if (totalProps <= 0)
+            if (TotalProperties <= 0)
             {
-                Rectangle clearRect = new Rectangle(1, 1, Size.Width - 2, Size.Height - 2);
-                Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, $"Filling empty gridview rect={clearRect}");
+                var clearRect = new Rectangle(1, 1, Size.Width - 2, Size.Height - 2);
+                Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Filling empty gridview rect={clearRect}");
 
                 Color color = BackColor;
                 if (color.HasTransparency())
@@ -2773,15 +2511,15 @@ namespace System.Windows.Forms.PropertyGridInternal
         private void OnEditChange(object sender, EventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditChange");
-            SetCommitError(ERROR_NONE, Edit.Focused);
+            SetCommitError(ErrorState.None, EditTextBox.Focused);
 
             ToolTip.ToolTip = string.Empty;
             ToolTip.Visible = false;
 
-            if (!Edit.InSetText())
+            if (!EditTextBox.InSetText)
             {
-                GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
-                if (gridEntry is not null && (gridEntry.Flags & GridEntry.FLAG_IMMEDIATELY_EDITABLE) != 0)
+                GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
+                if (gridEntry is not null && gridEntry.IsImmediatelyEditable)
                 {
                     Commit();
                 }
@@ -2792,38 +2530,40 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditGotFocus");
 
-            if (!Edit.Visible)
+            if (!EditTextBox.Visible)
             {
                 Focus();
                 return;
             }
 
-            switch (errorState)
+            switch (_errorState)
             {
-                case ERROR_MSGBOX_UP:
+                case ErrorState.MessageBoxUp:
                     return;
-                case ERROR_THROWN:
-                    if (Edit.Visible)
+                case ErrorState.Thrown:
+                    if (EditTextBox.Visible)
                     {
-                        Edit.HookMouseDown = true;
+                        EditTextBox.HookMouseDown = true;
                     }
+
                     break;
                 default:
                     if (NeedsCommit)
                     {
-                        SetCommitError(ERROR_NONE, true);
+                        SetCommitError(ErrorState.None, capture: true);
                     }
+
                     break;
             }
 
-            if (selectedGridEntry is not null && GetRowFromGridEntry(selectedGridEntry) != -1)
+            if (_selectedGridEntry is not null && GetRowFromGridEntry(_selectedGridEntry) != -1)
             {
-                Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "adding gridEntry focus");
-                selectedGridEntry.Focus = true;
-                InvalidateRow(selectedRow);
-                (Edit.AccessibilityObject as ControlAccessibleObject).NotifyClients(AccessibleEvents.Focus);
+                Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "adding gridEntry focus");
+                _selectedGridEntry.HasFocus = true;
+                InvalidateRow(_selectedRow);
+                (EditTextBox.AccessibilityObject as ControlAccessibleObject).NotifyClients(AccessibleEvents.Focus);
 
-                Edit.AccessibilityObject.SetFocus();
+                EditTextBox.AccessibilityObject.SetFocus();
             }
             else
             {
@@ -2831,90 +2571,97 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private bool ProcessEnumUpAndDown(GridEntry gridEntry, Keys keyCode, bool closeDropDown = true)
+        private bool ProcessEnumUpAndDown(GridEntry entry, Keys keyCode, bool closeDropDown = true)
         {
-            object value = gridEntry.PropertyValue;
-            object[] rgvalues = gridEntry.GetPropertyValueList();
-            if (rgvalues is not null)
+            object value = entry.PropertyValue;
+            object[] values = entry.GetPropertyValueList();
+            if (values is null)
             {
-                for (int i = 0; i < rgvalues.Length; i++)
+                return false;
+            }
+
+            for (int i = 0; i < values.Length; i++)
+            {
+                object currentValue = values[i];
+
+                if (value is not null && currentValue is not null && value.GetType() != currentValue.GetType()
+                    && entry.TypeConverter.CanConvertTo(entry, value.GetType()))
                 {
-                    object rgvalue = rgvalues[i];
-                    if (value is not null && rgvalue is not null && value.GetType() != rgvalue.GetType() && gridEntry.TypeConverter.CanConvertTo(gridEntry, value.GetType()))
+                    currentValue = entry.TypeConverter.ConvertTo(entry, CultureInfo.CurrentCulture, currentValue, value.GetType());
+                }
+
+                bool equal = (value == currentValue) || (value is not null && value.Equals(currentValue));
+
+                if (!equal && value is string @string && currentValue is not null)
+                {
+                    equal = 0 == string.Compare(@string, currentValue.ToString(), true, CultureInfo.CurrentCulture);
+                }
+
+                if (!equal)
+                {
+                    continue;
+                }
+
+                object valueNew;
+                if (keyCode == Keys.Up)
+                {
+                    if (i == 0)
                     {
-                        rgvalue = gridEntry.TypeConverter.ConvertTo(gridEntry, CultureInfo.CurrentCulture, rgvalue, value.GetType());
-                    }
-
-                    bool equal = (value == rgvalue) || (value is not null && value.Equals(rgvalue));
-
-                    if (!equal && value is string && rgvalue is not null)
-                    {
-                        equal = 0 == string.Compare((string)value, rgvalue.ToString(), true, CultureInfo.CurrentCulture);
-                    }
-                    if (equal)
-                    {
-                        object valueNew = null;
-                        if (keyCode == Keys.Up)
-                        {
-                            if (i == 0)
-                            {
-                                return true;
-                            }
-
-                            valueNew = rgvalues[i - 1];
-                        }
-                        else
-                        {
-                            if (i == rgvalues.Length - 1)
-                            {
-                                return true;
-                            }
-
-                            valueNew = rgvalues[i + 1];
-                        }
-
-                        CommitValue(gridEntry, valueNew, closeDropDown);
-                        SelectEdit(false);
                         return true;
                     }
+
+                    valueNew = values[i - 1];
                 }
+                else
+                {
+                    if (i == values.Length - 1)
+                    {
+                        return true;
+                    }
+
+                    valueNew = values[i + 1];
+                }
+
+                CommitValue(entry, valueNew, closeDropDown);
+                EditTextBox?.SelectAll();
+                return true;
             }
 
             return false;
         }
 
-        private void OnEditKeyDown(object sender, KeyEventArgs ke)
+        private void OnEditKeyDown(object sender, KeyEventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditKeyDown");
-            bool fAlt = ke.Alt;
-            if (!fAlt && (ke.KeyCode == Keys.Up || ke.KeyCode == Keys.Down))
+            if (!e.Alt && (e.KeyCode == Keys.Up || e.KeyCode == Keys.Down))
             {
-                GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+                GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
                 if (!gridEntry.Enumerable || !gridEntry.IsValueEditable)
                 {
                     return;
                 }
 
-                ke.Handled = true;
-                bool processed = ProcessEnumUpAndDown(gridEntry, ke.KeyCode);
+                e.Handled = true;
+                bool processed = ProcessEnumUpAndDown(gridEntry, e.KeyCode);
                 if (processed)
                 {
                     return;
                 }
             }
-            // Handle non-expand/collapse case of left & right as up & down
-            else if ((ke.KeyCode == Keys.Left || ke.KeyCode == Keys.Right) &&
-                     (ke.Modifiers & ~Keys.Shift) != 0)
+            else if ((e.KeyCode == Keys.Left || e.KeyCode == Keys.Right)
+                && (e.Modifiers & ~Keys.Shift) != 0)
             {
+                // Handle non-expand/collapse case of left & right as up & down
                 return;
             }
-            OnKeyDown(sender, ke);
+
+            OnKeyDown(sender, e);
         }
 
-        private void OnEditKeyPress(object sender, KeyPressEventArgs ke)
+        private void OnEditKeyPress(object sender, KeyPressEventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditKeyPress");
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {
                 return;
@@ -2922,7 +2669,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (!gridEntry.IsTextEditable)
             {
-                ke.Handled = FilterReadOnlyEditKeyPress(ke.KeyChar);
+                e.Handled = FilterReadOnlyEditKeyPress(e.KeyChar);
             }
         }
 
@@ -2930,25 +2677,24 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditLostFocus");
 
-            // believe it or not, this can actually happen.
-            if (Edit.Focused || (errorState == ERROR_MSGBOX_UP) || (errorState == ERROR_THROWN) || GetInPropertySet())
+            // Believe it or not this can actually happen.
+            if (EditTextBox.Focused || (_errorState == ErrorState.MessageBoxUp) || (_errorState == ErrorState.Thrown) || GetInPropertySet())
             {
                 return;
             }
 
-            // check to see if the focus is on the drop down or one of it's children
-            // if so, return;
-            if (dropDownHolder is not null && dropDownHolder.Visible)
+            // Check to see if the focus is on the drop down or one of it's children. If so, return.
+            if (_dropDownHolder is not null && _dropDownHolder.Visible)
             {
                 bool found = false;
-                for (IntPtr hwnd = User32.GetForegroundWindow();
-                    hwnd != IntPtr.Zero; hwnd = User32.GetParent(hwnd))
+                for (IntPtr hwnd = User32.GetForegroundWindow(); hwnd != IntPtr.Zero; hwnd = User32.GetParent(hwnd))
                 {
-                    if (hwnd == dropDownHolder.Handle)
+                    if (hwnd == _dropDownHolder.Handle)
                     {
                         found = true;
                     }
                 }
+
                 if (found)
                 {
                     return;
@@ -2960,56 +2706,57 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            // if the focus isn't goint to a child of the view
+            // If the focus isn't going to a child of the view
             if (!Commit())
             {
-                Edit.Focus();
+                EditTextBox.Focus();
                 return;
             }
-            // change our focus state.
+
+            // Change our focus state.
             InvokeLostFocus(this, EventArgs.Empty);
         }
 
-        private void OnEditMouseDown(object sender, MouseEventArgs me)
+        private void OnEditMouseDown(object sender, MouseEventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEditMouseDown");
 
             if (!FocusInside)
             {
-                SelectGridEntry(selectedGridEntry, false);
+                SelectGridEntry(_selectedGridEntry, pageIn: false);
             }
 
-            if (me.Clicks % 2 == 0)
+            if (e.Clicks % 2 == 0)
             {
-                DoubleClickRow(selectedRow, false, ROWVALUE);
-                Edit.SelectAll();
+                DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
+                EditTextBox.SelectAll();
             }
 
-            if (rowSelectTime == 0)
+            if (_rowSelectTime == 0)
             {
                 return;
             }
 
-            // check if the click happened within the double click time since the row was selected.
-            // this allows the edits to be selected with two clicks instead of 3 (select row, double click).
-            //
+            // Check if the click happened within the double click time since the row was selected.
+            // This allows the edits to be selected with two clicks instead of 3 (select row, double click).
             long timeStamp = DateTime.Now.Ticks;
-            int delta = (int)((timeStamp - rowSelectTime) / 10000); // make it milleseconds
+            int delta = (int)((timeStamp - _rowSelectTime) / 10000); // make it milliseconds
 
             if (delta < SystemInformation.DoubleClickTime)
             {
-                Point screenPoint = Edit.PointToScreen(new Point(me.X, me.Y));
+                Point screenPoint = EditTextBox.PointToScreen(new(e.X, e.Y));
 
-                if (Math.Abs(screenPoint.X - rowSelectPos.X) < SystemInformation.DoubleClickSize.Width &&
-                    Math.Abs(screenPoint.Y - rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
+                if (Math.Abs(screenPoint.X - _rowSelectPos.X) < SystemInformation.DoubleClickSize.Width &&
+                    Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
-                    DoubleClickRow(selectedRow, false, ROWVALUE);
-                    User32.SendMessageW(Edit, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(me.X, me.Y));
-                    Edit.SelectAll();
+                    DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
+                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(e.X, e.Y));
+                    EditTextBox.SelectAll();
                 }
-                rowSelectPos = Point.Empty;
 
-                rowSelectTime = 0;
+                _rowSelectPos = Point.Empty;
+
+                _rowSelectTime = 0;
             }
         }
 
@@ -3020,6 +2767,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return false;
             }
+
             if (sender == this || sender == OwnerGrid)
             {
                 F4Selection(true);
@@ -3042,107 +2790,103 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             SetFlag(FlagDropDownCommit, false);
 
-            if (sender == Edit && Edit.Focused)
+            if (sender != EditTextBox || !EditTextBox.Focused)
             {
-                // if we aren't in an error state, just quit
-                if (errorState == ERROR_NONE)
+                if (sender != this)
                 {
-                    Edit.Text = originalTextValue;
+                    CloseDropDown();
                     Focus();
-                    return true;
                 }
 
-                if (NeedsCommit)
-                {
-                    bool success = false;
-                    Edit.Text = originalTextValue;
-                    bool needReset = true;
+                return false;
+            }
 
-                    if (selectedGridEntry is not null)
-                    {
-                        string curTextValue = selectedGridEntry.GetPropertyTextValue();
-                        needReset = originalTextValue != curTextValue && !(string.IsNullOrEmpty(originalTextValue) && string.IsNullOrEmpty(curTextValue));
-                    }
-
-                    if (needReset)
-                    {
-                        try
-                        {
-                            success = CommitText(originalTextValue);
-                        }
-                        catch
-                        {
-                        }
-                    }
-                    else
-                    {
-                        success = true;
-                    }
-
-                    // this would be an odd thing to happen, but...
-                    if (!success)
-                    {
-                        Edit.Focus();
-                        SelectEdit(false);
-                        return true;
-                    }
-                }
-
-                SetCommitError(ERROR_NONE);
+            // If we aren't in an error state, just quit.
+            if (_errorState == ErrorState.None)
+            {
+                EditTextBox.Text = _originalTextValue;
                 Focus();
                 return true;
             }
-            else if (sender != this)
+
+            if (NeedsCommit)
             {
-                CloseDropDown();
-                Focus();
+                bool success = false;
+                EditTextBox.Text = _originalTextValue;
+                bool needReset = true;
+
+                if (_selectedGridEntry is not null)
+                {
+                    string currentTextValue = _selectedGridEntry.GetPropertyTextValue();
+                    needReset = _originalTextValue != currentTextValue
+                        && !(string.IsNullOrEmpty(_originalTextValue) && string.IsNullOrEmpty(currentTextValue));
+                }
+
+                if (needReset)
+                {
+                    try
+                    {
+                        success = CommitText(_originalTextValue);
+                    }
+                    catch
+                    {
+                    }
+                }
+                else
+                {
+                    success = true;
+                }
+
+                if (!success)
+                {
+                    EditTextBox.Focus();
+                    EditTextBox.SelectAll();
+                    return true;
+                }
             }
-            return false;
+
+            SetCommitError(ErrorState.None);
+            Focus();
+            return true;
         }
 
-        protected override void OnKeyDown(KeyEventArgs ke)
-        {
-            OnKeyDown(this, ke);
-        }
+        protected override void OnKeyDown(KeyEventArgs e) => OnKeyDown(this, e);
 
-        private void OnKeyDown(object sender, KeyEventArgs ke)
+        private void OnKeyDown(object sender, KeyEventArgs e)
         {
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
-            if (gridEntry is null)
+            GridEntry entry = GetGridEntryFromRow(_selectedRow);
+            if (entry is null)
             {
                 return;
             }
 
-            ke.Handled = true;
-            bool fControl = ke.Control;
-            bool fShift = ke.Shift;
-            bool fBoth = fControl && fShift;
-            bool fAlt = ke.Alt;
-            Keys keyCode = ke.KeyCode;
-            bool fallingThorugh = false;
+            e.Handled = true;
+            bool controlPressed = e.Control;
+            bool shiftPressed = e.Shift;
+            bool controlShiftPressed = controlPressed && shiftPressed;
+            bool altPressed = e.Alt;
+            Keys keyCode = e.KeyCode;
+            bool fallingThrough = false;
 
-            // Microsoft, we have to do this here because if we are
-            // hosted in a non-windows forms dialog, we never get a chance to
-            // peek at the messages, we just get called,
-            // so we have to do this here...
-            //
+            // We have to do this here because if we are hosted in a non-windows forms dialog, we never get a chance to
+            // peek at the messages, we just get called.
             if (keyCode == Keys.Tab)
             {
-                if (ProcessDialogKey(ke.KeyData))
+                if (ProcessDialogKey(e.KeyData))
                 {
-                    ke.Handled = true;
+                    e.Handled = true;
                     return;
                 }
             }
 
-            // Alt-Arrow support... sigh...
-            if (keyCode == Keys.Down && fAlt && DropDownButton.Visible)
+            // Alt-Arrow support.
+            if (keyCode == Keys.Down && altPressed && DropDownButton.Visible)
             {
                 F4Selection(false);
                 return;
             }
 
-            if (keyCode == Keys.Up && fAlt && DropDownButton.Visible && (dropDownHolder is not null) && dropDownHolder.Visible)
+            if (keyCode == Keys.Up && altPressed && DropDownButton.Visible && (_dropDownHolder is not null) && _dropDownHolder.Visible)
             {
                 UnfocusSelection();
                 return;
@@ -3153,128 +2897,132 @@ namespace System.Windows.Forms.PropertyGridInternal
                 ToolTip.ToolTip = string.Empty;
             }
 
-            if (fBoth || sender == this || sender == OwnerGrid)
+            if (controlShiftPressed || sender == this || sender == OwnerGrid)
             {
                 switch (keyCode)
                 {
                     case Keys.Up:
                     case Keys.Down:
-                        int pos = (keyCode == Keys.Up ? selectedRow - 1 : selectedRow + 1);
-                        SelectGridEntry(GetGridEntryFromRow(pos), true);
+                        int postion = keyCode == Keys.Up ? _selectedRow - 1 : _selectedRow + 1;
+                        SelectGridEntry(GetGridEntryFromRow(postion), pageIn: true);
                         SetFlag(FlagNoDefault, false);
                         return;
                     case Keys.Left:
-                        if (fControl)
+                        if (controlPressed)
                         {
-                            // move the splitter 3 pixels to the left
+                            // Move the splitter 3 pixels to the left
                             MoveSplitterTo(InternalLabelWidth - 3);
                             return;
                         }
-                        if (gridEntry.InternalExpanded)
+
+                        if (entry.InternalExpanded)
                         {
-                            SetExpand(gridEntry, false);
+                            SetExpand(entry, false);
                         }
                         else
                         {
-                            // Handle non-expand/collapse case of left & right as up & down
-                            SelectGridEntry(GetGridEntryFromRow(selectedRow - 1), true);
+                            // Handle non-expand/collapse case of left & right as up & down.
+                            SelectGridEntry(GetGridEntryFromRow(_selectedRow - 1), pageIn: true);
                         }
+
                         return;
                     case Keys.Right:
-                        if (fControl)
+                        if (controlPressed)
                         {
-                            // move the splitter 3 pixels to the right
+                            // Move the splitter 3 pixels to the right.
                             MoveSplitterTo(InternalLabelWidth + 3);
                             return;
                         }
-                        if (gridEntry.Expandable)
+
+                        if (entry.Expandable)
                         {
-                            if (gridEntry.InternalExpanded)
+                            if (entry.InternalExpanded)
                             {
-                                GridEntryCollection rgipes2 = gridEntry.Children;
-                                SelectGridEntry(rgipes2.GetEntry(0), true);
+                                SelectGridEntry(entry.Children[0], pageIn: true);
                             }
                             else
                             {
-                                SetExpand(gridEntry, true);
+                                SetExpand(entry, true);
                             }
                         }
                         else
                         {
-                            // Handle non-expand/collapse case of left & right as up & down
-                            SelectGridEntry(GetGridEntryFromRow(selectedRow + 1), true);
+                            // Handle non-expand/collapse case of left & right as up & down.
+                            SelectGridEntry(GetGridEntryFromRow(_selectedRow + 1), pageIn: true);
                         }
+
                         return;
                     case Keys.Return:
-                        if (gridEntry.Expandable)
+                        if (entry.Expandable)
                         {
-                            SetExpand(gridEntry, !gridEntry.InternalExpanded);
+                            SetExpand(entry, !entry.InternalExpanded);
                         }
                         else
                         {
-                            gridEntry.OnValueReturnKey();
+                            entry.OnValueReturnKey();
                         }
 
                         return;
                     case Keys.Home:
                     case Keys.End:
-                        GridEntryCollection rgipes = GetAllGridEntries();
-                        int pos2 = (keyCode == Keys.Home ? 0 : rgipes.Count - 1);
-                        SelectGridEntry(rgipes.GetEntry(pos2), true);
+                        GridEntryCollection allEntries = GetAllGridEntries();
+                        SelectGridEntry(allEntries[keyCode == Keys.Home ? 0 : allEntries.Count - 1], pageIn: true);
                         return;
                     case Keys.Add:
                     case Keys.Oemplus:
                     case Keys.OemMinus:
                     case Keys.Subtract:
 
-                        if (!gridEntry.Expandable)
+                        if (!entry.Expandable)
                         {
                             break;
                         }
 
                         SetFlag(FlagIsSpecialKey, true);
-                        bool expand = (keyCode == Keys.Add || keyCode == Keys.Oemplus);
-                        SetExpand(gridEntry, expand);
+                        bool expand = keyCode == Keys.Add || keyCode == Keys.Oemplus;
+                        SetExpand(entry, expand);
                         Invalidate();
-                        ke.Handled = true;
+                        e.Handled = true;
                         return;
 
                     case Keys.D8:
-                        if (fShift)
+                        if (shiftPressed)
                         {
                             goto case Keys.Multiply;
                         }
+
                         break;
                     case Keys.Multiply:
                         SetFlag(FlagIsSpecialKey, true);
-                        RecursivelyExpand(gridEntry, true, true, MaxRecurseExpand);
-                        ke.Handled = false;
+                        RecursivelyExpand(entry, true, true, MaxRecurseExpand);
+                        e.Handled = false;
                         return;
 
-                    case Keys.Prior:  //PAGE_UP:
-                    case Keys.Next: //PAGE_DOWN
+                    case Keys.Prior:  // PAGE_UP
+                    case Keys.Next:   // PAGE_DOWN
 
-                        bool next = (keyCode == Keys.Next);
-                        //int rowGoal = next ? visibleRows - 1 : 0;
-                        int offset = next ? visibleRows - 1 : 1 - visibleRows;
+                        bool next = keyCode == Keys.Next;
+                        int offset = next ? _visibleRows - 1 : 1 - _visibleRows;
 
-                        int row = selectedRow;
+                        int row = _selectedRow;
 
-                        if (fControl && !fShift)
+                        if (controlPressed && !shiftPressed)
                         {
                             return;
                         }
-                        if (selectedRow != -1)
-                        { // actual paging.
+
+                        if (_selectedRow != -1)
+                        {
+                            // Actual paging.
                             int start = GetScrollOffset();
                             SetScrollOffset(start + offset);
                             SetConstants();
                             if (GetScrollOffset() != (start + offset))
                             {
-                                // we didn't make a full page
+                                // We didn't make a full page.
                                 if (next)
                                 {
-                                    row = visibleRows - 1;
+                                    row = _visibleRows - 1;
                                 }
                                 else
                                 {
@@ -3287,135 +3035,102 @@ namespace System.Windows.Forms.PropertyGridInternal
                         Refresh();
                         return;
 
-                    // Copy/paste support...
+                    // Copy/paste support.
 
                     case Keys.Insert:
-                        if (fShift && !fControl && !fAlt)
+                        if (shiftPressed && !controlPressed && !altPressed)
                         {
-                            fallingThorugh = true;
+                            fallingThrough = true;
                             goto case Keys.V;
                         }
+
                         goto case Keys.C;
                     case Keys.C:
-                        // copy text in current property
-                        if (fControl && !fAlt && !fShift)
+                        // Copy text in current property.
+                        if (controlPressed && !altPressed && !shiftPressed)
                         {
                             DoCopyCommand();
                             return;
                         }
+
                         break;
                     case Keys.Delete:
-                        // cut text in current property
-                        if (fShift && !fControl && !fAlt)
+                        // Cut text in current property.
+                        if (shiftPressed && !controlPressed && !altPressed)
                         {
-                            fallingThorugh = true;
+                            fallingThrough = true;
                             goto case Keys.X;
                         }
+
                         break;
                     case Keys.X:
-                        // cut text in current property
-                        if (fallingThorugh || (fControl && !fAlt && !fShift))
+                        // Cut text in current property.
+                        if (fallingThrough || (controlPressed && !altPressed && !shiftPressed))
                         {
-                            Clipboard.SetDataObject(gridEntry.GetPropertyTextValue());
+                            Clipboard.SetDataObject(entry.GetPropertyTextValue());
                             CommitText("");
                             return;
                         }
+
                         break;
                     case Keys.V:
-                        // paste the text
-                        if (fallingThorugh || (fControl && !fAlt && !fShift))
+                        // Paste the text.
+                        if (fallingThrough || (controlPressed && !altPressed && !shiftPressed))
                         {
                             DoPasteCommand();
                         }
+
                         break;
                     case Keys.A:
-                        if (fControl && !fAlt && !fShift && Edit.Visible)
+                        if (controlPressed && !altPressed && !shiftPressed && EditTextBox.Visible)
                         {
-                            Edit.Focus();
-                            Edit.SelectAll();
+                            EditTextBox.Focus();
+                            EditTextBox.SelectAll();
                         }
+
                         break;
                 }
             }
 
-            if (gridEntry is not null && ke.KeyData == (Keys.C | Keys.Alt | Keys.Shift | Keys.Control))
+            if (entry is not null && e.KeyData == (Keys.C | Keys.Alt | Keys.Shift | Keys.Control))
             {
-                Clipboard.SetDataObject(gridEntry.GetTestingInfo());
+                Clipboard.SetDataObject(entry.GetTestingInfo());
                 return;
             }
 
-            /* Due to conflicts with other VS commands,
-               we are removing this functionality.
-
-               // Ctrl + Shift + 'X' selects the property that starts with 'X'
-               if (fBoth) {
-                   // now get the array to work with.
-                   GridEntry[] rgipes = GetAllGridEntries();
-                   int cLength = rgipes.Length;
-
-                   // now get our char.
-                   string strCh = (new string(new char[] {(char)ke.KeyCode})).ToLower(CultureInfo.InvariantCulture);
-
-                   int cCur = -1;
-                   if (gridEntry is not null)
-                       for (int i = 0; i < cLength; i++) {
-                           if (rgipes[i] == gridEntry) {
-                               cCur = i;
-                               break;
-                           }
-                       }
-
-                   cCur += 1; // this indicated where we start...
-                   // find next label that starts with this letter.
-                   for (int i = 0; i < cLength; i++) {
-                       GridEntry ipeCur = rgipes[(i + cCur) % cLength];
-                       if (ipeCur.PropertyLabel.ToLower(CultureInfo.InvariantCulture).StartsWith(strCh)) {
-                           if (gridEntry != ipeCur) {
-                               SelectGridEntry(ipeCur,true);
-                               return;
-                           }
-                           break;
-                       }
-                   }
-               }
-            */
-
-            if (selectedGridEntry is not null && selectedGridEntry.Enumerable &&
-                dropDownHolder is not null && dropDownHolder.Visible &&
+            if (_selectedGridEntry is not null && _selectedGridEntry.Enumerable &&
+                _dropDownHolder is not null && _dropDownHolder.Visible &&
                 (keyCode == Keys.Up || keyCode == Keys.Down))
             {
-                ProcessEnumUpAndDown(selectedGridEntry, keyCode, false);
+                ProcessEnumUpAndDown(_selectedGridEntry, keyCode, false);
             }
 
-            ke.Handled = false;
+            e.Handled = false;
             return;
         }
 
-        protected override void OnKeyPress(KeyPressEventArgs ke)
+        protected override void OnKeyPress(KeyPressEventArgs e)
         {
-            bool fControl = false; //ke.getControl();
-            bool fShift = false; //ke.getShift();
-            bool fBoth = fControl && fShift;
-            if (!fBoth && WillFilterKeyPress(ke.KeyChar))
+            if (WillFilterKeyPress(e.KeyChar))
             {
-                // find next property with letter typed.
-                FilterKeyPress(ke.KeyChar);
+                // Find next property with letter typed.
+                FilterKeyPress(e.KeyChar);
             }
 
             SetFlag(FlagIsSpecialKey, false);
         }
 
-        protected override void OnMouseDown(MouseEventArgs me)
+        protected override void OnMouseDown(MouseEventArgs e)
         {
-            // check for a splitter
-            if (me.Button == MouseButtons.Left && SplitterInside(me.X, me.Y) && totalProps != 0)
+            // Check for a splitter
+            if (e.Button == MouseButtons.Left && SplitterInside(e.X) && TotalProperties != 0)
             {
                 if (!Commit())
                 {
                     return;
                 }
 
-                if (me.Clicks == 2)
+                if (e.Clicks == 2)
                 {
                     MoveSplitterTo(Width / 2);
                     return;
@@ -3423,116 +3138,115 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 UnfocusSelection();
                 SetFlag(FlagIsSplitterMove, true);
-                tipInfo = -1;
+                _tipInfo = -1;
                 Capture = true;
                 return;
             }
 
-            // are ew on a propentry?
-            Point pos = FindPosition(me.X, me.Y);
+            // Are we on a propentry?
+            Point pos = FindPosition(e.X, e.Y);
 
             if (pos == InvalidPosition)
             {
                 return;
             }
 
-            // Notify that prop entry of the click...but normalize
-            // it's coords first...we really  just need the x, y
+            // Notify that prop entry of the click, but normalize it's coords first. We really just need the x, y.
             GridEntry gridEntry = GetGridEntryFromRow(pos.Y);
 
             if (gridEntry is not null)
             {
-                // get the origin of this pe
-                Rectangle r = GetRectangle(pos.Y, ROWLABEL);
+                // Get the origin of this pe.
+                Rectangle r = GetRectangle(pos.Y, RowLabel);
 
-                lastMouseDown = new Point(me.X, me.Y);
+                _lastMouseDown = new Point(e.X, e.Y);
 
-                // offset the mouse points
-                // notify the prop entry
-                if (me.Button == MouseButtons.Left)
+                // Offset the mouse points & notify the prop entry.
+                if (e.Button == MouseButtons.Left)
                 {
-                    gridEntry.OnMouseClick(me.X - r.X, me.Y - r.Y, me.Clicks, me.Button);
+                    gridEntry.OnMouseClick(e.X - r.X, e.Y - r.Y, e.Clicks, e.Button);
                 }
                 else
                 {
-                    SelectGridEntry(gridEntry, false);
+                    SelectGridEntry(gridEntry, pageIn: false);
                 }
-                lastMouseDown = InvalidPosition;
-                gridEntry.Focus = true;
+
+                _lastMouseDown = InvalidPosition;
+                gridEntry.HasFocus = true;
                 SetFlag(FlagNoDefault, false);
             }
         }
 
-        // this will make tool tip go away.
         protected override void OnMouseLeave(EventArgs e)
         {
             if (!GetFlag(FlagIsSplitterMove))
             {
-                Cursor = Cursors.Default; // Cursor = null;;
+                Cursor = Cursors.Default;
             }
 
             base.OnMouseLeave(e);
         }
 
-        protected override void OnMouseMove(MouseEventArgs me)
+        protected override void OnMouseMove(MouseEventArgs e)
         {
-            int rowMoveCur;
-            Point pt = Point.Empty;
+            int rowMoveCurrent;
+            Point point;
             bool onLabel = false;
 
-            if (me is null)
+            if (e is null)
             {
-                rowMoveCur = -1;
-                pt = InvalidPosition;
+                rowMoveCurrent = -1;
+                point = InvalidPosition;
             }
             else
             {
-                pt = FindPosition(me.X, me.Y);
-                if (pt == InvalidPosition || (pt.X != ROWLABEL && pt.X != ROWVALUE))
+                point = FindPosition(e.X, e.Y);
+                if (point == InvalidPosition || (point.X != RowLabel && point.X != RowValue))
                 {
-                    rowMoveCur = -1;
+                    rowMoveCurrent = -1;
                     ToolTip.ToolTip = string.Empty;
                 }
                 else
                 {
-                    rowMoveCur = pt.Y;
-                    onLabel = pt.X == ROWLABEL;
+                    rowMoveCurrent = point.Y;
+                    onLabel = point.X == RowLabel;
                 }
             }
 
-            if (pt == InvalidPosition || me is null)
+            if (point == InvalidPosition || e is null)
             {
                 return;
             }
 
             if (GetFlag(FlagIsSplitterMove))
             {
-                MoveSplitterTo(me.X);
+                MoveSplitterTo(e.X);
             }
 
-            if ((rowMoveCur != TipRow || pt.X != TipColumn) && !GetFlag(FlagIsSplitterMove))
+            if ((rowMoveCurrent != TipRow || point.X != TipColumn) && !GetFlag(FlagIsSplitterMove))
             {
-                GridEntry gridItem = GetGridEntryFromRow(rowMoveCur);
+                GridEntry gridItem = GetGridEntryFromRow(rowMoveCurrent);
                 string tip = string.Empty;
-                tipInfo = -1;
+                _tipInfo = -1;
 
                 if (gridItem is not null)
                 {
-                    Rectangle itemRect = GetRectangle(pt.Y, pt.X);
-                    if (onLabel && gridItem.GetLabelToolTipLocation(me.X - itemRect.X, me.Y - itemRect.Y) != InvalidPoint)
+                    Rectangle itemRect = GetRectangle(point.Y, point.X);
+                    if (onLabel && gridItem.GetLabelToolTipLocation(e.X - itemRect.X, e.Y - itemRect.Y) != InvalidPoint)
                     {
                         tip = gridItem.LabelToolTipText;
-                        TipRow = rowMoveCur;
-                        TipColumn = pt.X;
+                        TipRow = rowMoveCurrent;
+                        TipColumn = point.X;
                     }
-                    else if (!onLabel && gridItem.ValueToolTipLocation != InvalidPoint && !Edit.Focused)
+                    else if (!onLabel && gridItem.ValueToolTipLocation != InvalidPoint && !EditTextBox.Focused)
                     {
                         if (!NeedsCommit)
                         {
                             tip = gridItem.GetPropertyTextValue();
                         }
-                        TipRow = rowMoveCur;
-                        TipColumn = pt.X;
+
+                        TipRow = rowMoveCurrent;
+                        TipColumn = point.X;
                     }
                 }
 
@@ -3542,7 +3256,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (User32.IsChild(foregroundWindow, new HandleRef(this, Handle)).IsTrue())
                 {
                     // Don't show the tips if a dropdown is showing
-                    if ((dropDownHolder is null || dropDownHolder.Component is null) || rowMoveCur == selectedRow)
+                    if (_dropDownHolder is null || _dropDownHolder.Component is null || rowMoveCurrent == _selectedRow)
                     {
                         ToolTip.ToolTip = tip;
                     }
@@ -3553,33 +3267,32 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            if (totalProps != 0 && (SplitterInside(me.X, me.Y) || GetFlag(FlagIsSplitterMove)))
+            if (TotalProperties != 0 && (SplitterInside(e.X) || GetFlag(FlagIsSplitterMove)))
             {
                 Cursor = Cursors.VSplit;
             }
             else
             {
-                Cursor = Cursors.Default; // Cursor = null;;
+                Cursor = Cursors.Default;
             }
-            base.OnMouseMove(me);
+
+            base.OnMouseMove(e);
         }
 
-        protected override void OnMouseUp(MouseEventArgs me)
-        {
-            CancelSplitterMove();
-        }
+        protected override void OnMouseUp(MouseEventArgs e) => CancelSplitterMove();
 
-        protected override void OnMouseWheel(MouseEventArgs me)
+        protected override void OnMouseWheel(MouseEventArgs e)
         {
-            OwnerGrid.OnGridViewMouseWheel(me);
+            OwnerGrid.OnGridViewMouseWheel(e);
 
-            if (me is HandledMouseEventArgs e)
+            if (e is HandledMouseEventArgs handledArgs)
             {
-                if (e.Handled)
+                if (handledArgs.Handled)
                 {
                     return;
                 }
-                e.Handled = true;
+
+                handledArgs.Handled = true;
             }
 
             if ((ModifierKeys & (Keys.Shift | Keys.Alt)) != 0 || MouseButtons != MouseButtons.None)
@@ -3593,20 +3306,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return; // Do not scroll when the user system setting is 0 lines per notch
             }
 
-            Debug.Assert(cumulativeVerticalWheelDelta > -NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too small");
-            Debug.Assert(cumulativeVerticalWheelDelta < NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too big");
+            Debug.Assert(_cumulativeVerticalWheelDelta > -NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too small");
+            Debug.Assert(_cumulativeVerticalWheelDelta < NativeMethods.WHEEL_DELTA, "cumulativeVerticalWheelDelta is too big");
 
-            // Should this only work if the Edit has focus?  anyway
-            // we use the mouse wheel to change the values in the dropdown if it's
-            // an enumerable value.
-            //
-            if (selectedGridEntry is not null && selectedGridEntry.Enumerable && Edit.Focused && selectedGridEntry.IsValueEditable)
+            // Should this only work if the Edit has focus?
+            // We use the mouse wheel to change the values in the dropdown if it's an enumerable value.
+            if (_selectedGridEntry is not null && _selectedGridEntry.Enumerable && EditTextBox.Focused && _selectedGridEntry.IsValueEditable)
             {
-                int index = GetCurrentValueIndex(selectedGridEntry);
+                int index = GetCurrentValueIndex(_selectedGridEntry);
                 if (index != -1)
                 {
-                    int delta = me.Delta > 0 ? -1 : 1;
-                    object[] values = selectedGridEntry.GetPropertyValueList();
+                    int delta = e.Delta > 0 ? -1 : 1;
+                    object[] values = _selectedGridEntry.GetPropertyValueList();
 
                     if (delta > 0 && index >= (values.Length - 1))
                     {
@@ -3622,15 +3333,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     CommitValue(values[index]);
-                    SelectGridEntry(selectedGridEntry, true);
-                    Edit.Focus();
+                    SelectGridEntry(_selectedGridEntry, pageIn: true);
+                    EditTextBox.Focus();
                     return;
                 }
             }
 
             int initialOffset = GetScrollOffset();
-            cumulativeVerticalWheelDelta += me.Delta;
-            float partialNotches = (float)cumulativeVerticalWheelDelta / (float)NativeMethods.WHEEL_DELTA;
+            _cumulativeVerticalWheelDelta += e.Delta;
+            float partialNotches = _cumulativeVerticalWheelDelta / (float)NativeMethods.WHEEL_DELTA;
             int fullNotches = (int)partialNotches;
 
             if (wheelScrollLines == -1)
@@ -3639,23 +3350,23 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (fullNotches != 0)
                 {
                     int originalOffset = initialOffset;
-                    int large = fullNotches * scrollBar.LargeChange;
+                    int large = fullNotches * _scrollBar.LargeChange;
                     int newOffset = Math.Max(0, initialOffset - large);
-                    newOffset = Math.Min(newOffset, totalProps - visibleRows + 1);
+                    newOffset = Math.Min(newOffset, TotalProperties - _visibleRows + 1);
 
-                    initialOffset -= fullNotches * scrollBar.LargeChange;
-                    if (Math.Abs(initialOffset - originalOffset) >= Math.Abs(fullNotches * scrollBar.LargeChange))
+                    initialOffset -= fullNotches * _scrollBar.LargeChange;
+                    if (Math.Abs(initialOffset - originalOffset) >= Math.Abs(fullNotches * _scrollBar.LargeChange))
                     {
-                        cumulativeVerticalWheelDelta -= fullNotches * NativeMethods.WHEEL_DELTA;
+                        _cumulativeVerticalWheelDelta -= fullNotches * NativeMethods.WHEEL_DELTA;
                     }
                     else
                     {
-                        cumulativeVerticalWheelDelta = 0;
+                        _cumulativeVerticalWheelDelta = 0;
                     }
 
                     if (!ScrollRows(newOffset))
                     {
-                        cumulativeVerticalWheelDelta = 0;
+                        _cumulativeVerticalWheelDelta = 0;
                         return;
                     }
                 }
@@ -3663,8 +3374,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             else
             {
                 // SystemInformation.MouseWheelScrollLines doesn't work under terminal server,
-                // it default to the notches per scroll.
-                int scrollBands = (int)((float)wheelScrollLines * partialNotches);
+                // it defaults to the notches per scroll.
+                int scrollBands = (int)(wheelScrollLines * partialNotches);
 
                 if (scrollBands != 0)
                 {
@@ -3674,227 +3385,215 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
 
                     int newOffset = Math.Max(0, initialOffset - scrollBands);
-                    newOffset = Math.Min(newOffset, totalProps - visibleRows + 1);
+                    newOffset = Math.Min(newOffset, TotalProperties - _visibleRows + 1);
 
                     if (scrollBands > 0)
                     {
-                        if (scrollBar.Value <= scrollBar.Minimum)
+                        if (_scrollBar.Value <= _scrollBar.Minimum)
                         {
-                            cumulativeVerticalWheelDelta = 0;
+                            _cumulativeVerticalWheelDelta = 0;
                         }
                         else
                         {
-                            cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                            _cumulativeVerticalWheelDelta -= (int)(scrollBands * (NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                         }
                     }
                     else
                     {
-                        if (scrollBar.Value > (scrollBar.Maximum - visibleRows + 1))
+                        if (_scrollBar.Value > (_scrollBar.Maximum - _visibleRows + 1))
                         {
-                            cumulativeVerticalWheelDelta = 0;
+                            _cumulativeVerticalWheelDelta = 0;
                         }
                         else
                         {
-                            cumulativeVerticalWheelDelta -= (int)((float)scrollBands * ((float)NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
+                            _cumulativeVerticalWheelDelta -= (int)(scrollBands * (NativeMethods.WHEEL_DELTA / (float)wheelScrollLines));
                         }
                     }
 
                     if (!ScrollRows(newOffset))
                     {
-                        cumulativeVerticalWheelDelta = 0;
+                        _cumulativeVerticalWheelDelta = 0;
                         return;
                     }
                 }
                 else
                 {
-                    cumulativeVerticalWheelDelta = 0;
+                    _cumulativeVerticalWheelDelta = 0;
                 }
             }
         }
 
-        protected override void OnMove(EventArgs e)
-        {
-            CloseDropDown();
-        }
+        protected override void OnMove(EventArgs e) => CloseDropDown();
 
-        protected override void OnPaintBackground(PaintEventArgs pe)
+        protected override void OnPaintBackground(PaintEventArgs pevent)
         {
         }
 
-        protected override void OnPaint(PaintEventArgs pe)
+        protected override void OnPaint(PaintEventArgs e)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnPaint");
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "On paint called.  Rect=" + pe.ClipRectangle.ToString());
-            Graphics g = pe.Graphics;
+            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"On paint called.  Rect={e.ClipRectangle}");
+            Graphics g = e.Graphics;
 
-            int yPos = 0;
+            int yPosition = 0;
             int startRow = 0;
-            int endRow = visibleRows - 1;
+            int endRow = _visibleRows - 1;
 
-            Rectangle clipRect = pe.ClipRectangle;
+            Rectangle clipRect = e.ClipRectangle;
 
-            // give ourselves a little breathing room to account for lines, etc., as well
-            // as the entries themselves.
+            // Give ourselves a little breathing room to account for lines, etc., as well as the entries themselves.
             clipRect.Inflate(0, 2);
 
             try
             {
                 Size sizeWindow = Size;
 
-                // figure out what rows we're painting
-                Point posStart = FindPosition(clipRect.X, clipRect.Y);
-                Point posEnd = FindPosition(clipRect.X, clipRect.Y + clipRect.Height);
-                if (posStart != InvalidPosition)
+                // Figure out what rows we're painting.
+                Point startPosition = FindPosition(clipRect.X, clipRect.Y);
+                Point endPosition = FindPosition(clipRect.X, clipRect.Y + clipRect.Height);
+                if (startPosition != InvalidPosition)
                 {
-                    startRow = Math.Max(0, posStart.Y);
+                    startRow = Math.Max(0, startPosition.Y);
                 }
 
-                if (posEnd != InvalidPosition)
+                if (endPosition != InvalidPosition)
                 {
-                    endRow = posEnd.Y;
+                    endRow = endPosition.Y;
                 }
 
-                int cPropsVisible = Math.Min(totalProps - GetScrollOffset(), 1 + visibleRows);
+                int visibleCount = Math.Min(TotalProperties - GetScrollOffset(), 1 + _visibleRows);
 
 #if DEBUG
-                GridEntry debugIPEStart = GetGridEntryFromRow(startRow);
-                GridEntry debugIPEEnd = GetGridEntryFromRow(endRow);
-                string startName = debugIPEStart?.PropertyLabel;
-                if (startName is null)
-                {
-                    startName = "(null)";
-                }
-                string endName = debugIPEEnd?.PropertyLabel;
-                if (endName is null)
-                {
-                    endName = "(null)";
-                }
+                GridEntry debugEntryStart = GetGridEntryFromRow(startRow);
+                GridEntry debugEntryEnd = GetGridEntryFromRow(endRow);
+                string startName = debugEntryStart?.PropertyLabel ?? "(null)";
+                string endName = debugEntryEnd?.PropertyLabel ?? "(null)";
 #endif
 
                 SetFlag(FlagNeedsRefresh, false);
 
                 Size size = GetOurSize();
-                Point loc = ptOurLocation;
+                Point location = _location;
 
-                if (GetGridEntryFromRow(cPropsVisible - 1) is null)
+                if (GetGridEntryFromRow(visibleCount - 1) is null)
                 {
-                    cPropsVisible--;
+                    visibleCount--;
                 }
 
-                // if we actually have some properties, then start drawing the grid
-                if (totalProps > 0)
+                // If we actually have some properties, then start drawing the grid.
+                if (TotalProperties > 0)
                 {
-                    // draw splitter
-                    cPropsVisible = Math.Min(cPropsVisible, endRow + 1);
+                    // Draw splitter.
+                    visibleCount = Math.Min(visibleCount, endRow + 1);
 
-                    Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing splitter");
+                    Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "Drawing splitter");
                     using var splitterPen = OwnerGrid.LineColor.GetCachedPenScope(GetSplitterWidth());
-                    g.DrawLine(splitterPen, labelWidth, loc.Y, labelWidth, (cPropsVisible) * (RowHeight + 1) + loc.Y);
+                    g.DrawLine(splitterPen, _labelWidth, location.Y, _labelWidth, visibleCount * (RowHeight + 1) + location.Y);
 
-                    // draw lines.
-                    Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Drawing lines");
+                    // Draw lines.
+                    Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "Drawing lines");
                     using var linePen = g.FindNearestColor(OwnerGrid.LineColor).GetCachedPenScope();
 
-                    int cHeightCurRow = 0;
-                    int cLineEnd = loc.X + size.Width;
-                    int cLineStart = loc.X;
+                    int currentRowHeight = 0;
+                    int lineEnd = location.X + size.Width;
+                    int lineStart = location.X;
 
-                    // draw values.
+                    // Draw values.
                     int totalWidth = GetTotalWidth() + 1;
 
-                    // draw labels. set clip rect.
-                    for (int i = startRow; i < cPropsVisible; i++)
+                    // Draw labels. set clip rect.
+                    for (int i = startRow; i < visibleCount; i++)
                     {
                         try
                         {
-                            // draw the line
-                            cHeightCurRow = (i) * (RowHeight + 1) + loc.Y;
-                            g.DrawLine(linePen, cLineStart, cHeightCurRow, cLineEnd, cHeightCurRow);
+                            // Draw the line.
+                            currentRowHeight = i * (RowHeight + 1) + location.Y;
+                            g.DrawLine(linePen, lineStart, currentRowHeight, lineEnd, currentRowHeight);
 
-                            // draw the value
-                            DrawValueEntry(g, i, ref clipRect);
+                            // Draw the value.
+                            DrawValueEntry(g, i, clipRect);
 
-                            // draw the label
-                            Rectangle rect = GetRectangle(i, ROWLABEL);
-                            yPos = rect.Y + rect.Height;
-                            DrawLabel(g, i, rect, (i == selectedRow), false, ref clipRect);
-                            if (i == selectedRow)
+                            // Draw the label.
+                            Rectangle rect = GetRectangle(i, RowLabel);
+                            yPosition = rect.Y + rect.Height;
+                            DrawLabel(g, i, rect, i == _selectedRow, false, clipRect);
+                            if (i == _selectedRow)
                             {
-                                Edit.Invalidate();
+                                EditTextBox.Invalidate();
                             }
                         }
                         catch
                         {
-                            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose,
+                            Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose,
                                 $"Exception thrown during painting property {GetGridEntryFromRow(i).PropertyLabel}");
                         }
                     }
 
-                    // draw the bottom line
-                    cHeightCurRow = (cPropsVisible) * (RowHeight + 1) + loc.Y;
-                    g.DrawLine(linePen, cLineStart, cHeightCurRow, cLineEnd, cHeightCurRow);
+                    // Draw the bottom line
+                    currentRowHeight = visibleCount * (RowHeight + 1) + location.Y;
+                    g.DrawLine(linePen, lineStart, currentRowHeight, lineEnd, currentRowHeight);
                 }
 
-                // fill anything left with window
-                if (yPos < Size.Height)
+                // Fill anything left.
+                if (yPosition < Size.Height)
                 {
-                    yPos++;
-                    Rectangle clearRect = new Rectangle(1, yPos, Size.Width - 2, Size.Height - yPos - 1);
-                    Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, $"Filling remaining area rect={clearRect}");
+                    yPosition++;
+                    var clearRect = new Rectangle(1, yPosition, Size.Width - 2, Size.Height - yPosition - 1);
+                    Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, $"Filling remaining area rect={clearRect}");
 
                     using var backBrush = BackColor.GetCachedSolidBrushScope();
                     g.FillRectangle(backBrush, clearRect);
                 }
 
-                // Draw outside border
+                // Draw outside border.
                 using var borderPen = OwnerGrid.ViewBorderColor.GetCachedPenScope();
                 g.DrawRectangle(borderPen, 0, 0, sizeWindow.Width - 1, sizeWindow.Height - 1);
 
-                _fontBold = null;
+                _boldFont = null;
             }
             catch
             {
                 Debug.Fail("Caught exception in OnPaint");
-                // Do nothing.
             }
         }
 
         private void OnGridEntryLabelDoubleClick(object s, EventArgs e)
         {
-            GridEntry gridEntry = (GridEntry)s;
+            var gridEntry = (GridEntry)s;
 
-            // if we've changed since the click (probably because we moved a row into view), bail
-            //
-            if (gridEntry != lastClickedEntry)
+            // If we've changed since the click (probably because we moved a row into view), bail.
+            if (gridEntry != _lastClickedEntry)
             {
                 return;
             }
+
             int row = GetRowFromGridEntry(gridEntry);
-            DoubleClickRow(row, gridEntry.Expandable, ROWLABEL);
+            DoubleClickRow(row, gridEntry.Expandable, RowLabel);
         }
 
         private void OnGridEntryValueDoubleClick(object s, EventArgs e)
         {
-            GridEntry gridEntry = (GridEntry)s;
-            // if we've changed since the click (probably because we moved a row into view), bail
-            //
-            if (gridEntry != lastClickedEntry)
+            var gridEntry = (GridEntry)s;
+
+            // If we've changed since the click (probably because we moved a row into view), bail.
+            if (gridEntry != _lastClickedEntry)
             {
                 return;
             }
+
             int row = GetRowFromGridEntry(gridEntry);
-            DoubleClickRow(row, gridEntry.Expandable, ROWVALUE);
+            DoubleClickRow(row, gridEntry.Expandable, RowValue);
         }
 
-        private void OnGridEntryLabelClick(object s, EventArgs e)
+        private void OnGridEntryLabelClick(object sender, EventArgs e)
         {
-            lastClickedEntry = (GridEntry)s;
-            SelectGridEntry(lastClickedEntry, true);
+            _lastClickedEntry = (GridEntry)sender;
+            SelectGridEntry(_lastClickedEntry, pageIn: true);
         }
 
-        private void OnGridEntryOutlineClick(object s, EventArgs e)
+        private void OnGridEntryOutlineClick(object sender, EventArgs e)
         {
-            GridEntry gridEntry = (GridEntry)s;
+            var gridEntry = (GridEntry)sender;
             Debug.Assert(gridEntry.Expandable, "non-expandable IPE firing outline click");
 
             Cursor oldCursor = Cursor;
@@ -3902,12 +3601,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 oldCursor = null;
             }
+
             Cursor = Cursors.WaitCursor;
 
             try
             {
                 SetExpand(gridEntry, !gridEntry.InternalExpanded);
-                SelectGridEntry(gridEntry, false);
+                SelectGridEntry(gridEntry, pageIn: false);
             }
             finally
             {
@@ -3915,56 +3615,55 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void OnGridEntryValueClick(object s, EventArgs e)
+        private void OnGridEntryValueClick(object sender, EventArgs e)
         {
-            lastClickedEntry = (GridEntry)s;
-            bool setSelectTime = s != selectedGridEntry;
-            SelectGridEntry(lastClickedEntry, true);
-            Edit.Focus();
+            _lastClickedEntry = (GridEntry)sender;
+            bool setSelectTime = sender != _selectedGridEntry;
+            SelectGridEntry(_lastClickedEntry, pageIn: true);
+            EditTextBox.Focus();
 
-            if (lastMouseDown != InvalidPosition)
+            if (_lastMouseDown != InvalidPosition)
             {
-                // clear the row select time so we don't interpret this as a double click.
-                //
-                rowSelectTime = 0;
+                // Clear the row select time so we don't interpret this as a double click.
+                _rowSelectTime = 0;
 
-                Point editPoint = PointToScreen(lastMouseDown);
-                editPoint = Edit.PointToClient(editPoint);
-                User32.SendMessageW(Edit, User32.WM.LBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
-                User32.SendMessageW(Edit, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                Point editPoint = PointToScreen(_lastMouseDown);
+                editPoint = EditTextBox.PointToClient(editPoint);
+                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
             }
 
             if (setSelectTime)
             {
-                rowSelectTime = DateTime.Now.Ticks;
-                rowSelectPos = PointToScreen(lastMouseDown);
+                _rowSelectTime = DateTime.Now.Ticks;
+                _rowSelectPos = PointToScreen(_lastMouseDown);
             }
             else
             {
-                rowSelectTime = 0;
-                rowSelectPos = Point.Empty;
+                _rowSelectTime = 0;
+                _rowSelectPos = Point.Empty;
             }
         }
 
         protected override void OnFontChanged(EventArgs e)
         {
-            cachedRowHeight = -1;
+            _cachedRowHeight = -1;
 
             if (Disposing || ParentInternal is null || ParentInternal.Disposing)
             {
                 return;
             }
 
-            _fontBold = null;    // fontBold is cached based on Font
+            _boldFont = null;    // fontBold is cached based on Font
 
             ToolTip.Font = Font;
             SetFlag(FlagNeedUpdateUIBasedOnFont, true);
             UpdateUIBasedOnFont(true);
             base.OnFontChanged(e);
 
-            if (selectedGridEntry is not null)
+            if (_selectedGridEntry is not null)
             {
-                SelectGridEntry(selectedGridEntry, true);
+                SelectGridEntry(_selectedGridEntry, true);
             }
         }
 
@@ -3978,11 +3677,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (Visible && ParentInternal is not null)
             {
                 SetConstants();
-                if (selectedGridEntry is not null)
+                if (_selectedGridEntry is not null)
                 {
-                    SelectGridEntry(selectedGridEntry, true);
+                    SelectGridEntry(_selectedGridEntry, true);
                 }
-                if (toolTip is not null)
+
+                if (_toolTip is not null)
                 {
                     ToolTip.Font = Font;
                 }
@@ -3991,17 +3691,16 @@ namespace System.Windows.Forms.PropertyGridInternal
             base.OnVisibleChanged(e);
         }
 
-        // a GridEntry recreated its children
-        protected virtual void OnRecreateChildren(object s, GridEntryRecreateChildrenEventArgs e)
+        private void OnRecreateChildren(object s, GridEntryRecreateChildrenEventArgs e)
         {
-            GridEntry parent = (GridEntry)s;
+            var parent = (GridEntry)s;
 
             if (parent.Expanded)
             {
-                GridEntry[] entries = new GridEntry[allGridEntries.Count];
-                allGridEntries.CopyTo(entries, 0);
+                var entries = new GridEntry[_allGridEntries.Count];
+                _allGridEntries.CopyTo(entries, 0);
 
-                // find the index of the gridEntry that fired the event in our main list.
+                // Find the index of the gridEntry that fired the event in our main list.
                 int parentIndex = -1;
                 for (int i = 0; i < entries.Length; i++)
                 {
@@ -4014,47 +3713,53 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Debug.Assert(parentIndex != -1, "parent GridEntry not found in allGridEntries");
 
-                // clear our existing handlers
-                ClearGridEntryEvents(allGridEntries, parentIndex + 1, e.OldChildCount);
+                // Clear our existing handlers.
+                ClearGridEntryEvents(_allGridEntries, parentIndex + 1, e.OldChildCount);
 
-                // resize the array if it's changed
+                // Resize the array if it's changed.
                 if (e.OldChildCount != e.NewChildCount)
                 {
                     int newArraySize = entries.Length + (e.NewChildCount - e.OldChildCount);
-                    GridEntry[] newEntries = new GridEntry[newArraySize];
+                    var newEntries = new GridEntry[newArraySize];
 
-                    // copy the existing entries up to the parent
+                    // Copy the existing entries up to the parent.
                     Array.Copy(entries, 0, newEntries, 0, parentIndex + 1);
 
-                    // copy the entries after the spot we'll be putting the new ones
-                    Array.Copy(entries, parentIndex + e.OldChildCount + 1, newEntries, parentIndex + e.NewChildCount + 1, entries.Length - (parentIndex + e.OldChildCount + 1));
+                    // Copy the entries after the spot we'll be putting the new ones.
+                    Array.Copy(
+                        entries,
+                        parentIndex + e.OldChildCount + 1,
+                        newEntries,
+                        parentIndex + e.NewChildCount + 1,
+                        entries.Length - (parentIndex + e.OldChildCount + 1));
 
                     entries = newEntries;
                 }
 
-                // from that point, replace the children with tne new children.
+                // From that point, replace the children with the new children.
                 GridEntryCollection children = parent.Children;
                 int childCount = children.Count;
 
-                Debug.Assert(childCount == e.NewChildCount, "parent reports " + childCount + " new children, event reports " + e.NewChildCount);
+                Debug.Assert(childCount == e.NewChildCount, $"parent reports {childCount} new children, event reports {e.NewChildCount}");
 
-                // replace the changed items
+                // Replace the changed items.
                 for (int i = 0; i < childCount; i++)
                 {
-                    entries[parentIndex + i + 1] = children.GetEntry(i);
+                    entries[parentIndex + i + 1] = children[i];
                 }
 
-                // reset the array, rehook the handlers.
-                allGridEntries.Clear();
-                allGridEntries.AddRange(entries);
-                AddGridEntryEvents(allGridEntries, parentIndex + 1, childCount);
+                // Reset the array, rehook the handlers.
+                _allGridEntries.Clear();
+                _allGridEntries.AddRange(entries);
+                AddGridEntryEvents(_allGridEntries, parentIndex + 1, childCount);
             }
 
             if (e.OldChildCount != e.NewChildCount)
             {
-                totalProps = CountPropsFromOutline(topLevelGridEntries);
+                TotalProperties = CountPropsFromOutline(TopLevelGridEntries);
                 SetConstants();
             }
+
             Invalidate();
         }
 
@@ -4063,23 +3768,19 @@ namespace System.Windows.Forms.PropertyGridInternal
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnResize");
 
             Rectangle newRect = ClientRectangle;
-            int yDelta = lastClientRect == Rectangle.Empty ? 0 : newRect.Height - lastClientRect.Height;
-            bool lastRow = (selectedRow + 1) == visibleRows;
+            int yDelta = _lastClientRect == Rectangle.Empty ? 0 : newRect.Height - _lastClientRect.Height;
 
-            // if we are hiding or showing the scroll bar, update the selected row
-            // or if we are changing widths
-            //
-            bool sbVisible = ScrollBar.Visible;
+            // If we are changing widths, update the selected row.
 
-            if (!lastClientRect.IsEmpty && newRect.Width > lastClientRect.Width)
+            if (!_lastClientRect.IsEmpty && newRect.Width > _lastClientRect.Width)
             {
-                Rectangle rectInvalidate = new Rectangle(lastClientRect.Width - 1, 0, newRect.Width - lastClientRect.Width + 1, lastClientRect.Height);
+                var rectInvalidate = new Rectangle(_lastClientRect.Width - 1, 0, newRect.Width - _lastClientRect.Width + 1, _lastClientRect.Height);
                 Invalidate(rectInvalidate);
             }
 
-            if (!lastClientRect.IsEmpty && yDelta > 0)
+            if (!_lastClientRect.IsEmpty && yDelta > 0)
             {
-                Rectangle rectInvalidate = new Rectangle(0, lastClientRect.Height - 1, lastClientRect.Width, newRect.Height - lastClientRect.Height + 1);
+                var rectInvalidate = new Rectangle(0, _lastClientRect.Height - 1, _lastClientRect.Width, newRect.Height - _lastClientRect.Height + 1);
                 Invalidate(rectInvalidate);
             }
 
@@ -4099,36 +3800,38 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             LayoutWindow(false);
 
-            bool selectionVisible = (selectedGridEntry is not null && selectedRow >= 0 && selectedRow <= visibleRows);
-            SelectGridEntry(selectedGridEntry, selectionVisible);
-            lastClientRect = newRect;
+            bool selectionVisible = _selectedGridEntry is not null && _selectedRow >= 0 && _selectedRow <= _visibleRows;
+            SelectGridEntry(_selectedGridEntry, selectionVisible);
+            _lastClientRect = newRect;
         }
 
-        private void OnScroll(object sender, ScrollEventArgs se)
+        private void OnScroll(object sender, ScrollEventArgs e)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnScroll(" + ScrollBar.Value.ToString(CultureInfo.InvariantCulture) + " -> " + se.NewValue.ToString(CultureInfo.InvariantCulture) + ")");
+            Debug.WriteLineIf(
+                CompModSwitches.DebugGridView.TraceVerbose,
+                $"PropertyGridView:OnScroll({ScrollBar.Value} -> {e.NewValue})");
 
-            if (!Commit() || !IsScrollValueValid(se.NewValue))
+            if (!Commit() || !IsScrollValueValid(e.NewValue))
             {
-                // cancel the move
-                se.NewValue = ScrollBar.Value;
+                // Cancel the move
+                e.NewValue = ScrollBar.Value;
                 return;
             }
 
             int oldRow = -1;
-            GridEntry oldGridEntry = selectedGridEntry;
-            if (selectedGridEntry is not null)
+            GridEntry oldGridEntry = _selectedGridEntry;
+            if (_selectedGridEntry is not null)
             {
                 oldRow = GetRowFromGridEntry(oldGridEntry);
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "OnScroll: SelectedGridEntry=" + oldGridEntry.PropertyLabel);
             }
 
-            ScrollBar.Value = se.NewValue;
+            ScrollBar.Value = e.NewValue;
             if (oldGridEntry is not null)
             {
-                // we need to zero out the selected row so we don't try to commit again...since selectedRow is now bogus.
-                selectedRow = -1;
-                SelectGridEntry(oldGridEntry, (ScrollBar.Value == totalProps ? true : false));
+                // We need to zero out the selected row so we don't try to commit again since selectedRow is now bogus.
+                _selectedRow = -1;
+                SelectGridEntry(oldGridEntry, pageIn: ScrollBar.Value == TotalProperties);
                 int newRow = GetRowFromGridEntry(oldGridEntry);
                 if (oldRow != newRow)
                 {
@@ -4149,148 +3852,142 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual void PopupDialog(int row)
+        public void PopupDialog(int row)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:PopupDialog");
             GridEntry gridEntry = GetGridEntryFromRow(row);
-            if (gridEntry is not null)
+            if (gridEntry is null)
             {
-                if (dropDownHolder is not null && dropDownHolder.GetUsed())
+                return;
+            }
+
+            if (_dropDownHolder is not null && _dropDownHolder.GetUsed())
+            {
+                CloseDropDown();
+                return;
+            }
+
+            bool needsDropDownButton = gridEntry.NeedsDropDownButton;
+            bool enumerable = gridEntry.Enumerable;
+            bool needsCustomEditorButton = gridEntry.NeedsCustomEditorButton;
+
+            if (enumerable && !needsDropDownButton)
+            {
+                DropDownListBox.Items.Clear();
+                _ = gridEntry.PropertyValue;
+                object[] rgItems = gridEntry.GetPropertyValueList();
+                int maxWidth = 0;
+
+                // The listbox draws with GDI, not GDI+.  So we use a normal DC here.
+
+                using var hdc = new User32.GetDcScope(DropDownListBox.Handle);
+
+                var tm = new Gdi32.TEXTMETRICW();
+                int selectionIndex = -1;
+
+                // This creates a copy of the given Font, and as such we need to delete it
+                var hFont = (Gdi32.HFONT)Font.ToHfont();
+                using (var fontScope = new Gdi32.ObjectScope(hFont))
                 {
-                    CloseDropDown();
-                    return;
+                    using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
+
+                    selectionIndex = GetCurrentValueIndex(gridEntry);
+                    if (rgItems is not null && rgItems.Length > 0)
+                    {
+                        string value;
+                        var textSize = new Size();
+
+                        for (int i = 0; i < rgItems.Length; i++)
+                        {
+                            value = gridEntry.GetPropertyTextValue(rgItems[i]);
+                            DropDownListBox.Items.Add(value);
+                            Gdi32.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), value, value.Length, ref textSize);
+                            maxWidth = Math.Max(textSize.Width, maxWidth);
+                        }
+                    }
+
+                    Gdi32.GetTextMetricsW(hdc, ref tm);
+
+                    // border + padding + scrollbar
+                    maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
                 }
 
-                bool fBtnDropDown = gridEntry.NeedsDropDownButton;
-                bool fEnum = gridEntry.Enumerable;
-                bool fBtnDialog = gridEntry.NeedsCustomEditorButton;
-
-                if (fEnum && !fBtnDropDown)
+                if (selectionIndex != -1)
                 {
-                    DropDownListBox.Items.Clear();
-                    object value = gridEntry.PropertyValue;
-                    object[] rgItems = gridEntry.GetPropertyValueList();
-                    int maxWidth = 0;
+                    DropDownListBox.SelectedIndex = selectionIndex;
+                }
 
-                    // The listbox draws with GDI, not GDI+.  So, we
-                    // use a normal DC here.
+                SetFlag(FlagDropDownCommit, false);
+                DropDownListBox.Height = Math.Max(tm.tmHeight + 2, Math.Min(_maxListBoxHeight, DropDownListBox.PreferredHeight));
+                DropDownListBox.Width = Math.Max(maxWidth, GetRectangle(row, RowValue).Width);
+                try
+                {
+                    bool resizable = DropDownListBox.Items.Count > (DropDownListBox.Height / DropDownListBox.ItemHeight);
+                    SetFlag(FlagResizableDropDown, resizable);
+                    DropDownControl(DropDownListBox);
+                }
+                finally
+                {
+                    SetFlag(FlagResizableDropDown, false);
+                }
 
-                    using var hdc = new User32.GetDcScope(DropDownListBox.Handle);
+                Refresh();
+            }
+            else if (needsCustomEditorButton || needsDropDownButton)
+            {
+                try
+                {
+                    SetFlag(FlagInPropertySet, true);
+                    EditTextBox.DisableMouseHook = true;
 
-                    var tm = new Gdi32.TEXTMETRICW();
-                    int iSel = -1;
-
-                    // This creates a copy of the given Font, and as such we need to delete it
-                    Gdi32.HFONT hFont = (Gdi32.HFONT)Font.ToHfont();
-                    using (var fontScope = new Gdi32.ObjectScope(hFont))
-                    {
-                        using var fontSelection = new Gdi32.SelectObjectScope(hdc, hFont);
-
-                        iSel = GetCurrentValueIndex(gridEntry);
-                        if (rgItems is not null && rgItems.Length > 0)
-                        {
-                            string s;
-                            Size textSize = new Size();
-
-                            for (int i = 0; i < rgItems.Length; i++)
-                            {
-                                s = gridEntry.GetPropertyTextValue(rgItems[i]);
-                                DropDownListBox.Items.Add(s);
-                                Gdi32.GetTextExtentPoint32W(new HandleRef(DropDownListBox, hdc), s, s.Length, ref textSize);
-                                maxWidth = Math.Max(textSize.Width, maxWidth);
-                            }
-                        }
-
-                        Gdi32.GetTextMetricsW(hdc, ref tm);
-
-                        // border + padding + scrollbar
-                        maxWidth += 2 + tm.tmMaxCharWidth + SystemInformation.VerticalScrollBarWidth;
-                    }
-
-                    // Microsoft, 4/25/1998 - must check for -1 and not call the set...
-                    if (iSel != -1)
-                    {
-                        DropDownListBox.SelectedIndex = iSel;
-                    }
-
-                    SetFlag(FlagDropDownCommit, false);
-                    DropDownListBox.Height = Math.Max(tm.tmHeight + 2, Math.Min(maxListBoxHeight, DropDownListBox.PreferredHeight));
-                    DropDownListBox.Width = Math.Max(maxWidth, GetRectangle(row, ROWVALUE).Width);
                     try
                     {
-                        bool resizable = DropDownListBox.Items.Count > (DropDownListBox.Height / DropDownListBox.ItemHeight);
-                        SetFlag(FlagResizableDropDown, resizable);
-                        DropDownControl(DropDownListBox);
+                        SetFlag(FlagResizableDropDown, gridEntry.UITypeEditor.IsDropDownResizable);
+                        gridEntry.EditPropertyValue(this);
                     }
                     finally
                     {
                         SetFlag(FlagResizableDropDown, false);
                     }
-
-                    Refresh();
                 }
-                else if (fBtnDialog || fBtnDropDown)
+                finally
                 {
-                    try
-                    {
-                        SetFlag(FlagInPropertySet, true);
-                        Edit.DisableMouseHook = true;
+                    SetFlag(FlagInPropertySet, false);
+                    EditTextBox.DisableMouseHook = false;
+                }
 
-                        try
-                        {
-                            SetFlag(FlagResizableDropDown, gridEntry.UITypeEditor.IsDropDownResizable);
-                            gridEntry.EditPropertyValue(this);
-                        }
-                        finally
-                        {
-                            SetFlag(FlagResizableDropDown, false);
-                        }
-                    }
-                    finally
-                    {
-                        SetFlag(FlagInPropertySet, false);
-                        Edit.DisableMouseHook = false;
-                    }
-                    Refresh();
+                Refresh();
 
-                    // We can't do this because
-                    // some dialogs are non-modal, and
-                    // this will pull focus from them.
-                    //
-                    //if (fBtnDialog) {
-                    //      this.Focus();
-                    //}
-
-                    if (FocusInside)
-                    {
-                        SelectGridEntry(gridEntry, false);
-                    }
+                if (FocusInside)
+                {
+                    SelectGridEntry(gridEntry, pageIn: false);
                 }
             }
         }
 
-        internal static void PositionTooltip(Control parent, GridToolTip ToolTip, Rectangle itemRect)
+        internal static void PositionTooltip(Control parent, GridToolTip toolTip, Rectangle itemRect)
         {
-            ToolTip.Visible = false;
+            toolTip.Visible = false;
 
             RECT rect = itemRect;
 
-            User32.SendMessageW(ToolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, (IntPtr)1, ref rect);
+            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, (IntPtr)1, ref rect);
 
-            // now offset it back to screen coords
-            Point locPoint = parent.PointToScreen(new Point(rect.left, rect.top));
+            // Now offset it back to screen coords.
+            Point location = parent.PointToScreen(new(rect.left, rect.top));
 
-            ToolTip.Location = locPoint;   // set the position once so it updates it's size with it's real width.
+            // Set the position once so it updates it's size with it's real width.
+            toolTip.Location = location;
 
-            int overHang = (ToolTip.Location.X + ToolTip.Size.Width) - SystemInformation.VirtualScreen.Width;
-            if (overHang > 0)
+            int overhang = toolTip.Location.X + toolTip.Size.Width - SystemInformation.VirtualScreen.Width;
+            if (overhang > 0)
             {
-                locPoint.X -= overHang;
-                ToolTip.Location = locPoint;
+                location.X -= overhang;
+                toolTip.Location = location;
             }
 
-            // tell the control we've repositioned it.
-            ToolTip.Visible = true;
+            // Tell the control we've repositioned it.
+            toolTip.Visible = true;
         }
 
         protected override bool ProcessDialogKey(Keys keyData)
@@ -4306,6 +4003,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             return OnF4(this);
                         }
+
                         break;
 
                     case Keys.Tab:
@@ -4318,15 +4016,16 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         bool forward = (keyData & Keys.Shift) == 0;
 
-                        Control focusedControl = Control.FromHandle(User32.GetFocus());
+                        Control focusedControl = FromHandle(User32.GetFocus());
 
                         if (focusedControl is null || !IsMyChild(focusedControl))
                         {
                             if (forward)
                             {
                                 TabSelection();
-                                focusedControl = Control.FromHandle(User32.GetFocus());
-                                // make sure the value actually took the focus
+                                focusedControl = FromHandle(User32.GetFocus());
+
+                                // Make sure the value actually took the focus
                                 if (IsMyChild(focusedControl))
                                 {
                                     return true;
@@ -4343,9 +4042,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                         else
                         {
-                            // one of our editors has focus
+                            // One of our editors has focus.
 
-                            if (Edit.Focused)
+                            if (EditTextBox.Focused)
                             {
                                 if (forward)
                                 {
@@ -4359,24 +4058,23 @@ namespace System.Windows.Forms.PropertyGridInternal
                                         DialogButton.Focus();
                                         return true;
                                     }
-                                    // fall through
                                 }
                                 else
                                 {
-                                    SelectGridEntry(GetGridEntryFromRow(selectedRow), false);
+                                    SelectGridEntry(GetGridEntryFromRow(_selectedRow), pageIn: false);
                                     return true;
                                 }
                             }
                             else if (DialogButton.Focused || DropDownButton.Focused)
                             {
-                                if (!forward && Edit.Visible)
+                                if (!forward && EditTextBox.Visible)
                                 {
-                                    Edit.Focus();
+                                    EditTextBox.Focus();
                                     return true;
                                 }
-                                // fall through
                             }
                         }
+
                         break;
                     case Keys.Up:
                     case Keys.Down:
@@ -4386,33 +4084,35 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case Keys.Return:
                         if (DialogButton.Focused || DropDownButton.Focused)
                         {
-                            OnBtnClick((DialogButton.Focused ? DialogButton : DropDownButton), EventArgs.Empty);
+                            OnButtonClick(DialogButton.Focused ? DialogButton : DropDownButton, EventArgs.Empty);
                             return true;
                         }
-                        else if (selectedGridEntry is not null && selectedGridEntry.Expandable)
+                        else if (_selectedGridEntry is not null && _selectedGridEntry.Expandable)
                         {
-                            SetExpand(selectedGridEntry, !selectedGridEntry.InternalExpanded);
+                            SetExpand(_selectedGridEntry, !_selectedGridEntry.InternalExpanded);
                             return true;
                         }
+
                         break;
                 }
             }
+
             return base.ProcessDialogKey(keyData);
         }
 
-        protected virtual void RecalculateProps()
+        private void RecalculateProperties()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:RecalculateProps");
-            int props = CountPropsFromOutline(topLevelGridEntries);
-            if (totalProps != props)
+            int props = CountPropsFromOutline(TopLevelGridEntries);
+            if (TotalProperties != props)
             {
-                totalProps = props;
-                ClearGridEntryEvents(allGridEntries, 0, -1);
-                allGridEntries = null;
+                TotalProperties = props;
+                ClearGridEntryEvents(_allGridEntries, 0, -1);
+                _allGridEntries = null;
             }
         }
 
-        internal /*public virtual*/ void RecursivelyExpand(GridEntry gridEntry, bool fInit, bool expand, int maxExpands)
+        internal void RecursivelyExpand(GridEntry gridEntry, bool initialize, bool expand, int maxExpands)
         {
             if (gridEntry is null || (expand && --maxExpands < 0))
             {
@@ -4421,34 +4121,36 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             SetExpand(gridEntry, expand);
 
-            GridEntryCollection rgipes = gridEntry.Children;
-            if (rgipes is not null)
+            GridEntryCollection children = gridEntry.Children;
+            if (children is not null)
             {
-                for (int i = 0; i < rgipes.Count; i++)
+                for (int i = 0; i < children.Count; i++)
                 {
-                    RecursivelyExpand(rgipes.GetEntry(i), false, expand, maxExpands);
+                    RecursivelyExpand(children[i], initialize: false, expand, maxExpands);
                 }
             }
 
-            if (fInit)
+            if (initialize)
             {
-                GridEntry ipeSelect = selectedGridEntry;
+                GridEntry selectedEntry = _selectedGridEntry;
                 Refresh();
-                SelectGridEntry(ipeSelect, false);
+                SelectGridEntry(selectedEntry, pageIn: false);
                 Invalidate();
             }
         }
 
         public override void Refresh()
         {
-            Refresh(false, -1, -1);
+            Refresh(fullRefresh: false, startRow: -1, endRow: -1);
 
-            //resetting gridoutline rect to recalculate before repaint when viewsort property changed. This is necessary especially when user
-            // changes sort and move to a secondary monitor with different DPI and change view sort back to original.
-            if (topLevelGridEntries is not null && DpiHelper.IsScalingRequirementMet)
+            // Resetting gridoutline rect to recalculate before repaint when viewsort property changed.
+            // This is necessary especially when user changes sort and move to a secondary monitor with different
+            // DPI and change view sort back to original.
+
+            if (TopLevelGridEntries is not null && DpiHelper.IsScalingRequirementMet)
             {
-                var outlineRectIconSize = GetOutlineIconSize();
-                foreach (GridEntry gridentry in topLevelGridEntries)
+                int outlineRectIconSize = GetOutlineIconSize();
+                foreach (GridEntry gridentry in TopLevelGridEntries)
                 {
                     if (gridentry.OutlineRect.Height != outlineRectIconSize || gridentry.OutlineRect.Width != outlineRectIconSize)
                     {
@@ -4457,26 +4159,21 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            // make sure we got everything
+            // Make sure we got everything
             Invalidate();
         }
 
-        public void Refresh(bool fullRefresh)
-        {
-            Refresh(fullRefresh, -1, -1);
-        }
+        public void Refresh(bool fullRefresh) => Refresh(fullRefresh, startRow: -1, endRow: -1);
 
-        GridPositionData positionData;
-
-        private void Refresh(bool fullRefresh, int rowStart, int rowEnd)
+        private void Refresh(bool fullRefresh, int startRow, int endRow)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Refresh");
-            Debug.WriteLineIf(GridViewDebugPaint.TraceVerbose, "Refresh called for rows " + rowStart.ToString(CultureInfo.InvariantCulture) + " through " + rowEnd.ToString(CultureInfo.InvariantCulture));
+            Debug.WriteLineIf(
+                s_gridViewDebugPaint.TraceVerbose,
+                $"Refresh called for rows {startRow} through {endRow}");
             SetFlag(FlagNeedsRefresh, true);
             GridEntry gridEntry = null;
 
-            // There are cases here where the grid could get be disposed.
-            // so just bail.
             if (IsDisposed)
             {
                 return;
@@ -4484,9 +4181,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             bool pageInGridEntry = true;
 
-            if (rowStart == -1)
+            if (startRow == -1)
             {
-                rowStart = 0;
+                startRow = 0;
             }
 
             if (fullRefresh || OwnerGrid.HavePropEntriesChanged())
@@ -4496,10 +4193,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     OnEscape(this);
                 }
 
-                int oldLength = totalProps;
-                object oldObject = topLevelGridEntries is null || topLevelGridEntries.Count == 0 ? null : ((GridEntry)topLevelGridEntries[0]).GetValueOwner();
+                int oldLength = TotalProperties;
+                object oldObject = TopLevelGridEntries is null
+                    || TopLevelGridEntries.Count == 0 ? null : TopLevelGridEntries[0].GetValueOwner();
 
-                // walk up to the main IPE and refresh it.
+                // Walk up to the main IPE and refresh it.
                 if (fullRefresh)
                 {
                     OwnerGrid.RefreshProperties(true);
@@ -4507,20 +4205,20 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (oldLength > 0 && !GetFlag(FlagNoDefault))
                 {
-                    positionData = CaptureGridPositionData();
+                    _positionData = CaptureGridPositionData();
                     CommonEditorHide(true);
                 }
 
-                UpdateHelpAttributes(selectedGridEntry, null);
-                selectedGridEntry = null;
+                UpdateHelpAttributes(_selectedGridEntry, null);
+                _selectedGridEntry = null;
                 SetFlag(FlagIsNewSelection, true);
-                topLevelGridEntries = OwnerGrid.GetPropEntries();
+                TopLevelGridEntries = OwnerGrid.GetCurrentEntries();
 
-                ClearGridEntryEvents(allGridEntries, 0, -1);
-                allGridEntries = null;
-                RecalculateProps();
+                ClearGridEntryEvents(_allGridEntries, 0, -1);
+                _allGridEntries = null;
+                RecalculateProperties();
 
-                int newLength = totalProps;
+                int newLength = TotalProperties;
                 if (newLength > 0)
                 {
                     if (newLength < oldLength)
@@ -4531,28 +4229,28 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     SetConstants();
 
-                    if (positionData is not null)
+                    if (_positionData is not null)
                     {
-                        gridEntry = positionData.Restore(this);
+                        gridEntry = _positionData.Restore(this);
 
-                        // Upon restoring the grid entry position, we don't
-                        // want to page it in
-                        //
-                        object newObject = topLevelGridEntries is null || topLevelGridEntries.Count == 0 ? null : ((GridEntry)topLevelGridEntries[0]).GetValueOwner();
+                        // Upon restoring the grid entry position, we don't want to page it in.
+                        object newObject = TopLevelGridEntries is null || TopLevelGridEntries.Count == 0
+                            ? null
+                            : ((GridEntry)TopLevelGridEntries[0]).GetValueOwner();
                         pageInGridEntry = (gridEntry is null) || oldLength != newLength || newObject != oldObject;
                     }
 
                     if (gridEntry is null)
                     {
                         gridEntry = OwnerGrid.GetDefaultGridEntry();
-                        SetFlag(FlagNoDefault, gridEntry is null && totalProps > 0);
+                        SetFlag(FlagNoDefault, gridEntry is null && TotalProperties > 0);
                     }
 
-                    InvalidateRows(rowStart, rowEnd);
+                    InvalidateRows(startRow, endRow);
                     if (gridEntry is null)
                     {
-                        selectedRow = 0;
-                        selectedGridEntry = GetGridEntryFromRow(selectedRow);
+                        _selectedRow = 0;
+                        _selectedGridEntry = GetGridEntryFromRow(_selectedRow);
                     }
                 }
                 else if (oldLength == 0)
@@ -4565,24 +4263,25 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Release the old positionData which contains reference to previous selected objects.
-                positionData = null;
-                lastClickedEntry = null;
+                _positionData = null;
+                _lastClickedEntry = null;
             }
 
             if (!HasEntries)
             {
-                CommonEditorHide(selectedRow != -1);
+                CommonEditorHide(_selectedRow != -1);
                 OwnerGrid.SetStatusBox(null, null);
                 SetScrollOffset(0);
-                selectedRow = -1;
+                _selectedRow = -1;
                 Invalidate();
                 return;
             }
-            // in case we added or removed properties
 
-            OwnerGrid.ClearValueCaches();
+            // In case we added or removed properties.
 
-            InvalidateRows(rowStart, rowEnd);
+            OwnerGrid.ClearCachedValues();
+
+            InvalidateRows(startRow, endRow);
 
             if (gridEntry is not null)
             {
@@ -4590,23 +4289,20 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual void Reset()
+        public void Reset()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Reset");
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {
                 return;
             }
 
             gridEntry.ResetPropertyValue();
-            SelectRow(selectedRow);
+            SelectRow(_selectedRow);
         }
 
-        protected virtual void ResetOrigin(Graphics g)
-        {
-            g.ResetTransform();
-        }
+        private void ResetOrigin(Graphics g) => g.ResetTransform();
 
         internal void RestoreHierarchyState(ArrayList expandedItems)
         {
@@ -4621,17 +4317,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual DialogResult RunDialog(Form dialog)
-        {
-            return ShowDialog(dialog);
-        }
-
-        internal ArrayList SaveHierarchyState(GridEntryCollection entries)
-        {
-            return SaveHierarchyState(entries, null);
-        }
-
-        private ArrayList SaveHierarchyState(GridEntryCollection entries, ArrayList expandedItems)
+        internal ArrayList SaveHierarchyState(GridEntryCollection entries, ArrayList expandedItems = null)
         {
             if (entries is null)
             {
@@ -4645,10 +4331,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = 0; i < entries.Count; i++)
             {
-                if (((GridEntry)entries[i]).InternalExpanded)
+                if (entries[i].InternalExpanded)
                 {
-                    GridEntry entry = entries.GetEntry(i);
-                    expandedItems.Add(GetGridEntryHierarchy(entry.Children.GetEntry(0)));
+                    GridEntry entry = entries[i];
+                    expandedItems.Add(GetGridEntryHierarchy(entry.Children[0]));
                     SaveHierarchyState(entry.Children, expandedItems);
                 }
             }
@@ -4659,32 +4345,32 @@ namespace System.Windows.Forms.PropertyGridInternal
         // Scroll to the new offset
         private bool ScrollRows(int newOffset)
         {
-            GridEntry ipeCur = selectedGridEntry;
+            GridEntry currentEntry = _selectedGridEntry;
 
             if (!IsScrollValueValid(newOffset) || !Commit())
             {
                 return false;
             }
 
-            bool showEdit = Edit.Visible;
-            bool showBtnDropDown = DropDownButton.Visible;
-            bool showBtnEdit = DialogButton.Visible;
+            bool editVisible = EditTextBox.Visible;
+            bool dropDownButtonVisible = DropDownButton.Visible;
+            bool editButtonVisible = DialogButton.Visible;
 
-            Edit.Visible = false;
+            EditTextBox.Visible = false;
             DialogButton.Visible = false;
             DropDownButton.Visible = false;
 
             SetScrollOffset(newOffset);
 
-            if (ipeCur is not null)
+            if (currentEntry is not null)
             {
-                int curRow = GetRowFromGridEntry(ipeCur);
-                if (curRow >= 0 && curRow < visibleRows - 1)
+                int currentRow = GetRowFromGridEntry(currentEntry);
+                if (currentRow >= 0 && currentRow < _visibleRows - 1)
                 {
-                    Edit.Visible = showEdit;
-                    DialogButton.Visible = showBtnEdit;
-                    DropDownButton.Visible = showBtnDropDown;
-                    SelectGridEntry(ipeCur, true);
+                    EditTextBox.Visible = editVisible;
+                    DialogButton.Visible = editButtonVisible;
+                    DropDownButton.Visible = dropDownButtonVisible;
+                    SelectGridEntry(currentEntry, pageIn: true);
                 }
                 else
                 {
@@ -4700,83 +4386,68 @@ namespace System.Windows.Forms.PropertyGridInternal
             return true;
         }
 
-        private void SelectEdit(bool caretAtEnd)
+        internal void SelectGridEntry(GridEntry entry, bool pageIn)
         {
-            if (edit is not null)
-            {
-                Edit.SelectAll();
-            }
-        }
-
-        // select functions... selectGridEntry and selectRow will select a Row
-        // and install the appropriate editors.
-        //
-        internal /*protected virtual*/ void SelectGridEntry(GridEntry gridEntry, bool fPageIn)
-        {
-            if (gridEntry is null)
+            if (entry is null)
             {
                 return;
             }
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:SelectGridEntry(" + gridEntry.PropertyLabel + ")");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:SelectGridEntry({entry.PropertyLabel})");
 
-            int row = GetRowFromGridEntry(gridEntry);
+            int row = GetRowFromGridEntry(entry);
             if (row + GetScrollOffset() < 0)
             {
-                // throw exception? return false?
                 return;
             }
 
             int maxRows = (int)Math.Ceiling(((double)GetOurSize().Height) / (1 + RowHeight));
 
             // Determine whether or not we need to page-in this GridEntry
-            //
 
-            if (!fPageIn || (row >= 0 && row < (maxRows - 1)))
+            if (!pageIn || (row >= 0 && row < (maxRows - 1)))
             {
                 // No need to page-in: either fPageIn is false or the row is already in view
-                //
                 SelectRow(row);
             }
             else
             {
                 // Page-in the selected GridEntry
-                //
+                _selectedRow = -1; // clear the selected row since it's no longer a valid number
 
-                selectedRow = -1; // clear the selected row since it's no longer a valid number
-
-                int cOffset = GetScrollOffset();
+                int offset = GetScrollOffset();
                 if (row < 0)
                 {
-                    SetScrollOffset(row + cOffset);
+                    SetScrollOffset(row + offset);
                     Invalidate();
                     SelectRow(0);
                 }
                 else
                 {
-                    // try to put it one row up from the bottom
-                    int newOffset = row + cOffset - (maxRows - 2);
+                    // Try to put it one row up from the bottom.
+                    int newOffset = row + offset - (maxRows - 2);
 
                     if (newOffset >= ScrollBar.Minimum && newOffset < ScrollBar.Maximum)
                     {
                         SetScrollOffset(newOffset);
                     }
+
                     Invalidate();
-                    SelectGridEntry(gridEntry, false);
+                    SelectGridEntry(entry, pageIn: false);
                 }
             }
         }
 
         private void SelectRow(int row)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:SelectRow(" + row.ToString(CultureInfo.InvariantCulture) + ")");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:SelectRow({row})");
 
             if (!GetFlag(FlagIsNewSelection))
             {
                 if (FocusInside)
                 {
                     // If we're in an error state, we want to bail out of this.
-                    if (errorState != ERROR_NONE || (row != selectedRow && !Commit()))
+                    if (_errorState != ErrorState.None || (row != _selectedRow && !Commit()))
                     {
                         return;
                     }
@@ -4790,44 +4461,43 @@ namespace System.Windows.Forms.PropertyGridInternal
             GridEntry gridEntry = GetGridEntryFromRow(row);
 
             // Update our reset command.
-            //
-            if (row != selectedRow)
+            if (row != _selectedRow)
             {
                 UpdateResetCommand(gridEntry);
             }
 
-            if (GetFlag(FlagIsNewSelection) && GetGridEntryFromRow(selectedRow) is null)
+            if (GetFlag(FlagIsNewSelection) && GetGridEntryFromRow(_selectedRow) is null)
             {
                 CommonEditorHide();
             }
 
-            UpdateHelpAttributes(selectedGridEntry, gridEntry);
+            UpdateHelpAttributes(_selectedGridEntry, gridEntry);
 
-            // tell the old selection it's not focused any more
-            if (selectedGridEntry is not null)
+            // Tell the old selection it's not focused any more.
+            if (_selectedGridEntry is not null)
             {
-                selectedGridEntry.Focus = false;
+                _selectedGridEntry.HasFocus = false;
             }
 
-            // selection not visible.
-            if (row < 0 || row >= visibleRows)
+            // Selection not visible.
+            if (row < 0 || row >= _visibleRows)
             {
                 CommonEditorHide();
-                selectedRow = row;
-                selectedGridEntry = gridEntry;
+                _selectedRow = row;
+                _selectedGridEntry = gridEntry;
                 Refresh();
                 return;
             }
 
-            // leave current selection.
+            // Leave current selection.
             if (gridEntry is null)
             {
                 return;
             }
 
             bool newRow = false;
-            int oldSel = selectedRow;
-            if (selectedRow != row || !gridEntry.Equals(selectedGridEntry))
+            int oldSelectedRow = _selectedRow;
+            if (_selectedRow != row || !gridEntry.Equals(_selectedGridEntry))
             {
                 CommonEditorHide();
                 newRow = true;
@@ -4838,105 +4508,92 @@ namespace System.Windows.Forms.PropertyGridInternal
                 CloseDropDown();
             }
 
-            Rectangle rect = GetRectangle(row, ROWVALUE);
+            Rectangle rect = GetRectangle(row, RowValue);
             string s = gridEntry.GetPropertyTextValue();
 
-            // what components are we using?
-            bool fBtnDropDown = gridEntry.NeedsDropDownButton | gridEntry.Enumerable;
-            bool fBtnDialog = gridEntry.NeedsCustomEditorButton;
-            bool fEdit = gridEntry.IsTextEditable;
-            bool fPaint = gridEntry.IsCustomPaint;
+            // What components are we using?
+            bool needsDropDownButton = gridEntry.NeedsDropDownButton | gridEntry.Enumerable;
+            bool needsCustomEditorButton = gridEntry.NeedsCustomEditorButton;
+            bool customPaint = gridEntry.IsCustomPaint;
 
             rect.X += 1;
             rect.Width -= 1;
 
-            // we want to allow builders on read-only properties
-            if ((fBtnDialog || fBtnDropDown) && !gridEntry.ShouldRenderReadOnly && FocusInside)
+            // We want to allow builders on read-only properties
+            if ((needsCustomEditorButton || needsDropDownButton) && !gridEntry.ShouldRenderReadOnly && FocusInside)
             {
-                Control btn = fBtnDropDown ? (Control)DropDownButton : (Control)DialogButton;
-                Size sizeBtn = DpiHelper.IsScalingRequirementMet ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight) :
-                                                                               new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
-                Rectangle rectTarget = new Rectangle(rect.X + rect.Width - sizeBtn.Width,
-                                                      rect.Y,
-                                                      sizeBtn.Width, rect.Height);
-                CommonEditorUse(btn, rectTarget);
-                sizeBtn = btn.Size;
-                rect.Width -= (sizeBtn.Width);
-                btn.Invalidate();
+                Control button = needsDropDownButton ? DropDownButton : DialogButton;
+                Size sizeBtn = DpiHelper.IsScalingRequirementMet
+                    ? new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight)
+                    : new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
+
+                var rectTarget = new Rectangle(
+                    rect.X + rect.Width - sizeBtn.Width, rect.Y,
+                    sizeBtn.Width, rect.Height);
+
+                CommonEditorUse(button, rectTarget);
+                sizeBtn = button.Size;
+                rect.Width -= sizeBtn.Width;
+                button.Invalidate();
             }
 
-            // if we're painting the value, size the rect between the button and the painted value
-            if (fPaint)
+            // If we're painting the value, size the rect between the button and the painted value
+            if (customPaint)
             {
-                rect.X += paintIndent + 1;
-                rect.Width -= paintIndent + 1;
+                rect.X += _paintIndent + 1;
+                rect.Width -= _paintIndent + 1;
             }
             else
             {
-                rect.X += EDIT_INDENT + 1; // +1 to compensate for where GDI+ draws it's string relative to the rect.
-                rect.Width -= EDIT_INDENT + 1;
+                rect.X += EditIndent + 1; // +1 to compensate for where GDI+ draws it's string relative to the rect.
+                rect.Width -= EditIndent + 1;
             }
 
-            if ((GetFlag(FlagIsNewSelection) || !Edit.Focused) && (s is not null && !s.Equals(Edit.Text)))
+            if ((GetFlag(FlagIsNewSelection) || !EditTextBox.Focused) && s is not null && !s.Equals(EditTextBox.Text))
             {
-                Edit.Text = s;
-                originalTextValue = s;
-                Edit.SelectionStart = 0;
-                Edit.SelectionLength = 0;
+                EditTextBox.Text = s;
+                _originalTextValue = s;
+                EditTextBox.SelectionStart = 0;
+                EditTextBox.SelectionLength = 0;
             }
-            Edit.AccessibleName = gridEntry.Label;
 
-            switch (inheritRenderMode)
+            EditTextBox.AccessibleName = gridEntry.Label;
+
+            if (gridEntry.ShouldSerializePropertyValue())
             {
-                case RENDERMODE_BOLD:
-                    if (gridEntry.ShouldSerializePropertyValue())
-                    {
-                        Edit.Font = GetBoldFont();
-                    }
-                    else
-                    {
-                        Edit.Font = Font;
-                    }
-                    break;
-                case RENDERMODE_LEFTDOT:
-                    if (gridEntry.ShouldSerializePropertyValue())
-                    {
-                        rect.X += (LEFTDOT_SIZE * 2);
-                        rect.Width -= (LEFTDOT_SIZE * 2);
-                    }
-                    // nothing
-                    break;
-                case RENDERMODE_TRIANGLE:
-                    // nothing
-                    break;
+                EditTextBox.Font = GetBoldFont();
+            }
+            else
+            {
+                EditTextBox.Font = Font;
             }
 
             if (GetFlag(FlagIsSplitterMove) || !gridEntry.HasValue || !FocusInside)
             {
-                Edit.Visible = false;
+                EditTextBox.Visible = false;
             }
             else
             {
                 rect.Offset(1, 1);
                 rect.Height -= 1;
                 rect.Width -= 1;
-                CommonEditorUse(Edit, rect);
+                CommonEditorUse(EditTextBox, rect);
                 bool drawReadOnly = gridEntry.ShouldRenderReadOnly;
-                Edit.ForeColor = drawReadOnly ? GrayTextColor : ForeColor;
-                Edit.BackColor = BackColor;
-                Edit.ReadOnly = drawReadOnly || !gridEntry.IsTextEditable;
-                Edit.UseSystemPasswordChar = gridEntry.ShouldRenderPassword;
+                EditTextBox.ForeColor = drawReadOnly ? GrayTextColor : ForeColor;
+                EditTextBox.BackColor = BackColor;
+                EditTextBox.ReadOnly = drawReadOnly || !gridEntry.IsTextEditable;
+                EditTextBox.UseSystemPasswordChar = gridEntry.ShouldRenderPassword;
             }
 
-            GridEntry oldSelectedGridEntry = selectedGridEntry;
-            selectedRow = row;
-            selectedGridEntry = gridEntry;
+            GridEntry oldSelectedGridEntry = _selectedGridEntry;
+            _selectedRow = row;
+            _selectedGridEntry = gridEntry;
             OwnerGrid.SetStatusBox(gridEntry.PropertyLabel, gridEntry.PropertyDescription);
 
-            // tell the new focused item that it now has focus
-            if (selectedGridEntry is not null)
+            // Tell the new focused item that it now has focus
+            if (_selectedGridEntry is not null)
             {
-                selectedGridEntry.Focus = FocusInside;
+                _selectedGridEntry.HasFocus = FocusInside;
             }
 
             if (!GetFlag(FlagIsNewSelection))
@@ -4944,9 +4601,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Focus();
             }
 
-            //
-
-            InvalidateRow(oldSel);
+            InvalidateRow(oldSelectedRow);
 
             InvalidateRow(row);
             if (FocusInside)
@@ -4956,9 +4611,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             try
             {
-                if (selectedGridEntry != oldSelectedGridEntry)
+                if (_selectedGridEntry != oldSelectedGridEntry)
                 {
-                    OwnerGrid.OnSelectedGridItemChanged(oldSelectedGridEntry, selectedGridEntry);
+                    OwnerGrid.OnSelectedGridItemChanged(oldSelectedGridEntry, _selectedGridEntry);
                 }
             }
             catch
@@ -4966,46 +4621,45 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual void SetConstants()
+        public void SetConstants()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:SetConstants");
             Size size = GetOurSize();
 
-            visibleRows = (int)Math.Ceiling(((double)size.Height) / (1 + RowHeight));
+            _visibleRows = (int)Math.Ceiling(((double)size.Height) / (1 + RowHeight));
 
             size = GetOurSize();
 
             if (size.Width >= 0)
             {
-                labelRatio = Math.Max(Math.Min(labelRatio, 9), 1.1);
-                labelWidth = ptOurLocation.X + (int)((double)size.Width / labelRatio);
+                _labelRatio = Math.Max(Math.Min(_labelRatio, 9), 1.1);
+                _labelWidth = _location.X + (int)(size.Width / _labelRatio);
             }
 
-            int oldWidth = labelWidth;
+            int oldWidth = _labelWidth;
 
             bool adjustWidth = SetScrollbarLength();
             GridEntryCollection rgipesAll = GetAllGridEntries();
             if (rgipesAll is not null)
             {
                 int scroll = GetScrollOffset();
-                if ((scroll + visibleRows) >= rgipesAll.Count)
+                if ((scroll + _visibleRows) >= rgipesAll.Count)
                 {
-                    visibleRows = rgipesAll.Count - scroll;
+                    _visibleRows = rgipesAll.Count - scroll;
                 }
             }
 
             if (adjustWidth && size.Width >= 0)
             {
-                labelRatio = ((double)GetOurSize().Width / (double)(oldWidth - ptOurLocation.X));
-                //labelWidth = loc.X + (int) ((double)size.Width / labelRatio);
+                _labelRatio = GetOurSize().Width / (double)(oldWidth - _location.X);
             }
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "\tsize       :" + size.ToString());
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "\tlocation   :" + ptOurLocation.ToString());
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "\tvisibleRows:" + (visibleRows).ToString(CultureInfo.InvariantCulture));
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "\tlabelWidth :" + (labelWidth).ToString(CultureInfo.InvariantCulture));
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "\tlabelRatio :" + (labelRatio).ToString(CultureInfo.InvariantCulture));
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "\trowHeight  :" + (RowHeight).ToString(CultureInfo.InvariantCulture));
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tsize       :{size}");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tlocation   :{_location}");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tvisibleRows:{_visibleRows}");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tlabelWidth :{_labelWidth}");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tlabelRatio :{_labelRatio}");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\trowHeight  :{RowHeight}");
 #if DEBUG
             if (rgipesAll is null)
             {
@@ -5013,17 +4667,17 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "\tIPE Count  :" + (rgipesAll.Count).ToString(CultureInfo.InvariantCulture));
+                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"\tIPE Count  :{rgipesAll.Count}");
             }
 #endif
         }
 
-        private void SetCommitError(short error)
+        private void SetCommitError(ErrorState error)
         {
-            SetCommitError(error, error == ERROR_THROWN);
+            SetCommitError(error, error == ErrorState.Thrown);
         }
 
-        private void SetCommitError(short error, bool capture)
+        private void SetCommitError(ErrorState error, bool capture)
         {
 #if DEBUG
             if (CompModSwitches.DebugGridView.TraceVerbose)
@@ -5031,136 +4685,136 @@ namespace System.Windows.Forms.PropertyGridInternal
                 string err = "UNKNOWN!";
                 switch (error)
                 {
-                    case ERROR_NONE:
+                    case ErrorState.None:
                         err = "ERROR_NONE";
                         break;
-                    case ERROR_THROWN:
+                    case ErrorState.Thrown:
                         err = "ERROR_THROWN";
                         break;
-                    case ERROR_MSGBOX_UP:
+                    case ErrorState.MessageBoxUp:
                         err = "ERROR_MSGBOX_UP";
                         break;
                 }
-                Debug.WriteLine("PropertyGridView:SetCommitError(error=" + err + ", capture=" + capture.ToString() + ")");
+
+                Debug.WriteLine($"PropertyGridView:SetCommitError(error={err}, capture={capture})");
             }
 #endif
-            errorState = error;
-            if (error != ERROR_NONE)
+            _errorState = error;
+            if (error != ErrorState.None)
             {
                 CancelSplitterMove();
             }
 
-            Edit.HookMouseDown = capture;
+            EditTextBox.HookMouseDown = capture;
         }
 
-        internal /*public virtual*/ void SetExpand(GridEntry gridEntry, bool value)
+        internal void SetExpand(GridEntry entry, bool value)
         {
-            if (gridEntry is not null && gridEntry.Expandable)
+            if (entry is null || !entry.Expandable)
             {
-                int row = GetRowFromGridEntry(gridEntry);
-                int countFromEnd = visibleRows - row;
-                int curRow = selectedRow;
+                return;
+            }
 
-                // if the currently selected row is below us, we need to commit now
-                // or the offsets will be wrong
-                if (selectedRow != -1 && row < selectedRow && Edit.Visible)
+            int row = GetRowFromGridEntry(entry);
+            int currentRow = _selectedRow;
+
+            // If the currently selected row is below us, we need to commit now or the offsets will be wrong.
+            if (_selectedRow != -1 && row < _selectedRow && EditTextBox.Visible)
+            {
+                // This will cause the commit.
+                Focus();
+            }
+
+            int offset = GetScrollOffset();
+            int items = TotalProperties;
+
+            entry.InternalExpanded = value;
+
+            var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
+            var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+            _selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
+                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                oldExpandedState,
+                newExpandedState);
+
+            RecalculateProperties();
+            GridEntry selectedEntry = _selectedGridEntry;
+            if (!value)
+            {
+                for (GridEntry currentEntry = selectedEntry; currentEntry is not null; currentEntry = currentEntry.ParentGridEntry)
                 {
-                    // this will cause the commit
-                    Focus();
-                }
-
-                int offset = GetScrollOffset();
-                int items = totalProps;
-
-                gridEntry.InternalExpanded = value;
-
-                var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
-                var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-                selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
-                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                    oldExpandedState,
-                    newExpandedState);
-
-                RecalculateProps();
-                GridEntry ipeSelect = selectedGridEntry;
-                if (!value)
-                {
-                    for (GridEntry ipeCur = ipeSelect; ipeCur is not null; ipeCur = ipeCur.ParentGridEntry)
+                    if (currentEntry.Equals(entry))
                     {
-                        if (ipeCur.Equals(gridEntry))
-                        {
-                            ipeSelect = gridEntry;
-                        }
+                        selectedEntry = entry;
                     }
                 }
-                row = GetRowFromGridEntry(gridEntry);
-
-                SetConstants();
-
-                int newItems = totalProps - items;
-
-                if (value && newItems > 0 && newItems < visibleRows && (row + (newItems)) >= visibleRows && newItems < curRow)
-                {
-                    // scroll to show the newly opened items.
-                    SetScrollOffset((totalProps - items) + offset);
-                }
-
-                Invalidate();
-
-                SelectGridEntry(ipeSelect, false);
-
-                int scroll = GetScrollOffset();
-                SetScrollOffset(0);
-                SetConstants();
-                SetScrollOffset(scroll);
             }
+
+            row = GetRowFromGridEntry(entry);
+
+            SetConstants();
+
+            int newItems = TotalProperties - items;
+
+            if (value && newItems > 0 && newItems < _visibleRows && (row + newItems) >= _visibleRows && newItems < currentRow)
+            {
+                // Scroll to show the newly opened items.
+                SetScrollOffset(TotalProperties - items + offset);
+            }
+
+            Invalidate();
+
+            SelectGridEntry(selectedEntry, pageIn: false);
+
+            int scroll = GetScrollOffset();
+            SetScrollOffset(0);
+            SetConstants();
+            SetScrollOffset(scroll);
         }
 
         private void SetFlag(short flag, bool value)
         {
             if (value)
             {
-                flags = (short)((ushort)flags | (ushort)flag);
+                _flags = (short)((ushort)_flags | (ushort)flag);
             }
             else
             {
-                flags &= (short)~flag;
+                _flags &= (short)~flag;
             }
         }
 
-        public virtual void SetScrollOffset(int cOffset)
+        public void SetScrollOffset(int offset)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:SetScrollOffset(" + cOffset.ToString(CultureInfo.InvariantCulture) + ")");
-            int posNew = Math.Max(0, Math.Min(totalProps - visibleRows + 1, cOffset));
-            int posOld = ScrollBar.Value;
-            if (posNew != posOld && IsScrollValueValid(posNew) && visibleRows > 0)
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:SetScrollOffset({offset})");
+            int newPosition = Math.Max(0, Math.Min(TotalProperties - _visibleRows + 1, offset));
+            int oldPosition = ScrollBar.Value;
+            if (newPosition != oldPosition && IsScrollValueValid(newPosition) && _visibleRows > 0)
             {
-                ScrollBar.Value = posNew;
+                ScrollBar.Value = newPosition;
                 Invalidate();
-                selectedRow = GetRowFromGridEntry(selectedGridEntry);
+                _selectedRow = GetRowFromGridEntry(_selectedGridEntry);
             }
         }
 
-        // C#r
-        internal virtual bool _Commit()
-        {
-            return Commit();
-        }
-
-        private bool Commit()
+        internal bool Commit()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Commit()");
 
-            if (errorState == ERROR_MSGBOX_UP)
+            if (_errorState == ErrorState.MessageBoxUp)
             {
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Commit() returning false because an error has been thrown or we are in a property set");
+                Debug.WriteLineIf(
+                    CompModSwitches.DebugGridView.TraceVerbose,
+                    "PropertyGridView:Commit() returning false because an error has been thrown or we are in a property set");
                 return false;
             }
 
             if (!NeedsCommit)
             {
-                SetCommitError(ERROR_NONE);
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:Commit() returning true because no change has been made");
+                SetCommitError(ErrorState.None);
+                Debug.WriteLineIf(
+                    CompModSwitches.DebugGridView.TraceVerbose,
+                    "PropertyGridView:Commit() returning true because no change has been made");
                 return true;
             }
 
@@ -5169,65 +4823,65 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            GridEntry ipeCur = GetGridEntryFromRow(selectedRow);
-            if (ipeCur is null)
+            if (GetGridEntryFromRow(_selectedRow) is null)
             {
                 return true;
             }
+
             bool success = false;
             try
             {
-                success = CommitText(Edit.Text);
+                success = CommitText(EditTextBox.Text);
             }
             finally
             {
                 if (!success)
                 {
-                    Edit.Focus();
-                    SelectEdit(false);
+                    EditTextBox.Focus();
+                    EditTextBox.SelectAll();
                 }
                 else
                 {
-                    SetCommitError(ERROR_NONE);
+                    SetCommitError(ErrorState.None);
                 }
             }
+
             return success;
         }
 
         private bool CommitValue(object value)
         {
-            GridEntry ipeCur = selectedGridEntry;
+            GridEntry currentEntry = _selectedGridEntry;
 
-            if (selectedGridEntry is null && selectedRow != -1)
+            if (_selectedGridEntry is null && _selectedRow != -1)
             {
-                ipeCur = GetGridEntryFromRow(selectedRow);
+                currentEntry = GetGridEntryFromRow(_selectedRow);
             }
 
-            if (ipeCur is null)
+            if (currentEntry is null)
             {
                 Debug.Fail("Committing with no selected row!");
                 return true;
             }
 
-            return CommitValue(ipeCur, value);
+            return CommitValue(currentEntry, value);
         }
 
-        internal bool CommitValue(GridEntry ipeCur, object value, bool closeDropDown = true)
+        internal bool CommitValue(GridEntry entry, object value, bool closeDropDown = true)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CommitValue(" + (value is null ? "null" : value.ToString()) + ")");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:CommitValue({value?.ToString() ?? "null"})");
 
-            int propCount = ipeCur.ChildCount;
-            bool capture = Edit.HookMouseDown;
+            int propCount = entry.ChildCount;
+            bool capture = EditTextBox.HookMouseDown;
             object originalValue = null;
 
             try
             {
-                originalValue = ipeCur.PropertyValue;
+                originalValue = entry.PropertyValue;
             }
             catch
             {
-                // if the getter is failing, we still want to let
-                // the set happen.
+                // If the getter is failing, we still want to let the set happen.
             }
 
             try
@@ -5236,12 +4890,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     SetFlag(FlagInPropertySet, true);
 
-                    //if this propentry is enumerable, then once a value is selected from the editor,
-                    //we'll want to close the drop down (like true/false).  Otherwise, if we're
-                    //working with Anchor for ex., then we should be able to select different values
-                    //from the editor, without having it close every time.
-                    if (ipeCur is not null &&
-                        ipeCur.Enumerable &&
+                    // If this propentry is enumerable, then once a value is selected from the editor,
+                    // we'll want to close the drop down (like true/false).  Otherwise, if we're
+                    // working with Anchor for ex., then we should be able to select different values
+                    // from the editor, without having it close every time.
+                    if (entry is not null &&
+                        entry.Enumerable &&
                         closeDropDown)
                     {
                         CloseDropDown();
@@ -5249,19 +4903,19 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     try
                     {
-                        Edit.DisableMouseHook = true;
-                        ipeCur.PropertyValue = value;
+                        EditTextBox.DisableMouseHook = true;
+                        entry.PropertyValue = value;
                     }
                     finally
                     {
-                        Edit.DisableMouseHook = false;
-                        Edit.HookMouseDown = capture;
+                        EditTextBox.DisableMouseHook = false;
+                        EditTextBox.HookMouseDown = capture;
                     }
                 }
                 catch (Exception ex)
                 {
-                    SetCommitError(ERROR_THROWN);
-                    ShowInvalidMessage(ipeCur.PropertyLabel, value, ex);
+                    SetCommitError(ErrorState.Thrown);
+                    ShowInvalidMessage(entry.PropertyLabel, ex);
                     return false;
                 }
             }
@@ -5270,63 +4924,61 @@ namespace System.Windows.Forms.PropertyGridInternal
                 SetFlag(FlagInPropertySet, false);
             }
 
-            SetCommitError(ERROR_NONE);
+            SetCommitError(ErrorState.None);
 
-            string text = ipeCur.GetPropertyTextValue();
-            if (!string.Equals(text, Edit.Text))
+            string text = entry.GetPropertyTextValue();
+            if (!string.Equals(text, EditTextBox.Text))
             {
-                Edit.Text = text;
-                Edit.SelectionStart = 0;
-                Edit.SelectionLength = 0;
+                EditTextBox.Text = text;
+                EditTextBox.SelectionStart = 0;
+                EditTextBox.SelectionLength = 0;
             }
-            originalTextValue = text;
+
+            _originalTextValue = text;
 
             // Update our reset command.
-            //
-            UpdateResetCommand(ipeCur);
+            UpdateResetCommand(entry);
 
-            if (ipeCur.ChildCount != propCount)
+            if (entry.ChildCount != propCount)
             {
-                ClearGridEntryEvents(allGridEntries, 0, -1);
-                allGridEntries = null;
-                SelectGridEntry(ipeCur, true);
+                ClearGridEntryEvents(_allGridEntries, 0, -1);
+                _allGridEntries = null;
+                SelectGridEntry(entry, pageIn: true);
             }
 
-            // in case this guy got disposed...
-            if (ipeCur.Disposed)
+            if (entry.Disposed)
             {
-                bool editfocused = (edit is not null && edit.Focused);
+                bool editfocused = _editTextBox is not null && _editTextBox.Focused;
 
-                // reselect the row to find the replacement.
-                //
-                SelectGridEntry(ipeCur, true);
-                ipeCur = selectedGridEntry;
+                // Reselect the row to find the replacement.
+                SelectGridEntry(entry, pageIn: true);
+                entry = _selectedGridEntry;
 
-                if (editfocused && edit is not null)
+                if (editfocused && _editTextBox is not null)
                 {
-                    edit.Focus();
+                    _editTextBox.Focus();
                 }
             }
 
-            OwnerGrid.OnPropertyValueSet(ipeCur, originalValue);
+            OwnerGrid.OnPropertyValueSet(entry, originalValue);
 
             return true;
         }
 
         private bool CommitText(string text)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CommitValue(" + (text is null ? "null" : text.ToString()) + ")");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:CommitValue({text ?? "null"})");
 
-            object value = null;
+            object value;
 
-            GridEntry ipeCur = selectedGridEntry;
+            GridEntry currentEntry = _selectedGridEntry;
 
-            if (selectedGridEntry is null && selectedRow != -1)
+            if (_selectedGridEntry is null && _selectedRow != -1)
             {
-                ipeCur = GetGridEntryFromRow(selectedRow);
+                currentEntry = GetGridEntryFromRow(_selectedRow);
             }
 
-            if (ipeCur is null)
+            if (currentEntry is null)
             {
                 Debug.Fail("Committing with no selected row!");
                 return true;
@@ -5334,29 +4986,29 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             try
             {
-                value = ipeCur.ConvertTextToValue(text);
+                value = currentEntry.ConvertTextToValue(text);
             }
             catch (Exception ex)
             {
-                SetCommitError(ERROR_THROWN);
-                ShowInvalidMessage(ipeCur.PropertyLabel, text, ex);
+                SetCommitError(ErrorState.Thrown);
+                ShowInvalidMessage(currentEntry.PropertyLabel, ex);
                 return false;
             }
 
-            SetCommitError(ERROR_NONE);
+            SetCommitError(ErrorState.None);
 
             return CommitValue(value);
         }
 
         internal void ReverseFocus()
         {
-            if (selectedGridEntry is null)
+            if (_selectedGridEntry is null)
             {
                 Focus();
             }
             else
             {
-                SelectGridEntry(selectedGridEntry, true);
+                SelectGridEntry(_selectedGridEntry, pageIn: true);
 
                 if (DialogButton.Visible)
                 {
@@ -5366,10 +5018,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     DropDownButton.Focus();
                 }
-                else if (Edit.Visible)
+                else if (EditTextBox.Visible)
                 {
-                    Edit.SelectAll();
-                    Edit.Focus();
+                    EditTextBox.SelectAll();
+                    EditTextBox.Focus();
                 }
             }
         }
@@ -5377,44 +5029,51 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool SetScrollbarLength()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:SetScrollBarLength");
-            bool sbChange = false;
-            if (totalProps != -1)
+
+            if (TotalProperties == -1)
             {
-                if (totalProps < visibleRows)
+                return false;
+            }
+
+            if (TotalProperties < _visibleRows)
+            {
+                SetScrollOffset(0);
+            }
+            else if (GetScrollOffset() > TotalProperties)
+            {
+                SetScrollOffset(TotalProperties + 1 - _visibleRows);
+            }
+
+            bool hidden = !ScrollBar.Visible;
+            if (_visibleRows > 0)
+            {
+                ScrollBar.LargeChange = _visibleRows - 1;
+            }
+
+            bool scrollBarChanged = false;
+
+            ScrollBar.Maximum = Math.Max(0, TotalProperties - 1);
+            if (hidden != (TotalProperties < _visibleRows))
+            {
+                scrollBarChanged = true;
+                ScrollBar.Visible = hidden;
+                Size size = GetOurSize();
+                if (_labelWidth != -1 && size.Width > 0)
                 {
-                    SetScrollOffset(0);
-                }
-                else if (GetScrollOffset() > totalProps)
-                {
-                    SetScrollOffset((totalProps + 1) - visibleRows);
+                    if (_labelWidth > _location.X + size.Width)
+                    {
+                        _labelWidth = _location.X + (int)(size.Width / _labelRatio);
+                    }
+                    else
+                    {
+                        _labelRatio = GetOurSize().Width / (double)(_labelWidth - _location.X);
+                    }
                 }
 
-                bool fHidden = !ScrollBar.Visible;
-                if (visibleRows > 0)
-                {
-                    ScrollBar.LargeChange = visibleRows - 1;
-                }
-                ScrollBar.Maximum = Math.Max(0, totalProps - 1);
-                if (fHidden != (totalProps < visibleRows))
-                {
-                    sbChange = true;
-                    ScrollBar.Visible = fHidden;
-                    Size size = GetOurSize();
-                    if (labelWidth != -1 && size.Width > 0)
-                    {
-                        if (labelWidth > ptOurLocation.X + size.Width)
-                        {
-                            labelWidth = ptOurLocation.X + (int)((double)size.Width / labelRatio);
-                        }
-                        else
-                        {
-                            labelRatio = ((double)GetOurSize().Width / (double)(labelWidth - ptOurLocation.X));
-                        }
-                    }
-                    Invalidate();
-                }
+                Invalidate();
             }
-            return sbChange;
+
+            return scrollBarChanged;
         }
 
         /// <summary>
@@ -5422,9 +5081,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  use this method rather than showing the dialog directly, as this will
         ///  properly position the dialog and provide it a dialog owner.
         /// </summary>
-        public DialogResult /* IWindowsFormsEditorService. */ ShowDialog(Form dialog)
+        public DialogResult ShowDialog(Form dialog)
         {
-            // try to shift down if sitting right on top of existing owner.
+            // Try to shift down if sitting right on top of existing owner.
             if (dialog.StartPosition == FormStartPosition.CenterScreen)
             {
                 Control topControl = this;
@@ -5434,11 +5093,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         topControl = topControl.ParentInternal;
                     }
+
                     if (topControl.Size.Equals(dialog.Size))
                     {
                         dialog.StartPosition = FormStartPosition.Manual;
                         Point location = topControl.Location;
-                        //
                         location.Offset(25, 25);
                         dialog.Location = location;
                     }
@@ -5447,11 +5106,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             IntPtr priorFocus = User32.GetFocus();
 
-            IUIService service = (IUIService)GetService(typeof(IUIService));
             DialogResult result;
-            if (service is not null)
+            if (TryGetService(out IUIService uiService))
             {
-                result = service.ShowDialog(dialog);
+                result = uiService.ShowDialog(dialog);
             }
             else
             {
@@ -5466,52 +5124,41 @@ namespace System.Windows.Forms.PropertyGridInternal
             return result;
         }
 
-        private void ShowFormatExceptionMessage(string propName, object value, Exception ex)
+        private void ShowFormatExceptionMessage(string propertyName, Exception ex)
         {
-            if (value is null)
-            {
-                value = "(null)";
-            }
+            propertyName ??= "(unknown)";
 
-            if (propName is null)
-            {
-                propName = "(unknown)";
-            }
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:ShowFormatExceptionMessage(prop={propertyName})");
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ShowFormatExceptionMessage(prop=" + propName + ")");
-
-            // we have to uninstall our hook so the user can push the button!
-            bool hooked = Edit.HookMouseDown;
-            Edit.DisableMouseHook = true;
-            SetCommitError(ERROR_MSGBOX_UP, false);
+            // We have to uninstall our hook so the user can push the button!
+            bool hooked = EditTextBox.HookMouseDown;
+            EditTextBox.DisableMouseHook = true;
+            SetCommitError(ErrorState.MessageBoxUp, false);
 
             // Before invoking the error dialog, flush all mouse messages in the message queue.
             // Otherwise the click that triggered the error will still be in the queue, and will get eaten by the dialog,
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
             // error dialog gets closed, which is much too late.
-            var mouseMsg = new User32.MSG();
-            while (User32.PeekMessageW(ref mouseMsg,
+            var mouseMessage = new User32.MSG();
+            while (User32.PeekMessageW(ref mouseMessage,
                 IntPtr.Zero,
-                (User32.WM)User32.WM.MOUSEFIRST,
-                (User32.WM)User32.WM.MOUSELAST,
+                User32.WM.MOUSEFIRST,
+                User32.WM.MOUSELAST,
                 User32.PM.REMOVE).IsTrue())
             {
                 // No-op.
             }
 
-            // These things are just plain useless.
-            //
             if (ex is Reflection.TargetInvocationException)
             {
                 ex = ex.InnerException;
             }
 
             // Try to find an exception message to display
-            //
             string exMessage = ex.Message;
 
-            bool revert = false;
+            bool revert;
 
             while (exMessage is null || exMessage.Length == 0)
             {
@@ -5520,58 +5167,51 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     break;
                 }
+
                 exMessage = ex.Message;
             }
-
-            IUIService uiSvc = (IUIService)GetService(typeof(IUIService));
 
             ErrorDialog.Message = SR.PBRSFormatExceptionMessage;
             ErrorDialog.Text = SR.PBRSErrorTitle;
             ErrorDialog.Details = exMessage;
 
-            if (uiSvc is not null)
+            if (TryGetService(out IUIService uiService))
             {
-                revert = (DialogResult.Cancel == uiSvc.ShowDialog(ErrorDialog));
+                revert = DialogResult.Cancel == uiService.ShowDialog(ErrorDialog);
             }
             else
             {
-                revert = (DialogResult.Cancel == ShowDialog(ErrorDialog));
+                revert = DialogResult.Cancel == ShowDialog(ErrorDialog);
             }
 
-            Edit.DisableMouseHook = false;
+            EditTextBox.DisableMouseHook = false;
 
             if (hooked)
             {
-                SelectGridEntry(selectedGridEntry, true);
+                SelectGridEntry(_selectedGridEntry, pageIn: true);
             }
-            SetCommitError(ERROR_THROWN, hooked);
+
+            SetCommitError(ErrorState.Thrown, hooked);
 
             if (revert)
             {
-                OnEscape(Edit);
+                OnEscape(EditTextBox);
             }
         }
 
-        internal void ShowInvalidMessage(string propName, object value, Exception ex)
+        internal void ShowInvalidMessage(string propertyName, Exception ex)
         {
-            if (value is null)
-            {
-                value = "(null)";
-            }
+            propertyName ??= "(unknown)";
 
-            if (propName is null)
-            {
-                propName = "(unknown)";
-            }
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, $"PropertyGridView:ShowInvalidMessage(prop={propertyName})");
 
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:ShowInvalidMessage(prop=" + propName + ")");
-
-            // we have to uninstall our hook so the user can push the button!
-            bool hooked = Edit.HookMouseDown;
-            Edit.DisableMouseHook = true;
-            SetCommitError(ERROR_MSGBOX_UP, false);
+            // We have to uninstall our hook so the user can push the button.
+            bool hooked = EditTextBox.HookMouseDown;
+            EditTextBox.DisableMouseHook = true;
+            SetCommitError(ErrorState.MessageBoxUp, capture: false);
 
             // Before invoking the error dialog, flush all mouse messages in the message queue.
+            //
             // Otherwise the click that triggered the error will still be in the queue, and will get eaten by the dialog,
             // potentially causing an accidental button click. Problem occurs because we trap clicks using a system hook,
             // which usually discards the message by returning 1 to GetMessage(). But this won't occur until after the
@@ -5582,84 +5222,78 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // No-op.
             }
 
-            // These things are just plain useless.
-            //
             if (ex is Reflection.TargetInvocationException)
             {
                 ex = ex.InnerException;
             }
 
-            // Try to find an exception message to display
-            //
-            string exMessage = ex.Message;
+            // Try to find an exception message to display.
+            string message = ex.Message;
 
-            bool revert = false;
+            bool revert;
 
-            while (exMessage is null || exMessage.Length == 0)
+            while (message is null || message.Length == 0)
             {
                 ex = ex.InnerException;
                 if (ex is null)
                 {
                     break;
                 }
-                exMessage = ex.Message;
-            }
 
-            IUIService uiSvc = (IUIService)GetService(typeof(IUIService));
+                message = ex.Message;
+            }
 
             ErrorDialog.Message = SR.PBRSErrorInvalidPropertyValue;
             ErrorDialog.Text = SR.PBRSErrorTitle;
-            ErrorDialog.Details = exMessage;
+            ErrorDialog.Details = message;
 
-            if (uiSvc is not null)
+            if (TryGetService(out IUIService uiService))
             {
-                revert = (DialogResult.Cancel == uiSvc.ShowDialog(ErrorDialog));
+                revert = DialogResult.Cancel == uiService.ShowDialog(ErrorDialog);
             }
             else
             {
-                revert = (DialogResult.Cancel == ShowDialog(ErrorDialog));
+                revert = DialogResult.Cancel == ShowDialog(ErrorDialog);
             }
 
-            Edit.DisableMouseHook = false;
+            EditTextBox.DisableMouseHook = false;
 
             if (hooked)
             {
-                SelectGridEntry(selectedGridEntry, true);
+                SelectGridEntry(_selectedGridEntry, pageIn: true);
             }
-            SetCommitError(ERROR_THROWN, hooked);
+
+            SetCommitError(ErrorState.Thrown, capture: hooked);
 
             if (revert)
             {
-                OnEscape(Edit);
+                OnEscape(EditTextBox);
             }
         }
 
-        private bool SplitterInside(int x, int y)
-        {
-            return (Math.Abs(x - InternalLabelWidth) < 4);
-        }
+        private bool SplitterInside(int x) => Math.Abs(x - InternalLabelWidth) < 4;
 
         private void TabSelection()
         {
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {
                 return;
             }
 
-            if (Edit.Visible)
+            if (EditTextBox.Visible)
             {
-                Edit.Focus();
-                SelectEdit(false);
+                EditTextBox.Focus();
+                EditTextBox.SelectAll();
             }
-            else if (dropDownHolder is not null && dropDownHolder.Visible)
+            else if (_dropDownHolder is not null && _dropDownHolder.Visible)
             {
-                dropDownHolder.FocusComponent();
+                _dropDownHolder.FocusComponent();
                 return;
             }
-            else if (currentEditor is not null)
+            else if (_currentEditor is not null)
             {
-                currentEditor.Focus();
+                _currentEditor.Focus();
             }
 
             return;
@@ -5667,15 +5301,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal void RemoveSelectedEntryHelpAttributes()
         {
-            UpdateHelpAttributes(selectedGridEntry, null);
+            UpdateHelpAttributes(_selectedGridEntry, null);
         }
 
         private void UpdateHelpAttributes(GridEntry oldEntry, GridEntry newEntry)
         {
-            // Update the help context with the current property
-            //
-            IHelpService hsvc = GetHelpService();
-            if (hsvc is null || oldEntry == newEntry)
+            // Update the help context with the current property.
+            IHelpService helpService = GetHelpService();
+            if (helpService is null || oldEntry == newEntry)
             {
                 return;
             }
@@ -5685,7 +5318,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 while (temp is not null)
                 {
-                    hsvc.RemoveContextAttribute("Keyword", temp.HelpKeyword);
+                    helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
                     temp = temp.ParentGridEntry;
                 }
             }
@@ -5694,78 +5327,81 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 temp = newEntry;
 
-                UpdateHelpAttributes(hsvc, temp, true);
+                UpdateHelpAttributes(helpService, temp, true);
             }
         }
 
-        private void UpdateHelpAttributes(IHelpService helpSvc, GridEntry entry, bool addAsF1)
+        private void UpdateHelpAttributes(IHelpService helpService, GridEntry entry, bool addAsF1)
         {
             if (entry is null)
             {
                 return;
             }
 
-            UpdateHelpAttributes(helpSvc, entry.ParentGridEntry, false);
+            UpdateHelpAttributes(helpService, entry.ParentGridEntry, false);
             string helpKeyword = entry.HelpKeyword;
             if (helpKeyword is not null)
             {
-                helpSvc.AddContextAttribute("Keyword", helpKeyword, addAsF1 ? HelpKeywordType.F1Keyword : HelpKeywordType.GeneralKeyword);
+                helpService.AddContextAttribute("Keyword", helpKeyword, addAsF1 ? HelpKeywordType.F1Keyword : HelpKeywordType.GeneralKeyword);
             }
         }
 
         private void UpdateUIBasedOnFont(bool layoutRequired)
         {
-            if (IsHandleCreated && GetFlag(FlagNeedUpdateUIBasedOnFont))
+            if (!IsHandleCreated || !GetFlag(FlagNeedUpdateUIBasedOnFont))
             {
-                try
+                return;
+            }
+
+            try
+            {
+                if (_listBox is not null)
                 {
-                    if (listBox is not null)
+                    DropDownListBox.ItemHeight = RowHeight + 2;
+                }
+
+                if (_dropDownButton is not null)
+                {
+                    bool isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
+                    if (isScalingRequirementMet)
                     {
-                        DropDownListBox.ItemHeight = RowHeight + 2;
+                        _dropDownButton.Size = new(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight);
+                    }
+                    else
+                    {
+                        _dropDownButton.Size = new(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
                     }
 
-                    if (btnDropDown is not null)
+                    if (_dialogButton is not null)
                     {
-                        var isScalingRequirementMet = DpiHelper.IsScalingRequirementMet;
+                        DialogButton.Size = DropDownButton.Size;
                         if (isScalingRequirementMet)
                         {
-                            btnDropDown.Size = new Size(SystemInformation.VerticalScrollBarArrowHeightForDpi(_deviceDpi), RowHeight);
-                        }
-                        else
-                        {
-                            btnDropDown.Size = new Size(SystemInformation.VerticalScrollBarArrowHeight, RowHeight);
-                        }
-
-                        if (btnDialog is not null)
-                        {
-                            DialogButton.Size = DropDownButton.Size;
-                            if (isScalingRequirementMet)
-                            {
-                                btnDialog.Image = CreateResizedBitmap("dotdotdot", DOTDOTDOT_ICONWIDTH, DOTDOTDOT_ICONHEIGHT);
-                            }
-                        }
-                        if (isScalingRequirementMet)
-                        {
-                            btnDropDown.Image = CreateResizedBitmap("Arrow", DOWNARROW_ICONWIDTH, DOWNARROW_ICONHEIGHT);
+                            _dialogButton.Image = CreateResizedBitmap("dotdotdot", DotDotDotIconWidth, DotDotDotIconHeight);
                         }
                     }
 
-                    if (layoutRequired)
+                    if (isScalingRequirementMet)
                     {
-                        LayoutWindow(true);
+                        _dropDownButton.Image = CreateResizedBitmap("Arrow", DownArrowIconWidth, DownArrowIconHeight);
                     }
                 }
-                finally
+
+                if (layoutRequired)
                 {
-                    SetFlag(FlagNeedUpdateUIBasedOnFont, false);
+                    LayoutWindow(invalidate: true);
                 }
+            }
+            finally
+            {
+                SetFlag(FlagNeedUpdateUIBasedOnFont, false);
             }
         }
 
         private bool UnfocusSelection()
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:UnfocusSelection()");
-            GridEntry gridEntry = GetGridEntryFromRow(selectedRow);
+            GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
             if (gridEntry is null)
             {
                 return true;
@@ -5777,55 +5413,49 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 Focus();
             }
+
             return commit;
         }
 
         private void UpdateResetCommand(GridEntry gridEntry)
         {
-            if (totalProps > 0)
+            if (TotalProperties > 0 && TryGetService(out IMenuCommandService menuCommandService))
             {
-                IMenuCommandService mcs = (IMenuCommandService)GetService(typeof(IMenuCommandService));
-                if (mcs is not null)
+                MenuCommand reset = menuCommandService.FindCommand(PropertyGridCommands.Reset);
+                if (reset is not null)
                 {
-                    MenuCommand reset = mcs.FindCommand(PropertyGridCommands.Reset);
-                    if (reset is not null)
-                    {
-                        reset.Enabled = gridEntry is null ? false : gridEntry.CanResetPropertyValue();
-                    }
+                    reset.Enabled = gridEntry is not null && gridEntry.CanResetPropertyValue();
                 }
             }
         }
 
-        // a mini version of process dialog key
-        // for responding to WM_GETDLGCODE
         internal bool WantsTab(bool forward)
         {
             if (forward)
             {
                 if (Focused)
                 {
-                    // we want a tab if the grid has focus and
-                    // we have a button or an Edit
-                    if (DropDownButton.Visible ||
-                        DialogButton.Visible ||
-                        Edit.Visible)
+                    // We want a tab if the grid has focus and we have a button or an Edit.
+                    if (DropDownButton.Visible || DialogButton.Visible || EditTextBox.Visible)
                     {
                         return true;
                     }
                 }
-                else if (Edit.Focused && (DropDownButton.Visible || DialogButton.Visible))
+                else if (EditTextBox.Focused && (DropDownButton.Visible || DialogButton.Visible))
                 {
-                    // if the Edit has focus, and we have a button, we want the tab as well
+                    // If the Edit has focus, and we have a button, we want the tab as well.
                     return true;
                 }
+
                 return OwnerGrid.WantsTab(forward);
             }
             else
             {
-                if (Edit.Focused || DropDownButton.Focused || DialogButton.Focused)
+                if (EditTextBox.Focused || DropDownButton.Focused || DialogButton.Focused)
                 {
                     return true;
                 }
+
                 return OwnerGrid.WantsTab(forward);
             }
         }
@@ -5834,7 +5464,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (m.LParam != IntPtr.Zero)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                var nmhdr = (User32.NMHDR*)m.LParam;
 
                 if (nmhdr->hwndFrom == ToolTip.Handle)
                 {
@@ -5843,13 +5473,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                         case ComCtl32.TTN.POP:
                             break;
                         case ComCtl32.TTN.SHOW:
-                            // we want to move the tooltip over where our text would be
+                            // We want to move the tooltip over where our text would be.
                             Point mouseLoc = Cursor.Position;
-
-                            // convert to window coords
                             mouseLoc = PointToClient(mouseLoc);
-
-                            // figure out where we are and apply the offset
                             mouseLoc = FindPosition(mouseLoc.X, mouseLoc.Y);
 
                             if (mouseLoc == InvalidPosition)
@@ -5864,16 +5490,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 break;
                             }
 
-                            // get the proper rectangle
+                            // Get the proper rectangle.
                             Rectangle itemRect = GetRectangle(mouseLoc.Y, mouseLoc.X);
                             Point tipPt = Point.Empty;
 
-                            // and if we need a tooltip, move the tooltip control to that point.
-                            if (mouseLoc.X == ROWLABEL)
+                            // If we need a tooltip, move the tooltip control to that point.
+                            if (mouseLoc.X == RowLabel)
                             {
                                 tipPt = curEntry.GetLabelToolTipLocation(mouseLoc.X - itemRect.X, mouseLoc.Y - itemRect.Y);
                             }
-                            else if (mouseLoc.X == ROWVALUE)
+                            else if (mouseLoc.X == RowValue)
                             {
                                 tipPt = curEntry.ValueToolTipLocation;
                             }
@@ -5894,6 +5520,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
             }
+
             return false;
         }
 
@@ -5905,59 +5532,58 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Invalidate();
                     break;
 
-                // Microsoft -- if we get focus in the error
-                // state, make sure we push it back to the
-                // Edit or bad bad things can happen with
-                // our state...
-                //
+                // If we get focus in the error state, make sure we push it back to the
+                // Edit or bad bad things can happen with our state.
                 case (int)User32.WM.SETFOCUS:
-                    if (!GetInPropertySet() && Edit.Visible && (errorState != ERROR_NONE || !Commit()))
+                    if (!GetInPropertySet() && EditTextBox.Visible && (_errorState != ErrorState.None || !Commit()))
                     {
                         base.WndProc(ref m);
-                        Edit.Focus();
+                        EditTextBox.Focus();
                         return;
                     }
+
                     break;
 
                 case (int)User32.WM.IME_STARTCOMPOSITION:
-                    Edit.Focus();
-                    Edit.Clear();
-                    User32.PostMessageW(Edit, User32.WM.IME_STARTCOMPOSITION);
+                    EditTextBox.Focus();
+                    EditTextBox.Clear();
+                    User32.PostMessageW(EditTextBox, User32.WM.IME_STARTCOMPOSITION);
                     return;
 
                 case (int)User32.WM.IME_COMPOSITION:
-                    Edit.Focus();
-                    User32.PostMessageW(Edit, User32.WM.IME_COMPOSITION, m.WParam, m.LParam);
+                    EditTextBox.Focus();
+                    User32.PostMessageW(EditTextBox, User32.WM.IME_COMPOSITION, m.WParam, m.LParam);
                     return;
 
                 case (int)User32.WM.GETDLGCODE:
 
                     int flags = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTARROWS);
 
-                    if (selectedGridEntry is not null)
+                    if (_selectedGridEntry is not null)
                     {
                         if ((ModifierKeys & Keys.Shift) == 0)
                         {
-                            // if we're going backwards, we don't want the tab.
-                            // otherwise, we only want it if we have an edit...
-                            //
-                            if (edit.Visible)
+                            // If we're going backwards, we don't want the tab.
+                            // Otherwise we only want it if we have an edit.
+                            if (_editTextBox.Visible)
                             {
                                 flags |= (int)User32.DLGC.WANTTAB;
                             }
                         }
                     }
-                    m.Result = (IntPtr)(flags);
+
+                    m.Result = (IntPtr)flags;
                     return;
 
                 case (int)User32.WM.MOUSEMOVE:
 
-                    // check if it's the same position, of so eat the message
-                    if (unchecked((int)(long)m.LParam) == lastMouseMove)
+                    // Check if it's the same position, of so eat the message.
+                    if (unchecked((int)(long)m.LParam) == _lastMouseMove)
                     {
                         return;
                     }
-                    lastMouseMove = unchecked((int)(long)m.LParam);
+
+                    _lastMouseMove = unchecked((int)(long)m.LParam);
                     break;
 
                 case (int)User32.WM.NOTIFY:
@@ -5968,10 +5594,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
-                    m.Result = (IntPtr)GetRowFromGridEntry(selectedGridEntry);
+                    m.Result = (IntPtr)GetRowFromGridEntry(_selectedGridEntry);
                     return;
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.Result = (IntPtr)Math.Min(visibleRows, totalProps);
+                    m.Result = (IntPtr)Math.Min(_visibleRows, TotalProperties);
                     return;
             }
 
@@ -5979,10 +5605,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  rescale constants for the DPI change
+        ///  Rescale constants for the DPI change
         /// </summary>
-        /// <param name="deviceDpiOld"></param>
-        /// <param name="deviceDpiNew"></param>
         protected override void RescaleConstantsForDpi(int deviceDpiOld, int deviceDpiNew)
         {
             base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
@@ -5990,22 +5614,22 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Rescale constants on this object
+        ///  Rescale constants on this object.
         /// </summary>
         private void RescaleConstants()
         {
             if (DpiHelper.IsScalingRequirementMet)
             {
-                cachedRowHeight = -1;
-                paintWidth = LogicalToDeviceUnits(PAINT_WIDTH);
-                paintIndent = LogicalToDeviceUnits(PAINT_INDENT);
-                outlineSizeExplorerTreeStyle = LogicalToDeviceUnits(OUTLINE_SIZE_EXPLORER_TREE_STYLE);
-                outlineSize = LogicalToDeviceUnits(OUTLINE_SIZE);
-                maxListBoxHeight = LogicalToDeviceUnits(MAX_LISTBOX_HEIGHT);
-                offset_2Units = LogicalToDeviceUnits(OFFSET_2PIXELS);
-                if (topLevelGridEntries is not null)
+                _cachedRowHeight = -1;
+                _paintWidth = LogicalToDeviceUnits(PaintWidth);
+                _paintIndent = LogicalToDeviceUnits(PaintIndent);
+                _outlineSizeExplorerTreeStyle = LogicalToDeviceUnits(OutlineSizeExplorerTreeStyle);
+                _outlineSize = LogicalToDeviceUnits(OutlineSize);
+                _maxListBoxHeight = LogicalToDeviceUnits(MaxListBoxHeight);
+                _offset2Units = LogicalToDeviceUnits(Offset2Pixels);
+                if (TopLevelGridEntries is not null)
                 {
-                    foreach (GridEntry t in topLevelGridEntries)
+                    foreach (GridEntry t in TopLevelGridEntries)
                     {
                         ResetOutline(t);
                     }
@@ -6014,7 +5638,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  private method to recursively reset outlinerect for grid entries ( both visible and invisible)
+        ///  Recursively reset outline rect for grid entries (both visible and invisible)
         /// </summary>
         private void ResetOutline(GridEntry entry)
         {
@@ -6026,6 +5650,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     ResetOutline(ent);
                 }
             }
+
             return;
         }
     }

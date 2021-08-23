@@ -677,6 +677,21 @@
         <target state="translated">VT non gestito: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">Vai all'intervallo di tempo successivo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">Vai all'intervallo di tempo precedente</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">Vai alla data odierna e selezionala</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Annulla</target>
@@ -809,7 +824,7 @@
       </trans-unit>
       <trans-unit id="CheckBoxAutoCheckDescr">
         <source>Causes the check box to automatically change state when clicked.</source>
-        <target state="translated">Comporta il cambiamento automatico dello stato della casella di controllo quando  si fa clic su di essa.</target>
+        <target state="translated">Comporta il cambiamento automatico dello stato della casella di controllo quando si fa clic su di essa.</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxCheckAlignDescr">
@@ -1114,12 +1129,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Chiudi</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Apri</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1227,7 +1242,7 @@
         <target state="translated">Ultimo controllo che ha causato la visualizzazione di questo elenco di menu di scelta rapida.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">L'oggetto accessibile del controllo si trova in uno stato non valido.</target>
         <note />
@@ -4749,7 +4764,7 @@ sono riportate in fondo al messaggio.
         <target state="translated">Assembly caricati</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4758,7 +4773,7 @@ sono riportate in fondo al messaggio.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -5207,6 +5222,11 @@ Sostituirlo?</target>
         <target state="translated">La dimensione massima che il form può assumere.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">Ottiene o imposta l'ancoraggio per gli elementi figlio MDI ridotti a icona.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FormMenuStripDescr">
         <source>Specifies the primary MenuStrip for the Form. This property is used for keyboard activation and automatic merging in MDI.</source>
         <target state="translated">Specifica il MenuStrip principale per il form. Questa proprietà consente l'attivazione della tastiera e il merge automatico in MDI.</target>
@@ -5214,7 +5234,7 @@ Sostituirlo?</target>
       </trans-unit>
       <trans-unit id="FormMinimizeBoxDescr">
         <source>Determines whether a form has a minimize box in the upper-right corner of its caption bar.</source>
-        <target state="translated">Determina se un form dispone di un pulsante di riduzione a icona  nella parte superiore destra della barra del titolo.</target>
+        <target state="translated">Determina se un form dispone di un pulsante di riduzione a icona nella parte superiore destra della barra del titolo.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMinimumSizeDescr">
@@ -6466,6 +6486,16 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Consente la modifica di attributi dei segni di inserimento.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">L'oggetto accessibilità corrente viene usato solo per il controllo ListView nella visualizzazione {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">L'oggetto accessibilità corrente viene usato solo per il controllo ListView nella visualizzazione {0}, {1} o {2}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Evento generato quando la proprietà checked di un elemento di ListView cambia.</target>
@@ -6488,7 +6518,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ListViewItemImageKeyDescr">
         <source>The key in the image-list value that represents the image to display. when the list view item is in the unselected state.</source>
-        <target state="translated">La chiave nel valore del componente ImageList che rappresenta l'immagine da visualizzare quando l'elemento  del controllo ListView non è selezionato.</target>
+        <target state="translated">La chiave nel valore del componente ImageList che rappresenta l'immagine da visualizzare quando l'elemento del controllo ListView non è selezionato.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewItemIndentCountDescr">
@@ -7074,6 +7104,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="MonthCalendarTrailingForeColorDescr">
         <source>The color used to display the previous and following months that appear on the month calendar.</source>
         <target state="translated">Il colore utilizzato per visualizzare i mesi precedenti e successivi nel calendario mensile.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">Settimana {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -7906,6 +7941,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Colore da utilizzare per effetti di evidenziazione sul separatore.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
         <source>Starting color of the gradient used in the StatusStrip.</source>
         <target state="translated">Colore iniziale della sfumatura da utilizzare in StatusStrip.</target>
@@ -8688,7 +8728,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ScrollableControlHorizontalScrollDescr">
         <source>Gets the horizontal scroll bar for this ScrollableControl.</source>
-        <target state="translated">Ottiene la barra di scorrimento orizzontale per  ScrollableControl corrente.</target>
+        <target state="translated">Ottiene la barra di scorrimento orizzontale per ScrollableControl corrente.</target>
         <note />
       </trans-unit>
       <trans-unit id="ScrollableControlRaiseMouseEnterLeaveEventsForScrollBarsDescr">
@@ -8993,7 +9033,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="TabBaseShowToolTipsDescr">
         <source>Indicates whether ToolTips should be shown for tabs that have their ToolTips set.</source>
-        <target state="translated">Indica se devono essere visualizzati componenti ToolTip per le schede per le quali è stato  definito un componente ToolTip.</target>
+        <target state="translated">Indica se devono essere visualizzati componenti ToolTip per le schede per le quali è stato definito un componente ToolTip.</target>
         <note />
       </trans-unit>
       <trans-unit id="TabBaseSizeModeDescr">
@@ -10371,6 +10411,16 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">LargeChange: il valore '{0}' deve essere maggiore o uguale a 0.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">Grande riduzione</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">Grande incremento</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">Il valore massimo per la posizione del dispositivo di scorrimento nel controllo TrackBar.</target>
@@ -10389,6 +10439,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">L'orientamento del controllo</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">Posizione</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -10423,7 +10478,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
         <source>Text length must be less than 128 characters long.</source>
-        <target state="translated">La lunghezza del testo deve essere inferiore ai 128 caratteri.</target>
+        <target state="translated">La lunghezza del testo non deve superare i 128 caratteri.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -11032,8 +11087,8 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">SetCompatibleTextRenderingDefault deve essere chiamato prima della creazione del primo oggetto IWin32Window nell'applicazione.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">{0} deve essere chiamato prima della creazione del primo oggetto IWin32Window nell'applicazione.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

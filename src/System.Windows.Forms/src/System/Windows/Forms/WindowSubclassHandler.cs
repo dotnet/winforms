@@ -92,6 +92,7 @@ namespace System.Windows.Forms
             {
                 throw new ObjectDisposedException(nameof(WindowSubclassHandler));
             }
+
             if (_opened)
             {
                 throw new InvalidOperationException();
@@ -180,7 +181,7 @@ namespace System.Windows.Forms
             }
 
             // We cannot do anything from the finalizer thread since we have
-            // resoures that must only be accessed from the GUI thread.
+            // resources that must only be accessed from the GUI thread.
             if (disposing && _opened)
             {
                 // Check if the current window procedure is the correct one.

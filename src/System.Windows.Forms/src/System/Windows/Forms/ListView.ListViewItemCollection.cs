@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -17,30 +16,12 @@ namespace System.Windows.Forms
         ///  Represents the collection of items in a ListView or ListViewGroup
         /// </summary>
         [ListBindable(false)]
-        public class ListViewItemCollection : IList
+        public partial class ListViewItemCollection : IList
         {
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
             ///  issues by holding on to extra references.
             private int lastAccessedIndex = -1;
-
-            internal interface IInnerList
-            {
-                int Count { get; }
-                bool OwnerIsVirtualListView { get; }
-                bool OwnerIsDesignMode { get; }
-                ListViewItem this[int index] { get; set; }
-                ListViewItem Add(ListViewItem item);
-                void AddRange(ListViewItem[] items);
-                void Clear();
-                bool Contains(ListViewItem item);
-                void CopyTo(Array dest, int index);
-                IEnumerator GetEnumerator();
-                int IndexOf(ListViewItem item);
-                ListViewItem Insert(int index, ListViewItem item);
-                void Remove(ListViewItem item);
-                void RemoveAt(int index);
-            }
 
             private readonly IInnerList innerList;
 
@@ -55,7 +36,7 @@ namespace System.Windows.Forms
 
             internal ListViewItemCollection(IInnerList innerList)
             {
-                Debug.Assert(innerList != null, "Can't pass in null innerList");
+                Debug.Assert(innerList is not null, "Can't pass in null innerList");
                 this.innerList = innerList;
             }
 
@@ -148,7 +129,7 @@ namespace System.Windows.Forms
                     {
                         this[index] = (ListViewItem)value;
                     }
-                    else if (value != null)
+                    else if (value is not null)
                     {
                         this[index] = new ListViewItem(value.ToString(), -1);
                     }
@@ -197,10 +178,11 @@ namespace System.Windows.Forms
                 {
                     return IndexOf(Add((ListViewItem)item));
                 }
-                else if (item != null)
+                else if (item is not null)
                 {
                     return IndexOf(Add(item.ToString()));
                 }
+
                 return -1;
             }
 
@@ -387,6 +369,7 @@ namespace System.Windows.Forms
                     // Throw the exception only at runtime.
                     throw new InvalidOperationException(SR.ListViewCantGetEnumeratorInVirtualMode);
                 }
+
                 return InnerList.GetEnumerator();
             }
 
@@ -399,6 +382,7 @@ namespace System.Windows.Forms
                         return index;
                     }
                 }
+
                 return -1;
             }
 
@@ -413,6 +397,7 @@ namespace System.Windows.Forms
                     return -1;
                 }
             }
+
             /// <summary>
             ///  The zero-based index of the first occurrence of value within the entire CollectionBase, if found; otherwise, -1.
             /// </summary>
@@ -421,7 +406,7 @@ namespace System.Windows.Forms
                 // Step 0 - Arg validation
                 if (string.IsNullOrEmpty(key))
                 {
-                    return -1; // we dont support empty or null keys.
+                    return -1; // we don't support empty or null keys.
                 }
 
                 // step 1 - check the last cached item
@@ -462,6 +447,7 @@ namespace System.Windows.Forms
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
+
                 InnerList.Insert(index, item);
                 return item;
             }
@@ -482,7 +468,7 @@ namespace System.Windows.Forms
                 {
                     Insert(index, (ListViewItem)item);
                 }
-                else if (item != null)
+                else if (item is not null)
                 {
                     Insert(index, item.ToString());
                 }

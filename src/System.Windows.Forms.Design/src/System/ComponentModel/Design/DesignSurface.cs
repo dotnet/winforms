@@ -65,6 +65,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(rootComponentType));
             }
+
             BeginLoad(rootComponentType);
         }
 
@@ -79,6 +80,7 @@ namespace System.ComponentModel.Design
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
+
                 return ((IDesignerHost)_host).Container;
             }
         }
@@ -105,6 +107,7 @@ namespace System.ComponentModel.Design
                 {
                     return _loadErrors;
                 }
+
                 return Array.Empty<object>();
             }
         }
@@ -129,6 +132,7 @@ namespace System.ComponentModel.Design
                 {
                     throw new ObjectDisposedException(GetType().FullName);
                 }
+
                 return _serviceContainer;
             }
         }
@@ -166,6 +170,7 @@ namespace System.ComponentModel.Design
                             }
                         }
                     }
+
                     // loader didn't provide any help.  Just generally fail.
                     throw new InvalidOperationException(SR.DesignSurfaceNoRootComponent)
                     {
@@ -265,6 +270,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ObjectDisposedException(GetType().FullName);
             }
+
             BeginLoad(new DefaultDesignerLoader(rootComponentType));
         }
 
@@ -301,6 +307,7 @@ namespace System.ComponentModel.Design
             {
                 designer = TypeDescriptor.CreateDesigner(component, typeof(IDesigner));
             }
+
             return designer;
         }
 
@@ -328,6 +335,7 @@ namespace System.ComponentModel.Design
                 {
                     ctor = TypeDescriptor.GetReflectionType(type).GetConstructor(BindingFlags.Public | BindingFlags.Instance | BindingFlags.ExactBinding, null, new Type[] { typeof(IContainer) }, null);
                 }
+
                 if (ctor != null)
                 {
                     instance = TypeDescriptor.CreateInstance(this, type, new Type[] { typeof(IContainer) }, new object[] { ComponentContainer });
@@ -338,11 +346,12 @@ namespace System.ComponentModel.Design
             {
                 instance = Activator.CreateInstance(type, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.CreateInstance, null, null, null);
             }
+
             return instance;
         }
 
         /// <summary>
-        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent)
         {
@@ -350,7 +359,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its doesigner and makes it elligble for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
+        ///  Creates a container suitable for nesting controls or components.  Adding a component to a  nested container creates its designer and makes it eligible for all all services available from the design surface.  Components added to nested containers do not participate in serialization. You may provide an additional name for this container by passing a value into containerName.
         /// </summary>
         public INestedContainer CreateNestedContainer(IComponent owningComponent, string containerName)
         {
@@ -363,6 +372,7 @@ namespace System.ComponentModel.Design
             {
                 throw new ArgumentNullException(nameof(owningComponent));
             }
+
             return new SiteNestedContainer(owningComponent, containerName, _host);
         }
 
@@ -382,7 +392,7 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detatch.
+                // technically we should raise this after we've destroyed ourselves.  Unfortunately, too many things query us for services so they can detach.
                 Disposed?.Invoke(this, EventArgs.Empty);
 
                 // Destroying the host also destroys all components. In most cases destroying the root component will destroy its designer which also kills the view. So, we destroy the view below last (remember, this view is a "view container" so we are destroying the innermost view first and then destroying our own view).
@@ -436,6 +446,7 @@ namespace System.ComponentModel.Design
             {
                 return _serviceContainer.GetService(serviceType);
             }
+
             return null;
         }
 
@@ -502,10 +513,12 @@ namespace System.ComponentModel.Design
                     {
                         newErrors.AddRange(errors);
                     }
+
                     errors = newErrors;
                     successful = false;
                 }
             }
+
             OnLoaded(new LoadedEventArgs(successful, errors));
         }
 
@@ -592,6 +605,7 @@ namespace System.ComponentModel.Design
                 loaderHost.CreateComponent(_type);
                 loaderHost.EndLoad(_type.FullName, true, null);
             }
+
             public override void Dispose()
             {
             }

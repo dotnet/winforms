@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -35,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  We increment this every time we look at an Object, at specified
-        ///  intervals, we run through the properies list to see if we should
+        ///  intervals, we run through the properties list to see if we should
         ///  delete any.
         /// </summary>
         private int clearCount;
@@ -49,6 +48,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     handler = new ComNativeDescriptor();
                 }
+
                 return handler;
             }
         }
@@ -81,7 +81,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             string name = null;
 
-            // does IVsPerPropretyBrowsing supply us a name?
+            // does IVsPerPropertyBrowsing supply us a name?
             if (component is VSSDK.IVsPerPropertyBrowsing)
             {
                 HRESULT hr = ((VSSDK.IVsPerPropertyBrowsing)component).GetClassName(ref name);
@@ -89,6 +89,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     return name;
                 }
+
                 // otherwise fall through...
             }
 
@@ -168,6 +169,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return null;
             }
+
             object[] pVarResult = new object[1];
             if (GetPropertyValue(component, dispid, pVarResult) == HRESULT.S_OK)
             {
@@ -225,7 +227,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
         /// <summary>
         ///  Checks if the given dispid matches the dispid that the Object would like to specify
-        ///  as its identification proeprty (Name, ID, etc).
+        ///  as its identification property (Name, ID, etc).
         /// </summary>
         internal bool IsNameDispId(object obj, DispatchID dispid)
         {
@@ -265,6 +267,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                             {
                                 disposeList = new List<object>(3);
                             }
+
                             disposeList.Add(de.Key);
                         }
                     }
@@ -305,7 +308,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             //
             Com2Properties propsInfo = (Com2Properties)nativeProps[component];
 
-            // if we dont' have one, create one and set it up
+            // if we don't have one, create one and set it up
             //
             if (propsInfo is null || !propsInfo.CheckValid())
             {
@@ -317,6 +320,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     propsInfo.AddExtendedBrowsingHandlers(extendedBrowsingHandlers);
                 }
             }
+
             return propsInfo;
         }
 
@@ -366,6 +370,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             {
                 return propsInfo.DefaultProperty;
             }
+
             return null;
         }
 
@@ -463,6 +468,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 {
                     currentConverter = subConverter;
                 }
+
                 object subEditor = TypeDescriptor.GetEditor(t, editorType);
                 if (subEditor is not null)
                 {

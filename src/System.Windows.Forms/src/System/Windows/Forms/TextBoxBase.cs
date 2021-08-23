@@ -161,11 +161,15 @@ namespace System.Windows.Forms
             {
                 if (shortcutsToDisable is null)
                 {
-                    shortcutsToDisable = new int[] {(int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
-                    (int)Shortcut.CtrlV, (int)Shortcut.CtrlA, (int)Shortcut.CtrlL, (int)Shortcut.CtrlR,
-                    (int)Shortcut.CtrlE, (int)Shortcut.CtrlY, (int)Keys.Control + (int)Keys.Back,
-                    (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ};
+                    shortcutsToDisable = new int[]
+                    {
+                        (int)Shortcut.CtrlZ, (int)Shortcut.CtrlC, (int)Shortcut.CtrlX,
+                        (int)Shortcut.CtrlV, (int)Shortcut.CtrlA, (int)Shortcut.CtrlL, (int)Shortcut.CtrlR,
+                        (int)Shortcut.CtrlE, (int)Shortcut.CtrlY, (int)Keys.Control + (int)Keys.Back,
+                        (int)Shortcut.CtrlDel, (int)Shortcut.ShiftDel, (int)Shortcut.ShiftIns, (int)Shortcut.CtrlJ
+                    };
                 }
+
                 textBoxFlags[shortcutsEnabled] = value;
             }
         }
@@ -190,6 +194,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             //
             // There are a few keys that change the alignment of the text, but that
             // are not ignored by the native control when the ReadOnly property is set.
@@ -222,6 +227,7 @@ namespace System.Windows.Forms
                     EndUpdateInternal();
                     SetSelectedTextInternal(string.Empty, clearUndo: false);
                 }
+
                 return true;
             }
 
@@ -423,6 +429,7 @@ namespace System.Windows.Forms
 
                     return b;
                 }
+
                 return false;
             }
         }
@@ -462,6 +469,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)WS.BORDER;
                         break;
                 }
+
                 if (textBoxFlags[multiline])
                 {
                     cp.Style |= (int)ES.MULTILINE;
@@ -672,6 +680,7 @@ namespace System.Windows.Forms
                         text.Append("\r\n");
                         text.Append(value[i]);
                     }
+
                     Text = text.ToString();
                 }
                 else
@@ -731,6 +740,7 @@ namespace System.Windows.Forms
                         textBoxFlags[modified] = curState;
                         OnModifiedChanged(EventArgs.Empty);
                     }
+
                     return curState;
                 }
                 else
@@ -863,6 +873,7 @@ namespace System.Windows.Forms
                 {
                     height += SystemInformation.GetBorderSizeForDpi(_deviceDpi).Height * 4 + 3;
                 }
+
                 return height;
             }
         }
@@ -891,6 +902,7 @@ namespace System.Windows.Forms
                 bordersAndPadding.Width += 2;
                 bordersAndPadding.Height += 2;
             }
+
             // Reduce constraints by border/padding size
             proposedConstraints -= bordersAndPadding;
 
@@ -905,6 +917,7 @@ namespace System.Windows.Forms
             {
                 format |= TextFormatFlags.WordBreak;
             }
+
             Size textSize = TextRenderer.MeasureText(Text, Font, proposedConstraints, format);
 
             // We use this old computation as a lower bound to ensure backwards compatibility.
@@ -1432,6 +1445,7 @@ namespace System.Windows.Forms
                         // else fall through to base
                 }
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -1457,6 +1471,7 @@ namespace System.Windows.Forms
             {
                 SendMessageW(this, (WM)EM.SETMODIFY, PARAM.FromBool(true));
             }
+
             if (textBoxFlags[scrollToCaretOnHandleCreated])
             {
                 ScrollToCaret();
@@ -1600,8 +1615,8 @@ namespace System.Windows.Forms
         protected override void OnTextChanged(EventArgs e)
         {
             // since AutoSize existed in Everett, (and is the default) we can't
-            // relayout the parent when the "preferredsize" of the control changes.
-            // this means a multiline = true textbox wont natrually grow in height when
+            // relayout the parent when the "PreferredSize" of the control changes.
+            // this means a multiline = true textbox won't naturally grow in height when
             // the text changes.
             CommonProperties.xClearPreferredSizeCache(this);
             base.OnTextChanged(e);
@@ -1630,7 +1645,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int index = (int)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+            int index = (int)(long)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
             index = PARAM.LOWORD(index);
 
             if (index < 0)
@@ -1648,6 +1663,7 @@ namespace System.Windows.Forms
                     index = Math.Max(t.Length - 1, 0);
                 }
             }
+
             return index;
         }
 
@@ -1687,6 +1703,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
+
             return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)lineNumber));
         }
 
@@ -1861,8 +1878,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void SelectAll()
         {
-            int textLen = TextLength;
-            SelectInternal(0, textLen, textLen);
+            int textLength = TextLength;
+            SelectInternal(0, textLength, textLength);
         }
 
         /// <summary>
@@ -1961,8 +1978,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Converts byte offsset to unicode offsets.
-        ///  When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
+        ///  Converts byte offset to unicode offsets.
+        ///  When processing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
         ///  as opposed to RICHEDIT which does it always as character positions.
         ///  This method is used when handling the WM_GETSEL message.
         /// </summary>
@@ -1984,10 +2001,12 @@ namespace System.Windows.Forms
             {
                 start = 0;
             }
+
             if (start > bytes.Length)
             {
                 start = bytes.Length;
             }
+
             if (end > bytes.Length)
             {
                 end = bytes.Length;
@@ -2007,8 +2026,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Converts unicode offsset to byte offsets.
-        ///  When procssing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
+        ///  Converts unicode offset to byte offsets.
+        ///  When processing WM_GETSEL/WM_SETSEL, EDIT control works with byte offsets instead of character positions
         ///  as opposed to RICHEDIT which does it always as character positions.
         ///  This method is used when handling the WM_SETSEL message.
         /// </summary>
@@ -2028,14 +2047,17 @@ namespace System.Windows.Forms
             {
                 start = 0;
             }
+
             if (start > str.Length)
             {
                 start = str.Length;
             }
+
             if (end < start)
             {
                 end = start;
             }
+
             if (end > str.Length)
             {
                 end = str.Length;
@@ -2210,6 +2232,7 @@ namespace System.Windows.Forms
                         // SystemMenu if ContextMenuStrip menus are null
                         WmTextBoxContextMenu(ref m);
                     }
+
                     break;
                 default:
                     base.WndProc(ref m);

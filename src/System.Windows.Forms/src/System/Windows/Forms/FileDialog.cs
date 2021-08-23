@@ -4,12 +4,10 @@
 
 #nullable disable
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.IO;
+using System.Drawing.Design;
 using System.Runtime.InteropServices;
-using System.Threading;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
         private protected int _options;
 
         private string _title;
-        private string _initialDir;
+        private string _initialDirectory;
         private string _defaultExt;
         private string[] _fileNames;
         private string _filter;
@@ -271,11 +269,12 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue("")]
+        [Editor("System.Windows.Forms.Design.InitialDirectoryEditor, System.Windows.Forms.Design, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.FDinitialDirDescr))]
         public string InitialDirectory
         {
-            get => _initialDir ?? string.Empty;
-            set => _initialDir = value;
+            get => _initialDirectory ?? string.Empty;
+            set => _initialDirectory = value;
         }
 
         /// <summary>
@@ -464,6 +463,7 @@ namespace System.Windows.Forms
             {
                 directory += "\\";
             }
+
             List<string> names = new List<string>();
             do
             {
@@ -475,7 +475,8 @@ namespace System.Windows.Forms
 
                 names.Add(fileName);
                 fileName = charBuffer.GetString();
-            } while (fileName.Length > 0);
+            }
+            while (fileName.Length > 0);
 
             return names.ToArray();
         }
@@ -526,9 +527,10 @@ namespace System.Windows.Forms
                                 }
                                 catch
                                 {
-                                    // intentionaly not throwing here.
+                                    // intentionally not throwing here.
                                 }
                             }
+
                             _ignoreSecondFileOkNotification = false;
                             break;
                         case -604: /* CDN_SHAREVIOLATION */
@@ -554,11 +556,13 @@ namespace System.Windows.Forms
                                     return NativeMethods.InvalidIntPtr;
                                 }
                             }
+
                             if (!DoFileOk(notify->lpOFN))
                             {
                                 User32.SetWindowLong(hWnd, 0, NativeMethods.InvalidIntPtr);
                                 return NativeMethods.InvalidIntPtr;
                             }
+
                             break;
                     }
                 }
@@ -661,6 +665,7 @@ namespace System.Windows.Forms
 
                         _fileNames[i] = fileName;
                     }
+
                     if (!PromptUserIfAppropriate(fileName))
                     {
                         return false;
@@ -726,7 +731,7 @@ namespace System.Windows.Forms
         {
             _options = (int)(Comdlg32.OFN.HIDEREADONLY | Comdlg32.OFN.PATHMUSTEXIST) | AddExtensionOption;
             _title = null;
-            _initialDir = null;
+            _initialDirectory = null;
             _defaultExt = null;
             _fileNames = null;
             _filter = null;
@@ -767,6 +772,7 @@ namespace System.Windows.Forms
                 {
                     _charBuffer.PutString(_fileNames[0]);
                 }
+
                 ofn.lStructSize = Marshal.SizeOf<NativeMethods.OPENFILENAME_I>();
                 ofn.hwndOwner = hWndOwner;
                 ofn.hInstance = Instance;
@@ -774,7 +780,7 @@ namespace System.Windows.Forms
                 ofn.nFilterIndex = FilterIndex;
                 ofn.lpstrFile = _charBuffer.AllocCoTaskMem();
                 ofn.nMaxFile = FileBufferSize;
-                ofn.lpstrInitialDir = _initialDir;
+                ofn.lpstrInitialDir = _initialDirectory;
                 ofn.lpstrTitle = _title;
                 ofn.Flags = Options | (int)(Comdlg32.OFN.EXPLORER | Comdlg32.OFN.ENABLEHOOK | Comdlg32.OFN.ENABLESIZING);
                 ofn.lpfnHook = hookProcPtr;

@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -41,6 +40,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentException(string.Format(SR.RelatedListManagerChild, dataField));
             }
+
             finalType = fieldInfo.PropertyType;
 
             // Wire new BindingManagerBase
@@ -114,6 +114,7 @@ namespace System.Windows.Forms
             {
                 return name;
             }
+
             return base.GetListName();
         }
 
@@ -195,6 +196,7 @@ namespace System.Windows.Forms
                 SetDataSource(fieldInfo.GetValue(parentManager.Current));
                 listposition = (Count > 0 ? 0 : -1);
             }
+
             if (oldlistposition != listposition)
             {
                 OnPositionChanged(EventArgs.Empty);

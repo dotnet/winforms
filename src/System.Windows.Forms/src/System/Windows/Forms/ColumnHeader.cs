@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing.Design;
 using static Interop;
 using static Interop.ComCtl32;
@@ -153,6 +152,7 @@ namespace System.Windows.Forms
                     {
                         hdr.DisplayIndexInternal -= hdrMovedForward ? 1 : -1;
                     }
+
                     if (i != Index)
                     {
                         colsOrder[hdr.DisplayIndexInternal] = i;
@@ -170,7 +170,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The index of this column.  This index does not necessarily correspond
         ///  to the current visual position of the column in the ListView, because the
-        ///  user may orerder columns if the allowColumnReorder property is true.
+        ///  user may order columns if the allowColumnReorder property is true.
         /// </summary>
         [Browsable(false)]
         public int Index
@@ -199,6 +199,7 @@ namespace System.Windows.Forms
                 {
                     return ImageList.Images.Count - 1;
                 }
+
                 return _imageIndexer.Index;
             }
             set
@@ -286,6 +287,7 @@ namespace System.Windows.Forms
                 {
                     _name = value;
                 }
+
                 if (Site is not null)
                 {
                     Site.Name = value;
@@ -314,6 +316,7 @@ namespace System.Windows.Forms
                 {
                     _text = value;
                 }
+
                 if (ListView is not null)
                 {
                     ListView.SetColumnInfo(LVCF.TEXT, this);
@@ -341,6 +344,7 @@ namespace System.Windows.Forms
                         _textAlign = HorizontalAlignment.Right;
                     }
                 }
+
                 return _textAlign;
             }
             set
@@ -400,10 +404,10 @@ namespace System.Windows.Forms
                     IntPtr hwndHdr = User32.SendMessageW(ListView, (User32.WM)LVM.GETHEADER);
                     if (hwndHdr != IntPtr.Zero)
                     {
-                        int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
+                        int nativeColumnCount = PARAM.ToInt(User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT));
                         if (Index < nativeColumnCount)
                         {
-                            _width = (int)User32.SendMessageW(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index);
+                            _width = PARAM.ToInt(User32.SendMessageW(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index));
                         }
                     }
                 }
@@ -469,6 +473,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             base.Dispose(disposing);
         }
 

@@ -219,7 +219,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Size textImageInsetSize = new Size(TextImageInset * 2, TextImageInset * 2);
                 Size requiredImageSize = (ImageSize != Size.Empty) ? ImageSize + textImageInsetSize : Size.Empty;
 
-                // Pack Text into remaning space
+                // Pack Text into remaining space
                 proposedSize -= textImageInsetSize;
                 proposedSize = Decompose(checkSize, requiredImageSize, proposedSize);
 
@@ -230,7 +230,7 @@ namespace System.Windows.Forms.ButtonInternal
                     // When Button.AutoSizeMode is set to GrowOnly TableLayoutPanel expects buttons not to
                     // automatically wrap on word break. If there's enough room for the text to word-wrap then it
                     // will happen but the layout would not be adjusted to allow text wrapping. If someone has a
-                    // carriage return in the text we'll honor that for preferred size, but we wont wrap based
+                    // carriage return in the text we'll honor that for preferred size, but we won't wrap based
                     // on constraints.
                     try
                     {
@@ -310,6 +310,7 @@ namespace System.Windows.Forms.ButtonInternal
                         layout.Focus.Y++;
                         layout.Focus.Height--;
                     }
+
                     if (layout.Focus.Width % 2 == 0)
                     {
                         layout.Focus.X++;
@@ -333,6 +334,7 @@ namespace System.Windows.Forms.ButtonInternal
                             return TextImageRelation.ImageBeforeText;
                     }
                 }
+
                 return relation;
             }
 
@@ -460,7 +462,8 @@ namespace System.Windows.Forms.ButtonInternal
             // Maps an image align to the set of TextImageRelations that represent the same edge.
             // For example, imageAlign = TopLeft maps to TextImageRelations ImageAboveText (top)
             // and ImageBeforeText (left).
-            private static readonly TextImageRelation[] _imageAlignToRelation = new TextImageRelation[] {
+            private static readonly TextImageRelation[] _imageAlignToRelation = new TextImageRelation[]
+            {
                 /* TopLeft = */       TextImageRelation.ImageAboveText | TextImageRelation.ImageBeforeText,
                 /* TopCenter = */     TextImageRelation.ImageAboveText,
                 /* TopRight = */      TextImageRelation.ImageAboveText | TextImageRelation.TextBeforeImage,
@@ -512,7 +515,7 @@ namespace System.Windows.Forms.ButtonInternal
                 }
                 else
                 {
-                    // Rearrage text/image to prevent overlay.  Pack text into maxBounds - space reserved for image.
+                    // Rearrange text/image to prevent overlay.  Pack text into maxBounds - space reserved for image.
                     Size maxTextSize = LayoutUtils.SubAlignedRegion(maxBounds.Size, ImageSize, textImageRelation);
                     Size textSize = GetTextSize(maxTextSize);
                     Rectangle maxCombinedBounds = maxBounds;
@@ -589,6 +592,7 @@ namespace System.Windows.Forms.ButtonInternal
                         layout.Field.Y);
                     layout.TextBounds.Height = textBottom - layout.TextBounds.Y;
                 }
+
                 if (textImageRelation == TextImageRelation.TextAboveImage || textImageRelation == TextImageRelation.ImageAboveText)
                 {
                     // Adjust the horizontal position of textBounds so that the text doesn't fall off the boundary of the button
@@ -598,6 +602,7 @@ namespace System.Windows.Forms.ButtonInternal
                         layout.Field.X);
                     layout.TextBounds.Width = textRight - layout.TextBounds.X;
                 }
+
                 if (textImageRelation == TextImageRelation.ImageBeforeText && layout.ImageBounds.Size.Width != 0)
                 {
                     // Squeezes imageBounds.Width so that text is visible
@@ -606,6 +611,7 @@ namespace System.Windows.Forms.ButtonInternal
                         Math.Min(maxBounds.Width - layout.TextBounds.Width, layout.ImageBounds.Width));
                     layout.TextBounds.X = layout.ImageBounds.X + layout.ImageBounds.Width;
                 }
+
                 if (textImageRelation == TextImageRelation.ImageAboveText && layout.ImageBounds.Size.Height != 0)
                 {
                     // Squeezes imageBounds.Height so that the text is visible

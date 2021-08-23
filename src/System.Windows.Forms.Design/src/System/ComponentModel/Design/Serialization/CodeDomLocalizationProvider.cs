@@ -20,8 +20,8 @@ namespace System.ComponentModel.Design.Serialization
     public sealed class CodeDomLocalizationProvider : IDisposable, IDesignerSerializationProvider
     {
         private IExtenderProviderService _providerService;
-        private CodeDomLocalizationModel _model;
-        private CultureInfo[] _supportedCultures;
+        private readonly CodeDomLocalizationModel _model;
+        private readonly CultureInfo[] _supportedCultures;
         private LanguageExtenders _extender;
         private Hashtable _memberSerializers;
         private Hashtable _nopMemberSerializers;
@@ -125,7 +125,7 @@ namespace System.ComponentModel.Design.Serialization
             //
             // The first serializer is used for serializable objects that have no serializer of their
             // own, and for localizable properties when the CodeDomLocalizationModel is set to PropertyAssignment.
-            // The second serializer is used only for localizaing properties when the CodeDomLocalizationModel
+            // The second serializer is used only for localizing properties when the CodeDomLocalizationModel
             // is set to PropertyReflection
 
             // Compute a localization model based on the property, localization mode,
@@ -205,8 +205,7 @@ namespace System.ComponentModel.Design.Serialization
                 _nopMemberSerializers = new Hashtable();
             }
 
-            object newSerializer = null;
-
+            object newSerializer;
             if (model == CodeDomLocalizationModel.None)
             {
                 newSerializer = _nopMemberSerializers[currentSerializer];
@@ -260,10 +259,10 @@ namespace System.ComponentModel.Design.Serialization
         [ProvideProperty("Localizable", typeof(IComponent))]
         internal class LanguageExtenders : IExtenderProvider
         {
-            private IServiceProvider _serviceProvider;
-            private IDesignerHost _host;
+            private readonly IServiceProvider _serviceProvider;
+            private readonly IDesignerHost _host;
             private IComponent _lastRoot;
-            private TypeConverter.StandardValuesCollection _supportedCultures;
+            private readonly TypeConverter.StandardValuesCollection _supportedCultures;
             private bool _localizable;
             private CultureInfo _language;
             private CultureInfo _loadLanguage;
@@ -304,30 +303,25 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         _defaultLanguage = Application.CurrentCulture;
                     }
+
                     return _defaultLanguage;
                 }
             }
 
             /// <summary>
-            ///  Broadcasts a global change, indicating that all
-            ///  objects on the designer have changed.
+            ///  Broadcasts a global change, indicating that all objects on the designer have changed.
             /// </summary>
-            private void BroadcastGlobalChange(IComponent comp)
+            private void BroadcastGlobalChange(IComponent component)
             {
-                ISite site = comp.Site;
+                ISite site = component.Site;
 
-                if (site != null)
+                if (site.TryGetService(out IComponentChangeService changeService)
+                    && site.TryGetService(out IContainer container))
                 {
-                    IComponentChangeService cs = site.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
-                    IContainer container = site.GetService(typeof(IContainer)) as IContainer;
-
-                    if (cs != null && container != null)
+                    foreach (IComponent c in container.Components)
                     {
-                        foreach (IComponent c in container.Components)
-                        {
-                            cs.OnComponentChanging(c, null);
-                            cs.OnComponentChanged(c, null, null, null);
-                        }
+                        changeService.OnComponentChanging(c);
+                        changeService.OnComponentChanged(c);
                     }
                 }
             }
@@ -357,7 +351,7 @@ namespace System.ComponentModel.Design.Serialization
             [DesignOnly(true)]
             [TypeConverter(typeof(LanguageCultureInfoConverter))]
             [Category("Design")]
-            [SRDescriptionAttribute("LocalizationProviderLanguageDescr")]
+            [SRDescription("LocalizationProviderLanguageDescr")]
             public CultureInfo GetLanguage(IComponent o)
             {
                 CheckRoot();
@@ -390,7 +384,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             [DesignOnly(true)]
             [Category("Design")]
-            [SRDescriptionAttribute("LocalizationProviderLocalizableDescr")]
+            [SRDescription("LocalizationProviderLocalizableDescr")]
             public bool GetLocalizable(IComponent o)
             {
                 CheckRoot();

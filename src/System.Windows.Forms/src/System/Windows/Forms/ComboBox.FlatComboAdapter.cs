@@ -83,7 +83,7 @@ namespace System.Windows.Forms
                 DrawFlatComboDropDown(comboBox, g, _dropDownRect);
 
                 // When we are disabled there is one line of color that seems to eek through if backcolor is set
-                // so lets erase it.
+                // so let's erase it.
                 if (!LayoutUtils.IsZeroWidthOrHeight(_whiteFillRect))
                 {
                     // Fill in two more pixels with white so it looks smaller.
@@ -181,6 +181,7 @@ namespace System.Windows.Forms
                 {
                     return SystemColors.ControlDark;
                 }
+
                 return focused ? SystemColors.ControlDark : SystemColors.Window;
             }
 
@@ -190,7 +191,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  This eliminates flicker by removing the pieces we're going to paint ourselves from the update region.
             ///  Note the UpdateRegionBox is the bounding box of the actual update region. This is here so we can
-            ///  quickly eliminate rectangles that arent in the update region.
+            ///  quickly eliminate rectangles that aren't in the update region.
             /// </summary>
             public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {

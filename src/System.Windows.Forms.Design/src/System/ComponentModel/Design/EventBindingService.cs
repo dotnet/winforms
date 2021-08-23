@@ -3,7 +3,6 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
@@ -16,7 +15,7 @@ namespace System.ComponentModel.Design
     /// </summary>
     public abstract partial class EventBindingService : IEventBindingService
     {
-        private IServiceProvider _provider;
+        private readonly IServiceProvider _provider;
         private IComponent _showCodeComponent;
         private EventDescriptor _showCodeEventDescriptor;
         private string _showCodeMethodName;

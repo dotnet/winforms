@@ -11,7 +11,6 @@ using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
 using System.Windows.Forms.Layout;
-using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -68,6 +67,7 @@ namespace System.Windows.Forms
                 {
                     _domainItems = new DomainUpDownItemCollection(this);
                 }
+
                 return _domainItems;
             }
         }
@@ -234,6 +234,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return;
@@ -246,6 +247,7 @@ namespace System.Windows.Forms
             {
                 matchIndex = MatchIndex(Text, false, _domainIndex);
             }
+
             if (matchIndex != -1)
             {
                 // Found a match, so select this value
@@ -291,14 +293,17 @@ namespace System.Windows.Forms
             {
                 return -1;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return -1;
             }
+
             if (startPosition < 0)
             {
                 startPosition = _domainItems.Count - 1;
             }
+
             if (startPosition >= _domainItems.Count)
             {
                 startPosition = 0;
@@ -339,7 +344,8 @@ namespace System.Windows.Forms
                 {
                     index = 0;
                 }
-            } while (!found && index != startPosition);
+            }
+            while (!found && index != startPosition);
 
             return matchIndex;
         }
@@ -381,9 +387,11 @@ namespace System.Windows.Forms
                         // Select the matching domain item
                         SelectIndex(matchIndex);
                     }
+
                     e.Handled = true;
                 }
             }
+
             base.OnTextBoxKeyPress(source, e);
         }
 
@@ -479,6 +487,7 @@ namespace System.Windows.Forms
                 s += ", Items.Count: " + Items.Count.ToString(CultureInfo.CurrentCulture);
                 s += ", SelectedIndex: " + SelectedIndex.ToString(CultureInfo.CurrentCulture);
             }
+
             return s;
         }
 
@@ -492,6 +501,7 @@ namespace System.Windows.Forms
             {
                 return;
             }
+
             if (_domainItems.Count <= 0)
             {
                 return;
@@ -503,6 +513,7 @@ namespace System.Windows.Forms
             {
                 matchIndex = MatchIndex(Text, false, _domainIndex);
             }
+
             if (matchIndex != -1)
             {
                 // Found a match, so set the domain index accordingly
@@ -533,7 +544,7 @@ namespace System.Windows.Forms
             Text = _stringValue;
         }
 
-        // This is not a breaking change -- Even though this control previously autosized to hieght,
+        // This is not a breaking change -- Even though this control previously autosized to height,
         // it didn't actually have an AutoSize property.  The new AutoSize property enables the
         // smarter behavior.
         internal override Size GetPreferredSizeCore(Size proposedConstraints)
@@ -541,7 +552,7 @@ namespace System.Windows.Forms
             int height = PreferredHeight;
             int width = LayoutUtils.OldGetLargestStringSizeInCollection(Font, Items).Width;
 
-            // AdjuctWindowRect with our border, since textbox is borderless.
+            // AdjustWindowRect with our border, since textbox is borderless.
             width = SizeFromClientSize(width, height).Width + _upDownButtons.Width;
             return new Size(width, height) + Padding.Size;
         }

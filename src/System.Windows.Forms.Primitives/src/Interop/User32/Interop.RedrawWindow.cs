@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -30,9 +29,9 @@ internal static partial class Interop
         }
 
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public unsafe static extern BOOL RedrawWindow(IntPtr hWnd, RECT *lprcUpdate, IntPtr hrgnUpdate, RDW flags);
+        public unsafe static extern BOOL RedrawWindow(IntPtr hWnd, RECT* lprcUpdate, IntPtr hrgnUpdate, RDW flags);
 
-        public unsafe static BOOL RedrawWindow(HandleRef hWnd, RECT *lprcUpdate, IntPtr hrgnUpdate, RDW flags)
+        public unsafe static BOOL RedrawWindow(HandleRef hWnd, RECT* lprcUpdate, IntPtr hrgnUpdate, RDW flags)
         {
             BOOL result = RedrawWindow(hWnd.Handle, lprcUpdate, hrgnUpdate, flags);
             GC.KeepAlive(hWnd.Wrapper);

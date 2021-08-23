@@ -2,16 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.InteropServices;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms.Layout;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
 
@@ -91,7 +88,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Control_AccessibleDefaultActionDescription_Set_GetReturnsExpected(string value)
         {
             using var control = new Control
@@ -108,7 +105,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Control_AccessibleDescription_Set_GetReturnsExpected(string value)
         {
             using var control = new Control
@@ -125,7 +122,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Control_AccessibleName_Set_GetReturnsExpected(string value)
         {
             using var control = new Control
@@ -142,7 +139,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleRole))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(AccessibleRole))]
         public void Control_AccessibleRole_Set_GetReturnsExpected(AccessibleRole value)
         {
             using var control = new Control
@@ -159,7 +156,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleRole))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(AccessibleRole))]
         public void Control_AccessibleRole_SetInvalidValue_ThrowsInvalidEnumArgumentException(AccessibleRole value)
         {
             using var control = new Control();
@@ -167,7 +164,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_AllowDrop_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -189,7 +186,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_AllowDrop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -226,7 +223,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_AllowDrop_SetWithHandleAlreadyRegistered_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -435,6 +432,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Anchor", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -483,11 +481,13 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Anchor", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             int grandparentLayoutCallCount = 0;
             void grandparentHandler(object sender, LayoutEventArgs e)
             {
                 grandparentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             grandparent.Layout += grandparentHandler;
 
@@ -579,6 +579,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Anchor", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -701,6 +702,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Anchor", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             int grandparentLayoutCallCount = 0;
             void grandparentHandler(object sender, LayoutEventArgs e)
             {
@@ -709,6 +711,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Anchor", e.AffectedProperty);
                 grandparentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
             grandparent.Layout += grandparentHandler;
 
@@ -843,6 +846,7 @@ namespace System.Windows.Forms.Tests
                     parentLayoutCallCount++;
                 }
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -904,7 +908,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPointTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetPointTheoryData))]
         public void Control_AutoScrollOffset_Set_GetReturnsExpected(Point value)
         {
             using var control = new Control
@@ -919,7 +923,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_AutoSize_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -964,6 +968,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1025,6 +1030,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1062,7 +1068,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_AutoSize_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -1136,6 +1142,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("AutoSize", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1226,7 +1233,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void Control_BackColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Control
@@ -1243,7 +1250,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void Control_BackColor_SetWithCustomOldValue_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Control
@@ -1286,7 +1293,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void Control_BackColor_SetWithChildren_GetReturnsExpected(Color value, Color expected)
         {
             using var child1 = new Control();
@@ -1310,7 +1317,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBackColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetBackColorTheoryData))]
         public void Control_BackColor_SetWithChildrenWithColor_GetReturnsExpected(Color value, Color expected)
         {
             using var child1 = new Control
@@ -1634,7 +1641,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void Control_BackgroundImage_Set_GetReturnsExpected(Image value)
         {
             using var control = new Control
@@ -1686,7 +1693,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void Control_BackgroundImage_SetWithChildren_GetReturnsExpected(Image value)
         {
             using var child1 = new Control();
@@ -1708,7 +1715,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetImageTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetImageTheoryData))]
         public void Control_BackgroundImage_SetWithChildrenWithBackgroundImage_GetReturnsExpected(Image value)
         {
             using var image1 = new Bitmap(10, 10);
@@ -1984,7 +1991,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(ImageLayout))]
         public void Control_BackgroundImageLayout_Set_GetReturnsExpected(ImageLayout value)
         {
             using var control = new SubControl
@@ -2131,7 +2138,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImageLayout))]
         public void Control_BackgroundImageLayout_SetInvalid_ThrowsInvalidEnumArgumentException(ImageLayout value)
         {
             using var control = new Control();
@@ -2750,7 +2757,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -2961,7 +2969,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -3125,7 +3134,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Capture_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -3147,7 +3156,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Capture_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -3184,7 +3193,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_CausesValidation_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -3206,7 +3215,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_CausesValidation_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -3803,7 +3812,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Control_Cursor_Set_GetReturnsExpected(Cursor value)
         {
             using var control = new Control
@@ -3820,7 +3829,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Control_Cursor_SetWithHandle_GetReturnsExpected(Cursor value)
         {
             using var control = new Control();
@@ -3849,7 +3858,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Control_Cursor_SetWithChildren_GetReturnsExpected(Cursor value)
         {
             using var child1 = new Control();
@@ -3871,7 +3880,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetCursorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetCursorTheoryData))]
         public void Control_Cursor_SetWithChildrenWithCursor_GetReturnsExpected(Cursor value)
         {
             var cursor1 = new Cursor((IntPtr)1);
@@ -4121,7 +4130,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
         public void Control_Dock_Set_GetReturnsExpected(DockStyle value)
         {
             using var control = new Control();
@@ -4143,7 +4152,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
         public void Control_Dock_SetWithOldValue_GetReturnsExpected(DockStyle value)
         {
             using var control = new Control
@@ -4196,6 +4205,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Dock", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -4286,6 +4296,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal("Dock", e.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -4342,7 +4353,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryData), typeof(DockStyle))]
         public void Control_Dock_SetWithHandle_GetReturnsExpected(DockStyle value)
         {
             using var control = new Control();
@@ -4415,7 +4426,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DockStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(DockStyle))]
         public void Control_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
         {
             using var control = new Control();
@@ -4423,7 +4434,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_DoubleBuffered_Get_ReturnsExpected(bool value)
         {
             using var control = new SubControl();
@@ -4432,7 +4443,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_DoubleBuffered_Set_GetReturnsExpected(bool value)
         {
             using var control = new SubControl
@@ -4457,7 +4468,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_DoubleBuffered_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new SubControl();
@@ -4497,7 +4508,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Enabled_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -4831,7 +4842,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void Control_Font_Set_GetReturnsExpected(Font value)
         {
             using var control = new SubControl
@@ -4906,7 +4917,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetFontTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetFontTheoryData))]
         public void Control_Font_SetWithNonNullOldValue_GetReturnsExpected(Font value)
         {
             using var control = new SubControl
@@ -5286,7 +5297,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Control_ForeColor_Set_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Control
@@ -5303,7 +5314,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Control_ForeColor_SetWithCustomOldValue_GetReturnsExpected(Color value, Color expected)
         {
             using var control = new Control
@@ -5322,7 +5333,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Control_ForeColor_SetWithChildren_GetReturnsExpected(Color value, Color expected)
         {
             using var child1 = new Control();
@@ -5346,7 +5357,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetForeColorTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetForeColorTheoryData))]
         public void Control_ForeColor_SetWithChildrenWithColor_GetReturnsExpected(Color value, Color expected)
         {
             using var child1 = new Control
@@ -6023,7 +6034,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -6258,7 +6270,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -6435,7 +6448,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void Control_ImeMode_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new Control();
@@ -6542,7 +6555,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ImeMode))]
         public void Control_ImeModeBase_SetInvalid_ThrowsInvalidEnumArgumentException(ImeMode value)
         {
             using var control = new SubControl();
@@ -6576,7 +6589,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_IsAccessible_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -6770,7 +6783,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -6978,7 +6992,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -7247,7 +7262,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -7459,7 +7475,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -8104,7 +8121,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("MaximumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             control.MaximumSize = value;
@@ -8159,7 +8177,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("MaximumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             control.MaximumSize = value;
@@ -8311,7 +8330,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("MaximumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -8378,7 +8398,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("MaximumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -8750,7 +8771,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("MinimumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             control.MinimumSize = value;
@@ -8811,7 +8833,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("MinimumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             control.MinimumSize = value;
@@ -9056,7 +9079,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("MinimumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -9144,7 +9168,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("MinimumSize", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -9269,7 +9294,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Name_GetWithSite_ReturnsExpected(string siteName, string expected)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -9295,7 +9320,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Name_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new Control
@@ -9312,7 +9337,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Name_SetWithCustomOldValue_GetReturnsExpected(string value, string expected)
         {
             using var control = new Control
@@ -9441,7 +9466,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Padding", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             control.Padding = value;
@@ -9539,7 +9565,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Padding", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -10003,7 +10030,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ResizeRedraw_Get_ReturnsExpected(bool value)
         {
             var control = new SubControl();
@@ -10012,7 +10039,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ResizeRedraw_Set_GetReturnsExpected(bool value)
         {
             var control = new SubControl
@@ -10034,7 +10061,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_Set_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new Control
@@ -10051,7 +10078,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_SetWithOldValue_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var control = new Control
@@ -10070,7 +10097,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_SetWithChildren_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var child1 = new Control();
@@ -10094,7 +10121,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetRightToLeftTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetRightToLeftTheoryData))]
         public void Control_RightToLeft_SetWithChildrenWithRightToLeft_GetReturnsExpected(RightToLeft value, RightToLeft expected)
         {
             using var child1 = new Control
@@ -10412,7 +10439,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(RightToLeft))]
         public void Control_RightToLeft_SetInvalid_ThrowsInvalidEnumArgumentException(RightToLeft value)
         {
             using var control = new Control();
@@ -10480,22 +10507,30 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.ShowFocusCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, control.ShowFocusCues);
+        }
+
+        public static TheoryData<int, bool> Get_Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected()
+        {
+            return new TheoryData<int, bool>()
+            {
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), true },
+                { (int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true },
+                { (int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false },
+                { (int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), SystemInformation.MenuAccessKeysUnderlined }
+            };
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), true)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
+        [CommonMemberData(typeof(ControlTests), nameof(ControlTests.Get_Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected))]
         public void Control_ShowFocusCues_GetWithHandleMessageSent_ReturnsExpected(int wParam, bool expected)
         {
             using var control = new SubControl();
@@ -10505,7 +10540,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ShowFocusCues_GetWithSiteWithHandle_ReturnsExpected(bool designMode)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -10523,7 +10558,7 @@ namespace System.Windows.Forms.Tests
                 Site = mockSite.Object
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.ShowFocusCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, control.ShowFocusCues);
         }
 
         [WinFormsFact]
@@ -10531,22 +10566,30 @@ namespace System.Windows.Forms.Tests
         {
             using var control = new SubControl();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.False(control.ShowKeyboardCues);
+            Assert.Equal(SystemInformation.MenuAccessKeysUnderlined, control.ShowKeyboardCues);
+        }
+
+        public static TheoryData<int, bool> Get_Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected()
+        {
+            return new TheoryData<int, bool>()
+            {
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), true },
+                { (int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true },
+                { (int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false },
+                { (int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), SystemInformation.MenuAccessKeysUnderlined },
+                { (int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), SystemInformation.MenuAccessKeysUnderlined }
+            };
         }
 
         [WinFormsTheory]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEACCEL << 16), true)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.CLEAR | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), true)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.SET | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.ACTIVE << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEACCEL << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)User32.UISF.HIDEFOCUS << 16), false)]
-        [InlineData((int)User32.UIS.INITIALIZE | ((int)(User32.UISF.HIDEACCEL | User32.UISF.HIDEFOCUS) << 16), false)]
+        [CommonMemberData(typeof(ControlTests), nameof(ControlTests.Get_Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected))]
         public void Control_ShowKeyboardCues_GetWithHandleMessageSent_ReturnsExpected(int wParam, bool expected)
         {
             using var control = new SubControl();
@@ -10556,7 +10599,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_ShowKeyboardCues_GetWithSiteWithHandle_ReturnsExpected(bool designMode)
         {
             var mockSite = new Mock<ISite>(MockBehavior.Strict);
@@ -10574,7 +10617,7 @@ namespace System.Windows.Forms.Tests
                 Site = mockSite.Object
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(designMode, control.ShowKeyboardCues);
+            Assert.Equal(designMode | SystemInformation.MenuAccessKeysUnderlined, control.ShowKeyboardCues);
         }
 
         public static IEnumerable<object[]> Site_Set_TestData()
@@ -11390,7 +11433,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -11635,7 +11679,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -11825,7 +11870,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_TabStop_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -11847,7 +11892,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_TabStop_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -11922,7 +11967,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Text_Set_GetReturnsExpected(string value, string expected)
         {
             using var control = new Control
@@ -11939,7 +11984,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringNormalizedTheoryData))]
         public void Control_Text_SetWithHandle_GetReturnsExpected(string value, string expected)
         {
             using var control = new Control();
@@ -12172,7 +12217,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -12378,7 +12424,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -12560,7 +12607,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_UseWaitCursor_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -12582,7 +12629,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_UseWaitCursor_SetWithChildren_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -12613,7 +12660,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_UseWaitCursor_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new Control();
@@ -12672,7 +12719,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Visible_Set_GetReturnsExpected(bool value)
         {
             using var control = new Control
@@ -12694,7 +12741,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Visible_SetWithParent_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -12768,7 +12815,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void Control_Visible_SetWithParentWithHandle_GetReturnsExpected(bool value)
         {
             using var parent = new Control();
@@ -13406,7 +13453,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
 
             try
@@ -13641,7 +13689,8 @@ namespace System.Windows.Forms.Tests
                 Assert.Same(control, e.AffectedControl);
                 Assert.Equal("Bounds", e.AffectedProperty);
                 parentLayoutCallCount++;
-            };
+            }
+
             parent.Layout += parentHandler;
             Assert.NotEqual(IntPtr.Zero, parent.Handle);
             int invalidatedCallCount = 0;
@@ -13730,7 +13779,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Control_WindowText_Set_GetReturnsExpected(string value)
         {
             using var control = new Control
@@ -13745,7 +13794,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void Control_WindowText_SetWithHandle_GetReturnsExpected(string value)
         {
             using var control = new Control();

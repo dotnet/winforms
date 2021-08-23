@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Numerics;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Interop;
@@ -42,7 +41,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool ContainsMnemonic(string? text)
         {
-            if (text != null)
+            if (text is not null)
             {
                 int textLength = text.Length;
                 int firstAmpersand = text.IndexOf('&', 0);
@@ -61,6 +60,7 @@ namespace System.Windows.Forms
                     }
                 }
             }
+
             return false;
         }
 
@@ -114,6 +114,7 @@ namespace System.Windows.Forms
                     bounds.Y = constrainingBounds.Top;
                 }
             }
+
             return bounds;
         }
 
@@ -142,11 +143,13 @@ namespace System.Windows.Forms
                 {
                     str.Append('&');
                 }
+
                 if (index < text.Length)
                 {
                     str.Append(text[index]);
                 }
             }
+
             return str.ToString();
         }
 
@@ -167,7 +170,7 @@ namespace System.Windows.Forms
             string typeOfControl = "Unknown";
             string nameOfControl = "Name: ";
             Control c = Control.FromHandle(hwnd);
-            if (c != null)
+            if (c is not null)
             {
                 typeOfControl = c.GetType().ToString();
                 if (!string.IsNullOrEmpty(c.Name))
@@ -179,28 +182,17 @@ namespace System.Windows.Forms
                     nameOfControl += "Unknown";
 
                     // Add some extra debug info for ToolStripDropDowns.
-                    if (c is ToolStripDropDown dd && dd.OwnerItem != null)
+                    if (c is ToolStripDropDown dd && dd.OwnerItem is not null)
                     {
                         nameOfControl += Environment.NewLine + "\tOwnerItem: " + dd.OwnerItem.ToString();
                     }
                 }
             }
+
             return windowText + Environment.NewLine + "\tType: " + typeOfControl + Environment.NewLine + "\t" + nameOfControl + Environment.NewLine;
 #else
             return string.Empty;
 #endif
-        }
-
-        internal static string AssertControlInformation(bool condition, Control control)
-        {
-            if (condition)
-            {
-                return string.Empty;
-            }
-            else
-            {
-                return GetControlInformation(control.Handle);
-            }
         }
 
         /// <summary>
@@ -210,7 +202,7 @@ namespace System.Windows.Forms
         public static char GetMnemonic(string? text, bool convertToUpperCase)
         {
             char mnemonic = '\0';
-            if (text != null)
+            if (text is not null)
             {
                 int len = text.Length;
                 for (int i = 0; i < len - 1; i++)
@@ -232,10 +224,12 @@ namespace System.Windows.Forms
                         {
                             mnemonic = char.ToLower(text[i + 1], CultureInfo.CurrentCulture);
                         }
+
                         break;
                     }
                 }
             }
+
             return mnemonic;
         }
 
@@ -320,7 +314,7 @@ namespace System.Windows.Forms
 
         public static string GetComponentName(IComponent component, string defaultNameValue)
         {
-            Debug.Assert(component != null, "component passed here cannot be null");
+            Debug.Assert(component is not null, "component passed here cannot be null");
             if (string.IsNullOrEmpty(defaultNameValue))
             {
                 return component.Site?.Name ?? string.Empty;
@@ -328,51 +322,6 @@ namespace System.Windows.Forms
             else
             {
                 return defaultNameValue;
-            }
-        }
-
-        public static class EnumValidator
-        {
-            /// <summary>
-            ///  Valid values are 0x001,0x002,0x004, 0x010,0x020,0x040, 0x100, 0x200,0x400
-            ///  Method for verifying
-            ///  Verify that the number passed in has only one bit on
-            ///  Verify that the bit that is on is a valid bit by bitwise anding it to a mask.
-            /// </summary>
-            public static bool IsValidContentAlignment(ContentAlignment contentAlign)
-            {
-                if (BitOperations.PopCount((uint)contentAlign) != 1)
-                {
-                    return false;
-                }
-
-                // to calculate:
-                // foreach (int val in Enum.GetValues(typeof(ContentAlignment))) { mask |= val; }
-                int contentAlignmentMask = 0x777;
-                return ((contentAlignmentMask & (int)contentAlign) != 0);
-            }
-
-            /// <summary>
-            ///  shifts off the number of bits specified by numBitsToShift
-            ///  -  makes sure the bits we've shifted off are just zeros
-            ///  -  then compares if the resulting value is between minValAfterShift and maxValAfterShift
-            ///
-            ///  EXAMPLE:
-            ///  MessageBoxIcon. Valid values are 0x0, 0x10, 0x20, 0x30, 0x40
-            ///  Method for verifying: chop off the last 0 by shifting right 4 bits, verify resulting number is between 0 &amp; 4.
-            ///
-            ///  WindowsFormsUtils.EnumValidator.IsEnumWithinShiftedRange(icon, /*numBitsToShift*/4, /*min*/0x0,/*max*/0x4)
-            /// </summary>
-            public static bool IsEnumWithinShiftedRange(Enum enumValue, int numBitsToShift, int minValAfterShift, int maxValAfterShift)
-            {
-                int iValue = Convert.ToInt32(enumValue, CultureInfo.InvariantCulture);
-                int remainder = iValue >> numBitsToShift;
-                if (remainder << numBitsToShift != iValue)
-                {
-                    // there were bits that we shifted out.
-                    return false;
-                }
-                return (remainder >= minValAfterShift && remainder <= maxValAfterShift);
             }
         }
     }

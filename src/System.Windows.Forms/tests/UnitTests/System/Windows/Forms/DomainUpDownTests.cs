@@ -2,11 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
@@ -59,6 +57,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(new Size(116, Control.DefaultFont.Height + 3), control.ClientSize);
                 Assert.Equal(new Size(20, control.PreferredHeight), control.PreferredSize);
             }
+
             Assert.Null(control.Container);
             Assert.False(control.ContainsFocus);
             Assert.Null(control.ContextMenuStrip);
@@ -176,7 +175,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void DomainUpDown_Padding_Set_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new DomainUpDown
@@ -193,7 +192,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetPaddingNormalizedTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelperEx), nameof(CommonTestHelperEx.GetPaddingNormalizedTheoryData))]
         public void DomainUpDown_Padding_SetWithHandle_GetReturnsExpected(Padding value, Padding expected)
         {
             using var control = new DomainUpDown();
@@ -901,7 +900,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DomainUpDown_Wrap_Set_GetReturnsExpected(bool value)
         {
             using var control = new DomainUpDown
@@ -923,7 +922,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void DomainUpDown_Wrap_SetWithHandle_GetReturnsExpected(bool value)
         {
             using var control = new DomainUpDown();
@@ -1195,10 +1194,10 @@ namespace System.Windows.Forms.Tests
             control.OnSelectedItemChanged(source, eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.SelectedItemChanged -= handler;
-           control.OnSelectedItemChanged(source, eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.SelectedItemChanged -= handler;
+            control.OnSelectedItemChanged(source, eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         [WinFormsTheory]
@@ -1219,10 +1218,10 @@ namespace System.Windows.Forms.Tests
             control.OnSelectedItemChanged(source, eventArgs);
             Assert.Equal(1, callCount);
 
-           // Remove handler.
-           control.SelectedItemChanged -= handler;
-           control.OnSelectedItemChanged(source, eventArgs);
-           Assert.Equal(1, callCount);
+            // Remove handler.
+            control.SelectedItemChanged -= handler;
+            control.OnSelectedItemChanged(source, eventArgs);
+            Assert.Equal(1, callCount);
         }
 
         public static IEnumerable<object[]> UpButton_TestData()

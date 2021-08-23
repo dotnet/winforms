@@ -2,9 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using Xunit;
-using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests

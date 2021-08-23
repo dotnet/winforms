@@ -677,6 +677,21 @@
         <target state="translated">Nieobsługiwany VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
+        <source>Go to next time frame</source>
+        <target state="translated">Przejdź do następnego horyzontu czasowego</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarPreviousButtonAccessibleObjectDescription">
+        <source>Go to previous time frame</source>
+        <target state="translated">Przejdź do poprzedniego horyzontu czasowego</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="CalendarTodayLinkAccessibleObjectDescription">
+        <source>Go to and select today's date</source>
+        <target state="translated">Przejdź do dzisiejszej daty i wybierz ją</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CancelCaption">
         <source>Cancel</source>
         <target state="translated">Anuluj</target>
@@ -1114,12 +1129,12 @@
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonCloseName">
         <source>Close</source>
-        <target state="new">Close</target>
+        <target state="translated">Zamknij</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboboxDropDownButtonOpenName">
         <source>Open</source>
-        <target state="new">Open</target>
+        <target state="translated">Otwórz</target>
         <note />
       </trans-unit>
       <trans-unit id="CommandIdNotAllocated">
@@ -1227,7 +1242,7 @@
         <target state="translated">Ostatni formant, który spowodował wyświetlenie tego paska menu kontekstowego.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlAccessibileObjectInvalid">
+      <trans-unit id="ControlAccessibleObjectInvalid">
         <source>Control's accessible object is in an invalid state.</source>
         <target state="translated">Dostępny obiekt formantu ma nieprawidłowy stan.</target>
         <note />
@@ -4631,7 +4646,7 @@ Aby zamienić to domyślne okno dialogowe, obsłuż zdarzenie DataError.</target
       </trans-unit>
       <trans-unit id="ErrorProviderIconPaddingDescr">
         <source>The number of pixels to leave between the error icon and the control.</source>
-        <target state="translated">Liczba pikseli między ikoną błędu a  formantem.</target>
+        <target state="translated">Liczba pikseli między ikoną błędu a formantem.</target>
         <note />
       </trans-unit>
       <trans-unit id="ErrorSettingWindowRegion">
@@ -4749,7 +4764,7 @@ zamiast tego okna dialogowego znajdują się na końcu tego komunikatu.
         <target state="translated">Zestawy załadowane</target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSectionSeperator">
+      <trans-unit id="ExDlgMsgSectionSeparator">
         <source>
 ************** {0} **************
 </source>
@@ -4758,7 +4773,7 @@ zamiast tego okna dialogowego znajdują się na końcu tego komunikatu.
 </target>
         <note />
       </trans-unit>
-      <trans-unit id="ExDlgMsgSeperator">
+      <trans-unit id="ExDlgMsgSeparator">
         <source>----------------------------------------
 </source>
         <target state="translated">----------------------------------------
@@ -5205,6 +5220,11 @@ Czy chcesz go zamienić?</target>
       <trans-unit id="FormMaximumSizeDescr">
         <source>The maximum size the form can be resized to.</source>
         <target state="translated">Maksymalny rozmiar, do jakiego może być powiększony formularz.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FormMdiChildrenMinimizedAnchorBottomDescr">
+        <source>Gets or sets the anchoring for minimized MDI children.</source>
+        <target state="translated">Pobiera lub ustawia kotwiczenie dla zminimalizowanych elementów podrzędnych MDI.</target>
         <note />
       </trans-unit>
       <trans-unit id="FormMenuStripDescr">
@@ -6466,6 +6486,16 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Zezwala na zmianę atrybutów znacznika wstawiania.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewException">
+        <source>The current accessibility object is only for the ListView in {0} view</source>
+        <target state="translated">Bieżący obiekt ułatwień dostępu jest przeznaczony tylko dla elementu ListView w widoku {0}</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewItemAccessibilityObjectInvalidViewsException">
+        <source>The current accessibility object is only for the ListView in {0}, {1} or {2} view</source>
+        <target state="translated">Bieżący obiekt ułatwień dostępu jest przeznaczony tylko dla elementu ListView w widoku {0}, {1} lub {2}</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewItemCheckedDescr">
         <source>Event raised when the checked property of a ListView item changes.</source>
         <target state="translated">Zdarzenie wywoływane, gdy zostanie zmieniona zaznaczona właściwość elementu ListView.</target>
@@ -7074,6 +7104,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="MonthCalendarTrailingForeColorDescr">
         <source>The color used to display the previous and following months that appear on the month calendar.</source>
         <target state="translated">Kolor używany do wyświetlania miesięcy poprzedzających i następnych pojawiających się w kalendarzy miesięcznym.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="MonthCalendarWeekNumberDescription">
+        <source>Week {0}</source>
+        <target state="translated">Tydzień {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="MonthCalendarYearRangeSelected">
@@ -7904,6 +7939,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="ProfessionalColorsSeparatorLightDescr">
         <source>Color to use to for highlight effects on the separator.</source>
         <target state="translated">Kolor używany przez efekty wyróżnienia w separatorze.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
+        <source>Border color to use on the top edge of the StatusStrip.</source>
+        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
@@ -10371,6 +10411,16 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">LargeChange: wartość '{0}' musi być większa od lub równa 0.</target>
         <note />
       </trans-unit>
+      <trans-unit id="TrackBarLargeDecreaseButtonName">
+        <source>Large decrease</source>
+        <target state="translated">Duży spadek</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarLargeIncreaseButtonName">
+        <source>Large increase</source>
+        <target state="translated">Duży wzrost</target>
+        <note />
+      </trans-unit>
       <trans-unit id="TrackBarMaximumDescr">
         <source>The maximum value for the position of the slider on the TrackBar.</source>
         <target state="translated">Maksymalna wartość dla pozycji suwaka w elemencie TrackBar.</target>
@@ -10389,6 +10439,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="TrackBarOrientationDescr">
         <source>The orientation of the control.</source>
         <target state="translated">Orientacja formantu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="TrackBarPositionButtonName">
+        <source>Position</source>
+        <target state="translated">Stanowisko</target>
         <note />
       </trans-unit>
       <trans-unit id="TrackBarSmallChangeDescr">
@@ -10423,7 +10478,7 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       </trans-unit>
       <trans-unit id="TrayIcon_TextTooLong">
         <source>Text length must be less than 128 characters long.</source>
-        <target state="translated">Długość tekstu musi być mniejsza niż 128 znaki.</target>
+        <target state="translated">Długość tekstu musi być mniejsza niż 128 znaków.</target>
         <note />
       </trans-unit>
       <trans-unit id="TreeNodeBackColorDescr">
@@ -11032,8 +11087,8 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <note />
       </trans-unit>
       <trans-unit id="Win32WindowAlreadyCreated">
-        <source>SetCompatibleTextRenderingDefault must be called before the first IWin32Window object is created in the application.</source>
-        <target state="translated">Należy wywołać element SetCompatibleTextRenderingDefault, aby pierwszy obiekt IWin32Window został utworzony w aplikacji.</target>
+        <source>{0} must be called before the first IWin32Window object is created in the application.</source>
+        <target state="translated">{0}musi zostać wywołany przed utworzeniem pierwszego obiektu IWin32Window w aplikacji.</target>
         <note />
       </trans-unit>
       <trans-unit id="WindowSubclassHandlerWndProcIsNotExceptedOne">

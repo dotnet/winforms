@@ -26,7 +26,7 @@ namespace System.Windows.Forms.Design
 
             /// <summary>
             ///  This property performs a hit test on the ControlDesigner to determine if the BodyGlyph should return
-            ///  '-1' for hit testing (letting all messages pass directly to the the control).
+            ///  '-1' for hit testing (letting all messages pass directly to the control).
             /// </summary>
             internal bool IsTransparent(Point p) => _designer.GetHitTest(p);
 
@@ -48,6 +48,7 @@ namespace System.Windows.Forms.Design
                 {
                     _controlRect = _designer.Control.RectangleToScreen(_designer.Control.ClientRectangle);
                 }
+
                 _designer.OnDragEnter(e);
             }
 
@@ -73,6 +74,7 @@ namespace System.Windows.Forms.Design
                     e.Effect = DragDropEffects.None;
                     return;
                 }
+
                 _designer.OnDragOver(e);
             }
 

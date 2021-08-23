@@ -40,15 +40,19 @@ namespace System.Windows.Forms
         public ToolStripLabel(Image image) : base(null, image, null)
         {
         }
+
         public ToolStripLabel(string text, Image image) : base(text, image, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink) : this(text, image, isLink, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick) : this(text, image, isLink, onClick, null)
         {
         }
+
         public ToolStripLabel(string text, Image image, bool isLink, EventHandler onClick, string name) : base(text, image, onClick, name)
         {
             IsLink = isLink;
@@ -102,6 +106,7 @@ namespace System.Windows.Forms
                 }
             }
         }
+
         private Color IELinkColor
         {
             get
@@ -117,6 +122,7 @@ namespace System.Windows.Forms
                 return LinkUtilities.IEActiveLinkColor;
             }
         }
+
         private Color IEVisitedLinkColor
         {
             get
@@ -222,12 +228,12 @@ namespace System.Windows.Forms
         /// </summary>
         private void InvalidateLinkFonts()
         {
-            if (_linkFont != null)
+            if (_linkFont is not null)
             {
                 _linkFont.Dispose();
             }
 
-            if (_hoverLinkFont != null && _hoverLinkFont != _linkFont)
+            if (_hoverLinkFont is not null && _hoverLinkFont != _linkFont)
             {
                 _hoverLinkFont.Dispose();
             }
@@ -247,12 +253,13 @@ namespace System.Windows.Forms
             if (IsLink)
             {
                 ToolStrip parent = Parent;
-                if (parent != null)
+                if (parent is not null)
                 {
                     _lastCursor = parent.Cursor;
                     parent.Cursor = Cursors.Hand;
                 }
             }
+
             base.OnMouseEnter(e);
         }
 
@@ -261,11 +268,12 @@ namespace System.Windows.Forms
             if (IsLink)
             {
                 ToolStrip parent = Parent;
-                if (parent != null)
+                if (parent is not null)
                 {
                     parent.Cursor = _lastCursor;
                 }
             }
+
             base.OnMouseLeave(e);
         }
 
@@ -322,7 +330,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
         {
-            if (Owner != null)
+            if (Owner is not null)
             {
                 ToolStripRenderer renderer = Renderer;
 
@@ -332,6 +340,7 @@ namespace System.Windows.Forms
                 {
                     renderer.DrawItemImage(new ToolStripItemImageRenderEventArgs(e.Graphics, this, InternalLayout.ImageRectangle));
                 }
+
                 PaintText(e.Graphics);
             }
         }
@@ -364,6 +373,7 @@ namespace System.Windows.Forms
                         textColor = (LinkVisited) ? VisitedLinkColor : LinkColor;
                     }
                 }
+
                 Rectangle textRect = InternalLayout.TextRectangle;
                 renderer.DrawItemText(new ToolStripItemTextRenderEventArgs(g, this, Text, textRect, textColor, font, InternalLayout.TextFormat));
             }
@@ -372,7 +382,7 @@ namespace System.Windows.Forms
         protected internal override bool ProcessMnemonic(char charCode)
         {
             // checking IsMnemonic is not necessary - toolstrip does this for us.
-            if (ParentInternal != null)
+            if (ParentInternal is not null)
             {
                 if (!CanSelect)
                 {
@@ -383,8 +393,10 @@ namespace System.Windows.Forms
                 {
                     FireEvent(ToolStripItemEventType.Click);
                 }
+
                 return true;
             }
+
             return false;
         }
     }

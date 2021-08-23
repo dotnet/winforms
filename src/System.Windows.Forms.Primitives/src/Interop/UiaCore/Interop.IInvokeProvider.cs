@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System;
 using System.Runtime.InteropServices;
 
 internal static partial class Interop
@@ -14,7 +13,7 @@ internal static partial class Interop
         ///  These objects are usually stateless, and invoking them does not change their own state,
         ///  but causes something to happen in the larger context of the app the control is in.
         ///
-        ///  Examples of UI that implments this includes:
+        ///  Examples of UI that implements this includes:
         ///  Push buttons
         ///  Hyperlinks
         ///  Menu items
@@ -27,7 +26,7 @@ internal static partial class Interop
             /// <summary>
             ///  Request that the control initiate its action.
             ///  Should return immediately without blocking.
-            ///  There is no way to determine what happened, when it happend, or whether
+            ///  There is no way to determine what happened, when it happened, or whether
             ///  anything happened at all.
             /// </summary>
             void Invoke();

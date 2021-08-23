@@ -57,7 +57,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  Retrieves a WindowClass object for use.  This will create a new
-            ///  object if there is no such class/style available, or retrun a
+            ///  object if there is no such class/style available, or return a
             ///  cached object if one exists.
             /// </summary>
             internal static WindowClass Create(string className, User32.CS classStyle)
@@ -69,15 +69,15 @@ namespace System.Windows.Forms
                     {
                         // If we weren't given a class name, look for a window
                         // that has the exact class style.
-                        while (wc != null
-                            && (wc._className != null || wc._classStyle != classStyle))
+                        while (wc is not null
+                            && (wc._className is not null || wc._classStyle != classStyle))
                         {
                             wc = wc._next;
                         }
                     }
                     else
                     {
-                        while (wc != null && !className.Equals(wc._className))
+                        while (wc is not null && !className.Equals(wc._className))
                         {
                             wc = wc._next;
                         }
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
 
                     if (wc is null)
                     {
-                        // Didn't find an existing class, create one and attatch it to
+                        // Didn't find an existing class, create one and attach it to
                         // the end of the linked list.
                         wc = new WindowClass(className, classStyle)
                         {

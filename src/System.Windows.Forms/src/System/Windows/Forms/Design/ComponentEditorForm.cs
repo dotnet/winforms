@@ -8,10 +8,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Reflection;
-using System.Runtime.InteropServices;
-using System.Windows.Forms.Internal;
-using static Interop;
 
 namespace System.Windows.Forms.Design
 {
@@ -56,6 +52,7 @@ namespace System.Windows.Forms.Design
             {
                 throw new ArgumentException(SR.ComponentEditorFormBadComponent, nameof(component));
             }
+
             this.component = (IComponent)component;
             this.pageTypes = pageTypes;
             dirty = false;
@@ -79,54 +76,43 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal virtual void ApplyChanges(bool lastApply)
         {
-            if (dirty)
+            if (!dirty)
             {
-                IComponentChangeService changeService = null;
+                return;
+            }
 
-                if (component.Site != null)
+            if (component.Site.TryGetService(out IComponentChangeService changeService))
+            {
+                try
                 {
-                    changeService = (IComponentChangeService)component.Site.GetService(typeof(IComponentChangeService));
-                    if (changeService != null)
-                    {
-                        try
-                        {
-                            changeService.OnComponentChanging(component, null);
-                        }
-                        catch (CheckoutException e)
-                        {
-                            if (e == CheckoutException.Canceled)
-                            {
-                                return;
-                            }
-                            throw;
-                        }
-                    }
+                    changeService.OnComponentChanging(component, null);
                 }
+                catch (CheckoutException e) when (e == CheckoutException.Canceled)
+                {
+                    return;
+                }
+            }
 
+            for (int n = 0; n < pageSites.Length; n++)
+            {
+                if (pageSites[n].Dirty)
+                {
+                    pageSites[n].GetPageControl().ApplyChanges();
+                    pageSites[n].Dirty = false;
+                }
+            }
+
+            changeService?.OnComponentChanged(component);
+
+            applyButton.Enabled = false;
+            cancelButton.Text = SR.CloseCaption;
+            dirty = false;
+
+            if (lastApply == false)
+            {
                 for (int n = 0; n < pageSites.Length; n++)
                 {
-                    if (pageSites[n].Dirty)
-                    {
-                        pageSites[n].GetPageControl().ApplyChanges();
-                        pageSites[n].Dirty = false;
-                    }
-                }
-
-                if (changeService != null)
-                {
-                    changeService.OnComponentChanged(component, null, null, null);
-                }
-
-                applyButton.Enabled = false;
-                cancelButton.Text = SR.CloseCaption;
-                dirty = false;
-
-                if (lastApply == false)
-                {
-                    for (int n = 0; n < pageSites.Length; n++)
-                    {
-                        pageSites[n].GetPageControl().OnApplyComplete();
-                    }
+                    pageSites[n].GetPageControl().OnApplyComplete();
                 }
             }
         }
@@ -234,6 +220,7 @@ namespace System.Windows.Forms.Design
                     }
                 }
             }
+
             selectorWidth += SELECTOR_PADDING;
 
             string caption = string.Empty;
@@ -246,6 +233,7 @@ namespace System.Windows.Forms.Design
             {
                 caption = SR.ComponentEditorFormPropertiesNoName;
             }
+
             Text = caption;
 
             Rectangle pageHostBounds = new Rectangle(2 * BUTTON_PAD + selectorWidth, 2 * BUTTON_PAD + STRIP_HEIGHT,
@@ -307,7 +295,8 @@ namespace System.Windows.Forms.Design
             AcceptButton = okButton;
 
             Controls.Clear();
-            Controls.AddRange(new Control[] {
+            Controls.AddRange(new Control[]
+            {
                 selector,
                 grayStrip,
                 pageHost,

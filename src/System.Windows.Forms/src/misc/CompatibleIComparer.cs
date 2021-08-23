@@ -30,6 +30,7 @@ namespace System.Collections.Specialized
                         hash = ((hash << 5) + hash) ^ c;
                         ++szStr;
                     }
+
                     return hash;
                 }
             }

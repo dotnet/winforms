@@ -2,15 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.Drawing;
+using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
+using Moq;
 using Xunit;
 using static Interop;
-using static Interop.UiaCore;
 using static Interop.Gdi32;
-using System.Runtime.InteropServices;
-using Moq;
+using static Interop.UiaCore;
 using static Interop.User32;
 
 namespace System.Windows.Forms.Primitives.Tests.Automation
@@ -519,9 +518,25 @@ this is the third line.";
         }
 
         [StaFact]
+        public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsEmpty_for_EmptyText()
+        {
+            Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
+            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
+            IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
+            Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
+            providerMock.Setup(p => p.TextLength).Returns(0);
+            UiaTextProvider provider = providerMock.Object;
+            UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, start: 0, end: 0);
+            var actual = ((ITextRangeProvider)textRange).GetBoundingRectangles();
+            Assert.Equal(new double[] { 10, 33, 96, 19 }, actual);
+        }
+
+        [StaFact]
         public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsEmpty_for_DegenerateRange()
         {
-            IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
+            Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
+            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
+            IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
             providerMock.Setup(p => p.TextLength).Returns(5);
             UiaTextProvider provider = providerMock.Object;
@@ -533,7 +548,9 @@ this is the third line.";
         [StaFact]
         public void UiaTextRange_ITextRangeProvider_GetBoundingRectangles_ReturnsExpected_for_Endline()
         {
-            IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
+            Mock<IRawElementProviderSimple> enclosingElementMock = new Mock<IRawElementProviderSimple>(MockBehavior.Strict);
+            enclosingElementMock.Setup(m => m.GetPropertyValue(UIA.BoundingRectanglePropertyId)).Returns(new Rectangle(10, 33, 96, 19));
+            IRawElementProviderSimple enclosingElement = enclosingElementMock.Object;
             Mock<UiaTextProvider> providerMock = new Mock<UiaTextProvider>(MockBehavior.Strict);
             providerMock.Setup(p => p.TextLength).Returns(3);
             providerMock.Setup(p => p.PointToScreen(It.IsAny<Point>())).Returns(Point.Empty);
@@ -767,7 +784,7 @@ This is the line 3";
         [StaFact]
         public void UiaTextRange_ITextRangeProvider_AddToSelection_DoesntThrowException()
         {
-            // Check an app doesn't crash when calling AddToSelectio method.
+            // Check an app doesn't crash when calling AddToSelection method.
             IRawElementProviderSimple enclosingElement = new Mock<IRawElementProviderSimple>(MockBehavior.Strict).Object;
             UiaTextProvider provider = new Mock<UiaTextProvider>(MockBehavior.Strict).Object;
             UiaTextRange textRange = new UiaTextRange(enclosingElement, provider, 3, 7);

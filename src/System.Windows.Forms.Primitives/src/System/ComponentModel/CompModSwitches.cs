@@ -50,6 +50,7 @@ namespace System.ComponentModel
                 {
                     activeX = new TraceSwitch("ActiveX", "Debug ActiveX sourcing");
                 }
+
                 return activeX;
             }
         }
@@ -62,6 +63,7 @@ namespace System.ComponentModel
                 {
                     dataCursor = new TraceSwitch("Microsoft.WFC.Data.DataCursor", "DataCursor");
                 }
+
                 return dataCursor;
             }
         }
@@ -74,6 +76,7 @@ namespace System.ComponentModel
                 {
                     dataGridCursor = new TraceSwitch("DataGridCursor", "DataGrid cursor tracing");
                 }
+
                 return dataGridCursor;
             }
         }
@@ -86,6 +89,7 @@ namespace System.ComponentModel
                 {
                     dataGridEditing = new TraceSwitch("DataGridEditing", "DataGrid edit related tracing");
                 }
+
                 return dataGridEditing;
             }
         }
@@ -98,6 +102,7 @@ namespace System.ComponentModel
                 {
                     dataGridKeys = new TraceSwitch("DataGridKeys", "DataGrid keystroke management tracing");
                 }
+
                 return dataGridKeys;
             }
         }
@@ -110,6 +115,7 @@ namespace System.ComponentModel
                 {
                     dataGridLayout = new TraceSwitch("DataGridLayout", "DataGrid layout tracing");
                 }
+
                 return dataGridLayout;
             }
         }
@@ -122,6 +128,7 @@ namespace System.ComponentModel
                 {
                     dataGridPainting = new TraceSwitch("DataGridPainting", "DataGrid Painting related tracing");
                 }
+
                 return dataGridPainting;
             }
         }
@@ -134,6 +141,7 @@ namespace System.ComponentModel
                 {
                     dataGridParents = new TraceSwitch("DataGridParents", "DataGrid parent rows");
                 }
+
                 return dataGridParents;
             }
         }
@@ -146,6 +154,7 @@ namespace System.ComponentModel
                 {
                     dataGridScrolling = new TraceSwitch("DataGridScrolling", "DataGrid scrolling");
                 }
+
                 return dataGridScrolling;
             }
         }
@@ -158,6 +167,7 @@ namespace System.ComponentModel
                 {
                     dataGridSelection = new TraceSwitch("DataGridSelection", "DataGrid selection management tracing");
                 }
+
                 return dataGridSelection;
             }
         }
@@ -170,6 +180,7 @@ namespace System.ComponentModel
                 {
                     dataObject = new TraceSwitch("DataObject", "Enable tracing for the DataObject class.");
                 }
+
                 return dataObject;
             }
         }
@@ -182,6 +193,7 @@ namespace System.ComponentModel
                 {
                     dataView = new TraceSwitch("DataView", "DataView");
                 }
+
                 return dataView;
             }
         }
@@ -194,6 +206,7 @@ namespace System.ComponentModel
                 {
                     debugGridView = new TraceSwitch("PSDEBUGGRIDVIEW", "Debug PropertyGridView");
                 }
+
                 return debugGridView;
             }
         }
@@ -206,6 +219,7 @@ namespace System.ComponentModel
                 {
                     dgCaptionPaint = new TraceSwitch("DGCaptionPaint", "DataGridCaption");
                 }
+
                 return dgCaptionPaint;
             }
         }
@@ -218,6 +232,7 @@ namespace System.ComponentModel
                 {
                     dgEditColumnEditing = new TraceSwitch("DGEditColumnEditing", "Editing related tracing");
                 }
+
                 return dgEditColumnEditing;
             }
         }
@@ -230,6 +245,7 @@ namespace System.ComponentModel
                 {
                     dgRelationShpRowLayout = new TraceSwitch("DGRelationShpRowLayout", "Relationship row layout");
                 }
+
                 return dgRelationShpRowLayout;
             }
         }
@@ -242,6 +258,7 @@ namespace System.ComponentModel
                 {
                     dgRelationShpRowPaint = new TraceSwitch("DGRelationShpRowPaint", "Relationship row painting");
                 }
+
                 return dgRelationShpRowPaint;
             }
         }
@@ -254,6 +271,7 @@ namespace System.ComponentModel
                 {
                     dgRowPaint = new TraceSwitch("DGRowPaint", "DataGrid Simple Row painting stuff");
                 }
+
                 return dgRowPaint;
             }
         }
@@ -266,6 +284,7 @@ namespace System.ComponentModel
                 {
                     dragDrop = new TraceSwitch("DragDrop", "Debug OLEDragDrop support in Controls");
                 }
+
                 return dragDrop;
             }
         }
@@ -278,6 +297,7 @@ namespace System.ComponentModel
                 {
                     flowLayout = new TraceSwitch("FlowLayout", "Debug flow layout");
                 }
+
                 return flowLayout;
             }
         }
@@ -290,6 +310,7 @@ namespace System.ComponentModel
                 {
                     imeMode = new TraceSwitch("ImeMode", "Debug IME Mode");
                 }
+
                 return imeMode;
             }
         }
@@ -302,6 +323,7 @@ namespace System.ComponentModel
                 {
                     layoutPerformance = new TraceSwitch("LayoutPerformance", "Tracks layout events which impact performance.");
                 }
+
                 return layoutPerformance;
             }
         }
@@ -314,6 +336,7 @@ namespace System.ComponentModel
                 {
                     layoutSuspendResume = new TraceSwitch("LayoutSuspendResume", "Tracks SuspendLayout/ResumeLayout.");
                 }
+
                 return layoutSuspendResume;
             }
         }
@@ -326,6 +349,7 @@ namespace System.ComponentModel
                 {
                     lifetimeTracing = new BooleanSwitch("LifetimeTracing", "Track lifetime events. This will cause objects to track the stack at creation and dispose.");
                 }
+
                 return lifetimeTracing;
             }
         }
@@ -338,6 +362,7 @@ namespace System.ComponentModel
                 {
                     msaa = new TraceSwitch("MSAA", "Debug Microsoft Active Accessibility");
                 }
+
                 return msaa;
             }
         }
@@ -350,6 +375,7 @@ namespace System.ComponentModel
                 {
                     msoComponentManager = new TraceSwitch("MSOComponentManager", "Debug MSO Component Manager support");
                 }
+
                 return msoComponentManager;
             }
         }
@@ -362,6 +388,7 @@ namespace System.ComponentModel
                 {
                     richLayout = new TraceSwitch("RichLayout", "Debug layout in RichControls");
                 }
+
                 return richLayout;
             }
         }
@@ -374,6 +401,7 @@ namespace System.ComponentModel
                 {
                     setBounds = new TraceSwitch("SetBounds", "Trace changes to control size/position.");
                 }
+
                 return setBounds;
             }
         }
@@ -386,6 +414,7 @@ namespace System.ComponentModel
                 {
                     s_handleLeak = new TraceSwitch("HANDLELEAK", "HandleCollector: Track Win32 Handle Leaks");
                 }
+
                 return s_handleLeak;
             }
         }
@@ -398,6 +427,7 @@ namespace System.ComponentModel
                 {
                     s_traceCollect = new BooleanSwitch("TRACECOLLECT", "HandleCollector: Trace HandleCollector operations");
                 }
+
                 return s_traceCollect;
             }
         }
@@ -410,6 +440,7 @@ namespace System.ComponentModel
                 {
                     s_commonDesignerServices = new BooleanSwitch("CommonDesignerServices", "Assert if any common designer service is not found.");
                 }
+
                 return s_commonDesignerServices;
             }
         }

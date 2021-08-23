@@ -4,7 +4,6 @@
 
 #nullable enable
 
-using System.Buffers;
 using System.Runtime.InteropServices;
 using System.Text;
 using static Interop;
@@ -40,8 +39,7 @@ namespace System.Windows.Forms.Metafiles
             }
 
             StringBuilder sb = new StringBuilder(512);
-            sb.Append($@"[{nameof(EMREXTSELECTCLIPRGN)}] Mode: {iMode} Bounds: {RegionDataHeader->rcBound} Rects: {
-                    RegionDataHeader->nCount}");
+            sb.Append($@"[{nameof(EMREXTSELECTCLIPRGN)}] Mode: {iMode} Bounds: {RegionDataHeader->rcBound} Rects: {RegionDataHeader->nCount}");
 
             RECT[] clippingRects = ClippingRectangles;
             for (int i = 0; i < clippingRects.Length; i++)

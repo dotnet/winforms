@@ -2,23 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Threading;
-using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
-using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
     using Point = System.Drawing.Point;
     using Size = System.Drawing.Size;
 
-    public class StatusStripTests : IClassFixture<ThreadExceptionFixture>
+    public partial class StatusStripTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void StatusStrip_Ctor_Default()
@@ -181,7 +175,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void StatusStrip_CanOverflow_Set_GetReturnsExpected(bool value)
         {
             using var control = new StatusStrip();
@@ -608,7 +602,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripRenderMode))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(ToolStripRenderMode))]
         public void StatusStrip_RenderMode_SetInvalidValue_ThrowsInvalidEnumArgumentException(ToolStripRenderMode value)
         {
             using var control = new StatusStrip();
@@ -703,7 +697,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void StatusStrip_SizingGrip_Set_GetReturnsExpected(bool value)
         {
             using var control = new StatusStrip
@@ -841,7 +835,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetBoolTheoryData))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void StatusStrip_ShowItemToolTips_Set_GetReturnsExpected(bool value)
         {
             using var control = new StatusStrip
@@ -924,7 +918,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try
@@ -976,7 +971,8 @@ namespace System.Windows.Forms.Tests
                 Assert.True(control.Disposing);
                 Assert.Equal(callCount > 0, control.IsDisposed);
                 callCount++;
-            };
+            }
+
             control.Disposed += handler;
 
             try

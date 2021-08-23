@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 
 namespace System.Windows.Forms
@@ -33,6 +32,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertFrom(context, sourceType);
         }
 
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
                     // We throw here because we cannot meaningfully convert a custom
                     // cursor into a string. In fact, the ResXResourceWriter will use
                     // this exception to indicate to itself that this object should
-                    // be serialized through ISeriazable instead of a string.
+                    // be serialized through ISerializable instead of a string.
 
                     throw new FormatException(SR.CursorCannotCovertToString);
                 }

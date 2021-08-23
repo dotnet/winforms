@@ -4,9 +4,7 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
@@ -101,6 +99,7 @@ namespace System.Windows.Forms
                 {
                     _checkedIndexCollection = new CheckedIndexCollection(this);
                 }
+
                 return _checkedIndexCollection;
             }
         }
@@ -118,12 +117,13 @@ namespace System.Windows.Forms
                 {
                     _checkedItemCollection = new CheckedItemCollection(this);
                 }
+
                 return _checkedItemCollection;
             }
         }
 
         /// <summary>
-        ///  This is called when creating a window.  Inheriting classes can ovveride
+        ///  This is called when creating a window.  Inheriting classes can override
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.
@@ -448,7 +448,7 @@ namespace System.Windows.Forms
             // this.  Note that we'll only change the selection when the
             // user clicks again on a currently selected item, or when the
             // user has CheckOnClick set to true.  Otherwise
-            // just using the up and down arrows selects or unselects
+            // just using the up and down arrows selects or deselects
             // every item around town ...
             //
 
@@ -548,6 +548,7 @@ namespace System.Windows.Forms
                 {
                     state |= ButtonState.Flat;
                 }
+
                 if (e.Index < Items.Count)
                 {
                     switch (CheckedItems.GetCheckedState(e.Index))
@@ -632,6 +633,7 @@ namespace System.Windows.Forms
                 {
                     foreColor = SystemColors.GrayText;
                 }
+
                 Font font = Font;
 
                 // Setup text font, color, and text
@@ -699,6 +701,7 @@ namespace System.Windows.Forms
                         {
                             tabStops[0] = tabDistance;
                         }
+
                         format.SetTabStops(0, tabStops);
                     }
                     else if (UseCustomTabOffsets)
@@ -754,7 +757,7 @@ namespace System.Windows.Forms
                 if ((e.State & DrawItemState.Focus) == DrawItemState.Focus &&
                     (e.State & DrawItemState.NoFocusRect) != DrawItemState.NoFocusRect)
                 {
-                    ControlPaint.DrawFocusRectangle(e.Graphics, textBounds, foreColor, backColor);
+                    ControlPaint.DrawBlackWhiteFocusRectangle(e.Graphics, textBounds, backColor);
                 }
             }
 
@@ -827,6 +830,7 @@ namespace System.Windows.Forms
             {
                 LbnSelChange();
             }
+
             if (FormattingEnabled) //We want to fire KeyPress only when FormattingEnabled (this is a whidbey property)
             {
                 base.OnKeyPress(e);
@@ -900,6 +904,7 @@ namespace System.Windows.Forms
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
+
             // valid values are 0-2 inclusive.
             SourceGenerated.EnumValidator.Validate(value);
             CheckState currentValue = CheckedItems.GetCheckedState(index);
@@ -975,6 +980,7 @@ namespace System.Windows.Forms
                     _killnextselect = false;
                     break;
             }
+
             m.Result = NativeMethods.InvalidIntPtr;
         }
 
@@ -1024,6 +1030,7 @@ namespace System.Windows.Forms
                     {
                         base.WndProc(ref m);
                     }
+
                     break;
             }
         }

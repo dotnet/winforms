@@ -9,7 +9,6 @@ using System.Collections.Specialized;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Windows.Forms;
@@ -436,6 +435,7 @@ namespace System.Resources
                 {
                     readerTypeName = readerTypeName.Split(',')[0].Trim();
                 }
+
                 if (writerTypeName is not null && writerTypeName.IndexOf(',') != -1)
                 {
                     writerTypeName = writerTypeName.Split(',')[0].Trim();
@@ -527,6 +527,7 @@ namespace System.Resources
                             {
                                 _resHeaderVersion = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.ResMimeTypeStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -537,6 +538,7 @@ namespace System.Resources
                             {
                                 _resHeaderMimeType = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.ReaderStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -547,6 +549,7 @@ namespace System.Resources
                             {
                                 _resHeaderReaderType = reader.Value.Trim();
                             }
+
                             break;
                         case ResXResourceWriter.WriterStr:
                             if (reader.NodeType == XmlNodeType.Element)
@@ -557,6 +560,7 @@ namespace System.Resources
                             {
                                 _resHeaderWriterType = reader.Value.Trim();
                             }
+
                             break;
                     }
                 }
@@ -633,9 +637,9 @@ namespace System.Resources
                                 // based on the documentation at https://docs.microsoft.com/dotnet/api/system.xml.xmltextreader.whitespacehandling
                                 // this is ok because:
                                 // "Because the XmlTextReader does not have DTD information available to it,
-                                // SignificantWhitepsace nodes are only returned within the an xml:space='preserve' scope."
+                                // SignificantWhitespace nodes are only returned within the an xml:space='preserve' scope."
                                 // the xml:space would not be present for anything else than string and char (see ResXResourceWriter)
-                                // so this would not cause any breaking change while reading data from Everett (we never outputed
+                                // so this would not cause any breaking change while reading data from Everett (we never outputted
                                 // xml:space then) or from whidbey that is not specifically either a string or a char.
                                 // However please note that manually editing a resx file in Everett and in Whidbey because of the addition
                                 // of xml:space=preserve might have different consequences...

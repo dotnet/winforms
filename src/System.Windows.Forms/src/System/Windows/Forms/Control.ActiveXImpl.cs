@@ -10,7 +10,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
@@ -75,7 +74,8 @@ namespace System.Windows.Forms
 
                 _adviseList = new ArrayList();
                 _activeXState = new BitVector32();
-                _ambientProperties = new AmbientProperty[] {
+                _ambientProperties = new AmbientProperty[]
+                {
                     new AmbientProperty("Font", DispatchID.AMBIENT_FONT),
                     new AmbientProperty("BackColor", DispatchID.AMBIENT_BACKCOLOR),
                     new AmbientProperty("ForeColor", DispatchID.AMBIENT_FORECOLOR)
@@ -253,6 +253,7 @@ namespace System.Windows.Forms
                         s_logPixels.X = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSX);
                         s_logPixels.Y = Gdi32.GetDeviceCaps(dc, Gdi32.DeviceCapability.LOGPIXELSY);
                     }
+
                     return s_logPixels;
                 }
             }
@@ -284,6 +285,7 @@ namespace System.Windows.Forms
                     {
                         _clientSite.SaveObject();
                     }
+
                     SendOnSave();
                 }
             }
@@ -317,7 +319,7 @@ namespace System.Windows.Forms
 
                             if (lpmsg->hwnd != _control.Handle && lpmsg->IsMouseMessage())
                             {
-                                // Must translate message coordniates over to our HWND.  We first try
+                                // Must translate message coordinates over to our HWND.  We first try
                                 IntPtr hwndMap = lpmsg->hwnd == IntPtr.Zero ? hwndParent : lpmsg->hwnd;
                                 var pt = new Point
                                 {
@@ -356,6 +358,7 @@ namespace System.Windows.Forms
                                 User32.SendMessageW(target, (User32.WM)lpmsg->message, lpmsg->wParam, lpmsg->lParam);
                             }
                         }
+
                         break;
 
                     // These affect our visibility
@@ -367,6 +370,7 @@ namespace System.Windows.Forms
                         {
                             SetInPlaceVisible(false);
                         }
+
                         break;
 
                     // All other verbs are notimpl.
@@ -533,6 +537,7 @@ namespace System.Windows.Forms
                                 break;
                         }
                     }
+
                     return Convert.FromBase64String(sb.ToString());
                 }
                 else
@@ -559,6 +564,7 @@ namespace System.Windows.Forms
                     {
                         *pAdvf |= ADVF.ONLYONCE;
                     }
+
                     if (_activeXState[s_viewAdvisePrimeFirst])
                     {
                         *pAdvf |= ADVF.PRIMEFIRST;
@@ -669,6 +675,7 @@ namespace System.Windows.Forms
                                 {
                                     virt |= User32.AcceleratorFlags.FSHIFT;
                                 }
+
                                 accelerators[_accelCount++] = new User32.ACCEL
                                 {
                                     fVirt = virt,
@@ -758,6 +765,7 @@ namespace System.Windows.Forms
                     // The max allowed length of the stream name is 31.
                     streamName = streamName.Substring(len - 31);
                 }
+
                 return streamName;
             }
 
@@ -819,6 +827,7 @@ namespace System.Windows.Forms
                         {
                             hr = HRESULT.E_FAIL;
                         }
+
                         ThrowHr(hr);
                     }
 
@@ -1013,7 +1022,8 @@ namespace System.Windows.Forms
             private bool IsResourceProp(PropertyDescriptor prop)
             {
                 TypeConverter converter = prop.Converter;
-                Type[] convertTypes = new Type[] {
+                Type[] convertTypes = new Type[]
+                {
                     typeof(string),
                     typeof(byte[])
                     };
@@ -1150,6 +1160,7 @@ namespace System.Windows.Forms
                                         string objString = obj.ToString();
                                         value = converter.ConvertFrom(null, CultureInfo.InvariantCulture, FromBase64WrappedString(objString));
                                     }
+
                                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Converter returned " + value);
                                     props[i].SetValue(_control, value);
                                 }
@@ -1166,6 +1177,7 @@ namespace System.Windows.Forms
                                     errorCode = HRESULT.E_FAIL;
                                 }
                             }
+
                             if (errorString is not null)
                             {
                                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Exception converting property: " + errorString);
@@ -1190,6 +1202,7 @@ namespace System.Windows.Forms
                                     }
                                 }
                             }
+
                             Debug.Unindent();
                         }
                     }
@@ -1203,6 +1216,7 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+
                 if (Marshal.IsComObject(pPropBag))
                 {
                     Marshal.ReleaseComObject(pPropBag);
@@ -1302,6 +1316,7 @@ namespace System.Windows.Forms
                             {
                                 _activeXState[s_uiDead] = (bool)obj;
                             }
+
                             break;
 
                         case DispatchID.AMBIENT_DISPLAYASDEFAULT:
@@ -1309,6 +1324,7 @@ namespace System.Windows.Forms
                             {
                                 ibuttonControl.NotifyDefault((bool)obj);
                             }
+
                             break;
                     }
                 }
@@ -1512,7 +1528,7 @@ namespace System.Windows.Forms
                 internal class SafeIUnknown : SafeHandle
                 {
                     /// <summary>
-                    ///  Wrap an incomoing unknown or get the unknown for the CCW (COM-callable wrapper).
+                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
                     /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr)
                         : this(obj, addRefIntPtr, Guid.Empty)
@@ -1520,8 +1536,8 @@ namespace System.Windows.Forms
                     }
 
                     /// <summary>
-                    ///  Wrap an incomoing unknown or get the unknown for the CCW (COM-callable wrapper).
-                    ///  If an iid is supplied, QI for the interface and wrap that unknonwn instead.
+                    ///  Wrap an incoming unknown or get the unknown for the CCW (COM-callable wrapper).
+                    ///  If an iid is supplied, QI for the interface and wrap that unknown instead.
                     /// </summary>
                     public SafeIUnknown(object obj, bool addRefIntPtr, Guid iid)
                         : base(IntPtr.Zero, true)
@@ -1589,6 +1605,7 @@ namespace System.Windows.Forms
                         {
                             throw new InvalidCastException(SR.AxInterfaceNotSupported);
                         }
+
                         return ppv;
                     }
 
@@ -1603,6 +1620,7 @@ namespace System.Windows.Forms
                             {
                                 return (IntPtr.Zero == handle);
                             }
+
                             return true;
                         }
                     }
@@ -1618,6 +1636,7 @@ namespace System.Windows.Forms
                         {
                             Marshal.Release(ptr1);
                         }
+
                         return true;
                     }
 
@@ -1697,7 +1716,7 @@ namespace System.Windows.Forms
                         public IntPtr AddRefPtr;
                         public IntPtr ReleasePtr;
                         public IntPtr GetConnectionInterfacePtr;
-                        public IntPtr GetConnectionPointContainterPtr;
+                        public IntPtr GetConnectionPointContainerPtr;
                         public IntPtr AdvisePtr;
                         public IntPtr UnadvisePtr;
                         public IntPtr EnumConnectionsPtr;
@@ -1706,7 +1725,7 @@ namespace System.Windows.Forms
                     private readonly VTABLE _vtbl;
 
                     /// <summary>
-                    ///  Call IConnectioinPoint.Advise using Delegate.Invoke on the v-table slot.
+                    ///  Call IConnectionPoint.Advise using Delegate.Invoke on the v-table slot.
                     /// </summary>
                     public bool Advise(IntPtr punkEventSink, out uint pdwCookie)
                     {
@@ -1715,6 +1734,7 @@ namespace System.Windows.Forms
                         {
                             return true;
                         }
+
                         return false;
                     }
 
@@ -1982,7 +2002,7 @@ namespace System.Windows.Forms
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "SetExtent : Control has changed size.  Setting dirty bit");
                             _activeXState[s_isDirty] = true;
 
-                            // If we're not inplace active, then anounce that the view changed.
+                            // If we're not inplace active, then announce that the view changed.
                             if (!_activeXState[s_inPlaceActive])
                             {
                                 ViewChanged();
@@ -2219,6 +2239,7 @@ namespace System.Windows.Forms
                                 {
                                     User32.DispatchMessageA(ref *lpmsg);
                                 }
+
                                 return HRESULT.S_OK;
                             case PreProcessControlState.MessageNotNeeded:
                                 // in this case we'll check the site to see if it wants the message.
@@ -2353,6 +2374,7 @@ namespace System.Windows.Forms
                             x = rc.left;
                             y = rc.top;
                         }
+
                         if ((flags & User32.SWP.NOSIZE) == 0)
                         {
                             width = rc.right - rc.left;
@@ -2376,7 +2398,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Since this method is used by Reflection .. dont change the "signature"
+            // Since this method is used by Reflection .. don't change the "signature"
             internal void ViewChangedInternal()
             {
                 ViewChanged();
@@ -2403,6 +2425,7 @@ namespace System.Windows.Forms
                         {
                             Marshal.ReleaseComObject(_viewAdviseSink);
                         }
+
                         _viewAdviseSink = null;
                     }
                 }
@@ -2427,10 +2450,12 @@ namespace System.Windows.Forms
                     {
                         return;
                     }
+
                     if (m.Msg >= (int)User32.WM.NCLBUTTONDOWN && m.Msg <= (int)User32.WM.NCMBUTTONDBLCLK)
                     {
                         return;
                     }
+
                     if (m.IsKeyMessage())
                     {
                         return;

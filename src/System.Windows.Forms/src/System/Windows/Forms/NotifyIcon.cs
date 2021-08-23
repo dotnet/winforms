@@ -248,12 +248,13 @@ namespace System.Windows.Forms
                     value = string.Empty;
                 }
 
-                if (value != null && !value.Equals(text))
+                if (value is not null && !value.Equals(text))
                 {
-                    if (value != null && value.Length > MaxTextSize)
+                    if (value is not null && value.Length > MaxTextSize)
                     {
                         throw new ArgumentOutOfRangeException(nameof(Text), value, SR.TrayIcon_TextTooLong);
                     }
+
                     text = value;
                     if (added)
                     {
@@ -397,7 +398,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (window != null)
+                if (window is not null)
                 {
                     icon = null;
                     Text = string.Empty;
@@ -412,12 +413,13 @@ namespace System.Windows.Forms
                 // This same post is done in ControlNativeWindow's finalize method, so if you change
                 // it, change it there too.
                 //
-                if (window != null && window.Handle != IntPtr.Zero)
+                if (window is not null && window.Handle != IntPtr.Zero)
                 {
                     User32.PostMessageW(window, User32.WM.CLOSE);
                     window.ReleaseHandle();
                 }
             }
+
             base.Dispose(disposing);
         }
 
@@ -586,6 +588,7 @@ namespace System.Windows.Forms
                 {
                     window.CreateHandle(new CreateParams());
                 }
+
                 data.hWnd = window.Handle;
                 data.InfoTitle = tipTitle;
                 data.Info = tipText;
@@ -604,6 +607,7 @@ namespace System.Windows.Forms
                         data.dwInfoFlags = NIIF.NONE;
                         break;
                 }
+
                 Shell32.Shell_NotifyIconW(NIM.MODIFY, ref data);
             }
         }
@@ -613,7 +617,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowContextMenu()
         {
-            if (contextMenuStrip != null)
+            if (contextMenuStrip is not null)
             {
                 User32.GetCursorPos(out Point pt);
 
@@ -658,16 +662,18 @@ namespace System.Windows.Forms
                         window.CreateHandle(new CreateParams());
                     }
                 }
+
                 data.hWnd = window.Handle;
-                if (icon != null)
+                if (icon is not null)
                 {
                     data.uFlags |= NIF.ICON;
                     data.hIcon = icon.Handle;
                 }
+
                 data.uFlags |= NIF.TIP;
                 data.Tip = text;
 
-                if (showIconInTray && icon != null)
+                if (showIconInTray && icon is not null)
                 {
                     if (!added)
                     {
@@ -698,6 +704,7 @@ namespace System.Windows.Forms
                 OnMouseDoubleClick(new MouseEventArgs(button, 2, 0, 0, 0));
                 doubleClick = true;
             }
+
             OnMouseDown(new MouseEventArgs(button, clicks, 0, 0, 0));
         }
 
@@ -721,6 +728,7 @@ namespace System.Windows.Forms
                 OnClick(new MouseEventArgs(button, 0, 0, 0, 0));
                 OnMouseClick(new MouseEventArgs(button, 0, 0, 0, 0));
             }
+
             doubleClick = false;
         }
 
@@ -735,7 +743,7 @@ namespace System.Windows.Forms
             switch ((User32.WM)msg.Msg)
             {
                 case (User32.WM)WM_TRAYMOUSEMESSAGE:
-                    switch ((int)msg.LParam)
+                    switch (PARAM.ToInt(msg.LParam))
                     {
                         case (int)User32.WM.LBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Left, 2);
@@ -765,10 +773,11 @@ namespace System.Windows.Forms
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
                         case (int)User32.WM.RBUTTONUP:
-                            if (contextMenuStrip != null)
+                            if (contextMenuStrip is not null)
                             {
                                 ShowContextMenu();
                             }
+
                             WmMouseUp(ref msg, MouseButtons.Right);
                             break;
                         case (int)NIN.BALLOONSHOW:
@@ -784,11 +793,12 @@ namespace System.Windows.Forms
                             OnBalloonTipClicked();
                             break;
                     }
+
                     break;
                 case User32.WM.COMMAND:
                     if (IntPtr.Zero == msg.LParam)
                     {
-                        if (Command.DispatchID((int)msg.WParam & 0xFFFF))
+                        if (Command.DispatchID(PARAM.ToInt(msg.WParam) & 0xFFFF))
                         {
                             return;
                         }
@@ -797,6 +807,7 @@ namespace System.Windows.Forms
                     {
                         window.DefWndProc(ref msg);
                     }
+
                     break;
 
                 case User32.WM.DESTROY:

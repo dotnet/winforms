@@ -2,14 +2,12 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using Moq;
-using WinForms.Common.Tests;
+using System.Windows.Forms.TestUtilities;
 using Xunit;
 
 namespace System.Windows.Forms.Layout.Tests
@@ -114,7 +112,7 @@ namespace System.Windows.Forms.Layout.Tests
         }
 
         [WinFormsTheory]
-        [CommonMemberData(nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetEnumTypeTheoryDataInvalid), typeof(TableLayoutPanelGrowStyle))]
         public void TableLayoutSettings_GrowStyle_SetInvalid_ThrowsArgumentOutOfRangeException(TableLayoutPanelGrowStyle value)
         {
             using var control = new TableLayoutPanel();
@@ -518,6 +516,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -590,6 +589,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -735,6 +735,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -969,6 +970,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("ColumnSpan", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1209,6 +1211,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("TableIndex", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try
@@ -1443,6 +1446,7 @@ namespace System.Windows.Forms.Layout.Tests
                 Assert.Equal("RowSpan", eventArgs.AffectedProperty);
                 parentLayoutCallCount++;
             }
+
             parent.Layout += parentHandler;
 
             try

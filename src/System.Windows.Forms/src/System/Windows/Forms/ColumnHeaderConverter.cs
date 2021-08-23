@@ -23,6 +23,7 @@ namespace System.Windows.Forms
             {
                 return true;
             }
+
             return base.CanConvertTo(context, destinationType);
         }
 
@@ -78,6 +79,7 @@ namespace System.Windows.Forms
                         throw new ArgumentException(string.Format(SR.NoDefaultConstructor, t.FullName));
                     }
                 }
+
                 return id;
             }
 

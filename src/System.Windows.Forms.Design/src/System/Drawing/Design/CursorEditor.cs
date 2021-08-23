@@ -28,6 +28,7 @@ namespace System.Drawing.Design
             {
                 return value;
             }
+
             if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService edSvc))
             {
                 return value;
@@ -62,14 +63,14 @@ namespace System.Drawing.Design
             private object value;
             private IWindowsFormsEditorService edSvc;
             private readonly TypeConverter cursorConverter;
-            private UITypeEditor editor;
+            private readonly UITypeEditor editor;
 
             public CursorUI(UITypeEditor editor)
             {
                 this.editor = editor;
 
                 Height = 310;
-                ItemHeight = (int)Math.Max(4 + Cursors.Default.Size.Height, Font.Height);
+                ItemHeight = Math.Max(4 + Cursors.Default.Size.Height, Font.Height);
                 DrawMode = DrawMode.OwnerDrawFixed;
                 BorderStyle = BorderStyle.None;
 

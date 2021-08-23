@@ -5,12 +5,10 @@
 #nullable disable
 
 using System.Collections;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -661,6 +659,7 @@ namespace System.Windows.Forms
             {
                 w[i].Dispose();
             }
+
             _windows.Clear();
             foreach (ControlItem item in _items.Values)
             {
@@ -690,6 +689,7 @@ namespace System.Windows.Forms
                 DisposeRegion();
                 UnwireEvents(_errorManager);
             }
+
             base.Dispose(disposing);
         }
 
@@ -721,6 +721,7 @@ namespace System.Windows.Forms
                 item = new ControlItem(this, control, (IntPtr)(++_itemIdCounter));
                 _items[control] = item;
             }
+
             return item;
         }
 

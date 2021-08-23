@@ -5,6 +5,8 @@
 #nullable disable
 
 using static Interop;
+using static Interop.ComCtl32;
+using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -20,7 +22,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShorcut the previous label
+                    // APP COMPAT. When computing DateTimePickerAccessibleObject::get_KeyboardShortcut the previous label
                     // takes precedence over DTP::Text.
                     // This code was copied from the Everett sources.
                     Label previousLabel = PreviousLabel;
@@ -58,6 +60,7 @@ namespace System.Windows.Forms
                     {
                         return Owner.Text;
                     }
+
                     return baseValue;
                 }
             }
@@ -95,33 +98,25 @@ namespace System.Windows.Forms
             internal override bool IsIAccessibleExSupported() => true;
 
             internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
+                => propertyID switch
                 {
-                    case UiaCore.UIA.IsTogglePatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.TogglePatternId);
-                    case UiaCore.UIA.LocalizedControlTypePropertyId:
+                    UiaCore.UIA.IsTogglePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TogglePatternId),
+                    UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
+                    UiaCore.UIA.LocalizedControlTypePropertyId =>
                         // We define a custom "LocalizedControlType" by default.
                         // If DateTimePicker.AccessibleRole value is customized by a user
                         // then "LocalizedControlType" value will be based on "ControlType"
                         // which depends on DateTimePicker.AccessibleRole.
-                        return Owner.AccessibleRole == AccessibleRole.Default
-                               ? s_dateTimePickerLocalizedControlTypeString
-                               : base.GetPropertyValue(propertyID);
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
+                        Owner.AccessibleRole == AccessibleRole.Default
+                            ? s_dateTimePickerLocalizedControlTypeString
+                            : base.GetPropertyValue(propertyID),
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                => (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox) ||
+                    patternId == UiaCore.UIA.ExpandCollapsePatternId ||
+                    base.IsPatternSupported(patternId);
 
             #region Toggle Pattern
 
@@ -142,6 +137,28 @@ namespace System.Windows.Forms
                     ((DateTimePicker)Owner).Checked = !((DateTimePicker)Owner).Checked;
                 }
             }
+
+            #endregion
+
+            #region Expand-Collapse Pattern
+
+            internal override void Expand()
+            {
+                if (Owner.IsHandleCreated && ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
+                {
+                    SendMessageW(Owner, WM.SYSKEYDOWN, (IntPtr)Keys.Down);
+                }
+            }
+
+            internal override void Collapse()
+            {
+                if (Owner.IsHandleCreated && ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
+                {
+                    SendMessageW(Owner, (WM)DTM.CLOSEMONTHCAL);
+                }
+            }
+
+            internal override UiaCore.ExpandCollapseState ExpandCollapseState => ((DateTimePicker)Owner)._expandCollapseState;
 
             #endregion
         }

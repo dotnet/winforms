@@ -18,7 +18,7 @@ namespace System.Windows.Forms
         private class NotifyIconNativeWindow : NativeWindow
         {
             internal NotifyIcon reference;
-            private GCHandle rootRef;   // We will root the control when we do not want to be elligible for garbage collection.
+            private GCHandle rootRef;   // We will root the control when we do not want to be eligible for garbage collection.
 
             /// <summary>
             ///  Create a new NotifyIcon, and bind the window to the NotifyIcon component.
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                Debug.Assert(reference != null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
+                Debug.Assert(reference is not null, "NotifyIcon was garbage collected while it was still visible.  How did we let that happen?");
                 reference.WndProc(ref m);
             }
         }

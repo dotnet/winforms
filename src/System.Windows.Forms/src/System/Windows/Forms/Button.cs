@@ -5,9 +5,7 @@
 #nullable disable
 
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.ButtonInternal;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -31,7 +29,7 @@ namespace System.Windows.Forms
         private const int InvalidDimensionValue = int.MinValue;
 
         /// <summary>
-        ///  For buttons whose FaltStyle = FlatStyle.Flat, this property specifies the size, in pixels
+        ///  For buttons whose FlatStyle = FlatStyle.Flat, this property specifies the size, in pixels
         ///  of the border around the button.
         /// </summary>
         private Size _systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
@@ -78,6 +76,7 @@ namespace System.Windows.Forms
                         {
                             ParentInternal.LayoutEngine.InitLayout(this, BoundsSpecified.Size);
                         }
+
                         LayoutTransaction.DoLayout(ParentInternal, this, PropertyNames.AutoSize);
                     }
                 }
@@ -125,12 +124,13 @@ namespace System.Windows.Forms
                 requiredSize.Height += 9;
                 _systemSize = requiredSize;
             }
+
             Size paddedSize = _systemSize + Padding.Size;
             return AutoSizeMode == AutoSizeMode.GrowAndShrink ? paddedSize : LayoutUtils.UnionSizes(paddedSize, Size);
         }
 
         /// <summary>
-        ///  This is called when creating a window. Inheriting classes can overide
+        ///  This is called when creating a window. Inheriting classes can override
         ///  this to add extra functionality, but should not forget to first call
         ///  base.CreateParams() to make sure the control continues to work
         ///  correctly.
@@ -153,6 +153,7 @@ namespace System.Windows.Forms
                         cp.Style |= (int)User32.BS.DEFPUSHBUTTON;
                     }
                 }
+
                 return cp;
             }
         }
@@ -276,6 +277,7 @@ namespace System.Windows.Forms
                     //Paint in raised state...
                     ResetFlagsandPaint();
                 }
+
                 if (isMouseDown)
                 {
                     Point pt = PointToScreen(new Point(mevent.X, mevent.Y));
@@ -285,10 +287,12 @@ namespace System.Windows.Forms
                         {
                             OnClick(mevent);
                         }
+
                         OnMouseClick(mevent);
                     }
                 }
             }
+
             base.OnMouseUp(mevent);
         }
 
@@ -337,7 +341,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Lets a control process mnmemonic characters. Inheriting classes can
+        ///  Lets a control process mnemonic characters. Inheriting classes can
         ///  override this to add extra functionality, but should not forget to call
         ///  base.ProcessMnemonic(charCode); to ensure basic functionality
         ///  remains unchanged.
@@ -349,6 +353,7 @@ namespace System.Windows.Forms
                 PerformClick();
                 return true;
             }
+
             return base.ProcessMnemonic(charCode);
         }
 
@@ -379,6 +384,7 @@ namespace System.Windows.Forms
                             OnClick(EventArgs.Empty);
                         }
                     }
+
                     break;
                 case User32.WM.ERASEBKGND:
                     DefWndProc(ref m);

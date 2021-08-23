@@ -10,7 +10,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents an emunerator of elements in a <see cref='DataGridViewIntLinkedList'/>  linked list.
+    ///  Represents an enumerator of elements in a <see cref='DataGridViewIntLinkedList'/>  linked list.
     /// </summary>
     internal class DataGridViewIntLinkedListEnumerator : IEnumerator
     {
@@ -46,6 +46,7 @@ namespace System.Windows.Forms
                 Debug.Assert(_current is not null); // Since this is for internal use only.
                 _current = _current.Next;
             }
+
             return (_current is not null);
         }
 

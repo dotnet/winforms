@@ -52,9 +52,9 @@ namespace System.Windows.Forms
 
         // Values to track changes in IME composition string (if any).  Having const variables is a bit more efficient
         // than having an enum (which creates a class).
-        private const byte imeConvertionNone = 0;  // no convertion has been performed in the composition string.
-        private const byte imeConvertionUpdate = 1;  // the char being composed has been updated but not coverted yet.
-        private const byte imeConvertionCompleted = 2;  // the char being composed has been fully converted.
+        private const byte imeConversionNone = 0;  // no conversion has been performed in the composition string.
+        private const byte imeConversionUpdate = 1;  // the char being composed has been updated but not converted yet.
+        private const byte imeConversionCompleted = 2;  // the char being composed has been fully converted.
 
         /////////  Instance fields
 
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         // Bit mask - Determines when the Korean IME composition string is completed so converted character can be processed.
         private static readonly int IME_ENDING_COMPOSITION = BitVector32.CreateMask();
 
-        // Bit mask - Determines when the Korean IME is completing a composition, used when forcing convertion.
+        // Bit mask - Determines when the Korean IME is completing a composition, used when forcing conversion.
         private static readonly int IME_COMPLETING = BitVector32.CreateMask(IME_ENDING_COMPOSITION);
 
         // Used for handling characters that have a modifier (Ctrl-A, Shift-Del...).
@@ -155,7 +155,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void Initialize(MaskedTextProvider maskedTextProvider)
         {
-            Debug.Assert(maskedTextProvider != null, "Initializing from a null MaskProvider ref.");
+            Debug.Assert(maskedTextProvider is not null, "Initializing from a null MaskProvider ref.");
 
             this.maskedTextProvider = maskedTextProvider;
 
@@ -380,9 +380,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Specifies the formatting options for text cut/copited to the clipboard (Whether the mask returned from the Text
+        ///  Specifies the formatting options for text cut/copied to the clipboard (Whether the mask returned from the Text
         ///  property includes Literals and/or prompt characters).
-        ///  When prompt characters are excluded, theyare returned as spaces in the string returned.
+        ///  When prompt characters are excluded, they are returned as spaces in the string returned.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MaskedTextBoxCutCopyMaskFormat))]
@@ -553,6 +553,7 @@ namespace System.Windows.Forms
             {
                 return false;
             }
+
             return base.IsInputKey(keyData);
         }
 
@@ -627,7 +628,7 @@ namespace System.Windows.Forms
 
                 return lines;
             }
-            set{ }
+            set { }
         }
 
         /// <summary>
@@ -650,7 +651,7 @@ namespace System.Windows.Forms
             set
             {
                 //
-                // We dont' do anything if:
+                // We don't do anything if:
                 // 1.  IsNullOrEmpty( value )->[Reset control] && this.flagState[IS_NULL_MASK]==>Already Reset.
                 // 2. !IsNullOrEmpty( value )->[Set control] && !this.flagState[IS_NULL_MASK][control is set] && [value is the same]==>No need to update.
                 //
@@ -725,7 +726,7 @@ namespace System.Windows.Forms
                     maskedTextProvider.AsciiOnly);
 
                 //text is null when setting to a different mask value or when resetting the mask to null.
-                //text != null only when setting the mask from null to some value.
+                //text is not null only when setting the mask from null to some value.
                 SetMaskedTextProvider(newProvider, text);
             }
         }
@@ -1124,7 +1125,7 @@ namespace System.Windows.Forms
                 {
                     // We need to temporarily create an edit control to get the default password character.
                     // We cannot use this control because we would have to reset the native control's password char to use
-                    // the defult one so we can get it; this would change the text displayed in the box (even for a short time)
+                    // the default one so we can get it; this would change the text displayed in the box (even for a short time)
                     // opening a sec hole.
 
                     TextBox txtBox = new TextBox
@@ -1186,6 +1187,7 @@ namespace System.Windows.Forms
                             {
                                 SetText();
                             }
+
                             SelectionStart = ++caretTestPos;
                         }
                         else
@@ -1281,7 +1283,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Specifies the formatting options for text output (Whether the mask returned from the Text
         ///  property includes Literals and/or prompt characters).
-        ///  When prompt characters are excluded, theyare returned as spaces in the string returned.
+        ///  When prompt characters are excluded, they're returned as spaces in the string returned.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MaskedTextBoxTextMaskFormat))]
@@ -1340,7 +1342,7 @@ namespace System.Windows.Forms
                     IncludeLiterals = include;
                 }
 
-                if (oldText != null && oldText != TextOutput)
+                if (oldText is not null && oldText != TextOutput)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
@@ -1634,6 +1636,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return ch;
         }
 
@@ -1653,6 +1656,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return index;
         }
 
@@ -1747,6 +1751,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return pos;
         }
 
@@ -1767,6 +1772,7 @@ namespace System.Windows.Forms
             {
                 flagState[QUERY_BASE_TEXT] = false;
             }
+
             return size;
         }
 
@@ -1867,14 +1873,14 @@ namespace System.Windows.Forms
             {
                 switch (keyCode)
                 {
-                    // Unsupported keys should not be handled to allow generatating the corresponding message
+                    // Unsupported keys should not be handled to allow generating the corresponding message
                     // which is handled in the WndProc.
                     //case Keys.Z:  // ctrl-z == Undo.
                     //case Keys.Y:  // ctrl-y == Redo.
                     //    e.Handled = true;
                     //    return;
 
-                    // Note: Ctrl-Insert (Copy -Shortcut.CtrlIns) and Shft-Insert (Paste - Shortcut.ShiftIns) are
+                    // Note: Ctrl-Insert (Copy -Shortcut.CtrlIns) and Shift-Insert (Paste - Shortcut.ShiftIns) are
                     // handled by the base class and behavior depend on ShortcutsEnabled property.
 
                     // Special cases: usually cases where the native edit control would modify the mask.
@@ -1904,6 +1910,7 @@ namespace System.Windows.Forms
                             {
                                 keyCode = Keys.Back;
                             }
+
                             goto default;
 
                         case Keys.Control:
@@ -1919,6 +1926,7 @@ namespace System.Windows.Forms
                                     startPosition = 0;
                                 }
                             }
+
                             goto default;
 
                         default:
@@ -1926,6 +1934,7 @@ namespace System.Windows.Forms
                             {
                                 flagState[HANDLE_KEY_PRESS] = true;
                             }
+
                             break;
                     }
 
@@ -1988,12 +1997,12 @@ namespace System.Windows.Forms
                     if (ImeModeConversion.InputLanguageTable == ImeModeConversion.KoreanTable)
                     {
                         // Korean IMEs complete composition when a character has been fully converted, so the composition string
-                        // is only one-character long; once composed we block the IME if there ins't more room in the test string.
+                        // is only one-character long; once composed we block the IME if there isn't more room in the test string.
 
                         int editPos = maskedTextProvider.FindUnassignedEditPositionFrom(caretTestPos, forward);
                         if (editPos == MaskedTextProvider.InvalidIndex)
                         {
-                            ImeComplete();  // Force completion of compostion.
+                            ImeComplete();  // Force completion of composition.
                         }
                     }
                 }
@@ -2127,6 +2136,7 @@ namespace System.Windows.Forms
                 flagState[QUERY_BASE_TEXT] = queryBaseText;
             }
         }
+
         /// <summary>
         ///  Replaces the current selection in the text box specified by the startPosition and selectionLen parameters
         ///  with the contents of the supplied string.
@@ -2134,10 +2144,10 @@ namespace System.Windows.Forms
         private void Replace(string text, int startPosition, int selectionLen)
         {
             Debug.Assert(!flagState[IS_NULL_MASK], "This method must be called when a Mask is provided.");
-            Debug.Assert(text != null, "text is null.");
+            Debug.Assert(text is not null, "text is null.");
 
             // Clone the MaskedTextProvider so text properties are not modified until the paste operation is
-            // completed.  This is needed in case one of these properties is retreived in a MaskedInputRejected
+            // completed.  This is needed in case one of these properties is retrieved in a MaskedInputRejected
             // event handler (clipboard text is attempted to be set into the input text char by char).
 
             MaskedTextProvider clonedProvider = (MaskedTextProvider)maskedTextProvider.Clone();
@@ -2290,7 +2300,7 @@ namespace System.Windows.Forms
         {
             object parseRetVal = null;
 
-            if (validatingType != null)
+            if (validatingType is not null)
             {
                 string message = null;
 
@@ -2330,7 +2340,7 @@ namespace System.Windows.Forms
                             throw;
                         }
 
-                        if (exception.InnerException != null) // Outer exception is a generic TargetInvocationException.
+                        if (exception.InnerException is not null) // Outer exception is a generic TargetInvocationException.
                         {
                             exception = exception.InnerException;
                         }
@@ -2349,7 +2359,7 @@ namespace System.Windows.Forms
                 TypeValidationEventArgs tve = new TypeValidationEventArgs(validatingType, isValidInput, parseRetVal, message);
                 OnTypeValidationCompleted(tve);
 
-                if (e != null)
+                if (e is not null)
                 {
                     e.Cancel = tve.Cancel;
                 }
@@ -2454,7 +2464,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Designe time support for resetting Culture property..
+        ///  Design time support for resetting Culture property..
         /// </summary>
         private void ResetCulture()
         {
@@ -2485,7 +2495,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetMaskedTextProvider(MaskedTextProvider newProvider, string textOnInitializingMask)
         {
-            Debug.Assert(newProvider != null, "Initializing from a null MaskProvider ref.");
+            Debug.Assert(newProvider is not null, "Initializing from a null MaskProvider ref.");
 
             // Set R/W properties.
             newProvider.IncludePrompt = maskedTextProvider.IncludePrompt;
@@ -2516,7 +2526,7 @@ namespace System.Windows.Forms
 
             // NOTE: Whenever changing the MTP, the text is lost if any character in the old text violates the new provider's mask.
 
-            if (textOnInitializingMask != null) // Changing Mask (from null), which is the only RO property that requires passing text.
+            if (textOnInitializingMask is not null) // Changing Mask (from null), which is the only RO property that requires passing text.
             {
                 oldText = textOnInitializingMask;
                 raiseOnMaskInputRejected = !newProvider.Set(textOnInitializingMask, out testPos, out hint);
@@ -2594,7 +2604,7 @@ namespace System.Windows.Forms
 
             EventArgs e = EventArgs.Empty;
 
-            if (textOnInitializingMask != null /*changing mask from null*/ || oldProvider.Mask != newProvider.Mask)
+            if (textOnInitializingMask is not null /*changing mask from null*/ || oldProvider.Mask != newProvider.Mask)
             {
                 OnMaskChanged(e);
             }
@@ -2605,7 +2615,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Sets the control's text to the formatted text obtained from the underlying MaskedTextProvider.
         ///  TextChanged is raised always, this assumes the display or the output text changed.
-        ///  The caret position is lost (unless cached somewhere else like when lossing the focus).
+        ///  The caret position is lost (unless cached somewhere else like when losing the focus).
         ///  This is the common way of changing the text in the control.
         /// </summary>
         private void SetText()
@@ -2659,7 +2669,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Designe time support for checking if Culture value in the designer should be serialized.
+        ///  Design time support for checking if Culture value in the designer should be serialized.
         /// </summary>
         private bool ShouldSerializeCulture()
         {
@@ -2738,6 +2748,7 @@ namespace System.Windows.Forms
                     throw;
                 }
             }
+
             return true;
         }
 
@@ -2764,26 +2775,26 @@ namespace System.Windows.Forms
 
             if (ImeModeConversion.InputLanguageTable == ImeModeConversion.KoreanTable)
             {
-                byte imeConvertionType = imeConvertionNone;
+                byte imeConversionType = imeConversionNone;
 
                 // Check if there's an update to the composition string:
-                if ((m.LParam.ToInt32() & (int)Imm32.GCS.COMPSTR) != 0)
+                if ((PARAM.ToInt(m.LParam) & (int)Imm32.GCS.COMPSTR) != 0)
                 {
                     // The character in the composition has been updated but not yet converted.
-                    imeConvertionType = imeConvertionUpdate;
+                    imeConversionType = imeConversionUpdate;
                 }
-                else if ((m.LParam.ToInt32() & (int)Imm32.GCS.RESULTSTR) != 0)
+                else if ((PARAM.ToInt(m.LParam) & (int)Imm32.GCS.RESULTSTR) != 0)
                 {
                     // The character(s) in the composition has been fully converted.
-                    imeConvertionType = imeConvertionCompleted;
+                    imeConversionType = imeConversionCompleted;
                 }
 
                 // Process any update in the composition string.
-                if (imeConvertionType != imeConvertionNone)
+                if (imeConversionType != imeConversionNone)
                 {
                     if (flagState[IME_ENDING_COMPOSITION])
                     {
-                        // If IME is completing the convertion, we don't want to process further characters.
+                        // If IME is completing the conversion, we don't want to process further characters.
                         return flagState[IME_COMPLETING];
                     }
                 }
@@ -2876,6 +2887,7 @@ namespace System.Windows.Forms
                 {
                     throw;
                 }
+
                 Debug.Fail(ex.ToString());
                 return;
             }
@@ -2939,6 +2951,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     goto default;
 
                 case (int)WM.IME_ENDCOMPOSITION:
@@ -2950,6 +2963,7 @@ namespace System.Windows.Forms
                     {
                         break;
                     }
+
                     goto default;
 
                 case (int)WM.CUT:
@@ -2957,6 +2971,7 @@ namespace System.Windows.Forms
                     {
                         WmClear();
                     }
+
                     break;
 
                 case (int)WM.COPY:
@@ -2988,7 +3003,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Processes the WM_KILLFOCUS message. Updates control's text replacing promp chars with space.
+        ///  Processes the WM_KILLFOCUS message. Updates control's text replacing prompt chars with space.
         /// </summary>
         private void WmKillFocus()
         {

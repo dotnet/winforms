@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -55,8 +54,5 @@ namespace System.Windows.Forms
             add => base.RightToLeftChanged += value;
             remove => base.RightToLeftChanged -= value;
         }
-
-        protected override AccessibleObject CreateAccessibilityInstance()
-            => new VScrollBarAccessibleObject(this);
     }
 }

@@ -6,7 +6,6 @@ using System.Collections;
 using System.Configuration;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
@@ -31,7 +30,7 @@ namespace System.ComponentModel.Design
         public virtual DesignerActionListCollection ActionLists => _actionLists ??= new DesignerActionListCollection();
 
         /// <summary>
-        ///  Retrieves a list of associated components. These are components that should be incluced in a cut or copy
+        ///  Retrieves a list of associated components. These are components that should be included in a cut or copy
         ///  operation on this component.
         /// </summary>
         public virtual ICollection AssociatedComponents => Array.Empty<IComponent>();
@@ -103,7 +102,7 @@ namespace System.ComponentModel.Design
         ///  The defaultValues property contains a name/value dictionary of default values that should be applied to
         ///  properties. This dictionary may be null if no default values are specified.
         ///
-        ///  You may use the defaultValues dictionary to apply recommended defaults to proeprties but you should not
+        ///  You may use the defaultValues dictionary to apply recommended defaults to properties but you should not
         ///  modify component properties beyond what is stored in the dictionary, because this is an existing component
         ///  that may already have properties set on it.
         ///
@@ -191,12 +190,13 @@ namespace System.ComponentModel.Design
                 {
                     return host.GetDesigner(parent);
                 }
+
                 return null;
             }
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.ComponentDesigner' />.
+        ///  Disposes of the resources (other than memory) used by the <see cref='ComponentDesigner' />.
         /// </summary>
         public void Dispose()
         {
@@ -271,7 +271,7 @@ namespace System.ComponentModel.Design
                         }
 
                         eventChanged = true;
-                        handler = ebs.CreateUniqueMethodName((IComponent)comp, defaultEvent);
+                        handler = ebs.CreateUniqueMethodName(comp, defaultEvent);
                     }
                     else
                     {
@@ -335,7 +335,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='System.ComponentModel.Design.ComponentDesigner' /> class using the specified component.
+        ///  Initializes a new instance of the <see cref='ComponentDesigner' /> class using the specified component.
         /// </summary>
         public virtual void Initialize(IComponent component)
         {
@@ -383,7 +383,7 @@ namespace System.ComponentModel.Design
                     PropertyDescriptor prop = values[i];
 
                     // Skip some properties
-                    if (object.Equals(prop.Attributes[typeof(DesignOnlyAttribute)], DesignOnlyAttribute.Yes))
+                    if (Equals(prop.Attributes[typeof(DesignOnlyAttribute)], DesignOnlyAttribute.Yes))
                     {
                         continue;
                     }
@@ -415,7 +415,7 @@ namespace System.ComponentModel.Design
             => toInvoke?.InheritanceAttribute;
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='System.ComponentModel.Design.ComponentDesigner' />.
+        ///  Disposes of the resources (other than memory) used by the <see cref='ComponentDesigner' />.
         /// </summary>
         protected virtual void Dispose(bool disposing)
         {
@@ -473,6 +473,7 @@ namespace System.ComponentModel.Design
                                 ShadowProperties[SettingsKeyName] = Component.Site.Name;
                             }
                         }
+
                         persistableComponent.SettingsKey = ShadowProperties[SettingsKeyName] as string;
                         return persistableComponent.SettingsKey;
                     }
@@ -526,6 +527,7 @@ namespace System.ComponentModel.Design
                     return site.GetService(serviceType);
                 }
             }
+
             return null;
         }
 
@@ -703,14 +705,14 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component has been changed.
+        ///  Notifies the <see cref='IComponentChangeService' /> that this component has been changed.
         ///  You only need to call this when you are affecting component properties directly and not through the MemberDescriptor's accessors.
         /// </summary>
         protected void RaiseComponentChanged(MemberDescriptor member, object oldValue, object newValue)
             => GetService<IComponentChangeService>()?.OnComponentChanged(Component, member, oldValue, newValue);
 
         /// <summary>
-        ///  Notifies the <see cref='System.ComponentModel.Design.IComponentChangeService' /> that this component is
+        ///  Notifies the <see cref='IComponentChangeService' /> that this component is
         ///  about to be changed. You only need to call this when you are affecting component properties directly and
         ///  not through the MemberDescriptor's accessors.
         /// </summary>
