@@ -18,7 +18,9 @@ namespace System.Drawing.Design
             public CustomColorDialog()
             {
                 // colordlg.data was copied from VB6's dlg-4300.dlg
-                Stream stream = typeof(ColorEditor).Module.Assembly.GetManifestResourceStream(typeof(ColorEditor), "colordlg.data");
+                using Stream stream = typeof(ColorEditor).Module.Assembly.GetManifestResourceStream(
+                    typeof(ColorEditor),
+                    "colordlg.data");
 
                 int size = (int)(stream.Length - stream.Position);
                 byte[] buffer = new byte[size];

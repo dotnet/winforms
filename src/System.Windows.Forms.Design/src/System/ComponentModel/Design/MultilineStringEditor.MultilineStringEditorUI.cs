@@ -6,7 +6,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Microsoft.Win32;
@@ -270,24 +269,26 @@ namespace System.ComponentModel.Design
 
                 for (int i = 0; i < surrogates.Length; i++)
                 {
-                    if (surrogates[i] < start || surrogates[i] >= start + length)
+                    int currentSurrogate = surrogates[i];
+                    if (currentSurrogate < start || currentSurrogate >= start + length)
                     {
                         // Only process text in the specified area.
                         continue;
                     }
 
                     char low = (char)0x0000;
-                    if (surrogates[i] + 1 < value.Length)
+                    if (currentSurrogate + 1 < value.Length)
                     {
-                        low = value[surrogates[i] + 1];
+                        low = value[currentSurrogate + 1];
                     }
 
-                    if (value[surrogates[i]] < 0xD800 || value[surrogates[i]] > 0xDBFF || low < 0xDC00 || low > 0xDFFF)
+                    if (value[currentSurrogate] < 0xD800 || value[currentSurrogate] > 0xDBFF || low < 0xDC00 || low > 0xDFFF)
                     {
                         continue;
                     }
 
-                    int planeNumber = (value[surrogates[i]] / 0x40) - (0xD800 / 0x40) + 1; //plane 0 is the default plane
+                    // Plane 0 is the default plane.
+                    int planeNumber = (value[currentSurrogate] / 0x40) - (0xD800 / 0x40) + 1;
                     Font replaceFont = _fallbackFonts[planeNumber] as Font;
 
                     if (replaceFont is null)
@@ -297,7 +298,7 @@ namespace System.ComponentModel.Design
 
                         if (regkey is not null)
                         {
-                            string fallBackFontName = (string)regkey.GetValue("Plane" + planeNumber);
+                            string fallBackFontName = (string)regkey.GetValue($"Plane{planeNumber}");
                             if (!string.IsNullOrEmpty(fallBackFontName))
                             {
                                 replaceFont = new Font(fallBackFontName, base.Font.Size, base.Font.Style);
@@ -310,9 +311,9 @@ namespace System.ComponentModel.Design
                     if (replaceFont is not null)
                     {
                         int selectionLength = (i == surrogates.Length - 1)
-                            ? value.Length - surrogates[i] :
-                            surrogates[i + 1] - surrogates[i];
-                        Select(surrogates[i], selectionLength);
+                            ? value.Length - currentSurrogate
+                            : surrogates[i + 1] - currentSurrogate;
+                        Select(currentSurrogate, selectionLength);
                         SelectionFont = replaceFont;
                     }
                 }
@@ -331,7 +332,7 @@ namespace System.ComponentModel.Design
                         return string.Empty;
                     }
 
-                    string windowText = User32.GetWindowText(new HandleRef(this, Handle));
+                    string windowText = User32.GetWindowText(this);
                     if (!_ctrlEnterPressed)
                     {
                         return windowText;

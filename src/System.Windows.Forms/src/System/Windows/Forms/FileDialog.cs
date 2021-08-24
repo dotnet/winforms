@@ -21,7 +21,7 @@ namespace System.Windows.Forms
     {
         private const int FileBufferSize = 8192;
 
-        protected static readonly object EventFileOk = new object(); // Don't rename (public API)
+        protected static readonly object EventFileOk = new(); // Don't rename (public API)
 
         private const int AddExtensionOption = unchecked(unchecked((int)0x80000000));
 
@@ -144,7 +144,7 @@ namespace System.Windows.Forms
             set => SetOption((int)Comdlg32.OFN.NODEREFERENCELINKS, !value);
         }
 
-        private protected string DialogCaption => User32.GetWindowText(new HandleRef(this, _dialogHWnd));
+        private protected string DialogCaption => User32.GetWindowText(_dialogHWnd);
 
         /// <summary>
         ///  Gets or sets a string containing the file name selected in the file dialog box.
@@ -506,6 +506,7 @@ namespace System.Windows.Forms
                             break;
                         case -602: /* CDN_SELCHANGE */
                             NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN);
+
                             // Get the buffer size required to store the selected file names.
                             int sizeNeeded = (int)User32.SendMessageW(new HandleRef(this, _dialogHWnd), (User32.WM)1124 /*CDM_GETSPEC*/, IntPtr.Zero, IntPtr.Zero);
                             if (sizeNeeded > ofn.nMaxFile)

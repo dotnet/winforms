@@ -92,9 +92,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual object CreateInstance(Type itemType)
         {
-            var host = Context?.GetService<IDesignerHost>();
-
-            if (host is not null && typeof(IComponent).IsAssignableFrom(itemType))
+            if (Context.TryGetService(out IDesignerHost host) && typeof(IComponent).IsAssignableFrom(itemType))
             {
                 IComponent instance = host.CreateComponent(itemType, null);
 

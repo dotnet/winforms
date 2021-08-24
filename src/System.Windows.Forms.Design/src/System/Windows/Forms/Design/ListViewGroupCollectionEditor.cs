@@ -33,7 +33,7 @@ namespace System.Windows.Forms.Design
 
         private string CreateListViewGroupName(ListViewGroupCollection collection)
         {
-            ReadOnlySpan<char> listViewGroupName = "ListViewGroup";
+            ReadOnlySpan<char> listViewGroupName = nameof(ListViewGroup);
 
             if (Context.TryGetService(out INameCreationService nameService)
                 && Context.TryGetService(out IContainer container))

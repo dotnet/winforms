@@ -72,9 +72,8 @@ namespace System.Windows.Forms.Design
                 {
                     foreach (string name in _fileDialog.FileNames)
                     {
-                        ImageListImage image;
                         using FileStream file = new FileStream(name, FileMode.Open, FileAccess.Read, FileShare.Read);
-                        image = LoadImageFromStream(file, name.EndsWith(".ico"));
+                        ImageListImage image = LoadImageFromStream(file, name.EndsWith(".ico"));
                         image.Name = Path.GetFileName(name);
                         images.Add(image);
                     }

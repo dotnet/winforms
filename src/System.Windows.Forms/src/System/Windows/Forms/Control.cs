@@ -4012,18 +4012,11 @@ namespace System.Windows.Forms
             {
                 if (!IsHandleCreated)
                 {
-                    if (_text is null)
-                    {
-                        return "";
-                    }
-                    else
-                    {
-                        return _text;
-                    }
+                    return _text is null ? string.Empty : _text;
                 }
 
                 using var scope = MultithreadSafeCallScope.Create();
-                return User32.GetWindowText(new HandleRef(_window, Handle));
+                return User32.GetWindowText(this);
             }
             set
             {
