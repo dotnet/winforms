@@ -1201,35 +1201,24 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  In certain circumstances we might have to force
-        ///  text into the window whether or not the text is the same.
-        ///  Make this a method on TextBoxBase rather than RichTextBox (which is the only
-        ///  control that needs this at this point), since we need to set codeUpdateText.
+        ///  In certain circumstances we might have to force text into the window whether or not the text is the same.
+        ///  Make this a method on <see cref="TextBoxBase"/> rather than <see cref="RichTextBox"/> (which is the only
+        ///  control that needs this at this point), since we need to set <see cref="codeUpdateText"/>.
         /// </summary>
         internal void ForceWindowText(string value)
         {
-            if (value is null)
-            {
-                value = string.Empty;
-            }
+            value ??= string.Empty;
 
             textBoxFlags[codeUpdateText] = true;
             try
             {
                 if (IsHandleCreated)
                 {
-                    SetWindowTextW(new HandleRef(this, Handle), value);
+                    SetWindowTextW(this, value);
                 }
                 else
                 {
-                    if (value.Length == 0)
-                    {
-                        Text = null;
-                    }
-                    else
-                    {
-                        Text = value;
-                    }
+                    Text = value.Length == 0 ? null : value;
                 }
             }
             finally
@@ -1239,9 +1228,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating whether a
-        ///  multiline text box control automatically wraps words to the beginning of the next
-        ///  line when necessary.
+        ///  Gets or sets a value indicating whether a multiline text box control automatically wraps words to the
+        ///  beginning of the next line when necessary.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [Localizable(true)]

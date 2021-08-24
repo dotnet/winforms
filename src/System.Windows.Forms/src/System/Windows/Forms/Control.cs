@@ -4012,7 +4012,7 @@ namespace System.Windows.Forms
             {
                 if (!IsHandleCreated)
                 {
-                    return _text is null ? string.Empty : _text;
+                    return _text ?? string.Empty;
                 }
 
                 using var scope = MultithreadSafeCallScope.Create();
@@ -4020,27 +4020,17 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    value = string.Empty;
-                }
+                value ??= string.Empty;
 
                 if (!WindowText.Equals(value))
                 {
                     if (IsHandleCreated)
                     {
-                        User32.SetWindowTextW(new HandleRef(_window, Handle), value);
+                        User32.SetWindowTextW(this, value);
                     }
                     else
                     {
-                        if (value.Length == 0)
-                        {
-                            _text = null;
-                        }
-                        else
-                        {
-                            _text = value;
-                        }
+                        _text = value.Length == 0 ? null : value;
                     }
                 }
             }
@@ -7772,8 +7762,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inheriting classes should override this method to find out when the
-        ///  handle has been created.
+        ///  Inheriting classes should override this method to find out when the handle has been created.
         ///  Call base.OnHandleCreated first.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -7798,8 +7787,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // Restore dragdrop status. Ole Initialize happens
-                // when the ThreadContext in Application is created
+                // Restore dragdrop status. Ole Initialize happens when the ThreadContext in Application is created.
                 SetAcceptDrops(AllowDrop);
 
                 Region region = Region;
@@ -7812,25 +7800,28 @@ namespace System.Windows.Forms
                 IntPtr handle = Handle;
 
                 // The Accessibility Object for this Control
-                if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject accObj)
+                if (Properties.GetObject(s_accessibilityProperty) is ControlAccessibleObject clientAccessibleObject)
                 {
-                    accObj.Handle = handle;
+                    clientAccessibleObject.Handle = handle;
                 }
 
                 // Private accessibility object for control, used to wrap the object that
                 // OLEACC.DLL creates to represent the control's non-client (NC) region.
-                if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject ncAccObj)
+                if (Properties.GetObject(s_ncAccessibilityProperty) is ControlAccessibleObject nonClientAccessibleObject)
                 {
-                    ncAccObj.Handle = handle;
+                    nonClientAccessibleObject.Handle = handle;
                 }
 
                 // Set the window text from the Text property.
                 if (_text is not null && _text.Length != 0)
                 {
-                    User32.SetWindowTextW(new HandleRef(this, Handle), _text);
+                    User32.SetWindowTextW(this, _text);
                 }
 
-                if (!(this is ScrollableControl) && !IsMirrored && GetExtendedState(ExtendedStates.SetScrollPosition) && !GetExtendedState(ExtendedStates.HaveInvoked))
+                if (this is not ScrollableControl
+                    && !IsMirrored
+                    && GetExtendedState(ExtendedStates.SetScrollPosition)
+                    && !GetExtendedState(ExtendedStates.HaveInvoked))
                 {
                     BeginInvoke(new EventHandler(OnSetScrollPosition));
                     SetExtendedState(ExtendedStates.HaveInvoked, true);
