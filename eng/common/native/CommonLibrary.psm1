@@ -58,6 +58,13 @@ function DownloadAndExtract {
                                           -Force:$Force `
                                           -Verbose:$Verbose
 
+  if( ([regex]::Matches($InstallDirectory, "bin\\cmake\\" )).count -gt 0) {
+    $ToolNameSubDir = "$InstallDirectory\*"
+    $EnvPathToAdd = Join-Path $ToolNameSubDir  "bin" -Resolve
+	[Environment]::SetEnvironmentVariable("PATH", $env:Path + ";$EnvPathToAdd", 'Process')
+    Write-Host " install dir -  $InstallDirectory   , temp dir - $TempToolPath  , URI = $EnvPathToAdd"
+  }
+
   if ($UnzipStatus -Eq $False) {
     # Retry Download one more time with Force=true
     $DownloadRetryStatus = CommonLibrary\Get-File -Uri $Uri `
@@ -242,10 +249,12 @@ function New-ScriptShim {
 
     if ((Test-Path (Join-Path $ShimDirectory "$ShimName.exe"))) {
       Write-Host "$ShimName.exe already exists; replacing..."
+
       Remove-Item (Join-Path $ShimDirectory "$ShimName.exe")
     }
 
     & "$ShimDirectory\WinShimmer\winshimmer.exe" $ShimName $ToolFilePath $ShimDirectory
+
     return $True
   }
   catch {
