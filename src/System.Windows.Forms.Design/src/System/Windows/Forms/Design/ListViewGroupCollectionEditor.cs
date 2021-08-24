@@ -50,7 +50,7 @@ namespace System.Windows.Forms.Design
             int i = 1;
             string result = $"{listViewGroupName}{i}";
 
-            while (collection[result] != null)
+            while (collection[result] is not null)
             {
                 i++;
                 result = $"{listViewGroupName}{i}";

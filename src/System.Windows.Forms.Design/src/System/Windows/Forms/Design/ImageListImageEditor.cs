@@ -44,16 +44,15 @@ namespace System.Windows.Forms.Design
                 };
 
                 string filter = CreateFilterEntry(this);
-                Type[] imageExtenders = GetImageExtenders();
-                for (int i = 0; i < imageExtenders.Length; i++)
+                foreach (Type extender in GetImageExtenders())
                 {
                     var myClass = GetType();
                     var editor = (ImageEditor)Activator.CreateInstance(
-                        imageExtenders[i],
+                        extender,
                         BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.CreateInstance,
-                        null,
-                        null,
-                        null);
+                        binder: null,
+                        args: null,
+                        culture: null);
 
                     var editorClass = editor.GetType();
 

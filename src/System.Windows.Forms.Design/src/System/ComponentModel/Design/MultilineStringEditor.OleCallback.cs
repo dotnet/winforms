@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
                     Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE,
-                    0);
+                    reserved: 0);
 
                 Debug.Assert(storage is not null, "storage is NULL!");
 
@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design
 
             public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, Richedit.RECO reco, BOOL fReally, IntPtr hMetaPict)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryAcceptData(reco=" + reco + ")");
+                Debug.WriteLineIf(RichTextDbg.TraceVerbose, $"IRichTextBoxOleCallback::QueryAcceptData(reco={reco})");
                 if (reco == Richedit.RECO.PASTE)
                 {
                     DataObject dataObj = new DataObject(lpdataobj);

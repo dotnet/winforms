@@ -137,9 +137,6 @@ namespace System.ComponentModel.Design
                 base.OnNodeMouseClick(e);
             }
 
-            /// <summary>
-            ///  Sets the selection.
-            /// </summary>
             public bool SetSelection(object value, TreeNodeCollection nodes)
             {
                 TreeNode[] treeNodes;

@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
         {
             object instance = base.CreateInstance(type);
 
-            // Createw a default site-like name.
+            // Create a default site-like name.
             if (instance is ListViewItem.ListViewSubItem item)
             {
                 item.Name = SR.ListViewSubItemBaseName + s_count++;
