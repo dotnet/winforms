@@ -9,7 +9,7 @@ namespace System.Drawing.Design
     public partial class ColorEditor
     {
         /// <summary>
-        ///  Comparer for standard colors
+        ///  Comparer for standard colors.
         /// </summary>
         private class StandardColorComparer : IComparer
         {

@@ -16,14 +16,14 @@ namespace System.ComponentModel.Design
         private class OleCallback : Richedit.IRichEditOleCallback
         {
             private readonly RichTextBox _owner;
-            static TraceSwitch _richTextDbg;
+            private static TraceSwitch s_richTextDbg;
 
             static TraceSwitch RichTextDbg
             {
                 get
                 {
-                    _richTextDbg ??= new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
-                    return _richTextDbg;
+                    s_richTextDbg ??= new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
+                    return s_richTextDbg;
                 }
             }
 
@@ -37,13 +37,14 @@ namespace System.ComponentModel.Design
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
 
                 Ole32.ILockBytes pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
-                Debug.Assert(pLockBytes != null, "pLockBytes is NULL!");
+                Debug.Assert(pLockBytes is not null, "pLockBytes is NULL!");
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
                     Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE,
                     0);
-                Debug.Assert(storage != null, "storage is NULL!");
+
+                Debug.Assert(storage is not null, "storage is NULL!");
 
                 return HRESULT.S_OK;
             }
@@ -62,10 +63,10 @@ namespace System.ComponentModel.Design
 
             public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
+                Debug.WriteLineIf(RichTextDbg.TraceVerbose, $"IRichTextBoxOleCallback::QueryInsertObject({lpclsid})");
 
                 HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X") + ")");
+                Debug.WriteLineIf(RichTextDbg.TraceVerbose, $"real clsid:{realClsid} (hr={hr:X})");
 
                 if (!hr.Succeeded())
                 {
@@ -82,10 +83,12 @@ namespace System.ComponentModel.Design
                     case "00000315-0000-0000-C000-000000000046": // Metafile
                     case "00000316-0000-0000-C000-000000000046": // DIB
                     case "00000319-0000-0000-C000-000000000046": // EMF
-                    case "0003000A-0000-0000-C000-000000000046": //BMP
+                    case "0003000A-0000-0000-C000-000000000046": // BMP
                         return HRESULT.S_OK;
                     default:
-                        Debug.WriteLineIf(RichTextDbg.TraceVerbose, "   denying '" + lpclsid.ToString() + "' from being inserted due to security restrictions");
+                        Debug.WriteLineIf(
+                            RichTextDbg.TraceVerbose,
+                            $"   denying '{lpclsid}' from being inserted due to security restrictions");
                         return HRESULT.S_FALSE;
                 }
             }
@@ -140,7 +143,7 @@ namespace System.ComponentModel.Design
             {
                 Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetContextMenu");
 
-                // do nothing, we don't have ContextMenu any longer
+                // Do nothing, we don't have ContextMenu any longer.
                 hmenu = IntPtr.Zero;
                 return HRESULT.S_OK;
             }

@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Design
                 IHelpService helpService = (IHelpService)provider.GetService(typeof(IHelpService));
 
                 // Child modal dialog -launching in SystemAware mode.
-                _linkAreaUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new LinkAreaUI(this, helpService));
+                _linkAreaUI = DpiHelper.CreateInstanceInSystemAwareContext(() => new LinkAreaUI(helpService));
             }
 
             string text = string.Empty;
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
 
             string originalText = text;
             _linkAreaUI.SampleText = text;
-            _linkAreaUI.Start(editorService, value);
+            _linkAreaUI.Start(value);
 
             if (editorService.ShowDialog(_linkAreaUI) == DialogResult.OK)
             {

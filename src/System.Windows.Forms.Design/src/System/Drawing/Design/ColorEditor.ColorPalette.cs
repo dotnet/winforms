@@ -14,22 +14,22 @@ namespace System.Drawing.Design
         /// <summary>
         ///  A control to display the color palette.
         /// </summary>
-        private class ColorPalette : Control
+        private partial class ColorPalette : Control
         {
-            public const int CELLS_ACROSS = 8;
-            public const int CELLS_DOWN = 8;
-            public const int CELLS_CUSTOM = 16; // last cells
-            public const int CELLS = CELLS_ACROSS * CELLS_DOWN;
-            public const int CELL_SIZE = 16;
-            public const int MARGIN = 8;
+            public const int CellsAcross = 8;
+            public const int CellsDown = 8;
+            public const int CellsCustom = 16; // last cells
+            public const int TotalCells = CellsAcross * CellsDown;
+            public const int CellSize = 16;
+            public const int MarginWidth = 8;
 
-            private static bool isScalingInitialized;
-            private static int cellSizeX = CELL_SIZE;
-            private static int cellSizeY = CELL_SIZE;
-            private static int marginX = MARGIN;
-            private static int marginY = MARGIN;
+            private static bool s_isScalingInitialized;
+            private static int s_cellSizeX = CellSize;
+            private static int s_cellSizeY = CellSize;
+            private static int s_marginX = MarginWidth;
+            private static int s_marginY = MarginWidth;
 
-            private static readonly int[] staticCells = new int[]
+            private static readonly int[] s_staticCells = new int[]
             {
                 0x00ffffff, 0x00c0c0ff, 0x00c0e0ff, 0x00c0ffff,
                 0x00c0ffc0, 0x00ffffc0, 0x00ffc0c0, 0x00ffc0ff,
@@ -50,40 +50,41 @@ namespace System.Drawing.Design
                 0x00004000, 0x00404000, 0x00400000, 0x00400040
             };
 
-            private readonly Color[] staticColors;
-            private Color selectedColor;
-            private Point focus = new Point(0, 0);
-            private EventHandler onPicked;
-            private readonly ColorUI colorUI;
+            private readonly Color[] _staticColors;
+            private Color _selectedColor;
+            private Point _focus;
+            private EventHandler _onPicked;
+            private readonly ColorUI _colorUI;
 
             public ColorPalette(ColorUI colorUI, Color[] customColors)
             {
-                if (!isScalingInitialized)
+                if (!s_isScalingInitialized)
                 {
                     if (DpiHelper.IsScalingRequired)
                     {
-                        cellSizeX = DpiHelper.LogicalToDeviceUnitsX(CELL_SIZE);
-                        cellSizeY = DpiHelper.LogicalToDeviceUnitsY(CELL_SIZE);
-                        marginX = DpiHelper.LogicalToDeviceUnitsX(MARGIN);
-                        marginY = DpiHelper.LogicalToDeviceUnitsY(MARGIN);
+                        s_cellSizeX = DpiHelper.LogicalToDeviceUnitsX(CellSize);
+                        s_cellSizeY = DpiHelper.LogicalToDeviceUnitsY(CellSize);
+                        s_marginX = DpiHelper.LogicalToDeviceUnitsX(MarginWidth);
+                        s_marginY = DpiHelper.LogicalToDeviceUnitsY(MarginWidth);
                     }
 
-                    isScalingInitialized = true;
+                    s_isScalingInitialized = true;
                 }
 
-                this.colorUI = colorUI;
+                _colorUI = colorUI;
                 SetStyle(ControlStyles.Opaque, true);
 
                 BackColor = SystemColors.Control;
 
-                Size = new Size(CELLS_ACROSS * (cellSizeX + marginX) + marginX + 2,
-                                CELLS_DOWN * (cellSizeY + marginY) + marginY + 2);
+                Size = new Size(
+                    CellsAcross * (s_cellSizeX + s_marginX) + s_marginX + 2,
+                    CellsDown * (s_cellSizeY + s_marginY) + s_marginY + 2);
 
-                staticColors = new Color[CELLS - CELLS_CUSTOM];
+                _staticColors = new Color[TotalCells - CellsCustom];
 
-                for (int i = 0; i < staticCells.Length; i++)
+                for (int i = 0; i < s_staticCells.Length; i++)
                 {
-                    staticColors[i] = ColorTranslator.FromOle(staticCells[i]);
+                    _staticColors[i] = ColorTranslator.FromOle(s_staticCells[i]);
                 }
 
                 CustomColors = customColors;
@@ -91,20 +92,17 @@ namespace System.Drawing.Design
 
             public Color[] CustomColors { get; }
 
-            internal int FocusedCell => Get1DFrom2D(focus);
+            internal int FocusedCell => Get1DFrom2D(_focus);
 
             public Color SelectedColor
             {
-                get
-                {
-                    return selectedColor;
-                }
+                get => _selectedColor;
                 set
                 {
-                    if (!value.Equals(selectedColor))
+                    if (!value.Equals(_selectedColor))
                     {
                         InvalidateSelection();
-                        selectedColor = value;
+                        _selectedColor = value;
 
                         SetFocus(GetCellFromColor(value));
                         InvalidateSelection();
@@ -114,33 +112,32 @@ namespace System.Drawing.Design
 
             public event EventHandler Picked
             {
-                add => onPicked += value;
-                remove => onPicked -= value;
+                add => _onPicked += value;
+                remove => _onPicked -= value;
             }
 
-            protected override AccessibleObject CreateAccessibilityInstance()
+            protected override AccessibleObject CreateAccessibilityInstance() => new ColorPaletteAccessibleObject(this);
+
+            protected EventHandler Get_onPicked()
             {
-                return new ColorPaletteAccessibleObject(this);
+                return _onPicked;
             }
 
-            protected void OnPicked(EventArgs e)
-            {
-                onPicked?.Invoke(this, e);
-            }
+            protected void OnPicked(EventArgs e, EventHandler _onPicked) => _onPicked?.Invoke(this, e);
 
             private static void FillRectWithCellBounds(int across, int down, ref Rectangle rect)
             {
-                rect.X = marginX + across * (cellSizeX + marginX);
-                rect.Y = marginY + down * (cellSizeY + marginY);
-                rect.Width = cellSizeX;
-                rect.Height = cellSizeY;
+                rect.X = s_marginX + across * (s_cellSizeX + s_marginX);
+                rect.Y = s_marginY + down * (s_cellSizeY + s_marginY);
+                rect.Width = s_cellSizeX;
+                rect.Height = s_cellSizeY;
             }
 
             private Point GetCellFromColor(Color c)
             {
-                for (int y = 0; y < CELLS_DOWN; y++)
+                for (int y = 0; y < CellsDown; y++)
                 {
-                    for (int x = 0; x < CELLS_ACROSS; x++)
+                    for (int x = 0; x < CellsAcross; x++)
                     {
                         if (GetColorFromCell(x, y).Equals(c))
                         {
@@ -152,37 +149,32 @@ namespace System.Drawing.Design
                 return Point.Empty;
             }
 
-            private Color GetColorFromCell(int across, int down)
-            {
-                return GetColorFromCell(Get1DFrom2D(across, down));
-            }
+            private Color GetColorFromCell(int across, int down) => GetColorFromCell(Get1DFrom2D(across, down));
 
             private Color GetColorFromCell(int index)
             {
-                if (index < CELLS - CELLS_CUSTOM)
+                if (index < TotalCells - CellsCustom)
                 {
-                    return staticColors[index];
+                    return _staticColors[index];
                 }
 
-                return CustomColors[index - CELLS + CELLS_CUSTOM];
+                return CustomColors[index - TotalCells + CellsCustom];
             }
 
             private static Point GetCell2DFromLocationMouse(int x, int y)
             {
-                int across = x / (cellSizeX + marginX);
-                int down = y / (cellSizeY + marginY);
+                int across = x / (s_cellSizeX + s_marginX);
+                int down = y / (s_cellSizeY + s_marginY);
 
                 // Check if we're outside the cells
-                //
-                if (across < 0 || down < 0 || across >= CELLS_ACROSS || down >= CELLS_DOWN)
+                if (across < 0 || down < 0 || across >= CellsAcross || down >= CellsDown)
                 {
                     return new Point(-1, -1);
                 }
 
                 // Check if we're in the margin
-                //
-                if ((x - (cellSizeX + marginX) * across) < marginX ||
-                    (y - (cellSizeY + marginY) * down) < marginY)
+                if ((x - (s_cellSizeX + s_marginX) * across) < s_marginX
+                    || (y - (s_cellSizeY + s_marginY) * down) < s_marginY)
                 {
                     return new Point(-1, -1);
                 }
@@ -190,15 +182,9 @@ namespace System.Drawing.Design
                 return new Point(across, down);
             }
 
-            private static int GetCellFromLocationMouse(int x, int y)
-            {
-                return Get1DFrom2D(GetCell2DFromLocationMouse(x, y));
-            }
+            private static int GetCellFromLocationMouse(int x, int y) => Get1DFrom2D(GetCell2DFromLocationMouse(x, y));
 
-            private static int Get1DFrom2D(Point pt)
-            {
-                return Get1DFrom2D(pt.X, pt.Y);
-            }
+            private static int Get1DFrom2D(Point pt) => Get1DFrom2D(pt.X, pt.Y);
 
             private static int Get1DFrom2D(int x, int y)
             {
@@ -207,21 +193,21 @@ namespace System.Drawing.Design
                     return -1;
                 }
 
-                return x + CELLS_ACROSS * y;
+                return x + CellsAcross * y;
             }
 
             private static Point Get2DFrom1D(int cell)
             {
-                int x = cell % CELLS_ACROSS;
-                int y = cell / CELLS_ACROSS;
+                int x = cell % CellsAcross;
+                int y = cell / CellsAcross;
                 return new Point(x, y);
             }
 
             private void InvalidateSelection()
             {
-                for (int y = 0; y < CELLS_DOWN; y++)
+                for (int y = 0; y < CellsDown; y++)
                 {
-                    for (int x = 0; x < CELLS_ACROSS; x++)
+                    for (int x = 0; x < CellsAcross; x++)
                     {
                         if (SelectedColor.Equals(GetColorFromCell(x, y)))
                         {
@@ -237,34 +223,23 @@ namespace System.Drawing.Design
             private void InvalidateFocus()
             {
                 Rectangle r = new Rectangle();
-                FillRectWithCellBounds(focus.X, focus.Y, ref r);
+                FillRectWithCellBounds(_focus.X, _focus.Y, ref r);
                 Invalidate(Rectangle.Inflate(r, 5, 5));
-                NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), OBJID.CLIENT, 1 + Get1DFrom2D(focus.X, focus.Y));
+                NotifyWinEvent((uint)AccessibleEvents.Focus, new HandleRef(this, Handle), OBJID.CLIENT, 1 + Get1DFrom2D(_focus.X, _focus.Y));
             }
 
-            protected override bool IsInputKey(Keys keyData)
+            protected override bool IsInputKey(Keys keyData) => keyData switch
             {
-                switch (keyData)
-                {
-                    case Keys.Left:
-                    case Keys.Right:
-                    case Keys.Up:
-                    case Keys.Down:
-                    case Keys.Enter:
-                        return true;
-
-                    // If we don't do this in ProcessDialogKey, VS will take it from us (ASURT 37231)
-                    case Keys.F2:
-                        return false;
-                }
-
-                return base.IsInputKey(keyData);
-            }
+                Keys.Left or Keys.Right or Keys.Up or Keys.Down or Keys.Enter => true,
+                // If we don't do this in ProcessDialogKey, VS will take it from us
+                Keys.F2 => false,
+                _ => base.IsInputKey(keyData),
+            };
 
             protected virtual void LaunchDialog(int customIndex)
             {
                 Invalidate();
-                colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
+                _colorUI.EditorService.CloseDropDown(); // It will be closed anyway as soon as it sees the WM_ACTIVATE
                 CustomColorDialog dialog = new CustomColorDialog();
 
                 IntPtr hwndFocus = GetFocus();
@@ -276,7 +251,7 @@ namespace System.Drawing.Design
                         Color color = dialog.Color;
                         CustomColors[customIndex] = dialog.Color;
                         SelectedColor = CustomColors[customIndex];
-                        OnPicked(EventArgs.Empty);
+                        OnPicked(EventArgs.Empty, Get_onPicked());
                     }
 
                     dialog.Dispose();
@@ -302,25 +277,25 @@ namespace System.Drawing.Design
                 switch (e.KeyCode)
                 {
                     case Keys.Enter:
-                        SelectedColor = GetColorFromCell(focus.X, focus.Y);
+                        SelectedColor = GetColorFromCell(_focus.X, _focus.Y);
                         InvalidateFocus();
-                        OnPicked(EventArgs.Empty);
+                        OnPicked(EventArgs.Empty, Get_onPicked());
                         break;
                     case Keys.Space:
-                        SelectedColor = GetColorFromCell(focus.X, focus.Y);
+                        SelectedColor = GetColorFromCell(_focus.X, _focus.Y);
                         InvalidateFocus();
                         break;
                     case Keys.Left:
-                        SetFocus(new Point(focus.X - 1, focus.Y));
+                        SetFocus(new Point(_focus.X - 1, _focus.Y));
                         break;
                     case Keys.Right:
-                        SetFocus(new Point(focus.X + 1, focus.Y));
+                        SetFocus(new Point(_focus.X + 1, _focus.Y));
                         break;
                     case Keys.Up:
-                        SetFocus(new Point(focus.X, focus.Y - 1));
+                        SetFocus(new Point(_focus.X, _focus.Y - 1));
                         break;
                     case Keys.Down:
-                        SetFocus(new Point(focus.X, focus.Y + 1));
+                        SetFocus(new Point(_focus.X, _focus.Y + 1));
                         break;
                 }
             }
@@ -338,7 +313,7 @@ namespace System.Drawing.Design
                 {
                     Point cell2D = GetCell2DFromLocationMouse(me.X, me.Y);
 
-                    if (cell2D.X != -1 && cell2D.Y != -1 && cell2D != focus)
+                    if (cell2D.X != -1 && cell2D.Y != -1 && cell2D != _focus)
                     {
                         SetFocus(cell2D);
                     }
@@ -348,12 +323,11 @@ namespace System.Drawing.Design
             protected override void OnMouseMove(MouseEventArgs me)
             {
                 base.OnMouseMove(me);
-                if (me.Button == MouseButtons.Left &&
-                    Bounds.Contains(me.X, me.Y))
+                if (me.Button == MouseButtons.Left && Bounds.Contains(me.X, me.Y))
                 {
                     Point cell2D = GetCell2DFromLocationMouse(me.X, me.Y);
 
-                    if (cell2D.X != -1 && cell2D.Y != -1 && cell2D != focus)
+                    if (cell2D.X != -1 && cell2D.Y != -1 && cell2D != _focus)
                     {
                         SetFocus(cell2D);
                     }
@@ -370,82 +344,92 @@ namespace System.Drawing.Design
                     if (cell2D.X != -1 && cell2D.Y != -1)
                     {
                         SetFocus(cell2D);
-                        SelectedColor = GetColorFromCell(focus.X, focus.Y);
-                        OnPicked(EventArgs.Empty);
+                        SelectedColor = GetColorFromCell(_focus.X, _focus.Y);
+                        OnPicked(EventArgs.Empty, Get_onPicked());
                     }
                 }
                 else if (me.Button == MouseButtons.Right)
                 {
                     int cell = GetCellFromLocationMouse(me.X, me.Y);
-                    if (cell != -1 && cell >= (CELLS - CELLS_CUSTOM) && cell < CELLS)
+                    if (cell != -1 && cell >= (TotalCells - CellsCustom) && cell < TotalCells)
                     {
-                        LaunchDialog(cell - CELLS + CELLS_CUSTOM);
+                        LaunchDialog(cell - TotalCells + CellsCustom);
                     }
                 }
             }
 
             protected override void OnPaint(PaintEventArgs pe)
             {
-                Graphics g = pe.Graphics;
-                using (SolidBrush brush = new SolidBrush(BackColor))
-                {
-                    g.FillRectangle(brush, ClientRectangle);
-                }
+                Graphics graphics = pe.Graphics;
+                using var brush = BackColor.GetCachedSolidBrushScope();
+                graphics.FillRectangle(brush, ClientRectangle);
 
-                Rectangle rect = new Rectangle
+                Rectangle rect = new()
                 {
-                    Width = cellSizeX,
-                    Height = cellSizeY,
-                    X = marginX,
-                    Y = marginY
+                    Width = s_cellSizeX,
+                    Height = s_cellSizeY,
+                    X = s_marginX,
+                    Y = s_marginY
                 };
+
                 bool drawSelected = false;
 
-                for (int y = 0; y < CELLS_DOWN; y++)
+                for (int y = 0; y < CellsDown; y++)
                 {
-                    for (int x = 0; x < CELLS_ACROSS; x++)
+                    for (int x = 0; x < CellsAcross; x++)
                     {
-                        Color cur = GetColorFromCell(Get1DFrom2D(x, y));
+                        Color color = GetColorFromCell(Get1DFrom2D(x, y));
 
                         FillRectWithCellBounds(x, y, ref rect);
 
-                        if (cur.Equals(SelectedColor) && !drawSelected)
+                        if (color.Equals(SelectedColor) && !drawSelected)
                         {
-                            ControlPaint.DrawBorder(g, Rectangle.Inflate(rect, 3, 3), SystemColors.ControlText, ButtonBorderStyle.Solid);
+                            ControlPaint.DrawBorder(
+                                graphics,
+                                Rectangle.Inflate(rect, 3, 3),
+                                SystemColors.ControlText,
+                                ButtonBorderStyle.Solid);
+
                             drawSelected = true;
                         }
 
-                        if (focus.X == x && focus.Y == y && Focused)
+                        if (_focus.X == x && _focus.Y == y && Focused)
                         {
-                            ControlPaint.DrawFocusRectangle(g, Rectangle.Inflate(rect, 5, 5), SystemColors.ControlText, SystemColors.Control);
+                            ControlPaint.DrawFocusRectangle(
+                                graphics,
+                                Rectangle.Inflate(rect, 5, 5),
+                                SystemColors.ControlText,
+                                SystemColors.Control);
                         }
 
-                        ControlPaint.DrawBorder(g, Rectangle.Inflate(rect, 2, 2),
-                                                SystemColors.Control, 2, ButtonBorderStyle.Inset,
-                                                SystemColors.Control, 2, ButtonBorderStyle.Inset,
-                                                SystemColors.Control, 2, ButtonBorderStyle.Inset,
-                                                SystemColors.Control, 2, ButtonBorderStyle.Inset);
-                        PaintValue(cur, g, rect);
+                        ControlPaint.DrawBorder(
+                            graphics,
+                            Rectangle.Inflate(rect, 2, 2),
+                            SystemColors.Control, 2, ButtonBorderStyle.Inset,
+                            SystemColors.Control, 2, ButtonBorderStyle.Inset,
+                            SystemColors.Control, 2, ButtonBorderStyle.Inset,
+                            SystemColors.Control, 2, ButtonBorderStyle.Inset);
+
+                        PaintValue(color, graphics, rect);
                     }
                 }
             }
 
             private static void PaintValue(Color color, Graphics g, Rectangle rect)
             {
-                using (SolidBrush brush = new SolidBrush(color))
-                {
-                    g.FillRectangle(brush, rect);
-                }
+                using var brush = color.GetCachedSolidBrushScope();
+                g.FillRectangle(brush, rect);
             }
 
             protected override bool ProcessDialogKey(Keys keyData)
             {
                 if (keyData == Keys.F2)
-                { // no ctrl, alt, shift...
-                    int cell = Get1DFrom2D(focus.X, focus.Y);
-                    if (cell >= (CELLS - CELLS_CUSTOM) && cell < CELLS)
+                {
+                    // No ctrl, alt, shift.
+                    int cell = Get1DFrom2D(_focus.X, _focus.Y);
+                    if (cell >= (TotalCells - CellsCustom) && cell < TotalCells)
                     {
-                        LaunchDialog(cell - CELLS + CELLS_CUSTOM);
+                        LaunchDialog(cell - TotalCells + CellsCustom);
                         return true;
                     }
                 }
@@ -456,7 +440,6 @@ namespace System.Drawing.Design
             private void SetFocus(Point newFocus)
             {
                 // Make sure newFocus is within correct range of cells
-                //
                 if (newFocus.X < 0)
                 {
                     newFocus.X = 0;
@@ -467,131 +450,21 @@ namespace System.Drawing.Design
                     newFocus.Y = 0;
                 }
 
-                if (newFocus.X >= CELLS_ACROSS)
+                if (newFocus.X >= CellsAcross)
                 {
-                    newFocus.X = CELLS_ACROSS - 1;
+                    newFocus.X = CellsAcross - 1;
                 }
 
-                if (newFocus.Y >= CELLS_DOWN)
+                if (newFocus.Y >= CellsDown)
                 {
-                    newFocus.Y = CELLS_DOWN - 1;
+                    newFocus.Y = CellsDown - 1;
                 }
 
-                if (focus != newFocus)
+                if (_focus != newFocus)
                 {
                     InvalidateFocus();
-                    focus = newFocus;
+                    _focus = newFocus;
                     InvalidateFocus();
-                }
-            }
-
-            public class ColorPaletteAccessibleObject : ControlAccessibleObject
-            {
-                private readonly ColorCellAccessibleObject[] cells;
-
-                public ColorPaletteAccessibleObject(ColorPalette owner) : base(owner)
-                {
-                    cells = new ColorCellAccessibleObject[CELLS_ACROSS * CELLS_DOWN];
-                }
-
-                internal ColorPalette ColorPalette => (ColorPalette)Owner;
-
-                public override int GetChildCount()
-                {
-                    return CELLS_ACROSS * CELLS_DOWN;
-                }
-
-                public override AccessibleObject GetChild(int id)
-                {
-                    if (id < 0 || id >= CELLS_ACROSS * CELLS_DOWN)
-                    {
-                        return null;
-                    }
-
-                    if (cells[id] is null)
-                    {
-                        cells[id] = new ColorCellAccessibleObject(this, ColorPalette.GetColorFromCell(id), id);
-                    }
-
-                    return cells[id];
-                }
-
-                public override AccessibleObject HitTest(int x, int y)
-                {
-                    if (!ColorPalette.IsHandleCreated)
-                    {
-                        return base.HitTest(x, y);
-                    }
-
-                    // Convert from screen to client coordinates
-                    var pt = new Point(x, y);
-
-                    ScreenToClient(new HandleRef(ColorPalette, ColorPalette.Handle), ref pt);
-
-                    int cell = ColorPalette.GetCellFromLocationMouse(pt.X, pt.Y);
-                    if (cell != -1)
-                    {
-                        return GetChild(cell);
-                    }
-
-                    return base.HitTest(x, y);
-                }
-
-                public class ColorCellAccessibleObject : AccessibleObject
-                {
-                    private readonly Color color;
-                    private readonly ColorPaletteAccessibleObject parent;
-                    private readonly int cell;
-
-                    public ColorCellAccessibleObject(ColorPaletteAccessibleObject parent, Color color, int cell)
-                    {
-                        this.color = color;
-                        this.parent = parent;
-                        this.cell = cell;
-                    }
-
-                    public override Rectangle Bounds
-                    {
-                        get
-                        {
-                            Point cellPt = ColorPalette.Get2DFrom1D(cell);
-                            Rectangle rect = new Rectangle();
-                            ColorPalette.FillRectWithCellBounds(cellPt.X, cellPt.Y, ref rect);
-
-                            // Translate rect to screen coordinates
-                            var pt = new Point(rect.X, rect.Y);
-                            var palette = parent.ColorPalette;
-
-                            if (palette.IsHandleCreated)
-                            {
-                                ClientToScreen(new HandleRef(palette, palette.Handle), ref pt);
-                            }
-
-                            return new Rectangle(pt.X, pt.Y, rect.Width, rect.Height);
-                        }
-                    }
-
-                    public override string Name => color.ToString();
-
-                    public override AccessibleObject Parent => parent;
-
-                    public override AccessibleRole Role => AccessibleRole.Cell;
-
-                    public override AccessibleStates State
-                    {
-                        get
-                        {
-                            AccessibleStates state = base.State;
-                            if (cell == parent.ColorPalette.FocusedCell)
-                            {
-                                state |= AccessibleStates.Focused;
-                            }
-
-                            return state;
-                        }
-                    }
-
-                    public override string Value => color.ToString();
                 }
             }
         }
