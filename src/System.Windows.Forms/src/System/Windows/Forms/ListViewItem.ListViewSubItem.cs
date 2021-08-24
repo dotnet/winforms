@@ -43,13 +43,13 @@ namespace System.Windows.Forms
 
             public ListViewSubItem(ListViewItem owner, string text)
             {
-                this._owner = owner;
+                _owner = owner;
                 this.text = text;
             }
 
             public ListViewSubItem(ListViewItem owner, string text, Color foreColor, Color backColor, Font font)
             {
-                this._owner = owner;
+                _owner = owner;
                 this.text = text;
                 style = new SubItemStyle
                 {
@@ -60,17 +60,7 @@ namespace System.Windows.Forms
             }
 
             internal AccessibleObject AccessibilityObject
-            {
-                get
-                {
-                    if (_accessibilityObject is null)
-                    {
-                        _accessibilityObject = new ListViewSubItemAccessibleObject(this, _owner);
-                    }
-
-                    return _accessibilityObject;
-                }
-            }
+                => _accessibilityObject ??= new ListViewSubItemAccessibleObject(this, _owner);
 
             public Color BackColor
             {
@@ -81,19 +71,11 @@ namespace System.Windows.Forms
                         return style.backColor;
                     }
 
-                    if (_owner is not null && _owner.listView is not null)
-                    {
-                        return _owner.listView.BackColor;
-                    }
-
-                    return SystemColors.Window;
+                    return _owner?.listView?.BackColor ?? SystemColors.Window;
                 }
                 set
                 {
-                    if (style is null)
-                    {
-                        style = new SubItemStyle();
-                    }
+                    style ??= new SubItemStyle();
 
                     if (style.backColor != value)
                     {
@@ -108,7 +90,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_owner is not null && _owner.listView is not null && _owner.listView.IsHandleCreated)
+                    if (_owner?.listView is not null && _owner.listView.IsHandleCreated)
                     {
                         return _owner.listView.GetSubItemRect(_owner.Index, _owner.SubItems.IndexOf(this));
                     }
@@ -158,19 +140,11 @@ namespace System.Windows.Forms
                         return style.font;
                     }
 
-                    if (_owner is not null && _owner.listView is not null)
-                    {
-                        return _owner.listView.Font;
-                    }
-
-                    return Control.DefaultFont;
+                    return _owner?.listView?.Font ?? Control.DefaultFont;
                 }
                 set
                 {
-                    if (style is null)
-                    {
-                        style = new SubItemStyle();
-                    }
+                    style ??= new SubItemStyle();
 
                     if (style.font != value)
                     {
@@ -189,19 +163,11 @@ namespace System.Windows.Forms
                         return style.foreColor;
                     }
 
-                    if (_owner is not null && _owner.listView is not null)
-                    {
-                        return _owner.listView.ForeColor;
-                    }
-
-                    return SystemColors.WindowText;
+                    return _owner?.listView?.ForeColor ?? SystemColors.WindowText;
                 }
                 set
                 {
-                    if (style is null)
-                    {
-                        style = new SubItemStyle();
-                    }
+                    style ??= new SubItemStyle();
 
                     if (style.foreColor != value)
                     {
@@ -278,7 +244,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string ToString() => "ListViewSubItem: {" + Text + "}";
+            public override string ToString() => $"ListViewSubItem: {{{Text}}}";
         }
     }
 }

@@ -53,8 +53,8 @@ namespace System.Drawing.Design
                 {
                     if (customColors is null)
                     {
-                        customColors = new Color[ColorPalette.CELLS_CUSTOM];
-                        for (int i = 0; i < ColorPalette.CELLS_CUSTOM; i++)
+                        customColors = new Color[ColorPalette.CellsCustom];
+                        for (int i = 0; i < ColorPalette.CellsCustom; i++)
                         {
                             customColors[i] = Color.White;
                         }

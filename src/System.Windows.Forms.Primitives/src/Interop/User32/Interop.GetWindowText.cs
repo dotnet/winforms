@@ -60,10 +60,10 @@ internal static partial class Interop
             }
         }
 
-        public static string GetWindowText(HandleRef hWnd)
+        public static string GetWindowText(IHandle hWnd)
         {
             string result = GetWindowText(hWnd.Handle);
-            GC.KeepAlive(hWnd.Wrapper);
+            GC.KeepAlive(hWnd);
             return result;
         }
     }

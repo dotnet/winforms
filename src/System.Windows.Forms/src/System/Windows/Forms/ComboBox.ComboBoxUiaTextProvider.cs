@@ -4,7 +4,6 @@
 
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Automation;
 using static Interop;
 using static Interop.User32;
@@ -111,7 +110,7 @@ namespace System.Windows.Forms
 
             public override string Text
                 => _owningComboBox.IsHandleCreated
-                    ? User32.GetWindowText(new HandleRef(_owningComboBox, _owningChildEdit.Handle))
+                    ? User32.GetWindowText(_owningChildEdit)
                     : string.Empty;
 
             public override int TextLength

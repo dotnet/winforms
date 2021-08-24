@@ -13,7 +13,7 @@ namespace System.ComponentModel.Design
         public class Selector : TreeView
         {
             private readonly ObjectSelectorEditor _editor;
-            private IWindowsFormsEditorService _edSvc;
+            private IWindowsFormsEditorService _editorService;
             public bool clickSeen;
 
             /// <summary>
@@ -41,9 +41,9 @@ namespace System.ComponentModel.Design
             /// </summary>
             public SelectorNode AddNode(string label, object value, SelectorNode parent)
             {
-                SelectorNode newNode = new SelectorNode(label, value);
+                SelectorNode newNode = new(label, value);
 
-                if (parent != null)
+                if (parent is not null)
                 {
                     parent.Nodes.Add(newNode);
                 }
@@ -60,12 +60,12 @@ namespace System.ComponentModel.Design
             /// </summary>
             private bool ChooseSelectedNodeIfEqual()
             {
-                if (_editor != null && _edSvc != null)
+                if (_editor is not null && _editorService is not null)
                 {
                     _editor.SetValue(((SelectorNode)SelectedNode).value);
                     if (_editor.EqualsToValue(((SelectorNode)SelectedNode).value))
                     {
-                        _edSvc.CloseDropDown();
+                        _editorService.CloseDropDown();
                         return true;
                     }
                 }
@@ -74,7 +74,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  Clears the TreeNodeCollection and sets clickSeen to false
+            ///  Clears the TreeNodeCollection and sets clickSeen to false.
             /// </summary>
             public void Clear()
             {
@@ -107,7 +107,7 @@ namespace System.ComponentModel.Design
                     case Keys.Escape:
                         _editor.SetValue(_editor.prevValue);
                         e.Handled = true;
-                        _edSvc.CloseDropDown();
+                        _editorService.CloseDropDown();
                         break;
                 }
 
@@ -128,7 +128,7 @@ namespace System.ComponentModel.Design
 
             protected override void OnNodeMouseClick(TreeNodeMouseClickEventArgs e)
             {
-                // we won't get an OnAfterSelect if it's already selected, so use this instead
+                // We won't get an OnAfterSelect if it's already selected, so use this instead.
                 if (e.Node == SelectedNode)
                 {
                     ChooseSelectedNodeIfEqual();
@@ -137,9 +137,6 @@ namespace System.ComponentModel.Design
                 base.OnNodeMouseClick(e);
             }
 
-            /// <summary>
-            ///  Sets the selection
-            /// </summary>
             public bool SetSelection(object value, TreeNodeCollection nodes)
             {
                 TreeNode[] treeNodes;
@@ -155,13 +152,13 @@ namespace System.ComponentModel.Design
                     nodes.CopyTo(treeNodes, 0);
                 }
 
-                int len = treeNodes.Length;
-                if (len == 0)
+                int length = treeNodes.Length;
+                if (length == 0)
                 {
                     return false;
                 }
 
-                for (int i = 0; i < len; i++)
+                for (int i = 0; i < length; i++)
                 {
                     if (((SelectorNode)treeNodes[i]).value == value)
                     {
@@ -189,7 +186,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public void Start(IWindowsFormsEditorService edSvc, object value)
             {
-                _edSvc = edSvc;
+                _editorService = edSvc;
                 clickSeen = false;
                 SetSelection(value, Nodes);
             }
@@ -197,10 +194,7 @@ namespace System.ComponentModel.Design
             /// <summary>
             ///  Sets the internal IWindowsFormsEditorService to null
             /// </summary>
-            public void Stop()
-            {
-                _edSvc = null;
-            }
+            public void Stop() => _editorService = null;
 
             protected unsafe override void WndProc(ref Message m)
             {

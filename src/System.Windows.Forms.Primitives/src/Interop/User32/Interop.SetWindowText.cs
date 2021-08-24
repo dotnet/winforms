@@ -11,10 +11,10 @@ internal static partial class Interop
         [DllImport(Libraries.User32, CharSet = CharSet.Unicode)]
         public static extern int SetWindowTextW(IntPtr hWnd, string text);
 
-        public static int SetWindowTextW(HandleRef hWnd, string text)
+        public static int SetWindowTextW(IHandle hWnd, string text)
         {
             int result = SetWindowTextW(hWnd.Handle, text);
-            GC.KeepAlive(hWnd.Wrapper);
+            GC.KeepAlive(hWnd);
             return result;
         }
     }

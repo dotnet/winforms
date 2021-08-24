@@ -92,9 +92,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual object CreateInstance(Type itemType)
         {
-            var host = GetService(typeof(IDesignerHost)) as IDesignerHost;
-
-            if (host is not null && typeof(IComponent).IsAssignableFrom(itemType))
+            if (Context.TryGetService(out IDesignerHost host) && typeof(IComponent).IsAssignableFrom(itemType))
             {
                 IComponent instance = host.CreateComponent(itemType, null);
 
@@ -192,7 +190,7 @@ namespace System.ComponentModel.Design
         {
             if (instance is IComponent component)
             {
-                if (GetService(typeof(IDesignerHost)) is IDesignerHost host)
+                if (Context.TryGetService(out IDesignerHost host))
                 {
                     host.DestroyComponent(component);
                 }
@@ -229,7 +227,7 @@ namespace System.ComponentModel.Design
 
             bool commitChange = true;
             IComponentChangeService changeService = null;
-            IDesignerHost host = GetService(typeof(IDesignerHost)) as IDesignerHost;
+            IDesignerHost host = Context?.GetService<IDesignerHost>();
 
             try
             {
@@ -306,7 +304,7 @@ namespace System.ComponentModel.Design
                 if (!isInheritanceServiceInitialized)
                 {
                     isInheritanceServiceInitialized = true;
-                    inheritanceService = Context?.GetService(typeof(IInheritanceService)) as IInheritanceService;
+                    inheritanceService = Context?.GetService<IInheritanceService>();
                 }
 
                 if (inheritanceService is not null
@@ -324,17 +322,10 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual object[] GetItems(object editValue)
         {
-            // We look to see if the value implements ICollection, and if it does, we set through that.
             if (editValue is ICollection collection)
             {
-                var list = new ArrayList();
-                foreach (object value in collection)
-                {
-                    list.Add(value);
-                }
-
-                object[] values = new object[list.Count];
-                list.CopyTo(values, 0);
+                object[] values = new object[collection.Count];
+                collection.CopyTo(values, 0);
                 return values;
             }
 
@@ -403,7 +394,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual void ShowHelp()
         {
-            if (GetService(typeof(IHelpService)) is IHelpService helpService)
+            if (Context.TryGetService(out IHelpService helpService))
             {
                 helpService.ShowHelpFromKeyword(HelpTopic);
             }

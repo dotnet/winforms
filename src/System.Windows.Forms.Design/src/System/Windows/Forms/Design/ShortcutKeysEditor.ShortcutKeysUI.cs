@@ -18,89 +18,49 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  Array of keys that are present in the drop down list of the combo box.
             /// </summary>
-            private static readonly Keys[] validKeys =
+            private static readonly Keys[] s_validKeys =
             {
                 Keys.A, Keys.B, Keys.C, Keys.D, Keys.D0, Keys.D1, Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7,
-                Keys.D8, Keys.D9,
-                Keys.Delete, Keys.Down, Keys.E, Keys.End, Keys.F, Keys.F1, Keys.F10, Keys.F11, Keys.F12, Keys.F13,
-                Keys.F14, Keys.F15,
-                Keys.F16, Keys.F17, Keys.F18, Keys.F19, Keys.F2, Keys.F20, Keys.F21, Keys.F22, Keys.F23, Keys.F24,
-                Keys.F3, Keys.F4,
-                Keys.F5, Keys.F6, Keys.F7, Keys.F8, Keys.F9, Keys.G, Keys.H, Keys.I, Keys.Insert, Keys.J, Keys.K,
-                Keys.L, Keys.Left,
-                Keys.M, Keys.N, Keys.NumLock, Keys.NumPad0, Keys.NumPad1, Keys.NumPad2, Keys.NumPad3, Keys.NumPad4,
-                Keys.NumPad5,
-                Keys.NumPad6, Keys.NumPad7, Keys.NumPad8, Keys.NumPad9, Keys.O, Keys.OemBackslash, Keys.OemClear,
-                Keys.OemCloseBrackets,
+                Keys.D8, Keys.D9, Keys.Delete, Keys.Down, Keys.E, Keys.End, Keys.F, Keys.F1, Keys.F10, Keys.F11,
+                Keys.F12, Keys.F13, Keys.F14, Keys.F15, Keys.F16, Keys.F17, Keys.F18, Keys.F19, Keys.F2, Keys.F20,
+                Keys.F21, Keys.F22, Keys.F23, Keys.F24, Keys.F3, Keys.F4, Keys.F5, Keys.F6, Keys.F7, Keys.F8, Keys.F9,
+                Keys.G, Keys.H, Keys.I, Keys.Insert, Keys.J, Keys.K, Keys.L, Keys.Left, Keys.M, Keys.N, Keys.NumLock,
+                Keys.NumPad0, Keys.NumPad1, Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6,
+                Keys.NumPad7, Keys.NumPad8, Keys.NumPad9, Keys.O, Keys.OemBackslash, Keys.OemClear, Keys.OemCloseBrackets,
                 Keys.Oemcomma, Keys.OemMinus, Keys.OemOpenBrackets, Keys.OemPeriod, Keys.OemPipe, Keys.Oemplus,
-                Keys.OemQuestion,
-                Keys.OemQuotes, Keys.OemSemicolon, Keys.Oemtilde, Keys.P, Keys.Pause, Keys.Q, Keys.R, Keys.Right,
-                Keys.S, Keys.Space,
-                Keys.T, Keys.Tab, Keys.U, Keys.Up, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z
+                Keys.OemQuestion, Keys.OemQuotes, Keys.OemSemicolon, Keys.Oemtilde, Keys.P, Keys.Pause, Keys.Q, Keys.R,
+                Keys.Right, Keys.S, Keys.Space, Keys.T, Keys.Tab, Keys.U, Keys.Up, Keys.V, Keys.W, Keys.X, Keys.Y, Keys.Z
             };
 
-            private Button btnReset;
-            private CheckBox chkAlt;
-            private CheckBox chkCtrl;
-            private CheckBox chkShift;
-            private ComboBox cmbKey;
-            private readonly ShortcutKeysEditor editor;
-            private TypeConverter keysConverter;
-            private Label lblKey;
-            private Label lblModifiers;
-            private object originalValue, currentValue;
-            private TableLayoutPanel tlpInner;
-            private TableLayoutPanel tlpOuter;
-            private Keys unknownKeyCode;
-            private bool updateCurrentValue;
+            private Button _resetButton;
+            private CheckBox _altCheckBox;
+            private CheckBox _ctrlCheckBox;
+            private CheckBox _shiftCheckBox;
+            private ComboBox _keyComboBox;
+            private TypeConverter _keysConverter;
+            private Label _keyLabel;
+            private Label _modifiersLabel;
+            private object _originalValue, _currentValue;
+            private TableLayoutPanel _innerPanel;
+            private TableLayoutPanel _outerPanel;
+            private Keys _unknownKeyCode;
+            private bool _updateCurrentValue;
 
-            public ShortcutKeysUI(ShortcutKeysEditor editor)
+            public ShortcutKeysUI()
             {
-                this.editor = editor;
-                keysConverter = null;
+                _keysConverter = null;
                 End();
                 InitializeComponent();
                 AdjustSize();
 
-#if DEBUG
                 // Looking for duplicates in validKeys
-                int keyCount = validKeys.Length;
-                for (int key1 = 0; key1 < keyCount - 1; key1++)
-                {
-                    for (int key2 = key1 + 1; key2 < keyCount; key2++)
-                    {
-                        Debug.Assert((int)validKeys[key1] != (int)validKeys[key2]);
-                    }
-                }
-#endif
+                Debug.Assert(s_validKeys.Distinct().Count() == s_validKeys.Length);
             }
 
             /// <summary>
-            ///  Allows someone else to close our dropdown.
+            ///  Returns the Keys type converter.
             /// </summary>
-            // Can be called through reflection.
-            public IWindowsFormsEditorService EditorService
-            {
-                get;
-                private set;
-            }
-
-            /// <summary>
-            ///  Returns the Keys' type converter.
-            /// </summary>
-            private TypeConverter KeysConverter
-            {
-                get
-                {
-                    if (keysConverter is null)
-                    {
-                        keysConverter = TypeDescriptor.GetConverter(typeof(Keys));
-                    }
-
-                    Debug.Assert(keysConverter != null);
-                    return keysConverter;
-                }
-            }
+            private TypeConverter KeysConverter => _keysConverter ??= TypeDescriptor.GetConverter(typeof(Keys));
 
             /// <summary>
             ///  Returns the selected keys. If only modifiers were selected, we return Keys.None.
@@ -109,46 +69,39 @@ namespace System.Windows.Forms.Design
             {
                 get
                 {
-                    if (currentValue is Keys currentKeys && (currentKeys & Keys.KeyCode) == 0)
+                    if (_currentValue is Keys currentKeys && (currentKeys & Keys.KeyCode) == 0)
                     {
                         return Keys.None;
                     }
 
-                    return currentValue;
+                    return _currentValue;
                 }
             }
 
             /// <summary>
             ///  Triggered when the user clicks the Reset button. The value is set to Keys.None
             /// </summary>
-            private void btnReset_Click(object sender, EventArgs e)
+            private void OnResetButtonClick(object sender, EventArgs e)
             {
-                chkCtrl.Checked = false;
-                chkAlt.Checked = false;
-                chkShift.Checked = false;
-                cmbKey.SelectedIndex = -1;
+                _ctrlCheckBox.Checked = false;
+                _altCheckBox.Checked = false;
+                _shiftCheckBox.Checked = false;
+                _keyComboBox.SelectedIndex = -1;
             }
 
-            private void chkModifier_CheckedChanged(object sender, EventArgs e)
-            {
-                UpdateCurrentValue();
-            }
+            private void OnCheckedChanged(object sender, EventArgs e) => UpdateCurrentValue();
 
-            private void cmbKey_SelectedIndexChanged(object sender, EventArgs e)
-            {
-                UpdateCurrentValue();
-            }
+            private void OnSelectedIndexChanged(object sender, EventArgs e) => UpdateCurrentValue();
 
             public void End()
             {
-                EditorService = null;
-                originalValue = null;
-                currentValue = null;
-                updateCurrentValue = false;
-                if (unknownKeyCode != Keys.None)
+                _originalValue = null;
+                _currentValue = null;
+                _updateCurrentValue = false;
+                if (_unknownKeyCode != Keys.None)
                 {
-                    cmbKey.Items.RemoveAt(0);
-                    unknownKeyCode = Keys.None;
+                    _keyComboBox.Items.RemoveAt(0);
+                    _unknownKeyCode = Keys.None;
                 }
             }
 
@@ -156,126 +109,110 @@ namespace System.Windows.Forms.Design
             {
                 ComponentResourceManager resources = new ComponentResourceManager(typeof(ShortcutKeysEditor));
 
-                tlpOuter = new TableLayoutPanel();
-                lblModifiers = new Label();
-                chkCtrl = new CheckBox();
-                chkAlt = new CheckBox();
-                chkShift = new CheckBox();
-                tlpInner = new TableLayoutPanel();
-                lblKey = new Label();
-                cmbKey = new ComboBox();
-                btnReset = new Button();
-                tlpOuter.SuspendLayout();
-                tlpInner.SuspendLayout();
+                _outerPanel = new TableLayoutPanel();
+                _modifiersLabel = new Label();
+                _ctrlCheckBox = new CheckBox();
+                _altCheckBox = new CheckBox();
+                _shiftCheckBox = new CheckBox();
+                _innerPanel = new TableLayoutPanel();
+                _keyLabel = new Label();
+                _keyComboBox = new ComboBox();
+                _resetButton = new Button();
+                _outerPanel.SuspendLayout();
+                _innerPanel.SuspendLayout();
                 SuspendLayout();
 
-                //
-                // tlpOuter
-                //
-                resources.ApplyResources(tlpOuter, "tlpOuter");
-                tlpOuter.ColumnCount = 3;
-                tlpOuter.ColumnStyles.Add(new ColumnStyle());
-                tlpOuter.ColumnStyles.Add(new ColumnStyle());
-                tlpOuter.ColumnStyles.Add(new ColumnStyle());
-                tlpOuter.Controls.Add(lblModifiers, 0, 0);
-                tlpOuter.Controls.Add(chkCtrl, 0, 1);
-                tlpOuter.Controls.Add(chkShift, 1, 1);
-                tlpOuter.Controls.Add(chkAlt, 2, 1);
-                tlpOuter.Name = "tlpOuter";
-                tlpOuter.RowCount = 2;
-                tlpOuter.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-                tlpOuter.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
+                // Outer Panel
+                resources.ApplyResources(_outerPanel, "tlpOuter");
+                _outerPanel.ColumnCount = 3;
+                _outerPanel.ColumnStyles.Add(new ColumnStyle());
+                _outerPanel.ColumnStyles.Add(new ColumnStyle());
+                _outerPanel.ColumnStyles.Add(new ColumnStyle());
+                _outerPanel.Controls.Add(_modifiersLabel, 0, 0);
+                _outerPanel.Controls.Add(_ctrlCheckBox, 0, 1);
+                _outerPanel.Controls.Add(_shiftCheckBox, 1, 1);
+                _outerPanel.Controls.Add(_altCheckBox, 2, 1);
+                _outerPanel.Name = "tlpOuter";
+                _outerPanel.RowCount = 2;
+                _outerPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+                _outerPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 24F));
 
-                //
-                // lblModifiers
-                //
-                resources.ApplyResources(lblModifiers, "lblModifiers");
-                tlpOuter.SetColumnSpan(lblModifiers, 3);
-                lblModifiers.Name = "lblModifiers";
+                // Modifiers Label
+                resources.ApplyResources(_modifiersLabel, "lblModifiers");
+                _outerPanel.SetColumnSpan(_modifiersLabel, 3);
+                _modifiersLabel.Name = "lblModifiers";
 
-                //
-                // chkCtrl
-                //
-                resources.ApplyResources(chkCtrl, "chkCtrl");
-                chkCtrl.Name = "chkCtrl";
-                // this margin setting makes this control left-align with cmbKey and indented from lblModifiers/lblKey
-                chkCtrl.Margin = new Padding(12, 3, 3, 3);
+                // Ctrl CheckBox
+                resources.ApplyResources(_ctrlCheckBox, "chkCtrl");
+                _ctrlCheckBox.Name = "chkCtrl";
 
-                chkCtrl.CheckedChanged += chkModifier_CheckedChanged;
+                // This margin setting makes this control left-aligned with the key combo box and indents from the labels.
+                _ctrlCheckBox.Margin = new Padding(12, 3, 3, 3);
 
-                //
-                // chkAlt
-                //
-                resources.ApplyResources(chkAlt, "chkAlt");
-                chkAlt.Name = "chkAlt";
+                _ctrlCheckBox.CheckedChanged += OnCheckedChanged;
 
-                chkAlt.CheckedChanged += chkModifier_CheckedChanged;
+                // Alt CheckBox
+                resources.ApplyResources(_altCheckBox, "chkAlt");
+                _altCheckBox.Name = "chkAlt";
 
-                //
-                // chkShift
-                //
-                resources.ApplyResources(chkShift, "chkShift");
-                chkShift.Name = "chkShift";
+                _altCheckBox.CheckedChanged += OnCheckedChanged;
 
-                chkShift.CheckedChanged += chkModifier_CheckedChanged;
+                // Shift CheckBox
+                resources.ApplyResources(_shiftCheckBox, "chkShift");
+                _shiftCheckBox.Name = "chkShift";
 
-                //
-                // tlpInner
-                //
-                resources.ApplyResources(tlpInner, "tlpInner");
-                tlpInner.ColumnCount = 2;
-                tlpInner.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-                tlpInner.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
-                tlpInner.Controls.Add(lblKey, 0, 0);
-                tlpInner.Controls.Add(cmbKey, 0, 1);
-                tlpInner.Controls.Add(btnReset, 1, 1);
-                tlpInner.Name = "tlpInner";
-                tlpInner.RowCount = 2;
-                tlpInner.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
-                tlpInner.RowStyles.Add(new RowStyle(SizeType.AutoSize));
+                _shiftCheckBox.CheckedChanged += OnCheckedChanged;
 
-                //
-                // lblKey
-                //
-                resources.ApplyResources(lblKey, "lblKey");
-                tlpInner.SetColumnSpan(lblKey, 2);
-                lblKey.Name = "lblKey";
+                // Inner Panel
+                resources.ApplyResources(_innerPanel, "tlpInner");
+                _innerPanel.ColumnCount = 2;
+                _innerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+                _innerPanel.ColumnStyles.Add(new ColumnStyle(SizeType.AutoSize));
+                _innerPanel.Controls.Add(_keyLabel, 0, 0);
+                _innerPanel.Controls.Add(_keyComboBox, 0, 1);
+                _innerPanel.Controls.Add(_resetButton, 1, 1);
+                _innerPanel.Name = "tlpInner";
+                _innerPanel.RowCount = 2;
+                _innerPanel.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
+                _innerPanel.RowStyles.Add(new RowStyle(SizeType.AutoSize));
 
-                //
-                // cmbKey
-                //
-                resources.ApplyResources(cmbKey, "cmbKey");
-                cmbKey.DropDownStyle = ComboBoxStyle.DropDownList;
-                cmbKey.Name = "cmbKey";
-                // this margin setting makes this control align with chkCtrl and indented from lblModifiers/lblKey
-                // the top margin makes the combobox and btnReset align properly
-                cmbKey.Margin = new Padding(12, 4, 3, 3);
-                cmbKey.Padding = cmbKey.Margin;
+                // Key Label
+                resources.ApplyResources(_keyLabel, "lblKey");
+                _innerPanel.SetColumnSpan(_keyLabel, 2);
+                _keyLabel.Name = "lblKey";
 
-                foreach (Keys keyCode in validKeys)
+                // Key ComboBox
+                resources.ApplyResources(_keyComboBox, "cmbKey");
+                _keyComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+                _keyComboBox.Name = "cmbKey";
+
+                // This margin setting makes this control align with the Ctrl CheckBox and indents from the labels.
+                // The top margin makes the ComboBox and Reset Button align properly
+                _keyComboBox.Margin = new Padding(12, 4, 3, 3);
+                _keyComboBox.Padding = _keyComboBox.Margin;
+
+                foreach (Keys keyCode in s_validKeys)
                 {
-                    cmbKey.Items.Add(KeysConverter.ConvertToString(keyCode));
+                    _keyComboBox.Items.Add(KeysConverter.ConvertToString(keyCode));
                 }
 
-                cmbKey.SelectedIndexChanged += cmbKey_SelectedIndexChanged;
+                _keyComboBox.SelectedIndexChanged += OnSelectedIndexChanged;
 
-                //
-                // btnReset
-                //
-                resources.ApplyResources(btnReset, "btnReset");
-                btnReset.Name = "btnReset";
+                // ResetButton
+                resources.ApplyResources(_resetButton, "btnReset");
+                _resetButton.Name = "btnReset";
 
-                btnReset.Click += btnReset_Click;
+                _resetButton.Click += OnResetButtonClick;
 
                 resources.ApplyResources(this, "$this");
-                Controls.AddRange(new Control[] { tlpInner, tlpOuter });
+                Controls.AddRange(new Control[] { _innerPanel, _outerPanel });
                 Name = "ShortcutKeysUI";
                 Padding = new Padding(4);
 
-                tlpOuter.ResumeLayout(false);
-                tlpOuter.PerformLayout();
-                tlpInner.ResumeLayout(false);
-                tlpInner.PerformLayout();
+                _outerPanel.ResumeLayout(false);
+                _outerPanel.PerformLayout();
+                _innerPanel.ResumeLayout(false);
+                _innerPanel.PerformLayout();
                 ResumeLayout(false);
                 PerformLayout();
             }
@@ -283,25 +220,18 @@ namespace System.Windows.Forms.Design
             private void AdjustSize()
             {
                 ComponentResourceManager resources = new ComponentResourceManager(typeof(ShortcutKeysEditor));
-                Size btnResetSize = (Size)resources.GetObject("btnReset.Size");
-                Size = new Size(Size.Width + btnReset.Size.Width - btnResetSize.Width, Size.Height);
+                Size resetButtonSize = (Size)resources.GetObject("btnReset.Size");
+                Size = new Size(Size.Width + _resetButton.Size.Width - resetButtonSize.Width, Size.Height);
             }
 
             /// <summary>
-            ///  Returns True if the given key is part of the valid keys array.
+            ///  Returns true if the given key is part of the valid keys array.
             /// </summary>
             private static bool IsValidKey(Keys keyCode)
             {
                 Debug.Assert((keyCode & Keys.KeyCode) == keyCode);
-                foreach (Keys validKeyCode in validKeys)
-                {
-                    if (validKeyCode == keyCode)
-                    {
-                        return true;
-                    }
-                }
 
-                return false;
+                return s_validKeys.Contains(keyCode);
             }
 
             /// <summary>
@@ -310,11 +240,11 @@ namespace System.Windows.Forms.Design
             protected override void OnGotFocus(EventArgs e)
             {
                 base.OnGotFocus(e);
-                chkCtrl.Focus();
+                _ctrlCheckBox.Focus();
             }
 
             /// <summary>
-            ///  Fix keyboard navigation and handle escape key
+            ///  Fix keyboard navigation and handle escape key.
             /// </summary>
             protected override bool ProcessDialogKey(Keys keyData)
             {
@@ -322,12 +252,12 @@ namespace System.Windows.Forms.Design
                 Keys keyModifiers = keyData & Keys.Modifiers;
                 switch (keyCode)
                 {
-                    // REGISB: We shouldn't have to handle this. Could be a bug in the table layout panel. Check it out.
+                    // We shouldn't have to handle this. Could be a bug in the table layout panel?
                     case Keys.Tab:
                         if (keyModifiers == Keys.Shift &&
-                            chkCtrl.Focused)
+                            _ctrlCheckBox.Focused)
                         {
-                            btnReset.Focus();
+                            _resetButton.Focus();
                             return true;
                         }
 
@@ -336,9 +266,9 @@ namespace System.Windows.Forms.Design
                     case Keys.Left:
                         if ((keyModifiers & (Keys.Control | Keys.Alt)) == 0)
                         {
-                            if (chkCtrl.Focused)
+                            if (_ctrlCheckBox.Focused)
                             {
-                                btnReset.Focus();
+                                _resetButton.Focus();
                                 return true;
                             }
                         }
@@ -348,15 +278,15 @@ namespace System.Windows.Forms.Design
                     case Keys.Right:
                         if ((keyModifiers & (Keys.Control | Keys.Alt)) == 0)
                         {
-                            if (chkShift.Focused)
+                            if (_shiftCheckBox.Focused)
                             {
-                                cmbKey.Focus();
+                                _keyComboBox.Focus();
                                 return true;
                             }
 
-                            if (btnReset.Focused)
+                            if (_resetButton.Focused)
                             {
-                                chkCtrl.Focus();
+                                _ctrlCheckBox.Focus();
                                 return true;
                             }
                         }
@@ -364,11 +294,11 @@ namespace System.Windows.Forms.Design
                         break;
 
                     case Keys.Escape:
-                        if (!cmbKey.Focused ||
+                        if (!_keyComboBox.Focused ||
                             (keyModifiers & (Keys.Control | Keys.Alt)) != 0 ||
-                            !cmbKey.DroppedDown)
+                            !_keyComboBox.DroppedDown)
                         {
-                            currentValue = originalValue;
+                            _currentValue = _originalValue;
                         }
 
                         break;
@@ -380,35 +310,33 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  Triggered whenever the user drops down the editor.
             /// </summary>
-            public void Start(IWindowsFormsEditorService edSvc, object value)
+            public void Start(object value)
             {
-                Debug.Assert(edSvc != null);
-                Debug.Assert(!updateCurrentValue);
-                EditorService = edSvc;
-                originalValue = currentValue = value;
+                Debug.Assert(!_updateCurrentValue);
+                _originalValue = _currentValue = value;
 
-                Keys keys = value is Keys ? (Keys)value : Keys.None;
-                chkCtrl.Checked = (keys & Keys.Control) != 0;
-                chkAlt.Checked = (keys & Keys.Alt) != 0;
-                chkShift.Checked = (keys & Keys.Shift) != 0;
+                Keys keys = value is Keys keys1 ? keys1 : Keys.None;
+                _ctrlCheckBox.Checked = (keys & Keys.Control) != 0;
+                _altCheckBox.Checked = (keys & Keys.Alt) != 0;
+                _shiftCheckBox.Checked = (keys & Keys.Shift) != 0;
 
                 Keys keyCode = keys & Keys.KeyCode;
                 if (keyCode == Keys.None)
                 {
-                    cmbKey.SelectedIndex = -1;
+                    _keyComboBox.SelectedIndex = -1;
                 }
                 else if (IsValidKey(keyCode))
                 {
-                    cmbKey.SelectedItem = KeysConverter.ConvertToString(keyCode);
+                    _keyComboBox.SelectedItem = KeysConverter.ConvertToString(keyCode);
                 }
                 else
                 {
-                    cmbKey.Items.Insert(0, SR.ShortcutKeys_InvalidKey);
-                    cmbKey.SelectedIndex = 0;
-                    unknownKeyCode = keyCode;
+                    _keyComboBox.Items.Insert(0, SR.ShortcutKeys_InvalidKey);
+                    _keyComboBox.SelectedIndex = 0;
+                    _unknownKeyCode = keyCode;
                 }
 
-                updateCurrentValue = true;
+                _updateCurrentValue = true;
             }
 
             /// <summary>
@@ -416,38 +344,38 @@ namespace System.Windows.Forms.Design
             /// </summary>
             private void UpdateCurrentValue()
             {
-                if (!updateCurrentValue)
+                if (!_updateCurrentValue)
                 {
                     return;
                 }
 
-                int cmbKeySelectedIndex = cmbKey.SelectedIndex;
+                int cmbKeySelectedIndex = _keyComboBox.SelectedIndex;
                 Keys valueKeys = Keys.None;
-                if (chkCtrl.Checked)
+                if (_ctrlCheckBox.Checked)
                 {
                     valueKeys |= Keys.Control;
                 }
 
-                if (chkAlt.Checked)
+                if (_altCheckBox.Checked)
                 {
                     valueKeys |= Keys.Alt;
                 }
 
-                if (chkShift.Checked)
+                if (_shiftCheckBox.Checked)
                 {
                     valueKeys |= Keys.Shift;
                 }
 
-                if (unknownKeyCode != Keys.None && cmbKeySelectedIndex == 0)
+                if (_unknownKeyCode != Keys.None && cmbKeySelectedIndex == 0)
                 {
-                    valueKeys |= unknownKeyCode;
+                    valueKeys |= _unknownKeyCode;
                 }
                 else if (cmbKeySelectedIndex != -1)
                 {
-                    valueKeys |= validKeys[unknownKeyCode == Keys.None ? cmbKeySelectedIndex : cmbKeySelectedIndex - 1];
+                    valueKeys |= s_validKeys[_unknownKeyCode == Keys.None ? cmbKeySelectedIndex : cmbKeySelectedIndex - 1];
                 }
 
-                currentValue = valueKeys;
+                _currentValue = valueKeys;
             }
         }
     }
