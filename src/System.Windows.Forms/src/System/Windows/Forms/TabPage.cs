@@ -31,6 +31,7 @@ namespace System.Windows.Forms
         private List<ToolTip> _associatedToolTips;
         private ToolTip _externalToolTip;
         private readonly ToolTip _internalToolTip = new ToolTip();
+        private TabAccessibleObject _tabAccessibilityObject;
 
         /// <summary>
         ///  Constructs an empty TabPage.
@@ -129,6 +130,9 @@ namespace System.Windows.Forms
                 base.BackColor = value;
             }
         }
+
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new TabPageAccessibleObject(this);
 
         /// <summary>
         ///  Constructs the new instance of the Controls collection objects.
@@ -373,6 +377,10 @@ namespace System.Windows.Forms
         ///  theming API to render its background because it has large performance cost.
         /// </summary>
         internal override bool RenderTransparencyWithVisualStyles => true;
+
+        internal override bool SupportsUiaProviders => true;
+
+        internal TabAccessibleObject TabAccessibilityObject => _tabAccessibilityObject ??= new TabAccessibleObject(this);
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]

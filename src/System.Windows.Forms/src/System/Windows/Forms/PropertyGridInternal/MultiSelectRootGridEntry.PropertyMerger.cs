@@ -84,7 +84,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///  Returns an array list of the PropertyDescriptor arrays, one for each component.
+            ///  Returns an <see cref="ArrayList"/> of the <see cref="PropertyDescriptor"/> arrays, one for each component.
             /// </summary>
             private static ArrayList GetCommonProperties(object[] objects, bool presort, PropertyTab tab, GridEntry parentEntry)
             {

@@ -1878,8 +1878,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void SelectAll()
         {
-            int textLen = TextLength;
-            SelectInternal(0, textLen, textLen);
+            int textLength = TextLength;
+            SelectInternal(0, textLength, textLength);
         }
 
         /// <summary>

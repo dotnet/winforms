@@ -54,6 +54,8 @@ namespace System.Windows.Forms
         private EventHandler _onValueChanged;
         private EventHandler _onRightToLeftLayoutChanged;
 
+        private UiaCore.ExpandCollapseState _expandCollapseState;
+
         // We need to restrict the available dates because of limitations in the comctl
         // DateTime and MonthCalendar controls
         //
@@ -1159,6 +1161,12 @@ namespace System.Windows.Forms
         protected virtual void OnCloseUp(EventArgs eventargs)
         {
             _onCloseUp?.Invoke(this, eventargs);
+            _expandCollapseState = UiaCore.ExpandCollapseState.Collapsed;
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         /// <summary>
@@ -1167,6 +1175,7 @@ namespace System.Windows.Forms
         protected virtual void OnDropDown(EventArgs eventargs)
         {
             _onDropDown?.Invoke(this, eventargs);
+            _expandCollapseState = UiaCore.ExpandCollapseState.Expanded;
         }
 
         protected virtual void OnFormatChanged(EventArgs e)

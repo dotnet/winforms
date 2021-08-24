@@ -63,7 +63,7 @@ namespace System.Windows.Forms.Design
                 return value;
             }
 
-            // since the bindings may have changed, the properties listed in the properties window need to be refreshed
+            // Since the bindings may have changed, the properties listed in the properties window need to be refreshed.
             TypeDescriptor.Refresh(context.Instance);
 
             if (changeService is not null)

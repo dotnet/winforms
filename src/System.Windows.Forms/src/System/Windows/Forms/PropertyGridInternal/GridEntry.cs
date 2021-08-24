@@ -168,7 +168,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected GridEntryCollection ChildCollection
         {
-            get => _children ??= new GridEntryCollection(this, entries: null);
+            get => _children ??= new GridEntryCollection();
             set
             {
                 Debug.Assert(value is null || !Disposed, "Why are we putting new children in after we are disposed?");
@@ -498,7 +498,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     CreateChildren();
                 }
 
-                return Children;
+                return new GridItemCollection(Children);
             }
         }
 
@@ -691,7 +691,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         for (int i = 0; i < _children.Count; i++)
                         {
-                            _children.GetEntry(i).ParentGridEntry = this;
+                            _children[i].ParentGridEntry = this;
                         }
                     }
                 }
@@ -821,7 +821,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int totalCount = count;
                 for (int i = 0; i < count; i++)
                 {
-                    totalCount += ChildCollection.GetEntry(i).VisibleChildCount;
+                    totalCount += ChildCollection[i].VisibleChildCount;
                 }
 
                 return totalCount;
@@ -878,7 +878,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 for (int i = 0; i < ChildCollection.Count; i++)
                 {
-                    ChildCollection.GetEntry(i).ClearCachedValues();
+                    ChildCollection[i].ClearCachedValues();
                 }
             }
         }
@@ -897,7 +897,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Create the base prop entries given an object or set of objects
+        ///  Create the base property entries given an object or set of objects.
         /// </summary>
         internal static IRootGridEntry Create(
             PropertyGridView view,
@@ -956,7 +956,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    _children = new GridEntryCollection(this, Array.Empty<GridEntry>());
+                    _children = new GridEntryCollection();
                 }
 
                 return false;
@@ -1005,7 +1005,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    _children = new GridEntryCollection(this, Array.Empty<GridEntry>());
+                    _children = new GridEntryCollection();
                 }
 
                 if (InternalExpanded)
@@ -1022,7 +1022,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    _children = new GridEntryCollection(this, childProperties);
+                    _children = new GridEntryCollection(childProperties);
                 }
             }
 
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Returns the index of a child GridEntry.
         /// </summary>
-        internal virtual int GetChildIndex(GridEntry entry) => Children.GetEntry(entry);
+        internal int GetChildIndex(GridEntry entry) => Children.IndexOf(entry);
 
         /// <summary>
         ///  Gets the components that own the current value.  This is usually the value of the

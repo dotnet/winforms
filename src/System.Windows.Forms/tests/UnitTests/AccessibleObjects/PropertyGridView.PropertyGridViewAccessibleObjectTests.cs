@@ -52,7 +52,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using PropertyGrid propertyGrid = new PropertyGrid();
             using ComboBox comboBox = new ComboBox();
             propertyGrid.SelectedObject = comboBox;
-            GridEntry entry = (GridEntry)((GridEntry)propertyGrid.GetPropEntries()[0]).Children[2];
+            GridEntry entry = (GridEntry)((GridEntry)propertyGrid.GetCurrentEntries()[0]).Children[2];
             entry.HasFocus = true;
             entry.Select();
             Assert.Equal(entry, propertyGrid.SelectedGridItem);
@@ -67,7 +67,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             using PropertyGrid propertyGrid = new PropertyGrid();
             using ComboBox comboBox = new ComboBox();
             propertyGrid.SelectedObject = comboBox;
-            GridEntry entry = (GridEntry)((GridEntry)propertyGrid.GetPropEntries()[0]).Children[2];
+            GridEntry entry = (GridEntry)((GridEntry)propertyGrid.GetCurrentEntries()[0]).Children[2];
             entry.HasFocus = true;
             entry.Select();
             Assert.Equal(entry, propertyGrid.SelectedGridItem);
@@ -89,7 +89,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             int count = 0;
 
-            foreach (GridEntry category in propertyGrid.GetPropEntries())
+            foreach (GridEntry category in propertyGrid.GetCurrentEntries())
             {
                 count++;
 
@@ -171,7 +171,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             int i = 0;
 
-            foreach (GridEntry category in propertyGrid.GetPropEntries())
+            foreach (GridEntry category in propertyGrid.GetCurrentEntries())
             {
                 AccessibleObject categoryAccessibilityObject = category.AccessibilityObject;
                 AccessibleObject categoryItem = (AccessibleObject)accessibleObject.GetItem(i, 1);
@@ -247,7 +247,7 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
             int ROWLABEL = 1;
             int ROWVALUE = 2;
 
-            foreach (GridEntry category in propertyGrid.GetPropEntries())
+            foreach (GridEntry category in propertyGrid.GetCurrentEntries())
             {
                 AccessibleObject categoryAccessibilityObject = category.AccessibilityObject;
                 int row = propertyGridView.GetRowFromGridEntry(category);

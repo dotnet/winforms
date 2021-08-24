@@ -11,27 +11,22 @@ namespace System.Windows.Forms.Design
     {
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (context?.Instance is null || provider is null)
+            if (context?.Instance is null | !provider.TryGetService(out IWindowsFormsEditorService editorService))
             {
                 return value;
             }
 
-            if (!(provider.GetService(typeof(IWindowsFormsEditorService)) is IWindowsFormsEditorService editorService))
-            {
-                return value;
-            }
-
-            MaskedTextBox maskedTextBox = context.Instance as MaskedTextBox;
+            var maskedTextBox = context.Instance as MaskedTextBox;
             if (maskedTextBox is null)
             {
-                maskedTextBox = new MaskedTextBox();
+                maskedTextBox = new();
                 maskedTextBox.Text = value as string;
             }
 
-            MaskedTextBoxTextEditorDropDown dropDown = new MaskedTextBoxTextEditorDropDown(maskedTextBox);
+            MaskedTextBoxTextEditorDropDown dropDown = new(maskedTextBox);
             editorService.DropDownControl(dropDown);
 
-            if (dropDown.Value != null)
+            if (dropDown.Value is not null)
             {
                 value = dropDown.Value;
             }
@@ -41,7 +36,7 @@ namespace System.Windows.Forms.Design
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context)
         {
-            if (context != null && context.Instance != null)
+            if (context?.Instance is not null)
             {
                 return UITypeEditorEditStyle.DropDown;
             }
@@ -51,7 +46,7 @@ namespace System.Windows.Forms.Design
 
         public override bool GetPaintValueSupported(ITypeDescriptorContext context)
         {
-            if (context != null && context.Instance != null)
+            if (context?.Instance is not null)
             {
                 return false;
             }
