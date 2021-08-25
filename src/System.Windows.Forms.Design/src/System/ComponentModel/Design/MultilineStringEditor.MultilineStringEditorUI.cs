@@ -6,7 +6,6 @@ using System.Collections;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms;
 using System.Windows.Forms.Design;
 using Microsoft.Win32;
@@ -20,16 +19,17 @@ namespace System.ComponentModel.Design
         {
             private IWindowsFormsEditorService _editorService;
             private bool _editing;
-            private bool _escapePressed; // Initialized in BeginEdit
+            private bool _escapePressed;
             private bool _ctrlEnterPressed;
             SolidBrush _watermarkBrush;
+            private Size _watermarkSize = Size.Empty;
             private readonly Hashtable _fallbackFonts;
             private bool _firstTimeResizeToContent = true;
 
             private readonly StringFormat _watermarkFormat;
 
             // TextBox needs a little space greater than that actually text content to display the caret.
-            private const int _caretPadding = 3;
+            private const int CaretPadding = 3;
 
             internal MultilineStringEditorUI()
             {
@@ -56,29 +56,20 @@ namespace System.ComponentModel.Design
             {
                 if (disposing)
                 {
-                    if (_watermarkBrush != null)
-                    {
-                        _watermarkBrush.Dispose();
-                        _watermarkBrush = null;
-                    }
+                    _watermarkBrush?.Dispose();
+                    _watermarkBrush = null;
                 }
 
                 base.Dispose(disposing);
             }
 
-            protected override object CreateRichEditOleCallback()
-            {
-                return new OleCallback(this);
-            }
+            protected override object CreateRichEditOleCallback() => new OleCallback(this);
 
             protected override bool IsInputKey(Keys keyData)
             {
-                if ((keyData & Keys.KeyCode) == Keys.Return)
+                if ((keyData & Keys.KeyCode) == Keys.Return && Multiline && (keyData & Keys.Alt) == 0)
                 {
-                    if (Multiline && (keyData & Keys.Alt) == 0)
-                    {
-                        return true;
-                    }
+                    return true;
                 }
 
                 return base.IsInputKey(keyData);
@@ -106,7 +97,10 @@ namespace System.ComponentModel.Design
 
             protected override void OnKeyDown(KeyEventArgs e)
             {
-                // The RichTextBox does not always invalidate the entire client area unless there is a resize, so if you do a newline before you type enough text to resize the editor the watermark will be ScrollWindowEx'ed down the screen.  To prevent this, we do a full Invalidate if the watermark is showing when a key is pressed.
+                // The RichTextBox does not always invalidate the entire client area unless there is a resize, so if
+                // you do a newline before you type enough text to resize the editor the watermark will be
+                // ScrollWindowEx'ed down the screen. To prevent this, we do a full Invalidate if the watermark is
+                // showing when a key is pressed.
                 if (ShouldShowWatermark)
                 {
                     Invalidate();
@@ -124,7 +118,9 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    Debug.Assert(_editing, "Value is only valid between Begin and EndEdit. (Do not want to keep a reference to a large text buffer.)");
+                    Debug.Assert(
+                        _editing,
+                        "Value is only valid between Begin and EndEdit. (Do not want to keep a reference to a large text buffer.)");
                     return Text;
                 }
             }
@@ -161,6 +157,7 @@ namespace System.ComponentModel.Design
                 }
 
                 Size requestedSize = ContentSize;
+
                 // AdjustWindowRectEx() does not take the WS_VSCROLL or WS_HSCROLL styles into account.
                 requestedSize.Width += SystemInformation.VerticalScrollBarWidth;
 
@@ -169,8 +166,10 @@ namespace System.ComponentModel.Design
 
                 Rectangle workingArea = Screen.GetWorkingArea(this);
                 Point location = PointToScreen(Location);
-                // DANGER:  This assumes we will grow to the left.  This is true for propertygrid (DropDownHolder::OnCurrentControlResize)
+
+                // DANGER:  This assumes we will grow to the left. This is true for propertygrid (DropDownHolder::OnCurrentControlResize)
                 int maxDelta = location.X - workingArea.Left;
+
                 // NOTE:  If we are shrinking, requestedWidth will be negative, so the Min will not bound shrinking by maxDelta.  This is intentional.
                 int requestedDelta = Math.Min((requestedSize.Width - ClientSize.Width), maxDelta);
                 ClientSize = new Size(ClientSize.Width + requestedDelta, MinimumSize.Height);
@@ -186,7 +185,7 @@ namespace System.ComponentModel.Design
 
                     RECT rect = new RECT();
                     User32.DrawTextW(hdc, Text, Text.Length, ref rect, User32.DT.CALCRECT);
-                    return new Size(rect.right - rect.left + _caretPadding, rect.bottom - rect.top);
+                    return new Size(rect.right - rect.left + CaretPadding, rect.bottom - rect.top);
                 }
             }
 
@@ -201,7 +200,9 @@ namespace System.ComponentModel.Design
 
             protected override void OnTextChanged(EventArgs e)
             {
-                // OnContentsResized does not get raised for trailing whitespace.  To work around this, we listen for an OnTextChanged that was not preceeded by an OnContentsResized. Changing the box size here is more expensive, however, so we only want to do it when we have to.
+                // OnContentsResized does not get raised for trailing whitespace. To work around this, we listen for
+                // an OnTextChanged that was not preceeded by an OnContentsResized. Changing the box size here is more
+                // expensive, however, so we only want to do it when we have to.
                 if (!_contentsResizedRaised)
                 {
                     ResizeToContent();
@@ -216,7 +217,9 @@ namespace System.ComponentModel.Design
                 if (Visible)
                 {
                     ProcessSurrogateFonts(0, Text.Length);
-                    Select(Text.Length, 0); // move caret to the end
+
+                    // Move caret to the end
+                    Select(Text.Length, 0);
                 }
 
                 ResizeToContent();
@@ -259,82 +262,91 @@ namespace System.ComponentModel.Design
                 }
 
                 int[] surrogates = StringInfo.ParseCombiningCharacters(value);
-                if (surrogates.Length != value.Length)
+                if (surrogates.Length == value.Length)
                 {
-                    for (int i = 0; i < surrogates.Length; i++)
+                    return;
+                }
+
+                for (int i = 0; i < surrogates.Length; i++)
+                {
+                    int currentSurrogate = surrogates[i];
+                    if (currentSurrogate < start || currentSurrogate >= start + length)
                     {
-                        if (surrogates[i] >= start && surrogates[i] < start + length)
-                        { // only process text in the specified area
-                            char low = (char)0x0000;
-                            if (surrogates[i] + 1 < value.Length)
+                        // Only process text in the specified area.
+                        continue;
+                    }
+
+                    char low = (char)0x0000;
+                    if (currentSurrogate + 1 < value.Length)
+                    {
+                        low = value[currentSurrogate + 1];
+                    }
+
+                    if (value[currentSurrogate] < 0xD800 || value[currentSurrogate] > 0xDBFF || low < 0xDC00 || low > 0xDFFF)
+                    {
+                        continue;
+                    }
+
+                    // Plane 0 is the default plane.
+                    int planeNumber = (value[currentSurrogate] / 0x40) - (0xD800 / 0x40) + 1;
+                    Font replaceFont = _fallbackFonts[planeNumber] as Font;
+
+                    if (replaceFont is null)
+                    {
+                        using RegistryKey regkey = Registry.LocalMachine.OpenSubKey(
+                            @"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback");
+
+                        if (regkey is not null)
+                        {
+                            string fallBackFontName = (string)regkey.GetValue($"Plane{planeNumber}");
+                            if (!string.IsNullOrEmpty(fallBackFontName))
                             {
-                                low = value[surrogates[i] + 1];
+                                replaceFont = new Font(fallBackFontName, base.Font.Size, base.Font.Style);
                             }
 
-                            if (value[surrogates[i]] >= 0xD800 && value[surrogates[i]] <= 0xDBFF)
-                            {
-                                if (low >= 0xDC00 && low <= 0xDFFF)
-                                {
-                                    int planeNumber = (value[surrogates[i]] / 0x40) - (0xD800 / 0x40) + 1; //plane 0 is the default plane
-                                    Font replaceFont = _fallbackFonts[planeNumber] as Font;
-
-                                    if (replaceFont is null)
-                                    {
-                                        using RegistryKey regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows NT\CurrentVersion\LanguagePack\SurrogateFallback");
-                                        if (regkey != null)
-                                        {
-                                            string fallBackFontName = (string)regkey.GetValue("Plane" + planeNumber);
-                                            if (!string.IsNullOrEmpty(fallBackFontName))
-                                            {
-                                                replaceFont = new Font(fallBackFontName, base.Font.Size, base.Font.Style);
-                                            }
-
-                                            _fallbackFonts[planeNumber] = replaceFont;
-                                        }
-                                    }
-
-                                    if (replaceFont != null)
-                                    {
-                                        int selectionLength = (i == surrogates.Length - 1) ? value.Length - surrogates[i] : surrogates[i + 1] - surrogates[i];
-                                        Select(surrogates[i], selectionLength);
-                                        SelectionFont = replaceFont;
-                                    }
-                                }
-                            }
+                            _fallbackFonts[planeNumber] = replaceFont;
                         }
+                    }
+
+                    if (replaceFont is not null)
+                    {
+                        int selectionLength = (i == surrogates.Length - 1)
+                            ? value.Length - currentSurrogate
+                            : surrogates[i + 1] - currentSurrogate;
+                        Select(currentSurrogate, selectionLength);
+                        SelectionFont = replaceFont;
                     }
                 }
             }
 
-            // Override the Text property from RichTextBox so that we can get the window text from this control without doing a StreamOut operation on the control since StreamOut will cause an IME Composition Window to close unexpectedly.
             public override string Text
             {
                 get
                 {
-                    if (IsHandleCreated)
+                    // Override the Text property from RichTextBox so that we can get the window text from this control
+                    // without doing a StreamOut operation on the control since StreamOut will cause an IME Composition
+                    // Window to close unexpectedly.
+
+                    if (!IsHandleCreated)
                     {
-                        string windowText = User32.GetWindowText(new HandleRef(this, Handle));
-                        if (!_ctrlEnterPressed)
-                        {
-                            return windowText;
-                        }
-                        else
-                        {
-                            int index = windowText.LastIndexOf("\r\n");
-                            Debug.Assert(index != -1, "We should have found a Ctrl+Enter in the string");
-                            return windowText.Remove(index, 2);
-                        }
+                        return string.Empty;
+                    }
+
+                    string windowText = User32.GetWindowText(this);
+                    if (!_ctrlEnterPressed)
+                    {
+                        return windowText;
                     }
                     else
                     {
-                        return "";
+                        int index = windowText.LastIndexOf("\r\n");
+                        Debug.Assert(index != -1, "We should have found a Ctrl+Enter in the string");
+                        return windowText.Remove(index, 2);
                     }
                 }
                 set => base.Text = value;
             }
 
-            #region Watermark
-            private Size _watermarkSize = Size.Empty;
             private Size WatermarkSize
             {
                 get
@@ -342,6 +354,7 @@ namespace System.ComponentModel.Design
                     if (_watermarkSize == Size.Empty)
                     {
                         SizeF size;
+
                         // See how much space we should reserve for watermark
                         using (Graphics g = CreateGraphics())
                         {
@@ -395,14 +408,18 @@ namespace System.ComponentModel.Design
                             if (ShouldShowWatermark)
                             {
                                 using Graphics g = CreateGraphics();
-                                g.DrawString(SR.MultilineStringEditorWatermark, Font, WatermarkBrush, new RectangleF(0.0f, 0.0f, ClientSize.Width, ClientSize.Height), _watermarkFormat);
+                                g.DrawString(
+                                    SR.MultilineStringEditorWatermark,
+                                    Font,
+                                    WatermarkBrush,
+                                    new RectangleF(0.0f, 0.0f, ClientSize.Width, ClientSize.Height),
+                                    _watermarkFormat);
                             }
 
                             break;
                         }
                 }
             }
-            #endregion
         }
     }
 }

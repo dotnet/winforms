@@ -16,56 +16,48 @@ namespace System.ComponentModel.Design
         private class OleCallback : Richedit.IRichEditOleCallback
         {
             private readonly RichTextBox _owner;
-            static TraceSwitch _richTextDbg;
+            private static TraceSwitch s_richTextDebug;
 
-            static TraceSwitch RichTextDbg
-            {
-                get
-                {
-                    _richTextDbg ??= new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
-                    return _richTextDbg;
-                }
-            }
+            private static TraceSwitch RichTextDebug
+                => s_richTextDebug ??= new TraceSwitch("RichTextDbg", "Debug info about RichTextBox");
 
-            internal OleCallback(RichTextBox owner)
-            {
-                _owner = owner;
-            }
+            internal OleCallback(RichTextBox owner) => _owner = owner;
 
             public HRESULT GetNewStorage(out Ole32.IStorage storage)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetNewStorage");
 
                 Ole32.ILockBytes pLockBytes = Ole32.CreateILockBytesOnHGlobal(IntPtr.Zero, BOOL.TRUE);
-                Debug.Assert(pLockBytes != null, "pLockBytes is NULL!");
+                Debug.Assert(pLockBytes is not null, "pLockBytes is NULL!");
 
                 storage = Ole32.StgCreateDocfileOnILockBytes(
                     pLockBytes,
                     Ole32.STGM.SHARE_EXCLUSIVE | Ole32.STGM.CREATE | Ole32.STGM.READWRITE,
-                    0);
-                Debug.Assert(storage != null, "storage is NULL!");
+                    reserved: 0);
+
+                Debug.Assert(storage is not null, "storage is NULL!");
 
                 return HRESULT.S_OK;
             }
 
             public HRESULT GetInPlaceContext(IntPtr lplpFrame, IntPtr lplpDoc, IntPtr lpFrameInfo)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetInPlaceContext");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetInPlaceContext");
                 return HRESULT.E_NOTIMPL;
             }
 
             public HRESULT ShowContainerUI(BOOL fShow)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::ShowContainerUI");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::ShowContainerUI");
                 return HRESULT.S_OK;
             }
 
             public HRESULT QueryInsertObject(ref Guid lpclsid, IntPtr lpstg, int cp)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryInsertObject(" + lpclsid.ToString() + ")");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"IRichTextBoxOleCallback::QueryInsertObject({lpclsid})");
 
                 HRESULT hr = Ole32.ReadClassStg(lpstg, out Guid realClsid);
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "real clsid:" + realClsid.ToString() + " (hr=" + hr.ToString("X") + ")");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"real clsid:{realClsid} (hr={hr:X})");
 
                 if (!hr.Succeeded())
                 {
@@ -82,23 +74,25 @@ namespace System.ComponentModel.Design
                     case "00000315-0000-0000-C000-000000000046": // Metafile
                     case "00000316-0000-0000-C000-000000000046": // DIB
                     case "00000319-0000-0000-C000-000000000046": // EMF
-                    case "0003000A-0000-0000-C000-000000000046": //BMP
+                    case "0003000A-0000-0000-C000-000000000046": // BMP
                         return HRESULT.S_OK;
                     default:
-                        Debug.WriteLineIf(RichTextDbg.TraceVerbose, "   denying '" + lpclsid.ToString() + "' from being inserted due to security restrictions");
+                        Debug.WriteLineIf(
+                            RichTextDebug.TraceVerbose,
+                            $"   denying '{lpclsid}' from being inserted due to security restrictions");
                         return HRESULT.S_FALSE;
                 }
             }
 
             public HRESULT DeleteObject(IntPtr lpoleobj)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::DeleteObject");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::DeleteObject");
                 return HRESULT.S_OK;
             }
 
             public HRESULT QueryAcceptData(IComDataObject lpdataobj, IntPtr lpcfFormat, Richedit.RECO reco, BOOL fReally, IntPtr hMetaPict)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::QueryAcceptData(reco=" + reco + ")");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, $"IRichTextBoxOleCallback::QueryAcceptData(reco={reco})");
                 if (reco == Richedit.RECO.PASTE)
                 {
                     DataObject dataObj = new DataObject(lpdataobj);
@@ -115,13 +109,13 @@ namespace System.ComponentModel.Design
 
             public HRESULT ContextSensitiveHelp(BOOL fEnterMode)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::ContextSensitiveHelp");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::ContextSensitiveHelp");
                 return HRESULT.E_NOTIMPL;
             }
 
             public HRESULT GetClipboardData(ref Richedit.CHARRANGE lpchrg, Richedit.RECO reco, IntPtr lplpdataobj)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetClipboardData");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetClipboardData");
                 return HRESULT.E_NOTIMPL;
             }
 
@@ -138,9 +132,9 @@ namespace System.ComponentModel.Design
 
             public HRESULT GetContextMenu(short seltype, IntPtr lpoleobj, ref Richedit.CHARRANGE lpchrg, out IntPtr hmenu)
             {
-                Debug.WriteLineIf(RichTextDbg.TraceVerbose, "IRichTextBoxOleCallback::GetContextMenu");
+                Debug.WriteLineIf(RichTextDebug.TraceVerbose, "IRichTextBoxOleCallback::GetContextMenu");
 
-                // do nothing, we don't have ContextMenu any longer
+                // Do nothing, we don't have ContextMenu any longer.
                 hmenu = IntPtr.Zero;
                 return HRESULT.S_OK;
             }

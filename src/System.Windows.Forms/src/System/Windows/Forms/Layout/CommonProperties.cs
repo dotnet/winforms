@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Layout
     // to another.  (For example, set BoxStretchInternal on a control in FlowPanel and then move
     // the control to GridPanel.)  CommonProperties is a place to define keys and
     // accessors for such properties.
-    internal class CommonProperties
+    internal partial class CommonProperties
     {
         private static readonly int _layoutStateProperty = PropertyStore.CreateKey();
         private static readonly int _specifiedBoundsProperty = PropertyStore.CreateKey();
@@ -61,12 +61,6 @@ namespace System.Windows.Forms.Layout
         private static readonly BitVector32.Section _flowBreakSection = BitVector32.CreateSection(0x01, _anchorNeverShrinksSection);
         private static readonly BitVector32.Section _selfAutoSizingSection = BitVector32.CreateSection(0x01, _flowBreakSection);
         private static readonly BitVector32.Section _autoSizeModeSection = BitVector32.CreateSection(0x01, _selfAutoSizingSection);
-
-        private enum DockAnchorMode
-        {
-            Anchor = 0,
-            Dock = 1
-        }
 
         #region AppliesToAllLayouts
 

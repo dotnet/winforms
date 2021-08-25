@@ -26,12 +26,12 @@ namespace System.Windows.Forms.Design
                 return value;
             }
 
-            _shortcutKeysUI ??= new ShortcutKeysUI(this)
+            _shortcutKeysUI ??= new ShortcutKeysUI()
             {
                 BackColor = SystemColors.Control
             };
 
-            _shortcutKeysUI.Start(editorService, value);
+            _shortcutKeysUI.Start(value);
             editorService.DropDownControl(_shortcutKeysUI);
 
             if (_shortcutKeysUI.Value is not null)

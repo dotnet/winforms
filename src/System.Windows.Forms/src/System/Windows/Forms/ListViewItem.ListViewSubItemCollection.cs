@@ -77,7 +77,7 @@ namespace System.Windows.Forms
                 get => this[index];
                 set
                 {
-                    if (!(value is ListViewSubItem item))
+                    if (value is not ListViewSubItem item)
                     {
                         throw new ArgumentException(SR.ListViewBadListViewSubItem, nameof(value));
                     }
@@ -198,7 +198,7 @@ namespace System.Windows.Forms
 
             int IList.Add(object item)
             {
-                if (!(item is ListViewSubItem itemValue))
+                if (item is not ListViewSubItem itemValue)
                 {
                     throw new ArgumentException(SR.ListViewSubItemCollectionInvalidArgument, nameof(item));
                 }
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
 
             bool IList.Contains(object item)
             {
-                if (!(item is ListViewSubItem itemValue))
+                if (item is not ListViewSubItem itemValue)
                 {
                     return false;
                 }
@@ -239,12 +239,9 @@ namespace System.Windows.Forms
             public virtual bool ContainsKey(string key) => IsValidIndex(IndexOfKey(key));
 
             /// <summary>
-            ///  Ensures that the sub item array has the given
-            ///  capacity. If it doesn't, it enlarges the
-            ///  array until it does. If index is -1, additional
-            ///  space is tacked onto the end. If it is a valid
-            ///  insertion index into the array, this will move
-            ///  the array data to accomodate the space.
+            ///  Ensures that the sub item array has the given capacity. If it doesn't, it enlarges the
+            ///  array until it does. If index is -1, additional space is tacked onto the end. If it is a valid
+            ///  insertion index into the array, this will move the array data to accomodate the space.
             /// </summary>
             private void EnsureSubItemSpace(int size, int index)
             {
@@ -272,8 +269,7 @@ namespace System.Windows.Forms
 
                         ListViewSubItem[] newItems = new ListViewSubItem[newSize];
 
-                        // Now, when copying to the member variable, use index
-                        // if it was provided.
+                        // When copying to the member variable use index if it was provided.
                         if (index != -1)
                         {
                             Array.Copy(_owner.subItems, 0, newItems, 0, index);
@@ -315,7 +311,7 @@ namespace System.Windows.Forms
 
             int IList.IndexOf(object subItem)
             {
-                if (!(subItem is ListViewSubItem subItemValue))
+                if (subItem is not ListViewSubItem subItemValue)
                 {
                     return -1;
                 }
@@ -383,12 +379,12 @@ namespace System.Windows.Forms
 
             void IList.Insert(int index, object item)
             {
-                if (!(item is ListViewSubItem itemValue))
+                if (item is not ListViewSubItem subItem)
                 {
                     throw new ArgumentException(SR.ListViewBadListViewSubItem, nameof(item));
                 }
 
-                Insert(index, (ListViewSubItem)item);
+                Insert(index, subItem);
             }
 
             public void Remove(ListViewSubItem item)

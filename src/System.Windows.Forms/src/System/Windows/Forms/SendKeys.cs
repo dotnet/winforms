@@ -92,13 +92,6 @@ namespace System.Windows.Forms
         private static bool s_startNewChar;
         private static readonly SKWindow s_messageWindow;
 
-        private enum SendMethodTypes
-        {
-            Default = 1,
-            JournalHook = 2,
-            SendInput = 3
-        }
-
         private static SendMethodTypes? s_sendMethod;
         private static bool? s_hookSupported;
 

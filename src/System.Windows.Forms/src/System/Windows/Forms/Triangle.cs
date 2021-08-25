@@ -13,7 +13,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This class fully encapsulates the painting logic for a triangle.  (Used by DataGrid)
     /// </summary>
-    internal static class Triangle
+    internal static partial class Triangle
     {
         private const double TRI_HEIGHT_RATIO = 2.5;
         private const double TRI_WIDTH_RATIO = 0.8;
@@ -123,13 +123,5 @@ namespace System.Windows.Forms
                 points[i].Y += yOffset;
             }
         }
-    }
-
-    internal enum TriangleDirection
-    {
-        Up,
-        Down,
-        Left,
-        Right
     }
 }

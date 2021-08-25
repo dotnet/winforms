@@ -1193,12 +1193,5 @@ namespace System.Windows.Forms
 
             _pictureBoxState[InInitializationState] = false;
         }
-
-        private enum ImageInstallationType
-        {
-            DirectlySpecified,
-            ErrorOrInitial,
-            FromUrl
-        }
     }
 }

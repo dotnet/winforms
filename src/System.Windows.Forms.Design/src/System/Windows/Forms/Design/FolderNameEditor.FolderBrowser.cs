@@ -89,18 +89,16 @@ namespace System.Windows.Forms.Design
                             };
 
                             // Show the dialog.
-                            using (CoTaskMemSafeHandle browseHandle = Shell32.SHBrowseForFolderW(ref bi))
+                            using CoTaskMemSafeHandle browseHandle = Shell32.SHBrowseForFolderW(ref bi);
+                            if (browseHandle.IsInvalid)
                             {
-                                if (browseHandle.IsInvalid)
-                                {
-                                    return DialogResult.Cancel;
-                                }
-
-                                // Retrieve the path from the IDList.
-                                Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out string selectedPath);
-                                DirectoryPath = selectedPath;
-                                return DialogResult.OK;
+                                return DialogResult.Cancel;
                             }
+
+                            // Retrieve the path from the IDList.
+                            Shell32.SHGetPathFromIDListLongPath(browseHandle.DangerousGetHandle(), out string selectedPath);
+                            DirectoryPath = selectedPath;
+                            return DialogResult.OK;
                         }
                     }
                     finally

@@ -7,9 +7,9 @@ using System.ComponentModel;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  The ListControlStringCollectionEditor override StringCollectionEditor
-    ///  to prevent the string collection from being edited if a DataSource
-    ///  has been set on the control.
+    ///  <see cref="ListControlStringCollectionEditor"/> overrides <see cref="StringCollectionEditor"/>
+    ///  to prevent the string collection from being edited if <see cref="ListControl.DataSource"/>
+    ///  has been set.
     /// </summary>
     internal class ListControlStringCollectionEditor : StringCollectionEditor
     {
@@ -19,9 +19,9 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            // If we're trying to edit the items in an object that has a DataSource set, throw an exception
+            // If we're trying to edit the items in an object that has a DataSource set, throw an exception.
             ListControl control = context.Instance as ListControl;
-            if (control?.DataSource != null)
+            if (control?.DataSource is not null)
             {
                 throw new ArgumentException(SR.DataSourceLocksItems);
             }

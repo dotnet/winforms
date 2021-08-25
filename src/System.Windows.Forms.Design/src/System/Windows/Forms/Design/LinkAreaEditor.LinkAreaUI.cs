@@ -14,28 +14,22 @@ namespace System.Windows.Forms.Design
         /// </summary>
         internal class LinkAreaUI : Form
         {
-            private Label _caption = new Label();
-            private TextBox _sampleEdit = new TextBox();
-            private Button _okButton = new Button();
-            private Button _cancelButton = new Button();
+            private Label _caption = new();
+            private TextBox _sampleEdit = new();
+            private Button _okButton = new();
+            private Button _cancelButton = new();
             private TableLayoutPanel _okCancelTableLayoutPanel;
-            private readonly LinkAreaEditor _editor;
-            private IWindowsFormsEditorService _edSvc;
             private readonly IHelpService _helpService;
 
-            public LinkAreaUI(LinkAreaEditor editor, IHelpService helpService)
+            public LinkAreaUI(IHelpService helpService)
             {
-                _editor = editor;
                 _helpService = helpService;
                 InitializeComponent();
             }
 
             public string SampleText
             {
-                get
-                {
-                    return _sampleEdit.Text;
-                }
+                get => _sampleEdit.Text;
                 set
                 {
                     _sampleEdit.Text = value;
@@ -45,11 +39,7 @@ namespace System.Windows.Forms.Design
 
             public object Value { get; private set; }
 
-            public void End()
-            {
-                _edSvc = null;
-                Value = null;
-            }
+            public void End() => Value = null;
 
             private void InitializeComponent()
             {
@@ -62,37 +52,32 @@ namespace System.Windows.Forms.Design
                 _okCancelTableLayoutPanel.SuspendLayout();
                 SuspendLayout();
                 _okButton.Click += new EventHandler(okButton_click);
-                //
+
                 // caption
-                //
                 resources.ApplyResources(_caption, "caption");
                 _caption.Margin = new Padding(3, 1, 3, 0);
                 _caption.Name = "caption";
-                //
+
                 // sampleEdit
-                //
                 resources.ApplyResources(_sampleEdit, "sampleEdit");
                 _sampleEdit.Margin = new Padding(3, 2, 3, 3);
                 _sampleEdit.Name = "sampleEdit";
                 _sampleEdit.HideSelection = false;
                 _sampleEdit.ScrollBars = ScrollBars.Vertical;
-                //
+
                 // okButton
-                //
                 resources.ApplyResources(_okButton, "okButton");
                 _okButton.DialogResult = DialogResult.OK;
                 _okButton.Margin = new Padding(0, 0, 2, 0);
                 _okButton.Name = "okButton";
-                //
+
                 // cancelButton
-                //
                 resources.ApplyResources(_cancelButton, "cancelButton");
                 _cancelButton.DialogResult = DialogResult.Cancel;
                 _cancelButton.Margin = new Padding(3, 0, 0, 0);
                 _cancelButton.Name = "cancelButton";
-                //
+
                 // okCancelTableLayoutPanel
-                //
                 resources.ApplyResources(_okCancelTableLayoutPanel, "okCancelTableLayoutPanel");
                 _okCancelTableLayoutPanel.ColumnCount = 2;
                 _okCancelTableLayoutPanel.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 50F));
@@ -104,9 +89,8 @@ namespace System.Windows.Forms.Design
                 _okCancelTableLayoutPanel.RowCount = 1;
                 _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
                 _okCancelTableLayoutPanel.RowStyles.Add(new RowStyle());
-                //
+
                 // LinkAreaEditor
-                //
                 resources.ApplyResources(this, "$this");
                 AutoScaleMode = AutoScaleMode.Font;
                 CancelButton = _cancelButton;
@@ -131,23 +115,14 @@ namespace System.Windows.Forms.Design
                 Value = new LinkArea(_sampleEdit.SelectionStart, _sampleEdit.SelectionLength);
             }
 
-            private string HelpTopic => "net.ComponentModel.LinkAreaEditor";
-
-            /// <summary>
-            /// Called when the help button is clicked.
-            /// </summary>
-            private void ShowHelp()
-                => _helpService?.ShowHelpFromKeyword(HelpTopic);
-
             private void LinkAreaEditor_HelpButtonClicked(object sender, CancelEventArgs e)
             {
                 e.Cancel = true;
-                ShowHelp();
+                _helpService?.ShowHelpFromKeyword("net.ComponentModel.LinkAreaEditor");
             }
 
-            public void Start(IWindowsFormsEditorService edSvc, object value)
+            public void Start(object value)
             {
-                _edSvc = edSvc;
                 Value = value;
                 UpdateSelection();
                 ActiveControl = _sampleEdit;
@@ -155,23 +130,18 @@ namespace System.Windows.Forms.Design
 
             private void UpdateSelection()
             {
-                if (!(Value is LinkArea))
+                if (Value is not LinkArea linkArea)
                 {
                     return;
                 }
 
-                LinkArea pt = (LinkArea)Value;
                 try
                 {
-                    _sampleEdit.SelectionStart = pt.Start;
-                    _sampleEdit.SelectionLength = pt.Length;
+                    _sampleEdit.SelectionStart = linkArea.Start;
+                    _sampleEdit.SelectionLength = linkArea.Length;
                 }
-                catch (Exception ex)
+                catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                 {
-                    if (ClientUtils.IsCriticalException(ex))
-                    {
-                        throw;
-                    }
                 }
             }
         }

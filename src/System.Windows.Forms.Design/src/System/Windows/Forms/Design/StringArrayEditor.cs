@@ -5,8 +5,7 @@
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  The <c>StringArrayEditor</c> is a collection editor that is specifically
-    ///  designed to edit arrays containing strings.
+    ///  A collection editor that is specifically designed to edit arrays containing strings.
     /// </summary>
     internal class StringArrayEditor : StringCollectionEditor
     {
@@ -22,8 +21,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected override object[] GetItems(object editValue)
         {
-            Array valueArray = editValue as Array;
-            if (valueArray is null)
+            if (editValue is not Array valueArray)
             {
                 return Array.Empty<object>();
             }

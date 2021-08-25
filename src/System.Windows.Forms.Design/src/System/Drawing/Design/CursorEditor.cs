@@ -27,7 +27,7 @@ namespace System.Drawing.Design
                 return value;
             }
 
-            _cursorUI ??= new CursorUI(this);
+            _cursorUI ??= new CursorUI();
 
             _cursorUI.Start(editorService, value);
             editorService.DropDownControl(_cursorUI);

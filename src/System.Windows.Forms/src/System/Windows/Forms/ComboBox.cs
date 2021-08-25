@@ -4039,15 +4039,5 @@ namespace System.Windows.Forms
 
         internal virtual FlatComboAdapter CreateFlatComboAdapterInstance()
             => new FlatComboAdapter(this, smallButton: false);
-
-        /// <summary>
-        ///  Represents the ComboBox child native window type.
-        /// </summary>
-        private enum ChildWindowType
-        {
-            ListBox,
-            Edit,
-            DropDownList
-        }
     }
 }
