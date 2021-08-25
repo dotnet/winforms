@@ -76,7 +76,7 @@
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(455, 23);
             this.button4.TabIndex = 3;
-            this.button4.Text = "Dialogs_Controls: Testing the controls under the Dialogs Tab";
+            this.button4.Text = "TaskDialog: Testing the task dialog";
             this.button4.UseVisualStyleBackColor = true;
             this.button4.Click += new System.EventHandler(this.Button4_Click);
             // 

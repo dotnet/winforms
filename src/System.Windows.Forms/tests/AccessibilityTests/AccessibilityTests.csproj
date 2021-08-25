@@ -9,8 +9,6 @@
     <UsingToolXliff>false</UsingToolXliff>
   </PropertyGroup>
 
-
-
   <ItemGroup>
     <ProjectReference Include="..\..\src\System.Windows.Forms.csproj" />
   </ItemGroup>
