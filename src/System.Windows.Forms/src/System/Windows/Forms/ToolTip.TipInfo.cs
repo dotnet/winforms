@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     public partial class ToolTip
     {
-        private class TipInfo
+        private partial class TipInfo
         {
             private readonly string? _designerText;
             private string? _caption;
@@ -32,15 +32,6 @@ namespace System.Windows.Forms
             public Point Position { get; set; }
 
             public Type TipType { get; set; } = Type.Auto;
-
-            [Flags]
-            public enum Type
-            {
-                None = 0x0000,
-                Auto = 0x0001,
-                Absolute = 0x0002,
-                SemiAbsolute = 0x0004
-            }
         }
     }
 }
