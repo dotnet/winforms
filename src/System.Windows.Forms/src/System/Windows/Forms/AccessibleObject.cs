@@ -357,6 +357,11 @@ namespace System.Windows.Forms
 
         internal virtual UiaCore.IRawElementProviderSimple? HostRawElementProvider => null;
 
+        /// <summary>
+        ///  Returns the value of the specified <paramref name="propertyID"/> from the element.
+        /// </summary>
+        /// <param name="propertyID">Identifier indicating the property to return</param>
+        /// <returns>Returns the requested value if supported or null if it is not.</returns>
         internal virtual object? GetPropertyValue(UiaCore.UIA propertyID) =>
             propertyID switch
             {
@@ -419,6 +424,11 @@ namespace System.Windows.Forms
 
         internal virtual int GetChildId() => NativeMethods.CHILDID_SELF;
 
+        /// <summary>
+        ///  Returns the element in the specified <paramref name="direction"/>.
+        /// </summary>
+        /// <param name="direction">Indicates the direction in which to navigate.</param>
+        /// <returns>Returns the element in the specified direction if it exists.</returns>
         internal virtual UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction) => null;
 
         internal virtual UiaCore.IRawElementProviderSimple[]? GetEmbeddedFragmentRoots() => null;

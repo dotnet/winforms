@@ -23,27 +23,27 @@ internal static partial class Interop
         public interface IRawElementProviderFragment : IRawElementProviderSimple
         {
             /// <summary>
-            ///  Request to return the element in the specified direction
+            ///  Returns the element in the specified <paramref name="direction"/>.
             /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate</param>
-            /// <returns>Returns the element in the specified direction</returns>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>The element in the specified direction, if it exists.</returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object? /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
 
             /// <summary>
-            ///  Gets the runtime ID of an element. This should be unique
-            ///  among elements on a desktop.
+            ///  Gets the runtime ID of an element. This should be unique among elements on a desktop.
             /// </summary>
             /// <remarks>
-            ///  Proxy implementations should return null for the top-level proxy which
-            ///  corresponds to the HWND; and should return an array which starts
-            ///  with AutomationInteropProvider.AppendRuntimeId, followed by values
-            ///  which are then unique within that proxy's HWNDs.
+            ///  <para>
+            ///   Proxy implementations should return null for the top-level proxy which corresponds to the HWND;
+            ///   and should return an array which starts with AutomationInteropProvider.AppendRuntimeId", followed by
+            ///   values which are then unique within that proxy's HWNDs.
+            ///  </para>
             /// </remarks>
             int[]? GetRuntimeId();
 
             /// <summary>
-            ///  Return a bounding rectangle of this element
+            ///  Return a bounding rectangle of this element.
             /// </summary>
             UiaRect BoundingRectangle { get; }
 
@@ -59,10 +59,12 @@ internal static partial class Interop
 
             /// <summary>
             ///  Request that focus is set to this item.
+            /// </summary>
+            /// <remarks>
             ///  The UIAutomation framework will ensure that the UI hosting this fragment is already
             ///  focused before calling this method, so this method should only update its internal
             ///  focus state; it should not attempt to give its own HWND the focus, for example.
-            /// </summary>
+            /// </remarks>
             void SetFocus();
 
             /// <summary>

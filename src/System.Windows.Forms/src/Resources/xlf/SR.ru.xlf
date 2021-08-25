@@ -7347,11 +7347,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Форма {0} пыталась установить в качестве своего владельца недействительную форму. Формы не могут быть владельцами самих себя или своих владельцев.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description</source>
-        <target state="translated">Описание</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">Недопустимое значение свойства.</target>
@@ -8177,11 +8172,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Цвет переднего плана отключенного текста в области таблицы.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0}: описание</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Обзор…</target>
@@ -8220,6 +8210,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Цвет переднего плана панели описания.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

@@ -6,30 +6,26 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal partial class HotCommands
+    internal partial class HelpPane
     {
         /// <summary>
-        ///  Represents the hot commands control accessible object.
+        ///  Represents the <see cref="HelpPane"/> accessible object.
         /// </summary>
-        internal class HotCommandsAccessibleObject : Control.ControlAccessibleObject
+        internal class HelpPaneAccessibleObject : ControlAccessibleObject
         {
             private readonly PropertyGrid _parentPropertyGrid;
 
             /// <summary>
-            ///  Initializes new instance of DocCommentAccessibleObject.
+            ///  Initializes new instance of the <see cref="HelpPaneAccessibleObject"/>.
             /// </summary>
-            /// <param name="owningHotCommands">The owning HotCommands control.</param>
-            /// <param name="parentPropertyGrid">The parent PropertyGrid control.</param>
-            public HotCommandsAccessibleObject(HotCommands owningHotCommands, PropertyGrid parentPropertyGrid) : base(owningHotCommands)
+            /// <param name="owningHelpPane">The owning <see cref="HelpPane"/> control.</param>
+            /// <param name="parentPropertyGrid">The parent <see cref="PropertyGrid"/> control.</param>
+            public HelpPaneAccessibleObject(HelpPane owningHelpPane, PropertyGrid parentPropertyGrid) : base(owningHelpPane)
             {
                 _parentPropertyGrid = parentPropertyGrid;
             }
 
-            /// <summary>
-            ///  Request to return the element in the specified direction.
-            /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate.</param>
-            /// <returns>Returns the element in the specified direction.</returns>
+            /// <inheritdoc />
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (_parentPropertyGrid.AccessibilityObject is PropertyGrid.PropertyGridAccessibleObject propertyGridAccessibleObject)
@@ -44,11 +40,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.FragmentNavigate(direction);
             }
 
-            /// <summary>
-            ///  Request value of specified property from an element.
-            /// </summary>
-            /// <param name="propertyID">Identifier indicating the property to return</param>
-            /// <returns>Returns a ValInfo indicating whether the element supports this property, or has no value for it.</returns>
+            /// <inheritdoc />
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
@@ -57,7 +49,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _ => base.GetPropertyValue(propertyID)
                 };
 
-            public override string? Name => Owner?.AccessibleName ?? _parentPropertyGrid?.AccessibilityObject.Name;
+            public override string Name => Owner?.AccessibleName
+                ?? string.Format(SR.PropertyGridHelpPaneAccessibleNameTemplate, _parentPropertyGrid?.AccessibilityObject.Name);
         }
     }
 }

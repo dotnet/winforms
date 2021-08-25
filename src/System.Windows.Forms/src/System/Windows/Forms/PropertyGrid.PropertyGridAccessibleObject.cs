@@ -158,7 +158,7 @@ namespace System.Windows.Forms
                 {
                     if (index == 0)
                     {
-                        return _owningPropertyGrid.HotCommandsAccessibleObject;
+                        return _owningPropertyGrid.CommandsPaneAccessibleObject;
                     }
 
                     index--;
@@ -168,7 +168,7 @@ namespace System.Windows.Forms
                 {
                     if (index == 0)
                     {
-                        return _owningPropertyGrid.HelpAccessibleObject;
+                        return _owningPropertyGrid.HelpPaneAccessibleObject;
                     }
                 }
 

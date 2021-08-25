@@ -26,10 +26,10 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionPropertyGrid))]
     public partial class PropertyGrid : ContainerControl, IComPropertyBrowser, Ole32.IPropertyNotifySink
     {
-        private readonly DocComment _docComment;
-        private int _docCommentSizeRatio = -1;
-        private int _hotCommandsSizeRatio = -1;
-        private readonly HotCommands _hotCommands;
+        private readonly HelpPane _helpPane;
+        private int _helpPaneSizeRatio = -1;
+        private int _commandsPaneSizeRatio = -1;
+        private readonly CommandsPane _commandsPane;
         private readonly ToolStrip _toolStrip;
 
         private bool _helpVisible = true;
@@ -220,25 +220,25 @@ namespace System.Windows.Forms
                 // Always add the property tab here.
                 AddTab(DefaultTabType, PropertyTabScope.Static);
 
-                _docComment = new(this);
-                _docComment.SuspendLayout();
-                _docComment.TabStop = false;
-                _docComment.Dock = DockStyle.None;
-                _docComment.BackColor = SystemColors.Control;
-                _docComment.ForeColor = SystemColors.ControlText;
-                _docComment.MouseMove += OnChildMouseMove;
-                _docComment.MouseDown += OnChildMouseDown;
+                _helpPane = new(this);
+                _helpPane.SuspendLayout();
+                _helpPane.TabStop = false;
+                _helpPane.Dock = DockStyle.None;
+                _helpPane.BackColor = SystemColors.Control;
+                _helpPane.ForeColor = SystemColors.ControlText;
+                _helpPane.MouseMove += OnChildMouseMove;
+                _helpPane.MouseDown += OnChildMouseDown;
 
-                _hotCommands = new HotCommands(this);
-                _hotCommands.SuspendLayout();
-                _hotCommands.TabIndex = 3;
-                _hotCommands.Dock = DockStyle.None;
+                _commandsPane = new CommandsPane(this);
+                _commandsPane.SuspendLayout();
+                _commandsPane.TabIndex = 3;
+                _commandsPane.Dock = DockStyle.None;
                 SetHotCommandColors();
-                _hotCommands.Visible = false;
-                _hotCommands.MouseMove += OnChildMouseMove;
-                _hotCommands.MouseDown += OnChildMouseDown;
+                _commandsPane.Visible = false;
+                _commandsPane.MouseMove += OnChildMouseMove;
+                _commandsPane.MouseDown += OnChildMouseDown;
 
-                Controls.AddRange(new Control[] { _docComment, _hotCommands, _gridView, _toolStrip });
+                Controls.AddRange(new Control[] { _helpPane, _commandsPane, _gridView, _toolStrip });
 
                 SetActiveControl(_gridView);
                 _toolStrip.ResumeLayout(performLayout: false);  // SetupToolbar should perform the layout
@@ -252,8 +252,8 @@ namespace System.Windows.Forms
             }
             finally
             {
-                _docComment?.ResumeLayout(performLayout: false);
-                _hotCommands?.ResumeLayout(performLayout: false);
+                _helpPane?.ResumeLayout(performLayout: false);
+                _commandsPane?.ResumeLayout(performLayout: false);
 
                 ResumeLayout(performLayout: true);
             }
@@ -414,7 +414,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [SRDescription(nameof(SR.PropertyGridCanShowCommandsDesc))]
-        public virtual bool CanShowCommands => _hotCommands.WouldBeVisible;
+        public virtual bool CanShowCommands => _commandsPane.WouldBeVisible;
 
         /// <summary>
         ///  The text used color for category headings. The background color is determined by the LineColor property.
@@ -442,11 +442,11 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.PropertyGridCommandsBackColorDesc))]
         public Color CommandsBackColor
         {
-            get => _hotCommands.BackColor;
+            get => _commandsPane.BackColor;
             set
             {
-                _hotCommands.BackColor = value;
-                _hotCommands.Label.BackColor = value;
+                _commandsPane.BackColor = value;
+                _commandsPane.Label.BackColor = value;
             }
         }
 
@@ -457,11 +457,11 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.PropertyGridCommandsForeColorDesc))]
         public Color CommandsForeColor
         {
-            get => _hotCommands.ForeColor;
+            get => _commandsPane.ForeColor;
             set
             {
-                _hotCommands.ForeColor = value;
-                _hotCommands.Label.ForeColor = value;
+                _commandsPane.ForeColor = value;
+                _commandsPane.Label.ForeColor = value;
             }
         }
 
@@ -472,8 +472,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.PropertyGridCommandsLinkColorDesc))]
         public Color CommandsLinkColor
         {
-            get => _hotCommands.Label.LinkColor;
-            set => _hotCommands.Label.LinkColor = value;
+            get => _commandsPane.Label.LinkColor;
+            set => _commandsPane.Label.LinkColor = value;
         }
 
         /// <summary>
@@ -483,8 +483,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.PropertyGridCommandsActiveLinkColorDesc))]
         public Color CommandsActiveLinkColor
         {
-            get => _hotCommands.Label.ActiveLinkColor;
-            set => _hotCommands.Label.ActiveLinkColor = value;
+            get => _commandsPane.Label.ActiveLinkColor;
+            set => _commandsPane.Label.ActiveLinkColor = value;
         }
 
         /// <summary>
@@ -494,8 +494,8 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.PropertyGridCommandsDisabledLinkColorDesc))]
         public Color CommandsDisabledLinkColor
         {
-            get => _hotCommands.Label.DisabledLinkColor;
-            set => _hotCommands.Label.DisabledLinkColor = value;
+            get => _commandsPane.Label.DisabledLinkColor;
+            set => _commandsPane.Label.DisabledLinkColor = value;
         }
 
         /// <summary>
@@ -506,8 +506,8 @@ namespace System.Windows.Forms
         [DefaultValue(typeof(Color), "ControlDark")]
         public Color CommandsBorderColor
         {
-            get => _hotCommands.BorderColor;
-            set => _hotCommands.BorderColor = value;
+            get => _commandsPane.BorderColor;
+            set => _commandsPane.BorderColor = value;
         }
 
         /// <summary>
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public virtual bool CommandsVisible => _hotCommands.Visible;
+        public virtual bool CommandsVisible => _commandsPane.Visible;
 
         /// <summary>
         ///  Returns true if the commands pane will be shown for objects
@@ -526,30 +526,29 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.PropertyGridCommandsVisibleIfAvailable))]
         public virtual bool CommandsVisibleIfAvailable
         {
-            get => _hotCommands.AllowVisible;
+            get => _commandsPane.AllowVisible;
             set
             {
-                bool hotcommandsVisible = _hotCommands.Visible;
-                _hotCommands.AllowVisible = value;
+                bool hotcommandsVisible = _commandsPane.Visible;
+                _commandsPane.AllowVisible = value;
 
-                if (hotcommandsVisible != _hotCommands.Visible)
+                if (hotcommandsVisible != _commandsPane.Visible)
                 {
                     OnLayoutInternal(dividerOnly: false);
-                    _hotCommands.Invalidate();
+                    _commandsPane.Invalidate();
                 }
             }
         }
 
         /// <summary>
-        ///  Returns a default location for showing the context menu.  This
-        ///  location is the center of the active property label in the grid, and
-        ///  is used useful to position the context menu when the menu is invoked
+        ///  Returns a default location for showing the context menu. This location is the center of the active
+        ///  property label in the grid, and is used useful to position the context menu when the menu is invoked
         ///  via the keyboard.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public Point ContextMenuDefaultLocation => GetPropertyGridView().ContextMenuDefaultLocation;
+        public Point ContextMenuDefaultLocation => _gridView.ContextMenuDefaultLocation;
 
         /// <summary>
         ///  Collection of child controls.
@@ -632,7 +631,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the help control accessibility object.
         /// </summary>
-        internal AccessibleObject HelpAccessibleObject => _docComment.AccessibilityObject;
+        internal AccessibleObject HelpPaneAccessibleObject => _helpPane.AccessibilityObject;
 
         /// <summary>
         ///  The background color for the help region.
@@ -642,8 +641,8 @@ namespace System.Windows.Forms
         [DefaultValue(typeof(Color), "Control")]
         public Color HelpBackColor
         {
-            get => _docComment.BackColor;
-            set => _docComment.BackColor = value;
+            get => _helpPane.BackColor;
+            set => _helpPane.BackColor = value;
         }
 
         /// <summary>
@@ -654,20 +653,20 @@ namespace System.Windows.Forms
         [DefaultValue(typeof(Color), "ControlText")]
         public Color HelpForeColor
         {
-            get => _docComment.ForeColor;
-            set => _docComment.ForeColor = value;
+            get => _helpPane.ForeColor;
+            set => _helpPane.ForeColor = value;
         }
 
         /// <summary>
-        ///  The border color for the help region
+        ///  The border color for the help region.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridHelpBorderColorDesc))]
         [DefaultValue(typeof(Color), "ControlDark")]
         public Color HelpBorderColor
         {
-            get => _docComment.BorderColor;
-            set => _docComment.BorderColor = value;
+            get => _helpPane.BorderColor;
+            set => _helpPane.BorderColor = value;
         }
 
         /// <summary>
@@ -684,17 +683,17 @@ namespace System.Windows.Forms
             {
                 _helpVisible = value;
 
-                _docComment.Visible = value;
+                _helpPane.Visible = value;
                 OnLayoutInternal(dividerOnly: false);
                 Invalidate();
-                _docComment.Invalidate();
+                _helpPane.Invalidate();
             }
         }
 
         /// <summary>
         ///  Gets the hot commands control accessible object.
         /// </summary>
-        internal AccessibleObject HotCommandsAccessibleObject => _hotCommands.AccessibilityObject;
+        internal AccessibleObject CommandsPaneAccessibleObject => _commandsPane.AccessibilityObject;
 
         /// <summary>
         ///  Gets the main entry accessible object.
@@ -797,8 +796,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-        bool IComPropertyBrowser.InPropertySet => GetPropertyGridView().InPropertySet;
 
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridLineColorDesc))]
@@ -1088,7 +1085,7 @@ namespace System.Windows.Forms
                     }
 
                     ShowEventsButton(showEvents && _currentObjects.Length > 0);
-                    DisplayHotCommands();
+                    DisplayCommandsPane();
                     EnablePropPageButton(_currentObjects.Length == 1 ? _currentObjects[0] : null);
                     OnSelectedObjectsChanged(EventArgs.Empty);
                 }
@@ -1734,9 +1731,9 @@ namespace System.Windows.Forms
             return button;
         }
 
-        private void DisplayHotCommands()
+        private void DisplayCommandsPane()
         {
-            bool hotCommandsDisplayed = _hotCommands.Visible;
+            bool commandsPaneDisplayed = _commandsPane.Visible;
 
             IComponent component = null;
             DesignerVerb[] verbs = null;
@@ -1785,14 +1782,14 @@ namespace System.Windows.Forms
             {
                 if (verbs is not null && verbs.Length > 0)
                 {
-                    _hotCommands.SetVerbs(component, verbs);
+                    _commandsPane.SetVerbs(component, verbs);
                 }
                 else
                 {
-                    _hotCommands.SetVerbs(null, null);
+                    _commandsPane.SetVerbs(null, null);
                 }
 
-                if (hotCommandsDisplayed != _hotCommands.Visible)
+                if (commandsPaneDisplayed != _commandsPane.Visible)
                 {
                     OnLayoutInternal(dividerOnly: false);
                 }
@@ -1884,25 +1881,25 @@ namespace System.Windows.Forms
         {
             int useGrid = -1;
 
-            if (_hotCommands.Visible)
+            if (_commandsPane.Visible)
             {
-                Point location = _hotCommands.Location;
+                Point location = _commandsPane.Location;
                 if (y >= (location.Y - s_cyDivider) &&
                     y <= (location.Y + 1))
                 {
-                    return _hotCommands;
+                    return _commandsPane;
                 }
 
                 useGrid = 0;
             }
 
-            if (_docComment.Visible)
+            if (_helpPane.Visible)
             {
-                Point location = _docComment.Location;
+                Point location = _helpPane.Location;
                 if (y >= (location.Y - s_cyDivider) &&
                     y <= (location.Y + 1))
                 {
-                    return _docComment;
+                    return _helpPane;
                 }
 
                 if (useGrid == -1)
@@ -1922,9 +1919,9 @@ namespace System.Windows.Forms
                     switch (useGrid)
                     {
                         case 0:
-                            return _hotCommands;
+                            return _commandsPane;
                         case 1:
-                            return _docComment;
+                            return _helpPane;
                     }
                 }
             }
@@ -1935,9 +1932,9 @@ namespace System.Windows.Forms
         private int DividerLimitHigh(SnappableControl target)
         {
             int high = _gridView.Location.Y + MinGridHeight;
-            if (target == _docComment && _hotCommands.Visible)
+            if (target == _helpPane && _commandsPane.Visible)
             {
-                high += _hotCommands.Size.Height + 2;
+                high += _commandsPane.Size.Height + 2;
             }
 
             return high;
@@ -1973,8 +1970,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-        void IComPropertyBrowser.DropDownDone() => GetPropertyGridView().CloseDropDown();
 
         private bool EnablePropPageButton(object obj)
         {
@@ -2115,8 +2110,8 @@ namespace System.Windows.Forms
 
         bool IComPropertyBrowser.EnsurePendingChangesCommitted()
         {
-            // The commits sometimes cause transactions to open
-            // and close, which will cause refreshes, which we want to ignore.
+            // The commits sometimes cause transactions to open and close, which will cause refreshes,
+            // which we want to ignore.
 
             try
             {
@@ -2126,7 +2121,7 @@ namespace System.Windows.Forms
                     _designerHost.TransactionClosed -= OnTransactionClosed;
                 }
 
-                return GetPropertyGridView().EnsurePendingChangesCommitted();
+                return _gridView.EnsurePendingChangesCommitted();
             }
             finally
             {
@@ -2258,14 +2253,14 @@ namespace System.Windows.Forms
                 return _gridView;
             }
 
-            if (HotCommandsAccessibleObject.Bounds.Contains(point))
+            if (CommandsPaneAccessibleObject.Bounds.Contains(point))
             {
-                return _hotCommands;
+                return _commandsPane;
             }
 
-            if (HelpAccessibleObject.Bounds.Contains(point))
+            if (HelpPaneAccessibleObject.Bounds.Contains(point))
             {
-                return _docComment;
+                return _helpPane;
             }
 
             return null;
@@ -2293,7 +2288,11 @@ namespace System.Windows.Forms
             return _currentEntries;
         }
 
-        private PropertyGridView GetPropertyGridView() => _gridView;
+        internal bool HavePropertyEntriesChanged() => GetFlag(Flags.PropertiesChanged);
+
+        bool IComPropertyBrowser.InPropertySet => _gridView.InPropertySet;
+
+        void IComPropertyBrowser.DropDownDone() => _gridView.CloseDropDown();
 
         void IComPropertyBrowser.HandleF4()
         {
@@ -2310,11 +2309,23 @@ namespace System.Windows.Forms
             _gridView.Focus();
         }
 
-        internal bool HavePropEntriesChanged() => GetFlag(Flags.PropertiesChanged);
-
-        void IComPropertyBrowser.LoadState(RegistryKey optRoot)
+        void IComPropertyBrowser.SaveState(RegistryKey key)
         {
-            if (optRoot is null)
+            if (key is null)
+            {
+                return;
+            }
+
+            key.SetValue(RegistryStateNames.AlphabeticalSort, PropertySort == PropertySort.Alphabetical ? "1" : "0");
+            key.SetValue(RegistryStateNames.HelpVisible, HelpVisible ? "1" : "0");
+            key.SetValue(RegistryStateNames.CommandsVisible, CommandsVisibleIfAvailable ? "1" : "0");
+            key.SetValue(RegistryStateNames.CommentSizeRatio, _helpPaneSizeRatio.ToString(CultureInfo.InvariantCulture));
+            key.SetValue(RegistryStateNames.CommandSizeRatio, _commandsPaneSizeRatio.ToString(CultureInfo.InvariantCulture));
+        }
+
+        void IComPropertyBrowser.LoadState(RegistryKey key)
+        {
+            if (key is null)
             {
                 // Apply the same defaults from above.
                 PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
@@ -2323,43 +2334,38 @@ namespace System.Windows.Forms
             }
             else
             {
-                object value = optRoot.GetValue("PbrsAlpha", "0");
+                object value = key.GetValue(RegistryStateNames.AlphabeticalSort, "0");
 
-                if (value is not null && value.ToString().Equals("1"))
-                {
-                    PropertySort = PropertySort.Alphabetical;
-                }
-                else
-                {
-                    PropertySort = PropertySort.Categorized | PropertySort.Alphabetical;
-                }
+                PropertySort = value is not null && value.ToString().Equals("1")
+                    ? PropertySort.Alphabetical
+                    : PropertySort.Categorized | PropertySort.Alphabetical;
 
-                value = optRoot.GetValue("PbrsShowDesc", "1");
-                HelpVisible = (value is not null && value.ToString().Equals("1"));
+                value = key.GetValue(RegistryStateNames.HelpVisible, "1");
+                HelpVisible = value is not null && value.ToString().Equals("1");
 
-                value = optRoot.GetValue("PbrsShowCommands", "0");
-                CommandsVisibleIfAvailable = (value is not null && value.ToString().Equals("1"));
-
-                value = optRoot.GetValue("PbrsDescHeightRatio", "-1");
+                value = key.GetValue(RegistryStateNames.CommandsVisible, "0");
+                CommandsVisibleIfAvailable = value is not null && value.ToString().Equals("1");
 
                 bool update = false;
+
+                value = key.GetValue(RegistryStateNames.CommentSizeRatio, "-1");
                 if (value is string descriptionString)
                 {
                     int ratio = int.Parse(descriptionString, CultureInfo.InvariantCulture);
                     if (ratio > 0)
                     {
-                        _docCommentSizeRatio = ratio;
+                        _helpPaneSizeRatio = ratio;
                         update = true;
                     }
                 }
 
-                value = optRoot.GetValue("PbrsHotCommandHeightRatio", "-1");
+                value = key.GetValue(RegistryStateNames.CommandSizeRatio, "-1");
                 if (value is string commandString)
                 {
                     int ratio = int.Parse(commandString, CultureInfo.InvariantCulture);
                     if (ratio > 0)
                     {
-                        _docCommentSizeRatio = ratio;
+                        _commandsPaneSizeRatio = ratio;
                         update = true;
                     }
                 }
@@ -2624,8 +2630,8 @@ namespace System.Windows.Forms
                     SetupToolbar(true);
                 }
 
-                // No toolbar or doc comment or commands, just fill the whole thing with the grid
-                if (!_toolStrip.Visible && !_docComment.Visible && !_hotCommands.Visible)
+                // No toolbar or help or commands visible, just fill the whole thing with the grid.
+                if (!_toolStrip.Visible && !_helpPane.Visible && !_commandsPane.Visible)
                 {
                     _gridView.Location = new Point(0, 0);
                     _gridView.Size = Size;
@@ -2659,102 +2665,102 @@ namespace System.Windows.Forms
             int height;
 
             // If we're just moving the divider, set the requested heights.
-            int dcRequestedHeight = 0;
-            int hcRequestedHeight = 0;
-            int dcOptHeight = 0;
-            int hcOptHeight = 0;
+            int helpRequestedHeight = 0;
+            int commandsRequestedHeight = 0;
+            int helpOptimalHeight = 0;
+            int commandsOptimalHeight = 0;
 
             if (dividerOnly)
             {
-                dcRequestedHeight = _docComment.Visible ? _docComment.Size.Height : 0;
-                hcRequestedHeight = _hotCommands.Visible ? _hotCommands.Size.Height : 0;
+                helpRequestedHeight = _helpPane.Visible ? _helpPane.Size.Height : 0;
+                commandsRequestedHeight = _commandsPane.Visible ? _commandsPane.Size.Height : 0;
             }
             else
             {
-                if (_docComment.Visible)
+                if (_helpPane.Visible)
                 {
-                    dcOptHeight = _docComment.GetOptimalHeight(Size.Width - s_cyDivider);
-                    if (_docComment.UserSized)
+                    helpOptimalHeight = _helpPane.GetOptimalHeight(Size.Width - s_cyDivider);
+                    if (_helpPane.UserSized)
                     {
-                        dcRequestedHeight = _docComment.Size.Height;
+                        helpRequestedHeight = _helpPane.Size.Height;
                     }
-                    else if (_docCommentSizeRatio != -1)
+                    else if (_helpPaneSizeRatio != -1)
                     {
-                        dcRequestedHeight = (Height * _docCommentSizeRatio) / 100;
+                        helpRequestedHeight = (Height * _helpPaneSizeRatio) / 100;
                     }
                     else
                     {
-                        dcRequestedHeight = dcOptHeight;
+                        helpRequestedHeight = helpOptimalHeight;
                     }
                 }
 
-                if (_hotCommands.Visible)
+                if (_commandsPane.Visible)
                 {
-                    hcOptHeight = _hotCommands.GetOptimalHeight(Size.Width - s_cyDivider);
-                    if (_hotCommands.UserSized)
+                    commandsOptimalHeight = _commandsPane.GetOptimalHeight(Size.Width - s_cyDivider);
+                    if (_commandsPane.UserSized)
                     {
-                        hcRequestedHeight = _hotCommands.Size.Height;
+                        commandsRequestedHeight = _commandsPane.Size.Height;
                     }
-                    else if (_hotCommandsSizeRatio != -1)
+                    else if (_commandsPaneSizeRatio != -1)
                     {
-                        hcRequestedHeight = (Height * _hotCommandsSizeRatio) / 100;
+                        commandsRequestedHeight = (Height * _commandsPaneSizeRatio) / 100;
                     }
                     else
                     {
-                        hcRequestedHeight = hcOptHeight;
+                        commandsRequestedHeight = commandsOptimalHeight;
                     }
                 }
             }
 
             // Place the help comment window.
-            if (dcRequestedHeight > 0)
+            if (helpRequestedHeight > 0)
             {
                 maxSpace -= s_cyDivider;
 
-                if (hcRequestedHeight == 0 || (dcRequestedHeight + hcRequestedHeight) < maxSpace)
+                if (commandsRequestedHeight == 0 || (helpRequestedHeight + commandsRequestedHeight) < maxSpace)
                 {
                     // Full size.
-                    height = Math.Min(dcRequestedHeight, maxSpace);
+                    height = Math.Min(helpRequestedHeight, maxSpace);
                 }
-                else if (hcRequestedHeight > 0 && hcRequestedHeight < maxSpace)
+                else if (commandsRequestedHeight > 0 && commandsRequestedHeight < maxSpace)
                 {
                     // Give most of the space to the hot commands.
-                    height = maxSpace - hcRequestedHeight;
+                    height = maxSpace - commandsRequestedHeight;
                 }
                 else
                 {
                     // Split the difference.
-                    height = Math.Min(dcRequestedHeight, maxSpace / 2 - 1);
+                    height = Math.Min(helpRequestedHeight, maxSpace / 2 - 1);
                 }
 
                 height = Math.Max(height, s_cyDivider * 2);
 
-                _docComment.SetBounds(0, endSize - height, Size.Width, height);
+                _helpPane.SetBounds(0, endSize - height, Size.Width, height);
 
                 // If we've modified the height to less than the optimal, clear the userSized item.
-                if (height <= dcOptHeight && height < dcRequestedHeight)
+                if (height <= helpOptimalHeight && height < helpRequestedHeight)
                 {
-                    _docComment.UserSized = false;
+                    _helpPane.UserSized = false;
                 }
-                else if (_docCommentSizeRatio != -1 || _docComment.UserSized)
+                else if (_helpPaneSizeRatio != -1 || _helpPane.UserSized)
                 {
-                    _docCommentSizeRatio = (_docComment.Height * 100) / Height;
+                    _helpPaneSizeRatio = (_helpPane.Height * 100) / Height;
                 }
 
-                _docComment.Invalidate();
-                endSize = _docComment.Location.Y - s_cyDivider;
+                _helpPane.Invalidate();
+                endSize = _helpPane.Location.Y - s_cyDivider;
                 maxSpace -= height;
             }
 
             // Place the hot commands.
-            if (hcRequestedHeight > 0)
+            if (commandsRequestedHeight > 0)
             {
                 maxSpace -= s_cyDivider;
 
-                if (maxSpace > hcRequestedHeight)
+                if (maxSpace > commandsRequestedHeight)
                 {
                     // Full size.
-                    height = Math.Min(hcRequestedHeight, maxSpace);
+                    height = Math.Min(commandsRequestedHeight, maxSpace);
                 }
                 else
                 {
@@ -2765,18 +2771,18 @@ namespace System.Windows.Forms
                 height = Math.Max(height, s_cyDivider * 2);
 
                 // If we've modified the height, clear the userSized item.
-                if (height <= hcOptHeight && height < hcRequestedHeight)
+                if (height <= commandsOptimalHeight && height < commandsRequestedHeight)
                 {
-                    _hotCommands.UserSized = false;
+                    _commandsPane.UserSized = false;
                 }
-                else if (_hotCommandsSizeRatio != -1 || _hotCommands.UserSized)
+                else if (_commandsPaneSizeRatio != -1 || _commandsPane.UserSized)
                 {
-                    _hotCommandsSizeRatio = (_hotCommands.Height * 100) / Height;
+                    _commandsPaneSizeRatio = (_commandsPane.Height * 100) / Height;
                 }
 
-                _hotCommands.SetBounds(0, endSize - height, Size.Width, height);
-                _hotCommands.Invalidate();
-                endSize = _hotCommands.Location.Y - s_cyDivider;
+                _commandsPane.SetBounds(0, endSize - height, Size.Width, height);
+                _commandsPane.Invalidate();
+                endSize = _commandsPane.Location.Y - s_cyDivider;
             }
 
             _gridView.Size = new Size(Size.Width, endSize - _gridView.Location.Y);
@@ -2915,22 +2921,22 @@ namespace System.Windows.Forms
 
             int yLast = psheetLoc.Y + _gridView.Size.Height;
 
-            // Fill above hotcommands.
-            if (_hotCommands.Visible)
+            // Fill above the commands pane.
+            if (_commandsPane.Visible)
             {
                 pevent.Graphics.FillRectangle(
                     backgroundBrush,
-                    new Rectangle(0, yLast, width, _hotCommands.Location.Y - yLast));
-                yLast += _hotCommands.Size.Height;
+                    new Rectangle(0, yLast, width, _commandsPane.Location.Y - yLast));
+                yLast += _commandsPane.Size.Height;
             }
 
-            // Fill above doc comment.
-            if (_docComment.Visible)
+            // Fill above the help pane.
+            if (_helpPane.Visible)
             {
                 pevent.Graphics.FillRectangle(
                     backgroundBrush,
-                    new Rectangle(0, yLast, width, _docComment.Location.Y - yLast));
-                yLast += _docComment.Size.Height;
+                    new Rectangle(0, yLast, width, _helpPane.Location.Y - yLast));
+                yLast += _helpPane.Size.Height;
             }
 
             // Anything that might be left.
@@ -3246,7 +3252,7 @@ namespace System.Windows.Forms
             if (keyData.HasFlag(Keys.Shift))
             {
                 // This is backward
-                if (_hotCommands.Visible && _hotCommands.ContainsFocus)
+                if (_commandsPane.Visible && _commandsPane.ContainsFocus)
                 {
                     _gridView.ReverseFocus();
                 }
@@ -3278,9 +3284,9 @@ namespace System.Windows.Forms
                     else
                     {
                         // Otherwise, we're processing a message from elsewhere so we select our bottom item.
-                        if (_hotCommands.Visible)
+                        if (_commandsPane.Visible)
                         {
-                            _hotCommands.FocusLabel();
+                            _commandsPane.FocusLabel();
                         }
                         else if (_mainEntry is not null)
                         {
@@ -3320,9 +3326,9 @@ namespace System.Windows.Forms
                 }
                 else if (_gridView.FocusInside)
                 {
-                    if (_hotCommands.Visible)
+                    if (_commandsPane.Visible)
                     {
-                        _hotCommands.FocusLabel();
+                        _commandsPane.FocusLabel();
                         return true;
                     }
                     else
@@ -3330,7 +3336,7 @@ namespace System.Windows.Forms
                         passToParent = true;
                     }
                 }
-                else if (_hotCommands.ContainsFocus)
+                else if (_commandsPane.ContainsFocus)
                 {
                     passToParent = true;
                 }
@@ -3400,7 +3406,7 @@ namespace System.Windows.Forms
 
                 RefreshProperties(clearCached);
                 _gridView.Refresh();
-                DisplayHotCommands();
+                DisplayCommandsPane();
             }
             finally
             {
@@ -3694,23 +3700,25 @@ namespace System.Windows.Forms
 
         // The following Reset methods are used via reflection.
 
-        private void ResetCommandsBackColor() => _hotCommands.ResetBackColor();
+        private void ResetCommandsBackColor() => _commandsPane.ResetBackColor();
 
-        private void ResetCommandsForeColor() => _hotCommands.ResetForeColor();
+        private void ResetCommandsForeColor() => _commandsPane.ResetForeColor();
 
-        private void ResetCommandsLinkColor() => _hotCommands.Label.ResetLinkColor();
+        private void ResetCommandsLinkColor() => _commandsPane.Label.ResetLinkColor();
 
-        private void ResetCommandsActiveLinkColor() => _hotCommands.Label.ResetActiveLinkColor();
+        private void ResetCommandsActiveLinkColor() => _commandsPane.Label.ResetActiveLinkColor();
 
-        private void ResetCommandsDisabledLinkColor() => _hotCommands.Label.ResetDisabledLinkColor();
+        private void ResetCommandsDisabledLinkColor() => _commandsPane.Label.ResetDisabledLinkColor();
 
-        private void ResetHelpBackColor() => _docComment.ResetBackColor();
+        private void ResetHelpBackColor() => _helpPane.ResetBackColor();
 
-        private void ResetHelpForeColor() =>  _docComment.ResetBackColor();
+        private void ResetHelpForeColor() =>  _helpPane.ResetBackColor();
 
-        // This method is intended for use in replacing a specific selected root object with
-        // another object of the same exact type. Scenario: An immutable root object being
-        // replaced with a new instance because one of its properties was changed by the user.
+        /// <summary>
+        ///  This method is intended for use in replacing a specific selected root object with another object of the
+        ///  same exact type. Scenario: An immutable root object being replaced with a new instance because one of its
+        ///  properties was changed by the user.
+        /// </summary>
         internal void ReplaceSelectedObject(object oldObject, object newObject)
         {
             Debug.Assert(oldObject is not null && newObject is not null && oldObject.GetType() == newObject.GetType());
@@ -3726,39 +3734,21 @@ namespace System.Windows.Forms
             }
         }
 
-        public void ResetSelectedProperty() => GetPropertyGridView().Reset();
+        public void ResetSelectedProperty() => _gridView.Reset();
 
         private void SaveTabSelection()
         {
             if (_designerHost is not null)
             {
-                if (_designerSelections is null)
-                {
-                    _designerSelections = new Hashtable();
-                }
-
+                _designerSelections ??= new Hashtable();
                 _designerSelections[_designerHost.GetHashCode()] = _selectedViewTab;
             }
         }
 
-        void IComPropertyBrowser.SaveState(RegistryKey optRoot)
-        {
-            if (optRoot is null)
-            {
-                return;
-            }
-
-            optRoot.SetValue("PbrsAlpha", (PropertySort == PropertySort.Alphabetical ? "1" : "0"));
-            optRoot.SetValue("PbrsShowDesc", (HelpVisible ? "1" : "0"));
-            optRoot.SetValue("PbrsShowCommands", (CommandsVisibleIfAvailable ? "1" : "0"));
-            optRoot.SetValue("PbrsDescHeightRatio", _docCommentSizeRatio.ToString(CultureInfo.InvariantCulture));
-            optRoot.SetValue("PbrsHotCommandHeightRatio", _hotCommandsSizeRatio.ToString(CultureInfo.InvariantCulture));
-        }
-
         private void SetHotCommandColors()
-            => _hotCommands.SetColors(SystemColors.Control, SystemColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
+            => _commandsPane.SetColors(SystemColors.Control, SystemColors.ControlText, Color.Empty, Color.Empty, Color.Empty, Color.Empty);
 
-        internal void SetStatusBox(string title, string description) => _docComment.SetComment(title, description);
+        internal void SetStatusBox(string title, string description) => _helpPane.SetDescription(title, description);
 
         private void SelectViewTabButton(ToolStripButton button, bool updateSelection)
         {
@@ -4116,15 +4106,15 @@ namespace System.Windows.Forms
 
         // "Should" methods are used by the designer via reflection.
 
-        private bool ShouldSerializeCommandsBackColor() => _hotCommands.ShouldSerializeBackColor();
+        private bool ShouldSerializeCommandsBackColor() => _commandsPane.ShouldSerializeBackColor();
 
-        private bool ShouldSerializeCommandsForeColor() => _hotCommands.ShouldSerializeForeColor();
+        private bool ShouldSerializeCommandsForeColor() => _commandsPane.ShouldSerializeForeColor();
 
-        private bool ShouldSerializeCommandsLinkColor() => _hotCommands.Label.ShouldSerializeLinkColor();
+        private bool ShouldSerializeCommandsLinkColor() => _commandsPane.Label.ShouldSerializeLinkColor();
 
-        private bool ShouldSerializeCommandsActiveLinkColor() => _hotCommands.Label.ShouldSerializeActiveLinkColor();
+        private bool ShouldSerializeCommandsActiveLinkColor() => _commandsPane.Label.ShouldSerializeActiveLinkColor();
 
-        private bool ShouldSerializeCommandsDisabledLinkColor() => _hotCommands.Label.ShouldSerializeDisabledLinkColor();
+        private bool ShouldSerializeCommandsDisabledLinkColor() => _commandsPane.Label.ShouldSerializeDisabledLinkColor();
 
         /// <summary>
         ///  Sinks the property notify events on all the COM objects we are currently browsing.
@@ -4300,7 +4290,7 @@ namespace System.Windows.Forms
             set
             {
                 UseCompatibleTextRenderingInt = value;
-                _docComment.UpdateTextRenderingEngine();
+                _helpPane.UpdateTextRenderingEngine();
                 _gridView.Invalidate();
             }
         }
