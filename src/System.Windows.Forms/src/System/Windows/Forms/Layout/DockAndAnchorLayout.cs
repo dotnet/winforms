@@ -12,7 +12,7 @@ using System.Drawing;
 
 namespace System.Windows.Forms.Layout
 {
-    internal class DefaultLayout : LayoutEngine
+    internal partial class DefaultLayout : LayoutEngine
     {
         internal static readonly DefaultLayout Instance = new DefaultLayout();
 
@@ -1005,16 +1005,6 @@ namespace System.Windows.Forms.Layout
         public static bool IsAnchored(AnchorStyles anchor, AnchorStyles desiredAnchor)
         {
             return (anchor & desiredAnchor) == desiredAnchor;
-        }
-
-        [Flags]
-        private enum GrowthDirection
-        {
-            None = 0,
-            Upward = 0x01,
-            Downward = 0x02,
-            Left = 0x04,
-            Right = 0x08
         }
 
         private sealed class AnchorInfo

@@ -14,7 +14,7 @@ namespace System.Windows.Forms.ButtonInternal
 {
     internal abstract partial class ButtonBaseAdapter
     {
-        internal class LayoutOptions
+        internal partial class LayoutOptions
         {
             private static readonly int s_combineCheck = BitVector32.CreateMask();
             private static readonly int s_combineImageText = BitVector32.CreateMask(s_combineCheck);
@@ -113,14 +113,6 @@ namespace System.Windows.Forms.ButtonInternal
             public int TextImageInset { get; set; } = 2;
 
             public Padding Padding { get; set; }
-
-            private enum Composition
-            {
-                NoneCombined = 0x00,
-                CheckCombined = 0x01,
-                TextImageCombined = 0x02,
-                AllCombined = 0x03
-            }
 
             /// <summary>
             ///  Uses <see cref="CheckAlign"/>, <see cref="ImageAlign"/>, and <see cref="TextAlign"/> to compose

@@ -18,34 +18,8 @@ namespace System.Windows.Forms
     ///  It also has types that make sense only for ActiveX hosting classes.
     ///  In other words, this is a helper class for the ActiveX hosting classes.
     /// </summary>
-    internal static class WebBrowserHelper
+    internal static partial class WebBrowserHelper
     {
-        // Enumeration of the different states of the ActiveX control
-        internal enum AXState
-        {
-            Passive = 0,        // Not loaded
-            Loaded = 1,         // Loaded, but no server   [ocx created]
-            Running = 2,        // Server running, invisible [depersisted]
-            InPlaceActive = 4,  // Server in-place active [visible]
-            UIActive = 8        // Used only by WebBrowserSiteBase
-        }
-
-        // Enumeration of the different Edit modes
-        internal enum AXEditMode
-        {
-            None = 0,       // object not being edited
-            Object = 1,     // object provided an edit verb and we invoked it
-            Host = 2        // we invoked our own edit verb
-        }
-
-        // Enumeration of Selection Styles
-        internal enum SelectionStyle
-        {
-            NotSelected = 0,
-            Selected = 1,
-            Active = 2
-        }
-
         //
         // Static members:
         //

@@ -307,24 +307,5 @@ namespace System.Windows.Forms
                 FullFsmReset();
             }
         }
-
-        private enum SmEvent : byte
-        {
-            FocusedTool,
-            LeftTool,
-            InitialDelayTimerExpired, // internal
-            ReshowDelayTimerExpired, // internal
-            AutoPopupDelayTimerExpired, // internal
-            RefocusWaitDelayExpired // internal
-        }
-
-        private enum SmState : byte
-        {
-            Hidden,
-            ReadyForInitShow,
-            Shown,
-            ReadyForReshow,
-            WaitForRefocus
-        }
     }
 }
