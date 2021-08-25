@@ -1734,6 +1734,24 @@ namespace System.Windows.Forms.Tests
 
             return listView;
         }
+
+        [WinFormsFact]
+        public void ListViewAccessibleObject_BoundingRectangle_ReturnsCorrectWidth_IfListViewIsScrollable()
+        {
+            const int expectedWidth = 100;
+
+            using ListView listView = new()
+            {
+                Size = new Size(expectedWidth, 150)
+            };
+            listView.Items.AddRange(Enumerable.Range(0, 11).Select(i => new ListViewItem()).ToArray());
+            listView.CreateControl();
+
+            UiaCore.IRawElementProviderFragment uiaProvider = listView.AccessibilityObject;
+            UiaCore.UiaRect actual = uiaProvider.BoundingRectangle;
+
+            Assert.Equal(expectedWidth, actual.width);
+        }
     }
 }
 

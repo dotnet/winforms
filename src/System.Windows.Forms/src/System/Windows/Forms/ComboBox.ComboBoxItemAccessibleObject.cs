@@ -253,7 +253,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                Rectangle listBounds = _owningComboBox.ChildListAccessibleObject.BoundingRectangle;
+                Rectangle listBounds = _owningComboBox.ChildListAccessibleObject.Bounds;
                 if (listBounds.IntersectsWith(Bounds))
                 {
                     // Do nothing because the item is already visible
