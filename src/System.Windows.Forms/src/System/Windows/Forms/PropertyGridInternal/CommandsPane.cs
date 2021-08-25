@@ -10,7 +10,15 @@ using System.Text;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal partial class HotCommands : PropertyGrid.SnappableControl
+    /// <summary>
+    ///  The commands pane optionally shown at the bottom of the <see cref="PropertyGrid"/>.
+    /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   <see cref="PropertyGrid.CommandsVisible"/> controls the visibility of this control.
+    ///  </para>
+    /// </remarks>
+    internal partial class CommandsPane : PropertyGrid.SnappableControl
     {
         private object _component;
         private DesignerVerb[] _verbs;
@@ -18,7 +26,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool _allowVisible = true;
         private int _optimalHeight = -1;
 
-        internal HotCommands(PropertyGrid owner) : base(owner)
+        internal CommandsPane(PropertyGrid owner) : base(owner)
         {
             Text = "Command Pane";
         }
@@ -41,7 +49,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         /// <returns>The accessibility object for this control.</returns>
         protected override AccessibleObject CreateAccessibilityInstance()
-            => new HotCommandsAccessibleObject(this, OwnerPropertyGrid);
+            => new CommandsPaneAccessibleObject(this, OwnerPropertyGrid);
 
         public override Rectangle DisplayRectangle
         {
@@ -96,10 +104,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override int SnapHeightRequest(int request) => request;
 
-        /// <summary>
-        ///  Indicates whether or not the control supports UIA Providers via
-        ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
-        /// </summary>
+        /// <inheritdoc />
         internal override bool SupportsUiaProviders => true;
 
         private void LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)

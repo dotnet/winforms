@@ -4181,7 +4181,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 startRow = 0;
             }
 
-            if (fullRefresh || OwnerGrid.HavePropEntriesChanged())
+            if (fullRefresh || OwnerGrid.HavePropertyEntriesChanged())
             {
                 if (HasEntries && !InPropertySet && !CommitEditTextBox())
                 {

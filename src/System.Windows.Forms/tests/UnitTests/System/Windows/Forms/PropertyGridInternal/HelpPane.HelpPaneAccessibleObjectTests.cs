@@ -7,33 +7,33 @@ using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal.Tests
 {
-    public class DocComment_DocCommentAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
+    public class HelpPane_HelpPaneAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
         public void DocCommentAccessibleObject_Ctor_Default()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
-            using DocComment docComment = new DocComment(propertyGrid);
-            DocComment.DocCommentAccessibleObject accessibleObject =
-                new DocComment.DocCommentAccessibleObject(docComment, propertyGrid);
+            using HelpPane helpPane = new HelpPane(propertyGrid);
+            HelpPane.HelpPaneAccessibleObject accessibleObject =
+                new HelpPane.HelpPaneAccessibleObject(helpPane, propertyGrid);
 
-            Assert.Equal(docComment, accessibleObject.Owner);
+            Assert.Equal(helpPane, accessibleObject.Owner);
             Assert.False(propertyGrid.IsHandleCreated);
-            Assert.False(docComment.IsHandleCreated);
+            Assert.False(helpPane.IsHandleCreated);
         }
 
         [WinFormsFact]
         public void DocCommentAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
-            using DocComment docComment = new DocComment(propertyGrid);
+            using HelpPane helpPane = new HelpPane(propertyGrid);
             // AccessibleRole is not set = Default
 
-            object actual = docComment.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
+            object actual = helpPane.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
 
             Assert.Equal(UiaCore.UIA.PaneControlTypeId, actual);
             Assert.False(propertyGrid.IsHandleCreated);
-            Assert.False(docComment.IsHandleCreated);
+            Assert.False(helpPane.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -42,19 +42,19 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         public void DocCommentAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
-            using DocComment docComment = new DocComment(propertyGrid);
+            using HelpPane helpPane = new HelpPane(propertyGrid);
             // AccessibleRole is not set = Default
 
             if (createControl)
             {
-                docComment.CreateControl();
+                helpPane.CreateControl();
             }
 
-            AccessibleRole actual = docComment.AccessibilityObject.Role;
+            AccessibleRole actual = helpPane.AccessibilityObject.Role;
 
             Assert.Equal(expectedRole, actual);
             Assert.False(propertyGrid.IsHandleCreated);
-            Assert.Equal(createControl, docComment.IsHandleCreated);
+            Assert.Equal(createControl, helpPane.IsHandleCreated);
         }
     }
 }

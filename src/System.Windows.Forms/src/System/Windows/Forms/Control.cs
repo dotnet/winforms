@@ -13417,13 +13417,7 @@ namespace System.Windows.Forms
         ///  Indicates whether or not the control supports UIA Providers via
         ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces
         /// </summary>
-        internal virtual bool SupportsUiaProviders
-        {
-            get
-            {
-                return false;
-            }
-        }
+        internal virtual bool SupportsUiaProviders => false;
 
         ///
         ///  Explicit support of DropTarget

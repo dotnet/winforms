@@ -23,10 +23,10 @@ internal static partial class Interop
         public interface IRawElementProviderFragment : IRawElementProviderSimple
         {
             /// <summary>
-            ///  Request to return the element in the specified direction
+            ///  Returns the element in the specified <paramref name="direction"/>.
             /// </summary>
-            /// <param name="direction">Indicates the direction in which to navigate</param>
-            /// <returns>Returns the element in the specified direction</returns>
+            /// <param name="direction">Indicates the direction in which to navigate.</param>
+            /// <returns>Returns the element in the specified direction if it exists.</returns>
             [return: MarshalAs(UnmanagedType.IUnknown)]
             object? /*IRawElementProviderFragment*/ Navigate(NavigateDirection direction);
 
