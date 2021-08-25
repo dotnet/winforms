@@ -1248,16 +1248,16 @@ namespace System.Windows.Forms
         /// <param name="font">The font to be used as a default across the application.</param>
         /// <exception cref="ArgumentNullException"><paramref name="font"/> is <see langword="null"/>.</exception>
         /// <exception cref="InvalidOperationException">
-        /// You can only call this method before the first window is created by your Windows Forms application.
+        ///  You can only call this method before the first window is created by your Windows Forms application.
         /// </exception>
         /// <remarks>
-        ///  <para>
-        ///    The system text scale factor will be applied to the font, i.e. if the default font is set to "Calibri, 11f"
-        ///    and the text scale factor is set to 150% the resulting default font will be set to "Calibri, 16.5f".
-        ///  </para>
-        ///  <para>
-        ///    Users can adjust text scale with the Make text bigger slider on the Settings -> Ease of Access -> Vision/Display screen.
-        ///  </para>
+        /// <para>
+        ///  The system text scale factor will be applied to the font, i.e. if the default font is set to "Calibri, 11f"
+        ///  and the text scale factor is set to 150% the resulting default font will be set to "Calibri, 16.5f".
+        /// </para>
+        /// <para>
+        ///  Users can adjust text scale with the Make text bigger slider on the Settings -> Ease of Access -> Vision/Display screen.
+        /// </para>
         /// </remarks>
         /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
         public static void SetDefaultFont(Font font)
