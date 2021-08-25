@@ -1219,7 +1219,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void InsertItem(int index, TabPage tabPage)
         {
-            if (index < 0 || ((_tabPages is not null) && index > _tabPageCount))
+            if (index < 0 || index > _tabPageCount)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -1229,13 +1229,12 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(tabPage));
             }
 
-            if (IsHandleCreated)
+            int retIndex = IsHandleCreated
+                             ? (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage)
+                             : index;
+            if (retIndex >= 0)
             {
-                int retIndex = PARAM.ToInt(SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage));
-                if (retIndex >= 0)
-                {
-                    Insert(retIndex, tabPage);
-                }
+                Insert(retIndex, tabPage);
             }
         }
 

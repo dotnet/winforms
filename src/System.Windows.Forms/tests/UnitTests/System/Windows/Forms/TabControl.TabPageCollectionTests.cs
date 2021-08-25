@@ -1959,8 +1959,8 @@ namespace System.Windows.Forms.Tests
             {
                 // Add first.
                 collection.Insert(0, value1);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Same(value1, Assert.Single(collection));
+                Assert.Same(value1, Assert.Single(owner.TabPages));
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -1978,8 +1978,8 @@ namespace System.Windows.Forms.Tests
 
                 // Add another.
                 collection.Insert(0, value2);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Equal(new TabPage[] { value2, value1 }, collection.Cast<TabPage>());
+                Assert.Equal(new TabPage[] { value2, value1 }, owner.TabPages.Cast<TabPage>());
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -2009,8 +2009,8 @@ namespace System.Windows.Forms.Tests
 
                 // Add again.
                 collection.Insert(2, value1);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Equal(new TabPage[] { value2, value1, value1 }, collection.Cast<TabPage>());
+                Assert.Equal(new TabPage[] { value2, value1, value1 }, owner.TabPages.Cast<TabPage>());
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -2263,8 +2263,8 @@ namespace System.Windows.Forms.Tests
             {
                 // Add first.
                 collection.Insert(0, value1);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Same(value1, Assert.Single(collection));
+                Assert.Same(value1, Assert.Single(owner.TabPages));
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -2285,8 +2285,8 @@ namespace System.Windows.Forms.Tests
 
                 // Add another.
                 collection.Insert(0, value2);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Equal(new TabPage[] { value2, value1 }, collection.Cast<TabPage>());
+                Assert.Equal(new TabPage[] { value2, value1 }, owner.TabPages.Cast<TabPage>());
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -2322,8 +2322,8 @@ namespace System.Windows.Forms.Tests
 
                 // Add again.
                 collection.Insert(2, value1);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Equal(new TabPage[] { value2, value1, value1 }, collection.Cast<TabPage>());
+                Assert.Equal(new TabPage[] { value2, value1, value1 }, owner.TabPages.Cast<TabPage>());
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -2912,8 +2912,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new TabControl();
             var collection = new TabControl.TabPageCollection(owner);
             using var value = new TabPage();
-            collection.Insert(index, value);
-            Assert.Empty(collection);
+            Assert.Throws<ArgumentOutOfRangeException>(() => collection.Insert(index, value));
         }
 
         [WinFormsTheory]
@@ -2926,8 +2925,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
 
             using var value = new TabPage();
-            collection.Insert(index, value);
-            Assert.Same(value, Assert.Single(collection));
+            Assert.Throws<ArgumentOutOfRangeException>(() => collection.Insert(index, value));
         }
 
         [WinFormsTheory]
@@ -3003,8 +3001,8 @@ namespace System.Windows.Forms.Tests
             {
                 // Add first.
                 iList.Insert(0, value1);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Same(value1, Assert.Single(collection));
+                Assert.Same(value1, Assert.Single(owner.TabPages));
                 Assert.Same(value1, Assert.Single(owner.Controls));
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -3022,8 +3020,8 @@ namespace System.Windows.Forms.Tests
 
                 // Add another.
                 iList.Insert(0, value2);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Equal(new TabPage[] { value2, value1 }, collection.Cast<TabPage>());
+                Assert.Equal(new TabPage[] { value2, value1 }, owner.TabPages.Cast<TabPage>());
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -3053,8 +3051,8 @@ namespace System.Windows.Forms.Tests
 
                 // Add again.
                 iList.Insert(2, value1);
-                Assert.Empty(collection);
-                Assert.Empty(owner.TabPages);
+                Assert.Equal(new TabPage[] { value2, value1, value1 }, collection.Cast<TabPage>());
+                Assert.Equal(new TabPage[] { value2, value1, value1 }, owner.TabPages.Cast<TabPage>());
                 Assert.Equal(new Control[] { value2, value1 }, owner.Controls.Cast<Control>());
                 Assert.Same(owner, value1.Parent);
                 Assert.False(value1.Visible);
@@ -3141,8 +3139,7 @@ namespace System.Windows.Forms.Tests
             var collection = new TabControl.TabPageCollection(owner);
             IList iList = collection;
             using var value = new TabPage();
-            iList.Insert(index, value);
-            Assert.Empty(collection);
+            Assert.Throws<ArgumentOutOfRangeException>(() => iList.Insert(index, value));
         }
 
         [WinFormsTheory]
@@ -3156,8 +3153,7 @@ namespace System.Windows.Forms.Tests
             Assert.NotEqual(IntPtr.Zero, owner.Handle);
 
             using var value = new TabPage();
-            iList.Insert(index, value);
-            Assert.Same(value, Assert.Single(collection));
+            Assert.Throws<ArgumentOutOfRangeException>(() => iList.Insert(index, value));
         }
 
         [WinFormsTheory]
@@ -4910,6 +4906,63 @@ namespace System.Windows.Forms.Tests
             // Call again.
             collection.RemoveByKey(key);
             Assert.Equal(new TabPage[] { child1, child2, child3 }, collection.Cast<TabPage>());
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Insert_By_Index()
+        {
+            using var TabControl = new TabControl();
+
+            using var page1 = new TabPage();
+            using var page2 = new TabPage();
+            using var page3 = new TabPage();
+
+            page1.Text = "First works";
+            TabControl.TabPages.Add(page1);
+
+            page2.Text = "Second works";
+            TabControl.TabPages.Insert(1, page2);
+            Assert.Equal(2, TabControl.TabPages.Count);
+            Assert.Equal(page2, TabControl.TabPages[1]);
+            Assert.Equal(page2, TabControl.Controls[1]);
+
+            page3.Text = "Third works";
+            TabControl.TabPages.Insert(1, page3);
+            Assert.Equal(3, TabControl.TabPages.Count);
+            Assert.Equal(page3, TabControl.TabPages[1]);
+            Assert.Equal(page3, TabControl.Controls[1]);
+            Assert.Equal(page2, TabControl.TabPages[2]);
+            Assert.Equal(page2, TabControl.Controls[2]);
+        }
+
+        [WinFormsFact]
+        public void TabPageCollection_Insert_First_item()
+        {
+            using var TabControl = new TabControl();
+
+            using var page1 = new TabPage();
+            using var page2 = new TabPage();
+            using var page3 = new TabPage();
+
+            page1.Text = "First works";
+            TabControl.TabPages.Insert(0, page1);
+            Assert.Equal(1, TabControl.TabPages.Count);
+            Assert.Equal(page1, TabControl.TabPages[0]);
+            Assert.Equal(page1, TabControl.Controls[0]);
+
+            page2.Text = "Second works";
+            TabControl.TabPages.Insert(1, page2);
+            Assert.Equal(2, TabControl.TabPages.Count);
+            Assert.Equal(page2, TabControl.TabPages[1]);
+            Assert.Equal(page2, TabControl.Controls[1]);
+
+            page3.Text = "Third works";
+            TabControl.TabPages.Insert(1, page3);
+            Assert.Equal(3, TabControl.TabPages.Count);
+            Assert.Equal(page3, TabControl.TabPages[1]);
+            Assert.Equal(page3, TabControl.Controls[1]);
+            Assert.Equal(page2, TabControl.TabPages[2]);
+            Assert.Equal(page2, TabControl.Controls[2]);
         }
 
         private class NullGetItemsTabControl : TabControl
