@@ -4934,6 +4934,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(page2, TabControl.TabPages[2]);
             Assert.Equal(page2, TabControl.Controls[2]);
         }
+
         [WinFormsFact]
         public void TabPageCollection_Insert_First_item()
         {
