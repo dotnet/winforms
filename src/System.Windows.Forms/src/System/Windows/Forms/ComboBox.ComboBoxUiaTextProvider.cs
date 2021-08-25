@@ -277,7 +277,7 @@ namespace System.Windows.Forms
 
             public override Point PointToScreen(Point pt)
             {
-                User32.MapWindowPoints(_owningChildEdit.Handle, IntPtr.Zero, ref pt, 1);
+                User32.MapWindowPoint(_owningChildEdit, IntPtr.Zero, ref pt);
                 return pt;
             }
 
@@ -320,7 +320,7 @@ namespace System.Windows.Forms
 
                 // Convert screen to client coordinates.
                 // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
-                if (MapWindowPoints(default, _owningChildEdit, ref clientLocation, 1) == 0)
+                if (MapWindowPoint(IntPtr.Zero, _owningChildEdit, ref clientLocation) == 0)
                 {
                     return new UiaTextRange(new InternalAccessibleObject(_owningComboBox.ChildEditAccessibleObject), this, 0, 0);
                 }

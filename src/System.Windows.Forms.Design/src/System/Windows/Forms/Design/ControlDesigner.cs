@@ -320,7 +320,7 @@ namespace System.Windows.Forms.Design
         internal Point GetOffsetToClientArea()
         {
             var nativeOffset = new Point();
-            User32.MapWindowPoints(Control.Handle, Control.Parent.Handle, ref nativeOffset, 1);
+            User32.MapWindowPoint(Control, Control.Parent, ref nativeOffset);
             Point offset = Control.Location;
 
             // If the 2 controls do not have the same orientation, then force one to make sure we calculate the correct offset
@@ -1814,12 +1814,13 @@ namespace System.Windows.Forms.Design
 
             if (m.Msg >= (int)User32.WM.MOUSEFIRST && m.Msg <= (int)User32.WM.MOUSELAST)
             {
-                var pt = new Point
+                Point pt = new()
                 {
                     X = PARAM.SignedLOWORD(m.LParam),
                     Y = PARAM.SignedHIWORD(m.LParam)
                 };
-                User32.MapWindowPoints(m.HWnd, IntPtr.Zero, ref pt, 1);
+
+                User32.MapWindowPoints(m.HWnd, IntPtr.Zero, &pt, 1);
                 x = pt.X;
                 y = pt.Y;
             }
@@ -2139,9 +2140,9 @@ namespace System.Windows.Forms.Design
                         {
                             // Re-map the clip rect we pass to the paint event args to our child coordinates.
                             Point point = default;
-                            User32.MapWindowPoints(m.HWnd, Control.Handle, ref point, 1);
+                            User32.MapWindowPoint(m.HWnd, Control, ref point);
                             graphics.TranslateTransform(-point.X, -point.Y);
-                            User32.MapWindowPoints(m.HWnd, Control.Handle, ref clip, 2);
+                            User32.MapWindowPoints(m.HWnd, Control.Handle, ref clip);
                         }
 
                         Rectangle paintRect = clip;

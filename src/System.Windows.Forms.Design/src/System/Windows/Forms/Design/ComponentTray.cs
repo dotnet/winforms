@@ -1684,7 +1684,7 @@ namespace System.Windows.Forms.Design
                         // Get a hit test on any glyphs that we are managing this way - we know where to route appropriate  messages
                         Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                         var pt1 = new Point();
-                        User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                        pt1 = PointToClient(pt1);
                         pt.Offset(pt1.X, pt1.Y);
                         glyphManager.GetHitTest(pt);
                     }
@@ -2641,7 +2641,7 @@ namespace System.Windows.Forms.Design
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
                             Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
                             var pt1 = new Point();
-                            User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                            pt1 = PointToClient(pt1);
                             pt.Offset(pt1.X, pt1.Y);
                             pt.Offset(Location.X, Location.Y);//offset the loc of the traycontrol -so now we're in comptray coords
                             _tray.glyphManager.GetHitTest(pt);

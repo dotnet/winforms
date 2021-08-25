@@ -568,6 +568,10 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         protected virtual Type DefaultTabType => typeof(PropertiesTab);
 
+        /// <summary>
+        ///  Gets or sets a value indicating whether the <see cref="PropertyGrid"/> control paints its toolbar
+        ///  with flat buttons.
+        /// </summary>
         protected bool DrawFlatToolbar
         {
             get => _drawFlatToolBar;
@@ -1763,8 +1767,7 @@ namespace System.Windows.Forms
                     {
                         // No menu command service.  Go straight to the component's designer.  We can only do this
                         // if the object count is 1, because designers do not support verbs across a multi-selection.
-                        if (_currentObjects.Length == 1 && GetUnwrappedObject(0) is IComponent
-                            && site.TryGetService(out IDesignerHost designerHost))
+                        if (_currentObjects.Length == 1 && site.TryGetService(out IDesignerHost designerHost))
                         {
                             IDesigner designer = designerHost.GetDesigner(component);
                             if (designer is not null)
@@ -1777,7 +1780,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Don't show verbs if a prop grid is on the form at design time.
+            // Don't show verbs if a property grid is on the form at design time.
             if (!DesignMode)
             {
                 if (verbs is not null && verbs.Length > 0)
@@ -1803,10 +1806,13 @@ namespace System.Windows.Forms
                 // Unhook IDesignerEventService.ActiveDesignerChanged event
                 if (GetFlag(Flags.GotDesignerEventService))
                 {
-                    Debug.Assert(_designerEventService is not null, "GetFlag(GotDesignerEventService) inconsistent with designerEventService == null");
+                    Debug.Assert(
+                        _designerEventService is not null,
+                        "GetFlag(GotDesignerEventService) inconsistent with designerEventService == null");
+
                     if (_designerEventService is not null)
                     {
-                        _designerEventService.ActiveDesignerChanged -= new ActiveDesignerEventHandler(OnActiveDesignerChanged);
+                        _designerEventService.ActiveDesignerChanged -= OnActiveDesignerChanged;
                     }
 
                     _designerEventService = null;
@@ -1829,10 +1835,7 @@ namespace System.Windows.Forms
                 {
                     for (int i = 0; i < _imageList.Length; i++)
                     {
-                        if (_imageList[i] is not null)
-                        {
-                            _imageList[i].Dispose();
-                        }
+                        _imageList[i]?.Dispose();
                     }
 
                     _imageList = null;
@@ -1951,22 +1954,22 @@ namespace System.Windows.Forms
             return Math.Max(DividerLimitHigh(target), y);
         }
 
-        private static void DrawXorBar(Control ctlDrawTo, Rectangle rcFrame)
+        private static void DrawXorBar(Control targetControl, Rectangle rcFrame)
         {
-            Rectangle rc = ctlDrawTo.RectangleToScreen(rcFrame);
+            Rectangle rc = targetControl.RectangleToScreen(rcFrame);
 
             if (rc.Width < rc.Height)
             {
                 for (int i = 0; i < rc.Width; i++)
                 {
-                    ControlPaint.DrawReversibleLine(new Point(rc.X + i, rc.Y), new Point(rc.X + i, rc.Y + rc.Height), ctlDrawTo.BackColor);
+                    ControlPaint.DrawReversibleLine(new Point(rc.X + i, rc.Y), new Point(rc.X + i, rc.Y + rc.Height), targetControl.BackColor);
                 }
             }
             else
             {
                 for (int i = 0; i < rc.Height; i++)
                 {
-                    ControlPaint.DrawReversibleLine(new Point(rc.X, rc.Y + i), new Point(rc.X + rc.Width, rc.Y + i), ctlDrawTo.BackColor);
+                    ControlPaint.DrawReversibleLine(new Point(rc.X, rc.Y + i), new Point(rc.X + rc.Width, rc.Y + i), targetControl.BackColor);
                 }
             }
         }
@@ -4173,7 +4176,7 @@ namespace System.Windows.Forms
             {
                 // Convert the coordinates.
                 var temp = new Point(e.X, e.Y);
-                User32.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref temp, 1);
+                temp = WindowsFormsUtils.TranslatePoint(temp, child, this);
 
                 // Forward the message.
                 pt = temp;
@@ -4187,29 +4190,32 @@ namespace System.Windows.Forms
         {
             // If the only view available is properties-view, there's no need to show the button.
 
-            if (_viewTabButtons is not null)
+            if (_viewTabButtons is null)
             {
-                int nOtherViewsVisible = 0;
+                return;
+            }
 
-                // Starts at index 1, since index 0 is properties-view
-                for (int i = 1; i < _viewTabButtons.Length; i++)
-                {
-                    if (_viewTabButtons[i].Visible)
-                    {
-                        nOtherViewsVisible++;
-                    }
-                }
+            bool shouldBeVisible = false;
 
-                if (nOtherViewsVisible > 0)
+            // Starts at index 1, since index 0 is properties-view
+            for (int i = 1; i < _viewTabButtons.Length; i++)
+            {
+                if (_viewTabButtons[i].Visible)
                 {
-                    _viewTabButtons[PropertiesTabIndex].Visible = true;
-                    _separator2.Visible = true;
+                    shouldBeVisible = true;
+                    break;
                 }
-                else
-                {
-                    _viewTabButtons[PropertiesTabIndex].Visible = false;
-                    _separator2.Visible = false;
-                }
+            }
+
+            if (shouldBeVisible)
+            {
+                _viewTabButtons[PropertiesTabIndex].Visible = true;
+                _separator2.Visible = true;
+            }
+            else
+            {
+                _viewTabButtons[PropertiesTabIndex].Visible = false;
+                _separator2.Visible = false;
             }
         }
 
@@ -4295,17 +4301,10 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Indicates whether or not the control supports UIA Providers via
-        ///  IRawElementProviderFragment/IRawElementProviderFragmentRoot interfaces.
-        /// </summary>
+        /// <inheritdoc/>
         internal override bool SupportsUiaProviders => true;
 
-        /// <summary>
-        ///  Determines whether the control supports rendering text using GDI+ and GDI.
-        ///  This is provided for container controls to iterate through its children to set UseCompatibleTextRendering to the same
-        ///  value if the child control supports it.
-        /// </summary>
+        /// <inheritdoc/>
         internal override bool SupportsUseCompatibleTextRendering => true;
 
         internal override bool AllowsKeyboardToolTip() => false;

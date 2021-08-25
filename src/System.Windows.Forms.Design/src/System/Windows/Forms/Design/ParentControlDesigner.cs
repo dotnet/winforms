@@ -2043,16 +2043,11 @@ namespace System.Windows.Forms.Design
             if (_statusCommandUI != null && !offset.IsEmpty)
             {
                 Point location = new(baseVar.X, baseVar.Y);
-                User32.MapWindowPoints(IntPtr.Zero, Control.Handle, ref location, 1);
-                if (_statusCommandUI != null)
-                {
-                    _statusCommandUI.SetStatusInformation(new Rectangle(location.X, location.Y, offset.Width, offset.Height));
-                }
+                location = Control.PointToClient(location);
+                _statusCommandUI?.SetStatusInformation(new Rectangle(location.X, location.Y, offset.Width, offset.Height));
             }
 
-            // Quit now if we don't have an offset rect.  This indicates that
-            // the user didn't move the mouse.
-            //
+            // Quit now if we don't have an offset rect.  This indicates that the user didn't move the mouse.
             if (offset.IsEmpty && !cancel)
             {
                 // BUT, if we have a selected tool, create it here
@@ -2274,11 +2269,8 @@ namespace System.Windows.Forms.Design
             if (_statusCommandUI != null)
             {
                 Point offset = new(_mouseDragOffset.X, _mouseDragOffset.Y);
-                User32.MapWindowPoints(IntPtr.Zero, Control.Handle, ref offset, 1);
-                if (_statusCommandUI != null)
-                {
-                    _statusCommandUI.SetStatusInformation(new Rectangle(offset.X, offset.Y, _mouseDragOffset.Width, _mouseDragOffset.Height));
-                }
+                offset = Control.PointToClient(offset);
+                _statusCommandUI?.SetStatusInformation(new Rectangle(offset.X, offset.Y, _mouseDragOffset.Width, _mouseDragOffset.Height));
             }
         }
 

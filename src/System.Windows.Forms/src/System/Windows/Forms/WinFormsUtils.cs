@@ -6,7 +6,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Text;
 using static Interop;
 
@@ -273,14 +272,16 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Translates a point from one control's coordinate system to the other
-        ///  same as:
-        ///  controlTo.PointToClient(controlFrom.PointToScreen(point))
-        ///  but slightly more performant.
+        ///  Translates a point from one control's coordinate system to the other.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   Same as controlTo.PointToClient(controlFrom.PointToScreen(point)), but more slightly more performant.
+        ///  </para>
+        /// </remarks>
         public static Point TranslatePoint(Point point, Control fromControl, Control toControl)
         {
-            User32.MapWindowPoints(new HandleRef(fromControl, fromControl.Handle), new HandleRef(toControl, toControl.Handle), ref point, 1);
+            User32.MapWindowPoint(fromControl, toControl, ref point);
             return point;
         }
 

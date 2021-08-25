@@ -354,7 +354,7 @@ namespace System.Windows.Forms
                     if (activeToolStrip is not null)
                     {
                         var pt = new Point(x, y);
-                        User32.MapWindowPoints(new HandleRef(activeToolStrip, hwndMouseMessageIsFrom), new HandleRef(activeToolStrip, activeToolStrip.Handle), ref pt, 1);
+                        User32.MapWindowPoint(hwndMouseMessageIsFrom, activeToolStrip, ref pt);
                         if (!activeToolStrip.ClientRectangle.Contains(pt.X, pt.Y))
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)

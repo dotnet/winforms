@@ -10,60 +10,71 @@ internal static partial class Interop
     internal static partial class User32
     {
         [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref Point lpPoints, uint cPoints);
+        public unsafe static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, Point* lpPoints, uint cPoints);
 
-        public static int MapWindowPoints(HandleRef hWndFrom, IntPtr hWndTo, ref Point lpPoints, uint cPoints)
+        public unsafe static int MapWindowPoint(IHandle hWndFrom, IHandle hWndTo, ref Point lpPoints)
         {
-            int result = MapWindowPoints(hWndFrom.Handle, hWndTo, ref lpPoints, cPoints);
-            GC.KeepAlive(hWndFrom.Wrapper);
-            return result;
+            fixed (Point* p = &lpPoints)
+            {
+                int result = MapWindowPoints(
+                    hWndFrom?.Handle ?? IntPtr.Zero,
+                    hWndTo?.Handle ?? IntPtr.Zero,
+                    p,
+                    1);
+
+                GC.KeepAlive(hWndFrom);
+                GC.KeepAlive(hWndTo);
+                return result;
+            }
         }
 
-        public static int MapWindowPoints(IntPtr hWndFrom, HandleRef hWndTo, ref Point lpPoints, uint cPoints)
+        public unsafe static int MapWindowPoint(IHandle hWndFrom, IntPtr hWndTo, ref Point lpPoints)
         {
-            int result = MapWindowPoints(hWndFrom, hWndTo.Handle, ref lpPoints, cPoints);
-            GC.KeepAlive(hWndTo.Wrapper);
-            return result;
+            fixed (Point* p = &lpPoints)
+            {
+                int result = MapWindowPoints(hWndFrom.Handle, hWndTo, p, 1);
+                GC.KeepAlive(hWndFrom);
+                return result;
+            }
         }
 
-        public static int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref Point lpPoints, uint cPoints)
+        public unsafe static int MapWindowPoint(IntPtr hWndFrom, IHandle hWndTo, ref Point lpPoints)
         {
-            int result = MapWindowPoints(hWndFrom.Handle, hWndTo.Handle, ref lpPoints, cPoints);
-            GC.KeepAlive(hWndFrom.Wrapper);
-            GC.KeepAlive(hWndTo.Wrapper);
-            return result;
+            fixed (Point* p = &lpPoints)
+            {
+                int result = MapWindowPoints(hWndFrom, hWndTo.Handle, p, 1);
+                GC.KeepAlive(hWndTo);
+                return result;
+            }
         }
 
-        public static int MapWindowPoints(IntPtr hWndFrom, IHandle hWndTo, ref Point lpPoints, uint cPoints)
+        public unsafe static int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref RECT lpPoints)
         {
-            int result = MapWindowPoints(hWndFrom, hWndTo.Handle, ref lpPoints, cPoints);
-            GC.KeepAlive(hWndTo);
-            return result;
+            fixed (RECT* r = &lpPoints)
+            {
+                int result = MapWindowPoints(hWndFrom, hWndTo, (Point*)r, 2);
+                return result;
+            }
         }
 
-        [DllImport(Libraries.User32, ExactSpelling = true)]
-        public static extern int MapWindowPoints(IntPtr hWndFrom, IntPtr hWndTo, ref RECT lpPoints, uint cPoints);
-
-        public static int MapWindowPoints(HandleRef hWndFrom, IntPtr hWndTo, ref RECT lpPoints, uint cPoints)
+        public unsafe static int MapWindowPoints(IHandle hWndFrom, IntPtr hWndTo, ref RECT lpPoints)
         {
-            int result = MapWindowPoints(hWndFrom.Handle, hWndTo, ref lpPoints, cPoints);
-            GC.KeepAlive(hWndFrom.Wrapper);
-            return result;
+            fixed (RECT* r = &lpPoints)
+            {
+                int result = MapWindowPoints(hWndFrom.Handle, hWndTo, (Point*)r, 2);
+                GC.KeepAlive(hWndFrom);
+                return result;
+            }
         }
 
-        public static int MapWindowPoints(IntPtr hWndFrom, HandleRef hWndTo, ref RECT lpPoints, uint cPoints)
+        public unsafe static int MapWindowPoints(IntPtr hWndFrom, IHandle hWndTo, ref RECT lpPoints)
         {
-            int result = MapWindowPoints(hWndFrom, hWndTo.Handle, ref lpPoints, cPoints);
-            GC.KeepAlive(hWndTo.Wrapper);
-            return result;
-        }
-
-        public static int MapWindowPoints(HandleRef hWndFrom, HandleRef hWndTo, ref RECT lpPoints, uint cPoints)
-        {
-            int result = MapWindowPoints(hWndFrom.Handle, hWndTo.Handle, ref lpPoints, cPoints);
-            GC.KeepAlive(hWndFrom.Wrapper);
-            GC.KeepAlive(hWndTo.Wrapper);
-            return result;
+            fixed (RECT* r = &lpPoints)
+            {
+                int result = MapWindowPoints(hWndFrom, hWndTo.Handle, (Point*)r, 2);
+                GC.KeepAlive(hWndTo);
+                return result;
+            }
         }
     }
 }
