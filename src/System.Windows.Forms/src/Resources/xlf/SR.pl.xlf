@@ -7346,11 +7346,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Formularz {0} podjął próbę ustawienia nieodpowiedniego formularza jako właściciela. Formularze nie mogą być swoimi własnymi właścicielami ani właścicielami swoich właścicieli.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description</source>
-        <target state="translated">Opis</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">Wartość właściwości nie jest prawidłowa.</target>
@@ -8176,11 +8171,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Kolor pierwszego obszaru wyłączonego tekstu w obszarze siatki.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0} — opis</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Przeglądaj...</target>
@@ -8219,6 +8209,16 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Kolor pierwszego planu okienka opisu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

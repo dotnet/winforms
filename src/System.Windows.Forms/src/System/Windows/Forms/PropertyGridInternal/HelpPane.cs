@@ -64,7 +64,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             Size = new(DefaultWidth, defaultHeight);
 
-            Text = SR.PBRSDocCommentPaneTitle;
+            Text = SR.PropertyGridHelpPaneTitle;
             SetStyle(ControlStyles.Selectable, false);
             ResumeLayout(false);
         }

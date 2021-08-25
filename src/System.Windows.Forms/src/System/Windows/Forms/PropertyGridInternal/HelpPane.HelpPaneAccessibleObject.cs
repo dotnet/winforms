@@ -50,7 +50,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 };
 
             public override string Name => Owner?.AccessibleName
-                ?? string.Format(SR.PropertyGridDocCommentAccessibleNameTemplate, _parentPropertyGrid?.AccessibilityObject.Name);
+                ?? string.Format(SR.PropertyGridHelpPaneAccessibleNameTemplate, _parentPropertyGrid?.AccessibilityObject.Name);
         }
     }
 }

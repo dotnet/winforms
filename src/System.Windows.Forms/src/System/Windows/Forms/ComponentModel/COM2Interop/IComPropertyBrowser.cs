@@ -33,7 +33,10 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Commits all pending changes to the <see cref="PropertyGrid"/> control.
         /// </summary>
-        /// <returns>true if the <see cref="PropertyGrid"/> successfully commits changes; otherwise, false.</returns>
+        /// <returns>
+        ///  <see langword="true"/> if the <see cref="PropertyGrid"/> successfully commits changes; otherwise,
+        ///  <see langword="false"/>.
+        /// </returns>
         bool EnsurePendingChangesCommitted();
 
         /// <summary>

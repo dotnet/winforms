@@ -10,7 +10,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
     public class HelpPane_HelpPaneAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
-        public void DocCommentAccessibleObject_Ctor_Default()
+        public void HelpPaneAccessibleObject_Ctor_Default()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             using HelpPane helpPane = new HelpPane(propertyGrid);
@@ -23,7 +23,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         }
 
         [WinFormsFact]
-        public void DocCommentAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
+        public void HelpPaneAccessibleObject_ControlType_IsPane_IfAccessibleRoleIsDefault()
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             using HelpPane helpPane = new HelpPane(propertyGrid);
@@ -39,7 +39,7 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
         [WinFormsTheory]
         [InlineData(true, AccessibleRole.Client)]
         [InlineData(false, AccessibleRole.None)]
-        public void DocCommentAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
+        public void HelpPaneAccessibleObject_Role_IsExpected_ByDefault(bool createControl, AccessibleRole expectedRole)
         {
             using PropertyGrid propertyGrid = new PropertyGrid();
             using HelpPane helpPane = new HelpPane(propertyGrid);

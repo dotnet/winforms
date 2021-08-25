@@ -7346,11 +7346,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Formulář {0} se pokusil nastavit jako svého vlastníka nevhodný formulář. Formuláře nemohou vlastnit samy sebe ani své vlastníky.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description</source>
-        <target state="translated">Popis</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">Hodnota vlastnosti není platná.</target>
@@ -8176,11 +8171,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Barva popředí neaktivního textu v oblasti mřížky</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">Popis pro {0}</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Procházet...</target>
@@ -8219,6 +8209,16 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Barva popředí podokna popisu.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

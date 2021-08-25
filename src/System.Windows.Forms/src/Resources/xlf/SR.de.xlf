@@ -7346,11 +7346,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Das Formular {0} hat versucht, ein ungültiges Formular als Besitzer festzulegen. Formulare können nicht sich selbst oder ihre Besitzer besitzen.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PBRSDocCommentPaneTitle">
-        <source>Description</source>
-        <target state="translated">Beschreibung</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">Ungültiger Eigenschaftswert.</target>
@@ -8176,11 +8171,6 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Die Vordergrundfarbe für gesperrten Text im Rasterbereich.</target>
         <note />
       </trans-unit>
-      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0}-Beschreibung</target>
-        <note />
-      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Durchsuchen...</target>
@@ -8219,6 +8209,16 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Die Vordergrundfarbe des Beschreibungsbereichs.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="PropertyGridHelpPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

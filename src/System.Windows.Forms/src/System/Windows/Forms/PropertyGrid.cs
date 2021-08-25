@@ -1733,7 +1733,7 @@ namespace System.Windows.Forms
 
         private void DisplayCommandsPane()
         {
-            bool hotCommandsDisplayed = _commandsPane.Visible;
+            bool commandsPaneDisplayed = _commandsPane.Visible;
 
             IComponent component = null;
             DesignerVerb[] verbs = null;
@@ -1789,7 +1789,7 @@ namespace System.Windows.Forms
                     _commandsPane.SetVerbs(null, null);
                 }
 
-                if (hotCommandsDisplayed != _commandsPane.Visible)
+                if (commandsPaneDisplayed != _commandsPane.Visible)
                 {
                     OnLayoutInternal(dividerOnly: false);
                 }
