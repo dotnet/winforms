@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         /// </summary>
         /// <remarks>
         /// <para>
-        ///   Note: While the dialog is showing, you cannot switch from
+        ///   While the dialog is showing, you cannot switch from
         ///   <see cref="None"/> to any other state, and vice versa.
         /// </para>
         /// </remarks>
