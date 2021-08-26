@@ -215,15 +215,15 @@ namespace System.Windows.Forms.Design.Behavior
             {
                 ProcessingDrag = true;
 
-                // determine if this is a local drag, if it is, do normal processing otherwise, force a
+                // Determine if this is a local drag, if it is, do normal processing otherwise, force a
                 // PropagateHitTest.  We need to force this because the OLE D&D service suspends mouse messages
                 // when the drag is not local so the mouse hook never sees them.
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    User32.GetCursorPos(out Point pt);
-                    User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
-                    _behaviorService.PropagateHitTest(pt);
+                    User32.GetCursorPos(out Point point);
+                    point = PointToClient(point);
+                    _behaviorService.PropagateHitTest(point);
                 }
 
                 _behaviorService.OnDragEnter(null, e);
@@ -257,9 +257,9 @@ namespace System.Windows.Forms.Design.Behavior
                 if (!IsLocalDrag(e))
                 {
                     _behaviorService._validDragArgs = e;
-                    User32.GetCursorPos(out Point pt);
-                    User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt, 1);
-                    _behaviorService.PropagateHitTest(pt);
+                    User32.GetCursorPos(out Point point);
+                    point = PointToClient(point);
+                    _behaviorService.PropagateHitTest(point);
                 }
 
                 _behaviorService.OnDragOver(e);
@@ -332,8 +332,9 @@ namespace System.Windows.Forms.Design.Behavior
                         Point pt = new Point(
                             (short)PARAM.LOWORD(m.LParam),
                             (short)PARAM.HIWORD(m.LParam));
+
                         var pt1 = new Point();
-                        User32.MapWindowPoints(IntPtr.Zero, Handle, ref pt1, 1);
+                        pt1 = PointToClient(pt1);
                         pt.Offset(pt1.X, pt1.Y);
 
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)

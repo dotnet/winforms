@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
 using System.Text;
@@ -11,9 +12,17 @@ using System.Text;
 namespace System.Windows.Forms.PropertyGridInternal
 {
     /// <summary>
-    ///  The commands pane optionally shown at the bottom of the <see cref="PropertyGrid"/>.
+    ///  The commands pane optionally shown at the bottom of the <see cref="PropertyGrid"/>. This pane is used
+    ///  to host links to <see cref="DesignerVerb"/>s associated with the <see cref="PropertyGrid"/>'s selected
+    ///  object(s).
     /// </summary>
     /// <remarks>
+    ///  <para>
+    ///   <see cref="DesignerVerb"/> commands are found by looking for services on <see cref="IComponent.Site"/>.
+    ///   Specifically, it first looks for <see cref="IMenuCommandService"/>, then falls back to looking for
+    ///   <see cref="IDesigner.Verbs"/> from any associated <see cref="IDesignerHost"/>. Note that
+    ///   <see cref="PropertyGrid"/> will not set commands when it is in design mode.
+    ///  </para>
     ///  <para>
     ///   <see cref="PropertyGrid.CommandsVisible"/> controls the visibility of this control.
     ///  </para>
@@ -44,10 +53,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  Constructs the new instance of the accessibility object for this control.
-        /// </summary>
-        /// <returns>The accessibility object for this control.</returns>
+        /// <inheritdoc />
         protected override AccessibleObject CreateAccessibilityInstance()
             => new CommandsPaneAccessibleObject(this, OwnerPropertyGrid);
 
@@ -131,7 +137,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void OnCommandChanged(object sender, EventArgs e) => SetupLabel();
+        private void OnCommandChanged(object sender, EventArgs e) => InitializeLabelLinks();
 
         protected override void OnGotFocus(EventArgs e)
         {
@@ -191,18 +197,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Visible = true;
                 }
 
-                SetupLabel();
+                InitializeLabelLinks();
             }
 
             _optimalHeight = -1;
         }
 
-        private void SetupLabel()
+        private void InitializeLabelLinks()
         {
             Label.Links.Clear();
             StringBuilder sb = new();
-            var links = new Point[_verbs.Length];
-            int charLoc = 0;
+            Point[] links = new Point[_verbs.Length];
+            int index = 0;
             bool firstVerb = true;
 
             for (int i = 0; i < _verbs.Length; i++)
@@ -213,14 +219,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         sb.Append(Application.CurrentCulture.TextInfo.ListSeparator);
                         sb.Append(' ');
-                        charLoc += 2;
+                        index += 2;
                     }
 
                     string name = _verbs[i].Text;
 
-                    links[i] = new Point(charLoc, name.Length);
+                    links[i] = new Point(index, name.Length);
                     sb.Append(name);
-                    charLoc += name.Length;
+                    index += name.Length;
                     firstVerb = false;
                 }
             }

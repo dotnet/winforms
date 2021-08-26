@@ -8994,7 +8994,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Point PointToClient(Point p)
         {
-            User32.MapWindowPoints(IntPtr.Zero, new HandleRef(this, Handle), ref p, 1);
+            User32.MapWindowPoint(IntPtr.Zero, this, ref p);
             return p;
         }
 
@@ -9003,7 +9003,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Point PointToScreen(Point p)
         {
-            User32.MapWindowPoints(new HandleRef(this, Handle), IntPtr.Zero, ref p, 1);
+            User32.MapWindowPoint(this, IntPtr.Zero, ref p);
             return p;
         }
 
@@ -9867,7 +9867,7 @@ namespace System.Windows.Forms
         public Rectangle RectangleToClient(Rectangle r)
         {
             RECT rect = r;
-            User32.MapWindowPoints(IntPtr.Zero, new HandleRef(this, Handle), ref rect, 2);
+            User32.MapWindowPoints(IntPtr.Zero, this, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
@@ -9877,7 +9877,7 @@ namespace System.Windows.Forms
         public Rectangle RectangleToScreen(Rectangle r)
         {
             RECT rect = r;
-            User32.MapWindowPoints(new HandleRef(this, Handle), IntPtr.Zero, ref rect, 2);
+            User32.MapWindowPoints(this, IntPtr.Zero, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
@@ -11392,8 +11392,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Updates the bounds of the control based on the handle the control is
-        ///  bound to.
+        ///  Updates the bounds of the control based on the handle the control is bound to.
         /// </summary>
         // Internal for ScrollableControl
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -11406,11 +11405,16 @@ namespace System.Windows.Forms
             User32.GetWindowRect(new HandleRef(_window, InternalHandle), ref rect);
             if (!GetTopLevel())
             {
-                User32.MapWindowPoints(IntPtr.Zero, User32.GetParent(new HandleRef(_window, InternalHandle)), ref rect, 2);
+                User32.MapWindowPoints(IntPtr.Zero, User32.GetParent(new HandleRef(_window, InternalHandle)), ref rect);
             }
 
-            UpdateBounds(rect.left, rect.top, rect.right - rect.left,
-                         rect.bottom - rect.top, clientWidth, clientHeight);
+            UpdateBounds(
+                rect.left,
+                rect.top,
+                rect.right - rect.left,
+                rect.bottom - rect.top,
+                clientWidth,
+                clientHeight);
         }
 
         /// <summary>

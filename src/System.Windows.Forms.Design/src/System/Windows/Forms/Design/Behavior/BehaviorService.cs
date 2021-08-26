@@ -281,20 +281,12 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  Translates a point in the AdornerWindow to screen coords.
         /// </summary>
-        public Point AdornerWindowPointToScreen(Point p)
-        {
-            User32.MapWindowPoints(_adornerWindow.Handle, IntPtr.Zero, ref p, 1);
-            return p;
-        }
+        public Point AdornerWindowPointToScreen(Point p) => _adornerWindow.PointToScreen(p);
 
         /// <summary>
         ///  Gets the location (upper-left corner) of the AdornerWindow in screen coords.
         /// </summary>
-        public Point AdornerWindowToScreen()
-        {
-            Point origin = new Point(0, 0);
-            return AdornerWindowPointToScreen(origin);
-        }
+        public Point AdornerWindowToScreen() => AdornerWindowPointToScreen(new Point(0, 0));
 
         /// <summary>
         ///  Returns the location of a Control translated to AdornerWindow coords.
@@ -307,7 +299,7 @@ namespace System.Windows.Forms.Design.Behavior
             }
 
             var pt = new Point(c.Left, c.Top);
-            User32.MapWindowPoints(c.Parent.Handle, _adornerWindow.Handle, ref pt, 1);
+            User32.MapWindowPoint(c.Parent, _adornerWindow, ref pt);
             if (c.Parent.IsMirrored)
             {
                 pt.X -= c.Width;
@@ -321,7 +313,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public Point MapAdornerWindowPoint(IntPtr handle, Point pt)
         {
-            User32.MapWindowPoints(handle, _adornerWindow.Handle, ref pt, 1);
+            User32.MapWindowPoint(handle, _adornerWindow, ref pt);
             return pt;
         }
 
@@ -506,11 +498,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// <summary>
         ///  Translates a screen coord into a coord relative to the BehaviorService's AdornerWindow.
         /// </summary>
-        public Point ScreenToAdornerWindow(Point p)
-        {
-            User32.MapWindowPoints(IntPtr.Zero, _adornerWindow.Handle, ref p, 1);
-            return p;
-        }
+        public Point ScreenToAdornerWindow(Point p) => _adornerWindow.PointToClient(p);
 
         internal void OnLoseCapture()
         {

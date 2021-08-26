@@ -893,7 +893,7 @@ namespace System.Windows.Forms
                 // Same control as PointToClient or PointToScreen, just
                 // with two specific controls in mind.
                 var point = new Point(e.X, e.Y);
-                User32.MapWindowPoints(new HandleRef(child, child.Handle), new HandleRef(this, Handle), ref point, 1);
+                point = WindowsFormsUtils.TranslatePoint(point, child, this);
                 return new MouseEventArgs(e.Button, e.Clicks, point.X, point.Y, e.Delta);
             }
 

@@ -47,7 +47,10 @@ namespace System.Windows.Forms
                     RECT itemRect = new();
 
                     int result = unchecked((int)(long)User32.SendMessageW(
-                        listHandle, (User32.WM)User32.LB.GETITEMRECT, (IntPtr)currentIndex, ref itemRect));
+                        listHandle,
+                        (User32.WM)User32.LB.GETITEMRECT,
+                        (IntPtr)currentIndex,
+                        ref itemRect));
 
                     if (result == User32.LB_ERR)
                     {
@@ -55,7 +58,7 @@ namespace System.Windows.Forms
                     }
 
                     // Translate the item rect to screen coordinates
-                    User32.MapWindowPoints(listHandle, IntPtr.Zero, ref itemRect, 2);
+                    User32.MapWindowPoints(listHandle, IntPtr.Zero, ref itemRect);
                     return itemRect;
                 }
             }

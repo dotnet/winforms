@@ -70,23 +70,22 @@ namespace System.Windows.Forms.Design
         /// <summary>
         ///  We override GetHitTest to make the header in report view UI-active.
         /// </summary>
-        protected override bool GetHitTest(Point point)
+        protected unsafe override bool GetHitTest(Point point)
         {
-            ListView lv = (ListView)Component;
-            if (lv.View == View.Details)
+            ListView listView = (ListView)Component;
+            if (listView.View == View.Details)
             {
-                Point lvPoint = Control.PointToClient(point);
-                IntPtr hwndList = lv.Handle;
-                IntPtr hwndHit = User32.ChildWindowFromPointEx(hwndList, lvPoint, User32.CWP.SKIPINVISIBLE);
+                Point listViewPoint = Control.PointToClient(point);
+                IntPtr hwndHit = User32.ChildWindowFromPointEx(listView, listViewPoint, User32.CWP.SKIPINVISIBLE);
 
-                if (hwndHit != IntPtr.Zero && hwndHit != hwndList)
+                if (hwndHit != IntPtr.Zero && hwndHit != listView.Handle)
                 {
-                    IntPtr hwndHdr = User32.SendMessageW(hwndList, (User32.WM)ComCtl32.LVM.GETHEADER);
-                    if (hwndHit == hwndHdr)
+                    IntPtr headerHwnd = User32.SendMessageW(listView, (User32.WM)ComCtl32.LVM.GETHEADER);
+                    if (hwndHit == headerHwnd)
                     {
-                        User32.MapWindowPoints(IntPtr.Zero, hwndHdr, ref point, 1);
+                        User32.MapWindowPoints(IntPtr.Zero, headerHwnd, &point, 1);
                         _hdrhit.pt = point;
-                        User32.SendMessageW(hwndHdr, (User32.WM)ComCtl32.HDM.HITTEST, IntPtr.Zero, ref _hdrhit);
+                        User32.SendMessageW(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, IntPtr.Zero, ref _hdrhit);
                         if (_hdrhit.flags == ComCtl32.HHT.ONDIVIDER)
                             return true;
                     }

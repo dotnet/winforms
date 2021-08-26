@@ -7,7 +7,6 @@
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using static Interop;
 
@@ -607,7 +606,7 @@ namespace System.Windows.Forms
                             gripLocation = new Point(SizeGripBounds.Right, SizeGripBounds.Bottom);
                         }
 
-                        User32.MapWindowPoints(new HandleRef(this, Handle), rootHwnd, ref gripLocation, 1);
+                        User32.MapWindowPoint(this, rootHwnd, ref gripLocation);
 
                         int deltaBottomEdge = Math.Abs(rootHwndClientArea.bottom - gripLocation.Y);
                         int deltaRightEdge = Math.Abs(rootHwndClientArea.right - gripLocation.X);

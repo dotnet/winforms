@@ -326,7 +326,7 @@ namespace System.Windows.Forms
                                     X = PARAM.LOWORD(lpmsg->lParam),
                                     Y = PARAM.HIWORD(lpmsg->lParam)
                                 };
-                                User32.MapWindowPoints(hwndMap, new HandleRef(_control, _control.Handle), ref pt, 1);
+                                User32.MapWindowPoint(hwndMap, _control, ref pt);
 
                                 // check to see if this message should really go to a child
                                 //  control, and if so, map the point into that child's window
@@ -334,7 +334,7 @@ namespace System.Windows.Forms
                                 Control realTarget = target.GetChildAtPoint(pt);
                                 if (realTarget is not null && realTarget != target)
                                 {
-                                    User32.MapWindowPoints(new HandleRef(target, target.Handle), new HandleRef(realTarget, realTarget.Handle), ref pt, 1);
+                                    pt = WindowsFormsUtils.TranslatePoint(pt, target, realTarget);
                                     target = realTarget;
                                 }
 
@@ -2139,7 +2139,7 @@ namespace System.Windows.Forms
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"Old Intersect: {(Rectangle)rcIntersect}");
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Control Bounds: {posRect}");
 
-                        User32.MapWindowPoints(hWndParent, new HandleRef(_control, _control.Handle), ref rcIntersect, 2);
+                        User32.MapWindowPoints(hWndParent, _control, ref rcIntersect);
 
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, $"New Intersect: {(Rectangle)rcIntersect}");
 
