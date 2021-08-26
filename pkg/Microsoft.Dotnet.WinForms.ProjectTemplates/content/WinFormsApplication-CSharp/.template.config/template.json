@@ -53,6 +53,10 @@
       "type": "computed",
       "value": "(Framework == \"netcoreapp3.1\")"
     },
+    "UseApplicationBoilerplate": {
+      "type": "computed",
+      "value": "(Framework == \"net5.0\")"
+    },
     "langVersion": {
       "type": "parameter",
       "datatype": "text",
@@ -94,16 +98,29 @@
         {
           "condition": "(UseWindowsDesktopSdk)",
           "exclude": [
-            "Company.WinFormsApplication1.csproj"
+            "Company.WinFormsApplication1.csproj",
+            "Program.cs"
           ],
           "rename": {
-            "Company.WinFormsApplication3x1.csproj": "Company.WinFormsApplication1.csproj"
+            "Company.WinFormsApplication3x1.csproj": "Company.WinFormsApplication1.csproj",
+            "Program.boilerplate.cs": "Program.cs"
           }
         },
         {
-          "condition": "(!UseWindowsDesktopSdk)",
+          "condition": "(!UseWindowsDesktopSdk && UseApplicationBoilerplate)",
           "exclude": [
-            "Company.WinFormsApplication3x1.csproj"
+            "Company.WinFormsApplication3x1.csproj",
+            "Program.cs"
+          ],
+          "rename": {
+            "Program.boilerplate.cs": "Program.cs"
+          }
+        },
+        {
+          "condition": "(!UseWindowsDesktopSdk && !UseApplicationBoilerplate)",
+          "exclude": [
+            "Company.WinFormsApplication3x1.csproj",
+            "Program.boilerplate.cs"
           ]
         }
       ]
