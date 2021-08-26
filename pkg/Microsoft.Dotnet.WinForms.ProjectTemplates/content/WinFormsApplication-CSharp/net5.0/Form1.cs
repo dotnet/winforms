@@ -8,6 +8,18 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+#if (csharpFeature_FileScopedNamespaces)
+namespace Company.WinFormsApplication1;
+
+public partial class Form1 : Form
+{
+    public Form1()
+    {
+        InitializeComponent();
+    }
+
+}
+#else
 namespace Company.WinFormsApplication1
 {
     public partial class Form1 : Form
@@ -19,3 +31,4 @@ namespace Company.WinFormsApplication1
 
     }
 }
+#endif
