@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -361,11 +360,8 @@ namespace System.Windows.Forms
 
                             if (OleComponents is not null)
                             {
-                                IEnumerator enumerator = OleComponents.Values.GetEnumerator();
-
-                                while (enumerator.MoveNext())
+                                foreach (ComponentHashtableEntry idleEntry in OleComponents.Values)
                                 {
-                                    ComponentHashtableEntry idleEntry = (ComponentHashtableEntry)enumerator.Current;
                                     continueIdle |= idleEntry.component.FDoIdle(msoidlef.All).IsTrue();
                                 }
                             }
