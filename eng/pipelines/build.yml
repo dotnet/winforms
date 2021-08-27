@@ -78,33 +78,35 @@ jobs:
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc-${{ parameters.targetArchitecture }}.binlog
       displayName: Build
 
-    # Run Unit Tests
-    # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
-    - script: eng\cibuild.cmd
-        -test
-        -configuration $(_BuildConfig)
-        /p:Platform=${{ parameters.targetArchitecture }}
-        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
-        $(_OfficialBuildIdArgs)
-        $(_InternalRuntimeDownloadArgs)
-        /p:Coverage=$(_Coverage)
-        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test-${{ parameters.targetArchitecture }}.binlog
-        /m:1
-      displayName: Run Unit Tests
+    - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+      # Run Unit Tests
+      # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
+      - script: eng\cibuild.cmd
+          -test
+          -configuration $(_BuildConfig)
+          /p:Platform=${{ parameters.targetArchitecture }}
+          /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+          $(_OfficialBuildIdArgs)
+          $(_InternalRuntimeDownloadArgs)
+          /p:Coverage=$(_Coverage)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\Test-${{ parameters.targetArchitecture }}.binlog
+          /m:1
+        displayName: Run Unit Tests
 
-    # Run Integration Tests
-    # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
-    # UI race conditions
-    - script: eng\cibuild.cmd
-        -integrationTest
-        -configuration $(_BuildConfig)
-        /p:Platform=${{ parameters.targetArchitecture }}
-        /p:TargetArchitecture=${{ parameters.targetArchitecture }}
-        $(_OfficialBuildIdArgs)
-        $(_InternalRuntimeDownloadArgs)
-        /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
-        /m:1
-      displayName: Run Integration Tests
+    - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+      # Run Integration Tests
+      # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
+      # UI race conditions
+      - script: eng\cibuild.cmd
+          -integrationTest
+          -configuration $(_BuildConfig)
+          /p:Platform=${{ parameters.targetArchitecture }}
+          /p:TargetArchitecture=${{ parameters.targetArchitecture }}
+          $(_OfficialBuildIdArgs)
+          $(_InternalRuntimeDownloadArgs)
+          /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\IntegrationTest-${{ parameters.targetArchitecture }}.binlog
+          /m:1
+        displayName: Run Integration Tests
 
     # Create Nuget package, sign, and publish
     - script: eng\cibuild.cmd
