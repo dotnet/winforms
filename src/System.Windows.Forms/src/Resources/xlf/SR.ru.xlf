@@ -7939,7 +7939,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
         <source>Border color to use on the top edge of the StatusStrip.</source>
-        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <target state="translated">Цвет границы, используемый на верхнем крае StatusStrip.</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
@@ -8214,12 +8214,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="new">{0} Description</target>
+        <target state="translated">{0}: описание</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneTitle">
         <source>Description</source>
-        <target state="new">Description</target>
+        <target state="translated">Описание</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
