@@ -1664,7 +1664,6 @@ namespace System.Windows.Forms
 
             // Dispose unmanaged resources.
             UnhookNodes();
-            _toolTipBuffer.Dispose();
             KeyboardToolTip.Dispose();
 
             base.Dispose(disposing);
