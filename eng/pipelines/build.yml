@@ -78,7 +78,7 @@ jobs:
         /bl:$(BUILD.SOURCESDIRECTORY)\artifacts\log\$(_BuildConfig)\BuildSrc-${{ parameters.targetArchitecture }}.binlog
       displayName: Build
 
-    - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+    - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
       # Run Unit Tests
       # Tests are run with /m:1 to work around https://github.com/tonerdo/coverlet/issues/364
       - script: eng\cibuild.cmd
@@ -93,7 +93,7 @@ jobs:
           /m:1
         displayName: Run Unit Tests
 
-    - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+    - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
       # Run Integration Tests
       # Tests are run with /m:1 to avoid parallelism across different assemblies which can lead to
       # UI race conditions
