@@ -5753,9 +5753,6 @@ namespace System.Windows.Forms
                 }
             }
 
-            // Dispose unmanaged resources.
-            _toolTipBuffer.Dispose();
-
             base.Dispose(disposing);
         }
 
