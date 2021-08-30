@@ -49,10 +49,6 @@
       "defaultValue": "net6.0",
       "displayName": "Framework"
     },
-    "UseWindowsDesktopSdk": {
-      "type": "computed",
-      "value": "(Framework == \"netcoreapp3.1\")"
-    },
     "langVersion": {
       "type": "parameter",
       "datatype": "text",
@@ -78,6 +74,23 @@
       "defaultValue": "true",
       "description": "Whether to enable nullable reference types for this project.",
       "displayName": "Enable nullable"
+    },
+    "csharp10orLater": {
+      "type": "generated",
+      "generator": "regexMatch",
+      "datatype": "bool",
+      "parameters": {
+        "pattern": "^(|10\\.0|10|preview|latest|default|latestMajor)$",
+        "source": "langVersion"
+      }
+    },
+    "csharpFeature_ImplicitUsings": {
+      "type": "computed",
+      "value": "Framework == \"net6.0\" && csharp10orLater == \"true\""
+    },
+    "csharpFeature_FileScopedNamespaces": {
+      "type": "computed",
+      "value": "(Framework == \"net6.0\" || langVersion != \"\") && csharp10orLater == \"true\""
     }
   },
   "primaryOutputs": [
@@ -89,24 +102,19 @@
   ],
   "sources": [
     {
-      "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
-      "modifiers": [
-        {
-          "condition": "(UseWindowsDesktopSdk)",
-          "exclude": [
-            "Company.ControlLibrary1.csproj"
-          ],
-          "rename": {
-            "Company.ControlLibrary3x1.csproj": "Company.ControlLibrary1.csproj"
-          }
-        },
-        {
-          "condition": "(!UseWindowsDesktopSdk)",
-          "exclude": [
-            "Company.ControlLibrary3x1.csproj"
-          ]
-        }
-      ]
+      "condition": "Framework == \"netcoreapp3.1\"",
+      "source": "./netcoreapp3.1",
+      "target": "./"
+    },
+    {
+      "condition": "Framework == \"net5.0\"",
+      "source": "./net5.0",
+      "target": "./"
+    },
+    {
+      "condition": "Framework == \"net6.0\"",
+      "source": "./net6.0",
+      "target": "./"
     }
   ],
   "defaultName": "WinFormsControlLibrary1",
