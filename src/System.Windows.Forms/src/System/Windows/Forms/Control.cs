@@ -5915,11 +5915,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Gets control Font. If Font is inherited, Traverse through parent hierarchy and retreives Font.
+        /// Gets control <see cref="Font"/>. If font is inherited, traverse through parent hierarchy and retreives font.
         /// </summary>
-        /// <param name="fontDpi">Dpi of the control for which Font is evaluated.</param>
+        /// <param name="fontDpi"> Dpi of the control for which <see cref="Font"/> is evaluated.</param>
         /// <returns>
-        /// <para>Returns control Font.</para>
+        /// <para>The control's <see cref="Font"/></para>
         /// </returns>
         internal Font GetFont(out int fontDpi)
         {
@@ -7792,7 +7792,7 @@ namespace System.Windows.Forms
                 if (DpiHelper.IsPerMonitorV2Awareness)
                 {
                     int old = _deviceDpi;
-                    Font localFont = GetFont(out int fontDpi);
+                    using Font localFont = GetFont(out int fontDpi);
                     _deviceDpi = (int)User32.GetDpiForWindow(this);
                     if (old != _deviceDpi)
                     {
