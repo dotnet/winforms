@@ -2000,8 +2000,8 @@ System.Windows.Forms.Design.EventsTab.EventsTab(System.IServiceProvider? sp) -> 
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption) -> void
 ~System.Windows.Forms.Design.IUIService.ShowMessage(string message, string caption, System.Windows.Forms.MessageBoxButtons buttons) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.IUIService.Styles.get -> System.Collections.IDictionary
-~System.Windows.Forms.Design.IWindowsFormsEditorService.DropDownControl(System.Windows.Forms.Control control) -> void
-~System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows.Forms.Form dialog) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.Design.IWindowsFormsEditorService.DropDownControl(System.Windows.Forms.Control? control) -> void
+System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows.Forms.Form! dialog) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(object component, System.Windows.Forms.IWin32Window owner) -> bool
 ~System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject(string name, System.Windows.Forms.AccessibleObject parent) -> void
 ~System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void

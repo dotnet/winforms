@@ -130,7 +130,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (row != -1)
                 {
-                    propertyGridView.PopupDialog(row);
+                    propertyGridView.PopupEditor(row);
                 }
             }
 

@@ -2,10 +2,16 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Windows.Forms.PropertyGridInternal;
+
 namespace System.Windows.Forms
 {
     public partial class PropertyGrid
     {
+        /// <summary>
+        ///  Service provider that searches the <see cref="ActiveDesigner"/>, then the <see cref="PropertyGridView"/>,
+        ///  then finally the <see cref="Site"/> for requested services.
+        /// </summary>
         private class PropertyGridServiceProvider : IServiceProvider
         {
             private readonly PropertyGrid _ownerPropertyGrid;
@@ -17,24 +23,10 @@ namespace System.Windows.Forms
 
             public object? GetService(Type serviceType)
             {
-                object? s = null;
-
-                if (_ownerPropertyGrid.ActiveDesigner is not null)
-                {
-                    s = _ownerPropertyGrid.ActiveDesigner.GetService(serviceType);
-                }
-
-                if (s is null)
-                {
-                    s = _ownerPropertyGrid._gridView.GetService(serviceType);
-                }
-
-                if (s is null && _ownerPropertyGrid.Site is not null)
-                {
-                    s = _ownerPropertyGrid.Site.GetService(serviceType);
-                }
-
-                return s;
+                object? service = _ownerPropertyGrid.ActiveDesigner?.GetService(serviceType);
+                service ??= _ownerPropertyGrid._gridView.GetService(serviceType);
+                service ??= _ownerPropertyGrid.Site?.GetService(serviceType);
+                return service;
             }
         }
     }

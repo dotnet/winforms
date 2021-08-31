@@ -15,8 +15,7 @@ namespace System.ComponentModel.Design
         private class DateTimeUI : Control
         {
             private readonly MonthCalendar _monthCalendar = new DateTimeMonthCalendar();
-            private object _value;
-            private IWindowsFormsEditorService _edSvc;
+            private IWindowsFormsEditorService _editorService;
 
             public DateTimeUI()
             {
@@ -25,18 +24,12 @@ namespace System.ComponentModel.Design
                 _monthCalendar.Resize += MonthCalResize;
             }
 
-            public object Value
-            {
-                get
-                {
-                    return _value;
-                }
-            }
+            public object Value { get; private set; }
 
             public void End()
             {
-                _edSvc = null;
-                _value = null;
+                _editorService = null;
+                Value = null;
             }
 
             private void MonthCalKeyDown(object sender, KeyEventArgs e)
@@ -53,7 +46,7 @@ namespace System.ComponentModel.Design
             {
                 base.RescaleConstantsForDpi(deviceDpiOld, deviceDpiNew);
 
-                //Resizing the editor to fit to the SingleMonth size after Dpi changed.
+                // Resizing the editor to fit to the SingleMonth size after Dpi changed.
                 Size = _monthCalendar.SingleMonthSize;
             }
 
@@ -71,8 +64,8 @@ namespace System.ComponentModel.Design
 
             private void OnDateSelected(object sender, DateRangeEventArgs e)
             {
-                _value = _monthCalendar.SelectionStart;
-                _edSvc.CloseDropDown();
+                Value = _monthCalendar.SelectionStart;
+                _editorService.CloseDropDown();
             }
 
             protected override void OnGotFocus(EventArgs e)
@@ -81,15 +74,15 @@ namespace System.ComponentModel.Design
                 _monthCalendar.Focus();
             }
 
-            public void Start(IWindowsFormsEditorService edSvc, object value)
+            public void Start(IWindowsFormsEditorService editorService, object value)
             {
-                _edSvc = edSvc;
-                _value = value;
+                _editorService = editorService;
+                Value = value;
 
-                if (value != null)
+                if (value is not null)
                 {
-                    DateTime dt = (DateTime)value;
-                    _monthCalendar.SetDate((dt.Equals(DateTime.MinValue)) ? DateTime.Today : dt);
+                    DateTime dateTime = (DateTime)value;
+                    _monthCalendar.SetDate((dateTime.Equals(DateTime.MinValue)) ? DateTime.Today : dateTime);
                 }
             }
 

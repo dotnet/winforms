@@ -17,7 +17,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             DropDownClosing         = 0x0020,
             DropDownCommit          = 0x0040,
             NeedUpdateUIBasedOnFont = 0x0080,
-            BtnLaunchedEditor       = 0x0100,
+
+            /// <summary>
+            ///  The editor is currently launched via the drop-down button.
+            /// </summary>
+            ButtonLaunchedEditor    = 0x0100,
             NoDefault               = 0x0200,
             ResizableDropDown       = 0x0400
         }
