@@ -100,7 +100,7 @@ stages:
       skipTests: $(SkipTests)
 
 
-- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+- ${{ if and( and( ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest'))), eq(variables['Build.SourceBranch'], 'refs/heads/main') }}:
   - stage: OneLocBuild
     displayName: Publish localizable content to OneLocBuild
     jobs:
