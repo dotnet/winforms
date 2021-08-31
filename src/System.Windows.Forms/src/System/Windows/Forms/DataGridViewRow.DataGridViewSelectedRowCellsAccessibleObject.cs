@@ -13,6 +13,7 @@ namespace System.Windows.Forms
         private class DataGridViewSelectedRowCellsAccessibleObject : AccessibleObject
         {
             private readonly DataGridViewRow owner;
+            private int[] runtimeId;
 
             internal DataGridViewSelectedRowCellsAccessibleObject(DataGridViewRow owner)
             {
@@ -31,6 +32,9 @@ namespace System.Windows.Forms
             }
 
             public override string Value => Name;
+
+            internal override int[] RuntimeId
+                => runtimeId ??= new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
 
             public override AccessibleObject GetChild(int index)
             {

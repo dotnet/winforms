@@ -17,6 +17,9 @@ namespace System.Windows.Forms
         internal class ComboBoxChildDropDownButtonUiaProvider : AccessibleObject
         {
             private const int COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX = 2;
+            // Made up constant from MSAA proxy. When MSAA proxy is used as an accessibility provider, the similar Runtime ID
+            // is returned (for consistency purpose).
+            private const int GeneratedRuntimeId = 61453;
             private readonly ComboBox _owner;
 
             /// <summary>
@@ -204,22 +207,14 @@ namespace System.Windows.Forms
             ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
-            {
-                get
+                => new int[]
                 {
-                    var runtimeId = new int[5];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.InternalHandle;
-                    runtimeId[2] = _owner.GetHashCode();
-
-                    // Made up constant from MSAA proxy. When MSAA proxy is used as an accessibility provider,
-                    // the similar Runtime ID is returned (for consistency purpose)
-                    const int generatedRuntimeId = 61453;
-                    runtimeId[3] = generatedRuntimeId;
-                    runtimeId[4] = COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX;
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(_owner.InternalHandle),
+                    _owner.GetHashCode(),
+                    GeneratedRuntimeId,
+                    COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX
+                };
 
             /// <summary>
             ///  Gets the accessible state.

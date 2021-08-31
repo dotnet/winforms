@@ -62,6 +62,8 @@ namespace System.Windows.Forms
                     return name;
                 }
             }
+
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
         }
     }
 }

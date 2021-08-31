@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using static System.Windows.Forms.ListView;
 using static Interop;
@@ -102,22 +103,21 @@ namespace System.Windows.Forms
             public override AccessibleRole Role
                 => AccessibleRole.Grouping;
 
-            internal override int[]? RuntimeId
+            internal override int[] RuntimeId
             {
                 get
                 {
                     var owningListViewRuntimeId = _owningListViewAccessibilityObject.RuntimeId;
-                    if (owningListViewRuntimeId is null)
-                    {
-                        return base.RuntimeId;
-                    }
 
-                    var runtimeId = new int[4];
-                    runtimeId[0] = owningListViewRuntimeId[0];
-                    runtimeId[1] = owningListViewRuntimeId[1];
-                    runtimeId[2] = 4; // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
-                    runtimeId[3] = CurrentIndex;
-                    return runtimeId;
+                    Debug.Assert(owningListViewRuntimeId.Length >= 2);
+
+                    return new int[]
+                    {
+                        owningListViewRuntimeId[0],
+                        owningListViewRuntimeId[1],
+                        4, // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
+                        CurrentIndex
+                    };
                 }
             }
 

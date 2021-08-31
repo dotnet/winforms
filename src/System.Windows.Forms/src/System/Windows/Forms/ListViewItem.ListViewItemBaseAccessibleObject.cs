@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
@@ -185,39 +186,35 @@ namespace System.Windows.Forms
 
             internal virtual Rectangle GetSubItemBounds(int subItemIndex) => Rectangle.Empty;
 
-            internal override int[]? RuntimeId
+            internal override int[] RuntimeId
             {
                 get
                 {
-                    int[] runtimeId;
                     var owningListViewRuntimeId = _owningListView.AccessibilityObject.RuntimeId;
-                    if (owningListViewRuntimeId is null)
-                    {
-                        return base.RuntimeId;
-                    }
+
+                    Debug.Assert(owningListViewRuntimeId.Length >= 2);
 
                     if (OwningGroup is not null)
                     {
-                        runtimeId = new int[5];
-                        runtimeId[0] = owningListViewRuntimeId[0];
-                        runtimeId[1] = owningListViewRuntimeId[1];
-                        runtimeId[2] = 4; // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
-                        runtimeId[3] = OwningGroup.AccessibilityObject is ListViewGroupAccessibleObject listViewGroupAccessibleObject
-                                        ? listViewGroupAccessibleObject.CurrentIndex
-                                        : -1;
-
-                        runtimeId[4] = CurrentIndex;
-
-                        return runtimeId;
+                        return new int[]
+                        {
+                            owningListViewRuntimeId[0],
+                            owningListViewRuntimeId[1],
+                            4, // Win32-control specific RuntimeID constant, is used in similar Win32 controls and is used in WinForms controls for consistency.
+                            OwningGroup.AccessibilityObject is ListViewGroupAccessibleObject listViewGroupAccessibleObject
+                                            ? listViewGroupAccessibleObject.CurrentIndex
+                                            : -1,
+                            CurrentIndex
+                        };
                     }
 
-                    runtimeId = new int[4];
-                    runtimeId[0] = owningListViewRuntimeId[0];
-                    runtimeId[1] = owningListViewRuntimeId[1];
-                    runtimeId[2] = 4; // Win32-control specific RuntimeID constant.
-                    runtimeId[3] = CurrentIndex;
-
-                    return runtimeId;
+                    return new int[]
+                    {
+                        owningListViewRuntimeId[0],
+                        owningListViewRuntimeId[1],
+                        4, // Win32-control specific RuntimeID constant.
+                        CurrentIndex
+                    };
                 }
             }
 

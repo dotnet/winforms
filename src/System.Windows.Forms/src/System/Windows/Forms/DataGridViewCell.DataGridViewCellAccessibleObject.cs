@@ -599,19 +599,11 @@ namespace System.Windows.Forms
             }
 
             internal override int[] RuntimeId
-            {
-                get
+                => _runtimeId ??= new int[]
                 {
-                    if (_runtimeId is null)
-                    {
-                        _runtimeId = new int[2];
-                        _runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
-                        _runtimeId[1] = GetHashCode();
-                    }
-
-                    return _runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem, // first item is static - 0x2a
+                    GetHashCode()
+                };
 
             private string AutomationId
             {

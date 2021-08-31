@@ -190,8 +190,9 @@ namespace System.Windows.Forms
 
             public override string? DefaultAction => Owner.AccessibleDefaultActionDescription ?? base.DefaultAction;
 
-            // This is used only if control supports IAccessibleEx
-            internal override int[]? RuntimeId => new int[] { RuntimeIDFirstItem, PARAM.ToInt(HandleInternal) };
+            // This is used only if control supports IAccessibleEx. We need to provide a unique ID. Others are implementing this in the same manner.
+            // First item is static - 0x2a (RuntimeIDFirstItem). Second item can be anything, but it's good to supply HWND.
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, PARAM.ToInt(HandleInternal) };
 
             public override string? Description => Owner.AccessibleDescription ?? base.Description;
 

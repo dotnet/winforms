@@ -107,13 +107,14 @@ namespace System.Windows.Forms
                     /// <summary>
                     ///  Gets the runtime ID.
                     /// </summary>
-                    internal override int[] RuntimeId => new int[]
-                    {
-                        _parent.RuntimeId[0],
-                        _parent.RuntimeId[1],
-                        _parent.RuntimeId[2],
-                        _up ? 1 : 0
-                    };
+                    internal override int[] RuntimeId
+                        => new int[]
+                        {
+                            _parent.RuntimeId[0],
+                            _parent.RuntimeId[1],
+                            _parent.RuntimeId[2],
+                            _up ? 1 : 0
+                        };
                 }
             }
         }

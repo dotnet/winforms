@@ -70,18 +70,12 @@ namespace System.Windows.Forms
             }
 
             private ChildAccessibleObject GetChildAccessibleObject(ChildWindowType childWindowType)
-            {
-                if (childWindowType == ChildWindowType.Edit)
+                => childWindowType switch
                 {
-                    return _owner.ChildEditAccessibleObject;
-                }
-                else if (childWindowType == ChildWindowType.ListBox || childWindowType == ChildWindowType.DropDownList)
-                {
-                    return _owner.ChildListAccessibleObject;
-                }
-
-                return new ChildAccessibleObject(_owner, Handle);
-            }
+                    ChildWindowType.Edit => _owner.ChildEditAccessibleObject,
+                    ChildWindowType.ListBox or ChildWindowType.DropDownList => _owner.ChildListAccessibleObject,
+                    _ => throw new ArgumentOutOfRangeException(nameof(childWindowType))
+                };
 
             private void WmGetObject(ref Message m)
             {

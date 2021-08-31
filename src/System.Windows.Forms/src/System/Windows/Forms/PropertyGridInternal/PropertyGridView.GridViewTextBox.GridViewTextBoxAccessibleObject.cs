@@ -139,16 +139,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                     set => base.Name = value;
                 }
 
-                internal override int[]? RuntimeId
+                internal override int[] RuntimeId
                 {
                     get
                     {
                         int[]? selectedGridEntryAccessibleRuntimeId =
-                            _owningPropertyGridView?.SelectedGridEntry?.AccessibilityObject?.RuntimeId;
+                            _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject.RuntimeId;
 
                         if (selectedGridEntryAccessibleRuntimeId is null)
                         {
-                            return null;
+                            throw new InvalidOperationException();
                         }
 
                         int[] runtimeId = new int[selectedGridEntryAccessibleRuntimeId.Length + 1];

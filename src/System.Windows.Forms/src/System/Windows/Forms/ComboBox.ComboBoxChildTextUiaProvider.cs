@@ -143,19 +143,14 @@ namespace System.Windows.Forms
             ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
-            {
-                get
+                => new int[]
                 {
-                    var runtimeId = new int[5];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owner.InternalHandle;
-                    runtimeId[2] = _owner.GetHashCode();
-                    runtimeId[3] = GetHashCode();
-                    runtimeId[4] = GetChildId();
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(_owner.InternalHandle),
+                    _owner.GetHashCode(),
+                    GetHashCode(),
+                    GetChildId()
+                };
 
             /// <summary>
             ///  Gets the accessible state.

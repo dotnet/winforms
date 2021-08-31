@@ -55,6 +55,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, Parent.GetHashCode(), GetHashCode() };
+
             public override AccessibleObject? GetChild(int index)
             {
                 if (index >= 0 && index < _ownerDataGridView.GetCellCount(DataGridViewElementStates.Selected))

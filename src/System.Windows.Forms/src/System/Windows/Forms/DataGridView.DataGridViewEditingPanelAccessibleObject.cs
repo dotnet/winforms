@@ -38,13 +38,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override int[]? RuntimeId
-            {
-                get
-                {
-                    return _panel.AccessibilityObject.RuntimeId;
-                }
-            }
+            internal override int[] RuntimeId => _panel.AccessibilityObject.RuntimeId;
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {

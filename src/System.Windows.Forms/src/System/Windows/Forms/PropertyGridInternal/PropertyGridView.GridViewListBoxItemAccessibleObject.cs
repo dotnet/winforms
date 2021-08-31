@@ -53,7 +53,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 => new int[]
                 {
                     RuntimeIDFirstItem,
-                    (int)(long)_owningGridViewListBox.Handle,
+                    PARAM.ToInt(_owningGridViewListBox.InternalHandle),
                     _owningItem.GetHashCode()
                 };
         }

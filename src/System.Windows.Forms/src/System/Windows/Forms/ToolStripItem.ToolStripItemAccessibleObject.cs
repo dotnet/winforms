@@ -90,27 +90,15 @@ namespace System.Windows.Forms
                 }
             }
 
+            // We need to provide a unique ID. Others are implementing this in the same manner. First item should be UiaAppendRuntimeId
+            // since this is not a top-level element of the fragment. Second item can be anything, but here it is a hash.
+            // For toolstrip hash is unique even with child controls. Hwnd  is not.
             internal override int[] RuntimeId
-            {
-                get
+                => _runtimeId ??= new int[]
                 {
-                    if (_runtimeId is null)
-                    {
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item should be UiaAppendRuntimeId since this is not a top-level element of the fragment.
-                        // second item can be anything, but here it is a hash. For toolstrip hash is unique even with child controls. Hwnd  is not.
-
-                        _runtimeId = new int[]
-                        {
-                            NativeMethods.UiaAppendRuntimeId,
-                            _ownerItem.GetHashCode()
-                        };
-                    }
-
-                    return _runtimeId;
-                }
-            }
+                    NativeMethods.UiaAppendRuntimeId,
+                    _ownerItem.GetHashCode()
+                };
 
             /// <summary>
             ///  Gets the accessible property value.
