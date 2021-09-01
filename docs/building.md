@@ -6,7 +6,7 @@ Follow the prerequisites listed at [Developer Guide](developer-guide.md).
 
 ## Building
 
-### Building from command line
+### Building from command line (Preferred)
 
 * Run `.\build.cmd` from the repository root. This builds the `Winforms.sln` using the default config (Debug|Any CPU).
 * To specify a build configuration, add `-configuration` followed by the config such as `.\build -configuration Release`.
@@ -15,9 +15,10 @@ Note that this does **not** build using your machine-wide installed version of t
 
 ### Building from Visual Studio
 
-1. Run `.\restore.cmd` from the repository root.
-1. Run `.\start-vs.cmd` from the repository root. This will prepend the repo-local .NET SDK to the path, and open `Winforms.sln` in Visual Studio.
-1. You should now be able to build as you normally would.
+1. .NET 6.0 and above branches need VisualStudio 2022 to build.
+2. Run `.\restore.cmd` from the repository root.
+3. Run `.\start-vs.cmd` from the repository root. This will prepend the repo-local .NET SDK to the path, and open `Winforms.sln` in Visual Studio.
+4. You should now be able to build as you normally would.
 
 ### Building from Visual Studio Code
 
