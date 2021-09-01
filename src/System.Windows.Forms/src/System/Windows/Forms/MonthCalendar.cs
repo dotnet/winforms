@@ -8,7 +8,6 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.Layout;
 using Microsoft.Win32;
 using static Interop;
@@ -64,7 +63,6 @@ namespace System.Windows.Forms
         private static readonly Color s_defaultTitleBackColor = SystemColors.ActiveCaption;
         private static readonly Color s_defaultTitleForeColor = SystemColors.ActiveCaptionText;
         private static readonly Color s_trailingForeColor = SystemColors.GrayText;
-        private const int MinimumAllocSize = 12;  // minimum size to expand the buffer by
         private const int MonthsInYear = 12;
 
         /// <summary>
@@ -72,25 +70,24 @@ namespace System.Windows.Forms
         ///  inserts between calendars horizontally, regardless of font.
         /// </summary>
         private const int InsertWidthSize = 6;
+
         /// <summary>
         ///  This is the arbitrary number of pixels that the Win32 control
         ///  inserts between calendars vertically, regardless of font.
+        ///  From comctl32 MonthCalendar sources CALBORDER.
         /// </summary>
-        private const int InsertHeightSize = 6;       // From comctl32 MonthCalendar sources CALBORDER
+        private const int InsertHeightSize = 6;
 
         private const Day DefaultFirstDayOfWeek = Day.Default;
         private const int DefaultMaxSelectionCount = 7;
         private const int DefaultScrollChange = 0;
 
-        private static readonly Size s_defaultSingleMonthSize = new Size(176, 153);
+        private static readonly Size s_defaultSingleMonthSize = new(176, 153);
 
         private const int MaxScrollChange = 20000;
 
         private const int ExtraPadding = 2;
         private int _scaledExtraPadding = ExtraPadding;
-
-        private IntPtr _mdsBuffer;
-        private int _mdsBufferSize;
 
         private Color _titleBackColor = s_defaultTitleBackColor;
         private Color _titleForeColor = s_defaultTitleForeColor;
@@ -100,7 +97,7 @@ namespace System.Windows.Forms
         private bool _showWeekNumbers;
         private bool _rightToLeftLayout;
 
-        private Size _dimensions = new Size(1, 1);
+        private Size _dimensions = new(1, 1);
         private int _maxSelectionCount = DefaultMaxSelectionCount;
         private DateTime _maxDate = DateTime.MaxValue;
         private DateTime _minDate = DateTime.MinValue;
@@ -118,20 +115,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Bitmask for the annually bolded dates. Months start on January.
         /// </summary>
-        private readonly int[] _monthsOfYear = new int[12];
+        private readonly int[] _monthsOfYear = new int[MonthsInYear];
 
         /// <summary>
         ///  Bitmask for the dates bolded monthly.
         /// </summary>
         private int _datesToBoldMonthly;
 
-        /// <summary>
-        ///  Lists are slow, so this section can be optimized.
-        ///  Implementation is such that inserts are fast, removals are slow.
-        /// </summary>
-        private readonly List<DateTime> _arrayOfDates = new List<DateTime>();
-        private readonly List<DateTime> _annualArrayOfDates = new List<DateTime>();
-        private readonly List<DateTime> _monthlyArrayOfDates = new List<DateTime>();
+        private readonly List<DateTime> _boldDates = new();
+        private readonly List<DateTime> _annualBoldDates = new();
+        private readonly List<DateTime> _monthlyBoldDates = new();
 
         private DateRangeEventHandler _onDateChanged;
         private DateRangeEventHandler _onDateSelected;
@@ -181,11 +174,11 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.MonthCalendarAnnuallyBoldedDatesDescr))]
         public DateTime[] AnnuallyBoldedDates
         {
-            get => _annualArrayOfDates.ToArray();
+            get => _annualBoldDates.ToArray();
 
             set
             {
-                _annualArrayOfDates.Clear();
+                _annualBoldDates.Clear();
                 for (int i = 0; i < MonthsInYear; ++i)
                 {
                     _monthsOfYear[i] = 0;
@@ -194,9 +187,9 @@ namespace System.Windows.Forms
                 if (value is not null && value.Length > 0)
                 {
                     // Add each bolded date to our List.
+                    _annualBoldDates.AddRange(value);
                     foreach (var dateTime in value)
                     {
-                        _annualArrayOfDates.Add(dateTime);
                         _monthsOfYear[dateTime.Month - 1] |= 0x00000001 << (dateTime.Day - 1);
                     }
                 }
@@ -259,18 +252,15 @@ namespace System.Windows.Forms
         [Localizable(true)]
         public DateTime[] BoldedDates
         {
-            get => _arrayOfDates.ToArray();
+            get => _boldDates.ToArray();
 
             set
             {
-                _arrayOfDates.Clear();
+                _boldDates.Clear();
                 if (value is not null && value.Length > 0)
                 {
-                    // Add each bolded date to our List.
-                    foreach (var dateTime in value)
-                    {
-                        _arrayOfDates.Add(dateTime);
-                    }
+                    // Add each bolded date to our list.
+                    _boldDates.AddRange(value);
                 }
 
                 UpdateBoldedDates();
@@ -504,12 +494,18 @@ namespace System.Windows.Forms
 
                 if (value > DateTimePicker.EffectiveMaxDate(_maxDate))
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDate(value), nameof(MaxDate)));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidHighBoundArgument, nameof(MinDate), FormatDate(value), nameof(MaxDate)));
                 }
 
                 if (value < DateTimePicker.MinimumDateTime)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinDate), FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(MinDate), FormatDate(value), FormatDate(DateTimePicker.MinimumDateTime)));
                 }
 
                 _minDate = value;
@@ -524,19 +520,20 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.MonthCalendarMonthlyBoldedDatesDescr))]
         public DateTime[] MonthlyBoldedDates
         {
-            get => _monthlyArrayOfDates.ToArray();
+            get => _monthlyBoldDates.ToArray();
 
             set
             {
-                _monthlyArrayOfDates.Clear();
+                _monthlyBoldDates.Clear();
                 _datesToBoldMonthly = 0;
 
                 if (value is not null && value.Length > 0)
                 {
                     // Add each bolded date to our List.
+                    _monthlyBoldDates.AddRange(value);
+
                     foreach (var dateTime in value)
                     {
-                        _monthlyArrayOfDates.Add(dateTime);
                         _datesToBoldMonthly |= 0x00000001 << (dateTime.Day - 1);
                     }
                 }
@@ -612,12 +609,18 @@ namespace System.Windows.Forms
 
                 if (value < 0)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), 0));
                 }
 
                 if (value > MaxScrollChange)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), MaxScrollChange.ToString("D")));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidHighBoundArgumentEx, nameof(ScrollChange), value.ToString("D"), MaxScrollChange.ToString("D")));
                 }
 
                 if (IsHandleCreated)
@@ -648,12 +651,18 @@ namespace System.Windows.Forms
 
                 if (value < MinDate)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MinDate)));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MinDate)));
                 }
 
                 if (value > MaxDate)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MaxDate)));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionEnd), FormatDate(value), nameof(MaxDate)));
                 }
 
                 // If we've moved SelectionEnd before SelectionStart, move SelectionStart back
@@ -692,12 +701,18 @@ namespace System.Windows.Forms
 
                 if (value < _minDate)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MinDate)));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MinDate)));
                 }
 
                 if (value > _maxDate)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MaxDate)));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        value,
+                        string.Format(SR.InvalidHighBoundArgumentEx, nameof(SelectionStart), FormatDate(value), nameof(MaxDate)));
                 }
 
                 // If we've moved SelectionStart beyond SelectionEnd, move SelectionEnd forward
@@ -990,7 +1005,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddAnnuallyBoldedDate(DateTime date)
         {
-            _annualArrayOfDates.Add(date);
+            _annualBoldDates.Add(date);
             _monthsOfYear[date.Month - 1] |= 0x00000001 << (date.Day - 1);
         }
 
@@ -1000,9 +1015,9 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddBoldedDate(DateTime date)
         {
-            if (!_arrayOfDates.Contains(date))
+            if (!_boldDates.Contains(date))
             {
-                _arrayOfDates.Add(date);
+                _boldDates.Add(date);
             }
         }
 
@@ -1012,7 +1027,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddMonthlyBoldedDate(DateTime date)
         {
-            _monthlyArrayOfDates.Add(date);
+            _monthlyBoldDates.Add(date);
             _datesToBoldMonthly |= 0x00000001 << (date.Day - 1);
         }
 
@@ -1103,34 +1118,32 @@ namespace System.Windows.Forms
             Size = minSize;
         }
 
-        /// <summary>
-        ///  Event handler that bolds dates indicated by _arrayOfDates
-        /// </summary>
-        private void BoldDates(DateBoldEventArgs e)
+        private void WriteBoldDates(Span<int> boldDates)
         {
-            int months = e.Size;
-            e.DaysToBold = new int[months];
-            SelectionRange range = GetDisplayRange(false);
-            int startMonth = range.Start.Month;
-            int startYear = range.Start.Year;
-            int numDates = _arrayOfDates.Count;
-            for (int i = 0; i < numDates; ++i)
+            boldDates.Clear();
+
+            SelectionRange range = GetDisplayRange(visible: false);
+            DateTime start = range.Start;
+            int startMonth = start.Month;
+            int startYear = start.Year;
+
+            // Add the non-recurrent dates to bold.
+            foreach (DateTime date in _boldDates)
             {
-                DateTime date = _arrayOfDates[i];
-                if (DateTime.Compare(date, range.Start) >= 0 && DateTime.Compare(date, range.End) <= 0)
+                if (DateTime.Compare(date, start) >= 0 && DateTime.Compare(date, range.End) <= 0)
                 {
-                    int month = date.Month;
-                    int year = date.Year;
-                    int index = (year == startYear) ? month - startMonth : month + year * MonthsInYear - startYear * MonthsInYear - startMonth;
-                    e.DaysToBold[index] |= (0x00000001 << (date.Day - 1));
+                    // Date is within the display range, convert it into month count starting from the first displayed month.
+                    int monthIndex = (date.Year - startYear) * MonthsInYear + date.Month - startMonth;
+
+                    boldDates[monthIndex] |= (0x00000001 << (date.Day - 1));
                 }
             }
 
-            // Now we figure out which monthly and annual dates to bold
+            // Add monthly and annual dates to bold.
             --startMonth;
-            for (int i = 0; i < months; ++i, ++startMonth)
+            for (int i = 0; i < boldDates.Length; ++i, ++startMonth)
             {
-                e.DaysToBold[i] |= _monthsOfYear[startMonth % MonthsInYear] | _datesToBoldMonthly;
+                boldDates[i] |= _monthsOfYear[startMonth % MonthsInYear] | _datesToBoldMonthly;
             }
         }
 
@@ -1160,23 +1173,6 @@ namespace System.Windows.Forms
             }
 
             base.CreateHandle();
-        }
-
-        /// <summary>
-        ///  Called to cleanup a MonthCalendar. Normally you do not need
-        ///  to call this as the garbage collector will cleanup the buffer
-        ///  for you. However, there may be times when you may want to expedite
-        ///  the garbage collectors cleanup.
-        /// </summary>
-        protected override void Dispose(bool disposing)
-        {
-            if (_mdsBuffer != IntPtr.Zero)
-            {
-                Marshal.FreeHGlobal(_mdsBuffer);
-                _mdsBuffer = IntPtr.Zero;
-            }
-
-            base.Dispose(disposing);
         }
 
         /// <summary>
@@ -1344,8 +1340,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines which portion of a month calendar control is at at a given
-        ///  point on the screen.
+        ///  Determines which portion of a month calendar control is at a given point on the screen.
         /// </summary>
         public unsafe HitTestInfo HitTest(int x, int y)
         {
@@ -1379,8 +1374,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines which portion of a month calendar control is at at a given
-        ///  point on the screen.
+        ///  Determines which portion of a month calendar control is at a given point on the screen.
         /// </summary>
         public HitTestInfo HitTest(Point point) => HitTest(point.X, point.Y);
 
@@ -1540,7 +1534,8 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAllAnnuallyBoldedDates()
         {
-            _annualArrayOfDates.Clear();
+            _annualBoldDates.Clear();
+
             for (int i = 0; i < MonthsInYear; ++i)
             {
                 _monthsOfYear[i] = 0;
@@ -1550,14 +1545,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Removes all the bolded days. Be sure to call UpdateBoldedDates() afterwards.
         /// </summary>
-        public void RemoveAllBoldedDates() => _arrayOfDates.Clear();
+        public void RemoveAllBoldedDates() => _boldDates.Clear();
 
         /// <summary>
         ///  Removes all monthly bolded days. Be sure to call UpdateBoldedDates() afterwards.
         /// </summary>
         public void RemoveAllMonthlyBoldedDates()
         {
-            _monthlyArrayOfDates.Clear();
+            _monthlyBoldDates.Clear();
             _datesToBoldMonthly = 0;
         }
 
@@ -1570,13 +1565,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveAnnuallyBoldedDate(DateTime date)
         {
-            int length = _annualArrayOfDates.Count;
+            int length = _annualBoldDates.Count;
             int i = 0;
             for (; i < length; ++i)
             {
-                if (CompareDayAndMonth(_annualArrayOfDates[i], date))
+                if (CompareDayAndMonth(_annualBoldDates[i], date))
                 {
-                    _annualArrayOfDates.RemoveAt(i);
+                    _annualBoldDates.RemoveAt(i);
                     break;
                 }
             }
@@ -1584,7 +1579,7 @@ namespace System.Windows.Forms
             --length;
             for (int j = i; j < length; ++j)
             {
-                if (CompareDayAndMonth(_annualArrayOfDates[j], date))
+                if (CompareDayAndMonth(_annualBoldDates[j], date))
                 {
                     return;
                 }
@@ -1601,12 +1596,12 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveBoldedDate(DateTime date)
         {
-            int length = _arrayOfDates.Count;
-            for (int i = 0; i < length; ++i)
+            DateTime toRemove = date.Date;
+            for (int i = 0; i < _boldDates.Count; i++)
             {
-                if (DateTime.Compare(_arrayOfDates[i].Date, date.Date) == 0)
+                if (DateTime.Compare(_boldDates[i].Date, toRemove) == 0)
                 {
-                    _arrayOfDates.RemoveAt(i);
+                    _boldDates.RemoveAt(i);
                     return;
                 }
             }
@@ -1621,13 +1616,13 @@ namespace System.Windows.Forms
         /// </summary>
         public void RemoveMonthlyBoldedDate(DateTime date)
         {
-            int length = _monthlyArrayOfDates.Count;
+            int length = _monthlyBoldDates.Count;
             int i = 0;
             for (; i < length; ++i)
             {
-                if (CompareDayAndMonth(_monthlyArrayOfDates[i], date))
+                if (CompareDayAndMonth(_monthlyBoldDates[i], date))
                 {
-                    _monthlyArrayOfDates.RemoveAt(i);
+                    _monthlyBoldDates.RemoveAt(i);
                     break;
                 }
             }
@@ -1635,7 +1630,7 @@ namespace System.Windows.Forms
             --length;
             for (int j = i; j < length; ++j)
             {
-                if (CompareDayAndMonth(_monthlyArrayOfDates[j], date))
+                if (CompareDayAndMonth(_monthlyBoldDates[j], date))
                 {
                     return;
                 }
@@ -1644,9 +1639,9 @@ namespace System.Windows.Forms
             _datesToBoldMonthly &= ~(0x00000001 << (date.Day - 1));
         }
 
-        private void ResetAnnuallyBoldedDates() => _annualArrayOfDates.Clear();
+        private void ResetAnnuallyBoldedDates() => _annualBoldDates.Clear();
 
-        private void ResetBoldedDates() => _arrayOfDates.Clear();
+        private void ResetBoldedDates() => _boldDates.Clear();
 
         private void ResetCalendarDimensions() => CalendarDimensions = new Size(1, 1);
 
@@ -1662,7 +1657,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ResetMinDate() => MinDate = DateTime.MinValue;
 
-        private void ResetMonthlyBoldedDates() => _monthlyArrayOfDates.Clear();
+        private void ResetMonthlyBoldedDates() => _monthlyBoldDates.Clear();
 
         /// <summary>
         ///  Resets the limits of the selection range. By default value, the upper
@@ -1688,41 +1683,6 @@ namespace System.Windows.Forms
         {
             _todayDateSet = false;
             UpdateTodayDate();
-        }
-
-        /// <summary>
-        ///  reqSize = # elements in int[] array
-        ///
-        ///  The size argument should be greater than 0.
-        ///  Because of the nature of MonthCalendar, we can expect that
-        ///  the requested size will not be ridiculously large, hence
-        ///  it is not necessary to decrease the size of an allocated
-        ///  block if the new requested size is smaller.
-        /// </summary>
-        private IntPtr RequestBuffer(int reqSize)
-        {
-            Debug.Assert(reqSize > 0, "Requesting a ridiculously small buffer");
-            int intSize = 4;
-            // if the current buffer size is insufficient...
-            if (reqSize * intSize > _mdsBufferSize)
-            {
-                // free and expand the buffer,
-                if (_mdsBuffer != IntPtr.Zero)
-                {
-                    Marshal.FreeHGlobal(_mdsBuffer);
-                    _mdsBuffer = IntPtr.Zero;
-                }
-
-                // Round up to the nearest multiple of MINIMUM_ALLOC_SIZE
-                float quotient = (float)(reqSize - 1) / MinimumAllocSize;
-                int actualSize = ((int)(quotient + 1)) * MinimumAllocSize;
-                Debug.Assert(actualSize >= reqSize, "Tried to round up, but got it wrong");
-
-                _mdsBufferSize = actualSize * intSize;
-                _mdsBuffer = Marshal.AllocHGlobal(_mdsBufferSize);
-            }
-
-            return _mdsBuffer;
         }
 
         /// <summary>
@@ -1912,9 +1872,9 @@ namespace System.Windows.Forms
             DateTime currentDate = displayRange.Start;
             while (currentDate <= displayRange.End)
             {
-                bool currentDateIsBolded = _arrayOfDates.Contains(currentDate)
-                    || _annualArrayOfDates.Any(d => d.Month == currentDate.Month && d.Day == currentDate.Day)
-                    || _monthlyArrayOfDates.Any(d => d.Day == currentDate.Day);
+                bool currentDateIsBolded = _boldDates.Contains(currentDate)
+                    || _annualBoldDates.Any(d => d.Month == currentDate.Month && d.Day == currentDate.Day)
+                    || _monthlyBoldDates.Any(d => d.Day == currentDate.Day);
 
                 if (currentDateIsBolded)
                 {
@@ -2024,10 +1984,10 @@ namespace System.Windows.Forms
         }
 
         private bool ShouldSerializeAnnuallyBoldedDates()
-            => _annualArrayOfDates.Count > 0;
+            => _annualBoldDates.Count > 0;
 
         private bool ShouldSerializeBoldedDates()
-            => _arrayOfDates.Count > 0;
+            => _boldDates.Count > 0;
 
         private bool ShouldSerializeCalendarDimensions()
             => !_dimensions.Equals(new Size(1, 1));
@@ -2042,7 +2002,7 @@ namespace System.Windows.Forms
             => !TitleBackColor.Equals(s_defaultTitleBackColor);
 
         private bool ShouldSerializeMonthlyBoldedDates()
-            => _monthlyArrayOfDates.Count > 0;
+            => _monthlyBoldDates.Count > 0;
 
         /// <summary>
         ///  Retrieves true if the maxDate should be persisted in code gen.
@@ -2215,19 +2175,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the MCN_GETDAYSTATE notification
+        ///  Handles the MCN_GETDAYSTATE notification by returning an array of bitmasks, one entry per month,
+        ///  that specifies which dates to display in bold.
         /// </summary>
         private unsafe void WmDateBold(ref Message m)
         {
             NMDAYSTATE* nmmcds = (NMDAYSTATE*)m.LParam;
-            DateTime start = DateTimePicker.SysTimeToDateTime(nmmcds->stStart);
-            DateBoldEventArgs boldEvent = new DateBoldEventArgs(start, nmmcds->cDayState);
-            BoldDates(boldEvent);
-            _mdsBuffer = RequestBuffer(boldEvent.Size);
-            // copy boldEvent into mdsBuffer
-            Marshal.Copy(boldEvent.DaysToBold, 0, _mdsBuffer, boldEvent.Size);
-            // now we replug DateBoldEventArgs info into NMDAYSTATE
-            nmmcds->prgDayState = _mdsBuffer;
+            Span<int> boldDates = new Span<int>((int*)nmmcds->prgDayState, nmmcds->cDayState);
+            WriteBoldDates(boldDates);
         }
 
         /// <summary>

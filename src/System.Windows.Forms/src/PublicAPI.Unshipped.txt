@@ -1,2 +1,3 @@
+*REMOVED*override System.Windows.Forms.MonthCalendar.Dispose(bool disposing) -> void
 ~override System.Windows.Forms.TabControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.TabPage.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
