@@ -27,7 +27,7 @@ namespace System.Windows.Forms
                 _owningAccessibleObject = owningAccessibleObject ?? throw new ArgumentNullException(nameof(owningAccessibleObject));
             }
 
-            private int CurrentIndex
+            private protected int CurrentIndex
                 => _owningListBox.Items.InnerArray.IndexOf(_itemEntry);
 
             internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningAccessibleObject;
@@ -42,6 +42,8 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderSimple ItemSelectionContainer
                 => _owningAccessibleObject;
+
+            public override AccessibleObject Parent => _owningAccessibleObject;
 
             /// <summary>
             ///  Gets the runtime ID.
@@ -116,10 +118,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override string? Name
             {
-                get
-                {
-                    return _owningListBox.GetItemText(_itemEntry.Item);
-                }
+                get => _owningListBox.GetItemText(_itemEntry.Item);
                 set => base.Name = value;
             }
 

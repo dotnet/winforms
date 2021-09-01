@@ -143,7 +143,6 @@ namespace WinformsControlsTest
             this.Name = "ListViewTest";
             this.Text = "ListView Test";
             this.ResumeLayout(false);
-
         }
 
         #endregion
