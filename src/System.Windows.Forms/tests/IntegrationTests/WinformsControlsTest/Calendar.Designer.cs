@@ -55,7 +55,16 @@ namespace WinformsControlsTest
             this.monthCalendar1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
             | System.Windows.Forms.AnchorStyles.Left)
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.monthCalendar1.AnnuallyBoldedDates = new System.DateTime[] {
+        new System.DateTime(2021, 8, 1, 0, 0, 0, 0),
+        new System.DateTime(2021, 8, 2, 0, 0, 0, 0)};
+            this.monthCalendar1.BoldedDates = new System.DateTime[] {
+        new System.DateTime(2021, 7, 3, 0, 0, 0, 0),
+        new System.DateTime(2021, 7, 4, 0, 0, 0, 0)};
             this.monthCalendar1.Location = new System.Drawing.Point(18, 80);
+            this.monthCalendar1.MonthlyBoldedDates = new System.DateTime[] {
+        new System.DateTime(2021, 9, 5, 0, 0, 0, 0),
+        new System.DateTime(2021, 9, 6, 0, 0, 0, 0)};
             this.monthCalendar1.Name = "monthCalendar1";
             this.monthCalendar1.TabIndex = 0;
             // 
