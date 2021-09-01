@@ -1025,11 +1025,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             static Bitmap GetBitmapFromIcon(string iconName, int iconWidth, int iconHeight)
             {
                 Size desiredSize = new(iconWidth, iconHeight);
-                Icon icon = new(new Icon(typeof(PropertyGrid), iconName), desiredSize);
-                var bitmap = icon.ToBitmap();
-                icon.Dispose();
+                using Stream stream = typeof(PropertyGrid).Module.Assembly.GetManifestResourceStream(typeof(PropertyGrid), iconName);
+                using Icon icon = new(stream, desiredSize);
+                Bitmap bitmap = icon.ToBitmap();
 
-                if (bitmap.Size.Width != iconWidth || bitmap.Size.Height != iconHeight)
+                if (bitmap.Size != desiredSize)
                 {
                     Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(bitmap, desiredSize);
                     if (scaledBitmap is not null)

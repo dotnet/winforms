@@ -239,7 +239,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Returns true if there is a standard set of values that can be selected from.
         ///  <see cref="GetPropertyValueList"/> should return said values when this is true.
         /// </summary>
-        internal virtual bool Enumerable => (EntryFlags & Flags.StandardValuesSupported) != 0;
+        internal virtual bool Enumerable => EntryFlags.HasFlag(Flags.StandardValuesSupported);
 
         public override bool Expandable
         {
@@ -640,22 +640,21 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal virtual string LabelToolTipText => PropertyLabel;
 
         /// <summary>
-        ///  The entry needs a drop down button to invoke it's editor.
+        ///  The entry needs a drop down button to invoke its editor.
         /// </summary>
-        public virtual bool NeedsDropDownButton => (EntryFlags & Flags.DropDownEditable) != 0;
+        public virtual bool NeedsDropDownButton => EntryFlags.HasFlag(Flags.DropDownEditable);
 
         /// <summary>
-        ///  The entry needs a modal editor button ("...") to invoke it's editor.
+        ///  The entry needs a modal editor button ("...") to invoke its editor.
         /// </summary>
         public virtual bool NeedsModalEditorButton
-            => (EntryFlags & Flags.ModalEditable) != 0
-                && (IsValueEditable || (EntryFlags & Flags.ReadOnlyEditable) != 0);
+            => EntryFlags.HasFlag(Flags.ModalEditable) && (IsValueEditable || EntryFlags.HasFlag(Flags.ReadOnlyEditable));
 
         public PropertyGrid OwnerGrid { get; }
 
         /// <summary>
         ///  Returns rect that the outline icon (+ or - or arrow) will be drawn into, relative
-        ///  to the upper left corner of the GridEntry.
+        ///  to the upper left corner of the <see cref="GridEntry"/>.
         /// </summary>
         public Rectangle OutlineRect
         {
