@@ -290,6 +290,8 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static void Reset() => s_instance?.FullFsmReset();
+
         private void StartTracking(IKeyboardToolTip tool, ToolTip toolTip)
         {
             _toolToTip[tool] = toolTip;

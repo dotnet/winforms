@@ -4,6 +4,7 @@
 
 using System.ComponentModel;
 using System.Drawing;
+using System.Reflection;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
@@ -1312,6 +1313,88 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void ContainerControl_OnMove_HidesToolTip_IfToolTipIsShown()
+        {
+            using Control control = new();
+            using SubContainerControl container = new();
+            container.Controls.Add(control);
+            container.SetTopLevel();
+            container.CreateControl();
+
+            // Simulate that a keyboard toolTip is shown
+            KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
+            instance.TestAccessor().Dynamic._currentTool = control;
+            instance.TestAccessor().Dynamic._currentState = (byte)2;
+
+            container.MoveContainer();
+            IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
+            string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
+
+            Assert.Null(currentTool);
+            Assert.Equal("Hidden", currentState);
+
+            Assert.True(control.IsHandleCreated);
+            Assert.True(container.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_OnResize_HidesToolTip_IfToolTipIsShown()
+        {
+            using Control control = new();
+            using SubContainerControl container = new();
+            container.Controls.Add(control);
+            container.SetTopLevel();
+            container.CreateControl();
+
+            // Simulate that a keyboard toolTip is shown
+            KeyboardToolTipStateMachine instance = KeyboardToolTipStateMachine.Instance;
+            instance.TestAccessor().Dynamic._currentTool = control;
+            instance.TestAccessor().Dynamic._currentState = (byte)2;
+
+            container.ResizeContainer();
+            IKeyboardToolTip currentTool = instance.TestAccessor().Dynamic._currentTool;
+            string currentState = instance.TestAccessor().Dynamic._currentState.ToString();
+
+            Assert.Null(currentTool);
+            Assert.Equal("Hidden", currentState);
+
+            Assert.True(control.IsHandleCreated);
+            Assert.True(container.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_OnResize_DoNothing_IfInstanceIsNotCreated()
+        {
+            using Control control = new();
+            using SubContainerControl container = new();
+            container.Controls.Add(control);
+            container.CreateControl();
+
+            container.ResizeContainer();
+            object instance = typeof(KeyboardToolTipStateMachine).GetField("s_instance", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+
+            Assert.Null(instance);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(container.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ContainerControl_OnMove_DoNothing_IfInstanceIsNotCreated()
+        {
+            using Control control = new();
+            using SubContainerControl container = new();
+            container.Controls.Add(control);
+            container.CreateControl();
+
+            container.MoveContainer();
+            object instance = typeof(KeyboardToolTipStateMachine).GetField("s_instance", BindingFlags.Static | BindingFlags.NonPublic).GetValue(null);
+
+            Assert.Null(instance);
+            Assert.True(control.IsHandleCreated);
+            Assert.True(container.IsHandleCreated);
+        }
+
         private class SubControl : Control
         {
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
@@ -1373,6 +1456,10 @@ namespace System.Windows.Forms.Tests
                 set => base.ImeModeBase = value;
             }
 
+            public void MoveContainer() => base.OnMove(EventArgs.Empty);
+
+            public void ResizeContainer() => base.OnResize(EventArgs.Empty);
+
             public new bool ResizeRedraw
             {
                 get => base.ResizeRedraw;
@@ -1412,6 +1499,8 @@ namespace System.Windows.Forms.Tests
             public new void OnLayout(LayoutEventArgs e) => base.OnLayout(e);
 
             public new void OnParentChanged(EventArgs e) => base.OnParentChanged(e);
+
+            public void SetTopLevel() => SetTopLevel(true);
 
             public new void UpdateDefaultButton() => base.UpdateDefaultButton();
 
