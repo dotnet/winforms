@@ -7792,7 +7792,7 @@ namespace System.Windows.Forms
                 if (DpiHelper.IsPerMonitorV2Awareness)
                 {
                     int old = _deviceDpi;
-                    using Font localFont = GetCurrentFontAndDpi(out int fontDpi);
+                    Font localFont = GetCurrentFontAndDpi(out int fontDpi);
                     _deviceDpi = (int)User32.GetDpiForWindow(this);
                     if (old != _deviceDpi)
                     {
@@ -12259,7 +12259,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            using Font localFont = GetCurrentFontAndDpi(out int fontDpi);
+            Font localFont = GetCurrentFontAndDpi(out int fontDpi);
             _deviceDpi = newDeviceDpi;
 
             if (fontDpi == _deviceDpi)
@@ -12271,6 +12271,7 @@ namespace System.Windows.Forms
             // Controls are by default font scaled.
             // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
             var factor = (float)_deviceDpi / fontDpi;
+            ScaledControlFont?.Dispose();
             ScaledControlFont = localFont.WithSize(localFont.Size * factor);
 
             // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
