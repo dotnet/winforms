@@ -9,6 +9,7 @@ using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Design;
 using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Windows.Forms.Design;
@@ -191,6 +192,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
+        /// <summary>
+        ///  Shared drop-down button used to open the drop down editor (if applicable) for the currently selected row.
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   The visisbility of this button is primarily driven through associated <see cref="UITypeEditor"/>s for
+        ///   the selected row's <see cref="GridEntry"/>.
+        ///  </para>
+        /// </remarks>
         internal DropDownButton DropDownButton
         {
             get
@@ -223,6 +233,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
+        /// <summary>
+        ///  Shared "..." button used to launch editor dialogs for the selected row if applicable.
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   The visisbility of this button is primarily driven through associated <see cref="UITypeEditor"/>s for
+        ///   the selected row's <see cref="GridEntry"/>.
+        ///  </para>
+        /// </remarks>
         private Button DialogButton
         {
             get
@@ -252,26 +271,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 return _dialogButton;
             }
-        }
-
-        private static Bitmap GetBitmapFromIcon(string iconName, int iconWidth, int iconHeight)
-        {
-            Size desiredSize = new(iconWidth, iconHeight);
-            Icon icon = new(new Icon(typeof(PropertyGrid), iconName), desiredSize);
-            var bitmap = icon.ToBitmap();
-            icon.Dispose();
-
-            if (bitmap.Size.Width != iconWidth || bitmap.Size.Height != iconHeight)
-            {
-                Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(bitmap, desiredSize);
-                if (scaledBitmap is not null)
-                {
-                    bitmap.Dispose();
-                    bitmap = scaledBitmap;
-                }
-            }
-
-            return bitmap;
         }
 
         /// <summary>
@@ -545,8 +544,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Returns or sets the IServiceProvider the PropertyGridView will use to obtain
-        ///  services.  This may be null.
+        ///  Returns or sets the <see cref="IServiceProvider"/> the <see cref="PropertyGridView"/> will use to obtain
+        ///  services. This may be null.
         /// </summary>
         public IServiceProvider ServiceProvider
         {
@@ -784,10 +783,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             _tipInfo = -1;
         }
 
-        /// <summary>
-        ///  Closes a previously opened drop down.  This should be called by the
-        ///  drop down when the user does something that should close it.
-        /// </summary>
+        /// <inheritdoc />
         public void CloseDropDown() => CloseDropDownInternal(resetFocus: true);
 
         private void CloseDropDownInternal(bool resetFocus)
@@ -1025,6 +1021,26 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             return bitmap;
+
+            static Bitmap GetBitmapFromIcon(string iconName, int iconWidth, int iconHeight)
+            {
+                Size desiredSize = new(iconWidth, iconHeight);
+                using Stream stream = typeof(PropertyGrid).Module.Assembly.GetManifestResourceStream(typeof(PropertyGrid), iconName);
+                using Icon icon = new(stream, desiredSize);
+                Bitmap bitmap = icon.ToBitmap();
+
+                if (bitmap.Size != desiredSize)
+                {
+                    Bitmap scaledBitmap = DpiHelper.CreateResizedBitmap(bitmap, desiredSize);
+                    if (scaledBitmap is not null)
+                    {
+                        bitmap.Dispose();
+                        bitmap = scaledBitmap;
+                    }
+                }
+
+                return bitmap;
+            }
         }
 
         private void CreateUI() => UpdateUIBasedOnFont(layoutRequired: false);
@@ -1252,6 +1268,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
+        /// <summary>
+        ///  Handle selection and/or editor invocation when F4 is pressed. If the current row has a modal dialog ("...")
+        ///  <paramref name="popupModalDialog"/> will cause it to be invoked. If not set to true, the ("...") button
+        ///  will just be focused. Drop-down editors will always be launched.
+        /// </summary>
         private void F4Selection(bool popupModalDialog)
         {
             GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
@@ -1269,13 +1290,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (DropDownButton.Visible)
             {
-                PopupDialog(_selectedRow);
+                PopupEditor(_selectedRow);
             }
             else if (DialogButton.Visible)
             {
                 if (popupModalDialog)
                 {
-                    PopupDialog(_selectedRow);
+                    PopupEditor(_selectedRow);
                 }
                 else
                 {
@@ -1284,6 +1305,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else if (EditTextBox.Visible)
             {
+                // No edit buttons, just focus and select the text value.
                 EditTextBox.Focus();
                 EditTextBox.SelectAll();
             }
@@ -1474,17 +1496,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public int GetValueWidth() => (int)(InternalLabelWidth * (_labelRatio - 1));
 
-        /// <summary>
-        ///  Modally displays the provided control in a drop down.
-        /// </summary>
-        /// <remarks>
-        ///  <para>
-        ///   When possible, the current dimensions of the control will be respected. If this is not possible for the
-        ///   current screen layout the control may be resized, so it should be implemented using appropriate docking
-        ///   and anchoring so it will resize nicely. If the user performs an action that would cause the drop down to
-        ///   prematurely disappear the control will be hidden.
-        ///  </para>
-        /// </remarks>
+        /// <inheritdoc/>
         public void DropDownControl(Control control)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:DropDownControl");
@@ -1853,24 +1865,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return -1;
         }
 
-        public int GetDefaultOutlineIndent()
-        {
-            return OutlineIndent;
-        }
-
-        private IHelpService GetHelpService()
-        {
-            if (_helpService is null && ServiceProvider.TryGetService(out _topHelpService!))
-            {
-                IHelpService localHelpService = _topHelpService.CreateLocalContext(HelpContextType.ToolWindowSelection);
-                if (localHelpService is not null)
-                {
-                    _helpService = localHelpService;
-                }
-            }
-
-            return _helpService;
-        }
+        public int GetDefaultOutlineIndent() => OutlineIndent;
 
         public int GetScrollOffset()
         {
@@ -2248,11 +2243,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Shared click handler for the dialog and drop-down button.
+        ///  Shared click handler for the dialog and drop-down button. Commits any pending edits in the
+        ///  shared text box before launching the relevant editor for the currently selected row.
         /// </summary>
         private void OnButtonClick(object sender, EventArgs e)
         {
-            if (_flags.HasFlag(Flags.BtnLaunchedEditor))
+            if (_flags.HasFlag(Flags.ButtonLaunchedEditor))
             {
                 return;
             }
@@ -2267,12 +2263,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             try
             {
                 CommitEditTextBox();
-                SetFlag(Flags.BtnLaunchedEditor, true);
-                PopupDialog(_selectedRow);
+                SetFlag(Flags.ButtonLaunchedEditor, true);
+                PopupEditor(_selectedRow);
             }
             finally
             {
-                SetFlag(Flags.BtnLaunchedEditor, false);
+                SetFlag(Flags.ButtonLaunchedEditor, false);
             }
         }
 
@@ -2755,26 +2751,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private bool OnF4(Control sender)
-        {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnF4");
-            if (ModifierKeys != 0)
-            {
-                return false;
-            }
-
-            if (sender == this || sender == OwnerGrid)
-            {
-                F4Selection(true);
-            }
-            else
-            {
-                UnfocusSelection();
-            }
-
-            return true;
-        }
-
         private bool OnEscape(Control sender)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnEscape");
@@ -2877,7 +2853,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // Alt-Arrow support.
             if (keyCode == Keys.Down && altPressed && DropDownButton.Visible)
             {
-                F4Selection(false);
+                F4Selection(popupModalDialog: false);
                 return;
             }
 
@@ -3847,9 +3823,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public void PopupDialog(int row)
+        /// <summary>
+        ///  Displays the appropriate editor for the given <paramref name="row"/>.
+        /// </summary>
+        public void PopupEditor(int row)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:PopupDialog");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:PopupEditor");
             GridEntry gridEntry = GetGridEntryFromRow(row);
             if (gridEntry is null)
             {
@@ -3864,10 +3843,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             bool needsDropDownButton = gridEntry.NeedsDropDownButton;
             bool enumerable = gridEntry.Enumerable;
-            bool needsCustomEditorButton = gridEntry.NeedsCustomEditorButton;
+            bool needsCustomEditorButton = gridEntry.NeedsModalEditorButton;
 
             if (enumerable && !needsDropDownButton)
             {
+                // Just a simple selection of possible values, fill our common listbox with the values and show it.
+
                 DropDownListBox.Items.Clear();
                 _ = gridEntry.PropertyValue;
                 object[] rgItems = gridEntry.GetPropertyValueList();
@@ -3927,36 +3908,42 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 Refresh();
+                return;
             }
-            else if (needsCustomEditorButton || needsDropDownButton)
+
+            if (!needsCustomEditorButton && !needsDropDownButton)
             {
+                return;
+            }
+
+            // The current grid entry supports editing, invoke the editor.
+
+            try
+            {
+                InPropertySet = true;
+                EditTextBox.DisableMouseHook = true;
+
                 try
                 {
-                    InPropertySet = true;
-                    EditTextBox.DisableMouseHook = true;
-
-                    try
-                    {
-                        SetFlag(Flags.ResizableDropDown, gridEntry.UITypeEditor.IsDropDownResizable);
-                        gridEntry.EditPropertyValue(this);
-                    }
-                    finally
-                    {
-                        SetFlag(Flags.ResizableDropDown, false);
-                    }
+                    SetFlag(Flags.ResizableDropDown, gridEntry.UITypeEditor.IsDropDownResizable);
+                    gridEntry.EditPropertyValue(this);
                 }
                 finally
                 {
-                    InPropertySet = false;
-                    EditTextBox.DisableMouseHook = false;
+                    SetFlag(Flags.ResizableDropDown, false);
                 }
+            }
+            finally
+            {
+                InPropertySet = false;
+                EditTextBox.DisableMouseHook = false;
+            }
 
-                Refresh();
+            Refresh();
 
-                if (FocusInside)
-                {
-                    SelectGridEntry(gridEntry, pageIn: false);
-                }
+            if (FocusInside)
+            {
+                SelectGridEntry(gridEntry, pageIn: false);
             }
         }
 
@@ -3996,7 +3983,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     case Keys.F4:
                         if (FocusInside)
                         {
-                            return OnF4(this);
+                            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:OnF4");
+                            if (ModifierKeys != 0)
+                            {
+                                return false;
+                            }
+
+                            F4Selection(popupModalDialog: true);
+                            return true;
                         }
 
                         break;
@@ -4349,7 +4343,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             bool editVisible = EditTextBox.Visible;
             bool dropDownButtonVisible = DropDownButton.Visible;
-            bool editButtonVisible = DialogButton.Visible;
+            bool dialogButtonVisible = DialogButton.Visible;
 
             EditTextBox.Visible = false;
             DialogButton.Visible = false;
@@ -4363,7 +4357,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (currentRow >= 0 && currentRow < _visibleRows - 1)
                 {
                     EditTextBox.Visible = editVisible;
-                    DialogButton.Visible = editButtonVisible;
+                    DialogButton.Visible = dialogButtonVisible;
                     DropDownButton.Visible = dropDownButtonVisible;
                     SelectGridEntry(currentEntry, pageIn: true);
                 }
@@ -4508,7 +4502,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // What components are we using?
             bool needsDropDownButton = gridEntry.NeedsDropDownButton | gridEntry.Enumerable;
-            bool needsCustomEditorButton = gridEntry.NeedsCustomEditorButton;
+            bool needsCustomEditorButton = gridEntry.NeedsModalEditorButton;
             bool customPaint = gridEntry.IsCustomPaint;
 
             rect.X += 1;
@@ -5073,13 +5067,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             return scrollBarChanged;
         }
 
-        /// <summary>
-        ///  Shows the given dialog, and returns its dialog result.  You should always
-        ///  use this method rather than showing the dialog directly, as this will
-        ///  properly position the dialog and provide it a dialog owner.
-        /// </summary>
+        /// <inheritdoc />
         public DialogResult ShowDialog(Form dialog)
         {
+            ArgumentNullException.ThrowIfNull(dialog);
+
             // Try to shift down if sitting right on top of existing owner.
             if (dialog.StartPosition == FormStartPosition.CenterScreen)
             {
@@ -5304,8 +5296,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         private void UpdateHelpAttributes(GridEntry oldEntry, GridEntry newEntry)
         {
             // Update the help context with the current property.
-            IHelpService helpService = GetHelpService();
-            if (helpService is null || oldEntry == newEntry)
+            if (_helpService is null && ServiceProvider.TryGetService(out _topHelpService!))
+            {
+                _helpService = _topHelpService.CreateLocalContext(HelpContextType.ToolWindowSelection);
+            }
+
+            if (_helpService is null || oldEntry == newEntry)
             {
                 return;
             }
@@ -5315,7 +5311,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 while (temp is not null)
                 {
-                    helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
+                    _helpService.RemoveContextAttribute("Keyword", temp.HelpKeyword);
                     temp = temp.ParentGridEntry;
                 }
             }
@@ -5324,7 +5320,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 temp = newEntry;
 
-                UpdateHelpAttributes(helpService, temp, true);
+                UpdateHelpAttributes(_helpService, temp, true);
             }
         }
 

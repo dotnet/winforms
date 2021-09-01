@@ -213,8 +213,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Returns the default child GridEntry of this item.  Usually the default property
-        ///  of the target object.
+        ///  Returns the default child GridEntry of this item.  Usually the default property of the target object.
         /// </summary>
         internal virtual GridEntry DefaultChild
         {
@@ -236,7 +235,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal bool Disposed => GetFlagSet(Flags.Disposed);
 
-        internal virtual bool Enumerable => (EntryFlags & Flags.Enumerable) != 0;
+        /// <summary>
+        ///  Returns true if there is a standard set of values that can be selected from.
+        ///  <see cref="GetPropertyValueList"/> should return said values when this is true.
+        /// </summary>
+        internal virtual bool Enumerable => EntryFlags.HasFlag(Flags.StandardValuesSupported);
 
         public override bool Expandable
         {
@@ -346,7 +349,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (converter.GetStandardValuesSupported(this))
                 {
-                    _flags |= Flags.Enumerable;
+                    _flags |= Flags.StandardValuesSupported;
                 }
 
                 if (!forceReadOnly && converter.CanConvertFrom(this, typeof(string)) &&
@@ -398,7 +401,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         switch (uiEditor.GetEditStyle(this))
                         {
                             case UITypeEditorEditStyle.Modal:
-                                _flags |= Flags.CustomEditable;
+                                _flags |= Flags.ModalEditable;
                                 if (!isImmutable && !PropertyType.IsValueType)
                                 {
                                     _flags |= Flags.ReadOnlyEditable;
@@ -406,7 +409,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                                 break;
                             case UITypeEditorEditStyle.DropDown:
-                                _flags |= Flags.DropdownEditable;
+                                _flags |= Flags.DropDownEditable;
                                 break;
                         }
                     }
@@ -590,7 +593,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual bool IsValueEditable
             => !ForceReadOnly
-            && 0 != (EntryFlags & (Flags.DropdownEditable | Flags.TextEditable | Flags.CustomEditable | Flags.Enumerable));
+            && 0 != (EntryFlags & (Flags.DropDownEditable | Flags.TextEditable | Flags.ModalEditable | Flags.StandardValuesSupported));
 
         public bool IsImmediatelyEditable => (EntryFlags & Flags.ImmediatelyEditable) != 0;
 
@@ -636,17 +639,22 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal virtual string LabelToolTipText => PropertyLabel;
 
-        public virtual bool NeedsDropDownButton => (EntryFlags & Flags.DropdownEditable) != 0;
+        /// <summary>
+        ///  The entry needs a drop down button to invoke its editor.
+        /// </summary>
+        public virtual bool NeedsDropDownButton => EntryFlags.HasFlag(Flags.DropDownEditable);
 
-        public virtual bool NeedsCustomEditorButton
-            => (EntryFlags & Flags.CustomEditable) != 0
-                && (IsValueEditable || (EntryFlags & Flags.ReadOnlyEditable) != 0);
+        /// <summary>
+        ///  The entry needs a modal editor button ("...") to invoke its editor.
+        /// </summary>
+        public virtual bool NeedsModalEditorButton
+            => EntryFlags.HasFlag(Flags.ModalEditable) && (IsValueEditable || EntryFlags.HasFlag(Flags.ReadOnlyEditable));
 
         public PropertyGrid OwnerGrid { get; }
 
         /// <summary>
         ///  Returns rect that the outline icon (+ or - or arrow) will be drawn into, relative
-        ///  to the upper left corner of the GridEntry.
+        ///  to the upper left corner of the <see cref="GridEntry"/>.
         /// </summary>
         public Rectangle OutlineRect
         {
@@ -1501,7 +1509,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Returns the text values of this property.
+        ///  Returns the standard text values of this property.
         /// </summary>
         public virtual object[] GetPropertyValueList()
         {

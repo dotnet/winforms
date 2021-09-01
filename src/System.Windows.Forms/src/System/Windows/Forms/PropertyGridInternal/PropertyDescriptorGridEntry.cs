@@ -283,7 +283,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 _readOnlyVerified = true;
 
-                return base.ShouldRenderReadOnly && !_isSerializeContentsProperty && !base.NeedsCustomEditorButton;
+                return base.ShouldRenderReadOnly && !_isSerializeContentsProperty && !base.NeedsModalEditorButton;
             }
         }
 
