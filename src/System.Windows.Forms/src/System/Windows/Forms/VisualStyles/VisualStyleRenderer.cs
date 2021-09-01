@@ -86,7 +86,7 @@ namespace System.Windows.Forms.VisualStyles
 
         internal static bool IsCombinationDefined(string className, int part)
         {
-            bool returnVal = false;
+            bool result = false;
 
             if (!IsSupported)
             {
@@ -103,33 +103,32 @@ namespace System.Windows.Forms.VisualStyles
                 // allow these explicitly here.
                 if (part == 0)
                 {
-                    returnVal = true;
+                    result = true;
                 }
                 else
                 {
-                    returnVal = IsThemePartDefined(hTheme, part, 0).IsTrue();
+                    result = IsThemePartDefined(hTheme, part, 0).IsTrue();
                 }
             }
 
-            // If the combo isn't defined, check the validity of our theme handle cache
-            if (!returnVal)
+            // If the combo isn't defined, check the validity of our theme handle cache.
+            if (!result)
             {
-                using (ThemeHandle? tHandle = ThemeHandle.Create(className, false))
-                {
-                    if (tHandle != null)
-                    {
-                        returnVal = IsThemePartDefined(tHandle, part, 0).IsTrue();
-                    }
+                using ThemeHandle? handle = ThemeHandle.Create(className, false);
 
-                    // If we did, in fact get a new correct theme handle, our cache is out of date -- update it now.
-                    if (returnVal)
-                    {
-                        RefreshCache();
-                    }
+                if (handle is not null)
+                {
+                    result = IsThemePartDefined(handle, part, 0).IsTrue();
+                }
+
+                // If we did, in fact get a new correct theme handle, our cache is out of date -- update it now.
+                if (result)
+                {
+                    RefreshCache();
                 }
             }
 
-            return returnVal;
+            return result;
         }
 
         /// <summary>
@@ -236,7 +235,7 @@ namespace System.Windows.Forms.VisualStyles
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
 
-            if (IntPtr.Zero != hwnd)
+            if (hwnd != IntPtr.Zero)
             {
                 using var htheme = new UxTheme.OpenThemeDataScope(hwnd, Class);
                 if (htheme.IsNull)

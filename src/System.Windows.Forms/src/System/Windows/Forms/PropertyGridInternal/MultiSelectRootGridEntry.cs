@@ -11,7 +11,11 @@ using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal partial class MultiSelectRootGridEntry : SingleSelectRootGridEntry
+    /// <summary>
+    ///  Root <see cref="GridEntry"/> for the <see cref="PropertyGrid"/> when there are multiple objects
+    ///  in <see cref="PropertyGrid.SelectedObjects"/>.
+    /// </summary>
+    internal sealed partial class MultiSelectRootGridEntry : SingleSelectRootGridEntry
     {
         private static readonly PropertyDescriptorComparer s_propertyComparer = new();
 
@@ -36,7 +40,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     foreach (object obj in (Array)_value)
                     {
                         var readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
-                        if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute()) || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
+                        if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute())
+                            || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
                         {
                             anyReadOnly = true;
                             break;
@@ -55,9 +60,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected override bool CreateChildren() => CreateChildren(diffOldChildren: false);
-
-        protected override bool CreateChildren(bool diffOldChildren)
+        protected override bool CreateChildren(bool diffOldChildren = false)
         {
             try
             {

@@ -2605,8 +2605,8 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.PropertyGrid.SelectedTab.get -> System.Windows.Forms.Design.PropertyTab
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.PropertyGrid.ToolStripRenderer.set -> void
-~System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection
-~System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set -> void
+System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.get -> System.ComponentModel.AttributeCollection!
+System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set -> void
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string relatedImageList) -> void
 ~System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem

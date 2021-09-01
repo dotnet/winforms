@@ -10,7 +10,7 @@ using System.Diagnostics;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridEntry
+    internal sealed class MultiPropertyDescriptorGridEntry : PropertyDescriptorGridEntry
     {
         private readonly MergePropertyDescriptor _mergedDescriptor;
         private readonly object[] _objects;
@@ -113,9 +113,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected override bool CreateChildren() => CreateChildren(diffOldChildren: false);
-
-        protected override bool CreateChildren(bool diffOldChildren)
+        protected override bool CreateChildren(bool diffOldChildren = false)
         {
             try
             {

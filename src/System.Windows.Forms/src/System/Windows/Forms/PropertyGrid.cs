@@ -783,7 +783,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Enable/Disable use of VisualStyle glyph for PropertyGrid node expansion.
+        ///  Gets or sets a value that indicates whether OS-specific visual style glyphs are used for the expansion
+        ///  nodes in the grid area.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [SRDescription(nameof(SR.PropertyGridCanShowVisualStyleGlyphsDesc))]
