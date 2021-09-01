@@ -72,6 +72,9 @@ namespace System.Windows.Forms
                 }
             }
 
+            private protected virtual ListBoxItemAccessibleObject CreateItemAccessibleObject(ListBox listBox, ItemArray.Entry item)
+                => new(listBox, item, this);
+
             /// <summary>
             ///  Return the child object at the given screen coordinates.
             /// </summary>
@@ -155,6 +158,10 @@ namespace System.Windows.Forms
                         return IsPatternSupported(UiaCore.UIA.ScrollPatternId);
                     case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
                         return IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
+                    case UiaCore.UIA.IsEnabledPropertyId:
+                        return _owningListBox.Enabled;
+                    case UiaCore.UIA.RuntimeIdPropertyId:
+                        return RuntimeId;
                     default:
                         return base.GetPropertyValue(propertyID);
                 }
@@ -246,7 +253,7 @@ namespace System.Windows.Forms
 
                 if (!_itemAccessibleObjects.ContainsKey(item))
                 {
-                    _itemAccessibleObjects.Add(item, new ListBoxItemAccessibleObject(_owningListBox, item, this));
+                    _itemAccessibleObjects.Add(item, CreateItemAccessibleObject(_owningListBox, item));
                 }
 
                 return _itemAccessibleObjects[item];

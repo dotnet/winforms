@@ -845,6 +845,16 @@ namespace System.Windows.Forms
         protected virtual void OnItemCheck(ItemCheckEventArgs ice)
         {
             _onItemCheck?.Invoke(this, ice);
+
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibleObject checkedItem = AccessibilityObject.GetChild(ice.Index);
+
+                if (checkedItem is not null)
+                {
+                    checkedItem.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, ice.CurrentValue, ice.NewValue);
+                }
+            }
         }
 
         protected override void OnMeasureItem(MeasureItemEventArgs e)
@@ -1034,7 +1044,5 @@ namespace System.Windows.Forms
                     break;
             }
         }
-
-        internal override bool SupportsUiaProviders => false;
     }
 }

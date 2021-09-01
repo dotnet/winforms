@@ -2,129 +2,87 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
-using System.Drawing;
+using static Interop;
 
 namespace System.Windows.Forms
 {
     public partial class CheckedListBox
     {
-        internal class CheckedListBoxItemAccessibleObject : AccessibleObject
+        internal class CheckedListBoxItemAccessibleObject : ListBoxItemAccessibleObject
         {
-            private string _name;
-            private readonly int _index;
-            private readonly CheckedListBoxAccessibleObject _parent;
+            private readonly CheckedListBox _owningCheckedListBox;
 
-            public CheckedListBoxItemAccessibleObject(string name, int index, CheckedListBoxAccessibleObject parent) : base()
+            public CheckedListBoxItemAccessibleObject(CheckedListBox owningCheckedListBox, ItemArray.Entry item, CheckedListBoxAccessibleObject owningAccessibleObject) : base(owningCheckedListBox, item, owningAccessibleObject)
             {
-                _name = name;
-                _parent = parent;
-                _index = index;
-            }
-
-            public override Rectangle Bounds
-            {
-                get
-                {
-                    if (!ParentCheckedListBox.IsHandleCreated)
-                    {
-                        return Rectangle.Empty;
-                    }
-
-                    Rectangle rect = ParentCheckedListBox.GetItemRectangle(_index);
-
-                    if (rect.IsEmpty)
-                    {
-                        return rect;
-                    }
-
-                    // Translate rect to screen coordinates
-                    //
-                    rect = ParentCheckedListBox.RectangleToScreen(rect);
-                    Rectangle visibleArea = ParentCheckedListBox.RectangleToScreen(ParentCheckedListBox.ClientRectangle);
-
-                    if (visibleArea.Bottom < rect.Bottom)
-                    {
-                        rect.Height = visibleArea.Bottom - rect.Top;
-                    }
-
-                    rect.Width = visibleArea.Width;
-
-                    return rect;
-                }
+                _owningCheckedListBox = owningCheckedListBox;
             }
 
             public override string DefaultAction
             {
                 get
                 {
-                    if (!ParentCheckedListBox.IsHandleCreated)
+                    if (!_owningCheckedListBox.IsHandleCreated)
                     {
                         return string.Empty;
                     }
 
-                    if (ParentCheckedListBox.GetItemChecked(_index))
-                    {
-                        return SR.AccessibleActionUncheck;
-                    }
-                    else
-                    {
-                        return SR.AccessibleActionCheck;
-                    }
+                     return IsItemChecked ?  SR.AccessibleActionUncheck : SR.AccessibleActionCheck;
                 }
             }
 
-            private CheckedListBox ParentCheckedListBox
+            public override void DoDefaultAction()
             {
-                get
+                if (!_owningCheckedListBox.IsHandleCreated)
                 {
-                    return (CheckedListBox)_parent.Owner;
+                    return;
                 }
+
+                _owningCheckedListBox.SetItemChecked(CurrentIndex, !IsItemChecked);
             }
 
-            public override string Name
-            {
-                get
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
+                => propertyID switch
                 {
-                    return _name;
-                }
-                set
-                {
-                    _name = value;
-                }
-            }
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.CheckBoxControlTypeId,
+                    UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.InvokePatternId),
+                    UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId),
+                    UiaCore.UIA.IsTogglePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TogglePatternId),
+                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
+                    UiaCore.UIA.ValueValuePropertyId => Value,
+                    _ => base.GetPropertyValue(propertyID)
+                };
 
-            public override AccessibleObject Parent
-            {
-                get
-                {
-                    return _parent;
-                }
-            }
+            private bool IsItemChecked => _owningCheckedListBox.GetItemChecked(CurrentIndex);
 
-            public override AccessibleRole Role
-            {
-                get
+            internal override bool IsPatternSupported(UiaCore.UIA patternId)
+                => patternId switch
                 {
-                    return AccessibleRole.CheckButton;
-                }
-            }
+                    UiaCore.UIA.InvokePatternId => true,
+                    UiaCore.UIA.TogglePatternId => true,
+                    UiaCore.UIA.ValuePatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
+
+            public override AccessibleRole Role => AccessibleRole.CheckButton;
 
             public override AccessibleStates State
             {
                 get
                 {
-                    if (!ParentCheckedListBox.IsHandleCreated)
+                    if (!_owningCheckedListBox.IsHandleCreated)
                     {
                         return AccessibleStates.None;
                     }
 
                     AccessibleStates state = AccessibleStates.Selectable | AccessibleStates.Focusable;
 
+                    if (!Parent.BoundingRectangle.IntersectsWith(Bounds))
+                    {
+                        state |= AccessibleStates.Offscreen;
+                    }
+
                     // Checked state
-                    //
-                    switch (ParentCheckedListBox.GetItemCheckState(_index))
+                    switch (_owningCheckedListBox.GetItemCheckState(CurrentIndex))
                     {
                         case CheckState.Checked:
                             state |= AccessibleStates.Checked;
@@ -138,13 +96,12 @@ namespace System.Windows.Forms
                     }
 
                     // Selected state
-                    //
-                    if (ParentCheckedListBox.SelectedIndex == _index)
+                    if (_owningCheckedListBox.SelectedIndex == CurrentIndex)
                     {
                         state |= AccessibleStates.Selected | AccessibleStates.Focused;
                     }
 
-                    if (ParentCheckedListBox.Focused && ParentCheckedListBox.SelectedIndex == -1)
+                    if (_owningCheckedListBox.Focused && _owningCheckedListBox.SelectedIndex == -1)
                     {
                         state |= AccessibleStates.Focused;
                     }
@@ -153,70 +110,12 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Value
-            {
-                get
-                {
-                    return ParentCheckedListBox.GetItemChecked(_index).ToString();
-                }
-            }
+            internal override void Toggle() => DoDefaultAction();
 
-            public override void DoDefaultAction()
-            {
-                if (!ParentCheckedListBox.IsHandleCreated)
-                {
-                    return;
-                }
+            internal override UiaCore.ToggleState ToggleState
+                => IsItemChecked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
 
-                ParentCheckedListBox.SetItemChecked(_index, !ParentCheckedListBox.GetItemChecked(_index));
-            }
-
-            public override AccessibleObject Navigate(AccessibleNavigation direction)
-            {
-                // Down/Next
-                //
-                if (direction == AccessibleNavigation.Down ||
-                    direction == AccessibleNavigation.Next)
-                {
-                    if (_index < _parent.GetChildCount() - 1)
-                    {
-                        return _parent.GetChild(_index + 1);
-                    }
-                }
-
-                // Up/Previous
-                //
-                if (direction == AccessibleNavigation.Up ||
-                    direction == AccessibleNavigation.Previous)
-                {
-                    if (_index > 0)
-                    {
-                        return _parent.GetChild(_index - 1);
-                    }
-                }
-
-                return base.Navigate(direction);
-            }
-
-            public override void Select(AccessibleSelection flags)
-            {
-                try
-                {
-                    if (ParentCheckedListBox.IsHandleCreated)
-                    {
-                        ParentCheckedListBox.AccessibilityObject.GetSystemIAccessibleInternal()?.accSelect((int)flags, _index + 1);
-                    }
-                }
-                catch (ArgumentException)
-                {
-                    // In Everett, the CheckedListBox accessible children did not have any selection capability.
-                    // In Whidbey, they delegate the selection capability to OLEACC.
-                    // However, OLEACC does not deal w/ several Selection flags: ExtendSelection, AddSelection, RemoveSelection.
-                    // OLEACC instead throws an ArgumentException.
-                    // Since Whidbey API's should not throw an exception in places where Everett API's did not, we catch
-                    // the ArgumentException and fail silently.
-                }
-            }
+            public override string Value => IsItemChecked.ToString();
         }
     }
 }
