@@ -2059,7 +2059,7 @@ namespace System.Windows.Forms
                 if (IsAccessibilityObjectCreated && SelectedTab?.ParentInternal is TabControl)
                 {
                     SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
-                    SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                    BeginInvoke((MethodInvoker)(() => SelectedTab.TabAccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId)));
                 }
             }
             else
