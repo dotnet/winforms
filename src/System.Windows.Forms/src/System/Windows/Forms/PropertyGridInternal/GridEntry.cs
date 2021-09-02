@@ -1711,10 +1711,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             // Draw outline box.
 
             bool expanded = InternalExpanded;
-            Rectangle outline = OutlineRect;
 
             // Make sure we're in our bounds.
-            outline = Rectangle.Intersect(r, outline);
+            Rectangle outline = Rectangle.Intersect(r, OutlineRect);
             if (outline.IsEmpty)
             {
                 return;
