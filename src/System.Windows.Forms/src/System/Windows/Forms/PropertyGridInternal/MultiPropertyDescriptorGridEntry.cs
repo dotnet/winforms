@@ -154,9 +154,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public override object GetChildValueOwner(GridEntry childEntry)
+        internal override object GetValueOwnerInternal()
             => _mergedDescriptor.PropertyType.IsValueType || (EntryFlags & Flags.Immutable) != 0
-                ? base.GetChildValueOwner(childEntry)
+                ? base.GetValueOwnerInternal()
                 : _mergedDescriptor.GetValues(_objects);
 
         public override IComponent[] GetComponents()
@@ -166,9 +166,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return copy;
         }
 
-        /// <summary>
-        ///  Returns the text value of this property.
-        /// </summary>
         public override string GetPropertyTextValue(object value)
         {
             try
@@ -186,13 +183,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             return base.GetPropertyTextValue(value);
         }
 
-        protected internal override bool NotifyChildValue(GridEntry entry, Notify type)
+        internal override bool SendNotification(GridEntry entry, Notify notification)
         {
             DesignerTransaction transaction = DesignerHost?.CreateTransaction();
 
             try
             {
-                return base.NotifyChildValue(entry, type);
+                return base.SendNotification(entry, notification);
             }
             finally
             {
@@ -200,7 +197,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected override void NotifyParentChange(GridEntry entry)
+        protected override void NotifyParentsOfChanges(GridEntry entry)
         {
             // Now see if we need to notify the parent(s) up the chain.
             while (entry is PropertyDescriptorGridEntry propertyEntry
@@ -210,7 +207,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 object owner = entry.GetValueOwner();
 
                 // Find the next property descriptor with a different parent.
-                while (!(entry is PropertyDescriptorGridEntry) || OwnersEqual(owner, entry.GetValueOwner()))
+                while (entry is not PropertyDescriptorGridEntry || OwnersEqual(owner, entry.GetValueOwner()))
                 {
                     entry = entry.ParentGridEntry;
                     if (entry is null)
@@ -260,58 +257,60 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected internal override bool NotifyValueGivenParent(object @object, Notify type)
+        protected override bool SendNotification(object owner, Notify notification)
         {
-            if (@object is ICustomTypeDescriptor descriptor)
+            if (owner is ICustomTypeDescriptor descriptor)
             {
-                @object = descriptor.GetPropertyOwner(_propertyInfo);
+                owner = descriptor.GetPropertyOwner(_propertyInfo);
             }
 
-            switch (type)
+            switch (notification)
             {
                 case Notify.Reset:
 
-                    object[] objects = (object[])@object;
+                    object[] objects = (object[])owner;
 
-                    if (objects is not null && objects.Length > 0)
+                    if (objects is null || objects.Length == 0)
                     {
-                        IDesignerHost host = DesignerHost;
-                        DesignerTransaction transaction = host?.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
+                        return false;
+                    }
 
-                        try
+                    IDesignerHost host = DesignerHost;
+                    DesignerTransaction transaction = host?.CreateTransaction(string.Format(SR.PropertyGridResetValue, PropertyName));
+
+                    try
+                    {
+                        bool needChangeNotify = objects[0] is not IComponent component || component.Site is null;
+                        if (needChangeNotify)
                         {
-                            bool needChangeNotify = objects[0] is not IComponent component || component.Site is null;
-                            if (needChangeNotify)
+                            if (!OnComponentChanging())
                             {
-                                if (!OnComponentChanging())
-                                {
-                                    transaction?.Cancel();
-                                    transaction = null;
+                                transaction?.Cancel();
+                                transaction = null;
 
-                                    return false;
-                                }
+                                return false;
                             }
-
-                            _mergedDescriptor.ResetValue(@object);
-
-                            if (needChangeNotify)
-                            {
-                                OnComponentChanged();
-                            }
-
-                            NotifyParentChange(this);
                         }
-                        finally
+
+                        _mergedDescriptor.ResetValue(owner);
+
+                        if (needChangeNotify)
                         {
-                            transaction?.Commit();
+                            OnComponentChanged();
                         }
+
+                        NotifyParentsOfChanges(this);
+                    }
+                    finally
+                    {
+                        transaction?.Commit();
                     }
 
                     return false;
                 case Notify.DoubleClick:
                 case Notify.Return:
                     Debug.Assert(_propertyInfo is MergePropertyDescriptor, "Did not get a MergePropertyDescriptor!!!");
-                    Debug.Assert(@object is object[], "Did not get an array of objects!!");
+                    Debug.Assert(owner is object[], "Did not get an array of objects!!");
 
                     if (_propertyInfo is MergePropertyDescriptor mpd)
                     {
@@ -322,7 +321,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             EventDescriptor eventDescriptor = _eventBindings.GetEvent(mpd[0]);
                             if (eventDescriptor is not null)
                             {
-                                return ViewEvent(@object, null, eventDescriptor, true);
+                                return ViewEvent(owner, null, eventDescriptor, true);
                             }
                         }
 
@@ -330,11 +329,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                     else
                     {
-                        return base.NotifyValueGivenParent(@object, type);
+                        return base.SendNotification(owner, notification);
                     }
             }
 
-            return base.NotifyValueGivenParent(@object, type);
+            return base.SendNotification(owner, notification);
         }
 
         private bool OwnersEqual(object owner1, object owner2)

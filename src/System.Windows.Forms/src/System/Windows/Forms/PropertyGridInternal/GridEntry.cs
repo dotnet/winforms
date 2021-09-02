@@ -119,8 +119,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool ColorInversionNeededInHC => SystemInformation.HighContrast && !OwnerGrid._developerOverride;
 
+        /// <summary>
+        ///  Gets the <see cref="AccessibleObject"/> for this instance.
+        /// </summary>
         public AccessibleObject AccessibilityObject => _accessibleObject ??= GetAccessibilityObject();
 
+        /// <summary>
+        ///  Creates a new <see cref="AccessibleObject"/> for this instance.
+        /// </summary>
         protected virtual GridEntryAccessibleObject GetAccessibilityObject() => new(this);
 
         /// <summary>
@@ -324,7 +330,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual Flags EntryFlags
+        public Flags EntryFlags
         {
             get
             {
@@ -643,7 +649,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual GridEntry ParentGridEntry
+        public GridEntry ParentGridEntry
         {
             get => _parent;
             set
@@ -926,7 +932,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return true;
             }
 
-            GridEntry[] childProperties = GetPropEntries(this, PropertyValue, PropertyType);
+            GridEntry[] childProperties = GetChildEntries();
 
             bool expandable = childProperties is not null && childProperties.Length > 0;
 
@@ -1146,37 +1152,37 @@ namespace System.Windows.Forms.PropertyGridInternal
             return null;
         }
 
-        protected int GetLabelTextWidth(string labelText, Graphics graphics, Font font)
+        protected int GetLabelTextWidth(string text, Graphics graphics, Font font)
         {
             if (_cacheItems is null)
             {
                 _cacheItems = new CacheItems();
             }
             else if (_cacheItems.UseCompatTextRendering == OwnerGrid.UseCompatibleTextRendering
-                && _cacheItems.LastLabel == labelText
+                && _cacheItems.LastLabel == text
                 && font.Equals(_cacheItems.LastLabelFont))
             {
                 return _cacheItems.LastLabelWidth;
             }
 
-            SizeF textSize = PropertyGrid.MeasureTextHelper.MeasureText(OwnerGrid, graphics, labelText, font);
+            SizeF textSize = PropertyGrid.MeasureTextHelper.MeasureText(OwnerGrid, graphics, text, font);
 
             _cacheItems.LastLabelWidth = (int)textSize.Width;
-            _cacheItems.LastLabel = labelText;
+            _cacheItems.LastLabel = text;
             _cacheItems.LastLabelFont = font;
             _cacheItems.UseCompatTextRendering = OwnerGrid.UseCompatibleTextRendering;
 
             return _cacheItems.LastLabelWidth;
         }
 
-        internal int GetValueTextWidth(string valueString, Graphics graphics, Font font)
+        internal int GetValueTextWidth(string text, Graphics graphics, Font font)
         {
             if (_cacheItems is null)
             {
                 _cacheItems = new CacheItems();
             }
             else if (_cacheItems.LastValueTextWidth != -1
-                && _cacheItems.LastValueString == valueString
+                && _cacheItems.LastValueString == text
                 && font.Equals(_cacheItems.LastValueFont))
             {
                 return _cacheItems.LastValueTextWidth;
@@ -1184,41 +1190,30 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             // Value text is rendered using GDI directly (No TextRenderer) but measured/adjusted using GDI+
             // (since previous releases), so don't use MeasureTextHelper.
-            _cacheItems.LastValueTextWidth = (int)graphics.MeasureString(valueString, font).Width;
-            _cacheItems.LastValueString = valueString;
+            _cacheItems.LastValueTextWidth = (int)graphics.MeasureString(text, font).Width;
+            _cacheItems.LastValueString = text;
             _cacheItems.LastValueFont = font;
             return _cacheItems.LastValueTextWidth;
         }
 
         /// <summary>
-        ///  Gets the owner of the current value.  This is usually the value of the
-        ///  root entry, which is the object being browsed.
+        ///  Gets the owner of the current value. This is usually the value of the root entry,
+        ///  which is the object being browsed.
         /// </summary>
-        public virtual object GetValueOwner() => _parent is null ? PropertyValue : _parent.GetChildValueOwner(this);
+        public object GetValueOwner() => _parent is null ? PropertyValue : _parent.GetValueOwnerInternal();
 
         /// <summary>
-        ///  Gets the owners of the current value.  This is usually the value of the
-        ///  root entry, which is the objects being browsed for a multiselect item.
+        ///  Gets the owner of the current value. This is usually the value of the root entry,
+        ///  which is the object being browsed.
         /// </summary>
-        public virtual object[] GetValueOwners()
-        {
-            object owner = GetValueOwner();
-            if (owner is not null)
-            {
-                return new object[] { owner };
-            }
-
-            return null;
-        }
+        /// <devdoc>
+        ///  This internal override allows <see cref="CategoryGridEntry"/> to skip to its parent <see cref="PropertyValue"/>
+        ///  and <see cref="MultiPropertyDescriptorGridEntry"/> to return it's set of owners.
+        /// </devdoc>
+        internal virtual object GetValueOwnerInternal() => PropertyValue;
 
         /// <summary>
-        ///  Gets the owner of the current value.  This is usually the value of the
-        ///  root entry, which is the object being browsed.
-        /// </summary>
-        public virtual object GetChildValueOwner(GridEntry childEntry) => PropertyValue;
-
-        /// <summary>
-        ///  Returns a string with info about the currently selected GridEntry
+        ///  Returns a string with info about the currently selected <see cref="GridEntry"/>.
         /// </summary>
         public virtual string GetTestingInfo()
         {
@@ -1230,7 +1225,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                // make sure we clear any embedded nulls
+                // Make sure we clear any embedded nulls
                 textValue = textValue.Replace((char)0, ' ');
             }
 
@@ -1253,10 +1248,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Returns the child GridEntries for this item.
         /// </summary>
-        protected virtual GridEntry[] GetPropEntries(GridEntry parentEntry, object @object, Type objectType)
+        private GridEntry[] GetChildEntries()
         {
+            object value = PropertyValue;
+            Type objectType = PropertyType;
+
             // We don't want to create subprops for null objects.
-            if (@object is null)
+            if (value is null)
             {
                 return null;
             }
@@ -1275,7 +1273,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (!forceReadOnly)
                 {
-                    var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(@object)[typeof(ReadOnlyAttribute)];
+                    var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(value)[typeof(ReadOnlyAttribute)];
                     forceReadOnly = readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute();
                 }
 
@@ -1290,13 +1288,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 PropertyDescriptor defaultProperty = null;
                 if (tab is not null)
                 {
-                    properties = tab.GetProperties(this, @object, attributes);
-                    defaultProperty = tab.GetDefaultProperty(@object);
+                    properties = tab.GetProperties(this, value, attributes);
+                    defaultProperty = tab.GetDefaultProperty(value);
                 }
                 else
                 {
-                    properties = TypeConverter.GetProperties(this, @object, attributes);
-                    defaultProperty = TypeDescriptor.GetDefaultProperty(@object);
+                    properties = TypeConverter.GetProperties(this, value, attributes);
+                    defaultProperty = TypeDescriptor.GetDefaultProperty(value);
                 }
 
                 if (properties is null)
@@ -1325,15 +1323,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // If the target object is an array and nothing else has provided a set of properties to use,
                 // then expand the array.
 
-                if ((properties is null || properties.Count == 0) && objectType is not null && objectType.IsArray && @object is not null)
+                if ((properties is null || properties.Count == 0) && objectType is not null && objectType.IsArray && value is not null)
                 {
-                    var objArray = (Array)@object;
+                    var objArray = (Array)value;
 
                     entries = new GridEntry[objArray.Length];
 
                     for (int i = 0; i < entries.Length; i++)
                     {
-                        entries[i] = new ArrayElementGridEntry(OwnerGrid, parentEntry, i);
+                        entries[i] = new ArrayElementGridEntry(OwnerGrid, this, i);
                     }
                 }
                 else
@@ -1352,8 +1350,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                         bool hide = false;
                         try
                         {
-                            object owner = @object;
-                            if (@object is ICustomTypeDescriptor descriptor)
+                            object owner = value;
+                            if (value is ICustomTypeDescriptor descriptor)
                             {
                                 owner = descriptor.GetPropertyOwner(property);
                             }
@@ -1364,15 +1362,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             if (s_pbrsAssertPropsSwitch.Enabled)
                             {
-                                Debug.Fail($"Bad property '{parentEntry.PropertyLabel}.{property.Name}': {w}");
+                                Debug.Fail($"Bad property '{PropertyLabel}.{property.Name}': {w}");
                             }
 
                             hide = true;
                         }
 
                         newEntry = createInstanceSupported
-                            ? new ImmutablePropertyDescriptorGridEntry(OwnerGrid, parentEntry, property, hide)
-                            : new PropertyDescriptorGridEntry(OwnerGrid, parentEntry, property, hide);
+                            ? new ImmutablePropertyDescriptorGridEntry(OwnerGrid, this, property, hide)
+                            : new PropertyDescriptorGridEntry(OwnerGrid, this, property, hide);
 
                         if (forceReadOnly)
                         {
@@ -1424,19 +1422,19 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual void ResetPropertyValue()
         {
-            NotifyValue(Notify.Reset);
+            SendNotificationToParent(Notify.Reset);
             Refresh();
         }
 
         /// <summary>
         ///  Returns if the property can be reset
         /// </summary>
-        public virtual bool CanResetPropertyValue() => NotifyValue(Notify.CanReset);
+        public virtual bool CanResetPropertyValue() => SendNotificationToParent(Notify.CanReset);
 
         /// <summary>
         ///  Called when the item is double clicked.
         /// </summary>
-        public virtual bool DoubleClickPropertyValue() => NotifyValue(Notify.DoubleClick);
+        public virtual bool DoubleClickPropertyValue() => SendNotificationToParent(Notify.DoubleClick);
 
         /// <summary>
         ///  Returns the text value of this property.
@@ -1761,45 +1759,45 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Paints the value portion of this GridEntry into the given Graphics object. This is called by the GridEntry
-        ///  host (the PropertyGridView) when this GridEntry is to be painted.
+        ///  Paints the value portion of this <see cref="GridEntry"/> into the given <see cref="Graphics"/> object.
+        ///  This is called by the <see cref="GridEntry"/> host (the <see cref="PropertyGridView"/>) when this
+        ///  <see cref="GridEntry"/> is to be painted.
         /// </summary>
-        public virtual void PaintValue(object val, Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags)
+        /// <param name="text">
+        ///  Optional text representation of the value. If not specified, will use the <see cref="PropertyValue"/> directly.
+        /// </param>
+        public virtual void PaintValue(Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags, string text = null)
         {
             PropertyGridView gridHost = GridEntryHost;
             Debug.Assert(gridHost is not null);
 
             Color textColor = ShouldRenderReadOnly ? GridEntryHost.GrayTextColor : gridHost.GetTextColor();
+            object value;
 
-            string text;
-
-            if (paintFlags.HasFlag(PaintValueFlags.FetchValue))
+            if (text is null)
             {
                 if (_cacheItems is not null && _cacheItems.UseValueString)
                 {
                     text = _cacheItems.LastValueString;
-                    val = _cacheItems.LastValue;
+                    value = _cacheItems.LastValue;
                 }
                 else
                 {
-                    val = PropertyValue;
-                    text = GetPropertyTextValue(val);
+                    value = PropertyValue;
+                    text = GetPropertyTextValue(value);
 
-                    if (_cacheItems is null)
-                    {
-                        _cacheItems = new CacheItems();
-                    }
-
+                    _cacheItems ??= new CacheItems();
                     _cacheItems.LastValueString = text;
                     _cacheItems.UseValueString = true;
                     _cacheItems.LastValueTextWidth = -1;
                     _cacheItems.LastValueFont = null;
-                    _cacheItems.LastValue = val;
+                    _cacheItems.LastValue = value;
                 }
             }
             else
             {
-                text = GetPropertyTextValue(val);
+                value = ConvertTextToValue(text);
+                text = GetPropertyTextValue(value);
             }
 
             // Paint out the main rect using the appropriate brush.
@@ -1826,7 +1824,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (!Rectangle.Intersect(rectPaint, clipRect).IsEmpty)
                 {
-                    UITypeEditor?.PaintValue(new PaintValueEventArgs(this, val, g, rectPaint));
+                    UITypeEditor?.PaintValue(new PaintValueEventArgs(this, value, g, rectPaint));
 
                     // Paint a border around the area
                     rectPaint.Width--;
@@ -1939,20 +1937,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             => ComponentChangeService?.OnComponentChanged(GetValueOwner(), PropertyDescriptor);
 
         /// <summary>
-        ///  Called when the label portion of this GridEntry is clicked.
-        ///  Default implementation fired the event to any listeners, so be sure
-        ///  to call base.OnLabelClick(e) if this is overridden.
-        /// </summary>
-        protected virtual void OnLabelClick(EventArgs e) => RaiseEvent(s_labelClickEvent, e);
-
-        /// <summary>
-        ///  Called when the label portion of this GridEntry is double-clicked.
-        ///  Default implementation fired the event to any listeners, so be sure
-        ///  to call base.OnLabelDoubleClick(e) if this is overridden.
-        /// </summary>
-        protected virtual void OnLabelDoubleClick(EventArgs e) => RaiseEvent(s_labelDoubleClickEvent, e);
-
-        /// <summary>
         ///  Called when the GridEntry is clicked.
         /// </summary>
         public virtual bool OnMouseClick(int x, int y, int count, MouseButtons button)
@@ -1980,7 +1964,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     {
                         if (count % 2 == 0)
                         {
-                            OnOutlineDoubleClick(EventArgs.Empty);
+                            RaiseEvent(s_outlineDoubleClickEvent, EventArgs.Empty);
                         }
                         else
                         {
@@ -1993,11 +1977,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (count % 2 == 0)
                 {
-                    OnLabelDoubleClick(EventArgs.Empty);
+                    RaiseEvent(s_labelDoubleClickEvent, EventArgs.Empty);
                 }
                 else
                 {
-                    OnLabelClick(EventArgs.Empty);
+                    RaiseEvent(s_labelClickEvent, EventArgs.Empty);
                 }
 
                 return true;
@@ -2009,11 +1993,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (count % 2 == 0)
                 {
-                    OnValueDoubleClick(EventArgs.Empty);
+                    RaiseEvent(s_valueDoubleClickEvent, EventArgs.Empty);
                 }
                 else
                 {
-                    OnValueClick(EventArgs.Empty);
+                    RaiseEvent(s_valueClickEvent, EventArgs.Empty);
                 }
 
                 return true;
@@ -2023,64 +2007,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Called when the outline icon portion of this GridEntry is clicked.
-        ///  Default implementation fired the event to any listeners, so be sure
-        ///  to call base.OnOutlineClick(e) if this is overridden.
+        ///  Called when the outline icon portion of this <see cref="GridEntry"/> is clicked.
         /// </summary>
-        protected virtual void OnOutlineClick(EventArgs e) => RaiseEvent(s_outlineClickEvent, e);
+        protected void OnOutlineClick(EventArgs e) => RaiseEvent(s_outlineClickEvent, e);
+
+        internal bool OnValueReturnKey() => SendNotificationToParent(Notify.Return);
 
         /// <summary>
-        ///  Called when the outline icon portion of this GridEntry is double-clicked.
-        ///  Default implementation fired the event to any listeners, so be sure
-        ///  to call base.OnOutlineDoubleClick(e) if this is overridden.
+        ///  Sets the specified flag.
         /// </summary>
-        protected virtual void OnOutlineDoubleClick(EventArgs e) => RaiseEvent(s_outlineDoubleClickEvent, e);
-
-        /// <summary>
-        ///  Called when RecreateChildren is called.
-        ///  Default implementation fired the event to any listeners, so be sure
-        ///  to call base.OnOutlineDoubleClick(e) if this is overridden.
-        /// </summary>
-        protected virtual void OnRecreateChildren(GridEntryRecreateChildrenEventArgs e)
-        {
-            Delegate handler = GetEventHandler(s_recreateChildrenEvent);
-            if (handler is not null)
-            {
-                ((GridEntryRecreateChildrenEventHandler)handler)(this, e);
-            }
-        }
-
-        /// <summary>
-        ///  Called when the value portion of this GridEntry is clicked.
-        ///  Default implementation fired the event to any listeners, so be sure
-        ///  to call base.OnValueClick(e) if this is overridden.
-        /// </summary>
-        protected virtual void OnValueClick(EventArgs e) => RaiseEvent(s_valueClickEvent, e);
-
-        /// <summary>
-        ///  Called when the value portion of this GridEntry is clicked.
-        ///  Default implementation fired the event to any listeners, so be sure
-        ///  to call base.OnValueDoubleClick(e) if this is overridden.
-        /// </summary>
-        protected virtual void OnValueDoubleClick(EventArgs e) => RaiseEvent(s_valueDoubleClickEvent, e);
-
-        internal bool OnValueReturnKey() => NotifyValue(Notify.Return);
-
-        /// <summary>
-        ///  Sets the specified flag
-        /// </summary>
-        protected virtual void SetFlag(Flags flag, bool value) => SetFlag(flag, value ? flag : 0);
-
-        /// <summary>
-        ///  Sets the default child of this entry, given a valid value mask.
-        /// </summary>
-        protected virtual void SetFlag(Flags validFlags, Flags flag, bool value)
-            => SetFlag(validFlags | flag, validFlags | (value ? flag : 0));
-
-        /// <summary>
-        ///  Sets the value of a flag
-        /// </summary>
-        protected virtual void SetFlag(Flags flag, Flags value) => _flags = (EntryFlags & ~flag) | value;
+        protected void SetFlag(Flags flag, bool value)
+            => _flags = (EntryFlags & ~flag) | (value ? flag : 0);
 
         public override bool Select()
         {
@@ -2104,7 +2041,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Checks if this value should be persisted.
         /// </summary>
-        internal virtual bool ShouldSerializePropertyValue()
+        internal bool ShouldSerializePropertyValue()
         {
             if (_cacheItems is not null)
             {
@@ -2114,7 +2051,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    _cacheItems.LastShouldSerialize = NotifyValue(Notify.ShouldPersist);
+                    _cacheItems.LastShouldSerialize = SendNotificationToParent(Notify.ShouldPersist);
                     _cacheItems.UseShouldSerialize = true;
                 }
             }
@@ -2122,7 +2059,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 _cacheItems = new CacheItems
                 {
-                    LastShouldSerialize = NotifyValue(Notify.ShouldPersist),
+                    LastShouldSerialize = SendNotificationToParent(Notify.ShouldPersist),
                     UseShouldSerialize = true
                 };
             }
@@ -2164,21 +2101,37 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Sends a notify message to this GridEntry, and returns the success result
+        ///  Sends a notification to the given owner.
         /// </summary>
-        protected internal virtual bool NotifyValueGivenParent(object value, Notify type) => false;
+        /// <param name="owner">
+        ///  The owner of the <see cref="GridItem"/>.
+        /// </param>
+        /// <returns>
+        ///  The result of the notification.
+        /// </returns>
+        protected virtual bool SendNotification(object owner, Notify notification) => false;
 
         /// <summary>
-        ///  Sends a notify message to the child GridEntry, and returns the success result.
+        ///  Sends a notification to the owner of the given <paramref name="entry"/>.
         /// </summary>
-        protected internal virtual bool NotifyChildValue(GridEntry entry, Notify type)
-            => entry.NotifyValueGivenParent(entry.GetValueOwner(), type);
+        /// <returns>
+        ///  The result of the notification.
+        /// </returns>
+        internal virtual bool SendNotification(GridEntry entry, Notify notification)
+            => entry.SendNotification(entry.GetValueOwner(), notification);
 
-        protected internal virtual bool NotifyValue(Notify type) => _parent is null || _parent.NotifyChildValue(this, type);
+        /// <summary>
+        ///  Sends a notification to the owner of the <see cref="ParentGridEntry"/> if it exists.
+        /// </summary>
+        /// <returns>
+        ///  The result of the notification. Returns true if there is no parent.
+        /// </returns>
+        internal bool SendNotificationToParent(Notify type)
+            => _parent is null || _parent.SendNotification(this, type);
 
-        internal void RecreateChildren() => RecreateChildren(-1);
+        protected void RecreateChildren() => RecreateChildren(-1);
 
-        internal void RecreateChildren(int oldCount)
+        protected void RecreateChildren(int oldCount)
         {
             // Cause the flags to be rebuilt as well.
             bool wasExpanded = InternalExpanded || oldCount > 0;
@@ -2201,18 +2154,22 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             DisposeChildren();
             InternalExpanded = wasExpanded;
-            OnRecreateChildren(new GridEntryRecreateChildrenEventArgs(oldCount, VisibleChildCount));
+
+            if (GetEventHandler(s_recreateChildrenEvent) is GridEntryRecreateChildrenEventHandler handler)
+            {
+                handler(this, new(oldCount, VisibleChildCount));
+            }
         }
 
         /// <summary>
         ///  Refresh the current GridEntry's value and it's children.
         /// </summary>
-        public virtual void Refresh()
+        public void Refresh()
         {
             Type type = PropertyType;
             if (type is not null && type.IsArray)
             {
-                CreateChildren(true);
+                CreateChildren(diffOldChildren: true);
             }
 
             if (_children is not null)
@@ -2244,34 +2201,34 @@ namespace System.Windows.Forms.PropertyGridInternal
             ClearCachedValues();
         }
 
-        public virtual void RemoveOnLabelClick(EventHandler h) => RemoveEventHandler(s_labelClickEvent, h);
+        public void RemoveOnLabelClick(EventHandler handler) => RemoveEventHandler(s_labelClickEvent, handler);
 
-        public virtual void RemoveOnLabelDoubleClick(EventHandler h) => RemoveEventHandler(s_labelDoubleClickEvent, h);
+        public void RemoveOnLabelDoubleClick(EventHandler handler) => RemoveEventHandler(s_labelDoubleClickEvent, handler);
 
-        public virtual void RemoveOnValueClick(EventHandler h) => RemoveEventHandler(s_valueClickEvent, h);
+        public void RemoveOnValueClick(EventHandler handler) => RemoveEventHandler(s_valueClickEvent, handler);
 
-        public virtual void RemoveOnValueDoubleClick(EventHandler h) => RemoveEventHandler(s_valueDoubleClickEvent, h);
+        public void RemoveOnValueDoubleClick(EventHandler handler) => RemoveEventHandler(s_valueDoubleClickEvent, handler);
 
-        public virtual void RemoveOnOutlineClick(EventHandler h) => RemoveEventHandler(s_outlineClickEvent, h);
+        public void RemoveOnOutlineClick(EventHandler handler) => RemoveEventHandler(s_outlineClickEvent, handler);
 
-        public virtual void RemoveOnOutlineDoubleClick(EventHandler h) => RemoveEventHandler(s_outlineDoubleClickEvent, h);
+        public void RemoveOnOutlineDoubleClick(EventHandler handler) => RemoveEventHandler(s_outlineDoubleClickEvent, handler);
 
-        public virtual void RemoveOnRecreateChildren(GridEntryRecreateChildrenEventHandler h)
-            => RemoveEventHandler(s_recreateChildrenEvent, h);
+        public void RemoveOnRecreateChildren(GridEntryRecreateChildrenEventHandler handler)
+            => RemoveEventHandler(s_recreateChildrenEvent, handler);
 
-        protected void ResetState()
+        private void ResetState()
         {
             ClearFlags();
             ClearCachedValues();
         }
 
         /// <summary>
-        ///  Sets the value of this GridEntry from text
+        ///  Sets the value of this <see cref="GridEntry"/> from text.
         /// </summary>
-        public virtual bool SetPropertyTextValue(string str)
+        public bool SetPropertyTextValue(string text)
         {
             bool childrenPrior = _children is not null && _children.Count > 0;
-            PropertyValue = ConvertTextToValue(str);
+            PropertyValue = ConvertTextToValue(text);
             CreateChildren();
             bool childrenAfter = _children is not null && _children.Count > 0;
             return childrenPrior != childrenAfter;

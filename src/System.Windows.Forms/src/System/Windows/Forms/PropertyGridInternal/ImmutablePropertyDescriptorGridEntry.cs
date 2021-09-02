@@ -84,8 +84,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected internal override bool NotifyValueGivenParent(object obj, Notify type)
-            => ParentGridEntry.NotifyValue(type);
+        protected override bool SendNotification(object owner, Notify notification)
+            => ParentGridEntry.SendNotificationToParent(notification);
 
         public override bool ShouldRenderReadOnly => InstanceParentGridEntry.ShouldRenderReadOnly;
 

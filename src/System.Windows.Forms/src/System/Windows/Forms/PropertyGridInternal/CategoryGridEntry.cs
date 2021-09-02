@@ -126,8 +126,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override Type PropertyType => typeof(void);
 
-        /// <inheritdoc />
-        public override object GetChildValueOwner(GridEntry childEntry) => ParentGridEntry.GetChildValueOwner(childEntry);
+        internal override object GetValueOwnerInternal() => ParentGridEntry.GetValueOwnerInternal();
 
         protected override bool CreateChildren(bool diffOldChildren) => true;
 
@@ -165,9 +164,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public override void PaintValue(object value, Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags)
+        public override void PaintValue(Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags, string text)
         {
-            base.PaintValue(value, g, rect, clipRect, paintFlags & ~PaintValueFlags.DrawSelected);
+            base.PaintValue(g, rect, clipRect, paintFlags & ~PaintValueFlags.DrawSelected, text);
 
             // Draw the line along the top.
             if (ParentGridEntry.GetChildIndex(this) > 0)
@@ -177,7 +176,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected internal override bool NotifyChildValue(GridEntry entry, Notify type)
-            => ParentGridEntry.NotifyChildValue(entry, type);
+        internal override bool SendNotification(GridEntry entry, Notify notification)
+            => ParentGridEntry.SendNotification(entry, notification);
     }
 }
