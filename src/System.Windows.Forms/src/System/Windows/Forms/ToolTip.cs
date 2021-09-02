@@ -24,10 +24,15 @@ namespace System.Windows.Forms
     [SRDescription(nameof(SR.DescriptionToolTip))]
     public partial class ToolTip : Component, IExtenderProvider, IHandle
     {
-        // These values are copied from the comctl32's tooltip.
-        private const int DefaultDelay = 500;
+        // The actual delay values are based on the user-set double click time.
+        // These values are initialized using the default double-click time value.
+        internal const int DefaultDelay = 500;
+
+        // These values are copied from the ComCtl32's tooltip.
         private const int ReshowRatio = 5;
         private const int AutoPopRatio = 10;
+
+        private const int InfiniteDelay = short.MaxValue;
 
         private const int BalloonOffsetX = 10;
 
@@ -81,6 +86,8 @@ namespace System.Windows.Forms
             _ = cont ?? throw new ArgumentNullException(nameof(cont));
 
             cont.Add(this);
+
+            IsPersistent = OsVersion.IsWindows11_OrGreater;
         }
 
         /// <summary>
@@ -91,6 +98,9 @@ namespace System.Windows.Forms
             _window = new ToolTipNativeWindow(this);
             _auto = true;
             _delayTimes[(int)TTDT.AUTOMATIC] = DefaultDelay;
+
+            IsPersistent = OsVersion.IsWindows11_OrGreater;
+
             AdjustBaseFromAuto();
         }
 
@@ -630,7 +640,7 @@ namespace System.Windows.Forms
             tool?.AccessibilityObject?.RaiseAutomationNotification(
                 Automation.AutomationNotificationKind.ActionCompleted,
                 Automation.AutomationNotificationProcessing.All,
-                ToolTipTitle + " " + text);
+                $"{ToolTipTitle} {text}");
         }
 
         private void HandleCreated(object sender, EventArgs eventargs)
@@ -744,23 +754,41 @@ namespace System.Windows.Forms
 
             if (_auto)
             {
-                SetDelayTime(TTDT.AUTOMATIC, _delayTimes[(int)TTDT.AUTOMATIC]);
-                _delayTimes[(int)TTDT.AUTOPOP] = GetDelayTime(TTDT.AUTOPOP);
-                _delayTimes[(int)TTDT.INITIAL] = GetDelayTime(TTDT.INITIAL);
-                _delayTimes[(int)TTDT.RESHOW] = GetDelayTime(TTDT.RESHOW);
+                // AutomaticDelay property should overwrite other delay timer values, _auto field indicates that
+                // AutomaticDelay had been set more recently than other delays.
+                if (_delayTimes[(int)TTDT.AUTOMATIC] != DefaultDelay)
+                {
+                    SetDelayTime(TTDT.AUTOMATIC, _delayTimes[(int)TTDT.AUTOMATIC]);
+                }
+                else
+                {
+                    _delayTimes[(int)TTDT.AUTOPOP] = GetDelayTime(TTDT.AUTOPOP);
+                    _delayTimes[(int)TTDT.INITIAL] = GetDelayTime(TTDT.INITIAL);
+                    _delayTimes[(int)TTDT.RESHOW] = GetDelayTime(TTDT.RESHOW);
+                }
             }
             else
             {
-                for (int i = 1; i < _delayTimes.Length; i++)
+                int delayTime = _delayTimes[(int)TTDT.AUTOPOP];
+                if (delayTime >= 1 && delayTime != DefaultDelay * AutoPopRatio)
                 {
-                    if (_delayTimes[i] >= 1)
-                    {
-                        SetDelayTime((TTDT)i, _delayTimes[i]);
-                    }
+                    SetDelayTime(TTDT.AUTOPOP, delayTime);
+                }
+
+                delayTime = _delayTimes[(int)TTDT.INITIAL];
+                if (delayTime >= 1)
+                {
+                    SetDelayTime(TTDT.INITIAL, delayTime);
+                }
+
+                delayTime = _delayTimes[(int)TTDT.RESHOW];
+                if (delayTime >= 1)
+                {
+                    SetDelayTime(TTDT.RESHOW, delayTime);
                 }
             }
 
-            // Set active status
+            // Set active status.
             User32.SendMessageW(this, (User32.WM)TTM.ACTIVATE, PARAM.FromBool(active));
 
             if (BackColor != SystemColors.Info)
@@ -1151,16 +1179,21 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Sets the delay time based on the NativeMethods.TTDT_* values.
+        ///  Sets the delay time of <see cref="TTDT" /> type.
         /// </summary>
         private void SetDelayTime(TTDT type, int time)
         {
             _auto = type == TTDT.AUTOMATIC;
+
             _delayTimes[(int)type] = time;
 
             if (GetHandleCreated() && time >= 0)
             {
                 User32.SendMessageW(this, (User32.WM)TTM.SETDELAYTIME, (IntPtr)type, (IntPtr)time);
+                if (type == TTDT.AUTOPOP && time != InfiniteDelay)
+                {
+                    IsPersistent = false;
+                }
 
                 // Update everyone else if automatic is set. we need to do this
                 // to preserve value in case of handle recreation.
@@ -1251,6 +1284,14 @@ namespace System.Windows.Forms
                 associatedControl.SetToolTip(this);
             }
         }
+
+        /// <summary>
+        ///  Persistent tooltip is not dismissed automatically by a timer. It is dismissed by mouse
+        ///  movements outside this tooltip or by WM_KEYUP for CONTROL or ESCAPE key.
+        ///  Windows 11 considers tooltip persistent if AuoPopDelay had never been set or
+        ///  was set to infinity.
+        /// </summary>
+        internal bool IsPersistent { get; private set; }
 
         /// <summary>
         ///  Returns true if the AutomaticDelay property should be persisted.
