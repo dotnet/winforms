@@ -436,10 +436,7 @@ namespace System.Windows.Forms
                     Graphics g = e.Graphics;
                     Rectangle bounds = new Rectangle(Point.Empty, e.Item.Size);
 
-                    if (button.CheckState == CheckState.Checked)
-                    {
-                        g.FillRectangle(SystemBrushes.Highlight, bounds);
-                    }
+                    g.FillRectangle(SystemBrushes.Highlight, bounds);
 
                     if (button.Selected)
                     {
