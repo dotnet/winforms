@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
             public void Activate(bool activate)
             {
-                if (_dataGridView.DesignMode)
+                if (_dataGridView.DesignMode || !_dataGridView.IsHandleCreated)
                 {
                     return;
                 }
