@@ -97,9 +97,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Outline Icon padding
+        ///  Outline Icon padding.
         /// </summary>
-        internal int OutlineIconPadding
+        protected int OutlineIconPadding
         {
             get
             {
@@ -128,9 +128,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual bool AllowMerge => true;
 
-        internal virtual bool AlwaysAllowExpand => false;
-
-        internal virtual AttributeCollection Attributes => TypeDescriptor.GetAttributes(PropertyType);
+        protected virtual AttributeCollection Attributes => TypeDescriptor.GetAttributes(PropertyType);
 
         /// <summary>
         ///  Gets the value of the background brush to use. Override this member to cause the entry to paint it's
@@ -142,7 +140,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             => ShouldRenderReadOnly ? GridEntryHost.GrayTextColor : GridEntryHost.GetTextColor();
 
         /// <summary>
-        ///  The set of attributes that will be used for browse filtering
+        ///  The set of attributes that will be used for browse filtering.
         /// </summary>
         public virtual AttributeCollection BrowsableAttributes
         {
@@ -161,7 +159,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         /// <summary>
         ///  Retrieves the container that contains the set of objects this formatter may work
-        ///  with.  It may return null if there is no container, or of the formatter should not
+        ///  with. It may return null if there is no container, or of the formatter should not
         ///  use any outside objects.
         /// </summary>
         public virtual IContainer Container => Component?.Site?.Container;
@@ -304,23 +302,23 @@ namespace System.Windows.Forms.PropertyGridInternal
                     SetFlag(Flags.Expand, false);
                     if (value)
                     {
-                        bool fMakeSure = CreateChildren();
-                        SetFlag(Flags.Expand, fMakeSure);
+                        bool childrenExpandable = CreateChildren();
+                        SetFlag(Flags.Expand, childrenExpandable);
                     }
                 }
 
-                // Notify accessibility clients of expanded state change
-                // StateChange requires NameChange, too - accessible clients won't see this, unless both events are raised
+                // Notify accessibility clients of expanded state change. StateChange requires NameChange as well.
+                // Accessible clients won't see this unless both events are raised.
 
-                // Root item is hidden and should not raise events
+                // Root item is hidden and should not raise events.
                 if (GridItemType != GridItemType.Root)
                 {
                     int id = GridEntryHost.AccessibilityGetGridEntryChildID(this);
                     if (id >= 0)
                     {
-                        var gridAccObj = (PropertyGridView.PropertyGridViewAccessibleObject)GridEntryHost.AccessibilityObject;
-                        gridAccObj.NotifyClients(AccessibleEvents.StateChange, id);
-                        gridAccObj.NotifyClients(AccessibleEvents.NameChange, id);
+                        var accessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)GridEntryHost.AccessibilityObject;
+                        accessibleObject.NotifyClients(AccessibleEvents.StateChange, id);
+                        accessibleObject.NotifyClients(AccessibleEvents.NameChange, id);
                     }
                 }
             }
@@ -474,14 +472,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (label is not null)
                 {
-                    label += ".";
+                    label = $"{label}.{PropertyLabel}";
                 }
                 else
                 {
-                    label = string.Empty;
+                    label = PropertyLabel;
                 }
-
-                label += PropertyLabel;
 
                 return label;
             }
@@ -519,30 +515,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         internal virtual bool HasValue => true;
 
         /// <summary>
-        ///  Retrieves the keyword that the VS help dynamic help window will
-        ///  use when this IPE is selected.
+        ///  Retrieves the keyword that Visual Studio dynamic help window will use when this entry is selected.
         /// </summary>
-        public virtual string HelpKeyword
-        {
-            get
-            {
-                string keyWord = null;
-
-                if (_parent is not null)
-                {
-                    keyWord = _parent.HelpKeyword;
-                }
-
-                if (keyWord is null)
-                {
-                    keyWord = string.Empty;
-                }
-
-                return keyWord;
-            }
-        }
-
-        internal virtual string HelpKeywordInternal => HelpKeyword;
+        public virtual string HelpKeyword => _parent?.HelpKeyword ?? string.Empty;
 
         public virtual bool IsCustomPaint
         {
@@ -551,15 +526,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Prevent full flag population if possible.
                 if ((_flags & Flags.Checked) == 0)
                 {
-                    UITypeEditor typeEd = UITypeEditor;
-                    if (typeEd is not null)
+                    UITypeEditor editor = UITypeEditor;
+                    if (editor is not null)
                     {
                         if ((_flags & Flags.CustomPaint) != 0 || (_flags & Flags.NoCustomPaint) != 0)
                         {
                             return (_flags & Flags.CustomPaint) != 0;
                         }
 
-                        if (typeEd.GetPaintValueSupported(this))
+                        if (editor.GetPaintValueSupported(this))
                         {
                             _flags |= Flags.CustomPaint;
                             return true;
@@ -598,23 +573,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         public bool IsImmediatelyEditable => (EntryFlags & Flags.ImmediatelyEditable) != 0;
 
         /// <summary>
-        ///  Retrieves the component that is invoking the method on the formatter object.  This may
+        ///  Retrieves the component that is invoking the method on the formatter object. This may
         ///  return null if there is no component responsible for the call.
         /// </summary>
-        public virtual object Instance
-        {
-            get
-            {
-                object owner = GetValueOwner();
-
-                if (_parent is not null && owner is null)
-                {
-                    return _parent.Instance;
-                }
-
-                return owner;
-            }
-        }
+        public object Instance => GetValueOwner() ?? _parent?.Instance;
 
         public override string Label => PropertyLabel;
 
@@ -647,7 +609,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  The entry needs a modal editor button ("...") to invoke its editor.
         /// </summary>
-        public virtual bool NeedsModalEditorButton
+        public bool NeedsModalEditorButton
             => EntryFlags.HasFlag(Flags.ModalEditable) && (IsValueEditable || EntryFlags.HasFlag(Flags.ReadOnlyEditable));
 
         public PropertyGrid OwnerGrid { get; }
@@ -677,10 +639,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             set
             {
                 // Set property is required to reset cached value when dpi changed.
-                if (value != _outlineRect)
-                {
-                    _outlineRect = value;
-                }
+                _outlineRect = value;
             }
         }
 
@@ -720,7 +679,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Returns category name of the current property
+        ///  Returns the category name of the current property.
         /// </summary>
         public virtual string PropertyCategory => CategoryAttribute.Default.Category;
 
@@ -746,12 +705,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         public virtual string PropertyName => PropertyLabel;
 
         /// <summary>
-        ///  Returns the Type of the value of this GridEntry, or null if the value is null.
+        ///  Returns the Type of the value of this <see cref="GridEntry"/>, or null if the value is null.
         /// </summary>
         public virtual Type PropertyType => PropertyValue?.GetType();
 
         /// <summary>
-        ///  Gets or sets the value for the property that is represented by this GridEntry.
+        ///  Gets or sets the value for the property that is represented by this <see cref="GridEntry"/>.
         /// </summary>
         public virtual object PropertyValue
         {
@@ -759,7 +718,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             set { }
         }
 
-        public virtual bool ShouldRenderPassword => (EntryFlags & Flags.RenderPassword) != 0;
+        public bool ShouldRenderPassword => (EntryFlags & Flags.RenderPassword) != 0;
 
         public virtual bool ShouldRenderReadOnly
              => ForceReadOnly
@@ -791,7 +750,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Returns the type editor for this entry.  This may return null if there is no type editor.
+        ///  Returns the type editor for this entry. This may return null if there is no type editor.
         /// </summary>
         internal virtual UITypeEditor UITypeEditor
         {
@@ -806,9 +765,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        // note: we don't do set because of the value class semantics, etc.
+        // Note: we don't do set because of the value class semantics, etc.
 
-        public override object Value => PropertyValue;
+        public sealed override object Value => PropertyValue;
 
         internal Point ValueToolTipLocation
         {
@@ -839,41 +798,39 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Add an event handler to be invoked when the label portion of the property entry is clicked.
         /// </summary>
-        public virtual void AddOnLabelClick(EventHandler h) => AddEventHandler(s_labelClickEvent, h);
+        public void AddOnLabelClick(EventHandler h) => AddEventHandler(s_labelClickEvent, h);
 
         /// <summary>
         ///  Add an event handler to be invoked when the label portion of the property entry is double-clicked.
         /// </summary>
-        public virtual void AddOnLabelDoubleClick(EventHandler h) => AddEventHandler(s_labelDoubleClickEvent, h);
+        public void AddOnLabelDoubleClick(EventHandler h) => AddEventHandler(s_labelDoubleClickEvent, h);
 
         /// <summary>
         ///  Add an event handler to be invoked when the value portion of the property entry is clicked.
         /// </summary>
-        public virtual void AddOnValueClick(EventHandler h) => AddEventHandler(s_valueClickEvent, h);
+        public void AddOnValueClick(EventHandler h) => AddEventHandler(s_valueClickEvent, h);
 
         /// <summary>
         ///  Add an event handler to be invoked when the value portion of the prop entry is double-clicked.
         /// </summary>
-        public virtual void AddOnValueDoubleClick(EventHandler h) => AddEventHandler(s_valueDoubleClickEvent, h);
+        public void AddOnValueDoubleClick(EventHandler h) => AddEventHandler(s_valueDoubleClickEvent, h);
 
         /// <summary>
         ///  Add an event handler to be invoked when the outline icon portion of the prop entry is clicked
         /// </summary>
-        public virtual void AddOnOutlineClick(EventHandler h) => AddEventHandler(s_outlineClickEvent, h);
+        public void AddOnOutlineClick(EventHandler h) => AddEventHandler(s_outlineClickEvent, h);
 
         /// <summary>
         ///  Add an event handler to be invoked when the outline icon portion of the prop entry is double clicked.
         /// </summary>
-        public virtual void AddOnOutlineDoubleClick(EventHandler h) => AddEventHandler(s_outlineDoubleClickEvent, h);
+        public void AddOnOutlineDoubleClick(EventHandler h) => AddEventHandler(s_outlineDoubleClickEvent, h);
 
         /// <summary>
         ///  Add an event handler to be invoked when the children grid entries are re-created.
         /// </summary>
-        public virtual void AddOnRecreateChildren(GridEntryRecreateChildrenEventHandler h) => AddEventHandler(s_recreateChildrenEvent, h);
+        public void AddOnRecreateChildren(GridEntryRecreateChildrenEventHandler h) => AddEventHandler(s_recreateChildrenEvent, h);
 
-        internal void ClearCachedValues() => ClearCachedValues(clearChildren: true);
-
-        internal void ClearCachedValues(bool clearChildren)
+        internal void ClearCachedValues(bool clearChildren = true)
         {
             if (_cacheItems is not null)
             {
@@ -946,13 +903,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Populates the children of this grid entry.
         /// </summary>
         /// <returns>True if the children are expandable.</returns>
-        protected virtual bool CreateChildren() => CreateChildren(diffOldChildren: false);
-
-        /// <summary>
-        ///  Populates the children of this grid entry.
-        /// </summary>
-        /// <returns>True if the children are expandable.</returns>
-        protected virtual bool CreateChildren(bool diffOldChildren)
+        protected virtual bool CreateChildren(bool diffOldChildren = false)
         {
             Debug.Assert(!Disposed, "Why are we creating children after we are disposed?");
 
@@ -986,7 +937,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     for (int i = 0; i < childProperties.Length; i++)
                     {
-                        if (!childProperties[i].NonParentEquals(_children[i]))
+                        if (!childProperties[i].EqualsIgnoreParent(_children[i]))
                         {
                             same = false;
                             break;
@@ -1061,9 +1012,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  Disposes the array of children.
-        /// </summary>
         public virtual void DisposeChildren()
         {
             _children?.Dispose();
@@ -1084,12 +1032,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             try
             {
-                // Since edit value can push a modal loop there is a chance that this gridentry will be zombied
-                // before it returns.  Make sure we're not disposed.
-
                 object originalValue = PropertyValue;
                 object value = UITypeEditor.EditValue(this, this, originalValue);
 
+                // Since edit value can push a modal loop there is a chance that this gridentry will be zombied
+                // before it returns. Make sure we're not disposed.
                 if (Disposed)
                 {
                     return;
@@ -1138,13 +1085,26 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Tests two GridEntries for equality.
+        ///  Compares equality, ignoring the parent.
         /// </summary>
+        internal bool EqualsIgnoreParent(GridEntry entry)
+        {
+            if (entry == this)
+            {
+                return true;
+            }
+
+            return entry is not null
+                && entry.PropertyLabel.Equals(PropertyLabel)
+                && entry.PropertyType.Equals(PropertyType)
+                && entry.PropertyDepth == PropertyDepth;
+        }
+
         public override bool Equals(object obj)
         {
-            if (NonParentEquals(obj))
+            if (obj is GridEntry entry && EqualsIgnoreParent(entry))
             {
-                return ((GridEntry)obj).ParentGridEntry == ParentGridEntry;
+                return entry.ParentGridEntry == ParentGridEntry;
             }
 
             return false;
@@ -1153,7 +1113,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Searches for a value of a given property for a value editor user.
         /// </summary>
-        public virtual object FindPropertyValue(string propertyName, Type propertyType)
+        public object FindPropertyValue(string propertyName, Type propertyType)
         {
             object owner = GetValueOwner();
             PropertyDescriptor property = TypeDescriptor.GetProperties(owner)[propertyName];
@@ -1166,14 +1126,14 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Returns the index of a child GridEntry.
+        ///  Returns the index of a child <see cref="GridEntry"/>.
         /// </summary>
         internal int GetChildIndex(GridEntry entry) => Children.IndexOf(entry);
 
         /// <summary>
-        ///  Gets the components that own the current value.  This is usually the value of the
-        ///  root entry, which is the object being browsed.  Walks up the GridEntry tree
-        ///  looking for an owner that is an IComponent
+        ///  Gets the components that own the current value. This is usually the value of the root entry, which is the
+        ///  object being browsed. Walks up the <see cref="GridEntry"/> tree looking for an owner that is an
+        ///  <see cref="IComponent"/>.
         /// </summary>
         public virtual IComponent[] GetComponents()
         {
@@ -1320,7 +1280,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // Do we want to expose sub properties?
-                if (!TypeConverter.GetPropertiesSupported(this) && !AlwaysAllowExpand)
+                if (!TypeConverter.GetPropertiesSupported(this) && this is not IRootGridEntry)
                 {
                     return entries;
                 }
@@ -1551,37 +1511,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             return null;
         }
 
-        internal virtual bool NonParentEquals(object obj)
-        {
-            if (obj == this)
-            {
-                return true;
-            }
-
-            if (obj is null)
-            {
-                return false;
-            }
-
-            if (obj is not GridEntry entry)
-            {
-                return false;
-            }
-
-            return entry.PropertyLabel.Equals(PropertyLabel) &&
-                   entry.PropertyType.Equals(PropertyType) && entry.PropertyDepth == PropertyDepth;
-        }
-
         /// <summary>
-        ///  Paints the label portion of this GridEntry into the given Graphics object. This is called by the GridEntry
-        ///  host (the PropertyGridView) when this GridEntry is to be painted.
+        ///  Paints the label portion of this <see cref="GridEntry"/> into the given Graphics object. This is called by
+        ///  the <see cref="GridEntry"/> host (the <see cref="PropertyGridView"/>) when this <see cref="GridEntry"/> is
+        ///  to be painted.
         /// </summary>
         public virtual void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
         {
             PropertyGridView gridHost = GridEntryHost;
-            Debug.Assert(gridHost is not null, "No propEntryHost");
             string label = PropertyLabel;
-
             int borderWidth = gridHost.GetOutlineIconSize() + OutlineIconPadding;
 
             // Fill the background if necessary.
@@ -1604,7 +1542,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             using var backBrush = backColor.GetCachedSolidBrushScope();
             if (paintFullLabel && (neededWidth >= (rect.Width - (stringX + 2))))
             {
-                // GDIPLUS_SPACE = extra needed to ensure text draws completely and isn't clipped.
+                // GdiPlusSpace = extra needed to ensure text draws completely and isn't clipped.
                 int totalWidth = stringX + neededWidth + PropertyGridView.GdiPlusSpace;
 
                 // Blank out the space we're going to use.
@@ -1619,11 +1557,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             else
             {
-                // Normal case -- no pseudo-tooltip for the label
+                // Normal case -- no pseudo-tooltip for the label.
                 g.FillRectangle(backBrush, rect.X, rect.Y, rect.Width, rect.Height);
             }
 
-            // Draw the border stripe on the left
+            // Draw the border stripe on the left.
             using var stripeBrush = gridHost.GetLineColor().GetCachedSolidBrushScope();
             g.FillRectangle(stripeBrush, rect.X, rect.Y, borderWidth, rect.Height);
 
@@ -1643,11 +1581,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Region oldClip = g.Clip;
                 g.SetClip(textRect);
 
-                // We need to Invert color only if in Highcontrast mode, targeting 4.7.1 and above, Gridcategory and
+                // We need to invert the color only if in Highcontrast mode, targeting 4.7.1 and above, Gridcategory and
                 // not a developer override. This is required to achieve required contrast ratio.
                 bool shouldInvertForHC = ColorInversionNeededInHC && (bold || (selected && !_hasFocus));
 
-                // Do actual drawing
+                // Do actual drawing.
+
                 // A brush is needed if using GDI+ only (UseCompatibleTextRendering); if using GDI, only the color is needed.
                 Color textColor = selected && _hasFocus
                     ? gridHost.GetSelectedItemWithFocusForeColor()
@@ -1689,20 +1628,20 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Paints the outline portion of this GridEntry into the given Graphics object.  This
-        ///  is called by the GridEntry host (the PropertyGridView) when this GridEntry is
-        ///  to be painted.
+        ///  Paints the outline portion of this <see cref="GridEntry"/> into the given <see cref="Graphics"/> object.
+        ///  This is called by the <see cref="GridEntry"/> host (the <see cref="PropertyGridView"/>) when this
+        ///  <see cref="GridEntry"/> is to be painted.
         /// </summary>
         public virtual void PaintOutline(Graphics g, Rectangle r)
         {
-            // Draw tree-view glyphs as triangles on Vista and Windows afterword
-            // when Visual style is enabled
             if (GridEntryHost.IsExplorerTreeSupported)
             {
+                // Draw tree-view glyphs with the current ExplorerTreeView UxTheme
+
                 if (!_lastPaintWithExplorerStyle)
                 {
                     // Size of Explorer Tree style glyph (triangle) is different from +/- glyph, so when we change the
-                    // visual style (such as changing Windows theme), we need to recalculate outlineRect.
+                    // visual style (such as changing the Windows theme), we need to recalculate outlineRect.
 
                     _outlineRect = Rectangle.Empty;
                     _lastPaintWithExplorerStyle = true;
@@ -1717,7 +1656,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (_lastPaintWithExplorerStyle)
                 {
                     // Size of Explorer Tree style glyph (triangle) is different from +/- glyph, so when we change the
-                    // visual style (such as changing Windows theme), we need to recalculate outlineRect.
+                    // visual style (such as changing the Windows theme), we need to recalculate outlineRect.
 
                     _outlineRect = Rectangle.Empty;
                     _lastPaintWithExplorerStyle = false;
@@ -1729,94 +1668,95 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void PaintOutlineWithExplorerTreeStyle(Graphics g, Rectangle r, IntPtr handle)
         {
-            if (Expandable)
+            if (!Expandable)
             {
-                bool expanded = InternalExpanded;
-                Rectangle outline = OutlineRect;
-
-                // Make sure we're in our bounds.
-                outline = Rectangle.Intersect(r, outline);
-                if (outline.IsEmpty)
-                {
-                    return;
-                }
-
-                VisualStyleElement element = expanded
-                    ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
-                    : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
-
-                // Invert color if it is not overriden by developer.
-                if (ColorInversionNeededInHC)
-                {
-                    Color textColor = InvertColor(OwnerGrid.LineColor);
-                    if (g is not null)
-                    {
-                        using var brush = textColor.GetCachedSolidBrushScope();
-                        g.FillRectangle(brush, outline);
-                    }
-                }
-
-                VisualStyleRenderer explorerTreeRenderer = new(element);
-
-                using var hdc = new DeviceContextHdcScope(g);
-                explorerTreeRenderer.DrawBackground(hdc, outline, handle);
+                return;
             }
+
+            bool expanded = InternalExpanded;
+            Rectangle outline = OutlineRect;
+
+            // Make sure we're in our bounds.
+            outline = Rectangle.Intersect(r, outline);
+            if (outline.IsEmpty)
+            {
+                return;
+            }
+
+            VisualStyleElement element = expanded
+                ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
+                : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
+
+            // Invert color if it is not overriden by developer.
+            if (g is not null && ColorInversionNeededInHC)
+            {
+                Color textColor = InvertColor(OwnerGrid.LineColor);
+                using var brush = textColor.GetCachedSolidBrushScope();
+                g.FillRectangle(brush, outline);
+            }
+
+            VisualStyleRenderer explorerTreeRenderer = new(element);
+
+            using var hdc = new DeviceContextHdcScope(g);
+            explorerTreeRenderer.DrawBackground(hdc, outline, handle);
         }
 
         private void PaintOutlineWithClassicStyle(Graphics g, Rectangle r)
         {
-            // Draw outline box.
-            if (Expandable)
+            if (!Expandable)
             {
-                bool fExpanded = InternalExpanded;
-                Rectangle outline = OutlineRect;
+                return;
+            }
 
-                // Make sure we're in our bounds.
-                outline = Rectangle.Intersect(r, outline);
-                if (outline.IsEmpty)
-                {
-                    return;
-                }
+            // Draw outline box.
 
-                // Draw border area box.
-                Color penColor = GridEntryHost.GetTextColor();
+            bool expanded = InternalExpanded;
 
-                // Inverting text color to back ground to get required contrast ratio.
-                if (ColorInversionNeededInHC)
-                {
-                    penColor = InvertColor(OwnerGrid.LineColor);
-                }
-                else
-                {
-                    // Filling rectangle as it was in all cases where we do not invert colors.
-                    Color brushColor = GetBackgroundColor();
-                    using var brush = brushColor.GetCachedSolidBrushScope();
-                    g.FillRectangle(brush, outline);
-                }
+            // Make sure we're in our bounds.
+            Rectangle outline = Rectangle.Intersect(r, OutlineRect);
+            if (outline.IsEmpty)
+            {
+                return;
+            }
 
-                using var pen = penColor.GetCachedPenScope();
+            // Draw border area box.
+            Color penColor = GridEntryHost.GetTextColor();
 
-                g.DrawRectangle(pen, outline.X, outline.Y, outline.Width - 1, outline.Height - 1);
+            // Inverting text color to background to get required contrast ratio.
+            if (ColorInversionNeededInHC)
+            {
+                penColor = InvertColor(OwnerGrid.LineColor);
+            }
+            else
+            {
+                // Filling rectangle as it was in all cases where we do not invert colors.
+                Color brushColor = GetBackgroundColor();
+                using var brush = brushColor.GetCachedSolidBrushScope();
+                g.FillRectangle(brush, outline);
+            }
 
-                // Draw horizontal line for +/-
-                int indent = 2;
+            using var pen = penColor.GetCachedPenScope();
+
+            g.DrawRectangle(pen, outline.X, outline.Y, outline.Width - 1, outline.Height - 1);
+
+            // Draw horizontal line for +/-
+            int indent = 2;
+            g.DrawLine(
+                pen,
+                outline.X + indent,
+                outline.Y + outline.Height / 2,
+                outline.X + outline.Width - indent - 1,
+                outline.Y + outline.Height / 2);
+
+            // Draw vertical line to make a +
+            if (!expanded)
+            {
                 g.DrawLine(
                     pen,
-                    outline.X + indent,
-                    outline.Y + outline.Height / 2,
-                    outline.X + outline.Width - indent - 1,
-                    outline.Y + outline.Height / 2);
-
-                // Draw vertical line to make a +
-                if (!fExpanded)
-                {
-                    g.DrawLine(
-                        pen,
-                        outline.X + outline.Width / 2,
-                        outline.Y + indent,
-                        outline.X + outline.Width / 2,
-                        outline.Y + outline.Height - indent - 1);
-                }
+                    outline.X + outline.Width / 2,
+                    outline.Y + indent,
+                    outline.X + outline.Width / 2,
+                    outline.Y + outline.Height - indent - 1);
             }
         }
 

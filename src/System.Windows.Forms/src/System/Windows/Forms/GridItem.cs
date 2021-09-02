@@ -7,15 +7,21 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Representation of one row item in the PropertyGrid. These items represent the
-    ///  hierarchy of the grid's "tree-like" view and can be used to get information about
-    ///  the grid's state and contents.
-    ///  These objects should not be cached because they represent a snapshot of the
-    ///  PropertyGrid's state and may be disposed by grid activity. The PropertyGrid often
-    ///  recreates these objects internally even if it doesn't appear to change to the user.
+    ///  Representation of one row item in the <see cref="PropertyGrid"/>. These items represent the hierarchy of the
+    ///  grid's "tree-like" view and can be used to get information about the grid's state and contents.
     /// </summary>
+    /// <remarks>
+    ///  <para>
+    ///   These objects should not be cached because they represent a snapshot of the <see cref="PropertyGrid"/>'s
+    ///   state and may be disposed by grid activity. The <see cref="PropertyGrid"/> often recreates these objects
+    ///   internally even if it doesn't appear to change to the user.
+    ///  </para>
+    /// </remarks>
     public abstract class GridItem
     {
+        /// <summary>
+        ///  Gets or sets user-defined data about the <see cref="GridItem"/>.
+        /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [Localizable(false)]
         [Bindable(true)]
@@ -25,48 +31,49 @@ namespace System.Windows.Forms
         public object? Tag { get; set; }
 
         /// <summary>
-        ///  Retrieves the child GridItems, if any, of this GridItem
+        ///  Retrieves the child <see cref="GridItem"/>s, if any, of this <see cref="GridItem"/>.
         /// </summary>
         public abstract GridItemCollection GridItems { get; }
 
         /// <summary>
-        ///  Retrieves type of this GridItem, as a value from System.Windows.Forms.GridItemType
+        ///  Retrieves type of this <see cref="GridItem"/>.
         /// </summary>
         public abstract GridItemType GridItemType { get; }
 
         /// <summary>
-        ///  Retrieves the text label of this GridItem. This may be different from the actual
-        ///  PropertyName. For GridItemType.Property GridItems, retrieve the PropertyDescriptor
-        ///  and check its Name property.
+        ///  Retrieves the text label of this <see cref="GridItem"/>. This may be different from the actual
+        ///  PropertyName. For <see cref="GridItemType.Property"/> <see cref="GridItem"/>s, retrieve the
+        ///  <see cref="System.ComponentModel.PropertyDescriptor"/> and check its Name property.
         /// </summary>
         public abstract string? Label { get; }
 
         /// <summary>
-        ///  Retrieves parent GridItem of this GridItem, if any.
+        ///  Retrieves parent <see cref="GridItem"/> of this <see cref="GridItem"/>, if any.
         /// </summary>
         public abstract GridItem? Parent { get; }
 
         /// <summary>
-        ///  If this item is a GridItemType.Property GridItem, this retrieves the
-        ///  System.ComponentModel.PropertyDescriptor that is associated with this GridItem.
-        ///  This can be used to retrieve information such as property Type, Name, or
-        ///  TypeConverter.
+        ///  If this item is a <see cref="GridItemType.Property"/> <see cref="GridItem"/>, this retrieves the
+        ///  <see cref="System.ComponentModel.PropertyDescriptor"/> that is associated with this <see cref="GridItem"/>.
+        ///  This can be used to retrieve information such as property type, name, or <see cref="TypeConverter"/>.
         /// </summary>
         public abstract PropertyDescriptor? PropertyDescriptor { get; }
 
         /// <summary>
-        ///  Retrieves the current Value of this grid Item. This may be null.
+        ///  Retrieves the current value of this grid Item. This may be null.
         /// </summary>
-        // We don't do set because of the value class semantics, etc.
+        /// <devdoc>
+        ///  We don't do set because of the value class semantics, etc.
+        /// </devdoc>
         public abstract object? Value { get; }
 
         /// <summary>
-        ///  Retrieves whether the given property is expandable.
+        ///  Retrieves whether the given property is expandable to show nested properties.
         /// </summary>
         public virtual bool Expandable => false;
 
         /// <summary>
-        ///  Retrieves or sets whether the GridItem is in an expanded state.
+        ///  Retrieves or sets whether the <see cref="GridItem"/> is in an expanded state.
         /// </summary>
         public virtual bool Expanded
         {
@@ -75,7 +82,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Attempts to select this GridItem in the PropertyGrid.
+        ///  Attempts to select this <see cref="GridItem"/> in the <see cref="PropertyGrid"/>.
         /// </summary>
         public abstract bool Select();
     }

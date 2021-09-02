@@ -965,24 +965,24 @@ namespace System.Windows.Forms.PropertyGridInternal
             _currentEditor = control;
         }
 
-        private int CountPropsFromOutline(GridEntryCollection entries)
+        private int CountPropertiesFromOutline(GridEntryCollection entries)
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CountPropsFromOutLine");
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:CountPropertiesFromOutline");
             if (entries is null)
             {
                 return 0;
             }
 
-            int cProps = entries.Count;
+            int propertyCount = entries.Count;
             for (int i = 0; i < entries.Count; i++)
             {
-                if (((GridEntry)entries[i]).InternalExpanded)
+                if (entries[i].InternalExpanded)
                 {
-                    cProps += CountPropsFromOutline(((GridEntry)entries[i]).Children);
+                    propertyCount += CountPropertiesFromOutline(entries[i].Children);
                 }
             }
 
-            return cProps;
+            return propertyCount;
         }
 
         /// <summary>
@@ -1718,7 +1718,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Now, we will only go as many as were expanded.
                 for (; row < allGridEntries.Count && ((row - start) <= count); row++)
                 {
-                    if (gridEntries[i].NonParentEquals(allGridEntries[row]))
+                    if (gridEntries[i].EqualsIgnoreParent(allGridEntries[row]))
                     {
                         targetEntry = allGridEntries[row];
                         row++;
@@ -3727,7 +3727,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (e.OldChildCount != e.NewChildCount)
             {
-                TotalProperties = CountPropsFromOutline(TopLevelGridEntries);
+                TotalProperties = CountPropertiesFromOutline(TopLevelGridEntries);
                 SetConstants();
             }
 
@@ -4091,11 +4091,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void RecalculateProperties()
         {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:RecalculateProps");
-            int props = CountPropsFromOutline(TopLevelGridEntries);
-            if (TotalProperties != props)
+            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:RecalculateProperties");
+            int propertyCount = CountPropertiesFromOutline(TopLevelGridEntries);
+            if (TotalProperties != propertyCount)
             {
-                TotalProperties = props;
+                TotalProperties = propertyCount;
                 ClearGridEntryEvents(_allGridEntries, 0, -1);
                 _allGridEntries = null;
             }

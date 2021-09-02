@@ -12,6 +12,10 @@ using System.Windows.Forms.Design;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
+    /// <summary>
+    ///  Root <see cref="GridEntry"/> for the <see cref="PropertyGrid"/> when there is only one object
+    ///  in <see cref="PropertyGrid.SelectedObjects"/>.
+    /// </summary>
     internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     {
         protected object _value;
@@ -60,9 +64,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
         }
 
-        /// <summary>
-        ///  The set of attributes that will be used for browse filtering.
-        /// </summary>
+        /// <inheritdoc/>
         public override AttributeCollection BrowsableAttributes
         {
             get => _browsableAttributes ??= new(BrowsableAttribute.Yes);
@@ -112,8 +114,6 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override IComponentChangeService ComponentChangeService
             => _changeService ?? this.GetService<IComponentChangeService>();
 
-        internal override bool AlwaysAllowExpand => true;
-
         public override PropertyTab CurrentTab
         {
             get => _tab;
@@ -160,9 +160,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override GridItemType GridItemType => GridItemType.Root;
 
-        /// <summary>
-        ///  Retrieves the keyword that the VS help dynamic help window will use when this IPE is selected.
-        /// </summary>
         public override string HelpKeyword
         {
             get
@@ -184,22 +181,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (_value is IComponent component)
                 {
-                    ISite site = component.Site;
-                    if (site is null)
-                    {
-                        return _value.GetType().Name;
-                    }
-
-                    return site.Name;
+                    return component.Site?.Name ?? _value.GetType().Name;
                 }
 
                 return _value?.ToString();
             }
         }
 
-        /// <summary>
-        ///  Gets or sets the value for the property that is represented by this GridEntry.
-        /// </summary>
         public override object PropertyValue
         {
             get => _value;
@@ -212,9 +200,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected override bool CreateChildren()
+        protected override bool CreateChildren(bool diffOldChildren = false)
         {
-            bool expandable = base.CreateChildren();
+            bool expandable = base.CreateChildren(diffOldChildren);
             CategorizePropEntries();
             return expandable;
         }
@@ -239,17 +227,13 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override object GetService(Type serviceType)
             => _host?.GetService(serviceType) ?? _baseProvider?.GetService(serviceType);
 
-        /// <summary>
-        ///  Reset the Browsable attributes to the default (<see cref="BrowsableAttribute.Yes"/>).
-        /// </summary>
+        /// <inheritdoc/>
         public void ResetBrowsableAttributes() => _browsableAttributes = new(BrowsableAttribute.Yes);
 
-        /// <summary>
-        ///  Sets the value of this GridEntry from text.
-        /// </summary>
+        /// <inheritdoc/>
         public virtual void ShowCategories(bool sortByCategories)
         {
-            if ((_propertySort &= PropertySort.Categorized) != 0 != sortByCategories)
+            if (((_propertySort &= PropertySort.Categorized) != 0) != sortByCategories)
             {
                 if (sortByCategories)
                 {

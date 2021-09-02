@@ -11,11 +11,16 @@ using System.Reflection;
 namespace System.Windows.Forms.PropertyGridInternal
 {
     /// <summary>
-    ///  This grid entry is used for immutable objects.  An immutable object is identified through it's
-    ///  <see cref="TypeConverter"/>, which returns TRUE to ShouldCreateInstance.  For this case, we never go through
-    ///  the property descriptor to change the value, but recreate each time
+    ///  This grid entry is used for immutable objects.
     /// </summary>
-    internal class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
+    /// <remarks>
+    ///  <para>
+    ///   An immutable object is identified through it's <see cref="TypeConverter"/> when it returns true for
+    ///   <see cref="TypeConverter.GetCreateInstanceSupported()"/>. In this case, we never go through the
+    ///   <see cref="PropertyDescriptor"/> to change the value, but recreate the property object each time.
+    ///  </para>
+    /// </remarks>
+    internal sealed class ImmutablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
     {
         internal ImmutablePropertyDescriptorGridEntry(
             PropertyGrid ownerGrid,

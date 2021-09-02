@@ -53,18 +53,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             Initialize(propInfo);
         }
 
-        /// <summary>
-        ///  Specify that this grid entry should be allowed to be merged for multi-select.
-        /// </summary>
         public override bool AllowMerge
             => ((MergablePropertyAttribute)_propertyInfo.Attributes[typeof(MergablePropertyAttribute)])?.IsDefaultAttribute() ?? true;
 
-        internal override AttributeCollection Attributes => _propertyInfo.Attributes;
+        protected override AttributeCollection Attributes => _propertyInfo.Attributes;
 
-        /// <summary>
-        ///  Retrieves the keyword that the VS help dynamic help window will
-        ///  use when this IPE is selected.
-        /// </summary>
         public override string HelpKeyword
         {
             get
@@ -140,8 +133,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal override string LabelToolTipText => _toolTipText ?? base.LabelToolTipText;
 
-        internal override string HelpKeywordInternal => PropertyLabel;
-
         internal override bool Enumerable => base.Enumerable && !IsPropertyReadOnly;
 
         internal virtual bool IsPropertyReadOnly => _propertyInfo.IsReadOnly;
@@ -178,7 +169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Retrieves the PropertyDescriptor that is surfacing the given object/
+        ///  Retrieves the PropertyDescriptor that is surfacing the given object.
         /// </summary>
         public override PropertyDescriptor PropertyDescriptor => _propertyInfo;
 
@@ -308,9 +299,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  Returns the type editor for this entry.  This may return null if there is no type editor.
-        /// </summary>
         internal override UITypeEditor UITypeEditor
         {
             get
@@ -326,12 +314,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  Invokes the type editor for editing this item.
-        /// </summary>
-        internal override void EditPropertyValue(PropertyGridView iva)
+        internal override void EditPropertyValue(PropertyGridView gridView)
         {
-            base.EditPropertyValue(iva);
+            base.EditPropertyValue(gridView);
 
             if (!IsValueEditable)
             {

@@ -3851,7 +3851,7 @@ namespace System.Windows.Forms.Tests
             Type propertyType = gridEntry.PropertyType;
             Assert.True(propertyType == typeof(object));
 
-            AttributeCollection attributes = gridEntry.Attributes;
+            AttributeCollection attributes = gridEntry.TestAccessor().Dynamic.Attributes;
             bool foundTypeForward = false;
             foreach (object attribute in attributes)
             {
