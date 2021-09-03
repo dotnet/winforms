@@ -1681,10 +1681,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return;
             }
 
-            VisualStyleElement element = expanded
-                ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
-                : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
-
             // Invert color if it is not overriden by developer.
             if (g is not null && ColorInversionNeededInHC)
             {
@@ -1693,10 +1689,43 @@ namespace System.Windows.Forms.PropertyGridInternal
                 g.FillRectangle(brush, outline);
             }
 
-            VisualStyleRenderer explorerTreeRenderer = new(element);
+            if (ColorInversionNeededInHC || !expanded)
+            {
+                VisualStyleElement element = expanded
+                    ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
+                    : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
 
-            using var hdc = new DeviceContextHdcScope(g);
-            explorerTreeRenderer.DrawBackground(hdc, outline, handle);
+                VisualStyleRenderer explorerTreeRenderer = new(element);
+                RedrawExplorerTreeViewClosedGlyph(g, explorerTreeRenderer, outline, handle);
+            }
+            else
+            {
+                using var hdc = new DeviceContextHdcScope(g);
+                VisualStyleRenderer explorerTreeRenderer = new(VisualStyleElement.ExplorerTreeView.Glyph.Opened);
+                explorerTreeRenderer.DrawBackground(hdc, outline, handle);
+            }
+        }
+
+        private unsafe void RedrawExplorerTreeViewClosedGlyph(
+            Graphics graphics,
+            VisualStyleRenderer explorerTreeRenderer,
+            Rectangle rectangle,
+            IntPtr handle)
+        {
+            Color backgroundColor = ColorInversionNeededInHC ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
+            using var compatibleDC = new Gdi32.CreateDcScope((Gdi32.HDC)default);
+
+            int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
+            int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
+            Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
+            using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
+
+            compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backgroundColor)));
+            explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
+
+            using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
+            ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor);
+            graphics.DrawImage(bitmap, rectangle, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
         }
 
         private void PaintOutlineWithClassicStyle(Graphics g, Rectangle r)

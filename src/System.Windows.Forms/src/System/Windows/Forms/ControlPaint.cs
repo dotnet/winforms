@@ -69,6 +69,10 @@ namespace System.Windows.Forms
         private const ContentAlignment AnyMiddle
             = ContentAlignment.MiddleLeft | ContentAlignment.MiddleCenter | ContentAlignment.MiddleRight;
 
+        // This constant is needed in order to correctly select which pixels of the icon should be repainted.
+        // Otherwise, we will recolor intermediate shades and the icon will look inconsistent (too bold).
+        private const int MaximumLuminosityDifference = 20;
+
         internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Image backgroundImage, ImageLayout imageLayout)
         {
             Rectangle result = bounds;
@@ -2526,6 +2530,27 @@ namespace System.Windows.Forms
                     g.DrawLine(SystemPens.Window, bound.X, bound.Y + bound.Height - 1, bound.X + bound.Width - 1, bound.Y + bound.Height - 1);
 
                     break;
+            }
+        }
+
+        internal static void InvertForeColorIfNeeded(Bitmap bitmap, Color backgroundColor)
+        {
+            ControlPaint.HLSColor backgroundColorWrapper = new(backgroundColor);
+
+            for (int y = 0; y < bitmap.Height; ++y)
+            {
+                for (int x = 0; x < bitmap.Width; ++x)
+                {
+                    var pixel = bitmap.GetPixel(x, y);
+                    if (pixel != backgroundColor)
+                    {
+                        var pixelColorWrapper = new ControlPaint.HLSColor(pixel);
+                        if (Math.Abs(pixelColorWrapper.Luminosity - backgroundColorWrapper.Luminosity) > MaximumLuminosityDifference)
+                        {
+                            bitmap.SetPixel(x, y, pixel.InvertColor());
+                        }
+                    }
+                }
             }
         }
 
