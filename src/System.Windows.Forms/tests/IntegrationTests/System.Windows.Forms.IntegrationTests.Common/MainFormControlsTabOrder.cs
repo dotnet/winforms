@@ -35,6 +35,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         MessageBoxButton,
         ToolStripsButton,
         TrackBarsButton,
-        ScrollBarsButton
+        ScrollBarsButton,
+        ToolTipsButton
     }
 }

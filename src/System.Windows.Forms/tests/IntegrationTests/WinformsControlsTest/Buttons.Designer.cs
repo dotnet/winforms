@@ -51,6 +51,7 @@ namespace WinformsControlsTest
         }
 
         #endregion
+
         private System.Windows.Forms.ToolTip toolTip1;
     }
 }
