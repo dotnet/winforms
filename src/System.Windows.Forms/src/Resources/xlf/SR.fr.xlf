@@ -6291,6 +6291,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Informe les utilisateurs de contrôles ListView virtuels qu'ils doivent préparer leur cache.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
+        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
+        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">Impossible d'accéder à la collection des éléments activés lorsque le ListView est en mode virtuel.</target>
