@@ -20,7 +20,7 @@ namespace System.Windows.Forms
     [Docking(DockingBehavior.Ask)]
     [Designer("System.Windows.Forms.Design.PanelDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionPanel))]
-    public class Panel : ScrollableControl
+    public partial class Panel : ScrollableControl
     {
         private BorderStyle _borderStyle = BorderStyle.None;
 
@@ -182,6 +182,8 @@ namespace System.Windows.Forms
             remove => base.KeyPress -= value;
         }
 
+        internal override bool SupportsUiaProviders => true;
+
         [DefaultValue(false)]
         public new bool TabStop
         {
@@ -236,8 +238,17 @@ namespace System.Windows.Forms
         /// </summary>
         public override string ToString()
         {
-            string s = base.ToString();
-            return s + ", BorderStyle: " + typeof(BorderStyle).ToString() + "." + _borderStyle.ToString();
+            return $"{base.ToString()}, BorderStyle: {typeof(BorderStyle)}.{_borderStyle}";
         }
+
+        /// <summary>
+        ///  Creates a new AccessibleObject for this <see cref='Panel'/> instance.
+        ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
+        /// </summary>
+        /// <returns>
+        ///  <see cref='AccessibleObject'/> for this <see cref='Panel'/> instance.
+        /// </returns>
+        protected override AccessibleObject CreateAccessibilityInstance()
+           => new PanelAccessibleObject(this);
     }
 }
