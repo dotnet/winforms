@@ -37,7 +37,7 @@ namespace WinformsControlsTest
                 };
                 button.Click += info.Click;
 
-                flowLayoutPanelUITypeEditors.Controls.Add(button);
+                overarchingFlowLayoutPanel.Controls.Add(button);
             }
 
             Text = RuntimeInformation.FrameworkDescription;
@@ -174,6 +174,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.ScrollBarsButton,
                 new InitInfo("ScrollBars", (obj, e) => new ScrollBars().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.ToolTipsButton,
+                new InitInfo("ToolTips", (obj, e) => new ToolTipTests().Show(this))
             }
         };
 
@@ -182,7 +186,7 @@ namespace WinformsControlsTest
             base.OnShown(e);
 
             UpdateLayout();
-            flowLayoutPanelUITypeEditors.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Focus();
+            overarchingFlowLayoutPanel.Controls[(int)MainFormControlsTabOrder.ButtonsButton].Focus();
         }
 
         private void UpdateLayout()
@@ -191,51 +195,55 @@ namespace WinformsControlsTest
             Debug.WriteLine($"MessageBoxFont: {SystemFonts.MessageBoxFont}", nameof(MainForm));
             Debug.WriteLine($"Default font: {Control.DefaultFont}", nameof(MainForm));
 
-            // 1. Auto-size all buttons
-            flowLayoutPanelUITypeEditors.SuspendLayout();
-            foreach (Control c in flowLayoutPanelUITypeEditors.Controls)
+            List<Button> buttons = new List<Button>();
+            foreach (Control control in overarchingFlowLayoutPanel.Controls)
             {
-                if (c is Button button)
+                if (control is Button button)
                 {
-                    button.AutoSize = true;
+                    buttons.Add(button);
+                }
+                else
+                {
+                    Debug.WriteLine($"Why did we get a {control.GetType().Name} instead a {nameof(Button)} on {nameof(MainForm)}?");
                 }
             }
 
-            flowLayoutPanelUITypeEditors.ResumeLayout(true);
+            // 1. Auto-size all buttons
+            overarchingFlowLayoutPanel.SuspendLayout();
+            foreach (Button button in buttons)
+            {
+                button.AutoSize = true;
+            }
+
+            overarchingFlowLayoutPanel.ResumeLayout(true);
 
             // 2. Find the biggest button
             Size biggestButton = default;
-            foreach (Control c in flowLayoutPanelUITypeEditors.Controls)
+            foreach (Button button in buttons)
             {
-                if (c is Button button)
+                if (button.Width > biggestButton.Width)
                 {
-                    if (button.Width > biggestButton.Width)
-                    {
-                        biggestButton = button.Size;
-                    }
+                    biggestButton = button.Size;
                 }
             }
 
             Debug.WriteLine($"Biggest button size: {biggestButton}", nameof(MainForm));
 
             // 3. Size all buttons to the biggest button
-            flowLayoutPanelUITypeEditors.SuspendLayout();
-            foreach (Control c in flowLayoutPanelUITypeEditors.Controls)
+            overarchingFlowLayoutPanel.SuspendLayout();
+            foreach (Button button in buttons)
             {
-                if (c is Button button)
-                {
-                    button.AutoSize = false;
-                    button.Size = biggestButton;
-                }
+                button.AutoSize = false;
+                button.Size = biggestButton;
             }
 
-            flowLayoutPanelUITypeEditors.ResumeLayout(true);
+            overarchingFlowLayoutPanel.ResumeLayout(true);
 
             // 4. Calculate the new form size showing all buttons in two vertical columns
-            int padding = flowLayoutPanelUITypeEditors.Controls[0].Margin.All;
+            int padding = overarchingFlowLayoutPanel.Controls[0].Margin.All;
             ClientSize = new Size(
                 (biggestButton.Width + padding * 2) * 2 + padding * 2,
-                (int)(flowLayoutPanelUITypeEditors.Controls.Count / 2 * (biggestButton.Height + padding * 2) + padding * 2)
+                (int)((overarchingFlowLayoutPanel.Controls.Count + 1) / 2 * (biggestButton.Height + padding * 2) + padding * 2)
                 );
             MinimumSize = Size;
             Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));

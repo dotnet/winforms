@@ -38,6 +38,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(toolTip.ToolTipTitle);
             Assert.True(toolTip.UseAnimation);
             Assert.True(toolTip.UseFading);
+            Assert.False(toolTip.GetHandleCreated());
         }
 
         [WinFormsFact]
@@ -67,6 +68,7 @@ namespace System.Windows.Forms.Tests
             Assert.Empty(toolTip.ToolTipTitle);
             Assert.True(toolTip.UseAnimation);
             Assert.True(toolTip.UseFading);
+            Assert.False(toolTip.GetHandleCreated());
         }
 
         [WinFormsFact]
@@ -111,6 +113,7 @@ namespace System.Windows.Forms.Tests
             // Set different
             toolTip.Active = !value;
             Assert.Equal(!value, toolTip.Active);
+            Assert.False(toolTip.GetHandleCreated());
         }
 
         [WinFormsTheory]
@@ -135,9 +138,11 @@ namespace System.Windows.Forms.Tests
             // Set different
             toolTip.Active = !value;
             Assert.Equal(!value, toolTip.Active);
+            Assert.False(toolTip.GetHandleCreated());
 
             // NB: disposing the component with strictly mocked object causes tests to fail
-            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict. All invocations on the mock must have a corresponding setup.
+            // Moq.MockException : ISite.Container invocation failed with mock behavior Strict.
+            // All invocations on the mock must have a corresponding setup.
             toolTip.Site = null;
         }
 
@@ -152,6 +157,9 @@ namespace System.Windows.Forms.Tests
         {
             using var toolTip = new ToolTip
             {
+                InitialDelay = 80,
+                AutoPopDelay = 70,
+                ReshowDelay = 60,
                 AutomaticDelay = value
             };
             Assert.Equal(value, toolTip.AutomaticDelay);
@@ -160,6 +168,9 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedReshowDelay, toolTip.ReshowDelay);
 
             // Set same
+            toolTip.InitialDelay = 80;
+            toolTip.AutoPopDelay = 70;
+            toolTip.ReshowDelay = 60;
             toolTip.AutomaticDelay = value;
             Assert.Equal(value, toolTip.AutomaticDelay);
             Assert.Equal(expectedAutoPopDelay, toolTip.AutoPopDelay);
@@ -171,14 +182,44 @@ namespace System.Windows.Forms.Tests
         public void ToolTip_AutomaticDelay_ShouldSerialize_ReturnsExpected()
         {
             using var toolTip = new ToolTip();
-            PropertyDescriptor property = TypeDescriptor.GetProperties(typeof(ToolTip))[nameof(ToolTip.AutomaticDelay)];
-            Assert.False(property.ShouldSerializeValue(toolTip));
+
+            var properties = TypeDescriptor.GetProperties(typeof(ToolTip));
+            PropertyDescriptor automaticProperty = properties[nameof(ToolTip.AutomaticDelay)];
+            PropertyDescriptor initialProperty = properties[nameof(ToolTip.InitialDelay)];
+            PropertyDescriptor reshowProperty = properties[nameof(ToolTip.ReshowDelay)];
+            PropertyDescriptor autoPopProperty = properties[nameof(ToolTip.AutoPopDelay)];
+
+            // No delays were set, thus we have nothing to serialize.
+            Assert.False(automaticProperty.ShouldSerializeValue(toolTip));
+            Assert.False(initialProperty.ShouldSerializeValue(toolTip));
+            Assert.False(reshowProperty.ShouldSerializeValue(toolTip));
+            Assert.False(autoPopProperty.ShouldSerializeValue(toolTip));
 
             toolTip.AutomaticDelay = toolTip.AutomaticDelay;
-            Assert.False(property.ShouldSerializeValue(toolTip));
+
+            // No delays were were changed compared to the defaultvalues, thus we have nothing to serialize.
+            Assert.False(automaticProperty.ShouldSerializeValue(toolTip));
+            Assert.False(initialProperty.ShouldSerializeValue(toolTip));
+            Assert.False(reshowProperty.ShouldSerializeValue(toolTip));
+            Assert.False(autoPopProperty.ShouldSerializeValue(toolTip));
 
             toolTip.AutomaticDelay = 0;
-            Assert.True(property.ShouldSerializeValue(toolTip));
+
+            // Automatic delay will be used to calculate all other delays, thus it is the only one to serialize.
+            Assert.True(automaticProperty.ShouldSerializeValue(toolTip));
+            Assert.False(initialProperty.ShouldSerializeValue(toolTip));
+            Assert.False(reshowProperty.ShouldSerializeValue(toolTip));
+            Assert.False(autoPopProperty.ShouldSerializeValue(toolTip));
+
+            toolTip.InitialDelay = 10;
+
+            // Serializing all delays because we ignore automatic delay at least in a single case.
+            Assert.True(automaticProperty.ShouldSerializeValue(toolTip));
+            Assert.True(initialProperty.ShouldSerializeValue(toolTip));
+            Assert.True(reshowProperty.ShouldSerializeValue(toolTip));
+            Assert.True(autoPopProperty.ShouldSerializeValue(toolTip));
+
+            Assert.False(toolTip.GetHandleCreated());
         }
 
         [WinFormsFact]
@@ -248,6 +289,47 @@ namespace System.Windows.Forms.Tests
             // Set same.
             toolTip.BackColor = value;
             Assert.Equal(value, toolTip.BackColor);
+        }
+
+        [WinFormsFact]
+        public void ToolTip_IsPersistent_Get_ReturnsExpected()
+        {
+            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater;
+
+            using var toolTip = new ToolTip();
+            Assert.Equal(persistentToolTipSupported, toolTip.IsPersistent);
+
+            _ = toolTip.Handle;
+
+            toolTip.AutomaticDelay = toolTip.AutomaticDelay;
+            Assert.Equal(persistentToolTipSupported, toolTip.IsPersistent);
+
+            toolTip.AutoPopDelay = 0x7FFF;
+            Assert.Equal(persistentToolTipSupported, toolTip.IsPersistent);
+
+            toolTip.AutoPopDelay = toolTip.AutoPopDelay;
+            Assert.Equal(persistentToolTipSupported, toolTip.IsPersistent);
+
+            toolTip.ReshowDelay = 30;
+            Assert.Equal(persistentToolTipSupported, toolTip.IsPersistent);
+        }
+
+        [WinFormsFact]
+        public void ToolTip_IsPersistent_Get_ReturnsExpected_AutoPopChanged()
+        {
+            bool persistentToolTipSupported = OsVersion.IsWindows11_OrGreater;
+
+            using var toolTip = new ToolTip();
+            // IsPersistent is not set until the tooltip window is created.
+            toolTip.AutoPopDelay = 30;
+            Assert.Equal(persistentToolTipSupported, toolTip.IsPersistent);
+
+            _ = toolTip.Handle;
+            Assert.False(toolTip.IsPersistent);
+
+            // We can not make tooltip persistent again programmatically.
+            toolTip.AutomaticDelay = toolTip.AutomaticDelay;
+            Assert.False(toolTip.IsPersistent);
         }
 
         [WinFormsTheory]
