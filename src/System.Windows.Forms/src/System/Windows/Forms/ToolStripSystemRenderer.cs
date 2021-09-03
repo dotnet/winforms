@@ -624,6 +624,14 @@ namespace System.Windows.Forms
                 VisualStyleRenderer vsRenderer = VisualStyleRenderer;
                 vsRenderer.SetParameters(toolBarElement.ClassName, toolBarElement.Part, (int)state);
                 vsRenderer.DrawBackground(g, new Rectangle(Point.Empty, item.Size));
+
+                if (!SystemInformation.HighContrast &&
+                    (state == ToolBarState.Hot || state == ToolBarState.Pressed || state == ToolBarState.Checked))
+                {
+                    var bounds = item.ClientBounds;
+                    bounds.Height -= 1;
+                    ControlPaint.DrawBorderSimple(g, bounds, SystemColors.Highlight);
+                }
             }
             else
             {
