@@ -39,6 +39,13 @@ namespace System.Windows.Forms
             => s_versionInfo.dwMajorVersion >= 10 && s_versionInfo.dwBuildNumber >= 15063;
 
         /// <summary>
+        ///  Is this Windows 11 public preview or later?
+        ///  The underlying API does not read supportedOs from the manifest, it returns the actual version.
+        /// </summary>
+        public static bool IsWindows11_OrGreater
+            => s_versionInfo.dwMajorVersion >= 10 && s_versionInfo.dwBuildNumber >= 22000;
+
+        /// <summary>
         ///  Is Windows 8.1 or later.
         /// </summary>
         public static bool IsWindows8_1OrGreater
