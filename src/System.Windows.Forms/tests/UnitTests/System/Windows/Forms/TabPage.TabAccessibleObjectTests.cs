@@ -604,6 +604,7 @@ namespace System.Windows.Forms.Tests
             Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
             pages[1].TabAccessibilityObject.DoDefaultAction();
+            Application.DoEvents();
 
             Assert.Equal(1, tabAccessibleObject.CallSelectionItemEventCount);
             Assert.Equal(1, tabAccessibleObject.CallFocusChangedEventCount);
@@ -692,6 +693,7 @@ namespace System.Windows.Forms.Tests
             pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;
 
             tabControl.SelectedTab = pages[1];
+            Application.DoEvents();
 
             Assert.Equal(1, tabAccessibleObject.CallSelectionItemEventCount);
             Assert.Equal(1, tabAccessibleObject.CallFocusChangedEventCount);
@@ -756,6 +758,7 @@ namespace System.Windows.Forms.Tests
             Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
             tabControl.SelectedIndex = 1;
+            Application.DoEvents();
 
             Assert.Equal(1, tabAccessibleObject.CallSelectionItemEventCount);
             Assert.Equal(1, tabAccessibleObject.CallFocusChangedEventCount);
@@ -860,6 +863,7 @@ namespace System.Windows.Forms.Tests
             Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
             pages[1].TabAccessibilityObject.AddToSelection();
+            Application.DoEvents();
 
             Assert.Equal(1, tabAccessibleObject.CallSelectionItemEventCount);
             Assert.Equal(1, tabAccessibleObject.CallFocusChangedEventCount);
@@ -948,6 +952,7 @@ namespace System.Windows.Forms.Tests
             Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
 
             pages[1].TabAccessibilityObject.SelectItem();
+            Application.DoEvents();
 
             Assert.Equal(1, tabAccessibleObject.CallSelectionItemEventCount);
             Assert.Equal(1, tabAccessibleObject.CallFocusChangedEventCount);
