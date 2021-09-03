@@ -1222,7 +1222,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private void DrawValueEntry(Graphics g, int row, Rectangle clipRect)
+        /// <summary>
+        ///  Draw the value for the given row.
+        /// </summary>
+        private void DrawValue(Graphics g, int row, Rectangle clipRect)
         {
             GridEntry gridEntry = GetGridEntryFromRow(row);
             if (gridEntry is null)
@@ -1249,12 +1252,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 try
                 {
                     gridEntry.PaintValue(
-                        null,
                         g,
                         rect,
                         clipRect,
-                        GridEntry.PaintValueFlags.FetchValue
-                            | GridEntry.PaintValueFlags.PaintInPlace
+                        GridEntry.PaintValueFlags.PaintInPlace
                             | GridEntry.PaintValueFlags.CheckShouldSerialize);
                 }
                 catch (Exception ex)
@@ -2420,11 +2421,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             try
             {
                 gridEntry.PaintValue(
-                    gridEntry.ConvertTextToValue(text),
                     e.GraphicsInternal,
                     drawBounds,
                     drawBounds,
-                    e.State.HasFlag(DrawItemState.Selected) ? GridEntry.PaintValueFlags.DrawSelected : default);
+                    e.State.HasFlag(DrawItemState.Selected) ? GridEntry.PaintValueFlags.DrawSelected : default,
+                    text);
             }
             catch (FormatException ex)
             {
@@ -3482,7 +3483,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             g.DrawLine(linePen, lineStart, currentRowHeight, lineEnd, currentRowHeight);
 
                             // Draw the value.
-                            DrawValueEntry(g, i, clipRect);
+                            DrawValue(g, i, clipRect);
 
                             // Draw the label.
                             Rectangle rect = GetRectangle(i, RowLabel);

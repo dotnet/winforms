@@ -8,10 +8,29 @@ namespace System.Windows.Forms.PropertyGridInternal
     {
         public enum Notify
         {
+            /// <summary>
+            ///  Asks the object to reset it's value.
+            /// </summary>
             Reset = 1,
+
+            /// <summary>
+            ///  Asks if the object's value can be reset.
+            /// </summary>
             CanReset = 2,
+
+            /// <summary>
+            ///  Tells the object of a double-click event.
+            /// </summary>
             DoubleClick = 3,
+
+            /// <summary>
+            ///  Asks if the object value should be persisted.
+            /// </summary>
             ShouldPersist = 4,
+
+            /// <summary>
+            ///  Tells the object of a return pressed event.
+            /// </summary>
             Return = 5
         }
     }

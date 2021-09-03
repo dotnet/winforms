@@ -205,7 +205,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 try
                 {
-                    object result = GetPropertyValueCore(GetValueOwner());
+                    object value = GetPropertyValue(GetValueOwner());
 
                     if (_exceptionConverter is not null)
                     {
@@ -215,7 +215,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         _exceptionEditor = null;
                     }
 
-                    return result;
+                    return value;
                 }
                 catch (Exception e)
                 {
@@ -346,19 +346,19 @@ namespace System.Windows.Forms.PropertyGridInternal
             return base.GetLabelToolTipLocation(mouseX, mouseY);
         }
 
-        protected object GetPropertyValueCore(object target)
+        private object GetPropertyValue(object owner)
         {
             if (_propertyInfo is null)
             {
                 return null;
             }
 
-            if (target is ICustomTypeDescriptor descriptor)
+            if (owner is ICustomTypeDescriptor descriptor)
             {
-                target = descriptor.GetPropertyOwner(_propertyInfo);
+                owner = descriptor.GetPropertyOwner(_propertyInfo);
             }
 
-            return _propertyInfo.GetValue(target);
+            return _propertyInfo.GetValue(owner);
         }
 
         protected void Initialize(PropertyDescriptor propInfo)
@@ -380,7 +380,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected virtual void NotifyParentChange(GridEntry entry)
+        protected virtual void NotifyParentsOfChanges(GridEntry entry)
         {
             // See if we need to notify the parent(s) up the chain.
             while (entry is PropertyDescriptorGridEntry propertyEntry
@@ -423,18 +423,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        protected internal override bool NotifyValueGivenParent(object obj, Notify type)
+        protected override bool SendNotification(object owner, Notify type)
         {
-            if (obj is ICustomTypeDescriptor descriptor)
+            if (owner is ICustomTypeDescriptor descriptor)
             {
-                obj = descriptor.GetPropertyOwner(_propertyInfo);
+                owner = descriptor.GetPropertyOwner(_propertyInfo);
             }
 
             switch (type)
             {
                 case Notify.Reset:
 
-                    SetPropertyValue(obj, null, true, string.Format(SR.PropertyGridResetValue, PropertyName));
+                    SetPropertyValue(owner, value: null, reset: true, undoText: string.Format(SR.PropertyGridResetValue, PropertyName));
                     if (_propertyValueUIItems is not null)
                     {
                         for (int i = 0; i < _propertyValueUIItems.Length; i++)
@@ -448,7 +448,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case Notify.CanReset:
                     try
                     {
-                        return _propertyInfo.CanResetValue(obj) || (_propertyValueUIItems is not null && _propertyValueUIItems.Length > 0);
+                        return _propertyInfo.CanResetValue(owner)
+                            || (_propertyValueUIItems is not null && _propertyValueUIItems.Length > 0);
                     }
                     catch
                     {
@@ -465,7 +466,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case Notify.ShouldPersist:
                     try
                     {
-                        return _propertyInfo.ShouldSerializeValue(obj);
+                        return _propertyInfo.ShouldSerializeValue(owner);
                     }
                     catch
                     {
@@ -483,13 +484,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 case Notify.Return:
                     _eventBindings ??= this.GetService<IEventBindingService>();
 
-                    if (_eventBindings is not null)
+                    if (_eventBindings?.GetEvent(_propertyInfo) is not null)
                     {
-                        EventDescriptor eventDescriptor = _eventBindings.GetEvent(_propertyInfo);
-                        if (eventDescriptor is not null)
-                        {
-                            return ViewEvent(obj, null, null, true);
-                        }
+                        return ViewEvent(owner, newHandler: null, eventDescriptor: null, alwaysNavigate: true);
                     }
 
                     break;
@@ -503,8 +500,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             base.OnComponentChanged();
 
             // If we got this it means someone called ITypeDescriptorContext.OnComponentChanged.
-            // so we need to echo that change up the inheritance change in case the owner object isn't a sited component.
-            NotifyParentChange(this);
+            // We need to echo that change up the inheritance in case the owner object isn't a sited component.
+            NotifyParentsOfChanges(this);
         }
 
         public override bool OnMouseClick(int x, int y, int count, MouseButtons button)
@@ -528,83 +525,78 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             base.PaintLabel(g, rect, clipRect, selected, paintFullLabel);
 
-            IPropertyValueUIService propValSvc = PropertyValueUIService;
+            IPropertyValueUIService uiService = PropertyValueUIService;
 
-            if (propValSvc is null)
+            if (uiService is null)
             {
                 return;
             }
 
-            _propertyValueUIItems = propValSvc.GetPropertyUIValueItems(this, _propertyInfo);
+            _propertyValueUIItems = uiService.GetPropertyUIValueItems(this, _propertyInfo);
 
-            if (_propertyValueUIItems is not null)
+            if (_propertyValueUIItems is null)
             {
-                if (_uiItemRects is null || _uiItemRects.Length != _propertyValueUIItems.Length)
-                {
-                    _uiItemRects = new Rectangle[_propertyValueUIItems.Length];
-                }
-
-                if (!s_isScalingInitialized)
-                {
-                    if (DpiHelper.IsScalingRequired)
-                    {
-                        s_scaledImageSizeX = DpiHelper.LogicalToDeviceUnitsX(ImageSize);
-                        s_scaledImageSizeY = DpiHelper.LogicalToDeviceUnitsY(ImageSize);
-                    }
-
-                    s_isScalingInitialized = true;
-                }
-
-                for (int i = 0; i < _propertyValueUIItems.Length; i++)
-                {
-                    _uiItemRects[i] = new Rectangle(
-                        rect.Right - ((s_scaledImageSizeX + 1) * (i + 1)),
-                        (rect.Height - s_scaledImageSizeY) / 2,
-                        s_scaledImageSizeX,
-                        s_scaledImageSizeY);
-                    g.DrawImage(_propertyValueUIItems[i].Image, _uiItemRects[i]);
-                }
-
-                GridEntryHost.LabelPaintMargin = (s_scaledImageSizeX + 1) * _propertyValueUIItems.Length;
+                return;
             }
+
+            if (_uiItemRects is null || _uiItemRects.Length != _propertyValueUIItems.Length)
+            {
+                _uiItemRects = new Rectangle[_propertyValueUIItems.Length];
+            }
+
+            if (!s_isScalingInitialized)
+            {
+                if (DpiHelper.IsScalingRequired)
+                {
+                    s_scaledImageSizeX = DpiHelper.LogicalToDeviceUnitsX(ImageSize);
+                    s_scaledImageSizeY = DpiHelper.LogicalToDeviceUnitsY(ImageSize);
+                }
+
+                s_isScalingInitialized = true;
+            }
+
+            for (int i = 0; i < _propertyValueUIItems.Length; i++)
+            {
+                _uiItemRects[i] = new Rectangle(
+                    rect.Right - ((s_scaledImageSizeX + 1) * (i + 1)),
+                    (rect.Height - s_scaledImageSizeY) / 2,
+                    s_scaledImageSizeX,
+                    s_scaledImageSizeY);
+                g.DrawImage(_propertyValueUIItems[i].Image, _uiItemRects[i]);
+            }
+
+            GridEntryHost.LabelPaintMargin = (s_scaledImageSizeX + 1) * _propertyValueUIItems.Length;
         }
 
-        private object SetPropertyValue(object obj, object objVal, bool reset, string undoText)
+        private object SetPropertyValue(object owner, object value, bool reset, string undoText)
         {
-            DesignerTransaction trans = null;
+            DesignerTransaction transaction = null;
             try
             {
-                object oldValue = GetPropertyValueCore(obj);
+                object oldValue = GetPropertyValue(owner);
 
-                if (objVal is not null && objVal.Equals(oldValue))
+                if (value is not null && value.Equals(oldValue))
                 {
-                    return objVal;
+                    return value;
                 }
 
                 ClearCachedValues();
 
                 IDesignerHost host = DesignerHost;
 
-                if (host is not null)
-                {
-                    string text = undoText ?? string.Format(SR.PropertyGridSetValue, _propertyInfo.Name);
-                    trans = host.CreateTransaction(text);
-                }
+                transaction = host?.CreateTransaction(undoText ?? string.Format(SR.PropertyGridSetValue, _propertyInfo.Name));
 
                 // Usually IComponent things are sited and this notification will be fired automatically by
                 // the PropertyDescriptor.  However, for non-IComponent sub objects or sub objects that are
                 // non-sited sub components, we need to manually fire the notification.
 
-                bool needChangeNotify = obj is not IComponent component || component.Site is null;
+                bool needChangeNotify = owner is not IComponent component || component.Site is null;
 
                 if (needChangeNotify)
                 {
                     try
                     {
-                        if (ComponentChangeService is not null)
-                        {
-                            ComponentChangeService.OnComponentChanging(obj, _propertyInfo);
-                        }
+                        ComponentChangeService?.OnComponentChanging(owner, _propertyInfo);
                     }
                     catch (CheckoutException coEx)
                     {
@@ -624,8 +616,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     childCount = ChildCount;
                 }
 
-                var refreshAttr = (RefreshPropertiesAttribute)_propertyInfo.Attributes[typeof(RefreshPropertiesAttribute)];
-                bool needsRefresh = wasExpanded || (refreshAttr is not null && !refreshAttr.RefreshProperties.Equals(RefreshProperties.None));
+                // See if we need to refresh the property browser.
+                var refresh = (RefreshPropertiesAttribute)_propertyInfo.Attributes[typeof(RefreshPropertiesAttribute)];
+                bool needsRefresh = wasExpanded || (refresh is not null && !refresh.RefreshProperties.Equals(RefreshProperties.None));
 
                 if (needsRefresh)
                 {
@@ -634,35 +627,31 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // Determine if this is an event being created, and if so, navigate to the event code
 
-                EventDescriptor eventDesc = null;
+                EventDescriptor eventDescriptor = null;
 
                 // This is possibly an event.  Check it out.
-                if (obj is not null && objVal is string)
+                if (owner is not null && value is string)
                 {
                     _eventBindings ??= this.GetService<IEventBindingService>();
-
-                    if (_eventBindings is not null)
-                    {
-                        eventDesc = _eventBindings.GetEvent(_propertyInfo);
-                    }
+                    eventDescriptor = _eventBindings?.GetEvent(_propertyInfo);
 
                     // For a merged set of properties, the event binding service won't
-                    // find an event.  So, we ask type descriptor directly.
-                    if (eventDesc is null)
+                    // find an event. So, we ask the type descriptor directly.
+                    if (eventDescriptor is null)
                     {
                         // If we have a merged property descriptor, pull out one of the elements.
-                        object eventObj = obj;
+                        object eventObj = owner;
 
-                        if (_propertyInfo is MergePropertyDescriptor && obj is Array)
+                        if (_propertyInfo is MergePropertyDescriptor && owner is Array)
                         {
-                            var objArray = obj as Array;
+                            var objArray = owner as Array;
                             if (objArray.Length > 0)
                             {
                                 eventObj = objArray.GetValue(0);
                             }
                         }
 
-                        eventDesc = TypeDescriptor.GetEvents(eventObj)[_propertyInfo.Name];
+                        eventDescriptor = TypeDescriptor.GetEvents(eventObj)[_propertyInfo.Name];
                     }
                 }
 
@@ -671,52 +660,44 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     if (reset)
                     {
-                        _propertyInfo.ResetValue(obj);
+                        _propertyInfo.ResetValue(owner);
                     }
-                    else if (eventDesc is not null)
+                    else if (eventDescriptor is not null)
                     {
-                        ViewEvent(obj, (string)objVal, eventDesc, false);
+                        ViewEvent(owner, (string)value, eventDescriptor, false);
                     }
                     else
                     {
                         // Not an event
-                        SetPropertyValueCore(obj, objVal);
+                        SetPropertyValueCore(owner, value);
                     }
 
                     setSuccessful = true;
 
                     // Now notify the change service that the change was successful.
-                    if (needChangeNotify && ComponentChangeService is not null)
+                    if (needChangeNotify)
                     {
-                        ComponentChangeService.OnComponentChanged(obj, _propertyInfo, oldValue: null, objVal);
+                        ComponentChangeService?.OnComponentChanged(owner, _propertyInfo, oldValue: null, value);
                     }
 
-                    NotifyParentChange(this);
+                    NotifyParentsOfChanges(this);
                 }
                 finally
                 {
-                    // See if we need to refresh the property browser
-                    //
-                    //   1) if this property has the refreshpropertiesattribute, or
-                    //   2) it's got expanded sub properties
-
                     if (needsRefresh && GridEntryHost is not null)
                     {
                         RecreateChildren(childCount);
                         if (setSuccessful)
                         {
-                            GridEntryHost.Refresh(refreshAttr is not null && refreshAttr.Equals(RefreshPropertiesAttribute.All));
+                            GridEntryHost.Refresh(refresh is not null && refresh.Equals(RefreshPropertiesAttribute.All));
                         }
                     }
                 }
             }
             catch (CheckoutException checkoutEx)
             {
-                if (trans is not null)
-                {
-                    trans.Cancel();
-                    trans = null;
-                }
+                transaction?.Cancel();
+                transaction = null;
 
                 if (checkoutEx == CheckoutException.Canceled)
                 {
@@ -727,26 +708,20 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             catch
             {
-                if (trans is not null)
-                {
-                    trans.Cancel();
-                    trans = null;
-                }
+                transaction?.Cancel();
+                transaction = null;
 
                 throw;
             }
             finally
             {
-                if (trans is not null)
-                {
-                    trans.Commit();
-                }
+                transaction?.Commit();
             }
 
-            return obj;
+            return owner;
         }
 
-        protected void SetPropertyValueCore(object obj, object value)
+        protected void SetPropertyValueCore(object obj, object newValue)
         {
             if (_propertyInfo is null)
             {
@@ -779,7 +754,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (target is not null)
                 {
-                    _propertyInfo.SetValue(target, value);
+                    _propertyInfo.SetValue(target, newValue);
 
                     // Since the value that we modified may not be stored by the parent property, we need to push this
                     // value back into the parent.  An example here is Size or Location, which return Point objects
@@ -806,9 +781,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Navigates code to the given event.
         /// </summary>
-        protected bool ViewEvent(object obj, string newHandler, EventDescriptor eventdesc, bool alwaysNavigate)
+        protected bool ViewEvent(object owner, string newHandler, EventDescriptor eventDescriptor, bool alwaysNavigate)
         {
-            object value = GetPropertyValueCore(obj);
+            object value = GetPropertyValue(owner);
 
             string handler = value as string;
 
@@ -826,14 +801,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return true;
             }
 
-            var component = obj as IComponent;
+            var component = owner as IComponent;
 
             if (component is null && _propertyInfo is MergePropertyDescriptor)
             {
-                // It's possible that multiple objects are selected, and we're trying to create an event for each of them
-                if (obj is Array objArray && objArray.Length > 0)
+                // It's possible that multiple objects are selected, and we're trying to create an event for each of them.
+                if (owner is Array array && array.Length > 0)
                 {
-                    component = objArray.GetValue(0) as IComponent;
+                    component = array.GetValue(0) as IComponent;
                 }
             }
 
@@ -847,56 +822,44 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            if (eventdesc is null)
+            if (eventDescriptor is null)
             {
                 _eventBindings ??= this.GetService<IEventBindingService>();
-
-                if (_eventBindings is not null)
-                {
-                    eventdesc = _eventBindings.GetEvent(_propertyInfo);
-                }
+                eventDescriptor = _eventBindings?.GetEvent(_propertyInfo);
             }
 
             IDesignerHost host = DesignerHost;
-            DesignerTransaction trans = null;
+            DesignerTransaction transaction = null;
 
             try
             {
                 // This check can cause exceptions if the event has unreferenced dependencies, which we want to cath.
                 // This must be done before the transaction is started or the commit/cancel will also throw.
-                if (eventdesc.EventType is null)
+                if (eventDescriptor.EventType is null)
                 {
                     return false;
                 }
 
                 if (host is not null)
                 {
-                    string compName = component.Site is not null ? component.Site.Name : component.GetType().Name;
-                    trans = DesignerHost.CreateTransaction(string.Format(SR.WindowsFormsSetEvent, $"{compName}.{PropertyName}"));
+                    string componentName = component.Site?.Name ?? component.GetType().Name;
+                    transaction = DesignerHost.CreateTransaction(string.Format(
+                        SR.WindowsFormsSetEvent,
+                        $"{componentName}.{PropertyName}"));
                 }
 
-                if (_eventBindings is null)
-                {
-                    ISite site = component.Site;
-                    if (site is not null)
-                    {
-                        _eventBindings = (IEventBindingService)site.GetService(typeof(IEventBindingService));
-                    }
-                }
+                _eventBindings ??= component.Site?.GetService<IEventBindingService>();
 
-                if (newHandler is null && _eventBindings is not null)
-                {
-                    newHandler = _eventBindings.CreateUniqueMethodName(component, eventdesc);
-                }
+                newHandler ??= _eventBindings?.CreateUniqueMethodName(component, eventDescriptor);
 
                 if (newHandler is not null)
                 {
                     // Now walk through all the matching methods to see if this one exists.
-                    // If it doesn't we'll wanna show code.
+                    // If it doesn't we'll want to show code.
                     if (_eventBindings is not null)
                     {
                         bool methodExists = false;
-                        foreach (string methodName in _eventBindings.GetCompatibleMethods(eventdesc))
+                        foreach (string methodName in _eventBindings.GetCompatibleMethods(eventDescriptor))
                         {
                             if (newHandler == methodName)
                             {
@@ -913,15 +876,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     try
                     {
-                        _propertyInfo.SetValue(obj, newHandler);
+                        _propertyInfo.SetValue(owner, newHandler);
                     }
                     catch (InvalidOperationException ex)
                     {
-                        if (trans is not null)
-                        {
-                            trans.Cancel();
-                            trans = null;
-                        }
+                        transaction?.Cancel();
+                        transaction = null;
 
                         GridEntryHost?.ShowInvalidMessage(newHandler, ex);
 
@@ -933,38 +893,31 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     s_targetBindingService = _eventBindings;
                     s_targetComponent = component;
-                    s_targetEventdesc = eventdesc;
+                    s_targetEventdesc = eventDescriptor;
                     Application.Idle += ShowCodeIdle;
                 }
             }
             catch
             {
-                if (trans is not null)
-                {
-                    trans.Cancel();
-                    trans = null;
-                }
-
+                transaction?.Cancel();
+                transaction = null;
                 throw;
             }
             finally
             {
-                if (trans is not null)
-                {
-                    trans.Commit();
-                }
+                transaction?.Commit();
             }
 
             return true;
         }
 
         /// <summary>
-        ///  Displays the user code for the given event.  This will return true if the user
+        ///  Displays the user code for the given event. This will return true if the user
         ///  code could be displayed, or false otherwise.
         /// </summary>
-        static private void ShowCodeIdle(object sender, EventArgs e)
+        private static void ShowCodeIdle(object sender, EventArgs e)
         {
-            Application.Idle -= new EventHandler(PropertyDescriptorGridEntry.ShowCodeIdle);
+            Application.Idle -= ShowCodeIdle;
             if (s_targetBindingService is not null)
             {
                 s_targetBindingService.ShowCode(s_targetComponent, s_targetEventdesc);
@@ -974,16 +927,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <summary>
-        ///  Creates a new AccessibleObject for this PropertyDescriptorGridEntry instance.
-        ///  The AccessibleObject instance returned by this method supports IsEnabled UIA property.
-        /// </summary>
-        /// <returns>
-        ///  AccessibleObject for this PropertyDescriptorGridEntry instance.
-        /// </returns>
-        protected override GridEntryAccessibleObject GetAccessibilityObject()
-        {
-            return new PropertyDescriptorGridEntryAccessibleObject(this);
-        }
+        protected override GridEntryAccessibleObject GetAccessibilityObject() => new PropertyDescriptorGridEntryAccessibleObject(this);
     }
 }
