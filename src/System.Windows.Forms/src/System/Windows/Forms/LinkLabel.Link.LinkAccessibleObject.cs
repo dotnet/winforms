@@ -93,7 +93,6 @@ namespace System.Windows.Forms
                         UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                         UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningLinkLabel.FocusLink == _owningLink,
-                        UiaCore.UIA.AccessKeyPropertyId => _linkLabelAccessibleObject.KeyboardShortcut,
                         UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
                         UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                         UiaCore.UIA.LegacyIAccessiblePatternId => IsPatternSupported(propertyID),

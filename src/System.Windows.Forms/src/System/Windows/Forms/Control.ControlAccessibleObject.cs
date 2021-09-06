@@ -506,7 +506,7 @@ namespace System.Windows.Forms
                         case UiaCore.UIA.IsPasswordPropertyId:
                             return false;
                         case UiaCore.UIA.AccessKeyPropertyId:
-                            return string.Empty;
+                            return KeyboardShortcut;
                         case UiaCore.UIA.HelpTextPropertyId:
                             return Help ?? string.Empty;
                     }

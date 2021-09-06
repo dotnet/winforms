@@ -13,6 +13,31 @@ namespace System.Windows.Forms.Tests
 {
     public class Control_ControlAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
+        // These controls return an empty "AccessKey" property because they have a ControlStyles.UseTextForAccessibility flag
+        // with "false" value, which prohibits the use of text to create the AccessKey.
+        // This behavior is consistent with .NET Framework 4.7.2
+        private static Type[] s_controlsNotUseTextForAccessibility = new Type[]
+        {
+                typeof(CheckedListBox),
+                typeof(ComboBox),
+                typeof(DataGridViewComboBoxEditingControl),
+                typeof(DataGridViewTextBoxEditingControl),
+                typeof(DateTimePicker),
+                typeof(DomainUpDown),
+                typeof(HScrollBar),
+                typeof(ListBox),
+                typeof(ListView),
+                typeof(MaskedTextBox),
+                typeof(NumericUpDown),
+                typeof(ProgressBar),
+                typeof(RichTextBox),
+                typeof(TextBox),
+                typeof(TrackBar),
+                typeof(TreeView),
+                typeof(VScrollBar),
+                typeof(WebBrowser),
+        };
+
         [WinFormsFact]
         public void ControlAccessibleObject_Ctor_ControlWithoutHandle()
         {
@@ -1192,6 +1217,24 @@ namespace System.Windows.Forms.Tests
             var accessibleObjectRole = controlAccessibleObject.Role;
 
             Assert.Equal(AccessibleRole.Link, accessibleObjectRole);
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ControlAccessibleObject_TestData))]
+        public void ControlAccessibleObject_GetPropertyValue_AccessKey_ReturnExpected(Type type)
+        {
+            using Control control = ReflectionHelper.InvokePublicConstructor<Control>(type);
+
+            if (!control.SupportsUiaProviders)
+            {
+                return;
+            }
+
+            control.Text = "&Name";
+            AccessibleObject controlAccessibleObject = control.AccessibilityObject;
+            string expectedValue = s_controlsNotUseTextForAccessibility.Contains(type) ? null : "Alt+n";
+
+            Assert.Equal(expectedValue, controlAccessibleObject.GetPropertyValue(UiaCore.UIA.AccessKeyPropertyId));
         }
 
         [WinFormsTheory]
