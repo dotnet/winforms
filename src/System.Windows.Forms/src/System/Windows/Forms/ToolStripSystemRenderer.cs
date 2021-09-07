@@ -42,7 +42,8 @@ namespace System.Windows.Forms
             {
                 if (toolStripHighContrastRenderer is null)
                 {
-                    toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(/*renderLikeSystem*/true);
+                    // If system in high contrast mode 'false' flag should be passed to render filled selected button background. This is in consistence with ToolStripProfessionalRenderer.
+                    toolStripHighContrastRenderer = new ToolStripHighContrastRenderer(systemRenderMode: false);
                 }
 
                 return toolStripHighContrastRenderer;
@@ -355,6 +356,14 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnRenderButtonBackground(ToolStripItemRenderEventArgs e)
         {
+            // If system in high contrast mode and specific renderer override is defined, use that.
+            // For ToolStripSystemRenderer in High Contrast mode the RendererOverride property will be ToolStripHighContrastRenderer.
+            if (RendererOverride is not null)
+            {
+                base.OnRenderButtonBackground(e);
+                return;
+            }
+
             RenderItemInternal(e);
         }
 
@@ -363,6 +372,14 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnRenderDropDownButtonBackground(ToolStripItemRenderEventArgs e)
         {
+            // If system in high contrast mode and specific renderer override is defined, use that.
+            // For ToolStripSystemRenderer in High Contrast mode the RendererOverride property will be ToolStripHighContrastRenderer.
+            if (RendererOverride is not null)
+            {
+                base.OnRenderDropDownButtonBackground(e);
+                return;
+            }
+
             RenderItemInternal(e);
         }
 
@@ -499,6 +516,14 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnRenderSplitButtonBackground(ToolStripItemRenderEventArgs e)
         {
+            // If system in high contrast mode and specific renderer override is defined, use that.
+            // For ToolStripSystemRenderer in High Contrast mode the RendererOverride property will be ToolStripHighContrastRenderer.
+            if (RendererOverride is not null)
+            {
+                base.OnRenderSplitButtonBackground(e);
+                return;
+            }
+
             ToolStripSplitButton splitButton = e.Item as ToolStripSplitButton;
             Graphics g = e.Graphics;
 
