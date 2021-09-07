@@ -868,7 +868,7 @@ namespace System.Windows.Forms
             // to scale in Dpi mode (during WM_DPICHANGED event).
             // This may require scaling/relayout of the form. AutoScaleFactor will take
             // AutoScaleMode into account while scaling the controls.
-            if (AutoScaleMode != AutoScaleMode.None)
+            if (AutoScaleMode != AutoScaleMode.None && IsHandleCreated)
             {
                 _currentAutoScaleDimensions = SizeF.Empty;
 

@@ -2094,40 +2094,7 @@ namespace System.Windows.Forms
             [return: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             get
             {
-                // if application is in PermonitorV2 mode and font is scaled when moved between monitors.
-                // ToDo: need to work on getting Font serialization at design time right.
-                if (ScaledControlFont is not null)
-                {
-                    return ScaledControlFont;
-                }
-
-                if (TryGetExplicitlySetFont(out Font font))
-                {
-                    return font;
-                }
-
-                font = GetParentFont();
-                if (font is not null)
-                {
-                    return font;
-                }
-
-                if (IsActiveX)
-                {
-                    font = ActiveXAmbientFont;
-                    if (font is not null)
-                    {
-                        return font;
-                    }
-                }
-
-                AmbientProperties ambient = AmbientPropertiesService;
-                if (ambient is not null && ambient.Font is not null)
-                {
-                    return ambient.Font;
-                }
-
-                return DefaultFont;
+                return GetCurrentFontAndDpi(out _);
             }
 
             [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
@@ -2162,8 +2129,6 @@ namespace System.Windows.Forms
                     // Cleanup any font handle wrapper...
                     DisposeFontHandle();
 
-                    ScaledControlFont = value;
-
                     if (Properties.ContainsInteger(s_fontHeightProperty))
                     {
                         Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
@@ -2192,7 +2157,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                // if application is in PermonitorV2 mode and font is scaled when application moved between monitor.
+                // if application is in PerMonitorV2 mode and font is scaled when application moved between monitor.
                 if (ScaledControlFont is not null)
                 {
                     if (_scaledFontWrapper is null)
@@ -2366,11 +2331,12 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_foreColorEvent, value);
         }
 
-        private Font GetParentFont()
+        private Font GetParentFont(out int fontDpi)
         {
+            fontDpi = _deviceDpi;
             if (ParentInternal is not null && ParentInternal.CanAccessProperties)
             {
-                return ParentInternal.Font;
+                return ParentInternal.GetCurrentFontAndDpi(out fontDpi);
             }
             else
             {
@@ -5790,7 +5756,7 @@ namespace System.Windows.Forms
             RECT adornmentsAfterDpiChange = default;
             CreateParams cp = CreateParams;
 
-            // We would need to get adornments metrics for both (old and new) Dpi in case application is in permonitor V2 mode and Dpi changed.
+            // We would need to get adornments metrics for both (old and new) Dpi in case application is in PerMonitorV2 mode and Dpi changed.
             AdjustWindowRectExForControlDpi(ref adornmentsAfterDpiChange, cp.Style, bMenu: false, cp.ExStyle);
 
             if (_oldDeviceDpi != _deviceDpi && OsVersion.IsWindows10_1703OrGreater)
@@ -5946,6 +5912,52 @@ namespace System.Windows.Forms
             }
 
             return found;
+        }
+
+        /// <summary>
+        /// Gets the control <see cref="Font"/>. If the font is inherited, traverse through the parent hierarchy and retreives the font.
+        /// </summary>
+        /// <param name="fontDpi">Dpi of the control for which <see cref="Font"/> is evaluated.</param>
+        /// <returns>
+        /// <para>The control's <see cref="Font"/></para>
+        /// </returns>
+        internal Font GetCurrentFontAndDpi(out int fontDpi)
+        {
+            fontDpi = _deviceDpi;
+
+            // If application is in PerMonitorV2 mode and font is scaled when moved between monitors.
+            if (ScaledControlFont is not null)
+            {
+                return ScaledControlFont;
+            }
+
+            if (TryGetExplicitlySetFont(out Font font))
+            {
+                return font;
+            }
+
+            font = GetParentFont(out fontDpi);
+            if (font is not null)
+            {
+                return font;
+            }
+
+            if (IsActiveX)
+            {
+                font = ActiveXAmbientFont;
+                if (font is not null)
+                {
+                    return font;
+                }
+            }
+
+            AmbientProperties ambient = AmbientPropertiesService;
+            if (ambient is not null && ambient.Font is not null)
+            {
+                return ambient.Font;
+            }
+
+            return DefaultFont;
         }
 
         private protected virtual IList<Rectangle> GetNeighboringToolsRectangles()
@@ -7777,12 +7789,29 @@ namespace System.Windows.Forms
                     SetWindowFont();
                 }
 
-                if (DpiHelper.IsPerMonitorV2Awareness && !(typeof(Form).IsAssignableFrom(GetType())))
+                if (DpiHelper.IsPerMonitorV2Awareness)
                 {
                     int old = _deviceDpi;
+                    Font localFont = GetCurrentFontAndDpi(out int fontDpi);
                     _deviceDpi = (int)User32.GetDpiForWindow(this);
                     if (old != _deviceDpi)
                     {
+                        if (fontDpi != _deviceDpi)
+                        {
+                            // Controls are by default font scaled.
+                            // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
+                            var factor = (float)_deviceDpi / fontDpi;
+                            ScaledControlFont = localFont.WithSize(localFont.Size * factor);
+
+                            // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
+                            // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
+                            // 'OnFontChanged' event explicitly. ex: winforms designer natively hosted in VS.
+                            if (TryGetExplicitlySetFont(out Font local) && local is not null)
+                            {
+                                Font = ScaledControlFont;
+                            }
+                        }
+
                         RescaleConstantsForDpi(old, _deviceDpi);
                     }
                 }
@@ -12213,48 +12242,49 @@ namespace System.Windows.Forms
         {
             DefWndProc(ref m);
 
-            if (IsHandleCreated)
+            _oldDeviceDpi = _deviceDpi;
+
+            // In order to support tests, will be querying Dpi from the message first.
+            int newDeviceDpi = PARAM.SignedLOWORD(m.WParam);
+
+            // On certain OS versions, for non-test scenarios, WParam may be empty.
+            if (newDeviceDpi == 0)
             {
-                _oldDeviceDpi = _deviceDpi;
+                newDeviceDpi = (int)User32.GetDpiForWindow(this);
+            }
 
-                // In order to support tests, will be querying Dpi from the message first.
-                _deviceDpi = PARAM.SignedLOWORD(m.WParam);
+            if (_oldDeviceDpi == newDeviceDpi)
+            {
+                OnDpiChangedBeforeParent(EventArgs.Empty);
+                return;
+            }
 
-                // On certain OS versions, for non-test scenarios, WParam may be empty.
-                if (_deviceDpi == 0)
+            Font localFont = GetCurrentFontAndDpi(out int fontDpi);
+            _deviceDpi = newDeviceDpi;
+
+            if (fontDpi == _deviceDpi)
+            {
+                OnDpiChangedBeforeParent(EventArgs.Empty);
+                return;
+            }
+
+            // Controls are by default font scaled.
+            // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
+            var factor = (float)_deviceDpi / fontDpi;
+            ScaledControlFont?.Dispose();
+            ScaledControlFont = localFont.WithSize(localFont.Size * factor);
+
+            // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
+            // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
+            // 'OnFontChanged' event explicitly. ex: winforms designer in VS.
+            if (TryGetExplicitlySetFont(out Font local) || this is not ContainerControl || !IsScaledByParent(this))
+            {
+                if (local is not null)
                 {
-                    _deviceDpi = (int)User32.GetDpiForWindow(this);
+                    Font = ScaledControlFont;
                 }
 
-                // Controls are by default font scaled.
-                // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
-                if (_oldDeviceDpi != _deviceDpi)
-                {
-                    var factor = (float)_deviceDpi / _oldDeviceDpi;
-                    Font localFont = Font;
-                    Font scaledFont = localFont.WithSize(localFont.Size * factor);
-
-                    // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
-                    // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
-                    // 'OnFontChanged' event explicitly. ex: winforms designer in VS.
-                    if (TryGetExplicitlySetFont(out Font local) || this is not ContainerControl || !IsScaledByParent(this))
-                    {
-                        if (local is not null)
-                        {
-                            Font = scaledFont;
-                        }
-                        else
-                        {
-                            ScaledControlFont = scaledFont;
-                        }
-
-                        RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
-                    }
-                    else
-                    {
-                        ScaledControlFont = scaledFont;
-                    }
-                }
+                RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
             }
 
             OnDpiChangedBeforeParent(EventArgs.Empty);
