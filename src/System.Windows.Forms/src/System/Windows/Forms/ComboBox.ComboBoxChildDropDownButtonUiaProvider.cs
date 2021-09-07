@@ -42,13 +42,13 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    int left = 0;
-                    int top = 0;
-                    int width = 0;
-                    int height = 0;
-                    var systemIAccessible = GetSystemIAccessibleInternal();
-                    systemIAccessible?.accLocation(out left, out top, out width, out height, COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
-                    return new Rectangle(left, top, width, height);
+                    if (GetSystemIAccessibleInternal() is not Accessibility.IAccessible systemIAccessible)
+                    {
+                        return Rectangle.Empty;
+                    }
+
+                    systemIAccessible.accLocation(out int left, out int top, out int width, out int height, COMBOBOX_DROPDOWN_BUTTON_ACC_ITEM_INDEX);
+                    return new(left, top, width, height);
                 }
             }
 
