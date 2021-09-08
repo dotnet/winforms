@@ -21,7 +21,6 @@
     "Microsoft.NET.Sdk.IL": "6.0.0-rc.2.21457.19"
   },
   "native-tools": {
-    "cmake": "3.17.3",
-    "dotnet-api-docs_net5.0": "0.0.0.3"
+    "cmake": "3.17.3"
   }
 }
