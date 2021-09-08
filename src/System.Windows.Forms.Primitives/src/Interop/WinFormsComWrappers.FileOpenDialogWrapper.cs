@@ -16,7 +16,7 @@ internal partial class Interop
             {
                 if (wrappedInstance == IntPtr.Zero)
                 {
-                    throw new ArgumentNullException(nameof(wrappedInstance));
+                    ArgumentNullException.ThrowIfNull(argument: null, nameof(wrappedInstance));
                 }
 
                 _wrappedInstance = wrappedInstance;
