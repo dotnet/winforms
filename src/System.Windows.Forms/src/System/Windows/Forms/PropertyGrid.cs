@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         private Hashtable _designerSelections;
 
         private GridEntry _defaultEntry;
-        private GridEntry _mainEntry;
+        private GridEntry _rootEntry;
         private GridEntryCollection _currentEntries;
         private object[] _currentObjects;
 
@@ -312,9 +312,9 @@ namespace System.Windows.Forms
                 }
 
                 _designerHost = value;
-                if (_mainEntry is not null)
+                if (_rootEntry is not null)
                 {
-                    _mainEntry.DesignerHost = value;
+                    _rootEntry.DesignerHost = value;
                 }
 
                 RefreshTabs(PropertyTabScope.Document);
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public AttributeCollection BrowsableAttributes
         {
-            get => _browsableAttributes ??= new(new BrowsableAttribute(browsable: true));
+            get => _browsableAttributes ??= new(BrowsableAttribute.Yes);
             set
             {
                 if (value is null || value == AttributeCollection.Empty)
@@ -391,9 +391,9 @@ namespace System.Windows.Forms
                     _browsableAttributes = new(attributes);
                 }
 
-                if (_currentObjects is not null && _currentObjects.Length > 0 && _mainEntry is not null)
+                if (_currentObjects is not null && _currentObjects.Length > 0 && _rootEntry is not null)
                 {
-                    _mainEntry.BrowsableAttributes = BrowsableAttributes;
+                    _rootEntry.BrowsableAttributes = BrowsableAttributes;
                     Refresh(clearCached: true);
                 }
             }
@@ -1022,8 +1022,8 @@ namespace System.Windows.Forms
                         // need swallow the exception in this case.
                     }
 
-                    _mainEntry?.Dispose();
-                    _mainEntry = null;
+                    _rootEntry?.Dispose();
+                    _rootEntry = null;
 
                     if (!classesSame && !GetFlag(Flags.TabsChanging) && _selectedViewTab < _viewTabButtons.Length)
                     {
@@ -1050,7 +1050,8 @@ namespace System.Windows.Forms
                     }
 
                     // Make sure we've also got events on all the objects.
-                    if (showEvents && _viewTabs is not null && _viewTabs.Length > EventsTabIndex && (_viewTabs[EventsTabIndex] is EventsTab eventsTab))
+                    if (showEvents && _viewTabs is not null && _viewTabs.Length > EventsTabIndex
+                        && (_viewTabs[EventsTabIndex] is EventsTab eventsTab))
                     {
                         showEvents = _viewTabButtons[EventsTabIndex].Visible;
                         PropertyDescriptorCollection events;
@@ -1076,7 +1077,7 @@ namespace System.Windows.Forms
                             }
 
                             // Make sure these things are sited components as well.
-                            showEvents = showEvents && (currentObject is IComponent component && component.Site is not null);
+                            showEvents = showEvents && currentObject is IComponent component && component.Site is not null;
 
                             // Make sure we've also got events on all the objects.
                             events = eventsTab.GetProperties(currentObject, attributes);
@@ -1153,7 +1154,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public GridItem SelectedGridItem
         {
-            get => _gridView.SelectedGridEntry ?? _mainEntry;
+            get => _gridView.SelectedGridEntry ?? _rootEntry;
             set => _gridView.SelectedGridEntry = (GridEntry)value;
         }
 
@@ -1592,11 +1593,11 @@ namespace System.Windows.Forms
 
         /// <summary> Collapses all the nodes in the PropertyGrid</summary>
         public void CollapseAllGridItems()
-            => _gridView.RecursivelyExpand(_mainEntry, initialize: false, expand: false, maxExpands: -1);
+            => _gridView.RecursivelyExpand(_rootEntry, initialize: false, expand: false, maxExpands: -1);
 
         private void ClearCachedProperties() => _viewTabProperties?.Clear();
 
-        internal void ClearCachedValues() => _mainEntry?.ClearCachedValues();
+        internal void ClearCachedValues() => _rootEntry?.ClearCachedValues();
 
         /// <summary>
         ///  Clears the tabs of the given <paramref name="tabScope"/> or smaller.
@@ -1851,8 +1852,8 @@ namespace System.Windows.Forms
                 _propertyPageBitmap?.Dispose();
                 _propertyPageBitmap = null;
 
-                _mainEntry?.Dispose();
-                _mainEntry = null;
+                _rootEntry?.Dispose();
+                _rootEntry = null;
 
                 if (_currentObjects is not null)
                 {
@@ -2138,7 +2139,7 @@ namespace System.Windows.Forms
         }
 
         public void ExpandAllGridItems()
-            => _gridView.RecursivelyExpand(_mainEntry, initialize: false, expand: true, PropertyGridView.MaxRecurseExpand);
+            => _gridView.RecursivelyExpand(_rootEntry, initialize: false, expand: true, PropertyGridView.MaxRecurseExpand);
 
         private static Type[] GetCommonTabs(object[] objs, PropertyTabScope tabScope)
         {
@@ -3292,7 +3293,7 @@ namespace System.Windows.Forms
                         {
                             _commandsPane.FocusLabel();
                         }
-                        else if (_mainEntry is not null)
+                        else if (_rootEntry is not null)
                         {
                             _gridView.ReverseFocus();
                         }
@@ -3317,7 +3318,7 @@ namespace System.Windows.Forms
                 if (_toolStrip.Focused)
                 {
                     // Normal stuff, just do the propsheet.
-                    if (_mainEntry is not null)
+                    if (_rootEntry is not null)
                     {
                         _gridView.Focus();
                     }
@@ -4236,17 +4237,14 @@ namespace System.Windows.Forms
 
             if (_viewTabProperties is not null && _viewTabProperties.ContainsKey(tabName))
             {
-                _mainEntry = (GridEntry)_viewTabProperties[tabName];
-                if (_mainEntry is not null)
-                {
-                    _mainEntry.Refresh();
-                }
+                _rootEntry = (GridEntry)_viewTabProperties[tabName];
+                _rootEntry?.Refresh();
             }
             else
             {
                 if (_currentObjects is not null && _currentObjects.Length > 0)
                 {
-                    _mainEntry = (GridEntry)GridEntry.Create(
+                    _rootEntry = GridEntry.CreateRootGridEntry(
                         _gridView,
                         _currentObjects,
                         new PropertyGridServiceProvider(this),
@@ -4256,10 +4254,10 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    _mainEntry = null;
+                    _rootEntry = null;
                 }
 
-                if (_mainEntry is null)
+                if (_rootEntry is null)
                 {
                     _currentEntries = new GridEntryCollection(disposeItems: false);
                     _gridView.ClearGridEntries();
@@ -4268,20 +4266,16 @@ namespace System.Windows.Forms
 
                 if (BrowsableAttributes is not null)
                 {
-                    _mainEntry.BrowsableAttributes = BrowsableAttributes;
+                    _rootEntry.BrowsableAttributes = BrowsableAttributes;
                 }
 
-                if (_viewTabProperties is null)
-                {
-                    _viewTabProperties = new Hashtable();
-                }
-
-                _viewTabProperties[tabName] = _mainEntry;
+                _viewTabProperties ??= new Hashtable();
+                _viewTabProperties[tabName] = _rootEntry;
             }
 
             // Get entries.
-            _currentEntries = _mainEntry.Children;
-            _defaultEntry = _mainEntry.DefaultChild;
+            _currentEntries = _rootEntry.Children;
+            _defaultEntry = _rootEntry.DefaultChild;
             _gridView.Invalidate();
         }
 

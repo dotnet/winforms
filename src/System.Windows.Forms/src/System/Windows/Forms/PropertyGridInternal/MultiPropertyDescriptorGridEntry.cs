@@ -19,11 +19,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             PropertyGrid ownerGrid,
             GridEntry peParent,
             object[] objectArray,
-            PropertyDescriptor[] propInfo,
+            PropertyDescriptor[] propertyDescriptors,
             bool hide)
             : base(ownerGrid, peParent, hide)
         {
-            _mergedDescriptor = new MergePropertyDescriptor(propInfo);
+            _mergedDescriptor = new MergePropertyDescriptor(propertyDescriptors);
             _objects = objectArray;
             Initialize(_mergedDescriptor);
         }
@@ -108,7 +108,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 RecreateChildren();
                 if (Expanded)
                 {
-                    GridEntryHost.Refresh(false);
+                    OwnerGridView.Refresh(false);
                 }
             }
         }
@@ -128,7 +128,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _mergedDescriptor.GetValues(_objects),
                     this,
                     _propertySort,
-                    CurrentTab);
+                    OwnerTab);
 
                 Debug.WriteLineIf(
                     CompModSwitches.DebugGridView.TraceVerbose && mergedProperties is null,
@@ -201,7 +201,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             // Now see if we need to notify the parent(s) up the chain.
             while (entry is PropertyDescriptorGridEntry propertyEntry
-                && propertyEntry._propertyInfo.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
+                && propertyEntry.PropertyDescriptor.Attributes.Contains(NotifyParentPropertyAttribute.Yes))
             {
                 // Find the next parent property with a different value owner.
                 object owner = entry.GetValueOwner();
@@ -235,7 +235,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     for (int i = 0; i < ownerArray.Length; i++)
                     {
-                        PropertyDescriptor propertyInfo = propertyEntry._propertyInfo;
+                        PropertyDescriptor propertyInfo = propertyEntry.PropertyDescriptor;
 
                         if (propertyInfo is MergePropertyDescriptor descriptor)
                         {
@@ -251,8 +251,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
                 else
                 {
-                    changeService.OnComponentChanging(owner, propertyEntry._propertyInfo);
-                    changeService.OnComponentChanged(owner, propertyEntry._propertyInfo);
+                    changeService.OnComponentChanging(owner, propertyEntry.PropertyDescriptor);
+                    changeService.OnComponentChanged(owner, propertyEntry.PropertyDescriptor);
                 }
             }
         }
@@ -261,7 +261,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             if (owner is ICustomTypeDescriptor descriptor)
             {
-                owner = descriptor.GetPropertyOwner(_propertyInfo);
+                owner = descriptor.GetPropertyOwner(PropertyDescriptor);
             }
 
             switch (notification)
@@ -309,16 +309,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 case Notify.DoubleClick:
                 case Notify.Return:
-                    Debug.Assert(_propertyInfo is MergePropertyDescriptor, "Did not get a MergePropertyDescriptor!!!");
+                    Debug.Assert(PropertyDescriptor is MergePropertyDescriptor, "Did not get a MergePropertyDescriptor!!!");
                     Debug.Assert(owner is object[], "Did not get an array of objects!!");
 
-                    if (_propertyInfo is MergePropertyDescriptor mpd)
+                    if (PropertyDescriptor is MergePropertyDescriptor mergeDescriptor)
                     {
                         _eventBindings ??= this.GetService<IEventBindingService>();
 
                         if (_eventBindings is not null)
                         {
-                            EventDescriptor eventDescriptor = _eventBindings.GetEvent(mpd[0]);
+                            EventDescriptor eventDescriptor = _eventBindings.GetEvent(mergeDescriptor[0]);
                             if (eventDescriptor is not null)
                             {
                                 return ViewEvent(owner, null, eventDescriptor, true);
@@ -338,7 +338,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool OwnersEqual(object owner1, object owner2)
         {
-            if (!(owner1 is Array))
+            if (owner1 is not Array)
             {
                 return owner1 == owner2;
             }

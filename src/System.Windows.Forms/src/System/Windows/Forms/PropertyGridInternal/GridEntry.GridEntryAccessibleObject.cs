@@ -62,7 +62,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public override string? Name => _owningGridEntry?.PropertyLabel;
 
-            public override AccessibleObject? Parent => _owningGridEntry?.GridEntryHost?.AccessibilityObject;
+            public override AccessibleObject? Parent => _owningGridEntry?.OwnerGridView?.AccessibilityObject;
 
             public override AccessibleRole Role => AccessibleRole.Cell;
 
@@ -181,7 +181,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 get
                 {
-                    if (_owningGridEntry.GridEntryHost is null || !_owningGridEntry.GridEntryHost.IsHandleCreated)
+                    if (_owningGridEntry.OwnerGridView is null || !_owningGridEntry.OwnerGridView.IsHandleCreated)
                     {
                         return base.RuntimeId;
                     }
@@ -197,7 +197,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                         _runtimeId = new int[3];
                         _runtimeId[0] = 0x2a;
-                        _runtimeId[1] = (int)(long)_owningGridEntry.GridEntryHost.InternalHandle;
+                        _runtimeId[1] = (int)(long)_owningGridEntry.OwnerGridView.InternalHandle;
                         _runtimeId[2] = GetHashCode();
                     }
 

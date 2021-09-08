@@ -36,21 +36,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_forceReadOnlyChecked)
                 {
-                    bool anyReadOnly = false;
                     foreach (object obj in (Array)_value)
                     {
-                        var readOnlyAttr = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
-                        if ((readOnlyAttr is not null && !readOnlyAttr.IsDefaultAttribute())
+                        var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
+                        if ((readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute())
                             || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
                         {
-                            anyReadOnly = true;
+                            SetForceReadOnlyFlag();
                             break;
                         }
-                    }
-
-                    if (anyReadOnly)
-                    {
-                        SetForceReadOnlyFlag();
                     }
 
                     _forceReadOnlyChecked = true;
@@ -68,7 +62,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 ChildCollection.Clear();
 
-                MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, _propertySort, CurrentTab);
+                MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, _propertySort, OwnerTab);
 
                 Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
 

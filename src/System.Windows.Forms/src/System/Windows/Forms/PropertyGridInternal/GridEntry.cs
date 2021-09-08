@@ -11,9 +11,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Drawing.Drawing2D;
-#if DEBUG
-using System.Globalization;
-#endif
 using System.Windows.Forms.Design;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -21,7 +18,7 @@ using static Interop;
 namespace System.Windows.Forms.PropertyGridInternal
 {
     /// <summary>
-    ///  Base Entry for properties to be displayed in properties window.
+    ///  Base entry for properties to be displayed in the <see cref="PropertyGridView"/>.
     /// </summary>
     internal abstract partial class GridEntry : GridItem, ITypeDescriptorContext
     {
@@ -43,7 +40,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         private EventEntry _eventList;
         private CacheItems _cacheItems;
 
-        protected TypeConverter Converter { get; set; }
+        protected TypeConverter _typeConverter;
+
         protected UITypeEditor Editor { get; set; }
 
         private GridEntry _parent;
@@ -73,10 +71,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         private static Color InvertColor(Color color)
             => Color.FromArgb(color.A, (byte)~color.R, (byte)~color.G, (byte)~color.B);
 
-        protected GridEntry(PropertyGrid owner, GridEntry parent)
+        protected GridEntry(PropertyGrid ownerGrid, GridEntry parent)
         {
             _parent = parent;
-            OwnerGrid = owner;
+            OwnerGrid = ownerGrid;
 
             Debug.Assert(OwnerGrid is not null, "GridEntry w/o PropertyGrid owner, text rendering will fail.");
 
@@ -107,9 +105,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (DpiHelper.IsScalingRequirementMet)
                 {
-                    if (GridEntryHost is not null)
+                    if (OwnerGridView is not null)
                     {
-                        return GridEntryHost.LogicalToDeviceUnits(OutlineIconPaddingDefault);
+                        return OwnerGridView.LogicalToDeviceUnits(OutlineIconPaddingDefault);
                     }
                 }
 
@@ -140,10 +138,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Gets the value of the background brush to use. Override this member to cause the entry to paint it's
         ///  background in a different color. The base implementation returns null.
         /// </summary>
-        protected virtual Color GetBackgroundColor() => GridEntryHost.BackColor;
+        protected virtual Color GetBackgroundColor() => OwnerGridView.BackColor;
 
         protected virtual Color LabelTextColor
-            => ShouldRenderReadOnly ? GridEntryHost.GrayTextColor : GridEntryHost.GetTextColor();
+            => ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : OwnerGridView.GetTextColor();
 
         /// <summary>
         ///  The set of attributes that will be used for browse filtering.
@@ -204,27 +202,39 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual PropertyTab CurrentTab
-        {
-            get => _parent?.CurrentTab;
-            set
-            {
-                if (_parent is not null)
-                {
-                    _parent.CurrentTab = value;
-                }
-            }
-        }
+        /// <summary>
+        ///  The <see cref="PropertyTab"/> that the <see cref="GridEntry"/> belongs to.
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   The root grid entry <see cref="SingleSelectRootGridEntry"/> maintains this value.
+        ///  </para>
+        /// </remarks>
+        public virtual PropertyTab OwnerTab => _parent?.OwnerTab;
 
         /// <summary>
-        ///  Returns the default child GridEntry of this item.  Usually the default property of the target object.
+        ///  Returns the default child <see cref="GridEntry"/> of this item.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   The root grid entry <see cref="SingleSelectRootGridEntry"/> maintains this value.
+        ///  </para>
+        /// </remarks>
         internal virtual GridEntry DefaultChild
         {
             get => null;
             set { }
         }
 
+        /// <summary>
+        ///  The currently active <see cref="IDesignerHost"/>, if any.
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   The root grid entry <see cref="SingleSelectRootGridEntry"/> maintains this value. The owning
+        ///   <see cref="PropertyGrid"/> will update this when <see cref="PropertyGrid.ActiveDesigner"/> is set.
+        ///  </para>
+        /// </remarks>
         internal virtual IDesignerHost DesignerHost
         {
             get => _parent?.DesignerHost;
@@ -261,7 +271,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
 
-                if (expandable && (_cacheItems is null || _cacheItems.LastValue is null) && PropertyValue is null)
+                if (expandable && _cacheItems?.LastValue is null && PropertyValue is null)
                 {
                     expandable = false;
                 }
@@ -273,7 +283,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override bool Expanded
         {
             get => InternalExpanded;
-            set => GridEntryHost.SetExpand(this, value);
+            set => OwnerGridView.SetExpand(this, value);
         }
 
         internal virtual bool ForceReadOnly => (_flags & Flags.ForceReadOnly) != 0;
@@ -319,10 +329,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Root item is hidden and should not raise events.
                 if (GridItemType != GridItemType.Root)
                 {
-                    int id = GridEntryHost.AccessibilityGetGridEntryChildID(this);
+                    int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
                     if (id >= 0)
                     {
-                        var accessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)GridEntryHost.AccessibilityObject;
+                        var accessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject)OwnerGridView.AccessibilityObject;
                         accessibleObject.NotifyClients(AccessibleEvents.StateChange, id);
                         accessibleObject.NotifyClients(AccessibleEvents.NameChange, id);
                     }
@@ -452,10 +462,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // Notify accessibility applications that keyboard focus has changed.
                     if (value == true)
                     {
-                        int id = GridEntryHost.AccessibilityGetGridEntryChildID(this);
+                        int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
                         if (id >= 0)
                         {
-                            var gridAccObj = (PropertyGridView.PropertyGridViewAccessibleObject)GridEntryHost.AccessibilityObject;
+                            var gridAccObj = (PropertyGridView.PropertyGridViewAccessibleObject)OwnerGridView.AccessibilityObject;
                             gridAccObj.NotifyClients(AccessibleEvents.Focus, id);
                             gridAccObj.NotifyClients(AccessibleEvents.Selection, id);
 
@@ -507,9 +517,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal virtual PropertyGridView GridEntryHost
+        /// <summary>
+        ///  The <see cref="PropertyGridView"/> that this <see cref="GridEntry"/> belongs to.
+        /// </summary>
+        internal virtual PropertyGridView OwnerGridView
         {
-            get => _parent?.GridEntryHost;
+            get => _parent?.OwnerGridView;
             set => throw new NotSupportedException();
         }
 
@@ -598,7 +611,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                int borderWidth = GridEntryHost.GetOutlineIconSize() + OutlineIconPadding;
+                int borderWidth = OwnerGridView.GetOutlineIconSize() + OutlineIconPadding;
                 return ((_propertyDepth + 1) * borderWidth) + 1;
             }
         }
@@ -633,8 +646,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _outlineRect;
                 }
 
-                PropertyGridView gridHost = GridEntryHost;
-                Debug.Assert(gridHost is not null, "No propEntryHost!");
+                PropertyGridView gridHost = OwnerGridView;
+                Debug.Assert(gridHost is not null, "No owner grid!");
                 int outlineSize = gridHost.GetOutlineIconSize();
                 int borderWidth = outlineSize + OutlineIconPadding;
                 int left = (_propertyDepth * borderWidth) + OutlineIconPadding / 2;
@@ -735,25 +748,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Returns the type converter for this entry.
         /// </summary>
         internal virtual TypeConverter TypeConverter
-        {
-            get
-            {
-                if (Converter is null)
-                {
-                    object value = PropertyValue;
-                    if (value is null)
-                    {
-                        Converter = TypeDescriptor.GetConverter(PropertyType);
-                    }
-                    else
-                    {
-                        Converter = TypeDescriptor.GetConverter(value);
-                    }
-                }
-
-                return Converter;
-            }
-        }
+            => _typeConverter ??= TypeDescriptor.GetConverter(PropertyValue ?? PropertyType);
 
         /// <summary>
         ///  Returns the type editor for this entry. This may return null if there is no type editor.
@@ -868,9 +863,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Create the base property entries given an object or set of objects.
+        ///  Create the root grid entry given an object or set of objects.
         /// </summary>
-        internal static IRootGridEntry Create(
+        internal static GridEntry CreateRootGridEntry(
             PropertyGridView view,
             object[] objects,
             IServiceProvider baseProvider,
@@ -878,38 +873,25 @@ namespace System.Windows.Forms.PropertyGridInternal
             PropertyTab tab,
             PropertySort initialSortType)
         {
-            IRootGridEntry entry;
-
             if (objects is null || objects.Length == 0)
             {
                 return null;
             }
 
-            try
-            {
-                if (objects.Length == 1)
-                {
-                    entry = new SingleSelectRootGridEntry(view, objects[0], baseProvider, currentHost, tab, initialSortType);
-                }
-                else
-                {
-                    entry = new MultiSelectRootGridEntry(view, objects, baseProvider, currentHost, tab, initialSortType);
-                }
-            }
-            catch (Exception e)
-            {
-                Debug.Fail(e.ToString());
-                throw;
-            }
-
-            return entry;
+            return objects.Length == 1
+                ? new SingleSelectRootGridEntry(view, objects[0], baseProvider, currentHost, tab, initialSortType)
+                : new MultiSelectRootGridEntry(view, objects, baseProvider, currentHost, tab, initialSortType);
         }
 
         /// <summary>
         ///  Populates the children of this grid entry.
         /// </summary>
+        /// <param name="useExistingChildren">
+        ///  When set to true, will check existing children to see if they need to be recreated. If they
+        ///  haven't changed, the existing children will be used.
+        /// </param>
         /// <returns>True if the children are expandable.</returns>
-        protected virtual bool CreateChildren(bool diffOldChildren = false)
+        protected virtual bool CreateChildren(bool useExistingChildren = false)
         {
             Debug.Assert(!Disposed, "Why are we creating children after we are disposed?");
 
@@ -927,7 +909,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            if (!diffOldChildren && _children is not null && _children.Count > 0)
+            if (!useExistingChildren && _children is not null && _children.Count > 0)
             {
                 return true;
             }
@@ -936,7 +918,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             bool expandable = childProperties is not null && childProperties.Length > 0;
 
-            if (diffOldChildren && _children is not null && _children.Count > 0)
+            if (useExistingChildren && _children is not null && _children.Count > 0)
             {
                 bool same = true;
                 if (childProperties.Length == _children.Count)
@@ -1008,7 +990,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             SetFlag(Flags.Disposed, true);
 
             _cacheItems = null;
-            Converter = null;
+            _typeConverter = null;
             Editor = null;
             _accessibleObject = null;
 
@@ -1027,7 +1009,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ~GridEntry() => Dispose(disposing: false);
 
         /// <summary>
-        ///  Invokes the type editor for editing this item.
+        ///  Invokes the type editor for this item.
         /// </summary>
         internal virtual void EditPropertyValue(PropertyGridView gridView)
         {
@@ -1059,10 +1041,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // If the edited property is expanded to show sub-properties, then we want to
                     // preserve the expanded states of it and all of its descendants. RecreateChildren()
                     // has logic that is supposed to do this, but it doesn't do so correctly.
-                    PropertyGridView.GridPositionData positionData = GridEntryHost.CaptureGridPositionData();
+                    PropertyGridView.GridPositionData positionData = OwnerGridView.CaptureGridPositionData();
                     InternalExpanded = false;
                     RecreateChildren();
-                    positionData.Restore(GridEntryHost);
+                    positionData.Restore(OwnerGridView);
                 }
                 else
                 {
@@ -1079,7 +1061,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 else
                 {
                     RTLAwareMessageBox.Show(
-                        GridEntryHost,
+                        OwnerGridView,
                         e.Message,
                         SR.PBRSErrorTitle,
                         MessageBoxButtons.OK,
@@ -1119,7 +1101,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Searches for a value of a given property for a value editor user.
         /// </summary>
-        public object FindPropertyValue(string propertyName, Type propertyType)
+        private object FindPropertyValue(string propertyName, Type propertyType)
         {
             object owner = GetValueOwner();
             PropertyDescriptor property = TypeDescriptor.GetProperties(owner)[propertyName];
@@ -1175,7 +1157,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return _cacheItems.LastLabelWidth;
         }
 
-        internal int GetValueTextWidth(string text, Graphics graphics, Font font)
+        public int GetValueTextWidth(string text, Graphics graphics, Font font)
         {
             if (_cacheItems is null)
             {
@@ -1216,44 +1198,19 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Returns a string with info about the currently selected <see cref="GridEntry"/>.
         /// </summary>
         public virtual string GetTestingInfo()
-        {
-            string info = "object = (";
-            string textValue = GetPropertyTextValue();
-            if (textValue is null)
-            {
-                textValue = "(null)";
-            }
-            else
-            {
-                // Make sure we clear any embedded nulls
-                textValue = textValue.Replace((char)0, ' ');
-            }
-
-            Type type = PropertyType;
-            if (type is null)
-            {
-                type = typeof(object);
-            }
-
-            info += $"{FullLabel}), property = ({PropertyLabel},{type.AssemblyQualifiedName}), value = [{textValue}], expandable = {Expandable}, readOnly = {ShouldRenderReadOnly}";
-
-            return info;
-        }
+            => $@"object = ({FullLabel}), property = ({PropertyLabel},{(PropertyType ?? typeof(object)).AssemblyQualifiedName})
+                , value = [{(GetPropertyTextValue()?.Replace('\0', ' ') ?? "null")}], expandable = {Expandable}
+                , readOnly = {ShouldRenderReadOnly}";
 
         /// <summary>
-        ///  Retrieves the type of the value for this GridEntry.
-        /// </summary>
-        public virtual Type GetValueType() => PropertyType;
-
-        /// <summary>
-        ///  Returns the child GridEntries for this item.
+        ///  Returns the child <see cref="GridEntry"/> items for this <see cref="GridEntry"/>.
         /// </summary>
         private GridEntry[] GetChildEntries()
         {
             object value = PropertyValue;
             Type objectType = PropertyType;
 
-            // We don't want to create subprops for null objects.
+            // We don't want to create child entries for null objects.
             if (value is null)
             {
                 return null;
@@ -1264,8 +1221,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             var attributes = new Attribute[BrowsableAttributes.Count];
             BrowsableAttributes.CopyTo(attributes, 0);
 
-            PropertyTab tab = CurrentTab;
-            Debug.Assert(tab is not null, "No current tab!");
+            PropertyTab ownerTab = OwnerTab;
+            Debug.Assert(ownerTab is not null, "No current tab!");
 
             try
             {
@@ -1277,19 +1234,20 @@ namespace System.Windows.Forms.PropertyGridInternal
                     forceReadOnly = readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute();
                 }
 
-                // Do we want to expose sub properties?
-                if (!TypeConverter.GetPropertiesSupported(this) && this is not IRootGridEntry)
+                if (this is not IRootGridEntry && !TypeConverter.GetPropertiesSupported(this))
                 {
-                    return entries;
+                    // We can't get properties on this sub entry.
+                    return null;
                 }
 
-                // Ask the tab if we have one.
+                // Ask the owning tab for properties if we have one.
                 PropertyDescriptorCollection properties = null;
                 PropertyDescriptor defaultProperty = null;
-                if (tab is not null)
+                if (ownerTab is not null)
                 {
-                    properties = tab.GetProperties(this, value, attributes);
-                    defaultProperty = tab.GetDefaultProperty(value);
+                    // Get properties from the 
+                    properties = ownerTab.GetProperties(this, value, attributes);
+                    defaultProperty = ownerTab.GetDefaultProperty(value);
                 }
                 else
                 {
@@ -1392,25 +1350,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
             catch (Exception e)
             {
-#if DEBUG
-                if (s_pbrsAssertPropsSwitch.Enabled)
-                {
-                    // Checked builds are not giving us enough information here.  So, output as much stuff as we can.
-                    Text.StringBuilder b = new();
-                    b.Append(string.Format(CultureInfo.CurrentCulture, "********* Debug log written on {0} ************\r\n", DateTime.Now));
-                    b.Append(string.Format(CultureInfo.CurrentCulture, "Exception '{0}' reading properties for object {1}.\r\n", e.GetType().Name, value));
-                    b.Append(string.Format(CultureInfo.CurrentCulture, "Exception Text: \r\n{0}", e.ToString()));
-                    b.Append(string.Format(CultureInfo.CurrentCulture, "Exception stack: \r\n{0}", e.StackTrace));
-                    string path = string.Format(CultureInfo.CurrentCulture, "{0}\\PropertyGrid.log", Environment.GetEnvironmentVariable("SYSTEMDRIVE"));
-                    IO.FileStream s = new(path, IO.FileMode.Append, IO.FileAccess.Write, IO.FileShare.None);
-                    IO.StreamWriter w = new(s);
-                    w.Write(b.ToString());
-                    w.Close();
-                    s.Close();
-                    RTLAwareMessageBox.Show(null, b.ToString(), string.Format(SR.PropertyGridInternalNoProp, path),
-                        MessageBoxButtons.OK, MessageBoxIcon.Error, MessageBoxDefaultButton.Button1, 0);
-                }
-#endif
                 Debug.Fail($"Failed to get properties: {e.GetType().Name},{e.Message}\n{e.StackTrace}");
             }
 
@@ -1489,7 +1428,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         protected virtual bool GetFlagSet(Flags flag) => (flag & EntryFlags) != 0;
 
-        protected Font GetFont(bool boldFont) => boldFont ? GridEntryHost.GetBoldFont() : GridEntryHost.GetBaseFont();
+        protected Font GetFont(bool boldFont) => boldFont ? OwnerGridView.GetBoldFont() : OwnerGridView.GetBaseFont();
 
         /// <summary>
         ///  Retrieves the requested service.  This may return null if the requested service is not available.
@@ -1510,13 +1449,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  Paints the label portion of this <see cref="GridEntry"/> into the given Graphics object. This is called by
-        ///  the <see cref="GridEntry"/> host (the <see cref="PropertyGridView"/>) when this <see cref="GridEntry"/> is
-        ///  to be painted.
+        ///  Paints the label portion of this <see cref="GridEntry"/> into the given <see cref="Graphics"/> object.
         /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///   This is called by the <see cref="GridEntry"/> host (the <see cref="PropertyGridView"/>) when this
+        ///   <see cref="GridEntry"/> needs to be painted.
+        ///  </para>
+        /// </remarks>
         public virtual void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
         {
-            PropertyGridView gridHost = GridEntryHost;
+            PropertyGridView gridHost = OwnerGridView;
             string label = PropertyLabel;
             int borderWidth = gridHost.GetOutlineIconSize() + OutlineIconPadding;
 
@@ -1632,7 +1575,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual void PaintOutline(Graphics g, Rectangle r)
         {
-            if (GridEntryHost.IsExplorerTreeSupported)
+            if (OwnerGridView.IsExplorerTreeSupported)
             {
                 // Draw tree-view glyphs with the current ExplorerTreeView UxTheme
 
@@ -1645,7 +1588,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _lastPaintWithExplorerStyle = true;
                 }
 
-                PaintOutlineWithExplorerTreeStyle(g, r, (GridEntryHost is not null) ? GridEntryHost.HandleInternal : IntPtr.Zero);
+                PaintOutlineWithExplorerTreeStyle(g, r, (OwnerGridView is not null) ? OwnerGridView.HandleInternal : IntPtr.Zero);
             }
             else
             {
@@ -1718,7 +1661,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Draw border area box.
-            Color penColor = GridEntryHost.GetTextColor();
+            Color penColor = OwnerGridView.GetTextColor();
 
             // Inverting text color to background to get required contrast ratio.
             if (ColorInversionNeededInHC)
@@ -1768,10 +1711,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </param>
         public virtual void PaintValue(Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags, string text = null)
         {
-            PropertyGridView gridHost = GridEntryHost;
+            PropertyGridView gridHost = OwnerGridView;
             Debug.Assert(gridHost is not null);
 
-            Color textColor = ShouldRenderReadOnly ? GridEntryHost.GrayTextColor : gridHost.GetTextColor();
+            Color textColor = ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : gridHost.GetTextColor();
             object value;
 
             if (text is null)
@@ -1883,8 +1826,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 rect.Height);
 
             backColor = paintFlags.HasFlag(PaintValueFlags.DrawSelected)
-                ? GridEntryHost.GetSelectedItemWithFocusBackColor()
-                : GridEntryHost.BackColor;
+                ? OwnerGridView.GetSelectedItemWithFocusBackColor()
+                : OwnerGridView.BackColor;
 
             User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP
                 | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
@@ -1942,7 +1885,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         public virtual bool OnMouseClick(int x, int y, int count, MouseButtons button)
         {
             // Where are we at?
-            PropertyGridView gridHost = GridEntryHost;
+            PropertyGridView gridHost = OwnerGridView;
             Debug.Assert(gridHost is not null, "No prop entry host!");
 
             // Make sure it's the left button.
@@ -2028,7 +1971,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             try
             {
-                GridEntryHost.SelectedGridEntry = this;
+                OwnerGridView.SelectedGridEntry = this;
                 return true;
             }
             catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
@@ -2169,7 +2112,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             Type type = PropertyType;
             if (type is not null && type.IsArray)
             {
-                CreateChildren(diffOldChildren: true);
+                CreateChildren(useExistingChildren: true);
             }
 
             if (_children is not null)

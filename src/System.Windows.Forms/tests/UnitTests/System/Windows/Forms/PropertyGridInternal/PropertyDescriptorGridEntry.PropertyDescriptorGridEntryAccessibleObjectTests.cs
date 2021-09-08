@@ -92,15 +92,15 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
                 _propertyGridView = propertyGridView;
             }
 
-            internal override PropertyGridView GridEntryHost => _propertyGridView;
+            internal override PropertyGridView OwnerGridView => _propertyGridView;
         }
 
         private class TestPropertyDescriptorGridEntry : PropertyDescriptorGridEntry
         {
             private GridEntryCollection _collection;
 
-            public TestPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry peParent, bool hide)
-                : base(ownerGrid, peParent, hide)
+            public TestPropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry parent, bool hide)
+                : base(ownerGrid, parent, hide)
             {
             }
 

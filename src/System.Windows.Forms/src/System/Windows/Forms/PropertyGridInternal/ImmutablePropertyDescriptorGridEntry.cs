@@ -49,7 +49,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 for (int i = 0; i < properties.Count; i++)
                 {
-                    if (_propertyInfo.Name is not null && _propertyInfo.Name.Equals(properties[i].Name))
+                    if (PropertyDescriptor.Name is not null && PropertyDescriptor.Name.Equals(properties[i].Name))
                     {
                         values[properties[i].Name] = value;
                     }

@@ -91,11 +91,14 @@ namespace System.Windows.Forms.Design
             return null;
         }
 
-        /// <inheritdoc />
         public override PropertyDescriptorCollection GetProperties(object component, Attribute[]? attributes)
             => GetProperties(context: null, component, attributes);
 
-        /// <inheritdoc />
+        /// <inheritdoc/>
+        /// <devdoc>
+        ///  The <see cref="EventsTab"/> uses <see cref="IEventBindingService.GetEventProperties(EventDescriptorCollection)"/>
+        ///  to get <paramref name="component"/> property descriptors from <see cref="TypeDescriptor.GetEvents(object)"/>.
+        /// </devdoc>
         public override PropertyDescriptorCollection GetProperties(
             ITypeDescriptorContext? context,
             object component,
@@ -106,6 +109,8 @@ namespace System.Windows.Forms.Design
                 return new(null);
             }
 
+            // By passing `noCustomTypeDesc: false` we allow the component itself to participate in getting events
+            // (if `component` implements `ICustomTypeDescriptor`).
             var componentEventProperties = eventBindingService.GetEventProperties(
                TypeDescriptor.GetEvents(component, attributes, noCustomTypeDesc: false));
 
