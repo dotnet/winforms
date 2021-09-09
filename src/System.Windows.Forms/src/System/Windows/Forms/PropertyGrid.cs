@@ -157,8 +157,6 @@ namespace System.Windows.Forms
             // and adjust its children bounds with respect to propertygrid bounds. Autoscale mode should not scale them again.
             _doNotScaleChildren = true;
 
-            SetStyle(ControlStyles.UseTextForAccessibility, false);
-
             // Static variables are problem in a child level mixed mode scenario. Changing static variables causes compatibility issues.
             // So, recalculate static variables every time property grid initialized.
             if (DpiHelper.IsPerMonitorV2Awareness)

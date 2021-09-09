@@ -62,7 +62,6 @@ namespace System.Windows.Forms
                     UiaCore.UIA.IsEnabledPropertyId => _owningLinkLabel.Enabled,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => false,
-                    UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

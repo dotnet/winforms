@@ -141,7 +141,6 @@ namespace System.Windows.Forms
                     UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UIA.HasKeyboardFocusPropertyId => _owningTabControl.Focused,
                     UIA.NamePropertyId => Name,
-                    UIA.AccessKeyPropertyId => KeyboardShortcut,
                     UIA.NativeWindowHandlePropertyId => _owningTabControl.InternalHandle,
                     UIA.IsSelectionPatternAvailablePropertyId => IsPatternSupported(UIA.SelectionPatternId),
                     UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UIA.LegacyIAccessiblePatternId),
