@@ -1433,6 +1433,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public int GetOutlineIconSize() => IsExplorerTreeSupported ? _outlineSizeExplorerTreeStyle : _outlineSize;
 
+        internal bool IsEditTextBoxCreated => _editTextBox is not null && _editTextBox.IsHandleCreated;
+
         public int GetGridEntryHeight() => RowHeight;
 
         internal int GetPropertyLocation(string propName, bool getXY, bool rowValue)

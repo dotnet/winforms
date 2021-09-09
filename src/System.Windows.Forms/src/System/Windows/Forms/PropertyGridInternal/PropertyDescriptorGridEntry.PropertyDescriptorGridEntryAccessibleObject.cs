@@ -167,7 +167,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return propertyGridView.DropDownControlHolder.AccessibilityObject;
                     }
 
-                    return propertyGridView.EditAccessibleObject;
+                    if (propertyGridView.IsEditTextBoxCreated)
+                    {
+                        return propertyGridView.EditAccessibleObject;
+                    }
                 }
 
                 return null;
@@ -199,7 +202,10 @@ namespace System.Windows.Forms.PropertyGridInternal
                         return propertyGridView.DropDownButton.AccessibilityObject;
                     }
 
-                    return propertyGridView.EditAccessibleObject;
+                    if (propertyGridView.IsEditTextBoxCreated)
+                    {
+                        return propertyGridView.EditAccessibleObject;
+                    }
                 }
 
                 return null;
