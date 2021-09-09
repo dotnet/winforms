@@ -6291,6 +6291,11 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
         <target state="translated">Benachrichtigt die Benutzer virtueller ListView-Steuerelemente, dass sie den Cache vorbereiten müssen.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
+        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
+        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">Auf die Sammlung aktivierter Steuerelemente kann nicht zugegriffen werden, wenn sich die ListView im virtuellen Modus befindet.</target>

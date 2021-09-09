@@ -68,13 +68,6 @@ namespace WinformsControlsTest
             listView2.SelectedIndexChanged += listView2_SelectedIndexChanged;
             listView2.Click += listView2_Click;
 
-            ListViewGroup listViewGroup1 = new("ListViewGroup", HorizontalAlignment.Left)
-            {
-                Header = "ListViewGroup",
-                Name = "listViewGroup1"
-            };
-            listView2.Groups.AddRange(new ListViewGroup[] { listViewGroup1 });
-
             // Create three items and three sets of subitems for each item.
             ListViewItem item1 = new("item1", 0)
             {
@@ -136,10 +129,6 @@ namespace WinformsControlsTest
             // Add the ListView to the control collection.
             Controls.Add(listView2);
             listView2.Dock = DockStyle.Bottom;
-
-            // Change a ListViewGroup's header.
-            listView2.Groups[0].HeaderAlignment = HorizontalAlignment.Center;
-            listView2.Groups[0].Header = "NewText";
         }
 
         private void AddCollapsibleGroupToListView()

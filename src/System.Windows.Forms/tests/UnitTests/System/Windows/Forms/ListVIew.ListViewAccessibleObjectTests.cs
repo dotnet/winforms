@@ -267,10 +267,16 @@ namespace System.Windows.Forms.Tests
 
             listView.Columns.Add(new ColumnHeader());
 
-            ListViewGroup listViewGroup = new("Test Group");
-            listView.Groups.Add(listViewGroup);
-            ListViewItem listViewItem1 = new("Test item 1", listViewGroup);
-            ListViewItem listViewItem2 = new("Test item 2", group: createDefaultGroup ? null : listViewGroup);
+            ListViewItem listViewItem1 = new("Test item 1");
+            ListViewItem listViewItem2 = new("Test item 2");
+
+            if (!virtualMode)
+            {
+                ListViewGroup listViewGroup = new("Test Group");
+                listView.Groups.Add(listViewGroup);
+                listViewItem1.Group = listViewGroup;
+                listViewItem2.Group = createDefaultGroup ? null : listViewGroup;
+            }
 
             if (virtualMode)
             {
@@ -342,8 +348,11 @@ namespace System.Windows.Forms.Tests
 
             listView.Columns.Add(new ColumnHeader());
 
-            ListViewGroup listViewGroup = new("Test Group");
-            listView.Groups.Add(listViewGroup);
+            if (!virtualMode)
+            {
+                ListViewGroup listViewGroup = new("Test Group");
+                listView.Groups.Add(listViewGroup);
+            }
 
             if (virtualMode)
             {
@@ -385,7 +394,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem listViewItem2 = new("Test item 2");
             ListViewItem listViewItem3 = new("Test item 3");
 
-            if (createGroup)
+            if (!virtualMode && createGroup)
             {
                 listView.Groups.Add(new ListViewGroup("Test Group"));
                 listViewItem2.Group = listView.Groups[0];
@@ -442,7 +451,7 @@ namespace System.Windows.Forms.Tests
 
             listView.Columns.Add(new ColumnHeader());
 
-            if (createGroup)
+            if (!virtualMode && createGroup)
             {
                 listView.Groups.Add(new ListViewGroup("Test Group"));
             }
@@ -508,7 +517,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem listViewItem2 = new("Test item 2");
             ListViewItem listViewItem3 = new("Test item 3");
 
-            if (createGroup)
+            if (!virtualMode && createGroup)
             {
                 listView.Groups.Add(new ListViewGroup("Test Group"));
                 listViewItem2.Group = listView.Groups[0];
@@ -579,7 +588,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem listViewItem2 = new("Test item 2");
             ListViewItem listViewItem3 = new("Test item 3");
 
-            if (createGroup)
+            if (!virtualMode && createGroup)
             {
                 listView.Groups.Add(new ListViewGroup("Test Group"));
                 listViewItem2.Group = listView.Groups[0];
@@ -634,7 +643,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem listViewItem2 = new("Test item 2");
             ListViewItem listViewItem3 = new("Test item 3");
 
-            if (createGroup)
+            if (!virtualMode && createGroup)
             {
                 listView.Groups.Add(new ListViewGroup("Test Group 1"));
                 listView.Groups.Add(new ListViewGroup("Test Group 2"));
@@ -714,7 +723,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem listViewItem2 = new("Test item 2");
             ListViewItem listViewItem3 = new("Test item 3");
 
-            if (createGroup)
+            if (!virtualMode && createGroup)
             {
                 listView.Groups.Add(new ListViewGroup("Test Group 1"));
                 listView.Groups.Add(new ListViewGroup("Test Group 2"));
@@ -792,7 +801,7 @@ namespace System.Windows.Forms.Tests
 
             listView.Columns.Add(new ColumnHeader());
 
-            if (createGroup)
+            if (!virtualMode && createGroup)
             {
                 listView.Groups.Add(new ListViewGroup("Test Group 1"));
                 listView.Groups[0].Items.Add(new ListViewItem());
@@ -848,7 +857,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem listViewItem2 = new("Test item 2");
             ListViewItem listViewItem3 = new("Test item 3");
 
-            if (createGroup)
+            if (!virtualMode && createGroup)
             {
                 listView.Groups.Add(new ListViewGroup("Test Group 1"));
                 listView.Groups.Add(new ListViewGroup("Test Group 2"));
@@ -1003,13 +1012,8 @@ namespace System.Windows.Forms.Tests
                 VirtualListSize = 4
             };
 
-            ListViewGroup listViewGroup1 = new ListViewGroup("Test1");
-            ListViewGroup listViewGroup2 = new ListViewGroup("Test2");
-            listView.Groups.Add(listViewGroup1);
-            listView.Groups.Add(listViewGroup2);
-
-            ListViewItem listItem1 = new ListViewItem(new string[] { "Item 1", "Item A" }, -1, listViewGroup1);
-            ListViewItem listItem2 = new ListViewItem("Group item 2", listViewGroup1);
+            ListViewItem listItem1 = new ListViewItem(new string[] { "Item 1", "Item A" }, -1);
+            ListViewItem listItem2 = new ListViewItem("Group item 2");
             ListViewItem listItem3 = new ListViewItem("Item 3");
             ListViewItem listItem4 = new ListViewItem(new string[] { "Item 4", "Item B" }, -1);
 
@@ -1393,7 +1397,10 @@ namespace System.Windows.Forms.Tests
             ListViewItem listItem3 = new("Item 3");
             ListViewItem listItem4 = new(new string[] { "Test Item 4", "Item B", "Item C", "Item D" }, -1);
 
-            listView.Groups.Add(listViewGroup);
+            if (!virtualMode)
+            {
+                listView.Groups.Add(listViewGroup);
+            }
 
             listView.Columns.Add(new ColumnHeader() { Name = "Column 1" });
             listView.Columns.Add(new ColumnHeader() { Name = "Column 2" });

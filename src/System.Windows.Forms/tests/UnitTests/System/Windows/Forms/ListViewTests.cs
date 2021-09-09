@@ -4577,13 +4577,12 @@ namespace System.Windows.Forms.Tests
             {
                 ShowGroups = true,
                 CheckBoxes = false,
-                VirtualMode = true,
                 VirtualListSize = 2 // we can't add items, just indicate how many we have
             };
 
             ListViewGroup group = new ListViewGroup("Test group");
             control.Groups.Add(group);
-
+            control.VirtualMode = true;
             control.RetrieveVirtualItem += (s, e) =>
             {
                 e.Item = e.ItemIndex switch
@@ -5371,7 +5370,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem listItem1 = new("Test Item 1");
             ListViewItem listItem2 = new("Test Item 2");
 
-            if (withinGroup)
+            if (!virtualMode && withinGroup)
             {
                 ListViewGroup listViewGroup = new("Test");
                 listView.Groups.Add(listViewGroup);

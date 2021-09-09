@@ -42,10 +42,7 @@ namespace System.Windows.Forms
             get => (ListViewGroup)List[index];
             set
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value, nameof(value));
 
                 if (List.Contains(value))
                 {
@@ -79,10 +76,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value, nameof(value));
 
                 if (_list is null)
                 {
@@ -121,10 +115,8 @@ namespace System.Windows.Forms
 
         public int Add(ListViewGroup group)
         {
-            if (group is null)
-            {
-                throw new ArgumentNullException(nameof(group));
-            }
+            ArgumentNullException.ThrowIfNull(group, nameof(group));
+            ThrowInvalidOperationExceptionIfVirtualMode();
 
             if (Contains(group))
             {
@@ -162,10 +154,8 @@ namespace System.Windows.Forms
 
         public void AddRange(ListViewGroup[] groups)
         {
-            if (groups is null)
-            {
-                throw new ArgumentNullException(nameof(groups));
-            }
+            ArgumentNullException.ThrowIfNull(groups, nameof(groups));
+            ThrowInvalidOperationExceptionIfVirtualMode();
 
             for (int i = 0; i < groups.Length; i++)
             {
@@ -175,10 +165,8 @@ namespace System.Windows.Forms
 
         public void AddRange(ListViewGroupCollection groups)
         {
-            if (groups is null)
-            {
-                throw new ArgumentNullException(nameof(groups));
-            }
+            ArgumentNullException.ThrowIfNull(groups, nameof(groups));
+            ThrowInvalidOperationExceptionIfVirtualMode();
 
             for (int i = 0; i < groups.Count; i++)
             {
@@ -251,10 +239,8 @@ namespace System.Windows.Forms
 
         public void Insert(int index, ListViewGroup group)
         {
-            if (group is null)
-            {
-                throw new ArgumentNullException(nameof(group));
-            }
+            ArgumentNullException.ThrowIfNull(group, nameof(group));
+            ThrowInvalidOperationExceptionIfVirtualMode();
 
             if (Contains(group))
             {
@@ -312,5 +298,13 @@ namespace System.Windows.Forms
         }
 
         public void RemoveAt(int index) => Remove(this[index]);
+
+        private void ThrowInvalidOperationExceptionIfVirtualMode()
+        {
+            if (_listView.VirtualMode)
+            {
+                throw new InvalidOperationException(SR.ListViewCannotAddGroupsToVirtualListView);
+            }
+        }
     }
 }
