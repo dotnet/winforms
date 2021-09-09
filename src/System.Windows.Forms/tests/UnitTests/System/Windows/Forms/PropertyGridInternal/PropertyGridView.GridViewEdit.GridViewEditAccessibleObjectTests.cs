@@ -31,6 +31,10 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             PropertyDescriptorGridEntry selectedGridEntry = propertyGridView.TestAccessor().Dynamic._selectedGridEntry;
 
             Assert.Equal(gridEntry.PropertyName, selectedGridEntry.PropertyName);
+            // Force the entry edit control Handle creation.
+            // GridViewEditAccessibleObject exists, if its control is already created.
+            // In UI case an entry edit control is created when an PropertyGridView gets focus.
+            Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.Edit.Handle);
 
             AccessibleObject selectedGridEntryAccessibleObject = gridEntry.AccessibilityObject;
             UiaCore.IRawElementProviderFragment editFieldAccessibleObject = selectedGridEntryAccessibleObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
@@ -54,6 +58,11 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
 
             propertyGridView.TestAccessor().Dynamic._selectedGridEntry = gridEntry;
 
+            // Force the entry edit control Handle creation.
+            // GridViewEditAccessibleObject exists, if its control is already created.
+            // In UI case an entry edit control is created when an PropertyGridView gets focus.
+            Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.Edit.Handle);
+
             UiaCore.IRawElementProviderFragment editFieldAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
             Assert.Equal("GridViewEditAccessibleObject", editFieldAccessibleObject.GetType().Name);
 
@@ -63,7 +72,9 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             propertyGridView.TestAccessor().Dynamic._dropDownHolder = dropDownHolder;
 
             dropDownHolder.SetState(0x00000002, true); // Control class States.Visible flag
+            UiaCore.IRawElementProviderFragment dropDownHolderAccessibleObject = gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
 
+            Assert.Equal("DropDownHolderAccessibleObject", dropDownHolderAccessibleObject.GetType().Name);
             Assert.True(propertyGridView.DropDownVisible);
             object previousAccessibleObject = editFieldAccessibleObject.Navigate(UiaCore.NavigateDirection.PreviousSibling);
             Assert.NotNull(previousAccessibleObject);
