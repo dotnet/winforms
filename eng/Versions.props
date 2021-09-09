@@ -43,6 +43,10 @@
     -->
     <MicrosoftNETCoreILAsmVersion>$(MicrosoftNETCoreILAsmPackageVersion)</MicrosoftNETCoreILAsmVersion>
   </PropertyGroup>
+  <!-- Docs / Intellisense -->
+  <PropertyGroup>
+    <MicrosoftPrivateIntellisenseVersion>5.0.0-preview-20201009.2</MicrosoftPrivateIntellisenseVersion>
+  </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>
     <MicrosoftDotNetGenFacadesPackageVersion>6.0.0-beta.21427.6</MicrosoftDotNetGenFacadesPackageVersion>
