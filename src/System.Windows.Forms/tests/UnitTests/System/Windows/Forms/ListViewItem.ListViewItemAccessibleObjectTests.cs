@@ -1148,11 +1148,16 @@ namespace System.Windows.Forms.Tests
                 VirtualListSize = 2
             };
 
-            ListViewGroup listViewGroup = new("Test");
-
             ListViewItem listItem1 = new("Item 1");
-            ListViewItem listItem2 = new("Item 2", group: listViewGroup);
-            listView.Groups.Add(listViewGroup);
+            ListViewItem listItem2 = new("Item 2");
+
+            if (!virtualMode)
+            {
+                ListViewGroup listViewGroup = new("Test");
+                listItem2.Group = listViewGroup;
+                listView.Groups.Add(listViewGroup);
+            }
+
             for (int i = 0; i < subItemCount; i++)
             {
                 listItem1.SubItems.Add(new ListViewSubItem() { Text = $"SubItem {i}" });
@@ -1202,13 +1207,18 @@ namespace System.Windows.Forms.Tests
                 VirtualListSize = 4
             };
 
-            ListViewGroup listViewGroup = new("Test");
-            ListViewItem listItem1 = new(new string[] { "Test Item 1", "Item A" }, -1, listViewGroup);
-            ListViewItem listItem2 = new("Group item 2", listViewGroup);
+            ListViewItem listItem1 = new(new string[] { "Test Item 1", "Item A" }, -1);
+            ListViewItem listItem2 = new("Group item 2");
             ListViewItem listItem3 = new("Item 3");
             ListViewItem listItem4 = new(new string[] { "Test Item 4", "Item B", "Item C", "Item D" }, -1);
 
-            listView.Groups.Add(listViewGroup);
+            if (!virtualMode)
+            {
+                ListViewGroup listViewGroup = new("Test");
+                listView.Groups.Add(listViewGroup);
+                listItem1.Group = listViewGroup;
+                listItem2.Group = listViewGroup;
+            }
 
             listView.Columns.Add(new ColumnHeader() { Name = "Column 1" });
             listView.Columns.Add(new ColumnHeader() { Name = "Column 2" });
@@ -1800,24 +1810,30 @@ namespace System.Windows.Forms.Tests
                 VirtualListSize = 3
             };
 
-            ListViewGroup lvgroup1 = new()
-            {
-                Header = "CollapsibleGroup1",
-                CollapsedState = ListViewGroupCollapsedState.Expanded
-            };
-
-            listView.Groups.Add(lvgroup1);
-            ListViewItem listViewItem1 = new("Item1", lvgroup1);
-
-            ListViewGroup lvgroup2 = new()
-            {
-                Header = "CollapsibleGroup2",
-                CollapsedState = ListViewGroupCollapsedState.Collapsed
-            };
-
-            ListViewItem listViewItem2 = new("Item2", lvgroup2);
+            ListViewItem listViewItem1 = new("Item1");
+            ListViewItem listViewItem2 = new("Item2");
             ListViewItem listViewItem3 = new("Item3");
-            listView.Groups.Add(lvgroup2);
+
+            if (!virtualMode)
+            {
+                ListViewGroup lvgroup1 = new()
+                {
+                    Header = "CollapsibleGroup1",
+                    CollapsedState = ListViewGroupCollapsedState.Expanded
+                };
+
+                ListViewGroup lvgroup2 = new()
+                {
+                    Header = "CollapsibleGroup2",
+                    CollapsedState = ListViewGroupCollapsedState.Collapsed
+                };
+
+                listView.Groups.Add(lvgroup1);
+                listView.Groups.Add(lvgroup2);
+
+                listViewItem1.Group = lvgroup1;
+                listViewItem2.Group = lvgroup2;
+            }
 
             if (virtualMode)
             {

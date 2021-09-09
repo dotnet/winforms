@@ -6291,6 +6291,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">通知虛擬 ListView 控制項的使用者應該準備快取區。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
+        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
+        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">當 ListView 處於虛擬模式時，無法存取已核取的項目集合。</target>

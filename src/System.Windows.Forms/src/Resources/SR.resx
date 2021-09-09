@@ -6838,4 +6838,7 @@ Stack trace where the illegal operation occurred was:
   <data name="ProfessionalColorsStatusStripBorderDescr" xml:space="preserve">
     <value>Border color to use on the top edge of the StatusStrip.</value>
   </data>
+  <data name="ListViewCannotAddGroupsToVirtualListView" xml:space="preserve">
+    <value>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</value>
+  </data>
 </root>

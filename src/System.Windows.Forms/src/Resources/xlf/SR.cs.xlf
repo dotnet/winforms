@@ -6291,6 +6291,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Upozorňuje uživatele virtuálních ovládacích prvků ListView, že by si měli připravit mezipaměť.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
+        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
+        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">Nelze získat přístup ke kolekci zaškrtnutých položek, pokud je zobrazení ListView ve virtuálním režimu.</target>
