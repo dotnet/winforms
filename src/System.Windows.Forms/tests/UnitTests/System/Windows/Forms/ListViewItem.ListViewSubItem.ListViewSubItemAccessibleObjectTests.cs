@@ -798,11 +798,15 @@ namespace System.Windows.Forms.Tests
                 VirtualListSize = 2
             };
 
-            ListViewGroup listViewGroup = new("Test");
-            listView.Groups.Add(listViewGroup);
-
             ListViewItem listItem1 = new("Item 1");
-            ListViewItem listItem2 = new("Item 2", group: listViewGroup);
+            ListViewItem listItem2 = new("Item 2");
+
+            if (!virtualMode)
+            {
+                ListViewGroup listViewGroup = new("Test");
+                listView.Groups.Add(listViewGroup);
+                listItem2.Group = listViewGroup;
+            }
 
             for (int i = 0; i < subItemCount; i++)
             {

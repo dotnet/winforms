@@ -1050,5 +1050,88 @@ namespace System.Windows.Forms.Tests
             collection.CopyTo(array, 0);
             Assert.Equal(new object[] { 1, 2, 3 }, array);
         }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListViewGroupCollection_Add_Group_DoesNotWork_IfVirtualMode(bool createControl)
+        {
+            using var listView = new ListView() { VirtualMode = true };
+
+            if (createControl)
+            {
+                listView.CreateControl();
+            }
+
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.Add(new ListViewGroup()));
+            Assert.Equal(createControl, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListViewGroupCollection_Add_Key_HeaderText_DoesNotWork_IfVirtualMode(bool createControl)
+        {
+            using var listView = new ListView() { VirtualMode = true };
+
+            if (createControl)
+            {
+                listView.CreateControl();
+            }
+
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.Add(key: "key", headerText: "text" ));
+            Assert.Equal(createControl, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListViewGroupCollection_AddRange_GroupsArray_DoesNotWork_IfVirtualMode(bool createControl)
+        {
+            using var listView = new ListView() { VirtualMode = true };
+
+            if (createControl)
+            {
+                listView.CreateControl();
+            }
+
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.AddRange(new ListViewGroup[] { new(), new () }));
+            Assert.Equal(createControl, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListViewGroupCollection_AddRange_ListViewGroupCollection_DoesNotWork_IfVirtualMode(bool createControl)
+        {
+            using var listView = new ListView() { VirtualMode = true };
+            using var listViewSource = new ListView();
+            ListViewGroupCollection sourceGroup = new(listViewSource);
+            sourceGroup.AddRange(new ListViewGroup[] { new(), new() } );
+
+            if (createControl)
+            {
+                listView.CreateControl();
+            }
+
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.AddRange(sourceGroup));
+            Assert.Equal(createControl, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ListViewGroupCollection_Insert_DoesNotWork_IfVirtualMode(bool createControl)
+        {
+            using var listView = new ListView() { VirtualMode = true };
+
+            if (createControl)
+            {
+                listView.CreateControl();
+            }
+
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.Insert(0, new ListViewGroup()));
+            Assert.Equal(createControl, listView.IsHandleCreated);
+        }
     }
 }
