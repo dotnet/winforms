@@ -1245,7 +1245,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 PropertyDescriptor defaultProperty = null;
                 if (ownerTab is not null)
                 {
-                    // Get properties from the 
                     properties = ownerTab.GetProperties(this, value, attributes);
                     defaultProperty = ownerTab.GetDefaultProperty(value);
                 }
