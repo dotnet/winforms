@@ -17,8 +17,6 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UIA propertyID)
                 => propertyID switch
                 {
-                    UIA.NamePropertyId
-                        => Name,
                     UIA.AutomationIdPropertyId
                         => Owner.Name,
                     UIA.ControlTypePropertyId

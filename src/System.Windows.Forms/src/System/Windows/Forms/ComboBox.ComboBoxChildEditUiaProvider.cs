@@ -85,10 +85,6 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.RuntimeIdPropertyId:
-                        return RuntimeId;
-                    case UiaCore.UIA.BoundingRectanglePropertyId:
-                        return Bounds;
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.EditControlTypeId;
                     case UiaCore.UIA.NamePropertyId:
@@ -103,20 +99,12 @@ namespace System.Windows.Forms
                         return _owner.Enabled;
                     case UiaCore.UIA.AutomationIdPropertyId:
                         return COMBO_BOX_EDIT_AUTOMATION_ID;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
                     case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:
                         return _handle;
                     case UiaCore.UIA.IsOffscreenPropertyId:
                         return false;
-                    case UiaCore.UIA.IsTextPatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.TextPatternId);
-                    case UiaCore.UIA.IsTextPattern2AvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.TextPattern2Id);
-                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.ValuePatternId);
                     default:
                         return base.GetPropertyValue(propertyID);
                 }

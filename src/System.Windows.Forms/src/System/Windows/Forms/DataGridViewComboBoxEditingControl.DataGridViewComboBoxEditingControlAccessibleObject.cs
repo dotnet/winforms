@@ -71,16 +71,6 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                if (propertyID == UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId)
-                {
-                    return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
-
             internal override UiaCore.ExpandCollapseState ExpandCollapseState
             {
                 get

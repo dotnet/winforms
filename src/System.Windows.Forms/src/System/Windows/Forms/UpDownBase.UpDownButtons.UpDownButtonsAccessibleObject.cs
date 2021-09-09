@@ -64,9 +64,6 @@ namespace System.Windows.Forms
 
                 internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId => Name,
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-                    UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
                     UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
                     UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
                     _ => base.GetPropertyValue(propertyID),

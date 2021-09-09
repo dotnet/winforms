@@ -124,18 +124,12 @@ namespace System.Windows.Forms
                         // has the "edit" control type, and it supports the Text pattern. And its owning subitem accessible
                         // object has the "text" control type, because it is just a container for the edit field.
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TextControlTypeId,
-                        UiaCore.UIA.NamePropertyId => Name,
                         UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                         UiaCore.UIA.ProcessIdPropertyId => Environment.ProcessId,
                         UiaCore.UIA.AutomationIdPropertyId => AutomationId,
-                        UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && _owningListView.FocusedItem == _owningItem,
                         UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
-                        UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
-                        UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
-                        UiaCore.UIA.IsGridItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridItemPatternId),
-                        UiaCore.UIA.IsTableItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TableItemPatternId),
                         _ => base.GetPropertyValue(propertyID)
                     };
 

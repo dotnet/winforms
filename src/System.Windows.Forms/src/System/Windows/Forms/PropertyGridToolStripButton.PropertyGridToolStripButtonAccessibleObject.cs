@@ -22,13 +22,6 @@ namespace System.Windows.Forms
             internal override bool IsItemSelected
                 => _owningPropertyGridToolStripButton.Checked;
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                => propertyID switch
-                {
-                    UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.SelectionItemPatternId),
-                    _ => base.GetPropertyValue(propertyID)
-                };
-
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 => patternId switch
                 {

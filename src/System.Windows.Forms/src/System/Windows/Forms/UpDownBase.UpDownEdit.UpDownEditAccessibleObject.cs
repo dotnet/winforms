@@ -34,14 +34,6 @@ namespace System.Windows.Forms
 
                 public override string? KeyboardShortcut => _parent.AccessibilityObject.KeyboardShortcut;
 
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                    => propertyID switch
-                    {
-                        UiaCore.UIA.IsTextPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPatternId),
-                        UiaCore.UIA.IsTextPattern2AvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPattern2Id),
-                        _ => base.GetPropertyValue(propertyID),
-                    };
-
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
                     => patternId switch
                     {

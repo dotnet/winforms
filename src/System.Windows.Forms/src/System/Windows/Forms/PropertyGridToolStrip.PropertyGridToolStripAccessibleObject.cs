@@ -54,7 +54,6 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ToolBarControlTypeId,
-                    UiaCore.UIA.NamePropertyId => Name,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

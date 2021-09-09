@@ -182,20 +182,15 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                     UiaCore.UIA.AutomationIdPropertyId => AutomationId,
-                    UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
                     UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
                     UiaCore.UIA.LegacyIAccessibleNamePropertyId => Name,
                     UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.GroupControlTypeId,
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningListView.Focused && Focused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
-                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
-                    UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

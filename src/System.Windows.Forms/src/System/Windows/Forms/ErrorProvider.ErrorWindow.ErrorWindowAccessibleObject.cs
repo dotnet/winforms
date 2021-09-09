@@ -81,20 +81,12 @@ namespace System.Windows.Forms
                 {
                     switch (propertyID)
                     {
-                        case UiaCore.UIA.RuntimeIdPropertyId:
-                            return RuntimeId;
                         case UiaCore.UIA.ControlTypePropertyId:
                             return UiaCore.UIA.GroupControlTypeId;
-                        case UiaCore.UIA.NamePropertyId:
-                            return Name;
-                        case UiaCore.UIA.HelpTextPropertyId:
-                            return Help;
                         case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
                             return State;
                         case UiaCore.UIA.NativeWindowHandlePropertyId:
                             return _owner.Handle;
-                        case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
-                            return IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
                         default:
                             return base.GetPropertyValue(propertyID);
                     }

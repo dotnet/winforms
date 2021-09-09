@@ -142,10 +142,6 @@ namespace System.Windows.Forms
                         => UiaCore.UIA.DataItemControlTypeId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         => IsEnabled,
-                    UiaCore.UIA.IsGridItemPatternAvailablePropertyId
-                        => IsPatternSupported(UiaCore.UIA.GridItemPatternId),
-                    UiaCore.UIA.IsTableItemPatternAvailablePropertyId
-                        => IsPatternSupported(UiaCore.UIA.TableItemPatternId),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

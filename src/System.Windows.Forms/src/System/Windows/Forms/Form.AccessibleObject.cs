@@ -33,7 +33,6 @@ namespace System.Windows.Forms
             {
                 return propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId => Name,
                     // Unlike other controls, here the default "ControlType" doesn't correspond the value from the mapping
                     // depending on the default Role.
                     // In other cases "ControlType" will reflect changes to Form.AccessibleRole (i.e. if it is set to a custom role).

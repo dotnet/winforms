@@ -127,8 +127,6 @@ namespace System.Windows.Forms
                         return _owningListBox.AccessibleRole == AccessibleRole.Default
                                ? UiaCore.UIA.ListControlTypeId
                                : base.GetPropertyValue(propertyID);
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         bool result = _owningListBox.HasKeyboardFocus && _owningListBox.Focused;
                         if (GetChildCount() > 0)
@@ -137,18 +135,6 @@ namespace System.Windows.Forms
                         }
 
                         return result;
-                    case UiaCore.UIA.NativeWindowHandlePropertyId:
-                        return _owningListBox.InternalHandle;
-                    case UiaCore.UIA.IsSelectionPatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.SelectionPatternId);
-                    case UiaCore.UIA.IsScrollPatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.ScrollPatternId);
-                    case UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId);
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _owningListBox.Enabled;
-                    case UiaCore.UIA.RuntimeIdPropertyId:
-                        return RuntimeId;
                     default:
                         return base.GetPropertyValue(propertyID);
                 }

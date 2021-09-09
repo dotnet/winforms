@@ -45,7 +45,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.PaneControlTypeId,
-                    UiaCore.UIA.NamePropertyId => Name,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

@@ -77,7 +77,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
             {
                 UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
-                UiaCore.UIA.NamePropertyId => Name,
                 UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => true,
                 UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
                 _ => base.GetPropertyValue(propertyID),

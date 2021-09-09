@@ -50,17 +50,6 @@ namespace System.Windows.Forms
                     }
                 }
 
-                internal override object GetPropertyValue(UiaCore.UIA propertyID)
-                {
-                    switch (propertyID)
-                    {
-                        case UiaCore.UIA.IsOffscreenPropertyId:
-                            return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
-                    }
-
-                    return base.GetPropertyValue(propertyID);
-                }
-
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
                     if (patternId == UiaCore.UIA.ExpandCollapsePatternId ||

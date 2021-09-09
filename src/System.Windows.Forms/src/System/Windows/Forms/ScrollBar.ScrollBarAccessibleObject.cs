@@ -134,7 +134,6 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.AutomationIdPropertyId => _owningScrollBar.Name,
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
@@ -142,11 +141,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => _owningScrollBar.AccessibleRole == AccessibleRole.Default
                                                          ? UiaCore.UIA.ScrollBarControlTypeId
                                                          : base.GetPropertyValue(propertyID),
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-                    UiaCore.UIA.IsEnabledPropertyId => _owningScrollBar.Enabled,
-                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningScrollBar.Focused,
-                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

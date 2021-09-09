@@ -496,18 +496,12 @@ namespace System.Windows.Forms
             {
                 switch (propertyId)
                 {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return Owner?.DataGridView?.Enabled ?? false;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                     case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
                 }

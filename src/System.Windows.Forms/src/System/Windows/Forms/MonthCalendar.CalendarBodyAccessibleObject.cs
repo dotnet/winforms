@@ -141,8 +141,6 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TableControlTypeId,
-                    UiaCore.UIA.IsGridPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridPatternId),
-                    UiaCore.UIA.IsTablePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TablePatternId),
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
                     _ => base.GetPropertyValue(propertyID)
                 };

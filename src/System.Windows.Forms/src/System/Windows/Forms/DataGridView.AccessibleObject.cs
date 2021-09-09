@@ -236,22 +236,14 @@ namespace System.Windows.Forms
                         return _ownerDataGridView.AccessibleRole == AccessibleRole.Default
                                ? UiaCore.UIA.DataGridControlTypeId
                                : base.GetPropertyValue(propertyID);
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         // If no inner cell entire DGV should be announced as focused by Narrator.
                         // Else only inner cell should be announced as focused by Narrator but not entire DGV.
                         return RowCount == 0;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return _ownerDataGridView.CanFocus;
-                    case UiaCore.UIA.IsEnabledPropertyId:
-                        return _ownerDataGridView.Enabled;
                     case UiaCore.UIA.IsControlElementPropertyId:
                         return true;
-                    case UiaCore.UIA.IsTablePatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.TablePatternId);
-                    case UiaCore.UIA.IsGridPatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.GridPatternId);
                     case UiaCore.UIA.ItemStatusPropertyId:
                         // Whether the _ownerDataGridView DataGridView can be sorted by some column.
                         // If so, provide not-sorted/sorted-by item status.

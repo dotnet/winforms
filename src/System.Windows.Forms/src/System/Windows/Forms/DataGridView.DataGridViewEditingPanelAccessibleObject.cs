@@ -91,8 +91,6 @@ namespace System.Windows.Forms
                         return _ownerDataGridView.CurrentCell is not null;
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _ownerDataGridView.Enabled;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return false;
                     case UiaCore.UIA.IsControlElementPropertyId:
                     case UiaCore.UIA.IsContentElementPropertyId:
                         return true;

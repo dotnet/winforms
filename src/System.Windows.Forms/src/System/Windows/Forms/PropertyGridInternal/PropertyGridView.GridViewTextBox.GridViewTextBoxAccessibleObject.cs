@@ -83,16 +83,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                 {
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.EditControlTypeId,
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => Owner.Focused,
                     UiaCore.UIA.IsEnabledPropertyId => !IsReadOnly,
                     UiaCore.UIA.ClassNamePropertyId => Owner.GetType().ToString(),
                     UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
-                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
-                    UiaCore.UIA.IsTextPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPatternId),
-                    UiaCore.UIA.IsTextPattern2AvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPattern2Id),
                     _ => base.GetPropertyValue(propertyID),
                 };
 

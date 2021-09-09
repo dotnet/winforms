@@ -25,8 +25,6 @@ namespace System.Windows.Forms
                 {
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                 }
 
                 return base.GetPropertyValue(propertyID);

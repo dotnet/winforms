@@ -472,6 +472,10 @@ namespace System.Windows.Forms
                         // "ControlType" value depends on owner's AccessibleRole value.
                         // See: docs/accessibility/accessible-role-controltype.md
                         return AccessibleRoleControlTypeMap.GetControlType(Role);
+                    case UiaCore.UIA.NativeWindowHandlePropertyId:
+                        return Owner.InternalHandle;
+                    case UiaCore.UIA.IsEnabledPropertyId:
+                        return Owner.Enabled;
                 }
 
                 if (Owner.SupportsUiaProviders)
@@ -480,13 +484,10 @@ namespace System.Windows.Forms
                     {
                         case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                             return Owner.CanSelect;
-                        case UiaCore.UIA.IsOffscreenPropertyId:
                         case UiaCore.UIA.IsPasswordPropertyId:
                             return false;
                         case UiaCore.UIA.AccessKeyPropertyId:
                             return KeyboardShortcut;
-                        case UiaCore.UIA.HelpTextPropertyId:
-                            return Help ?? string.Empty;
                     }
                 }
 

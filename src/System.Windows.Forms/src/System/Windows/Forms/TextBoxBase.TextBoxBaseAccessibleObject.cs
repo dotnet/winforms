@@ -31,15 +31,6 @@ namespace System.Windows.Forms
                     _ => base.IsPatternSupported(patternId)
                 };
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID) =>
-                propertyID switch
-                {
-                    UiaCore.UIA.IsTextPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPatternId),
-                    UiaCore.UIA.IsTextPattern2AvailablePropertyId => IsPatternSupported(UiaCore.UIA.TextPattern2Id),
-                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
-                    _ => base.GetPropertyValue(propertyID)
-                };
-
             internal override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
         }
     }

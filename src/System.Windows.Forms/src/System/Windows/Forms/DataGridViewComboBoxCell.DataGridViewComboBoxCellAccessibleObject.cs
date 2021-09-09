@@ -25,7 +25,6 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => IsInComboBoxMode
                                                             ? UiaCore.UIA.ComboBoxControlTypeId
                                                             : UiaCore.UIA.DataItemControlTypeId,
-                    UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
                     _ => base.GetPropertyValue(propertyID)
                 };
 

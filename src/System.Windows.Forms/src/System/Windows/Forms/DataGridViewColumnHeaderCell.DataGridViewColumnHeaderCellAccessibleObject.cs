@@ -277,13 +277,10 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyId)
                 => propertyId switch
                 {
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HeaderControlTypeId,
                     UiaCore.UIA.IsEnabledPropertyId => Owner?.DataGridView?.Enabled ?? false,
-                    UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     var x when x == UiaCore.UIA.HasKeyboardFocusPropertyId || x == UiaCore.UIA.IsPasswordPropertyId => false,
-                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.AccessKeyPropertyId => string.Empty,
                     _ => base.GetPropertyValue(propertyId)
                 };
