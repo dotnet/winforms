@@ -23,27 +23,27 @@ namespace System.Windows.Forms.PropertyGridInternal
         private GridEntry _defaultEntry;
         private IDesignerHost _host;
         private IServiceProvider _baseProvider;
-        private PropertyTab _tab;
-        private PropertyGridView _gridEntryHost;
+        private PropertyTab _ownerTab;
+        private PropertyGridView _ownerGridView;
         private AttributeCollection _browsableAttributes;
         private IComponentChangeService _changeService;
         protected bool _forceReadOnlyChecked;
 
         internal SingleSelectRootGridEntry(
-            PropertyGridView gridEntryHost,
+            PropertyGridView ownerGridView,
             object value,
             GridEntry parent,
             IServiceProvider baseProvider,
             IDesignerHost host,
-            PropertyTab tab,
+            PropertyTab ownerTab,
             PropertySort sortType)
-            : base(gridEntryHost.OwnerGrid, parent)
+            : base(ownerGridView.OwnerGrid, parent)
         {
             Debug.Assert(value is not null, "Can't browse a null object!");
             _host = host;
-            _gridEntryHost = gridEntryHost;
+            _ownerGridView = ownerGridView;
             _baseProvider = baseProvider;
-            _tab = tab;
+            _ownerTab = ownerTab;
             _value = value;
             _valueClassName = TypeDescriptor.GetClassName(_value);
 
@@ -114,19 +114,15 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override IComponentChangeService ComponentChangeService
             => _changeService ?? this.GetService<IComponentChangeService>();
 
-        public override PropertyTab CurrentTab
-        {
-            get => _tab;
-            set => _tab = value;
-        }
+        public override PropertyTab OwnerTab => _ownerTab;
 
-        internal override GridEntry DefaultChild
+        internal sealed override GridEntry DefaultChild
         {
             get => _defaultEntry;
             set => _defaultEntry = value;
         }
 
-        internal override IDesignerHost DesignerHost
+        internal sealed override IDesignerHost DesignerHost
         {
             get => _host;
             set => _host = value;
@@ -148,14 +144,14 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _forceReadOnlyChecked = true;
                 }
 
-                return base.ForceReadOnly || (GridEntryHost is not null && !GridEntryHost.Enabled);
+                return base.ForceReadOnly || (OwnerGridView is not null && !OwnerGridView.Enabled);
             }
         }
 
-        internal override PropertyGridView GridEntryHost
+        internal override PropertyGridView OwnerGridView
         {
-            get => _gridEntryHost;
-            set => _gridEntryHost = value;
+            get => _ownerGridView;
+            set => _ownerGridView = value;
         }
 
         public override GridItemType GridItemType => GridItemType.Root;
@@ -213,8 +209,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 _host = null;
                 _baseProvider = null;
-                _tab = null;
-                _gridEntryHost = null;
+                _ownerTab = null;
+                _ownerGridView = null;
                 _changeService = null;
             }
 

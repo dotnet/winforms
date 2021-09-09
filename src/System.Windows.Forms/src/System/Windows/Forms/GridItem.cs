@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         public abstract GridItemCollection GridItems { get; }
 
         /// <summary>
-        ///  Retrieves type of this <see cref="GridItem"/>.
+        ///  Retrieves the type of this <see cref="GridItem"/>.
         /// </summary>
         public abstract GridItemType GridItemType { get; }
 

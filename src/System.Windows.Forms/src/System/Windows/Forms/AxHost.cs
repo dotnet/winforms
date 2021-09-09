@@ -2712,15 +2712,11 @@ namespace System.Windows.Forms
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents()
-        {
-            return TypeDescriptor.GetEvents(this, true);
-        }
+            => TypeDescriptor.GetEvents(this, noCustomTypeDesc: true);
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         EventDescriptorCollection ICustomTypeDescriptor.GetEvents(Attribute[] attributes)
-        {
-            return TypeDescriptor.GetEvents(this, attributes, true);
-        }
+            => TypeDescriptor.GetEvents(this, attributes, noCustomTypeDesc: true);
 
         private void OnIdle(object sender, EventArgs e)
         {

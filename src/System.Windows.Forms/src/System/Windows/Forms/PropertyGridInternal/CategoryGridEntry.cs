@@ -86,7 +86,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         protected override GridEntryAccessibleObject GetAccessibilityObject() => new CategoryGridEntryAccessibleObject(this);
 
-        protected override Color GetBackgroundColor() => GridEntryHost.GetLineColor();
+        protected override Color GetBackgroundColor() => OwnerGridView.GetLineColor();
 
         protected override Color LabelTextColor => OwnerGrid.CategoryForeColor;
 
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                PropertyGridView gridHost = GridEntryHost;
+                PropertyGridView gridHost = OwnerGridView;
 
                 // Give an extra pixel for breathing room.
                 // Calling base.PropertyDepth to avoid the -1 in the override.
