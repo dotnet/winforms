@@ -1439,6 +1439,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public virtual int GetLabelWidth() => InternalLabelWidth;
 
+        internal bool IsEditTextBoxCreated => _edit is not null && _edit.IsHandleCreated;
+
         internal bool IsExplorerTreeSupported => OwnerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
 
         public virtual int GetOutlineIconSize() => IsExplorerTreeSupported ? _outlineSizeExplorerTreeStyle : _outlineSize;
