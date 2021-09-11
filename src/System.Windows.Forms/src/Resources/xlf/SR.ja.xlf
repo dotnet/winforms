@@ -6293,7 +6293,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
         <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <target state="translated">ListView が仮想モードにある場合は、ListView グループ コレクションにグループを追加することはできません。</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
