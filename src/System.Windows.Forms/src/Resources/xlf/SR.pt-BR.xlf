@@ -6293,7 +6293,7 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       </trans-unit>
       <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
         <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <target state="translated">Você não pode adicionar grupos à coleção de grupos ListView quando o ListView estiver no modo virtual.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
