@@ -5,7 +5,7 @@
 using Xunit;
 using static Interop;
 
-namespace System.Windows.Forms.Tests.AccessibleObjects
+namespace System.Windows.Forms.Tests
 {
     public class ErrorProviderAccessibleObjectTests : IDisposable, IClassFixture<ThreadExceptionFixture>
     {
