@@ -117,7 +117,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                if (_mergedDescriptor.PropertyType.IsValueType || (EntryFlags & Flags.Immutable) != 0)
+                if (_mergedDescriptor.PropertyType.IsValueType || EntryFlags.HasFlag(Flags.Immutable))
                 {
                     return base.CreateChildren(diffOldChildren);
                 }
@@ -155,7 +155,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         internal override object GetValueOwnerInternal()
-            => _mergedDescriptor.PropertyType.IsValueType || (EntryFlags & Flags.Immutable) != 0
+            => _mergedDescriptor.PropertyType.IsValueType || EntryFlags.HasFlag(Flags.Immutable)
                 ? base.GetValueOwnerInternal()
                 : _mergedDescriptor.GetValues(_objects);
 

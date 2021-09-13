@@ -71,7 +71,7 @@ namespace System.Windows.Forms
         private GridEntry _defaultEntry;
         private GridEntry _rootEntry;
         private GridEntryCollection _currentEntries;
-        private object[] _currentObjects;
+        private object[] _selectedObjects;
 
         private int _paintFrozen;
         private Color _lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
@@ -389,7 +389,7 @@ namespace System.Windows.Forms
                     _browsableAttributes = new(attributes);
                 }
 
-                if (_currentObjects is not null && _currentObjects.Length > 0 && _rootEntry is not null)
+                if (_selectedObjects is not null && _selectedObjects.Length > 0 && _rootEntry is not null)
                 {
                     _rootEntry.BrowsableAttributes = BrowsableAttributes;
                     Refresh(clearCached: true);
@@ -901,7 +901,7 @@ namespace System.Windows.Forms
         [TypeConverter(typeof(SelectedObjectConverter))]
         public object SelectedObject
         {
-            get => _currentObjects is null || _currentObjects.Length == 0 ? null : _currentObjects[0];
+            get => _selectedObjects is null || _selectedObjects.Length == 0 ? null : _selectedObjects[0];
             set => SelectedObjects = value is null ? Array.Empty<object>() : (new object[] { value });
         }
 
@@ -909,7 +909,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public object[] SelectedObjects
         {
-            get => _currentObjects is null ? Array.Empty<object>() : (object[])_currentObjects.Clone();
+            get => _selectedObjects is null ? Array.Empty<object>() : (object[])_selectedObjects.Clone();
             set
             {
                 using var _ = new FreezePaintScope(this);
@@ -944,16 +944,16 @@ namespace System.Windows.Forms
                 }
 
                 // Make sure we actually changed something before we inspect tabs.
-                if (_currentObjects is not null
+                if (_selectedObjects is not null
                     && value is not null
-                    && _currentObjects.Length == value.Length)
+                    && _selectedObjects.Length == value.Length)
                 {
                     isSame = true;
                     classesSame = true;
 
                     for (int i = 0; i < value.Length && (isSame || classesSame); i++)
                     {
-                        if (isSame && _currentObjects[i] != value[i])
+                        if (isSame && _selectedObjects[i] != value[i])
                         {
                             isSame = false;
                         }
@@ -1002,7 +1002,7 @@ namespace System.Windows.Forms
                     // objects. Set it to null to avoid leaks.
                     _defaultEntry = null;
 
-                    _currentObjects = value is null ? Array.Empty<object>() : (object[])value.Clone();
+                    _selectedObjects = value is null ? Array.Empty<object>() : (object[])value.Clone();
 
                     SinkPropertyNotifyEvents();
                     SetFlag(Flags.PropertiesChanged, true);
@@ -1056,11 +1056,11 @@ namespace System.Windows.Forms
                         var attributes = new Attribute[BrowsableAttributes.Count];
                         BrowsableAttributes.CopyTo(attributes, 0);
 
-                        HashSet<Type> eventTypes = _currentObjects.Length > 10 ? new() : null;
+                        HashSet<Type> eventTypes = _selectedObjects.Length > 10 ? new() : null;
 
-                        for (int i = 0; i < _currentObjects.Length && showEvents; i++)
+                        for (int i = 0; i < _selectedObjects.Length && showEvents; i++)
                         {
-                            object currentObject = _currentObjects[i];
+                            object currentObject = _selectedObjects[i];
 
                             if (currentObject is ICustomTypeDescriptor descriptor)
                             {
@@ -1088,9 +1088,9 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    ShowEventsButton(showEvents && _currentObjects.Length > 0);
+                    ShowEventsButton(showEvents && _selectedObjects.Length > 0);
                     DisplayCommandsPane();
-                    EnablePropPageButton(_currentObjects.Length == 1 ? _currentObjects[0] : null);
+                    EnablePropPageButton(_selectedObjects.Length == 1 ? _selectedObjects[0] : null);
                     OnSelectedObjectsChanged(EventArgs.Empty);
                 }
 
@@ -1102,7 +1102,7 @@ namespace System.Windows.Forms
                 // If you select an events tab for your designer and double click to go to code, it should
                 // be the events tab when you get back to the designer. Check for that state here and
                 // make sure we select and refresh that tab when we load.
-                if (_currentObjects.Length > 0 && GetFlag(Flags.ReInitTab))
+                if (_selectedObjects.Length > 0 && GetFlag(Flags.ReInitTab))
                 {
                     object designerKey = ActiveDesigner;
 
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms
                     Refresh(clearCached: true);
                 }
 
-                if (_currentObjects.Length > 0)
+                if (_selectedObjects.Length > 0)
                 {
                     SaveTabSelection();
                 }
@@ -1744,9 +1744,9 @@ namespace System.Windows.Forms
 
             // We favor the menu command service, since it can give us verbs.
             // If we fail that, we will go straight to the designer.
-            if (_currentObjects is not null && _currentObjects.Length > 0)
+            if (_selectedObjects is not null && _selectedObjects.Length > 0)
             {
-                for (int i = 0; i < _currentObjects.Length; i++)
+                for (int i = 0; i < _selectedObjects.Length; i++)
                 {
                     if (GetUnwrappedObject(i) is IComponent iComponent)
                     {
@@ -1767,7 +1767,7 @@ namespace System.Windows.Forms
                     {
                         // No menu command service.  Go straight to the component's designer.  We can only do this
                         // if the object count is 1, because designers do not support verbs across a multi-selection.
-                        if (_currentObjects.Length == 1 && site.TryGetService(out IDesignerHost designerHost))
+                        if (_selectedObjects.Length == 1 && site.TryGetService(out IDesignerHost designerHost))
                         {
                             IDesigner designer = designerHost.GetDesigner(component);
                             if (designer is not null)
@@ -1853,9 +1853,9 @@ namespace System.Windows.Forms
                 _rootEntry?.Dispose();
                 _rootEntry = null;
 
-                if (_currentObjects is not null)
+                if (_selectedObjects is not null)
                 {
-                    _currentObjects = null;
+                    _selectedObjects = null;
                     SinkPropertyNotifyEvents();
                 }
 
@@ -1999,7 +1999,7 @@ namespace System.Windows.Forms
 
         private void EnableTabs()
         {
-            if (_currentObjects is null)
+            if (_selectedObjects is null)
             {
                 return;
             }
@@ -2022,7 +2022,7 @@ namespace System.Windows.Forms
                 bool canExtend = true;
 
                 // Make sure the tab is valid for all objects.
-                for (int j = 0; j < _currentObjects.Length; j++)
+                for (int j = 0; j < _selectedObjects.Length; j++)
                 {
                     try
                     {
@@ -2271,12 +2271,12 @@ namespace System.Windows.Forms
 
         private object GetUnwrappedObject(int index)
         {
-            if (_currentObjects is null || index < 0 || index > _currentObjects.Length)
+            if (_selectedObjects is null || index < 0 || index > _selectedObjects.Length)
             {
                 return null;
             }
 
-            object @object = _currentObjects[index];
+            object @object = _selectedObjects[index];
             return @object is ICustomTypeDescriptor descriptor ? descriptor.GetPropertyOwner(pd: null) : @object;
         }
 
@@ -2487,7 +2487,7 @@ namespace System.Windows.Forms
         {
             bool batchMode = GetFlag(Flags.BatchMode);
             if (batchMode || GetFlag(Flags.InternalChange) || _gridView.InPropertySet ||
-               (_currentObjects is null) || (_currentObjects.Length == 0))
+               (_selectedObjects is null) || (_selectedObjects.Length == 0))
             {
                 if (batchMode && !_gridView.InPropertySet)
                 {
@@ -2497,10 +2497,10 @@ namespace System.Windows.Forms
                 return;
             }
 
-            int objectCount = _currentObjects.Length;
+            int objectCount = _selectedObjects.Length;
             for (int i = 0; i < objectCount; i++)
             {
-                if (_currentObjects[i] == e.Component)
+                if (_selectedObjects[i] == e.Component)
                 {
                     Refresh(clearCached: false);
                     break;
@@ -2526,16 +2526,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            for (int i = 0; i < _currentObjects.Length; i++)
+            for (int i = 0; i < _selectedObjects.Length; i++)
             {
-                if (e.Component == _currentObjects[i])
+                if (e.Component == _selectedObjects[i])
                 {
-                    object[] newObjects = new object[_currentObjects.Length - 1];
-                    Array.Copy(_currentObjects, 0, newObjects, 0, i);
+                    object[] newObjects = new object[_selectedObjects.Length - 1];
+                    Array.Copy(_selectedObjects, 0, newObjects, 0, i);
                     if (i < newObjects.Length)
                     {
                         // Fixed for .NET Framework 4.0
-                        Array.Copy(_currentObjects, i + 1, newObjects, i, newObjects.Length - i);
+                        Array.Copy(_selectedObjects, i + 1, newObjects, i, newObjects.Length - i);
                     }
 
                     if (!GetFlag(Flags.BatchMode))
@@ -2546,7 +2546,7 @@ namespace System.Windows.Forms
                     {
                         // Otherwise, just dump the selection.
                         _gridView.ClearGridEntries();
-                        _currentObjects = newObjects;
+                        _selectedObjects = newObjects;
                         SetFlag(Flags.FullRefreshAfterBatch, true);
                     }
                 }
@@ -2574,7 +2574,7 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             OnLayoutInternal(dividerOnly: false);
             TypeDescriptor.Refreshed += OnTypeDescriptorRefreshed;
-            if (_currentObjects is not null && _currentObjects.Length > 0)
+            if (_selectedObjects is not null && _selectedObjects.Length > 0)
             {
                 Refresh(clearCached: true);
             }
@@ -3032,7 +3032,7 @@ namespace System.Windows.Forms
             SetFlag(Flags.BatchMode, false);
             if (GetFlag(Flags.FullRefreshAfterBatch))
             {
-                SelectedObjects = _currentObjects;
+                SelectedObjects = _selectedObjects;
                 SetFlag(Flags.FullRefreshAfterBatch, false);
             }
             else if (GetFlag(Flags.BatchModeChange))
@@ -3059,15 +3059,15 @@ namespace System.Windows.Forms
 
         private void OnTypeDescriptorRefreshedInvoke(RefreshEventArgs e)
         {
-            if (_currentObjects is null)
+            if (_selectedObjects is null)
             {
                 return;
             }
 
-            for (int i = 0; i < _currentObjects.Length; i++)
+            for (int i = 0; i < _selectedObjects.Length; i++)
             {
                 Type typeChanged = e.TypeChanged;
-                if (_currentObjects[i] == e.ComponentChanged || typeChanged?.IsAssignableFrom(_currentObjects[i].GetType()) == true)
+                if (_selectedObjects[i] == e.ComponentChanged || typeChanged?.IsAssignableFrom(_selectedObjects[i].GetType()) == true)
                 {
                     // Clear our property hashes.
                     ClearCachedProperties();
@@ -3141,10 +3141,10 @@ namespace System.Windows.Forms
         private void OnViewButtonClickPP(object sender, EventArgs e)
         {
             if (_viewPropertyPagesButton.Enabled &&
-                _currentObjects is not null &&
-                _currentObjects.Length > 0)
+                _selectedObjects is not null &&
+                _selectedObjects.Length > 0)
             {
-                object baseObject = _currentObjects[0];
+                object baseObject = _selectedObjects[0];
                 object obj = baseObject;
 
                 bool success = false;
@@ -3451,16 +3451,16 @@ namespace System.Windows.Forms
             // Check the component level tabs.
             if (tabScope <= PropertyTabScope.Component)
             {
-                if (_currentObjects is not null && _currentObjects.Length > 0)
+                if (_selectedObjects is not null && _selectedObjects.Length > 0)
                 {
                     // Get the subset of PropertyTabs that's common to all objects.
-                    Type[] tabTypes = GetCommonTabs(_currentObjects, PropertyTabScope.Component);
+                    Type[] tabTypes = GetCommonTabs(_selectedObjects, PropertyTabScope.Component);
 
                     for (int i = 0; i < tabTypes.Length; i++)
                     {
-                        for (int j = 0; j < _currentObjects.Length; j++)
+                        for (int j = 0; j < _selectedObjects.Length; j++)
                         {
-                            AddTab(tabTypes[i], _currentObjects[j], PropertyTabScope.Component, false);
+                            AddTab(tabTypes[i], _selectedObjects[j], PropertyTabScope.Component, false);
                         }
                     }
                 }
@@ -3726,11 +3726,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(oldObject is not null && newObject is not null && oldObject.GetType() == newObject.GetType());
 
-            for (int i = 0; i < _currentObjects.Length; ++i)
+            for (int i = 0; i < _selectedObjects.Length; ++i)
             {
-                if (_currentObjects[i] == oldObject)
+                if (_selectedObjects[i] == oldObject)
                 {
-                    _currentObjects[i] = newObject;
+                    _selectedObjects[i] = newObject;
                     Refresh(clearCached: true);
                     break;
                 }
@@ -4136,19 +4136,19 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (_currentObjects is null || _currentObjects.Length == 0)
+            if (_selectedObjects is null || _selectedObjects.Length == 0)
             {
                 _connectionPointCookies = null;
                 return;
             }
 
             // It's okay if our array is too big, we'll just reuse it and ignore the empty slots.
-            if (_connectionPointCookies is null || (_currentObjects.Length > _connectionPointCookies.Length))
+            if (_connectionPointCookies is null || (_selectedObjects.Length > _connectionPointCookies.Length))
             {
-                _connectionPointCookies = new AxHost.ConnectionPointCookie[_currentObjects.Length];
+                _connectionPointCookies = new AxHost.ConnectionPointCookie[_selectedObjects.Length];
             }
 
-            for (int i = 0; i < _currentObjects.Length; i++)
+            for (int i = 0; i < _selectedObjects.Length; i++)
             {
                 try
                 {
@@ -4240,11 +4240,11 @@ namespace System.Windows.Forms
             }
             else
             {
-                if (_currentObjects is not null && _currentObjects.Length > 0)
+                if (_selectedObjects is not null && _selectedObjects.Length > 0)
                 {
                     _rootEntry = GridEntry.CreateRootGridEntry(
                         _gridView,
-                        _currentObjects,
+                        _selectedObjects,
                         new PropertyGridServiceProvider(this),
                         _designerHost,
                         SelectedTab,
@@ -4504,7 +4504,10 @@ namespace System.Windows.Forms
                 case AutomationMessages.PGM_GETROWCOORDS:
                     if (m.Msg == _copyDataMessage)
                     {
-                        m.Result = (IntPtr)_gridView.GetPropertyLocation(_propertyName, m.LParam == IntPtr.Zero, m.WParam == IntPtr.Zero);
+                        m.Result = (IntPtr)_gridView.GetPropertyLocation(
+                            _propertyName,
+                            getXY: m.LParam == IntPtr.Zero,
+                            rowValue: m.WParam == IntPtr.Zero);
                         return;
                     }
 
