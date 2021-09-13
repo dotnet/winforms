@@ -2218,6 +2218,22 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        /// Adjusts form location based on <see cref="FormStartPosition" >FormStartPosition</see>
+        /// </summary>
+        internal void AdjustFormPosition()
+        {
+            FormStartPosition startPos = (FormStartPosition)formState[FormStateStartPos];
+            if (startPos == FormStartPosition.CenterParent)
+            {
+                CenterToParent();
+            }
+            else if (startPos == FormStartPosition.CenterScreen)
+            {
+                CenterToScreen();
+            }
+        }
+
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void SetVisibleCore(bool value)
         {
@@ -4038,15 +4054,7 @@ namespace System.Windows.Forms
             //
             if (GetState(States.Modal))
             {
-                FormStartPosition startPos = (FormStartPosition)formState[FormStateStartPos];
-                if (startPos == FormStartPosition.CenterParent)
-                {
-                    CenterToParent();
-                }
-                else if (startPos == FormStartPosition.CenterScreen)
-                {
-                    CenterToScreen();
-                }
+                AdjustFormPosition();
             }
 
             // There is no good way to explain this event except to say

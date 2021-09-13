@@ -7813,6 +7813,14 @@ namespace System.Windows.Forms
                         }
 
                         RescaleConstantsForDpi(old, _deviceDpi);
+
+                        // If control is top-level window and control position is not a default location,
+                        // resizing the control would need location recalculated.
+                        // ex: FormStartPosition.CenterParent or FormStartPosition.CenterScreen
+                        if (this is Form form && form.TopLevel)
+                        {
+                            form.AdjustFormPosition();
+                        }
                     }
                 }
 
