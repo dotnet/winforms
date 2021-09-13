@@ -3418,36 +3418,6 @@ namespace System.Windows.Forms
             }
         }
 
-        private string GenerateRandomName()
-        {
-            Debug.Assert(BackgroundImage is not null, "we need to generate random numbers only when saving the background image to disk");
-            Bitmap bm = new Bitmap(BackgroundImage);
-            int handle = 0;
-
-            try
-            {
-                handle = unchecked((int)(long)bm.GetHicon());
-            }
-            catch
-            {
-                bm.Dispose();
-            }
-
-            Random rnd;
-            if (handle == 0)
-            {
-                // there was a problem when we got the icon handle
-                // use DateTime.Now to seed the randomizer
-                rnd = new Random((int)System.DateTime.Now.Ticks);
-            }
-            else
-            {
-                rnd = new Random(handle);
-            }
-
-            return rnd.Next().ToString(CultureInfo.InvariantCulture);
-        }
-
         // IDs for identifying ListViewItem's
         private int GenerateUniqueID()
         {
@@ -5171,11 +5141,7 @@ namespace System.Windows.Forms
             if (BackgroundImage is not null)
             {
                 // save the image to a temporary file name
-                string tempDirName = System.IO.Path.GetTempPath();
-                Text.StringBuilder sb = new Text.StringBuilder(1024);
-                UnsafeNativeMethods.GetTempFileName(tempDirName, GenerateRandomName(), 0, sb);
-
-                backgroundImageFileName = sb.ToString();
+                backgroundImageFileName = Path.GetTempFileName();
 
                 BackgroundImage.Save(backgroundImageFileName, System.Drawing.Imaging.ImageFormat.Bmp);
 
