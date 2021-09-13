@@ -2254,8 +2254,7 @@ namespace System.Windows.Forms
                 case ArrowDirection.Right:
                     return GetNextItemHorizontal(start, forward: true);
                 case ArrowDirection.Left:
-                    bool isRtl = RightToLeft == RightToLeft.Yes;
-                    bool forward = (LastKeyData == (Keys.Shift | Keys.Tab) && !isRtl) || (LastKeyData == Keys.Tab && isRtl);
+                    bool forward = LastKeyData == Keys.Tab;
                     return GetNextItemHorizontal(start, forward);
                 case ArrowDirection.Down:
                     return GetNextItemVertical(start, down: true);
