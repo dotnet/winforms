@@ -7814,11 +7814,15 @@ namespace System.Windows.Forms
 
                         RescaleConstantsForDpi(old, _deviceDpi);
 
-                        // If control is top-level window and control position is not a default location,
-                        // resizing the control would need location recalculated.
-                        // ex: FormStartPosition.CenterParent or FormStartPosition.CenterScreen
+                        // If control is top-level window ( for ex: Top level Form) and control's StartPosition is not WindowsDefaultLocation,
+                        // resizing the control would need Location of the control to be recalculated.
+                        // ex: Form centered as FormStartPosition.CenterParent or FormStartPosition.CenterScreen, would need recalculation for Location
+                        // property to place on center to parent/screen.
                         if (this is Form form && form.TopLevel)
                         {
+                            // Form gets location information form CreateParams but these were calculated before handle created for the Form.
+                            // In case of launching the Form on secondary monitor, DPI is evaluated only after handle is created for the Form and the
+                            // Form resized according to the new DPI.Hence, Form location need to be recalculated with new bounds information.
                             form.AdjustFormPosition();
                         }
                     }

@@ -2219,7 +2219,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Adjusts form location based on <see cref="FormStartPosition" >FormStartPosition</see>
+        /// Adjusts form location based on <see cref="FormStartPosition"/>
         /// </summary>
         internal void AdjustFormPosition()
         {
