@@ -416,24 +416,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private bool HasEntries => TopLevelGridEntries is not null && TopLevelGridEntries.Count > 0;
 
-        private int InternalLabelWidth
-        {
-            get
-            {
-                if (_flags.HasFlag(Flags.NeedUpdateUIBasedOnFont))
-                {
-                    UpdateUIBasedOnFont(true);
-                }
-
-                if (_labelWidth == -1)
-                {
-                    SetConstants();
-                }
-
-                return _labelWidth;
-            }
-        }
-
         internal int LabelPaintMargin
         {
             set => _requiredLabelPaintMargin = (short)Math.Max(Math.Max(value, _requiredLabelPaintMargin), GdiPlusSpace);
@@ -1170,7 +1152,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             int length = GetEntryLabelLength(g, gridEntry);
-            return length > _location.X + InternalLabelWidth;
+            return length > _location.X + LabelWidth;
         }
 
         private void DrawLabel(Graphics g, int row, Rectangle rect, bool selected, bool longLabelrequest, Rectangle clipRect)
@@ -1388,46 +1370,29 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public Font GetBoldFont() => _boldFont ??= new Font(Font, FontStyle.Bold);
 
-        /// <summary>
-        ///  Gets the element from point.
-        /// </summary>
-        /// <param name="x">The point x coordinate.</param>
-        /// <param name="y">The point y coordinate.</param>
-        /// <returns>The found grid element.</returns>
-        internal GridEntry GetElementFromPoint(int x, int y)
+        public Color LineColor => OwnerGrid.LineColor;
+
+        public Color SelectedItemWithFocusForeColor => OwnerGrid.SelectedItemWithFocusForeColor;
+
+        public Color SelectedItemWithFocusBackColor => OwnerGrid.SelectedItemWithFocusBackColor;
+
+        public int LabelWidth
         {
-            var point = new Point(x, y);
-            GridEntryCollection allGridEntries = GetAllGridEntries();
-            var targetEntries = new GridEntry[allGridEntries.Count];
-            try
+            get
             {
-                GetGridEntriesFromOutline(allGridEntries, 0, allGridEntries.Count - 1, targetEntries);
-            }
-            catch (Exception ex)
-            {
-                Debug.Fail(ex.ToString());
-            }
-
-            foreach (GridEntry gridEntry in targetEntries)
-            {
-                if (gridEntry.AccessibilityObject.Bounds.Contains(point))
+                if (_flags.HasFlag(Flags.NeedUpdateUIBasedOnFont))
                 {
-                    return gridEntry;
+                    UpdateUIBasedOnFont(true);
                 }
+
+                if (_labelWidth == -1)
+                {
+                    SetConstants();
+                }
+
+                return _labelWidth;
             }
-
-            return null;
         }
-
-        public Color GetLineColor() => OwnerGrid.LineColor;
-
-        public Color GetSelectedItemWithFocusForeColor() => OwnerGrid.SelectedItemWithFocusForeColor;
-
-        public Color GetSelectedItemWithFocusBackColor() => OwnerGrid.SelectedItemWithFocusBackColor;
-
-        public IntPtr GetHostHandle() => Handle;
-
-        public int GetLabelWidth() => InternalLabelWidth;
 
         internal bool IsExplorerTreeSupported => OwnerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
 
@@ -1435,9 +1400,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal bool IsEditTextBoxCreated => _editTextBox is not null && _editTextBox.IsHandleCreated;
 
-        public int GetGridEntryHeight() => RowHeight;
+        public int GridEntryHeight => RowHeight;
 
-        internal int GetPropertyLocation(string propName, bool getXY, bool rowValue)
+        internal int GetPropertyLocation(string propertyName, bool getXY, bool rowValue)
         {
             if (_allGridEntries is null || _allGridEntries.Count <= 0)
             {
@@ -1446,26 +1411,29 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             for (int i = 0; i < _allGridEntries.Count; i++)
             {
-                if (0 == string.Compare(propName, _allGridEntries[i].PropertyLabel, true, CultureInfo.InvariantCulture))
+                GridEntry entry = _allGridEntries[i];
+                if (!string.Equals(propertyName, entry.PropertyLabel, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    if (getXY)
-                    {
-                        int row = GetRowFromGridEntry(_allGridEntries[i]);
+                    continue;
+                }
 
-                        if (row < 0 || row >= _visibleRows)
-                        {
-                            return -1;
-                        }
-                        else
-                        {
-                            Rectangle r = GetRectangle(row, rowValue ? RowValue : RowLabel);
-                            return PARAM.ToInt(r.X, r.Y);
-                        }
+                if (getXY)
+                {
+                    int row = GetRowFromGridEntry(entry);
+
+                    if (row < 0 || row >= _visibleRows)
+                    {
+                        return -1;
                     }
                     else
                     {
-                        return i;
+                        Rectangle r = GetRectangle(row, rowValue ? RowValue : RowLabel);
+                        return PARAM.ToInt(r.X, r.Y);
                     }
+                }
+                else
+                {
+                    return i;
                 }
             }
 
@@ -1489,17 +1457,16 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public int GetSplitterWidth() => 1;
 
-        public int GetTotalWidth() => GetLabelWidth() + GetSplitterWidth() + GetValueWidth();
+        public int GetTotalWidth() => LabelWidth + GetSplitterWidth() + GetValueWidth();
 
-        public int GetValuePaintIndent() => _paintIndent;
+        public int ValuePaintIndent => _paintIndent;
 
-        public int GetValuePaintWidth() => _paintWidth;
+        public int ValuePaintWidth => _paintWidth;
 
-        public int GetValueStringIndent() => EditIndent;
+        public int ValueStringIndent => EditIndent;
 
-        public int GetValueWidth() => (int)(InternalLabelWidth * (_labelRatio - 1));
+        public int GetValueWidth() => (int)(LabelWidth * (_labelRatio - 1));
 
-        /// <inheritdoc/>
         public void DropDownControl(Control control)
         {
             Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView:DropDownControl");
@@ -1592,10 +1559,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             // If it's the TAB key, we keep it since we'll give them focus with it.
             if (_dropDownHolder is not null && _dropDownHolder.Visible && m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam != (int)Keys.Tab)
             {
-                Control ctl = _dropDownHolder.Component;
-                if (ctl is not null)
+                Control control = _dropDownHolder.Component;
+                if (control is not null)
                 {
-                    m.Result = User32.SendMessageW(ctl, (User32.WM)m.Msg, m.WParam, m.LParam);
+                    m.Result = User32.SendMessageW(control, (User32.WM)m.Msg, m.WParam, m.LParam);
                     return true;
                 }
             }
@@ -1614,11 +1581,11 @@ namespace System.Windows.Forms.PropertyGridInternal
                 string letter = new(new char[] { keyChar });
                 for (int i = 0; i < values.Length; i++)
                 {
-                    object valueCur = values[(i + index + 1) % values.Length];
-                    string text = gridEntry.GetPropertyTextValue(valueCur);
-                    if (text is not null && text.Length > 0 && string.Compare(text.Substring(0, 1), letter, true, CultureInfo.InvariantCulture) == 0)
+                    object currentValue = values[(i + index + 1) % values.Length];
+                    string text = gridEntry.GetPropertyTextValue(currentValue);
+                    if (text is not null && text.Length > 0 && string.Equals(text.Substring(0, 1), letter, StringComparison.InvariantCultureIgnoreCase))
                     {
-                        CommitValue(valueCur);
+                        CommitValue(currentValue);
                         if (EditTextBox.Focused)
                         {
                             EditTextBox.SelectAll();
@@ -1754,7 +1721,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             var pt = new Point(RowLabel, 0);
-            if (x > InternalLabelWidth + _location.X)
+            if (x > LabelWidth + _location.X)
             {
                 pt.X = RowValue;
             }
@@ -1763,21 +1730,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return pt;
         }
 
-        public void Flush()
-        {
-            Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "PropertyGridView::Flush()");
-            if (CommitEditTextBox() && EditTextBox.Focused)
-            {
-                Focus();
-            }
-        }
-
-        private GridEntryCollection GetAllGridEntries()
-        {
-            return GetAllGridEntries(updateCache: false);
-        }
-
-        private GridEntryCollection GetAllGridEntries(bool updateCache)
+        private GridEntryCollection GetAllGridEntries(bool updateCache = false)
         {
             if (_visibleRows == -1 || TotalProperties == -1 || !HasEntries)
             {
@@ -2006,12 +1959,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             else if (fLabel)
             {
                 rect.X = 1;
-                rect.Width = InternalLabelWidth - 1;
+                rect.Width = LabelWidth - 1;
             }
             else if (fValue)
             {
-                rect.X = _location.X + InternalLabelWidth;
-                rect.Width = size.Width - InternalLabelWidth;
+                rect.X = _location.X + LabelWidth;
+                rect.Width = size.Width - LabelWidth;
             }
 
             rect.Y = row * (RowHeight + 1) + 1 + _location.Y;
@@ -2072,7 +2025,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return gridEntry is null ? string.Empty : gridEntry.GetTestingInfo();
         }
 
-        public Color GetTextColor() => ForeColor;
+        public Color TextColor => ForeColor;
 
         private void LayoutWindow(bool invalidate)
         {
@@ -2216,7 +2169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             int startPS = _location.X;
             int pos = Math.Max(Math.Min(xPosition, widthPS - 10), GetOutlineIconSize() * 2);
 
-            int oldLabelWidth = InternalLabelWidth;
+            int oldLabelWidth = LabelWidth;
 
             _labelRatio = widthPS / (double)(pos - startPS);
 
@@ -2231,9 +2184,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             Rectangle r = ClientRectangle;
 
             // If we're moving to the left, just invalidate the values.
-            if (oldLabelWidth > InternalLabelWidth)
+            if (oldLabelWidth > LabelWidth)
             {
-                int left = InternalLabelWidth - _requiredLabelPaintMargin;
+                int left = LabelWidth - _requiredLabelPaintMargin;
                 Invalidate(new Rectangle(left, 0, Size.Width - left, Size.Height));
             }
             else
@@ -2509,15 +2462,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             ToolTip.ToolTip = string.Empty;
             ToolTip.Visible = false;
-
-            if (!EditTextBox.InSetText)
-            {
-                GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
-                if (gridEntry is not null && gridEntry.IsImmediatelyEditable)
-                {
-                    CommitEditTextBox();
-                }
-            }
         }
 
         private void OnEditGotFocus(object sender, EventArgs e)
@@ -2885,7 +2829,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         if (controlPressed)
                         {
                             // Move the splitter 3 pixels to the left
-                            MoveSplitterTo(InternalLabelWidth - 3);
+                            MoveSplitterTo(LabelWidth - 3);
                             return;
                         }
 
@@ -2904,7 +2848,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         if (controlPressed)
                         {
                             // Move the splitter 3 pixels to the right.
-                            MoveSplitterTo(InternalLabelWidth + 3);
+                            MoveSplitterTo(LabelWidth + 3);
                             return;
                         }
 
@@ -5263,7 +5207,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private bool SplitterInside(int x) => Math.Abs(x - InternalLabelWidth) < 4;
+        private bool SplitterInside(int x) => Math.Abs(x - LabelWidth) < 4;
 
         private void TabSelection()
         {

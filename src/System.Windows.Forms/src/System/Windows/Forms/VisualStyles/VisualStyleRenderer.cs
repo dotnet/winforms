@@ -61,7 +61,7 @@ namespace System.Windows.Forms.VisualStyles
                     // could fail for some other reason. Try creating a theme handle here - if successful, return true,
                     // else return false.
                     IntPtr hTheme = GetHandle("BUTTON", false); // Button is an arbitrary choice.
-                    supported = (hTheme != IntPtr.Zero);
+                    supported = hTheme != IntPtr.Zero;
                 }
 
                 return supported;

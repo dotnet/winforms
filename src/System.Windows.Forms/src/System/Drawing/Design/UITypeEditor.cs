@@ -98,7 +98,8 @@ namespace System.Drawing.Design
         /// <param name="value">The object whose value this type editor will display. </param>
         /// <param name="canvas">A drawing canvas on which to paint the representation of the object's value. </param>
         /// <param name="rectangle">A <see cref="Rectangle" /> within whose boundaries to paint the value. </param>
-        public void PaintValue(object value, Graphics canvas, Rectangle rectangle) => PaintValue(new PaintValueEventArgs(null, value, canvas, rectangle));
+        public void PaintValue(object value, Graphics canvas, Rectangle rectangle)
+            => PaintValue(new PaintValueEventArgs(null, value, canvas, rectangle));
 
         /// <summary>
         ///  Paints a representative value of the specified object to the specified canvas.

@@ -42,7 +42,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 set => _filter = value;
             }
 
-            /// <inheritdoc />
             internal override bool SupportsUiaProviders => true;
 
             public override bool Focused => !HideFocusState && base.Focused;
@@ -76,7 +75,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            /// <inheritdoc />
             protected override AccessibleObject CreateAccessibilityInstance() => new GridViewTextBoxAccessibleObject(this);
 
             protected override void DestroyHandle()
@@ -105,11 +103,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            /// <summary>
-            ///  Overridden to handle TAB key.
-            /// </summary>
             protected override bool IsInputKey(Keys keyData)
             {
+                // Overridden to handle TAB key.
                 switch (keyData & Keys.KeyCode)
                 {
                     case Keys.Escape:
@@ -184,7 +180,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
             {
-                // Make sure we allow the Edit to handle ctrl-z
+                // Make sure we allow the Edit to handle ctrl-z.
                 switch (keyData & Keys.KeyCode)
                 {
                     case Keys.Z:
@@ -245,7 +241,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return base.ProcessCmdKey(ref msg, keyData);
             }
 
-            /// <inheritdoc />
             protected override bool ProcessDialogKey(Keys keyData)
             {
                 // We don't do anything with modified keys here.

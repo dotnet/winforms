@@ -138,10 +138,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Gets the value of the background brush to use. Override this member to cause the entry to paint it's
         ///  background in a different color. The base implementation returns null.
         /// </summary>
-        protected virtual Color GetBackgroundColor() => OwnerGridView.BackColor;
+        protected virtual Color BackgroundColor => OwnerGridView.BackColor;
 
         protected virtual Color LabelTextColor
-            => ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : OwnerGridView.GetTextColor();
+            => ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : OwnerGridView.TextColor;
 
         /// <summary>
         ///  The set of attributes that will be used for browse filtering.
@@ -344,7 +344,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if ((_flags & Flags.Checked) != 0)
+                if (_flags.HasFlag(Flags.Checked))
                 {
                     return _flags;
                 }
@@ -352,7 +352,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _flags |= Flags.Checked;
 
                 TypeConverter converter = TypeConverter;
-                UITypeEditor uiEditor = UITypeEditor;
+                UITypeEditor editor = UITypeEditor;
                 object value = Instance;
                 bool forceReadOnly = ForceReadOnly;
 
@@ -372,9 +372,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _flags |= Flags.TextEditable;
                 }
 
-                bool isImmutableReadOnly = TypeDescriptor.GetAttributes(PropertyType)[typeof(ImmutableObjectAttribute)]
+                bool hasImmutableAttribute = TypeDescriptor.GetAttributes(PropertyType)[typeof(ImmutableObjectAttribute)]
                     .Equals(ImmutableObjectAttribute.Yes);
-                bool isImmutable = isImmutableReadOnly || converter.GetCreateInstanceSupported(this);
+                bool isImmutable = hasImmutableAttribute || converter.GetCreateInstanceSupported(this);
 
                 if (isImmutable)
                 {
@@ -388,7 +388,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // If we're expandable, but we don't support editing,
                     // make us read only editable so we don't paint grey.
 
-                    if (!forceReadOnly && (_flags & Flags.TextEditable) == 0 && !isImmutableReadOnly)
+                    if (!forceReadOnly && !_flags.HasFlag(Flags.TextEditable) && !hasImmutableAttribute)
                     {
                         _flags |= Flags.ReadOnlyEditable;
                     }
@@ -399,33 +399,35 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _flags |= Flags.RenderPassword;
                 }
 
-                if (uiEditor is not null)
+                if (editor is null)
                 {
-                    if (uiEditor.GetPaintValueSupported(this))
+                    return _flags;
+                }
+
+                if (editor.GetPaintValueSupported(this))
+                {
+                    _flags |= Flags.CustomPaint;
+                }
+
+                // We only allow drop-downs if the object is NOT being inherited.
+
+                bool allowButtons = !forceReadOnly;
+
+                if (allowButtons)
+                {
+                    switch (editor.GetEditStyle(this))
                     {
-                        _flags |= Flags.CustomPaint;
-                    }
+                        case UITypeEditorEditStyle.Modal:
+                            _flags |= Flags.ModalEditable;
+                            if (!isImmutable && !PropertyType.IsValueType)
+                            {
+                                _flags |= Flags.ReadOnlyEditable;
+                            }
 
-                    // We only allow drop-downs if the object is NOT being inherited.
-
-                    bool allowButtons = !forceReadOnly;
-
-                    if (allowButtons)
-                    {
-                        switch (uiEditor.GetEditStyle(this))
-                        {
-                            case UITypeEditorEditStyle.Modal:
-                                _flags |= Flags.ModalEditable;
-                                if (!isImmutable && !PropertyType.IsValueType)
-                                {
-                                    _flags |= Flags.ReadOnlyEditable;
-                                }
-
-                                break;
-                            case UITypeEditorEditStyle.DropDown:
-                                _flags |= Flags.DropDownEditable;
-                                break;
-                        }
+                            break;
+                        case UITypeEditorEditStyle.DropDown:
+                            _flags |= Flags.DropDownEditable;
+                            break;
                     }
                 }
 
@@ -538,19 +540,22 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         public virtual string HelpKeyword => _parent?.HelpKeyword ?? string.Empty;
 
-        public virtual bool IsCustomPaint
+        /// <summary>
+        ///  Returns true when the entry has an <see cref="UITypeEditor"/> that custom paints a value.
+        /// </summary>
+        public bool IsCustomPaint
         {
             get
             {
-                // Prevent full flag population if possible.
-                if ((_flags & Flags.Checked) == 0)
+                // Prevent full flag population if possible by not hitting EntryFlags if flags have not been checked yet.
+                if (!_flags.HasFlag(Flags.Checked))
                 {
                     UITypeEditor editor = UITypeEditor;
                     if (editor is not null)
                     {
-                        if ((_flags & Flags.CustomPaint) != 0 || (_flags & Flags.NoCustomPaint) != 0)
+                        if (_flags.HasFlag(Flags.CustomPaint) || _flags.HasFlag(Flags.NoCustomPaint))
                         {
-                            return (_flags & Flags.CustomPaint) != 0;
+                            return _flags.HasFlag(Flags.CustomPaint);
                         }
 
                         if (editor.GetPaintValueSupported(this))
@@ -566,7 +571,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                return (EntryFlags & Flags.CustomPaint) != 0;
+                return EntryFlags.HasFlag(Flags.CustomPaint);
             }
         }
 
@@ -583,13 +588,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual bool IsTextEditable => IsValueEditable && (EntryFlags & Flags.TextEditable) != 0;
+        public bool IsTextEditable => IsValueEditable && EntryFlags.HasFlag(Flags.TextEditable);
 
         public virtual bool IsValueEditable
             => !ForceReadOnly
-            && 0 != (EntryFlags & (Flags.DropDownEditable | Flags.TextEditable | Flags.ModalEditable | Flags.StandardValuesSupported));
-
-        public bool IsImmediatelyEditable => (EntryFlags & Flags.ImmediatelyEditable) != 0;
+            && GetFlagSet(Flags.DropDownEditable | Flags.TextEditable | Flags.ModalEditable | Flags.StandardValuesSupported);
 
         /// <summary>
         ///  Retrieves the component that is invoking the method on the formatter object. This may
@@ -651,7 +654,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 int outlineSize = gridHost.GetOutlineIconSize();
                 int borderWidth = outlineSize + OutlineIconPadding;
                 int left = (_propertyDepth * borderWidth) + OutlineIconPadding / 2;
-                int top = (gridHost.GetGridEntryHeight() - outlineSize) / 2;
+                int top = (gridHost.GridEntryHeight - outlineSize) / 2;
                 _outlineRect = new Rectangle(left, top, outlineSize, outlineSize);
                 return _outlineRect;
             }
@@ -737,12 +740,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             set { }
         }
 
-        public bool ShouldRenderPassword => (EntryFlags & Flags.RenderPassword) != 0;
+        public bool ShouldRenderPassword => EntryFlags.HasFlag(Flags.RenderPassword);
 
         public virtual bool ShouldRenderReadOnly
              => ForceReadOnly
-                || 0 != (EntryFlags & Flags.RenderReadOnly)
-                || (!IsValueEditable && (0 == (EntryFlags & Flags.ReadOnlyEditable)));
+                || EntryFlags.HasFlag(Flags.RenderReadOnly)
+                || (!IsValueEditable && !EntryFlags.HasFlag(Flags.ReadOnlyEditable));
 
         /// <summary>
         ///  Returns the type converter for this entry.
@@ -865,6 +868,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// <summary>
         ///  Create the root grid entry given an object or set of objects.
         /// </summary>
+        /// <param name="objects">The objects to build the root entry on.</param>
         internal static GridEntry CreateRootGridEntry(
             PropertyGridView view,
             object[] objects,
@@ -1030,7 +1034,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                // Push the new value back into the property
+                // Push the new value back into the property.
                 if (value != originalValue && IsValueEditable)
                 {
                     gridView.CommitValue(this, value);
@@ -1170,8 +1174,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return _cacheItems.LastValueTextWidth;
             }
 
-            // Value text is rendered using GDI directly (No TextRenderer) but measured/adjusted using GDI+
-            // (since previous releases), so don't use MeasureTextHelper.
+            // Value text is rendered using GDI directly but always measured/adjusted using GDI+,
+            // so don't use MeasureTextHelper.
             _cacheItems.LastValueTextWidth = (int)graphics.MeasureString(text, font).Width;
             _cacheItems.LastValueString = text;
             _cacheItems.LastValueFont = font;
@@ -1423,9 +1427,9 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override int GetHashCode() => HashCode.Combine(PropertyLabel, PropertyType, GetType());
 
         /// <summary>
-        ///  Checks if a given flag is set
+        ///  Checks if any given flags are set.
         /// </summary>
-        protected virtual bool GetFlagSet(Flags flag) => (flag & EntryFlags) != 0;
+        protected bool GetFlagSet(Flags flags) => (flags & EntryFlags) != 0;
 
         protected Font GetFont(bool boldFont) => boldFont ? OwnerGridView.GetBoldFont() : OwnerGridView.GetBaseFont();
 
@@ -1433,19 +1437,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///  Retrieves the requested service.  This may return null if the requested service is not available.
         /// </summary>
         public virtual object GetService(Type serviceType)
-        {
-            if (serviceType == typeof(GridItem))
-            {
-                return this;
-            }
-
-            if (_parent is not null)
-            {
-                return _parent.GetService(serviceType);
-            }
-
-            return null;
-        }
+            => serviceType == typeof(GridItem) ? this : (_parent?.GetService(serviceType));
 
         /// <summary>
         ///  Paints the label portion of this <see cref="GridEntry"/> into the given <see cref="Graphics"/> object.
@@ -1458,21 +1450,21 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </remarks>
         public virtual void PaintLabel(Graphics g, Rectangle rect, Rectangle clipRect, bool selected, bool paintFullLabel)
         {
-            PropertyGridView gridHost = OwnerGridView;
+            PropertyGridView ownerGrid = OwnerGridView;
             string label = PropertyLabel;
-            int borderWidth = gridHost.GetOutlineIconSize() + OutlineIconPadding;
+            int borderWidth = ownerGrid.GetOutlineIconSize() + OutlineIconPadding;
 
             // Fill the background if necessary.
-            Color backColor = selected ? gridHost.GetSelectedItemWithFocusBackColor() : GetBackgroundColor();
+            Color backColor = selected ? ownerGrid.SelectedItemWithFocusBackColor : BackgroundColor;
 
             // If we don't have focus, paint with the line color.
             if (selected && !_hasFocus)
             {
-                backColor = gridHost.GetLineColor();
+                backColor = ownerGrid.LineColor;
             }
 
-            bool bold = (EntryFlags & Flags.LabelBold) != 0;
-            Font font = GetFont(bold);
+            bool bold = EntryFlags.HasFlag(Flags.LabelBold);
+            Font font = GetFont(boldFont: bold);
 
             int labelWidth = GetLabelTextWidth(label, g, font);
 
@@ -1489,7 +1481,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 g.FillRectangle(backBrush, borderWidth - 1, rect.Y, totalWidth - borderWidth + 3, rect.Height);
 
                 // Draw an end line.
-                using var linePen = gridHost.GetLineColor().GetCachedPenScope();
+                using var linePen = ownerGrid.LineColor.GetCachedPenScope();
                 g.DrawLine(linePen, totalWidth, rect.Y, totalWidth, rect.Height);
 
                 // Set the new width that we can draw into.
@@ -1502,12 +1494,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Draw the border stripe on the left.
-            using var stripeBrush = gridHost.GetLineColor().GetCachedSolidBrushScope();
+            using var stripeBrush = ownerGrid.LineColor.GetCachedSolidBrushScope();
             g.FillRectangle(stripeBrush, rect.X, rect.Y, borderWidth, rect.Height);
 
             if (selected && _hasFocus)
             {
-                using var focusBrush = gridHost.GetSelectedItemWithFocusBackColor().GetCachedSolidBrushScope();
+                using var focusBrush = ownerGrid.SelectedItemWithFocusBackColor.GetCachedSolidBrushScope();
                 g.FillRectangle(
                     focusBrush,
                     stringX, rect.Y, rect.Width - stringX - 1, rect.Height);
@@ -1529,7 +1521,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // A brush is needed if using GDI+ only (UseCompatibleTextRendering); if using GDI, only the color is needed.
                 Color textColor = selected && _hasFocus
-                    ? gridHost.GetSelectedItemWithFocusForeColor()
+                    ? ownerGrid.SelectedItemWithFocusForeColor
                     : shouldInvertForHC
                         ? InvertColor(OwnerGrid.LineColor)
                         : g.FindNearestColor(LabelTextColor);
@@ -1655,14 +1647,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             IntPtr handle)
         {
             Color backgroundColor = ColorInversionNeededInHC ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
-            using var compatibleDC = new Gdi32.CreateDcScope((Gdi32.HDC)default);
+            using var compatibleDC = new Gdi32.CreateDcScope(default);
 
             int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
             int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
             Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
             using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
 
-            compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), Gdi32.CreateSolidBrush(ColorTranslator.ToWin32(backgroundColor)));
+            using var brush = new Gdi32.CreateBrushScope(backgroundColor);
+            compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
             explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
 
             using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
@@ -1689,7 +1682,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Draw border area box.
-            Color penColor = OwnerGridView.GetTextColor();
+            Color penColor = OwnerGridView.TextColor;
 
             // Inverting text color to background to get required contrast ratio.
             if (ColorInversionNeededInHC)
@@ -1699,8 +1692,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             else
             {
                 // Filling rectangle as it was in all cases where we do not invert colors.
-                Color brushColor = GetBackgroundColor();
-                using var brush = brushColor.GetCachedSolidBrushScope();
+                using var brush = BackgroundColor.GetCachedSolidBrushScope();
                 g.FillRectangle(brush, outline);
             }
 
@@ -1739,10 +1731,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </param>
         public virtual void PaintValue(Graphics g, Rectangle rect, Rectangle clipRect, PaintValueFlags paintFlags, string text = null)
         {
-            PropertyGridView gridHost = OwnerGridView;
-            Debug.Assert(gridHost is not null);
+            PropertyGridView ownerGrid = OwnerGridView;
+            Debug.Assert(ownerGrid is not null);
 
-            Color textColor = ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : gridHost.GetTextColor();
+            Color textColor = ShouldRenderReadOnly ? OwnerGridView.GrayTextColor : ownerGrid.TextColor;
             object value;
 
             if (text is null)
@@ -1772,12 +1764,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             // Paint out the main rect using the appropriate brush.
-            Color backColor = GetBackgroundColor();
+            Color backColor = BackgroundColor;
 
             if (paintFlags.HasFlag(PaintValueFlags.DrawSelected))
             {
-                backColor = gridHost.GetSelectedItemWithFocusBackColor();
-                textColor = gridHost.GetSelectedItemWithFocusForeColor();
+                backColor = ownerGrid.SelectedItemWithFocusBackColor;
+                textColor = ownerGrid.SelectedItemWithFocusForeColor;
             }
 
             using var backBrush = backColor.GetCachedSolidBrushScope();
@@ -1786,12 +1778,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             int paintIndent = 0;
             if (IsCustomPaint)
             {
-                paintIndent = gridHost.GetValuePaintIndent();
+                paintIndent = ownerGrid.ValuePaintIndent;
                 Rectangle rectPaint = new(
                     rect.X + 1,
                     rect.Y + 1,
-                    gridHost.GetValuePaintWidth(),
-                    gridHost.GetGridEntryHeight() - 2);
+                    ownerGrid.ValuePaintWidth,
+                    ownerGrid.GridEntryHeight - 2);
 
                 if (!Rectangle.Intersect(rectPaint, clipRect).IsEmpty)
                 {
@@ -1804,8 +1796,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            rect.X += paintIndent + gridHost.GetValueStringIndent();
-            rect.Width -= paintIndent + 2 * gridHost.GetValueStringIndent();
+            rect.X += paintIndent + ownerGrid.ValueStringIndent;
+            rect.Width -= paintIndent + 2 * ownerGrid.ValueStringIndent;
 
             // Bold the property if we need to persist it (e.g. it's not the default value).
             bool valueModified = paintFlags.HasFlag(PaintValueFlags.CheckShouldSerialize) && ShouldSerializePropertyValue();
@@ -1854,13 +1846,13 @@ namespace System.Windows.Forms.PropertyGridInternal
                 rect.Height);
 
             backColor = paintFlags.HasFlag(PaintValueFlags.DrawSelected)
-                ? OwnerGridView.GetSelectedItemWithFocusBackColor()
+                ? OwnerGridView.SelectedItemWithFocusBackColor
                 : OwnerGridView.BackColor;
 
             User32.DT format = User32.DT.EDITCONTROL | User32.DT.EXPANDTABS | User32.DT.NOCLIP
                 | User32.DT.SINGLELINE | User32.DT.NOPREFIX;
 
-            if (gridHost.DrawValuesRightToLeft)
+            if (ownerGrid.DrawValuesRightToLeft)
             {
                 format |= User32.DT.RIGHT | User32.DT.RTLREADING;
             }
@@ -1922,7 +1914,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return false;
             }
 
-            int labelWidth = gridHost.GetLabelWidth();
+            int labelWidth = gridHost.LabelWidth;
 
             // Are we in the label?
             if (x >= 0 && x <= labelWidth)

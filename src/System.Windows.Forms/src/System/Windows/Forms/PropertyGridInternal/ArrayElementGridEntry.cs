@@ -16,7 +16,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             : base(ownerGrid, parent)
         {
             _index = index;
-            SetFlag(Flags.RenderReadOnly, (parent.EntryFlags & Flags.RenderReadOnly) != 0 || parent.ForceReadOnly);
+            SetFlag(Flags.RenderReadOnly, parent.EntryFlags.HasFlag(Flags.RenderReadOnly) || parent.ForceReadOnly);
         }
 
         public override GridItemType GridItemType => GridItemType.ArrayValue;

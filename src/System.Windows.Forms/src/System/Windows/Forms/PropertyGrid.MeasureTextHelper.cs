@@ -20,40 +20,28 @@ namespace System.Windows.Forms
                 => MeasureText(owner, g, text, font, new SizeF(width, 999999));
 
             public static SizeF MeasureTextSimple(PropertyGrid owner, Graphics g, string text, Font font, SizeF size)
-            {
-                SizeF bindingSize;
-                if (owner.UseCompatibleTextRendering)
-                {
-                    bindingSize = g.MeasureString(text, font, size);
-                }
-                else
-                {
-                    bindingSize = TextRenderer.MeasureText(g, text, font, Size.Ceiling(size), GetTextRendererFlags());
-                }
-
-                return bindingSize;
-            }
+                => owner.UseCompatibleTextRendering
+                    ? g.MeasureString(text, font, size)
+                    : TextRenderer.MeasureText(
+                        g,
+                        text,
+                        font,
+                        Size.Ceiling(size),
+                        TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform);
 
             public static SizeF MeasureText(PropertyGrid owner, Graphics g, string text, Font font, SizeF size)
-            {
-                SizeF bindingSize;
-                if (owner.UseCompatibleTextRendering)
-                {
-                    bindingSize = g.MeasureString(text, font, size);
-                }
-                else
-                {
-                    TextFormatFlags flags =
-                        GetTextRendererFlags() |
-                        TextFormatFlags.LeftAndRightPadding |
-                        TextFormatFlags.WordBreak |
-                        TextFormatFlags.NoFullWidthCharacterBreak;
-
-                    bindingSize = (SizeF)TextRenderer.MeasureText(g, text, font, Size.Ceiling(size), flags);
-                }
-
-                return bindingSize;
-            }
+                => owner.UseCompatibleTextRendering
+                    ? g.MeasureString(text, font, size)
+                    : TextRenderer.MeasureText(
+                        g,
+                        text,
+                        font,
+                        Size.Ceiling(size),
+                        TextFormatFlags.PreserveGraphicsClipping
+                            | TextFormatFlags.PreserveGraphicsTranslateTransform
+                            | TextFormatFlags.LeftAndRightPadding
+                            | TextFormatFlags.WordBreak
+                            | TextFormatFlags.NoFullWidthCharacterBreak);
 
             public static TextFormatFlags GetTextRendererFlags()
                 => TextFormatFlags.PreserveGraphicsClipping | TextFormatFlags.PreserveGraphicsTranslateTransform;

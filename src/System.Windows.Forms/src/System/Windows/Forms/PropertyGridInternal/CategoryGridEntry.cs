@@ -86,7 +86,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         /// </summary>
         protected override GridEntryAccessibleObject GetAccessibilityObject() => new CategoryGridEntryAccessibleObject(this);
 
-        protected override Color GetBackgroundColor() => OwnerGridView.GetLineColor();
+        protected override Color BackgroundColor => OwnerGridView.LineColor;
 
         protected override Color LabelTextColor => OwnerGrid.CategoryForeColor;
 
@@ -139,8 +139,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             // Draw the focus rect.
             if (selected && HasFocus)
             {
-                bool bold = (EntryFlags & Flags.LabelBold) != 0;
-                Font font = GetFont(bold);
+                bool bold = EntryFlags.HasFlag(Flags.LabelBold);
+                Font font = GetFont(boldFont: bold);
                 int labelWidth = GetLabelTextWidth(PropertyLabel, g, font);
 
                 int indent = PropertyLabelIndent - 2;

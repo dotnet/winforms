@@ -18,7 +18,6 @@ namespace System.Windows.Forms.PropertyGridInternal
     /// </summary>
     internal class SingleSelectRootGridEntry : GridEntry, IRootGridEntry
     {
-        protected object _value;
         private string _valueClassName;
         private GridEntry _defaultEntry;
         private IDesignerHost _host;
@@ -31,21 +30,20 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal SingleSelectRootGridEntry(
             PropertyGridView ownerGridView,
-            object value,
-            GridEntry parent,
+            object target,
             IServiceProvider baseProvider,
             IDesignerHost host,
             PropertyTab ownerTab,
             PropertySort sortType)
-            : base(ownerGridView.OwnerGrid, parent)
+            : base(ownerGridView.OwnerGrid, parent: null)
         {
-            Debug.Assert(value is not null, "Can't browse a null object!");
+            Debug.Assert(target is not null, "Can't browse a null object!");
             _host = host;
             _ownerGridView = ownerGridView;
             _baseProvider = baseProvider;
             _ownerTab = ownerTab;
-            _value = value;
-            _valueClassName = TypeDescriptor.GetClassName(_value);
+            Target = target;
+            _valueClassName = TypeDescriptor.GetClassName(Target);
 
             IsExpandable = true;
 
@@ -54,17 +52,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             InternalExpanded = true;
         }
 
-        internal SingleSelectRootGridEntry(
-            PropertyGridView view,
-            object value,
-            IServiceProvider baseProvider,
-            IDesignerHost host,
-            PropertyTab tab,
-            PropertySort sortType) : this(view, value, null, baseProvider, host, tab, sortType)
-        {
-        }
+        /// <summary>
+        ///  The target object for this root entry. This is either a single object or an array of objects from
+        ///  <see cref="PropertyGrid.SelectedObjects" />
+        /// </summary>
+        protected object Target { get; private set; }
 
-        /// <inheritdoc/>
         public override AttributeCollection BrowsableAttributes
         {
             get => _browsableAttributes ??= new(BrowsableAttribute.Yes);
@@ -134,9 +127,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_forceReadOnlyChecked)
                 {
-                    var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(_value)[typeof(ReadOnlyAttribute)];
+                    var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(Target)[typeof(ReadOnlyAttribute)];
                     if ((readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute())
-                        || TypeDescriptor.GetAttributes(_value).Contains(InheritanceAttribute.InheritedReadOnly))
+                        || TypeDescriptor.GetAttributes(Target).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
                         SetForceReadOnlyFlag();
                     }
@@ -160,7 +153,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                var helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(_value)[typeof(HelpKeywordAttribute)];
+                var helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(Target)[typeof(HelpKeywordAttribute)];
 
                 if (helpAttribute is not null && !helpAttribute.IsDefaultAttribute())
                 {
@@ -175,23 +168,23 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                if (_value is IComponent component)
+                if (Target is IComponent component)
                 {
-                    return component.Site?.Name ?? _value.GetType().Name;
+                    return component.Site?.Name ?? Target.GetType().Name;
                 }
 
-                return _value?.ToString();
+                return Target?.ToString();
             }
         }
 
         public override object PropertyValue
         {
-            get => _value;
+            get => Target;
             set
             {
-                object old = _value;
-                _value = value;
-                _valueClassName = TypeDescriptor.GetClassName(_value);
+                object old = Target;
+                Target = value;
+                _valueClassName = TypeDescriptor.GetClassName(Target);
                 OwnerGrid.ReplaceSelectedObject(old, value);
             }
         }
@@ -214,7 +207,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _changeService = null;
             }
 
-            _value = null;
+            Target = null;
             _valueClassName = null;
             _defaultEntry = null;
             base.Dispose(disposing);

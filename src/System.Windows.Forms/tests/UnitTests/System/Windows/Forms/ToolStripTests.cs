@@ -4776,6 +4776,47 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<InvalidEnumArgumentException>("direction", () => toolStrip.GetNextItem(null, direction));
         }
 
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void ToolStrip_GetNextItem_ReturnsForwardItem(RightToLeft rightToLeft)
+        {
+            using ToolStrip toolStrip = new()
+            {
+                RightToLeft = rightToLeft,
+                TabStop = false
+            };
+            using ToolStripButton toolStripButton1 = new();
+            using ToolStripButton toolStripButton2 = new();
+            using ToolStripButton toolStripButton3 = new();
+            toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Right);
+
+            Assert.Equal(toolStripButton2, actual);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void ToolStrip_GetNextItem_ReturnsBackwardItem(RightToLeft rightToLeft)
+        {
+            using ToolStrip toolStrip = new()
+            {
+                RightToLeft = rightToLeft,
+                TabStop = false
+            };
+            using ToolStripButton toolStripButton1 = new();
+            using ToolStripButton toolStripButton2 = new();
+            using ToolStripButton toolStripButton3 = new();
+            toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+            ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Left);
+
+            Assert.Equal(toolStripButton3, actual);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
         [WinFormsFact]
         public void ToolStrip_GetAutoSizeMode_Invoke_ReturnsExpected()
         {
