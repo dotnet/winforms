@@ -29,6 +29,9 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisCSharpWorkspacesVersion)" />
+
+    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.txt" />
+    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.txt" />
   </ItemGroup>
 
   <ItemGroup>

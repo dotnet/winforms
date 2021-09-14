@@ -24,6 +24,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisCSharpWorkspacesVersion)" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic.Workspaces" Version="$(MicrosoftCodeAnalysisVisualBasicWorkspacesVersion)" />
+
+    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.txt" />
+    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.txt" />
   </ItemGroup>
 
   <ItemGroup>
