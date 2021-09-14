@@ -262,9 +262,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // If read only editable is set, make sure it's valid.
                 if (_propertyDescriptor.IsReadOnly && !_readOnlyVerified && GetFlagSet(Flags.ReadOnlyEditable))
                 {
-                    Type propType = PropertyType;
+                    Type propertyType = PropertyType;
 
-                    if (propType is not null && (propType.IsArray || propType.IsValueType || propType.IsPrimitive))
+                    if (propertyType is not null && (propertyType.IsArray || propertyType.IsValueType || propertyType.IsPrimitive))
                     {
                         SetFlag(Flags.ReadOnlyEditable, false);
                         SetFlag(Flags.RenderReadOnly, true);
@@ -274,7 +274,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 _readOnlyVerified = true;
 
-                return base.ShouldRenderReadOnly && !_isSerializeContentsProperty && !base.NeedsModalEditorButton;
+                return base.ShouldRenderReadOnly && !_isSerializeContentsProperty && !NeedsModalEditorButton;
             }
         }
 
@@ -328,7 +328,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 for (int i = 0; i < _propertyValueUIItems.Length; i++)
                 {
-                    if (_uiItemRects[i].Contains(mouseX, OwnerGridView.GetGridEntryHeight() / 2))
+                    if (_uiItemRects[i].Contains(mouseX, OwnerGridView.GridEntryHeight / 2))
                     {
                         _toolTipText = _propertyValueUIItems[i].ToolTip;
                         return new Point(mouseX, mouseY);
@@ -496,7 +496,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 for (int i = 0; i < _propertyValueUIItems.Length; i++)
                 {
-                    if (_uiItemRects[i].Contains(x, OwnerGridView.GetGridEntryHeight() / 2))
+                    if (_uiItemRects[i].Contains(x, OwnerGridView.GridEntryHeight / 2))
                     {
                         _propertyValueUIItems[i].InvokeHandler(this, _propertyDescriptor, _propertyValueUIItems[i]);
                         return true;
@@ -707,7 +707,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return owner;
         }
 
-        protected void SetPropertyValueCore(object obj, object newValue)
+        protected void SetPropertyValueCore(object owner, object newValue)
         {
             if (_propertyDescriptor is null)
             {
@@ -720,11 +720,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 Cursor.Current = Cursors.WaitCursor;
 
-                object target = obj;
+                object realOwner = owner;
 
-                if (target is ICustomTypeDescriptor descriptor)
+                if (realOwner is ICustomTypeDescriptor descriptor)
                 {
-                    target = descriptor.GetPropertyOwner(_propertyDescriptor);
+                    realOwner = descriptor.GetPropertyOwner(_propertyDescriptor);
                 }
 
                 // Check the type of the object we are modifying.  If it's a value type or an array,
@@ -734,25 +734,25 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (ParentGridEntry is not null)
                 {
-                    Type propType = ParentGridEntry.PropertyType;
-                    treatAsValueType = propType.IsValueType || propType.IsArray;
+                    Type propertyType = ParentGridEntry.PropertyType;
+                    treatAsValueType = propertyType.IsValueType || propertyType.IsArray;
                 }
 
-                if (target is not null)
+                if (realOwner is not null)
                 {
-                    _propertyDescriptor.SetValue(target, newValue);
+                    _propertyDescriptor.SetValue(realOwner, newValue);
 
                     // Since the value that we modified may not be stored by the parent property, we need to push this
-                    // value back into the parent.  An example here is Size or Location, which return Point objects
-                    // that are unconnected to the object they relate to.  So we modify the Point object and
-                    // push it back into the object we got it from.
+                    // value back into the parent. An example here is Size or Location, which return Point objects that
+                    // are unconnected to the object they relate to. So we modify the Point object and push it back
+                    // into the object we got it from.
 
                     if (treatAsValueType)
                     {
                         GridEntry parent = ParentGridEntry;
                         if (parent is not null && parent.IsValueEditable)
                         {
-                            parent.PropertyValue = obj;
+                            parent.PropertyValue = owner;
                         }
                     }
                 }

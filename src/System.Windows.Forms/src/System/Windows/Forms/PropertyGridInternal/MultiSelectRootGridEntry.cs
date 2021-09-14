@@ -21,12 +21,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal MultiSelectRootGridEntry(
             PropertyGridView view,
-            object obj,
+            object[] target,
             IServiceProvider baseProvider,
             IDesignerHost host,
             PropertyTab tab,
             PropertySort sortType)
-            : base(view, obj, baseProvider, host, tab, sortType)
+            : base(view, target, baseProvider, host, tab, sortType)
         {
         }
 
@@ -36,11 +36,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_forceReadOnlyChecked)
                 {
-                    foreach (object obj in (Array)_value)
+                    foreach (object target in (Array)Target)
                     {
-                        var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(obj)[typeof(ReadOnlyAttribute)];
+                        var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(target)[typeof(ReadOnlyAttribute)];
                         if ((readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute())
-                            || TypeDescriptor.GetAttributes(obj).Contains(InheritanceAttribute.InheritedReadOnly))
+                            || TypeDescriptor.GetAttributes(target).Contains(InheritanceAttribute.InheritedReadOnly))
                         {
                             SetForceReadOnlyFlag();
                             break;
@@ -58,27 +58,27 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             try
             {
-                object[] rgobjs = (object[])_value;
+                object[] targets = (object[])Target;
 
                 ChildCollection.Clear();
 
-                MultiPropertyDescriptorGridEntry[] mergedProps = PropertyMerger.GetMergedProperties(rgobjs, this, _propertySort, OwnerTab);
+                var mergedProperties = PropertyMerger.GetMergedProperties(targets, this, _propertySort, OwnerTab);
 
-                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProps is null, "PropertyGridView: MergedProps returned null!");
+                Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose && mergedProperties is null, "PropertyGridView: MergedProps returned null!");
 
-                if (mergedProps is not null)
+                if (mergedProperties is not null)
                 {
-                    ChildCollection.AddRange(mergedProps);
+                    ChildCollection.AddRange(mergedProperties);
                 }
 
-                bool fExpandable = Children.Count > 0;
-                if (!fExpandable)
+                bool expandable = Children.Count > 0;
+                if (!expandable)
                 {
                     SetFlag(Flags.ExpandableFailed, true);
                 }
 
                 CategorizePropEntries();
-                return fExpandable;
+                return expandable;
             }
             catch (Exception e) when (!ClientUtils.IsCriticalException(e))
             {
