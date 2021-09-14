@@ -8171,6 +8171,12 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyUp(KeyEventArgs e)
         {
+            if (OsVersion.IsWindows11_OrGreater &&
+                (e.KeyCode.HasFlag(Keys.ControlKey) || e.KeyCode == Keys.Escape))
+            {
+                KeyboardToolTipStateMachine.HidePersistentTooltip();
+            }
+
             ((KeyEventHandler)Events[s_keyUpEvent])?.Invoke(this, e);
         }
 

@@ -65,7 +65,7 @@
             this.automaticDelayButton.Size = new System.Drawing.Size(1031, 183);
             this.automaticDelayButton.TabIndex = 0;
             this.automaticDelayToolTip.SetToolTip(this.automaticDelayButton, "Not persistent");
-            this.automaticDelayButton.Text = "&AutomaticDelay = 30";
+            this.automaticDelayButton.Text = "&AutomaticDelay = 300";
             this.automaticDelayButton.UseVisualStyleBackColor = true;
             // 
             // autoPopDelayButton
@@ -76,7 +76,7 @@
             this.autoPopDelayButton.Size = new System.Drawing.Size(949, 183);
             this.autoPopDelayButton.TabIndex = 1;
             this.autoPopDelayToolTip.SetToolTip(this.autoPopDelayButton, "Not persistent");
-            this.autoPopDelayButton.Text = "Auto&PopDelay = 300";
+            this.autoPopDelayButton.Text = "Auto&PopDelay = 6000";
             this.autoPopDelayButton.UseVisualStyleBackColor = true;
             // 
             // flowLayoutPanel1
@@ -140,11 +140,11 @@
             // 
             // automaticDelayToolTip
             // 
-            this.automaticDelayToolTip.AutomaticDelay = 30;
+            this.automaticDelayToolTip.AutomaticDelay = 300;
             // 
             // autoPopDelayToolTip
             // 
-            this.autoPopDelayToolTip.AutoPopDelay = 300;
+            this.autoPopDelayToolTip.AutoPopDelay = 6000;
             this.autoPopDelayToolTip.InitialDelay = 500;
             this.autoPopDelayToolTip.ReshowDelay = 100;
             // 

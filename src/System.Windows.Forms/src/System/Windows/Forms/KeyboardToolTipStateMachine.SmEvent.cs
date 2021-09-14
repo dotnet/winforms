@@ -12,7 +12,7 @@ namespace System.Windows.Forms
             LeftTool,
             InitialDelayTimerExpired, // internal
             ReshowDelayTimerExpired, // internal
-            AutoPopupDelayTimerExpired, // internal
+            DismissTooltips, // internal
             RefocusWaitDelayExpired // internal
         }
     }

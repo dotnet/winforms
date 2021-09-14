@@ -1291,7 +1291,7 @@ namespace System.Windows.Forms
         ///  Windows 11 considers tooltip persistent if AuoPopDelay had never been set or
         ///  was set to infinity.
         /// </summary>
-        internal bool IsPersistent { get; private set; }
+        internal bool IsPersistent { get; set; }
 
         /// <summary>
         ///  Returns true if the AutomaticDelay property should be persisted.
@@ -1530,7 +1530,9 @@ namespace System.Windows.Forms
 
             if (duration < 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(duration), string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), (duration).ToString(CultureInfo.CurrentCulture), 0));
+                throw new ArgumentOutOfRangeException(
+                    nameof(duration),
+                    string.Format(SR.InvalidLowBoundArgumentEx, nameof(duration), (duration).ToString(CultureInfo.CurrentCulture), 0));
             }
 
             Rectangle toolRectangle = tool.GetNativeScreenRectangle();
@@ -1561,7 +1563,11 @@ namespace System.Windows.Forms
 
             SetTrackPosition(pointX, pointY);
             IsActivatedByKeyboard = true;
-            StartTimer(tool.GetOwnerWindow(), duration);
+
+            if (!IsPersistent)
+            {
+                StartTimer(tool.GetOwnerWindow(), duration);
+            }
         }
 
         private bool TryGetBubbleSize(IKeyboardToolTip tool, Rectangle toolRectangle, out Size bubbleSize)
