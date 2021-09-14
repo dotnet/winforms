@@ -6291,11 +6291,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Informe les utilisateurs de contrôles ListView virtuels qu'ils doivent préparer leur cache.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
-        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">Impossible d'accéder à la collection des éléments activés lorsque le ListView est en mode virtuel.</target>
@@ -7351,6 +7346,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Le formulaire {0} a essayé de définir un formulaire inéligible comme son propriétaire. Les formulaires ne peuvent pas s'appartenir ou appartenir à leurs propriétaires.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PBRSDocCommentPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">Valeur de propriété non valide.</target>
@@ -8176,6 +8176,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Couleur de premier plan du texte désactivé de la grille.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Parcourir...</target>
@@ -8214,16 +8219,6 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">La couleur de premier plan du volet Description.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">Description de {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneTitle">
-        <source>Description</source>
-        <target state="translated">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

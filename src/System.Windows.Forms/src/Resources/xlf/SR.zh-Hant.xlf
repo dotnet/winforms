@@ -6291,11 +6291,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">通知虛擬 ListView 控制項的使用者應該準備快取區。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
-        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">當 ListView 處於虛擬模式時，無法存取已核取的項目集合。</target>
@@ -7351,6 +7346,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">表單 {0} 嘗試將不合資格的表單設為擁有人。表單不能擁有本身或其擁有人。</target>
         <note />
       </trans-unit>
+      <trans-unit id="PBRSDocCommentPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">無效的屬性值。</target>
@@ -8176,6 +8176,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">方格區域中停用文字的前景色彩。</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">瀏覽...</target>
@@ -8214,16 +8219,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">描述窗格的前景色彩。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0} 描述</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneTitle">
-        <source>Description</source>
-        <target state="translated">描述</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

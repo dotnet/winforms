@@ -6291,11 +6291,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Notifica os usuários de controles ListView virtuais de que devem preparar o cache.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
-        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="translated">Você não pode adicionar grupos à coleção de grupos ListView quando o ListView estiver no modo virtual.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">Não é possível acessar a coleção de itens marcados quando ListView está no modo virtual.</target>
@@ -7351,6 +7346,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">O formulário {0} tentou definir um formulário inadequado como proprietário. Formulários não podem possuir a si próprios ou seus proprietários.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PBRSDocCommentPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">Valor de propriedade inválido.</target>
@@ -8176,6 +8176,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">A cor do primeiro plano do texto desabilitado na área da grade.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Procurar...</target>
@@ -8214,16 +8219,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">A cor de primeiro plano do painel de descrição.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">Descrição de {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneTitle">
-        <source>Description</source>
-        <target state="translated">Descrição</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

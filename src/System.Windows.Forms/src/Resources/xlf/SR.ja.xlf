@@ -6291,11 +6291,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">仮想 ListView コントロールのユーザーにキャッシュを用意する必要があることを通知します。</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
-        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="translated">ListView が仮想モードにある場合は、ListView グループ コレクションにグループを追加することはできません。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">ListView が仮想モードにされているときは、チェックされた項目コレクションにアクセスできません。</target>
@@ -7351,6 +7346,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">フォーム {0} はそれ自体のオーナーとして適切でないフォームを設定しようとしました。フォームがフォームを所有したり、そのオーナーを所有したりすることはできません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="PBRSDocCommentPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">プロパティの値が無効です。</target>
@@ -8176,6 +8176,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">グリッド領域内の無効な文字の前景色。</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">参照...</target>
@@ -8214,16 +8219,6 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">説明ペインの前景色です。</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0} 説明</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneTitle">
-        <source>Description</source>
-        <target state="translated">説明</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

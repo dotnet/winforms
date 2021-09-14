@@ -6291,11 +6291,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Notifica agli utenti dei controlli ListView virtuali di preparare la cache.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
-        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="translated">Non è possibile aggiungere gruppi alla raccolta di gruppi ListView quando ListView è in modalità virtuale.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">Impossibile accedere alla raccolta degli elementi selezionati quando ListView è in modalità virtuale.</target>
@@ -7351,6 +7346,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Tentativo del form {0} di impostare come proprio proprietario un form non adatto. I form non possono essere proprietari di se stessi né dei propri proprietari.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PBRSDocCommentPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">Valore della proprietà non valido.</target>
@@ -8176,6 +8176,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Colore di primo piano del testo disabilitato nell'area della griglia.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Sfoglia...</target>
@@ -8214,16 +8219,6 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Colore di primo piano del riquadro Descrizione.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">Descrizione di {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneTitle">
-        <source>Description</source>
-        <target state="translated">Descrizione</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

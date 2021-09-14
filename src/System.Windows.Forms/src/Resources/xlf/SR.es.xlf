@@ -6291,11 +6291,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Notifica a los usuarios de controles ListView virtuales que deberían preparar su caché.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
-        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="translated">No se pueden agregar grupos a la colección de grupos ListView cuando ListView esté en modo virtual.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">No se puede tener acceso a la colección de elementos activados cuando ListView está en modo virtual.</target>
@@ -7351,6 +7346,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">El formulario {0} intentó establecer como propietario un formulario no válido. Los formularios no pueden poseer a sus propietarios ni a sí mismos.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PBRSDocCommentPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">El valor de la propiedad no es válido.</target>
@@ -8176,6 +8176,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Color de primer plano del texto deshabilitado en el área de la cuadrícula.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Examinar...</target>
@@ -8214,16 +8219,6 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Color de primer plano del panel de descripciones.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">Descripción de {0}</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneTitle">
-        <source>Description</source>
-        <target state="translated">Descripción</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

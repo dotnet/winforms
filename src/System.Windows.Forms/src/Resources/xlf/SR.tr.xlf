@@ -6291,11 +6291,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Sanal ListView denetimlerinin kullanıcılarına önbelleklerini hazırlamaları gerektiğini bildirir.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
-        <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
         <source>Cannot access the checked items collection when the ListView is in virtual mode.</source>
         <target state="translated">ListView sanal moddayken işaretlenmiş öğeler koleksiyonuna erişilemiyor.</target>
@@ -7351,6 +7346,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">{0} formu, geçersiz bir formu sahip olarak ayarlamaya çalıştı. Formlar kendilerinin veya sahiplerinin sahibi olamaz.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PBRSDocCommentPaneTitle">
+        <source>Description</source>
+        <target state="new">Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
         <source>Property value is not valid.</source>
         <target state="translated">Özellik değeri geçerli değil.</target>
@@ -8176,6 +8176,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">Kılavuz alanındaki devre dışı metnin ön plan rengi.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
+        <source>{0} Description</source>
+        <target state="new">{0} Description</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
         <source>Browse...</source>
         <target state="translated">Gözat...</target>
@@ -8214,16 +8219,6 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="PropertyGridHelpForeColorDesc">
         <source>The foreground color of the description pane.</source>
         <target state="translated">Açıklama bölmesinin ön plan rengi.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
-        <source>{0} Description</source>
-        <target state="translated">{0} Açıklaması</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="PropertyGridHelpPaneTitle">
-        <source>Description</source>
-        <target state="translated">Açıklama</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
