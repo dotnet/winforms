@@ -860,5 +860,48 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(Environment.ProcessId, actual);
             Assert.False(listView.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_Bounds_Equals_ListViewItem_IfFullRowSelectIsTrue()
+        {
+            using ListView listView = new()
+            {
+                View = View.Details,
+                FullRowSelect = true
+            };
+
+            listView.CreateControl();
+            listView.Columns.AddRange(new ColumnHeader[] { new() { Width = 120, Text = "Column 1" }, new() { Width = 120, Text = "Column 2" } });
+            listView.Items.Add(new ListViewItem("Test item 11"));
+            listView.Items[0].SubItems.Add("Test item 12");
+
+            var itemAccessibleObject = listView.Items[0].AccessibilityObject;
+            var subItemAccessibleObject = listView.Items[0].SubItems[0].AccessibilityObject;
+
+            Assert.Equal(itemAccessibleObject.Bounds, subItemAccessibleObject.Bounds);
+            Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSтubItemAccessibleObject_Bounds_NotEquals_ListViewItem_IfFullRowSelectIsFalse()
+        {
+            using ListView listView = new()
+            {
+                View = View.Details,
+                FullRowSelect = false
+            };
+
+            listView.CreateControl();
+
+            listView.Columns.AddRange(new ColumnHeader[] { new() { Width = 120, Text = "Column 1" }, new() { Width = 120, Text = "Column 2" } });
+            listView.Items.Add(new ListViewItem("Test item 11"));
+            listView.Items[0].SubItems.Add("Test item 12");
+
+            var itemAccessibleObject = listView.Items[0].AccessibilityObject;
+            var subItemAccessibleObject = listView.Items[0].SubItems[0].AccessibilityObject;
+
+            Assert.NotEqual(itemAccessibleObject.Bounds, subItemAccessibleObject.Bounds);
+            Assert.True(listView.IsHandleCreated);
+        }
     }
 }
