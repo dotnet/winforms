@@ -5,6 +5,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <LangVersion>Preview</LangVersion>
     <Nullable>enable</Nullable>
+    <NoWarn>$(NoWarn);RS2007</NoWarn>
 
     <IsRoslynComponent>true</IsRoslynComponent>
 
