@@ -79,7 +79,7 @@ namespace System.Windows.Forms
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
                         UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
                         UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
-                        UiaCore.UIA.InvokePatternId => IsPatternSupported(propertyID),
+                        UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.InvokePatternId),
                         _ => base.GetPropertyValue(propertyID),
                     };
 

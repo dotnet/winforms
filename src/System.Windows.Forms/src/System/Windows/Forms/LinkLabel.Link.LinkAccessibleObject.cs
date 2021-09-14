@@ -91,7 +91,7 @@ namespace System.Windows.Forms
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HyperlinkControlTypeId,
                         UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningLinkLabel.FocusLink == _owningLink,
-                        UiaCore.UIA.InvokePatternId => IsPatternSupported(propertyID),
+                        UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.InvokePatternId),
                         _ => base.GetPropertyValue(propertyID)
                     };
 

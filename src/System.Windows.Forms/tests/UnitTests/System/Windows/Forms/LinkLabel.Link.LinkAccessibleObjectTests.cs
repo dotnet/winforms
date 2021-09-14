@@ -154,14 +154,14 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
-        [InlineData(((int)UiaCore.UIA.LegacyIAccessiblePatternId))]
-        [InlineData(((int)UiaCore.UIA.InvokePatternId))]
-        public void LinkAccessibleObject_GetPropertyValue_IsPatternSupported(int patternId)
+        [InlineData(((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
+        [InlineData(((int)UiaCore.UIA.IsInvokePatternAvailablePropertyId))]
+        public void LinkAccessibleObject_GetPropertyValue_IsPatternSupported(int propertyId)
         {
             using LinkLabel linkLabel = new();
             LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
 
-            bool actual = (bool)accessibleObject.GetPropertyValue((UiaCore.UIA)patternId);
+            bool actual = (bool)accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId);
 
             Assert.True(actual);
             Assert.False(linkLabel.IsHandleCreated);
