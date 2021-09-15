@@ -1820,7 +1820,7 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> KeyEventArgs_TestData()
         {
-            yield return new object[] { null };
+            yield return new object[] { new KeyEventArgs(Keys.None) };
             yield return new object[] { new KeyEventArgs(Keys.Cancel) };
             yield return new object[] { new KeyEventArgs(Keys.Escape) };
         }
