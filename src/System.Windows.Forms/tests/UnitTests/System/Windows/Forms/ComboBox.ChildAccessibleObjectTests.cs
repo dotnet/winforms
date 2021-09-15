@@ -14,9 +14,26 @@ namespace System.Windows.Forms.Tests
             using var control = new ComboBox();
             control.CreateControl();
 
-            Assert.True(control.IsHandleCreated);
             var accessibleObject = new ComboBox.ChildAccessibleObject(control, IntPtr.Zero);
+
             Assert.NotNull(accessibleObject.TestAccessor().Dynamic._owner);
+            Assert.True(control.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData("Some string for test")]
+        [InlineData("")]
+        [InlineData(null)]
+        public void ChildAccessibleObject_Name_Default(string testName)
+        {
+            using var control = new ComboBox();
+            control.AccessibilityObject.Name = testName;
+            control.CreateControl();
+
+            var accessibleObject = new ComboBox.ChildAccessibleObject(control, IntPtr.Zero);
+
+            Assert.Equal(testName, accessibleObject.Name);
+            Assert.True(control.IsHandleCreated);
         }
     }
 }
