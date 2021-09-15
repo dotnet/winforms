@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
 using System.Windows.Forms.Design;
@@ -28,7 +27,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if ((sort & PropertySort.Alphabetical) != 0)
                     {
-                        ArrayList commonProperties = GetCommonProperties(objects, presort: true, tab, parentEntry);
+                        var commonProperties = GetCommonProperties(objects, presort: true, tab, parentEntry);
 
                         var entries = new MultiPropertyDescriptorGridEntry[commonProperties.Count];
                         for (int i = 0; i < entries.Length; i++)
@@ -37,7 +36,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 parentEntry.OwnerGrid,
                                 parentEntry,
                                 objects,
-                                (PropertyDescriptor[])commonProperties[i],
+                                commonProperties[i],
                                 hide: false);
                         }
 
@@ -48,15 +47,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                         object[] sortObjects = new object[length - 1];
                         Array.Copy(objects, 1, sortObjects, 0, length - 1);
 
-                        ArrayList properties = GetCommonProperties(sortObjects, presort: true, tab, parentEntry);
+                        var properties = GetCommonProperties(sortObjects, presort: true, tab, parentEntry);
 
                         // This will work for just one as well.
-                        ArrayList firstProperties = GetCommonProperties(new object[] { objects[0] }, presort: false, tab, parentEntry);
+                        var firstProperties = GetCommonProperties(new object[] { objects[0] }, presort: false, tab, parentEntry);
 
                         var firstPropertyDescriptors = new PropertyDescriptor[firstProperties.Count];
                         for (int i = 0; i < firstProperties.Count; i++)
                         {
-                            firstPropertyDescriptors[i] = ((PropertyDescriptor[])firstProperties[i])[0];
+                            firstPropertyDescriptors[i] = firstProperties[i][0];
                         }
 
                         properties = UnsortedMerge(firstPropertyDescriptors, properties);
@@ -69,7 +68,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                                 parentEntry.OwnerGrid,
                                 parentEntry,
                                 objects,
-                                (PropertyDescriptor[])properties[i],
+                                properties[i],
                                 hide: false);
                         }
 
@@ -84,11 +83,15 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
 
             /// <summary>
-            ///  Returns an <see cref="ArrayList"/> of the <see cref="PropertyDescriptor"/> arrays, one for each component.
+            ///  Returns a list of <see cref="PropertyDescriptor"/> arrays, one for each component.
             /// </summary>
-            private static ArrayList GetCommonProperties(object[] objects, bool presort, PropertyTab tab, GridEntry parentEntry)
+            private static IList<PropertyDescriptor[]> GetCommonProperties(
+                object[] objects,
+                bool presort,
+                PropertyTab tab,
+                GridEntry parentEntry)
             {
-                var propertyCollections = new PropertyDescriptorCollection[objects.Length];
+                var objectProperties = new PropertyDescriptorCollection[objects.Length];
                 var attributes = new Attribute[parentEntry.BrowsableAttributes.Count];
 
                 parentEntry.BrowsableAttributes.CopyTo(attributes, 0);
@@ -101,33 +104,35 @@ namespace System.Windows.Forms.PropertyGridInternal
                         properties = properties.Sort(s_propertyComparer);
                     }
 
-                    propertyCollections[i] = properties;
+                    objectProperties[i] = properties;
                 }
 
-                ArrayList mergedList = new();
+                List<PropertyDescriptor[]> mergedList = new();
                 var matchArray = new PropertyDescriptor[objects.Length];
 
                 //
                 // Merge the property descriptors
                 //
 
-                int[] positions = new int[propertyCollections.Length];
-                for (int i = 0; i < propertyCollections[0].Count; i++)
+                int[] positions = new int[objectProperties.Length];
+
+                // Iterate through the first object's properties to see if it has matches in the other objects.
+                for (int i = 0; i < objectProperties[0].Count; i++)
                 {
-                    PropertyDescriptor pivotProperty = propertyCollections[0][i];
+                    PropertyDescriptor pivotProperty = objectProperties[0][i];
 
                     bool match = pivotProperty.Attributes[typeof(MergablePropertyAttribute)].IsDefaultAttribute();
 
-                    for (int j = 1; match && j < propertyCollections.Length; j++)
+                    for (int j = 1; match && j < objectProperties.Length; j++)
                     {
-                        if (positions[j] >= propertyCollections[j].Count)
+                        if (positions[j] >= objectProperties[j].Count)
                         {
                             match = false;
                             break;
                         }
 
                         // Check to see if we're on a match.
-                        PropertyDescriptor property = propertyCollections[j][positions[j]];
+                        PropertyDescriptor property = objectProperties[j][positions[j]];
                         if (pivotProperty.Equals(property))
                         {
                             positions[j] += 1;
@@ -143,7 +148,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
 
                         int position = positions[j];
-                        property = propertyCollections[j][position];
+                        property = objectProperties[j][position];
 
                         match = false;
 
@@ -170,9 +175,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                             // Try again.
                             position++;
-                            if (position < propertyCollections[j].Count)
+                            if (position < objectProperties[j].Count)
                             {
-                                property = propertyCollections[j][position];
+                                property = objectProperties[j][position];
                             }
                             else
                             {
@@ -192,7 +197,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     if (match)
                     {
                         matchArray[0] = pivotProperty;
-                        mergedList.Add(matchArray.Clone());
+                        mergedList.Add((PropertyDescriptor[])matchArray.Clone());
                     }
                 }
 
@@ -241,18 +246,20 @@ namespace System.Windows.Forms.PropertyGridInternal
             ///  have already been merged. The resulting array is the intersection of entries between the two,
             ///  but in the order of <paramref name="baseEntries"/>.
             /// </summary>
-            private static ArrayList UnsortedMerge(PropertyDescriptor[] baseEntries, ArrayList sortedMergedEntries)
+            private static IList<PropertyDescriptor[]> UnsortedMerge(
+                PropertyDescriptor[] baseEntries,
+                IList<PropertyDescriptor[]> sortedMergedEntries)
             {
-                ArrayList mergedEntries = new();
-                var mergeArray = new PropertyDescriptor[((PropertyDescriptor[])sortedMergedEntries[0]).Length + 1];
+                List<PropertyDescriptor[]> mergedEntries = new();
+                var mergeArray = new PropertyDescriptor[sortedMergedEntries[0].Length + 1];
 
                 for (int i = 0; i < baseEntries.Length; i++)
                 {
-                    PropertyDescriptor basePd = baseEntries[i];
+                    PropertyDescriptor basePropertyDescriptor = baseEntries[i];
 
                     // First do a binary search for a matching item.
                     PropertyDescriptor[] mergedEntryList = null;
-                    string entryName = $"{basePd.Name} {basePd.PropertyType.FullName}";
+                    string entryName = $"{basePropertyDescriptor.Name} {basePropertyDescriptor.PropertyType.FullName}";
 
                     int length = sortedMergedEntries.Count;
 
@@ -262,7 +269,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     while (length > 0)
                     {
-                        var propertyDescriptors = (PropertyDescriptor[])sortedMergedEntries[start + offset];
+                        var propertyDescriptors = sortedMergedEntries[start + offset];
                         PropertyDescriptor propertyDescriptor = propertyDescriptors[0];
                         string sortString = $"{propertyDescriptor.Name} {propertyDescriptor.PropertyType.FullName}";
                         int result = string.Compare(entryName, sortString, ignoreCase: false, CultureInfo.InvariantCulture);
@@ -287,9 +294,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     if (mergedEntryList is not null)
                     {
-                        mergeArray[0] = basePd;
+                        mergeArray[0] = basePropertyDescriptor;
                         Array.Copy(mergedEntryList, 0, mergeArray, 1, mergedEntryList.Length);
-                        mergedEntries.Add(mergeArray.Clone());
+                        mergedEntries.Add((PropertyDescriptor[])mergeArray.Clone());
                     }
                 }
 

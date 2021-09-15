@@ -60,8 +60,8 @@ namespace System.ComponentModel.Design
             if (value is IComponent component)
             {
                 // Make sure the component is not being inherited -- we can't delete these!
-                InheritanceAttribute attribute = (InheritanceAttribute)TypeDescriptor.GetAttributes(component)[typeof(InheritanceAttribute)];
-                if (attribute is not null && attribute.InheritanceLevel != InheritanceLevel.NotInherited)
+                if (TypeDescriptorHelper.TryGetAttribute(component, out InheritanceAttribute attribute)
+                    && attribute.InheritanceLevel != InheritanceLevel.NotInherited)
                 {
                     return false;
                 }

@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Diagnostics;
@@ -97,7 +96,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 _browsableAttributes = value;
 
-                if (!same && Children is not null && Children.Count > 0)
+                if (!same && ChildCount > 0)
                 {
                     DisposeChildren();
                 }
@@ -127,8 +126,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_forceReadOnlyChecked)
                 {
-                    var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(Target)[typeof(ReadOnlyAttribute)];
-                    if ((readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute())
+                    if ((TypeDescriptorHelper.TryGetAttribute(Target, out ReadOnlyAttribute readOnlyAttribute)
+                        && !readOnlyAttribute.IsDefaultAttribute())
                         || TypeDescriptor.GetAttributes(Target).Contains(InheritanceAttribute.InheritedReadOnly))
                     {
                         SetForceReadOnlyFlag();
@@ -153,9 +152,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                var helpAttribute = (HelpKeywordAttribute)TypeDescriptor.GetAttributes(Target)[typeof(HelpKeywordAttribute)];
-
-                if (helpAttribute is not null && !helpAttribute.IsDefaultAttribute())
+                if (TypeDescriptorHelper.TryGetAttribute(Target, out HelpKeywordAttribute helpAttribute)
+                    && !helpAttribute.IsDefaultAttribute())
                 {
                     return helpAttribute.HelpKeyword;
                 }
@@ -192,20 +190,17 @@ namespace System.Windows.Forms.PropertyGridInternal
         protected override bool CreateChildren(bool diffOldChildren = false)
         {
             bool expandable = base.CreateChildren(diffOldChildren);
-            CategorizePropEntries();
+            CategorizePropertyEntries();
             return expandable;
         }
 
         protected override void Dispose(bool disposing)
         {
-            if (disposing)
-            {
-                _host = null;
-                _baseProvider = null;
-                _ownerTab = null;
-                _ownerGridView = null;
-                _changeService = null;
-            }
+            _host = null;
+            _baseProvider = null;
+            _ownerTab = null;
+            _ownerGridView = null;
+            _changeService = null;
 
             Target = null;
             _valueClassName = null;
@@ -216,10 +211,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         public override object GetService(Type serviceType)
             => _host?.GetService(serviceType) ?? _baseProvider?.GetService(serviceType);
 
-        /// <inheritdoc/>
         public void ResetBrowsableAttributes() => _browsableAttributes = new(BrowsableAttribute.Yes);
 
-        /// <inheritdoc/>
         public virtual void ShowCategories(bool sortByCategories)
         {
             if (((_propertySort &= PropertySort.Categorized) != 0) != sortByCategories)
@@ -241,73 +234,46 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        internal void CategorizePropEntries()
+        /// <summary>
+        ///  Groups all children under category grid entries.
+        /// </summary>
+        protected void CategorizePropertyEntries()
         {
-            if (Children.Count <= 0)
-            {
-                return;
-            }
-
-            var childEntries = new GridEntry[Children.Count];
-            Children.CopyTo(childEntries, 0);
-
-            if ((_propertySort & PropertySort.Categorized) == 0)
+            if (Children.Count == 0 || (_propertySort & PropertySort.Categorized) == 0)
             {
                 return;
             }
 
             // First, walk through all the entries and group them by their category.
 
-            Hashtable categories = new();
-            for (int i = 0; i < childEntries.Length; i++)
+            Dictionary<string, List<GridEntry>> categories = new();
+            foreach (var child in Children)
             {
-                GridEntry child = childEntries[i];
-                Debug.Assert(child is not null);
-                if (child is not null)
+                string category = child.PropertyCategory;
+                if (!categories.TryGetValue(category, out var gridEntries))
                 {
-                    string category = child.PropertyCategory;
-                    var gridEntries = (ArrayList)categories[category];
-                    if (gridEntries is null)
-                    {
-                        gridEntries = new ArrayList();
-                        categories[category] = gridEntries;
-                    }
-
-                    gridEntries.Add(child);
+                    gridEntries = new List<GridEntry>();
+                    categories[category] = gridEntries;
                 }
+
+                gridEntries.Add(child);
             }
 
             // Now walk through and create a CategoryGridEntry that holds all the properties for each category.
 
-            ArrayList categoryGridEntries = new();
-            IDictionaryEnumerator enumerator = categories.GetEnumerator();
-            while (enumerator.MoveNext())
+            List<GridEntry> categoryGridEntries = new();
+            foreach (var entry in categories)
             {
-                var gridEntries = (ArrayList)enumerator.Value;
-                if (gridEntries is not null)
+                var gridEntries = entry.Value;
+                if (gridEntries.Count > 0)
                 {
-                    string category = (string)enumerator.Key;
-                    if (gridEntries.Count > 0)
-                    {
-                        var rgpes = new GridEntry[gridEntries.Count];
-                        gridEntries.CopyTo(rgpes, 0);
-                        try
-                        {
-                            categoryGridEntries.Add(new CategoryGridEntry(OwnerGrid, this, category, rgpes));
-                        }
-                        catch
-                        {
-                        }
-                    }
+                    categoryGridEntries.Add(new CategoryGridEntry(OwnerGrid, this, entry.Key, entry.Value));
                 }
             }
 
-            childEntries = new GridEntry[categoryGridEntries.Count];
-            categoryGridEntries.CopyTo(childEntries, 0);
-            Array.Sort(childEntries, GridEntryComparer.Default);
-
+            categoryGridEntries.Sort(GridEntryComparer.Default);
             ChildCollection.Clear();
-            ChildCollection.AddRange(childEntries);
+            ChildCollection.AddRange(categoryGridEntries);
         }
     }
 }

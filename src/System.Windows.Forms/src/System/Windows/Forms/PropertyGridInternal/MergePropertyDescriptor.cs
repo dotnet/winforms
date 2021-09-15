@@ -9,7 +9,6 @@ using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Globalization;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
@@ -28,15 +27,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             _descriptors = descriptors;
         }
 
-        /// <inheritdoc />
         public override Type ComponentType => _descriptors[0].ComponentType;
 
-        /// <inheritdoc />
         public override TypeConverter Converter => _descriptors[0].Converter;
 
         public override string DisplayName => _descriptors[0].DisplayName;
 
-        /// <inheritdoc />
         public override bool IsLocalizable
         {
             get
@@ -58,7 +54,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <inheritdoc />
         public override bool IsReadOnly
         {
             get
@@ -80,12 +75,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <inheritdoc />
         public override Type PropertyType => _descriptors[0].PropertyType;
 
         public PropertyDescriptor this[int index] => _descriptors[index];
 
-        /// <inheritdoc />
         public override bool CanResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::CanResetValue called with non-array value");
@@ -107,9 +100,8 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         /// <summary>
-        ///  This method attempts to copy the given value so unique values are
-        ///  always passed to each object.  If the object cannot be copied it
-        ///  will be returned.
+        ///  This method attempts to copy the given value so unique values are always passed to each object.
+        ///  If the value cannot be copied the original value will be returned.
         /// </summary>
         private object CopyValue(object value)
         {
@@ -133,40 +125,43 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (value is ICloneable clone)
             {
                 clonedValue = clone.Clone();
+
+                if (clonedValue is not null)
+                {
+                    return clonedValue;
+                }
             }
 
-            // Next, access the type converter
-            if (clonedValue is null)
+            // Next, access the type converter.
+            TypeConverter converter = TypeDescriptor.GetConverter(value);
+            if (converter.CanConvertTo(typeof(InstanceDescriptor)))
             {
-                TypeConverter converter = TypeDescriptor.GetConverter(value);
-                if (converter.CanConvertTo(typeof(InstanceDescriptor)))
+                // Instance descriptors provide full fidelity unless they are marked as incomplete.
+                var instanceDescriptor = (InstanceDescriptor)converter.ConvertTo(
+                    null,
+                    CultureInfo.InvariantCulture,
+                    value,
+                    typeof(InstanceDescriptor));
+
+                if (instanceDescriptor is not null && instanceDescriptor.IsComplete)
                 {
-                    // Instance descriptors provide full fidelity unless they are marked as incomplete.
-                    var desc = (InstanceDescriptor)converter.ConvertTo(null, CultureInfo.InvariantCulture, value, typeof(InstanceDescriptor));
-                    if (desc is not null && desc.IsComplete)
+                    clonedValue = instanceDescriptor.Invoke();
+                    if (clonedValue is not null)
                     {
-                        clonedValue = desc.Invoke();
+                        return clonedValue;
                     }
                 }
-
-                // If that didn't work, try conversion to/from string
-                if (clonedValue is null && converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
-                {
-                    object stringRep = converter.ConvertToInvariantString(value);
-                    clonedValue = converter.ConvertFromInvariantString((string)stringRep);
-                }
             }
 
-            // How about serialization?
-            if (clonedValue is null && type.IsSerializable)
+            // If that didn't work, try conversion to/from string.
+            if (converter.CanConvertTo(typeof(string)) && converter.CanConvertFrom(typeof(string)))
             {
-                BinaryFormatter f = new();
-                MemoryStream ms = new();
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                f.Serialize(ms, value);
-                ms.Position = 0;
-                clonedValue = f.Deserialize(ms);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                object stringRepresentation = converter.ConvertToInvariantString(value);
+                clonedValue = converter.ConvertFromInvariantString((string)stringRepresentation);
+                if (clonedValue is not null)
+                {
+                    return clonedValue;
+                }
             }
 
             if (clonedValue is not null)
@@ -174,7 +169,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 return clonedValue;
             }
 
-            // we failed.  This object's reference will be set on each property.
+            // We failed.  This object's reference will be set on each property.
             return value;
         }
 
@@ -266,7 +261,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return values;
         }
 
-        /// <inheritdoc />
         public override void ResetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ResetValue called with non-array value");
@@ -314,7 +308,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <inheritdoc />
         public override void SetValue(object component, object value)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::SetValue called with non-array value");
@@ -333,7 +326,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        /// <inheritdoc />
         public override bool ShouldSerializeValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::ShouldSerializeValue called with non-array value");
