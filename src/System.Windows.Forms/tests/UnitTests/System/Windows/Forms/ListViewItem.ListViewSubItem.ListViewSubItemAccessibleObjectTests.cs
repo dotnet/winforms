@@ -883,7 +883,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ListViewSтubItemAccessibleObject_Bounds_NotEquals_ListViewItem_IfFullRowSelectIsFalse()
+        public void ListViewSubItemAccessibleObject_Bounds_NotEquals_ListViewItem_IfFullRowSelectIsFalse()
         {
             using ListView listView = new()
             {
@@ -902,6 +902,76 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(itemAccessibleObject.Bounds, subItemAccessibleObject.Bounds);
             Assert.True(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_GetPropertyValue_RuntimeId_ReturnsExpected()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new("Test item");
+            listView.Items.Add(listViewItem);
+            ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
+            ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
+            object actual = listViewSubItemAccessibleObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId);
+
+            Assert.Equal(listViewSubItem.AccessibilityObject.RuntimeId, actual);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_GetPropertyValue_BoundingRectangle_ReturnsExpected()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new("Test item");
+            listView.Items.Add(listViewItem);
+            ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
+            ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
+            object actual = listViewSubItemAccessibleObject.GetPropertyValue(UiaCore.UIA.BoundingRectanglePropertyId);
+
+            Assert.Equal(listViewSubItem.AccessibilityObject.BoundingRectangle, actual);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ListViewSubItemAccessibleObject_GetPropertyValue_IsOffscreen_ReturnsFalse()
+        {
+            using ListView listView = new();
+            ListViewItem listViewItem = new("Test item");
+            listView.Items.Add(listViewItem);
+            ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
+            ListViewSubItemAccessibleObject listViewSubItemAccessibleObject = new(listViewSubItem, listViewItem);
+            var actual = (bool)listViewSubItemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
+
+            Assert.False(actual);
+            Assert.False(listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(false, ((int)UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId))]
+        [InlineData(true, ((int)UiaCore.UIA.IsGridItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsGridPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsScrollItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsScrollPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsSelectionPatternAvailablePropertyId))]
+        [InlineData(true, ((int)UiaCore.UIA.IsTableItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsTablePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsTextPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsTogglePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsValuePatternAvailablePropertyId))]
+        public void ListViewSubItemAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
+        {
+            using ListView listView = new() { View = View.Details };
+            ListViewItem listViewItem = new("Test item");
+            listView.Items.Add(listViewItem);
+            ListViewItem.ListViewSubItem listViewSubItem = new(listViewItem, "Test subItem");
+            ListViewSubItemAccessibleObject accessibleObject = new(listViewSubItem, listViewItem);
+
+            Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
+            Assert.False(listView.IsHandleCreated);
         }
     }
 }

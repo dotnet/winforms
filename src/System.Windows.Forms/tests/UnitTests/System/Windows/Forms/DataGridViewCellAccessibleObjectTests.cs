@@ -539,6 +539,79 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(UiaCore.UIA.DataItemControlTypeId, provider.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
         }
 
+        [WinFormsFact]
+        public void DataGridViewCellsAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add(new DataGridViewRow());
+
+            DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
+
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+
+            //DataGridViewCellAccessibleObject name couldn't be set, it's gathered dynamically in the Name property accessor
+            Assert.Equal(accessibleObject.Name, actual);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellsAccessibleObject_GetPropertyValue_HelpText_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add(new DataGridViewRow());
+
+            DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
+
+            object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.HelpTextPropertyId);
+
+            Assert.Equal(accessibleObject.Help ?? string.Empty, actual);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewCellsAccessibleObject_GetPropertyValue_IsOffscreen_ReturnsFalse()
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add(new DataGridViewRow());
+
+            DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
+
+            bool actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
+
+            Assert.False(actual);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(false, ((int)UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId))]
+        [InlineData(true, ((int)UiaCore.UIA.IsGridItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsGridPatternAvailablePropertyId))]
+        [InlineData(true, ((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsMultipleViewPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsScrollItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsScrollPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsSelectionPatternAvailablePropertyId))]
+        [InlineData(true, ((int)UiaCore.UIA.IsTableItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsTablePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsTextPattern2AvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsTextPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UiaCore.UIA.IsTogglePatternAvailablePropertyId))]
+        [InlineData(true, ((int)UiaCore.UIA.IsValuePatternAvailablePropertyId))]
+        public void DataGridViewCellAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            dataGridView.Rows.Add(new DataGridViewRow());
+            DataGridViewCellAccessibleObject accessibleObject = new(dataGridView.Rows[0].Cells[0]);
+
+            Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
         private class SubDataGridViewCell : DataGridViewCell
         {
         }

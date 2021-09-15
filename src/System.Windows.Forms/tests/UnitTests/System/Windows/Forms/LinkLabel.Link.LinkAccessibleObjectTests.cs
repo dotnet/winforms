@@ -180,6 +180,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void LinkAccessibleObject_GetPropertyValue_RuntimeId_ReturnsExpected()
+        {
+            using LinkLabel linkLabel = new();
+            LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
+
+            object actual = accessibleObject.GetPropertyValue(UIA.RuntimeIdPropertyId);
+
+            Assert.Equal(accessibleObject.RuntimeId, actual);
+            Assert.False(linkLabel.IsHandleCreated);
+        }
+
+        [WinFormsFact]
         public void LinkAccessibleObject_GetPropertyValue_Name_IsExpected_ForOneLink()
         {
             using LinkLabel linkLabel = new();
@@ -214,6 +226,55 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(names[index], actual);
             }
 
+            Assert.False(linkLabel.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void LinkAccessibleObject_GetPropertyValue_HelpText_ReturnsExpected()
+        {
+            using LinkLabel linkLabel = new();
+            LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
+
+            object actual = accessibleObject.GetPropertyValue(UIA.HelpTextPropertyId);
+
+            Assert.Equal(accessibleObject.Help ?? string.Empty, actual);
+            Assert.False(linkLabel.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void LinkAccessibleObject_GetPropertyValue_IsOffscreen_ReturnsFalse()
+        {
+            using LinkLabel linkLabel = new();
+            LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
+
+            var actual = (bool)accessibleObject.GetPropertyValue(UIA.IsOffscreenPropertyId);
+
+            Assert.False(actual);
+            Assert.False(linkLabel.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(false, ((int)UIA.IsExpandCollapsePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsGridItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsGridPatternAvailablePropertyId))]
+        [InlineData(true, ((int)UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsMultipleViewPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsScrollItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsScrollPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsSelectionItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsSelectionPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTableItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTablePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTextPattern2AvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTextPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTogglePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsValuePatternAvailablePropertyId))]
+        public void LinkAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
+        {
+            using LinkLabel linkLabel = new();
+            LinkAccessibleObject accessibleObject = linkLabel.Links[0].AccessibleObject;
+
+            Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA)propertyId) ?? false);
             Assert.False(linkLabel.IsHandleCreated);
         }
     }
