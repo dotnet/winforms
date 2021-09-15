@@ -805,6 +805,7 @@ override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.TabControl.BackgroundImage.set -> void
 ~override System.Windows.Forms.TabControl.ControlCollection.Add(System.Windows.Forms.Control value) -> void
 ~override System.Windows.Forms.TabControl.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
+~override System.Windows.Forms.TabControl.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.TabControl.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.TabControl.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.TabControl.OnEnter(System.EventArgs e) -> void
@@ -827,6 +828,7 @@ override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.Equals(object other) -> bool
 ~override System.Windows.Forms.TableLayoutPanelCellPosition.ToString() -> string
 ~override System.Windows.Forms.TableLayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
+~override System.Windows.Forms.TabPage.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.TabPage.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~override System.Windows.Forms.TabPage.OnEnter(System.EventArgs e) -> void
 ~override System.Windows.Forms.TabPage.OnLeave(System.EventArgs e) -> void
