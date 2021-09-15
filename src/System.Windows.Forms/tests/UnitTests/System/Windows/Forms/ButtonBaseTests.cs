@@ -5,8 +5,8 @@
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.Drawing;
-using Moq;
 using System.Windows.Forms.TestUtilities;
+using Moq;
 using Xunit;
 using static Interop;
 using static Interop.User32;
@@ -5432,9 +5432,9 @@ namespace System.Windows.Forms.Tests
         {
             foreach (FlatStyle flatStyle in Enum.GetValues(typeof(FlatStyle)))
             {
+                bool expectedIsHandleCreated = flatStyle == FlatStyle.System;
                 foreach (bool enabled in new bool[] { true, false })
                 {
-                    bool expectedIsHandleCreated = flatStyle == FlatStyle.System ? true : false;
                     yield return new object[] { flatStyle, enabled, new KeyEventArgs(Keys.Cancel), false, false };
                     yield return new object[] { flatStyle, enabled, new KeyEventArgs(Keys.Enter), false, false };
                     yield return new object[] { flatStyle, enabled, new KeyEventArgs(Keys.Space), true, expectedIsHandleCreated };
@@ -5699,7 +5699,7 @@ namespace System.Windows.Forms.Tests
             {
                 foreach (bool enabled in new bool[] { true, false })
                 {
-                    yield return new object[] { flatStyle, enabled, null };
+                    yield return new object[] { flatStyle, enabled, new KeyEventArgs(Keys.None) };
                     yield return new object[] { flatStyle, enabled, new KeyEventArgs(Keys.Cancel) };
                     yield return new object[] { flatStyle, enabled, new KeyEventArgs(Keys.Enter) };
                     yield return new object[] { flatStyle, enabled, new KeyEventArgs(Keys.Space) };

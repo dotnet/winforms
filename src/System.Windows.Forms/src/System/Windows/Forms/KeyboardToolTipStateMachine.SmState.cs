@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     internal sealed partial class KeyboardToolTipStateMachine
     {
-        private enum SmState : byte
+        internal enum SmState : byte
         {
             Hidden,
             ReadyForInitShow,

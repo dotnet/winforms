@@ -65,7 +65,7 @@ namespace System.Windows.Forms
 
                 (SmState.Shown, SmEvent.FocusedTool) => _currentState, // unlikely: focus without leave
                 (SmState.Shown, SmEvent.LeftTool) => HideAndStartWaitingForRefocus(tool, tooltip),
-                (SmState.Shown, SmEvent.AutoPopupDelayTimerExpired) => FullFsmReset(),
+                (SmState.Shown, SmEvent.DismissTooltips) => FullFsmReset(),
 
                 (SmState.WaitForRefocus, SmEvent.FocusedTool) => SetupReshowTimer(tool, tooltip),
                 (SmState.WaitForRefocus, SmEvent.LeftTool) => _currentState, // OK
@@ -191,14 +191,23 @@ namespace System.Windows.Forms
         private SmState ShowToolTip(IKeyboardToolTip tool, ToolTip toolTip)
         {
             string toolTipText = tool.GetCaptionForTool(toolTip);
-            int autoPopDelay = toolTip.GetDelayTime(ComCtl32.TTDT.AUTOPOP);
+
+            int autoPopDelay = toolTip.IsPersistent ?
+                0 :
+                toolTip.GetDelayTime(ComCtl32.TTDT.AUTOPOP);
+
             if (!_currentTool.IsHoveredWithMouse())
             {
                 toolTip.ShowKeyboardToolTip(toolTipText, _currentTool, autoPopDelay);
             }
 
-            StartTimer(autoPopDelay,
-                GetOneRunTickHandler((Timer sender) => Transit(SmEvent.AutoPopupDelayTimerExpired, _currentTool)));
+            if (!toolTip.IsPersistent)
+            {
+                StartTimer(
+                    autoPopDelay,
+                    GetOneRunTickHandler((Timer sender) => Transit(SmEvent.DismissTooltips, _currentTool)));
+            }
+
             return SmState.Shown;
         }
 
@@ -257,6 +266,25 @@ namespace System.Windows.Forms
                 {
                     FullFsmReset();
                 }
+            }
+        }
+
+        internal static void HidePersistentTooltip() => s_instance?.HidePersistent();
+
+        private void HidePersistent()
+        {
+            if (_currentState != SmState.Shown || _currentTool is null)
+            {
+                return;
+            }
+
+            ToolTip currentToolTip = _toolToTip[_currentTool];
+            // This test is required because typing is not dismissing non-persistent tooltips.
+            if (currentToolTip?.IsPersistent == true)
+            {
+                currentToolTip.HideToolTip(_currentTool);
+                _currentTool = null;
+                _currentState = SmState.Hidden;
             }
         }
 

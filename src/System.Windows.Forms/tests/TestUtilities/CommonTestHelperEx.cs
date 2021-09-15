@@ -121,12 +121,11 @@ namespace System.Windows.Forms.TestUtilities
 
         public static TheoryData<KeyEventArgs> GetKeyEventArgsTheoryData()
         {
-            var data = new TheoryData<KeyEventArgs>
+            return new TheoryData<KeyEventArgs>
             {
-                null,
+                new KeyEventArgs(Keys.None),
                 new KeyEventArgs(Keys.Cancel)
             };
-            return data;
         }
 
         public static TheoryData<KeyPressEventArgs> GetKeyPressEventArgsTheoryData()
