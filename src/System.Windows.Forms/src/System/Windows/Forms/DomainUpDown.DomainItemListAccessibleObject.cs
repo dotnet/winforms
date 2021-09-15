@@ -10,6 +10,7 @@ namespace System.Windows.Forms
     {
         internal class DomainItemListAccessibleObject : AccessibleObject
         {
+            const string DefaultName = "Items";
             private readonly DomainUpDownAccessibleObject parent;
 
             public DomainItemListAccessibleObject(DomainUpDownAccessibleObject parent) : base()
@@ -24,7 +25,7 @@ namespace System.Windows.Forms
                     string baseName = base.Name;
                     if (baseName is null || baseName.Length == 0)
                     {
-                        return "Items";
+                        return DefaultName;
                     }
 
                     return baseName;

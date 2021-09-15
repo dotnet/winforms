@@ -18,5 +18,31 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(testName, accessibleObject.Name);
             Assert.Equal(AccessibleRole.ListItem, accessibleObject.Role);
         }
+
+        [WinFormsTheory]
+        [InlineData("Some string")]
+        [InlineData("")]
+        [InlineData(null)]
+        public void DomainItemAccessibleObject_Name_Set_ReturnsExpected(string testValue)
+        {
+            var accessibleObject = new DomainItemAccessibleObject(null, null);
+            accessibleObject.Name = testValue;
+            Assert.Equal(testValue, accessibleObject.Name);
+        }
+
+        [WinFormsFact]
+        public void DomainItemAccessibleObject_State_Default_ReturnsExpected()
+        {
+            var accessibleObject = new DomainItemAccessibleObject(null, null);
+            Assert.Equal(AccessibleStates.Selectable, accessibleObject.State);
+        }
+
+        [WinFormsFact]
+        public void DomainItemAccessibleObject_Value_Default_ReturnsExpected()
+        {
+            string testName = "Some test name";
+            var accessibleObject = new DomainItemAccessibleObject(testName, null);
+            Assert.Equal(testName, accessibleObject.Value);
+        }
     }
 }
