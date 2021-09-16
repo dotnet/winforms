@@ -26,7 +26,7 @@ variables:
     isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
 
   # used for post-build phases, internal builds only
-  - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
+  - ${{ if and(ne($(isPublic), 'true'), ne($(isPR), 'true')) }}:
     - group: DotNet-Winforms-SDLValidation-Params
     - group: DotNet-Blob-Feed
     - group: DotNet-Symbol-Server-Pats
@@ -42,7 +42,7 @@ variables:
         /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
 
   # Produce test-signed build for PR and Public builds
-  - ${{ if or(variables['isPublic'], variables['isPR']) }}:
+  - ${{ if or($(isPublic), $(isPR)) }}:
     # needed for darc (dependency flow) publishing
     - name: _PublishArgs
       value: ''
@@ -57,7 +57,7 @@ variables:
       value: false
 
   # Set up non-PR build from internal project
-  - ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
+  - ${{ if and(ne($(isPublic), 'true'), ne($(isPR), 'true')) }}:
     # needed for darc (dependency flow) publishing
     - name: _PublishArgs
       value: >-
@@ -97,7 +97,7 @@ stages:
       targetArchitecture: arm64
 
 
-- ${{ if and(EnableLoc, ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
+- ${{ if and($(EnableLoc), ne($(isPublic), 'true'), ne($(isPR), 'true')) }}:
   - stage: OneLocBuild
     displayName: Publish localizable content to OneLocBuild
     jobs:
@@ -109,7 +109,7 @@ stages:
         LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
 
 
-- ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
+- ${{ if and(ne($(isPublic), 'true'), ne($(isPR), 'true')) }}:
   - stage: PublishAssetRegistry
     displayName: Publish to Build Asset Registry
     dependsOn: Build
@@ -123,7 +123,7 @@ stages:
 
 
 # Copied from the arcade repo and modified for winforms
-- ${{ if and(ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
+- ${{ if and(ne($(isPublic), 'true'), ne($(isPR), 'true')) }}:
   - template: /eng/common/templates/post-build/post-build.yml
     parameters:
       validateDependsOn: PublishAssetRegistry
