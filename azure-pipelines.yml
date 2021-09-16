@@ -17,16 +17,16 @@ pr:
 - internal/experimental/*
 
 variables:
-  - name: TeamName
-    value: DotNetCore
+    TeamName: DotNetCore
   # clean the local repo on the build agents
-  - name: Build.Repository.Clean
-    value: true
-  - name: PostBuildSign
-    value: true
+    Build.Repository.Clean: true
+    PostBuildSign: true
+    EnableLoc: true
+    isPublic: $[eq(variables['System.TeamProject'], 'public')]
+    isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
 
   # used for post-build phases, internal builds only
-  - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+  - ${{ if and(ne(variables.isPublic, 'true'), ne(variables.isPR, 'true')) }}:
     - group: DotNet-Winforms-SDLValidation-Params
     - group: DotNet-Blob-Feed
     - group: DotNet-Symbol-Server-Pats
@@ -42,7 +42,7 @@ variables:
         /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
 
   # Produce test-signed build for PR and Public builds
-  - ${{ if or(eq(variables['System.TeamProject'], 'public'), in(variables['Build.Reason'], 'PullRequest')) }}:
+  - ${{ if or(variables.isPublic, variables.isPR) }}:
     # needed for darc (dependency flow) publishing
     - name: _PublishArgs
       value: ''
@@ -57,7 +57,7 @@ variables:
       value: false
 
   # Set up non-PR build from internal project
-  - ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+  - ${{ if and(ne(variables.isPublic, 'true'), ne(variables.isPR, 'true')) }}:
     # needed for darc (dependency flow) publishing
     - name: _PublishArgs
       value: >-
@@ -97,7 +97,7 @@ stages:
       targetArchitecture: arm64
 
 
-- ${{ if and( and( ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')), eq(variables['Build.SourceBranch'], 'refs/heads/main')) }}:
+- ${{ if and(EnableLoc, ne(variables.isPublic, 'true'), ne(variables.isPR, 'true')) }}:
   - stage: OneLocBuild
     displayName: Publish localizable content to OneLocBuild
     jobs:
@@ -109,7 +109,7 @@ stages:
         LclPackageId: 'LCL-JUNO-PROD-WINFORMS'
 
 
-- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+- ${{ if and(ne(variables.isPublic, 'true'), ne(variables.isPR, 'true')) }}:
   - stage: PublishAssetRegistry
     displayName: Publish to Build Asset Registry
     dependsOn: Build
@@ -123,7 +123,7 @@ stages:
 
 
 # Copied from the arcade repo and modified for winforms
-- ${{ if and(ne(variables['System.TeamProject'], 'public'), notin(variables['Build.Reason'], 'PullRequest')) }}:
+- ${{ if and(ne(variables.isPublic, 'true'), ne(variables.isPR, 'true')) }}:
   - template: /eng/common/templates/post-build/post-build.yml
     parameters:
       validateDependsOn: PublishAssetRegistry
