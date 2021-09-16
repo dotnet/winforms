@@ -38,8 +38,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     foreach (object target in (Array)Target)
                     {
-                        var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(target)[typeof(ReadOnlyAttribute)];
-                        if ((readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute())
+                        if ((TypeDescriptorHelper.TryGetAttribute(target, out ReadOnlyAttribute readOnlyAttribute)
+                            && !readOnlyAttribute.IsDefaultAttribute())
                             || TypeDescriptor.GetAttributes(target).Contains(InheritanceAttribute.InheritedReadOnly))
                         {
                             SetForceReadOnlyFlag();
@@ -77,7 +77,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     SetFlag(Flags.ExpandableFailed, true);
                 }
 
-                CategorizePropEntries();
+                CategorizePropertyEntries();
                 return expandable;
             }
             catch (Exception e) when (!ClientUtils.IsCriticalException(e))

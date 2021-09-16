@@ -75,7 +75,6 @@ namespace System.Windows.Forms
 
         private int _paintFrozen;
         private Color _lineColor = SystemInformation.HighContrast ? SystemColors.ControlDarkDark : SystemColors.InactiveBorder;
-        internal bool _developerOverride;
         private Color _categoryForegroundColor = SystemColors.ControlText;
         private Color _categorySplitterColor = SystemColors.Control;
         private Color _viewBorderColor = SystemColors.ControlDark;
@@ -811,11 +810,13 @@ namespace System.Windows.Forms
                 if (_lineColor != value)
                 {
                     _lineColor = value;
-                    _developerOverride = true;
+                    HasCustomLineColor = true;
                     _gridView.Invalidate();
                 }
             }
         }
+
+        internal bool HasCustomLineColor { get; private set; }
 
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -2107,7 +2108,7 @@ namespace System.Windows.Forms
             }
             catch (Exception ex)
             {
-                Debug.Fail("Failed to add a large property grid toolstrip button, " + ex.ToString());
+                Debug.Fail($"Failed to add a large property grid toolstrip button, {ex}");
             }
         }
 
@@ -2149,9 +2150,8 @@ namespace System.Windows.Forms
             var tabTypes = new Type[5];
             int types = 0;
             int i, j, k;
-            var tabAttribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(objs[0])[typeof(PropertyTabAttribute)];
 
-            if (tabAttribute is null)
+            if (!TypeDescriptorHelper.TryGetAttribute(objs[0], out PropertyTabAttribute tabAttribute))
             {
                 return Array.Empty<Type>();
             }
@@ -2184,9 +2184,7 @@ namespace System.Windows.Forms
             for (i = 1; i < objs.Length && types > 0; i++)
             {
                 // Get the tab attribute.
-                tabAttribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(objs[i])[typeof(PropertyTabAttribute)];
-
-                if (tabAttribute is null)
+                if (!TypeDescriptorHelper.TryGetAttribute(objs[i], out tabAttribute))
                 {
                     // If the current item has no tabs at all, we can fail right now.
                     return Array.Empty<Type>();
@@ -2229,15 +2227,7 @@ namespace System.Windows.Forms
             return returnTypes;
         }
 
-        internal GridEntry GetDefaultGridEntry()
-        {
-            if (_defaultEntry is null && _currentEntries is not null)
-            {
-                _defaultEntry = (GridEntry)_currentEntries[0];
-            }
-
-            return _defaultEntry;
-        }
+        internal GridEntry GetDefaultGridEntry() => _defaultEntry ??= _currentEntries?[0];
 
         /// <summary>
         ///  Gets the element from point.

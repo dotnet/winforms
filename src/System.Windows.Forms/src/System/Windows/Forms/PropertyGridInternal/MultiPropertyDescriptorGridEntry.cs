@@ -17,11 +17,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public MultiPropertyDescriptorGridEntry(
             PropertyGrid ownerGrid,
-            GridEntry peParent,
+            GridEntry parent,
             object[] objectArray,
             PropertyDescriptor[] propertyDescriptors,
             bool hide)
-            : base(ownerGrid, peParent, hide)
+            : base(ownerGrid, parent, hide)
         {
             _mergedDescriptor = new MergePropertyDescriptor(propertyDescriptors);
             _objects = objectArray;

@@ -5,61 +5,51 @@
 using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal class AttributeTypeSorter : IComparer
+    internal class AttributeTypeSorter : IComparer, IComparer<Attribute>
     {
-        private static IDictionary? s_typeIds;
+        private static readonly ConditionalWeakTable<Attribute, string> s_typeIds = new();
 
-        public int Compare(object? obj1, object? obj2)
+        public int Compare(object? x, object? y) => Compare(x as Attribute, y as Attribute);
+
+        public int Compare(Attribute? x, Attribute? y)
         {
-            Attribute? a1 = obj1 as Attribute;
-            Attribute? a2 = obj2 as Attribute;
-
-            if (a1 is null && a2 is null)
+            if (x is null && y is null)
             {
                 return 0;
             }
-            else if (a1 is null)
+            else if (x is null)
             {
                 return -1;
             }
-            else if (a2 is null)
+            else if (y is null)
             {
                 return 1;
             }
 
-            return string.Compare(AttributeTypeSorter.GetTypeIdString(a1), AttributeTypeSorter.GetTypeIdString(a2), false, CultureInfo.InvariantCulture);
+            return string.Compare(GetTypeIdString(x), GetTypeIdString(y), ignoreCase: false, CultureInfo.InvariantCulture);
         }
 
-        private static string? GetTypeIdString(Attribute a)
+        private static string? GetTypeIdString(Attribute attribute)
         {
-            string? result;
-            object? typeId = a.TypeId;
+            if (s_typeIds.TryGetValue(attribute, out string? result))
+            {
+                return result;
+            }
+
+            object? typeId = attribute.TypeId;
 
             if (typeId is null)
             {
-                Debug.Fail("Attribute '" + a.GetType().FullName + "' does not have a typeid.");
-                return "";
+                Debug.Fail($"Attribute '{attribute.GetType().FullName}' does not have a typeid.");
+                return string.Empty;
             }
 
-            if (s_typeIds is null)
-            {
-                s_typeIds = new Hashtable();
-                result = null;
-            }
-            else
-            {
-                result = s_typeIds[typeId] as string;
-            }
-
-            if (result is null)
-            {
-                result = typeId.ToString();
-                s_typeIds[typeId] = result;
-            }
-
+            result = typeId.ToString();
+            s_typeIds.AddOrUpdate(attribute, result ?? string.Empty);
             return result;
         }
     }

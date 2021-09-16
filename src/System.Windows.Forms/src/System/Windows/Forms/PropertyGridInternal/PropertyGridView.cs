@@ -1396,7 +1396,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal bool IsExplorerTreeSupported => OwnerGrid.CanShowVisualStyleGlyphs && VisualStyleRenderer.IsSupported;
 
-        public int GetOutlineIconSize() => IsExplorerTreeSupported ? _outlineSizeExplorerTreeStyle : _outlineSize;
+        public int OutlineIconSize => IsExplorerTreeSupported ? _outlineSizeExplorerTreeStyle : _outlineSize;
 
         internal bool IsEditTextBoxCreated => _editTextBox is not null && _editTextBox.IsHandleCreated;
 
@@ -1455,9 +1455,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             return null;
         }
 
-        public int GetSplitterWidth() => 1;
+        public int SplitterWidth => 1;
 
-        public int GetTotalWidth() => LabelWidth + GetSplitterWidth() + GetValueWidth();
+        /// <summary>
+        ///  The width of the label, splitter, and value.
+        /// </summary>
+        public int TotalWidth => LabelWidth + SplitterWidth + ValueWidth;
 
         public int ValuePaintIndent => _paintIndent;
 
@@ -1465,7 +1468,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public int ValueStringIndent => EditIndent;
 
-        public int GetValueWidth() => (int)(LabelWidth * (_labelRatio - 1));
+        public int ValueWidth => (int)(LabelWidth * (_labelRatio - 1));
 
         public void DropDownControl(Control control)
         {
@@ -1821,7 +1824,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             return -1;
         }
 
-        public int GetDefaultOutlineIndent() => OutlineIndent;
+        public int DefaultOutlineIndent => OutlineIndent;
 
         public int GetScrollOffset()
         {
@@ -2167,7 +2170,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             int widthPS = GetOurSize().Width;
             int startPS = _location.X;
-            int pos = Math.Max(Math.Min(xPosition, widthPS - 10), GetOutlineIconSize() * 2);
+            int pos = Math.Max(Math.Min(xPosition, widthPS - 10), OutlineIconSize * 2);
 
             int oldLabelWidth = LabelWidth;
 
@@ -3405,7 +3408,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     visibleCount = Math.Min(visibleCount, endRow + 1);
 
                     Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "Drawing splitter");
-                    using var splitterPen = OwnerGrid.LineColor.GetCachedPenScope(GetSplitterWidth());
+                    using var splitterPen = OwnerGrid.LineColor.GetCachedPenScope(SplitterWidth);
                     g.DrawLine(splitterPen, _labelWidth, location.Y, _labelWidth, visibleCount * (RowHeight + 1) + location.Y);
 
                     // Draw lines.
@@ -3417,7 +3420,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     int lineStart = location.X;
 
                     // Draw values.
-                    int totalWidth = GetTotalWidth() + 1;
+                    int totalWidth = TotalWidth + 1;
 
                     // Draw labels. set clip rect.
                     for (int i = startRow; i < visibleCount; i++)
@@ -4085,12 +4088,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (TopLevelGridEntries is not null && DpiHelper.IsScalingRequirementMet)
             {
-                int outlineRectIconSize = GetOutlineIconSize();
-                foreach (GridEntry gridentry in TopLevelGridEntries)
+                int outlineRectIconSize = OutlineIconSize;
+                foreach (GridEntry entry in TopLevelGridEntries)
                 {
-                    if (gridentry.OutlineRect.Height != outlineRectIconSize || gridentry.OutlineRect.Width != outlineRectIconSize)
+                    if (entry.OutlineRectangle.Height != outlineRectIconSize || entry.OutlineRectangle.Width != outlineRectIconSize)
                     {
-                        ResetOutline(gridentry);
+                        entry.ResetOutlineRectangle();
                     }
                 }
             }
@@ -5569,29 +5572,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _offset2Units = LogicalToDeviceUnits(Offset2Pixels);
                 if (TopLevelGridEntries is not null)
                 {
-                    foreach (GridEntry t in TopLevelGridEntries)
+                    foreach (GridEntry entry in TopLevelGridEntries)
                     {
-                        ResetOutline(t);
+                        entry.ResetOutlineRectangle();
                     }
                 }
             }
-        }
-
-        /// <summary>
-        ///  Recursively reset outline rect for grid entries (both visible and invisible)
-        /// </summary>
-        private void ResetOutline(GridEntry entry)
-        {
-            entry.OutlineRect = Rectangle.Empty;
-            if (entry.ChildCount > 0)
-            {
-                foreach (GridEntry ent in entry.Children)
-                {
-                    ResetOutline(ent);
-                }
-            }
-
-            return;
         }
     }
 }

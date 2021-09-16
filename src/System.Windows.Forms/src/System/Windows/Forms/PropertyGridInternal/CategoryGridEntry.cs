@@ -4,32 +4,23 @@
 
 #nullable disable
 
-using System.Collections;
-#if DEBUG
-using System.Diagnostics;
-#endif
 using System.Drawing;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
-    internal partial class CategoryGridEntry : GridEntry
+    /// <summary>
+    ///  Virtual, collapsible parent <see cref="GridEntry"/>.
+    /// </summary>
+    internal sealed partial class CategoryGridEntry : GridEntry
     {
         private readonly string _name;
-        private Brush _backBrush;
-        private static Hashtable s_categoryStates;
+        private static Dictionary<string, bool> s_categoryStates;
         private readonly static object s_lock = new();
 
-        public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry peParent, string name, GridEntry[] childGridEntries)
-            : base(ownerGrid, peParent)
+        public CategoryGridEntry(PropertyGrid ownerGrid, GridEntry parent, string name, IEnumerable<GridEntry> children)
+            : base(ownerGrid, parent)
         {
             _name = name;
-
-#if DEBUG
-            for (int n = 0; n < childGridEntries.Length; n++)
-            {
-                Debug.Assert(childGridEntries[n] is not null, "Null item in category subproperty list");
-            }
-#endif
 
             lock (s_lock)
             {
@@ -43,12 +34,11 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             IsExpandable = true;
 
-            for (int i = 0; i < childGridEntries.Length; i++)
+            ChildCollection = new GridEntryCollection(children);
+            foreach (var child in ChildCollection)
             {
-                childGridEntries[i].ParentGridEntry = this;
+                child.ParentGridEntry = this;
             }
-
-            ChildCollection = new GridEntryCollection(childGridEntries);
 
             lock (s_lock)
             {
@@ -58,17 +48,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             SetFlag(Flags.LabelBold, true);
         }
 
-        /// <summary>
-        ///  Returns true if this GridEntry has a value field in the right hand column.
-        /// </summary>
+        // We have no value to display for a category entry.
         internal override bool HasValue => false;
 
         protected override void Dispose(bool disposing)
         {
             if (disposing)
             {
-                _backBrush?.Dispose();
-                _backBrush = null;
                 ChildCollection = null;
             }
 
@@ -117,8 +103,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                 PropertyGridView gridHost = OwnerGridView;
 
                 // Give an extra pixel for breathing room.
-                // Calling base.PropertyDepth to avoid the -1 in the override.
-                return 1 + gridHost.GetOutlineIconSize() + OutlineIconPadding + (base.PropertyDepth * gridHost.GetDefaultOutlineIndent());
+                // Calling base.PropertyDepth to avoid the -1 in our override.
+                return 1 + gridHost.OutlineIconSize + OutlineIconPadding
+                    + (base.PropertyDepth * gridHost.DefaultOutlineIndent);
             }
         }
 
@@ -145,7 +132,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 int indent = PropertyLabelIndent - 2;
                 Rectangle focusRect = new(indent, rect.Y, labelWidth + 3, rect.Height - 1);
-                if (SystemInformation.HighContrast && !OwnerGrid._developerOverride)
+                if (SystemInformation.HighContrast && !OwnerGrid.HasCustomLineColor)
                 {
                     // Line color is SystemColors.ControlDarkDark in high contrast mode.
                     ControlPaint.DrawFocusRectangle(g, focusRect, SystemColors.ControlText, OwnerGrid.LineColor);

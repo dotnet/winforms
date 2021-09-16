@@ -115,7 +115,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        private bool ColorInversionNeededInHC => SystemInformation.HighContrast && !OwnerGrid._developerOverride;
+        private bool ColorInversionNeededInHighContrast
+            => SystemInformation.HighContrast && !OwnerGrid.HasCustomLineColor;
 
         /// <summary>
         ///  Gets the <see cref="AccessibleObject"/> for this instance.
@@ -575,7 +576,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             }
         }
 
-        public virtual bool IsExpandable
+        public bool IsExpandable
         {
             get => Expandable;
             set
@@ -602,9 +603,6 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         public override string Label => PropertyLabel;
 
-        /// <summary>
-        ///  Retrieves the PropertyDescriptor that is surfacing the given object/
-        /// </summary>
         public override PropertyDescriptor PropertyDescriptor => null;
 
         /// <summary>
@@ -614,7 +612,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             get
             {
-                int borderWidth = OwnerGridView.GetOutlineIconSize() + OutlineIconPadding;
+                int borderWidth = OwnerGridView.OutlineIconSize + OutlineIconPadding;
                 return ((_propertyDepth + 1) * borderWidth) + 1;
             }
         }
@@ -637,10 +635,10 @@ namespace System.Windows.Forms.PropertyGridInternal
         public PropertyGrid OwnerGrid { get; }
 
         /// <summary>
-        ///  Returns rect that the outline icon (+ or - or arrow) will be drawn into, relative
+        ///  Returns the rectangle that the outline icon (+ or - or arrow) will be drawn into, relative
         ///  to the upper left corner of the <see cref="GridEntry"/>.
         /// </summary>
-        public Rectangle OutlineRect
+        public Rectangle OutlineRectangle
         {
             get
             {
@@ -649,19 +647,30 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return _outlineRect;
                 }
 
-                PropertyGridView gridHost = OwnerGridView;
-                Debug.Assert(gridHost is not null, "No owner grid!");
-                int outlineSize = gridHost.GetOutlineIconSize();
+                int outlineSize = OwnerGridView.OutlineIconSize;
                 int borderWidth = outlineSize + OutlineIconPadding;
-                int left = (_propertyDepth * borderWidth) + OutlineIconPadding / 2;
-                int top = (gridHost.GridEntryHeight - outlineSize) / 2;
-                _outlineRect = new Rectangle(left, top, outlineSize, outlineSize);
+                _outlineRect = new Rectangle(
+                    (_propertyDepth * borderWidth) + OutlineIconPadding / 2,
+                    (OwnerGridView.GridEntryHeight - outlineSize) / 2,
+                    outlineSize,
+                    outlineSize);
+
                 return _outlineRect;
             }
-            set
+        }
+
+        /// <summary>
+        ///  Recursively resets outline rectangles for this <see cref="GridEntry"/> and it's children.
+        /// </summary>
+        public void ResetOutlineRectangle()
+        {
+            _outlineRect = Rectangle.Empty;
+            if (ChildCount > 0)
             {
-                // Set property is required to reset cached value when dpi changed.
-                _outlineRect = value;
+                foreach (GridEntry child in Children)
+                {
+                    child.ResetOutlineRectangle();
+                }
             }
         }
 
@@ -1234,8 +1243,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (!forceReadOnly)
                 {
-                    var readOnlyAttribute = (ReadOnlyAttribute)TypeDescriptor.GetAttributes(value)[typeof(ReadOnlyAttribute)];
-                    forceReadOnly = readOnlyAttribute is not null && !readOnlyAttribute.IsDefaultAttribute();
+                    forceReadOnly = TypeDescriptorHelper.TryGetAttribute(value, out ReadOnlyAttribute readOnlyAttribute)
+                        && !readOnlyAttribute.IsDefaultAttribute();
                 }
 
                 if (this is not IRootGridEntry && !TypeConverter.GetPropertiesSupported(this))
@@ -1452,7 +1461,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         {
             PropertyGridView ownerGrid = OwnerGridView;
             string label = PropertyLabel;
-            int borderWidth = ownerGrid.GetOutlineIconSize() + OutlineIconPadding;
+            int borderWidth = ownerGrid.OutlineIconSize + OutlineIconPadding;
 
             // Fill the background if necessary.
             Color backColor = selected ? ownerGrid.SelectedItemWithFocusBackColor : BackgroundColor;
@@ -1515,14 +1524,14 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 // We need to invert the color only if in Highcontrast mode, targeting 4.7.1 and above, Gridcategory and
                 // not a developer override. This is required to achieve required contrast ratio.
-                bool shouldInvertForHC = ColorInversionNeededInHC && (bold || (selected && !_hasFocus));
+                bool shouldInvert = ColorInversionNeededInHighContrast && (bold || (selected && !_hasFocus));
 
                 // Do actual drawing.
 
                 // A brush is needed if using GDI+ only (UseCompatibleTextRendering); if using GDI, only the color is needed.
                 Color textColor = selected && _hasFocus
                     ? ownerGrid.SelectedItemWithFocusForeColor
-                    : shouldInvertForHC
+                    : shouldInvert
                         ? InvertColor(OwnerGrid.LineColor)
                         : g.FindNearestColor(LabelTextColor);
 
@@ -1541,30 +1550,25 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 g.SetClip(oldClip, CombineMode.Replace);
-                oldClip.Dispose();   // clip is actually copied out.
+                oldClip.Dispose();   // SetClip copies the passed in Region.
 
-                if (maxSpace <= labelWidth)
-                {
-                    _labelTipPoint = new Point(stringX + 2, rect.Y + 1);
-                }
-                else
-                {
-                    _labelTipPoint = InvalidPoint;
-                }
+                _labelTipPoint = maxSpace <= labelWidth ? new Point(stringX + 2, rect.Y + 1) : InvalidPoint;
             }
 
             rect.Y -= 1;
             rect.Height += 2;
 
-            PaintOutline(g, rect);
+            if (Expandable)
+            {
+                PaintOutlineGlyph(g, rect);
+            }
         }
 
         /// <summary>
-        ///  Paints the outline portion of this <see cref="GridEntry"/> into the given <see cref="Graphics"/> object.
-        ///  This is called by the <see cref="GridEntry"/> host (the <see cref="PropertyGridView"/>) when this
-        ///  <see cref="GridEntry"/> is to be painted.
+        ///  Paints the outline portion (the expand / collapse area to the left) of this <see cref="GridEntry"/> into
+        ///  the given <see cref="Graphics"/> object.
         /// </summary>
-        public virtual void PaintOutline(Graphics g, Rectangle r)
+        private void PaintOutlineGlyph(Graphics g, Rectangle r)
         {
             if (OwnerGridView.IsExplorerTreeSupported)
             {
@@ -1596,128 +1600,116 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 PaintOutlineWithClassicStyle(g, r);
             }
-        }
 
-        private void PaintOutlineWithExplorerTreeStyle(Graphics g, Rectangle r, IntPtr handle)
-        {
-            if (!Expandable)
+            // Draw the expansion glyph with the Explorer tree style.
+            void PaintOutlineWithExplorerTreeStyle(Graphics g, Rectangle r, IntPtr handle)
             {
-                return;
+                // Make sure we're in our bounds.
+                Rectangle outline = Rectangle.Intersect(r, OutlineRectangle);
+                if (outline.IsEmpty)
+                {
+                    return;
+                }
+
+                bool expanded = InternalExpanded;
+
+                // Invert color if it is not overriden by developer.
+                if (g is not null && ColorInversionNeededInHighContrast)
+                {
+                    Color textColor = InvertColor(OwnerGrid.LineColor);
+                    using var brush = textColor.GetCachedSolidBrushScope();
+                    g.FillRectangle(brush, outline);
+                }
+
+                if (ColorInversionNeededInHighContrast || !expanded)
+                {
+                    VisualStyleElement element = expanded
+                        ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
+                        : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
+
+                    VisualStyleRenderer explorerTreeRenderer = new(element);
+                    RedrawExplorerTreeViewClosedGlyph(g, explorerTreeRenderer, outline, handle);
+                }
+                else
+                {
+                    using var hdc = new DeviceContextHdcScope(g);
+                    VisualStyleRenderer explorerTreeRenderer = new(VisualStyleElement.ExplorerTreeView.Glyph.Opened);
+                    explorerTreeRenderer.DrawBackground(hdc, outline, handle);
+                }
+
+                unsafe void RedrawExplorerTreeViewClosedGlyph(
+                    Graphics graphics,
+                    VisualStyleRenderer explorerTreeRenderer,
+                    Rectangle rectangle,
+                    IntPtr handle)
+                {
+                    Color backgroundColor = ColorInversionNeededInHighContrast ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
+                    using var compatibleDC = new Gdi32.CreateDcScope(default);
+
+                    int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
+                    int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
+                    Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
+                    using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
+
+                    using var brush = new Gdi32.CreateBrushScope(backgroundColor);
+                    compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
+                    explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
+
+                    using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
+                    ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor);
+                    graphics.DrawImage(bitmap, rectangle, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
+                }
             }
 
-            bool expanded = InternalExpanded;
-            Rectangle outline = OutlineRect;
-
-            // Make sure we're in our bounds.
-            outline = Rectangle.Intersect(r, outline);
-            if (outline.IsEmpty)
+            // Draw the expansion glyph as a plus/minus.
+            void PaintOutlineWithClassicStyle(Graphics g, Rectangle r)
             {
-                return;
-            }
+                // Make sure we're in our bounds.
+                Rectangle outline = Rectangle.Intersect(r, OutlineRectangle);
+                if (outline.IsEmpty)
+                {
+                    return;
+                }
 
-            // Invert color if it is not overriden by developer.
-            if (g is not null && ColorInversionNeededInHC)
-            {
-                Color textColor = InvertColor(OwnerGrid.LineColor);
-                using var brush = textColor.GetCachedSolidBrushScope();
-                g.FillRectangle(brush, outline);
-            }
+                bool expanded = InternalExpanded;
 
-            if (ColorInversionNeededInHC || !expanded)
-            {
-                VisualStyleElement element = expanded
-                    ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
-                    : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
+                Color penColor = OwnerGridView.TextColor;
 
-                VisualStyleRenderer explorerTreeRenderer = new(element);
-                RedrawExplorerTreeViewClosedGlyph(g, explorerTreeRenderer, outline, handle);
-            }
-            else
-            {
-                using var hdc = new DeviceContextHdcScope(g);
-                VisualStyleRenderer explorerTreeRenderer = new(VisualStyleElement.ExplorerTreeView.Glyph.Opened);
-                explorerTreeRenderer.DrawBackground(hdc, outline, handle);
-            }
-        }
+                if (ColorInversionNeededInHighContrast)
+                {
+                    // Inverting text color to background to get required contrast ratio.
+                    penColor = InvertColor(OwnerGrid.LineColor);
+                }
+                else
+                {
+                    // Fill the background when not inverting.
+                    using var brush = BackgroundColor.GetCachedSolidBrushScope();
+                    g.FillRectangle(brush, outline);
+                }
 
-        private unsafe void RedrawExplorerTreeViewClosedGlyph(
-            Graphics graphics,
-            VisualStyleRenderer explorerTreeRenderer,
-            Rectangle rectangle,
-            IntPtr handle)
-        {
-            Color backgroundColor = ColorInversionNeededInHC ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
-            using var compatibleDC = new Gdi32.CreateDcScope(default);
+                // Draw the border.
+                using var pen = penColor.GetCachedPenScope();
+                g.DrawRectangle(pen, outline.X, outline.Y, outline.Width - 1, outline.Height - 1);
 
-            int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
-            int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
-            Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
-            using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
-
-            using var brush = new Gdi32.CreateBrushScope(backgroundColor);
-            compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
-            explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
-
-            using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
-            ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor);
-            graphics.DrawImage(bitmap, rectangle, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
-        }
-
-        private void PaintOutlineWithClassicStyle(Graphics g, Rectangle r)
-        {
-            if (!Expandable)
-            {
-                return;
-            }
-
-            // Draw outline box.
-
-            bool expanded = InternalExpanded;
-
-            // Make sure we're in our bounds.
-            Rectangle outline = Rectangle.Intersect(r, OutlineRect);
-            if (outline.IsEmpty)
-            {
-                return;
-            }
-
-            // Draw border area box.
-            Color penColor = OwnerGridView.TextColor;
-
-            // Inverting text color to background to get required contrast ratio.
-            if (ColorInversionNeededInHC)
-            {
-                penColor = InvertColor(OwnerGrid.LineColor);
-            }
-            else
-            {
-                // Filling rectangle as it was in all cases where we do not invert colors.
-                using var brush = BackgroundColor.GetCachedSolidBrushScope();
-                g.FillRectangle(brush, outline);
-            }
-
-            using var pen = penColor.GetCachedPenScope();
-
-            g.DrawRectangle(pen, outline.X, outline.Y, outline.Width - 1, outline.Height - 1);
-
-            // Draw horizontal line for +/-
-            int indent = 2;
-            g.DrawLine(
-                pen,
-                outline.X + indent,
-                outline.Y + outline.Height / 2,
-                outline.X + outline.Width - indent - 1,
-                outline.Y + outline.Height / 2);
-
-            // Draw vertical line to make a +
-            if (!expanded)
-            {
+                // Draw horizontal line for +/-
+                int indent = 2;
                 g.DrawLine(
                     pen,
-                    outline.X + outline.Width / 2,
-                    outline.Y + indent,
-                    outline.X + outline.Width / 2,
-                    outline.Y + outline.Height - indent - 1);
+                    outline.X + indent,
+                    outline.Y + outline.Height / 2,
+                    outline.X + outline.Width - indent - 1,
+                    outline.Y + outline.Height / 2);
+
+                // Draw vertical line to make a +
+                if (!expanded)
+                {
+                    g.DrawLine(
+                        pen,
+                        outline.X + outline.Width / 2,
+                        outline.Y + indent,
+                        outline.X + outline.Width / 2,
+                        outline.Y + outline.Height - indent - 1);
+                }
             }
         }
 
@@ -1922,7 +1914,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Are we on the outline?
                 if (Expandable)
                 {
-                    Rectangle outlineRect = OutlineRect;
+                    Rectangle outlineRect = OutlineRectangle;
                     if (outlineRect.Contains(x, y))
                     {
                         if (count % 2 == 0)
@@ -1938,31 +1930,15 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                if (count % 2 == 0)
-                {
-                    RaiseEvent(s_labelDoubleClickEvent, EventArgs.Empty);
-                }
-                else
-                {
-                    RaiseEvent(s_labelClickEvent, EventArgs.Empty);
-                }
-
+                RaiseEvent(count % 2 == 0 ? s_labelDoubleClickEvent : s_labelClickEvent, EventArgs.Empty);
                 return true;
             }
 
             // Are we in the value?
-            labelWidth += gridHost.GetSplitterWidth();
-            if (x >= labelWidth && x <= labelWidth + gridHost.GetValueWidth())
+            labelWidth += gridHost.SplitterWidth;
+            if (x >= labelWidth && x <= labelWidth + gridHost.ValueWidth)
             {
-                if (count % 2 == 0)
-                {
-                    RaiseEvent(s_valueDoubleClickEvent, EventArgs.Empty);
-                }
-                else
-                {
-                    RaiseEvent(s_valueClickEvent, EventArgs.Empty);
-                }
-
+                RaiseEvent(count % 2 == 0 ? s_valueDoubleClickEvent : s_valueClickEvent, EventArgs.Empty);
                 return true;
             }
 
