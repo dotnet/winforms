@@ -51,7 +51,7 @@ namespace System.Windows.Forms
                         // When we need to get bounds for first sub item it will return width of all item.
                         int width = bounds.Width;
 
-                        if (index == 0 && _owningListView.Columns.Count > 1)
+                        if (!_owningListView.FullRowSelect && index == 0 && _owningListView.Columns.Count > 1)
                         {
                             width = ParentInternal.GetSubItemBounds(subItemIndex: 1).X - bounds.X;
                         }
