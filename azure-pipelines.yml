@@ -17,13 +17,19 @@ pr:
 - internal/experimental/*
 
 variables:
-    TeamName: DotNetCore
+  - name: TeamName
+    value: DotNetCore
   # clean the local repo on the build agents
-    Build.Repository.Clean: true
-    PostBuildSign: true
-    EnableLoc: true
-    isPublic: $[eq(variables['System.TeamProject'], 'public')]
-    isPR: $[eq(variables['Build.Reason'], 'PullRequest')]
+  - name: Build.Repository.Clean
+    value: true
+  - name: PostBuildSign
+    value: true
+  - name: EnableLoc
+    value: true
+  - name: isPublic
+    value: $[eq(variables['System.TeamProject'], 'public')]
+  - name: isPR
+    value: $[eq(variables['Build.Reason'], 'PullRequest')]
 
   # used for post-build phases, internal builds only
   - ${{ if and(ne($(isPublic), 'true'), ne($(isPR), 'true')) }}:
