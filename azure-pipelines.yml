@@ -48,7 +48,7 @@ variables:
         /p:DotNetRuntimeSourceFeedKey=$(dotnetclimsrc-read-sas-token-base64)
 
   # Produce test-signed build for PR and Public builds
-  - ${{ if or(variables['isPublic'], variables['isPR']) }}:
+  - ${{ if or(eq(variables['isPublic'], 'true'), eq(variables['isPR'], 'true')) }}:
     # needed for darc (dependency flow) publishing
     - name: _PublishArgs
       value: ''
