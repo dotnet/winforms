@@ -27,9 +27,9 @@ variables:
   - name: EnableLoc
     value: true
   - name: isPublic
-    value: eq(variables['System.TeamProject'], 'public')
+    value: ${{ eq(variables['System.TeamProject'], 'public') }}
   - name: isPR
-    value: eq(variables['Build.Reason'], 'PullRequest')
+    value: ${{ eq(variables['Build.Reason'], 'PullRequest')}}
 
   # used for post-build phases, internal builds only
   - ${{ if and(ne($(isPublic), 'true'), ne($(isPR), 'true')) }}:
