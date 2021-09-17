@@ -20,7 +20,7 @@ parameters:
   RepoType: gitHub
   GitHubOrg: dotnet
   MirrorRepo: ''
-  MirrorBranch: release/$(Build.SourceBranchName)
+  MirrorBranch: main
   condition: ''
 
 jobs:
