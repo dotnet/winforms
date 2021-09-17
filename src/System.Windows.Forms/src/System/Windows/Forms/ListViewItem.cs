@@ -1061,12 +1061,12 @@ namespace System.Windows.Forms
                 IntPtr result = User32.SendMessageW(listView, (User32.WM)LVM.ISGROUPVIEWENABLED);
                 Debug.Assert(!updateOwner || result != IntPtr.Zero, "Groups not enabled");
                 result = User32.SendMessageW(listView, (User32.WM)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
-                Debug.Assert(!updateOwner || result != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
+                Debug.Assert(!updateOwner || result != IntPtr.Zero, $"Doesn't contain group id: {lvItem.iGroupId}");
             }
 
             if (updateOwner)
             {
-                User32.SendMessageW(listView, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WM)LVM.SETITEMW, 0, ref lvItem);
             }
         }
 
@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms
                 }
 
                 lvItem.iItem = displayIndex;
-                User32.SendMessageW(listView, (User32.WM)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WM)LVM.GETITEMW, 0, ref lvItem);
 
                 // Update this class' information
                 if (checkSelection)

@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)(long)GetWindowLong(_owningChildEdit, GWL.STYLE);
+                    ES extendedStyle = (ES)GetWindowLong(_owningChildEdit, GWL.STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL);
                 }
             }
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
             {
                 // Send an EM_GETRECT message to find out the bounding rectangle.
                 RECT rectangle = new RECT();
-                SendMessageW(_owningChildEdit, (WM)EM.GETRECT, IntPtr.Zero, ref rectangle);
+                SendMessageW(_owningChildEdit, (WM)EM.GETRECT, 0, ref rectangle);
 
                 return rectangle;
             }

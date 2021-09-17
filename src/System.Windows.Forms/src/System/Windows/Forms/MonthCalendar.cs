@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         private DateTime _minDate = DateTime.MinValue;
         private int _scrollChange = DefaultScrollChange;
         private bool _todayDateSet;
-        private DateTime _todayDate = DateTime.Now.Date;
+        private DateTime _todaysDate = DateTime.Now.Date;
         private DateTime _selectionStart;
         private DateTime _selectionEnd;
         private DateTime _focusedDate;
@@ -140,9 +140,9 @@ namespace System.Windows.Forms
         {
             PrepareForDrawing();
 
-            _selectionStart = _todayDate;
-            _selectionEnd = _todayDate;
-            _focusedDate = _todayDate;
+            _selectionStart = _todaysDate;
+            _selectionEnd = _todaysDate;
+            _focusedDate = _todaysDate;
             SetStyle(ControlStyles.UserPaint, false);
             SetStyle(ControlStyles.StandardClick, false);
 
@@ -831,7 +831,7 @@ namespace System.Windows.Forms
                 if (IsHandleCreated)
                 {
                     RECT rect = new RECT();
-                    if (User32.SendMessageW(this, (User32.WM)MCM.GETMINREQRECT, IntPtr.Zero, ref rect) == IntPtr.Zero)
+                    if (User32.SendMessageW(this, (User32.WM)MCM.GETMINREQRECT, 0, ref rect) == 0)
                     {
                         throw new InvalidOperationException(SR.InvalidSingleMonthSize);
                     }
@@ -877,9 +877,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The date shown as "Today" in the Month Calendar control.
-        ///  By default, "Today" is the current date at the time
-        ///  the MonthCalendar control is created.
+        ///  The date shown as "Today" in the Month Calendar control. By default, "Today" is the current date at the
+        ///  time the MonthCalendar control is created.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.MonthCalendarTodayDateDescr))]
@@ -889,36 +888,42 @@ namespace System.Windows.Forms
             {
                 if (_todayDateSet)
                 {
-                    return _todayDate;
+                    return _todaysDate;
                 }
 
                 if (IsHandleCreated)
                 {
-                    var st = new Kernel32.SYSTEMTIME();
-                    int res = (int)User32.SendMessageW(this, (User32.WM)User32.MCM.GETTODAY, IntPtr.Zero, ref st);
-                    Debug.Assert(res != 0, "MCM_GETTODAY failed");
-                    return DateTimePicker.SysTimeToDateTime(st).Date;
+                    Kernel32.SYSTEMTIME systemTime = new();
+                    int result = (int)User32.SendMessageW(this, (User32.WM)User32.MCM.GETTODAY, 0, ref systemTime);
+                    Debug.Assert(result != 0, "MCM_GETTODAY failed");
+                    return ((DateTime)systemTime).Date;
                 }
 
                 return Now.Date;
             }
             set
             {
-                if (!(_todayDateSet) || (DateTime.Compare(value, _todayDate) != 0))
+                if (!_todayDateSet || (DateTime.Compare(value, _todaysDate) != 0))
                 {
-                    // throw if trying to set the TodayDate to a value greater than MaxDate
+                    // Throw if trying to set the TodayDate to a value greater than MaxDate.
                     if (DateTime.Compare(value, _maxDate) > 0)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidHighBoundArgumentEx, nameof(TodayDate), FormatDate(value), FormatDate(_maxDate)));
+                        throw new ArgumentOutOfRangeException(
+                            nameof(value),
+                            value,
+                            string.Format(SR.InvalidHighBoundArgumentEx, nameof(TodayDate), FormatDate(value), FormatDate(_maxDate)));
                     }
 
-                    // throw if trying to set the TodayDate to a value less than MinDate
+                    // Throw if trying to set the TodayDate to a value less than MinDate.
                     if (DateTime.Compare(value, _minDate) < 0)
                     {
-                        throw new ArgumentOutOfRangeException(nameof(value), value, string.Format(SR.InvalidLowBoundArgument, nameof(TodayDate), FormatDate(value), FormatDate(_minDate)));
+                        throw new ArgumentOutOfRangeException(
+                            nameof(value),
+                            value,
+                            string.Format(SR.InvalidLowBoundArgument, nameof(TodayDate), FormatDate(value), FormatDate(_minDate)));
                     }
 
-                    _todayDate = value.Date;
+                    _todaysDate = value.Date;
                     _todayDateSet = true;
                     UpdateTodayDate();
                 }
@@ -1310,12 +1315,12 @@ namespace System.Windows.Forms
 
         private SelectionRange GetMonthRange(GMR flag)
         {
-            Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
-            User32.SendMessageW(this, (User32.WM)MCM.GETMONTHRANGE, (IntPtr)flag, ref sa[0]);
+            Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
+            User32.SendMessageW(this, (User32.WM)MCM.GETMONTHRANGE, (nint)flag, ref times[0]);
             return new SelectionRange
             {
-                Start = DateTimePicker.SysTimeToDateTime(sa[0]),
-                End = DateTimePicker.SysTimeToDateTime(sa[1])
+                Start = times[0],
+                End = times[1]
             };
         }
 
@@ -1344,19 +1349,20 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe HitTestInfo HitTest(int x, int y)
         {
-            var mchi = new MCHITTESTINFO
+            MCHITTESTINFO mchi = new()
             {
                 cbSize = (uint)sizeof(MCHITTESTINFO),
                 pt = new Point(x, y),
                 st = new Kernel32.SYSTEMTIME()
             };
-            User32.SendMessageW(this, (User32.WM)MCM.HITTEST, IntPtr.Zero, ref mchi);
 
-            // If the hit area has an associated valid date, get it
+            User32.SendMessageW(this, (User32.WM)MCM.HITTEST, 0, ref mchi);
+
+            // If the hit area has an associated valid date, get it.
             HitArea hitArea = GetHitArea(mchi.uHit);
             if (HitTestInfo.HitAreaHasValidDateTime(hitArea))
             {
-                var sys = new Kernel32.SYSTEMTIME
+                Kernel32.SYSTEMTIME systemTime = new()
                 {
                     wYear = mchi.st.wYear,
                     wMonth = mchi.st.wMonth,
@@ -1367,7 +1373,8 @@ namespace System.Windows.Forms
                     wSecond = mchi.st.wSecond,
                     wMilliseconds = mchi.st.wMilliseconds
                 };
-                return new HitTestInfo(mchi.pt, hitArea, DateTimePicker.SysTimeToDateTime(sys));
+
+                return new HitTestInfo(mchi.pt, hitArea, systemTime);
             }
 
             return new HitTestInfo(mchi.pt, hitArea);
@@ -1419,8 +1426,8 @@ namespace System.Windows.Forms
 
             if (_todayDateSet)
             {
-                Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(_todayDate);
-                User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
+                Kernel32.SYSTEMTIME systemTime = _todaysDate;
+                User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
             }
 
             SetControlColor(MCSC.TEXT, ForeColor);
@@ -1777,13 +1784,14 @@ namespace System.Windows.Forms
             // Updated the calendar range
             if (IsHandleCreated)
             {
-                Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
-                sa[0] = DateTimePicker.DateTimeToSysTime(minDate);
-                sa[1] = DateTimePicker.DateTimeToSysTime(maxDate);
+                Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
+                times[0] = minDate;
+                times[1] = maxDate;
                 GDTR flags = GDTR.MIN | GDTR.MAX;
-                if (User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (IntPtr)flags, ref sa[0]) == IntPtr.Zero)
+                if (User32.SendMessageW(this, (User32.WM)MCM.SETRANGE, (nint)flags, ref times[0]) == 0)
                 {
-                    throw new InvalidOperationException(string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
+                    throw new InvalidOperationException(
+                        string.Format(SR.MonthCalendarRange, minDate.ToShortDateString(), maxDate.ToShortDateString()));
                 }
 
                 UpdateDisplayRange();
@@ -1939,22 +1947,22 @@ namespace System.Windows.Forms
             {
                 if (date1.Ticks == _selectionStart.Ticks)
                 {
-                    // Bring start date forward
+                    // Bring start date forward.
                     date1 = date2.AddDays(1 - _maxSelectionCount);
                 }
                 else
                 {
-                    // Bring end date back
+                    // Bring end date back.
                     date2 = date1.AddDays(_maxSelectionCount - 1);
                 }
             }
 
-            // Set the range
+            // Set the range.
             SetSelRange(date1, date2);
         }
 
         /// <summary>
-        ///  Upper must be greater than Lower
+        ///  <paramref name="upper"/> must be greater than <paramref name="lower"/>.
         /// </summary>
         private void SetSelRange(DateTime lower, DateTime upper)
         {
@@ -1971,10 +1979,10 @@ namespace System.Windows.Forms
             // Always set the value on the control, to ensure that it is up to date.
             if (IsHandleCreated)
             {
-                Span<Kernel32.SYSTEMTIME> sa = stackalloc Kernel32.SYSTEMTIME[2];
-                sa[0] = DateTimePicker.DateTimeToSysTime(lower);
-                sa[1] = DateTimePicker.DateTimeToSysTime(upper);
-                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, IntPtr.Zero, ref sa[0]);
+                Span<Kernel32.SYSTEMTIME> times = stackalloc Kernel32.SYSTEMTIME[2];
+                times[0] = lower;
+                times[1] = upper;
+                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETSELRANGE, 0, ref times[0]);
             }
 
             if (changed)
@@ -2091,12 +2099,12 @@ namespace System.Windows.Forms
             {
                 if (_todayDateSet)
                 {
-                    Kernel32.SYSTEMTIME st = DateTimePicker.DateTimeToSysTime(_todayDate);
-                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, ref st);
+                    Kernel32.SYSTEMTIME systemTime = _todaysDate;
+                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, ref systemTime);
                 }
                 else
                 {
-                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, IntPtr.Zero, IntPtr.Zero);
+                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, IntPtr.Zero);
                 }
             }
         }
@@ -2204,13 +2212,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the MCN_SELECT notification
+        ///  Handles the MCN_SELECT notification.
         /// </summary>
         private unsafe void WmDateSelected(ref Message m)
         {
             NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m.LParam;
-            DateTime start = _selectionStart = DateTimePicker.SysTimeToDateTime(nmmcsc->stSelStart);
-            DateTime end = _selectionEnd = DateTimePicker.SysTimeToDateTime(nmmcsc->stSelEnd);
+            DateTime start = _selectionStart = nmmcsc->stSelStart;
+            DateTime end = _selectionEnd = nmmcsc->stSelEnd;
 
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);

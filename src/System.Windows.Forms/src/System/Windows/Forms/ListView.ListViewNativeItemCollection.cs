@@ -221,7 +221,8 @@ namespace System.Windows.Forms
                         mask = LVIF.PARAM,
                         iItem = displayIndex
                     };
-                    User32.SendMessageW(owner, (User32.WM)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
+
+                    User32.SendMessageW(owner, (User32.WM)LVM.GETITEMW, 0, ref lvItem);
                     return PARAM.ToInt(lvItem.lParam);
                 }
                 else

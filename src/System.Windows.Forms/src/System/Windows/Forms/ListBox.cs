@@ -1504,7 +1504,7 @@ namespace System.Windows.Forms
         {
             CheckIndex(index);
             var rect = new RECT();
-            if (SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect) == IntPtr.Zero)
+            if (SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect) == 0)
             {
                 return Rectangle.Empty;
             }
@@ -1590,13 +1590,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adds the given item to the native List box.  This asserts if the handle hasn't been
-        ///  created.
+        ///  Adds the given item to the native List box.
         /// </summary>
         private int NativeAdd(object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessageW(this, (WM)LB.ADDSTRING, IntPtr.Zero, GetItemText(item)));
+            int insertIndex = (int)SendMessageW(this, (WM)LB.ADDSTRING, 0, GetItemText(item));
             if (insertIndex == LB_ERRSPACE)
             {
                 throw new OutOfMemoryException();
@@ -1659,7 +1658,7 @@ namespace System.Windows.Forms
         private int NativeInsert(int index, object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessageW(this, (WM)LB.INSERTSTRING, (IntPtr)index, GetItemText(item)));
+            int insertIndex = (int)SendMessageW(this, (WM)LB.INSERTSTRING, index, GetItemText(item));
 
             if (insertIndex == LB_ERRSPACE)
             {
@@ -1675,7 +1674,7 @@ namespace System.Windows.Forms
                 throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
-            Debug.Assert(insertIndex == index, "NativeListBox inserted at " + insertIndex + " not the requested index of " + index);
+            Debug.Assert(insertIndex == index, $"NativeListBox inserted at {insertIndex} not the requested index of {index}");
             return insertIndex;
         }
 

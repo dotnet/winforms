@@ -44,7 +44,7 @@ This is a custom link\v #data#\v0  with hidden text after the link.\par
                 dwEffects = Interop.Richedit.CFE.LINK,
             };
 
-            Interop.User32.SendMessageW(control, (Interop.User32.WM)Interop.Richedit.EM.SETCHARFORMAT, (IntPtr)Interop.Richedit.SCF.SELECTION, ref format);
+            Interop.User32.SendMessageW(control, (Interop.User32.WM)Interop.Richedit.EM.SETCHARFORMAT, (nint)Interop.Richedit.SCF.SELECTION, ref format);
 
             control.Select(0, 0);
         }

@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                             lvbkImage.pszImage = pBackgroundImageFileName;
                             lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
 
-                            User32.SendMessageW(this, (User32.WM)LVM.SETBKIMAGEW, IntPtr.Zero, ref lvbkImage);
+                            User32.SendMessageW(this, (User32.WM)LVM.SETBKIMAGEW, 0, ref lvbkImage);
                         }
                     }
                 }
@@ -1686,7 +1686,8 @@ namespace System.Windows.Forms
                     cbSize = (uint)sizeof(LVTILEVIEWINFO),
                     dwMask = LVTVIM.TILESIZE
                 };
-                User32.SendMessageW(this, (User32.WM)LVM.GETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
+
+                User32.SendMessageW(this, (User32.WM)LVM.GETTILEVIEWINFO, 0, ref tileViewInfo);
 
                 return tileViewInfo.sizeTile;
             }
@@ -1715,8 +1716,9 @@ namespace System.Windows.Forms
                     dwFlags = LVTVIF.FIXEDSIZE,
                     sizeTile = tileSize
                 };
-                IntPtr retval = User32.SendMessageW(this, (User32.WM)LVM.SETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
-                Debug.Assert(retval != IntPtr.Zero, "LVM_SETTILEVIEWINFO failed");
+
+                nint result = User32.SendMessageW(this, (User32.WM)LVM.SETTILEVIEWINFO, 0, ref tileViewInfo);
+                Debug.Assert(result != 0, "LVM_SETTILEVIEWINFO failed");
 
                 if (AutoArrange)
                 {
@@ -2233,7 +2235,7 @@ namespace System.Windows.Forms
                 lvhi.pt.X += si.nPos;
             }
 
-            if (User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, IntPtr.Zero, ref lvhi) != (IntPtr)(-1) && lvhi.iItem > -1)
+            if (User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, 0, ref lvhi) != -1 && lvhi.iItem > -1)
             {
                 AccessibilityObject?.InternalRaiseAutomationNotification(
                     Automation.AutomationNotificationKind.Other,
@@ -3355,12 +3357,13 @@ namespace System.Windows.Forms
                         lvFindInfo.vkDirection = (uint)dir;
                     }
 
-                    lvFindInfo.lParam = IntPtr.Zero;
+                    lvFindInfo.lParam = 0;
                     int index = (int)User32.SendMessageW(
                         this,
                         (User32.WM)LVM.FINDITEMW,
                         (IntPtr)(startIndex - 1), // decrement startIndex so that the search is 0-based
                         ref lvFindInfo);
+
                     if (index >= 0)
                     {
                         return Items[index];
@@ -3457,12 +3460,12 @@ namespace System.Windows.Forms
 
                 if (lastIndex != -1)
                 {
-                    displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, (IntPtr)(lastIndex - 1), ref info);
+                    displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, lastIndex - 1, ref info);
                 }
 
                 if (displayIndex == -1)
                 {
-                    displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, (IntPtr)(-1) /* beginning */, ref info);
+                    displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, -1 /* beginning */, ref info);
                 }
 
                 Debug.Assert(displayIndex != -1, "This item is in the list view -- why can't we find a display index for it?");
@@ -3522,7 +3525,7 @@ namespace System.Windows.Forms
                 pt = new Point(x, y)
             };
 
-            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, 0, ref lvhi);
 
             ListViewItem li = null;
             if (displayIndex >= 0 && ((lvhi.flags & LVHT.ONITEM) != 0))
@@ -3569,7 +3572,7 @@ namespace System.Windows.Forms
                 pt = new Point(x, y)
             };
 
-            int index = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
+            int index = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, 0, ref lvhi);
             if (index > -1)
             {
                 iItem = lvhi.iItem;
@@ -3585,16 +3588,14 @@ namespace System.Windows.Forms
         internal Point GetItemPosition(int index)
         {
             var pt = new Point();
-            User32.SendMessageW(this, (User32.WM)LVM.GETITEMPOSITION, (IntPtr)index, ref pt);
+            User32.SendMessageW(this, (User32.WM)LVM.GETITEMPOSITION, index, ref pt);
             return pt;
         }
 
         internal LVIS GetItemState(int index)
-        {
-            return GetItemState(index, LVIS.FOCUSED | LVIS.SELECTED | LVIS.CUT |
-                                LVIS.DROPHILITED | LVIS.OVERLAYMASK |
-                                LVIS.STATEIMAGEMASK);
-        }
+            => GetItemState(
+                index,
+                LVIS.FOCUSED | LVIS.SELECTED | LVIS.CUT | LVIS.DROPHILITED | LVIS.OVERLAYMASK | LVIS.STATEIMAGEMASK);
 
         internal LVIS GetItemState(int index, LVIS mask)
         {
@@ -3604,16 +3605,13 @@ namespace System.Windows.Forms
             }
 
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
-            return unchecked((LVIS)(long)User32.SendMessageW(this, (User32.WM)LVM.GETITEMSTATE, (IntPtr)index, (IntPtr)mask));
+            return (LVIS)User32.SendMessageW(this, (User32.WM)LVM.GETITEMSTATE, index, (nint)mask);
         }
 
         /// <summary>
         ///  Returns a list item's bounding rectangle, including subitems.
         /// </summary>
-        public Rectangle GetItemRect(int index)
-        {
-            return GetItemRect(index, 0);
-        }
+        public Rectangle GetItemRect(int index) => GetItemRect(index, 0);
 
         /// <summary>
         ///  Returns a specific portion of a list item's bounding rectangle.
@@ -3625,7 +3623,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            //valid values are 0x0 to 0x3
+            // Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(portion, nameof(portion));
 
             if (View == View.Details && Columns.Count == 0)
@@ -3637,7 +3635,8 @@ namespace System.Windows.Forms
             {
                 left = (int)portion
             };
-            if (User32.SendMessageW(this, (User32.WM)LVM.GETITEMRECT, (IntPtr)index, ref itemrect) == IntPtr.Zero)
+
+            if (User32.SendMessageW(this, (User32.WM)LVM.GETITEMRECT, index, ref itemrect) == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -3665,7 +3664,7 @@ namespace System.Windows.Forms
             {
                 left = 0
             };
-            if (User32.SendMessageW(this, (User32.WM)LVM.GETITEMRECT, (IntPtr)index, ref itemrect) == IntPtr.Zero)
+            if (User32.SendMessageW(this, (User32.WM)LVM.GETITEMRECT, index, ref itemrect) == 0)
             {
                 return Rectangle.Empty;
             }
@@ -3715,7 +3714,8 @@ namespace System.Windows.Forms
                 left = (int)portion,
                 top = subItemIndex
             };
-            if (User32.SendMessageW(this, (User32.WM)LVM.GETSUBITEMRECT, (IntPtr)itemIndex, ref itemrect) == IntPtr.Zero)
+
+            if (User32.SendMessageW(this, (User32.WM)LVM.GETSUBITEMRECT, itemIndex, ref itemrect) == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
             }
@@ -3760,7 +3760,7 @@ namespace System.Windows.Forms
         {
             if (!ClientRectangle.Contains(x, y))
             {
-                return new ListViewHitTestInfo(null /*hitItem*/, null /*hitSubItem*/, ListViewHitTestLocations.None /*hitLocation*/);
+                return new ListViewHitTestInfo(hitItem: null, hitSubItem: null, hitLocation: ListViewHitTestLocations.None);
             }
 
             var lvhi = new LVHITTESTINFO
@@ -3771,15 +3771,15 @@ namespace System.Windows.Forms
             int iItem;
             if (SupportsListViewSubItems)
             {
-                iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
+                iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, 0, ref lvhi);
             }
             else
             {
-                iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+                iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, 0, ref lvhi);
             }
 
             ListViewItem item = (iItem == -1) ? null : Items[iItem];
-            ListViewHitTestLocations location = ListViewHitTestLocations.None;
+            ListViewHitTestLocations location;
 
             if (item is null && (LVHT.ABOVE & lvhi.flags) == LVHT.ABOVE)
             {
@@ -3977,7 +3977,7 @@ namespace System.Windows.Forms
             {
                 lvColumn.pszText = columnHeaderText;
 
-                return (int)User32.SendMessageW(this, (User32.WM)LVM.INSERTCOLUMNW, (IntPtr)index, ref lvColumn);
+                return (int)User32.SendMessageW(this, (User32.WM)LVM.INSERTCOLUMNW, index, ref lvColumn);
             }
         }
 
@@ -4021,7 +4021,8 @@ namespace System.Windows.Forms
                         iItem = item.Index,
                         mask = LVIF.GROUPID
                     };
-                    User32.SendMessageW(this, (User32.WM)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
+
+                    User32.SendMessageW(this, (User32.WM)LVM.GETITEMW, 0, ref lvItem);
                     Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
                 }
             }
@@ -4034,8 +4035,8 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "InsertGroupNative precondition: list-view handle must be created");
             Debug.Assert(group == DefaultGroup || Groups.Contains(group), "Make sure ListView.Groups contains this group before adding the native LVGROUP. Otherwise, custom-drawing may break.");
 
-            IntPtr result = SendGroupMessage(group, LVM.INSERTGROUP, (IntPtr)index, LVGF.GROUPID);
-            Debug.Assert(result != (IntPtr)(-1), "Failed to insert group");
+            nint result = SendGroupMessage(group, LVM.INSERTGROUP, index, LVGF.GROUPID);
+            Debug.Assert(result != -1, "Failed to insert group");
         }
 
         /// <summary>
@@ -4244,7 +4245,7 @@ namespace System.Windows.Forms
                         {
                             lvItem.pszText = pText;
 
-                            insertIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.INSERTITEMW, IntPtr.Zero, ref lvItem);
+                            insertIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.INSERTITEMW, 0, ref lvItem);
                         }
 
                         if (actualIndex == -1)
@@ -4938,10 +4939,10 @@ namespace System.Windows.Forms
                     pwpos = &wpos
                 };
 
-                // get the layout information
-                User32.SendMessageW(hdrHWND, (User32.WM)HDM.LAYOUT, IntPtr.Zero, ref hd);
+                // Get the layout information.
+                User32.SendMessageW(hdrHWND, (User32.WM)HDM.LAYOUT, 0, ref hd);
 
-                // position the header control
+                // Position the header control.
                 User32.SetWindowPos(
                     new HandleRef(this, hdrHWND),
                     new HandleRef(this, wpos.hwndInsertAfter),
@@ -5165,7 +5166,7 @@ namespace System.Windows.Forms
             fixed (char* pBackgroundImageFileName = backgroundImageFileName)
             {
                 lvbkImage.pszImage = pBackgroundImageFileName;
-                User32.SendMessageW(this, (User32.WM)LVM.SETBKIMAGEW, IntPtr.Zero, ref lvbkImage);
+                User32.SendMessageW(this, (User32.WM)LVM.SETBKIMAGEW, 0, ref lvbkImage);
             }
 
             if (string.IsNullOrEmpty(fileNameToDelete))
@@ -5247,7 +5248,7 @@ namespace System.Windows.Forms
                     lvColumn.pszText = columnHeaderText;
                 }
 
-                result = User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNW, (IntPtr)ch.Index, ref lvColumn);
+                result = User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNW, ch.Index, ref lvColumn);
             }
 
             if (result == IntPtr.Zero)
@@ -5409,7 +5410,8 @@ namespace System.Windows.Forms
                 iItem = itemIndex,
                 iImage = imageIndex
             };
-            User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
+
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, 0, ref lvItem);
         }
 
         internal void SetItemIndentCount(int index, int indentCount)
@@ -5430,7 +5432,8 @@ namespace System.Windows.Forms
                 iItem = index,
                 iIndent = indentCount
             };
-            User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
+
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, 0, ref lvItem);
         }
 
         internal void SetItemPosition(int index, int x, int y)
@@ -5448,7 +5451,7 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
             var pt = new Point(x, y);
-            User32.SendMessageW(this, (User32.WM)LVM.SETITEMPOSITION32, (IntPtr)index, ref pt);
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMPOSITION32, index, ref pt);
         }
 
         internal void SetItemState(int index, LVIS state, LVIS mask)
@@ -5469,7 +5472,8 @@ namespace System.Windows.Forms
                 state = state,
                 stateMask = mask
             };
-            User32.SendMessageW(this, (User32.WM)LVM.SETITEMSTATE, (IntPtr)index, ref lvItem);
+
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMSTATE, index, ref lvItem);
         }
 
         internal void SetItemText(int itemIndex, int subItemIndex, string text)
@@ -5506,7 +5510,7 @@ namespace System.Windows.Forms
             {
                 lvItem.pszText = pText;
 
-                User32.SendMessageW(this, (User32.WM)LVM.SETITEMTEXTW, (IntPtr)itemIndex, ref lvItem);
+                User32.SendMessageW(this, (User32.WM)LVM.SETITEMTEXTW, itemIndex, ref lvItem);
             }
         }
 
@@ -5700,11 +5704,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "UpdateGroupNative precondition: list-view handle must be created");
 
-            IntPtr result = SendGroupMessage(group, LVM.SETGROUPINFO, (IntPtr)group.ID, (LVGF)0);
-            Debug.Assert(result != (IntPtr)(-1));
+            nint result = SendGroupMessage(group, LVM.SETGROUPINFO, group.ID, 0);
+            Debug.Assert(result != -1);
         }
 
-        private unsafe IntPtr SendGroupMessage(ListViewGroup group, LVM msg, IntPtr lParam, LVGF additionalMask)
+        private unsafe nint SendGroupMessage(ListViewGroup group, LVM msg, nint lParam, LVGF additionalMask)
         {
             string header = group.Header;
             string footer = group.Footer;
@@ -5828,8 +5832,8 @@ namespace System.Windows.Forms
                 sizeTile = TileSize,
             };
 
-            IntPtr retval = User32.SendMessageW(this, (User32.WM)LVM.SETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
-            Debug.Assert(retval != IntPtr.Zero, "LVM_SETTILEVIEWINFO failed");
+            nint retval = User32.SendMessageW(this, (User32.WM)LVM.SETTILEVIEWINFO, 0, ref tileViewInfo);
+            Debug.Assert(retval != 0, "LVM_SETTILEVIEWINFO failed");
         }
 
         private void WmNmClick(ref Message m)
@@ -5847,7 +5851,7 @@ namespace System.Windows.Forms
                 pt = PointToClient(Cursor.Position)
             };
 
-            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, 0, ref lvhi);
             if (displayIndex == -1 || lvhi.iSubItem != 0 || (lvhi.flags & LVHT.ONITEMSTATEICON) == 0)
             {
                 return;
@@ -5889,7 +5893,7 @@ namespace System.Windows.Forms
                 pt = PointToClient(Cursor.Position)
             };
 
-            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, 0, ref lvhi);
             if (displayIndex != -1 && (lvhi.flags & LVHT.ONITEM) != 0)
             {
                 ListViewItem clickedItem = Items[displayIndex];
@@ -6315,7 +6319,7 @@ namespace System.Windows.Forms
         private int GetIndexOfClickedItem()
         {
             var lvhi = SetupHitTestInfo();
-            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi));
+            return (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, 0, ref lvhi);
         }
 
         private LVHITTESTINFO SetupHitTestInfo()
@@ -6338,9 +6342,9 @@ namespace System.Windows.Forms
 
         private int UpdateGroupCollapse(Interop.User32.WM clickType)
         {
-            // see if the mouse event occurred on a group
+            // See if the mouse event occurred on a group.
             var lvhi = SetupHitTestInfo();
-            int groupID = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, (IntPtr)(-1), ref lvhi));
+            int groupID = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, -1, ref lvhi);
             if (groupID == -1)
             {
                 return groupID;

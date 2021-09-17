@@ -76,19 +76,19 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.TreeNodeBoundToAnotherTreeView), nameof(value));
                 }
 
-                if (tv.nodeTable.ContainsKey(value.Handle) && value.index != index)
+                if (tv._nodeTable.ContainsKey(value.Handle) && value.index != index)
                 {
                     throw new ArgumentException(string.Format(SR.OnlyOneControl, value.Text), nameof(value));
                 }
 
-                if (tv.nodeTable.ContainsKey(value.Handle)
+                if (tv._nodeTable.ContainsKey(value.Handle)
                     && value.Handle == actual.Handle
                     && value.index == index)
                 {
                     return;
                 }
 
-                tv.nodeTable.Remove(actual.handle);
+                tv._nodeTable.Remove(actual._handle);
                 value.parent = owner;
                 value.index = index;
                 owner.children[index] = value;
@@ -363,7 +363,7 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(node));
             }
 
-            if (node.handle != IntPtr.Zero)
+            if (node._handle != IntPtr.Zero)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
             }
@@ -524,7 +524,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void Insert(int index, TreeNode node)
         {
-            if (node.handle != IntPtr.Zero)
+            if (node._handle != IntPtr.Zero)
             {
                 throw new ArgumentException(string.Format(SR.OnlyOneControl, node.Text), nameof(node));
             }

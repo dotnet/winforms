@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms.Tests
             };
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMODIFY, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMODIFY));
         }
 
         [WinFormsTheory]
@@ -1750,7 +1750,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.MaxLength = value;
-            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETLIMITTEXT, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETLIMITTEXT));
         }
 
         [WinFormsFact]
@@ -1866,7 +1866,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.Modified = value;
-            Assert.Equal((IntPtr)expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMODIFY, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)User32.EM.GETMODIFY));
         }
 
         [WinFormsFact]
@@ -2374,7 +2374,7 @@ namespace System.Windows.Forms.Tests
             control.ReadOnly = value;
 
             User32.ES style = (User32.ES)User32.GetWindowLong(control.Handle, User32.GWL.STYLE);
-            Assert.Equal(value, (style & User32.ES.READONLY) != 0);
+            Assert.Equal(value, style.HasFlag(User32.ES.READONLY));
         }
 
         [WinFormsFact]

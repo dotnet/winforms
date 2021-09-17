@@ -416,13 +416,13 @@ namespace System.Windows.Forms
                     if (_initialDirectory.Length != 0)
                     {
                         // Try to expand the folder specified by initialDir
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, PARAM.FromBool(true), _initialDirectory);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETEXPANDED, (nint)BOOL.TRUE, _initialDirectory);
                     }
 
                     if (_selectedPath.Length != 0)
                     {
                         // Try to select the folder specified by selectedPath
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, PARAM.FromBool(true), _selectedPath);
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.SETSELECTIONW, (nint)BOOL.TRUE, _selectedPath);
                     }
 
                     break;

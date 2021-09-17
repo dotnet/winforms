@@ -1059,19 +1059,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  "Parks" the given HWND to a temporary HWND.  This allows WS_CHILD windows to
-        ///  be parked.
+        ///  "Parks" the given HWND to a temporary HWND. This allows WS_CHILD windows to be parked.
         /// </summary>
         internal static void ParkHandle(HandleRef handle, IntPtr dpiAwarenessContext)
         {
             Debug.Assert(User32.IsWindow(handle).IsTrue(), "Handle being parked is not a valid window handle");
-            Debug.Assert((PARAM.ToInt(User32.GetWindowLong(handle, User32.GWL.STYLE)) & (int)User32.WS.CHILD) != 0, "Only WS_CHILD windows should be parked.");
+            Debug.Assert(((User32.WS)User32.GetWindowLong(handle, User32.GWL.STYLE)).HasFlag(User32.WS.CHILD), "Only WS_CHILD windows should be parked.");
 
-            ThreadContext threadContext = GetContextForHandle(handle);
-            if (threadContext is not null)
-            {
-                threadContext.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
-            }
+            GetContextForHandle(handle)?.GetParkingWindow(dpiAwarenessContext).ParkHandle(handle);
         }
 
         /// <summary>

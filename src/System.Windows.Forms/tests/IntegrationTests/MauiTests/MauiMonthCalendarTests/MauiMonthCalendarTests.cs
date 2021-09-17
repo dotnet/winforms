@@ -113,7 +113,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
                 stSelEnd = date,
             };
 
-            SendMessageW(wrapper.Calendar.Handle, WM.REFLECT | WM.NOTIFY, IntPtr.Zero, ref lParam);
+            SendMessageW(wrapper.Calendar.Handle, WM.REFLECT | WM.NOTIFY, 0, ref lParam);
 
             return new ScenarioResult(true);
         }

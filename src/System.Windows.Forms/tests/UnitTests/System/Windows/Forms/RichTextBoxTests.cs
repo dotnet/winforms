@@ -661,7 +661,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.AutoWordSelection = value;
-            Assert.Equal((IntPtr)expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETOPTIONS));
+            Assert.Equal(expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETOPTIONS));
         }
 
         public static IEnumerable<object[]> BackColor_Set_TestData()
@@ -1209,7 +1209,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.DetectUrls = value;
-            Assert.Equal((IntPtr)expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETAUTOURLDETECT));
+            Assert.Equal(expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETAUTOURLDETECT));
         }
 
         [WinFormsTheory]
@@ -1622,13 +1622,13 @@ namespace System.Windows.Forms.Tests
                 dwMask = (CFM)int.MaxValue
             };
 
-            IntPtr result;
+            nint result;
 
             using (var font = new Font(familyName, emSize, style, unit, gdiCharSet))
             {
                 control.Font = font;
-                result = SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format);
-                Assert.NotEqual(IntPtr.Zero, result);
+                result = SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format);
+                Assert.NotEqual(0, result);
                 Assert.Equal(familyName, format.FaceName.ToString());
                 Assert.Equal(expectedYHeight, format.yHeight);
                 Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
@@ -1644,8 +1644,8 @@ namespace System.Windows.Forms.Tests
                 dwMask = (CFM)int.MaxValue
             };
 
-            result = SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format1);
-            Assert.NotEqual(IntPtr.Zero, result);
+            result = SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format1);
+            Assert.NotEqual(0, result);
             Assert.Equal(Control.DefaultFont.Name, format1.FaceName.ToString());
             Assert.Equal((int)(Control.DefaultFont.SizeInPoints * 20), (int)format1.yHeight);
             Assert.True(format1.dwEffects.HasFlag(CFE.AUTOBACKCOLOR));
@@ -1770,7 +1770,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format));
             Assert.Equal(0x785634, format.crTextColor);
         }
 
@@ -1785,7 +1785,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format));
             Assert.Equal(0x785634, format.crTextColor);
 
             // Set different.
@@ -1794,7 +1794,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.ALL, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.ALL, ref format));
             Assert.Equal(0x907856, format.crTextColor);
         }
 
@@ -2068,7 +2068,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.MaxLength = value;
-            Assert.Equal((IntPtr)expected, SendMessageW(control.Handle, (WM)User32.EM.GETLIMITTEXT));
+            Assert.Equal(expected, SendMessageW(control.Handle, (WM)User32.EM.GETLIMITTEXT));
         }
 
         [WinFormsFact]
@@ -3802,7 +3802,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(expected, (int)format.wAlignment);
         }
 
@@ -3997,7 +3997,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(0x785634, format.crBackColor);
         }
 
@@ -4259,7 +4259,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(expectedOffset, (int)format.dxOffset);
             Assert.Equal(expected, (int)format.wNumbering);
         }
@@ -4453,7 +4453,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(900, format.yOffset);
         }
 
@@ -4642,7 +4642,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(CHARFORMAT2W)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(0x785634, format.crTextColor);
         }
 
@@ -4957,7 +4957,7 @@ namespace System.Windows.Forms.Tests
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = (CFM)int.MaxValue
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal("Arial", format.FaceName.ToString());
             Assert.Equal(expectedYHeight, (int)format.yHeight);
             Assert.Equal(CFE.AUTOBACKCOLOR | CFE.AUTOCOLOR | (CFE)expectedEffects, format.dwEffects);
@@ -5177,7 +5177,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(expected, format.dxOffset);
         }
 
@@ -5368,7 +5368,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(expected, format.dxStartIndent);
         }
 
@@ -5766,7 +5766,7 @@ namespace System.Windows.Forms.Tests
                 cbSize = (uint)sizeof(CHARFORMAT2W),
                 dwMask = CFM.PROTECTED
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETCHARFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(value, (format.dwEffects & CFE.PROTECTED) != 0);
         }
 
@@ -5952,7 +5952,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(expected, format.dxRightIndent);
         }
 
@@ -6399,7 +6399,7 @@ namespace System.Windows.Forms.Tests
             {
                 cbSize = (uint)sizeof(PARAFORMAT)
             };
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(3, format.cTabCount);
             Assert.Equal(15, format.rgxTabs[0]);
             Assert.Equal(30, format.rgxTabs[1]);
@@ -6407,7 +6407,7 @@ namespace System.Windows.Forms.Tests
 
             // Set null or empty.
             control.SelectionTabs = nullOrEmptyValue;
-            Assert.NotEqual(IntPtr.Zero, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (IntPtr)SCF.SELECTION, ref format));
+            Assert.NotEqual(0, SendMessageW(control.Handle, (WM)Richedit.EM.GETPARAFORMAT, (nint)SCF.SELECTION, ref format));
             Assert.Equal(0, format.cTabCount);
         }
 
@@ -6676,7 +6676,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.ShowSelectionMargin = value;
-            Assert.Equal((IntPtr)expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETOPTIONS));
+            Assert.Equal(expected, SendMessageW(control.Handle, (WM)Richedit.EM.GETOPTIONS));
         }
 
         [WinFormsFact]

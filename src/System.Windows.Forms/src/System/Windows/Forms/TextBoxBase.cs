@@ -948,7 +948,7 @@ namespace System.Windows.Forms
             {
                 start = 0;
                 int startResult = 0;
-                User32.SendMessageW(this, (WM)EM.GETSEL, (IntPtr)(&startResult), ref end);
+                User32.SendMessageW(this, (WM)EM.GETSEL, (nint)(&startResult), ref end);
                 start = startResult;
 
                 //Here, we return the max of either 0 or the # returned by
@@ -1064,18 +1064,19 @@ namespace System.Windows.Forms
 
             if (clearUndo)
             {
-                SendMessageW(this, (WM)EM.REPLACESEL, IntPtr.Zero, text);
+                SendMessageW(this, (WM)EM.REPLACESEL, 0, text);
+
                 // For consistency with Text, we clear the modified flag
                 SendMessageW(this, (WM)EM.SETMODIFY);
                 ClearUndo();
             }
             else
             {
-                SendMessageW(this, (WM)EM.REPLACESEL, /*undoable*/ (IntPtr)(-1), text);
+                SendMessageW(this, (WM)EM.REPLACESEL, -1, text);
             }
 
             // Re-enable user input.
-            SendMessageW(this, (WM)EM.LIMITTEXT, (IntPtr)maxLength);
+            SendMessageW(this, (WM)EM.LIMITTEXT, maxLength);
         }
 
         /// <summary>
@@ -1725,7 +1726,7 @@ namespace System.Windows.Forms
             IntPtr editOlePtr = IntPtr.Zero;
             try
             {
-                if (SendMessageW(this, (WM)Richedit.EM.GETOLEINTERFACE, IntPtr.Zero, ref editOlePtr) != IntPtr.Zero)
+                if (SendMessageW(this, (WM)Richedit.EM.GETOLEINTERFACE, 0, ref editOlePtr) != 0)
                 {
                     IntPtr iTextDocument = IntPtr.Zero;
                     Guid iiTextDocumentGuid = typeof(Richedit.ITextDocument).GUID;

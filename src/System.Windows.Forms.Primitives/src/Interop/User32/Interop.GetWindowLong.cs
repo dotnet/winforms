@@ -10,14 +10,14 @@ internal static partial class Interop
     {
         // We only ever call this on 32 bit so IntPtr is correct
         [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        private static extern IntPtr GetWindowLongW(IntPtr hWnd, GWL nIndex);
+        private static extern nint GetWindowLongW(IntPtr hWnd, GWL nIndex);
 
         [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr GetWindowLongPtrW(IntPtr hWnd, GWL nIndex);
+        public static extern nint GetWindowLongPtrW(IntPtr hWnd, GWL nIndex);
 
-        public static IntPtr GetWindowLong(IntPtr hWnd, GWL nIndex)
+        public static nint GetWindowLong(IntPtr hWnd, GWL nIndex)
         {
-            if (IntPtr.Size == 4)
+            if (!Environment.Is64BitProcess)
             {
                 return GetWindowLongW(hWnd, nIndex);
             }
@@ -25,16 +25,16 @@ internal static partial class Interop
             return GetWindowLongPtrW(hWnd, nIndex);
         }
 
-        public static IntPtr GetWindowLong(IHandle hWnd, GWL nIndex)
+        public static nint GetWindowLong(IHandle hWnd, GWL nIndex)
         {
-            IntPtr result = GetWindowLong(hWnd.Handle, nIndex);
+            nint result = GetWindowLong(hWnd.Handle, nIndex);
             GC.KeepAlive(hWnd);
             return result;
         }
 
-        public static IntPtr GetWindowLong(HandleRef hWnd, GWL nIndex)
+        public static nint GetWindowLong(HandleRef hWnd, GWL nIndex)
         {
-            IntPtr result = GetWindowLong(hWnd.Handle, nIndex);
+            nint result = GetWindowLong(hWnd.Handle, nIndex);
             GC.KeepAlive(hWnd.Wrapper);
             return result;
         }

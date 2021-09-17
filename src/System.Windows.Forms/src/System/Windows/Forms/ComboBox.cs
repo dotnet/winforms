@@ -1106,7 +1106,7 @@ namespace System.Windows.Forms
                     CreateControl();
                     if (IsHandleCreated && _childEdit is not null)
                     {
-                        SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.REPLACESEL, (IntPtr)(-1), str);
+                        SendMessageW(_childEdit, (WM)EM.REPLACESEL, -1, str);
                     }
                 }
             }
@@ -1739,7 +1739,7 @@ namespace System.Windows.Forms
                     DefChildWndProc(ref m);
                     if (_childEdit is not null && m.HWnd == _childEdit.Handle)
                     {
-                        SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                        SendMessageW(_childEdit, (WM)EM.SETMARGINS, (nint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                     }
 
                     break;
@@ -2330,13 +2330,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adds the given item to the native combo box.  This asserts if the handle hasn't been
-        ///  created.
+        ///  Adds the given item to the native combo box.
         /// </summary>
         private int NativeAdd(object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessageW(this, (WM)CB.ADDSTRING, IntPtr.Zero, GetItemText(item)));
+            int insertIndex = (int)SendMessageW(this, (WM)CB.ADDSTRING, 0, GetItemText(item));
             if (insertIndex < 0)
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
@@ -2400,13 +2399,13 @@ namespace System.Windows.Forms
         private int NativeInsert(int index, object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessageW(this, (WM)CB.INSERTSTRING, (IntPtr)index, GetItemText(item)));
+            int insertIndex = (int)SendMessageW(this, (WM)CB.INSERTSTRING, index, GetItemText(item));
             if (insertIndex < 0)
             {
                 throw new OutOfMemoryException(SR.ComboBoxItemOverflow);
             }
 
-            Debug.Assert(insertIndex == index, "NativeComboBox inserted at " + insertIndex + " not the requested index of " + index);
+            Debug.Assert(insertIndex == index, $"NativeComboBox inserted at {insertIndex} not the requested index of {index}");
             return insertIndex;
         }
 
@@ -2421,7 +2420,7 @@ namespace System.Windows.Forms
             // currently selected item.  Test for this and invalidate.  Note that because
             // invalidate will lazy-paint we can actually invalidate before we send the
             // delete message.
-            //
+
             if (DropDownStyle == ComboBoxStyle.DropDownList && SelectedIndex == index)
             {
                 Invalidate();
@@ -2477,23 +2476,21 @@ namespace System.Windows.Forms
                 IntPtr hwnd = GetWindow(new HandleRef(this, Handle), GW.CHILD);
                 if (hwnd != IntPtr.Zero)
                 {
-                    // if it's a simple dropdown list, the first HWND is the list box.
-                    //
+                    // If it's a simple dropdown list, the first HWND is the list box.
                     if (DropDownStyle == ComboBoxStyle.Simple)
                     {
                         _childListBox = new ComboBoxChildNativeWindow(this, ChildWindowType.ListBox);
                         _childListBox.AssignHandle(hwnd);
 
-                        // get the edits hwnd...
-                        //
+                        // Get the edits hwnd...
                         hwnd = GetWindow(new HandleRef(this, hwnd), GW.HWNDNEXT);
                     }
 
                     _childEdit = new ComboBoxChildNativeWindow(this, ChildWindowType.Edit);
                     _childEdit.AssignHandle(hwnd);
 
-                    // set the initial margin for combobox to be zero (this is also done whenever the font is changed).
-                    SendMessageW(new HandleRef(this, _childEdit.Handle), (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                    // Set the initial margin for combobox to be zero (this is also done whenever the font is changed).
+                    SendMessageW(_childEdit, (WM)EM.SETMARGINS, (nint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
                 }
             }
 
@@ -3614,7 +3611,7 @@ namespace System.Windows.Forms
             {
                 if (_childEdit is not null && _childEdit.Handle != IntPtr.Zero)
                 {
-                    SendMessageW(new HandleRef(this, _childEdit.Handle), WM.SETTEXT, IntPtr.Zero, s);
+                    SendMessageW(_childEdit, WM.SETTEXT, IntPtr.Zero, s);
                 }
             }
         }

@@ -98,12 +98,13 @@ namespace System.Windows.Forms
 
         private Image GetTargetWindowIcon()
         {
-            IntPtr hIcon = User32.SendMessageW(new HandleRef(this, GetSafeHandle(_target)), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
+            IntPtr hIcon = User32.SendMessageW(GetSafeHandle(_target), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, 0);
             Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
             Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 
             Image systemIcon = smallIcon.ToBitmap();
             smallIcon.Dispose();
+            GC.KeepAlive(_target);
 
             return systemIcon;
         }

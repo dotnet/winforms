@@ -347,7 +347,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW(_owningTextBoxBase, (WM)EM.SETSEL, (IntPtr)start, (IntPtr)end);
+                SendMessageW(_owningTextBoxBase, (WM)EM.SETSEL, start, end);
             }
 
             private RECT GetFormattingRectangle()
@@ -356,7 +356,7 @@ namespace System.Windows.Forms
 
                 // Send an EM_GETRECT message to find out the bounding rectangle.
                 RECT rectangle = new RECT();
-                SendMessageW(_owningTextBoxBase, (WM)EM.GETRECT, (IntPtr)0, ref rectangle);
+                SendMessageW(_owningTextBoxBase, (WM)EM.GETRECT, 0, ref rectangle);
                 return rectangle;
             }
 

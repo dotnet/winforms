@@ -2416,12 +2416,9 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (CheckForIllegalCrossThreadCalls &&
-                    !t_inCrossThreadSafeCall &&
-                    InvokeRequired)
+                if (CheckForIllegalCrossThreadCalls && !t_inCrossThreadSafeCall && InvokeRequired)
                 {
-                    throw new InvalidOperationException(string.Format(SR.IllegalCrossThreadCall,
-                                                                     Name));
+                    throw new InvalidOperationException(string.Format(SR.IllegalCrossThreadCall, Name));
                 }
 
                 if (!IsHandleCreated)
@@ -3924,31 +3921,19 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The current exStyle of the hWnd
         /// </summary>
-        private int WindowExStyle
+        private protected User32.WS_EX ExtendedWindowStyle
         {
-            get
-            {
-                return unchecked((int)(long)User32.GetWindowLong(this, User32.GWL.EXSTYLE));
-            }
-            set
-            {
-                User32.SetWindowLong(this, User32.GWL.EXSTYLE, (IntPtr)value);
-            }
+            get => (User32.WS_EX)User32.GetWindowLong(this, User32.GWL.EXSTYLE);
+            set => User32.SetWindowLong(this, User32.GWL.EXSTYLE, (nint)value);
         }
 
         /// <summary>
         ///  The current style of the hWnd
         /// </summary>
-        internal int WindowStyle
+        internal User32.WS WindowStyle
         {
-            get
-            {
-                return unchecked((int)(long)User32.GetWindowLong(this, User32.GWL.STYLE));
-            }
-            set
-            {
-                User32.SetWindowLong(this, User32.GWL.STYLE, new HandleRef(null, (IntPtr)value));
-            }
+            get => (User32.WS)User32.GetWindowLong(this, User32.GWL.STYLE);
+            set => User32.SetWindowLong(this, User32.GWL.STYLE, (nint)value);
         }
 
         /// <summary>
@@ -5123,7 +5108,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (0 != ((int)User32.WS_EX.MDICHILD & (int)(long)User32.GetWindowLong(new HandleRef(_window, InternalHandle), User32.GWL.EXSTYLE)))
+            if (((User32.WS_EX)User32.GetWindowLong(_window, User32.GWL.EXSTYLE)).HasFlag(User32.WS_EX.MDICHILD))
             {
                 User32.DefMDIChildProcW(InternalHandle, User32.WM.CLOSE, IntPtr.Zero, IntPtr.Zero);
             }
@@ -6143,8 +6128,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Return ((Control) window).Handle if window is a Control.
-        ///  Otherwise, returns window.Handle
+        ///  Return <see cref="Control.Handle"/> if <paramref name="window"/> is a <see cref="Control"/>.
+        ///  Otherwise, returns <see cref="IWin32Window.Handle"/> after validating the handle is valid.
         /// </summary>
         internal static IntPtr GetSafeHandle(IWin32Window window)
         {
@@ -6155,10 +6140,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                IntPtr hWnd = window.Handle;
-                if (hWnd == IntPtr.Zero || User32.IsWindow(hWnd).IsTrue())
+                IntPtr hwnd = window.Handle;
+                if (hwnd == IntPtr.Zero || User32.IsWindow(hwnd).IsTrue())
                 {
-                    return hWnd;
+                    return hwnd;
                 }
                 else
                 {
@@ -11699,40 +11684,42 @@ namespace System.Windows.Forms
 
         internal virtual void UpdateStylesCore()
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                CreateParams cp = CreateParams;
-                int winStyle = WindowStyle;
-                int exStyle = WindowExStyle;
-
-                // resolve the Form's lazy visibility.
-                if ((_state & States.Visible) != 0)
-                {
-                    cp.Style |= (int)User32.WS.VISIBLE;
-                }
-
-                if (winStyle != cp.Style)
-                {
-                    WindowStyle = cp.Style;
-                }
-
-                if (exStyle != cp.ExStyle)
-                {
-                    WindowExStyle = cp.ExStyle;
-                    SetState(States.Mirrored, (cp.ExStyle & (int)User32.WS_EX.LAYOUTRTL) != 0);
-                }
-
-                User32.SetWindowPos(
-                    new HandleRef(this, Handle),
-                    User32.HWND_TOP,
-                    flags: User32.SWP.DRAWFRAME
-                        | User32.SWP.NOACTIVATE
-                        | User32.SWP.NOMOVE
-                        | User32.SWP.NOSIZE
-                        | User32.SWP.NOZORDER);
-
-                Invalidate(true);
+                return;
             }
+
+            CreateParams cp = CreateParams;
+            User32.WS currentStyle = WindowStyle;
+            User32.WS_EX currentExtendedStyle = ExtendedWindowStyle;
+
+            // Resolve the Form's lazy visibility.
+            if ((_state & States.Visible) != 0)
+            {
+                cp.Style |= (int)User32.WS.VISIBLE;
+            }
+
+            if (currentStyle != (User32.WS)cp.Style)
+            {
+                WindowStyle = (User32.WS)cp.Style;
+            }
+
+            if (currentExtendedStyle != (User32.WS_EX)cp.ExStyle)
+            {
+                ExtendedWindowStyle = (User32.WS_EX)cp.ExStyle;
+                SetState(States.Mirrored, ((User32.WS_EX)cp.ExStyle).HasFlag(User32.WS_EX.LAYOUTRTL));
+            }
+
+            User32.SetWindowPos(
+                new HandleRef(this, Handle),
+                User32.HWND_TOP,
+                flags: User32.SWP.DRAWFRAME
+                    | User32.SWP.NOACTIVATE
+                    | User32.SWP.NOMOVE
+                    | User32.SWP.NOSIZE
+                    | User32.SWP.NOZORDER);
+
+            Invalidate(true);
         }
 
         private void UserPreferenceChanged(object sender, UserPreferenceChangedEventArgs pref)
@@ -11775,9 +11762,7 @@ namespace System.Windows.Forms
                     lastParentHandle = parentHandle;
                     parentHandle = User32.GetParent(parentHandle);
 
-                    int style = unchecked((int)((long)User32.GetWindowLong(lastParentHandle, User32.GWL.STYLE)));
-
-                    if ((style & (int)User32.WS.CHILD) == 0)
+                    if (((User32.WS)User32.GetWindowLong(lastParentHandle, User32.GWL.STYLE)).HasFlag(User32.WS.CHILD))
                     {
                         break;
                     }

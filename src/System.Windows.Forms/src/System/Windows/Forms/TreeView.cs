@@ -57,7 +57,7 @@ namespace System.Windows.Forms
         private bool hoveredAlready;
         private bool rightToLeftLayout;
 
-        private IntPtr hNodeMouseDown = IntPtr.Zero;//ensures we fire nodeclick on the correct node
+        private nint _mouseDownNode = 0; // ensures we fire nodeclick on the correct node
 
         private const int TREEVIEWSTATE_hideSelection = 0x00000001;
         private const int TREEVIEWSTATE_labelEdit = 0x00000002;
@@ -138,7 +138,7 @@ namespace System.Windows.Forms
         internal TreeNodeCollection nodes;
         internal TreeNode editNode;
         internal TreeNode root;
-        internal Hashtable nodeTable = new Hashtable();
+        internal Hashtable _nodeTable = new();
         internal bool nodesCollectionClear; //this is set when the treeNodeCollection is getting cleared and used by TreeView
         private MouseButtons downButton;
         private TreeViewDrawMode drawMode = TreeViewDrawMode.Normal;
@@ -1747,8 +1747,9 @@ namespace System.Windows.Forms
             {
                 pt = new Point(x, y)
             };
-            IntPtr hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhi);
-            TreeNode node = (hnode == IntPtr.Zero ? null : NodeFromHandle(hnode));
+
+            nint hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhi);
+            TreeNode node = hnode == 0 ? null : NodeFromHandle(hnode);
             TreeViewHitTestLocations loc = (TreeViewHitTestLocations)tvhi.flags;
             return (new TreeViewHitTestInfo(node, loc));
         }
@@ -1794,8 +1795,8 @@ namespace System.Windows.Forms
                 pt = new Point(x, y)
             };
 
-            IntPtr hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhi);
-            return (hnode == IntPtr.Zero ? null : NodeFromHandle(hnode));
+            nint hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhi);
+            return (hnode == 0 ? null : NodeFromHandle(hnode));
         }
 
         private void ImageListRecreateHandle(object sender, EventArgs e)
@@ -1937,12 +1938,7 @@ namespace System.Windows.Forms
         ///  Note this can be null - particularly if any windows messages get generated during
         ///  the insertion of a tree node (TVM_INSERTITEM)
         /// </summary>
-        internal TreeNode NodeFromHandle(IntPtr handle)
-        {
-            TreeNode node = (TreeNode)nodeTable[handle];
-
-            return node;
-        }
+        internal TreeNode NodeFromHandle(IntPtr handle) => (TreeNode)_nodeTable[handle];
 
         /// <summary>
         ///  Fires the DrawNode event.
@@ -2170,8 +2166,8 @@ namespace System.Windows.Forms
                 pt = PointToClient(Cursor.Position)
             };
 
-            IntPtr hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhip);
-            if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
+            nint hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+            if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (tn != prevHoveredNode && tn is not null)
@@ -2605,13 +2601,12 @@ namespace System.Windows.Forms
                 OnAfterSelect(new TreeViewEventArgs(node, action));
             }
 
-            // TreeView doesn't properly revert back to the unselected image
-            // if the unselected image is blank.
+            // TreeView doesn't properly revert back to the unselected image if the unselected image is blank.
             var rc = new RECT();
             *((IntPtr*)&rc.left) = nmtv->itemOld.hItem;
             if (nmtv->itemOld.hItem != IntPtr.Zero)
             {
-                if (unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc)) != 0)
+                if (User32.SendMessageW(this, (User32.WM)TVM.GETITEMRECT, 1, ref rc) != 0)
                 {
                     User32.InvalidateRect(new HandleRef(this, Handle), &rc, BOOL.TRUE);
                 }
@@ -2951,8 +2946,9 @@ namespace System.Windows.Forms
             {
                 pt = PointToClient(Cursor.Position)
             };
-            IntPtr hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhip);
-            if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
+
+            nint hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+            if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (tn is not null)
@@ -2962,7 +2958,7 @@ namespace System.Windows.Forms
                         Rectangle bounds = tn.Bounds;
                         bounds.Location = PointToScreen(bounds.Location);
 
-                        User32.SendMessageW(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, PARAM.FromBool(true), ref bounds);
+                        User32.SendMessageW(tooltipHandle, (User32.WM)TTM.ADJUSTRECT, (nint)BOOL.TRUE, ref bounds);
                         User32.SetWindowPos(
                             new HandleRef(this, tooltipHandle),
                             User32.HWND_TOPMOST,
@@ -2986,8 +2982,9 @@ namespace System.Windows.Forms
             {
                 pt = PointToClient(Cursor.Position)
             };
-            IntPtr hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhip);
-            if (hnode != IntPtr.Zero && ((tvhip.flags & TVHT.ONITEM) != 0))
+
+            nint hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+            if (hnode != 0 && ((tvhip.flags & TVHT.ONITEM) != 0))
             {
                 TreeNode tn = NodeFromHandle(hnode);
                 if (ShowNodeToolTips && tn is not null && (!string.IsNullOrEmpty(tn.ToolTipText)))
@@ -3062,12 +3059,11 @@ namespace System.Windows.Forms
                         {
                             pt = pos
                         };
-                        IntPtr hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhip);
-                        if (nmtv->nmhdr.code != (int)NM.CLICK
-                                    || (tvhip.flags & TVHT.ONITEM) != 0)
+
+                        nint hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
+                        if (nmtv->nmhdr.code != (int)NM.CLICK || (tvhip.flags & TVHT.ONITEM) != 0)
                         {
-                            button = nmtv->nmhdr.code == (int)NM.CLICK
-                                ? MouseButtons.Left : MouseButtons.Right;
+                            button = nmtv->nmhdr.code == (int)NM.CLICK ? MouseButtons.Left : MouseButtons.Right;
                         }
 
                         // The treeview's WndProc doesn't get the WM_LBUTTONUP messages when
@@ -3076,7 +3072,7 @@ namespace System.Windows.Forms
                         if (nmtv->nmhdr.code != (int)NM.CLICK
                             || (tvhip.flags & TVHT.ONITEM) != 0 || FullRowSelect)
                         {
-                            if (hnode != IntPtr.Zero && !ValidationCancelled)
+                            if (hnode != 0 && !ValidationCancelled)
                             {
                                 OnNodeMouseClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), button, 1, pos.X, pos.Y));
                                 OnClick(new MouseEventArgs(button, 1, pos.X, pos.Y, 0));
@@ -3217,6 +3213,7 @@ namespace System.Windows.Forms
                     if (CheckBoxes)
                     {
                         TVITEMW* item = (TVITEMW*)m.LParam;
+
                         // Check for invalid node handle
                         if (item->hItem != IntPtr.Zero)
                         {
@@ -3226,7 +3223,8 @@ namespace System.Windows.Forms
                                 hItem = item->hItem,
                                 stateMask = TVIS.STATEIMAGEMASK
                             };
-                            User32.SendMessageW(this, (User32.WM)TVM.GETITEMW, IntPtr.Zero, ref item1);
+
+                            User32.SendMessageW(this, (User32.WM)TVM.GETITEMW, 0, ref item1);
 
                             TreeNode node = NodeFromHandle(item->hItem);
                             node.CheckedStateInternal = (((int)item1.state >> TreeNode.SHIFTVAL) > 1);
@@ -3294,7 +3292,8 @@ namespace System.Windows.Forms
                     {
                         pt = new Point(PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam))
                     };
-                    hNodeMouseDown = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhip);
+
+                    _mouseDownNode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
 
                     // This gets around the TreeView behavior of temporarily moving the selection
                     // highlight to a node when the user clicks on its checkbox.
@@ -3304,7 +3303,7 @@ namespace System.Windows.Forms
                         OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
                         if (!ValidationCancelled && CheckBoxes)
                         {
-                            TreeNode node = NodeFromHandle(hNodeMouseDown);
+                            TreeNode node = NodeFromHandle(_mouseDownNode);
                             bool eventReturn = TreeViewBeforeCheck(node, TreeViewAction.ByMouse);
                             if (!eventReturn && node is not null)
                             {
@@ -3328,16 +3327,17 @@ namespace System.Windows.Forms
                     {
                         pt = new Point(PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam))
                     };
-                    IntPtr hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhi);
+
+                    nint hnode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhi);
 
                     // Important for CheckBoxes. Click needs to be fired.
-                    if (hnode != IntPtr.Zero)
+                    if (hnode != 0)
                     {
                         if (!ValidationCancelled && !treeViewState[TREEVIEWSTATE_doubleclickFired] & !treeViewState[TREEVIEWSTATE_mouseUpFired])
                         {
-                            //If the hit-tested node here is the same as the node we hit-tested
-                            //on mouse down then we will fire our OnNodeMoseClick event.
-                            if (hnode == hNodeMouseDown)
+                            // If the hit-tested node here is the same as the node we hit-tested
+                            // on mouse down then we will fire our OnNodeMoseClick event.
+                            if (hnode == _mouseDownNode)
                             {
                                 OnNodeMouseClick(new TreeNodeMouseClickEventArgs(NodeFromHandle(hnode), downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam)));
                             }
@@ -3368,7 +3368,7 @@ namespace System.Windows.Forms
                     Capture = false;
 
                     // Always clear our hit-tested node we cached on mouse down
-                    hNodeMouseDown = IntPtr.Zero;
+                    _mouseDownNode = IntPtr.Zero;
                     break;
                 case (int)User32.WM.MBUTTONDBLCLK:
                     // Fire mouse up in the Wndproc.
@@ -3400,14 +3400,16 @@ namespace System.Windows.Forms
                     Capture = true;
                     break;
                 case (int)User32.WM.RBUTTONDOWN:
-                    //Always Reset the MouseupFired....
+                    // Always Reset the MouseupFired....
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
+
                     //Cache the hit-tested node for verification when mouse up is fired
                     var tvhit = new TVHITTESTINFO
                     {
                         pt = new Point(PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam))
                     };
-                    hNodeMouseDown = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, IntPtr.Zero, ref tvhit);
+
+                    _mouseDownNode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhit);
 
                     WmMouseDown(ref m, MouseButtons.Right, 1);
                     downButton = MouseButtons.Right;

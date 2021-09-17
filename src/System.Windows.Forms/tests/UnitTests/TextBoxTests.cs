@@ -4,7 +4,6 @@
 
 using System.ComponentModel;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
@@ -387,14 +386,12 @@ namespace System.Windows.Forms.Tests
                 PlaceholderText = "Enter your name"
             };
 
-            HandleRef refHandle = new HandleRef(tb, tb.Handle);
-
-            //Cover the Placeholder draw code path
-            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
+            // Cover the Placeholder draw code path
+            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
             tb.TextAlign = HorizontalAlignment.Center;
-            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
+            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
             tb.TextAlign = HorizontalAlignment.Right;
-            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
+            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }
@@ -408,14 +405,12 @@ namespace System.Windows.Forms.Tests
                 RightToLeft = RightToLeft.Yes
             };
 
-            HandleRef refHandle = new HandleRef(tb, tb.Handle);
-
             //Cover the Placeholder draw code path in RightToLeft scenario
-            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
+            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
             tb.TextAlign = HorizontalAlignment.Center;
-            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
+            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
             tb.TextAlign = HorizontalAlignment.Right;
-            User32.SendMessageW(refHandle, User32.WM.PAINT, PARAM.FromBool(false));
+            User32.SendMessageW(tb, User32.WM.PAINT, (nint)BOOL.FALSE);
 
             Assert.False(string.IsNullOrEmpty(tb.PlaceholderText));
         }

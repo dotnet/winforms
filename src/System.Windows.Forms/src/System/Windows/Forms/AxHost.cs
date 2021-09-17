@@ -1394,24 +1394,23 @@ namespace System.Windows.Forms
             }
 
             IntPtr handle = Handle;
-            IntPtr currentWndproc = User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.WNDPROC);
+            IntPtr currentWndproc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
             if (currentWndproc == wndprocAddr)
             {
                 return true;
             }
 
-            if (unchecked((int)(long)User32.SendMessageW(this, (User32.WM)REGMSG_MSG)) == (int)REGMSG_RETVAL)
+            if (unchecked((int)(long)User32.SendMessageW(this, REGMSG_MSG)) == (int)REGMSG_RETVAL)
             {
                 wndprocAddr = currentWndproc;
                 return true;
             }
 
-            // yikes, we were resubclassed...
-            Debug.WriteLineIf(AxHostSwitch.TraceVerbose, "The horrible control subclassed itself w/o calling the old wndproc...");
-            // we need to resubclass ourselves now...
-            Debug.Assert(!OwnWindow(), "why are we here if we own our window?");
+            // We were resubclassed, we need to resublass ourselves.
+            Debug.WriteLineIf(AxHostSwitch.TraceVerbose, "The control subclassed itself w/o calling the old wndproc.");
+            Debug.Assert(!OwnWindow(), "Why are we here if we own our window?");
             WindowReleaseHandle();
-            User32.SetWindowLong(new HandleRef(this, handle), User32.GWL.WNDPROC, new HandleRef(this, currentWndproc));
+            User32.SetWindowLong(this, User32.GWL.WNDPROC, new HandleRef(this, currentWndproc));
             WindowAssignHandle(handle, axState[assignUniqueID]);
             InformOfNewHandle();
             axState[manualUpdate] = true;
@@ -3553,12 +3552,11 @@ namespace System.Windows.Forms
 
         private void DetachAndForward(ref Message m)
         {
-            IntPtr handle = GetHandleNoCreate();
             DetachWindow();
-            if (handle != IntPtr.Zero)
+            if (IsHandleCreated)
             {
-                IntPtr wndProc = User32.GetWindowLong(new HandleRef(this, handle), User32.GWL.WNDPROC);
-                m.Result = User32.CallWindowProcW(wndProc, handle, (User32.WM)m.Msg, m.WParam, m.LParam);
+                IntPtr wndProc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
+                m.Result = User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
             }
         }
 

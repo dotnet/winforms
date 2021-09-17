@@ -60,7 +60,7 @@ namespace System.Windows.Forms
             get
             {
                 var rect = new RECT();
-                User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKRECT, IntPtr.Zero, ref rect);
+                User32.SendMessageW(listView, (User32.WM)LVM.GETINSERTMARKRECT, 0, ref rect);
                 return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
             }
         }
@@ -115,8 +115,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Performs a hit-test at the specified insertion point
-        ///  and returns the closest item.
+        ///  Performs a hit-test at the specified insertion point and returns the closest item.
         /// </summary>
         public unsafe int NearestIndex(Point pt)
         {
@@ -124,7 +123,8 @@ namespace System.Windows.Forms
             {
                 cbSize = (uint)sizeof(LVINSERTMARK)
             };
-            User32.SendMessageW(listView, (User32.WM)LVM.INSERTMARKHITTEST, (IntPtr)(&pt), ref lvInsertMark);
+
+            User32.SendMessageW(listView, (User32.WM)LVM.INSERTMARKHITTEST, (nint)(&pt), ref lvInsertMark);
 
             return lvInsertMark.iItem;
         }
@@ -138,7 +138,8 @@ namespace System.Windows.Forms
                 dwFlags = appearsAfterItem ? LVIM.AFTER : LVIM.BEFORE,
                 iItem = index
             };
-            User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARK, IntPtr.Zero, ref lvInsertMark);
+
+            User32.SendMessageW(listView, (User32.WM)LVM.SETINSERTMARK, 0, ref lvInsertMark);
 
             if (!color.IsEmpty)
             {

@@ -32,6 +32,21 @@ internal partial class Interop
                     sysTime.wMonth, sysTime.wDay, sysTime.wHour,
                     sysTime.wMinute, sysTime.wSecond, sysTime.wMilliseconds);
             }
+
+            /// <summary>
+            ///  Converts <see cref="DateTime"/> value with a 1 second granularity.
+            /// </summary>
+            public static implicit operator SYSTEMTIME(DateTime time) => new Kernel32.SYSTEMTIME
+            {
+                wYear = (short)time.Year,
+                wMonth = (short)time.Month,
+                wDayOfWeek = (short)time.DayOfWeek,
+                wDay = (short)time.Day,
+                wHour = (short)time.Hour,
+                wMinute = (short)time.Minute,
+                wSecond = (short)time.Second,
+                wMilliseconds = 0
+            };
         }
     }
 }

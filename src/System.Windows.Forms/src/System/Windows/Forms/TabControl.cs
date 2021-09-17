@@ -383,7 +383,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.ADJUSTRECT, IntPtr.Zero, ref rect);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.ADJUSTRECT, 0, ref rect);
                     }
                 }
 
@@ -1156,7 +1156,7 @@ namespace System.Windows.Forms
                 CreateHandle();
             }
 
-            User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETITEMRECT, (IntPtr)index, ref rect);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETITEMRECT, index, ref rect);
             return Rectangle.FromLTRB(rect.left, rect.top, rect.right, rect.bottom);
         }
 
@@ -2203,7 +2203,7 @@ namespace System.Windows.Forms
 
         private void SetState(State state, bool value) => _tabControlState[(int)state] = value;
 
-        private unsafe IntPtr SendMessage(ComCtl32.TCM msg, IntPtr wParam, TabPage tabPage)
+        private unsafe nint SendMessage(ComCtl32.TCM msg, nint wParam, TabPage tabPage)
         {
             var tcitem = new ComCtl32.TCITEMW();
             string text = tabPage.Text;

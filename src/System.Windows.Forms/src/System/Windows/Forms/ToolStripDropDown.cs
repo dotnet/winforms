@@ -1724,27 +1724,29 @@ namespace System.Windows.Forms
 
         private void SetTopLevelStyle(bool value)
         {
-            if (IsHandleCreated)
+            if (!IsHandleCreated)
             {
-                // We need to swap they style bits on the window handle
-                // we could recreate the handle, but that seems rather expensive.
-                int styleFlags = WindowStyle;
-
-                if (value)
-                {
-                    // setting toplevel = true
-                    styleFlags &= ~(int)User32.WS.CHILD;
-                    styleFlags |= unchecked((int)User32.WS.POPUP);
-                }
-                else
-                {
-                    // this is a child window
-                    styleFlags &= ~unchecked((int)User32.WS.POPUP);
-                    styleFlags |= (int)User32.WS.CHILD;
-                }
-
-                WindowStyle = styleFlags;
+                return;
             }
+
+            // We need to swap they style bits on the window handle
+            // we could recreate the handle, but that seems rather expensive.
+            User32.WS styleFlags = WindowStyle;
+
+            if (value)
+            {
+                // Setting toplevel = true
+                styleFlags &= ~User32.WS.CHILD;
+                styleFlags |= User32.WS.POPUP;
+            }
+            else
+            {
+                // This is a child window
+                styleFlags &= ~User32.WS.POPUP;
+                styleFlags |= User32.WS.CHILD;
+            }
+
+            WindowStyle = styleFlags;
         }
 
         protected override void SetVisibleCore(bool visible)
@@ -2174,7 +2176,7 @@ namespace System.Windows.Forms
         }
 
         #region WMNCACTIVATE
-        private bool sendingActivateMessage;
+        private bool _sendingActivateMessage;
 
         /// <summary>
         ///  If someone clicks on a child control of the toolstrip dropdown, we want
@@ -2186,26 +2188,29 @@ namespace System.Windows.Forms
         {
             if (m.WParam != IntPtr.Zero /*activating*/)
             {
-                if (!sendingActivateMessage)
+                if (!_sendingActivateMessage)
                 {
-                    sendingActivateMessage = true;
+                    _sendingActivateMessage = true;
                     try
                     {
-                        Debug.WriteLineIf(DropDownActivateDebug.TraceVerbose, "Sending WM_NCACTIVATE to toplevel hwnd" + ToolStripManager.ModalMenuFilter.ActiveHwnd);
-                        // we're activating - notify the previous guy that we're activating.
+                        Debug.WriteLineIf(DropDownActivateDebug.TraceVerbose, $"Sending WM_NCACTIVATE to toplevel hwnd {ToolStripManager.ModalMenuFilter.ActiveHwnd}");
+
+                        // We're activating - notify the previous guy that we're activating.
                         HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        User32.SendMessageW(activeHwndHandleRef, User32.WM.NCACTIVATE, (IntPtr)1, (IntPtr)(-1));
+                        User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, (IntPtr)1, (IntPtr)(-1));
                         User32.RedrawWindow(
                             activeHwndHandleRef,
                             null,
                             IntPtr.Zero,
                             User32.RDW.FRAME | User32.RDW.INVALIDATE);
                         m.WParam = (IntPtr)1;
+
+                        GC.KeepAlive(activeHwndHandleRef.Wrapper);
                     }
                     finally
                     {
-                        sendingActivateMessage = false;
+                        _sendingActivateMessage = false;
                     }
                 }
 
@@ -2218,6 +2223,7 @@ namespace System.Windows.Forms
             }
         }
         #endregion
+
         /// <summary>
         ///  Determines if this is the first dropDown in the dropDown chain
         /// </summary>

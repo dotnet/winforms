@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         // ie. nodes which don't use fancy fonts or colors (ie. that use the TreeView settings for these)
         //     will take up less memory than those that do.
         internal OwnerDrawPropertyBag propBag;
-        internal IntPtr handle;
+        internal IntPtr _handle;
         internal string text;
         internal string name;
 
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         private TreeNodeImageIndexer stateImageIndexer;
 
         private string toolTipText = string.Empty;
-        private ContextMenuStrip contextMenuStrip;
+        private ContextMenuStrip _contextMenuStrip;
         internal bool nodesCleared;
 
         internal TreeNodeImageIndexer ImageIndexer
@@ -243,10 +243,9 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
                 // wparam: 1=include only text, 0=include entire line
-                if (User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) == IntPtr.Zero)
+                if (User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, 1, ref rc) == 0)
                 {
                     // This means the node is not visible
-                    //
                     return Rectangle.Empty;
                 }
 
@@ -266,16 +265,16 @@ namespace System.Windows.Forms
                 RECT rc = new RECT();
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
+
                 // wparam: 1=include only text, 0=include entire line
                 if (tv is null || tv.IsDisposed)
                 {
                     return Rectangle.Empty;
                 }
 
-                if (User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, IntPtr.Zero, ref rc) == IntPtr.Zero)
+                if (User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, 0, ref rc) == 0)
                 {
                     // This means the node is not visible
-                    //
                     return Rectangle.Empty;
                 }
 
@@ -306,7 +305,7 @@ namespace System.Windows.Forms
             set
             {
                 CheckedStateInternal = value;
-                if (handle == IntPtr.Zero)
+                if (_handle == IntPtr.Zero)
                 {
                     return;
                 }
@@ -320,11 +319,12 @@ namespace System.Windows.Forms
                 var item = new TVITEMW
                 {
                     mask = TVIF.HANDLE | TVIF.STATE,
-                    hItem = handle,
+                    hItem = _handle,
                     stateMask = TVIS.STATEIMAGEMASK
                 };
+
                 item.state |= value ? CHECKED : UNCHECKED;
-                User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
+                User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
             }
         }
 
@@ -339,18 +339,20 @@ namespace System.Windows.Forms
             get
             {
 #if DEBUG
-                if (handle != IntPtr.Zero && !treeView.IsDisposed)
+                if (_handle != IntPtr.Zero && !treeView.IsDisposed)
                 {
                     TreeView tv = TreeView;
                     var item = new TVITEMW
                     {
                         mask = TVIF.HANDLE | TVIF.STATE,
-                        hItem = handle,
+                        hItem = _handle,
                         stateMask = TVIS.STATEIMAGEMASK
                     };
+
                     User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, IntPtr.Zero, ref item);
-                    Debug.Assert(!tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
-                        "isChecked on node '" + Name + "' did not match the state in TVM_GETITEM.");
+                    Debug.Assert(
+                        !tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
+                        $"isChecked on node '{Name}' did not match the state in TVM_GETITEM.");
                 }
 #endif
                 return CheckedInternal;
@@ -375,7 +377,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The contextMenu associated with this tree node. The contextMenu
+        ///  The <see cref="Forms.ContextMenuStrip"/> associated with this tree node. This menu
         ///  will be shown when the user right clicks the mouse on the control.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -383,32 +385,15 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlContextMenuDescr))]
         public virtual ContextMenuStrip ContextMenuStrip
         {
-            get
-            {
-                return contextMenuStrip;
-            }
-            set
-            {
-                contextMenuStrip = value;
-            }
+            get => _contextMenuStrip;
+            set => _contextMenuStrip = value;
         }
 
         /// <summary>
         ///  The first child node of this node.
         /// </summary>
         [Browsable(false)]
-        public TreeNode FirstNode
-        {
-            get
-            {
-                if (childCount == 0)
-                {
-                    return null;
-                }
-
-                return children[0];
-            }
-        }
+        public TreeNode FirstNode => childCount == 0 ? null : children[0];
 
         private TreeNode FirstVisibleParent
         {
@@ -511,12 +496,12 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (handle == IntPtr.Zero && TreeView is not null)
+                if (_handle == IntPtr.Zero && TreeView is not null)
                 {
                     TreeView.CreateControl(); // force handle creation
                 }
 
-                return handle;
+                return _handle;
             }
         }
 
@@ -627,7 +612,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (handle == IntPtr.Zero)
+                if (_handle == IntPtr.Zero)
                 {
                     return expandOnRealization;
                 }
@@ -644,7 +629,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (handle == IntPtr.Zero)
+                if (_handle == IntPtr.Zero)
                 {
                     return false;
                 }
@@ -661,7 +646,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (handle == IntPtr.Zero)
+                if (_handle == IntPtr.Zero)
                 {
                     return false;
                 }
@@ -676,7 +661,7 @@ namespace System.Windows.Forms
                 unsafe
                 { *((IntPtr*)&rc.left) = Handle; }
 
-                bool visible = User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, (IntPtr)1, ref rc) != IntPtr.Zero;
+                bool visible = User32.SendMessageW(tv, (User32.WM)TVM.GETITEMRECT, 1, ref rc) != 0;
                 if (visible)
                 {
                     Size size = tv.ClientSize;
@@ -1014,7 +999,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (handle == IntPtr.Zero)
+                if (_handle == IntPtr.Zero)
                 {
                     return 0;
                 }
@@ -1031,7 +1016,8 @@ namespace System.Windows.Forms
                     mask = TVIF.HANDLE | TVIF.STATE,
                     stateMask = TVIS.SELECTED | TVIS.EXPANDED
                 };
-                User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, IntPtr.Zero, ref item);
+
+                User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, 0, ref item);
                 return item.state;
             }
         }
@@ -1355,7 +1341,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void BeginEdit()
         {
-            if (handle != IntPtr.Zero)
+            if (_handle != IntPtr.Zero)
             {
                 TreeView tv = TreeView;
                 if (tv.LabelEdit == false)
@@ -1368,7 +1354,7 @@ namespace System.Windows.Forms
                     tv.Focus();
                 }
 
-                User32.SendMessageW(tv, (User32.WM)TVM.EDITLABELW, (IntPtr)0, handle);
+                User32.SendMessageW(tv, (User32.WM)TVM.EDITLABELW, (IntPtr)0, _handle);
             }
         }
 
@@ -1444,7 +1430,7 @@ namespace System.Windows.Forms
 
             node.StateImageIndexer.Index = StateImageIndexer.Index;
             node.ToolTipText = toolTipText;
-            node.ContextMenuStrip = contextMenuStrip;
+            node.ContextMenuStrip = _contextMenuStrip;
 
             // only set the key if it's set to something useful
             if (!(string.IsNullOrEmpty(ImageIndexer.Key)))
@@ -1921,7 +1907,7 @@ namespace System.Windows.Forms
 
                 var tvis = new TVINSERTSTRUCTW
                 {
-                    hParent = parent.handle
+                    hParent = parent._handle
                 };
                 tvis.item.mask = InsertMask;
 
@@ -1932,7 +1918,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    tvis.hInsertAfter = prev.handle;
+                    tvis.hInsertAfter = prev._handle;
                 }
 
                 tvis.item.pszText = Marshal.StringToHGlobalAuto(text);
@@ -1970,28 +1956,26 @@ namespace System.Windows.Forms
                 // gets placed in the wrong place. You must restore the edit mode
                 // asynchronously (PostMessage) after the add is complete
                 // to get the expected behavior.
-                //
                 bool editing = false;
-                IntPtr editHandle = User32.SendMessageW(tv, (User32.WM)TVM.GETEDITCONTROL);
-                if (editHandle != IntPtr.Zero)
+                nint editHandle = User32.SendMessageW(tv, (User32.WM)TVM.GETEDITCONTROL);
+                if (editHandle != 0)
                 {
-                    // currently editing...
-                    //
+                    // Currently editing.
                     editing = true;
                     User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, PARAM.FromBool(false));
                 }
 
-                handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, IntPtr.Zero, ref tvis);
-                tv.nodeTable[handle] = this;
+                _handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, 0, ref tvis);
+                tv._nodeTable[_handle] = this;
 
-                // Lets update the Lparam to the Handle ....
+                // Lets update the Lparam to the Handle.
                 UpdateNode(TVIF.PARAM);
 
                 Marshal.FreeHGlobal(tvis.item.pszText);
 
                 if (editing)
                 {
-                    User32.PostMessageW(tv, (User32.WM)TVM.EDITLABELW, IntPtr.Zero, handle);
+                    User32.PostMessageW(tv, (User32.WM)TVM.EDITLABELW, 0, _handle);
                 }
 
                 User32.InvalidateRect(new HandleRef(tv, tv.Handle), null, BOOL.FALSE);
@@ -2074,15 +2058,15 @@ namespace System.Windows.Forms
 
             KeyboardToolTipStateMachine.Instance.Unhook(this, tv.KeyboardToolTip);
 
-            if (handle != IntPtr.Zero)
+            if (_handle != IntPtr.Zero)
             {
                 if (notify && tv.IsHandleCreated)
                 {
-                    User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, IntPtr.Zero, handle);
+                    User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, IntPtr.Zero, _handle);
                 }
 
-                treeView.nodeTable.Remove(handle);
-                handle = IntPtr.Zero;
+                treeView._nodeTable.Remove(_handle);
+                _handle = IntPtr.Zero;
             }
 
             treeView = null;
@@ -2113,11 +2097,12 @@ namespace System.Windows.Forms
             var item = new TVITEMW
             {
                 mask = TVIF.HANDLE | TVIF.STATE,
-                hItem = handle,
+                hItem = _handle,
                 stateMask = TVIS.EXPANDEDONCE,
                 state = 0
             };
-            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
+
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
         }
 
         private bool ShouldSerializeBackColor()
@@ -2210,7 +2195,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UpdateNode(TVIF mask)
         {
-            if (handle == IntPtr.Zero)
+            if (_handle == IntPtr.Zero)
             {
                 return;
             }
@@ -2225,7 +2210,7 @@ namespace System.Windows.Forms
             var item = new TVITEMW
             {
                 mask = TVIF.HANDLE | mask,
-                hItem = handle
+                hItem = _handle
             };
             if ((mask & TVIF.TEXT) != 0)
             {
@@ -2261,10 +2246,10 @@ namespace System.Windows.Forms
 
             if ((mask & TVIF.PARAM) != 0)
             {
-                item.lParam = handle;
+                item.lParam = _handle;
             }
 
-            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
             if ((mask & TVIF.TEXT) != 0)
             {
                 Marshal.FreeHGlobal(item.pszText);
@@ -2294,7 +2279,8 @@ namespace System.Windows.Forms
                 hItem = Handle,
                 iImage = Math.Max(0, ((ImageIndexer.ActualIndex >= tv.ImageList.Images.Count) ? tv.ImageList.Images.Count - 1 : ImageIndexer.ActualIndex))
             };
-            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, IntPtr.Zero, ref item);
+
+            User32.SendMessageW(tv, (User32.WM)TVM.SETITEMW, 0, ref item);
         }
 
         /// <summary>

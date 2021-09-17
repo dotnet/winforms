@@ -421,10 +421,7 @@ namespace System.Windows.Forms
         ///  Indicates if the given item is, in any way, shape, or form, checked.
         ///  This will return true if the item is fully or indeterminately checked.
         /// </summary>
-        public bool GetItemChecked(int index)
-        {
-            return (GetItemCheckState(index) != CheckState.Unchecked);
-        }
+        public bool GetItemChecked(int index) => GetItemCheckState(index) != CheckState.Unchecked;
 
         /// <summary>
         ///  Invalidates the given item in the listbox
@@ -434,7 +431,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect);
+                SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect);
                 InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }
