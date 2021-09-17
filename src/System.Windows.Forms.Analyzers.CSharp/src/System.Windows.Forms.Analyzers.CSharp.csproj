@@ -31,8 +31,8 @@
     </PackageReference>
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="$(MicrosoftCodeAnalysisCSharpWorkspacesVersion)" />
 
-    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.txt" />
-    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.txt" />
+    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Unshipped.md" />
+    <AdditionalFiles Include="$(ProjectDir)AnalyzerReleases.Shipped.md" />
   </ItemGroup>
 
   <ItemGroup>
