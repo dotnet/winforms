@@ -10,34 +10,34 @@
   </PropertyGroup>
   <!-- Below have corresponding entries in Versions.Details.XML because they are updated via Maestro -->
   <PropertyGroup>
-    <VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>6.0.0-rc.2.21467.18</VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>
-    <SystemDiagnosticsEventLogPackageVersion>6.0.0-rc.2.21467.18</SystemDiagnosticsEventLogPackageVersion>
-    <SystemDirectoryServicesPackageVersion>6.0.0-rc.2.21467.18</SystemDirectoryServicesPackageVersion>
-    <SystemReflectionMetadataLoadContextPackageVersion>6.0.0-rc.2.21467.18</SystemReflectionMetadataLoadContextPackageVersion>
-    <SystemSecurityCryptographyXmlPackageVersion>6.0.0-rc.2.21467.18</SystemSecurityCryptographyXmlPackageVersion>
-    <SystemIOPackagingPackageVersion>6.0.0-rc.2.21467.18</SystemIOPackagingPackageVersion>
+    <VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>6.0.0-rc.2.21467.25</VSRedistCommonNetCoreSharedFrameworkx6460PackageVersion>
+    <SystemDiagnosticsEventLogPackageVersion>6.0.0-rc.2.21467.25</SystemDiagnosticsEventLogPackageVersion>
+    <SystemDirectoryServicesPackageVersion>6.0.0-rc.2.21467.25</SystemDirectoryServicesPackageVersion>
+    <SystemReflectionMetadataLoadContextPackageVersion>6.0.0-rc.2.21467.25</SystemReflectionMetadataLoadContextPackageVersion>
+    <SystemSecurityCryptographyXmlPackageVersion>6.0.0-rc.2.21467.25</SystemSecurityCryptographyXmlPackageVersion>
+    <SystemIOPackagingPackageVersion>6.0.0-rc.2.21467.25</SystemIOPackagingPackageVersion>
     <MicrosoftNETCoreRuntimeCoreCLRPackageVersion>5.0.0-preview.7.20320.5</MicrosoftNETCoreRuntimeCoreCLRPackageVersion>
-    <MicrosoftNETCoreILDAsmPackageVersion>6.0.0-rc.2.21467.18</MicrosoftNETCoreILDAsmPackageVersion>
-    <SystemDiagnosticsPerformanceCounterPackageVersion>6.0.0-rc.2.21467.18</SystemDiagnosticsPerformanceCounterPackageVersion>
-    <SystemSecurityCryptographyPkcsPackageVersion>6.0.0-rc.2.21467.18</SystemSecurityCryptographyPkcsPackageVersion>
-    <SystemSecurityCryptographyProtectedDataPackageVersion>6.0.0-rc.2.21467.18</SystemSecurityCryptographyProtectedDataPackageVersion>
-    <SystemTextEncodingsWebPackageVersion>6.0.0-rc.2.21467.18</SystemTextEncodingsWebPackageVersion>
-    <SystemTextJsonPackageVersion>6.0.0-rc.2.21467.18</SystemTextJsonPackageVersion>
-    <SystemThreadingAccessControlPackageVersion>6.0.0-rc.2.21467.18</SystemThreadingAccessControlPackageVersion>
-    <MicrosoftWin32RegistryAccessControlPackageVersion>6.0.0-rc.2.21467.18</MicrosoftWin32RegistryAccessControlPackageVersion>
-    <MicrosoftNETCoreAppRefPackageVersion>6.0.0-rc.2.21467.18</MicrosoftNETCoreAppRefPackageVersion>
-    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>6.0.0-rc.2.21467.18</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
-    <MicrosoftNETCorePlatformsPackageVersion>6.0.0-rc.2.21467.18</MicrosoftNETCorePlatformsPackageVersion>
-    <MicrosoftWin32SystemEventsPackageVersion>6.0.0-rc.2.21467.18</MicrosoftWin32SystemEventsPackageVersion>
-    <SystemCodeDomPackageVersion>6.0.0-rc.2.21467.18</SystemCodeDomPackageVersion>
-    <SystemConfigurationConfigurationManagerPackageVersion>6.0.0-rc.2.21467.18</SystemConfigurationConfigurationManagerPackageVersion>
-    <SystemDrawingCommonPackageVersion>6.0.0-rc.2.21467.18</SystemDrawingCommonPackageVersion>
-    <SystemResourcesExtensionsPackageVersion>6.0.0-rc.2.21467.18</SystemResourcesExtensionsPackageVersion>
-    <SystemSecurityPermissionsPackageVersion>6.0.0-rc.2.21467.18</SystemSecurityPermissionsPackageVersion>
-    <SystemWindowsExtensionsPackageVersion>6.0.0-rc.2.21467.18</SystemWindowsExtensionsPackageVersion>
-    <MicrosoftNETCoreILAsmPackageVersion>6.0.0-rc.2.21467.18</MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>6.0.0-rc.2.21467.18</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
-    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>6.0.0-rc.2.21467.18</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
+    <MicrosoftNETCoreILDAsmPackageVersion>6.0.0-rc.2.21467.25</MicrosoftNETCoreILDAsmPackageVersion>
+    <SystemDiagnosticsPerformanceCounterPackageVersion>6.0.0-rc.2.21467.25</SystemDiagnosticsPerformanceCounterPackageVersion>
+    <SystemSecurityCryptographyPkcsPackageVersion>6.0.0-rc.2.21467.25</SystemSecurityCryptographyPkcsPackageVersion>
+    <SystemSecurityCryptographyProtectedDataPackageVersion>6.0.0-rc.2.21467.25</SystemSecurityCryptographyProtectedDataPackageVersion>
+    <SystemTextEncodingsWebPackageVersion>6.0.0-rc.2.21467.25</SystemTextEncodingsWebPackageVersion>
+    <SystemTextJsonPackageVersion>6.0.0-rc.2.21467.25</SystemTextJsonPackageVersion>
+    <SystemThreadingAccessControlPackageVersion>6.0.0-rc.2.21467.25</SystemThreadingAccessControlPackageVersion>
+    <MicrosoftWin32RegistryAccessControlPackageVersion>6.0.0-rc.2.21467.25</MicrosoftWin32RegistryAccessControlPackageVersion>
+    <MicrosoftNETCoreAppRefPackageVersion>6.0.0-rc.2.21467.25</MicrosoftNETCoreAppRefPackageVersion>
+    <MicrosoftNETCoreAppRuntimewinx64PackageVersion>6.0.0-rc.2.21467.25</MicrosoftNETCoreAppRuntimewinx64PackageVersion>
+    <MicrosoftNETCorePlatformsPackageVersion>6.0.0-rc.2.21467.25</MicrosoftNETCorePlatformsPackageVersion>
+    <MicrosoftWin32SystemEventsPackageVersion>6.0.0-rc.2.21467.25</MicrosoftWin32SystemEventsPackageVersion>
+    <SystemCodeDomPackageVersion>6.0.0-rc.2.21467.25</SystemCodeDomPackageVersion>
+    <SystemConfigurationConfigurationManagerPackageVersion>6.0.0-rc.2.21467.25</SystemConfigurationConfigurationManagerPackageVersion>
+    <SystemDrawingCommonPackageVersion>6.0.0-rc.2.21467.25</SystemDrawingCommonPackageVersion>
+    <SystemResourcesExtensionsPackageVersion>6.0.0-rc.2.21467.25</SystemResourcesExtensionsPackageVersion>
+    <SystemSecurityPermissionsPackageVersion>6.0.0-rc.2.21467.25</SystemSecurityPermissionsPackageVersion>
+    <SystemWindowsExtensionsPackageVersion>6.0.0-rc.2.21467.25</SystemWindowsExtensionsPackageVersion>
+    <MicrosoftNETCoreILAsmPackageVersion>6.0.0-rc.2.21467.25</MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx64MicrosoftNETCoreILAsmPackageVersion>6.0.0-rc.2.21467.25</runtimewinx64MicrosoftNETCoreILAsmPackageVersion>
+    <runtimewinx86MicrosoftNETCoreILAsmPackageVersion>6.0.0-rc.2.21467.25</runtimewinx86MicrosoftNETCoreILAsmPackageVersion>
     <!-- 
       Microsoft.NET.Sdk.IL.targets requires definition of MicrosoftNETCoreILAsmVersion
     -->
