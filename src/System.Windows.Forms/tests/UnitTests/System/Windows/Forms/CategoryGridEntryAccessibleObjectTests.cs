@@ -4,18 +4,18 @@
 
 using System.Windows.Forms.PropertyGridInternal;
 using Xunit;
+using static System.Windows.Forms.PropertyGridInternal.CategoryGridEntry;
 
 namespace System.Windows.Forms.Tests
 {
     public class CategoryGridEntryAccessibleObjectTests
     {
         [WinFormsFact]
-        public void CategoryGridEntryAccessibleObject_Ctor_OwnerGridEntryCannotBeNull()
+        public void CategoryGridEntryAccessibleObject_Ctor_OwnerCategoryGridEntryCannotBeNull()
         {
-            using PropertyGrid control = new();
-            SubGridEntry gridEntry = new(control, null);
-
-            Assert.Throws<NullReferenceException>(() => new CategoryGridEntry(control, null, "Name", new []{ gridEntry }));
+            using NoAssertContext context = new();
+            var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
+            Assert.Null(accessibilityObject.TestAccessor().Dynamic._owningCategoryGridEntry);
         }
 
         private class SubGridEntry: GridEntry
