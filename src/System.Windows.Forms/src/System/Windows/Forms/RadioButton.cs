@@ -386,7 +386,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, PARAM.FromBool(isChecked));
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)isChecked.ToBOOL());
             }
         }
 

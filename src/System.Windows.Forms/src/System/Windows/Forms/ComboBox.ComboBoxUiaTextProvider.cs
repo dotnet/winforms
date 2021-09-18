@@ -360,12 +360,12 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW(_owningChildEdit, (WM)EM.SETSEL, (IntPtr)start, (IntPtr)end);
+                SendMessageW(_owningChildEdit, (WM)EM.SETSEL, start, end);
             }
 
             private int GetCharIndexFromPosition(Point pt)
             {
-                int index = (int)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+                int index = (int)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, 0, PARAM.FromLowHigh(pt.X, pt.Y));
                 index = PARAM.LOWORD(index);
 
                 if (index < 0)
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
                     return Point.Empty;
                 }
 
-                int i = (int)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, (IntPtr)index);
+                int i = (int)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, index);
 
                 return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
             }

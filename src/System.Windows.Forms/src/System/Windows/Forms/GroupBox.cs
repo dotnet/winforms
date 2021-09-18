@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                     }
 
                     base.Text = value;
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     }
                 }
 

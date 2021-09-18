@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(TabPages))]
     [DefaultEvent(nameof(SelectedIndexChanged))]
-    [Designer("System.Windows.Forms.Design.TabControlDesigner, " + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.TabControlDesigner, {AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionTabControl))]
     public partial class TabControl : Control
     {
@@ -477,7 +477,7 @@ namespace System.Windows.Forms
                     IntPtr handle = (value is not null) ? value.Handle : IntPtr.Zero;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, handle);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, 0, handle);
                     }
 
                     // Update the image list in the tab pages.
@@ -937,7 +937,7 @@ namespace System.Windows.Forms
 
         private int AddNativeTabPage(TabPage tabPage)
         {
-            int index = PARAM.ToInt(SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)(_tabPageCount + 1), tabPage));
+            int index = SendMessage(ComCtl32.TCM.INSERTITEMW, _tabPageCount + 1, tabPage);
             User32.PostMessageW(this, _tabBaseReLayoutMessage);
             return index;
         }
@@ -946,7 +946,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && ShouldSerializeItemSize())
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETITEMSIZE, IntPtr.Zero, PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETITEMSIZE, 0, PARAM.FromLowHigh(_itemSize.Width, _itemSize.Height));
             }
 
             _cachedDisplayRect = Rectangle.Empty;
@@ -1168,7 +1168,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, ImageList.Handle);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, 0, ImageList.Handle);
             }
         }
 
@@ -1215,12 +1215,10 @@ namespace System.Windows.Forms
                 throw new ArgumentNullException(nameof(tabPage));
             }
 
-            int retIndex = IsHandleCreated
-                             ? (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage)
-                             : index;
-            if (retIndex >= 0)
+            index = IsHandleCreated ? SendMessage(ComCtl32.TCM.INSERTITEMW, index, tabPage) : index;
+            if (index >= 0)
             {
-                Insert(retIndex, tabPage);
+                Insert(index, tabPage);
             }
         }
 
@@ -1296,7 +1294,7 @@ namespace System.Windows.Forms
             // horizontal and vertical dimensions of the padding rectangle.
             if (!_padding.IsEmpty)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETPADDING, IntPtr.Zero, PARAM.FromLowHigh(_padding.X, _padding.Y));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETPADDING, 0, PARAM.FromLowHigh(_padding.X, _padding.Y));
             }
 
             base.OnHandleCreated(e);
@@ -1304,7 +1302,7 @@ namespace System.Windows.Forms
             ApplyItemSize();
             if (_imageList is not null)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, IntPtr.Zero, _imageList.Handle);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETIMAGELIST, 0, _imageList.Handle);
             }
 
             if (ShowToolTips)
@@ -1647,7 +1645,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, ((User32.WM)TCM.DELETEALLITEMS), IntPtr.Zero, IntPtr.Zero);
+                User32.SendMessageW(this, ((User32.WM)TCM.DELETEALLITEMS));
             }
 
             _tabPages = null;
@@ -1670,7 +1668,7 @@ namespace System.Windows.Forms
             _tabPages[_tabPageCount] = null;
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.DELETEITEM, (IntPtr)index);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.DELETEITEM, index);
             }
 
             _cachedDisplayRect = Rectangle.Empty;
@@ -1725,13 +1723,13 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                SendMessage(ComCtl32.TCM.SETITEMW, (IntPtr)index, value);
+                SendMessage(ComCtl32.TCM.SETITEMW, index, value);
             }
 
             // Make the Updated tab page the currently selected tab page
             if (DesignMode && IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)index, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, index, 0);
             }
 
             _tabPages[index] = value;
@@ -2054,7 +2052,7 @@ namespace System.Windows.Forms
             else
             {
                 // user Cancelled the Selection of the new Tab.
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)_lastSelection);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, _lastSelection);
                 UpdateTabSelection(true);
             }
 
@@ -2192,7 +2190,7 @@ namespace System.Windows.Forms
 
         private void SetState(State state, bool value) => _tabControlState[(int)state] = value;
 
-        private unsafe nint SendMessage(ComCtl32.TCM msg, nint wParam, TabPage tabPage)
+        private unsafe int SendMessage(ComCtl32.TCM msg, int wParam, TabPage tabPage)
         {
             var tcitem = new ComCtl32.TCITEMW();
             string text = tabPage.Text;
@@ -2210,7 +2208,7 @@ namespace System.Windows.Forms
             fixed (char* pText = text)
             {
                 tcitem.pszText = pText;
-                return User32.SendMessageW(this, (User32.WM)msg, wParam, ref tcitem);
+                return (int)User32.SendMessageW(this, (User32.WM)msg, wParam, ref tcitem);
             }
         }
 

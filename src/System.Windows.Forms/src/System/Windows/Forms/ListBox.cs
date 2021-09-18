@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                     }
                     else if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, (IntPtr)columnWidth);
+                        SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, columnWidth);
                     }
                 }
             }
@@ -616,10 +616,9 @@ namespace System.Windows.Forms
                     if (drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
                     {
                         BeginUpdate();
-                        SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)value);
+                        SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, value);
 
                         // Changing the item height might require a resize for IntegralHeight list boxes
-                        //
                         if (IntegralHeight)
                         {
                             Size oldSize = Size;
@@ -1156,7 +1155,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    SendMessageW(this, (WM)LB.SETTOPINDEX, (IntPtr)value);
+                    SendMessageW(this, (WM)LB.SETTOPINDEX, value);
                 }
                 else
                 {
@@ -1600,7 +1599,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe string NativeGetItemText(int index)
         {
-            int maxLength = PARAM.ToInt(SendMessageW(this, (WM)LB.GETTEXTLEN, (IntPtr)index));
+            int maxLength = (int)SendMessageW(this, (WM)LB.GETTEXTLEN, index);
             if (maxLength == LB_ERR)
             {
                 return string.Empty;
@@ -1610,7 +1609,7 @@ namespace System.Windows.Forms
             string result;
             fixed (char* pText = text)
             {
-                int actualLength = PARAM.ToInt(SendMessageW(this, (WM)LB.GETTEXT, (IntPtr)index, (IntPtr)pText));
+                int actualLength = (int)SendMessageW(this, (WM)LB.GETTEXT, index, (nint)pText);
                 Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
                 if (actualLength == LB_ERR)
                 {
@@ -1659,10 +1658,10 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
 
             bool selected = (int)SendMessageW(this, (WM)LB.GETSEL, index, 0) > 0;
-            SendMessageW(this, (WM)LB.DELETESTRING, (IntPtr)index);
+            SendMessageW(this, (WM)LB.DELETESTRING, index);
 
-            //If the item currently selected is removed then we should fire a Selectionchanged event...
-            //as the next time selected index returns -1...
+            // If the item currently selected is removed then we should fire a Selectionchanged event
+            // as the next time selected index returns -1.
 
             if (selected)
             {
@@ -1681,11 +1680,11 @@ namespace System.Windows.Forms
 
             if (selectionMode == SelectionMode.One)
             {
-                SendMessageW(this, (WM)LB.SETCURSEL, (IntPtr)(value ? index : -1));
+                SendMessageW(this, (WM)LB.SETCURSEL, value ? index : -1);
             }
             else
             {
-                SendMessageW(this, (WM)LB.SETSEL, PARAM.FromBool(value), (IntPtr)index);
+                SendMessageW(this, (WM)LB.SETSEL, PARAM.FromBool(value), index);
             }
         }
 
@@ -1724,7 +1723,7 @@ namespace System.Windows.Forms
                         var result = new int[count];
                         fixed (int* pResult = result)
                         {
-                            SendMessageW(this, (WM)LB.GETSELITEMS, (IntPtr)count, (IntPtr)pResult);
+                            SendMessageW(this, (WM)LB.GETSELITEMS, count, (nint)pResult);
                         }
 
                         foreach (int i in result)
@@ -1795,21 +1794,21 @@ namespace System.Windows.Forms
 
             //for getting the current Locale to set the Scrollbars...
             //
-            SendMessageW(this, (WM)LB.SETLOCALE, (IntPtr)Kernel32.GetThreadLocale().RawValue);
+            SendMessageW(this, (WM)LB.SETLOCALE, (nint)Kernel32.GetThreadLocale().RawValue);
 
             if (columnWidth != 0)
             {
-                SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, (IntPtr)columnWidth);
+                SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, columnWidth);
             }
 
             if (drawMode == DrawMode.OwnerDrawFixed)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             if (topIndex != 0)
             {
-                SendMessageW(this, (WM)LB.SETTOPINDEX, (IntPtr)topIndex);
+                SendMessageW(this, (WM)LB.SETTOPINDEX, topIndex);
             }
 
             if (UseCustomTabOffsets && CustomTabOffsets is not null)
@@ -1820,7 +1819,7 @@ namespace System.Windows.Forms
 
                 fixed (int* pOffsets = offsets)
                 {
-                    SendMessageW(this, (WM)LB.SETTABSTOPS, (IntPtr)wpar, (IntPtr)pOffsets);
+                    SendMessageW(this, (WM)LB.SETTABSTOPS, wpar, (nint)pOffsets);
                 }
             }
 
@@ -2174,7 +2173,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessageW(this, (WM)LB.SETCURSEL, (IntPtr)DataManager.Position);
+                    SendMessageW(this, (WM)LB.SETCURSEL, DataManager.Position);
                 }
 
                 // if the list changed and we still did not fire the
@@ -2306,7 +2305,7 @@ namespace System.Windows.Forms
                     width = MaxItemWidth;
                 }
 
-                SendMessageW(this, (WM)LB.SETHORIZONTALEXTENT, (IntPtr)width);
+                SendMessageW(this, (WM)LB.SETHORIZONTALEXTENT, width);
             }
         }
 
@@ -2366,7 +2365,7 @@ namespace System.Windows.Forms
                 CustomTabOffsets.CopyTo(offsets, 0);
                 fixed (int* pOffsets = offsets)
                 {
-                    SendMessageW(this, (WM)LB.SETTABSTOPS, (IntPtr)wpar, (IntPtr)pOffsets);
+                    SendMessageW(this, (WM)LB.SETTABSTOPS, wpar, (nint)pOffsets);
                 }
 
                 Invalidate();

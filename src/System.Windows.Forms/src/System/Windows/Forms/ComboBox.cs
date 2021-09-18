@@ -486,7 +486,7 @@ namespace System.Windows.Forms
                     Properties.SetInteger(PropDropDownWidth, value);
                     if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)CB.SETDROPPEDWIDTH, (IntPtr)value);
+                        SendMessageW(this, (WM)CB.SETDROPPEDWIDTH, value);
                     }
                 }
             }
@@ -556,7 +556,7 @@ namespace System.Windows.Forms
                     CreateHandle();
                 }
 
-                SendMessageW(this, (WM)CB.SHOWDROPDOWN, (IntPtr)(value ? -1 : 0));
+                SendMessageW(this, (WM)CB.SHOWDROPDOWN, value ? -1 : 0);
             }
         }
 
@@ -812,7 +812,7 @@ namespace System.Windows.Forms
                     Properties.SetInteger(PropMaxLength, value);
                     if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)CB.LIMITTEXT, (IntPtr)value);
+                        SendMessageW(this, (WM)CB.LIMITTEXT, value);
                     }
                 }
             }
@@ -1018,7 +1018,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)CB.SETCURSEL, (IntPtr)value);
+                        SendMessageW(this, (WM)CB.SETCURSEL, value);
                     }
                     else
                     {
@@ -1124,7 +1124,7 @@ namespace System.Windows.Forms
             {
                 int end = 0;
                 int start = 0;
-                SendMessageW(this, (WM)CB.GETEDITSEL, (IntPtr)(&start), (IntPtr)(&end));
+                SendMessageW(this, (WM)CB.GETEDITSEL, (nint)(&start), (nint)(&end));
                 return end - start;
             }
             set
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms
             get
             {
                 int value = 0;
-                SendMessageW(this, (WM)CB.GETEDITSEL, (IntPtr)(&value), IntPtr.Zero);
+                SendMessageW(this, (WM)CB.GETEDITSEL, (nint)(&value), 0);
                 return value;
             }
             set
@@ -2143,7 +2143,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int h = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT, (IntPtr)index);
+                int h = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT, index);
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -2368,7 +2368,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe string NativeGetItemText(int index)
         {
-            int maxLength = PARAM.ToInt(SendMessageW(this, (WM)CB.GETLBTEXTLEN, (IntPtr)index));
+            int maxLength = (int)SendMessageW(this, (WM)CB.GETLBTEXTLEN, index);
             if (maxLength == LB_ERR)
             {
                 return string.Empty;
@@ -2378,7 +2378,7 @@ namespace System.Windows.Forms
             string result;
             fixed (char* pText = text)
             {
-                int actualLength = PARAM.ToInt(SendMessageW(this, (WM)CB.GETLBTEXT, (IntPtr)index, (IntPtr)pText));
+                int actualLength = (int)SendMessageW(this, (WM)CB.GETLBTEXT, index, (nint)pText);
                 Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
                 if (actualLength == LB_ERR)
                 {
@@ -2426,7 +2426,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            SendMessageW(this, (WM)CB.DELETESTRING, (IntPtr)index);
+            SendMessageW(this, (WM)CB.DELETESTRING, index);
         }
 
         internal override void RecreateHandleCore()
@@ -2461,7 +2461,7 @@ namespace System.Windows.Forms
 
             if (MaxLength > 0)
             {
-                SendMessageW(this, (WM)CB.LIMITTEXT, (IntPtr)MaxLength);
+                SendMessageW(this, (WM)CB.LIMITTEXT, MaxLength);
             }
 
             // Get the handles and wndprocs of the ComboBox's child windows
@@ -2497,7 +2497,7 @@ namespace System.Windows.Forms
             int dropDownWidth = Properties.GetInteger(PropDropDownWidth, out bool found);
             if (found)
             {
-                SendMessageW(this, (WM)CB.SETDROPPEDWIDTH, (IntPtr)dropDownWidth);
+                SendMessageW(this, (WM)CB.SETDROPPEDWIDTH, dropDownWidth);
             }
 
             found = false;
@@ -2539,7 +2539,7 @@ namespace System.Windows.Forms
                 //
                 if (_selectedIndex >= 0)
                 {
-                    SendMessageW(this, (WM)CB.SETCURSEL, (IntPtr)_selectedIndex);
+                    SendMessageW(this, (WM)CB.SETCURSEL, _selectedIndex);
                     UpdateText();
                     _selectedIndex = -1;
                 }
@@ -3409,7 +3409,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(length), length, string.Format(SR.InvalidArgument, nameof(length), length));
             }
 
-            SendMessageW(this, (WM)CB.SETEDITSEL, IntPtr.Zero, PARAM.FromLowHigh(start, end));
+            SendMessageW(this, (WM)CB.SETEDITSEL, 0, PARAM.FromLowHigh(start, end));
         }
 
         /// <summary>
@@ -3454,7 +3454,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessageW(this, (WM)CB.SETCURSEL, (IntPtr)DataManager.Position);
+                    SendMessageW(this, (WM)CB.SETCURSEL, DataManager.Position);
                 }
                 else
                 {
@@ -3548,27 +3548,27 @@ namespace System.Windows.Forms
         {
             if (!IsHandleCreated)
             {
-                // if we don't create control here we report item heights incorrectly later on.
+                // If we don't create control here we report item heights incorrectly later on.
                 CreateControl();
             }
 
             if (DrawMode == DrawMode.OwnerDrawFixed)
             {
-                SendMessageW(this, (WM)CB.SETITEMHEIGHT, (IntPtr)(-1), (IntPtr)ItemHeight);
-                SendMessageW(this, (WM)CB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+                SendMessageW(this, (WM)CB.SETITEMHEIGHT, -1, ItemHeight);
+                SendMessageW(this, (WM)CB.SETITEMHEIGHT, 0, ItemHeight);
             }
             else if (DrawMode == DrawMode.OwnerDrawVariable)
             {
-                SendMessageW(this, (WM)CB.SETITEMHEIGHT, (IntPtr)(-1), (IntPtr)ItemHeight);
+                SendMessageW(this, (WM)CB.SETITEMHEIGHT, -1, ItemHeight);
                 Graphics graphics = CreateGraphicsInternal();
                 for (int i = 0; i < Items.Count; i++)
                 {
-                    int original = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT, (IntPtr)i);
+                    int original = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT, i);
                     MeasureItemEventArgs mievent = new MeasureItemEventArgs(graphics, i, original);
                     OnMeasureItem(mievent);
                     if (mievent.ItemHeight != original)
                     {
-                        SendMessageW(this, (WM)CB.SETITEMHEIGHT, (IntPtr)i, (IntPtr)mievent.ItemHeight);
+                        SendMessageW(this, (WM)CB.SETITEMHEIGHT, i, mievent.ItemHeight);
                     }
                 }
 

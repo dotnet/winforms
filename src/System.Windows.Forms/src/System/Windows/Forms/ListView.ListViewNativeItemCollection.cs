@@ -6,7 +6,6 @@
 
 using System.Collections;
 using System.Diagnostics;
-using System.Globalization;
 using static Interop;
 using static Interop.ComCtl32;
 
@@ -233,92 +232,90 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                if (owner.itemCount > 0)
+                if (owner.itemCount <= 0)
                 {
-                    owner.ApplyUpdateCachedItems();
+                    return;
+                }
 
-                    if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
+                owner.ApplyUpdateCachedItems();
+
+                if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
+                {
+                    // Walk the items to see which ones are selected.
+                    // We use the LVM_GETNEXTITEM message to see what the next selected item is
+                    // so we can avoid checking selection for each one.
+                    int count = owner.Items.Count;
+                    int nextSelected = (int)User32.SendMessageW(owner, (User32.WM)LVM.GETNEXTITEM, -1, (nint)LVNI.SELECTED);
+                    for (int i = 0; i < count; i++)
                     {
-                        // walk the items to see which ones are selected.
-                        // we use the LVM_GETNEXTITEM message to see what the next selected item is
-                        // so we can avoid checking selection for each one.
-                        //
-                        int count = owner.Items.Count;
-                        int nextSelected = (int)User32.SendMessageW(owner, (User32.WM)LVM.GETNEXTITEM, (IntPtr)(-1), (IntPtr)LVNI.SELECTED);
-                        for (int i = 0; i < count; i++)
+                        ListViewItem item = owner.Items[i];
+                        Debug.Assert(item is not null, $"Failed to get item at index {i}");
+                        if (item is not null)
                         {
-                            ListViewItem item = owner.Items[i];
-                            Debug.Assert(item is not null, "Failed to get item at index " + i.ToString(CultureInfo.InvariantCulture));
-                            if (item is not null)
+                            // If it's the one we're looking for, ask for the next one.
+                            if (i == nextSelected)
                             {
-                                // if it's the one we're looking for, ask for the next one
-                                //
-                                if (i == nextSelected)
-                                {
-                                    item.StateSelected = true;
-                                    nextSelected = (int)User32.SendMessageW(owner, (User32.WM)LVM.GETNEXTITEM, (IntPtr)nextSelected, (IntPtr)LVNI.SELECTED);
-                                }
-                                else
-                                {
-                                    // otherwise it's false
-                                    //
-                                    item.StateSelected = false;
-                                }
-
-                                item.UnHost(i, false);
-                            }
-                        }
-
-                        Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
-
-                        User32.SendMessageW(owner, (User32.WM)LVM.DELETEALLITEMS);
-
-                        // There's a problem in the list view that if it's in small icon, it won't pick upo the small icon
-                        // sizes until it changes from large icon, so we flip it twice here...
-                        //
-                        if (owner.View == View.SmallIcon)
-                        {
-                            if (Application.ComCtlSupportsVisualStyles)
-                            {
-                                owner.FlipViewToLargeIconAndSmallIcon = true;
+                                item.StateSelected = true;
+                                nextSelected = (int)User32.SendMessageW(owner, (User32.WM)LVM.GETNEXTITEM, nextSelected, (nint)LVNI.SELECTED);
                             }
                             else
                             {
-                                Debug.Assert(!owner.FlipViewToLargeIconAndSmallIcon, "we only set this when comctl 6.0 is loaded");
-                                owner.View = View.LargeIcon;
-                                owner.View = View.SmallIcon;
+                                // Otherwise it's false.
+                                item.StateSelected = false;
                             }
+
+                            item.UnHost(i, false);
                         }
                     }
-                    else
-                    {
-                        int count = owner.Items.Count;
 
-                        for (int i = 0; i < count; i++)
+                    Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
+
+                    User32.SendMessageW(owner, (User32.WM)LVM.DELETEALLITEMS);
+
+                    // There's a problem in the list view that if it's in small icon, it won't pick upo the small icon
+                    // sizes until it changes from large icon, so we flip it twice here...
+                    if (owner.View == View.SmallIcon)
+                    {
+                        if (Application.ComCtlSupportsVisualStyles)
                         {
-                            ListViewItem item = owner.Items[i];
-                            if (item is not null)
-                            {
-                                item.UnHost(i, true);
-                            }
+                            owner.FlipViewToLargeIconAndSmallIcon = true;
                         }
-
-                        Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
-                        owner.listItemsArray.Clear();
+                        else
+                        {
+                            Debug.Assert(!owner.FlipViewToLargeIconAndSmallIcon, "we only set this when comctl 6.0 is loaded");
+                            owner.View = View.LargeIcon;
+                            owner.View = View.SmallIcon;
+                        }
                     }
+                }
+                else
+                {
+                    int count = owner.Items.Count;
 
-                    owner.listItemsTable.Clear();
-                    if (owner.IsHandleCreated && !owner.CheckBoxes)
+                    for (int i = 0; i < count; i++)
                     {
-                        owner.savedCheckedItems = null;
+                        ListViewItem item = owner.Items[i];
+                        if (item is not null)
+                        {
+                            item.UnHost(i, true);
+                        }
                     }
 
-                    owner.itemCount = 0;
+                    Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
+                    owner.listItemsArray.Clear();
+                }
 
-                    if (owner.ExpectingMouseUp)
-                    {
-                        owner.ItemCollectionChangedInMouseDown = true;
-                    }
+                owner.listItemsTable.Clear();
+                if (owner.IsHandleCreated && !owner.CheckBoxes)
+                {
+                    owner.savedCheckedItems = null;
+                }
+
+                owner.itemCount = 0;
+
+                if (owner.ExpectingMouseUp)
+                {
+                    owner.ItemCollectionChangedInMouseDown = true;
                 }
             }
 
@@ -438,9 +435,7 @@ namespace System.Windows.Forms
                 if (owner.IsHandleCreated)
                 {
                     Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
-                    int retval = (int)User32.SendMessageW(owner, (User32.WM)LVM.DELETEITEM, index);
-
-                    if (0 == retval)
+                    if (User32.SendMessageW(owner, (User32.WM)LVM.DELETEITEM, index) == 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }

@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms
             UpdateMaxLength();
             if (textBoxFlags[modified])
             {
-                SendMessageW(this, (WM)EM.SETMODIFY, PARAM.FromBool(true));
+                SendMessageW(this, (WM)EM.SETMODIFY, (nint)BOOL.TRUE);
             }
 
             if (textBoxFlags[scrollToCaretOnHandleCreated])
@@ -1828,7 +1828,7 @@ namespace System.Windows.Forms
             {
                 AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
 
-                SendMessageW(this, (WM)EM.SETSEL, (IntPtr)s, (IntPtr)e);
+                SendMessageW(this, (WM)EM.SETSEL, s, e);
 
                 AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
@@ -1942,7 +1942,7 @@ namespace System.Windows.Forms
             {
                 textBoxFlags[setSelectionOnHandleCreated] = false;
                 AdjustSelectionStartAndEnd(selectionStart, selectionLength, out int start, out int end, -1);
-                SendMessageW(this, (WM)EM.SETSEL, (IntPtr)start, (IntPtr)end);
+                SendMessageW(this, (WM)EM.SETSEL, start, end);
             }
         }
 
@@ -2071,7 +2071,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)EM.LIMITTEXT, (IntPtr)maxLength);
+                SendMessageW(this, (WM)EM.LIMITTEXT, maxLength);
             }
         }
 
@@ -2113,7 +2113,7 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (!textBoxFlags[multiline])
             {
-                SendMessageW(this, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                SendMessageW(this, (WM)EM.SETMARGINS, (nint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
             }
         }
 

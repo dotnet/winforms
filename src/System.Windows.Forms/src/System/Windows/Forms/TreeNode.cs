@@ -349,7 +349,7 @@ namespace System.Windows.Forms
                         stateMask = TVIS.STATEIMAGEMASK
                     };
 
-                    User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, IntPtr.Zero, ref item);
+                    User32.SendMessageW(tv, (User32.WM)TVM.GETITEMW, 0, ref item);
                     Debug.Assert(
                         !tv.CheckBoxes || (((int)item.state >> SHIFTVAL) > 1) == CheckedInternal,
                         $"isChecked on node '{Name}' did not match the state in TVM_GETITEM.");
@@ -738,7 +738,6 @@ namespace System.Windows.Forms
             {
                 // TVGN_NEXTVISIBLE can only be sent if the specified node is visible.
                 // So before sending, we check if this node is visible. If not, we find the first visible parent.
-                //
                 TreeView tv = TreeView;
                 if (tv is null || tv.IsDisposed)
                 {
@@ -749,7 +748,7 @@ namespace System.Windows.Forms
 
                 if (node is not null)
                 {
-                    IntPtr next = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.NEXTVISIBLE, node.Handle);
+                    IntPtr next = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (nint)TVGN.NEXTVISIBLE, node.Handle);
                     if (next != IntPtr.Zero)
                     {
                         return tv.NodeFromHandle(next);
@@ -897,7 +896,6 @@ namespace System.Windows.Forms
             {
                 // TVGN_PREVIOUSVISIBLE can only be sent if the specified node is visible.
                 // So before sending, we check if this node is visible. If not, we find the first visible parent.
-                //
                 TreeNode node = FirstVisibleParent;
                 TreeView tv = TreeView;
 
@@ -908,7 +906,7 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    IntPtr prev = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.PREVIOUSVISIBLE, node.Handle);
+                    IntPtr prev = User32.SendMessageW(tv, (User32.WM)TVM.GETNEXTITEM, (nint)TVGN.PREVIOUSVISIBLE, node.Handle);
                     if (prev != IntPtr.Zero)
                     {
                         return tv.NodeFromHandle(prev);
@@ -1354,7 +1352,7 @@ namespace System.Windows.Forms
                     tv.Focus();
                 }
 
-                User32.SendMessageW(tv, (User32.WM)TVM.EDITLABELW, (IntPtr)0, _handle);
+                User32.SendMessageW(tv, (User32.WM)TVM.EDITLABELW, 0, _handle);
             }
         }
 
@@ -1547,7 +1545,7 @@ namespace System.Windows.Forms
                 tv.OnBeforeCollapse(e);
                 if (!e.Cancel)
                 {
-                    User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)TVE.COLLAPSE, (IntPtr)Handle);
+                    User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (nint)TVE.COLLAPSE, Handle);
                     tv.OnAfterCollapse(new TreeViewEventArgs(this));
                 }
             }
@@ -1735,7 +1733,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(tv, (User32.WM)TVM.ENSUREVISIBLE, IntPtr.Zero, Handle);
+            User32.SendMessageW(tv, (User32.WM)TVM.ENSUREVISIBLE, 0, Handle);
         }
 
         /// <summary>
@@ -1753,7 +1751,7 @@ namespace System.Windows.Forms
             ResetExpandedState(tv);
             if (!IsExpanded)
             {
-                User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (IntPtr)TVE.EXPAND, Handle);
+                User32.SendMessageW(tv, (User32.WM)TVM.EXPAND, (nint)TVE.EXPAND, Handle);
             }
 
             expandOnRealization = false;
@@ -1962,7 +1960,7 @@ namespace System.Windows.Forms
                 {
                     // Currently editing.
                     editing = true;
-                    User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, PARAM.FromBool(false));
+                    User32.SendMessageW(tv, (User32.WM)TVM.ENDEDITLABELNOW, (nint)BOOL.FALSE);
                 }
 
                 _handle = User32.SendMessageW(tv, (User32.WM)TVM.INSERTITEMW, 0, ref tvis);
@@ -1987,7 +1985,7 @@ namespace System.Windows.Forms
                     // and this is the FIRST NODE to get added..
                     // This is Comctl quirk where it just doesn't draw
                     // the first node after a Clear( ) if Scrollable == false.
-                    User32.SendMessageW(tv, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                    User32.SendMessageW(tv, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     nodesCleared = false;
                 }
             }
@@ -2062,7 +2060,7 @@ namespace System.Windows.Forms
             {
                 if (notify && tv.IsHandleCreated)
                 {
-                    User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, IntPtr.Zero, _handle);
+                    User32.SendMessageW(tv, (User32.WM)TVM.DELETEITEM, 0, _handle);
                 }
 
                 treeView._nodeTable.Remove(_handle);

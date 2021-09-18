@@ -1055,7 +1055,7 @@ namespace System.Windows.Forms.Tests
                 MaxSelectionCount = 10
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(10, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETMAXSELCOUNT, 0, 0));
+            Assert.Equal(10, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETMAXSELCOUNT));
         }
 
         [WinFormsFact]
@@ -1086,7 +1086,7 @@ namespace System.Windows.Forms.Tests
                 ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TEXT, 0));
+            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TEXT));
         }
 
         [WinFormsFact]
@@ -1097,7 +1097,7 @@ namespace System.Windows.Forms.Tests
                 BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x563412, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.MONTHBK, 0));
+            Assert.Equal(0x563412, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.MONTHBK));
         }
 
         [WinFormsFact]
@@ -1108,7 +1108,7 @@ namespace System.Windows.Forms.Tests
                 TitleBackColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TITLEBK, 0));
+            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TITLEBK));
         }
 
         [WinFormsFact]
@@ -1119,7 +1119,7 @@ namespace System.Windows.Forms.Tests
                 TitleForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TITLETEXT, 0));
+            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TITLETEXT));
         }
 
         [WinFormsFact]
@@ -1130,7 +1130,7 @@ namespace System.Windows.Forms.Tests
                 TrailingForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TRAILINGTEXT, 0));
+            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)ComCtl32.MCM.GETCOLOR, (nint)ComCtl32.MCSC.TRAILINGTEXT));
         }
 
         [WinFormsFact]

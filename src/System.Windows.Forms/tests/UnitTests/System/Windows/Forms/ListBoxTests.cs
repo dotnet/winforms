@@ -1805,7 +1805,7 @@ namespace System.Windows.Forms.Tests
             };
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal(expected, SendMessageW(control.Handle, (WM)LB.GETITEMHEIGHT) == (IntPtr)25);
+            Assert.Equal(expected, SendMessageW(control.Handle, (WM)LB.GETITEMHEIGHT) == 25);
         }
 
         [WinFormsTheory]

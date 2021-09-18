@@ -802,7 +802,7 @@ namespace System.Windows.Forms
                         }
 
                         Debug.Assert(s_cachedDropDownWidth >= 1);
-                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, (IntPtr)s_cachedDropDownWidth);
+                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, s_cachedDropDownWidth);
                     }
                 }
                 else
@@ -812,7 +812,7 @@ namespace System.Windows.Forms
                     int dropDownWidth = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETDROPPEDWIDTH);
                     if (dropDownWidth != DropDownWidth)
                     {
-                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, (IntPtr)DropDownWidth);
+                        User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, DropDownWidth);
                     }
                 }
             }

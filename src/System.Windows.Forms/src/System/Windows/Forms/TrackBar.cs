@@ -7,7 +7,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Globalization;
 using System.Windows.Forms.Layout;
 using static Interop;
 using static Interop.ComCtl32;
@@ -280,7 +279,7 @@ namespace System.Windows.Forms
                 _largeChange = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)value);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, value);
                 }
             }
         }
@@ -425,7 +424,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)_maximum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
             Invalidate();
         }
 
@@ -483,7 +482,7 @@ namespace System.Windows.Forms
                 _smallChange = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)value);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, value);
                 }
             }
         }
@@ -559,7 +558,7 @@ namespace System.Windows.Forms
                 _tickFrequency = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, (IntPtr)value);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, value);
                     Invalidate();
                 }
             }
@@ -759,7 +758,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                _value = PARAM.ToInt(User32.SendMessageW(this, (User32.WM)TBM.GETPOS));
+                _value = (int)User32.SendMessageW(this, (User32.WM)TBM.GETPOS);
 
                 // See SetTrackBarValue() for a description of why we sometimes reflect the trackbar value
                 if (_orientation == Orientation.Vertical)
@@ -807,11 +806,11 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)_minimum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(false), (IntPtr)_maximum);
-            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, (IntPtr)_tickFrequency);
-            User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, IntPtr.Zero, (IntPtr)_largeChange);
-            User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, IntPtr.Zero, (IntPtr)_smallChange);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.FALSE, _maximum);
+            User32.SendMessageW(this, (User32.WM)TBM.SETTICFREQ, _tickFrequency);
+            User32.SendMessageW(this, (User32.WM)TBM.SETPAGESIZE, 0, _largeChange);
+            User32.SendMessageW(this, (User32.WM)TBM.SETLINESIZE, 0, _smallChange);
             SetTrackBarPosition();
             AdjustSize();
         }
@@ -990,10 +989,10 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, PARAM.FromBool(false), (IntPtr)_minimum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMIN, (nint)BOOL.FALSE, _minimum);
 
                     // We must repaint the trackbar after changing the range.
-                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, PARAM.FromBool(true), (IntPtr)_maximum);
+                    User32.SendMessageW(this, (User32.WM)TBM.SETRANGEMAX, (nint)BOOL.TRUE, _maximum);
 
                     Invalidate();
                 }
@@ -1038,15 +1037,11 @@ namespace System.Windows.Forms
                     reflectedValue = Minimum + Maximum - _value;
                 }
 
-                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, PARAM.FromBool(true), (IntPtr)reflectedValue);
+                User32.SendMessageW(this, (User32.WM)TBM.SETPOS, (nint)BOOL.TRUE, reflectedValue);
             }
         }
 
-        public override string ToString()
-        {
-            string s = base.ToString();
-            return s + ", Minimum: " + Minimum.ToString(CultureInfo.CurrentCulture) + ", Maximum: " + Maximum.ToString(CultureInfo.CurrentCulture) + ", Value: " + _value;
-        }
+        public override string ToString() => $"{base.ToString()}, Minimum: {Minimum}, Maximum: {Maximum}, Value: {_value}";
 
         protected override void WndProc(ref Message m)
         {

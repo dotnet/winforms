@@ -324,7 +324,7 @@ namespace System.Windows.Forms
             public override bool LineScroll(int charactersHorizontal, int linesVertical)
                 // Sends an EM_LINESCROLL message to scroll it horizontally and/or vertically.
                 => _owningTextBoxBase.IsHandleCreated
-                    && SendMessageW(_owningTextBoxBase, (WM)EM.LINESCROLL, (IntPtr)charactersHorizontal, (IntPtr)linesVertical) != IntPtr.Zero;
+                    && SendMessageW(_owningTextBoxBase, (WM)EM.LINESCROLL, charactersHorizontal, linesVertical) != 0;
 
             public override void SetSelection(int start, int end)
             {

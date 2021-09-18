@@ -28,8 +28,7 @@ namespace System.Windows.Forms.Design
                 return true;
             }
 
-            // The scroll bars on a form are "live"
-            //
+            // The scroll bars on a form are "live".
             ScrollableControl f = (ScrollableControl)Control;
             if (f.IsHandleCreated && f.AutoScroll)
             {

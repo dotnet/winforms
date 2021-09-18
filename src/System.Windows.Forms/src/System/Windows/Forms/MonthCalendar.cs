@@ -372,10 +372,11 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, IntPtr.Zero, (IntPtr)value);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, 0, (nint)value);
                     }
 
                     UpdateDisplayRange();
+
                     // Add the extra call to make the accessibility tree to rebuild correctly
                     OnDisplayRangeChanged(EventArgs.Empty);
                 }
@@ -465,7 +466,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    if (User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, (IntPtr)value) == IntPtr.Zero)
+                    if (User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, value) == 0)
                     {
                         throw new ArgumentException(string.Format(SR.MonthCalendarMaxSelCount, value.ToString("D")), nameof(value));
                     }
@@ -625,7 +626,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, (IntPtr)value);
+                    User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, value);
                 }
 
                 _scrollChange = value;
@@ -1419,7 +1420,7 @@ namespace System.Windows.Forms
             SetSelRange(_selectionStart, _selectionEnd);
             if (_maxSelectionCount != DefaultMaxSelectionCount)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, (IntPtr)_maxSelectionCount);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMAXSELCOUNT, _maxSelectionCount);
             }
 
             AdjustSize();
@@ -1446,20 +1447,20 @@ namespace System.Windows.Forms
                 firstDay = (int)_firstDayOfWeek;
             }
 
-            User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, IntPtr.Zero, (IntPtr)firstDay);
+            User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETFIRSTDAYOFWEEK, 0, firstDay);
 
             SetRange();
             if (_scrollChange != DefaultScrollChange)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, (IntPtr)_scrollChange);
+                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETMONTHDELTA, _scrollChange);
             }
 
-            SystemEvents.UserPreferenceChanged += new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged += MarshaledUserPreferenceChanged;
         }
 
         protected override void OnHandleDestroyed(EventArgs e)
         {
-            SystemEvents.UserPreferenceChanged -= new UserPreferenceChangedEventHandler(MarshaledUserPreferenceChanged);
+            SystemEvents.UserPreferenceChanged -= MarshaledUserPreferenceChanged;
             base.OnHandleDestroyed(e);
         }
 
@@ -1734,7 +1735,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETCOLOR, (IntPtr)colorIndex, PARAM.FromColor(value));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.MCM.SETCOLOR, (nint)colorIndex, value.ToWin32());
             }
         }
 
@@ -2104,7 +2105,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, IntPtr.Zero);
+                    User32.SendMessageW(this, (User32.WM)User32.MCM.SETTODAY, 0, 0);
                 }
             }
         }

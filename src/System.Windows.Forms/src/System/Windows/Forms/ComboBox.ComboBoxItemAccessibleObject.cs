@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                User32.SendMessageW(_owningComboBox, (User32.WM)User32.CB.SETTOPINDEX, (IntPtr)GetCurrentIndex());
+                User32.SendMessageW(_owningComboBox, (User32.WM)User32.CB.SETTOPINDEX, GetCurrentIndex());
             }
 
             internal override void SetFocus()

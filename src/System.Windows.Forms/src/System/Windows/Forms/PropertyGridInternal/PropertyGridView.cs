@@ -188,7 +188,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
 
-                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != IntPtr.Zero;
+                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != 0;
             }
         }
 
@@ -2691,7 +2691,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
                     DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
-                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(e.X, e.Y));
+                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromLowHigh(e.X, e.Y));
                     EditTextBox.SelectAll();
                 }
 
@@ -3550,8 +3550,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Point editPoint = PointToScreen(_lastMouseDown);
                 editPoint = EditTextBox.PointToClient(editPoint);
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, 0, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
             }
 
             if (setSelectTime)

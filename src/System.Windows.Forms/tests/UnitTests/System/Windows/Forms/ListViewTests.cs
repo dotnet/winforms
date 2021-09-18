@@ -1870,7 +1870,7 @@ namespace System.Windows.Forms.Tests
             {
                 ShowGroups = showGroups
             };
-            Assert.Equal(0, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+            Assert.Equal(0, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
         }
 
         public static IEnumerable<object[]> Handle_GetWithGroups_TestData()
@@ -1932,7 +1932,7 @@ namespace System.Windows.Forms.Tests
                     listView.Groups.Add(group1);
                     listView.Groups.Add(group2);
 
-                    Assert.Equal(2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+                    Assert.Equal(2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
 
                     var lvgroup1 = new LVGROUPW
                     {
@@ -4483,7 +4483,7 @@ namespace System.Windows.Forms.Tests
             uint keyCode = (uint)Keys.Space;
             uint lParam = (0x00000001 | keyCode << 16);
 
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Equal(selectItems ? 2 : 0, control.SelectedItems.Count);
             Assert.Equal(!checkItem && selectItems && focusItem, item2.Checked);
         }
@@ -4515,7 +4515,7 @@ namespace System.Windows.Forms.Tests
             uint lParam = (0x00000001 | keyCode << 16);
 
             // If control doesn't have selected items none will be focused.
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Empty(control.SelectedIndices);
             Assert.Null(control.FocusedItem);
             Assert.Null(control.FocusedGroup);
@@ -4559,7 +4559,7 @@ namespace System.Windows.Forms.Tests
                 uint keyCode = (uint)(key_s == "Keys.Down" ? Keys.Down : Keys.Up);
                 uint lParam = (0x00000001 | keyCode << 16);
 
-                User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+                User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
                 Assert.False(control.GroupsEnabled);
                 Assert.True(control.Items.Count > 0);
                 int expectedGroupIndex = int.Parse(expectedGroupIndex_s);
@@ -4604,7 +4604,7 @@ namespace System.Windows.Forms.Tests
             uint lParam = (0x00000001 | keyCode << 16);
 
             // Actually ListView in VirtualMode can't have Groups
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Null(control.FocusedGroup);
         }
 
@@ -4646,7 +4646,7 @@ namespace System.Windows.Forms.Tests
             uint lParam = (0x00000001 | keyCode << 16);
 
             // Actually ListView in VirtualMode doesn't check items here
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.False(item2.Checked);
         }
 

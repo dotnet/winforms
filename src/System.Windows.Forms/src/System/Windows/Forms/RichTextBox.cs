@@ -194,8 +194,8 @@ namespace System.Windows.Forms
                     User32.SendMessageW(
                         this,
                         (User32.WM)EM.SETOPTIONS,
-                        (IntPtr)(value ? ECOOP.OR : ECOOP.XOR),
-                        (IntPtr)ECO.AUTOWORDSELECTION);
+                        (nint)(value ? ECOOP.OR : ECOOP.XOR),
+                        (nint)ECO.AUTOWORDSELECTION);
                 }
             }
         }
@@ -531,7 +531,7 @@ namespace System.Windows.Forms
                     languageOption = value;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)EM.SETLANGOPTIONS, IntPtr.Zero, (IntPtr)value);
+                        User32.SendMessageW(this, (User32.WM)EM.SETLANGOPTIONS, 0, (nint)value);
                     }
                 }
             }
@@ -644,7 +644,7 @@ namespace System.Windows.Forms
                     else if (IsHandleCreated)
                     {
                         using var hDC = new Gdi32.CreateDcScope("DISPLAY", null, null, IntPtr.Zero, informationOnly: true);
-                        User32.SendMessageW(this, (User32.WM)EM.SETTARGETDEVICE, (IntPtr)hDC, (IntPtr)Pixel2Twip(value, true));
+                        User32.SendMessageW(this, (User32.WM)EM.SETTARGETDEVICE, hDC, Pixel2Twip(value, true));
                     }
                 }
             }
@@ -1382,8 +1382,8 @@ namespace System.Windows.Forms
                         User32.SendMessageW(
                             this,
                             (User32.WM)EM.SETOPTIONS,
-                            (IntPtr)(value ? ECOOP.OR : ECOOP.XOR),
-                            (IntPtr)ECO.SELECTIONBAR);
+                            (nint)(value ? ECOOP.OR : ECOOP.XOR),
+                            (nint)ECO.SELECTIONBAR);
                     }
                 }
             }
@@ -1479,7 +1479,7 @@ namespace System.Windows.Forms
                     codepage = 1200u /* CP_UNICODE */
                 };
 
-                return (int)User32.SendMessageW(this, (User32.WM)EM.GETTEXTLENGTHEX, (IntPtr)(&gtl));
+                return (int)User32.SendMessageW(this, (User32.WM)EM.GETTEXTLENGTHEX, (nint)(&gtl));
             }
         }
 
@@ -2367,7 +2367,7 @@ namespace System.Windows.Forms
             }
 
             var pt = new Point();
-            User32.SendMessageW(this, (User32.WM)User32.EM.POSFROMCHAR, (IntPtr)(&pt), (IntPtr)index);
+            User32.SendMessageW(this, (User32.WM)User32.EM.POSFROMCHAR, (nint)(&pt), index);
             return pt;
         }
 
@@ -2445,7 +2445,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, 0, BackColor.ToWin32());
             }
 
             base.OnBackColorChanged(e);
@@ -2523,8 +2523,8 @@ namespace System.Windows.Forms
             User32.SendMessageW(
                 this,
                 (User32.WM)EM.SETEVENTMASK,
-                IntPtr.Zero,
-                (IntPtr)(ENM.PROTECTED | ENM.SELCHANGE |
+                0,
+                (nint)(ENM.PROTECTED | ENM.SELCHANGE |
                          ENM.DROPFILES | ENM.REQUESTRESIZE |
                          ENM.IMECHANGE | ENM.CHANGE |
                          ENM.UPDATE | ENM.SCROLL |
@@ -2535,7 +2535,7 @@ namespace System.Windows.Forms
             rightMargin = 0;
             RightMargin = rm;
 
-            User32.SendMessageW(this, (User32.WM)EM.AUTOURLDETECT, DetectUrls ? (IntPtr)1 : IntPtr.Zero, IntPtr.Zero);
+            User32.SendMessageW(this, (User32.WM)EM.AUTOURLDETECT, DetectUrls ? 1 : 0, 0);
             if (selectionBackColorToSetOnHandleCreated != Color.Empty)
             {
                 SelectionBackColor = selectionBackColorToSetOnHandleCreated;
@@ -2544,7 +2544,7 @@ namespace System.Windows.Forms
             // Initialize colors before initializing RTF, otherwise CFE_AUTOCOLOR will be in effect
             // and our text will all be Color.WindowText.
             AutoWordSelection = AutoWordSelection;
-            User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+            User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, 0, BackColor.ToWin32());
             InternalSetForeColor(ForeColor);
 
             // base sets the Text property.  It's important to do this *after* setting EM_AUTOUrlDETECT.
@@ -2789,7 +2789,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)EM.SETZOOM, (IntPtr)numerator, (IntPtr)denominator);
+                User32.SendMessageW(this, (User32.WM)EM.SETZOOM, numerator, denominator);
             }
 
             if (numerator != 0)
@@ -3012,7 +3012,7 @@ namespace System.Windows.Forms
 
                 // gives us TextBox compatible behavior, programatic text change shouldn't
                 // be limited...
-                User32.SendMessageW(this, (User32.WM)EM.EXLIMITTEXT, IntPtr.Zero, (IntPtr)int.MaxValue);
+                User32.SendMessageW(this, (User32.WM)EM.EXLIMITTEXT, 0, int.MaxValue);
 
                 // go get the text for the control
                 User32.SendMessageW(this, (User32.WM)EM.STREAMIN, (nint)flags, ref es);
@@ -3034,7 +3034,7 @@ namespace System.Windows.Forms
                 }
 
                 // set the modify tag on the control
-                User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY, (IntPtr)(-1));
+                User32.SendMessageW(this, (User32.WM)User32.EM.SETMODIFY, -1);
 
                 // EM_GETLINECOUNT will cause the RichTextBox to recalculate its line indexes
                 User32.SendMessageW(this, (User32.WM)User32.EM.GETLINECOUNT);
@@ -3228,7 +3228,7 @@ namespace System.Windows.Forms
                         Marshal.QueryInterface(punk, ref iidRichEditOleCallback, out IntPtr pRichEditOleCallback);
                         try
                         {
-                            User32.SendMessageW(this, (User32.WM)EM.SETOLECALLBACK, IntPtr.Zero, pRichEditOleCallback);
+                            User32.SendMessageW(this, (User32.WM)EM.SETOLECALLBACK, 0, pRichEditOleCallback);
                         }
                         finally
                         {
@@ -3253,7 +3253,7 @@ namespace System.Windows.Forms
             {
                 if (BackColor.IsSystemColor)
                 {
-                    User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                    User32.SendMessageW(this, (User32.WM)EM.SETBKGNDCOLOR, 0, BackColor.ToWin32());
                 }
 
                 if (ForeColor.IsSystemColor)
@@ -3360,7 +3360,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)EM.EXLIMITTEXT, IntPtr.Zero, (IntPtr)MaxLength);
+                User32.SendMessageW(this, (User32.WM)EM.EXLIMITTEXT, 0, (IntPtr)MaxLength);
             }
         }
 
@@ -3590,7 +3590,7 @@ namespace System.Windows.Forms
             if (ImeMode == ImeMode.Hangul || ImeMode == ImeMode.HangulFull)
             {
                 // Is the IME CompositionWindow open?
-                ICM compMode = unchecked((ICM)(long)User32.SendMessageW(this, (User32.WM)EM.GETIMECOMPMODE));
+                ICM compMode = (ICM)User32.SendMessageW(this, (User32.WM)EM.GETIMECOMPMODE);
                 if (compMode != ICM.NOTOPEN)
                 {
                     int textLength = User32.GetWindowTextLengthW(new HandleRef(this, Handle));

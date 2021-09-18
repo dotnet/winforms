@@ -2913,8 +2913,8 @@ namespace System.Windows.Forms
             User32.SendMessageW(
                 this,
                 User32.WM.PRINT,
-                (IntPtr)imageHdc.HDC,
-                (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                imageHdc.HDC,
+                (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
             // Now BLT the result to the destination bitmap.
             Gdi32.BitBlt(

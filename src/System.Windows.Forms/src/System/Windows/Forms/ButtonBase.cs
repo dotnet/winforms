@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms
                     //
                     if (!OwnerDraw)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, PARAM.FromBool(true));
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.TRUE);
                     }
 
                     Invalidate(DownChangeRectangle);
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms
                 {
                     SetFlag(FlagMousePressed, false);
                     SetFlag(FlagMouseDown, false);
-                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, PARAM.FromBool(false));
+                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.FALSE);
                 }
 
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only

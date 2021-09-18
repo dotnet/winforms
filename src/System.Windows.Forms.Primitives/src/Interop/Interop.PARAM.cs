@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
-
 internal partial class Interop
 {
     /// <summary>
@@ -51,9 +49,6 @@ internal partial class Interop
         public static nint FromBool(bool value)
             => (nint)(value ? BOOL.TRUE : BOOL.FALSE);
 
-        public static nint FromColor(Color color)
-            => ColorTranslator.ToWin32(color);
-
         /// <summary>
         ///  Hard casts to <see langword="int" /> without bounds checks.
         /// </summary>
@@ -63,18 +58,5 @@ internal partial class Interop
         ///  Hard casts to <see langword="uint" /> without bounds checks.
         /// </summary>
         public static uint ToUInt(nint param) => (uint)param;
-
-        /// <summary>
-        ///  Hard casts to <see langword="long" /> without bounds checks.
-        /// </summary>
-        /// <remarks>
-        ///  Technically not needed, but here for completeness.
-        /// </remarks>
-        public static long ToLong(nint param) => param;
-
-        /// <summary>
-        ///  Hard casts to <see langword="ulong" /> without bounds checks.
-        /// </summary>
-        public static ulong ToULong(nint param) => (ulong)param;
     }
 }

@@ -404,10 +404,10 @@ namespace System.Windows.Forms
                     IntPtr hwndHdr = User32.SendMessageW(ListView, (User32.WM)LVM.GETHEADER);
                     if (hwndHdr != IntPtr.Zero)
                     {
-                        int nativeColumnCount = PARAM.ToInt(User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT));
+                        int nativeColumnCount = (int)User32.SendMessageW(hwndHdr, (User32.WM)HDM.GETITEMCOUNT);
                         if (Index < nativeColumnCount)
                         {
-                            _width = PARAM.ToInt(User32.SendMessageW(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, (IntPtr)Index));
+                            _width = (int)User32.SendMessageW(ListView, (User32.WM)LVM.GETCOLUMNWIDTH, Index);
                         }
                     }
                 }
@@ -489,7 +489,7 @@ namespace System.Windows.Forms
             {
                 fixed (int* pCols = cols)
                 {
-                    User32.SendMessageW(ListView, (User32.WM)LVM.SETCOLUMNORDERARRAY, (IntPtr)cols.Length, (IntPtr)pCols);
+                    User32.SendMessageW(ListView, (User32.WM)LVM.SETCOLUMNORDERARRAY, cols.Length, (nint)pCols);
                 }
             }
         }

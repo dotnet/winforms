@@ -585,7 +585,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETOPTIONS.
-            SendMessageW(control.Handle, (WM)Richedit.EM.SETOPTIONS, (IntPtr)ECOOP.OR, (IntPtr)ECO.AUTOWORDSELECTION);
+            SendMessageW(control.Handle, (WM)Richedit.EM.SETOPTIONS, (nint)ECOOP.OR, (nint)ECO.AUTOWORDSELECTION);
             Assert.False(control.AutoWordSelection);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1132,7 +1132,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_AUTOURLDETECT.
-            SendMessageW(control.Handle, (WM)Richedit.EM.AUTOURLDETECT, IntPtr.Zero);
+            SendMessageW(control.Handle, (WM)Richedit.EM.AUTOURLDETECT, 0);
             Assert.True(control.DetectUrls);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1951,7 +1951,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_LIMITTEXT.
-            SendMessageW(control.Handle, (WM)User32.EM.LIMITTEXT, IntPtr.Zero, (IntPtr)1);
+            SendMessageW(control.Handle, (WM)User32.EM.LIMITTEXT, 0, 1);
             Assert.Equal(0x7FFFFFFF, control.MaxLength);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -1959,7 +1959,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_EXLIMITTEXT.
-            SendMessageW(control.Handle, (WM)Richedit.EM.EXLIMITTEXT, IntPtr.Zero, (IntPtr)2);
+            SendMessageW(control.Handle, (WM)Richedit.EM.EXLIMITTEXT, 0, 2);
             Assert.Equal(0x7FFFFFFF, control.MaxLength);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -5570,7 +5570,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionLength = value;
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = SendMessageW(control.Handle, (WM)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
+            IntPtr result = SendMessageW(control.Handle, (WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
             Assert.Equal(1, PARAM.LOWORD(result));
             Assert.Equal(expected, PARAM.HIWORD(result));
             Assert.Equal(1, selectionStart);
@@ -6160,7 +6160,7 @@ namespace System.Windows.Forms.Tests
             control.SelectionStart = value;
             int selectionStart = 0;
             int selectionEnd = 0;
-            IntPtr result = SendMessageW(control.Handle, (WM)User32.EM.GETSEL, (IntPtr)(&selectionStart), (IntPtr)(&selectionEnd));
+            IntPtr result = SendMessageW(control.Handle, (WM)User32.EM.GETSEL, (nint)(&selectionStart), (nint)(&selectionEnd));
             Assert.Equal(expectedSelectionStart, PARAM.LOWORD(result));
             Assert.Equal(expectedEnd, PARAM.HIWORD(result));
             Assert.Equal(expectedSelectionStart, selectionStart);
@@ -6600,7 +6600,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETOPTIONS.
-            SendMessageW(control.Handle, (WM)Richedit.EM.SETOPTIONS, (IntPtr)ECOOP.OR, (IntPtr)ECO.SELECTIONBAR);
+            SendMessageW(control.Handle, (WM)Richedit.EM.SETOPTIONS, (nint)ECOOP.OR, (nint)ECO.SELECTIONBAR);
             Assert.False(control.ShowSelectionMargin);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);
@@ -7746,7 +7746,7 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
 
             // Call EM_SETZOOM.
-            SendMessageW(control.Handle, (WM)Richedit.EM.SETZOOM, (IntPtr)2, (IntPtr)10);
+            SendMessageW(control.Handle, (WM)Richedit.EM.SETZOOM, 2, 10);
             Assert.Equal(0.2f, control.ZoomFactor);
             Assert.True(control.IsHandleCreated);
             Assert.Equal(0, invalidatedCallCount);

@@ -146,7 +146,7 @@ namespace System.Windows.Forms
             {
                 if (Owner.IsHandleCreated && ExpandCollapseState == UiaCore.ExpandCollapseState.Collapsed)
                 {
-                    SendMessageW(Owner, WM.SYSKEYDOWN, (IntPtr)Keys.Down);
+                    SendMessageW(Owner, WM.SYSKEYDOWN, (nint)Keys.Down);
                 }
             }
 

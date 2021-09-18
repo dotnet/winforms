@@ -1206,9 +1206,9 @@ namespace System.Windows.Forms.Design
         private unsafe void OnDesignerDeactivate(object sender, EventArgs e)
         {
             Control control = Control;
-            if (control != null && control.IsHandleCreated)
+            if (control is not null && control.IsHandleCreated)
             {
-                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE);
+                User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.FALSE);
                 User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
             }
         }

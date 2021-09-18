@@ -1256,7 +1256,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETMCCOLOR, (IntPtr)colorIndex, PARAM.FromColor(value));
+                User32.SendMessageW(this, (User32.WM)DTM.SETMCCOLOR, (nint)colorIndex, value.ToWin32());
             }
         }
 
@@ -1267,7 +1267,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)DTM.SETMCFONT, (IntPtr)CalendarFontHandle, NativeMethods.InvalidIntPtr);
+                User32.SendMessageW(this, (User32.WM)DTM.SETMCFONT, CalendarFontHandle, NativeMethods.InvalidIntPtr);
             }
         }
 

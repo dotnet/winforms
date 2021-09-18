@@ -1760,7 +1760,7 @@ namespace System.Windows.Forms
                     User32.GetWindowRect(this, ref r);
                     if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                     {
-                        User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)User32.HT.CLIENT);
+                        User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (nint)User32.HT.CLIENT);
                     }
                 }
 
@@ -3663,7 +3663,7 @@ namespace System.Windows.Forms
                         User32.SendMessageW(
                             TopMostParent,
                             User32.WM.CHANGEUISTATE,
-                            (IntPtr)(actionMask | (int)User32.UIS.SET));
+                            actionMask | (int)User32.UIS.SET);
                     }
                 }
 
@@ -3709,7 +3709,7 @@ namespace System.Windows.Forms
                         // state (has been this way forever)
                         User32.SendMessageW(TopMostParent,
                             User32.WM.CHANGEUISTATE,
-                            (IntPtr)(actionMask | (int)User32.UIS.SET));
+                            actionMask | (int)User32.UIS.SET);
                     }
                 }
 
@@ -4697,7 +4697,7 @@ namespace System.Windows.Forms
 
             if (_updateCount == 0)
             {
-                User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
+                User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
             }
 
             _updateCount++;
@@ -5304,8 +5304,8 @@ namespace System.Windows.Forms
             User32.SendMessageW(
                 this,
                 User32.WM.PRINT,
-                (IntPtr)hDc,
-                (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                hDc,
+                (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
             // Now BLT the result to the destination bitmap.
             using Graphics destGraphics = Graphics.FromImage(bitmap);
@@ -5380,7 +5380,7 @@ namespace System.Windows.Forms
                 _updateCount--;
                 if (_updateCount == 0)
                 {
-                    User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                    User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     if (invalidate)
                     {
                         Invalidate();
@@ -7895,7 +7895,7 @@ namespace System.Windows.Forms
                 if (User32.GetScrollInfo(this, User32.SB.HORZ, ref si).IsTrue())
                 {
                     si.nPos = (RightToLeft == RightToLeft.Yes) ? si.nMax : si.nMin;
-                    User32.SendMessageW(this, User32.WM.HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.HSCROLL, PARAM.FromLowHigh((int)User32.SBH.THUMBPOSITION, si.nPos), 0);
                 }
             }
         }
@@ -9319,7 +9319,7 @@ namespace System.Windows.Forms
             if (GetStyle(ControlStyles.UserPaint))
             {
                 // We let user paint controls paint directly into the metafile
-                User32.SendMessageW(this, User32.WM.PRINT, (IntPtr)hDC, lParam);
+                User32.SendMessageW(this, User32.WM.PRINT, hDC, lParam);
             }
             else
             {
@@ -9336,7 +9336,7 @@ namespace System.Windows.Forms
                 // which is then copied into the metafile.  (Old GDI line drawing
                 // is 1px thin, which causes borders to disappear, etc.)
                 using MetafileDCWrapper dcWrapper = new MetafileDCWrapper(hDC, Size);
-                User32.SendMessageW(this, User32.WM.PRINT, (IntPtr)dcWrapper.HDC, lParam);
+                User32.SendMessageW(this, User32.WM.PRINT, dcWrapper.HDC, lParam);
             }
         }
 
@@ -9357,7 +9357,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Control.ProcessDialogChar [" + charCode.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Control.ProcessDialogChar [{charCode.ToString()}]");
             return _parent is null ? false : _parent.ProcessDialogChar(charCode);
         }
 
@@ -9622,7 +9622,7 @@ namespace System.Windows.Forms
                 User32.SendMessageW(
                     topMostParent,
                     User32.GetParent(topMostParent.Handle) == IntPtr.Zero ? User32.WM.CHANGEUISTATE : User32.WM.UPDATEUISTATE,
-                    (IntPtr)((int)User32.UIS.CLEAR | ((int)toClear << 16)));
+                    (int)User32.UIS.CLEAR | ((int)toClear << 16));
             }
         }
 
@@ -11312,13 +11312,13 @@ namespace System.Windows.Forms
 
         private void SetWindowFont()
         {
-            User32.SendMessageW(this, User32.WM.SETFONT, (IntPtr)FontHandle, PARAM.FromBool(false));
+            User32.SendMessageW(this, User32.WM.SETFONT, FontHandle, (nint)BOOL.FALSE);
         }
 
         private void SetWindowStyle(int flag, bool value)
         {
-            int styleFlags = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
-            User32.SetWindowLong(this, User32.GWL.STYLE, new HandleRef(null, (IntPtr)(value ? styleFlags | flag : styleFlags & ~flag)));
+            int styleFlags = (int)User32.GetWindowLong(this, User32.GWL.STYLE);
+            User32.SetWindowLong(this, User32.GWL.STYLE, value ? styleFlags | flag : styleFlags & ~flag);
         }
 
         /// <summary>

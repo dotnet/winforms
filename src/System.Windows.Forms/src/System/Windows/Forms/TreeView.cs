@@ -206,12 +206,12 @@ namespace System.Windows.Forms
                 base.BackColor = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TVM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                    User32.SendMessageW(this, (User32.WM)TVM.SETBKCOLOR, 0, BackColor.ToWin32());
 
                     // This is to get around a problem in the comctl control where the lines
                     // connecting nodes don't get the new BackColor.  This messages forces
                     // reconstruction of the line bitmaps without changing anything else.
-                    User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, (IntPtr)Indent);
+                    User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, Indent);
                 }
             }
         }
@@ -462,7 +462,7 @@ namespace System.Windows.Forms
                 base.ForeColor = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)TVM.SETTEXTCOLOR, IntPtr.Zero, PARAM.FromColor(ForeColor));
+                    User32.SendMessageW(this, (User32.WM)TVM.SETTEXTCOLOR, 0, ForeColor.ToWin32());
                 }
             }
         }
@@ -660,11 +660,9 @@ namespace System.Windows.Forms
                     AttachImageListHandlers();
 
                     // Update TreeView's images
-                    //
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, IntPtr.Zero,
-                                    value is null ? IntPtr.Zero : value.Handle);
+                        User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, 0, value is null ? 0 : value.Handle);
                         if (StateImageList is not null && StateImageList.Images.Count > 0 && internalStateImageList is not null)
                         {
                             SetStateImageList(internalStateImageList.Handle);
@@ -803,7 +801,7 @@ namespace System.Windows.Forms
                     indent = value;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, (IntPtr)value);
+                        User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, value);
                         indent = (int)User32.SendMessageW(this, (User32.WM)TVM.GETINDENT);
                     }
                 }
@@ -928,7 +926,7 @@ namespace System.Windows.Forms
                     lineColor = value;
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)TVM.SETLINECOLOR, IntPtr.Zero, PARAM.FromColor(lineColor));
+                        User32.SendMessageW(this, (User32.WM)TVM.SETLINECOLOR, 0, lineColor.ToWin32());
                     }
                 }
             }
@@ -1173,7 +1171,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    IntPtr hItem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.CARET);
+                    IntPtr hItem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (nint)TVGN.CARET);
                     if (hItem == IntPtr.Zero)
                     {
                         return null;
@@ -1199,8 +1197,8 @@ namespace System.Windows.Forms
                     // to inform the handle that the selected node has been added to the TreeView.
                     Debug.Assert(selectedNode is null || selectedNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
-                    IntPtr hnode = (value is null ? IntPtr.Zero : value.Handle);
-                    User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.CARET, hnode);
+                    nint hnode = (value is null ? 0 : value.Handle);
+                    User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (nint)TVGN.CARET, hnode);
                     selectedNode = null;
                 }
                 else
@@ -1395,7 +1393,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    IntPtr hitem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (IntPtr)TVGN.FIRSTVISIBLE);
+                    IntPtr hitem = User32.SendMessageW(this, (User32.WM)TVM.GETNEXTITEM, (nint)TVGN.FIRSTVISIBLE);
                     return (hitem == IntPtr.Zero ? null : NodeFromHandle(hitem));
                 }
 
@@ -1410,8 +1408,8 @@ namespace System.Windows.Forms
                     // to inform the handle that the selected node has been added to the TreeView.
                     Debug.Assert(topNode is null || topNode.TreeView != this, "handle is created, but we're still caching selectedNode");
 
-                    IntPtr hnode = (value is null ? IntPtr.Zero : value.Handle);
-                    User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.FIRSTVISIBLE, hnode);
+                    nint hnode = (value is null ? 0 : value.Handle);
+                    User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (nint)TVGN.FIRSTVISIBLE, hnode);
                     topNode = null;
                 }
                 else
@@ -1689,14 +1687,14 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
+                    User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                     if (delayed)
                     {
-                        User32.PostMessageW(this, User32.WM.SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                        User32.PostMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     }
                     else
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     }
                 }
             }
@@ -1712,7 +1710,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(toolTip, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+            User32.SendMessageW(toolTip, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
             User32.SendMessageW(this, (User32.WM)TVM.SETTOOLTIPS, toolTip.Handle);
             controlToolTipText = toolTip.GetToolTip(this);
         }
@@ -1791,7 +1789,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr handle = (ImageList is null) ? IntPtr.Zero : ImageList.Handle;
-                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, IntPtr.Zero, handle);
+                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, 0, handle);
             }
         }
 
@@ -1951,7 +1949,7 @@ namespace System.Windows.Forms
             int version = (int)User32.SendMessageW(this, (User32.WM)CCM.GETVERSION);
             if (version < 5)
             {
-                User32.SendMessageW(this, (User32.WM)CCM.SETVERSION, (IntPtr)5);
+                User32.SendMessageW(this, (User32.WM)CCM.SETVERSION, 5);
             }
 
             // Workaround for problem in TreeView where it doesn't recognize the TVS_CHECKBOXES
@@ -1961,40 +1959,40 @@ namespace System.Windows.Forms
             // This seems to make the Treeview happy.
             if (CheckBoxes)
             {
-                int style = PARAM.ToInt(User32.GetWindowLong(this, User32.GWL.STYLE));
+                int style = (int)User32.GetWindowLong(this, User32.GWL.STYLE);
                 style |= (int)TVS.CHECKBOXES;
-                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
+                User32.SetWindowLong(this, User32.GWL.STYLE, style);
             }
 
             if (ShowNodeToolTips && !DesignMode)
             {
-                int style = PARAM.ToInt(User32.GetWindowLong(this, User32.GWL.STYLE));
+                int style = (int)User32.GetWindowLong(this, User32.GWL.STYLE);
                 style |= (int)TVS.INFOTIP;
-                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
+                User32.SetWindowLong(this, User32.GWL.STYLE, style);
             }
 
             Color c = BackColor;
             if (c != SystemColors.Window)
             {
-                User32.SendMessageW(this, (User32.WM)TVM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(c));
+                User32.SendMessageW(this, (User32.WM)TVM.SETBKCOLOR, 0, c.ToWin32());
             }
 
             c = ForeColor;
 
             if (c != SystemColors.WindowText)
             {
-                User32.SendMessageW(this, (User32.WM)TVM.SETTEXTCOLOR, IntPtr.Zero, PARAM.FromColor(c));
+                User32.SendMessageW(this, (User32.WM)TVM.SETTEXTCOLOR, 0, c.ToWin32());
             }
 
             // Put the linecolor into the native control only if set.
             if (lineColor != Color.Empty)
             {
-                User32.SendMessageW(this, (User32.WM)TVM.SETLINECOLOR, IntPtr.Zero, PARAM.FromColor(lineColor));
+                User32.SendMessageW(this, (User32.WM)TVM.SETLINECOLOR, 0, lineColor.ToWin32());
             }
 
             if (imageList is not null)
             {
-                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, IntPtr.Zero, imageList.Handle);
+                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, 0, imageList.Handle);
             }
 
             if (stateImageList is not null)
@@ -2004,12 +2002,12 @@ namespace System.Windows.Forms
 
             if (indent != -1)
             {
-                User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, (IntPtr)indent);
+                User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, indent);
             }
 
             if (itemHeight != -1)
             {
-                User32.SendMessageW(this, (User32.WM)TVM.SETITEMHEIGHT, (IntPtr)ItemHeight);
+                User32.SendMessageW(this, (User32.WM)TVM.SETITEMHEIGHT, ItemHeight);
             }
 
             // Essentially we are setting the width to be infinite so that the
@@ -2074,7 +2072,7 @@ namespace System.Windows.Forms
                 }
 
                 newImageList.Images.AddRange(images);
-                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, newImageList.Handle);
+                User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (nint)TVSIL.STATE, newImageList.Handle);
 
                 if (internalStateImageList is not null)
                 {
@@ -2089,7 +2087,7 @@ namespace System.Windows.Forms
         {
             // In certain cases (TREEVIEWSTATE_checkBoxes) e.g., the Native TreeView leaks the imagelist
             // even if set by us. To prevent any leaks, we always destroy what was there after setting a new list.
-            IntPtr handleOld = User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE, handle);
+            IntPtr handleOld = User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (nint)TVSIL.STATE, handle);
             if ((handleOld != IntPtr.Zero) && (handleOld != handle))
             {
                 ComCtl32.ImageList.Destroy(new HandleRef(this, handleOld));
@@ -2100,13 +2098,13 @@ namespace System.Windows.Forms
         // We must destroy it explicitly.
         private void DestroyNativeStateImageList(bool reset)
         {
-            IntPtr handle = User32.SendMessageW(this, (User32.WM)TVM.GETIMAGELIST, (IntPtr)TVSIL.STATE);
+            IntPtr handle = User32.SendMessageW(this, (User32.WM)TVM.GETIMAGELIST, (nint)TVSIL.STATE);
             if (handle != IntPtr.Zero)
             {
                 ComCtl32.ImageList.Destroy(new HandleRef(this, handle));
                 if (reset)
                 {
-                    User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (IntPtr)TVSIL.STATE);
+                    User32.SendMessageW(this, (User32.WM)TVM.SETIMAGELIST, (nint)TVSIL.STATE);
                 }
             }
         }
@@ -2694,7 +2692,7 @@ namespace System.Windows.Forms
             // If the user shows the ContextMenu bu overriding the WndProc( ), then the treeview
             // goes into the weird state where the high-light gets locked to the node on which the ContextMenu was shown.
             // So we need to get the native TREEVIEW out of this weird state.
-            User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
+            User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (nint)TVGN.DROPHILITE);
 
             // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
@@ -3077,7 +3075,7 @@ namespace System.Windows.Forms
                             else
                             {
                                 treeViewState[TREEVIEWSTATE_showTreeViewContextMenu] = true;
-                                User32.SendMessageW(this, User32.WM.CONTEXTMENU, Handle, (IntPtr)User32.GetMessagePos());
+                                User32.SendMessageW(this, User32.WM.CONTEXTMENU, Handle, (nint)User32.GetMessagePos());
                             }
 
                             m.Result = (IntPtr)1;
@@ -3135,7 +3133,7 @@ namespace System.Windows.Forms
             ContextMenuStrip strip = sender as ContextMenuStrip;
             // Unhook the Event.
             strip.Closing -= new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
-            User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (IntPtr)TVGN.DROPHILITE);
+            User32.SendMessageW(this, (User32.WM)TVM.SELECTITEM, (nint)TVGN.DROPHILITE);
         }
 
         private void UnhookNodes()
@@ -3402,7 +3400,7 @@ namespace System.Windows.Forms
                     downButton = MouseButtons.Right;
                     break;
                 case (int)User32.WM.SYSCOLORCHANGE:
-                    User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, (IntPtr)Indent);
+                    User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, Indent);
                     base.WndProc(ref m);
                     break;
                 case (int)User32.WM.SETFOCUS:

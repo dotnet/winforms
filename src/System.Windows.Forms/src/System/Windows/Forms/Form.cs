@@ -2599,7 +2599,7 @@ namespace System.Windows.Forms
             {
                 if (IsMdiChild)
                 {
-                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, IntPtr.Zero);
+                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
                 }
                 else
                 {
@@ -3575,7 +3575,7 @@ namespace System.Windows.Forms
             // If this form is a MdiChild, then we need to set the focus differently.
             if (IsMdiChild)
             {
-                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, IntPtr.Zero);
+                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
                 return Focused;
             }
 
@@ -4820,7 +4820,7 @@ namespace System.Windows.Forms
             else if (IsMdiChild)
             {
                 User32.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
-                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, IntPtr.Zero);
+                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
             }
             else
             {
@@ -5583,7 +5583,7 @@ namespace System.Windows.Forms
                         Properties.SetObject(PropDummyMdiMenu, dummyMenu);
                     }
 
-                    User32.SendMessageW(ctlClient, User32.WM.MDISETMENU, dummyMenu.Value, IntPtr.Zero);
+                    User32.SendMessageW(ctlClient, User32.WM.MDISETMENU, dummyMenu.Value, 0);
                 }
 
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
@@ -5862,8 +5862,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, 0);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, 0);
                 }
 
                 if (WindowState == FormWindowState.Maximized && MdiParent?.MdiControlStrip != null)

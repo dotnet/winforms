@@ -609,7 +609,7 @@ namespace System.Windows.Forms
                 {
                     if (0 == _paintFrozen++)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                     }
                 }
 
@@ -622,7 +622,7 @@ namespace System.Windows.Forms
 
                     if (0 == --_paintFrozen)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                         Invalidate(true);
                     }
                 }

@@ -503,7 +503,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+            SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
         }
 
         /// <summary>
@@ -803,14 +803,12 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             // Update the item height
-            //
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
-            //
             base.OnFontChanged(e);
         }
 

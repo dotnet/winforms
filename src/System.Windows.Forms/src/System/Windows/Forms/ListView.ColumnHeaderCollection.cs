@@ -352,7 +352,7 @@ namespace System.Windows.Forms
                             int w = owner.columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             if (owner.IsHandleCreated)
                             {
-                                User32.SendMessageW(owner, (User32.WM)LVM.DELETECOLUMN, (IntPtr)colIdx);
+                                User32.SendMessageW(owner, (User32.WM)LVM.DELETECOLUMN, colIdx);
                             }
 
                             owner.columnHeaders[colIdx].OwnerListview = null;

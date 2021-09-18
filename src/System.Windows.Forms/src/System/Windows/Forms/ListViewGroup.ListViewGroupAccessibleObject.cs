@@ -162,7 +162,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                return LVGS.FOCUSED == unchecked((LVGS)(long)User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPSTATE, (IntPtr)nativeGroupId, (IntPtr)LVGS.FOCUSED));
+                return LVGS.FOCUSED == (LVGS)User32.SendMessageW(_owningListView, (User32.WM)LVM.GETGROUPSTATE, nativeGroupId, (nint)LVGS.FOCUSED);
             }
 
             private unsafe int GetNativeGroupId()

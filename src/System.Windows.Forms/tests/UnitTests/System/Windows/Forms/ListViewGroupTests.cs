@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Tests
                     Assert.NotEqual(IntPtr.Zero, listView.Handle);
                     group.TitleImageIndex = value.Index;
 
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
                     var lvgroup = new LVGROUPW
                     {
                         cbSize = (uint)sizeof(LVGROUPW),
@@ -350,7 +350,7 @@ namespace System.Windows.Forms.Tests
                     Assert.NotEqual(IntPtr.Zero, listView.Handle);
                     group.TitleImageKey = value.Key;
 
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
                     var lvgroup = new LVGROUPW
                     {
                         cbSize = (uint)sizeof(LVGROUPW),
@@ -487,7 +487,7 @@ namespace System.Windows.Forms.Tests
                     Assert.NotEqual(IntPtr.Zero, listView.Handle);
                     group.Subtitle = value;
 
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
 
                     var lvgroup = new LVGROUPW
                     {
@@ -598,7 +598,7 @@ namespace System.Windows.Forms.Tests
                     Assert.NotEqual(IntPtr.Zero, listView.Handle);
                     group.Footer = value;
 
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
                     char* buffer = stackalloc char[256];
                     var lvgroup = new LVGROUPW
                     {
@@ -742,7 +742,7 @@ namespace System.Windows.Forms.Tests
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
                 group1.FooterAlignment = value;
 
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
                 char* buffer = stackalloc char[256];
                 var lvgroup = new LVGROUPW
                 {
@@ -858,7 +858,7 @@ namespace System.Windows.Forms.Tests
                     Assert.NotEqual(IntPtr.Zero, listView.Handle);
                     group.Header = value;
 
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
                     char* buffer = stackalloc char[256];
                     var lvgroup = new LVGROUPW
                     {
@@ -992,7 +992,7 @@ namespace System.Windows.Forms.Tests
                 Assert.NotEqual(IntPtr.Zero, listView.Handle);
                 group1.HeaderAlignment = value;
 
-                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
                 char* buffer = stackalloc char[256];
                 var lvgroup = new LVGROUPW
                 {
@@ -1115,7 +1115,7 @@ namespace System.Windows.Forms.Tests
                     group.CollapsedState = (ListViewGroupCollapsedState)data[0];
                     ListViewGroupCollapsedState expectedCollapsedState = (ListViewGroupCollapsedState)data[1];
 
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
                     var lvgroup = new LVGROUPW
                     {
                         cbSize = (uint)sizeof(LVGROUPW),
@@ -1263,7 +1263,7 @@ namespace System.Windows.Forms.Tests
                     Assert.NotEqual(IntPtr.Zero, listView.Handle);
                     group.TaskLink = value;
 
-                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, 0, 0));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
                     var lvgroup = new LVGROUPW
                     {
                         cbSize = (uint)sizeof(LVGROUPW),

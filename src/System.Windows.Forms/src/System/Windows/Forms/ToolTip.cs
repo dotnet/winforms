@@ -193,7 +193,7 @@ namespace System.Windows.Forms
                 _backColor = value;
                 if (GetHandleCreated())
                 {
-                    User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, PARAM.FromColor(_backColor));
+                    User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, _backColor.ToWin32());
                 }
             }
         }
@@ -262,7 +262,7 @@ namespace System.Windows.Forms
                 _foreColor = value;
                 if (GetHandleCreated())
                 {
-                    User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, PARAM.FromColor(_foreColor));
+                    User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, _foreColor.ToWin32());
                 }
             }
         }
@@ -750,7 +750,7 @@ namespace System.Windows.Forms
             }
 
             // Setting the max width has the added benefit of enabling multiline tool tips.
-            User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+            User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
             if (_auto)
             {
@@ -793,12 +793,12 @@ namespace System.Windows.Forms
 
             if (BackColor != SystemColors.Info)
             {
-                User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, PARAM.FromColor(BackColor));
+                User32.SendMessageW(this, (User32.WM)TTM.SETTIPBKCOLOR, BackColor.ToWin32());
             }
 
             if (ForeColor != SystemColors.InfoText)
             {
-                User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, PARAM.FromColor(ForeColor));
+                User32.SendMessageW(this, (User32.WM)TTM.SETTIPTEXTCOLOR, ForeColor.ToWin32());
             }
 
             if (_toolTipIcon > 0 || !string.IsNullOrEmpty(_toolTipTitle))
@@ -1186,7 +1186,7 @@ namespace System.Windows.Forms
 
             if (GetHandleCreated() && time >= 0)
             {
-                User32.SendMessageW(this, (User32.WM)TTM.SETDELAYTIME, (IntPtr)type, (IntPtr)time);
+                User32.SendMessageW(this, (User32.WM)TTM.SETDELAYTIME, (nint)type, time);
                 if (type == TTDT.AUTOPOP && time != InfiniteDelay)
                 {
                     IsPersistent = false;
@@ -1751,7 +1751,7 @@ namespace System.Windows.Forms
             try
             {
                 _trackPosition = true;
-                User32.SendMessageW(this, (User32.WM)TTM.TRACKPOSITION, IntPtr.Zero, PARAM.FromLowHigh(pointX, pointY));
+                User32.SendMessageW(this, (User32.WM)TTM.TRACKPOSITION, 0, PARAM.FromLowHigh(pointX, pointY));
             }
             finally
             {
@@ -2125,7 +2125,7 @@ namespace System.Windows.Forms
                 int maxwidth = (IsBalloon)
                     ? Math.Min(currentTooltipSize.Width - 2 * BalloonOffsetX, screen.WorkingArea.Width)
                     : Math.Min(currentTooltipSize.Width, screen.WorkingArea.Width);
-                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)maxwidth);
+                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, maxwidth);
             }
 
             if (e.Cancel)
@@ -2279,7 +2279,7 @@ namespace System.Windows.Forms
             if ((tipInfo.TipType & TipInfo.Type.Auto) != 0 || (tipInfo.TipType & TipInfo.Type.SemiAbsolute) != 0)
             {
                 Screen screen = Screen.FromPoint(Cursor.Position);
-                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)screen.WorkingArea.Width);
+                User32.SendMessageW(this, (User32.WM)TTM.SETMAXTIPWIDTH, 0, screen.WorkingArea.Width);
             }
 
             // For non-auto tips (those shown through the show(.) methods, we need to
