@@ -418,21 +418,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TextBoxCanUndoDescr))]
-        public bool CanUndo
-        {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    bool b;
-                    b = unchecked((int)(long)SendMessageW(this, (WM)EM.CANUNDO)) != 0;
-
-                    return b;
-                }
-
-                return false;
-            }
-        }
+        public bool CanUndo => IsHandleCreated && (int)SendMessageW(this, (WM)EM.CANUNDO) != 0;
 
         /// <summary>
         ///  Returns the parameters needed to create the handle. Inheriting classes
@@ -733,7 +719,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    bool curState = (0 != unchecked((int)(long)SendMessageW(this, (WM)EM.GETMODIFY)));
+                    bool curState = (int)SendMessageW(this, (WM)EM.GETMODIFY) != 0;
                     if (textBoxFlags[modified] != curState)
                     {
                         // Raise ModifiedChanged event.  See WmReflectCommand for more info.
@@ -1634,7 +1620,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int index = (int)(long)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+            int index = (int)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, 0, PARAM.FromLowHigh(pt.X, pt.Y));
             index = PARAM.LOWORD(index);
 
             if (index < 0)
@@ -1664,10 +1650,7 @@ namespace System.Windows.Forms
         ///  you pass the index of a overflowed character, GetLineFromCharIndex would
         ///  return 1 and not 0.
         /// </summary>
-        public virtual int GetLineFromCharIndex(int index)
-        {
-            return (int)(long)SendMessageW(this, (WM)EM.LINEFROMCHAR, (IntPtr)index);
-        }
+        public virtual int GetLineFromCharIndex(int index) => (int)SendMessageW(this, (WM)EM.LINEFROMCHAR, index);
 
         /// <summary>
         ///  Returns the location of the character at the given index.
@@ -1679,7 +1662,7 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            int i = (int)(long)SendMessageW(this, (WM)EM.POSFROMCHAR, (IntPtr)index);
+            int i = (int)SendMessageW(this, (WM)EM.POSFROMCHAR, index);
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
@@ -1693,16 +1676,13 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
 
-            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)lineNumber));
+            return (int)SendMessageW(this, (WM)EM.LINEINDEX, lineNumber);
         }
 
         /// <summary>
         ///  Returns the index of the first character of the line where the caret is.
         /// </summary>
-        public int GetFirstCharIndexOfCurrentLine()
-        {
-            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)(-1)));
-        }
+        public int GetFirstCharIndexOfCurrentLine() => (int)SendMessageW(this, (WM)EM.LINEINDEX, -1);
 
         /// <summary>
         ///  Ensures that the caret is visible in the TextBox window, by scrolling the
@@ -1753,7 +1733,7 @@ namespace System.Windows.Forms
                             textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                             // 2. Get the first visible line.
-                            int firstVisibleLine = unchecked((int)(long)SendMessageW(this, (WM)EM.GETFIRSTVISIBLELINE));
+                            int firstVisibleLine = (int)SendMessageW(this, (WM)EM.GETFIRSTVISIBLELINE);
 
                             // 3. If the first visible line is smaller than the start of the selection, we are done;
                             if (firstVisibleLine <= selStartLine)

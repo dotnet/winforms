@@ -544,7 +544,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessageW(this, (WM)CB.GETDROPPEDSTATE)) != 0;
+                    return (int)SendMessageW(this, (WM)CB.GETDROPPEDSTATE) != 0;
                 }
 
                 return false;
@@ -680,7 +680,7 @@ namespace System.Windows.Forms
                 // Note that the above if clause deals with the case when the handle has not yet been created
                 Debug.Assert(IsHandleCreated, "Handle should be created at this point");
 
-                int h = unchecked((int)(long)SendMessageW(this, (WM)CB.GETITEMHEIGHT));
+                int h = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT);
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -996,7 +996,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessageW(this, (WM)CB.GETCURSEL));
+                    return (int)SendMessageW(this, (WM)CB.GETCURSEL);
                 }
 
                 return _selectedIndex;
@@ -2143,7 +2143,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int h = unchecked((int)(long)SendMessageW(this, (WM)CB.GETITEMHEIGHT, (IntPtr)index));
+                int h = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT, (IntPtr)index);
                 if (h == -1)
                 {
                     throw new Win32Exception();
@@ -2203,7 +2203,7 @@ namespace System.Windows.Forms
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
                 // Keys.Delete only triggers a WM_KEYDOWN and WM_KEYUP, and no WM_CHAR. That's why it's treated separately.
-                if ((Keys)unchecked((int)(long)m.WParam) == Keys.Delete)
+                if ((Keys)(int)(long)m.WParam == Keys.Delete)
                 {
                     // Reset matching text and remove any selection
                     MatchingText = string.Empty;
@@ -3563,7 +3563,7 @@ namespace System.Windows.Forms
                 Graphics graphics = CreateGraphicsInternal();
                 for (int i = 0; i < Items.Count; i++)
                 {
-                    int original = unchecked((int)(long)SendMessageW(this, (WM)CB.GETITEMHEIGHT, (IntPtr)i));
+                    int original = (int)SendMessageW(this, (WM)CB.GETITEMHEIGHT, (IntPtr)i);
                     MeasureItemEventArgs mievent = new MeasureItemEventArgs(graphics, i, original);
                     OnMeasureItem(mievent);
                     if (mievent.ItemHeight != original)

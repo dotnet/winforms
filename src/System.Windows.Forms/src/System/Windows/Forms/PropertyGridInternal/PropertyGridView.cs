@@ -352,7 +352,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (_editTextBox is not null && _editTextBox.IsHandleCreated)
                 {
-                    int exStyle = unchecked((int)(long)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE));
+                    int exStyle = (int)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE);
                     return (exStyle & (int)User32.WS_EX.RTLREADING) != 0;
                 }
                 else

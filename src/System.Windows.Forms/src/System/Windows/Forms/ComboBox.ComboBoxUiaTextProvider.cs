@@ -115,7 +115,7 @@ namespace System.Windows.Forms
 
             public override int TextLength
                 => _owningComboBox.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningChildEdit, WM.GETTEXTLENGTH)
+                    ? (int)SendMessageW(_owningChildEdit, WM.GETTEXTLENGTH)
                     : -1;
 
             public override WS_EX WindowExStyle
@@ -365,7 +365,7 @@ namespace System.Windows.Forms
 
             private int GetCharIndexFromPosition(Point pt)
             {
-                int index = (int)(long)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+                int index = (int)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
                 index = PARAM.LOWORD(index);
 
                 if (index < 0)
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
                     return Point.Empty;
                 }
 
-                int i = (int)(long)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, (IntPtr)index);
+                int i = (int)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, (IntPtr)index);
 
                 return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
             }

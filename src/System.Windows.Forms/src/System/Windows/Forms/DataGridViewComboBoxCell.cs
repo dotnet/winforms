@@ -809,7 +809,7 @@ namespace System.Windows.Forms
                 {
                     // The dropdown width may have been previously adjusted to the items because of the owning column autosized.
                     // The dropdown width needs to be realigned to the DropDownWidth property value.
-                    int dropDownWidth = unchecked((int)(long)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETDROPPEDWIDTH));
+                    int dropDownWidth = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETDROPPEDWIDTH);
                     if (dropDownWidth != DropDownWidth)
                     {
                         User32.SendMessageW(comboBox, (User32.WM)User32.CB.SETDROPPEDWIDTH, (IntPtr)DropDownWidth);
@@ -829,11 +829,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                //
                 dataGridViewCell = (DataGridViewComboBoxCell)System.Activator.CreateInstance(thisType);
             }
 
-            base.CloneInternal(dataGridViewCell);
+            CloneInternal(dataGridViewCell);
             dataGridViewCell.DropDownWidth = DropDownWidth;
             dataGridViewCell.MaxDropDownItems = MaxDropDownItems;
             dataGridViewCell.CreateItemsFromDataSource = false;

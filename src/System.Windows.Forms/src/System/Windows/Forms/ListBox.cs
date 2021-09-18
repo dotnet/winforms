@@ -436,20 +436,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // Used internally to find the currently focused item
-        //
-        internal int FocusedIndex
-        {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    return unchecked((int)(long)SendMessageW(this, (WM)LB.GETCARETINDEX));
-                }
-
-                return -1;
-            }
-        }
+        internal int FocusedIndex => IsHandleCreated ? (int)SendMessageW(this, (WM)LB.GETCARETINDEX) : -1;
 
         // The scroll bars don't display properly when the IntegralHeight == false
         // and the control is resized before the font size is change and the new font size causes
@@ -876,7 +863,7 @@ namespace System.Windows.Forms
 
                 if (current == SelectionMode.One && IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessageW(this, (WM)LB.GETCURSEL));
+                    return (int)SendMessageW(this, (WM)LB.GETCURSEL);
                 }
 
                 if (itemsCollection is not null && SelectedItems.Count > 0)
@@ -1164,17 +1151,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListBoxTopIndexDescr))]
         public int TopIndex
         {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    return unchecked((int)(long)SendMessageW(this, (WM)LB.GETTOPINDEX));
-                }
-                else
-                {
-                    return topIndex;
-                }
-            }
+            get => IsHandleCreated ? (int)SendMessageW(this, (WM)LB.GETTOPINDEX) : topIndex;
             set
             {
                 if (IsHandleCreated)
@@ -1468,9 +1445,7 @@ namespace System.Windows.Forms
         {
             int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
 
-            // Note: index == 0 is OK even if the ListBox currently has
-            // no items.
-            //
+            // Note: index == 0 is OK even if the ListBox currently has no items.
             if (index < 0 || (index > 0 && index >= itemCount))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
@@ -1483,13 +1458,13 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int h = unchecked((int)(long)SendMessageW(this, (WM)LB.GETITEMHEIGHT, (IntPtr)index));
-                if (h == -1)
+                int height = (int)SendMessageW(this, (WM)LB.GETITEMHEIGHT, index);
+                if (height == -1)
                 {
                     throw new Win32Exception();
                 }
 
-                return h;
+                return height;
             }
 
             return itemHeight;
@@ -1526,8 +1501,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Tells you whether or not the item at the supplied index is selected
-        ///  or not.
+        ///  Tells you whether or not the item at the supplied index is selected or not.
         /// </summary>
         public bool GetSelected(int index)
         {
@@ -1539,13 +1513,13 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                int sel = unchecked((int)(long)SendMessageW(this, (WM)LB.GETSEL, (IntPtr)index));
-                if (sel == -1)
+                int selection = (int)SendMessageW(this, (WM)LB.GETSEL, index);
+                if (selection == -1)
                 {
                     throw new Win32Exception();
                 }
 
-                return sel > 0;
+                return selection > 0;
             }
             else
             {
@@ -1571,14 +1545,13 @@ namespace System.Windows.Forms
         /// </summary>
         public int IndexFromPoint(int x, int y)
         {
-            //NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
-            //call Sendmessage.
-            //
+            // NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
+            // call Sendmessage.
             RECT r = new RECT();
             GetClientRect(new HandleRef(this, Handle), ref r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
-                int index = unchecked((int)(long)SendMessageW(this, (WM)LB.ITEMFROMPOINT, IntPtr.Zero, PARAM.FromLowHigh(x, y)));
+                int index = (int)SendMessageW(this, (WM)LB.ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));
                 if (PARAM.HIWORD(index) == 0)
                 {
                     // Inside ListBox client area
@@ -1685,7 +1658,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
 
-            bool selected = (unchecked((int)(long)SendMessageW(this, (WM)LB.GETSEL, (IntPtr)index, IntPtr.Zero)) > 0);
+            bool selected = (int)SendMessageW(this, (WM)LB.GETSEL, index, 0) > 0;
             SendMessageW(this, (WM)LB.DELETESTRING, (IntPtr)index);
 
             //If the item currently selected is removed then we should fire a Selectionchanged event...
@@ -1735,7 +1708,7 @@ namespace System.Windows.Forms
             switch (selectionMode)
             {
                 case SelectionMode.One:
-                    int index = unchecked((int)(long)SendMessageW(this, (WM)LB.GETCURSEL));
+                    int index = (int)SendMessageW(this, (WM)LB.GETCURSEL);
                     if (index >= 0)
                     {
                         SelectedItems.SetSelected(index, true);
@@ -1745,7 +1718,7 @@ namespace System.Windows.Forms
 
                 case SelectionMode.MultiSimple:
                 case SelectionMode.MultiExtended:
-                    int count = unchecked((int)(long)SendMessageW(this, (WM)LB.GETSELCOUNT));
+                    int count = (int)SendMessageW(this, (WM)LB.GETSELCOUNT);
                     if (count > 0)
                     {
                         var result = new int[count];

@@ -1950,7 +1950,7 @@ namespace System.Windows.Forms.Design
 
                     // We don't really want the focus, but we want to focus the designer. Below we handle WM_SETFOCUS
                     // and do the right thing.
-                    User32.SendMessageW(Control.Handle, User32.WM.SETFOCUS, IntPtr.Zero, IntPtr.Zero);
+                    User32.SendMessageW(Control.Handle, User32.WM.SETFOCUS);
 
                     // We simulate doubleclick for things that don't...
                     if (button == MouseButtons.Left && IsDoubleClick(x, y))
@@ -1984,7 +1984,7 @@ namespace System.Windows.Forms.Design
 
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, (IntPtr)GetParentPointFromLparam(m.LParam));
+                            User32.SendMessageW(Control.Parent.Handle, (User32.WM)m.Msg, m.WParam, GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -2033,7 +2033,7 @@ namespace System.Windows.Forms.Design
                                 Control.Parent.Handle,
                                 (User32.WM)m.Msg,
                                 m.WParam,
-                                (IntPtr)GetParentPointFromLparam(m.LParam));
+                                GetParentPointFromLparam(m.LParam));
                             return;
                         }
 
@@ -2080,7 +2080,7 @@ namespace System.Windows.Forms.Design
                                 Control.Parent.Handle,
                                 (User32.WM)m.Msg,
                                 m.WParam,
-                                (IntPtr)GetParentPointFromLparam(m.LParam));
+                                GetParentPointFromLparam(m.LParam));
                             _toolPassThrough = false;
                             return;
                         }

@@ -6704,7 +6704,7 @@ namespace System.Windows.Forms
                 mask = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTALLKEYS);
             }
 
-            return (unchecked((int)(long)User32.SendMessageW(this, User32.WM.GETDLGCODE)) & mask) != 0;
+            return ((int)User32.SendMessageW(this, User32.WM.GETDLGCODE) & mask) != 0;
         }
 
         /// <summary>
@@ -6744,7 +6744,7 @@ namespace System.Windows.Forms
             }
 
             return IsHandleCreated
-                && (unchecked((int)(long)User32.SendMessageW(this, User32.WM.GETDLGCODE)) & (int)mask) != 0;
+                && ((User32.DLGC)User32.SendMessageW(this, User32.WM.GETDLGCODE) & mask) != 0;
         }
 
         /// <summary>

@@ -433,7 +433,7 @@ namespace System.Windows.Forms
                     {
                         // Try to retrieve the path from the IDList
                         bool isFileSystemFolder = SHGetPathFromIDListLongPath(selectedPidl, out _);
-                        User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, IntPtr.Zero, PARAM.FromBool(isFileSystemFolder));
+                        User32.SendMessageW(hwnd, (User32.WM)BFFM.ENABLEOK, 0, (nint)isFileSystemFolder.ToBOOL());
                     }
 
                     break;

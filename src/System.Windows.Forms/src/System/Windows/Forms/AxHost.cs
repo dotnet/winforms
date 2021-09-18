@@ -1400,7 +1400,7 @@ namespace System.Windows.Forms
                 return true;
             }
 
-            if (unchecked((int)(long)User32.SendMessageW(this, REGMSG_MSG)) == (int)REGMSG_RETVAL)
+            if ((int)User32.SendMessageW(this, REGMSG_MSG) == (int)REGMSG_RETVAL)
             {
                 wndprocAddr = currentWndproc;
                 return true;

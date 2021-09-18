@@ -781,12 +781,11 @@ namespace System.Windows.Forms
                 }
                 else if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETINDENT));
+                    return (int)User32.SendMessageW(this, (User32.WM)TVM.GETINDENT);
                 }
 
                 return DefaultTreeViewIndent;
             }
-
             set
             {
                 if (indent != value)
@@ -805,7 +804,7 @@ namespace System.Windows.Forms
                     if (IsHandleCreated)
                     {
                         User32.SendMessageW(this, (User32.WM)TVM.SETINDENT, (IntPtr)value);
-                        indent = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETINDENT));
+                        indent = (int)User32.SendMessageW(this, (User32.WM)TVM.GETINDENT);
                     }
                 }
             }
@@ -827,7 +826,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETITEMHEIGHT));
+                    return (int)User32.SendMessageW(this, (User32.WM)TVM.GETITEMHEIGHT);
                 }
                 else
                 {
@@ -839,7 +838,6 @@ namespace System.Windows.Forms
                     return FontHeight + 3;
                 }
             }
-
             set
             {
                 if (itemHeight != value)
@@ -870,8 +868,8 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        User32.SendMessageW(this, (User32.WM)TVM.SETITEMHEIGHT, (IntPtr)value);
-                        itemHeight = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETITEMHEIGHT));
+                        User32.SendMessageW(this, (User32.WM)TVM.SETITEMHEIGHT, value);
+                        itemHeight = (int)User32.SendMessageW(this, (User32.WM)TVM.GETITEMHEIGHT);
                     }
                 }
             }
@@ -917,7 +915,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    int intColor = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETLINECOLOR));
+                    int intColor = (int)User32.SendMessageW(this, (User32.WM)TVM.GETLINECOLOR);
                     return ColorTranslator.FromWin32(intColor);
                 }
 
@@ -1433,18 +1431,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TreeViewVisibleCountDescr))]
-        public int VisibleCount
-        {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)TVM.GETVISIBLECOUNT));
-                }
-
-                return 0;
-            }
-        }
+        public int VisibleCount => IsHandleCreated ? (int)User32.SendMessageW(this, (User32.WM)TVM.GETVISIBLECOUNT) : 0;
 
         [SRCategory(nameof(SR.CatBehavior))]
         [SRDescription(nameof(SR.TreeViewBeforeEditDescr))]
@@ -1961,7 +1948,7 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            int version = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)CCM.GETVERSION));
+            int version = (int)User32.SendMessageW(this, (User32.WM)CCM.GETVERSION);
             if (version < 5)
             {
                 User32.SendMessageW(this, (User32.WM)CCM.SETVERSION, (IntPtr)5);
@@ -3238,7 +3225,7 @@ namespace System.Windows.Forms
                     {
                         case TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling multiline tool tips
-                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

@@ -270,13 +270,7 @@ namespace System.Windows.Forms
             set { richTextBoxFlags[callOnContentsResizedSection] = value ? 1 : 0; }
         }
 
-        internal override bool CanRaiseTextChangedEvent
-        {
-            get
-            {
-                return !SuppressTextChangedEvent;
-            }
-        }
+        internal override bool CanRaiseTextChangedEvent => !SuppressTextChangedEvent;
 
         /// <summary>
         ///  Whether or not there are actions that can be Redone on the RichTextBox control.
@@ -284,18 +278,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.RichTextBoxCanRedoDescr))]
-        public bool CanRedo
-        {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.CANREDO)) != 0;
-                }
-
-                return false;
-            }
-        }
+        public bool CanRedo => IsHandleCreated && (int)User32.SendMessageW(this, (User32.WM)EM.CANREDO) != 0;
 
         protected override CreateParams CreateParams
         {
@@ -602,10 +585,10 @@ namespace System.Windows.Forms
             {
                 if (!CanRedo)
                 {
-                    return "";
+                    return string.Empty;
                 }
 
-                int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.GETREDONAME));
+                int n = (int)User32.SendMessageW(this, (User32.WM)EM.GETREDONAME);
                 return GetEditorActionName(n);
             }
         }
@@ -1369,7 +1352,7 @@ namespace System.Windows.Forms
                 ForceHandleCreate();
                 if (SelectionLength > 0)
                 {
-                    int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.SELECTIONTYPE));
+                    int n = (int)User32.SendMessageW(this, (User32.WM)EM.SELECTIONTYPE);
                     return (RichTextBoxSelectionTypes)n;
                 }
                 else
@@ -1496,7 +1479,7 @@ namespace System.Windows.Forms
                     codepage = 1200u /* CP_UNICODE */
                 };
 
-                return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.GETTEXTLENGTHEX, (IntPtr)(&gtl)));
+                return (int)User32.SendMessageW(this, (User32.WM)EM.GETTEXTLENGTHEX, (IntPtr)(&gtl));
             }
         }
 
@@ -1520,7 +1503,7 @@ namespace System.Windows.Forms
                     return "";
                 }
 
-                int n = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.GETUNDONAME));
+                int n = (int)User32.SendMessageW(this, (User32.WM)EM.GETUNDONAME);
                 return GetEditorActionName(n);
             }
         }
@@ -1714,9 +1697,7 @@ namespace System.Windows.Forms
         ///  given clipboard format.
         /// </summary>
         public bool CanPaste(DataFormats.Format clipFormat)
-        {
-            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.CANPASTE, (IntPtr)clipFormat.Id)) != 0;
-        }
+            => (int)User32.SendMessageW(this, (User32.WM)EM.CANPASTE, clipFormat.Id) != 0;
 
         //DrawToBitmap doesn't work for this control, so we should hide it.  We'll
         //still call base so that this has a chance to work if it can.
@@ -2368,9 +2349,7 @@ namespace System.Windows.Forms
         ///  return 1 and not 0.
         /// </summary>
         public override int GetLineFromCharIndex(int index)
-        {
-            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)EM.EXLINEFROMCHAR, IntPtr.Zero, (IntPtr)index));
-        }
+            => (int)User32.SendMessageW(this, (User32.WM)EM.EXLINEFROMCHAR, 0, index);
 
         /// <summary>
         ///  Returns the location of the character at the given index.
@@ -3178,7 +3157,7 @@ namespace System.Windows.Forms
             }
 
             GETTEXTLENGTHEX* pGtl = &gtl;
-            int expectedLength = PARAM.ToInt(User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTLENGTHEX, (IntPtr)pGtl));
+            int expectedLength = (int)User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTLENGTHEX, (nint)pGtl);
             if (expectedLength == (int)HRESULT.E_INVALIDARG)
                 throw new Win32Exception(expectedLength);
 
@@ -3199,7 +3178,7 @@ namespace System.Windows.Forms
             GETTEXTEX* pGt = &gt;
             fixed (char* pText = text)
             {
-                int actualLength = PARAM.ToInt(User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTEX, (IntPtr)pGt, (IntPtr)pText));
+                int actualLength = (int)User32.SendMessageW(Handle, (User32.WM)User32.EM.GETTEXTEX, (nint)pGt, (nint)pText);
 
                 // The default behaviour of EM_GETTEXTEX is to normalise line endings to '\r'
                 // (see: GT_DEFAULT, https://docs.microsoft.com/windows/win32/api/richedit/ns-richedit-gettextex#members),

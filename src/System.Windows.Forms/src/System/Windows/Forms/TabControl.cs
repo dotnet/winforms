@@ -646,7 +646,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TabBaseRowCountDescr))]
         public int RowCount
-            => unchecked((int)(long)User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETROWCOUNT));
+            => (int)User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETROWCOUNT);
 
         /// <summary>
         ///  The index of the currently selected tab in the strip, if there
@@ -660,15 +660,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.selectedIndexDescr))]
         public int SelectedIndex
         {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETCURSEL));
-                }
-
-                return _selectedIndex;
-            }
+            get => IsHandleCreated ? (int)User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.GETCURSEL) : _selectedIndex;
             set
             {
                 if (value < -1)
@@ -699,7 +691,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, (IntPtr)value);
+                        User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETCURSEL, value);
 
                         if (!GetState(State.FromCreateHandles) && !GetState(State.SelectFirstControl))
                         {
@@ -768,10 +760,7 @@ namespace System.Windows.Forms
         [RefreshProperties(RefreshProperties.Repaint)]
         public TabSizeMode SizeMode
         {
-            get
-            {
-                return _sizeMode;
-            }
+            get => _sizeMode;
             set
             {
                 if (_sizeMode == value)
@@ -2181,7 +2170,7 @@ namespace System.Windows.Forms
                             break;
                         case (int)TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling Multiline tool tips
-                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                            User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
                             m.Result = (IntPtr)1;
                             return;

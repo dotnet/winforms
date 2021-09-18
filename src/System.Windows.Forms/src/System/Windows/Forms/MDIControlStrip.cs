@@ -98,7 +98,7 @@ namespace System.Windows.Forms
 
         private Image GetTargetWindowIcon()
         {
-            IntPtr hIcon = User32.SendMessageW(GetSafeHandle(_target), User32.WM.GETICON, (IntPtr)User32.ICON.SMALL, 0);
+            IntPtr hIcon = User32.SendMessageW(GetSafeHandle(_target), User32.WM.GETICON, (nint)User32.ICON.SMALL);
             Icon icon = hIcon != IntPtr.Zero ? Icon.FromHandle(hIcon) : Form.DefaultIcon;
             Icon smallIcon = new Icon(icon, SystemInformation.SmallIconSize);
 

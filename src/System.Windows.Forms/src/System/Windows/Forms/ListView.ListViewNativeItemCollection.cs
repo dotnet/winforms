@@ -428,7 +428,7 @@ namespace System.Windows.Forms
 
                 if (owner.IsHandleCreated && !owner.CheckBoxes && this[index].Checked)
                 {
-                    owner.UpdateSavedCheckedItems(this[index], false /*addItem*/);
+                    owner.UpdateSavedCheckedItems(this[index], addItem: false);
                 }
 
                 owner.ApplyUpdateCachedItems();
@@ -438,7 +438,7 @@ namespace System.Windows.Forms
                 if (owner.IsHandleCreated)
                 {
                     Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
-                    int retval = unchecked((int)(long)User32.SendMessageW(owner, (User32.WM)LVM.DELETEITEM, (IntPtr)index));
+                    int retval = (int)User32.SendMessageW(owner, (User32.WM)LVM.DELETEITEM, index);
 
                     if (0 == retval)
                     {

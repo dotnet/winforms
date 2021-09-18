@@ -2198,7 +2198,7 @@ namespace System.Windows.Forms
                         // We're activating - notify the previous guy that we're activating.
                         HandleRef activeHwndHandleRef = ToolStripManager.ModalMenuFilter.ActiveHwnd;
 
-                        User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, (IntPtr)1, (IntPtr)(-1));
+                        User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, 1, -1);
                         User32.RedrawWindow(
                             activeHwndHandleRef,
                             null,

@@ -143,20 +143,18 @@ namespace System.Windows.Forms
 
             public override Rectangle BoundingRectangle
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (Rectangle)GetFormattingRectangle()
+                    ? GetFormattingRectangle()
                     : Rectangle.Empty;
 
             public override int FirstVisibleLine
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
+                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
                     : -1;
 
             public override bool IsMultiline => _owningTextBoxBase.Multiline;
 
             public override bool IsReadingRTL
-                => _owningTextBoxBase.IsHandleCreated
-                    ? WindowExStyle.HasFlag(WS_EX.RTLREADING)
-                    : false;
+                => _owningTextBoxBase.IsHandleCreated && WindowExStyle.HasFlag(WS_EX.RTLREADING);
 
             public override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
 
@@ -169,14 +167,14 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)(long)GetWindowLong(_owningTextBoxBase, GWL.STYLE);
+                    ES extendedStyle = (ES)GetWindowLong(_owningTextBoxBase, GWL.STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL) || extendedStyle.HasFlag(ES.AUTOVSCROLL);
                 }
             }
 
             public override int LinesCount
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
+                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
                     : -1;
 
             public override int LinesPerPage
@@ -216,7 +214,7 @@ namespace System.Windows.Forms
 
             public override int TextLength
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningTextBoxBase, WM.GETTEXTLENGTH)
+                    ? (int)SendMessageW(_owningTextBoxBase, WM.GETTEXTLENGTH)
                     : -1;
 
             public override WS_EX WindowExStyle
@@ -241,7 +239,7 @@ namespace System.Windows.Forms
 
             public override int GetLineIndex(int line)
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningTextBoxBase, (WM)EM.LINEINDEX, (IntPtr)line)
+                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.LINEINDEX, line)
                     : -1;
 
             public override Point GetPositionFromChar(int charIndex)
