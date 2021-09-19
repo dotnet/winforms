@@ -76,11 +76,7 @@ namespace System.Resources
 
         public ResXDataNode(string name, object value, Func<Type, string> typeNameConverter)
         {
-            if (name is null)
-            {
-                throw (new ArgumentNullException(nameof(name)));
-            }
-
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
             if (name.Length == 0)
             {
                 throw (new ArgumentException(nameof(name)));
@@ -110,9 +106,10 @@ namespace System.Resources
 
         public ResXDataNode(string name, ResXFileRef fileRef, Func<Type, string> typeNameConverter)
         {
-            if (string.IsNullOrEmpty(name))
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
+            if (name.Length == 0)
             {
-                throw new ArgumentNullException(nameof(name));
+                throw (new ArgumentException(nameof(name)));
             }
 
             _name = name;
@@ -194,10 +191,7 @@ namespace System.Resources
             }
             set
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(Name));
-                }
+                ArgumentNullException.ThrowIfNull(value, nameof(Name));
 
                 if (value.Length == 0)
                 {
