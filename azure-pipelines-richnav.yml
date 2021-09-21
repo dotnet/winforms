@@ -16,8 +16,8 @@ stages:
         enableRichCodeNavigation: true
         richCodeNavigationEnvironment: 'production'
         pool:
-          name: NetCorePublic-Pool
-          queue: BuildPool.Windows.10.Amd64.VS2019.Open
+          name: NetCore1ESPool-Svc-Public
+          demands: ImageOverride -equals Build.Windows.10.Amd64.VS2019.Open
 
         steps:
         - checkout: self
