@@ -347,20 +347,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             => DropDownListBox.Visible ? DropDownListBox.AccessibilityObject : null;
 
         internal bool DrawValuesRightToLeft
-        {
-            get
-            {
-                if (_editTextBox is not null && _editTextBox.IsHandleCreated)
-                {
-                    int exStyle = (int)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE);
-                    return (exStyle & (int)User32.WS_EX.RTLREADING) != 0;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+            => _editTextBox is not null
+                && _editTextBox.IsHandleCreated
+                && ((User32.WS_EX)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE)).HasFlag(User32.WS_EX.RTLREADING);
 
         internal DropDownHolder DropDownControlHolder => _dropDownHolder;
 

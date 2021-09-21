@@ -14,12 +14,5 @@ namespace System.Windows.Forms
             GC.KeepAlive(window);
             return style;
         }
-
-        public static User32.WS GetStyle(this IWin32Window window)
-        {
-            User32.WS style = (User32.WS)User32.GetWindowLong(Control.GetSafeHandle(window), User32.GWL.STYLE);
-            GC.KeepAlive(window);
-            return style;
-        }
     }
 }
