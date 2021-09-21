@@ -14,7 +14,7 @@ internal static partial class Interop
         {
             public LVFI flags;
             public char* psz;
-            public IntPtr lParam;
+            public nint lParam;
             public Point pt;
             public uint vkDirection;
         }

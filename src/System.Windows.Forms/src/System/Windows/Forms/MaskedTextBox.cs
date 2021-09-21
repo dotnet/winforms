@@ -1109,7 +1109,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // This message does not return a value.
-                User32.SendMessageW(this, (User32.WM)EM.SETPASSWORDCHAR, (IntPtr)pwdChar);
+                User32.SendMessageW(this, (User32.WM)EM.SETPASSWORDCHAR, (nint)pwdChar);
                 Invalidate();
             }
         }

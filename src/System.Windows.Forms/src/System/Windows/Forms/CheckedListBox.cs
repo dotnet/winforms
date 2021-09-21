@@ -421,10 +421,7 @@ namespace System.Windows.Forms
         ///  Indicates if the given item is, in any way, shape, or form, checked.
         ///  This will return true if the item is fully or indeterminately checked.
         /// </summary>
-        public bool GetItemChecked(int index)
-        {
-            return (GetItemCheckState(index) != CheckState.Unchecked);
-        }
+        public bool GetItemChecked(int index) => GetItemCheckState(index) != CheckState.Unchecked;
 
         /// <summary>
         ///  Invalidates the given item in the listbox
@@ -434,7 +431,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect);
+                SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect);
                 InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }
@@ -506,7 +503,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+            SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
         }
 
         /// <summary>
@@ -806,14 +803,12 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             // Update the item height
-            //
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
-            //
             base.OnFontChanged(e);
         }
 

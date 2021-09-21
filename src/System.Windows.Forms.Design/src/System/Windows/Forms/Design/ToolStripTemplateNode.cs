@@ -909,12 +909,12 @@ namespace System.Windows.Forms.Design
                     tb.KeyDown += new KeyEventHandler(OnKeyDown);
                     tb.SelectAll();
                     Control baseComponent = null;
-                    if (_designerHost != null)
+                    if (_designerHost is not null)
                     {
                         baseComponent = (Control)_designerHost.RootComponent;
-                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, IntPtr.Zero, IntPtr.Zero);
+                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                         tb.Focus();
-                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (IntPtr)1, IntPtr.Zero);
+                        User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     }
                 }
                 finally
@@ -994,15 +994,13 @@ namespace System.Windows.Forms.Design
         /// </summary>
         private void FocusForm()
         {
-            if (_component.Site.GetService(typeof(ISplitWindowService)) is DesignerFrame designerFrame)
+            if (_component.Site.GetService(typeof(ISplitWindowService)) is DesignerFrame designerFrame
+                && _designerHost is not null)
             {
-                if (_designerHost != null)
-                {
-                    Control baseComponent = (Control)_designerHost.RootComponent;
-                    User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, IntPtr.Zero, IntPtr.Zero);
-                    designerFrame.Focus();
-                    User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (IntPtr)1, IntPtr.Zero);
-                }
+                Control baseComponent = (Control)_designerHost.RootComponent;
+                User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
+                designerFrame.Focus();
+                User32.SendMessageW(baseComponent.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
             }
         }
 

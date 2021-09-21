@@ -188,7 +188,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
 
-                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != IntPtr.Zero;
+                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != 0;
             }
         }
 
@@ -347,20 +347,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             => DropDownListBox.Visible ? DropDownListBox.AccessibilityObject : null;
 
         internal bool DrawValuesRightToLeft
-        {
-            get
-            {
-                if (_editTextBox is not null && _editTextBox.IsHandleCreated)
-                {
-                    int exStyle = unchecked((int)(long)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE));
-                    return (exStyle & (int)User32.WS_EX.RTLREADING) != 0;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+            => _editTextBox is not null
+                && _editTextBox.IsHandleCreated
+                && ((User32.WS_EX)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE)).HasFlag(User32.WS_EX.RTLREADING);
 
         internal DropDownHolder DropDownControlHolder => _dropDownHolder;
 
@@ -2691,7 +2680,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
                     DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
-                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(e.X, e.Y));
+                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromLowHigh(e.X, e.Y));
                     EditTextBox.SelectAll();
                 }
 
@@ -3550,8 +3539,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Point editPoint = PointToScreen(_lastMouseDown);
                 editPoint = EditTextBox.PointToClient(editPoint);
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, 0, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
             }
 
             if (setSelectTime)
@@ -3903,7 +3892,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, (IntPtr)1, ref rect);
+            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, 1, ref rect);
 
             // Now offset it back to screen coords.
             Point location = parent.PointToScreen(new(rect.left, rect.top));

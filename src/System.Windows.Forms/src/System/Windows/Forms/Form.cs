@@ -24,7 +24,7 @@ namespace System.Windows.Forms
     [ToolboxItemFilter("System.Windows.Forms.Control.TopLevel")]
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]
-    [Designer("System.Windows.Forms.Design.FormDocumentDesigner, " + AssemblyRef.SystemDesign, typeof(IRootDesigner))]
+    [Designer($"System.Windows.Forms.Design.FormDocumentDesigner, {AssemblyRef.SystemDesign}", typeof(IRootDesigner))]
     [DefaultEvent(nameof(Load))]
     [InitializationEvent(nameof(Load))]
     [DesignerCategory("Form")]
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
         private BoundsSpecified restoredWindowBoundsSpecified;
         private DialogResult dialogResult;
         private MdiClient ctlClient;
-        private NativeWindow ownerWindow;
+        private NativeWindow _ownerWindow;
         private bool rightToLeftLayout;
 
         private Rectangle restoreBounds = new Rectangle(-1, -1, -1, -1);
@@ -788,7 +788,7 @@ namespace System.Windows.Forms
             {
                 CreateParams cp = base.CreateParams;
 
-                if (IsHandleCreated && (WindowStyle & (int)User32.WS.DISABLED) != 0)
+                if (IsHandleCreated && WindowStyle.HasFlag(User32.WS.DISABLED))
                 {
                     // Forms that are parent of a modal dialog must keep their WS_DISABLED style
                     cp.Style |= (int)User32.WS.DISABLED;
@@ -808,7 +808,7 @@ namespace System.Windows.Forms
                 IWin32Window dialogOwner = (IWin32Window)Properties.GetObject(PropDialogOwner);
                 if (dialogOwner != null)
                 {
-                    cp.Parent = Control.GetSafeHandle(dialogOwner);
+                    cp.Parent = GetSafeHandle(dialogOwner);
                 }
 
                 FillInCreateParamsBorderStyles(cp);
@@ -1738,11 +1738,10 @@ namespace System.Windows.Forms
                     formState[FormStateLayered] = (TransparencyKey != Color.Empty) ? 1 : 0;
                     if (oldLayered != (formState[FormStateLayered] != 0))
                     {
-                        int exStyle = unchecked((int)(long)User32.GetWindowLong(this, User32.GWL.EXSTYLE));
                         CreateParams cp = CreateParams;
-                        if (exStyle != cp.ExStyle)
+                        if ((int)ExtendedWindowStyle != cp.ExStyle)
                         {
-                            User32.SetWindowLong(this, User32.GWL.EXSTYLE, (IntPtr)cp.ExStyle);
+                            User32.SetWindowLong(this, User32.GWL.EXSTYLE, cp.ExStyle);
                         }
                     }
                 }
@@ -2095,28 +2094,25 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  For forms that are show in task bar false, this returns a HWND
-        ///  they must be parented to in order for it to work.
+        ///  For forms that are show in task bar false, this returns a HWND they must be parented to in order for it to work.
         /// </summary>
-        private HandleRef TaskbarOwner
+        private IHandle TaskbarOwner
         {
             get
             {
-                if (ownerWindow is null)
-                {
-                    ownerWindow = new NativeWindow();
-                }
+                _ownerWindow ??= new NativeWindow();
 
-                if (ownerWindow.Handle == IntPtr.Zero)
+                if (_ownerWindow.Handle == IntPtr.Zero)
                 {
                     CreateParams cp = new CreateParams
                     {
                         ExStyle = (int)User32.WS_EX.TOOLWINDOW
                     };
-                    ownerWindow.CreateHandle(cp);
+
+                    _ownerWindow.CreateHandle(cp);
                 }
 
-                return new HandleRef(ownerWindow, ownerWindow.Handle);
+                return _ownerWindow;
             }
         }
 
@@ -2603,7 +2599,7 @@ namespace System.Windows.Forms
             {
                 if (IsMdiChild)
                 {
-                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, IntPtr.Zero);
+                    User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
                 }
                 else
                 {
@@ -3200,19 +3196,17 @@ namespace System.Windows.Forms
                     UpdateMenuHandles();
                 }
 
-                // In order for a window not to have a taskbar entry, it must
-                // be owned.
-                //
+                // In order for a window not to have a taskbar entry, it must be owned.
                 if (!ShowInTaskbar && OwnerInternal is null && TopLevel)
                 {
-                    User32.SetWindowLong(this, User32.GWL.HWNDPARENT, TaskbarOwner);
+                    User32.SetWindowLong(this, User32.GWL.HWNDPARENT, (nint)TaskbarOwner.Handle);
 
                     // Make sure the large icon is set so the ALT+TAB icon
                     // reflects the real icon of the application
                     Icon icon = Icon;
                     if (icon != null && TaskbarOwner.Handle != IntPtr.Zero)
                     {
-                        User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, icon.Handle);
+                        User32.SendMessageW(TaskbarOwner, User32.WM.SETICON, (nint)User32.ICON.BIG, icon.Handle);
                     }
                 }
 
@@ -3581,7 +3575,7 @@ namespace System.Windows.Forms
             // If this form is a MdiChild, then we need to set the focus differently.
             if (IsMdiChild)
             {
-                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, IntPtr.Zero);
+                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
                 return Focused;
             }
 
@@ -3710,46 +3704,47 @@ namespace System.Windows.Forms
         /// </summary>
         protected void CenterToParent()
         {
-            if (TopLevel)
+            if (!TopLevel)
             {
-                Point p = new Point();
-                Size s = Size;
-                IntPtr ownerHandle = IntPtr.Zero;
+                return;
+            }
 
-                ownerHandle = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
-                if (ownerHandle != IntPtr.Zero)
+            Point p = new Point();
+            Size s = Size;
+            IntPtr ownerHandle = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
+
+            if (ownerHandle != IntPtr.Zero)
+            {
+                Screen desktop = Screen.FromHandle(ownerHandle);
+                Rectangle screenRect = desktop.WorkingArea;
+                var ownerRect = new RECT();
+                User32.GetWindowRect(ownerHandle, ref ownerRect);
+
+                p.X = (ownerRect.left + ownerRect.right - s.Width) / 2;
+                if (p.X < screenRect.X)
                 {
-                    Screen desktop = Screen.FromHandle(ownerHandle);
-                    Rectangle screenRect = desktop.WorkingArea;
-                    var ownerRect = new RECT();
-                    User32.GetWindowRect(ownerHandle, ref ownerRect);
-
-                    p.X = (ownerRect.left + ownerRect.right - s.Width) / 2;
-                    if (p.X < screenRect.X)
-                    {
-                        p.X = screenRect.X;
-                    }
-                    else if (p.X + s.Width > screenRect.X + screenRect.Width)
-                    {
-                        p.X = screenRect.X + screenRect.Width - s.Width;
-                    }
-
-                    p.Y = (ownerRect.top + ownerRect.bottom - s.Height) / 2;
-                    if (p.Y < screenRect.Y)
-                    {
-                        p.Y = screenRect.Y;
-                    }
-                    else if (p.Y + s.Height > screenRect.Y + screenRect.Height)
-                    {
-                        p.Y = screenRect.Y + screenRect.Height - s.Height;
-                    }
-
-                    Location = p;
+                    p.X = screenRect.X;
                 }
-                else
+                else if (p.X + s.Width > screenRect.X + screenRect.Width)
                 {
-                    CenterToScreen();
+                    p.X = screenRect.X + screenRect.Width - s.Width;
                 }
+
+                p.Y = (ownerRect.top + ownerRect.bottom - s.Height) / 2;
+                if (p.Y < screenRect.Y)
+                {
+                    p.Y = screenRect.Y;
+                }
+                else if (p.Y + s.Height > screenRect.Y + screenRect.Height)
+                {
+                    p.Y = screenRect.Y + screenRect.Height - s.Height;
+                }
+
+                Location = p;
+            }
+            else
+            {
+                CenterToScreen();
             }
         }
 
@@ -3762,7 +3757,7 @@ namespace System.Windows.Forms
         protected void CenterToScreen()
         {
             Point p = new Point();
-            Screen desktop = null;
+            Screen desktop;
             if (OwnerInternal != null)
             {
                 desktop = Screen.FromControl(OwnerInternal);
@@ -3775,14 +3770,7 @@ namespace System.Windows.Forms
                     hWndOwner = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
                 }
 
-                if (hWndOwner != IntPtr.Zero)
-                {
-                    desktop = Screen.FromHandle(hWndOwner);
-                }
-                else
-                {
-                    desktop = Screen.FromPoint(Control.MousePosition);
-                }
+                desktop = hWndOwner != IntPtr.Zero ? Screen.FromHandle(hWndOwner) : Screen.FromPoint(MousePosition);
             }
 
             Rectangle screenRect = desktop.WorkingArea;
@@ -4627,31 +4615,29 @@ namespace System.Windows.Forms
             if (StartPosition != FormStartPosition.Manual)
             {
                 oldStartPosition = StartPosition;
+
                 // Set the startup postion to manual, to stop the form from
                 // changing position each time RecreateHandle() is called.
                 StartPosition = FormStartPosition.Manual;
             }
 
-            EnumThreadWindowsCallback etwcb = null;
+            EnumThreadWindowsCallback callback = null;
             if (IsHandleCreated)
             {
                 // First put all the owned windows into a list
-                etwcb = new EnumThreadWindowsCallback(Handle);
-                User32.EnumThreadWindows(
-                    Kernel32.GetCurrentThreadId(),
-                    etwcb.Callback);
-                GC.KeepAlive(this);
+                callback = new EnumThreadWindowsCallback(Handle);
+                User32.EnumThreadWindows(Kernel32.GetCurrentThreadId(), callback.Callback);
+
                 // Reset the owner of the windows in the list
-                etwcb.ResetOwners();
+                callback.ResetOwners();
             }
 
             base.RecreateHandleCore();
 
-            if (etwcb != null)
-            {
-                // Set the owner of the windows in the list back to the new Form's handle
-                etwcb.SetOwners(new HandleRef(this, Handle));
-            }
+            // Set the owner of the windows in the list back to the new Form's handle
+            callback?.SetOwners(Handle);
+
+            GC.KeepAlive(this);
 
             if (oldStartPosition != FormStartPosition.Manual)
             {
@@ -4834,7 +4820,7 @@ namespace System.Windows.Forms
             else if (IsMdiChild)
             {
                 User32.SetActiveWindow(new HandleRef(MdiParentInternal, MdiParentInternal.Handle));
-                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, IntPtr.Zero);
+                User32.SendMessageW(MdiParentInternal.MdiClient, User32.WM.MDIACTIVATE, Handle, 0);
             }
             else
             {
@@ -5114,22 +5100,22 @@ namespace System.Windows.Forms
         {
             if (owner == this)
             {
-                throw new InvalidOperationException(string.Format(SR.OwnsSelfOrOwner, "Show"));
+                throw new InvalidOperationException(string.Format(SR.OwnsSelfOrOwner, nameof(Show)));
             }
 
             if (Visible)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible, "Show"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible, nameof(Show)));
             }
 
             if (!Enabled)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled, "Show"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled, nameof(Show)));
             }
 
             if (!TopLevel)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel, "Show"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel, nameof(Show)));
             }
 
             if (!SystemInformation.UserInteractive)
@@ -5137,18 +5123,17 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner != null) && ((int)User32.GetWindowLong(new HandleRef(owner, Control.GetSafeHandle(owner)), User32.GWL.EXSTYLE)
-                     & (int)User32.WS_EX.TOPMOST) == 0)
-            {   // It's not the top-most window
+            if ((owner != null) && owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
+            {
+                // It's not the top-most window
                 if (owner is Control ownerControl)
                 {
                     owner = ownerControl.TopLevelControlInternal;
                 }
             }
 
-            IntPtr hWndActive = User32.GetActiveWindow();
-            IntPtr hWndOwner = owner is null ? hWndActive : Control.GetSafeHandle(owner);
-            IntPtr hWndOldOwner = IntPtr.Zero;
+            IntPtr activeHwnd = User32.GetActiveWindow();
+            IntPtr ownerHwnd = owner is null ? activeHwnd : GetSafeHandle(owner);
             Properties.SetObject(PropDialogOwner, owner);
             Form oldOwner = OwnerInternal;
             if (owner is Form ownerForm && owner != oldOwner)
@@ -5156,18 +5141,19 @@ namespace System.Windows.Forms
                 Owner = ownerForm;
             }
 
-            if (hWndOwner != IntPtr.Zero && hWndOwner != Handle)
+            if (ownerHwnd != IntPtr.Zero && ownerHwnd != Handle)
             {
                 // Catch the case of a window trying to own its owner
-                if (User32.GetWindowLong(new HandleRef(owner, hWndOwner), User32.GWL.HWNDPARENT) == Handle)
+                if (User32.GetWindowLong(ownerHwnd, User32.GWL.HWNDPARENT) == Handle)
                 {
-                    throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "show"), nameof(owner));
+                    throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(Show)), nameof(owner));
                 }
 
                 // Set the new owner.
-                hWndOldOwner = User32.GetWindowLong(this, User32.GWL.HWNDPARENT);
-                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, new HandleRef(owner, hWndOwner));
+                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd);
             }
+
+            GC.KeepAlive(owner);
 
             Visible = true;
         }
@@ -5175,10 +5161,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Displays this form as a modal dialog box with no owner window.
         /// </summary>
-        public DialogResult ShowDialog()
-        {
-            return ShowDialog(null);
-        }
+        public DialogResult ShowDialog() => ShowDialog(null);
 
         /// <summary>
         ///  Shows this form as a modal dialog with the specified owner.
@@ -5187,27 +5170,27 @@ namespace System.Windows.Forms
         {
             if (owner == this)
             {
-                throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "showDialog"), nameof(owner));
+                throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(ShowDialog)), nameof(owner));
             }
 
             if (Visible)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible, "showDialog"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnVisible, nameof(ShowDialog)));
             }
 
             if (!Enabled)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled, "showDialog"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnDisabled, nameof(ShowDialog)));
             }
 
             if (!TopLevel)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel, "showDialog"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnNonTopLevel, nameof(ShowDialog)));
             }
 
             if (Modal)
             {
-                throw new InvalidOperationException(string.Format(SR.ShowDialogOnModal, "showDialog"));
+                throw new InvalidOperationException(string.Format(SR.ShowDialogOnModal, nameof(ShowDialog)));
             }
 
             if (!SystemInformation.UserInteractive)
@@ -5215,9 +5198,9 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if ((owner != null) && ((int)User32.GetWindowLong(new HandleRef(owner, GetSafeHandle(owner)), User32.GWL.EXSTYLE)
-                     & (int)User32.WS_EX.TOPMOST) == 0)
-            {   // It's not the top-most window
+            if ((owner != null) && owner.GetExtendedStyle().HasFlag(User32.WS_EX.TOPMOST))
+            {
+                // It's not the top-most window
                 if (owner is Control ownerControl)
                 {
                     owner = ownerControl.TopLevelControlInternal;
@@ -5230,15 +5213,15 @@ namespace System.Windows.Forms
             // for modal dialogs make sure we reset close reason.
             CloseReason = CloseReason.None;
 
-            IntPtr hWndCapture = User32.GetCapture();
-            if (hWndCapture != IntPtr.Zero)
+            IntPtr captureHwnd = User32.GetCapture();
+            if (captureHwnd != IntPtr.Zero)
             {
-                User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE);
+                User32.SendMessageW(captureHwnd, User32.WM.CANCELMODE);
                 User32.ReleaseCapture();
             }
 
-            IntPtr hWndActive = User32.GetActiveWindow();
-            IntPtr hWndOwner = owner is null ? hWndActive : Control.GetSafeHandle(owner);
+            IntPtr activeHwnd = User32.GetActiveWindow();
+            IntPtr ownerHwnd = owner is null ? activeHwnd : GetSafeHandle(owner);
 
             Form oldOwner = OwnerInternal;
 
@@ -5253,22 +5236,20 @@ namespace System.Windows.Forms
                 // we'll know to terminate the RunDialog loop immediately.
                 // Thus we must initialize the DialogResult *before* the call
                 // to CreateControl().
-                //
                 dialogResult = DialogResult.None;
 
                 // If "this" is an MDI parent then the window gets activated,
                 // causing GetActiveWindow to return "this.handle"... to prevent setting
                 // the owner of this to this, we must create the control AFTER calling
                 // GetActiveWindow.
-                //
                 CreateControl();
 
-                if (hWndOwner != IntPtr.Zero && hWndOwner != Handle)
+                if (ownerHwnd != IntPtr.Zero && ownerHwnd != Handle)
                 {
                     // Catch the case of a window trying to own its owner
-                    if (User32.GetWindowLong(new HandleRef(owner, hWndOwner), User32.GWL.HWNDPARENT) == Handle)
+                    if (User32.GetWindowLong(ownerHwnd, User32.GWL.HWNDPARENT) == Handle)
                     {
-                        throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, "showDialog"), nameof(owner));
+                        throw new ArgumentException(string.Format(SR.OwnsSelfOrOwner, nameof(ShowDialog)), nameof(owner));
                     }
 
                     // In a multi Dpi environment and applications in PMV2 mode, Dpi changed events triggered
@@ -5285,15 +5266,13 @@ namespace System.Windows.Forms
                     else
                     {
                         // Set the new parent.
-                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, new HandleRef(owner, hWndOwner));
+                        User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd);
                     }
                 }
 
                 try
                 {
-                    // If the DialogResult was already set, then there's
-                    // no need to actually display the dialog.
-                    //
+                    // If the DialogResult was already set, then there's no need to actually display the dialog.
                     if (dialogResult == DialogResult.None)
                     {
                         // Application.RunDialog sets this dialog to be visible.
@@ -5303,20 +5282,19 @@ namespace System.Windows.Forms
                 finally
                 {
                     // Call SetActiveWindow before setting Visible = false.
-                    //
 
-                    if (User32.IsWindow(hWndActive).IsFalse())
+                    if (User32.IsWindow(activeHwnd).IsFalse())
                     {
-                        hWndActive = hWndOwner;
+                        activeHwnd = ownerHwnd;
                     }
 
-                    if (User32.IsWindow(hWndActive).IsTrue() && User32.IsWindowVisible(hWndActive).IsTrue())
+                    if (User32.IsWindow(activeHwnd).IsTrue() && User32.IsWindowVisible(activeHwnd).IsTrue())
                     {
-                        User32.SetActiveWindow(hWndActive);
+                        User32.SetActiveWindow(activeHwnd);
                     }
-                    else if (User32.IsWindow(hWndOwner).IsTrue() && User32.IsWindowVisible(hWndOwner).IsTrue())
+                    else if (User32.IsWindow(ownerHwnd).IsTrue() && User32.IsWindowVisible(ownerHwnd).IsTrue())
                     {
-                        User32.SetActiveWindow(hWndOwner);
+                        User32.SetActiveWindow(ownerHwnd);
                     }
 
                     SetVisibleCore(false);
@@ -5342,6 +5320,7 @@ namespace System.Windows.Forms
             {
                 Owner = oldOwner;
                 Properties.SetObject(PropDialogOwner, null);
+                GC.KeepAlive(owner);
             }
 
             return DialogResult;
@@ -5427,11 +5406,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Returns a string representation for this control.
         /// </summary>
-        public override string ToString()
-        {
-            string s = base.ToString();
-            return s + ", Text: " + Text;
-        }
+        public override string ToString() => $"{base.ToString()}, Text: {Text}";
 
         /// <summary>
         ///  Updates the autoscalebasesize based on the current font.
@@ -5485,10 +5460,6 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Updates the default button based on current selection, and the
-        ///  acceptButton property.
-        /// </summary>
         protected override void UpdateDefaultButton()
         {
             ContainerControl cc = this;
@@ -5525,13 +5496,13 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && TopLevel)
             {
-                HandleRef ownerHwnd = NativeMethods.NullHandleRef;
+                IHandle ownerHwnd = null;
 
                 Form owner = (Form)Properties.GetObject(PropOwner);
 
-                if (owner != null)
+                if (owner is not null)
                 {
-                    ownerHwnd = new HandleRef(owner, owner.Handle);
+                    ownerHwnd = owner;
                 }
                 else
                 {
@@ -5541,7 +5512,8 @@ namespace System.Windows.Forms
                     }
                 }
 
-                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd);
+                User32.SetWindowLong(this, User32.GWL.HWNDPARENT, ownerHwnd?.Handle ?? default);
+                GC.KeepAlive(ownerHwnd);
             }
         }
 
@@ -5611,7 +5583,7 @@ namespace System.Windows.Forms
                         Properties.SetObject(PropDummyMdiMenu, dummyMenu);
                     }
 
-                    User32.SendMessageW(ctlClient, User32.WM.MDISETMENU, dummyMenu.Value, IntPtr.Zero);
+                    User32.SendMessageW(ctlClient, User32.WM.MDISETMENU, dummyMenu.Value, 0);
                 }
 
                 // (New fix: Only destroy Win32 Menu if using a MenuStrip)
@@ -5890,8 +5862,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, IntPtr.Zero);
-                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, IntPtr.Zero);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.SMALL, 0);
+                    User32.SendMessageW(this, User32.WM.SETICON, (IntPtr)User32.ICON.BIG, 0);
                 }
 
                 if (WindowState == FormWindowState.Maximized && MdiParent?.MdiControlStrip != null)
@@ -6384,10 +6356,10 @@ namespace System.Windows.Forms
             // that point our handle is not actually destroyed so
             // destroying our parent actually causes a recursive
             // WM_DESTROY.
-            if (ownerWindow != null)
+            if (_ownerWindow != null)
             {
-                ownerWindow.DestroyHandle();
-                ownerWindow = null;
+                _ownerWindow.DestroyHandle();
+                _ownerWindow = null;
             }
 
             if (Modal && dialogResult == DialogResult.None)

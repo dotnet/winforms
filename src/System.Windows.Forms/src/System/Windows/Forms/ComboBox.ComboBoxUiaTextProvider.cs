@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)(long)GetWindowLong(_owningChildEdit, GWL.STYLE);
+                    ES extendedStyle = (ES)GetWindowLong(_owningChildEdit, GWL.STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL);
                 }
             }
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
 
             public override int TextLength
                 => _owningComboBox.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningChildEdit, WM.GETTEXTLENGTH)
+                    ? (int)SendMessageW(_owningChildEdit, WM.GETTEXTLENGTH)
                     : -1;
 
             public override WS_EX WindowExStyle
@@ -360,12 +360,12 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW(_owningChildEdit, (WM)EM.SETSEL, (IntPtr)start, (IntPtr)end);
+                SendMessageW(_owningChildEdit, (WM)EM.SETSEL, start, end);
             }
 
             private int GetCharIndexFromPosition(Point pt)
             {
-                int index = (int)(long)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+                int index = (int)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, 0, PARAM.FromLowHigh(pt.X, pt.Y));
                 index = PARAM.LOWORD(index);
 
                 if (index < 0)
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
             {
                 // Send an EM_GETRECT message to find out the bounding rectangle.
                 RECT rectangle = new RECT();
-                SendMessageW(_owningChildEdit, (WM)EM.GETRECT, IntPtr.Zero, ref rectangle);
+                SendMessageW(_owningChildEdit, (WM)EM.GETRECT, 0, ref rectangle);
 
                 return rectangle;
             }
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
                     return Point.Empty;
                 }
 
-                int i = (int)(long)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, (IntPtr)index);
+                int i = (int)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, index);
 
                 return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
             }

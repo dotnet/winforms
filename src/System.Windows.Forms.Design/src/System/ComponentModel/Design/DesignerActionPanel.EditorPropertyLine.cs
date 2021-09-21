@@ -608,7 +608,7 @@ namespace System.ComponentModel.Design
                         IntPtr hWndCapture = User32.GetCapture();
                         if (hWndCapture != IntPtr.Zero)
                         {
-                            User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE, IntPtr.Zero, IntPtr.Zero);
+                            User32.SendMessageW(hWndCapture, User32.WM.CANCELMODE);
                             User32.ReleaseCapture();
                         }
 

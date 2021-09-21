@@ -1261,7 +1261,7 @@ namespace System.Windows.Forms
                     this,
                     User32.WM.HSCROLL,
                     PARAM.FromLowHigh((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
-                    IntPtr.Zero);
+                    0);
             }
         }
 

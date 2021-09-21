@@ -150,8 +150,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 User32.SendMessageW(
                     this,
                     (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
-                    IntPtr.Zero,
-                    (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    0,
+                    SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 

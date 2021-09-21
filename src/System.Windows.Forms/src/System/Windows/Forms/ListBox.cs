@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                     }
                     else if (IsHandleCreated)
                     {
-                        SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, (IntPtr)columnWidth);
+                        SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, columnWidth);
                     }
                 }
             }
@@ -436,20 +436,7 @@ namespace System.Windows.Forms
             }
         }
 
-        // Used internally to find the currently focused item
-        //
-        internal int FocusedIndex
-        {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    return unchecked((int)(long)SendMessageW(this, (WM)LB.GETCARETINDEX));
-                }
-
-                return -1;
-            }
-        }
+        internal int FocusedIndex => IsHandleCreated ? (int)SendMessageW(this, (WM)LB.GETCARETINDEX) : -1;
 
         // The scroll bars don't display properly when the IntegralHeight == false
         // and the control is resized before the font size is change and the new font size causes
@@ -629,10 +616,9 @@ namespace System.Windows.Forms
                     if (drawMode == DrawMode.OwnerDrawFixed && IsHandleCreated)
                     {
                         BeginUpdate();
-                        SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)value);
+                        SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, value);
 
                         // Changing the item height might require a resize for IntegralHeight list boxes
-                        //
                         if (IntegralHeight)
                         {
                             Size oldSize = Size;
@@ -876,7 +862,7 @@ namespace System.Windows.Forms
 
                 if (current == SelectionMode.One && IsHandleCreated)
                 {
-                    return unchecked((int)(long)SendMessageW(this, (WM)LB.GETCURSEL));
+                    return (int)SendMessageW(this, (WM)LB.GETCURSEL);
                 }
 
                 if (itemsCollection is not null && SelectedItems.Count > 0)
@@ -1164,22 +1150,12 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ListBoxTopIndexDescr))]
         public int TopIndex
         {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    return unchecked((int)(long)SendMessageW(this, (WM)LB.GETTOPINDEX));
-                }
-                else
-                {
-                    return topIndex;
-                }
-            }
+            get => IsHandleCreated ? (int)SendMessageW(this, (WM)LB.GETTOPINDEX) : topIndex;
             set
             {
                 if (IsHandleCreated)
                 {
-                    SendMessageW(this, (WM)LB.SETTOPINDEX, (IntPtr)value);
+                    SendMessageW(this, (WM)LB.SETTOPINDEX, value);
                 }
                 else
                 {
@@ -1468,9 +1444,7 @@ namespace System.Windows.Forms
         {
             int itemCount = (itemsCollection is null) ? 0 : itemsCollection.Count;
 
-            // Note: index == 0 is OK even if the ListBox currently has
-            // no items.
-            //
+            // Note: index == 0 is OK even if the ListBox currently has no items.
             if (index < 0 || (index > 0 && index >= itemCount))
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
@@ -1483,13 +1457,13 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int h = unchecked((int)(long)SendMessageW(this, (WM)LB.GETITEMHEIGHT, (IntPtr)index));
-                if (h == -1)
+                int height = (int)SendMessageW(this, (WM)LB.GETITEMHEIGHT, index);
+                if (height == -1)
                 {
                     throw new Win32Exception();
                 }
 
-                return h;
+                return height;
             }
 
             return itemHeight;
@@ -1504,7 +1478,7 @@ namespace System.Windows.Forms
         {
             CheckIndex(index);
             var rect = new RECT();
-            if (SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect) == IntPtr.Zero)
+            if (SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect) == 0)
             {
                 return Rectangle.Empty;
             }
@@ -1526,8 +1500,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Tells you whether or not the item at the supplied index is selected
-        ///  or not.
+        ///  Tells you whether or not the item at the supplied index is selected or not.
         /// </summary>
         public bool GetSelected(int index)
         {
@@ -1539,13 +1512,13 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                int sel = unchecked((int)(long)SendMessageW(this, (WM)LB.GETSEL, (IntPtr)index));
-                if (sel == -1)
+                int selection = (int)SendMessageW(this, (WM)LB.GETSEL, index);
+                if (selection == -1)
                 {
                     throw new Win32Exception();
                 }
 
-                return sel > 0;
+                return selection > 0;
             }
             else
             {
@@ -1571,14 +1544,13 @@ namespace System.Windows.Forms
         /// </summary>
         public int IndexFromPoint(int x, int y)
         {
-            //NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
-            //call Sendmessage.
-            //
+            // NT4 SP6A : SendMessage Fails. So First check whether the point is in Client Co-ordinates and then
+            // call Sendmessage.
             RECT r = new RECT();
             GetClientRect(new HandleRef(this, Handle), ref r);
             if (r.left <= x && x < r.right && r.top <= y && y < r.bottom)
             {
-                int index = unchecked((int)(long)SendMessageW(this, (WM)LB.ITEMFROMPOINT, IntPtr.Zero, PARAM.FromLowHigh(x, y)));
+                int index = (int)SendMessageW(this, (WM)LB.ITEMFROMPOINT, 0, PARAM.FromLowHigh(x, y));
                 if (PARAM.HIWORD(index) == 0)
                 {
                     // Inside ListBox client area
@@ -1590,13 +1562,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adds the given item to the native List box.  This asserts if the handle hasn't been
-        ///  created.
+        ///  Adds the given item to the native List box.
         /// </summary>
         private int NativeAdd(object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessageW(this, (WM)LB.ADDSTRING, IntPtr.Zero, GetItemText(item)));
+            int insertIndex = (int)SendMessageW(this, (WM)LB.ADDSTRING, 0, GetItemText(item));
             if (insertIndex == LB_ERRSPACE)
             {
                 throw new OutOfMemoryException();
@@ -1628,7 +1599,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal unsafe string NativeGetItemText(int index)
         {
-            int maxLength = PARAM.ToInt(SendMessageW(this, (WM)LB.GETTEXTLEN, (IntPtr)index));
+            int maxLength = (int)SendMessageW(this, (WM)LB.GETTEXTLEN, index);
             if (maxLength == LB_ERR)
             {
                 return string.Empty;
@@ -1638,7 +1609,7 @@ namespace System.Windows.Forms
             string result;
             fixed (char* pText = text)
             {
-                int actualLength = PARAM.ToInt(SendMessageW(this, (WM)LB.GETTEXT, (IntPtr)index, (IntPtr)pText));
+                int actualLength = (int)SendMessageW(this, (WM)LB.GETTEXT, index, (nint)pText);
                 Debug.Assert(actualLength != LB_ERR, "Should have validated the index above");
                 if (actualLength == LB_ERR)
                 {
@@ -1659,7 +1630,7 @@ namespace System.Windows.Forms
         private int NativeInsert(int index, object item)
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
-            int insertIndex = unchecked((int)(long)SendMessageW(this, (WM)LB.INSERTSTRING, (IntPtr)index, GetItemText(item)));
+            int insertIndex = (int)SendMessageW(this, (WM)LB.INSERTSTRING, index, GetItemText(item));
 
             if (insertIndex == LB_ERRSPACE)
             {
@@ -1675,7 +1646,7 @@ namespace System.Windows.Forms
                 throw new OutOfMemoryException(SR.ListBoxItemOverflow);
             }
 
-            Debug.Assert(insertIndex == index, "NativeListBox inserted at " + insertIndex + " not the requested index of " + index);
+            Debug.Assert(insertIndex == index, $"NativeListBox inserted at {insertIndex} not the requested index of {index}");
             return insertIndex;
         }
 
@@ -1686,11 +1657,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "Shouldn't be calling Native methods before the handle is created.");
 
-            bool selected = (unchecked((int)(long)SendMessageW(this, (WM)LB.GETSEL, (IntPtr)index, IntPtr.Zero)) > 0);
-            SendMessageW(this, (WM)LB.DELETESTRING, (IntPtr)index);
+            bool selected = (int)SendMessageW(this, (WM)LB.GETSEL, index, 0) > 0;
+            SendMessageW(this, (WM)LB.DELETESTRING, index);
 
-            //If the item currently selected is removed then we should fire a Selectionchanged event...
-            //as the next time selected index returns -1...
+            // If the item currently selected is removed then we should fire a Selectionchanged event
+            // as the next time selected index returns -1.
 
             if (selected)
             {
@@ -1709,11 +1680,11 @@ namespace System.Windows.Forms
 
             if (selectionMode == SelectionMode.One)
             {
-                SendMessageW(this, (WM)LB.SETCURSEL, (IntPtr)(value ? index : -1));
+                SendMessageW(this, (WM)LB.SETCURSEL, value ? index : -1);
             }
             else
             {
-                SendMessageW(this, (WM)LB.SETSEL, PARAM.FromBool(value), (IntPtr)index);
+                SendMessageW(this, (WM)LB.SETSEL, PARAM.FromBool(value), index);
             }
         }
 
@@ -1736,7 +1707,7 @@ namespace System.Windows.Forms
             switch (selectionMode)
             {
                 case SelectionMode.One:
-                    int index = unchecked((int)(long)SendMessageW(this, (WM)LB.GETCURSEL));
+                    int index = (int)SendMessageW(this, (WM)LB.GETCURSEL);
                     if (index >= 0)
                     {
                         SelectedItems.SetSelected(index, true);
@@ -1746,13 +1717,13 @@ namespace System.Windows.Forms
 
                 case SelectionMode.MultiSimple:
                 case SelectionMode.MultiExtended:
-                    int count = unchecked((int)(long)SendMessageW(this, (WM)LB.GETSELCOUNT));
+                    int count = (int)SendMessageW(this, (WM)LB.GETSELCOUNT);
                     if (count > 0)
                     {
                         var result = new int[count];
                         fixed (int* pResult = result)
                         {
-                            SendMessageW(this, (WM)LB.GETSELITEMS, (IntPtr)count, (IntPtr)pResult);
+                            SendMessageW(this, (WM)LB.GETSELITEMS, count, (nint)pResult);
                         }
 
                         foreach (int i in result)
@@ -1823,21 +1794,21 @@ namespace System.Windows.Forms
 
             //for getting the current Locale to set the Scrollbars...
             //
-            SendMessageW(this, (WM)LB.SETLOCALE, (IntPtr)Kernel32.GetThreadLocale().RawValue);
+            SendMessageW(this, (WM)LB.SETLOCALE, (nint)Kernel32.GetThreadLocale().RawValue);
 
             if (columnWidth != 0)
             {
-                SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, (IntPtr)columnWidth);
+                SendMessageW(this, (WM)LB.SETCOLUMNWIDTH, columnWidth);
             }
 
             if (drawMode == DrawMode.OwnerDrawFixed)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             if (topIndex != 0)
             {
-                SendMessageW(this, (WM)LB.SETTOPINDEX, (IntPtr)topIndex);
+                SendMessageW(this, (WM)LB.SETTOPINDEX, topIndex);
             }
 
             if (UseCustomTabOffsets && CustomTabOffsets is not null)
@@ -1848,7 +1819,7 @@ namespace System.Windows.Forms
 
                 fixed (int* pOffsets = offsets)
                 {
-                    SendMessageW(this, (WM)LB.SETTABSTOPS, (IntPtr)wpar, (IntPtr)pOffsets);
+                    SendMessageW(this, (WM)LB.SETTABSTOPS, wpar, (nint)pOffsets);
                 }
             }
 
@@ -2202,7 +2173,7 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated)
                 {
-                    SendMessageW(this, (WM)LB.SETCURSEL, (IntPtr)DataManager.Position);
+                    SendMessageW(this, (WM)LB.SETCURSEL, DataManager.Position);
                 }
 
                 // if the list changed and we still did not fire the
@@ -2334,7 +2305,7 @@ namespace System.Windows.Forms
                     width = MaxItemWidth;
                 }
 
-                SendMessageW(this, (WM)LB.SETHORIZONTALEXTENT, (IntPtr)width);
+                SendMessageW(this, (WM)LB.SETHORIZONTALEXTENT, width);
             }
         }
 
@@ -2394,7 +2365,7 @@ namespace System.Windows.Forms
                 CustomTabOffsets.CopyTo(offsets, 0);
                 fixed (int* pOffsets = offsets)
                 {
-                    SendMessageW(this, (WM)LB.SETTABSTOPS, (IntPtr)wpar, (IntPtr)pOffsets);
+                    SendMessageW(this, (WM)LB.SETTABSTOPS, wpar, (nint)pOffsets);
                 }
 
                 Invalidate();

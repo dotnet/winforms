@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Drawing;
-
 internal partial class Interop
 {
     /// <summary>
@@ -11,15 +9,15 @@ internal partial class Interop
     /// </summary>
     internal static class PARAM
     {
-        public static IntPtr FromLowHigh(int low, int high)
-            => (IntPtr)ToInt(low, high);
+        public static nint FromLowHigh(int low, int high)
+            => (nint)ToInt(low, high);
 
-        public static IntPtr FromLowHighUnsigned(int low, int high)
+        public static nint FromLowHighUnsigned(int low, int high)
             // Convert the int to an uint before converting it to a pointer type,
             // which ensures the high dword being zero for 64-bit pointers.
             // This corresponds to the logic of the MAKELPARAM/MAKEWPARAM/MAKELRESULT
             // macros.
-            => unchecked((nint)(nuint)(uint)ToInt(low, high));
+            => (nint)(uint)ToInt(low, high);
 
         public static int ToInt(int low, int high)
             => (high << 16) | (low & 0xffff);
@@ -43,16 +41,13 @@ internal partial class Interop
             => SignedLOWORD(unchecked((int)n));
 
         public static int SignedHIWORD(int n)
-            => (int)(short)HIWORD(n);
+            => (short)HIWORD(n);
 
         public static int SignedLOWORD(int n)
-            => (int)(short)LOWORD(n);
+            => (short)LOWORD(n);
 
-        public static IntPtr FromBool(bool value)
-            => (IntPtr)(value ? BOOL.TRUE : BOOL.FALSE);
-
-        public static IntPtr FromColor(Color color)
-            => (IntPtr)ColorTranslator.ToWin32(color);
+        public static nint FromBool(bool value)
+            => (nint)(value ? BOOL.TRUE : BOOL.FALSE);
 
         /// <summary>
         ///  Hard casts to <see langword="int" /> without bounds checks.
@@ -63,18 +58,5 @@ internal partial class Interop
         ///  Hard casts to <see langword="uint" /> without bounds checks.
         /// </summary>
         public static uint ToUInt(nint param) => (uint)param;
-
-        /// <summary>
-        ///  Hard casts to <see langword="long" /> without bounds checks.
-        /// </summary>
-        /// <remarks>
-        ///  Technically not needed, but here for completeness.
-        /// </remarks>
-        public static long ToLong(nint param) => param;
-
-        /// <summary>
-        ///  Hard casts to <see langword="ulong" /> without bounds checks.
-        /// </summary>
-        public static ulong ToULong(nint param) => (ulong)param;
     }
 }

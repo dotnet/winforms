@@ -31,7 +31,7 @@ namespace System.Windows.Forms
                 if (MainForm is not null && MainForm.IsHandleCreated)
                 {
                     // Get ahold of the parenting control
-                    IntPtr parentHandle = Interop.User32.GetWindowLong(new HandleRef(this, MainForm.Handle), User32.GWL.HWNDPARENT);
+                    IntPtr parentHandle = Interop.User32.GetWindowLong(MainForm, User32.GWL.HWNDPARENT);
 
                     parentControl = Control.FromHandle(parentHandle);
 

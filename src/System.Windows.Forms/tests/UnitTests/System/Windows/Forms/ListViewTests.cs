@@ -516,7 +516,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56);
-            Assert.Equal((IntPtr)0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
+            Assert.Equal(0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
         }
 
         [WinFormsFact]
@@ -1378,7 +1378,7 @@ namespace System.Windows.Forms.Tests
 
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             control.ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78);
-            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
+            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
         }
 
         [WinFormsFact]
@@ -1848,7 +1848,7 @@ namespace System.Windows.Forms.Tests
                 BackColor = Color.FromArgb(0xFF, 0x12, 0x34, 0x56)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
+            Assert.Equal(0x563412, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETBKCOLOR));
         }
 
         [WinFormsFact]
@@ -1859,7 +1859,7 @@ namespace System.Windows.Forms.Tests
                 ForeColor = Color.FromArgb(0x12, 0x34, 0x56, 0x78)
             };
             Assert.NotEqual(IntPtr.Zero, control.Handle);
-            Assert.Equal((IntPtr)0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
+            Assert.Equal(0x785634, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTCOLOR));
         }
 
         [WinFormsTheory]
@@ -1870,7 +1870,7 @@ namespace System.Windows.Forms.Tests
             {
                 ShowGroups = showGroups
             };
-            Assert.Equal((IntPtr)0, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
+            Assert.Equal(0, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
         }
 
         public static IEnumerable<object[]> Handle_GetWithGroups_TestData()
@@ -1901,6 +1901,9 @@ namespace System.Windows.Forms.Tests
             // Run this from another thread as we call Application.EnableVisualStyles.
             using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
+                char* headerBuffer = stackalloc char[256];
+                char* footerBuffer = stackalloc char[256];
+
                 foreach (object[] data in Handle_GetWithGroups_TestData())
                 {
                     bool showGroups = (bool)data[0];
@@ -1929,9 +1932,8 @@ namespace System.Windows.Forms.Tests
                     listView.Groups.Add(group1);
                     listView.Groups.Add(group2);
 
-                    Assert.Equal((IntPtr)2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT, IntPtr.Zero, IntPtr.Zero));
-                    char* headerBuffer = stackalloc char[256];
-                    char* footerBuffer = stackalloc char[256];
+                    Assert.Equal(2, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPCOUNT));
+
                     var lvgroup1 = new LVGROUPW
                     {
                         cbSize = (uint)sizeof(LVGROUPW),
@@ -1941,7 +1943,7 @@ namespace System.Windows.Forms.Tests
                         pszFooter = footerBuffer,
                         cchFooter = 256,
                     };
-                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)0, ref lvgroup1));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 0, ref lvgroup1));
                     Assert.Equal("ListViewGroup", new string(lvgroup1.pszHeader));
                     Assert.Empty(new string(lvgroup1.pszFooter));
                     Assert.True(lvgroup1.iGroupId >= 0);
@@ -1956,7 +1958,7 @@ namespace System.Windows.Forms.Tests
                         pszFooter = footerBuffer,
                         cchFooter = 256,
                     };
-                    Assert.Equal((IntPtr)1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, (IntPtr)1, ref lvgroup2));
+                    Assert.Equal(1, User32.SendMessageW(listView.Handle, (User32.WM)LVM.GETGROUPINFOBYINDEX, 1, ref lvgroup2));
                     Assert.Equal(expectedHeaderText, new string(lvgroup2.pszHeader));
                     Assert.Equal(expectedFooterText, new string(lvgroup2.pszFooter));
                     Assert.True(lvgroup2.iGroupId > 0);
@@ -1975,7 +1977,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ListView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
 
-            IntPtr expected = IntPtr.Size == 8 ? (IntPtr)0xFFFFFFFF : (IntPtr)(-1);
+            nint expected = unchecked((nint)0xFFFFFFFF);
             Assert.Equal(expected, User32.SendMessageW(control.Handle, (User32.WM)LVM.GETTEXTBKCOLOR));
         }
 
@@ -1985,7 +1987,7 @@ namespace System.Windows.Forms.Tests
             using var control = new ListView();
             Assert.NotEqual(IntPtr.Zero, control.Handle);
             int version = Application.UseVisualStyles ? 6 : 5;
-            Assert.Equal((IntPtr)version, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
+            Assert.Equal(version, User32.SendMessageW(control.Handle, (User32.WM)CCM.GETVERSION));
         }
 
         public static IEnumerable<object[]> Handle_CustomGetVersion_TestData()
@@ -4481,7 +4483,7 @@ namespace System.Windows.Forms.Tests
             uint keyCode = (uint)Keys.Space;
             uint lParam = (0x00000001 | keyCode << 16);
 
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Equal(selectItems ? 2 : 0, control.SelectedItems.Count);
             Assert.Equal(!checkItem && selectItems && focusItem, item2.Checked);
         }
@@ -4513,7 +4515,7 @@ namespace System.Windows.Forms.Tests
             uint lParam = (0x00000001 | keyCode << 16);
 
             // If control doesn't have selected items none will be focused.
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Empty(control.SelectedIndices);
             Assert.Null(control.FocusedItem);
             Assert.Null(control.FocusedGroup);
@@ -4557,7 +4559,7 @@ namespace System.Windows.Forms.Tests
                 uint keyCode = (uint)(key_s == "Keys.Down" ? Keys.Down : Keys.Up);
                 uint lParam = (0x00000001 | keyCode << 16);
 
-                User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+                User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
                 Assert.False(control.GroupsEnabled);
                 Assert.True(control.Items.Count > 0);
                 int expectedGroupIndex = int.Parse(expectedGroupIndex_s);
@@ -4602,7 +4604,7 @@ namespace System.Windows.Forms.Tests
             uint lParam = (0x00000001 | keyCode << 16);
 
             // Actually ListView in VirtualMode can't have Groups
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.Null(control.FocusedGroup);
         }
 
@@ -4644,7 +4646,7 @@ namespace System.Windows.Forms.Tests
             uint lParam = (0x00000001 | keyCode << 16);
 
             // Actually ListView in VirtualMode doesn't check items here
-            User32.SendMessageW(control, User32.WM.KEYDOWN, (IntPtr)keyCode, (IntPtr)lParam);
+            User32.SendMessageW(control, User32.WM.KEYDOWN, (nint)keyCode, (nint)lParam);
             Assert.False(item2.Checked);
         }
 

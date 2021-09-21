@@ -18,11 +18,11 @@ namespace System.Windows.Forms
     [ToolboxItemFilter("System.Windows.Forms")]
     public abstract class CommonDialog : Component
     {
-        private static readonly object s_helpRequestEvent = new object();
+        private static readonly object s_helpRequestEvent = new();
         private const int CDM_SETDEFAULTFOCUS = (int)User32.WM.USER + 0x51;
-        private static User32.WM s_helpMsg;
+        private static User32.WM s_helpMessage;
 
-        private IntPtr _defOwnerWndProc;
+        private IntPtr _priorWindowProcedure;
 
         private IntPtr _hookedWndProc;
 
@@ -114,12 +114,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Defines the owner window procedure that is overridden to add specific
-        ///  functionality to a common dialog box.
+        ///  Defines the owner window procedure that is overridden to add specific functionality to a common dialog box.
         /// </summary>
         protected virtual IntPtr OwnerWndProc(IntPtr hWnd, int msg, IntPtr wparam, IntPtr lparam)
         {
-            if (msg == (int)s_helpMsg)
+            if (msg == (int)s_helpMessage)
             {
                 if (NativeWindow.WndProcShouldBeDebuggable)
                 {
@@ -140,7 +139,7 @@ namespace System.Windows.Forms
                 return IntPtr.Zero;
             }
 
-            return User32.CallWindowProcW(_defOwnerWndProc, hWnd, (User32.WM)msg, wparam, lparam);
+            return User32.CallWindowProcW(_priorWindowProcedure, hWnd, (User32.WM)msg, wparam, lparam);
         }
 
         /// <summary>
@@ -171,44 +170,43 @@ namespace System.Windows.Forms
 
             // This will be used if there is no owner or active window.
             // Declared here so it can be kept alive.
-            NativeWindow native = null;
+            NativeWindow nativeWindow = null;
 
-            IntPtr hwndOwner = IntPtr.Zero;
+            IntPtr ownerHwnd = IntPtr.Zero;
             DialogResult result = DialogResult.Cancel;
             try
             {
                 if (owner is not null)
                 {
-                    hwndOwner = Control.GetSafeHandle(owner);
+                    ownerHwnd = Control.GetSafeHandle(owner);
                 }
 
-                if (hwndOwner == IntPtr.Zero)
+                if (ownerHwnd == IntPtr.Zero)
                 {
-                    hwndOwner = User32.GetActiveWindow();
+                    ownerHwnd = User32.GetActiveWindow();
                 }
 
-                if (hwndOwner == IntPtr.Zero)
+                if (ownerHwnd == IntPtr.Zero)
                 {
                     // We will have to create our own Window
-                    native = new NativeWindow();
-                    native.CreateHandle(new CreateParams());
-                    hwndOwner = native.Handle;
+                    nativeWindow = new NativeWindow();
+                    nativeWindow.CreateHandle(new CreateParams());
+                    ownerHwnd = nativeWindow.Handle;
                 }
 
-                if (s_helpMsg == User32.WM.NULL)
+                if (s_helpMessage == User32.WM.NULL)
                 {
-                    s_helpMsg = User32.RegisterWindowMessageW("commdlg_help");
+                    s_helpMessage = User32.RegisterWindowMessageW("commdlg_help");
                 }
 
-                User32.WNDPROCINT ownerProc = new User32.WNDPROCINT(OwnerWndProc);
-                _hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerProc);
-                Debug.Assert(IntPtr.Zero == _defOwnerWndProc, "The previous subclass wasn't properly cleaned up");
+                User32.WNDPROCINT ownerWindowProcedure = new User32.WNDPROCINT(OwnerWndProc);
+                _hookedWndProc = Marshal.GetFunctionPointerForDelegate(ownerWindowProcedure);
+                Debug.Assert(IntPtr.Zero == _priorWindowProcedure, "The previous subclass wasn't properly cleaned up");
 
                 IntPtr userCookie = IntPtr.Zero;
                 try
                 {
-                    // UnsafeNativeMethods.[Get|Set]WindowLong is smart enough to call SetWindowLongPtr on 64-bit OS
-                    _defOwnerWndProc = User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC, ownerProc);
+                    _priorWindowProcedure = User32.SetWindowLong(ownerHwnd, User32.GWL.WNDPROC, ownerWindowProcedure);
 
                     if (Application.UseVisualStyles)
                     {
@@ -218,7 +216,7 @@ namespace System.Windows.Forms
                     Application.BeginModalMessageLoop();
                     try
                     {
-                        result = RunDialog(hwndOwner) ? DialogResult.OK : DialogResult.Cancel;
+                        result = RunDialog(ownerHwnd) ? DialogResult.OK : DialogResult.Cancel;
                     }
                     finally
                     {
@@ -227,25 +225,27 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    IntPtr currentSubClass = User32.GetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC);
-                    if (_defOwnerWndProc != IntPtr.Zero || currentSubClass != _hookedWndProc)
+                    IntPtr currentSubClass = User32.GetWindowLong(ownerHwnd, User32.GWL.WNDPROC);
+                    if (_priorWindowProcedure != IntPtr.Zero || currentSubClass != _hookedWndProc)
                     {
-                        User32.SetWindowLong(new HandleRef(this, hwndOwner), User32.GWL.WNDPROC, new HandleRef(this, _defOwnerWndProc));
+                        User32.SetWindowLong(ownerHwnd, User32.GWL.WNDPROC, _priorWindowProcedure);
                     }
 
                     ThemingScope.Deactivate(userCookie);
 
-                    _defOwnerWndProc = IntPtr.Zero;
+                    _priorWindowProcedure = IntPtr.Zero;
                     _hookedWndProc = IntPtr.Zero;
-                    // Ensure that the subclass delegate will not be GC collected until
-                    // after it has been subclassed
-                    GC.KeepAlive(ownerProc);
+
+                    // Ensure that the subclass delegate will not be GC collected until after it has been subclassed.
+                    GC.KeepAlive(ownerWindowProcedure);
                 }
             }
             finally
             {
-                native?.DestroyHandle();
+                nativeWindow?.DestroyHandle();
             }
+
+            GC.KeepAlive(owner);
 
             return result;
         }
