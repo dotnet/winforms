@@ -4,7 +4,7 @@
     "Microsoft.Component.CodeAnalysis.SDK",
     "Microsoft.Component.MSBuild",
     "Microsoft.NetCore.Component.DevelopmentTools",
-    "Microsoft.NetCore.Component.Runtime.5.0",
+    "Microsoft.NetCore.Component.Runtime.6.0",
     "Microsoft.NetCore.Component.SDK",
     "Microsoft.VisualStudio.Component.CoreEditor",
     "Microsoft.VisualStudio.Component.Debugger.JustInTime",
