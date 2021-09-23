@@ -1541,13 +1541,13 @@ namespace System.Windows.Forms
             var comboRectMid = new RECT();
             GetWindowRect(this, ref comboRectMid);
 
-            //Get the Edit Rectangle.
+            // Get the Edit Rectangle.
             var editRectMid = new RECT();
             GetWindowRect(_childEdit, ref editRectMid);
 
-            //get the delta
-            int comboXMid = PARAM.SignedLOWORD(m.LParam) + (editRectMid.left - comboRectMid.left);
-            int comboYMid = PARAM.SignedHIWORD(m.LParam) + (editRectMid.top - comboRectMid.top);
+            // Get the delta.
+            int comboXMid = PARAM.SignedLOWORD(m._LParam) + (editRectMid.left - comboRectMid.left);
+            int comboYMid = PARAM.SignedHIWORD(m._LParam) + (editRectMid.top - comboRectMid.top);
 
             return new Point(comboXMid, comboYMid);
         }
@@ -1558,7 +1558,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ChildWndProc(ref Message m)
         {
-            switch ((WM)m.Msg)
+            switch (m._Msg)
             {
                 case WM.CHAR:
                     if (DropDownStyle == ComboBoxStyle.Simple && m.HWnd == _childListBox.Handle)
@@ -1607,7 +1607,7 @@ namespace System.Windows.Forms
 
                     if (AutoCompleteMode != AutoCompleteMode.None)
                     {
-                        char keyChar = unchecked((char)(long)m.WParam);
+                        char keyChar = (char)m._WParam;
                         if (keyChar == (char)(int)Keys.Escape)
                         {
                             DroppedDown = false;
@@ -1808,27 +1808,22 @@ namespace System.Windows.Forms
                     OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, Ptl.X, Ptl.Y, 0));
                     break;
                 case WM.LBUTTONUP:
-                    // Get the mouse location
-                    var rect = new RECT();
-                    GetWindowRect(this, ref rect);
-                    Rectangle clientRect = rect;
 
-                    int x = PARAM.SignedLOWORD(m.LParam);
-                    int y = PARAM.SignedHIWORD(m.LParam);
-                    Point pt = new Point(x, y);
-                    pt = PointToScreen(pt);
-
-                    // Combobox gets a WM_LBUTTONUP for focus change- check MouseEvents
+                    // Combobox gets a WM_LBUTTONUP for focus change- check MouseEvents.
                     if (_mouseEvents && !ValidationCancelled)
                     {
                         _mouseEvents = false;
                         if (_mousePressed)
                         {
-                            if (clientRect.Contains(pt))
+                            RECT rect = default;
+                            GetWindowRect(this, ref rect);
+                            Rectangle clientRect = rect;
+
+                            if (clientRect.Contains(PointToScreen(PARAM.ToPoint(m._LParam))))
                             {
                                 _mousePressed = false;
-                                OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
-                                OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                                OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.ToPoint(m._LParam)));
+                                OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.ToPoint(m._LParam)));
                             }
                             else
                             {
@@ -1842,10 +1837,8 @@ namespace System.Windows.Forms
                     DefChildWndProc(ref m);
                     Capture = false;
 
-                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates
-                    pt = EditToComboboxMapping(m);
-
-                    OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, pt.X, pt.Y, 0));
+                    // The message gets fired from Combo-box's WndPrc - convert to Combobox coordinates.
+                    OnMouseUp(new MouseEventArgs(MouseButtons.Left, 1, EditToComboboxMapping(m)));
                     break;
                 case WM.MBUTTONDOWN:
                     _mousePressed = true;
@@ -1884,7 +1877,7 @@ namespace System.Windows.Forms
                     // Set the mouse capture as this is the child Wndproc.
                     Capture = false;
                     DefChildWndProc(ref m);
-                    OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                    OnMouseUp(new MouseEventArgs(MouseButtons.Middle, 1, PARAM.ToPoint(m._LParam)));
                     break;
                 case WM.RBUTTONUP:
                     _mousePressed = false;
@@ -1902,7 +1895,7 @@ namespace System.Windows.Forms
                     // Forward context menu messages to the parent control
                     if (ContextMenuStrip is not null)
                     {
-                        SendMessageW(this, WM.CONTEXTMENU, m.WParam, m.LParam);
+                        SendMessageW(this, WM.CONTEXTMENU, m._WParam, m._LParam);
                     }
                     else
                     {
@@ -1921,7 +1914,8 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.SETCURSOR:
-                    if (Cursor != DefaultCursor && _childEdit is not null && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m.LParam) == (int)HT.CLIENT)
+                    if (Cursor != DefaultCursor && _childEdit is not null
+                        && m.HWnd == _childEdit.Handle && PARAM.LOWORD(m._LParam) == (int)HT.CLIENT)
                     {
                         Cursor.Current = Cursor;
                     }
@@ -2199,11 +2193,12 @@ namespace System.Windows.Forms
         // auto-completion in DropDownList style.
         private bool InterceptAutoCompleteKeystroke(Message m)
         {
-            if (m.Msg == (int)WM.KEYDOWN)
+            if (m._Msg == WM.KEYDOWN)
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
+
                 // Keys.Delete only triggers a WM_KEYDOWN and WM_KEYUP, and no WM_CHAR. That's why it's treated separately.
-                if ((Keys)(int)(long)m.WParam == Keys.Delete)
+                if ((Keys)(int)m._WParam == Keys.Delete)
                 {
                     // Reset matching text and remove any selection
                     MatchingText = string.Empty;
@@ -2219,7 +2214,7 @@ namespace System.Windows.Forms
             else if (m.Msg == (int)WM.CHAR)
             {
                 Debug.Assert((ModifierKeys & Keys.Alt) == 0);
-                char keyChar = unchecked((char)(long)m.WParam);
+                char keyChar = (char)m._WParam;
                 if (keyChar == (char)Keys.Back)
                 {
                     if (DateTime.Now.Ticks - _autoCompleteTimeStamp > AutoCompleteTimeout ||
@@ -2288,7 +2283,9 @@ namespace System.Windows.Forms
             return false;
         }
 
-        // Invalidate the entire control, including child HWNDs and non-client areas
+        /// <summary>
+        ///  Invalidate the entire control, including child HWNDs and non-client areas.
+        /// </summary>
         private unsafe void InvalidateEverything()
         {
             if (!IsHandleCreated)
@@ -2296,12 +2293,10 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Control.Invalidate(true) doesn't invalidate the non-client region
+            // Control.Invalidate(true) doesn't invalidate the non-client region.
             RedrawWindow(
-                new HandleRef(this, Handle),
-                null,
-                IntPtr.Zero,
-                RDW.INVALIDATE | RDW.FRAME | RDW.ERASE | RDW.ALLCHILDREN);
+                this,
+                flags: RDW.INVALIDATE | RDW.FRAME | RDW.ERASE | RDW.ALLCHILDREN);
         }
 
         /// <summary>
@@ -3622,10 +3617,10 @@ namespace System.Windows.Forms
             {
                 RECT rect = default;
                 GetClientRect(this, ref rect);
-                Gdi32.HDC hdc = (Gdi32.HDC)m.WParam;
+                Gdi32.HDC hdc = (Gdi32.HDC)m._WParam;
                 using var hbrush = new Gdi32.CreateBrushScope(ParentInternal?.BackColor ?? SystemColors.Control);
                 hdc.FillRectangle(rect, hbrush);
-                m.Result = (IntPtr)1;
+                m._Result = 1;
                 return;
             }
 
@@ -3635,9 +3630,9 @@ namespace System.Windows.Forms
         private void WmParentNotify(ref Message m)
         {
             base.WndProc(ref m);
-            if (unchecked((int)(long)m.WParam) == ((int)WM.CREATE | 1000 << 16))
+            if ((int)m._WParam == ((int)WM.CREATE | 1000 << 16))
             {
-                _dropDownHandle = m.LParam;
+                _dropDownHandle = m._LParam;
 
                 // By some reason WmParentNotify with WM_DESTROY is not called before recreation.
                 // So release the old references here.
@@ -3721,7 +3716,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectCommand(ref Message m)
         {
-            switch ((CBN)PARAM.HIWORD(m.WParam))
+            switch ((CBN)PARAM.HIWORD(m._WParam))
             {
                 case CBN.DBLCLK:
                     break;
@@ -3760,7 +3755,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
+            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m._LParam;
 
             using var e = new DrawItemEventArgs(
                 dis->hDC,
@@ -3773,12 +3768,12 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m.Result = (IntPtr)1;
+            m._Result = 1;
         }
 
         private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParam;
+            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m._LParam;
 
             // Determine if message was sent by a combo item or the combo edit field
             int itemID = (int)mis->itemID;
@@ -3795,7 +3790,7 @@ namespace System.Windows.Forms
                 mis->itemHeight = (uint)ItemHeight;
             }
 
-            m.Result = (IntPtr)1;
+            m._Result = 1;
         }
 
         /// <summary>
@@ -3852,7 +3847,7 @@ namespace System.Windows.Forms
                     break;
                 case WM.CTLCOLOREDIT:
                 case WM.CTLCOLORLISTBOX:
-                    m.Result = (IntPtr)InitializeDCForWmCtlColor((Gdi32.HDC)m.WParam, (User32.WM)m.Msg);
+                    m._Result = InitializeDCForWmCtlColor((Gdi32.HDC)m._WParam, m._Msg);
                     break;
                 case WM.ERASEBKGND:
                     WmEraseBkgnd(ref m);
@@ -3874,27 +3869,22 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
-                    // Get the mouse location
-                    var r = new RECT();
-                    GetWindowRect(this, ref r);
-                    Rectangle clientRect = r;
+                    RECT rect = default;
+                    GetWindowRect(this, ref rect);
+                    Rectangle clientRect = rect;
 
-                    int x = PARAM.SignedLOWORD(m.LParam);
-                    int y = PARAM.SignedHIWORD(m.LParam);
-                    Point pt = new Point(x, y);
-                    pt = PointToScreen(pt);
-                    //mouseEvents is used to keep the check that we get the WM_LBUTTONUP after
-                    //WM_LBUTTONDOWN or WM_LBUTTONDBLBCLK
-                    // combo box gets a WM_LBUTTONUP for focus change ...
-                    //
+                    Point point = PointToScreen(PARAM.ToPoint(m._LParam));
+
+                    // _mouseEvents is used to keep the check that we get the WM_LBUTTONUP after WM_LBUTTONDOWN or
+                    // WM_LBUTTONDBLBCLK combo box gets a WM_LBUTTONUP for focus change.
                     if (_mouseEvents && !ValidationCancelled)
                     {
                         _mouseEvents = false;
                         bool captured = Capture;
-                        if (captured && clientRect.Contains(pt))
+                        if (captured && clientRect.Contains(point))
                         {
-                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
-                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.ToPoint(m._LParam)));
+                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.ToPoint(m._LParam)));
                         }
 
                         base.WndProc(ref m);
@@ -3928,10 +3918,10 @@ namespace System.Windows.Forms
                         FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
 
                         // Call the base class to do its painting (with a clipped DC).
-                        bool useBeginPaint = m.WParam == IntPtr.Zero;
+                        bool useBeginPaint = m._WParam == 0;
                         using var paintScope = useBeginPaint ? new BeginPaintScope(Handle) : default;
 
-                        Gdi32.HDC dc = useBeginPaint ? paintScope : (Gdi32.HDC)m.WParam;
+                        Gdi32.HDC dc = useBeginPaint ? paintScope : (Gdi32.HDC)m._WParam;
 
                         using var savedDcState = new Gdi32.SaveDcScope(dc);
 
@@ -3940,7 +3930,7 @@ namespace System.Windows.Forms
                             Gdi32.SelectClipRgn(dc, dropDownRegion);
                         }
 
-                        m.WParam = (IntPtr)dc;
+                        m._WParam = dc;
                         DefWndProc(ref m);
 
                         if (getRegionSucceeded)
@@ -3958,19 +3948,17 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.PRINTCLIENT:
-                    // all the fancy stuff we do in OnPaint has to happen again in OnPrint.
+                    // All the fancy stuff we do in OnPaint has to happen again in OnPrint.
                     if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                     {
                         DefWndProc(ref m);
 
-                        if ((unchecked((PRF)(long)m.LParam) & PRF.CLIENT) == PRF.CLIENT)
+                        if (((PRF)m._LParam & PRF.CLIENT) == PRF.CLIENT)
                         {
                             if (!GetStyle(ControlStyles.UserPaint) && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
                             {
-                                using (Graphics g = Graphics.FromHdcInternal(m.WParam))
-                                {
-                                    FlatComboBoxAdapter.DrawFlatCombo(this, g);
-                                }
+                                using Graphics g = Graphics.FromHdcInternal(m._WParam);
+                                FlatComboBoxAdapter.DrawFlatCombo(this, g);
                             }
 
                             return;

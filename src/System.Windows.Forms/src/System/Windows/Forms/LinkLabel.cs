@@ -2008,23 +2008,14 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        ///  Handles the WM_SETCURSOR message
+        ///  Handles the WM_SETCURSOR message.
         /// </summary>
         private void WmSetCursor(ref Message m)
         {
-            // Accessing through the Handle property has side effects that break this
-            // logic. You must use InternalHandle.
-            //
-            if (m.WParam == InternalHandle && PARAM.LOWORD(m.LParam) == (int)User32.HT.CLIENT)
+            // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
+            if (m._WParam == InternalHandle && (User32.HT)PARAM.LOWORD(m._LParam) == User32.HT.CLIENT)
             {
-                if (OverrideCursor is not null)
-                {
-                    Cursor.Current = OverrideCursor;
-                }
-                else
-                {
-                    Cursor.Current = Cursor;
-                }
+                Cursor.Current = OverrideCursor ?? Cursor;
             }
             else
             {

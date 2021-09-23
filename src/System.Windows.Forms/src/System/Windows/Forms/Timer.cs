@@ -347,15 +347,15 @@ namespace System.Windows.Forms
                 Debug.Assert(m.HWnd == Handle && Handle != IntPtr.Zero, "Timer getting messages for other windows?");
 
                 // For timer messages call the timer event.
-                if (m.Msg == (int)User32.WM.TIMER)
+                if (m._Msg == User32.WM.TIMER)
                 {
-                    if (m.WParam == _timerID)
+                    if (m._WParam == _timerID)
                     {
                         _owner.OnTick(EventArgs.Empty);
                         return;
                     }
                 }
-                else if (m.Msg == (int)User32.WM.CLOSE)
+                else if (m._Msg == User32.WM.CLOSE)
                 {
                     // This is a posted method from another thread that tells us we need
                     // to kill the timer. The handle may already be gone, so we specify it here.

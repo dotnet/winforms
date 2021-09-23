@@ -1849,7 +1849,7 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe override bool PreProcessMessage(ref Message msg)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "AxHost.PreProcessMessage " + msg.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"AxHost.PreProcessMessage {msg.ToString()}");
 
             if (IsUserMode())
             {
@@ -1861,7 +1861,6 @@ namespace System.Windows.Forms
                     // IsInputKey() or IsInputChar(). So, we short-circuit those to return false
                     // and only return true, if the container-chain wanted to process the keystroke
                     // (e.g. tab, accelerators etc.)
-                    //
                     return base.PreProcessMessage(ref msg);
                 }
 
@@ -1873,14 +1872,16 @@ namespace System.Windows.Forms
                     if (activeObj is not null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
-                        msg.Msg = (int)win32Message.message;
-                        msg.WParam = win32Message.wParam;
-                        msg.LParam = win32Message.lParam;
+                        msg._Msg = win32Message.message;
+                        msg._WParam = win32Message.wParam;
+                        msg._LParam = win32Message.lParam;
                         msg.HWnd = win32Message.hwnd;
 
                         if (hr == HRESULT.S_OK)
                         {
-                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated by control to " + msg);
+                            Debug.WriteLineIf(
+                                s_controlKeyboardRouting.TraceVerbose,
+                                $"\t Message translated by control to {msg}");
                             return true;
                         }
                         else if (hr == HRESULT.S_FALSE)
@@ -1901,12 +1902,16 @@ namespace System.Windows.Forms
                         }
                         else if (axState[siteProcessedInputKey])
                         {
-                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
+                            Debug.WriteLineIf(
+                                s_controlKeyboardRouting.TraceVerbose,
+                                $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
                             return base.PreProcessMessage(ref msg);
                         }
                         else
                         {
-                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
+                            Debug.WriteLineIf(
+                                s_controlKeyboardRouting.TraceVerbose,
+                                $"\t Message not processed by site. Returning false. {msg}");
                             return false;
                         }
                     }
@@ -1921,13 +1926,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Process a mnemonic character.
-        ///  This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
+        ///  Process a mnemonic character. This is done by manufacturing a WM_SYSKEYDOWN message and passing it to the
         ///  ActiveX control.
         /// </summary>
         protected internal unsafe override bool ProcessMnemonic(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "In AxHost.ProcessMnemonic: " + (int)charCode);
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"In AxHost.ProcessMnemonic: {(int)charCode}");
             if (CanSelect)
             {
                 try
@@ -3401,7 +3405,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 // Things we explicitly ignore and pass to the ocx's windproc
                 case User32.WM.ERASEBKGND:
@@ -3439,7 +3443,7 @@ namespace System.Windows.Forms
 
                 case User32.WM.KILLFOCUS:
                     {
-                        hwndFocus = m.WParam;
+                        hwndFocus = m._WParam;
                         try
                         {
                             base.WndProc(ref m);
@@ -3453,7 +3457,7 @@ namespace System.Windows.Forms
                     }
 
                 case User32.WM.COMMAND:
-                    if (!ReflectMessage(m.LParam, ref m))
+                    if (!ReflectMessage(m._LParam, ref m))
                     {
                         DefWndProc(ref m);
                     }
@@ -3468,16 +3472,16 @@ namespace System.Windows.Forms
 #if DEBUG
                     if (!OwnWindow())
                     {
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "WM_DESTROY naughty control is destroying the window from under us..." + GetType().ToString());
+                        Debug.WriteLineIf(
+                            AxHTraceSwitch.TraceVerbose,
+                            $"WM_DESTROY control is destroying the window from under us...{GetType()}");
                     }
 #endif
-                    //
                     // If we are currently in a state of InPlaceActive or above,
                     // we should first reparent the ActiveX control to our parking
                     // window before we transition to a state below InPlaceActive.
                     // Otherwise we face all sorts of problems when we try to
                     // transition back to a state >= InPlaceActive.
-                    //
                     if (GetOcState() >= OC_INPLACE)
                     {
                         Ole32.IOleInPlaceObject ipo = GetInPlaceObject();
@@ -3530,17 +3534,19 @@ namespace System.Windows.Forms
 #if DEBUG
                     if (!OwnWindow())
                     {
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "WM_NCDESTROY naughty control is destroying the window from under us..." + GetType().ToString());
+                        Debug.WriteLineIf(
+                            AxHTraceSwitch.TraceVerbose,
+                            $"WM_NCDESTROY control is destroying the window from under us...{GetType()}");
                     }
 #endif
-                    // need to detach it now...
+                    // Need to detach it now.
                     DetachAndForward(ref m);
                     break;
 
                 default:
-                    if (m.Msg == (int)REGMSG_MSG)
+                    if (m._Msg == REGMSG_MSG)
                     {
-                        m.Result = (IntPtr)REGMSG_RETVAL;
+                        m._Result = REGMSG_RETVAL;
                         return;
                     }
 
@@ -3556,7 +3562,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr wndProc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
-                m.Result = User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
+                m._Result = User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m._WParam, m._LParam);
             }
         }
 

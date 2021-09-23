@@ -2095,7 +2095,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 case User32.WM.NCACTIVATE:
                     // if someone clicks on a child control of the toolstrip dropdown, we want
@@ -2108,9 +2108,11 @@ namespace System.Windows.Forms
                     // This is the Chrome Panel collection editor scenario
                     // we had focus, then the Chrome panel was activated and we never went away
                     // when we get focus again, we should reactivate our message filter.
-                    Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.WndProc] got a WM_ACTIVATE " + ((PARAM.ToInt(m.WParam) == (int)User32.WA.ACTIVE) ? "WA_ACTIVE" : "WA_INACTIVE") + " - checkin if we need to set the active toolstrip");
+                    Debug.WriteLineIf(
+                        s_snapFocusDebug.TraceVerbose,
+                        $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)m._WParam == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
 
-                    if (PARAM.ToInt(m.WParam) == (int)User32.WA.ACTIVE)
+                    if ((User32.WA)m._WParam == User32.WA.ACTIVE)
                     {
                         if (Visible)
                         {
@@ -2122,12 +2124,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Fail("Why are we being activated when we're not visible? Deactivating thingie is " + WindowsFormsUtils.GetControlInformation(m.LParam));
+                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation(m._LParam)}");
                         }
                     }
                     else
                     {
-                        Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ToolStripDropDown.WndProc] activating thingie is " + WindowsFormsUtils.GetControlInformation(m.LParam));
+                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation(m._LParam)}");
                     }
 
                     base.WndProc(ref m);
@@ -2186,7 +2188,11 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmNCActivate(ref Message m)
         {
-            if (m.WParam != IntPtr.Zero /*activating*/)
+            if (m._WParam == 0)
+            {
+                base.WndProc(ref m);
+            }
+            else
             {
                 if (!_sendingActivateMessage)
                 {
@@ -2200,11 +2206,10 @@ namespace System.Windows.Forms
 
                         User32.SendMessageW(activeHwndHandleRef.Handle, User32.WM.NCACTIVATE, (nint)BOOL.TRUE, -1);
                         User32.RedrawWindow(
-                            activeHwndHandleRef,
-                            null,
-                            IntPtr.Zero,
-                            User32.RDW.FRAME | User32.RDW.INVALIDATE);
-                        m.WParam = (IntPtr)1;
+                            activeHwndHandleRef.Handle,
+                            flags: User32.RDW.FRAME | User32.RDW.INVALIDATE);
+
+                        m._WParam = 1;
 
                         GC.KeepAlive(activeHwndHandleRef.Wrapper);
                     }
@@ -2216,10 +2221,6 @@ namespace System.Windows.Forms
 
                 DefWndProc(ref m);
                 return;
-            }
-            else
-            {
-                base.WndProc(ref m);
             }
         }
         #endregion

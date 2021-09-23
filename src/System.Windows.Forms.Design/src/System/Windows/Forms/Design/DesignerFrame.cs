@@ -105,8 +105,8 @@ namespace System.Windows.Forms.Design
         {
             if (_designer != null && _designer.IsHandleCreated)
             {
-                User32.SendMessageW(_designer.Handle, User32.WM.NCACTIVATE, PARAM.FromBool(focus));
-                User32.RedrawWindow(_designer.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
+                User32.SendMessageW(_designer.Handle, User32.WM.NCACTIVATE, (nint)focus.ToBOOL());
+                User32.RedrawWindow(_designer.Handle, flags: User32.RDW.FRAME);
             }
         }
 
@@ -207,7 +207,7 @@ namespace System.Windows.Forms.Design
                     if (!_designerRegion._messageMouseWheelProcessed)
                     {
                         _designerRegion._messageMouseWheelProcessed = true;
-                        User32.SendMessageW(_designerRegion.Handle, User32.WM.MOUSEWHEEL, m.WParam, m.LParam);
+                        User32.SendMessageW(_designerRegion.Handle, User32.WM.MOUSEWHEEL, m._WParam, m._LParam);
                         return;
                     }
 
@@ -216,8 +216,8 @@ namespace System.Windows.Forms.Design
                 case User32.WM.KEYDOWN:
                     User32.SBV wScrollNotify = 0;
                     User32.WM msg = User32.WM.NULL;
-                    int keycode = unchecked((int)(long)m.WParam) & 0xFFFF;
-                    switch ((Keys)keycode)
+                    Keys keycode = (Keys)(m._WParam & 0xFFFF);
+                    switch (keycode)
                     {
                         case Keys.Up:
                             wScrollNotify = User32.SBV.LINEUP;
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Design
 
                     break;
                 case User32.WM.CONTEXTMENU:
-                    User32.SendMessageW(_designer.Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
+                    User32.SendMessageW(_designer.Handle, m._Msg, m._WParam, m._LParam);
                     return;
             }
 
@@ -562,14 +562,14 @@ namespace System.Windows.Forms.Design
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                if (m.Msg == (int)User32.WM.PARENTNOTIFY && PARAM.LOWORD(m.WParam) == (short)User32.WM.CREATE)
+                if (m._Msg == User32.WM.PARENTNOTIFY && (User32.WM)PARAM.LOWORD(m._WParam) == User32.WM.CREATE)
                 {
                     if (_overlayList != null)
                     {
                         bool ourWindow = false;
                         foreach (Control c in _overlayList)
                         {
-                            if (c.IsHandleCreated && m.LParam == c.Handle)
+                            if (c.IsHandleCreated && m._LParam == c.Handle)
                             {
                                 ourWindow = true;
                                 break;

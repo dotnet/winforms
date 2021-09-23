@@ -3296,7 +3296,7 @@ namespace System.Windows.Forms
             {
                 case User32.WM.SETCURSOR:
                     LinkCursor = true;
-                    m.Result = (IntPtr)1;
+                    m._Result = 1;
                     return;
                 // Mouse-down triggers Url; this matches Outlook 2000's behavior.
                 case User32.WM.LBUTTONDOWN:
@@ -3306,11 +3306,11 @@ namespace System.Windows.Forms
                         OnLinkClicked(new LinkClickedEventArgs(linktext, enlink.charrange.cpMin, enlink.charrange.cpMax - enlink.charrange.cpMin));
                     }
 
-                    m.Result = (IntPtr)1;
+                    m._Result = 1;
                     return;
             }
 
-            m.Result = IntPtr.Zero;
+            m._Result = 0;
             return;
         }
 
@@ -3368,10 +3368,9 @@ namespace System.Windows.Forms
         {
             // We check if we're in the middle of handle creation because
             // the rich edit control fires spurious events during this time.
-            //
-            if (m.LParam == Handle && !GetState(States.CreatingHandle))
+            if (m._LParam == Handle && !GetState(States.CreatingHandle))
             {
-                switch ((User32.EN)PARAM.HIWORD(m.WParam))
+                switch ((User32.EN)PARAM.HIWORD(m._WParam))
                 {
                     case User32.EN.HSCROLL:
                         OnHScroll(EventArgs.Empty);
@@ -3394,14 +3393,14 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
                 switch ((EN)nmhdr->code)
                 {
                     case EN.LINK:
                         EnLinkMsgHandler(ref m);
                         break;
                     case EN.DROPFILES:
-                        ENDROPFILES* endropfiles = (ENDROPFILES*)m.LParam;
+                        ENDROPFILES* endropfiles = (ENDROPFILES*)m._LParam;
 
                         // Only look at the first file.
                         var path = new StringBuilder(Kernel32.MAX_PATH);
@@ -3426,13 +3425,13 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        m.Result = (IntPtr)1;   // tell them we did the drop
+                        m._Result = 1;   // tell them we did the drop
                         break;
 
                     case EN.REQUESTRESIZE:
                         if (!CallOnContentsResized)
                         {
-                            REQRESIZE* reqResize = (REQRESIZE*)m.LParam;
+                            REQRESIZE* reqResize = (REQRESIZE*)m._LParam;
                             if (BorderStyle == BorderStyle.Fixed3D)
                             {
                                 reqResize->rc.bottom++;
@@ -3444,7 +3443,7 @@ namespace System.Windows.Forms
                         break;
 
                     case EN.SELCHANGE:
-                        SELCHANGE* selChange = (SELCHANGE*)m.LParam;
+                        SELCHANGE* selChange = (SELCHANGE*)m._LParam;
                         WmSelectionChange(*selChange);
                         break;
 
@@ -3470,7 +3469,7 @@ namespace System.Windows.Forms
                                     CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
                                     if ((charFormat->dwMask & CFM.PROTECTED) != 0)
                                     {
-                                        m.Result = IntPtr.Zero;
+                                        m._Result = 0;
                                         return;
                                     }
 
@@ -3489,15 +3488,14 @@ namespace System.Windows.Forms
                                         break;
                                     }
 
-                                    m.Result = IntPtr.Zero;
+                                    m._Result = 0;
                                     return;
 
                                 // Allow the following
-                                //
                                 case (int)User32.WM.COPY:
                                 case (int)User32.WM.SETTEXT:
                                 case (int)EM.EXLIMITTEXT:
-                                    m.Result = IntPtr.Zero;
+                                    m._Result = 0;
                                     return;
 
                                 // Beep and disallow change for all other messages
@@ -3507,7 +3505,7 @@ namespace System.Windows.Forms
                             }
 
                             OnProtected(EventArgs.Empty);
-                            m.Result = (IntPtr)1;
+                            m._Result = 1;
                             break;
                         }
 
@@ -3633,7 +3631,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 case User32.WM.REFLECT_NOTIFY:
                     WmReflectNotify(ref m);
@@ -3651,14 +3649,12 @@ namespace System.Windows.Forms
                     //      changing "LinkCursor", we set it to a hand. Otherwise, we call the
                     //      WM_SETCURSOR implementation on Control to set it to the user's selection for
                     //      the RichTextBox's cursor.
-                    //
-                    //      Similarly,
                     LinkCursor = false;
                     DefWndProc(ref m);
                     if (LinkCursor && !Cursor.Equals(Cursors.WaitCursor))
                     {
                         Cursor.Current = Cursors.Hand;
-                        m.Result = (IntPtr)1;
+                        m._Result = 1;
                     }
                     else
                     {
@@ -3678,7 +3674,7 @@ namespace System.Windows.Forms
 
                 case User32.WM.GETDLGCODE:
                     base.WndProc(ref m);
-                    m.Result = (IntPtr)(AcceptsTab ? unchecked((int)(long)m.Result) | (int)User32.DLGC.WANTTAB : unchecked((int)(long)m.Result) & ~(int)User32.DLGC.WANTTAB);
+                    m._Result = AcceptsTab ? m._Result | (nint)User32.DLGC.WANTTAB : m._Result & ~(nint)User32.DLGC.WANTTAB;
                     break;
 
                 case User32.WM.GETOBJECT:
@@ -3688,9 +3684,9 @@ namespace System.Windows.Forms
                     // classes. Usually this doesn't matter, because system controls always identify their window class explicitly through
                     // the WM_GETOBJECT+OBJID_QUERYCLASSNAMEIDX message. But RICHEDIT20 doesn't do that - so we must do it ourselves.
                     // Otherwise OLEACC will treat rich edit controls as custom controls, so the accessible Role and Value will be wrong.
-                    if (unchecked((int)(long)m.LParam) == User32.OBJID.QUERYCLASSNAMEIDX)
+                    if ((int)m._LParam == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
-                        m.Result = (IntPtr)(65536 + 30);
+                        m._Result = 65536 + 30;
                     }
 
                     break;
@@ -3709,7 +3705,7 @@ namespace System.Windows.Forms
                 case User32.WM.VSCROLL:
                     {
                         base.WndProc(ref m);
-                        User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParam);
+                        User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m._WParam);
                         if (loWord == User32.SBV.THUMBTRACK)
                         {
                             OnVScroll(EventArgs.Empty);
@@ -3725,7 +3721,7 @@ namespace System.Windows.Forms
                 case User32.WM.HSCROLL:
                     {
                         base.WndProc(ref m);
-                        User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParam);
+                        User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m._WParam);
                         if (loWord == User32.SBH.THUMBTRACK)
                         {
                             OnHScroll(EventArgs.Empty);

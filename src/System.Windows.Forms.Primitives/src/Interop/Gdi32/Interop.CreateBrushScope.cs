@@ -48,7 +48,7 @@ internal static partial class Interop
                 if (!HBrush.IsNull)
                 {
                     // Note that this is a no-op if the original brush was a system brush
-                    DeleteObject(HBrush);
+                    DeleteObject((HGDIOBJ)HBrush);
                 }
 
 #if DEBUG

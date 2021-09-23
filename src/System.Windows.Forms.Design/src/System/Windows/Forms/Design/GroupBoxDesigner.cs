@@ -109,16 +109,13 @@ namespace System.Windows.Forms.Design
             switch (m.Msg)
             {
                 case (int)User32.WM.NCHITTEST:
-                    // The group box always fires HTTRANSPARENT, which
-                    // causes the message to go to our parent.  We want
-                    // the group box's designer to get these messages, however,
-                    // so change this.
-                    //
+                    // The group box always fires HTTRANSPARENT, which causes the message to go to our parent.  We want
+                    // the group box's designer to get these messages, however, so change this.
                     base.WndProc(ref m);
 
-                    if (unchecked((int)(long)m.Result) == (int)User32.HT.TRANSPARENT)
+                    if (m._Result == (int)User32.HT.TRANSPARENT)
                     {
-                        m.Result = (IntPtr)User32.HT.CLIENT;
+                        m._Result = (nint)User32.HT.CLIENT;
                     }
 
                     break;

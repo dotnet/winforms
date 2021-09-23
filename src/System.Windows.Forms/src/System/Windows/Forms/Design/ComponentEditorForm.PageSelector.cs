@@ -195,11 +195,11 @@ namespace System.Windows.Forms.Design
 
             private unsafe void OnCustomDraw(ref Message m)
             {
-                ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)m.LParam;
+                ComCtl32.NMTVCUSTOMDRAW* nmtvcd = (ComCtl32.NMTVCUSTOMDRAW*)m._LParam;
                 switch (nmtvcd->nmcd.dwDrawStage)
                 {
                     case ComCtl32.CDDS.PREPAINT:
-                        m.Result = (IntPtr)(ComCtl32.CDRF.NOTIFYITEMDRAW | ComCtl32.CDRF.NOTIFYPOSTPAINT);
+                        m._Result = (nint)(ComCtl32.CDRF.NOTIFYITEMDRAW | ComCtl32.CDRF.NOTIFYPOSTPAINT);
                         break;
                     case ComCtl32.CDDS.ITEMPREPAINT:
                         {
@@ -228,15 +228,15 @@ namespace System.Windows.Forms.Design
                                     ColorTranslator.ToWin32(SystemColors.ControlText));
                             }
 
-                            m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
+                            m._Result = (nint)ComCtl32.CDRF.SKIPDEFAULT;
                         }
 
                         break;
                     case ComCtl32.CDDS.POSTPAINT:
-                        m.Result = (IntPtr)ComCtl32.CDRF.SKIPDEFAULT;
+                        m._Result = (nint)ComCtl32.CDRF.SKIPDEFAULT;
                         break;
                     default:
-                        m.Result = (IntPtr)ComCtl32.CDRF.DODEFAULT;
+                        m._Result = (nint)ComCtl32.CDRF.DODEFAULT;
                         break;
                 }
             }
@@ -269,9 +269,9 @@ namespace System.Windows.Forms.Design
 
             protected unsafe override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)(User32.WM.REFLECT_NOTIFY))
+                if (m._Msg == User32.WM.REFLECT_NOTIFY)
                 {
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
                     if (nmhdr->code == (int)ComCtl32.NM.CUSTOMDRAW)
                     {
                         OnCustomDraw(ref m);

@@ -630,30 +630,28 @@ namespace System.ComponentModel.Design
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (m.Msg == (int)User32.WM.ACTIVATE)
+                    if (m._Msg == User32.WM.ACTIVATE
+                        && Visible
+                        && (User32.WA)PARAM.LOWORD(m._WParam) == User32.WA.INACTIVE
+                        && !OwnsWindow(m._LParam))
                     {
-                        if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE)
+                        Visible = false;
+                        if (m._LParam == 0)
                         {
-                            if (!OwnsWindow(m.LParam))
+                            // We 're switching process, also dismiss the parent.
+                            Control toplevel = _parentControl.TopLevelControl;
+                            if (toplevel is ToolStripDropDown dropDown)
                             {
-                                Visible = false;
-                                if (m.LParam == IntPtr.Zero)
-                                { //we 're switching process, also dismiss the parent
-                                    Control toplevel = _parentControl.TopLevelControl;
-                                    if (toplevel is ToolStripDropDown dropDown)
-                                    {
-                                        // if it's a toolstrip dropdown let it know that we have a specific close reason.
-                                        dropDown.Close();
-                                    }
-                                    else if (toplevel != null)
-                                    {
-                                        toplevel.Visible = false;
-                                    }
-                                }
-
-                                return;
+                                // If it's a toolstrip dropdown let it know that we have a specific close reason.
+                                dropDown.Close();
+                            }
+                            else if (toplevel is not null)
+                            {
+                                toplevel.Visible = false;
                             }
                         }
+
+                        return;
                     }
 
                     base.WndProc(ref m);

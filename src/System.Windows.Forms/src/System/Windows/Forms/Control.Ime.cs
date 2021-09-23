@@ -715,7 +715,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                m.Result = IntPtr.Zero;
+                m._Result = 0;
             }
 
             Debug.Unindent();
@@ -739,7 +739,9 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmImeEndComposition(ref Message m)
         {
-            Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside WmImeEndComposition() - Disabling ImeWmCharToIgnore, this=" + this);
+            Debug.WriteLineIf(
+                CompModSwitches.ImeMode.Level >= TraceLevel.Info,
+                $"Inside WmImeEndComposition() - Disabling ImeWmCharToIgnore, this={this}");
             ImeWmCharsToIgnore = ImeCharsToIgnoreDisabled;
             DefWndProc(ref m);
         }
@@ -751,7 +753,7 @@ namespace System.Windows.Forms
         {
             if (ImeSupported && ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)
             {
-                int wparam = PARAM.ToInt(m.WParam);
+                int wparam = PARAM.ToInt(m._WParam);
 
                 // The WM_IME_NOTIFY message is not consistent across the different IMEs, particularly the notification type
                 // we care about (IMN_SETCONVERSIONMODE & IMN_SETOPENSTATUS).
@@ -772,7 +774,9 @@ namespace System.Windows.Forms
 
                 if (wparam == (int)Imm32.IMN.SETCONVERSIONMODE || wparam == (int)Imm32.IMN.SETOPENSTATUS)
                 {
-                    Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, string.Format(CultureInfo.CurrentCulture, "Inside WmImeNotify(m.wparam=[{0}]), this={1}", m.WParam, this));
+                    Debug.WriteLineIf(
+                        CompModSwitches.ImeMode.Level >= TraceLevel.Info,
+                        $"Inside WmImeNotify(m.wparam=[{m._WParam}]), this={this}");
                     Debug.Indent();
 
                     // Synchronize internal properties with the IME context mode.

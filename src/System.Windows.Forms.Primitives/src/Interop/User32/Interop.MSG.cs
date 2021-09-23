@@ -15,16 +15,16 @@ internal static partial class Interop
         {
             public IntPtr hwnd;
             public WM message;
-            public IntPtr wParam;
-            public IntPtr lParam;
+            public nint wParam;
+            public nint lParam;
             public uint time;
             public Point pt;
 
             public static implicit operator Message(MSG msg)
-                => new Message { HWnd = msg.hwnd, Msg = (int)msg.message, WParam = msg.wParam, LParam = msg.lParam };
+                => new Message { HWnd = msg.hwnd, Msg = (int)msg.message, _WParam = msg.wParam, _LParam = msg.lParam };
 
             public static implicit operator MSG(Message message)
-                => new MSG { hwnd = message.HWnd, message = (WM)message.Msg, wParam = message.WParam, lParam = message.LParam };
+                => new MSG { hwnd = message.HWnd, message = message._Msg, wParam = message._WParam, lParam = message._LParam };
         }
     }
 }

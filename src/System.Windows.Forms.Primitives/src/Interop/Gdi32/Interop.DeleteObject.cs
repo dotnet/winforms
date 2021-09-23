@@ -9,7 +9,7 @@ internal static partial class Interop
     internal static partial class Gdi32
     {
         [DllImport(Libraries.Gdi32, ExactSpelling = true)]
-        private static extern BOOL DeleteObject(IntPtr hObject);
+        private static extern BOOL DeleteObject(nint hObject);
 
         public static BOOL DeleteObject(HGDIOBJ hObject) => DeleteObject(hObject.Handle);
     }
