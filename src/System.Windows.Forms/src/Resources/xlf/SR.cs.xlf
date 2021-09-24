@@ -8218,7 +8218,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="translated">Popis pro {0}</target>
+        <target state="translated">Popis {0}</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneTitle">
