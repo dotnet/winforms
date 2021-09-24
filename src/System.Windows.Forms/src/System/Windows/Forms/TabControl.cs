@@ -1294,7 +1294,7 @@ namespace System.Windows.Forms
             // horizontal and vertical dimensions of the padding rectangle.
             if (!_padding.IsEmpty)
             {
-                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETPADDING, 0, PARAM.FromLowHigh(_padding.X, _padding.Y));
+                User32.SendMessageW(this, (User32.WM)ComCtl32.TCM.SETPADDING, 0, PARAM.FromPoint(_padding));
             }
 
             base.OnHandleCreated(e);
@@ -1997,7 +1997,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmNeedText(ref Message m)
         {
-            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParam;
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m._LParam;
 
             int commandID = (int)ttt->hdr.idFrom;
 
@@ -2020,7 +2020,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m.LParam;
+            User32.DRAWITEMSTRUCT* dis = (User32.DRAWITEMSTRUCT*)m._LParam;
 
             using var e = new DrawItemEventArgs(
                 dis->hDC,
@@ -2031,7 +2031,7 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m.Result = (IntPtr)1;
+            m._Result = 1;
         }
 
         private bool WmSelChange()
@@ -2112,7 +2112,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected unsafe override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 case User32.WM.REFLECT_DRAWITEM:
                     WmReflectDrawItem(ref m);
@@ -2124,7 +2124,7 @@ namespace System.Windows.Forms
 
                 case User32.WM.NOTIFY:
                 case User32.WM.REFLECT_NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
                     switch (nmhdr->code)
                     {
                         // new switch added to prevent the TabControl from changing to next TabPage ...
@@ -2136,14 +2136,14 @@ namespace System.Windows.Forms
                         case (int)TCN.SELCHANGING:
                             if (WmSelChanging())
                             {
-                                m.Result = (IntPtr)1;
+                                m._Result = 1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
 
                             if (ValidationCancelled)
                             {
-                                m.Result = (IntPtr)1;
+                                m._Result = 1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
@@ -2156,7 +2156,7 @@ namespace System.Windows.Forms
                         case (int)TCN.SELCHANGE:
                             if (WmSelChange())
                             {
-                                m.Result = (IntPtr)1;
+                                m._Result = 1;
                                 SetState(State.UISelection, false);
                                 return;
                             }
@@ -2170,14 +2170,14 @@ namespace System.Windows.Forms
                             // Setting the max width has the added benefit of enabling Multiline tool tips
                             User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
-                            m.Result = (IntPtr)1;
+                            m._Result = 1;
                             return;
                     }
 
                     break;
             }
 
-            if (m.Msg == (int)_tabBaseReLayoutMessage)
+            if (m._Msg == _tabBaseReLayoutMessage)
             {
                 WmTabBaseReLayout(ref m);
                 return;

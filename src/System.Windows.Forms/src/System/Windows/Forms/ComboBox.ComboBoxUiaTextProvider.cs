@@ -359,7 +359,7 @@ namespace System.Windows.Forms
 
             private int GetCharIndexFromPosition(Point pt)
             {
-                int index = (int)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, 0, PARAM.FromLowHigh(pt.X, pt.Y));
+                int index = (int)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, 0, PARAM.FromPoint(pt));
                 index = PARAM.LOWORD(index);
 
                 if (index < 0)

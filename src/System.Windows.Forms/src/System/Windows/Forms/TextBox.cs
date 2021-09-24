@@ -554,14 +554,10 @@ namespace System.Windows.Forms
         {
             base.OnBackColorChanged(e);
 
-            // Force repainting of the entire window frame
+            // Force repainting of the entire window frame.
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                RedrawWindow(
-                    new HandleRef(this, Handle),
-                    null,
-                    IntPtr.Zero,
-                    RDW.INVALIDATE | RDW.FRAME);
+                RedrawWindow(this, flags: RDW.INVALIDATE | RDW.FRAME);
             }
         }
 
@@ -845,10 +841,10 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((PRF)m.LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
+            if (((PRF)m._LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
                 && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParam);
+                using Graphics g = Graphics.FromHdc(m._WParam);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);

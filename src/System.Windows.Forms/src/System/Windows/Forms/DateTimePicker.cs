@@ -1455,7 +1455,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateTimeChange(ref Message m)
         {
-            NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)m.LParam;
+            NMDATETIMECHANGE* nmdtc = (NMDATETIMECHANGE*)m._LParam;
             DateTime temp = _value;
             bool oldvalid = _validTime;
             if (nmdtc->dwFlags != GDT.NONE)
@@ -1513,7 +1513,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
                 switch ((DTN)nmhdr->code)
                 {
                     case DTN.CLOSEUP:

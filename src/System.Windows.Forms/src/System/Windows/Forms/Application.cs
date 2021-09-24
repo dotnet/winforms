@@ -601,9 +601,7 @@ namespace System.Windows.Forms
                 SendThemeChangedRecursive(handle);
                 User32.RedrawWindow(
                     handle,
-                    null,
-                    IntPtr.Zero,
-                    User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
+                    flags: User32.RDW.INVALIDATE | User32.RDW.FRAME | User32.RDW.ERASE | User32.RDW.ALLCHILDREN);
             }
 
             return BOOL.TRUE;
@@ -679,9 +677,9 @@ namespace System.Windows.Forms
             if (modified)
             {
                 message.HWnd = msg.hwnd;
-                message.Msg = (int)msg.message;
-                message.WParam = msg.wParam;
-                message.LParam = msg.lParam;
+                message._Msg = msg.message;
+                message._WParam = msg.wParam;
+                message._LParam = msg.lParam;
             }
 
             return processed;

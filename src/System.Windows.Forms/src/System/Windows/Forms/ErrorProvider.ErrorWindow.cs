@@ -424,22 +424,22 @@ namespace System.Windows.Forms
             /// </summary>
             private void WmGetObject(ref Message m)
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + GetType().FullName + ", lParam = " + m.LParam.ToString());
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m._LParam}");
 
-                if (m.Msg == (int)User32.WM.GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
+                if (m.Msg == (int)User32.WM.GETOBJECT && m._LParam == NativeMethods.UiaRootObjectId)
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    m.Result = UiaCore.UiaReturnRawElementProvider(
-                        new HandleRef(this, Handle),
-                        m.WParam,
-                        m.LParam,
+                    m._Result = UiaCore.UiaReturnRawElementProvider(
+                        this,
+                        m._WParam,
+                        m._LParam,
                         AccessibilityObject);
 
                     return;
                 }
 
-                // some accessible object requested that we don't care about, so do default message processing
+                // Some accessible object requested that we don't care about, so do default message processing.
                 DefWndProc(ref m);
             }
 
@@ -448,13 +448,13 @@ namespace System.Windows.Forms
             /// </summary>
             protected unsafe override void WndProc(ref Message m)
             {
-                switch ((User32.WM)m.Msg)
+                switch (m._Msg)
                 {
                     case User32.WM.GETOBJECT:
                         WmGetObject(ref m);
                         break;
                     case User32.WM.NOTIFY:
-                        User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                        User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
                         if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
                             OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);

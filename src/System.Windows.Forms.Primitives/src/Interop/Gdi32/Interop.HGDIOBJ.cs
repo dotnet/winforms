@@ -8,14 +8,14 @@ internal static partial class Interop
     {
         public struct HGDIOBJ
         {
-            public IntPtr Handle { get; }
+            public nint Handle { get; }
 
-            public HGDIOBJ(IntPtr handle) => Handle = handle;
+            public HGDIOBJ(nint handle) => Handle = handle;
 
-            public bool IsNull => Handle == IntPtr.Zero;
+            public bool IsNull => Handle == 0;
 
-            public static explicit operator IntPtr(HGDIOBJ hgdiobj) => hgdiobj.Handle;
-            public static explicit operator HGDIOBJ(IntPtr hgdiobj) => new HGDIOBJ(hgdiobj);
+            public static explicit operator nint(HGDIOBJ hgdiobj) => hgdiobj.Handle;
+            public static explicit operator HGDIOBJ(nint hgdiobj) => new(hgdiobj);
 
             public static bool operator ==(HGDIOBJ value1, HGDIOBJ value2) => value1.Handle == value2.Handle;
             public static bool operator !=(HGDIOBJ value1, HGDIOBJ value2) => value1.Handle != value2.Handle;

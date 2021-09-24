@@ -1620,7 +1620,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int index = (int)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, 0, PARAM.FromLowHigh(pt.X, pt.Y));
+            int index = (int)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, 0, PARAM.FromPoint(pt));
             index = PARAM.LOWORD(index);
 
             if (index < 0)
@@ -2094,16 +2094,15 @@ namespace System.Windows.Forms
         {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle])
             {
-                EN wParamAsEN = (EN)PARAM.HIWORD(m.WParam);
+                EN wParamAsEN = (EN)PARAM.HIWORD(m._WParam);
                 if (wParamAsEN == EN.CHANGE && CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
                 else if (wParamAsEN == EN.UPDATE)
                 {
-                    // Force update to the Modified property, which will trigger
-                    // ModifiedChanged event handlers
-                    bool force = Modified;
+                    // Force update to the Modified property, which will trigger ModifiedChanged event handlers
+                    _ = Modified;
                 }
             }
         }
@@ -2122,13 +2121,13 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (AcceptsTab)
             {
-                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "TextBox wants tabs");
-                m.Result = (IntPtr)(unchecked((int)(long)m.Result) | (int)DLGC.WANTTAB);
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBox wants tabs");
+                m._Result = m._Result | (int)DLGC.WANTTAB;
             }
             else
             {
-                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "TextBox doesn't want tabs");
-                m.Result = (IntPtr)(unchecked((int)(long)m.Result) & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS));
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBox doesn't want tabs");
+                m._Result = m._Result & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS);
             }
         }
 
@@ -2142,24 +2141,21 @@ namespace System.Windows.Forms
                 return;
             }
 
-            int x = PARAM.SignedLOWORD(m.LParam);
-            int y = PARAM.SignedHIWORD(m.LParam);
             Point client;
             bool keyboardActivated = false;
 
-            // Lparam will be exactly -1 when the user invokes the context menu
-            // with the keyboard.
-            if (unchecked((int)(long)m.LParam) == -1)
+            // LParam will be -1 when the user invokes the context menu with the keyboard.
+            if (m._LParam == -1)
             {
                 keyboardActivated = true;
                 client = new Point(Width / 2, Height / 2);
             }
             else
             {
-                client = PointToClient(new Point(x, y));
+                client = PointToClient(PARAM.ToPoint(m._LParam));
             }
 
-            // Only show the context menu when clicked in the client area (VisualStudio7 #156)
+            // Only show the context menu when clicked in the client area.
             if (ClientRectangle.Contains(client))
             {
                 ContextMenuStrip.ShowInternal(this, client, keyboardActivated);

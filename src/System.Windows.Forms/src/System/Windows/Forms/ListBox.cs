@@ -2375,9 +2375,9 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((PRF)m.LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if (((PRF)m._LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParam);
+                using Graphics g = Graphics.FromHdc(m._WParam);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);
@@ -2388,9 +2388,9 @@ namespace System.Windows.Forms
 
         protected virtual void WmReflectCommand(ref Message m)
         {
-            switch (PARAM.HIWORD(m.WParam))
+            switch ((User32.LBN)PARAM.HIWORD(m._WParam))
             {
-                case (int)LBN.SELCHANGE:
+                case User32.LBN.SELCHANGE:
                     if (selectedItems is not null)
                     {
                         selectedItems.Dirty();
@@ -2398,7 +2398,7 @@ namespace System.Windows.Forms
 
                     OnSelectedIndexChanged(EventArgs.Empty);
                     break;
-                case (int)LBN.DBLCLK:
+                case User32.LBN.DBLCLK:
                     // Handle this inside WM_LBUTTONDBLCLK
                     // OnDoubleClick(EventArgs.Empty);
                     break;
@@ -2407,7 +2407,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParam;
+            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m._LParam;
 
             Rectangle bounds = dis->rcItem;
             if (HorizontalScrollbar)
@@ -2426,27 +2426,27 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m.Result = (IntPtr)1;
+            m._Result = 1;
         }
 
         // This method is only called if in owner draw mode
         private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParam;
+            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m._LParam;
 
             if (drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
                 using Graphics graphics = CreateGraphicsInternal();
                 var mie = new MeasureItemEventArgs(graphics, (int)mis->itemID, ItemHeight);
                 OnMeasureItem(mie);
-                mis->itemHeight = unchecked((uint)mie.ItemHeight);
+                mis->itemHeight = (uint)mie.ItemHeight;
             }
             else
             {
-                mis->itemHeight = unchecked((uint)ItemHeight);
+                mis->itemHeight = (uint)ItemHeight;
             }
 
-            m.Result = (IntPtr)1;
+            m._Result = 1;
         }
 
         /// <summary>
@@ -2456,7 +2456,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch ((WM)m.Msg)
+            switch (m._Msg)
             {
                 case WM.REFLECT_COMMAND:
                     WmReflectCommand(ref m);
@@ -2471,48 +2471,39 @@ namespace System.Windows.Forms
                     WmPrint(ref m);
                     break;
                 case WM.LBUTTONDOWN:
-                    if (selectedItems is not null)
-                    {
-                        selectedItems.Dirty();
-                    }
-
+                    selectedItems?.Dirty();
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
-                    // Get the mouse location
-                    //
-                    int x = PARAM.SignedLOWORD(m.LParam);
-                    int y = PARAM.SignedHIWORD(m.LParam);
-                    Point pt = new Point(x, y);
-                    pt = PointToScreen(pt);
+                    Point point = PARAM.ToPoint(m._LParam);
                     bool captured = Capture;
-                    if (captured && WindowFromPoint(pt) == Handle)
+                    if (captured && WindowFromPoint(PointToScreen(point)) == Handle)
                     {
                         if (!doubleClickFired && !ValidationCancelled)
                         {
-                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
-                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                            OnClick(new MouseEventArgs(MouseButtons.Left, 1, point));
+                            OnMouseClick(new MouseEventArgs(MouseButtons.Left, 1, point));
                         }
                         else
                         {
                             doubleClickFired = false;
+
                             // WM_COMMAND is only fired if the user double clicks an item,
-                            // so we can't use that as a double-click substitute
+                            // so we can't use that as a double-click substitute.
                             if (!ValidationCancelled)
                             {
-                                OnDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
-                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                                OnDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, point));
+                                OnMouseDoubleClick(new MouseEventArgs(MouseButtons.Left, 2, point));
                             }
                         }
                     }
 
-                    //
                     // If this control has been disposed in the user's event handler, then we need to ignore the WM_LBUTTONUP
                     // message to avoid exceptions thrown as a result of handle re-creation.
                     // We handle this situation here and not at the top of the window procedure since this is the only place
                     // where we can get disposed as an effect of external code (form.Close() for instance) and then pass the
                     // message to the base class.
-                    //
+
                     if (GetState(States.Disposed))
                     {
                         base.DefWndProc(ref m);
@@ -2526,29 +2517,18 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.RBUTTONUP:
-                    // Get the mouse location
-                    //
-                    int rx = PARAM.SignedLOWORD(m.LParam);
-                    int ry = PARAM.SignedHIWORD(m.LParam);
-                    Point rpt = new Point(rx, ry);
-                    rpt = PointToScreen(rpt);
-                    bool rCaptured = Capture;
-                    if (rCaptured && WindowFromPoint(rpt) == Handle)
+                    if (Capture && WindowFromPoint(PointToScreen(PARAM.ToPoint(m._LParam))) == Handle)
                     {
-                        if (selectedItems is not null)
-                        {
-                            selectedItems.Dirty();
-                        }
+                        selectedItems?.Dirty();
                     }
 
                     base.WndProc(ref m);
                     break;
 
                 case WM.LBUTTONDBLCLK:
-                    //the Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP...
-                    //sequence for doubleclick...
-                    //the first WM_LBUTTONUP, resets the flag for Doubleclick
-                    //So its necessary for us to set it again...
+                    // The Listbox gets  WM_LBUTTONDOWN - WM_LBUTTONUP -WM_LBUTTONDBLCLK - WM_LBUTTONUP sequence for
+                    // doubleclick. The first WM_LBUTTONUP, resets the flag for double click so its necessary for us
+                    // to set it again.
                     doubleClickFired = true;
                     base.WndProc(ref m);
                     break;

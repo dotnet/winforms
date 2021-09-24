@@ -4284,10 +4284,8 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <inheritdoc/>
         internal override bool SupportsUiaProviders => true;
 
-        /// <inheritdoc/>
         internal override bool SupportsUseCompatibleTextRendering => true;
 
         internal override bool AllowsKeyboardToolTip() => false;
@@ -4334,57 +4332,57 @@ namespace System.Windows.Forms
 
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch (m._Msg)
             {
-                case (int)User32.WM.UNDO:
-                    if ((long)m.LParam == 0)
+                case User32.WM.UNDO:
+                    if (m._LParam == 0)
                     {
                         _gridView.DoUndoCommand();
                     }
                     else
                     {
-                        m.Result = CanUndo ? (IntPtr)1 : (IntPtr)0;
+                        m._Result = CanUndo ? 1 : 0;
                     }
 
                     return;
-                case (int)User32.WM.CUT:
-                    if ((long)m.LParam == 0)
+                case User32.WM.CUT:
+                    if (m._LParam == 0)
                     {
                         _gridView.DoCutCommand();
                     }
                     else
                     {
-                        m.Result = CanCut ? (IntPtr)1 : (IntPtr)0;
+                        m._Result = CanCut ? 1 : 0;
                     }
 
                     return;
 
-                case (int)User32.WM.COPY:
-                    if ((long)m.LParam == 0)
+                case User32.WM.COPY:
+                    if (m._LParam == 0)
                     {
                         _gridView.DoCopyCommand();
                     }
                     else
                     {
-                        m.Result = CanCopy ? (IntPtr)1 : (IntPtr)0;
+                        m._Result = CanCopy ? 1 : 0;
                     }
 
                     return;
 
-                case (int)User32.WM.PASTE:
-                    if ((long)m.LParam == 0)
+                case User32.WM.PASTE:
+                    if (m._LParam == 0)
                     {
                         _gridView.DoPasteCommand();
                     }
                     else
                     {
-                        m.Result = CanPaste ? (IntPtr)1 : (IntPtr)0;
+                        m._Result = CanPaste ? 1 : 0;
                     }
 
                     return;
 
-                case (int)User32.WM.COPYDATA:
-                    var cds = (User32.COPYDATASTRUCT*)m.LParam;
+                case User32.WM.COPYDATA:
+                    var cds = (User32.COPYDATASTRUCT*)m._LParam;
 
                     if (cds is not null && cds->lpData != IntPtr.Zero)
                     {
@@ -4392,29 +4390,29 @@ namespace System.Windows.Forms
                         _copyDataMessage = (int)cds->dwData;
                     }
 
-                    m.Result = (IntPtr)1;
+                    m._Result = 1;
                     return;
-                case AutomationMessages.PGM_GETBUTTONCOUNT:
+                case (User32.WM)AutomationMessages.PGM_GETBUTTONCOUNT:
                     if (_toolStrip is not null)
                     {
-                        m.Result = (IntPtr)_toolStrip.Items.Count;
+                        m._Result = _toolStrip.Items.Count;
                         return;
                     }
 
                     break;
-                case AutomationMessages.PGM_GETBUTTONSTATE:
+                case (User32.WM)AutomationMessages.PGM_GETBUTTONSTATE:
                     if (_toolStrip is not null)
                     {
-                        int index = unchecked((int)(long)m.WParam);
+                        int index = (int)m._WParam;
                         if (index >= 0 && index < _toolStrip.Items.Count)
                         {
                             if (_toolStrip.Items[index] is ToolStripButton button)
                             {
-                                m.Result = (IntPtr)(button.Checked ? 1 : 0);
+                                m._Result = button.Checked ? 1 : 0;
                             }
                             else
                             {
-                                m.Result = IntPtr.Zero;
+                                m._Result = 0;
                             }
                         }
 
@@ -4422,32 +4420,30 @@ namespace System.Windows.Forms
                     }
 
                     break;
-                case AutomationMessages.PGM_SETBUTTONSTATE:
+                case (User32.WM)AutomationMessages.PGM_SETBUTTONSTATE:
                     if (_toolStrip is not null)
                     {
-                        int index = unchecked((int)(long)m.WParam);
-                        if (index >= 0 && index < _toolStrip.Items.Count)
+                        int index = (int)m._WParam;
+                        if (index >= 0 && index < _toolStrip.Items.Count && _toolStrip.Items[index] is ToolStripButton button)
                         {
-                            if (_toolStrip.Items[index] is ToolStripButton button)
+                            button.Checked = !button.Checked;
+
+                            // Special treatment for the properties page button.
+                            if (button == _viewPropertyPagesButton)
                             {
-                                button.Checked = !button.Checked;
-                                // special treatment for the properties page button
-                                if (button == _viewPropertyPagesButton)
+                                OnViewButtonClickPP(button, EventArgs.Empty);
+                            }
+                            else
+                            {
+                                switch ((int)m._WParam)
                                 {
-                                    OnViewButtonClickPP(button, EventArgs.Empty);
-                                }
-                                else
-                                {
-                                    switch (unchecked((int)(long)m.WParam))
-                                    {
-                                        case AlphaSortButtonIndex:
-                                        case CategorySortButtonIndex:
-                                            OnViewSortButtonClick(button, EventArgs.Empty);
-                                            break;
-                                        default:
-                                            SelectViewTabButton(button, true);
-                                            break;
-                                    }
+                                    case AlphaSortButtonIndex:
+                                    case CategorySortButtonIndex:
+                                        OnViewSortButtonClick(button, EventArgs.Empty);
+                                        break;
+                                    default:
+                                        SelectViewTabButton(button, true);
+                                        break;
                                 }
                             }
                         }
@@ -4457,11 +4453,11 @@ namespace System.Windows.Forms
 
                     break;
 
-                case AutomationMessages.PGM_GETBUTTONTEXT:
-                case AutomationMessages.PGM_GETBUTTONTOOLTIPTEXT:
+                case (User32.WM)AutomationMessages.PGM_GETBUTTONTEXT:
+                case (User32.WM)AutomationMessages.PGM_GETBUTTONTOOLTIPTEXT:
                     if (_toolStrip is not null)
                     {
-                        int index = unchecked((int)(long)m.WParam);
+                        int index = (int)m._WParam;
                         if (index >= 0 && index < _toolStrip.Items.Count)
                         {
                             string text;
@@ -4475,7 +4471,7 @@ namespace System.Windows.Forms
                             }
 
                             // Write text into test file.
-                            m.Result = AutomationMessages.WriteAutomationText(text);
+                            m._Result = AutomationMessages.WriteAutomationText(text);
                         }
 
                         return;
@@ -4483,46 +4479,46 @@ namespace System.Windows.Forms
 
                     break;
 
-                case AutomationMessages.PGM_GETTESTINGINFO:
+                case (User32.WM)AutomationMessages.PGM_GETTESTINGINFO:
                     {
                         // Get "testing info" string for Nth grid entry (or active entry if N < 0)
-                        string testingInfo = _gridView.GetTestingInfo(unchecked((int)(long)m.WParam));
-                        m.Result = AutomationMessages.WriteAutomationText(testingInfo);
+                        string testingInfo = _gridView.GetTestingInfo((int)m._WParam);
+                        m._Result = AutomationMessages.WriteAutomationText(testingInfo);
                         return;
                     }
 
-                case AutomationMessages.PGM_GETROWCOORDS:
+                case (User32.WM)AutomationMessages.PGM_GETROWCOORDS:
                     if (m.Msg == _copyDataMessage)
                     {
-                        m.Result = (IntPtr)_gridView.GetPropertyLocation(
+                        m._Result = _gridView.GetPropertyLocation(
                             _propertyName,
-                            getXY: m.LParam == IntPtr.Zero,
-                            rowValue: m.WParam == IntPtr.Zero);
+                            getXY: m._LParam == 0,
+                            rowValue: m._WParam == 0);
                         return;
                     }
 
                     break;
-                case AutomationMessages.PGM_GETSELECTEDROW:
-                case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.Result = User32.SendMessageW(_gridView, (User32.WM)m.Msg, m.WParam, m.LParam);
+                case (User32.WM)AutomationMessages.PGM_GETSELECTEDROW:
+                case (User32.WM)AutomationMessages.PGM_GETVISIBLEROWCOUNT:
+                    m._Result = User32.SendMessageW(_gridView, m._Msg, m._WParam, m._LParam);
                     return;
-                case AutomationMessages.PGM_SETSELECTEDTAB:
-                    if (m.LParam != IntPtr.Zero)
+                case (User32.WM)AutomationMessages.PGM_SETSELECTEDTAB:
+                    if (m._LParam != 0)
                     {
-                        string tabTypeName = AutomationMessages.ReadAutomationText(m.LParam);
+                        string tabTypeName = AutomationMessages.ReadAutomationText(m._LParam);
 
                         for (int i = 0; i < _viewTabs.Length; i++)
                         {
                             if (_viewTabs[i].GetType().FullName == tabTypeName && _viewTabButtons[i].Visible)
                             {
                                 SelectViewTabButtonDefault(_viewTabButtons[i]);
-                                m.Result = (IntPtr)1;
+                                m._Result = 1;
                                 break;
                             }
                         }
                     }
 
-                    m.Result = (IntPtr)0;
+                    m._Result = 0;
                     return;
             }
 

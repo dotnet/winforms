@@ -3276,21 +3276,16 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Calls the default window proc for the form. If
-        ///  a subclass overrides this function,
-        ///  it must call the base implementation.
-        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void DefWndProc(ref Message m)
         {
             if (ctlClient != null && ctlClient.IsHandleCreated && ctlClient.ParentInternal == this)
             {
-                m.Result = User32.DefFrameProcW(m.HWnd, ctlClient.Handle, (User32.WM)m.Msg, m.WParam, m.LParam);
+                m._Result = User32.DefFrameProcW(m.HWnd, ctlClient.Handle, m._Msg, m._WParam, m._LParam);
             }
             else if (0 != formStateEx[FormStateExUseMdiChildProc])
             {
-                m.Result = User32.DefMDIChildProcW(m.HWnd, (User32.WM)m.Msg, m.WParam, m.LParam);
+                m._Result = User32.DefMDIChildProcW(m.HWnd, m._Msg, m._WParam, m._LParam);
             }
             else
             {
@@ -4312,14 +4307,9 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
 
             Size desiredSize = new Size();
-            if (OnGetDpiScaledSize(_deviceDpi, PARAM.SignedLOWORD(m.WParam), ref desiredSize))
-            {
-                m.Result = PARAM.FromLowHigh(Size.Width, Size.Height);
-            }
-            else
-            {
-                m.Result = IntPtr.Zero;
-            }
+            m._Result = OnGetDpiScaledSize(_deviceDpi, PARAM.SignedLOWORD(m._WParam), ref desiredSize)
+                ? PARAM.FromLowHigh(Size.Width, Size.Height)
+                : 0;
         }
 
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4412,9 +4402,9 @@ namespace System.Windows.Forms
                 retValue = true;
             }
 
-            msg.Msg = (int)win32Message.message;
-            msg.WParam = win32Message.wParam;
-            msg.LParam = win32Message.lParam;
+            msg._Msg = win32Message.message;
+            msg._WParam = win32Message.wParam;
+            msg._LParam = win32Message.lParam;
             msg.HWnd = win32Message.hwnd;
 
             return retValue;
@@ -4430,7 +4420,7 @@ namespace System.Windows.Forms
         {
             if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
             {
-                Keys keyCode = (Keys)keyData & Keys.KeyCode;
+                Keys keyCode = keyData & Keys.KeyCode;
                 IButtonControl button;
 
                 switch (keyCode)
@@ -5873,7 +5863,7 @@ namespace System.Windows.Forms
 
                 if (redrawFrame)
                 {
-                    User32.RedrawWindow(new HandleRef(this, Handle), null, IntPtr.Zero, User32.RDW.INVALIDATE | User32.RDW.FRAME);
+                    User32.RedrawWindow(this, flags: User32.RDW.INVALIDATE | User32.RDW.FRAME);
                 }
             }
         }
@@ -5999,9 +5989,9 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmActivate(ref Message m)
         {
-            Application.FormActivated(Modal, true); // inform MsoComponentManager we're active
-            Active = PARAM.LOWORD(m.WParam) != (int)User32.WA.INACTIVE;
-            Application.FormActivated(Modal, Active); // inform MsoComponentManager we're active
+            Application.FormActivated(Modal, true);
+            Active = (User32.WA)PARAM.LOWORD(m._WParam) != User32.WA.INACTIVE;
+            Application.FormActivated(Modal, Active);
         }
 
         /// <summary>
@@ -6131,11 +6121,11 @@ namespace System.Windows.Forms
                     OnFormClosing(e);
                 }
 
-                if (m.Msg == (int)User32.WM.QUERYENDSESSION)
+                if (m._Msg == User32.WM.QUERYENDSESSION)
                 {
-                    m.Result = (IntPtr)(e.Cancel ? 0 : 1);
+                    m._Result = e.Cancel ? 0 : 1;
                 }
-                else if (e.Cancel && (MdiParent != null))
+                else if (e.Cancel && (MdiParent is not null))
                 {
                     // This is the case of an MDI child close event being canceled by the user.
                     CloseReason = CloseReason.None;
@@ -6148,7 +6138,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                e.Cancel = m.WParam == IntPtr.Zero;
+                e.Cancel = m._WParam == 0;
             }
 
             // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
@@ -6251,7 +6241,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmGetMinMaxInfoHelper(ref Message m, Size minTrack, Size maxTrack, Rectangle maximizedBounds)
         {
-            User32.MINMAXINFO* mmi = (User32.MINMAXINFO*)m.LParam;
+            User32.MINMAXINFO* mmi = (User32.MINMAXINFO*)m._LParam;
             if (!minTrack.IsEmpty)
             {
                 mmi->ptMinTrackSize.X = minTrack.Width;
@@ -6298,7 +6288,7 @@ namespace System.Windows.Forms
                 mmi->ptMaxSize.Y = maximizedBounds.Height;
             }
 
-            m.Result = IntPtr.Zero;
+            m._Result = 0;
         }
 
         /// <summary>
@@ -6316,11 +6306,11 @@ namespace System.Windows.Forms
             {
                 // This message is propagated twice by the MDIClient window. Once to the
                 // window being deactivated and once to the window being activated.
-                if (Handle == m.WParam)
+                if (Handle == m._WParam)
                 {
                     formMdiParent.DeactivateMdiChild();
                 }
-                else if (Handle == m.LParam)
+                else if (Handle == m._LParam)
                 {
                     formMdiParent.ActivateMdiChild(this);
                 }
@@ -6369,18 +6359,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  WM_NCHITTEST handler
+        ///  WM_NCHITTEST handler.
         /// </summary>
         private void WmNCHitTest(ref Message m)
         {
             if (formState[FormStateRenderSizeGrip] != 0)
             {
-                int x = PARAM.SignedLOWORD(m.LParam);
-                int y = PARAM.SignedHIWORD(m.LParam);
-
                 // Convert to client coordinates
-                var pt = new Point(x, y);
-                User32.ScreenToClient(new HandleRef(this, Handle), ref pt);
+                Point point = PointToClient(PARAM.ToPoint(m._LParam));
 
                 Size clientSize = ClientSize;
 
@@ -6388,11 +6374,11 @@ namespace System.Windows.Forms
                 // the grip area in this case not to get in the way of the control box.  We only need to check for the client's
                 // height since the window width will be at least the size of the control box which is always bigger than the
                 // grip width.
-                if (pt.X >= (clientSize.Width - SizeGripSize) &&
-                    pt.Y >= (clientSize.Height - SizeGripSize) &&
+                if (point.X >= (clientSize.Width - SizeGripSize) &&
+                    point.Y >= (clientSize.Height - SizeGripSize) &&
                     clientSize.Height >= SizeGripSize)
                 {
-                    m.Result = (IntPtr)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
+                    m._Result = (nint)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
                     return;
                 }
             }
@@ -6404,11 +6390,10 @@ namespace System.Windows.Forms
             // The edge values are the 8 values from HTLEFT (10) to HTBOTTOMRIGHT (17).
             if (AutoSizeMode == AutoSizeMode.GrowAndShrink)
             {
-                int result = unchecked((int)(long)m.Result);
-                if (result >= (int)User32.HT.LEFT &&
-                    result <= (int)User32.HT.BOTTOMRIGHT)
+                int result = (int)m._Result;
+                if (result >= (int)User32.HT.LEFT && result <= (int)User32.HT.BOTTOMRIGHT)
                 {
-                    m.Result = (IntPtr)User32.HT.BORDER;
+                    m._Result = (nint)User32.HT.BORDER;
                 }
             }
         }
@@ -6429,7 +6414,7 @@ namespace System.Windows.Forms
         {
             bool callDefault = true;
 
-            User32.SC sc = (User32.SC)(PARAM.LOWORD(m.WParam) & 0xFFF0);
+            User32.SC sc = (User32.SC)(PARAM.LOWORD(m._WParam) & 0xFFF0);
             switch (sc)
             {
                 case User32.SC.CLOSE:
@@ -6463,7 +6448,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if (Command.DispatchID(PARAM.LOWORD(m.WParam)))
+            if (Command.DispatchID(PARAM.LOWORD(m._WParam)))
             {
                 callDefault = false;
             }
@@ -6475,21 +6460,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  WM_SIZE handler
+        ///  WM_SIZE handler.
         /// </summary>
         private void WmSize(ref Message m)
         {
-            // If this is an MDI parent, don't pass WM_SIZE to the default
-            // window proc. We handle resizing the MDIClient window ourselves
-            // (using ControlDock.FILL).
-            //
+            // If this is an MDI parent, don't pass WM_SIZE to the default window proc. We handle resizing the
+            // MDIClient window ourselves (using ControlDock.FILL).
             if (ctlClient is null)
             {
                 base.WndProc(ref m);
                 if (MdiControlStrip is null && MdiParentInternal != null && MdiParentInternal.ActiveMdiChildInternal == this)
                 {
-                    int wParam = PARAM.ToInt(m.WParam);
-                    MdiParentInternal.UpdateMdiControlStrip(wParam == (int)User32.WINDOW_SIZE.MAXIMIZED);
+                    MdiParentInternal.UpdateMdiControlStrip((User32.WINDOW_SIZE)m._WParam == User32.WINDOW_SIZE.MAXIMIZED);
                 }
             }
         }
@@ -6499,8 +6481,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmWindowPosChanged(ref Message m)
         {
-            //           We must update the windowState, because resize is fired
-            //           from here... (in Control)
+            // We must update the windowState, because resize is fired from here (in Control).
             UpdateWindowState();
             base.WndProc(ref m);
 

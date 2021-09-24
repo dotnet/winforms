@@ -1580,14 +1580,14 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                switch ((User32.WM)m.Msg)
+                switch (m._Msg)
                 {
                     case User32.WM.KILLFOCUS:
                         base.WndProc(ref m);
-                        IntPtr focussedWindow = m.WParam;
-                        if (!IsParentWindow(focussedWindow))
+                        IntPtr focusedWindow = m._WParam;
+                        if (!IsParentWindow(focusedWindow))
                         {
-                            owner.Commit(false, false);
+                            owner.Commit(enterKeyPressed: false, tabKeyPressed: false);
                         }
 
                         break;

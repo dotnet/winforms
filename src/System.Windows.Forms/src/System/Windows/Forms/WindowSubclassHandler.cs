@@ -230,12 +230,12 @@ namespace System.Windows.Forms
             // Call the original window procedure to process the message.
             if (_originalWindowProc != IntPtr.Zero)
             {
-                m.Result = User32.CallWindowProcW(
+                m._Result = User32.CallWindowProcW(
                     _originalWindowProc,
                     m.HWnd,
-                    (User32.WM)m.Msg,
-                    m.WParam,
-                    m.LParam);
+                    m._Msg,
+                    m._WParam,
+                    m._LParam);
             }
         }
 
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
                 HandleWndProcException(ex);
             }
 
-            return m.Result;
+            return m._Result;
         }
     }
 }

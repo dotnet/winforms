@@ -358,14 +358,9 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Provides some interesting information for the Button control in
-        ///  String form.
+        ///  Provides some interesting information for the Button control in String form.
         /// </summary>
-        public override string ToString()
-        {
-            string s = base.ToString();
-            return s + ", Text: " + Text;
-        }
+        public override string ToString() => $"{base.ToString()}, Text: {Text}";
 
         /// <summary>
         ///  The button's window procedure.  Inheriting classes can override this
@@ -374,10 +369,10 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 case User32.WM.REFLECT_COMMAND:
-                    if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED)
+                    if ((User32.BN)PARAM.HIWORD(m._WParam) == User32.BN.CLICKED)
                     {
                         if (!ValidationCancelled)
                         {

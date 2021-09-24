@@ -85,25 +85,23 @@ namespace System.Windows.Forms
 
             private void WmGetObject(ref Message m)
             {
-                if (m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
+                if (m._LParam == NativeMethods.UiaRootObjectId)
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    m.Result = UiaCore.UiaReturnRawElementProvider(
-                        new HandleRef(this, Handle),
-                        m.WParam,
-                        m.LParam,
+                    m._Result = UiaCore.UiaReturnRawElementProvider(
+                        this,
+                        m._WParam,
+                        m._LParam,
                         GetChildAccessibleObject(_childWindowType));
 
                     return;
                 }
 
                 // See "How to Handle WM_GETOBJECT" in MSDN
-                //
-                if (PARAM.ToInt(m.LParam) == OBJID.CLIENT)
+                if ((int)m._LParam == OBJID.CLIENT)
                 {
                     // Get the IAccessible GUID
-                    //
                     Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
 
                     // Get an Lresult for the accessibility Object for this control
@@ -114,7 +112,7 @@ namespace System.Windows.Forms
 
                         try
                         {
-                            m.Result = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParam, new HandleRef(this, pUnknown));
+                            m._Result = Oleacc.LresultFromObject(ref IID_IAccessible, m._WParam, new HandleRef(this, pUnknown));
                         }
                         finally
                         {

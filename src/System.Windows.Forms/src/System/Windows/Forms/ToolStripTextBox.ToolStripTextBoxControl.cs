@@ -137,7 +137,7 @@ namespace System.Windows.Forms
 
                 // Call RedrawWindow with the region.
                 User32.RedrawWindow(
-                    new HandleRef(this, Handle),
+                    this,
                     null,
                     hNonClientRegion,
                     User32.RDW.INVALIDATE | User32.RDW.ERASE | User32.RDW.UPDATENOW
@@ -276,12 +276,12 @@ namespace System.Windows.Forms
                 g.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
 
                 // We've handled WM_NCPAINT.
-                m.Result = IntPtr.Zero;
+                m._Result = 0;
             }
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)User32.WM.NCPAINT)
+                if (m._Msg == User32.WM.NCPAINT)
                 {
                     WmNCPaint(ref m);
                     return;

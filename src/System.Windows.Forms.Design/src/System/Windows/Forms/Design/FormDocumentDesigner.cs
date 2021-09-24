@@ -380,7 +380,7 @@ namespace System.Windows.Forms.Design
             if (control != null && control.IsHandleCreated)
             {
                 User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.TRUE);
-                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
+                User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
             }
         }
 
@@ -393,7 +393,7 @@ namespace System.Windows.Forms.Design
             if (control != null && control.IsHandleCreated)
             {
                 User32.SendMessageW(control.Handle, User32.WM.NCACTIVATE, (nint)BOOL.FALSE);
-                User32.RedrawWindow(control.Handle, null, IntPtr.Zero, User32.RDW.FRAME);
+                User32.RedrawWindow(control.Handle, flags: User32.RDW.FRAME);
             }
         }
 

@@ -281,17 +281,16 @@ namespace System.Windows.Forms
 
             internal static void ProcessMenuKeyDown(ref Message m)
             {
-                Keys keyData = (Keys)PARAM.ToInt(m.WParam);
+                Keys keyData = (Keys)m._WParam;
 
                 if (Control.FromHandle(m.HWnd) is ToolStrip toolStrip && !toolStrip.IsDropDown)
                 {
                     return;
                 }
 
-                // Handle the case where the ALT key has been pressed down while a dropdown
-                // was open. We need to clear off the MenuKeyToggle so the next ALT will activate
-                // the menu.
-                if (ToolStripManager.IsMenuKey(keyData))
+                // Handle the case where the ALT key has been pressed down while a dropdown was open. We need to clear
+                // off the MenuKeyToggle so the next ALT will activate the menu.
+                if (IsMenuKey(keyData))
                 {
                     if (!InMenuMode && MenuKeyToggle)
                     {
@@ -342,7 +341,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            private void ProcessMouseButtonPressed(IntPtr hwndMouseMessageIsFrom, int x, int y)
+            private void ProcessMouseButtonPressed(IntPtr hwndMouseMessageIsFrom, Point location)
             {
                 Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.ProcessMouseButtonPressed] Found a mouse down.");
 
@@ -353,16 +352,16 @@ namespace System.Windows.Forms
 
                     if (activeToolStrip is not null)
                     {
-                        var pt = new Point(x, y);
-                        User32.MapWindowPoint(hwndMouseMessageIsFrom, activeToolStrip, ref pt);
-                        if (!activeToolStrip.ClientRectangle.Contains(pt.X, pt.Y))
+                        Point translatedLocation = location;
+                        User32.MapWindowPoint(hwndMouseMessageIsFrom, activeToolStrip, ref translatedLocation);
+                        if (!activeToolStrip.ClientRectangle.Contains(translatedLocation))
                         {
                             if (activeToolStrip is ToolStripDropDown activeToolStripDropDown)
                             {
                                 if (!(activeToolStripDropDown.OwnerToolStrip is not null
                                     && activeToolStripDropDown.OwnerToolStrip.Handle == hwndMouseMessageIsFrom
                                     && activeToolStripDropDown.OwnerDropDownItem is not null
-                                     && activeToolStripDropDown.OwnerDropDownItem.DropDownButtonArea.Contains(x, y)))
+                                    && activeToolStripDropDown.OwnerDropDownItem.DropDownButtonArea.Contains(location)))
                                 {
                                     // The owner item should handle closing the dropdown
                                     // this allows code such as if (DropDown.Visible) { Hide, Show } etc.
@@ -373,15 +372,19 @@ namespace System.Windows.Forms
                             {
                                 // Make sure we clear the selection.
                                 activeToolStrip.NotifySelectionChange(item: null);
+
                                 // We're a toplevel toolstrip and we've clicked somewhere else.
                                 // Exit menu mode
-                                Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ModalMenuFilter.ProcessMouseButtonPressed] Calling exit because we're a toplevel toolstrip and we've clicked somewhere else.");
+                                Debug.WriteLineIf(
+                                    ToolStrip.s_snapFocusDebug.TraceVerbose,
+                                    "[ModalMenuFilter.ProcessMouseButtonPressed] Calling exit because we're a toplevel toolstrip and we've clicked somewhere else.");
+
                                 ExitMenuModeCore();
                             }
                         }
                         else
                         {
-                            // we've found a dropdown that intersects with the mouse message
+                            // We've found a dropdown that intersects with the mouse message
                             break;
                         }
                     }
@@ -655,19 +658,14 @@ namespace System.Windows.Forms
                         case User32.WM.MBUTTONDOWN:
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown. If not, we should dismiss it.
-                            ProcessMouseButtonPressed(m.HWnd,
-                                x: PARAM.SignedLOWORD(m.LParam),
-                                y: PARAM.SignedHIWORD(m.LParam));
-
+                            ProcessMouseButtonPressed(m.HWnd, PARAM.ToPoint(m._LParam));
                             break;
                         case User32.WM.NCLBUTTONDOWN:
                         case User32.WM.NCRBUTTONDOWN:
                         case User32.WM.NCMBUTTONDOWN:
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown. If not, we should dismiss it.
-                            ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero,
-                                x: PARAM.SignedLOWORD(m.LParam),
-                                y: PARAM.SignedHIWORD(m.LParam));
+                            ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero, PARAM.ToPoint(m._LParam));
                             break;
 
                         case User32.WM.KEYDOWN:

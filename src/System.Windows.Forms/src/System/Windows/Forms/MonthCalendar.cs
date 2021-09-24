@@ -2138,7 +2138,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateChanged(ref Message m)
         {
-            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m.LParam;
+            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m._LParam;
             DateTime start = nmmcsc->stSelStart;
             DateTime end = nmmcsc->stSelEnd;
 
@@ -2189,7 +2189,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateBold(ref Message m)
         {
-            NMDAYSTATE* nmmcds = (NMDAYSTATE*)m.LParam;
+            NMDAYSTATE* nmmcds = (NMDAYSTATE*)m._LParam;
             Span<int> boldDates = new Span<int>((int*)nmmcds->prgDayState, nmmcds->cDayState);
             WriteBoldDates(boldDates);
         }
@@ -2199,7 +2199,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmCalViewChanged(ref Message m)
         {
-            NMVIEWCHANGE* nmmcvm = (NMVIEWCHANGE*)m.LParam;
+            NMVIEWCHANGE* nmmcvm = (NMVIEWCHANGE*)m._LParam;
             Debug.Assert(_mcCurView == nmmcvm->uOldView, "Calendar view mode is out of sync with native control");
             if (_mcCurView != nmmcvm->uNewView)
             {
@@ -2217,7 +2217,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmDateSelected(ref Message m)
         {
-            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m.LParam;
+            NMSELCHANGE* nmmcsc = (NMSELCHANGE*)m._LParam;
             DateTime start = _selectionStart = nmmcsc->stSelStart;
             DateTime end = _selectionEnd = nmmcsc->stSelEnd;
 
@@ -2237,12 +2237,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the WM_GETDLGCODE message
+        ///  Handles the WM_GETDLGCODE message.
         /// </summary>
         private void WmGetDlgCode(ref Message m)
         {
-            // The MonthCalendar does its own handling of arrow keys
-            m.Result = (IntPtr)User32.DLGC.WANTARROWS;
+            // The MonthCalendar does its own handling of arrow keys.
+            m._Result = (nint)User32.DLGC.WANTARROWS;
         }
 
         /// <summary>
@@ -2252,7 +2252,7 @@ namespace System.Windows.Forms
         {
             if (m.HWnd == Handle)
             {
-                User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
 
                 switch ((MCN)nmhdr->code)
                 {
