@@ -319,8 +319,7 @@ namespace System.Windows.Forms
                 lDescription = Parenthesize(MsgToString((User32.WM)PARAM.LOWORD(wparam)));
             }
 
-            return @$"msg=0x{(uint)msg:x}{id} hwnd=0x{(long)hWnd:x)} wparam
-                =0x{wparam:x} lparam=0x{lparam:x}{lDescription} result=0x{result:x}";
+            return $@"msg=0x{(uint)msg:x}{id} hwnd=0x{(long)hWnd:x} wparam=0x{wparam:x} lparam=0x{lparam:x}{lDescription} result=0x{result:x}";
         }
     }
 }
