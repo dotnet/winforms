@@ -102,16 +102,19 @@
   ],
   "sources": [
     {
+      "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
       "condition": "Framework == \"netcoreapp3.1\"",
       "source": "./netcoreapp3.1",
       "target": "./"
     },
     {
+      "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
       "condition": "Framework == \"net5.0\"",
       "source": "./net5.0",
       "target": "./"
     },
     {
+      "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
       "condition": "Framework == \"net6.0\"",
       "source": "./net6.0",
       "target": "./"
