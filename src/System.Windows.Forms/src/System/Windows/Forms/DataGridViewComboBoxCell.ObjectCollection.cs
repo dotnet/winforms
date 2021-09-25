@@ -112,10 +112,7 @@ namespace System.Windows.Forms
                 //this.owner.CheckNoSharedCell();
                 owner.CheckNoDataSource();
 
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item, nameof(item));
 
                 int index = InnerArray.Add(item);
 
@@ -167,10 +164,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal void AddRangeInternal(ICollection items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items, nameof(items));
 
                 foreach (object item in items)
                 {
@@ -277,10 +271,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(object value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value, nameof(value));
 
                 return InnerArray.IndexOf(value);
             }
@@ -297,10 +288,7 @@ namespace System.Windows.Forms
                 //this.owner.CheckNoSharedCell();
                 owner.CheckNoDataSource();
 
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item, nameof(item));
 
                 if (index < 0 || index > InnerArray.Count)
                 {

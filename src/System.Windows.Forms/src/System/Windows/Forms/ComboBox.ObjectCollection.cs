@@ -323,7 +323,6 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-
                 ArgumentNullException.ThrowIfNull(item, nameof(item));
 
                 if (index < 0 || index > Count)

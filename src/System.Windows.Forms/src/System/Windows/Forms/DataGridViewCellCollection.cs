@@ -123,10 +123,7 @@ namespace System.Windows.Forms
             set
             {
                 DataGridViewCell dataGridViewCell = value;
-                if (dataGridViewCell is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(dataGridViewCell, nameof(value));
 
                 if (dataGridViewCell.DataGridView is not null)
                 {
@@ -248,10 +245,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewCell[] dataGridViewCells)
         {
-            if (dataGridViewCells is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewCells));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewCells, nameof(dataGridViewCells));
 
             if (_owner.DataGridView is not null)
             {

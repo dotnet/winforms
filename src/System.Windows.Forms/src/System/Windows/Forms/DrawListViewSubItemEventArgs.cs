@@ -28,15 +28,10 @@ namespace System.Windows.Forms
 
             if (itemIndex == -1)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item, nameof(item));
             }
-            else if (subItem is null)
-            {
-                throw new ArgumentNullException(nameof(subItem));
-            }
+
+            ArgumentNullException.ThrowIfNull(subItem, nameof(subItem));
 
             Bounds = bounds;
             Item = item;

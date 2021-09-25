@@ -185,7 +185,6 @@ namespace System.Windows.Forms
 
             internal HashKey(object dataSource, string dataMember)
             {
-
                 ArgumentNullException.ThrowIfNull(dataSource, nameof(dataSource));
 
                 ArgumentNullException.ThrowIfNull(dataMember, nameof(dataMember));

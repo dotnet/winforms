@@ -8,10 +8,7 @@ namespace System.Windows.Forms
     {
         public DataGridViewColumnStateChangedEventArgs(DataGridViewColumn dataGridViewColumn, DataGridViewElementStates stateChanged)
         {
-            if (dataGridViewColumn is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewColumn));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewColumn, nameof(dataGridViewColumn));
 
             Column = dataGridViewColumn;
             StateChanged = stateChanged;

@@ -366,10 +366,7 @@ namespace System.Windows.Forms
         public virtual int Add(params object[] values)
         {
             Debug.Assert(DataGridView is not null);
-            if (values is null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
+            ArgumentNullException.ThrowIfNull(values, nameof(values));
 
             if (DataGridView.VirtualMode)
             {
@@ -478,10 +475,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(DataGridView is not null);
 
-            if (dataGridViewRow is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewRow));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewRow, nameof(dataGridViewRow));
 
             if (dataGridViewRow.DataGridView is not null)
             {
@@ -797,10 +791,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewRow[] dataGridViewRows)
         {
-            if (dataGridViewRows is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewRows));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewRows, nameof(dataGridViewRows));
 
             Debug.Assert(DataGridView is not null);
 
@@ -1435,10 +1426,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(DataGridView is not null);
 
-            if (values is null)
-            {
-                throw new ArgumentNullException(nameof(values));
-            }
+            ArgumentNullException.ThrowIfNull(values, nameof(values));
 
             if (DataGridView.VirtualMode)
             {
@@ -1543,10 +1531,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(rowIndex), SR.DataGridViewRowCollection_RowIndexOutOfRange);
             }
 
-            if (dataGridViewRow is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewRow));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewRow, nameof(dataGridViewRow));
 
             if (dataGridViewRow.DataGridView is not null)
             {
@@ -1837,10 +1822,7 @@ namespace System.Windows.Forms
         {
             Debug.Assert(DataGridView is not null);
 
-            if (dataGridViewRows is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewRows));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewRows, nameof(dataGridViewRows));
 
             if (dataGridViewRows.Length == 1)
             {
@@ -2231,10 +2213,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(DataGridViewRow dataGridViewRow)
         {
-            if (dataGridViewRow is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewRow));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewRow, nameof(dataGridViewRow));
 
             if (dataGridViewRow.DataGridView != DataGridView)
             {

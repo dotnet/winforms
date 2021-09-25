@@ -10,10 +10,7 @@ namespace System.Windows.Forms
     {
         public DataGridViewColumnEventArgs(DataGridViewColumn dataGridViewColumn)
         {
-            if (dataGridViewColumn is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewColumn));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewColumn, nameof(dataGridViewColumn));
 
             Debug.Assert(dataGridViewColumn.Index >= -1);
             Column = dataGridViewColumn;

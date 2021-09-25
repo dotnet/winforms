@@ -10025,10 +10025,7 @@ namespace System.Windows.Forms
 
         public void InvalidateCell(DataGridViewCell dataGridViewCell)
         {
-            if (dataGridViewCell is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewCell));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewCell, nameof(dataGridViewCell));
 
             if (dataGridViewCell.DataGridView != this)
             {
@@ -10997,10 +10994,7 @@ namespace System.Windows.Forms
         internal void OnAddingColumn(DataGridViewColumn dataGridViewColumn)
         {
             // throw an exception if the column to be added breaks the rules
-            if (dataGridViewColumn is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewColumn));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewColumn, nameof(dataGridViewColumn));
 
             if (dataGridViewColumn.DataGridView is not null)
             {
@@ -11251,10 +11245,7 @@ namespace System.Windows.Forms
             // Note dataGridViewRow.DataGridView is not null for duplication of shared rows.
 
             // throw an exception if the row to be added breaks the rules
-            if (dataGridViewRow is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewRow));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewRow, nameof(dataGridViewRow));
 
             // !Do not check for dataGridViewRow.Selected flag. Caller does it instead!
             // !Do not check for dataGridViewRow.DataGridView is not null. Caller does it instead!
@@ -11519,10 +11510,8 @@ namespace System.Windows.Forms
         protected virtual void OnAutoSizeColumnsModeChanged(DataGridViewAutoSizeColumnsModeEventArgs e)
         {
             DataGridViewAutoSizeColumnMode[] previousModes = e.PreviousModes;
-            if (previousModes is null)
-            {
-                throw new ArgumentNullException(nameof(e.PreviousModes));
-            }
+
+            ArgumentNullException.ThrowIfNull(previousModes, nameof(e.PreviousModes));
 
             if (previousModes.Length != Columns.Count)
             {
@@ -28625,10 +28614,7 @@ namespace System.Windows.Forms
 
         public virtual void Sort(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
-            if (dataGridViewColumn is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewColumn));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewColumn, nameof(dataGridViewColumn));
 
             if (direction != ListSortDirection.Ascending && direction != ListSortDirection.Descending)
             {
@@ -28650,10 +28636,7 @@ namespace System.Windows.Forms
 
         public virtual void Sort(IComparer comparer)
         {
-            if (comparer is null)
-            {
-                throw new ArgumentNullException(nameof(comparer));
-            }
+            ArgumentNullException.ThrowIfNull(comparer, nameof(comparer));
 
             if (VirtualMode)
             {

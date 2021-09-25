@@ -229,10 +229,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             if (rowIndex != -1)
             {
@@ -521,10 +518,7 @@ namespace System.Windows.Forms
                 return new Size(-1, -1);
             }
 
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
             DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
@@ -757,10 +751,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             PaintPrivate(graphics,
                          clipBounds,

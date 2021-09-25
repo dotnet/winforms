@@ -289,10 +289,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             if (DataGridView is null || OwningRow is null)
             {
@@ -345,10 +342,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             if (DataGridView is null ||
                 rowIndex < 0 ||
@@ -623,10 +617,7 @@ namespace System.Windows.Forms
                 return new Size(-1, -1);
             }
 
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             DataGridViewAdvancedBorderStyle dgvabsPlaceholder = new DataGridViewAdvancedBorderStyle(), dgvabsEffective;
             dgvabsEffective = OwningRow.AdjustRowHeaderBorderStyle(DataGridView.AdvancedRowHeadersBorderStyle,
@@ -693,10 +684,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             PaintPrivate(graphics,
                 clipBounds,

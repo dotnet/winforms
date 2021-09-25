@@ -919,10 +919,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
@@ -1025,10 +1022,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             if (DataGridView is null ||
                 rowIndex < 0 ||
@@ -1323,10 +1317,7 @@ namespace System.Windows.Forms
                 return new Size(-1, -1);
             }
 
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             Size preferredSize = Size.Empty;
             DataGridViewFreeDimension freeDimension = DataGridViewCell.GetFreeDimensionFromConstraint(constraintSize);
@@ -1548,10 +1539,7 @@ namespace System.Windows.Forms
         /// </summary>
         private object ItemFromComboBoxDataSource(PropertyDescriptor property, object key)
         {
-            if (key is null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
+            ArgumentNullException.ThrowIfNull(key, nameof(key));
 
             //if (key == this.keyUsedDuringAutoSize)
             //{
@@ -1960,10 +1948,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             PaintPrivate(graphics,
                 clipBounds,

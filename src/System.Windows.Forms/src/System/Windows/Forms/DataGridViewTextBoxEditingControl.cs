@@ -98,10 +98,7 @@ namespace System.Windows.Forms
 
         public virtual void ApplyCellStyleToEditingControl(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            if (dataGridViewCellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewCellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewCellStyle, nameof(dataGridViewCellStyle));
 
             Font = dataGridViewCellStyle.Font;
             if (dataGridViewCellStyle.BackColor.A < 255)

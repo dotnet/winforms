@@ -924,15 +924,8 @@ namespace System.Windows.Forms
             bool isFirstDisplayedColumn,
             bool isFirstDisplayedRow)
         {
-            if (dataGridViewAdvancedBorderStyleInput is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewAdvancedBorderStyleInput));
-            }
-
-            if (dataGridViewAdvancedBorderStylePlaceholder is null)
-            {
-                throw new ArgumentNullException(nameof(dataGridViewAdvancedBorderStylePlaceholder));
-            }
+            ArgumentNullException.ThrowIfNull(dataGridViewAdvancedBorderStyleInput, nameof(dataGridViewAdvancedBorderStyleInput));
+            ArgumentNullException.ThrowIfNull(dataGridViewAdvancedBorderStylePlaceholder, nameof(dataGridViewAdvancedBorderStylePlaceholder));
 
             switch (dataGridViewAdvancedBorderStyleInput.All)
             {
@@ -990,10 +983,7 @@ namespace System.Windows.Forms
 
         protected virtual Rectangle BorderWidths(DataGridViewAdvancedBorderStyle advancedBorderStyle)
         {
-            if (advancedBorderStyle is null)
-            {
-                throw new ArgumentNullException(nameof(advancedBorderStyle));
-            }
+            ArgumentNullException.ThrowIfNull(advancedBorderStyle, nameof(advancedBorderStyle));
 
             Rectangle rect = new Rectangle
             {
@@ -2732,15 +2722,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static int MeasureTextHeight(Graphics graphics, string text, Font font, int maxWidth, TextFormatFlags flags, out bool widthTruncated)
         {
-            if (graphics is null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
-
-            if (font is null)
-            {
-                throw new ArgumentNullException(nameof(font));
-            }
+            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(font, nameof(font));
 
             if (maxWidth <= 0)
             {
@@ -2762,15 +2745,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Size MeasureTextPreferredSize(Graphics graphics, string text, Font font, float maxRatio, TextFormatFlags flags)
         {
-            if (graphics is null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
-
-            if (font is null)
-            {
-                throw new ArgumentNullException(nameof(font));
-            }
+            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(font, nameof(font));
 
             if (maxRatio <= 0.0F)
             {
@@ -2814,15 +2790,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Size MeasureTextSize(Graphics graphics, string text, Font font, TextFormatFlags flags)
         {
-            if (graphics is null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
-
-            if (font is null)
-            {
-                throw new ArgumentNullException(nameof(font));
-            }
+            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(font, nameof(font));
 
             if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
             {
@@ -3378,12 +3347,9 @@ namespace System.Windows.Forms
             DataGridViewCellStyle cellStyle,
             DataGridViewAdvancedBorderStyle advancedBorderStyle)
         {
-            if (graphics is null)
-                throw new ArgumentNullException(nameof(graphics));
-            if (cellStyle is null)
-                throw new ArgumentNullException(nameof(cellStyle));
-            if (advancedBorderStyle is null)
-                throw new ArgumentNullException(nameof(advancedBorderStyle));
+            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(advancedBorderStyle, nameof(advancedBorderStyle));
 
             if (DataGridView is null)
             {
@@ -3781,10 +3747,7 @@ namespace System.Windows.Forms
 
         protected virtual void PaintErrorIcon(Graphics graphics, Rectangle clipBounds, Rectangle cellValueBounds, string errorText)
         {
-            if (graphics is null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
+            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
 
             if (DataGridView is null)
             {
@@ -3801,8 +3764,7 @@ namespace System.Windows.Forms
 
         private static void PaintErrorIcon(Graphics graphics, Rectangle iconBounds)
         {
-            if (graphics is null)
-                throw new ArgumentNullException(nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
 
             Bitmap bmp = ErrorBitmap;
             if (bmp is not null)
@@ -3950,10 +3912,7 @@ namespace System.Windows.Forms
                                                     TypeConverter formattedValueTypeConverter,
                                                     TypeConverter valueTypeConverter)
         {
-            if (cellStyle is null)
-            {
-                throw new ArgumentNullException(nameof(cellStyle));
-            }
+            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
 
             if (FormattedValueType is null)
             {
