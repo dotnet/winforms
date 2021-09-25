@@ -119,10 +119,7 @@ namespace System.Windows.Forms
             // Update the owner of these subitems
             for (int i = 0; i < subItems.Length; i++)
             {
-                if (subItems[i] is null)
-                {
-                    throw new ArgumentNullException(nameof(subItems));
-                }
+                ArgumentNullException.ThrowIfNull(subItems[i], nameof(subItems));
 
                 subItems[i]._owner = this;
             }
@@ -201,10 +198,7 @@ namespace System.Windows.Forms
             // Update the owner of these subitems
             for (int i = 0; i < subItems.Length; i++)
             {
-                if (subItems[i] is null)
-                {
-                    throw new ArgumentNullException(nameof(subItems));
-                }
+                ArgumentNullException.ThrowIfNull(subItems[i], nameof(subItems));
 
                 subItems[i]._owner = this;
             }

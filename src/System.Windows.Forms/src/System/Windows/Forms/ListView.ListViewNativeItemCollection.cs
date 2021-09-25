@@ -146,10 +146,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewItem[] values)
             {
-                if (values is null)
-                {
-                    throw new ArgumentNullException(nameof(values));
-                }
+                ArgumentNullException.ThrowIfNull(values, nameof(values));
 
                 if (owner.VirtualMode)
                 {

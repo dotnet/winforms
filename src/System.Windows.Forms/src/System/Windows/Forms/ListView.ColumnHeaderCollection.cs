@@ -275,20 +275,14 @@ namespace System.Windows.Forms
 
             public virtual void AddRange(ColumnHeader[] values)
             {
-                if (values is null)
-                {
-                    throw new ArgumentNullException(nameof(values));
-                }
+                ArgumentNullException.ThrowIfNull(values, nameof(values));
 
                 Hashtable usedIndices = new Hashtable();
                 int[] indices = new int[values.Length];
 
                 for (int i = 0; i < values.Length; i++)
                 {
-                    if (values[i] is null)
-                    {
-                        throw new ArgumentNullException(nameof(values));
-                    }
+                    ArgumentNullException.ThrowIfNull(values[i], nameof(values));
 
                     if (values[i].DisplayIndex == -1)
                     {

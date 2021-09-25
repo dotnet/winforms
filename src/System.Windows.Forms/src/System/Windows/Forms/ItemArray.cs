@@ -224,10 +224,7 @@ namespace System.Windows.Forms
 
         public void InsertEntry(int index, Entry item)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item, nameof(item));
 
             _entries.Insert(index, item);
             Version++;

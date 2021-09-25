@@ -67,10 +67,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderHelpKeywordDescr))]
         public virtual string GetHelpKeyword(Control ctl)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             return (string)_keywords[ctl];
         }
@@ -83,10 +80,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderNavigatorDescr))]
         public virtual HelpNavigator GetHelpNavigator(Control ctl)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             object nav = _navigators[ctl];
             return nav is null ? HelpNavigator.AssociateIndex : (HelpNavigator)nav;
@@ -100,10 +94,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderHelpStringDescr))]
         public virtual string GetHelpString(Control ctl)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             return (string)_helpStrings[ctl];
         }
@@ -115,10 +106,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.HelpProviderShowHelpDescr))]
         public virtual bool GetShowHelp(Control ctl)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             object b = _showHelp[ctl];
             return b is null ? false : (bool)b;
@@ -189,10 +177,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpString(Control ctl, string helpString)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             _helpStrings[ctl] = helpString;
             if (!string.IsNullOrEmpty(helpString))
@@ -208,10 +193,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpKeyword(Control ctl, string keyword)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             _keywords[ctl] = keyword;
             if (!string.IsNullOrEmpty(keyword))
@@ -227,10 +209,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetHelpNavigator(Control ctl, HelpNavigator navigator)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             SourceGenerated.EnumValidator.Validate(navigator, nameof(navigator));
 
@@ -244,10 +223,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void SetShowHelp(Control ctl, bool value)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             _showHelp[ctl] = value;
             UpdateEventBinding(ctl);
@@ -258,10 +234,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal bool ShouldSerializeShowHelp(Control ctl)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             return _showHelp.ContainsKey(ctl);
         }
@@ -271,10 +244,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual void ResetShowHelp(Control ctl)
         {
-            if (ctl is null)
-            {
-                throw new ArgumentNullException(nameof(ctl));
-            }
+            ArgumentNullException.ThrowIfNull(ctl, nameof(ctl));
 
             _showHelp.Remove(ctl);
         }

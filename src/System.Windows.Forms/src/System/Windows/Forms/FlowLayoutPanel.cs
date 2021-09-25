@@ -60,10 +60,7 @@ namespace System.Windows.Forms
         [DisplayName("FlowBreak")]
         public bool GetFlowBreak(Control control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control, nameof(control));
 
             return _flowLayoutSettings.GetFlowBreak(control);
         }
@@ -71,10 +68,7 @@ namespace System.Windows.Forms
         [DisplayName("FlowBreak")]
         public void SetFlowBreak(Control control, bool value)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control, nameof(control));
 
             _flowLayoutSettings.SetFlowBreak(control, value);
         }
