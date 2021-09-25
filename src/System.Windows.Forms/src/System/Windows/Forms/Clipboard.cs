@@ -44,10 +44,7 @@ namespace System.Windows.Forms
                 throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
             }
 
-            if (data is null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
+            ArgumentNullException.ThrowIfNull(data, nameof(data));
 
             if (retryTimes < 0)
             {
@@ -318,20 +315,14 @@ namespace System.Windows.Forms
 
         public static void SetAudio(byte[] audioBytes)
         {
-            if (audioBytes is null)
-            {
-                throw new ArgumentNullException(nameof(audioBytes));
-            }
+            ArgumentNullException.ThrowIfNull(audioBytes, nameof(audioBytes));
 
             SetAudio(new MemoryStream(audioBytes));
         }
 
         public static void SetAudio(Stream audioStream)
         {
-            if (audioStream is null)
-            {
-                throw new ArgumentNullException(nameof(audioStream));
-            }
+            ArgumentNullException.ThrowIfNull(audioStream, nameof(audioStream));
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.WaveAudio, false, audioStream);
@@ -340,13 +331,9 @@ namespace System.Windows.Forms
 
         public static void SetData(string format, object data)
         {
+            ArgumentNullException.ThrowIfNull(format, nameof(format));
             if (string.IsNullOrWhiteSpace(format))
             {
-                if (format is null)
-                {
-                    throw new ArgumentNullException(nameof(format));
-                }
-
                 throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
             }
 
@@ -358,10 +345,7 @@ namespace System.Windows.Forms
 
         public static void SetFileDropList(StringCollection filePaths)
         {
-            if (filePaths is null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(filePaths, nameof(filePaths));
 
             if (filePaths.Count == 0)
             {
@@ -393,10 +377,7 @@ namespace System.Windows.Forms
 
         public static void SetImage(Image image)
         {
-            if (image is null)
-            {
-                throw new ArgumentNullException(nameof(image));
-            }
+            ArgumentNullException.ThrowIfNull(image, nameof(image));
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.Bitmap, true, image);
@@ -407,9 +388,10 @@ namespace System.Windows.Forms
 
         public static void SetText(string text, TextDataFormat format)
         {
+            ArgumentNullException.ThrowIfNull(text, nameof(text));
             if (string.IsNullOrEmpty(text))
             {
-                throw new ArgumentNullException(nameof(text));
+                throw new ArgumentException(nameof(text));
             }
 
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
