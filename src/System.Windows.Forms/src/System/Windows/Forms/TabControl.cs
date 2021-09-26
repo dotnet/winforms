@@ -1026,10 +1026,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DeselectTab(TabPage tabPage)
         {
-            if (tabPage is null)
-            {
-                throw new ArgumentNullException(nameof(tabPage));
-            }
+            ArgumentNullException.ThrowIfNull(tabPage, nameof(tabPage));
 
             int index = FindTabPage(tabPage);
             DeselectTab(index);
@@ -1040,10 +1037,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DeselectTab(string tabPageName)
         {
-            if (tabPageName is null)
-            {
-                throw new ArgumentNullException(nameof(tabPageName));
-            }
+            ArgumentNullException.ThrowIfNull(tabPageName, nameof(tabPageName));
 
             TabPage tabPage = TabPages[tabPageName];
             DeselectTab(tabPage);
@@ -1162,10 +1156,7 @@ namespace System.Windows.Forms
 
         protected string GetToolTipText(object item)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item, nameof(item));
 
             if (!(item is TabPage tabPage))
             {
@@ -1221,10 +1212,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            if (tabPage is null)
-            {
-                throw new ArgumentNullException(nameof(tabPage));
-            }
+            ArgumentNullException.ThrowIfNull(tabPage, nameof(tabPage));
 
             int retIndex = IsHandleCreated
                              ? (int)SendMessage(ComCtl32.TCM.INSERTITEMW, (IntPtr)index, tabPage)
@@ -1729,10 +1717,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             if (IsHandleCreated)
             {
@@ -1765,10 +1750,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SelectTab(TabPage tabPage)
         {
-            if (tabPage is null)
-            {
-                throw new ArgumentNullException(nameof(tabPage));
-            }
+            ArgumentNullException.ThrowIfNull(tabPage, nameof(tabPage));
 
             int index = FindTabPage(tabPage);
             SelectTab(index);
@@ -1779,10 +1761,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SelectTab(string tabPageName)
         {
-            if (tabPageName is null)
-            {
-                throw new ArgumentNullException(nameof(tabPageName));
-            }
+            ArgumentNullException.ThrowIfNull(tabPageName, nameof(tabPageName));
 
             TabPage tabPage = TabPages[tabPageName];
             SelectTab(tabPage);

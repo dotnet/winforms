@@ -24,10 +24,7 @@ namespace System.Windows.Forms
 
             public override void Add(Control value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value, nameof(value));
 
                 if (IsReadOnly)
                 {

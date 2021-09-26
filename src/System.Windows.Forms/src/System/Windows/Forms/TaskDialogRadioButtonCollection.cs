@@ -56,10 +56,7 @@ namespace System.Windows.Forms
         /// </exception>
         protected override void SetItem(int index, TaskDialogRadioButton item)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item, nameof(item));
 
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.
@@ -99,10 +96,7 @@ namespace System.Windows.Forms
         /// </exception>
         protected override void InsertItem(int index, TaskDialogRadioButton item)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item, nameof(item));
 
             // Disallow collection modification, so that we don't need to copy it
             // when binding the TaskDialogPage.

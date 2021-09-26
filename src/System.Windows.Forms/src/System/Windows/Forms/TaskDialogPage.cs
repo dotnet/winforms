@@ -575,10 +575,7 @@ namespace System.Windows.Forms
         /// </exception>
         public void Navigate(TaskDialogPage page)
         {
-            if (page is null)
-            {
-                throw new ArgumentNullException(nameof(page));
-            }
+            ArgumentNullException.ThrowIfNull(page, nameof(page));
 
             if (BoundDialog is null)
             {

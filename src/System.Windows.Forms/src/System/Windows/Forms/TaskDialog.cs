@@ -389,10 +389,7 @@ namespace System.Windows.Forms
         public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
         {
-            if (page is null)
-            {
-                throw new ArgumentNullException(nameof(page));
-            }
+            ArgumentNullException.ThrowIfNull(page, nameof(page));
 
             TaskDialog dialog = new TaskDialog();
             return dialog.ShowDialogInternal(hwndOwner, page, startupLocation);

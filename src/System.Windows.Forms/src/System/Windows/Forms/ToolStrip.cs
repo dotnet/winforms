@@ -4387,10 +4387,7 @@ namespace System.Windows.Forms
 
         protected internal void SetItemLocation(ToolStripItem item, Point location)
         {
-            if (item is null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item, nameof(item));
 
             if (item.Owner != this)
             {

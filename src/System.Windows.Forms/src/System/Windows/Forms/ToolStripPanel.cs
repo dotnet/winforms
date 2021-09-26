@@ -787,10 +787,7 @@ namespace System.Windows.Forms
 
         public void Join(ToolStrip toolStripToDrag, Point location)
         {
-            if (toolStripToDrag is null)
-            {
-                throw new ArgumentNullException(nameof(toolStripToDrag));
-            }
+            ArgumentNullException.ThrowIfNull(toolStripToDrag, nameof(toolStripToDrag));
 
             if (!_state[s_stateBeginInit] && !_state[s_stateInJoin])
             {

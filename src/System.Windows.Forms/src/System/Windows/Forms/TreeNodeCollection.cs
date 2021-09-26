@@ -63,10 +63,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value, nameof(value));
 
                 TreeView tv = owner.treeView;
                 TreeNode actual = owner.children[index];
@@ -268,10 +265,7 @@ namespace System.Windows.Forms
 
         public virtual void AddRange(TreeNode[] nodes)
         {
-            if (nodes is null)
-            {
-                throw new ArgumentNullException(nameof(nodes));
-            }
+            ArgumentNullException.ThrowIfNull(nodes, nameof(nodes));
 
             if (nodes.Length == 0)
             {
@@ -300,9 +294,10 @@ namespace System.Windows.Forms
 
         public TreeNode[] Find(string key, bool searchAllChildren)
         {
+            ArgumentNullException.ThrowIfNull(key, nameof(key));
             if (string.IsNullOrEmpty(key))
             {
-                throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
+                throw new ArgumentException(SR.FindKeyMayNotBeEmptyOrNull, nameof(key));
             }
 
             List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, new List<TreeNode>());
@@ -358,10 +353,7 @@ namespace System.Windows.Forms
 
         private int AddInternal(TreeNode node, int delta)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
+            ArgumentNullException.ThrowIfNull(node, nameof(node));
 
             if (node.handle != IntPtr.Zero)
             {
@@ -420,11 +412,9 @@ namespace System.Windows.Forms
 
         int IList.Add(object node)
         {
-            if (node is null)
-            {
-                throw new ArgumentNullException(nameof(node));
-            }
-            else if (node is TreeNode)
+            ArgumentNullException.ThrowIfNull(node, nameof(node));
+
+            if (node is TreeNode)
             {
                 return Add((TreeNode)node);
             }
