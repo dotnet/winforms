@@ -143,10 +143,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void BeginLoad(IDesignerLoaderHost host)
         {
-            if (host is null)
-            {
-                throw new ArgumentNullException(nameof(host));
-            }
+            ArgumentNullException.ThrowIfNull(host, nameof(host));
 
             if (_state[s_stateLoaded])
             {
@@ -874,10 +871,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SetBaseComponentClassName(string name)
         {
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
 
             _baseComponentClassName = name;
         }

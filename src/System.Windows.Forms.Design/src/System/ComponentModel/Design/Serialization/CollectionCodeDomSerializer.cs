@@ -124,10 +124,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected bool MethodSupportsSerialization(MethodInfo method)
         {
-            if (method is null)
-            {
-                throw new ArgumentNullException(nameof(method));
-            }
+            ArgumentNullException.ThrowIfNull(method, nameof(method));
 
             object[] attrs = method.GetCustomAttributes(typeof(DesignerSerializationVisibilityAttribute), true);
             if (attrs.Length > 0)
@@ -148,15 +145,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             object result = null;
             using (TraceScope("CollectionCodeDomSerializer::" + nameof(Serialize)))
@@ -317,25 +307,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (targetType is null)
-            {
-                throw new ArgumentNullException(nameof(targetType));
-            }
-
-            if (originalCollection is null)
-            {
-                throw new ArgumentNullException(nameof(originalCollection));
-            }
-
-            if (valuesToSerialize is null)
-            {
-                throw new ArgumentNullException(nameof(valuesToSerialize));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(targetType, nameof(targetType));
+            ArgumentNullException.ThrowIfNull(originalCollection, nameof(originalCollection));
+            ArgumentNullException.ThrowIfNull(valuesToSerialize, nameof(valuesToSerialize));
 
             object result = null;
             bool serialized = false;

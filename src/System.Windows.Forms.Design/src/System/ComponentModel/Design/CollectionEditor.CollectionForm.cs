@@ -174,10 +174,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             protected internal virtual DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
-                if (edSvc is null)
-                {
-                    throw new ArgumentNullException(nameof(edSvc));
-                }
+                ArgumentNullException.ThrowIfNull(edSvc, nameof(edSvc));
 
                 return edSvc.ShowDialog(this);
             }

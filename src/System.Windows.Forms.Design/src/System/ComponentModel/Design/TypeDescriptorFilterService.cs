@@ -40,15 +40,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterAttributes(IComponent component, IDictionary attributes)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (attributes is null)
-            {
-                throw new ArgumentNullException(nameof(attributes));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(attributes, nameof(attributes));
 
             IDesigner designer = GetDesigner(component);
 
@@ -66,15 +59,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterEvents(IComponent component, IDictionary events)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (events is null)
-            {
-                throw new ArgumentNullException(nameof(events));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(events, nameof(events));
 
             IDesigner designer = GetDesigner(component);
 
@@ -92,15 +78,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterProperties(IComponent component, IDictionary properties)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (properties is null)
-            {
-                throw new ArgumentNullException(nameof(properties));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(properties, nameof(properties));
 
             IDesigner designer = GetDesigner(component);
 

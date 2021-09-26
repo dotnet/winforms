@@ -44,15 +44,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual object Deserialize(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (declaration is null)
-            {
-                throw new ArgumentNullException(nameof(declaration));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(declaration, nameof(declaration));
 
             object rootObject = null;
             using (TraceScope("TypeCodeDomSerializer::Deserialize"))
@@ -354,20 +347,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration declaration, object value)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (declaration is null)
-            {
-                throw new ArgumentNullException(nameof(declaration));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(declaration, nameof(declaration));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             if (!(declaration.UserData[s_initMethodKey] is CodeConstructor ctor))
             {
@@ -383,15 +365,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (declaration is null)
-            {
-                throw new ArgumentNullException(nameof(declaration));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(declaration, nameof(declaration));
 
             foreach (CodeTypeMember member in declaration.Members)
             {
@@ -436,15 +411,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeTypeDeclaration Serialize(IDesignerSerializationManager manager, object root, ICollection members)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (root is null)
-            {
-                throw new ArgumentNullException(nameof(root));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(root, nameof(root));
 
             Trace("TypeCodeDomSerializer::Serialize");
 
