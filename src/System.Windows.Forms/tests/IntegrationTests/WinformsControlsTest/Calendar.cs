@@ -15,6 +15,21 @@ namespace WinformsControlsTest
             daysOfWeekComboBox.SelectedIndex = (int)monthCalendar1.FirstDayOfWeek;
             showWeekNumbersCheckBox.Checked = monthCalendar1.ShowWeekNumbers;
             showTodayCheckBox.Checked = monthCalendar1.ShowToday;
+            monthCalendar1.DateSelected += monthCalendar1_DateSelected;
+        }
+
+        private unsafe void monthCalendar1_DateSelected(object sender, DateRangeEventArgs e)
+        {
+            if (monthCalendar1.BoldedDates.Contains(e.Start))
+            {
+                monthCalendar1.RemoveBoldedDate(e.Start);
+            }
+            else
+            {
+                monthCalendar1.AddBoldedDate(e.Start);
+            }
+
+            monthCalendar1.UpdateBoldedDates();
         }
 
         private void setMinDateButton_Click(object sender, EventArgs e)
