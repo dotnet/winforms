@@ -2,12 +2,11 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Configuration;
 using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripSettingsManagerTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripSettingsManagerTests : IClassFixture<UserConfigDisposableFixture>
     {
         [WinFormsFact]
         public void ToolStripSettingsManager_Save_Load_RoundTripExpected()
@@ -22,14 +21,6 @@ namespace System.Windows.Forms.Tests
 
             var toolStripSettingsManager = new ToolStripSettingsManager(mainForm, "MainForm");
 
-            // Work around for issue https://github.com/dotnet/winforms/issues/5836.
-            // Cleaning user.config file if exists that may have written by previously ran tests.
-            var configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
-            if (File.Exists(configuration.FilePath))
-            {
-                File.Delete(configuration.FilePath);
-            }
-
             toolStripSettingsManager.Save();
 
             toolStrip.Size = new Drawing.Size(5, 5);
@@ -39,13 +30,6 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(new Drawing.Size(10, 10), toolStrip.Size);
             Assert.False(toolStrip.Visible);
-
-            // Cleaning the user.config file created by this test.
-            configuration = ConfigurationManager.OpenExeConfiguration(ConfigurationUserLevel.PerUserRoamingAndLocal);
-            if (File.Exists(configuration.FilePath))
-            {
-                File.Delete(configuration.FilePath);
-            }
         }
     }
 }
