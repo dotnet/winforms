@@ -81,7 +81,7 @@ stages:
                 _DotNetPublishToBlobFeed : false
                 # Code coverage uploads fail on internal PRs
                 ${{ if eq(variables['System.TeamProject'], 'public') }}:
-                  _Coverage: true
+                  _Coverage: false
             Release:
               _BuildConfig: Release
               _Coverage: false
