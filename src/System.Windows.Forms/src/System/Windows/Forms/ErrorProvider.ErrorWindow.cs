@@ -424,16 +424,16 @@ namespace System.Windows.Forms
             /// </summary>
             private void WmGetObject(ref Message m)
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m._LParam}");
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m.LParamInternal}");
 
-                if (m.Msg == (int)User32.WM.GETOBJECT && m._LParam == NativeMethods.UiaRootObjectId)
+                if (m.Msg == (int)User32.WM.GETOBJECT && m.LParamInternal == NativeMethods.UiaRootObjectId)
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    m._Result = UiaCore.UiaReturnRawElementProvider(
+                    m.ResultInternal = UiaCore.UiaReturnRawElementProvider(
                         this,
-                        m._WParam,
-                        m._LParam,
+                        m.WParamInternal,
+                        m.LParamInternal,
                         AccessibilityObject);
 
                     return;
@@ -448,13 +448,13 @@ namespace System.Windows.Forms
             /// </summary>
             protected unsafe override void WndProc(ref Message m)
             {
-                switch (m._Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.GETOBJECT:
                         WmGetObject(ref m);
                         break;
                     case User32.WM.NOTIFY:
-                        User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
+                        User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
                         if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
                             OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);

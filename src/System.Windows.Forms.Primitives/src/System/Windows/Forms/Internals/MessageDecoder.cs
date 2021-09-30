@@ -306,7 +306,7 @@ namespace System.Windows.Forms
 
         public static string ToString(Message message)
         {
-            return ToString(message.HWnd, message._Msg, message._WParam, message._LParam, message._Result);
+            return ToString(message.HWnd, message.MsgInternal, message.WParamInternal, message.LParamInternal, message.ResultInternal);
         }
 
         private static string ToString(IntPtr hWnd, User32.WM msg, nint wparam, nint lparam, nint result)

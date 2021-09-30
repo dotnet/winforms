@@ -272,9 +272,9 @@ namespace System.Windows.Forms
                 else
                 {
                     // win32Message may have been modified. Lets copy it back.
-                    msg._Msg = win32Message.message;
-                    msg._WParam = win32Message.wParam;
-                    msg._LParam = win32Message.lParam;
+                    msg.MsgInternal = win32Message.message;
+                    msg.WParamInternal = win32Message.wParam;
+                    msg.LParamInternal = win32Message.lParam;
                     msg.HWnd = win32Message.hwnd;
 
                     if (hr == HRESULT.S_FALSE)
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.COMMAND:
-                    if (!ReflectMessage(m._LParam, ref m))
+                    if (!ReflectMessage(m.LParamInternal, ref m))
                     {
                         DefWndProc(ref m);
                     }
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.KILLFOCUS:
-                    hwndFocus = m._WParam;
+                    hwndFocus = m.WParamInternal;
                     try
                     {
                         base.WndProc(ref m);
@@ -483,9 +483,9 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m._Msg == WebBrowserHelper.REGMSG_MSG)
+                    if (m.MsgInternal == WebBrowserHelper.REGMSG_MSG)
                     {
-                        m._Result = WebBrowserHelper.REGMSG_RETVAL;
+                        m.ResultInternal = WebBrowserHelper.REGMSG_RETVAL;
                     }
                     else
                     {

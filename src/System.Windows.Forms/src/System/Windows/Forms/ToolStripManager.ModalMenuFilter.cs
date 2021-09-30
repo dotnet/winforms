@@ -281,7 +281,7 @@ namespace System.Windows.Forms
 
             internal static void ProcessMenuKeyDown(ref Message m)
             {
-                Keys keyData = (Keys)m._WParam;
+                Keys keyData = (Keys)m.WParamInternal;
 
                 if (Control.FromHandle(m.HWnd) is ToolStrip toolStrip && !toolStrip.IsDropDown)
                 {
@@ -658,14 +658,14 @@ namespace System.Windows.Forms
                         case User32.WM.MBUTTONDOWN:
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown. If not, we should dismiss it.
-                            ProcessMouseButtonPressed(m.HWnd, PARAM.ToPoint(m._LParam));
+                            ProcessMouseButtonPressed(m.HWnd, PARAM.ToPoint(m.LParamInternal));
                             break;
                         case User32.WM.NCLBUTTONDOWN:
                         case User32.WM.NCRBUTTONDOWN:
                         case User32.WM.NCMBUTTONDOWN:
                             // When a mouse button is pressed, we should determine if it is within the client coordinates
                             // of the active dropdown. If not, we should dismiss it.
-                            ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero, PARAM.ToPoint(m._LParam));
+                            ProcessMouseButtonPressed(/*nc messages are in screen coords*/IntPtr.Zero, PARAM.ToPoint(m.LParamInternal));
                             break;
 
                         case User32.WM.KEYDOWN:

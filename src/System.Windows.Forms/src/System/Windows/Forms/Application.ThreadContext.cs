@@ -1285,9 +1285,9 @@ namespace System.Windows.Forms
                             if (f is IMessageModifyAndFilter)
                             {
                                 msg.hwnd = m.HWnd;
-                                msg.message = m._Msg;
-                                msg.wParam = m._WParam;
-                                msg.lParam = m._LParam;
+                                msg.message = m.MsgInternal;
+                                msg.wParam = m.WParamInternal;
+                                msg.lParam = m.LParamInternal;
                                 modified = true;
                             }
 
@@ -1384,8 +1384,8 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    msg.wParam = m._WParam;
-                    msg.lParam = m._LParam;
+                    msg.wParam = m.WParamInternal;
+                    msg.lParam = m.LParamInternal;
 
                     if (retValue)
                     {

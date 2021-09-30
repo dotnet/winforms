@@ -21,18 +21,18 @@ namespace System.Windows.Forms
 
         // Using prefixed variants of the property names for easier diffing.
 #pragma warning disable IDE1006 // Naming Styles
-        internal nint _Result;
-        internal nint _LParam;
-        internal nint _WParam;
-        internal User32.WM _Msg;
+        internal nint ResultInternal;
+        internal nint LParamInternal;
+        internal nint WParamInternal;
+        internal User32.WM MsgInternal;
 #pragma warning restore IDE1006 // Naming Styles
 
         public IntPtr HWnd { get; set; }
 
         public int Msg
         {
-            get => (int)_Msg;
-            set => _Msg = (User32.WM)value;
+            get => (int)MsgInternal;
+            set => MsgInternal = (User32.WM)value;
         }
 
         // It is particularly dangerous to cast to/from IntPtr on 64 bit platforms as casts are checked.
@@ -45,45 +45,45 @@ namespace System.Windows.Forms
         // is unchecked. Casting works just like casting between other intrinsic types (short, int, long, etc.).
         //
         // Marking it as obsolete in DEBUG to fail the build. In consuming projects you can skip this obsoletion
-        // by adding the property <NoWarn>$(NoWarn),WINFORMSDEV0001</NoWarn> to a property group in your project
+        // by adding the property <NoWarn>$(NoWarn),WFDEV001</NoWarn> to a property group in your project
         // file (or adding the warning via the project properties pages).
 #if DEBUG
         [Obsolete(
-            $"Casting to/from IntPtr is unsafe, use {nameof(_WParam)}.",
-            DiagnosticId = "WINFORMSDEV0001")]
+            $"Casting to/from IntPtr is unsafe, use {nameof(WParamInternal)}.",
+            DiagnosticId = "WFDEV001")]
 #endif
         public IntPtr WParam
         {
-            get => _WParam;
-            set => _WParam = value;
+            get => WParamInternal;
+            set => WParamInternal = value;
         }
 
 #if DEBUG
         [Obsolete(
-            $"Casting to/from IntPtr is unsafe, use {nameof(_LParam)}.",
-            DiagnosticId = "WINFORMSDEV0001")]
+            $"Casting to/from IntPtr is unsafe, use {nameof(LParamInternal)}.",
+            DiagnosticId = "WFDEV001")]
 #endif
         public IntPtr LParam
         {
-            get => _LParam;
-            set => _LParam = value;
+            get => LParamInternal;
+            set => LParamInternal = value;
         }
 
 #if DEBUG
         [Obsolete(
-            $"Casting to/from IntPtr is unsafe, use {nameof(_Result)}.",
-            DiagnosticId = "WINFORMSDEV0001")]
+            $"Casting to/from IntPtr is unsafe, use {nameof(ResultInternal)}.",
+            DiagnosticId = "WFDEV001")]
 #endif
         public IntPtr Result
         {
-            get => _Result;
-            set => _Result = value;
+            get => ResultInternal;
+            set => ResultInternal = value;
         }
 
         /// <summary>
         ///  Gets the <see cref='LParam'/> value, and converts the value to an object.
         /// </summary>
-        public object? GetLParam(Type cls) => Marshal.PtrToStructure(_LParam, cls);
+        public object? GetLParam(Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
 
         internal static Message Create(IntPtr hWnd, User32.WM msg, nint wparam, nint lparam)
             => Create(hWnd, (int)msg, wparam, lparam);
@@ -94,9 +94,9 @@ namespace System.Windows.Forms
             {
                 HWnd = hWnd,
                 Msg = msg,
-                _WParam = wparam,
-                _LParam = lparam,
-                _Result = IntPtr.Zero
+                WParamInternal = wparam,
+                LParamInternal = lparam,
+                ResultInternal = IntPtr.Zero
             };
 
 #if DEBUG
@@ -116,10 +116,10 @@ namespace System.Windows.Forms
             }
 
             return HWnd == m.HWnd
-                && _Msg == m._Msg
-                && _WParam == m._WParam
-                && _LParam == m._LParam
-                && _Result == m._Result;
+                && MsgInternal == m.MsgInternal
+                && WParamInternal == m.WParamInternal
+                && LParamInternal == m.LParamInternal
+                && ResultInternal == m.ResultInternal;
         }
 
         public static bool operator ==(Message a, Message b) => a.Equals(b);

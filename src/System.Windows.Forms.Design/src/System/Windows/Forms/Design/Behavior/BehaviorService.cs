@@ -829,15 +829,15 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void TestHook_SetText(ref Message m, string text)
         {
-            if (m._LParam == 0)
+            if (m.LParamInternal == 0)
             {
-                m._Result = (text.Length + 1) * sizeof(char);
+                m.ResultInternal = (text.Length + 1) * sizeof(char);
                 return;
             }
 
-            if (m._WParam < text.Length + 1)
+            if (m.WParamInternal < text.Length + 1)
             {
-                m._Result = -1;
+                m.ResultInternal = -1;
                 return;
             }
 
@@ -849,9 +849,9 @@ namespace System.Windows.Forms.Design.Behavior
             bytes = Text.Encoding.Unicode.GetBytes(text);
             nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
 
-            Marshal.Copy(bytes, 0, m._LParam, bytes.Length);
-            Marshal.Copy(nullBytes, 0, m._LParam + bytes.Length, nullBytes.Length);
-            m._Result = (bytes.Length + nullBytes.Length) / sizeof(char);
+            Marshal.Copy(bytes, 0, m.LParamInternal, bytes.Length);
+            Marshal.Copy(nullBytes, 0, m.LParamInternal + bytes.Length, nullBytes.Length);
+            m.ResultInternal = (bytes.Length + nullBytes.Length) / sizeof(char);
         }
 
         private void TestHook_GetAllSnapLines(ref Message m)

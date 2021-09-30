@@ -2375,9 +2375,9 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((PRF)m._LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if (((PRF)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m._WParam);
+                using Graphics g = Graphics.FromHdc(m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);
@@ -2388,7 +2388,7 @@ namespace System.Windows.Forms
 
         protected virtual void WmReflectCommand(ref Message m)
         {
-            switch ((User32.LBN)PARAM.HIWORD(m._WParam))
+            switch ((User32.LBN)PARAM.HIWORD(m.WParamInternal))
             {
                 case User32.LBN.SELCHANGE:
                     if (selectedItems is not null)
@@ -2407,7 +2407,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectDrawItem(ref Message m)
         {
-            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m._LParam;
+            DRAWITEMSTRUCT* dis = (DRAWITEMSTRUCT*)m.LParamInternal;
 
             Rectangle bounds = dis->rcItem;
             if (HorizontalScrollbar)
@@ -2426,13 +2426,13 @@ namespace System.Windows.Forms
 
             OnDrawItem(e);
 
-            m._Result = 1;
+            m.ResultInternal = 1;
         }
 
         // This method is only called if in owner draw mode
         private unsafe void WmReflectMeasureItem(ref Message m)
         {
-            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m._LParam;
+            MEASUREITEMSTRUCT* mis = (MEASUREITEMSTRUCT*)m.LParamInternal;
 
             if (drawMode == DrawMode.OwnerDrawVariable && mis->itemID >= 0)
             {
@@ -2446,7 +2446,7 @@ namespace System.Windows.Forms
                 mis->itemHeight = (uint)ItemHeight;
             }
 
-            m._Result = 1;
+            m.ResultInternal = 1;
         }
 
         /// <summary>
@@ -2456,7 +2456,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case WM.REFLECT_COMMAND:
                     WmReflectCommand(ref m);
@@ -2475,7 +2475,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     break;
                 case WM.LBUTTONUP:
-                    Point point = PARAM.ToPoint(m._LParam);
+                    Point point = PARAM.ToPoint(m.LParamInternal);
                     bool captured = Capture;
                     if (captured && WindowFromPoint(PointToScreen(point)) == Handle)
                     {
@@ -2517,7 +2517,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.RBUTTONUP:
-                    if (Capture && WindowFromPoint(PointToScreen(PARAM.ToPoint(m._LParam))) == Handle)
+                    if (Capture && WindowFromPoint(PointToScreen(PARAM.ToPoint(m.LParamInternal))) == Handle)
                     {
                         selectedItems?.Dirty();
                     }

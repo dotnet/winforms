@@ -740,10 +740,10 @@ namespace System.Windows.Forms
 
         private void WndProc(ref Message msg)
         {
-            switch (msg._Msg)
+            switch (msg.MsgInternal)
             {
                 case (User32.WM)WM_TRAYMOUSEMESSAGE:
-                    switch ((User32.WM)msg._LParam)
+                    switch ((User32.WM)msg.LParamInternal)
                     {
                         case User32.WM.LBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Left, 2);
@@ -796,9 +796,9 @@ namespace System.Windows.Forms
 
                     break;
                 case User32.WM.COMMAND:
-                    if (msg._LParam == 0)
+                    if (msg.LParamInternal == 0)
                     {
-                        if (Command.DispatchID((int)msg._WParam & 0xFFFF))
+                        if (Command.DispatchID((int)msg.WParamInternal & 0xFFFF))
                         {
                             return;
                         }

@@ -841,10 +841,10 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((PRF)m._LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
+            if (((PRF)m.LParamInternal & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
                 && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m._WParam);
+                using Graphics g = Graphics.FromHdc(m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);

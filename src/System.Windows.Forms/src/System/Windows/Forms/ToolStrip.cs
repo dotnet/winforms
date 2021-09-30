@@ -4928,12 +4928,12 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if (m._Msg == User32.WM.SETFOCUS)
+            if (m.MsgInternal == User32.WM.SETFOCUS)
             {
-                SnapFocus(m._WParam);
+                SnapFocus(m.WParamInternal);
             }
 
-            if (m._Msg == User32.WM.MOUSEACTIVATE)
+            if (m.MsgInternal == User32.WM.MOUSEACTIVATE)
             {
                 // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                 // itself.  the mouse message will still go through, but focus won't be taken.
@@ -4947,7 +4947,7 @@ namespace System.Windows.Forms
                 if (hwndClicked == Handle)
                 {
                     _lastMouseDownedItem = null;
-                    m._Result = (nint)User32.MA.NOACTIVATE;
+                    m.ResultInternal = (nint)User32.MA.NOACTIVATE;
 
                     if (!IsDropDown && !IsInDesignMode)
                     {
@@ -4962,7 +4962,7 @@ namespace System.Windows.Forms
                             {
                                 // Activate the window, and discard the mouse message.
                                 // this appears to be the same behavior as office.
-                                m._Result = (nint)User32.MA.ACTIVATEANDEAT;
+                                m.ResultInternal = (nint)User32.MA.ACTIVATEANDEAT;
                             }
                         }
                     }

@@ -3281,11 +3281,11 @@ namespace System.Windows.Forms
         {
             if (ctlClient != null && ctlClient.IsHandleCreated && ctlClient.ParentInternal == this)
             {
-                m._Result = User32.DefFrameProcW(m.HWnd, ctlClient.Handle, m._Msg, m._WParam, m._LParam);
+                m.ResultInternal = User32.DefFrameProcW(m.HWnd, ctlClient.Handle, m.MsgInternal, m.WParamInternal, m.LParamInternal);
             }
             else if (0 != formStateEx[FormStateExUseMdiChildProc])
             {
-                m._Result = User32.DefMDIChildProcW(m.HWnd, m._Msg, m._WParam, m._LParam);
+                m.ResultInternal = User32.DefMDIChildProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
             }
             else
             {
@@ -4307,7 +4307,7 @@ namespace System.Windows.Forms
             DefWndProc(ref m);
 
             Size desiredSize = new Size();
-            m._Result = OnGetDpiScaledSize(_deviceDpi, PARAM.SignedLOWORD(m._WParam), ref desiredSize)
+            m.ResultInternal = OnGetDpiScaledSize(_deviceDpi, PARAM.SignedLOWORD(m.WParamInternal), ref desiredSize)
                 ? PARAM.FromLowHigh(Size.Width, Size.Height)
                 : 0;
         }
@@ -4402,9 +4402,9 @@ namespace System.Windows.Forms
                 retValue = true;
             }
 
-            msg._Msg = win32Message.message;
-            msg._WParam = win32Message.wParam;
-            msg._LParam = win32Message.lParam;
+            msg.MsgInternal = win32Message.message;
+            msg.WParamInternal = win32Message.wParam;
+            msg.LParamInternal = win32Message.lParam;
             msg.HWnd = win32Message.hwnd;
 
             return retValue;
@@ -5990,7 +5990,7 @@ namespace System.Windows.Forms
         private void WmActivate(ref Message m)
         {
             Application.FormActivated(Modal, true);
-            Active = (User32.WA)PARAM.LOWORD(m._WParam) != User32.WA.INACTIVE;
+            Active = (User32.WA)PARAM.LOWORD(m.WParamInternal) != User32.WA.INACTIVE;
             Application.FormActivated(Modal, Active);
         }
 
@@ -6121,9 +6121,9 @@ namespace System.Windows.Forms
                     OnFormClosing(e);
                 }
 
-                if (m._Msg == User32.WM.QUERYENDSESSION)
+                if (m.MsgInternal == User32.WM.QUERYENDSESSION)
                 {
-                    m._Result = e.Cancel ? 0 : 1;
+                    m.ResultInternal = e.Cancel ? 0 : 1;
                 }
                 else if (e.Cancel && (MdiParent is not null))
                 {
@@ -6138,7 +6138,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                e.Cancel = m._WParam == 0;
+                e.Cancel = m.WParamInternal == 0;
             }
 
             // Pass 2 (WM_CLOSE & WM_ENDSESSION)... Fire closed
@@ -6241,7 +6241,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmGetMinMaxInfoHelper(ref Message m, Size minTrack, Size maxTrack, Rectangle maximizedBounds)
         {
-            User32.MINMAXINFO* mmi = (User32.MINMAXINFO*)m._LParam;
+            User32.MINMAXINFO* mmi = (User32.MINMAXINFO*)m.LParamInternal;
             if (!minTrack.IsEmpty)
             {
                 mmi->ptMinTrackSize.X = minTrack.Width;
@@ -6288,7 +6288,7 @@ namespace System.Windows.Forms
                 mmi->ptMaxSize.Y = maximizedBounds.Height;
             }
 
-            m._Result = 0;
+            m.ResultInternal = 0;
         }
 
         /// <summary>
@@ -6306,11 +6306,11 @@ namespace System.Windows.Forms
             {
                 // This message is propagated twice by the MDIClient window. Once to the
                 // window being deactivated and once to the window being activated.
-                if (Handle == m._WParam)
+                if (Handle == m.WParamInternal)
                 {
                     formMdiParent.DeactivateMdiChild();
                 }
-                else if (Handle == m._LParam)
+                else if (Handle == m.LParamInternal)
                 {
                     formMdiParent.ActivateMdiChild(this);
                 }
@@ -6366,7 +6366,7 @@ namespace System.Windows.Forms
             if (formState[FormStateRenderSizeGrip] != 0)
             {
                 // Convert to client coordinates
-                Point point = PointToClient(PARAM.ToPoint(m._LParam));
+                Point point = PointToClient(PARAM.ToPoint(m.LParamInternal));
 
                 Size clientSize = ClientSize;
 
@@ -6378,7 +6378,7 @@ namespace System.Windows.Forms
                     point.Y >= (clientSize.Height - SizeGripSize) &&
                     clientSize.Height >= SizeGripSize)
                 {
-                    m._Result = (nint)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
+                    m.ResultInternal = (nint)(IsMirrored ? User32.HT.BOTTOMLEFT : User32.HT.BOTTOMRIGHT);
                     return;
                 }
             }
@@ -6390,10 +6390,10 @@ namespace System.Windows.Forms
             // The edge values are the 8 values from HTLEFT (10) to HTBOTTOMRIGHT (17).
             if (AutoSizeMode == AutoSizeMode.GrowAndShrink)
             {
-                int result = (int)m._Result;
+                int result = (int)m.ResultInternal;
                 if (result >= (int)User32.HT.LEFT && result <= (int)User32.HT.BOTTOMRIGHT)
                 {
-                    m._Result = (nint)User32.HT.BORDER;
+                    m.ResultInternal = (nint)User32.HT.BORDER;
                 }
             }
         }
@@ -6414,7 +6414,7 @@ namespace System.Windows.Forms
         {
             bool callDefault = true;
 
-            User32.SC sc = (User32.SC)(PARAM.LOWORD(m._WParam) & 0xFFF0);
+            User32.SC sc = (User32.SC)(PARAM.LOWORD(m.WParamInternal) & 0xFFF0);
             switch (sc)
             {
                 case User32.SC.CLOSE:
@@ -6448,7 +6448,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            if (Command.DispatchID(PARAM.LOWORD(m._WParam)))
+            if (Command.DispatchID(PARAM.LOWORD(m.WParamInternal)))
             {
                 callDefault = false;
             }
@@ -6471,7 +6471,7 @@ namespace System.Windows.Forms
                 base.WndProc(ref m);
                 if (MdiControlStrip is null && MdiParentInternal != null && MdiParentInternal.ActiveMdiChildInternal == this)
                 {
-                    MdiParentInternal.UpdateMdiControlStrip((User32.WINDOW_SIZE)m._WParam == User32.WINDOW_SIZE.MAXIMIZED);
+                    MdiParentInternal.UpdateMdiControlStrip((User32.WINDOW_SIZE)m.WParamInternal == User32.WINDOW_SIZE.MAXIMIZED);
                 }
             }
         }

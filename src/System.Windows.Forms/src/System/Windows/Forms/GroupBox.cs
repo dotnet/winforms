@@ -658,7 +658,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
-            if (m._WParam == 0)
+            if (m.WParamInternal == 0)
             {
                 return;
             }
@@ -670,18 +670,18 @@ namespace System.Windows.Forms
 
             if (backColor.HasTransparency())
             {
-                using Graphics graphics = Graphics.FromHdcInternal(m._WParam);
+                using Graphics graphics = Graphics.FromHdcInternal(m.WParamInternal);
                 using var brush = backColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, rect);
             }
             else
             {
-                var hdc = (Gdi32.HDC)m._WParam;
+                var hdc = (Gdi32.HDC)m.WParamInternal;
                 using var hbrush = new Gdi32.CreateBrushScope(backColor);
                 User32.FillRect(hdc, ref rect, hbrush);
             }
 
-            m._Result = 1;
+            m.ResultInternal = 1;
         }
 
         protected override void WndProc(ref Message m)
@@ -692,7 +692,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.ERASEBKGND:
                 case User32.WM.PRINTCLIENT:
@@ -705,9 +705,9 @@ namespace System.Windows.Forms
                     // will always be exposed through MSAA. Reason: When FlatStyle=System, we map down to the Win32
                     // "Button" window class to get OS group box rendering; but the OS does not expose the children
                     // of buttons to MSAA (because it assumes buttons won't have children).
-                    if (m._LParam == User32.OBJID.QUERYCLASSNAMEIDX)
+                    if (m.LParamInternal == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
-                        m._Result = 0;
+                        m.ResultInternal = 0;
                     }
 
                     break;

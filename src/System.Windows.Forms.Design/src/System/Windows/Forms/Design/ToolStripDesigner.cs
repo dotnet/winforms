@@ -2547,7 +2547,7 @@ namespace System.Windows.Forms.Design
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.CONTEXTMENU:
-                    if (GetHitTest(PARAM.ToPoint(m._LParam)))
+                    if (GetHitTest(PARAM.ToPoint(m.LParamInternal)))
                     {
                         return;
                     }
