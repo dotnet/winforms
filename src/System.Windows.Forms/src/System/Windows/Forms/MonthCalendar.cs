@@ -1901,7 +1901,7 @@ namespace System.Windows.Forms
 
             // Calculate the number of visible months, even though they may be partially visible.
             // It is necessary to send to Windows correct info about all bolded dates that are visible.
-            int monthsCount = (displayRange.End.Year - displayRange.Start.Year) * 12 + displayRange.End.Month - displayRange.Start.Month + 1;
+            int monthsCount = (displayRange.End.Year - displayRange.Start.Year) * MonthsInYear + displayRange.End.Month - displayRange.Start.Month + 1;
 
             // Create a special collection for storage states of dates of some displayed month.
             // This collection will be send to Windows to update displayed dates states - bolded/unbolded.
@@ -1918,9 +1918,11 @@ namespace System.Windows.Forms
 
                 if (currentDateIsBolded)
                 {
-                    // Calculate an index of a month of the current date in the display range.
-                    // It works as an array, indexes start from 0.
-                    int currentMonthIndex = (12 - displayRange.Start.Month + currentDate.Month) % 12;
+                    // Calculate an index of a month of the current date in the display range,
+                    // starting from the first displayed month.
+                    // The display range may include gray dates of the first and last months.
+                    // So the max count of visible months is 14 and the max index is 13.
+                    int currentMonthIndex = (currentDate.Year - displayRange.Start.Year) * MonthsInYear + currentDate.Month - displayRange.Start.Month;
 
                     // Set bolded state for the current date of the current month
                     // to prepare the states array before sending to Windows
