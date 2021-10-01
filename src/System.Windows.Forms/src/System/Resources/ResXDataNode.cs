@@ -109,7 +109,7 @@ namespace System.Resources
             ArgumentNullException.ThrowIfNull(name, nameof(name));
             if (name.Length == 0)
             {
-                throw (new ArgumentException(nameof(name)));
+                throw (new ArgumentNullException(nameof(name)));
             }
 
             _name = name;

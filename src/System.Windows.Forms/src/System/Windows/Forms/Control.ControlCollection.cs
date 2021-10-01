@@ -207,7 +207,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(key, nameof(key));
                 if (string.IsNullOrEmpty(key))
                 {
-                    throw new ArgumentException(SR.FindKeyMayNotBeEmptyOrNull, nameof(key));
+                    throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
                 }
 
                 List<Control> foundControls = new();

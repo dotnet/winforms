@@ -391,7 +391,7 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(text, nameof(text));
             if (string.IsNullOrEmpty(text))
             {
-                throw new ArgumentException(nameof(text));
+                throw new ArgumentNullException(nameof(text));
             }
 
             SourceGenerated.EnumValidator.Validate(format, nameof(format));

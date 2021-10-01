@@ -683,6 +683,10 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(targetForm, nameof(targetForm));
             ArgumentNullException.ThrowIfNull(key, nameof(key));
+            if (string.IsNullOrEmpty(key))
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
 
             ToolStripSettingsManager settingsManager = new ToolStripSettingsManager(targetForm, key);
 
