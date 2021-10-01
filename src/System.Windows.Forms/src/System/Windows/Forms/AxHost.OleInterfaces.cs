@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
             internal OleInterfaces(AxHost host)
             {
-                this.host = host ?? throw new ArgumentNullException(nameof(host));
+                this.host = host.OrThrowIfNull();
             }
 
             private void Dispose(bool disposing)

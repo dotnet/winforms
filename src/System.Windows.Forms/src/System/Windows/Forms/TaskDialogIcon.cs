@@ -110,7 +110,7 @@ namespace System.Windows.Forms
         ///   </para>
         /// </remarks>
         public TaskDialogIcon(Bitmap image)
-            : this(BitmapToIcon(image ?? throw new ArgumentNullException(nameof(image))), true)
+            : this(BitmapToIcon(image.OrThrowIfNull()), true)
         {
         }
 
@@ -128,7 +128,7 @@ namespace System.Windows.Forms
         ///   </para>
         /// </remarks>
         public TaskDialogIcon(Icon icon)
-            : this(icon ?? throw new ArgumentNullException(nameof(icon)), false)
+            : this(icon.OrThrowIfNull(), false)
         {
         }
 

@@ -5,6 +5,7 @@
 #nullable disable
 
 using System.ComponentModel;
+using System.Windows.Forms;
 
 namespace System.Drawing.Design
 {
@@ -24,7 +25,7 @@ namespace System.Drawing.Design
         {
             Context = context;
             Value = value;
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Graphics = graphics.OrThrowIfNull();
             Bounds = bounds;
         }
 

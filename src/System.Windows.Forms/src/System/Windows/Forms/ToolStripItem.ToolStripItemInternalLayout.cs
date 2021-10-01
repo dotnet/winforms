@@ -27,7 +27,7 @@ namespace System.Windows.Forms
 
             public ToolStripItemInternalLayout(ToolStripItem ownerItem)
             {
-                _ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
+                _ownerItem = ownerItem.OrThrowIfNull();
             }
 
             protected virtual ToolStripItem Owner => _ownerItem;

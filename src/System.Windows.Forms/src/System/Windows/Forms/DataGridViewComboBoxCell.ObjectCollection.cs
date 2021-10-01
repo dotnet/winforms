@@ -211,7 +211,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    InnerArray[index] = value ?? throw new ArgumentNullException(nameof(value));
+                    InnerArray[index] = value.OrThrowIfNull();
                     owner.OnItemsCollectionChanged();
                 }
             }

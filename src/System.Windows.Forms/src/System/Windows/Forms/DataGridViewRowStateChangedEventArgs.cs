@@ -8,7 +8,7 @@ namespace System.Windows.Forms
     {
         public DataGridViewRowStateChangedEventArgs(DataGridViewRow dataGridViewRow, DataGridViewElementStates stateChanged)
         {
-            Row = dataGridViewRow ?? throw new ArgumentNullException(nameof(dataGridViewRow));
+            Row = dataGridViewRow.OrThrowIfNull();
             StateChanged = stateChanged;
         }
 

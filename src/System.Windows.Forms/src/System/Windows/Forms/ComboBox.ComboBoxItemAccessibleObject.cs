@@ -29,7 +29,7 @@ namespace System.Windows.Forms
             /// <param name="owningItem">The owning ComboBox item.</param>
             public ComboBoxItemAccessibleObject(ComboBox owningComboBox, Entry owningItem)
             {
-                _owningComboBox = owningComboBox ?? throw new ArgumentNullException(nameof(owningComboBox));
+                _owningComboBox = owningComboBox.OrThrowIfNull();
                 _owningItem = owningItem;
 
                 _systemIAccessible = _owningComboBox.ChildListAccessibleObject.GetSystemIAccessibleInternal();

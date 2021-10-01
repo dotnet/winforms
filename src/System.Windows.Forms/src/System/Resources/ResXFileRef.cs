@@ -7,6 +7,7 @@
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
+using System.Windows.Forms;
 
 namespace System.Resources
 {
@@ -25,8 +26,8 @@ namespace System.Resources
         /// </summary>
         public ResXFileRef(string fileName, string typeName)
         {
-            FileName = fileName ?? throw new ArgumentNullException(nameof(fileName));
-            TypeName = typeName ?? throw new ArgumentNullException(nameof(typeName));
+            FileName = fileName.OrThrowIfNull();
+            TypeName = typeName.OrThrowIfNull();
         }
 
         /// <summary>

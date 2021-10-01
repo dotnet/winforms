@@ -567,7 +567,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                _icon = value ?? throw new ArgumentNullException(nameof(value));
+                _icon = value.OrThrowIfNull();
                 DisposeRegion();
                 ErrorWindow[] array = new ErrorWindow[_windows.Values.Count];
                 _windows.Values.CopyTo(array, 0);

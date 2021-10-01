@@ -26,7 +26,7 @@ namespace System.Windows.Forms
             Color backColor,
             Font? font)
         {
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Graphics = graphics.OrThrowIfNull();
             Bounds = bounds;
             ColumnIndex = columnIndex;
             Header = header;

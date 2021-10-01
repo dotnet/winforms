@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         //
         internal WebBrowserSiteBase(WebBrowserBase h)
         {
-            host = h ?? throw new ArgumentNullException(nameof(h));
+            host = h.OrThrowIfNull();
         }
 
         /// <summary>

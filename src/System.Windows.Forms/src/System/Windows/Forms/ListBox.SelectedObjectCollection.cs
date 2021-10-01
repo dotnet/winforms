@@ -25,7 +25,7 @@ namespace System.Windows.Forms
 
             public SelectedObjectCollection(ListBox owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
                 stateDirty = true;
                 lastVersion = -1;
             }

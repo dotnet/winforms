@@ -14,7 +14,7 @@ namespace System.Windows.Forms
 
             public ListViewColumnHeaderAccessibleObject(ColumnHeader columnHeader)
             {
-                _owningColumnHeader = columnHeader ?? throw new ArgumentNullException(nameof(columnHeader));
+                _owningColumnHeader = columnHeader.OrThrowIfNull();
             }
 
             internal override object? GetPropertyValue(UIA propertyID)

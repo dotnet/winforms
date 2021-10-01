@@ -420,7 +420,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                InnerList[index].Item = value ?? throw new ArgumentNullException(nameof(value));
+                InnerList[index].Item = value.OrThrowIfNull();
 
                 // If the native control has been created, and the display text of the new list item object
                 // is different to the current text in the native list item, recreate the native list item...

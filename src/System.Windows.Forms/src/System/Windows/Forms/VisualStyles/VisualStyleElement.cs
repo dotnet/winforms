@@ -19,7 +19,7 @@ namespace System.Windows.Forms.VisualStyles
 
         private VisualStyleElement(string className, int part, int state)
         {
-            ClassName = className ?? throw new ArgumentNullException(nameof(className));
+            ClassName = className.OrThrowIfNull();
             Part = part;
             State = state;
         }

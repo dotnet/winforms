@@ -20,7 +20,7 @@ namespace System.Windows.Forms
             Rectangle bounds,
             TreeNodeStates state)
         {
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Graphics = graphics.OrThrowIfNull();
             Node = node;
             Bounds = bounds;
             State = state;

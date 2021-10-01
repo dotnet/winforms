@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
                     public DirectionButtonAccessibleObject(UpDownButtonsAccessibleObject parent, bool up)
                     {
-                        _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+                        _parent = parent.OrThrowIfNull();
                         _up = up;
                     }
 

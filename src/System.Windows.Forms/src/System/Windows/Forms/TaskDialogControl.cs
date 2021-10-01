@@ -60,7 +60,7 @@ namespace System.Windows.Forms
 
         internal ComCtl32.TDF Bind(TaskDialogPage page)
         {
-            BoundPage = page ?? throw new ArgumentNullException(nameof(page));
+            BoundPage = page.OrThrowIfNull();
 
             // Use the current value of IsCreatable to determine if the control is
             // created. This is important because IsCreatable can change while the

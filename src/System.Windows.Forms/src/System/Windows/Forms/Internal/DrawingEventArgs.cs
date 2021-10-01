@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             Rectangle clipRect,
             DrawingEventFlags flags)
         {
-            _graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            _graphics = graphics.OrThrowIfNull();
             _hdc = default;
             _oldPalette = default;
             CheckGraphicsForState(graphics, flags);

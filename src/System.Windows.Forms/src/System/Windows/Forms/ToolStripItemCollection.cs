@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         public ToolStripItemCollection(ToolStrip owner, ToolStripItem[] value)
         {
-            _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            _owner = owner.OrThrowIfNull();
             AddRange(value);
         }
 

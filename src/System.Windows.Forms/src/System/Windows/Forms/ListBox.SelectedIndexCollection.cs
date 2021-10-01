@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
             public SelectedIndexCollection(ListBox owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>

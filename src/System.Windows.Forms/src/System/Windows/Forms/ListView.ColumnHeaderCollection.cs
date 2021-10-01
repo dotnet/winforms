@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
             public ColumnHeaderCollection(ListView owner)
             {
-                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                this.owner = owner.OrThrowIfNull();
             }
 
             /// <summary>

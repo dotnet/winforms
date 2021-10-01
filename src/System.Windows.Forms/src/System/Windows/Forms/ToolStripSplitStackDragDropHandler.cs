@@ -19,7 +19,7 @@ namespace System.Windows.Forms
 
         public ToolStripSplitStackDragDropHandler(ToolStrip owner)
         {
-            this._owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            this._owner = owner.OrThrowIfNull();
         }
 
         public void OnDragEnter(DragEventArgs e)

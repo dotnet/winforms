@@ -24,7 +24,7 @@ namespace System.Windows.Forms
             ColumnHeader? header,
             ListViewItemStates itemState)
         {
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Graphics = graphics.OrThrowIfNull();
 
             if (itemIndex == -1)
             {

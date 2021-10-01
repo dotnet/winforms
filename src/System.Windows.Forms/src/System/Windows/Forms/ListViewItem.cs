@@ -113,7 +113,7 @@ namespace System.Windows.Forms
         public ListViewItem(ListViewSubItem[] subItems, int imageIndex) : this()
         {
             ImageIndexer.Index = imageIndex;
-            this.subItems = subItems ?? throw new ArgumentNullException(nameof(subItems));
+            this.subItems = subItems.OrThrowIfNull();
             SubItemCount = subItems.Length;
 
             // Update the owner of these subitems
@@ -192,7 +192,7 @@ namespace System.Windows.Forms
         public ListViewItem(ListViewSubItem[] subItems, string imageKey) : this()
         {
             ImageIndexer.Key = imageKey;
-            this.subItems = subItems ?? throw new ArgumentNullException(nameof(subItems));
+            this.subItems = subItems.OrThrowIfNull();
             SubItemCount = subItems.Length;
 
             // Update the owner of these subitems

@@ -113,7 +113,7 @@ namespace System.Resources
             }
 
             _name = name;
-            _fileRef = fileRef ?? throw new ArgumentNullException(nameof(fileRef));
+            _fileRef = fileRef.OrThrowIfNull();
             _typeNameConverter = typeNameConverter;
         }
 

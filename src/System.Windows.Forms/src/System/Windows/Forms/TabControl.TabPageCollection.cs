@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
             public TabPageCollection(TabControl owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             public virtual TabPage this[int index]

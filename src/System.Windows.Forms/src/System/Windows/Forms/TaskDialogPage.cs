@@ -133,7 +133,7 @@ namespace System.Windows.Forms
                 // access the controls from the task dialog's callback.
                 DenyIfBound();
 
-                _buttons = value ?? throw new ArgumentNullException(nameof(value));
+                _buttons = value.OrThrowIfNull();
             }
         }
 
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
                 // access the controls from the task dialog's callback.
                 DenyIfBound();
 
-                _radioButtons = value ?? throw new ArgumentNullException(nameof(value));
+                _radioButtons = value.OrThrowIfNull();
             }
         }
 

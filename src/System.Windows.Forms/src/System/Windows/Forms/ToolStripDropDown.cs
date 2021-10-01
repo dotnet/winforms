@@ -2018,7 +2018,7 @@ namespace System.Windows.Forms
         /// <summary> show relative to control coordinates </summary>
         public void Show(Control control, Point position)
         {
-            SourceControlInternal = control ?? throw new ArgumentNullException(nameof(control));
+            SourceControlInternal = control.OrThrowIfNull();
             // When we have no owner item and we're set to RTL.Inherit, translate the coordinates
             // so that the menu looks like it's swooping from the other side
             if (OwnerItem is null && control.RightToLeft == RightToLeft.Yes)
@@ -2034,7 +2034,7 @@ namespace System.Windows.Forms
 
         public void Show(Control control, Point position, ToolStripDropDownDirection direction)
         {
-            SourceControlInternal = control ?? throw new ArgumentNullException(nameof(control));
+            SourceControlInternal = control.OrThrowIfNull();
             displayLocation = CalculateDropDownLocation(control.PointToScreen(position), direction).Location;
             Location = displayLocation;
             ShowCore();
@@ -2043,7 +2043,7 @@ namespace System.Windows.Forms
         /// <summary> show relative to control coordinates </summary>
         public void Show(Control control, int x, int y)
         {
-            SourceControlInternal = control ?? throw new ArgumentNullException(nameof(control));
+            SourceControlInternal = control.OrThrowIfNull();
             Show(control, new Point(x, y));
         }
 

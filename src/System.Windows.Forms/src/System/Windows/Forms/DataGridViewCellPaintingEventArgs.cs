@@ -33,8 +33,8 @@ namespace System.Windows.Forms
                 throw new ArgumentException(string.Format(SR.DataGridView_InvalidDataGridViewPaintPartsCombination, nameof(paintParts)), nameof(paintParts));
             }
 
-            _dataGridView = dataGridView ?? throw new ArgumentNullException(nameof(dataGridView));
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            _dataGridView = dataGridView.OrThrowIfNull();
+            Graphics = graphics.OrThrowIfNull();
             ClipBounds = clipBounds;
             CellBounds = cellBounds;
             RowIndex = rowIndex;
@@ -43,7 +43,7 @@ namespace System.Windows.Forms
             Value = value;
             FormattedValue = formattedValue;
             ErrorText = errorText;
-            CellStyle = cellStyle ?? throw new ArgumentNullException(nameof(cellStyle));
+            CellStyle = cellStyle.OrThrowIfNull();
             AdvancedBorderStyle = advancedBorderStyle;
             PaintParts = paintParts;
         }

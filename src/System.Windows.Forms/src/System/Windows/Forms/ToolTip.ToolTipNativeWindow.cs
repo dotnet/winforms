@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 
             internal ToolTipNativeWindow(ToolTip toolTip)
             {
-                _toolTip = toolTip ?? throw new ArgumentNullException(nameof(toolTip));
+                _toolTip = toolTip.OrThrowIfNull();
             }
 
             protected override void WndProc(ref Message m) => _toolTip.WndProc(ref m);

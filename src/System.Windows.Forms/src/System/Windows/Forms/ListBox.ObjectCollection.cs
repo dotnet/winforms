@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
             public ObjectCollection(ListBox owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>

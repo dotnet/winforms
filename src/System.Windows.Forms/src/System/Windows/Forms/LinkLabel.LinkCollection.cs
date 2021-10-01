@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
             public LinkCollection(LinkLabel owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             public virtual Link this[int index]

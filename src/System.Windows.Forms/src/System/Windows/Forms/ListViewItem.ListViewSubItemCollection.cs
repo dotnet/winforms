@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
             public ListViewSubItemCollection(ListViewItem owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
 
                     ListViewSubItem oldSubItem = _owner.subItems[index];
 
-                    _owner.subItems[index] = value ?? throw new ArgumentNullException(nameof(value));
+                    _owner.subItems[index] = value.OrThrowIfNull();
                     value._owner = _owner;
 
                     oldSubItem._owner = null;

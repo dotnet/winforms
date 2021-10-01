@@ -83,7 +83,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolTip(IContainer cont) : this()
         {
-            _ = cont ?? throw new ArgumentNullException(nameof(cont));
+            _ = cont.OrThrowIfNull();
 
             cont.Add(this);
 

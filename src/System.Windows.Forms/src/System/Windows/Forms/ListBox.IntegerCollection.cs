@@ -19,7 +19,7 @@ namespace System.Windows.Forms
 
             public IntegerCollection(ListBox owner)
             {
-                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                this.owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
