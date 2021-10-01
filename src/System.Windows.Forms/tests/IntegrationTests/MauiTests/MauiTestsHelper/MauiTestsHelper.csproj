@@ -10,4 +10,8 @@
     <OutputType>Library</OutputType>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\Common\tests\TestUtilities\System.Windows.Forms.Common.TestUtilities.csproj" />
+  </ItemGroup>
+
 </Project>
