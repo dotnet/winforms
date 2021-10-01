@@ -13,5 +13,21 @@ namespace System.Windows.Forms
             ArgumentNullException.ThrowIfNull(argument, paramName);
             return argument;
         }
+
+        internal static void ThrowIfNull(this Interop.Gdi32.HDC argument, [CallerArgumentExpression("argument")] string? paramName = null)
+        {
+            if (argument.IsNull)
+            {
+                throw new ArgumentNullException(paramName);
+            }
+        }
+
+        internal static void ThrowIfNull(this IntPtr argument, [CallerArgumentExpression("argument")] string? paramName = null)
+        {
+            if (argument == IntPtr.Zero)
+            {
+                throw new ArgumentNullException(paramName);
+            }
+        }
     }
 }
