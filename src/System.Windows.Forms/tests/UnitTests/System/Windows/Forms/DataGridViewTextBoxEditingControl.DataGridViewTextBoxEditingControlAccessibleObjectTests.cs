@@ -137,6 +137,9 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewTextBoxEditingControlAccessibleObject_FragmentNavigate_ParentIsCell()
         {
             using DataGridView control = new();
+
+            Assert.True(control.AccessibilityObject is Control.ControlAccessibleObject);
+
             control.Columns.Add(new DataGridViewTextBoxColumn());
             control.Rows.Add();
 

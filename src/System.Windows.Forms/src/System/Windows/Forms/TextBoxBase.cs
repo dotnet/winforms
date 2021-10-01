@@ -1830,7 +1830,10 @@ namespace System.Windows.Forms
 
                 SendMessageW(this, (WM)EM.SETSEL, s, e);
 
-                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                if (IsAccessibilityObjectCreated)
+                {
+                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                }
             }
             else
             {

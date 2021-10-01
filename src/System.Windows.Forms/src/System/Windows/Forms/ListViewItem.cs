@@ -356,7 +356,10 @@ namespace System.Windows.Forms
                 {
                     listView.SetItemState(Index, value ? LVIS.FOCUSED : 0, LVIS.FOCUSED);
 
-                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                    if (listView.IsAccessibilityObjectCreated)
+                    {
+                        AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                    }
                 }
             }
         }

@@ -162,7 +162,8 @@ namespace System.Windows.Forms
         {
             base.OnHandleCreated(e);
 
-            _dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
+            // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
+            _dataGridView?.SetAccessibleObjectParent(AccessibilityObject);
         }
     }
 }

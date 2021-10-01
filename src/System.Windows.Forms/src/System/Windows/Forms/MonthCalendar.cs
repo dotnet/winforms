@@ -1488,7 +1488,10 @@ namespace System.Windows.Forms
         {
             base.OnGotFocus(e);
 
-            ((MonthCalendarAccessibleObject)AccessibilityObject).FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                ((MonthCalendarAccessibleObject)AccessibilityObject).FocusedCell?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         /// <summary>
@@ -2177,8 +2180,11 @@ namespace System.Windows.Forms
                 UpdateDisplayRange();
             }
 
-            MonthCalendarAccessibleObject calendarAccessibleObject = (MonthCalendarAccessibleObject)AccessibilityObject;
-            calendarAccessibleObject.RaiseAutomationEventForChild(UiaCore.UIA.AutomationFocusChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                MonthCalendarAccessibleObject calendarAccessibleObject = (MonthCalendarAccessibleObject)AccessibilityObject;
+                calendarAccessibleObject.RaiseAutomationEventForChild(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
 
             OnDateChanged(new DateRangeEventArgs(start, end));
         }

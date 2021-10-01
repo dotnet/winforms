@@ -916,9 +916,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
         {
-            // UIA events:
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ValueValuePropertyId, Name, Name);
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ValueValuePropertyId, Name, Name);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+            }
 
             ((EventHandler)Events[s_valueChangedEvent])?.Invoke(this, e);
         }

@@ -1271,7 +1271,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            if (LiveSetting != AutomationLiveSetting.Off)
+            if (IsAccessibilityObjectCreated && LiveSetting != AutomationLiveSetting.Off)
             {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }

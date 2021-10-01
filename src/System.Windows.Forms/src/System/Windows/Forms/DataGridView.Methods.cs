@@ -50,7 +50,11 @@ namespace System.Windows.Forms
             {
                 AccessibilityNotifyClients(AccessibleEvents.Focus, objectID, childID);
 
-                CurrentCell?.AccessibilityObject.SetFocus();
+                DataGridViewCell currentCell = CurrentCell;
+                if (currentCell is not null && currentCell.IsParentAccessibilityObjectCreated)
+                {
+                    currentCell.AccessibilityObject.SetFocus();
+                }
             }
 
             AccessibilityNotifyClients(AccessibleEvents.Selection, objectID, childID);
@@ -76,10 +80,13 @@ namespace System.Windows.Forms
                 DataGridViewRowEventArgs dgvre = new DataGridViewRowEventArgs(Rows[NewRowIndex]);
                 OnUserAddedRow(dgvre);
 
-                AccessibilityObject.InternalRaiseAutomationNotification(
-                    AutomationNotificationKind.ItemAdded,
-                    AutomationNotificationProcessing.ImportantMostRecent,
-                    string.Format(SR.DataGridView_RowAddedNotification, NewRowIndex));
+                if (IsAccessibilityObjectCreated)
+                {
+                    AccessibilityObject.InternalRaiseAutomationNotification(
+                        AutomationNotificationKind.ItemAdded,
+                        AutomationNotificationProcessing.ImportantMostRecent,
+                        string.Format(SR.DataGridView_RowAddedNotification, NewRowIndex));
+                }
             }
         }
 

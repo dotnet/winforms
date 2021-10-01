@@ -4338,6 +4338,9 @@ namespace System.Windows.Forms.Tests
             SubListViewItemAccessibleObject customAccessibleObject = new SubListViewItemAccessibleObject(testItem);
             testItem.CustomAccessibleObject = customAccessibleObject;
 
+            // Enforce accessible object creation
+            _ = listView.AccessibilityObject;
+
             listView.Items[0].Focused = focused;
             listView.Items[0].Selected = selected;
 
