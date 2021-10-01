@@ -683,7 +683,7 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, string textToDraw, TextFormatFlags flags)
         {
             ArgumentNullException.ThrowIfNull(dc, nameof(dc));
-
+            ArgumentNullException.ThrowIfNull(textToDraw);
             if (string.IsNullOrEmpty(textToDraw))
                 throw new ArgumentNullException(nameof(textToDraw));
 
@@ -698,7 +698,7 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, Rectangle bounds, string textToDraw, TextFormatFlags flags)
         {
             ArgumentNullException.ThrowIfNull(dc, nameof(dc));
-
+            ArgumentNullException.ThrowIfNull(textToDraw);
             if (string.IsNullOrEmpty(textToDraw))
                 throw new ArgumentNullException(nameof(textToDraw));
 

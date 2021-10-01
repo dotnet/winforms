@@ -63,9 +63,7 @@ namespace System.Windows.Forms
         /// <param name="handle">The window handle of the window to subclass.</param>
         public WindowSubclassHandler(IntPtr handle)
         {
-            if (handle == IntPtr.Zero)
-                throw new ArgumentNullException(nameof(handle));
-
+            handle.ThrowIfNull();
             _handle = handle;
 
             // Create a delegate for our window procedure and get a function

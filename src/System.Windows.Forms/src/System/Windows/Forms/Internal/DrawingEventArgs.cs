@@ -49,8 +49,7 @@ namespace System.Windows.Forms
             Rectangle clipRect,
             DrawingEventFlags flags)
         {
-            if (dc.IsNull)
-                throw new ArgumentNullException(nameof(dc));
+            dc.ThrowIfNull();
 
 #if DEBUG
             Gdi32.OBJ type = Gdi32.GetObjectType(dc);
