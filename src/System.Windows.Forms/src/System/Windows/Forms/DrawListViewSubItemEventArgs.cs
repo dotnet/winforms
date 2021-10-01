@@ -30,8 +30,10 @@ namespace System.Windows.Forms
             {
                 ArgumentNullException.ThrowIfNull(item, nameof(item));
             }
-
-            ArgumentNullException.ThrowIfNull(subItem, nameof(subItem));
+            else
+            {
+                ArgumentNullException.ThrowIfNull(subItem, nameof(subItem));
+            }
 
             Bounds = bounds;
             Item = item;
