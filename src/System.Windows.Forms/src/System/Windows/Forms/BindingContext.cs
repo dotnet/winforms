@@ -186,8 +186,10 @@ namespace System.Windows.Forms
             internal HashKey(object dataSource, string dataMember)
             {
                 ArgumentNullException.ThrowIfNull(dataSource, nameof(dataSource));
-
-                ArgumentNullException.ThrowIfNull(dataMember, nameof(dataMember));
+                if (dataMember is null)
+                {
+                    dataMember = string.Empty;
+                }
 
                 // The dataMember should be case insensitive, so convert the
                 // dataMember to lower case
