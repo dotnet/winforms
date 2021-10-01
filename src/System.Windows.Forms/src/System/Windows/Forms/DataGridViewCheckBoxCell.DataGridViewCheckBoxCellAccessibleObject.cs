@@ -176,10 +176,10 @@ namespace System.Windows.Forms
                     switch (Owner.FormattedValue)
                     {
                         case CheckState checkState:
-                            toggledState = checkState == CheckState.Unchecked;
+                            toggledState = checkState == CheckState.Checked;
                             break;
                         case bool boolState:
-                            toggledState = !boolState;
+                            toggledState = boolState;
                             break;
                         default:
                             return UiaCore.ToggleState.Indeterminate;
