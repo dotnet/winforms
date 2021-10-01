@@ -54,7 +54,7 @@ namespace System.Windows.Forms
         public Stream OpenFile()
         {
             string filename = FileNames[0];
-            ArgumentNullException.ThrowIfNull(filename, nameof(filename));
+            ArgumentNullException.ThrowIfNull(filename, nameof(FileName));
             if (string.IsNullOrEmpty(filename))
             {
                 throw new ArgumentNullException(nameof(FileName));
