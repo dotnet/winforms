@@ -367,6 +367,8 @@ namespace System.Windows.Forms
         public virtual void SetText(string textData, TextDataFormat format)
         {
             ArgumentNullException.ThrowIfNull(textData, nameof(textData));
+            if (string.IsNullOrEmpty(textData))
+                throw new ArgumentNullException(nameof(textData));
 
             //valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
