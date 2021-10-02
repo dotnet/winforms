@@ -4,6 +4,7 @@
 
 using System.Drawing;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
 {
@@ -18,7 +19,7 @@ namespace System.ComponentModel.Design
             public Line(IServiceProvider serviceProvider, DesignerActionPanel actionPanel)
             {
                 _serviceProvider = serviceProvider;
-                _actionPanel = actionPanel ?? throw new ArgumentNullException(nameof(actionPanel));
+                _actionPanel = actionPanel.OrThrowIfNull();
             }
 
             protected DesignerActionPanel ActionPanel

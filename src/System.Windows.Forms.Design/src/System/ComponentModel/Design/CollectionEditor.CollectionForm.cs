@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
-                _editor = editor ?? throw new ArgumentNullException(nameof(editor));
+                _editor = editor.OrThrowIfNull();
             }
 
             /// <summary>

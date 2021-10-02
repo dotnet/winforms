@@ -6,6 +6,7 @@ using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
 using System.Windows.Forms;
+using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design
 {
@@ -27,7 +28,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected EventBindingService(IServiceProvider provider)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _provider = provider.OrThrowIfNull();
         }
 
         /// <summary>

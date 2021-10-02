@@ -6,6 +6,7 @@ using System.Collections;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Windows.Forms.Design;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -50,7 +51,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public DesignerSerializationManager(IServiceProvider provider)
         {
-            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            this.provider = provider.OrThrowIfNull();
             preserveNames = true;
             validateRecycledTypes = true;
         }
