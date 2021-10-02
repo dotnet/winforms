@@ -22,12 +22,14 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static void ThrowIfNull(this IntPtr argument, [CallerArgumentExpression("argument")] string? paramName = null)
+        internal static IntPtr OrThrowIfZero(this IntPtr argument, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             if (argument == IntPtr.Zero)
             {
                 throw new ArgumentNullException(paramName);
             }
+
+            return argument;
         }
     }
 }
