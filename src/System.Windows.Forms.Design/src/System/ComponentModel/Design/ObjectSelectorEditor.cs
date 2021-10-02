@@ -69,7 +69,7 @@ namespace System.ComponentModel.Design
             IntPtr hwnd = treeView.Handle;
             ComCtl32.TVS_EX exstyle = (ComCtl32.TVS_EX)User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
+            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
         }
 
         public override UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.DropDown;

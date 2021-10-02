@@ -621,7 +621,7 @@ namespace System.Windows.Forms
 
         private void WmReflectScroll(ref Message m)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParam);
+            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m._WParam);
             DoScroll(type);
         }
 

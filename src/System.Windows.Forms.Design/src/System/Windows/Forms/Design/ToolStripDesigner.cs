@@ -2547,10 +2547,7 @@ namespace System.Windows.Forms.Design
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.CONTEXTMENU:
-                    int x = PARAM.SignedLOWORD(m.LParam);
-                    int y = PARAM.SignedHIWORD(m.LParam);
-                    bool inBounds = GetHitTest(new Point(x, y));
-                    if (inBounds)
+                    if (GetHitTest(PARAM.ToPoint(m._LParam)))
                     {
                         return;
                     }

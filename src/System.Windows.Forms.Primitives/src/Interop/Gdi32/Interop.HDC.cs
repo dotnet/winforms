@@ -8,15 +8,15 @@ internal static partial class Interop
     {
         public readonly struct HDC
         {
-            public IntPtr Handle { get; }
+            public nint Handle { get; }
 
-            public HDC(IntPtr handle) => Handle = handle;
+            public HDC(nint handle) => Handle = handle;
 
-            public bool IsNull => Handle == IntPtr.Zero;
+            public bool IsNull => Handle == 0;
 
-            public static explicit operator IntPtr(HDC hdc) => hdc.Handle;
-            public static explicit operator HDC(IntPtr hdc) => new HDC(hdc);
-            public static implicit operator HGDIOBJ(HDC hdc) => new HGDIOBJ(hdc.Handle);
+            public static implicit operator nint(HDC hdc) => hdc.Handle;
+            public static explicit operator HDC(nint hdc) => new(hdc);
+            public static implicit operator HGDIOBJ(HDC hdc) => new(hdc.Handle);
 
             public static bool operator ==(HDC value1, HDC value2) => value1.Handle == value2.Handle;
             public static bool operator !=(HDC value1, HDC value2) => value1.Handle != value2.Handle;

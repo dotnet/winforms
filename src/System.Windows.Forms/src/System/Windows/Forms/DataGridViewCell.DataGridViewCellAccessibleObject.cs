@@ -684,6 +684,7 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
+                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.DataItemControlTypeId,
                     UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,// Announce the cell when focusing.
                     UiaCore.UIA.IsEnabledPropertyId => _owner?.DataGridView?.Enabled ?? false,

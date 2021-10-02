@@ -311,7 +311,7 @@ namespace System.Windows.Forms
 
         private unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch ((User32.SBH)PARAM.LOWORD(m.WParam))
+            switch ((User32.SBH)PARAM.LOWORD(m._WParam))
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        pos = PARAM.HIWORD(m.WParam);
+                        pos = PARAM.HIWORD(m._WParam);
                     }
 
                     break;
@@ -695,14 +695,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  WM_HSCROLL handler
+        ///  WM_HSCROLL handler.
         /// </summary>
         private void WmHScroll(ref Message m)
         {
-            // The lparam is handle of the sending scrollbar, or NULL when
-            // the scrollbar sending the message is the "form" scrollbar...
-            //
-            if (m.LParam != IntPtr.Zero)
+            // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
+            // the message is the built-in Window scrollbar.
+            if (m._LParam != 0)
             {
                 base.WndProc(ref m);
                 return;
@@ -769,14 +768,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  WM_VSCROLL handler
+        ///  WM_VSCROLL handler.
         /// </summary>
         private void WmVScroll(ref Message m)
         {
-            // The lparam is handle of the sending scrollbar, or NULL when
-            // the scrollbar sending the message is the "form" scrollbar...
-            //
-            if (m.LParam != IntPtr.Zero)
+            // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
+            // the message is the built-in Window scrollbar.
+            if (m._LParam != 0)
             {
                 base.WndProc(ref m);
                 return;
@@ -795,10 +793,10 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKeyDown(ref Message msg)
         {
-            Keys keyData = (Keys)(PARAM.ToInt(msg.WParam) | (int)ModifierKeys);
+            Keys keyData = (Keys)msg._WParam | ModifierKeys;
             Point locPos = Position;
-            int pos = 0;
-            int maxPos = 0;
+            int pos;
+            int maxPos;
 
             switch (keyData & Keys.KeyCode)
             {
@@ -828,7 +826,7 @@ namespace System.Windows.Forms
                     if ((keyData & Keys.Modifiers) == Keys.Control)
                     {
                         pos = locPos.X;
-                        maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
+                        maxPos = Math.Max(Width, virtualSize.Width);
                         if (pos < maxPos - SCROLL_PAGE)
                         {
                             pos += SCROLL_PAGE;
@@ -879,7 +877,7 @@ namespace System.Windows.Forms
                 case Keys.Down:
 
                     pos = locPos.Y;
-                    maxPos = Math.Max(Height, virtualSize.Height/* - Height*/);
+                    maxPos = Math.Max(Height, virtualSize.Height);
 
                     if (pos < maxPos - SCROLL_LINE)
                     {
@@ -910,7 +908,7 @@ namespace System.Windows.Forms
                     break;
                 case Keys.Right:
                     pos = locPos.X;
-                    maxPos = Math.Max(Width, virtualSize.Width /*- Width*/);
+                    maxPos = Math.Max(Width, virtualSize.Width);
                     if (pos < maxPos - SCROLL_LINE)
                     {
                         pos += SCROLL_LINE;
@@ -928,7 +926,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 case User32.WM.VSCROLL:
                     WmVScroll(ref m);
@@ -946,8 +944,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Control.BackColor'/> property should be
-        ///  persisted.
+        ///  Indicates whether the <see cref='Control.BackColor'/> property should be persisted.
         /// </summary>
         internal override bool ShouldSerializeBackColor()
         {
@@ -955,8 +952,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Control.ForeColor'/> property should be
-        ///  persisted.
+        ///  Indicates whether the <see cref='Control.ForeColor'/> property should be persisted.
         /// </summary>
         internal override bool ShouldSerializeForeColor()
         {

@@ -47,7 +47,7 @@ internal static partial class Interop
 
             public static implicit operator HDC(in CreateDcScope dcScope) => dcScope.HDC;
             public static implicit operator HGDIOBJ(in CreateDcScope dcScope) => dcScope.HDC;
-            public static explicit operator IntPtr(in CreateDcScope dcScope) => dcScope.HDC.Handle;
+            public static implicit operator nint(in CreateDcScope dcScope) => dcScope.HDC.Handle;
 
             public bool IsNull => HDC.IsNull;
 

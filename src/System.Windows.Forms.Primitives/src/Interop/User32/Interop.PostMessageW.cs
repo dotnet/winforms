@@ -12,14 +12,14 @@ internal static partial class Interop
         public static extern BOOL PostMessageW(
             IntPtr hWnd,
             WM Msg,
-            IntPtr wParam = default,
-            IntPtr lParam = default);
+            nint wParam = default,
+            nint lParam = default);
 
         public static BOOL PostMessageW(
             IHandle hWnd,
             WM Msg,
-            IntPtr wParam = default,
-            IntPtr lParam = default)
+            nint wParam = default,
+            nint lParam = default)
         {
             BOOL result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd);
@@ -29,8 +29,8 @@ internal static partial class Interop
         public static BOOL PostMessageW(
             HandleRef hWnd,
             WM Msg,
-            IntPtr wParam = default,
-            IntPtr lParam = default)
+            nint wParam = default,
+            nint lParam = default)
         {
             BOOL result = PostMessageW(hWnd.Handle, Msg, wParam, lParam);
             GC.KeepAlive(hWnd.Wrapper);

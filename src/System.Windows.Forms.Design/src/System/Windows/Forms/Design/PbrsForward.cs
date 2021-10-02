@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -121,22 +121,22 @@ namespace System.Windows.Forms.Design
                     {
                         foreach (BufferedKey bk in bufferedChars)
                         {
-                            if (bk.KeyChar.Msg == (int)User32.WM.CHAR)
+                            if (bk.KeyChar._Msg == User32.WM.CHAR)
                             {
-                                if (bk.KeyDown.Msg != 0)
+                                if (bk.KeyDown._Msg != 0)
                                 {
-                                    User32.SendMessageW(hWnd, User32.WM.KEYDOWN, bk.KeyDown.WParam, bk.KeyDown.LParam);
+                                    User32.SendMessageW(hWnd, User32.WM.KEYDOWN, bk.KeyDown._WParam, bk.KeyDown._LParam);
                                 }
 
-                                User32.SendMessageW(hWnd, User32.WM.CHAR, bk.KeyChar.WParam, bk.KeyChar.LParam);
-                                if (bk.KeyUp.Msg != 0)
+                                User32.SendMessageW(hWnd, User32.WM.CHAR, bk.KeyChar._WParam, bk.KeyChar._LParam);
+                                if (bk.KeyUp._Msg != 0)
                                 {
-                                    User32.SendMessageW(hWnd, User32.WM.KEYUP, bk.KeyUp.WParam, bk.KeyUp.LParam);
+                                    User32.SendMessageW(hWnd, User32.WM.KEYUP, bk.KeyUp._WParam, bk.KeyUp._LParam);
                                 }
                             }
                             else
                             {
-                                User32.SendMessageW(hWnd, (User32.WM)bk.KeyChar.Msg, bk.KeyChar.WParam, bk.KeyChar.LParam);
+                                User32.SendMessageW(hWnd, bk.KeyChar._Msg, bk.KeyChar._WParam, bk.KeyChar._LParam);
                             }
                         }
                     }

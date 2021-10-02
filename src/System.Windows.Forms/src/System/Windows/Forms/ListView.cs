@@ -356,7 +356,7 @@ namespace System.Windows.Forms
                 base.BackColor = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                    User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, 0, BackColor.ToWin32());
                 }
             }
         }
@@ -411,7 +411,7 @@ namespace System.Windows.Forms
                             lvbkImage.pszImage = pBackgroundImageFileName;
                             lvbkImage.cchImageMax = (uint)(backgroundImageFileName.Length + 1);
 
-                            User32.SendMessageW(this, (User32.WM)LVM.SETBKIMAGEW, IntPtr.Zero, ref lvbkImage);
+                            User32.SendMessageW(this, (User32.WM)LVM.SETBKIMAGEW, 0, ref lvbkImage);
                         }
                     }
                 }
@@ -568,12 +568,13 @@ namespace System.Windows.Forms
                         if (IsHandleCreated && _imageListState is not null)
                         {
                             if (CheckBoxes)
-                            { // we want custom checkboxes
-                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, _imageListState.Handle);
+                            {
+                                // We want custom checkboxes.
+                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.STATE, _imageListState.Handle);
                             }
                             else
                             {
-                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
+                                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.STATE, 0);
                             }
                         }
 
@@ -833,7 +834,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    int displayIndex = PARAM.ToInt(User32.SendMessageW(this, (User32.WM)LVM.GETNEXTITEM, (IntPtr)(-1), (IntPtr)LVNI.FOCUSED));
+                    int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.GETNEXTITEM, -1, (nint)LVNI.FOCUSED);
                     if (displayIndex > -1)
                     {
                         return Items[displayIndex];
@@ -869,7 +870,7 @@ namespace System.Windows.Forms
                 base.ForeColor = value;
                 if (IsHandleCreated)
                 {
-                    User32.SendMessageW(this, (User32.WM)LVM.SETTEXTCOLOR, IntPtr.Zero, PARAM.FromColor(ForeColor));
+                    User32.SendMessageW(this, (User32.WM)LVM.SETTEXTCOLOR, 0, ForeColor.ToWin32());
                 }
             }
         }
@@ -982,8 +983,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER,
-                        value is null ? IntPtr.Zero : value.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.GROUPHEADER, value is null ? 0 : value.Handle);
             }
         }
 
@@ -1249,7 +1249,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, value is null ? IntPtr.Zero : value.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.NORMAL, value is null ? 0 : value.Handle);
                 if (AutoArrange && !listViewState1[LISTVIEWSTATE1_disposingImageLists])
                 {
                     UpdateListViewItemsLocations();
@@ -1490,7 +1490,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, value is null ? IntPtr.Zero : value.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.SMALL, value is null ? 0 : value.Handle);
 
                 if (View == View.SmallIcon)
                 {
@@ -1595,7 +1595,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, value is null ? IntPtr.Zero : value.Handle);
+                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.STATE, value is null ? 0 : value.Handle);
                     }
                 }
                 else
@@ -1610,7 +1610,7 @@ namespace System.Windows.Forms
                         // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
                         // So we make the native listView forget about its StateImageList just before we recreate the handle.
                         // Likely related to https://devblogs.microsoft.com/oldnewthing/20171128-00/?p=97475
-                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
+                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.STATE, 0);
                     }
 
                     _imageListState = value;
@@ -1623,13 +1623,16 @@ namespace System.Windows.Forms
 
                     if (CheckBoxes)
                     {
-                        // need to recreate to get the new images pushed in.
+                        // Need to recreate to get the new images pushed in.
                         RecreateHandleInternal();
                     }
                     else
                     {
-                        User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE,
-                            (_imageListState is null || _imageListState.Images.Count == 0) ? IntPtr.Zero : _imageListState.Handle);
+                        User32.SendMessageW(
+                            this,
+                            (User32.WM)LVM.SETIMAGELIST,
+                            (nint)LVSIL.STATE,
+                            (_imageListState is null || _imageListState.Images.Count == 0) ? 0 : _imageListState.Handle);
                     }
 
                     // Comctl should handle auto-arrange for us, but doesn't
@@ -1686,7 +1689,8 @@ namespace System.Windows.Forms
                     cbSize = (uint)sizeof(LVTILEVIEWINFO),
                     dwMask = LVTVIM.TILESIZE
                 };
-                User32.SendMessageW(this, (User32.WM)LVM.GETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
+
+                User32.SendMessageW(this, (User32.WM)LVM.GETTILEVIEWINFO, 0, ref tileViewInfo);
 
                 return tileViewInfo.sizeTile;
             }
@@ -1715,8 +1719,9 @@ namespace System.Windows.Forms
                     dwFlags = LVTVIF.FIXEDSIZE,
                     sizeTile = tileSize
                 };
-                IntPtr retval = User32.SendMessageW(this, (User32.WM)LVM.SETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
-                Debug.Assert(retval != IntPtr.Zero, "LVM_SETTILEVIEWINFO failed");
+
+                nint result = User32.SendMessageW(this, (User32.WM)LVM.SETTILEVIEWINFO, 0, ref tileViewInfo);
+                Debug.Assert(result != 0, "LVM_SETTILEVIEWINFO failed");
 
                 if (AutoArrange)
                 {
@@ -1755,7 +1760,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                topIndex = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.GETTOPINDEX));
+                topIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.GETTOPINDEX);
                 if (topIndex >= 0 && topIndex < Items.Count)
                 {
                     return Items[topIndex];
@@ -1863,7 +1868,7 @@ namespace System.Windows.Forms
                     viewStyle = value;
                     if (IsHandleCreated && Application.ComCtlSupportsVisualStyles)
                     {
-                        User32.SendMessageW(this, (User32.WM)LVM.SETVIEW, (IntPtr)viewStyle);
+                        User32.SendMessageW(this, (User32.WM)LVM.SETVIEW, (nint)viewStyle);
                         UpdateGroupView();
 
                         // if we switched to Tile view we should update the win32 list view tile view info
@@ -1908,14 +1913,14 @@ namespace System.Windows.Forms
                 int topIndex = -1;
                 if (keepTopItem)
                 {
-                    topIndex = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.GETTOPINDEX));
+                    topIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.GETTOPINDEX);
                 }
 
                 virtualListSize = value;
 
                 if (IsHandleCreated && VirtualMode && !DesignMode)
                 {
-                    User32.SendMessageW(this, (User32.WM)LVM.SETITEMCOUNT, (IntPtr)virtualListSize);
+                    User32.SendMessageW(this, (User32.WM)LVM.SETITEMCOUNT, virtualListSize);
                 }
 
                 if (keepTopItem)
@@ -2233,9 +2238,9 @@ namespace System.Windows.Forms
                 lvhi.pt.X += si.nPos;
             }
 
-            if (User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, IntPtr.Zero, ref lvhi) != (IntPtr)(-1) && lvhi.iItem > -1)
+            if (IsAccessibilityObjectCreated && User32.SendMessageW(hwnd, (User32.WM)HDM.HITTEST, 0, ref lvhi) != -1 && lvhi.iItem > -1)
             {
-                AccessibilityObject?.InternalRaiseAutomationNotification(
+                AccessibilityObject.InternalRaiseAutomationNotification(
                     Automation.AutomationNotificationKind.Other,
                     Automation.AutomationNotificationProcessing.MostRecent,
                     Columns[lvhi.iItem].Text);
@@ -2495,12 +2500,12 @@ namespace System.Windows.Forms
 
         private unsafe int CompensateColumnHeaderResize(Message m, bool columnResizeCancelled)
         {
-            if (Application.ComCtlSupportsVisualStyles &&
-                View == View.Details &&
-                !columnResizeCancelled &&
-                Items.Count > 0)
+            if (Application.ComCtlSupportsVisualStyles
+                && View == View.Details
+                && !columnResizeCancelled
+                && Items.Count > 0)
             {
-                NMHEADERW* header = (NMHEADERW*)m.LParam;
+                NMHEADERW* header = (NMHEADERW*)m._LParam;
                 return CompensateColumnHeaderResize(header->iItem, columnResizeCancelled);
             }
             else
@@ -2607,19 +2612,19 @@ namespace System.Windows.Forms
 
             try
             {
-                NMLVCUSTOMDRAW* nmcd = (NMLVCUSTOMDRAW*)m.LParam;
+                NMLVCUSTOMDRAW* nmcd = (NMLVCUSTOMDRAW*)m._LParam;
                 // Find out which stage we're drawing
                 switch (nmcd->nmcd.dwDrawStage)
                 {
                     case CDDS.PREPAINT:
                         if (OwnerDraw)
                         {
-                            m.Result = (IntPtr)CDRF.NOTIFYITEMDRAW;
+                            m._Result = (nint)CDRF.NOTIFYITEMDRAW;
                             return;
                         }
 
                         // We want custom draw for this paint cycle
-                        m.Result = (IntPtr)(CDRF.NOTIFYSUBITEMDRAW | CDRF.NEWFONT);
+                        m._Result = (nint)(CDRF.NOTIFYSUBITEMDRAW | CDRF.NEWFONT);
 
                         // refresh the cache of the current color & font settings for this paint cycle
                         odCacheBackColor = BackColor;
@@ -2636,15 +2641,15 @@ namespace System.Windows.Forms
                             odCacheFontHandleWrapper = new FontHandleWrapper(odCacheFont);
                             odCacheFontHandle = odCacheFontHandleWrapper.Handle;
                             Gdi32.SelectObject(nmcd->nmcd.hdc, odCacheFontHandleWrapper.Handle);
-                            m.Result = (IntPtr)CDRF.NEWFONT;
+                            m._Result = (nint)CDRF.NEWFONT;
                         }
 
                         return;
 
-                    //We have to return a NOTIFYSUBITEMDRAW (called NOTIFYSUBITEMREDRAW in the docs) here to
-                    //get it to enter "change all subitems instead of whole rows" mode.
+                    // We have to return a NOTIFYSUBITEMDRAW (called NOTIFYSUBITEMREDRAW in the docs) here to
+                    // get it to enter "change all subitems instead of whole rows" mode.
 
-                    //HOWEVER... we only want to do this for report styles...
+                    // HOWEVER... we only want to do this for report styles...
 
                     case CDDS.ITEMPREPAINT:
 
@@ -2679,13 +2684,13 @@ namespace System.Windows.Forms
                             // For other view styles, we do it here.
                             if (viewStyle == View.Details)
                             {
-                                m.Result = (IntPtr)CDRF.NOTIFYSUBITEMDRAW;
+                                m._Result = (nint)CDRF.NOTIFYSUBITEMDRAW;
                             }
                             else
                             {
                                 if (!e.DrawDefault)
                                 {
-                                    m.Result = (IntPtr)CDRF.SKIPDEFAULT;
+                                    m._Result = (nint)CDRF.SKIPDEFAULT;
                                 }
                             }
 
@@ -2697,16 +2702,16 @@ namespace System.Windows.Forms
 
                         if (viewStyle == View.Details || viewStyle == View.Tile)
                         {
-                            m.Result = (IntPtr)(CDRF.NOTIFYSUBITEMDRAW | CDRF.NEWFONT);
+                            m._Result = (nint)(CDRF.NOTIFYSUBITEMDRAW | CDRF.NEWFONT);
                             dontmess = true; // don't mess with our return value!
 
-                            //ITEMPREPAINT is used to work out the rect for the first column!!! GAH!!!
-                            //(which means we can't just do our color/font work on SUBITEM|ITEM_PREPAINT)
-                            //so fall through... and tell the end of SUBITEM|ITEM_PREPAINT not to mess
-                            //with our return value...
+                            // ITEMPREPAINT is used to work out the rect for the first column!!! GAH!!!
+                            // (which means we can't just do our color/font work on SUBITEM|ITEM_PREPAINT)
+                            // so fall through... and tell the end of SUBITEM|ITEM_PREPAINT not to mess
+                            // with our return value...
                         }
 
-                        //If it's not a report, we fall through and change the main item's styles
+                        // If it's not a report, we fall through and change the main item's styles
 
                         goto case (CDDS.SUBITEM | CDDS.ITEMPREPAINT);
 
@@ -2769,7 +2774,7 @@ namespace System.Windows.Forms
 
                             if (skipCustomDrawCode)
                             {
-                                m.Result = (IntPtr)CDRF.SKIPDEFAULT;
+                                m._Result = (nint)CDRF.SKIPDEFAULT;
                                 return; // skip our custom draw code
                             }
                         }
@@ -2779,7 +2784,7 @@ namespace System.Windows.Forms
                         // if we're doing the whole row in one style, change our result!
                         if (dontmess && item.UseItemStyleForSubItems)
                         {
-                            m.Result = (IntPtr)CDRF.NEWFONT;
+                            m._Result = (nint)CDRF.NEWFONT;
                         }
 
                         Debug.Assert(item is not null, "Item was null in ITEMPREPAINT");
@@ -2835,8 +2840,6 @@ namespace System.Windows.Forms
                         }
 
                         // We always have to set font and color data, because of comctl design
-
-                        //
 
                         Color riFore = Color.Empty;
                         Color riBack = Color.Empty;
@@ -2952,7 +2955,7 @@ namespace System.Windows.Forms
 
                         if (!dontmess)
                         {
-                            m.Result = (IntPtr)CDRF.NEWFONT;
+                            m._Result = (nint)CDRF.NEWFONT;
                         }
 
                         if (disposeSubItemFont)
@@ -2963,14 +2966,14 @@ namespace System.Windows.Forms
                         return;
 
                     default:
-                        m.Result = (IntPtr)CDRF.DODEFAULT;
+                        m._Result = (nint)CDRF.DODEFAULT;
                         return;
                 }
             }
             catch (Exception e)
             {
                 Debug.Fail("Exception occurred attempting to setup custom draw. Disabling custom draw for this control", e.ToString());
-                m.Result = (IntPtr)CDRF.DODEFAULT;
+                m._Result = (nint)CDRF.DODEFAULT;
             }
         }
 
@@ -2981,7 +2984,6 @@ namespace System.Windows.Forms
                 IO.FileInfo fi = new IO.FileInfo(fileName);
                 if (fi.Exists)
                 {
-                    //
                     // ComCtl ListView uses COM objects to manipulate the bitmap we send it to them.
                     // I could not find any resources which explain in detail when the IImgCtx objects
                     // release the temporary file. So if we get a FileIO when we delete the temporary file
@@ -3198,7 +3200,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated && GroupsEnabled)
             {
-                if (User32.SendMessageW(this, (User32.WM)LVM.HASGROUP, (IntPtr)DefaultGroup.ID) == IntPtr.Zero)
+                if (User32.SendMessageW(this, (User32.WM)LVM.HASGROUP, DefaultGroup.ID) == 0)
                 {
                     UpdateGroupView();
                     InsertGroupNative(0, DefaultGroup);
@@ -3219,7 +3221,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.ENSUREVISIBLE, (IntPtr)index);
+                User32.SendMessageW(this, (User32.WM)LVM.ENSUREVISIBLE, index);
             }
         }
 
@@ -3355,12 +3357,13 @@ namespace System.Windows.Forms
                         lvFindInfo.vkDirection = (uint)dir;
                     }
 
-                    lvFindInfo.lParam = IntPtr.Zero;
+                    lvFindInfo.lParam = 0;
                     int index = (int)User32.SendMessageW(
                         this,
                         (User32.WM)LVM.FINDITEMW,
                         (IntPtr)(startIndex - 1), // decrement startIndex so that the search is 0-based
                         ref lvFindInfo);
+
                     if (index >= 0)
                     {
                         return Items[index];
@@ -3404,13 +3407,12 @@ namespace System.Windows.Forms
         private void ForceCheckBoxUpdate()
         {
             // Force ListView to update its checkbox bitmaps.
-            //
             if (CheckBoxes && IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)LVS_EX.CHECKBOXES, IntPtr.Zero);
-                User32.SendMessageW(this, (User32.WM)LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)LVS_EX.CHECKBOXES, (IntPtr)LVS_EX.CHECKBOXES);
+                User32.SendMessageW(this, (User32.WM)LVM.SETEXTENDEDLISTVIEWSTYLE, (nint)LVS_EX.CHECKBOXES, 0);
+                User32.SendMessageW(this, (User32.WM)LVM.SETEXTENDEDLISTVIEWSTYLE, (nint)LVS_EX.CHECKBOXES, (nint)LVS_EX.CHECKBOXES);
 
-                // Comctl should handle auto-arrange for us, but doesn't
+                // Comctl should handle auto-arrange for us, but doesn't.
                 if (AutoArrange)
                 {
                     ArrangeIcons(Alignment);
@@ -3457,12 +3459,12 @@ namespace System.Windows.Forms
 
                 if (lastIndex != -1)
                 {
-                    displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, (IntPtr)(lastIndex - 1), ref info);
+                    displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, lastIndex - 1, ref info);
                 }
 
                 if (displayIndex == -1)
                 {
-                    displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, (IntPtr)(-1) /* beginning */, ref info);
+                    displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.FINDITEMW, -1 /* beginning */, ref info);
                 }
 
                 Debug.Assert(displayIndex != -1, "This item is in the list view -- why can't we find a display index for it?");
@@ -3522,7 +3524,7 @@ namespace System.Windows.Forms
                 pt = new Point(x, y)
             };
 
-            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, 0, ref lvhi);
 
             ListViewItem li = null;
             if (displayIndex >= 0 && ((lvhi.flags & LVHT.ONITEM) != 0))
@@ -3569,7 +3571,7 @@ namespace System.Windows.Forms
                 pt = new Point(x, y)
             };
 
-            int index = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
+            int index = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, 0, ref lvhi);
             if (index > -1)
             {
                 iItem = lvhi.iItem;
@@ -3585,16 +3587,14 @@ namespace System.Windows.Forms
         internal Point GetItemPosition(int index)
         {
             var pt = new Point();
-            User32.SendMessageW(this, (User32.WM)LVM.GETITEMPOSITION, (IntPtr)index, ref pt);
+            User32.SendMessageW(this, (User32.WM)LVM.GETITEMPOSITION, index, ref pt);
             return pt;
         }
 
         internal LVIS GetItemState(int index)
-        {
-            return GetItemState(index, LVIS.FOCUSED | LVIS.SELECTED | LVIS.CUT |
-                                LVIS.DROPHILITED | LVIS.OVERLAYMASK |
-                                LVIS.STATEIMAGEMASK);
-        }
+            => GetItemState(
+                index,
+                LVIS.FOCUSED | LVIS.SELECTED | LVIS.CUT | LVIS.DROPHILITED | LVIS.OVERLAYMASK | LVIS.STATEIMAGEMASK);
 
         internal LVIS GetItemState(int index, LVIS mask)
         {
@@ -3604,16 +3604,13 @@ namespace System.Windows.Forms
             }
 
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
-            return unchecked((LVIS)(long)User32.SendMessageW(this, (User32.WM)LVM.GETITEMSTATE, (IntPtr)index, (IntPtr)mask));
+            return (LVIS)User32.SendMessageW(this, (User32.WM)LVM.GETITEMSTATE, index, (nint)mask);
         }
 
         /// <summary>
         ///  Returns a list item's bounding rectangle, including subitems.
         /// </summary>
-        public Rectangle GetItemRect(int index)
-        {
-            return GetItemRect(index, 0);
-        }
+        public Rectangle GetItemRect(int index) => GetItemRect(index, 0);
 
         /// <summary>
         ///  Returns a specific portion of a list item's bounding rectangle.
@@ -3625,7 +3622,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            //valid values are 0x0 to 0x3
+            // Valid values are 0x0 to 0x3
             SourceGenerated.EnumValidator.Validate(portion, nameof(portion));
 
             if (View == View.Details && Columns.Count == 0)
@@ -3637,7 +3634,8 @@ namespace System.Windows.Forms
             {
                 left = (int)portion
             };
-            if (User32.SendMessageW(this, (User32.WM)LVM.GETITEMRECT, (IntPtr)index, ref itemrect) == IntPtr.Zero)
+
+            if (User32.SendMessageW(this, (User32.WM)LVM.GETITEMRECT, index, ref itemrect) == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
@@ -3665,7 +3663,7 @@ namespace System.Windows.Forms
             {
                 left = 0
             };
-            if (User32.SendMessageW(this, (User32.WM)LVM.GETITEMRECT, (IntPtr)index, ref itemrect) == IntPtr.Zero)
+            if (User32.SendMessageW(this, (User32.WM)LVM.GETITEMRECT, index, ref itemrect) == 0)
             {
                 return Rectangle.Empty;
             }
@@ -3715,7 +3713,8 @@ namespace System.Windows.Forms
                 left = (int)portion,
                 top = subItemIndex
             };
-            if (User32.SendMessageW(this, (User32.WM)LVM.GETSUBITEMRECT, (IntPtr)itemIndex, ref itemrect) == IntPtr.Zero)
+
+            if (User32.SendMessageW(this, (User32.WM)LVM.GETSUBITEMRECT, itemIndex, ref itemrect) == 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(itemIndex), itemIndex, string.Format(SR.InvalidArgument, nameof(itemIndex), itemIndex));
             }
@@ -3747,20 +3746,17 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr handle = (GroupImageList is null) ? IntPtr.Zero : GroupImageList.Handle;
-            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER, handle);
+            nint handle = (GroupImageList is null) ? 0 : GroupImageList.Handle;
+            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.GROUPHEADER, handle);
         }
 
-        public ListViewHitTestInfo HitTest(Point point)
-        {
-            return HitTest(point.X, point.Y);
-        }
+        public ListViewHitTestInfo HitTest(Point point) => HitTest(point.X, point.Y);
 
         public ListViewHitTestInfo HitTest(int x, int y)
         {
             if (!ClientRectangle.Contains(x, y))
             {
-                return new ListViewHitTestInfo(null /*hitItem*/, null /*hitSubItem*/, ListViewHitTestLocations.None /*hitLocation*/);
+                return new ListViewHitTestInfo(hitItem: null, hitSubItem: null, hitLocation: ListViewHitTestLocations.None);
             }
 
             var lvhi = new LVHITTESTINFO
@@ -3771,15 +3767,15 @@ namespace System.Windows.Forms
             int iItem;
             if (SupportsListViewSubItems)
             {
-                iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
+                iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, 0, ref lvhi);
             }
             else
             {
-                iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+                iItem = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, 0, ref lvhi);
             }
 
             ListViewItem item = (iItem == -1) ? null : Items[iItem];
-            ListViewHitTestLocations location = ListViewHitTestLocations.None;
+            ListViewHitTestLocations location;
 
             if (item is null && (LVHT.ABOVE & lvhi.flags) == LVHT.ABOVE)
             {
@@ -3977,7 +3973,7 @@ namespace System.Windows.Forms
             {
                 lvColumn.pszText = columnHeaderText;
 
-                return (int)User32.SendMessageW(this, (User32.WM)LVM.INSERTCOLUMNW, (IntPtr)index, ref lvColumn);
+                return (int)User32.SendMessageW(this, (User32.WM)LVM.INSERTCOLUMNW, index, ref lvColumn);
             }
         }
 
@@ -4021,7 +4017,8 @@ namespace System.Windows.Forms
                         iItem = item.Index,
                         mask = LVIF.GROUPID
                     };
-                    User32.SendMessageW(this, (User32.WM)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
+
+                    User32.SendMessageW(this, (User32.WM)LVM.GETITEMW, 0, ref lvItem);
                     Debug.Assert(lvItem.iGroupId != -1, "there is a list view item which is not parented");
                 }
             }
@@ -4034,8 +4031,8 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "InsertGroupNative precondition: list-view handle must be created");
             Debug.Assert(group == DefaultGroup || Groups.Contains(group), "Make sure ListView.Groups contains this group before adding the native LVGROUP. Otherwise, custom-drawing may break.");
 
-            IntPtr result = SendGroupMessage(group, LVM.INSERTGROUP, (IntPtr)index, LVGF.GROUPID);
-            Debug.Assert(result != (IntPtr)(-1), "Failed to insert group");
+            nint result = SendGroupMessage(group, LVM.INSERTGROUP, index, LVGF.GROUPID);
+            Debug.Assert(result != -1, "Failed to insert group");
         }
 
         /// <summary>
@@ -4173,7 +4170,7 @@ namespace System.Windows.Forms
             try
             {
                 // Set the count of items first.
-                User32.SendMessageW(this, (User32.WM)LVM.SETITEMCOUNT, (IntPtr)itemCount);
+                User32.SendMessageW(this, (User32.WM)LVM.SETITEMCOUNT, itemCount);
 
                 // Now add the items.
                 for (int i = 0; i < items.Length; i++)
@@ -4200,13 +4197,12 @@ namespace System.Windows.Forms
 #if DEBUG
                         IntPtr result = User32.SendMessageW(this, (User32.WM)LVM.ISGROUPVIEWENABLED);
                         Debug.Assert(result != IntPtr.Zero, "Groups not enabled");
-                        result = User32.SendMessageW(this, (User32.WM)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
-                        Debug.Assert(result != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
+                        result = User32.SendMessageW(this, (User32.WM)LVM.HASGROUP, lvItem.iGroupId);
+                        Debug.Assert(result != IntPtr.Zero, $"Doesn't contain group id: {lvItem.iGroupId}");
 #endif
                     }
 
-                    // make sure that our columns memory is big enough.
-                    // if not, then realloc it.
+                    // Make sure that our columns memory is big enough. If not, then realloc it.
                     if (lvItem.cColumns > maxColumns || hGlobalColumns == IntPtr.Zero)
                     {
                         if (hGlobalColumns != IntPtr.Zero)
@@ -4244,7 +4240,7 @@ namespace System.Windows.Forms
                         {
                             lvItem.pszText = pText;
 
-                            insertIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.INSERTITEMW, IntPtr.Zero, ref lvItem);
+                            insertIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.INSERTITEMW, 0, ref lvItem);
                         }
 
                         if (actualIndex == -1)
@@ -4354,8 +4350,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr handle = (LargeImageList is null) ? IntPtr.Zero : LargeImageList.Handle;
-            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, handle);
+            nint handle = (LargeImageList is null) ? 0 : LargeImageList.Handle;
+            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.NORMAL, handle);
 
             ForceCheckBoxUpdate();
         }
@@ -4549,7 +4545,7 @@ namespace System.Windows.Forms
                 BeginUpdate();
                 try
                 {
-                    User32.SendMessageW(this, (User32.WM)LVM.UPDATE, (IntPtr)(-1));
+                    User32.SendMessageW(this, (User32.WM)LVM.UPDATE, -1);
                 }
                 finally
                 {
@@ -4557,8 +4553,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            // If font changes and we have headers, they need to be explicitly invalidated
-            //
+            // If font changes and we have headers, they need to be explicitly invalidated.
             InvalidateColumnHeaders();
         }
 
@@ -4569,48 +4564,46 @@ namespace System.Windows.Forms
 
             base.OnHandleCreated(e);
 
-            int version = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)CCM.GETVERSION));
+            int version = (int)User32.SendMessageW(this, (User32.WM)CCM.GETVERSION);
             if (version < 5)
             {
-                User32.SendMessageW(this, (User32.WM)CCM.SETVERSION, (IntPtr)5);
+                User32.SendMessageW(this, (User32.WM)CCM.SETVERSION, 5);
             }
 
             UpdateExtendedStyles();
             RealizeProperties();
-            User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
-            User32.SendMessageW(this, (User32.WM)LVM.SETTEXTCOLOR, IntPtr.Zero, PARAM.FromColor(base.ForeColor));
+            User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, 0, BackColor.ToWin32());
+            User32.SendMessageW(this, (User32.WM)LVM.SETTEXTCOLOR, 0, base.ForeColor.ToWin32());
 
             // The native list view will not invalidate the entire list view item area if the BkColor is not CLR_NONE.
             // This not noticeable if the customer paints the items w/ the same background color as the list view itself.
             // However, if the customer paints the items w/ a color different from the list view's back color
             // then when the user changes selection the native list view will not invalidate the entire list view item area.
-            User32.SendMessageW(this, (User32.WM)LVM.SETTEXTBKCOLOR, IntPtr.Zero, (IntPtr)CLR.NONE);
+            User32.SendMessageW(this, (User32.WM)LVM.SETTEXTBKCOLOR, 0, (nint)CLR.NONE);
 
             // LVS_NOSCROLL does not work well when the list view is in View.Details or in View.List modes.
             // we have to set this style after the list view was created and before we position the native list view items.
-            //
             if (!Scrollable)
             {
-                int style = unchecked((int)((long)User32.GetWindowLong(this, User32.GWL.STYLE)));
+                int style = (int)User32.GetWindowLong(this, User32.GWL.STYLE);
                 style |= (int)LVS.NOSCROLL;
-                User32.SetWindowLong(this, User32.GWL.STYLE, (IntPtr)style);
+                User32.SetWindowLong(this, User32.GWL.STYLE, style);
             }
 
-            // in VirtualMode we have to tell the list view to ask for the list view item's state image index
+            // In VirtualMode we have to tell the list view to ask for the list view item's state image index.
             if (VirtualMode)
             {
-                LVIS callbackMask = unchecked((LVIS)(long)User32.SendMessageW(this, (User32.WM)LVM.GETCALLBACKMASK));
+                LVIS callbackMask = (LVIS)User32.SendMessageW(this, (User32.WM)LVM.GETCALLBACKMASK);
                 callbackMask |= LVIS.STATEIMAGEMASK;
-                User32.SendMessageW(this, (User32.WM)LVM.SETCALLBACKMASK, (IntPtr)callbackMask);
+                User32.SendMessageW(this, (User32.WM)LVM.SETCALLBACKMASK, (nint)callbackMask);
             }
 
             if (Application.ComCtlSupportsVisualStyles)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETVIEW, (IntPtr)viewStyle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETVIEW, (nint)viewStyle);
                 UpdateGroupView();
 
-                // Add groups
-                //
+                // Add groups.
                 if (groups is not null)
                 {
                     for (int index = 0; index < groups.Count; index++)
@@ -4619,8 +4612,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                // Set tile view settings
-                //
+                // Set tile view settings.
                 if (viewStyle == View.Tile)
                 {
                     UpdateTileView();
@@ -4630,7 +4622,6 @@ namespace System.Windows.Forms
             ListViewHandleDestroyed = false;
 
             // Use a copy of the list items array so that we can maintain the (handle created || listItemsArray is not null) invariant
-            //
             ListViewItem[] listViewItemsToAdd = null;
             if (listItemsArray is not null)
             {
@@ -4652,8 +4643,7 @@ namespace System.Windows.Forms
                 SetDisplayIndices(indices);
             }
 
-            // make sure that we're not in a begin/end update call.
-            //
+            // Make sure that we're not in a begin/end update call.
             if (itemCount > 0 && listViewItemsToAdd is not null)
             {
                 InsertItemsNative(0, listViewItemsToAdd);
@@ -4661,7 +4651,7 @@ namespace System.Windows.Forms
 
             if (VirtualMode && VirtualListSize > -1 && !DesignMode)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETITEMCOUNT, (IntPtr)VirtualListSize);
+                User32.SendMessageW(this, (User32.WM)LVM.SETITEMCOUNT, VirtualListSize);
             }
 
             if (columnCount > 0)
@@ -4756,7 +4746,7 @@ namespace System.Windows.Forms
                 NotifyAboutGotFocus(focusedItem);
             }
 
-            if (IsHandleCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
+            if (IsHandleCreated && IsAccessibilityObjectCreated && AccessibilityObject.GetFocus() is AccessibleObject focusedAccessibleObject)
             {
                 focusedAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
             }
@@ -4795,10 +4785,13 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ListViewItem item = e.Item;
-            UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
-            UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
-            item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, oldValue, newValue);
+            if (IsAccessibilityObjectCreated)
+            {
+                ListViewItem item = e.Item;
+                UiaCore.ToggleState oldValue = item.Checked ? UiaCore.ToggleState.Off : UiaCore.ToggleState.On;
+                UiaCore.ToggleState newValue = item.Checked ? UiaCore.ToggleState.On : UiaCore.ToggleState.Off;
+                item.AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.ToggleToggleStatePropertyId, oldValue, newValue);
+            }
         }
 
         protected virtual void OnItemDrag(ItemDragEventArgs e)
@@ -4901,7 +4894,10 @@ namespace System.Windows.Forms
             if (firstSelectedItem.Focused && _selectedItem != firstSelectedItem)
             {
                 _selectedItem = firstSelectedItem;
-                firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                if (IsAccessibilityObjectCreated)
+                {
+                    firstSelectedItem.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
             }
         }
 
@@ -4911,10 +4907,11 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(BackColor));
+                User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, 0, BackColor.ToWin32());
+
                 // We should probably be OK if we don't set the TEXTBKCOLOR to CLR_NONE.
                 // However, for the sake of being more robust, reset the TECTBKCOLOR to CLR_NONE when the system palette changes.
-                User32.SendMessageW(this, (User32.WM)LVM.SETTEXTBKCOLOR, IntPtr.Zero, (IntPtr)CLR.NONE);
+                User32.SendMessageW(this, (User32.WM)LVM.SETTEXTBKCOLOR, 0, (nint)CLR.NONE);
             }
         }
 
@@ -4925,12 +4922,12 @@ namespace System.Windows.Forms
 
         private unsafe void PositionHeader()
         {
-            IntPtr hdrHWND = User32.GetWindow(new HandleRef(this, Handle), User32.GW.CHILD);
+            IntPtr hdrHWND = User32.GetWindow(this, User32.GW.CHILD);
             if (hdrHWND != IntPtr.Zero)
             {
                 var rc = new RECT();
                 var wpos = new User32.WINDOWPOS();
-                User32.GetClientRect(new HandleRef(this, Handle), ref rc);
+                User32.GetClientRect(this, ref rc);
 
                 var hd = new User32.HDLAYOUT
                 {
@@ -4938,18 +4935,20 @@ namespace System.Windows.Forms
                     pwpos = &wpos
                 };
 
-                // get the layout information
-                User32.SendMessageW(hdrHWND, (User32.WM)HDM.LAYOUT, IntPtr.Zero, ref hd);
+                // Get the layout information.
+                User32.SendMessageW(hdrHWND, (User32.WM)HDM.LAYOUT, 0, ref hd);
 
-                // position the header control
+                // Position the header control.
                 User32.SetWindowPos(
-                    new HandleRef(this, hdrHWND),
-                    new HandleRef(this, wpos.hwndInsertAfter),
+                    hdrHWND,
+                    wpos.hwndInsertAfter,
                     wpos.x,
                     wpos.y,
                     wpos.cx,
                     wpos.cy,
                     wpos.flags | User32.SWP.SHOWWINDOW);
+
+                GC.KeepAlive(this);
             }
         }
 
@@ -4968,39 +4967,39 @@ namespace System.Windows.Forms
 
         protected void RealizeProperties()
         {
-            //Realize state information
+            // Realize state information
             Color c;
 
             c = BackColor;
             if (c != SystemColors.Window)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, IntPtr.Zero, PARAM.FromColor(c));
+                User32.SendMessageW(this, (User32.WM)LVM.SETBKCOLOR, 0, c.ToWin32());
             }
 
             c = ForeColor;
             if (c != SystemColors.WindowText)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETTEXTCOLOR, IntPtr.Zero, PARAM.FromColor(c));
+                User32.SendMessageW(this, (User32.WM)LVM.SETTEXTCOLOR, 0, c.ToWin32());
             }
 
             if (_imageListLarge is not null)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.NORMAL, _imageListLarge.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.NORMAL, _imageListLarge.Handle);
             }
 
             if (_imageListSmall is not null)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, _imageListSmall.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.SMALL, _imageListSmall.Handle);
             }
 
             if (_imageListState is not null)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, _imageListState.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.STATE, _imageListState.Handle);
             }
 
             if (_imageListGroup is not null)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.GROUPHEADER, _imageListGroup.Handle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.GROUPHEADER, _imageListGroup.Handle);
             }
         }
 
@@ -5042,8 +5041,9 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                int retval = (int)User32.SendMessageW(this, (User32.WM)LVM.REDRAWITEMS, (IntPtr)startIndex, (IntPtr)endIndex);
+                int retval = (int)User32.SendMessageW(this, (User32.WM)LVM.REDRAWITEMS, startIndex, endIndex);
                 Debug.Assert(retval != 0);
+
                 // ListView control seems to be bogus. Items affected need to be invalidated in LargeIcon and SmallIcons views.
                 if (View == View.LargeIcon || View == View.SmallIcon)
                 {
@@ -5118,13 +5118,13 @@ namespace System.Windows.Forms
         private void RemoveGroupNative(ListViewGroup group)
         {
             Debug.Assert(IsHandleCreated, "RemoveGroupNative precondition: list-view handle must be created");
-            User32.SendMessageW(this, (User32.WM)LVM.REMOVEGROUP, (IntPtr)group.ID);
+            User32.SendMessageW(this, (User32.WM)LVM.REMOVEGROUP, group.ID);
         }
 
         private void Scroll(int fromLVItem, int toLVItem)
         {
             int scrollY = GetItemPosition(toLVItem).Y - GetItemPosition(fromLVItem).Y;
-            User32.SendMessageW(this, (User32.WM)LVM.SCROLL, IntPtr.Zero, (IntPtr)scrollY);
+            User32.SendMessageW(this, (User32.WM)LVM.SCROLL, IntPtr.Zero, scrollY);
         }
 
         private unsafe void SetBackgroundImage()
@@ -5165,7 +5165,7 @@ namespace System.Windows.Forms
             fixed (char* pBackgroundImageFileName = backgroundImageFileName)
             {
                 lvbkImage.pszImage = pBackgroundImageFileName;
-                User32.SendMessageW(this, (User32.WM)LVM.SETBKIMAGEW, IntPtr.Zero, ref lvbkImage);
+                User32.SendMessageW(this, (User32.WM)LVM.SETBKIMAGEW, 0, ref lvbkImage);
             }
 
             if (string.IsNullOrEmpty(fileNameToDelete))
@@ -5247,7 +5247,7 @@ namespace System.Windows.Forms
                     lvColumn.pszText = columnHeaderText;
                 }
 
-                result = User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNW, (IntPtr)ch.Index, ref lvColumn);
+                result = User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNW, ch.Index, ref lvColumn);
             }
 
             if (result == IntPtr.Zero)
@@ -5308,7 +5308,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNWIDTH, (IntPtr)columnIndex, PARAM.FromLowHigh(width, 0));
+                User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNWIDTH, columnIndex, PARAM.FromLowHigh(width, 0));
             }
 
             if (IsHandleCreated &&
@@ -5318,7 +5318,7 @@ namespace System.Windows.Forms
                 if (compensate != 0)
                 {
                     int newWidth = columnHeaders[columnIndex].Width + compensate;
-                    User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNWIDTH, (IntPtr)columnIndex, PARAM.FromLowHigh(newWidth, 0));
+                    User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNWIDTH, columnIndex, PARAM.FromLowHigh(newWidth, 0));
                 }
             }
         }
@@ -5327,7 +5327,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNWIDTH, (IntPtr)index, PARAM.FromLowHigh(width, 0));
+                User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNWIDTH, index, PARAM.FromLowHigh(width, 0));
             }
         }
 
@@ -5345,7 +5345,7 @@ namespace System.Windows.Forms
             {
                 fixed (int* pOrderedColumns = orderedColumns)
                 {
-                    User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNORDERARRAY, (IntPtr)orderedColumns.Length, (IntPtr)pOrderedColumns);
+                    User32.SendMessageW(this, (User32.WM)LVM.SETCOLUMNORDERARRAY, orderedColumns.Length, (nint)pOrderedColumns);
                 }
             }
         }
@@ -5386,7 +5386,7 @@ namespace System.Windows.Forms
             toolTipCaption = toolTip.GetToolTip(this);
 
             // native ListView expects tooltip HWND as a wParam and ignores lParam
-            IntPtr oldHandle = User32.SendMessageW(this, (User32.WM)LVM.SETTOOLTIPS, toolTip.Handle, IntPtr.Zero);
+            IntPtr oldHandle = User32.SendMessageW(this, (User32.WM)LVM.SETTOOLTIPS, toolTip.Handle, 0);
             GC.KeepAlive(toolTip);
             User32.DestroyWindow(oldHandle);
         }
@@ -5409,7 +5409,8 @@ namespace System.Windows.Forms
                 iItem = itemIndex,
                 iImage = imageIndex
             };
-            User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
+
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, 0, ref lvItem);
         }
 
         internal void SetItemIndentCount(int index, int indentCount)
@@ -5430,7 +5431,8 @@ namespace System.Windows.Forms
                 iItem = index,
                 iIndent = indentCount
             };
-            User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
+
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMW, 0, ref lvItem);
         }
 
         internal void SetItemPosition(int index, int x, int y)
@@ -5448,7 +5450,7 @@ namespace System.Windows.Forms
             Debug.Assert(IsHandleCreated, "How did we add items without a handle?");
 
             var pt = new Point(x, y);
-            User32.SendMessageW(this, (User32.WM)LVM.SETITEMPOSITION32, (IntPtr)index, ref pt);
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMPOSITION32, index, ref pt);
         }
 
         internal void SetItemState(int index, LVIS state, LVIS mask)
@@ -5469,7 +5471,8 @@ namespace System.Windows.Forms
                 state = state,
                 stateMask = mask
             };
-            User32.SendMessageW(this, (User32.WM)LVM.SETITEMSTATE, (IntPtr)index, ref lvItem);
+
+            User32.SendMessageW(this, (User32.WM)LVM.SETITEMSTATE, index, ref lvItem);
         }
 
         internal void SetItemText(int itemIndex, int subItemIndex, string text)
@@ -5487,7 +5490,7 @@ namespace System.Windows.Forms
 
             if (View == View.List && subItemIndex == 0)
             {
-                int colWidth = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.GETCOLUMNWIDTH));
+                int colWidth = (int)User32.SendMessageW(this, (User32.WM)LVM.GETCOLUMNWIDTH);
 
                 using Graphics g = CreateGraphicsInternal();
 
@@ -5506,7 +5509,7 @@ namespace System.Windows.Forms
             {
                 lvItem.pszText = pText;
 
-                User32.SendMessageW(this, (User32.WM)LVM.SETITEMTEXTW, (IntPtr)itemIndex, ref lvItem);
+                User32.SendMessageW(this, (User32.WM)LVM.SETITEMTEXTW, itemIndex, ref lvItem);
             }
         }
 
@@ -5524,7 +5527,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.SendMessageW(this, (User32.WM)LVM.SETSELECTIONMARK, IntPtr.Zero, (IntPtr)itemIndex);
+            User32.SendMessageW(this, (User32.WM)LVM.SETSELECTIONMARK, 0, itemIndex);
         }
 
         private void SmallImageListRecreateHandle(object sender, EventArgs e)
@@ -5534,8 +5537,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr handle = (SmallImageList is null) ? IntPtr.Zero : SmallImageList.Handle;
-            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.SMALL, handle);
+            nint handle = (SmallImageList is null) ? 0 : SmallImageList.Handle;
+            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.SMALL, handle);
 
             ForceCheckBoxUpdate();
         }
@@ -5567,8 +5570,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            IntPtr handle = (StateImageList is null) ? IntPtr.Zero : StateImageList.Handle;
-            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, handle);
+            nint handle = (StateImageList is null) ? 0 : StateImageList.Handle;
+            User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.STATE, handle);
         }
 
         /// <summary>
@@ -5606,11 +5609,11 @@ namespace System.Windows.Forms
         {
             if (!VirtualMode && IsHandleCreated && AutoArrange && (View == View.LargeIcon || View == View.SmallIcon))
             {
-                // this only has an affect for large icon and small icon views.
+                // This only has an affect for large icon and small icon views.
                 try
                 {
                     BeginUpdate();
-                    User32.SendMessageW(this, (User32.WM)LVM.UPDATE, (IntPtr)(-1));
+                    User32.SendMessageW(this, (User32.WM)LVM.UPDATE, -1);
                 }
                 finally
                 {
@@ -5691,7 +5694,7 @@ namespace System.Windows.Forms
                     exStyle |= LVS_EX.INFOTIP;
                 }
 
-                User32.SendMessageW(this, (User32.WM)LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)exMask, (IntPtr)exStyle);
+                User32.SendMessageW(this, (User32.WM)LVM.SETEXTENDEDLISTVIEWSTYLE, (nint)exMask, (nint)exStyle);
                 Invalidate();
             }
         }
@@ -5700,11 +5703,11 @@ namespace System.Windows.Forms
         {
             Debug.Assert(IsHandleCreated, "UpdateGroupNative precondition: list-view handle must be created");
 
-            IntPtr result = SendGroupMessage(group, LVM.SETGROUPINFO, (IntPtr)group.ID, (LVGF)0);
-            Debug.Assert(result != (IntPtr)(-1));
+            nint result = SendGroupMessage(group, LVM.SETGROUPINFO, group.ID, 0);
+            Debug.Assert(result != -1);
         }
 
-        private unsafe IntPtr SendGroupMessage(ListViewGroup group, LVM msg, IntPtr lParam, LVGF additionalMask)
+        private unsafe nint SendGroupMessage(ListViewGroup group, LVM msg, nint lParam, LVGF additionalMask)
         {
             string header = group.Header;
             string footer = group.Footer;
@@ -5802,12 +5805,11 @@ namespace System.Windows.Forms
         }
 
         // ListViewGroupCollection::Clear needs to remove the items from the Default group
-        //
         internal void UpdateGroupView()
         {
             if (IsHandleCreated && Application.ComCtlSupportsVisualStyles && !VirtualMode)
             {
-                int retval = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.ENABLEGROUPVIEW, PARAM.FromBool(GroupsEnabled)));
+                int retval = (int)User32.SendMessageW(this, (User32.WM)LVM.ENABLEGROUPVIEW, PARAM.FromBool(GroupsEnabled));
                 Debug.Assert(retval != -1, "Error enabling group view");
             }
         }
@@ -5828,8 +5830,8 @@ namespace System.Windows.Forms
                 sizeTile = TileSize,
             };
 
-            IntPtr retval = User32.SendMessageW(this, (User32.WM)LVM.SETTILEVIEWINFO, IntPtr.Zero, ref tileViewInfo);
-            Debug.Assert(retval != IntPtr.Zero, "LVM_SETTILEVIEWINFO failed");
+            nint retval = User32.SendMessageW(this, (User32.WM)LVM.SETTILEVIEWINFO, 0, ref tileViewInfo);
+            Debug.Assert(retval != 0, "LVM_SETTILEVIEWINFO failed");
         }
 
         private void WmNmClick(ref Message m)
@@ -5847,7 +5849,7 @@ namespace System.Windows.Forms
                 pt = PointToClient(Cursor.Position)
             };
 
-            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, IntPtr.Zero, ref lvhi);
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.SUBITEMHITTEST, 0, ref lvhi);
             if (displayIndex == -1 || lvhi.iSubItem != 0 || (lvhi.flags & LVHT.ONITEMSTATEICON) == 0)
             {
                 return;
@@ -5889,7 +5891,7 @@ namespace System.Windows.Forms
                 pt = PointToClient(Cursor.Position)
             };
 
-            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi);
+            int displayIndex = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, 0, ref lvhi);
             if (displayIndex != -1 && (lvhi.flags & LVHT.ONITEM) != 0)
             {
                 ListViewItem clickedItem = Items[displayIndex];
@@ -5909,16 +5911,15 @@ namespace System.Windows.Forms
             // Windows ListView pushes its own Windows ListView in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
             // comes back up.
-            int x = PARAM.SignedLOWORD(m.LParam);
-            int y = PARAM.SignedHIWORD(m.LParam);
-            OnMouseDown(new MouseEventArgs(button, clicks, x, y, 0));
+            Point point = PARAM.ToPoint(m._LParam);
+            OnMouseDown(new MouseEventArgs(button, clicks, point));
 
-            //If Validation is cancelled don't fire any events through the Windows ListView's message loop...
+            // If Validation is cancelled don't fire any events through the Windows ListView's message loop.
             if (!ValidationCancelled)
             {
                 if (CheckBoxes)
                 {
-                    ListViewHitTestInfo lvhti = HitTest(x, y);
+                    ListViewHitTestInfo lvhti = HitTest(point);
                     if (_imageListState is not null && _imageListState.Images.Count < 2)
                     {
                         // When the user clicks on the check box and the listView's state image list
@@ -5946,37 +5947,40 @@ namespace System.Windows.Forms
                 }
             }
 
-            Point screenPoint = PointToScreen(new Point(x, y));
-            AccessibleObject accessibilityObject = AccessibilityObject.HitTest(screenPoint.X, screenPoint.Y);
-            accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                Point screenPoint = PointToScreen(point);
+                AccessibleObject accessibilityObject = AccessibilityObject.HitTest(screenPoint.X, screenPoint.Y);
+                accessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         private unsafe bool WmNotify(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
 
             if (nmhdr->code == (int)NM.CUSTOMDRAW && UiaCore.UiaClientsAreListening().IsTrue())
             {
                 // Checking that mouse buttons are not pressed is necessary to avoid
                 // multiple annotation of the column header when resizing the column with the mouse
-                if (m.LParam != IntPtr.Zero && Control.MouseButtons == MouseButtons.None)
+                if (m._LParam != 0 && MouseButtons == MouseButtons.None)
                 {
                     AnnounceColumnHeader(Cursor.Position);
                 }
             }
 
-            // column header custom draw message handling
+            // Column header custom draw message handling.
             if (nmhdr->code == (int)NM.CUSTOMDRAW && OwnerDraw)
             {
                 try
                 {
-                    NMCUSTOMDRAW* nmcd = (NMCUSTOMDRAW*)m.LParam;
+                    NMCUSTOMDRAW* nmcd = (NMCUSTOMDRAW*)m._LParam;
                     // Find out which stage we're drawing
                     switch (nmcd->dwDrawStage)
                     {
                         case CDDS.PREPAINT:
                             {
-                                m.Result = (IntPtr)CDRF.NOTIFYITEMDRAW;
+                                m._Result = (nint)CDRF.NOTIFYITEMDRAW;
                                 return true; // we are done - don't do default handling
                             }
 
@@ -5998,12 +6002,12 @@ namespace System.Windows.Forms
                                 OnDrawColumnHeader(e);
                                 if (e.DrawDefault)
                                 {
-                                    m.Result = (IntPtr)CDRF.DODEFAULT;
+                                    m._Result = (nint)CDRF.DODEFAULT;
                                     return false;
                                 }
                                 else
                                 {
-                                    m.Result = (IntPtr)CDRF.SKIPDEFAULT;
+                                    m._Result = (nint)CDRF.SKIPDEFAULT;
                                     return true; // we are done - don't do default handling
                                 }
                             }
@@ -6015,7 +6019,7 @@ namespace System.Windows.Forms
                 catch (Exception e)
                 {
                     Debug.Fail("Exception occurred attempting to setup header custom draw. Disabling custom draw for the column header", e.ToString());
-                    m.Result = (IntPtr)CDRF.DODEFAULT;
+                    m._Result = (nint)CDRF.DODEFAULT;
                 }
             }
 
@@ -6034,7 +6038,7 @@ namespace System.Windows.Forms
                 newWidthForColumnWidthChangingCancelled = -1;
                 listViewState1[LISTVIEWSTATE1_cancelledColumnWidthChanging] = false;
 
-                NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                NMHEADERW* nmheader = (NMHEADERW*)m._LParam;
                 if (columnHeaders is not null && columnHeaders.Length > nmheader->iItem)
                 {
                     columnHeaderClicked = columnHeaders[nmheader->iItem];
@@ -6049,7 +6053,7 @@ namespace System.Windows.Forms
 
             if (nmhdr->code == (int)HDN.ITEMCHANGINGW)
             {
-                NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                NMHEADERW* nmheader = (NMHEADERW*)m._LParam;
 
                 if (columnHeaders is not null && nmheader->iItem < columnHeaders.Length &&
                     (listViewState[LISTVIEWSTATE_headerControlTracking] || listViewState[LISTVIEWSTATE_headerDividerDblClick]))
@@ -6057,7 +6061,7 @@ namespace System.Windows.Forms
                     int newColumnWidth = ((nmheader->pitem->mask & HDI.WIDTH) != 0) ? nmheader->pitem->cxy : -1;
                     ColumnWidthChangingEventArgs colWidthChanging = new ColumnWidthChangingEventArgs(nmheader->iItem, newColumnWidth);
                     OnColumnWidthChanging(colWidthChanging);
-                    m.Result = (IntPtr)(colWidthChanging.Cancel ? 1 : 0);
+                    m._Result = colWidthChanging.Cancel ? 1 : 0;
                     if (colWidthChanging.Cancel)
                     {
                         nmheader->pitem->cxy = colWidthChanging.NewWidth;
@@ -6085,7 +6089,7 @@ namespace System.Windows.Forms
             if ((nmhdr->code == (int)HDN.ITEMCHANGEDW) &&
                 !listViewState[LISTVIEWSTATE_headerControlTracking])
             {
-                NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                NMHEADERW* nmheader = (NMHEADERW*)m._LParam;
                 if (columnHeaders is not null && nmheader->iItem < columnHeaders.Length)
                 {
                     int w = columnHeaders[nmheader->iItem].Width;
@@ -6142,14 +6146,14 @@ namespace System.Windows.Forms
 
             if (nmhdr->code == (int)HDN.ENDTRACKW)
             {
-                Debug.Assert(listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync...");
+                Debug.Assert(listViewState[LISTVIEWSTATE_headerControlTracking], "HDN_ENDTRACK and HDN_BEGINTRACK are out of sync.");
                 listViewState[LISTVIEWSTATE_headerControlTracking] = false;
                 if (listViewState1[LISTVIEWSTATE1_cancelledColumnWidthChanging])
                 {
-                    m.Result = (IntPtr)1;
+                    m._Result = 1;
                     if (newWidthForColumnWidthChangingCancelled != -1)
                     {
-                        NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                        NMHEADERW* nmheader = (NMHEADERW*)m._LParam;
                         if (columnHeaders is not null && columnHeaders.Length > nmheader->iItem)
                         {
                             columnHeaders[nmheader->iItem].Width = newWidthForColumnWidthChangingCancelled;
@@ -6170,7 +6174,7 @@ namespace System.Windows.Forms
 
             if (nmhdr->code == (int)HDN.ENDDRAG)
             {
-                NMHEADERW* header = (NMHEADERW*)m.LParam;
+                NMHEADERW* header = (NMHEADERW*)m._LParam;
                 if (header->pitem is not null)
                 {
                     if ((header->pitem->mask & HDI.ORDER) == HDI.ORDER)
@@ -6197,7 +6201,7 @@ namespace System.Windows.Forms
                         OnColumnReordered(chrevent);
                         if (chrevent.Cancel)
                         {
-                            m.Result = new IntPtr(1);
+                            m._Result = 1;
                             return true;
                         }
                         else
@@ -6271,7 +6275,7 @@ namespace System.Windows.Forms
                     // If the column resize was cancelled then apply the NewWidth supplied by the user.
                     if (newWidthForColumnWidthChangingCancelled != -1)
                     {
-                        NMHEADERW* nmheader = (NMHEADERW*)m.LParam;
+                        NMHEADERW* nmheader = (NMHEADERW*)m._LParam;
                         if (columnHeaders is not null && columnHeaders.Length > nmheader->iItem)
                         {
                             columnHeaders[nmheader->iItem].Width = newWidthForColumnWidthChangingCancelled;
@@ -6279,7 +6283,7 @@ namespace System.Windows.Forms
                     }
 
                     // Tell ComCtl that the HDN_DIVIDERDBLCLICK was cancelled.
-                    m.Result = (IntPtr)1;
+                    m._Result = 1;
                 }
                 else
                 {
@@ -6288,7 +6292,7 @@ namespace System.Windows.Forms
                     if (compensateForColumnResize != 0)
                     {
 #if DEBUG
-                        NMHEADERW* header = (NMHEADERW*)m.LParam;
+                        NMHEADERW* header = (NMHEADERW*)m._LParam;
                         Debug.Assert(header->iItem == 0, "we only need to compensate for the first column resize");
                         Debug.Assert(columnHeaders.Length > 0, "there should be a column that we need to compensate for");
 #endif
@@ -6315,7 +6319,7 @@ namespace System.Windows.Forms
         private int GetIndexOfClickedItem()
         {
             var lvhi = SetupHitTestInfo();
-            return unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, IntPtr.Zero, ref lvhi));
+            return (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, 0, ref lvhi);
         }
 
         private LVHITTESTINFO SetupHitTestInfo()
@@ -6338,9 +6342,9 @@ namespace System.Windows.Forms
 
         private int UpdateGroupCollapse(Interop.User32.WM clickType)
         {
-            // see if the mouse event occurred on a group
+            // See if the mouse event occurred on a group.
             var lvhi = SetupHitTestInfo();
-            int groupID = unchecked((int)(long)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, (IntPtr)(-1), ref lvhi));
+            int groupID = (int)User32.SendMessageW(this, (User32.WM)LVM.HITTEST, -1, ref lvhi);
             if (groupID == -1)
             {
                 return groupID;
@@ -6378,13 +6382,12 @@ namespace System.Windows.Forms
 
         internal void RecreateHandleInternal()
         {
-            //
-            // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native listView destroys
-            // the state imageList.
+            // For some reason, if CheckBoxes are set to true and the list view has a state imageList, then the native
+            // listView destroys the state imageList.
             // (Yes, it does exactly that even though our wrapper sets LVS_SHAREIMAGELISTS on the native listView.)
             if (IsHandleCreated && StateImageList is not null)
             {
-                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (IntPtr)LVSIL.STATE, IntPtr.Zero);
+                User32.SendMessageW(this, (User32.WM)LVM.SETIMAGELIST, (nint)LVSIL.STATE, 0);
             }
 
             RecreateHandle();
@@ -6392,7 +6395,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmReflectNotify(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
 
             switch (nmhdr->code)
             {
@@ -6402,17 +6405,17 @@ namespace System.Windows.Forms
 
                 case (int)LVN.BEGINLABELEDITW:
                     {
-                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
+                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m._LParam;
                         LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem);
                         OnBeforeLabelEdit(e);
-                        m.Result = (IntPtr)(e.CancelEdit ? 1 : 0);
+                        m._Result = e.CancelEdit ? 1 : 0;
                         listViewState[LISTVIEWSTATE_inLabelEdit] = !e.CancelEdit;
                         break;
                     }
 
                 case (int)LVN.COLUMNCLICK:
                     {
-                        NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
+                        NMLISTVIEW* nmlv = (NMLISTVIEW*)m._LParam;
                         listViewState[LISTVIEWSTATE_columnClicked] = true;
                         columnIndex = nmlv->iSubItem;
                         break;
@@ -6420,7 +6423,7 @@ namespace System.Windows.Forms
 
                 case (int)LVN.LINKCLICK:
                     {
-                        NMLVLINK* pLink = (NMLVLINK*)m.LParam;
+                        NMLVLINK* pLink = (NMLVLINK*)m._LParam;
                         int groupID = pLink->iSubItem;
                         for (int i = 0; i < groups.Count; i++)
                         {
@@ -6437,11 +6440,11 @@ namespace System.Windows.Forms
                 case (int)LVN.ENDLABELEDITW:
                     {
                         listViewState[LISTVIEWSTATE_inLabelEdit] = false;
-                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
+                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m._LParam;
                         string text = dispInfo->item.pszText is null ? null : new string(dispInfo->item.pszText);
                         LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem, text);
                         OnAfterLabelEdit(e);
-                        m.Result = (IntPtr)(e.CancelEdit ? 0 : 1);
+                        m._Result = e.CancelEdit ? 0 : 1;
 
                         // from msdn:
                         //   "If the user cancels editing, the pszText member of the LVITEM structure is NULL"
@@ -6464,7 +6467,7 @@ namespace System.Windows.Forms
                         // started so don't tell the user about this operation.
                         if (!ItemCollectionChangedInMouseDown)
                         {
-                            NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
+                            NMLISTVIEW* nmlv = (NMLISTVIEW*)m._LParam;
                             ListViewItem item = Items[nmlv->iItem];
                             OnItemDrag(new ItemDragEventArgs(MouseButtons.Left, item));
                         }
@@ -6479,7 +6482,7 @@ namespace System.Windows.Forms
                         // started so don't tell the user about this operation.
                         if (!ItemCollectionChangedInMouseDown)
                         {
-                            NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
+                            NMLISTVIEW* nmlv = (NMLISTVIEW*)m._LParam;
                             ListViewItem item = Items[nmlv->iItem];
                             OnItemDrag(new ItemDragEventArgs(MouseButtons.Right, item));
                         }
@@ -6489,7 +6492,7 @@ namespace System.Windows.Forms
 
                 case (int)LVN.ITEMCHANGING:
                     {
-                        NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
+                        NMLISTVIEW* nmlv = (NMLISTVIEW*)m._LParam;
                         if ((nmlv->uChanged & LVIF.STATE) != 0)
                         {
                             // Because the state image mask is 1-based, a value of 1 means unchecked,
@@ -6501,7 +6504,7 @@ namespace System.Windows.Forms
                             {
                                 ItemCheckEventArgs e = new ItemCheckEventArgs(nmlv->iItem, newState, oldState);
                                 OnItemCheck(e);
-                                m.Result = (IntPtr)(((int)e.NewValue == 0 ? 0 : 1) == (int)oldState ? 1 : 0);
+                                m._Result = (e.NewValue == 0 ? 0 : 1) == (int)oldState ? 1 : 0;
                             }
                         }
 
@@ -6510,7 +6513,7 @@ namespace System.Windows.Forms
 
                 case (int)LVN.ITEMCHANGED:
                     {
-                        NMLISTVIEW* nmlv = (NMLISTVIEW*)m.LParam;
+                        NMLISTVIEW* nmlv = (NMLISTVIEW*)m._LParam;
                         // Check for state changes to the selected state...
                         if ((nmlv->uChanged & LVIF.STATE) != 0)
                         {
@@ -6649,7 +6652,7 @@ namespace System.Windows.Forms
                 case (int)LVN.KEYDOWN:
                     if (GroupsEnabled)
                     {
-                        NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParam;
+                        NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m._LParam;
                         if ((lvkd->wVKey == (short)Keys.Down || lvkd->wVKey == (short)Keys.Up) && SelectedItems.Count > 0)
                         {
                             AccessibleObject accessibleObject = SelectedItems[0].AccessibilityObject;
@@ -6672,7 +6675,7 @@ namespace System.Windows.Forms
 
                     if (CheckBoxes)
                     {
-                        NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m.LParam;
+                        NMLVKEYDOWN* lvkd = (NMLVKEYDOWN*)m._LParam;
                         if (lvkd->wVKey == (short)Keys.Space)
                         {
                             ListViewItem focusedItem = FocusedItem;
@@ -6697,7 +6700,7 @@ namespace System.Windows.Forms
 
                 case (int)LVN.ODCACHEHINT:
                     // tell the user to prepare the cache:
-                    NMLVCACHEHINT* cacheHint = (NMLVCACHEHINT*)m.LParam;
+                    NMLVCACHEHINT* cacheHint = (NMLVCACHEHINT*)m._LParam;
                     OnCacheVirtualItems(new CacheVirtualItemsEventArgs(cacheHint->iFrom, cacheHint->iTo));
                     break;
 
@@ -6705,9 +6708,9 @@ namespace System.Windows.Forms
                     if (nmhdr->code == (int)LVN.GETDISPINFOW)
                     {
                         // we use the LVN_GETDISPINFO message only in virtual mode
-                        if (VirtualMode && m.LParam != IntPtr.Zero)
+                        if (VirtualMode && m._LParam != 0)
                         {
-                            NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParam;
+                            NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m._LParam;
 
                             RetrieveVirtualItemEventArgs rVI = new RetrieveVirtualItemEventArgs(dispInfo->item.iItem);
                             OnRetrieveVirtualItem(rVI);
@@ -6758,9 +6761,9 @@ namespace System.Windows.Forms
                     }
                     else if (nmhdr->code == (int)LVN.ODSTATECHANGED)
                     {
-                        if (VirtualMode && m.LParam != IntPtr.Zero)
+                        if (VirtualMode && m._LParam != 0)
                         {
-                            NMLVODSTATECHANGE* odStateChange = (NMLVODSTATECHANGE*)m.LParam;
+                            NMLVODSTATECHANGE* odStateChange = (NMLVODSTATECHANGE*)m._LParam;
                             bool selectedChanged = (odStateChange->uNewState & LVIS.SELECTED) != (odStateChange->uOldState & LVIS.SELECTED);
                             if (selectedChanged)
                             {
@@ -6773,9 +6776,9 @@ namespace System.Windows.Forms
                     }
                     else if (nmhdr->code == (int)LVN.GETINFOTIPW)
                     {
-                        if (ShowItemToolTips && m.LParam != IntPtr.Zero)
+                        if (ShowItemToolTips && m._LParam != 0)
                         {
-                            NMLVGETINFOTIPW* infoTip = (NMLVGETINFOTIPW*)m.LParam;
+                            NMLVGETINFOTIPW* infoTip = (NMLVGETINFOTIPW*)m._LParam;
                             ListViewItem lvi = Items[infoTip->item];
 
                             // This code is needed to hide the keyboard tooltip before showing the mouse tooltip
@@ -6784,7 +6787,7 @@ namespace System.Windows.Forms
                             if (lvi is not null && !string.IsNullOrEmpty(lvi.ToolTipText))
                             {
                                 // Setting the max width has the added benefit of enabling multiline tool tips
-                                User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                                User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
                                 // UNICODE. Use char.
                                 // we need to copy the null terminator character ourselves
@@ -6797,11 +6800,11 @@ namespace System.Windows.Forms
                     {
                         if (VirtualMode)
                         {
-                            NMLVFINDITEMW* nmlvif = (NMLVFINDITEMW*)m.LParam;
+                            NMLVFINDITEMW* nmlvif = (NMLVFINDITEMW*)m._LParam;
 
                             if ((nmlvif->lvfi.flags & LVFI.PARAM) != 0)
                             {
-                                m.Result = (IntPtr)(-1);
+                                m._Result = -1;
                                 return;
                             }
 
@@ -6848,11 +6851,11 @@ namespace System.Windows.Forms
                             OnSearchForVirtualItem(sviEvent);
                             if (sviEvent.Index != -1)
                             {
-                                m.Result = (IntPtr)sviEvent.Index;
+                                m._Result = sviEvent.Index;
                             }
                             else
                             {
-                                m.Result = (IntPtr)(-1);
+                                m._Result = -1;
                             }
                         }
                     }
@@ -6864,9 +6867,9 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((User32.PRF)m.LParam & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if (((User32.PRF)m._LParam & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParam);
+                using Graphics g = Graphics.FromHdc(m._WParam);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);
@@ -6877,7 +6880,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 case User32.WM.REFLECT_NOTIFY:
                     WmReflectNotify(ref m);
@@ -6905,19 +6908,19 @@ namespace System.Windows.Forms
                 case User32.WM.RBUTTONUP:
                 case User32.WM.MBUTTONUP:
 
-                    // see the mouse is on item
+                    // See if the mouse is on the item.
                     int index = UpdateGroupCollapse(User32.WM.LBUTTONUP);
 
                     if (!ValidationCancelled && listViewState[LISTVIEWSTATE_doubleclickFired] && index != -1)
                     {
                         listViewState[LISTVIEWSTATE_doubleclickFired] = false;
                         OnDoubleClick(EventArgs.Empty);
-                        OnMouseDoubleClick(new MouseEventArgs(downButton, 2, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                        OnMouseDoubleClick(new MouseEventArgs(downButton, 2, PARAM.ToPoint(m._LParam)));
                     }
 
                     if (!listViewState[LISTVIEWSTATE_mouseUpFired])
                     {
-                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.ToPoint(m._LParam)));
                         listViewState[LISTVIEWSTATE_expectingMouseUp] = false;
                     }
 
@@ -6943,7 +6946,7 @@ namespace System.Windows.Forms
                 case User32.WM.MOUSEMOVE:
                     if (listViewState[LISTVIEWSTATE_expectingMouseUp] && !listViewState[LISTVIEWSTATE_mouseUpFired] && MouseButtons == MouseButtons.None)
                     {
-                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.SignedLOWORD(m.LParam), PARAM.SignedHIWORD(m.LParam), 0));
+                        OnMouseUp(new MouseEventArgs(downButton, 1, PARAM.ToPoint(m._LParam)));
                         listViewState[LISTVIEWSTATE_mouseUpFired] = true;
                     }
 
@@ -7006,7 +7009,7 @@ namespace System.Windows.Forms
                     WmPrint(ref m);
                     break;
                 case User32.WM.TIMER:
-                    if (unchecked((int)(long)m.WParam) != LVTOOLTIPTRACKING || !Application.ComCtlSupportsVisualStyles)
+                    if (m._WParam != LVTOOLTIPTRACKING || !Application.ComCtlSupportsVisualStyles)
                     {
                         base.WndProc(ref m);
                     }

@@ -50,7 +50,8 @@ namespace System.Windows.Forms
                     pt->Y = -1;
                 }
 
-                wb.ShowContextMenu(pt->X, pt->Y);
+                wb.ShowContextMenu(*pt);
+
                 // MSHTML should not display its context menu because we displayed ours
                 return HRESULT.S_OK;
             }

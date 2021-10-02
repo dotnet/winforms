@@ -17,9 +17,9 @@ namespace System.Windows.Forms.Design
     /// </summary>
     internal class TreeViewDesigner : ControlDesigner
     {
-        private ComCtl32.TVHITTESTINFO tvhit;
+        private ComCtl32.TVHITTESTINFO _tvhit;
         private DesignerActionListCollection _actionLists;
-        private TreeView treeView;
+        private TreeView _treeView;
 
         public TreeViewDesigner()
         {
@@ -33,11 +33,11 @@ namespace System.Windows.Forms.Design
         {
             if (disposing)
             {
-                if (treeView != null)
+                if (_treeView != null)
                 {
-                    treeView.AfterExpand -= new TreeViewEventHandler(TreeViewInvalidate);
-                    treeView.AfterCollapse -= new TreeViewEventHandler(TreeViewInvalidate);
-                    treeView = null;
+                    _treeView.AfterExpand -= TreeViewInvalidate;
+                    _treeView.AfterCollapse -= TreeViewInvalidate;
+                    _treeView = null;
                 }
             }
 
@@ -45,53 +45,37 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  <para>Allows your component to support a design time user interface. A TabStrip
+        ///  Allows your component to support a design time user interface. A TabStrip
         ///  control, for example, has a design time user interface that allows the user
         ///  to click the tabs to change tabs. To implement this, TabStrip returns
-        ///  true whenever the given point is within its tabs.</para>
+        ///  true whenever the given point is within its tabs.
         /// </summary>
         protected override bool GetHitTest(Point point)
         {
             point = Control.PointToClient(point);
-            tvhit.pt = point;
-            User32.SendMessageW(Control, (User32.WM)ComCtl32.TVM.HITTEST, IntPtr.Zero, ref tvhit);
-            if (tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON)
-                return true;
-            return false;
+            _tvhit.pt = point;
+            User32.SendMessageW(Control, (User32.WM)ComCtl32.TVM.HITTEST, 0, ref _tvhit);
+            return _tvhit.flags == ComCtl32.TVHT.ONITEMBUTTON;
         }
 
         public override void Initialize(IComponent component)
         {
             base.Initialize(component);
-            treeView = component as TreeView;
-            Debug.Assert(treeView != null, "TreeView is null in TreeViewDesigner");
-            if (treeView != null)
+            _treeView = component as TreeView;
+            Debug.Assert(_treeView != null, "TreeView is null in TreeViewDesigner");
+            if (_treeView != null)
             {
-                treeView.AfterExpand += new TreeViewEventHandler(TreeViewInvalidate);
-                treeView.AfterCollapse += new TreeViewEventHandler(TreeViewInvalidate);
+                _treeView.AfterExpand += TreeViewInvalidate;
+                _treeView.AfterCollapse += TreeViewInvalidate;
             }
         }
 
-        private void TreeViewInvalidate(object sender, TreeViewEventArgs e)
-        {
-            if (treeView != null)
-            {
-                treeView.Invalidate();
-            }
-        }
+        private void TreeViewInvalidate(object sender, TreeViewEventArgs e) => _treeView?.Invalidate();
 
         public override DesignerActionListCollection ActionLists
-        {
-            get
-            {
-                if (_actionLists == null)
+            => _actionLists ??= new DesignerActionListCollection
                 {
-                    _actionLists = new DesignerActionListCollection();
-                    _actionLists.Add(new TreeViewActionList(this));
-                }
-
-                return _actionLists;
-            }
-        }
+                    new TreeViewActionList(this)
+                };
     }
 }

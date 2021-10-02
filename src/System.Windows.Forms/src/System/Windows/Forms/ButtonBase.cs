@@ -1099,7 +1099,7 @@ namespace System.Windows.Forms
                     //
                     if (!OwnerDraw)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, PARAM.FromBool(true));
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.TRUE);
                     }
 
                     Invalidate(DownChangeRectangle);
@@ -1128,7 +1128,7 @@ namespace System.Windows.Forms
                 {
                     SetFlag(FlagMousePressed, false);
                     SetFlag(FlagMouseDown, false);
-                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, PARAM.FromBool(false));
+                    User32.SendMessageW(this, (User32.WM)User32.BM.SETSTATE, (nint)BOOL.FALSE);
                 }
 
                 // Breaking change: specifically filter out Keys.Enter and Keys.Space as the only
@@ -1289,14 +1289,14 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m.Msg)
+            switch (m._Msg)
             {
                 // We don't respect this because the code below eats BM_SETSTATE.
                 // So we just invoke the click.
-                case (int)User32.BM.CLICK:
-                    if (this is IButtonControl)
+                case (User32.WM)User32.BM.CLICK:
+                    if (this is IButtonControl control)
                     {
-                        ((IButtonControl)this).PerformClick();
+                        control.PerformClick();
                     }
                     else
                     {
@@ -1308,16 +1308,16 @@ namespace System.Windows.Forms
 
             if (OwnerDraw)
             {
-                switch (m.Msg)
+                switch (m._Msg)
                 {
-                    case (int)User32.BM.SETSTATE:
+                    case (User32.WM)User32.BM.SETSTATE:
                         // Ignore BM_SETSTATE - Windows gets confused and paints things,
                         // even though we are ownerdraw.
                         break;
 
-                    case (int)User32.WM.KILLFOCUS:
-                    case (int)User32.WM.CANCELMODE:
-                    case (int)User32.WM.CAPTURECHANGED:
+                    case User32.WM.KILLFOCUS:
+                    case User32.WM.CANCELMODE:
+                    case User32.WM.CAPTURECHANGED:
                         if (!GetFlag(FlagInButtonUp) && GetFlag(FlagMousePressed))
                         {
                             SetFlag(FlagMousePressed, false);
@@ -1332,9 +1332,9 @@ namespace System.Windows.Forms
                         base.WndProc(ref m);
                         break;
 
-                    case (int)User32.WM.LBUTTONUP:
-                    case (int)User32.WM.MBUTTONUP:
-                    case (int)User32.WM.RBUTTONUP:
+                    case User32.WM.LBUTTONUP:
+                    case User32.WM.MBUTTONUP:
+                    case User32.WM.RBUTTONUP:
                         try
                         {
                             SetFlag(FlagInButtonUp, true);
@@ -1354,10 +1354,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                switch ((User32.WM)m.Msg)
+                switch (m._Msg)
                 {
                     case User32.WM.REFLECT_COMMAND:
-                        if (PARAM.HIWORD(m.WParam) == (int)User32.BN.CLICKED && !ValidationCancelled)
+                        if ((User32.BN)PARAM.HIWORD(m._WParam) == User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);
                         }

@@ -338,7 +338,7 @@ namespace System.Windows.Forms
                                     target = realTarget;
                                 }
 
-                                lpmsg->lParam = PARAM.FromLowHigh(pt.X, pt.Y);
+                                lpmsg->lParam = PARAM.FromPoint(pt);
                             }
 
 #if DEBUG
@@ -2193,7 +2193,7 @@ namespace System.Windows.Forms
                     else
                     {
                         Message m = Message.Create(lpmsg->hwnd, lpmsg->message, lpmsg->wParam, lpmsg->lParam);
-                        Debug.WriteLine("AxSource: TranslateAccelerator : " + m.ToString());
+                        Debug.WriteLine($"AxSource: TranslateAccelerator : {m}");
                     }
                 }
 #endif // DEBUG
@@ -2221,9 +2221,9 @@ namespace System.Windows.Forms
                             case PreProcessControlState.MessageProcessed:
                                 // someone returned true from PreProcessMessage
                                 // no need to dispatch the message, its already been coped with.
-                                lpmsg->message = (User32.WM)msg.Msg;
-                                lpmsg->wParam = msg.WParam;
-                                lpmsg->lParam = msg.LParam;
+                                lpmsg->message = msg._Msg;
+                                lpmsg->wParam = msg._WParam;
+                                lpmsg->lParam = msg._LParam;
                                 return HRESULT.S_OK;
                             case PreProcessControlState.MessageNeeded:
                                 // Here we need to dispatch the message ourselves

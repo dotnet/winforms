@@ -469,7 +469,7 @@ namespace System.Windows.Forms
                         User32.GetWindowRect(this, ref r);
                         if ((r.left <= p.X && p.X < r.right && r.top <= p.Y && p.Y < r.bottom) || User32.GetCapture() == Handle)
                         {
-                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (IntPtr)User32.HT.CLIENT);
+                            User32.SendMessageW(this, User32.WM.SETCURSOR, Handle, (nint)User32.HT.CLIENT);
                         }
                     }
                 }
@@ -2327,9 +2327,8 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetCursor(ref Message m)
         {
-            // Accessing through the Handle property has side effects that break this
-            // logic. You must use InternalHandle.
-            if (m.WParam == InternalHandle && ((int)m.LParam & 0x0000FFFF) == (int)User32.HT.CLIENT)
+            // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
+            if (m._WParam == InternalHandle && (User32.HT)(m._LParam & 0x0000FFFF) == User32.HT.CLIENT)
             {
                 Cursor.Current = OverrideCursor ?? Cursor;
             }
@@ -2339,16 +2338,6 @@ namespace System.Windows.Forms
             }
         }
 
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                                               //
-        // END PRIVATE FUNCTIONS ...                                                                     //
-        //                                                                                               //
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
-        //                                                                                               //
-        // Start PROTECTED OVERRIDE FUNCTIONS                                                            //
-        //                                                                                               //
-        ///////////////////////////////////////////////////////////////////////////////////////////////////
         internal override Rectangle GetToolNativeScreenRectangle()
         {
             // Return splitter rectangle instead of the whole container rectangle to be consistent with the mouse ToolTip
@@ -2517,17 +2506,14 @@ namespace System.Windows.Forms
                 _owner = splitContainer;
             }
 
-            /// <summary>
-            /// </summary>
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
+                if (m._Msg >= User32.WM.KEYFIRST && m._Msg <= User32.WM.KEYLAST)
                 {
-                    if ((m.Msg == (int)User32.WM.KEYDOWN && PARAM.ToInt(m.WParam) == (int)Keys.Escape)
-                        || (m.Msg == (int)User32.WM.SYSKEYDOWN))
+                    if ((m._Msg == User32.WM.KEYDOWN && (Keys)m._WParam == Keys.Escape)
+                        || (m._Msg == User32.WM.SYSKEYDOWN))
                     {
-                        //Notify that splitMOVE was reverted ..
-                        //this is used in ONKEYUP!!
+                        // Notify that splitMOVE was reverted. This is used in ONKEYUP.
                         _owner._splitBegin = false;
                         _owner.SplitEnd(false);
                         _owner._splitterClick = false;

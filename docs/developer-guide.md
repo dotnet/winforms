@@ -6,22 +6,20 @@ The [Issue Guide](issue-guide.md) describes our approach to using GitHub issues.
 
 ## Machine Setup
 
-Windows Forms requires the following workloads and components be selected when installing Visual Studio 2019 (16.11):
+Windows Forms requires the following workloads and components be selected when installing Visual Studio 2022 (17.0.0):
 
 * Required Workloads:
   * .NET Desktop Development
   * Desktop development with C++
-* Required Individual Components:
+* [Required Individual Components][required-individual-components]:
   * Windows 10 SDK
   * C++/CLI support
 
 
-  :warning: CMake 3.15.5 or later is required. CMake shipped with VS 2019 (3.17.20032601-MSVC_2) does not meet requirements. Install CMake from the [official website][cmake-download] or via [Chocolatey][chocolatey]:
+  :warning: CMake 3.21.0 or later is required. Install CMake from the [official website][cmake-download] or via [Chocolatey][chocolatey]:
   ```
   choco install cmake --installargs 'ADD_CMAKE_TO_PATH=System'
   ```
-
-  :warning: If you have VS 2022 installed CMake 3.21.0 or later is required.
   
 
 ## Workflow
@@ -47,3 +45,4 @@ You first need to [fork][fork] then [clone][clone] this Windows Forms repository
 [up-for-grabs]: https://github.com/dotnet/winforms/issues?q=is%3Aopen+is%3Aissue+label%3Aup-for-grabs
 [chocolatey]: https://chocolatey.org/
 [cmake-download]: https://cmake.org/download/
+[required-individual-components]: ../WinForms.vsconfig

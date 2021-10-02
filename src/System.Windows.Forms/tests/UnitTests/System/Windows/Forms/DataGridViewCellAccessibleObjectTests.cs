@@ -6,6 +6,7 @@ using System.Drawing;
 using Moq;
 using Moq.Protected;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -528,6 +529,14 @@ namespace System.Windows.Forms.Tests
                     Assert.Equal(cell.ReadOnly, value);
                 }
             }
+        }
+
+        [Fact]
+        public void DataGridViewCellAccessibleObject_ControlType_IsDefined()
+        {
+            UiaCore.IRawElementProviderSimple provider = new DataGridViewCellAccessibleObject();
+
+            Assert.Equal(UiaCore.UIA.DataItemControlTypeId, provider.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
         }
 
         private class SubDataGridViewCell : DataGridViewCell

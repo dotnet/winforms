@@ -239,76 +239,82 @@ namespace System.Windows.Forms
             // WebBrowserSiteBase's IOleControlSite.TranslateAccelerator implementation. There, we
             // set a flag and call back into this method. In this method, we first check
             // if this flag is set. If so, we call base.PreProcessMessage.
-            if (IsUserMode)
+            if (!IsUserMode)
             {
-                if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
-                {
-                    // In this case, the control called us back through IOleControlSite
-                    // and is now giving us a chance to see if we want to process it.
-                    return base.PreProcessMessage(ref msg);
-                }
-
-                // Convert Message to MSG
-                User32.MSG win32Message = msg;
-                SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
-                try
-                {
-                    if (axOleInPlaceObject is not null)
-                    {
-                        // Give the ActiveX control a chance to process this key by calling
-                        // IOleInPlaceActiveObject::TranslateAccelerator.
-                        HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
-                        if (hr == HRESULT.S_OK)
-                        {
-                            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message translated to " + win32Message);
-                            return true;
-                        }
-                        else
-                        {
-                            // win32Message may have been modified. Lets copy it back.
-                            msg.Msg = (int)win32Message.message;
-                            msg.WParam = win32Message.wParam;
-                            msg.LParam = win32Message.lParam;
-                            msg.HWnd = win32Message.hwnd;
-
-                            if (hr == HRESULT.S_FALSE)
-                            {
-                                // Same code as in AxHost (ignore dialog keys here).
-                                // We have the same problem here
-                                bool ret = false;
-
-                                ignoreDialogKeys = true;
-                                try
-                                {
-                                    ret = base.PreProcessMessage(ref msg);
-                                }
-                                finally
-                                {
-                                    ignoreDialogKeys = false;
-                                }
-
-                                return ret;
-                            }
-                            else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
-                            {
-                                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message processed by site. Calling base.PreProcessMessage() " + msg);
-                                return base.PreProcessMessage(ref msg);
-                            }
-                            else
-                            {
-                                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "\t Message not processed by site. Returning false. " + msg);
-                                return false;
-                            }
-                        }
-                    }
-                }
-                finally
-                {
-                    SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
-                }
+                return false;
             }
 
-            return false;
+            if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
+            {
+                // In this case, the control called us back through IOleControlSite
+                // and is now giving us a chance to see if we want to process it.
+                return base.PreProcessMessage(ref msg);
+            }
+
+            // Convert Message to MSG
+            User32.MSG win32Message = msg;
+            SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+            try
+            {
+                if (axOleInPlaceObject is null)
+                {
+                    return false;
+                }
+
+                // Give the ActiveX control a chance to process this key by calling
+                // IOleInPlaceActiveObject::TranslateAccelerator.
+                HRESULT hr = axOleInPlaceActiveObject.TranslateAccelerator(&win32Message);
+                if (hr == HRESULT.S_OK)
+                {
+                    Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"\t Message translated to {win32Message}");
+                    return true;
+                }
+                else
+                {
+                    // win32Message may have been modified. Lets copy it back.
+                    msg._Msg = win32Message.message;
+                    msg._WParam = win32Message.wParam;
+                    msg._LParam = win32Message.lParam;
+                    msg.HWnd = win32Message.hwnd;
+
+                    if (hr == HRESULT.S_FALSE)
+                    {
+                        // Same code as in AxHost (ignore dialog keys here).
+                        // We have the same problem here.
+                        bool ret = false;
+
+                        ignoreDialogKeys = true;
+                        try
+                        {
+                            ret = base.PreProcessMessage(ref msg);
+                        }
+                        finally
+                        {
+                            ignoreDialogKeys = false;
+                        }
+
+                        return ret;
+                    }
+                    else if (GetAXHostState(WebBrowserHelper.siteProcessedInputKey))
+                    {
+                        Debug.WriteLineIf(
+                            s_controlKeyboardRouting.TraceVerbose,
+                            $"\t Message processed by site. Calling base.PreProcessMessage() {msg}");
+                        return base.PreProcessMessage(ref msg);
+                    }
+                    else
+                    {
+                        Debug.WriteLineIf(
+                            s_controlKeyboardRouting.TraceVerbose,
+                            $"\t Message not processed by site. Returning false. {msg}");
+                        return false;
+                    }
+                }
+            }
+            finally
+            {
+                SetAXHostState(WebBrowserHelper.siteProcessedInputKey, false);
+            }
         }
 
         //
@@ -398,7 +404,7 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.COMMAND:
-                    if (!ReflectMessage(m.LParam, ref m))
+                    if (!ReflectMessage(m._LParam, ref m))
                     {
                         DefWndProc(ref m);
                     }
@@ -427,7 +433,7 @@ namespace System.Windows.Forms
                     break;
 
                 case User32.WM.KILLFOCUS:
-                    hwndFocus = (IntPtr)m.WParam;
+                    hwndFocus = m._WParam;
                     try
                     {
                         base.WndProc(ref m);
@@ -477,9 +483,9 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m.Msg == (int)WebBrowserHelper.REGMSG_MSG)
+                    if (m._Msg == WebBrowserHelper.REGMSG_MSG)
                     {
-                        m.Result = (IntPtr)WebBrowserHelper.REGMSG_RETVAL;
+                        m._Result = WebBrowserHelper.REGMSG_RETVAL;
                     }
                     else
                     {

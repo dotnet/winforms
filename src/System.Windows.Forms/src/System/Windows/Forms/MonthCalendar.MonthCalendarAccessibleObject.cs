@@ -224,7 +224,7 @@ namespace System.Windows.Forms
                     iRow = rowIndex
                 };
 
-                bool success = User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
+                bool success = User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
 
                 return success ? new(gridInfo.stStart, gridInfo.stEnd) : null;
             }
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
                     iRow = rowIndex
                 };
 
-                bool success = User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo) != IntPtr.Zero;
+                bool success = User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo) != 0;
 
                 return success ? _owningMonthCalendar.RectangleToScreen(gridInfo.rc) : default;
             }
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
                         cchName = (UIntPtr)name.Length - 1
                     };
 
-                    User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, IntPtr.Zero, ref gridInfo);
+                    User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.GETCALENDARGRIDINFO, 0, ref gridInfo);
                 }
 
                 string text = string.Empty;
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
                     pt = point
                 };
 
-                User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.HITTEST, IntPtr.Zero, ref hitTestInfo);
+                User32.SendMessageW(_owningMonthCalendar, (User32.WM)MCM.HITTEST, 0, ref hitTestInfo);
 
                 return hitTestInfo;
             }

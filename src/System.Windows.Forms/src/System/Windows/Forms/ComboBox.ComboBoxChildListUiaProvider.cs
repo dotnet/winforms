@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using System.Runtime.InteropServices;
 using static System.Windows.Forms.ComboBox.ObjectCollection;
 using static Interop;
@@ -25,6 +26,8 @@ namespace System.Windows.Forms
                 _owningComboBox = owningComboBox;
                 _childListControlhandle = childListControlhandle;
             }
+
+            internal override Rectangle BoundingRectangle => User32.GetWindowRect(_owningComboBox.GetListNativeWindow());
 
             /// <summary>
             ///  Return the child object at the given screen coordinates.

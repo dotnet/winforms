@@ -650,33 +650,33 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        bool ISelectionUIHandler.QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY) => DragHandler.QueryBeginDrag(components, rules, initialX, initialY);
+        bool ISelectionUIHandler.QueryBeginDrag(object[] components, SelectionRules rules, int initialX, int initialY)
+            => DragHandler.QueryBeginDrag(components, rules, initialX, initialY);
 
-        void ISelectionUIHandler.ShowContextMenu(IComponent component)
-        {
-            Point cur = MousePosition;
-            OnContextMenu(cur.X, cur.Y, true);
-        }
+        void ISelectionUIHandler.ShowContextMenu(IComponent component) => OnContextMenu(MousePosition);
 
-        private void OnContextMenu(int x, int y, bool useSelection)
+        private void OnContextMenu(Point location)
         {
-            if (!TabOrderActive)
+            if (TabOrderActive)
+            {
+                return;
+            }
+
+            Capture = false;
+            IMenuCommandService mcs = MenuService;
+            if (mcs is not null)
             {
                 Capture = false;
-                IMenuCommandService mcs = MenuService;
-                if (mcs != null)
+                Cursor.Clip = Rectangle.Empty;
+                ISelectionService selectionService = (ISelectionService)GetService(typeof(ISelectionService));
+                if (selectionService is not null
+                    && !(selectionService.SelectionCount == 1 && selectionService.PrimarySelection == mainDesigner.Component))
                 {
-                    Capture = false;
-                    Cursor.Clip = Rectangle.Empty;
-                    ISelectionService s = (ISelectionService)GetService(typeof(ISelectionService));
-                    if (useSelection && s != null && !(1 == s.SelectionCount && s.PrimarySelection == mainDesigner.Component))
-                    {
-                        mcs.ShowContextMenu(MenuCommands.TraySelectionMenu, x, y);
-                    }
-                    else
-                    {
-                        mcs.ShowContextMenu(MenuCommands.ComponentTrayMenu, x, y);
-                    }
+                    mcs.ShowContextMenu(MenuCommands.TraySelectionMenu, location.X, location.Y);
+                }
+                else
+                {
+                    mcs.ShowContextMenu(MenuCommands.ComponentTrayMenu, location.X, location.Y);
                 }
             }
         }
@@ -1644,7 +1644,8 @@ namespace System.Windows.Forms.Design
             switch ((User32.WM)m.Msg)
             {
                 case User32.WM.CANCELMODE:
-                    // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel any pending drag operation!
+                    // When we get cancelmode (i.e. you tabbed away to another window) then we want to cancel
+                    // any pending drag operation.
                     OnLostCapture();
                     break;
                 case User32.WM.SETCURSOR:
@@ -1652,7 +1653,8 @@ namespace System.Windows.Forms.Design
                     return;
                 case User32.WM.HSCROLL:
                 case User32.WM.VSCROLL:
-                    // When we scroll, we reposition a control without causing a property change event.  Therefore, we must tell the selection UI service to sync itself.
+                    // When we scroll, we reposition a control without causing a property change event.
+                    // Therefore, we must tell the selection UI service to sync itself.
                     base.WndProc(ref m);
                     if (selectionUISvc != null)
                     {
@@ -1665,32 +1667,34 @@ namespace System.Windows.Forms.Design
                     Invalidate();
                     break;
                 case User32.WM.CONTEXTMENU:
-                    // Pop a context menu for the composition designer.
-                    int x = PARAM.SignedLOWORD(m.LParam);
-                    int y = PARAM.SignedHIWORD(m.LParam);
-                    if (x == -1 && y == -1)
                     {
-                        // for shift-F10
-                        Point mouse = MousePosition;
-                        x = mouse.X;
-                        y = mouse.Y;
+                        // Pop a context menu for the composition designer.
+                        Point location = PARAM.ToPoint(m._LParam);
+                        if (location.X == -1 && location.Y == -1)
+                        {
+                            // For shift-F10.
+                            location = MousePosition;
+                        }
+
+                        OnContextMenu(location);
+                        break;
                     }
 
-                    OnContextMenu(x, y, true);
-                    break;
                 case User32.WM.NCHITTEST:
-                    if (glyphManager != null)
                     {
-                        // Get a hit test on any glyphs that we are managing this way - we know where to route appropriate  messages
-                        Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
-                        var pt1 = new Point();
-                        pt1 = PointToClient(pt1);
-                        pt.Offset(pt1.X, pt1.Y);
-                        glyphManager.GetHitTest(pt);
+                        if (glyphManager is not null)
+                        {
+                            // Get a hit test on any glyphs that we are managing this way.
+                            // We know where to route appropriate messages.
+                            Point location = PARAM.ToPoint(m._LParam);
+                            location.Offset(PointToClient(default));
+                            glyphManager.GetHitTest(location);
+                        }
+
+                        base.WndProc(ref m);
+                        break;
                     }
 
-                    base.WndProc(ref m);
-                    break;
                 default:
                     base.WndProc(ref m);
                     break;
@@ -2321,7 +2325,7 @@ namespace System.Windows.Forms.Design
             /// <summary>
             ///  Called when we are to display our context menu for this component.
             /// </summary>
-            private void OnContextMenu(int x, int y)
+            private void OnContextMenu(Point location)
             {
                 if (!_tray.TabOrderActive)
                 {
@@ -2338,7 +2342,7 @@ namespace System.Windows.Forms.Design
                     {
                         Capture = false;
                         Cursor.Clip = Rectangle.Empty;
-                        mcs.ShowContextMenu(MenuCommands.TraySelectionMenu, x, y);
+                        mcs.ShowContextMenu(MenuCommands.TraySelectionMenu, location.X, location.Y);
                     }
                 }
             }
@@ -2622,24 +2626,26 @@ namespace System.Windows.Forms.Design
                         OnSetCursor();
                         break;
                     case User32.WM.CONTEXTMENU:
-                        // We must handle this ourselves.  Control only allows regular Windows Forms context menus, which doesn't do us much good.  Also, control's button up processing calls DefwndProc first, which causes a right mouse up to be routed as a WM_CONTEXTMENU.  If we don't respond to it here, this message will be bubbled up to our parent, which would pop up a container context menu instead of our own.
-                        int x = PARAM.SignedLOWORD(m.LParam);
-                        int y = PARAM.SignedHIWORD(m.LParam);
-                        if (x == -1 && y == -1)
+                        // We must handle this ourselves.  Control only allows regular Windows Forms context menus, which
+                        // doesn't do us much good.  Also, control's button up processing calls DefwndProc first, which
+                        // causes a right mouse up to be routed as a WM_CONTEXTMENU.  If we don't respond to it here,
+                        // this message will be bubbled up to our parent, which would pop up a container context menu
+                        // instead of our own.
+
+                        Point location = PARAM.ToPoint(m._LParam);
+                        if (location.X == -1 && location.Y == -1)
                         {
                             // for shift-F10
-                            Point mouse = MousePosition;
-                            x = mouse.X;
-                            y = mouse.Y;
+                            location = MousePosition;
                         }
 
-                        OnContextMenu(x, y);
+                        OnContextMenu(location);
                         break;
                     case User32.WM.NCHITTEST:
                         if (_tray.glyphManager != null)
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
-                            Point pt = new Point((short)PARAM.LOWORD(m.LParam), (short)PARAM.HIWORD(m.LParam));
+                            Point pt = PARAM.ToPoint(m._LParam);
                             var pt1 = new Point();
                             pt1 = PointToClient(pt1);
                             pt.Offset(pt1.X, pt1.Y);

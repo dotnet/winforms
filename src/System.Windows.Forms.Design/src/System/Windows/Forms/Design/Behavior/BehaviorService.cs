@@ -826,15 +826,15 @@ namespace System.Windows.Forms.Design.Behavior
 
         private void TestHook_SetText(ref Message m, string text)
         {
-            if (m.LParam == IntPtr.Zero)
+            if (m._LParam == 0)
             {
-                m.Result = (IntPtr)((text.Length + 1) * Marshal.SystemDefaultCharSize);
+                m._Result = (text.Length + 1) * sizeof(char);
                 return;
             }
 
-            if (unchecked((int)(long)m.WParam) < text.Length + 1)
+            if (m._WParam < text.Length + 1)
             {
-                m.Result = (IntPtr)(-1);
+                m._Result = -1;
                 return;
             }
 
@@ -843,20 +843,12 @@ namespace System.Windows.Forms.Design.Behavior
             byte[] nullBytes;
             byte[] bytes;
 
-            if (Marshal.SystemDefaultCharSize == 1)
-            {
-                bytes = Text.Encoding.Default.GetBytes(text);
-                nullBytes = Text.Encoding.Default.GetBytes(nullChar);
-            }
-            else
-            {
-                bytes = Text.Encoding.Unicode.GetBytes(text);
-                nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
-            }
+            bytes = Text.Encoding.Unicode.GetBytes(text);
+            nullBytes = Text.Encoding.Unicode.GetBytes(nullChar);
 
-            Marshal.Copy(bytes, 0, m.LParam, bytes.Length);
-            Marshal.Copy(nullBytes, 0, unchecked((IntPtr)((long)m.LParam + bytes.Length)), nullBytes.Length);
-            m.Result = (IntPtr)((bytes.Length + nullBytes.Length) / Marshal.SystemDefaultCharSize);
+            Marshal.Copy(bytes, 0, m._LParam, bytes.Length);
+            Marshal.Copy(nullBytes, 0, m._LParam + bytes.Length, nullBytes.Length);
+            m._Result = (bytes.Length + nullBytes.Length) / sizeof(char);
         }
 
         private void TestHook_GetAllSnapLines(ref Message m)

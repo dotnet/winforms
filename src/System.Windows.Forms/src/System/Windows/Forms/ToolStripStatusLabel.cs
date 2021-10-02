@@ -193,7 +193,7 @@ namespace System.Windows.Forms
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
-            if (LiveSetting != AutomationLiveSetting.Off)
+            if (IsParentAccessibilityObjectCreated && LiveSetting != AutomationLiveSetting.Off)
             {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }

@@ -579,10 +579,8 @@ namespace System.Windows.Forms
                 // if we're within the grip bounds tell windows
                 // that we're the bottom right of the window.
                 Rectangle sizeGripBounds = SizeGripBounds;
-                int x = PARAM.LOWORD(m.LParam);
-                int y = PARAM.HIWORD(m.LParam);
 
-                if (sizeGripBounds.Contains(PointToClient(new Point(x, y))))
+                if (sizeGripBounds.Contains(PointToClient(PARAM.ToPoint(m._LParam))))
                 {
                     IntPtr rootHwnd = User32.GetAncestor(this, User32.GA.ROOT);
 
@@ -615,7 +613,7 @@ namespace System.Windows.Forms
                         {
                             if ((deltaRightEdge + deltaBottomEdge) < 2)
                             {
-                                m.Result = (IntPtr)User32.HT.BOTTOMRIGHT;
+                                m._Result = (nint)User32.HT.BOTTOMRIGHT;
                                 return;
                             }
                         }
@@ -647,14 +645,11 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)User32.WM.NCHITTEST)
+                if (m._Msg == User32.WM.NCHITTEST)
                 {
-                    int x = PARAM.LOWORD(m.LParam);
-                    int y = PARAM.HIWORD(m.LParam);
-
-                    if (ClientRectangle.Contains(PointToClient(new Point(x, y))))
+                    if (ClientRectangle.Contains(PointToClient(PARAM.ToPoint(m._LParam))))
                     {
-                        m.Result = (IntPtr)User32.HT.BOTTOMLEFT;
+                        m._Result = (nint)User32.HT.BOTTOMLEFT;
                         return;
                     }
                 }

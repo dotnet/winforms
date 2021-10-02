@@ -265,7 +265,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private static IntPtr EmptyHookCallback(User32.HC nCode, IntPtr wparam, IntPtr lparam) => IntPtr.Zero;
+        private static nint EmptyHookCallback(User32.HC nCode, nint wparam, nint lparam) => 0;
 
         private static void LoadSendMethodFromConfig()
         {

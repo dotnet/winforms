@@ -421,10 +421,7 @@ namespace System.Windows.Forms
         ///  Indicates if the given item is, in any way, shape, or form, checked.
         ///  This will return true if the item is fully or indeterminately checked.
         /// </summary>
-        public bool GetItemChecked(int index)
-        {
-            return (GetItemCheckState(index) != CheckState.Unchecked);
-        }
+        public bool GetItemChecked(int index) => GetItemCheckState(index) != CheckState.Unchecked;
 
         /// <summary>
         ///  Invalidates the given item in the listbox
@@ -434,7 +431,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 var rect = new RECT();
-                SendMessageW(this, (WM)LB.GETITEMRECT, (IntPtr)index, ref rect);
+                SendMessageW(this, (WM)LB.GETITEMRECT, index, ref rect);
                 InvalidateRect(new HandleRef(this, Handle), &rect, BOOL.FALSE);
             }
         }
@@ -506,7 +503,7 @@ namespace System.Windows.Forms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+            SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
         }
 
         /// <summary>
@@ -806,14 +803,12 @@ namespace System.Windows.Forms
         protected override void OnFontChanged(EventArgs e)
         {
             // Update the item height
-            //
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)LB.SETITEMHEIGHT, IntPtr.Zero, (IntPtr)ItemHeight);
+                SendMessageW(this, (WM)LB.SETITEMHEIGHT, 0, ItemHeight);
             }
 
             // The base OnFontChanged will adjust the height of the CheckedListBox accordingly
-            //
             base.OnFontChanged(e);
         }
 
@@ -942,21 +937,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We need to get LBN_SELCHANGE notifications
+        ///  We need to get LBN_SELCHANGE notifications.
         /// </summary>
         protected override void WmReflectCommand(ref Message m)
         {
-            switch (PARAM.HIWORD(m.WParam))
+            switch ((User32.LBN)PARAM.HIWORD(m._WParam))
             {
-                case (int)LBN.SELCHANGE:
+                case User32.LBN.SELCHANGE:
                     LbnSelChange();
-                    // finally, fire the OnSelectionChange event.
                     base.WmReflectCommand(ref m);
                     break;
 
-                case (int)LBN.DBLCLK:
+                case User32.LBN.DBLCLK:
                     // We want double-clicks to change the checkstate on each click - just like the CheckBox control
-                    //
                     LbnSelChange();
                     base.WmReflectCommand(ref m);
                     break;
@@ -973,8 +966,8 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectVKeyToItem(ref Message m)
         {
-            int keycode = PARAM.LOWORD(m.WParam);
-            switch ((Keys)keycode)
+            Keys keycode = (Keys)PARAM.LOWORD(m._WParam);
+            switch (keycode)
             {
                 case Keys.Up:
                 case Keys.Down:
@@ -991,7 +984,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            m.Result = NativeMethods.InvalidIntPtr;
+            m._Result = -1;
         }
 
         /// <summary>
@@ -1001,39 +994,39 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch ((WM)m.Msg)
+            switch (m._Msg)
             {
                 case WM.REFLECT_CHARTOITEM:
-                    m.Result = NativeMethods.InvalidIntPtr;
+                    m._Result = -1;
                     break;
                 case WM.REFLECT_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:
-                    if (m.Msg == (int)LBC_GETCHECKSTATE)
+                    if (m._Msg == LBC_GETCHECKSTATE)
                     {
-                        int item = unchecked((int)(long)m.WParam);
+                        int item = (int)m._WParam;
                         if (item < 0 || item >= Items.Count)
                         {
-                            m.Result = (IntPtr)LB_ERR;
+                            m._Result = LB_ERR;
                         }
                         else
                         {
-                            m.Result = (IntPtr)(GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED);
+                            m._Result = GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED;
                         }
                     }
-                    else if (m.Msg == (int)LBC_SETCHECKSTATE)
+                    else if (m._Msg == LBC_SETCHECKSTATE)
                     {
-                        int item = unchecked((int)(long)m.WParam);
-                        int state = unchecked((int)(long)m.LParam);
+                        int item = (int)m._WParam;
+                        int state = (int)m._LParam;
                         if (item < 0 || item >= Items.Count || (state != LB_CHECKED && state != LB_UNCHECKED))
                         {
-                            m.Result = IntPtr.Zero;
+                            m._Result = 0;
                         }
                         else
                         {
                             SetItemChecked(item, (state == LB_CHECKED));
-                            m.Result = (IntPtr)1;
+                            m._Result = 1;
                         }
                     }
                     else

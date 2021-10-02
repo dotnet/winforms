@@ -29,8 +29,7 @@ namespace System.Windows.Forms
                 get => base.Text;
                 set
                 {
-                    bool valueChanged = (value != base.Text);
-                    if (valueChanged)
+                    if (IsAccessibilityObjectCreated && value != base.Text)
                     {
                         AccessibilityObject.RaiseAutomationNotification(Automation.AutomationNotificationKind.ActionCompleted,
                             Automation.AutomationNotificationProcessing.CurrentThenMostRecent, SR.UpDownEditLocalizedControlTypeName);
