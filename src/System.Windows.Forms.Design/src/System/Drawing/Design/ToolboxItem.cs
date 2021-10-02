@@ -881,14 +881,12 @@ namespace System.Drawing.Design
         /// </summary>
         protected void ValidatePropertyType(string propertyName, object value, Type expectedType, bool allowNull)
         {
-            if (value is null)
+            if (!allowNull)
             {
-                if (!allowNull)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
             }
-            else
+
+            if (value != null)
             {
                 if (!expectedType.IsInstanceOfType(value))
                 {
