@@ -106,13 +106,7 @@ namespace System.Resources
 
         public ResXDataNode(string name, ResXFileRef fileRef, Func<Type, string> typeNameConverter)
         {
-            ArgumentNullException.ThrowIfNull(name, nameof(name));
-            if (name.Length == 0)
-            {
-                throw (new ArgumentNullException(nameof(name)));
-            }
-
-            _name = name;
+            _name = name.OrThrowIfNullOrEmpty();
             _fileRef = fileRef.OrThrowIfNull();
             _typeNameConverter = typeNameConverter;
         }

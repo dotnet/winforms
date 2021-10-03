@@ -388,12 +388,7 @@ namespace System.Windows.Forms
 
         public static void SetText(string text, TextDataFormat format)
         {
-            ArgumentNullException.ThrowIfNull(text, nameof(text));
-            if (string.IsNullOrEmpty(text))
-            {
-                throw new ArgumentNullException(nameof(text));
-            }
-
+            ArgumentValidation.ThrowIfNullOrEmpty(text);
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             IDataObject dataObject = new DataObject();

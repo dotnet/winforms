@@ -682,11 +682,7 @@ namespace System.Windows.Forms
         public static void LoadSettings(Form targetForm, string key)
         {
             ArgumentNullException.ThrowIfNull(targetForm, nameof(targetForm));
-            ArgumentNullException.ThrowIfNull(key, nameof(key));
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
+            ArgumentValidation.ThrowIfNullOrEmpty(key);
 
             ToolStripSettingsManager settingsManager = new ToolStripSettingsManager(targetForm, key);
 
