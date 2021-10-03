@@ -9,13 +9,22 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripContentPanelRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
+        [WinFormsFact]
+        public void ToolStripContentPanelRenderEventArgs_NullGraphics_ThrowsArgumentNullException()
+        {
+            using var toolStripButton = new ToolStripButton();
+            Assert.Throws<ArgumentNullException>(() => new ToolStripContentPanelRenderEventArgs(null, null));
+        }
+
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripContentPanel_TestData()
         {
-            var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
+            using var image = new Bitmap(10, 10);
+            using Graphics graphics = Graphics.FromImage(image);
 
-            yield return new object[] { null, null };
-            yield return new object[] { graphics, new ToolStripContentPanel() };
+            yield return new object[] { graphics, null };
+
+            using var toolStripContentPanel = new ToolStripContentPanel();
+            yield return new object[] { graphics, toolStripContentPanel };
         }
 
         [WinFormsTheory]
