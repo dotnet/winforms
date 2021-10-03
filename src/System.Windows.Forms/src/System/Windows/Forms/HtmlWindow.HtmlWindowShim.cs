@@ -77,7 +77,7 @@ namespace System.Windows.Forms
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
-                if (proxy != null)
+                if (proxy is not null)
                 {
                     ((IHTMLWindow3)NativeHtmlWindow).DetachEvent(eventName, proxy);
                 }
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
 
             public override void DisconnectFromEvents()
             {
-                if (_cookie != null)
+                if (_cookie is not null)
                 {
                     _cookie.Disconnect();
                     _cookie = null;
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
 
             public void OnWindowUnload()
             {
-                if (_htmlWindow != null)
+                if (_htmlWindow is not null)
                 {
                     _htmlWindow.ShimManager.OnWindowUnloaded(_htmlWindow);
                 }
@@ -105,7 +105,7 @@ namespace System.Windows.Forms
                 base.Dispose(disposing);
                 if (disposing)
                 {
-                    if (_htmlWindow != null && _htmlWindow.NativeHtmlWindow != null)
+                    if (_htmlWindow is not null && _htmlWindow.NativeHtmlWindow is not null)
                     {
                         Marshal.FinalReleaseComObject(_htmlWindow.NativeHtmlWindow);
                     }

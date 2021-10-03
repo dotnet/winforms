@@ -44,7 +44,7 @@ namespace System.Windows.Forms
 
                     for (int i = 0; i < _imageInfoCollection.Count; i++)
                     {
-                        if ((_imageInfoCollection[i] is ImageInfo image) && (image.Name != null) && (image.Name.Length != 0))
+                        if ((_imageInfoCollection[i] is ImageInfo image) && (image.Name is not null) && (image.Name.Length != 0))
                         {
                             keysCollection.Add(image.Name);
                         }
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
             [Conditional("DEBUG")]
             private void AssertInvariant()
             {
-                Debug.Assert(_owner != null, "ImageCollection has no owner (ImageList)");
+                Debug.Assert(_owner is not null, "ImageCollection has no owner (ImageList)");
                 Debug.Assert((_owner._originals is null) == (_owner.HandleCreated), " Either we should have the original images, or the handle should be created");
             }
 
@@ -85,7 +85,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    Debug.Assert(_owner != null, "ImageCollection has no owner (ImageList)");
+                    Debug.Assert(_owner is not null, "ImageCollection has no owner (ImageList)");
 
                     if (_owner.HandleCreated)
                     {
@@ -96,7 +96,7 @@ namespace System.Windows.Forms
                         int count = 0;
                         foreach (Original original in _owner._originals)
                         {
-                            if (original != null)
+                            if (original is not null)
                             {
                                 count += original._nImages;
                             }
@@ -330,7 +330,7 @@ namespace System.Windows.Forms
 
                 if (original._image is Bitmap)
                 {
-                    if (_owner._originals != null)
+                    if (_owner._originals is not null)
                     {
                         index = _owner._originals.Add(original);
                     }
@@ -347,7 +347,7 @@ namespace System.Windows.Forms
                 }
                 else if (original._image is Icon)
                 {
-                    if (_owner._originals != null)
+                    if (_owner._originals is not null)
                     {
                         index = _owner._originals.Add(original);
                     }
@@ -439,7 +439,7 @@ namespace System.Windows.Forms
             public void Clear()
             {
                 AssertInvariant();
-                if (_owner._originals != null)
+                if (_owner._originals is not null)
                 {
                     _owner._originals.Clear();
                 }
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
                 // Check the last cached item
                 if (IsValidIndex(_lastAccessedIndex))
                 {
-                    if ((_imageInfoCollection[_lastAccessedIndex] != null) &&
+                    if ((_imageInfoCollection[_lastAccessedIndex] is not null) &&
                         (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[_lastAccessedIndex]).Name, key, ignoreCase: true)))
                     {
                         return _lastAccessedIndex;
@@ -510,7 +510,7 @@ namespace System.Windows.Forms
                 // Search for the item
                 for (int i = 0; i < Count; i++)
                 {
-                    if ((_imageInfoCollection[i] != null) &&
+                    if ((_imageInfoCollection[i] is not null) &&
                             (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[i]).Name, key, ignoreCase: true)))
                     {
                         _lastAccessedIndex = i;
@@ -580,7 +580,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ImageListRemoveFailed);
                 }
 
-                if ((_imageInfoCollection != null) && (index >= 0 && index < _imageInfoCollection.Count))
+                if ((_imageInfoCollection is not null) && (index >= 0 && index < _imageInfoCollection.Count))
                 {
                     _imageInfoCollection.RemoveAt(index);
 
