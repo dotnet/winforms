@@ -14,7 +14,7 @@ namespace System.Windows.Forms
             return argument;
         }
 
-        internal static void ThrowIfNull(this Interop.Gdi32.HDC argument, [CallerArgumentExpression("argument")] string? paramName = null)
+        internal static void ThrowIfNull(Interop.Gdi32.HDC argument, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             if (argument.IsNull)
             {

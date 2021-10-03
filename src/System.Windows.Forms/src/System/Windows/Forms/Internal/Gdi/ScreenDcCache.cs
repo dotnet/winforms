@@ -64,7 +64,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void Release(Gdi32.HDC hdc)
         {
-            hdc.ThrowIfNull();
+            ArgumentValidation.ThrowIfNull(hdc);
             ValidateHdc(hdc);
 
             IntPtr temp = (IntPtr)hdc;

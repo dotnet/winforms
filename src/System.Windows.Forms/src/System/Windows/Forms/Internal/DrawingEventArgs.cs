@@ -49,7 +49,7 @@ namespace System.Windows.Forms
             Rectangle clipRect,
             DrawingEventFlags flags)
         {
-            dc.ThrowIfNull();
+            ArgumentValidation.ThrowIfNull(dc);
 
 #if DEBUG
             Gdi32.OBJ type = Gdi32.GetObjectType(dc);
