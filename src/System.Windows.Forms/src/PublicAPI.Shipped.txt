@@ -22,17 +22,17 @@ abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string?
 ~override System.Windows.Forms.AxHost.Cursor.set -> void
 ~override System.Windows.Forms.AxHost.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.AxHost.Font.set -> void
-~override System.Windows.Forms.AxHost.InvalidActiveXStateException.ToString() -> string
+override System.Windows.Forms.AxHost.InvalidActiveXStateException.ToString() -> string!
 ~override System.Windows.Forms.AxHost.OnBackColorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.OnForeColorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.OnLostFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.Site.set -> void
-~override System.Windows.Forms.AxHost.StateConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.AxHost.StateConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.AxHost.StateConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.AxHost.StateConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.AxHost.StateConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.AxHost.StateConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.AxHost.StateConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.AxHost.StateConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.AxHost.Text.get -> string
 ~override System.Windows.Forms.AxHost.Text.set -> void
 ~override System.Windows.Forms.BindingMemberInfo.Equals(object otherObject) -> bool
@@ -1504,7 +1504,7 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Windows.Forms.AxHost.ContainingControl.set -> void
 ~System.Windows.Forms.AxHost.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~System.Windows.Forms.AxHost.GetOcx() -> object
-~System.Windows.Forms.AxHost.InvalidActiveXStateException.InvalidActiveXStateException(string name, System.Windows.Forms.AxHost.ActiveXInvokeKind kind) -> void
+System.Windows.Forms.AxHost.InvalidActiveXStateException.InvalidActiveXStateException(string? name, System.Windows.Forms.AxHost.ActiveXInvokeKind kind) -> void
 ~System.Windows.Forms.AxHost.OcxState.get -> System.Windows.Forms.AxHost.State
 ~System.Windows.Forms.AxHost.OcxState.set -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseDown(object o1, object o2, object o3, object o4) -> void
@@ -1514,7 +1514,7 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
 ~System.Windows.Forms.AxHost.State.State(System.IO.Stream ms, int storageType, bool manualUpdate, string licKey) -> void
 ~System.Windows.Forms.AxHost.State.State(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.AxHost.TypeLibraryTimeStampAttribute.TypeLibraryTimeStampAttribute(string timestamp) -> void
+System.Windows.Forms.AxHost.TypeLibraryTimeStampAttribute.TypeLibraryTimeStampAttribute(string! timestamp) -> void
 ~System.Windows.Forms.BaseCollection.CopyTo(System.Array ar, int index) -> void
 ~System.Windows.Forms.BaseCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.BaseCollection.SyncRoot.get -> object
