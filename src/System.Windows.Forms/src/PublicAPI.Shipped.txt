@@ -2513,10 +2513,10 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.set -> void
 ~System.Windows.Forms.MonthCalendar.SelectionRange.get -> System.Windows.Forms.SelectionRange
 ~System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
-~System.Windows.Forms.NodeLabelEditEventArgs.Label.get -> string
-~System.Windows.Forms.NodeLabelEditEventArgs.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode node) -> void
-~System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode node, string label) -> void
+System.Windows.Forms.NodeLabelEditEventArgs.Label.get -> string?
+System.Windows.Forms.NodeLabelEditEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode? node) -> void
+System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode? node, string? label) -> void
 ~System.Windows.Forms.NotifyIcon.BalloonTipText.get -> string
 ~System.Windows.Forms.NotifyIcon.BalloonTipText.set -> void
 ~System.Windows.Forms.NotifyIcon.BalloonTipTitle.get -> string
