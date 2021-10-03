@@ -37,8 +37,7 @@ namespace System.Windows.Forms
                 // If there is no selection, start and end parameters are the position of the caret.
                 SendMessageW(_owningTextBoxBase, (WM)EM.GETSEL, ref start, ref end);
 
-                var internalAccessibleObject = new InternalAccessibleObject(_owningTextBoxBase.AccessibilityObject);
-                return new UiaCore.ITextRangeProvider[] { new UiaTextRange(internalAccessibleObject, this, start, end) };
+                return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, end) };
             }
 
             public override UiaCore.ITextRangeProvider[]? GetVisibleRanges()
@@ -49,9 +48,8 @@ namespace System.Windows.Forms
                 }
 
                 GetVisibleRangePoints(out int start, out int end);
-                var internalAccessibleObject = new InternalAccessibleObject(_owningTextBoxBase.AccessibilityObject);
 
-                return new UiaCore.ITextRangeProvider[] { new UiaTextRange(internalAccessibleObject, this, start, end) };
+                return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, end) };
             }
 
             public override UiaCore.ITextRangeProvider? RangeFromChild(UiaCore.IRawElementProviderSimple childElement)
@@ -79,7 +77,7 @@ namespace System.Windows.Forms
                 // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
                 if (MapWindowPoint(IntPtr.Zero, _owningTextBoxBase, ref clientLocation) == 0)
                 {
-                    return new UiaTextRange(new InternalAccessibleObject(_owningTextBoxBase.AccessibilityObject), this, 0, 0);
+                    return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, end: 0);
                 }
 
                 // We have to deal with the possibility that the coordinate is inside the window rect
@@ -95,10 +93,10 @@ namespace System.Windows.Forms
                 // Get the character at those client coordinates.
                 int start = _owningTextBoxBase.GetCharIndexFromPosition(clientLocation);
 
-                return new UiaTextRange(new InternalAccessibleObject(_owningTextBoxBase.AccessibilityObject), this, start, start);
+                return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start, start);
             }
 
-            public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(new InternalAccessibleObject(_owningTextBoxBase.AccessibilityObject), this, 0, TextLength);
+            public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, TextLength);
 
             public override UiaCore.SupportedTextSelection SupportedTextSelection => UiaCore.SupportedTextSelection.Single;
 
@@ -117,9 +115,7 @@ namespace System.Windows.Forms
                     isActive = BOOL.TRUE;
                 }
 
-                var internalAccessibleObject = new InternalAccessibleObject(_owningTextBoxBase.AccessibilityObject);
-
-                return new UiaTextRange(internalAccessibleObject, this, _owningTextBoxBase.SelectionStart, _owningTextBoxBase.SelectionStart);
+                return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, _owningTextBoxBase.SelectionStart, _owningTextBoxBase.SelectionStart);
             }
 
             public override Point PointToScreen(Point pt) => _owningTextBoxBase.PointToScreen(pt);
@@ -136,27 +132,23 @@ namespace System.Windows.Forms
             /// </returns>
             public override UiaCore.ITextRangeProvider RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
             {
-                var internalAccessibleObject = new InternalAccessibleObject(_owningTextBoxBase.AccessibilityObject);
-
-                return new UiaTextRange(internalAccessibleObject, this, 0, 0);
+                return new UiaTextRange(_owningTextBoxBase.AccessibilityObject, this, start: 0, end: 0);
             }
 
             public override Rectangle BoundingRectangle
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (Rectangle)GetFormattingRectangle()
+                    ? GetFormattingRectangle()
                     : Rectangle.Empty;
 
             public override int FirstVisibleLine
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
+                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.GETFIRSTVISIBLELINE)
                     : -1;
 
             public override bool IsMultiline => _owningTextBoxBase.Multiline;
 
             public override bool IsReadingRTL
-                => _owningTextBoxBase.IsHandleCreated
-                    ? WindowExStyle.HasFlag(WS_EX.RTLREADING)
-                    : false;
+                => _owningTextBoxBase.IsHandleCreated && WindowExStyle.HasFlag(WS_EX.RTLREADING);
 
             public override bool IsReadOnly => _owningTextBoxBase.ReadOnly;
 
@@ -169,14 +161,14 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)(long)GetWindowLong(_owningTextBoxBase, GWL.STYLE);
+                    ES extendedStyle = (ES)GetWindowLong(_owningTextBoxBase, GWL.STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL) || extendedStyle.HasFlag(ES.AUTOVSCROLL);
                 }
             }
 
             public override int LinesCount
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
+                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.GETLINECOUNT)
                     : -1;
 
             public override int LinesPerPage
@@ -216,7 +208,7 @@ namespace System.Windows.Forms
 
             public override int TextLength
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningTextBoxBase, WM.GETTEXTLENGTH)
+                    ? (int)SendMessageW(_owningTextBoxBase, WM.GETTEXTLENGTH)
                     : -1;
 
             public override WS_EX WindowExStyle
@@ -241,7 +233,7 @@ namespace System.Windows.Forms
 
             public override int GetLineIndex(int line)
                 => _owningTextBoxBase.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningTextBoxBase, (WM)EM.LINEINDEX, (IntPtr)line)
+                    ? (int)SendMessageW(_owningTextBoxBase, (WM)EM.LINEINDEX, line)
                     : -1;
 
             public override Point GetPositionFromChar(int charIndex)
@@ -326,7 +318,7 @@ namespace System.Windows.Forms
             public override bool LineScroll(int charactersHorizontal, int linesVertical)
                 // Sends an EM_LINESCROLL message to scroll it horizontally and/or vertically.
                 => _owningTextBoxBase.IsHandleCreated
-                    && SendMessageW(_owningTextBoxBase, (WM)EM.LINESCROLL, (IntPtr)charactersHorizontal, (IntPtr)linesVertical) != IntPtr.Zero;
+                    && SendMessageW(_owningTextBoxBase, (WM)EM.LINESCROLL, charactersHorizontal, linesVertical) != 0;
 
             public override void SetSelection(int start, int end)
             {
@@ -347,7 +339,7 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW(_owningTextBoxBase, (WM)EM.SETSEL, (IntPtr)start, (IntPtr)end);
+                SendMessageW(_owningTextBoxBase, (WM)EM.SETSEL, start, end);
             }
 
             private RECT GetFormattingRectangle()
@@ -356,7 +348,7 @@ namespace System.Windows.Forms
 
                 // Send an EM_GETRECT message to find out the bounding rectangle.
                 RECT rectangle = new RECT();
-                SendMessageW(_owningTextBoxBase, (WM)EM.GETRECT, (IntPtr)0, ref rectangle);
+                SendMessageW(_owningTextBoxBase, (WM)EM.GETRECT, 0, ref rectangle);
                 return rectangle;
             }
 

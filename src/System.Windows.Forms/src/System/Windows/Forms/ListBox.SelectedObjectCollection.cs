@@ -56,7 +56,7 @@ namespace System.Windows.Forms
 
                             case SelectionMode.MultiSimple:
                             case SelectionMode.MultiExtended:
-                                return unchecked((int)(long)SendMessageW(_owner, (WM)LB.GETSELCOUNT));
+                                return (int)SendMessageW(_owner, (WM)LB.GETSELCOUNT);
                         }
 
                         return 0;

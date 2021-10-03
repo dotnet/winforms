@@ -214,7 +214,7 @@ namespace System.Windows.Forms
 
                     if (IsHandleCreated)
                     {
-                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)_checkState);
+                        User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_checkState);
                     }
 
                     if (oldChecked != Checked)
@@ -452,8 +452,11 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
             // UIA events:
-            AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Name, Name);
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationPropertyChangedEvent(UiaCore.UIA.NamePropertyId, Name, Name);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationPropertyChangedEventId);
+            }
 
             if (FlatStyle == FlatStyle.System)
             {
@@ -529,7 +532,7 @@ namespace System.Windows.Forms
 
             if (IsHandleCreated)
             {
-                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (IntPtr)_checkState);
+                User32.SendMessageW(this, (User32.WM)User32.BM.SETCHECK, (nint)_checkState);
             }
         }
 

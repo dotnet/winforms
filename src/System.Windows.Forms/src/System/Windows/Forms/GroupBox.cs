@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(false));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                     }
 
                     base.Text = value;
@@ -264,7 +264,7 @@ namespace System.Windows.Forms
                 {
                     if (suspendRedraw && IsHandleCreated)
                     {
-                        User32.SendMessageW(this, User32.WM.SETREDRAW, PARAM.FromBool(true));
+                        User32.SendMessageW(this, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                     }
                 }
 
@@ -658,7 +658,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmEraseBkgnd(ref Message m)
         {
-            if (m.WParam == IntPtr.Zero)
+            if (m._WParam == 0)
             {
                 return;
             }
@@ -670,18 +670,18 @@ namespace System.Windows.Forms
 
             if (backColor.HasTransparency())
             {
-                using Graphics graphics = Graphics.FromHdcInternal(m.WParam);
+                using Graphics graphics = Graphics.FromHdcInternal(m._WParam);
                 using var brush = backColor.GetCachedSolidBrushScope();
                 graphics.FillRectangle(brush, rect);
             }
             else
             {
-                var hdc = (Gdi32.HDC)m.WParam;
+                var hdc = (Gdi32.HDC)m._WParam;
                 using var hbrush = new Gdi32.CreateBrushScope(backColor);
                 User32.FillRect(hdc, ref rect, hbrush);
             }
 
-            m.Result = (IntPtr)1;
+            m._Result = 1;
         }
 
         protected override void WndProc(ref Message m)
@@ -692,7 +692,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 case User32.WM.ERASEBKGND:
                 case User32.WM.PRINTCLIENT:
@@ -705,9 +705,9 @@ namespace System.Windows.Forms
                     // will always be exposed through MSAA. Reason: When FlatStyle=System, we map down to the Win32
                     // "Button" window class to get OS group box rendering; but the OS does not expose the children
                     // of buttons to MSAA (because it assumes buttons won't have children).
-                    if (unchecked((int)(long)m.LParam) == User32.OBJID.QUERYCLASSNAMEIDX)
+                    if (m._LParam == User32.OBJID.QUERYCLASSNAMEIDX)
                     {
-                        m.Result = IntPtr.Zero;
+                        m._Result = 0;
                     }
 
                     break;

@@ -671,18 +671,18 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             protected override void WndProc(ref Message m)
             {
-                if (m.Msg == (int)User32.WM.ACTIVATE)
+                if (m._Msg == User32.WM.ACTIVATE)
                 {
                     SetState(States.Modal, true);
                     Debug.WriteLineIf(CompModSwitches.DebugGridView.TraceVerbose, "DropDownHolder:WM_ACTIVATE()");
-                    IntPtr activatedWindow = m.LParam;
-                    if (Visible && PARAM.LOWORD(m.WParam) == (int)User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
+                    IntPtr activatedWindow = m._LParam;
+                    if (Visible && (User32.WA)PARAM.LOWORD(m._WParam) == User32.WA.INACTIVE && !OwnsWindow(activatedWindow))
                     {
                         _gridView.CloseDropDownInternal(false);
                         return;
                     }
                 }
-                else if (m.Msg == (int)User32.WM.CLOSE)
+                else if (m._Msg == User32.WM.CLOSE)
                 {
                     // Don't let an ALT-F4 get you down.
                     if (Visible)
@@ -692,12 +692,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     return;
                 }
-                else if (m.Msg == (int)User32.WM.DPICHANGED)
+                else if (m._Msg == User32.WM.DPICHANGED)
                 {
                     // Dropdownholder in PropertyGridView is already scaled based on the parent font and other
                     // properties that were already set for the new DPI. This case is to avoid rescaling
                     // (double scaling) of this form.
-                    m.Result = IntPtr.Zero;
+                    m._Result = 0;
                     return;
                 }
 

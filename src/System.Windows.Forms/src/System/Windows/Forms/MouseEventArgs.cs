@@ -25,6 +25,18 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Initializes a new instance of the <see cref='MouseEventArgs'/> class.
+        /// </summary>
+        internal MouseEventArgs(MouseButtons button, int clicks, Point location, int delta = 0)
+        {
+            Button = button;
+            Clicks = clicks;
+            X = location.X;
+            Y = location.Y;
+            Delta = delta;
+        }
+
+        /// <summary>
         ///  Gets which mouse button was pressed.
         /// </summary>
         public MouseButtons Button { get; }

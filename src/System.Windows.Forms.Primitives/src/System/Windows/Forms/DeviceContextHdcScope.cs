@@ -34,12 +34,15 @@ namespace System.Windows.Forms
         ///  Gets the <see cref="Gdi32.HDC"/> from the given <paramref name="deviceContext"/>.
         /// </summary>
         /// <remarks>
-        ///  When a <see cref="Graphics"/> object is created from a <see cref="Gdi32.HDC"/> the clipping region and
-        ///  the viewport origin are applied (<see cref="Gdi32.GetViewportExtEx(Gdi32.HDC, out Size)"/>). The clipping
-        ///  region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion.
-        ///
-        ///  The Graphics object saves and restores DC state when performing operations that would modify the DC to
-        ///  maintain the DC in its original or returned state after <see cref="Graphics.ReleaseHdc()"/>.
+        ///  <para>
+        ///   When a <see cref="Graphics"/> object is created from a <see cref="Gdi32.HDC"/> the clipping region and
+        ///   the viewport origin are applied (<see cref="Gdi32.GetViewportExtEx(Gdi32.HDC, out Size)"/>). The clipping
+        ///   region isn't reflected in <see cref="Graphics.Clip"/>, which is combined with the HDC HRegion.
+        ///  </para>
+        ///  <para>
+        ///   The Graphics object saves and restores DC state when performing operations that would modify the DC to
+        ///   maintain the DC in its original or returned state after <see cref="Graphics.ReleaseHdc()"/>.
+        ///  </para>
         /// </remarks>
         /// <param name="applyGraphicsState">
         ///  Applies the origin transform and clipping region of the <paramref name="deviceContext"/> if it is an
@@ -62,7 +65,9 @@ namespace System.Windows.Forms
         ///  Prefer to use <see cref="DeviceContextHdcScope(IDeviceContext, bool, bool)"/>.
         /// </summary>
         /// <remarks>
-        ///  Ideally we'd not bifurcate what properties we apply unless we're absolutely sure we only want one.
+        ///  <para>
+        ///   Ideally we'd not bifurcate what properties we apply unless we're absolutely sure we only want one.
+        ///  </para>
         /// </remarks>
         public unsafe DeviceContextHdcScope(
             IDeviceContext deviceContext,
@@ -74,7 +79,9 @@ namespace System.Windows.Forms
                 // As we're throwing in the constructor, `this` will never be passed back and as such .Dispose()
                 // can't be called. We don't have anything to release at this point so there is no point in having
                 // the finalizer run.
+#if DEBUG
                 DisposalTracking.SuppressFinalize(this!);
+#endif
                 throw new ArgumentNullException(nameof(deviceContext));
             }
 
@@ -204,7 +211,7 @@ namespace System.Windows.Forms
         }
 
         public static implicit operator Gdi32.HDC(in DeviceContextHdcScope scope) => scope.HDC;
-        public static explicit operator IntPtr(in DeviceContextHdcScope scope) => scope.HDC.Handle;
+        public static implicit operator nint(in DeviceContextHdcScope scope) => scope.HDC.Handle;
 
         [Conditional("DEBUG")]
         private void ValidateHDC()
@@ -212,7 +219,9 @@ namespace System.Windows.Forms
             if (HDC.IsNull)
             {
                 // We don't want the disposal tracking to fire as it will take down unrelated tests.
+#if DEBUG
                 DisposalTracking.SuppressFinalize(this!);
+#endif
                 throw new InvalidOperationException("Null HDC");
             }
 
@@ -225,7 +234,9 @@ namespace System.Windows.Forms
                 case Gdi32.OBJ.ENHMETADC:
                     break;
                 default:
+#if DEBUG
                     DisposalTracking.SuppressFinalize(this!);
+#endif
                     throw new InvalidOperationException($"Invalid handle ({type})");
             }
         }
@@ -238,12 +249,14 @@ namespace System.Windows.Forms
             }
 
             // Note that Graphics keeps track of the HDC it passes back, so we don't need to pass it back in
-            if (!(DeviceContext is IGraphicsHdcProvider))
+            if (DeviceContext is not IGraphicsHdcProvider)
             {
                 DeviceContext?.ReleaseHdc();
             }
 
+#if DEBUG
             DisposalTracking.SuppressFinalize(this!);
+#endif
         }
     }
 }

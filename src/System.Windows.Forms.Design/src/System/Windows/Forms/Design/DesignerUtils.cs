@@ -438,30 +438,33 @@ namespace System.Windows.Forms.Design
             IntPtr hWnd = control.Handle;
             image = new Bitmap(Math.Max(control.Width, MINCONTROLBITMAPSIZE), Math.Max(control.Height, MINCONTROLBITMAPSIZE), PixelFormat.Format32bppPArgb);
 
-            //Have to do this BEFORE we set the testcolor.
+            // Have to do this BEFORE we set the testcolor.
             if (control.BackColor == Color.Transparent)
             {
-                using (Graphics g = Graphics.FromImage(image))
-                {
-                    g.Clear(SystemColors.Control);
-                }
+                using Graphics g = Graphics.FromImage(image);
+                g.Clear(SystemColors.Control);
             }
 
-            // To validate that the control responded to the wm_print message, we pre-populate the bitmap with a colored center pixel.  We assume that the control _did not_ respond to wm_print if these center pixel is still this value
+            //  To validate that the control responded to the wm_print message, we pre-populate the bitmap with a
+            //  colored center pixel.  We assume that the control _did not_ respond to wm_print if these center pixel
+            //  is still this value.
+
             Color testColor = Color.FromArgb(255, 252, 186, 238);
             ((Bitmap)image).SetPixel(image.Width / 2, image.Height / 2, testColor);
             using (Graphics g = Graphics.FromImage(image))
             {
                 IntPtr hDc = g.GetHdc();
-                //send the actual wm_print message
-                User32.SendMessageW(hWnd, User32.WM.PRINT, hDc, (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                User32.SendMessageW(
+                    hWnd,
+                    User32.WM.PRINT,
+                    hDc,
+                    (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
                 g.ReleaseHdc(hDc);
             }
 
-            //now check to see if our center pixel was cleared, if not then our wm_print failed
+            // Now check to see if our center pixel was cleared, if not then our WM_PRINT failed
             if (((Bitmap)image).GetPixel(image.Width / 2, image.Height / 2).Equals(testColor))
             {
-                //wm_print failed
                 return false;
             }
 
@@ -863,9 +866,7 @@ namespace System.Windows.Forms.Design
             => DpiHelper.IsScalingRequired ? DpiHelper.LogicalToDeviceUnitsX(unit) : unit;
 
         private static ComCtl32.TVS_EX TreeView_GetExtendedStyle(IntPtr handle)
-        {
-            return (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
-        }
+            => (ComCtl32.TVS_EX)User32.SendMessageW(handle, (User32.WM)ComCtl32.TVM.GETEXTENDEDSTYLE);
 
         /// <summary>
         ///  Modify a WinForms TreeView control to use the new Explorer style theme
@@ -884,7 +885,7 @@ namespace System.Windows.Forms.Design
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
             ComCtl32.TVS_EX exstyle = TreeView_GetExtendedStyle(hwnd);
             exstyle |= ComCtl32.TVS_EX.DOUBLEBUFFER | ComCtl32.TVS_EX.FADEINOUTEXPANDOS;
-            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, IntPtr.Zero, (IntPtr)exstyle);
+            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.TVM.SETEXTENDEDSTYLE, 0, (nint)exstyle);
         }
 
         /// <summary>
@@ -900,7 +901,11 @@ namespace System.Windows.Forms.Design
 
             IntPtr hwnd = listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);
-            User32.SendMessageW(hwnd, (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER, (IntPtr)ComCtl32.LVS_EX.DOUBLEBUFFER);
+            User32.SendMessageW(
+                hwnd,
+                (User32.WM)ComCtl32.LVM.SETEXTENDEDLISTVIEWSTYLE,
+                (nint)ComCtl32.LVS_EX.DOUBLEBUFFER,
+                (nint)ComCtl32.LVS_EX.DOUBLEBUFFER);
         }
     }
 }

@@ -22,13 +22,13 @@ namespace System.Windows.Forms
     /// </summary>
     [DefaultProperty(nameof(Text))]
     [DefaultBindingProperty(nameof(Text))]
-    [Designer("System.Windows.Forms.Design.LabelDesigner, " + AssemblyRef.SystemDesign)]
-    [ToolboxItem("System.Windows.Forms.Design.AutoSizeToolboxItem," + AssemblyRef.SystemDesign)]
+    [Designer($"System.Windows.Forms.Design.LabelDesigner, {AssemblyRef.SystemDesign}")]
+    [ToolboxItem($"System.Windows.Forms.Design.AutoSizeToolboxItem,{AssemblyRef.SystemDesign}")]
     [SRDescription(nameof(SR.DescriptionLabel))]
     // If not for FormatControl, we could inherit from ButtonBase and get foreground images for free.
     public partial class Label : Control, IAutomationLiveRegion
     {
-        private static readonly object s_eventTextAlignChanged = new object();
+        private static readonly object s_eventTextAlignChanged = new();
 
         private static readonly BitVector32.Section s_stateUseMnemonic = BitVector32.CreateSection(1);
         private static readonly BitVector32.Section s_stateAutoSize = BitVector32.CreateSection(1, s_stateUseMnemonic);
@@ -806,34 +806,35 @@ namespace System.Windows.Forms
             get => _labelState[s_stateUseMnemonic] != 0;
             set
             {
-                if (UseMnemonic != value)
+                if (UseMnemonic == value)
                 {
-                    _labelState[s_stateUseMnemonic] = value ? 1 : 0;
-                    MeasureTextCache.InvalidateCache();
+                    return;
+                }
 
-                    // The size of the label need to be adjusted when the Mnemonic
-                    // is set irrespective of auto-sizing
-                    using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text))
+                _labelState[s_stateUseMnemonic] = value ? 1 : 0;
+                MeasureTextCache.InvalidateCache();
+
+                // The size of the label need to be adjusted when the Mnemonic is set irrespective of auto-sizing.
+                using (LayoutTransaction.CreateTransactionIf(AutoSize, ParentInternal, this, PropertyNames.Text))
+                {
+                    AdjustSize();
+                    Invalidate();
+                }
+
+                // Set windowStyle directly instead of recreating handle to increase efficiency.
+                if (IsHandleCreated)
+                {
+                    User32.WS style = WindowStyle;
+                    if (!UseMnemonic)
                     {
-                        AdjustSize();
-                        Invalidate();
+                        style |= (User32.WS)User32.SS.NOPREFIX;
+                    }
+                    else
+                    {
+                        style &= ~(User32.WS)User32.SS.NOPREFIX;
                     }
 
-                    //set windowStyle directly instead of recreating handle to increase efficiency
-                    if (IsHandleCreated)
-                    {
-                        int style = WindowStyle;
-                        if (!UseMnemonic)
-                        {
-                            style |= (int)User32.SS.NOPREFIX;
-                        }
-                        else
-                        {
-                            style &= ~(int)User32.SS.NOPREFIX;
-                        }
-
-                        WindowStyle = style;
-                    }
+                    WindowStyle = style;
                 }
             }
         }
@@ -1270,7 +1271,7 @@ namespace System.Windows.Forms
                 Invalidate();
             }
 
-            if (LiveSetting != AutomationLiveSetting.Off)
+            if (IsAccessibilityObjectCreated && LiveSetting != AutomationLiveSetting.Off)
             {
                 AccessibilityObject.RaiseLiveRegionChanged();
             }
@@ -1497,8 +1498,8 @@ namespace System.Windows.Forms
                     // this so we can tell what's going on.
 
                     Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
-                    Point pt = new Point(unchecked((int)(long)m.LParam));
-                    m.Result = (IntPtr)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
+                    Point pt = new Point((int)m._LParam);
+                    m._Result = (nint)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
                     break;
 
                 default:

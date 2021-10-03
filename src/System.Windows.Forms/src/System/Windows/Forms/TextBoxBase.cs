@@ -418,21 +418,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.TextBoxCanUndoDescr))]
-        public bool CanUndo
-        {
-            get
-            {
-                if (IsHandleCreated)
-                {
-                    bool b;
-                    b = unchecked((int)(long)SendMessageW(this, (WM)EM.CANUNDO)) != 0;
-
-                    return b;
-                }
-
-                return false;
-            }
-        }
+        public bool CanUndo => IsHandleCreated && (int)SendMessageW(this, (WM)EM.CANUNDO) != 0;
 
         /// <summary>
         ///  Returns the parameters needed to create the handle. Inheriting classes
@@ -733,7 +719,7 @@ namespace System.Windows.Forms
             {
                 if (IsHandleCreated)
                 {
-                    bool curState = (0 != unchecked((int)(long)SendMessageW(this, (WM)EM.GETMODIFY)));
+                    bool curState = (int)SendMessageW(this, (WM)EM.GETMODIFY) != 0;
                     if (textBoxFlags[modified] != curState)
                     {
                         // Raise ModifiedChanged event.  See WmReflectCommand for more info.
@@ -948,7 +934,7 @@ namespace System.Windows.Forms
             {
                 start = 0;
                 int startResult = 0;
-                User32.SendMessageW(this, (WM)EM.GETSEL, (IntPtr)(&startResult), ref end);
+                User32.SendMessageW(this, (WM)EM.GETSEL, (nint)(&startResult), ref end);
                 start = startResult;
 
                 //Here, we return the max of either 0 or the # returned by
@@ -1064,18 +1050,19 @@ namespace System.Windows.Forms
 
             if (clearUndo)
             {
-                SendMessageW(this, (WM)EM.REPLACESEL, IntPtr.Zero, text);
+                SendMessageW(this, (WM)EM.REPLACESEL, 0, text);
+
                 // For consistency with Text, we clear the modified flag
                 SendMessageW(this, (WM)EM.SETMODIFY);
                 ClearUndo();
             }
             else
             {
-                SendMessageW(this, (WM)EM.REPLACESEL, /*undoable*/ (IntPtr)(-1), text);
+                SendMessageW(this, (WM)EM.REPLACESEL, -1, text);
             }
 
             // Re-enable user input.
-            SendMessageW(this, (WM)EM.LIMITTEXT, (IntPtr)maxLength);
+            SendMessageW(this, (WM)EM.LIMITTEXT, maxLength);
         }
 
         /// <summary>
@@ -1457,7 +1444,7 @@ namespace System.Windows.Forms
             UpdateMaxLength();
             if (textBoxFlags[modified])
             {
-                SendMessageW(this, (WM)EM.SETMODIFY, PARAM.FromBool(true));
+                SendMessageW(this, (WM)EM.SETMODIFY, (nint)BOOL.TRUE);
             }
 
             if (textBoxFlags[scrollToCaretOnHandleCreated])
@@ -1633,7 +1620,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual int GetCharIndexFromPosition(Point pt)
         {
-            int index = (int)(long)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+            int index = (int)User32.SendMessageW(this, (WM)EM.CHARFROMPOS, 0, PARAM.FromPoint(pt));
             index = PARAM.LOWORD(index);
 
             if (index < 0)
@@ -1663,10 +1650,7 @@ namespace System.Windows.Forms
         ///  you pass the index of a overflowed character, GetLineFromCharIndex would
         ///  return 1 and not 0.
         /// </summary>
-        public virtual int GetLineFromCharIndex(int index)
-        {
-            return (int)(long)SendMessageW(this, (WM)EM.LINEFROMCHAR, (IntPtr)index);
-        }
+        public virtual int GetLineFromCharIndex(int index) => (int)SendMessageW(this, (WM)EM.LINEFROMCHAR, index);
 
         /// <summary>
         ///  Returns the location of the character at the given index.
@@ -1678,7 +1662,7 @@ namespace System.Windows.Forms
                 return Point.Empty;
             }
 
-            int i = (int)(long)SendMessageW(this, (WM)EM.POSFROMCHAR, (IntPtr)index);
+            int i = (int)SendMessageW(this, (WM)EM.POSFROMCHAR, index);
             return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
         }
 
@@ -1692,16 +1676,13 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(lineNumber), lineNumber, string.Format(SR.InvalidArgument, nameof(lineNumber), lineNumber));
             }
 
-            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)lineNumber));
+            return (int)SendMessageW(this, (WM)EM.LINEINDEX, lineNumber);
         }
 
         /// <summary>
         ///  Returns the index of the first character of the line where the caret is.
         /// </summary>
-        public int GetFirstCharIndexOfCurrentLine()
-        {
-            return unchecked((int)(long)SendMessageW(this, (WM)EM.LINEINDEX, (IntPtr)(-1)));
-        }
+        public int GetFirstCharIndexOfCurrentLine() => (int)SendMessageW(this, (WM)EM.LINEINDEX, -1);
 
         /// <summary>
         ///  Ensures that the caret is visible in the TextBox window, by scrolling the
@@ -1725,7 +1706,7 @@ namespace System.Windows.Forms
             IntPtr editOlePtr = IntPtr.Zero;
             try
             {
-                if (SendMessageW(this, (WM)Richedit.EM.GETOLEINTERFACE, IntPtr.Zero, ref editOlePtr) != IntPtr.Zero)
+                if (SendMessageW(this, (WM)Richedit.EM.GETOLEINTERFACE, 0, ref editOlePtr) != 0)
                 {
                     IntPtr iTextDocument = IntPtr.Zero;
                     Guid iiTextDocumentGuid = typeof(Richedit.ITextDocument).GUID;
@@ -1752,7 +1733,7 @@ namespace System.Windows.Forms
                             textRange.ScrollIntoView(0);   // 0 ==> tomEnd
 
                             // 2. Get the first visible line.
-                            int firstVisibleLine = unchecked((int)(long)SendMessageW(this, (WM)EM.GETFIRSTVISIBLELINE));
+                            int firstVisibleLine = (int)SendMessageW(this, (WM)EM.GETFIRSTVISIBLELINE);
 
                             // 3. If the first visible line is smaller than the start of the selection, we are done;
                             if (firstVisibleLine <= selStartLine)
@@ -1847,9 +1828,12 @@ namespace System.Windows.Forms
             {
                 AdjustSelectionStartAndEnd(start, length, out int s, out int e, textLen);
 
-                SendMessageW(this, (WM)EM.SETSEL, (IntPtr)s, (IntPtr)e);
+                SendMessageW(this, (WM)EM.SETSEL, s, e);
 
-                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                if (IsAccessibilityObjectCreated)
+                {
+                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                }
             }
             else
             {
@@ -1961,7 +1945,7 @@ namespace System.Windows.Forms
             {
                 textBoxFlags[setSelectionOnHandleCreated] = false;
                 AdjustSelectionStartAndEnd(selectionStart, selectionLength, out int start, out int end, -1);
-                SendMessageW(this, (WM)EM.SETSEL, (IntPtr)start, (IntPtr)end);
+                SendMessageW(this, (WM)EM.SETSEL, start, end);
             }
         }
 
@@ -2090,7 +2074,7 @@ namespace System.Windows.Forms
         {
             if (IsHandleCreated)
             {
-                SendMessageW(this, (WM)EM.LIMITTEXT, (IntPtr)maxLength);
+                SendMessageW(this, (WM)EM.LIMITTEXT, maxLength);
             }
         }
 
@@ -2113,16 +2097,15 @@ namespace System.Windows.Forms
         {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle])
             {
-                EN wParamAsEN = (EN)PARAM.HIWORD(m.WParam);
+                EN wParamAsEN = (EN)PARAM.HIWORD(m._WParam);
                 if (wParamAsEN == EN.CHANGE && CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
                 }
                 else if (wParamAsEN == EN.UPDATE)
                 {
-                    // Force update to the Modified property, which will trigger
-                    // ModifiedChanged event handlers
-                    bool force = Modified;
+                    // Force update to the Modified property, which will trigger ModifiedChanged event handlers
+                    _ = Modified;
                 }
             }
         }
@@ -2132,7 +2115,7 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (!textBoxFlags[multiline])
             {
-                SendMessageW(this, (WM)EM.SETMARGINS, (IntPtr)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
+                SendMessageW(this, (WM)EM.SETMARGINS, (nint)(EC.LEFTMARGIN | EC.RIGHTMARGIN));
             }
         }
 
@@ -2141,13 +2124,13 @@ namespace System.Windows.Forms
             base.WndProc(ref m);
             if (AcceptsTab)
             {
-                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "TextBox wants tabs");
-                m.Result = (IntPtr)(unchecked((int)(long)m.Result) | (int)DLGC.WANTTAB);
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBox wants tabs");
+                m._Result = m._Result | (int)DLGC.WANTTAB;
             }
             else
             {
-                Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "TextBox doesn't want tabs");
-                m.Result = (IntPtr)(unchecked((int)(long)m.Result) & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS));
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBox doesn't want tabs");
+                m._Result = m._Result & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS);
             }
         }
 
@@ -2161,24 +2144,21 @@ namespace System.Windows.Forms
                 return;
             }
 
-            int x = PARAM.SignedLOWORD(m.LParam);
-            int y = PARAM.SignedHIWORD(m.LParam);
             Point client;
             bool keyboardActivated = false;
 
-            // Lparam will be exactly -1 when the user invokes the context menu
-            // with the keyboard.
-            if (unchecked((int)(long)m.LParam) == -1)
+            // LParam will be -1 when the user invokes the context menu with the keyboard.
+            if (m._LParam == -1)
             {
                 keyboardActivated = true;
                 client = new Point(Width / 2, Height / 2);
             }
             else
             {
-                client = PointToClient(new Point(x, y));
+                client = PointToClient(PARAM.ToPoint(m._LParam));
             }
 
-            // Only show the context menu when clicked in the client area (VisualStudio7 #156)
+            // Only show the context menu when clicked in the client area.
             if (ClientRectangle.Contains(client))
             {
                 ContextMenuStrip.ShowInternal(this, client, keyboardActivated);

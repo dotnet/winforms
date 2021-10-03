@@ -13,7 +13,7 @@ internal static partial class Interop
             IntPtr wndProc,
             IntPtr hWnd,
             WM msg,
-            IntPtr wParam,
-            IntPtr lParam);
+            nint wParam,
+            nint lParam);
     }
 }

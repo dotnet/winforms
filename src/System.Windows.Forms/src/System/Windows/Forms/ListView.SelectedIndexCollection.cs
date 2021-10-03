@@ -35,7 +35,7 @@ namespace System.Windows.Forms
                 {
                     if (owner.IsHandleCreated)
                     {
-                        return unchecked((int)(long)User32.SendMessageW(owner, (User32.WM)LVM.GETSELECTEDCOUNT));
+                        return (int)User32.SendMessageW(owner, (User32.WM)LVM.GETSELECTEDCOUNT);
                     }
                     else
                     {
@@ -61,7 +61,7 @@ namespace System.Windows.Forms
                         int displayIndex = -1;
                         for (int i = 0; i < count; i++)
                         {
-                            int fidx = unchecked((int)(long)User32.SendMessageW(owner, (User32.WM)LVM.GETNEXTITEM, (IntPtr)displayIndex, (IntPtr)LVNI.SELECTED));
+                            int fidx = (int)User32.SendMessageW(owner, (User32.WM)LVM.GETNEXTITEM, displayIndex, (nint)LVNI.SELECTED);
                             if (fidx > -1)
                             {
                                 indices[i] = fidx;
@@ -100,13 +100,11 @@ namespace System.Windows.Forms
 
                     if (owner.IsHandleCreated)
                     {
-                        // Count through the selected items in the ListView, until
-                        // we reach the 'index'th selected item.
-                        //
+                        // Count through the selected items in the ListView, until we reach the 'index'th selected item.
                         int fidx = -1;
                         for (int count = 0; count <= index; count++)
                         {
-                            fidx = unchecked((int)(long)User32.SendMessageW(owner, (User32.WM)LVM.GETNEXTITEM, (IntPtr)fidx, (IntPtr)LVNI.SELECTED));
+                            fidx = (int)User32.SendMessageW(owner, (User32.WM)LVM.GETNEXTITEM, fidx, (nint)LVNI.SELECTED);
                             Debug.Assert(fidx != -1, "Invalid index returned from LVM_GETNEXTITEM");
                         }
 

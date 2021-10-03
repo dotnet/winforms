@@ -14,5 +14,54 @@ namespace System.Windows.Forms.Tests
         {
             Assert.Throws<ArgumentNullException>(() => new ToolStripControlHostAccessibleObject(null));
         }
+
+        [WinFormsFact]
+        public void ToolStripControlHostAccessibleObject_Ctor_Default()
+        {
+            using Control control = new();
+            using ToolStripControlHost toolStrip = new(control);
+            var accessibleObject = (ToolStripControlHostAccessibleObject)toolStrip.AccessibilityObject;
+
+            Assert.NotNull(accessibleObject);
+            Assert.Equal(toolStrip, accessibleObject.Owner);
+            Assert.False(toolStrip.Control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripControlHostAccessibleObject_DefaultAction_ReturnsExpected()
+        {
+            using Control control = new();
+            using ToolStripControlHost toolStrip = new(control);
+            var accessibleObject = (ToolStripControlHostAccessibleObject)toolStrip.AccessibilityObject;
+
+            Assert.Equal(string.Empty, accessibleObject.DefaultAction);
+            Assert.False(toolStrip.Control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripControlHostAccessibleObject_Role_ReturnsExpected()
+        {
+            AccessibleRole testRole = AccessibleRole.Cell;
+            using Control control = new();
+            using ToolStripControlHost toolStrip = new(control);
+            var accessibleObject = (ToolStripControlHostAccessibleObject)toolStrip.AccessibilityObject;
+
+            control.AccessibleRole = testRole;
+
+            Assert.Equal(testRole, accessibleObject.Role);
+            Assert.False(toolStrip.Control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ToolStripControlHostAccessibleObject_FragmentNavigate_ReturnsExpected()
+        {
+            using Control control = new();
+            using ToolStripControlHost toolStrip = new(control);
+            var accessibleObject = (ToolStripControlHostAccessibleObject)toolStrip.AccessibilityObject;
+
+            Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.FirstChild));
+            Assert.Equal(control.AccessibilityObject, accessibleObject.FragmentNavigate(Interop.UiaCore.NavigateDirection.LastChild));
+            Assert.False(toolStrip.Control.IsHandleCreated);
+        }
     }
 }

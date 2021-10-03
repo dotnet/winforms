@@ -83,27 +83,23 @@ namespace System.Windows.Forms
                     }
                 }
 
-                private unsafe IntPtr MessageHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
+                private unsafe nint MessageHookProc(User32.HC nCode, nint wparam, nint lparam)
                 {
-                    if (nCode == User32.HC.ACTION)
+                    if (nCode == User32.HC.ACTION && _isHooked && (User32.PM)wparam == User32.PM.REMOVE)
                     {
-                        if (_isHooked && (User32.PM)wparam == User32.PM.REMOVE)
+                        // Only process messages we've pulled off the queue.
+                        User32.MSG* msg = (User32.MSG*)lparam;
+                        if (msg is not null)
                         {
-                            // only process messages we've pulled off the queue
-                            User32.MSG* msg = (User32.MSG*)lparam;
-                            if (msg is not null)
+                            // Call pretranslate on the message to execute the message filters and preprocess message.
+                            if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
                             {
-                                // call pretranslate on the message - this should execute
-                                // the message filters and preprocess message.
-                                if (Application.ThreadContext.FromCurrent().PreTranslateMessage(ref *msg))
-                                {
-                                    msg->message = User32.WM.NULL;
-                                }
+                                msg->message = User32.WM.NULL;
                             }
                         }
                     }
 
-                    return User32.CallNextHookEx(new HandleRef(this, _messageHookHandle), nCode, wparam, lparam);
+                    return User32.CallNextHookEx(_messageHookHandle, nCode, wparam, lparam);
                 }
 
                 private void UninstallMessageHook()

@@ -25,7 +25,7 @@ variables:
   - name: PostBuildSign
     value: true
   - name: EnableLoc
-    value: false
+    value: true
   - name: isPublic
     value: ${{ eq(variables['System.TeamProject'], 'public') }}
   - name: isPR
@@ -106,7 +106,7 @@ stages:
       skipTests: $(SkipTests)
 
 
-- ${{ if and(variables['EnableLoc'], ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
+- ${{ if and(eq(variables['EnableLoc'], 'true'), ne(variables['isPublic'], 'true'), ne(variables['isPR'], 'true')) }}:
   - stage: OneLocBuild
     displayName: Publish localizable content to OneLocBuild
     jobs:

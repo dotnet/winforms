@@ -10,14 +10,14 @@ internal static partial class Interop
     {
         // We only ever call this on 32 bit so IntPtr is correct
         [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        private static extern IntPtr SetWindowLongW(IntPtr hWnd, GWL nIndex, IntPtr dwNewLong);
+        private static extern IntPtr SetWindowLongW(IntPtr hWnd, GWL nIndex, nint dwNewLong);
 
         [DllImport(Libraries.User32, ExactSpelling = true, SetLastError = true)]
-        public static extern IntPtr SetWindowLongPtrW(IntPtr hWnd, GWL nIndex, IntPtr dwNewLong);
+        public static extern IntPtr SetWindowLongPtrW(IntPtr hWnd, GWL nIndex, nint dwNewLong);
 
-        public static IntPtr SetWindowLong(IntPtr hWnd, GWL nIndex, IntPtr dwNewLong)
+        public static IntPtr SetWindowLong(IntPtr hWnd, GWL nIndex, nint dwNewLong)
         {
-            if (IntPtr.Size == 4)
+            if (!Environment.Is64BitProcess)
             {
                 return SetWindowLongW(hWnd, nIndex, dwNewLong);
             }
@@ -25,18 +25,10 @@ internal static partial class Interop
             return SetWindowLongPtrW(hWnd, nIndex, dwNewLong);
         }
 
-        public static IntPtr SetWindowLong(IHandle hWnd, GWL nIndex, IntPtr dwNewLong)
+        public static IntPtr SetWindowLong(IHandle hWnd, GWL nIndex, nint dwNewLong)
         {
             IntPtr result = SetWindowLong(hWnd.Handle, nIndex, dwNewLong);
             GC.KeepAlive(hWnd);
-            return result;
-        }
-
-        public static IntPtr SetWindowLong(IHandle hWnd, GWL nIndex, IHandle dwNewLong)
-        {
-            IntPtr result = SetWindowLong(hWnd.Handle, nIndex, dwNewLong.Handle);
-            GC.KeepAlive(hWnd);
-            GC.KeepAlive(dwNewLong);
             return result;
         }
 
@@ -56,27 +48,10 @@ internal static partial class Interop
             return result;
         }
 
-        public static IntPtr SetWindowLong(IntPtr hWnd, GWL nIndex, WNDPROC dwNewLong)
+        public static IntPtr SetWindowLong(IntPtr hWnd, GWL nIndex, WNDPROCINT dwNewLong)
         {
             IntPtr pointer = Marshal.GetFunctionPointerForDelegate(dwNewLong);
             IntPtr result = SetWindowLong(hWnd, nIndex, pointer);
-            GC.KeepAlive(dwNewLong);
-            return result;
-        }
-
-        public static IntPtr SetWindowLong(HandleRef hWnd, GWL nIndex, WNDPROCINT dwNewLong)
-        {
-            IntPtr pointer = Marshal.GetFunctionPointerForDelegate(dwNewLong);
-            IntPtr result = SetWindowLong(hWnd.Handle, nIndex, pointer);
-            GC.KeepAlive(hWnd.Wrapper);
-            return result;
-        }
-
-        public static IntPtr SetWindowLong(HandleRef hWnd, GWL nIndex, HandleRef dwNewLong)
-        {
-            IntPtr result = SetWindowLong(hWnd.Handle, nIndex, dwNewLong.Handle);
-            GC.KeepAlive(hWnd.Wrapper);
-            GC.KeepAlive(dwNewLong.Wrapper);
             return result;
         }
     }

@@ -178,7 +178,7 @@ This is a custom link\v #link3#\v0  which is followed by hidden text.\par
                 dwEffects = Richedit.CFE.LINK,
             };
 
-            SendMessageW(_control, (WM)Richedit.EM.SETCHARFORMAT, (IntPtr)Richedit.SCF.SELECTION, ref format);
+            SendMessageW(_control, (WM)Richedit.EM.SETCHARFORMAT, (nint)Richedit.SCF.SELECTION, ref format);
 
             _control.Select(0, 0);
         }
@@ -190,7 +190,7 @@ This is a custom link\v #link3#\v0  which is followed by hidden text.\par
 
             try
             {
-                if (SendMessageW(_control, (WM)Richedit.EM.GETOLEINTERFACE, IntPtr.Zero, ref pOleInterface) != IntPtr.Zero && pOleInterface != IntPtr.Zero)
+                if (SendMessageW(_control, (WM)Richedit.EM.GETOLEINTERFACE, 0, ref pOleInterface) != 0 && pOleInterface != IntPtr.Zero)
                 {
                     // This increments the RCW reference count, further casts do not increment it. It is important
                     // to capture the initial reference to the RCW so we can release it even if casts fail.

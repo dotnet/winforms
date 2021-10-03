@@ -1474,50 +1474,48 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetActiveControl(Control value)
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::SetActiveControl(" + (value is null ? "null" : value.Name) + ") - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"ContainerControl::SetActiveControl({(value is null ? "null" : value.Name)}) - {Name}");
 
-            if (_activeControl != value || (value is not null && !value.Focused))
+            if (_activeControl == value && (value is null || value.Focused))
             {
-                if (value is not null && !Contains(value))
+                return;
+            }
+
+            if (value is not null && !Contains(value))
+            {
+                throw new ArgumentException(SR.CannotActivateControl, nameof(value));
+            }
+
+            bool result;
+            ContainerControl containerControl = this;
+
+            if (value is not null)
+            {
+                containerControl = value.ParentInternal.GetContainerControl() as ContainerControl;
+            }
+
+            if (containerControl is not null)
+            {
+                // Call to the recursive function that corrects the chain of active controls
+                result = containerControl.ActivateControl(value, false);
+            }
+            else
+            {
+                result = AssignActiveControlInternal(value);
+            }
+
+            if (containerControl is not null && result)
+            {
+                ContainerControl ancestor = this;
+                while (ancestor.ParentInternal?.GetContainerControl() is ContainerControl parentContainer)
                 {
-                    throw new ArgumentException(SR.CannotActivateControl, nameof(value));
+                    ancestor = parentContainer;
                 }
 
-                bool ret;
-                ContainerControl cc = this;
-
-                if (value is not null)
+                if (ancestor.ContainsFocus
+                    && (value is null || value is not UserControl userControl || !userControl.HasFocusableChild()))
                 {
-                    cc = (value.ParentInternal.GetContainerControl()) as ContainerControl;
-                }
-
-                if (cc is not null)
-                {
-                    // Call to the recursive function that corrects the chain of active controls
-                    ret = cc.ActivateControl(value, false);
-                }
-                else
-                {
-                    ret = AssignActiveControlInternal(value);
-                }
-
-                if (cc is not null && ret)
-                {
-                    ContainerControl ccAncestor = this;
-                    while (ccAncestor.ParentInternal is not null &&
-                           ccAncestor.ParentInternal.GetContainerControl() is ContainerControl)
-                    {
-                        ccAncestor = ccAncestor.ParentInternal.GetContainerControl() as ContainerControl;
-                        Debug.Assert(ccAncestor is not null);
-                    }
-
-                    if (ccAncestor.ContainsFocus &&
-                        (value is null ||
-                         !(value is UserControl) ||
-                         (value is UserControl && !((UserControl)value).HasFocusableChild())))
-                    {
-                        cc.FocusActiveControlInternal();
-                    }
+                    containerControl.FocusActiveControlInternal();
                 }
             }
         }
@@ -1526,13 +1524,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                ContainerControl ret = this;
-                while (ret.ActiveControl is ContainerControl)
+                ContainerControl result = this;
+                while (result.ActiveControl is ContainerControl control)
                 {
-                    ret = (ContainerControl)ret.ActiveControl;
+                    result = control;
                 }
 
-                return ret;
+                return result;
             }
         }
 
@@ -1540,13 +1538,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                ContainerControl ret = this;
-                while (ret._focusedControl is ContainerControl)
+                ContainerControl result = this;
+                while (result._focusedControl is ContainerControl control)
                 {
-                    ret = (ContainerControl)ret._focusedControl;
+                    result = control;
                 }
 
-                return ret;
+                return result;
             }
         }
 
@@ -1563,7 +1561,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void UpdateFocusedControl()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::UpdateFocusedControl() - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"ContainerControl::UpdateFocusedControl() - {Name}");
 
             // Capture the current focusedControl as the unvalidatedControl if we don't have one/are not validating.
             EnsureUnvalidatedControl(_focusedControl);

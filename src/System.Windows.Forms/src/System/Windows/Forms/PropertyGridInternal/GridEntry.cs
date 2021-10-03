@@ -327,8 +327,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // Notify accessibility clients of expanded state change. StateChange requires NameChange as well.
                 // Accessible clients won't see this unless both events are raised.
 
-                // Root item is hidden and should not raise events.
-                if (GridItemType != GridItemType.Root)
+                // Root item is hidden and should not raise events
+                if (OwnerGridView.IsAccessibilityObjectCreated && GridItemType != GridItemType.Root)
                 {
                     int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
                     if (id >= 0)
@@ -463,7 +463,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _hasFocus = value;
 
                     // Notify accessibility applications that keyboard focus has changed.
-                    if (value == true)
+                    if (OwnerGridView.IsAccessibilityObjectCreated && value == true)
                     {
                         int id = OwnerGridView.AccessibilityGetGridEntryChildID(this);
                         if (id >= 0)

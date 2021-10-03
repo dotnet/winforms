@@ -25,9 +25,9 @@ namespace System.Windows.Forms.PropertyGridInternal
                     _reference = new WeakReference(parent, trackResurrection: false);
                 }
 
-                public virtual IntPtr Callback(User32.HC nCode, IntPtr wparam, IntPtr lparam)
+                public virtual nint Callback(User32.HC nCode, nint wparam, nint lparam)
                 {
-                    IntPtr result = IntPtr.Zero;
+                    nint result = 0;
                     try
                     {
                         if (_reference.Target is MouseHook hook)

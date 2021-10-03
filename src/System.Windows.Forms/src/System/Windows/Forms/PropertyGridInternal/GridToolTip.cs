@@ -5,7 +5,6 @@
 #nullable disable
 
 using System.Diagnostics;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
@@ -136,12 +135,12 @@ namespace System.Windows.Forms.PropertyGridInternal
             if (IsHandleCreated)
             {
                 User32.SetWindowPos(
-                    new HandleRef(this, Handle),
+                    this,
                     User32.HWND_TOPMOST,
                     flags: User32.SWP.NOMOVE | User32.SWP.NOSIZE | User32.SWP.NOACTIVATE);
 
                 ComCtl32.ToolInfoWrapper<Control> info = GetTOOLINFO(control);
-                if (info.SendMessage(this, (User32.WM)ComCtl32.TTM.ADDTOOLW) == IntPtr.Zero)
+                if (info.SendMessage(this, (User32.WM)ComCtl32.TTM.ADDTOOLW) == 0)
                 {
                     Debug.Fail($"TTM_ADDTOOL failed for {control.GetType().Name}");
                 }
@@ -150,8 +149,8 @@ namespace System.Windows.Forms.PropertyGridInternal
                 User32.SendMessageW(
                     this,
                     (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH,
-                    IntPtr.Zero,
-                    (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    0,
+                    SystemInformation.MaxWindowTrackSize.Width);
             }
         }
 
@@ -176,12 +175,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void WndProc(ref Message msg)
         {
-            switch ((User32.WM)msg.Msg)
+            switch (msg._Msg)
             {
                 case User32.WM.SHOWWINDOW:
-                    if (unchecked((int)(long)msg.WParam) != 0 && _dontShow)
+                    if ((int)msg._WParam != 0 && _dontShow)
                     {
-                        msg.WParam = IntPtr.Zero;
+                        msg._WParam = 0;
                     }
 
                     break;
@@ -191,7 +190,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,
                     // functional changes between v5 and v6, and the specific way the property grid drives its tooltip.
                     // Workaround is to just force HTTRANSPARENT all the time.
-                    msg.Result = (IntPtr)User32.HT.TRANSPARENT;
+                    msg._Result = (nint)User32.HT.TRANSPARENT;
                     return;
             }
 

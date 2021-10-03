@@ -1000,7 +1000,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static bool ProcessMenuKey(ref Message m)
         {
-            Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, "ToolStripManager.ProcessMenuKey: [" + m.ToString() + "]");
+            Debug.WriteLineIf(Control.s_controlKeyboardRouting.TraceVerbose, $"ToolStripManager.ProcessMenuKey: [{m.ToString()}]");
             if (!IsThreadUsingToolStrips())
             {
                 return false;
@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] Determining whether we should send focus to MenuStrip");
 
-            Keys keyData = (Keys)(int)m.LParam;
+            Keys keyData = (Keys)m._LParam;
 
             // Search for our menu to work with
             Control intendedControl = Control.FromHandle(m.HWnd);

@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
             private bool _gotNextEvent;
 
-            public unsafe virtual IntPtr Callback(User32.HC nCode, IntPtr wparam, IntPtr lparam)
+            public unsafe virtual nint Callback(User32.HC nCode, nint wparam, nint lparam)
             {
                 User32.EVENTMSG* eventmsg = (User32.EVENTMSG*)lparam;
 
@@ -52,11 +52,11 @@ namespace System.Windows.Forms
                             s_events is not null && s_events.Count > 0 && !s_stopHook,
                             "HC_GETNEXT when queue is empty!");
 
-                        SKEvent evt = (SKEvent)s_events.Peek();
-                        eventmsg->message = evt.WM;
-                        eventmsg->paramL = evt.ParamL;
-                        eventmsg->paramH = evt.ParamH;
-                        eventmsg->hwnd = evt.HWND;
+                        SKEvent @event = s_events.Peek();
+                        eventmsg->message = @event.WM;
+                        eventmsg->paramL = @event.ParamL;
+                        eventmsg->paramH = @event.ParamH;
+                        eventmsg->hwnd = @event.HWND;
                         eventmsg->time = Kernel32.GetTickCount();
                         break;
                     default:
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
                     _gotNextEvent = false;
                 }
 
-                return IntPtr.Zero;
+                return 0;
             }
         }
     }

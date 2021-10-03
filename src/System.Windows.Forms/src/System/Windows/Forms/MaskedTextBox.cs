@@ -10,7 +10,6 @@ using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Design;
 using System.Globalization;
-using System.Runtime.InteropServices;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
 using static Interop.User32;
@@ -1109,7 +1108,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 // This message does not return a value.
-                User32.SendMessageW(this, (User32.WM)EM.SETPASSWORDCHAR, (IntPtr)pwdChar);
+                User32.SendMessageW(this, (User32.WM)EM.SETPASSWORDCHAR, (nint)pwdChar);
                 Invalidate();
             }
         }
@@ -1795,20 +1794,17 @@ namespace System.Windows.Forms
             bool includePrompt = (CutCopyMaskFormat & MaskFormat.IncludePrompt) != 0;
             bool includeLiterals = (CutCopyMaskFormat & MaskFormat.IncludeLiterals) != 0;
 
-            return maskedTextProvider.ToString( /*ignorePasswordChar*/ true, includePrompt, includeLiterals, selStart, selLength);
+            return maskedTextProvider.ToString(ignorePasswordChar: true, includePrompt, includeLiterals, selStart, selLength);
         }
 
         protected unsafe override void OnBackColorChanged(EventArgs e)
         {
             base.OnBackColorChanged(e);
-            // Force repainting of the entire window frame
+
+            // Force repainting of the entire window frame.
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                RedrawWindow(
-                    new HandleRef(this, Handle),
-                    null,
-                    IntPtr.Zero,
-                    RDW.INVALIDATE | RDW.FRAME);
+                RedrawWindow(this, flags: RDW.INVALIDATE | RDW.FRAME);
             }
         }
 
@@ -2778,12 +2774,12 @@ namespace System.Windows.Forms
                 byte imeConversionType = imeConversionNone;
 
                 // Check if there's an update to the composition string:
-                if ((PARAM.ToInt(m.LParam) & (int)Imm32.GCS.COMPSTR) != 0)
+                if ((m._LParam & (int)Imm32.GCS.COMPSTR) != 0)
                 {
                     // The character in the composition has been updated but not yet converted.
                     imeConversionType = imeConversionUpdate;
                 }
-                else if ((PARAM.ToInt(m.LParam) & (int)Imm32.GCS.RESULTSTR) != 0)
+                else if ((m._LParam & (int)Imm32.GCS.RESULTSTR) != 0)
                 {
                     // The character(s) in the composition has been fully converted.
                     imeConversionType = imeConversionCompleted;
@@ -2898,10 +2894,10 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if ((unchecked((User32.PRF)(long)m.LParam) & User32.PRF.NONCLIENT) != 0
+            if (((User32.PRF)m._LParam & User32.PRF.NONCLIENT) != 0
                 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParam);
+                using Graphics g = Graphics.FromHdc(m._WParam);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);

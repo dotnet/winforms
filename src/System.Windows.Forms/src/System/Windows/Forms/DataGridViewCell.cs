@@ -492,6 +492,11 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        ///  Indicates whether or not the parent grid view for this element has an accessible object associated with it.
+        /// </summary>
+        internal bool IsParentAccessibilityObjectCreated => DataGridView is not null && DataGridView.IsAccessibilityObjectCreated;
+
         [Browsable(false)]
         public bool IsInEditMode
         {

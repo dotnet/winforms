@@ -3070,7 +3070,7 @@ namespace System.Windows.Forms
 
                 KeyboardToolTipStateMachine.Instance.NotifyAboutGotFocus(this);
 
-                if (AccessibilityObject is ToolStripItemAccessibleObject accessibleObject)
+                if (IsParentAccessibilityObjectCreated && AccessibilityObject is ToolStripItemAccessibleObject accessibleObject)
                 {
                     accessibleObject.RaiseFocusChanged();
                 }
@@ -3534,6 +3534,11 @@ namespace System.Windows.Forms
         internal virtual void OnKeyboardToolTipUnhook(ToolTip toolTip)
         {
         }
+
+        /// <summary>
+        ///  Indicates whether or not the parent of this item has an accessible object associated with it.
+        /// </summary>
+        internal bool IsParentAccessibilityObjectCreated => ParentInternal is not null && ParentInternal.IsAccessibilityObjectCreated;
 
         internal virtual bool IsBeingTabbedTo() => ToolStrip.AreCommonNavigationalKeysDown();
 

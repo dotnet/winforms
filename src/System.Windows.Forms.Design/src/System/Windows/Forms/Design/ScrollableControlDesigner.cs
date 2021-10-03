@@ -28,12 +28,11 @@ namespace System.Windows.Forms.Design
                 return true;
             }
 
-            // The scroll bars on a form are "live"
-            //
+            // The scroll bars on a form are "live".
             ScrollableControl f = (ScrollableControl)Control;
             if (f.IsHandleCreated && f.AutoScroll)
             {
-                int hitTest = (int)(long)User32.SendMessageW(f.Handle, User32.WM.NCHITTEST, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+                int hitTest = (int)User32.SendMessageW(f.Handle, User32.WM.NCHITTEST, 0, PARAM.FromLowHigh(pt.X, pt.Y));
                 if (hitTest == (int)User32.HT.VSCROLL || hitTest == (int)User32.HT.HSCROLL)
                 {
                     return true;

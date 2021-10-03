@@ -675,7 +675,7 @@ namespace System.Windows.Forms.Tests
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, IntPtr.Zero, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expectedValue, item.state);
         }
 
@@ -943,7 +943,7 @@ namespace System.Windows.Forms.Tests
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, IntPtr.Zero, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expectedValue, item.state);
         }
 
@@ -1216,7 +1216,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iImage);
         }
 
@@ -1243,7 +1243,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iImage);
         }
 
@@ -1274,7 +1274,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iImage);
         }
 
@@ -1489,7 +1489,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal(0, column.iImage);
         }
 
@@ -1519,7 +1519,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal(expected, column.iImage);
         }
 
@@ -1551,7 +1551,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal(expected, column.iImage);
         }
 
@@ -3198,7 +3198,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.IMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iSelectedImage);
         }
 
@@ -3227,7 +3227,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iSelectedImage);
         }
 
@@ -3258,7 +3258,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal(expected, item.iSelectedImage);
         }
 
@@ -3473,7 +3473,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal(0, column.iSelectedImage);
         }
 
@@ -3503,7 +3503,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal(expected, column.iSelectedImage);
         }
 
@@ -3535,7 +3535,7 @@ namespace System.Windows.Forms.Tests
                 mask = TVIF.HANDLE | TVIF.SELECTEDIMAGE,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal(expected, column.iSelectedImage);
         }
 
@@ -3863,7 +3863,7 @@ namespace System.Windows.Forms.Tests
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expected, item.state);
         }
 
@@ -3893,7 +3893,7 @@ namespace System.Windows.Forms.Tests
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expected, item.state);
         }
 
@@ -3925,7 +3925,7 @@ namespace System.Windows.Forms.Tests
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal((TVIS)expected, item.state);
         }
 
@@ -4226,7 +4226,7 @@ namespace System.Windows.Forms.Tests
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal((TVIS)0, column.state);
         }
 
@@ -4264,7 +4264,7 @@ namespace System.Windows.Forms.Tests
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal((TVIS)expected, column.state);
         }
 
@@ -4304,7 +4304,7 @@ namespace System.Windows.Forms.Tests
                 stateMask = TVIS.STATEIMAGEMASK,
                 hItem = node.Handle
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref column));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref column));
             Assert.Equal((TVIS)expected, column.state);
         }
 
@@ -4462,7 +4462,7 @@ namespace System.Windows.Forms.Tests
                 cchTextMax = 256,
                 pszText = (IntPtr)textBuffer
             };
-            Assert.Equal((IntPtr)1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, (IntPtr)0, ref item));
+            Assert.Equal(1, SendMessageW(control.Handle, (WM)TVM.GETITEMW, 0, ref item));
             Assert.Equal(expected, new string((char*)item.pszText));
         }
 

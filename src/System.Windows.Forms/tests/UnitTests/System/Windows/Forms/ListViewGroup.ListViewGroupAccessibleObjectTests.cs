@@ -270,7 +270,7 @@ namespace System.Windows.Forms.Tests
                 Assert.True(list.IsHandleCreated);
 
                 RECT groupRect = new RECT();
-                User32.SendMessageW(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, (IntPtr)list.Groups.IndexOf(listGroup), ref groupRect);
+                User32.SendMessageW(list, (User32.WM)ComCtl32.LVM.GETGROUPRECT, list.Groups.IndexOf(listGroup), ref groupRect);
 
                 int actualWidth = group1AccObj.Bounds.Width;
                 int expectedWidth = groupRect.Width;

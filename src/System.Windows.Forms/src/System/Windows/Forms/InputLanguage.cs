@@ -301,7 +301,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static InputLanguageChangedEventArgs CreateInputLanguageChangedEventArgs(Message m)
         {
-            return new InputLanguageChangedEventArgs(new InputLanguage(m.LParam), unchecked((byte)(long)m.WParam));
+            return new InputLanguageChangedEventArgs(new InputLanguage(m._LParam), (byte)m._WParam);
         }
 
         /// <summary>
@@ -309,10 +309,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal static InputLanguageChangingEventArgs CreateInputLanguageChangingEventArgs(Message m)
         {
-            var inputLanguage = new InputLanguage(m.LParam);
+            var inputLanguage = new InputLanguage(m._LParam);
 
             // NOTE: by default we should allow any locale switch
-            bool localeSupportedBySystem = m.WParam != IntPtr.Zero;
+            bool localeSupportedBySystem = m._WParam != 0;
             return new InputLanguageChangingEventArgs(inputLanguage, localeSupportedBySystem);
         }
 

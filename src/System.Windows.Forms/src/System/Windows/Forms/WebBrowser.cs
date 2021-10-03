@@ -1362,26 +1362,26 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Returns TRUE if there is a context menu to show
-        ///  Returns FALSE otherwise
+        ///  Returns true if there is a context menu to show.
         /// </summary>
-        private bool ShowContextMenu(int x, int y)
+        private bool ShowContextMenu(Point location)
         {
             ContextMenuStrip contextMenuStrip = ContextMenuStrip;
             if (contextMenuStrip is not null)
             {
                 Point client;
+
                 bool keyboardActivated = false;
-                // X will be exactly -1 when the user invokes the context menu from the keyboard
-                //
-                if (x == -1)
+
+                // X will be -1 when the user invokes the context menu from the keyboard
+                if (location.X == -1)
                 {
                     keyboardActivated = true;
                     client = new Point(Width / 2, Height / 2);
                 }
                 else
                 {
-                    client = PointToClient(new Point(x, y));
+                    client = PointToClient(location);
                 }
 
                 if (ClientRectangle.Contains(client))
@@ -1406,13 +1406,10 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch ((User32.WM)m.Msg)
+            switch (m._Msg)
             {
                 case User32.WM.CONTEXTMENU:
-                    int x = PARAM.SignedLOWORD(m.LParam);
-                    int y = PARAM.SignedHIWORD(m.LParam);
-
-                    if (!ShowContextMenu(x, y))
+                    if (!ShowContextMenu(PARAM.ToPoint(m._LParam)))
                     {
                         DefWndProc(ref m);
                     }

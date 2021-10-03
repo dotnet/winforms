@@ -8,16 +8,16 @@ internal static partial class Interop
     {
         public readonly struct HFONT
         {
-            public IntPtr Handle { get; }
+            public nint Handle { get; }
 
-            public HFONT(IntPtr handle) => Handle = handle;
+            public HFONT(nint handle) => Handle = handle;
 
-            public bool IsNull => Handle == IntPtr.Zero;
+            public bool IsNull => Handle == 0;
 
             public static implicit operator HGDIOBJ(HFONT hfont) => new HGDIOBJ(hfont.Handle);
             public static explicit operator HFONT(HGDIOBJ hfont) => new HFONT(hfont.Handle);
-            public static explicit operator HFONT(IntPtr hfont) => new HFONT(hfont);
-            public static explicit operator IntPtr(HFONT hfont) => hfont.Handle;
+            public static explicit operator HFONT(nint hfont) => new HFONT(hfont);
+            public static implicit operator IntPtr(HFONT hfont) => hfont.Handle;
         }
     }
 }

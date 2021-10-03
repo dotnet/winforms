@@ -891,17 +891,13 @@ namespace System.Windows.Forms.Design
 
                                 try
                                 {
-                                    name = null;
-                                    if (comp.Site != null)
-                                    {
-                                        name = comp.Site.Name;
-                                    }
+                                    name = comp.Site?.Name;
 
                                     Control oldDesignerControl = null;
                                     if (updateLocation)
                                     {
                                         oldDesignerControl = client.GetDesignerControl();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW);
+                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)BOOL.FALSE);
                                     }
 
                                     Point dropPt = client.GetDesignerControl().PointToClient(new Point(de.X, de.Y));
@@ -950,10 +946,10 @@ namespace System.Windows.Forms.Design
                                         }
                                     }
 
-                                    if (oldDesignerControl != null)
+                                    if (oldDesignerControl is not null)
                                     {
                                         //((ComponentDataObject)dataObj).ShowControls();
-                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (IntPtr)1);
+                                        User32.SendMessageW(oldDesignerControl.Handle, User32.WM.SETREDRAW, (nint)BOOL.TRUE);
                                         oldDesignerControl.Invalidate(true);
                                     }
 

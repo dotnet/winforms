@@ -1014,9 +1014,9 @@ namespace System.Windows.Forms
             /// </summary>
             public bool PreFilterMessage(ref Message m)
             {
-                if (m.Msg >= (int)User32.WM.KEYFIRST && m.Msg <= (int)User32.WM.KEYLAST)
+                if (m._Msg >= User32.WM.KEYFIRST && m._Msg <= User32.WM.KEYLAST)
                 {
-                    if (m.Msg == (int)User32.WM.KEYDOWN && unchecked((int)(long)m.WParam) == (int)Keys.Escape)
+                    if (m._Msg == User32.WM.KEYDOWN && (Keys)m._WParam == Keys.Escape)
                     {
                         owner.SplitEnd(false);
                     }
