@@ -1796,10 +1796,10 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Windows.Forms.DataGridView.TopLeftHeaderCell.set -> void
 ~System.Windows.Forms.DataGridView.UserSetCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.DataGridView.VerticalScrollBar.get -> System.Windows.Forms.ScrollBar
-~System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.Windows.Forms.DataGridViewAutoSizeColumnMode previousMode) -> void
-~System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[] previousModes) -> void
-~System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]
+System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs(System.Windows.Forms.DataGridViewColumn? dataGridViewColumn, System.Windows.Forms.DataGridViewAutoSizeColumnMode previousMode) -> void
+System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[]? previousModes) -> void
+System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]?
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
 ~System.Windows.Forms.DataGridViewCell.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
