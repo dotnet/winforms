@@ -2681,13 +2681,12 @@ namespace System.Windows.Forms
         public bool IsAncestorSiteInDesignMode =>
             GetSitedParentSite(this) is ISite parentSite ? parentSite.DesignMode : false;
 
-        private ISite GetSitedParentSite(Control control) =>
-            control is null
-                ? throw new ArgumentNullException(nameof(control))
-                : (control.Site is not null && control.Site.DesignMode) ||
-                  control.Parent is null
-                    ? control.Site
-                    : GetSitedParentSite(control.Parent);
+        private ISite GetSitedParentSite(Control control)
+        {
+            ArgumentNullException.ThrowIfNull(control);
+            return (control.Site is not null && control.Site.DesignMode) || control.Parent is null ?
+                control.Site : GetSitedParentSite(control.Parent);
+        }
 
         // If the control on which GetContainerControl( ) is called is a ContainerControl, then we don't return the parent
         // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
