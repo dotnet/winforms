@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
             ///  convert an object in the given source type to the native type of the converter
             ///  using the context.
             /// </summary>
-            public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+            public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
             {
                 if (sourceType == typeof(byte[]))
                 {
@@ -36,7 +34,7 @@ namespace System.Windows.Forms
             ///  Gets a value indicating whether this converter can
             ///  convert an object to the given destination type using the context.
             /// </summary>
-            public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+            public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
             {
                 if (destinationType == typeof(byte[]))
                 {
@@ -49,11 +47,11 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Converts the given object to the converter's native type.
             /// </summary>
-            public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+            public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
             {
-                if (value is byte[])
+                if (value is byte[] valueAsBytes)
                 {
-                    MemoryStream ms = new MemoryStream((byte[])value);
+                    using MemoryStream ms = new MemoryStream(valueAsBytes);
                     return new State(ms);
                 }
 
@@ -67,7 +65,7 @@ namespace System.Windows.Forms
             ///  type is string.  If this cannot convert to the destination type, this will
             ///  throw a NotSupportedException.
             /// </summary>
-            public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+            public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
             {
                 if (destinationType is null)
                 {
@@ -78,7 +76,7 @@ namespace System.Windows.Forms
                 {
                     if (value is not null)
                     {
-                        MemoryStream ms = new MemoryStream();
+                        using MemoryStream ms = new MemoryStream();
                         State state = (State)value;
                         state.Save(ms);
                         ms.Close();
