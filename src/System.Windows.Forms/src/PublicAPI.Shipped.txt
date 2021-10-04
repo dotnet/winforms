@@ -3096,9 +3096,9 @@ System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set
 ~System.Windows.Forms.WebBrowser.WebBrowserSite.WebBrowserSite(System.Windows.Forms.WebBrowser host) -> void
 ~System.Windows.Forms.WebBrowserBase.ActiveXInstance.get -> object
 ~System.Windows.Forms.WebBrowserBase.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
-~System.Windows.Forms.WebBrowserNavigatingEventArgs.TargetFrameName.get -> string
-~System.Windows.Forms.WebBrowserNavigatingEventArgs.Url.get -> System.Uri
-~System.Windows.Forms.WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs(System.Uri url, string targetFrameName) -> void
+System.Windows.Forms.WebBrowserNavigatingEventArgs.TargetFrameName.get -> string?
+System.Windows.Forms.WebBrowserNavigatingEventArgs.Url.get -> System.Uri?
+System.Windows.Forms.WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs(System.Uri? url, string? targetFrameName) -> void
 ~virtual System.Drawing.Design.PropertyValueUIItem.Image.get -> System.Drawing.Image
 ~virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Drawing.Design.PropertyValueUIItemInvokeHandler
 ~virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string
