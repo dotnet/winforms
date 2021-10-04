@@ -62,7 +62,7 @@ namespace System.Windows.Forms.Tests
         public void ThrowIfNull_HDC_ParamIsNull()
         {
             var param = new Interop.Gdi32.HDC(IntPtr.Zero);
-            var exception = Assert.Throws<ArgumentNullException>(() => param.ThrowIfNull());
+            var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNull(param));
             Assert.Equal(nameof(param), exception.ParamName);
         }
 
@@ -70,14 +70,14 @@ namespace System.Windows.Forms.Tests
         public void ThrowIfNull_HDC_ParamIsNotNull()
         {
             var param = new Interop.Gdi32.HDC(new IntPtr(24));
-            param.ThrowIfNull();
+            ArgumentValidation.ThrowIfNull(param);
         }
 
         [Fact]
         public void ThrowIfNull_HDC_DifferentParamName()
         {
             var param = new Interop.Gdi32.HDC(IntPtr.Zero);
-            var exception = Assert.Throws<ArgumentNullException>(() => param.ThrowIfNull("paramName"));
+            var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNull(param, "paramName"));
             Assert.Equal("paramName", exception.ParamName);
         }
     }
