@@ -36,8 +36,8 @@ namespace System.Windows.Forms.Automation
         /// </remark>
         public UiaTextRange(IRawElementProviderSimple enclosingElement, UiaTextProvider provider, int start, int end)
         {
-            _enclosingElement = enclosingElement ?? throw new ArgumentNullException(nameof(enclosingElement));
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _enclosingElement = enclosingElement.OrThrowIfNull();
+            _provider = provider.OrThrowIfNull();
 
             if (start > 0)
             {
