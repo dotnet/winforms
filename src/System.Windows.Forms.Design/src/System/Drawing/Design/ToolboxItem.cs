@@ -886,12 +886,9 @@ namespace System.Drawing.Design
                 ArgumentNullException.ThrowIfNull(value);
             }
 
-            if (value != null)
+            if (value is not null && !expectedType.IsInstanceOfType(value))
             {
-                if (!expectedType.IsInstanceOfType(value))
-                {
-                    throw new ArgumentException(string.Format(SR.ToolboxItemInvalidPropertyType, propertyName, expectedType.FullName), nameof(value));
-                }
+                throw new ArgumentException(string.Format(SR.ToolboxItemInvalidPropertyType, propertyName, expectedType.FullName), nameof(value));
             }
         }
 
