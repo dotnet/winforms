@@ -172,7 +172,6 @@ namespace System.ComponentModel.Design
 
             // Check the arguments only after checking whether code markers are enabled
             // This allows the calling code to pass null value and avoid calculation of data if nothing is to be logged
-
             ArgumentNullException.ThrowIfNull(aBuff, nameof(aBuff));
 
             try
