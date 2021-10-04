@@ -2480,8 +2480,8 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.ListViewItem.Text.set -> void
 ~System.Windows.Forms.ListViewItem.ToolTipText.get -> string
 ~System.Windows.Forms.ListViewItem.ToolTipText.set -> void
-~System.Windows.Forms.ListViewItemMouseHoverEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListViewItemMouseHoverEventArgs.ListViewItemMouseHoverEventArgs(System.Windows.Forms.ListViewItem item) -> void
+System.Windows.Forms.ListViewItemMouseHoverEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.ListViewItemMouseHoverEventArgs.ListViewItemMouseHoverEventArgs(System.Windows.Forms.ListViewItem? item) -> void
 ~System.Windows.Forms.ListViewItemSelectionChangedEventArgs.Item.get -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListViewItemSelectionChangedEventArgs.ListViewItemSelectionChangedEventArgs(System.Windows.Forms.ListViewItem item, int itemIndex, bool isSelected) -> void
 ~System.Windows.Forms.MaskedTextBox.Culture.get -> System.Globalization.CultureInfo
