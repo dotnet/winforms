@@ -133,7 +133,7 @@ namespace System.Windows.Forms
             if (disposing)
             {
                 // Only dispose the graphics object if we created it via the HDC.
-                if (_graphics != null && !_hdc.IsNull)
+                if (_graphics is not null && !_hdc.IsNull)
                 {
                     _graphics.Dispose();
                 }

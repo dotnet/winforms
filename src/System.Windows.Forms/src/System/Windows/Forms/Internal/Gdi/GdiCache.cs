@@ -86,13 +86,13 @@ namespace System.Windows.Forms
         /// </remarks>
         public static FontCache.Scope GetHFONT(Font? font, Gdi32.QUALITY quality = Gdi32.QUALITY.DEFAULT)
         {
-            Debug.Assert(font != null);
+            Debug.Assert(font is not null);
             return font is null ? new FontCache.Scope() : s_fontCache.GetEntry(font, quality);
         }
 
         public static FontCache.Scope GetHFONT(Font? font, Gdi32.QUALITY quality, Gdi32.HDC hdc)
         {
-            if (font != null)
+            if (font is not null)
             {
                 return GetHFONT(font, quality);
             }

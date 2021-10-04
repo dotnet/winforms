@@ -40,7 +40,7 @@ namespace System.Windows.Forms
             // Resets the owner of all the windows owned by this Form before handle recreation.
             internal void ResetOwners()
             {
-                if (_ownedWindows != null)
+                if (_ownedWindows is not null)
                 {
                     foreach (IntPtr hwnd in _ownedWindows)
                     {
@@ -52,7 +52,7 @@ namespace System.Windows.Forms
             // Sets the owner of the windows back to this Form after its handle recreation.
             internal void SetOwners(IntPtr ownerHwnd)
             {
-                if (_ownedWindows != null)
+                if (_ownedWindows is not null)
                 {
                     foreach (IntPtr hwnd in _ownedWindows)
                     {

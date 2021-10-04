@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         internal HtmlElement(HtmlShimManager shimManager, IHTMLElement element)
         {
             _htmlElement = element;
-            Debug.Assert(NativeHtmlElement != null, "The element object should implement IHTMLElement");
+            Debug.Assert(NativeHtmlElement is not null, "The element object should implement IHTMLElement");
 
             _shimManager = shimManager;
         }
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (ShimManager != null)
+                if (ShimManager is not null)
                 {
                     HtmlElementShim shim = ShimManager.GetElementShim(this);
                     if (shim is null)
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
                     iHtmlElement = iHtmlDomNode.FirstChild() as IHTMLElement;
                 }
 
-                return iHtmlElement != null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
             }
         }
 
@@ -225,7 +225,7 @@ namespace System.Windows.Forms
                     iHtmlElement = iHtmlDomNode.NextSibling() as IHTMLElement;
                 }
 
-                return iHtmlElement != null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
             }
         }
 
@@ -243,7 +243,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement iHtmlElement = NativeHtmlElement.GetOffsetParent();
-                return iHtmlElement != null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
             }
         }
 
@@ -300,7 +300,7 @@ namespace System.Windows.Forms
             get
             {
                 IHTMLElement iHtmlElement = NativeHtmlElement.GetParentElement();
-                return iHtmlElement != null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+                return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
             }
         }
 
@@ -427,14 +427,14 @@ namespace System.Windows.Forms
         public HtmlElementCollection GetElementsByTagName(string tagName)
         {
             IHTMLElementCollection iHTMLElementCollection = ((IHTMLElement2)NativeHtmlElement).GetElementsByTagName(tagName);
-            return iHTMLElementCollection != null ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
+            return iHTMLElementCollection is not null ? new HtmlElementCollection(_shimManager, iHTMLElementCollection) : new HtmlElementCollection(_shimManager);
         }
 
         public HtmlElement InsertAdjacentElement(HtmlElementInsertionOrientation orient, HtmlElement newElement)
         {
             IHTMLElement iHtmlElement = ((IHTMLElement2)NativeHtmlElement).InsertAdjacentElement(orient.ToString(),
                 (IHTMLElement)newElement.DomElement);
-            return iHtmlElement != null ? new HtmlElement(_shimManager, iHtmlElement) : null;
+            return iHtmlElement is not null ? new HtmlElement(_shimManager, iHtmlElement) : null;
         }
 
         public object InvokeMember(string methodName)
@@ -457,7 +457,7 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    if (parameter != null)
+                    if (parameter is not null)
                     {
                         // Reverse the parameter order so that they read naturally after IDispatch.
                         Array.Reverse(parameter);

@@ -52,7 +52,7 @@ namespace System.Windows.Forms
                 if (borderSize != value)
                 {
                     borderSize = value;
-                    if (owner != null && owner.ParentInternal != null)
+                    if (owner is not null && owner.ParentInternal is not null)
                     {
                         LayoutTransaction.DoLayoutIf(owner.AutoSize, owner.ParentInternal, owner, PropertyNames.FlatAppearanceBorderSize);
                     }

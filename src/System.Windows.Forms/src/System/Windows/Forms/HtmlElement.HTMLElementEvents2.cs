@@ -370,7 +370,7 @@ namespace System.Windows.Forms
 
             private void FireEvent(object key, EventArgs e)
             {
-                if (_parent != null)
+                if (_parent is not null)
                 {
                     _parent.ElementShim.FireEvent(key, e);
                 }
