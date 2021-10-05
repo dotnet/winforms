@@ -350,10 +350,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ISelectionService.GetComponentSelected(object component)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
 
             return (_selection != null && _selection.Contains(component));
         }
@@ -423,10 +420,7 @@ namespace System.ComponentModel.Design
                 foreach (object o in components)
                 {
                     requestedPrimary = o;
-                    if (o is null)
-                    {
-                        throw new ArgumentNullException(nameof(components));
-                    }
+                    ArgumentNullException.ThrowIfNull(o, nameof(components));
 
                     break;
                 }
@@ -457,10 +451,7 @@ namespace System.ComponentModel.Design
                             bool remove = true;
                             foreach (object comp in components)
                             {
-                                if (comp is null)
-                                {
-                                    throw new ArgumentNullException(nameof(components));
-                                }
+                                ArgumentNullException.ThrowIfNull(comp, nameof(components));
 
                                 if (ReferenceEquals(comp, item))
                                 {
@@ -481,10 +472,7 @@ namespace System.ComponentModel.Design
                 // Now select / toggle the components.
                 foreach (object comp in components)
                 {
-                    if (comp is null)
-                    {
-                        throw new ArgumentNullException(nameof(components));
-                    }
+                    ArgumentNullException.ThrowIfNull(comp, nameof(components));
 
                     if (_selection != null && _selection.Contains(comp))
                     {

@@ -26,10 +26,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
-            if (manager is null || codeObject is null)
-            {
-                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(codeObject, nameof(codeObject));
 
             //Attempt to suspend all components within the icontainer
             IContainer container = (IContainer)manager.GetService(typeof(IContainer));
@@ -157,10 +155,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            if (manager is null || value is null)
-            {
-                throw new ArgumentNullException(manager is null ? "manager" : "value");
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             // Find our base class's serializer.
             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));

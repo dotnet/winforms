@@ -563,10 +563,7 @@ namespace System.Drawing.Design
             ITypeResolutionService ts = null;
             Type type = null;
 
-            if (typeName is null)
-            {
-                throw new ArgumentNullException(nameof(typeName));
-            }
+            ArgumentNullException.ThrowIfNull(typeName, nameof(typeName));
 
             if (host != null)
             {
@@ -884,19 +881,14 @@ namespace System.Drawing.Design
         /// </summary>
         protected void ValidatePropertyType(string propertyName, object value, Type expectedType, bool allowNull)
         {
-            if (value is null)
+            if (!allowNull)
             {
-                if (!allowNull)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
             }
-            else
+
+            if (value is not null && !expectedType.IsInstanceOfType(value))
             {
-                if (!expectedType.IsInstanceOfType(value))
-                {
-                    throw new ArgumentException(string.Format(SR.ToolboxItemInvalidPropertyType, propertyName, expectedType.FullName), nameof(value));
-                }
+                throw new ArgumentException(string.Format(SR.ToolboxItemInvalidPropertyType, propertyName, expectedType.FullName), nameof(value));
             }
         }
 
@@ -1042,10 +1034,7 @@ namespace System.Drawing.Design
 
             private string GetPropertyName(object key)
             {
-                if (key is null)
-                {
-                    throw new ArgumentNullException(nameof(key));
-                }
+                ArgumentNullException.ThrowIfNull(key, nameof(key));
 
                 if (!(key is string propertyName) || propertyName.Length == 0)
                 {

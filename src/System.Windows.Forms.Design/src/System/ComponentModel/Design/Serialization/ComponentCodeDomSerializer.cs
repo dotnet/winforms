@@ -117,10 +117,8 @@ namespace System.ComponentModel.Design.Serialization
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(value);
             using (TraceScope("ComponentCodeDomSerializer::Serialize"))
             {
-                if (manager is null || value is null)
-                {
-                    throw new ArgumentNullException(manager is null ? "manager" : "value");
-                }
+                ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+                ArgumentNullException.ThrowIfNull(value, nameof(value));
 
                 if (IsSerialized(manager, value))
                 {

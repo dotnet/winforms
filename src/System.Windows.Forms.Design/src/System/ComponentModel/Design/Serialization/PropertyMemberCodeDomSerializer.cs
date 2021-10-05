@@ -102,24 +102,13 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(statements, nameof(statements));
 
             if (!(descriptor is PropertyDescriptor propertyToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
-            }
-
-            if (statements is null)
-            {
-                throw new ArgumentNullException(nameof(statements));
             }
 
             try
@@ -430,15 +419,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override bool ShouldSerialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             if (!(descriptor is PropertyDescriptor propertyToSerialize))
             {

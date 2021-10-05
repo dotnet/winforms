@@ -82,10 +82,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             object instance = null;
 
-            if (manager is null || codeObject is null)
-            {
-                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(codeObject, nameof(codeObject));
 
             using (TraceScope("ResourceCodeDomSerializer::Deserialize"))
             {
@@ -157,15 +155,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (type is null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(type, nameof(type));
 
             if (name != null && name.Equals(ResourceManagerName) && typeof(ResourceManager).IsAssignableFrom(type))
             {
@@ -979,10 +970,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override ResourceSet GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
             {
-                if (culture is null)
-                {
-                    throw new ArgumentNullException(nameof(culture));
-                }
+                ArgumentNullException.ThrowIfNull(culture, nameof(culture));
 
                 CultureInfo lastCulture;
                 do

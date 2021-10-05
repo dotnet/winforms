@@ -36,15 +36,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (type is null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(type, nameof(type));
 
             return manager.CreateInstance(type, parameters, name, addToContainer);
         }
@@ -154,15 +147,8 @@ namespace System.ComponentModel.Design.Serialization
 
         internal static void Error(IDesignerSerializationManager manager, string exceptionText, string helpLink)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (exceptionText is null)
-            {
-                throw new ArgumentNullException(nameof(exceptionText));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(exceptionText, nameof(exceptionText));
 
             CodeStatement statement = (CodeStatement)manager.Context[typeof(CodeStatement)];
             CodeLinePragma linePragma = null;
@@ -2099,15 +2085,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             CodeExpression expression = null;
 
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             Trace("GetExpression called for object {0}", value.ToString());
 
@@ -2212,10 +2191,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected CodeDomSerializer GetSerializer(IDesignerSerializationManager manager, object value)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
 
             if (value != null)
             {
@@ -2328,15 +2304,8 @@ namespace System.ComponentModel.Design.Serialization
         protected bool IsSerialized(IDesignerSerializationManager manager, object value, bool honorPreset)
         {
             bool hasExpression = false;
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             // Is the expression part of a prior SetExpression call?
             if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table && table.GetExpression(value) != null && (!honorPreset || !table.ContainsPresetExpression(value)))
@@ -2356,15 +2325,8 @@ namespace System.ComponentModel.Design.Serialization
         protected CodeExpression SerializeCreationExpression(IDesignerSerializationManager manager, object value, out bool isComplete)
         {
             isComplete = false;
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             TypeConverter converter = TypeDescriptor.GetConverter(value);
             // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
@@ -2548,15 +2510,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected string GetUniqueName(IDesignerSerializationManager manager, object value)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             string name = manager.GetName(value);
             if (name is null)
@@ -2603,25 +2558,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeEvent(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, EventDescriptor descriptor)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (statements is null)
-            {
-                throw new ArgumentNullException(nameof(statements));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            if (descriptor is null)
-            {
-                throw new ArgumentNullException(nameof(descriptor));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(statements, nameof(statements));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(descriptor, nameof(descriptor));
 
             using (TraceScope("CodeDomSerializerBase::" + nameof(SerializeEvent)))
             {
@@ -2784,25 +2724,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeProperty(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, PropertyDescriptor propertyToSerialize)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            if (propertyToSerialize is null)
-            {
-                throw new ArgumentNullException(nameof(propertyToSerialize));
-            }
-
-            if (statements is null)
-            {
-                throw new ArgumentNullException(nameof(statements));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(propertyToSerialize, nameof(propertyToSerialize));
+            ArgumentNullException.ThrowIfNull(statements, nameof(statements));
 
             Trace("CodeDomSerializerBase::" + nameof(SerializeProperty) + " {0}", propertyToSerialize.Name);
             // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
@@ -3147,20 +3072,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SetExpression(IDesignerSerializationManager manager, object value, CodeExpression expression, bool isPreset)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
-
-            if (expression is null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(expression, nameof(expression));
 
             ExpressionTable table = (ExpressionTable)manager.Context[typeof(ExpressionTable)];
             if (table is null)

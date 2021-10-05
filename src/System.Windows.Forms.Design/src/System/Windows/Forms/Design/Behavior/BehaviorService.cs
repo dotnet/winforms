@@ -455,10 +455,7 @@ namespace System.Windows.Forms.Design.Behavior
         /// </summary>
         public void PushBehavior(Behavior behavior)
         {
-            if (behavior is null)
-            {
-                throw new ArgumentNullException(nameof(behavior));
-            }
+            ArgumentNullException.ThrowIfNull(behavior, nameof(behavior));
 
             // Should we catch this
             _behaviorStack.Insert(0, behavior);

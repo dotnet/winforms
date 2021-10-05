@@ -39,10 +39,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IExtenderProviderService.AddExtenderProvider(IExtenderProvider provider)
         {
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
+            ArgumentNullException.ThrowIfNull(provider, nameof(provider));
 
             if (_providers is null)
             {
@@ -62,10 +59,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         void IExtenderProviderService.RemoveExtenderProvider(IExtenderProvider provider)
         {
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
+            ArgumentNullException.ThrowIfNull(provider, nameof(provider));
 
             _providers?.Remove(provider);
         }

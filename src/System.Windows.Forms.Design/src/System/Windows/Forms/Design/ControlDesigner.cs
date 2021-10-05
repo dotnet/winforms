@@ -611,15 +611,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected bool EnableDesignMode(Control child, string name)
         {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child));
-            }
-
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(child, nameof(child));
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
 
             if (!TryGetService(out INestedContainer nc))
             {

@@ -61,10 +61,7 @@ namespace System.ComponentModel.Design
         /// <param name="parentProvider"> The parent service provider.  If there is no parent used to resolve services this can be null. </param>
         public DesignSurface(IServiceProvider parentProvider, Type rootComponentType) : this(parentProvider)
         {
-            if (rootComponentType is null)
-            {
-                throw new ArgumentNullException(nameof(rootComponentType));
-            }
+            ArgumentNullException.ThrowIfNull(rootComponentType, nameof(rootComponentType));
 
             BeginLoad(rootComponentType);
         }
@@ -241,10 +238,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void BeginLoad(DesignerLoader loader)
         {
-            if (loader is null)
-            {
-                throw new ArgumentNullException(nameof(loader));
-            }
+            ArgumentNullException.ThrowIfNull(loader, nameof(loader));
 
             if (_host is null)
             {
@@ -261,10 +255,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void BeginLoad(Type rootComponentType)
         {
-            if (rootComponentType is null)
-            {
-                throw new ArgumentNullException(nameof(rootComponentType));
-            }
+            ArgumentNullException.ThrowIfNull(rootComponentType, nameof(rootComponentType));
 
             if (_host is null)
             {
@@ -288,10 +279,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected internal virtual IDesigner CreateDesigner(IComponent component, bool rootDesigner)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
 
             if (_host is null)
             {
@@ -317,10 +305,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected internal virtual object CreateInstance(Type type)
         {
-            if (type is null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type, nameof(type));
 
             // Locate an appropriate constructor for IComponents.
             object instance = null;
@@ -368,10 +353,7 @@ namespace System.ComponentModel.Design
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            if (owningComponent is null)
-            {
-                throw new ArgumentNullException(nameof(owningComponent));
-            }
+            ArgumentNullException.ThrowIfNull(owningComponent, nameof(owningComponent));
 
             return new SiteNestedContainer(owningComponent, containerName, _host);
         }

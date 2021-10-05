@@ -27,10 +27,7 @@ namespace System.ComponentModel.Design
 
         public void AddRange(DesignerActionList[] value)
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             for (int i = 0; i < value.Length; i++)
             {
@@ -40,10 +37,7 @@ namespace System.ComponentModel.Design
 
         public void AddRange(DesignerActionListCollection value)
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             int currentCount = value.Count;
             for (int i = 0; i < currentCount; i++)
