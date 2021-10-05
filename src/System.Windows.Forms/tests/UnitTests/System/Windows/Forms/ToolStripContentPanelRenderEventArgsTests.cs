@@ -18,13 +18,11 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripContentPanel_TestData()
         {
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
 
             yield return new object[] { graphics, null };
-
-            using var toolStripContentPanel = new ToolStripContentPanel();
-            yield return new object[] { graphics, toolStripContentPanel };
+            yield return new object[] { graphics, new ToolStripContentPanel() };
         }
 
         [WinFormsTheory]

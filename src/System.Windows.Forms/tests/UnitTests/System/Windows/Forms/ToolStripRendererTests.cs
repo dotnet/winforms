@@ -718,11 +718,10 @@ namespace System.Windows.Forms.Tests
         {
             yield return new object[] { null };
 
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
-            using var toolStripContentPanel = new ToolStripContentPanel();
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripContentPanelRenderEventArgs(graphics, null) };
-            yield return new object[] { new ToolStripContentPanelRenderEventArgs(graphics, toolStripContentPanel) };
+            yield return new object[] { new ToolStripContentPanelRenderEventArgs(graphics, new ToolStripContentPanel()) };
         }
 
         public static IEnumerable<object[]> Initialize_TestData()
