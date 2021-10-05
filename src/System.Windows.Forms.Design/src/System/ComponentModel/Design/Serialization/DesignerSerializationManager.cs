@@ -6,7 +6,7 @@ using System.Collections;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
-using System.Windows.Forms.Design;
+using System.Windows.Forms;
 
 namespace System.ComponentModel.Design.Serialization
 {

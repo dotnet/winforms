@@ -7,7 +7,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
-using System.Windows.Forms.Design;
+using System.Windows.Forms;
 
 namespace System.ComponentModel.Design
 {
