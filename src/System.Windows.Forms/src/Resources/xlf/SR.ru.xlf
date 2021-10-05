@@ -2062,6 +2062,16 @@
         <target state="translated">Размеры данного элемента управления при бесконечном размере экрана.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
+        <source>{0} collection shouldn't be empty for {1}.</source>
+        <target state="new">{0} collection shouldn't be empty for {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="new">{0} property should be set for {1}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">Данный список должен быть IBindingList для AddNew.</target>
@@ -7535,6 +7545,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="PanelBorderStyleDescr">
         <source>Indicates whether the panel should have a border.</source>
         <target state="translated">Показывает, должны ли у панели быть границы.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ParentPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
