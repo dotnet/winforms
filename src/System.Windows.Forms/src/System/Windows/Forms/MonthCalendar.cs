@@ -340,6 +340,35 @@ namespace System.Windows.Forms
             set => base.DoubleBuffered = value;
         }
 
+        internal void FillMonthDayStates(Span<uint> monthDayStates, SelectionRange displayRange)
+        {
+            // Run through all displayed dates to set a binary marker that the date is bolded
+            // if BoldedDates, AnnualArrayOfDates, or MonthlyArrayOfDates contain this date.
+            DateTime currentDate = displayRange.Start;
+            while (currentDate <= displayRange.End)
+            {
+                bool currentDateIsBolded = _boldDates.Contains(currentDate)
+                    || _annualBoldDates.Any(d => d.Month == currentDate.Month && d.Day == currentDate.Day)
+                    || _monthlyBoldDates.Any(d => d.Day == currentDate.Day);
+
+                if (currentDateIsBolded)
+                {
+                    // Calculate an index of a month of the current date in the display range,
+                    // starting from the first displayed month.
+                    // The display range may include gray dates of the first and last months.
+                    // So the max count of visible months is 14 and the max index is 13.
+                    int currentMonthIndex = GetIndexInMonths(displayRange.Start, currentDate);
+
+                    // Set bolded state for the current date of the current month
+                    // to prepare the states array before sending to Windows
+                    monthDayStates[currentMonthIndex] |= 1U << currentDate.Day - 1;
+                }
+
+                // Set the next day for check
+                currentDate = currentDate.AddDays(1);
+            }
+        }
+
         /// <summary>
         ///  The first day of the week for the month calendar control.
         /// </summary>
@@ -1238,6 +1267,9 @@ namespace System.Windows.Forms
             }
         }
 
+        private static int GetIndexInMonths(DateTime startDate, DateTime currentDate)
+            => (currentDate.Year - startDate.Year) * MonthsInYear + currentDate.Month - startDate.Month;
+
         private Size GetMinReqRect() => GetMinReqRect(0, false, false);
 
         /// <summary>
@@ -1324,6 +1356,14 @@ namespace System.Windows.Forms
                 End = times[1]
             };
         }
+
+        /// <summary>
+        ///  Calculate the number of visible months, even though they may be partially visible.
+        ///  It is necessary to send to Windows correct info about all bolded dates that are visible.
+        ///  Get an index of the last month, that starts from 0, and add 1 to get months count.
+        /// </summary>
+        private static int GetMonthsCountOfRange(SelectionRange displayRange)
+            => GetIndexInMonths(displayRange.Start, displayRange.End) + 1;
 
         /// <summary>
         ///  Called by SetBoundsCore. If updateRows is true, then the number of rows
@@ -1870,38 +1910,13 @@ namespace System.Windows.Forms
 
             // Get the first and the last visible dates even they are in not fully displayed months
             SelectionRange displayRange = GetDisplayRange(false);
-
-            // Calculate the number of visible months, even though they may be partially visible.
-            // It is necessary to send to Windows correct info about all bolded dates that are visible.
-            int monthsCount = (displayRange.End.Year - displayRange.Start.Year) * 12 + displayRange.End.Month - displayRange.Start.Month + 1;
+            int monthsCount = GetMonthsCountOfRange(displayRange);
 
             // Create a special collection for storage states of dates of some displayed month.
             // This collection will be send to Windows to update displayed dates states - bolded/unbolded.
             Span<uint> monthDayStates = stackalloc uint[monthsCount];
-
-            // Run through all displayed dates to set a binary marker that the date is bolded
-            // if BoldedDates, AnnualArrayOfDates, or MonthlyArrayOfDates contain this date.
-            DateTime currentDate = displayRange.Start;
-            while (currentDate <= displayRange.End)
-            {
-                bool currentDateIsBolded = _boldDates.Contains(currentDate)
-                    || _annualBoldDates.Any(d => d.Month == currentDate.Month && d.Day == currentDate.Day)
-                    || _monthlyBoldDates.Any(d => d.Day == currentDate.Day);
-
-                if (currentDateIsBolded)
-                {
-                    // Calculate an index of a month of the current date in the display range.
-                    // It works as an array, indexes start from 0.
-                    int currentMonthIndex = (12 - displayRange.Start.Month + currentDate.Month) % 12;
-
-                    // Set bolded state for the current date of the current month
-                    // to prepare the states array before sending to Windows
-                    monthDayStates[currentMonthIndex] |= 1U << currentDate.Day - 1;
-                }
-
-                // Set the next day for check
-                currentDate = currentDate.AddDays(1);
-            }
+            // Run through all displayed bolded dates and fill the Span collection
+            FillMonthDayStates(monthDayStates, displayRange);
 
             fixed (uint* arr = monthDayStates)
             {
