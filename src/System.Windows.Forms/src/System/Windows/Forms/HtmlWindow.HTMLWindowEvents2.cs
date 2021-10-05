@@ -78,7 +78,7 @@ namespace System.Windows.Forms
             {
                 HtmlElementEventArgs e = new(_parent.ShimManager, evtObj);
                 FireEvent(HtmlWindow.s_eventUnload, e);
-                if (_parent != null)
+                if (_parent is not null)
                 {
                     _parent.WindowShim.OnWindowUnload();
                 }
@@ -86,7 +86,7 @@ namespace System.Windows.Forms
 
             private void FireEvent(object key, EventArgs e)
             {
-                if (_parent != null)
+                if (_parent is not null)
                 {
                     _parent.WindowShim.FireEvent(key, e);
                 }

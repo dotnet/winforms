@@ -249,7 +249,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (dialog != null)
+                if (dialog is not null)
                 {
                     Marshal.FinalReleaseComObject(dialog);
                 }

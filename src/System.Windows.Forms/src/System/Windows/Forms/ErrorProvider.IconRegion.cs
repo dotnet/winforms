@@ -97,7 +97,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Dispose()
             {
-                if (_region != null)
+                if (_region is not null)
                 {
                     _region.Dispose();
                     _region = null;

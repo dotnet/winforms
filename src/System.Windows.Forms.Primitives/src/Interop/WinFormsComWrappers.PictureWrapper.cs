@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 internal partial class Interop
 {
@@ -15,12 +16,7 @@ internal partial class Interop
 
             public PictureWrapper(IntPtr wrappedInstance)
             {
-                if (wrappedInstance == IntPtr.Zero)
-                {
-                    throw new ArgumentNullException(nameof(wrappedInstance));
-                }
-
-                _wrappedInstance = wrappedInstance;
+                _wrappedInstance = wrappedInstance.OrThrowIfZero();
             }
 
             public void Dispose()

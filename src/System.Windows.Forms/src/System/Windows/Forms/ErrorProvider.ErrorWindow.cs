@@ -152,13 +152,13 @@ namespace System.Windows.Forms
             /// </summary>
             private void EnsureDestroyed()
             {
-                if (_timer != null)
+                if (_timer is not null)
                 {
                     _timer.Dispose();
                     _timer = null;
                 }
 
-                if (_tipWindow != null)
+                if (_tipWindow is not null)
                 {
                     _tipWindow.DestroyHandle();
                     _tipWindow = null;
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
 
                 if (blinkPhase == 0 && _provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
                 {
-                    Debug.Assert(_timer != null);
+                    Debug.Assert(_timer is not null);
                     _timer.Stop();
                 }
 
@@ -277,7 +277,7 @@ namespace System.Windows.Forms
             {
                 _items.Remove(item);
 
-                if (_tipWindow != null)
+                if (_tipWindow is not null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
                     info.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.DELTOOLW);
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
                         iconRegion.Region.Translate(-iconBounds.X, -iconBounds.Y);
                     }
 
-                    if (_tipWindow != null)
+                    if (_tipWindow is not null)
                     {
                         ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
                         if (_provider.RightToLeft)

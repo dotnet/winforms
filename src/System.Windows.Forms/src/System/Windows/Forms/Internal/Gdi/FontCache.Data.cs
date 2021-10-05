@@ -71,7 +71,7 @@ namespace System.Windows.Forms
                 string familyName = font.FontFamily.Name;
 
                 // Strip vertical-font mark from the name if needed.
-                if (familyName != null && familyName.Length > 1 && familyName[0] == '@')
+                if (familyName is not null && familyName.Length > 1 && familyName[0] == '@')
                 {
                     familyName = familyName.Substring(1);
                 }

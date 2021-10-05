@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using static Interop.ComCtl32;
 
 namespace System.Windows.Forms.Tests
 {
@@ -4156,6 +4157,92 @@ namespace System.Windows.Forms.Tests
             calendar.MaxDate = new DateTime(2019, 9, 3);
             Assert.Throws<ArgumentOutOfRangeException>("date1", () => calendar.SetSelectionRange(calendar.MaxDate.AddDays(1), calendar.MaxDate));
             Assert.Throws<ArgumentOutOfRangeException>("date2", () => calendar.SetSelectionRange(calendar.MaxDate, calendar.MaxDate.AddDays(1)));
+        }
+
+        public static IEnumerable<object[]> MonthCalendar_FillMonthDayStates_ReturnsExpected_TestData()
+        {
+            // This test set of dates is designed for a specifict test case:
+            // when a calendar has 12 fully visible months + 2 not fully visible.
+            // This test calendar has (08/29/2021 - 09/10/2022) dates range.
+
+            yield return new object[] { new DateTime(2021, 8, 31) }; // Make this date of the not fully visible previous month bold
+
+            // Make visible dates of 2021 year (Sep - Dec) bold
+            for (int i = 9; i <= 12; i++)
+            {
+                yield return new object[] { new DateTime(2021, i, i) };
+            }
+
+            // Make visible dates of 2022 year (Jan - Aug) bold
+            for (int i = 1; i <= 8; i++)
+            {
+                yield return new object[] { new DateTime(2022, i, i) };
+            }
+
+            yield return new object[] { new DateTime(2022, 9, 1) }; // Make this date of the not fully visible last month bold
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendar_FillMonthDayStates_ReturnsExpected_TestData))]
+        public unsafe void MonthCalendar_FillMonthDayStates_ReturnsExpected(DateTime currentDate)
+        {
+            const int MonthsInYear = 12;
+            // Create a calendar with (600x600) size, that contains 3 columns and 4 row of months (12 months total).
+            // Set the first day of week to have a stable test case in different environments.
+            using MonthCalendar calendar = new() { Size = new Size(600, 600), FirstDayOfWeek = Day.Sunday };
+
+            calendar.CreateControl();
+            // Set a visible range (08/29/2021 - 09/10/2022) to have a stable test case
+            calendar.SetSelectionRange(new DateTime(2021, 9, 1), new DateTime(2022, 8, 31));
+            MCMV view = calendar.TestAccessor().Dynamic._mcCurView;
+            SelectionRange displayRange = calendar.GetDisplayRange(visible: false);
+
+            Assert.Equal(MCMV.MONTH, view);
+            Assert.Equal(new DateTime(2021, 8, 29), displayRange.Start);
+            Assert.Equal(new DateTime(2022, 9, 10), displayRange.End);
+
+            int monthsCount = calendar.TestAccessor().Dynamic.GetMonthsCountOfRange(displayRange);
+            int currentMonthIndex = (currentDate.Year - displayRange.Start.Year) * MonthsInYear + currentDate.Month - displayRange.Start.Month;
+            calendar.AddBoldedDate(currentDate);
+            Span<uint> boldedDates = stackalloc uint[monthsCount];
+
+            calendar.FillMonthDayStates(boldedDates, displayRange);
+
+            uint expectedState = 1U << (currentDate.Day - 1);
+            uint actualState = boldedDates[currentMonthIndex] & expectedState;
+
+            Assert.Equal(expectedState, actualState);
+        }
+
+        public static IEnumerable<object[]> MonthCalendar_GetIndexInMonths_ReturnsExpected_TestData()
+        {
+            int expectedIndex = 0;
+
+            // This test set of dates is designed to check dates in different years.
+            // The start date is 08/01/2021.
+
+            // Check dates of 2021 year (Aug - Dec)
+            for (int i = 8; i <= 12; i++)
+            {
+                yield return new object[] { new DateTime(2021, i, i), expectedIndex++ };
+            }
+
+            // Check dates of 2022 year (Jan - Sep) bold
+            for (int i = 1; i <= 9; i++)
+            {
+                yield return new object[] { new DateTime(2022, i, i), expectedIndex++ };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(MonthCalendar_GetIndexInMonths_ReturnsExpected_TestData))]
+        public unsafe void MonthCalendar_GetIndexInMonths_ReturnsExpected(DateTime currentDate, int expectedIndex)
+        {
+            DateTime startDate = new(2021, 8, 1);
+            using MonthCalendar calendar = new();
+            int actualIndex = calendar.TestAccessor().Dynamic.GetIndexInMonths(startDate, currentDate);
+
+            Assert.Equal(expectedIndex, actualIndex);
         }
 
         private class SubMonthCalendar : MonthCalendar
