@@ -2062,16 +2062,6 @@
         <target state="translated">Rozmiary formantu przy założeniu, że ekran jest nieskończenie wielki.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
-        <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="new">{0} collection shouldn't be empty for {1}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
-        <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">Lista musi być parametrem IBindingList dla parametru AddNew.</target>
@@ -7544,11 +7534,6 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="PanelBorderStyleDescr">
         <source>Indicates whether the panel should have a border.</source>
         <target state="translated">Wskazuje, czy panel ma mieć obramowanie.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ParentPropertyNotSetInGetNextControl">
-        <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">

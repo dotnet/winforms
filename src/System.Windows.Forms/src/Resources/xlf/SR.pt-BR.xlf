@@ -2062,16 +2062,6 @@
         <target state="translated">O tamanho do controle se a tela fosse muito grande.</target>
         <note />
       </trans-unit>
-      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
-        <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="new">{0} collection shouldn't be empty for {1}.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
-        <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">A lista deve ser uma IBindingList para AddNew.</target>
@@ -7544,11 +7534,6 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="PanelBorderStyleDescr">
         <source>Indicates whether the panel should have a border.</source>
         <target state="translated">Indica se o painel deve ter uma borda.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="ParentPropertyNotSetInGetNextControl">
-        <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
