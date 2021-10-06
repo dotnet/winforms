@@ -18,7 +18,7 @@ namespace System.Windows.Forms
             Color arrowColor,
             ArrowDirection arrowDirection)
         {
-            Graphics = g ?? throw new ArgumentNullException(nameof(g));
+            Graphics = g.OrThrowIfNull();
             Item = toolStripItem;
             ArrowRectangle = arrowRectangle;
             DefaultArrowColor = arrowColor;
