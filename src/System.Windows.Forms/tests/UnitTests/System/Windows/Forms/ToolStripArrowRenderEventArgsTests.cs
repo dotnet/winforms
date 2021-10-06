@@ -18,13 +18,11 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripItem_Rectangle_Color_ArrowDirection_TestData()
         {
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { graphics, null, Rectangle.Empty, Color.Empty, (ArrowDirection)(ArrowDirection.Down + 1) };
-
-            using var toolStripButton = new ToolStripButton();
-            yield return new object[] { graphics, toolStripButton, new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down };
-            yield return new object[] { graphics, toolStripButton, new Rectangle(-1, -2, -3, -4), Color.Blue, ArrowDirection.Down };
+            yield return new object[] { graphics, new ToolStripButton(), new Rectangle(1, 2, 3, 4), Color.Blue, ArrowDirection.Down };
+            yield return new object[] { graphics, new ToolStripButton(), new Rectangle(-1, -2, -3, -4), Color.Blue, ArrowDirection.Down };
         }
 
         [WinFormsTheory]
