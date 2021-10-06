@@ -4211,9 +4211,10 @@ namespace System.Windows.Forms.Tests
 
         public static IEnumerable<object[]> DrawItemEventArgs_TestData()
         {
-            using var bitmap = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(bitmap);
             yield return new object[] { null };
+
+            var bitmap = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(bitmap);
             yield return new object[] { new DrawItemEventArgs(graphics, null, new Rectangle(1, 2, 3, 4), 0, DrawItemState.Checked) };
         }
 
