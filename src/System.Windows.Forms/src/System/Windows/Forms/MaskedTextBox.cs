@@ -2774,12 +2774,12 @@ namespace System.Windows.Forms
                 byte imeConversionType = imeConversionNone;
 
                 // Check if there's an update to the composition string:
-                if ((m._LParam & (int)Imm32.GCS.COMPSTR) != 0)
+                if ((m.LParamInternal & (int)Imm32.GCS.COMPSTR) != 0)
                 {
                     // The character in the composition has been updated but not yet converted.
                     imeConversionType = imeConversionUpdate;
                 }
-                else if ((m._LParam & (int)Imm32.GCS.RESULTSTR) != 0)
+                else if ((m.LParamInternal & (int)Imm32.GCS.RESULTSTR) != 0)
                 {
                     // The character(s) in the composition has been fully converted.
                     imeConversionType = imeConversionCompleted;
@@ -2894,10 +2894,10 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((User32.PRF)m._LParam & User32.PRF.NONCLIENT) != 0
+            if (((User32.PRF)m.LParamInternal & User32.PRF.NONCLIENT) != 0
                 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m._WParam);
+                using Graphics g = Graphics.FromHdc(m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);

@@ -2697,7 +2697,7 @@ namespace System.Windows.Forms
             // Windows TreeView pushes its own message loop in WM_xBUTTONDOWN, so fire the
             // event before calling defWndProc or else it won't get fired until the button
             // comes back up.
-            OnMouseDown(new MouseEventArgs(button, clicks, PARAM.ToPoint(m._LParam)));
+            OnMouseDown(new MouseEventArgs(button, clicks, PARAM.ToPoint(m.LParamInternal)));
 
             // If Validation is cancelled don't fire any events through the Windows TreeView's message loop.
             if (!ValidationCancelled)
@@ -2711,14 +2711,14 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void CustomDraw(ref Message m)
         {
-            NMTVCUSTOMDRAW* nmtvcd = (NMTVCUSTOMDRAW*)m._LParam;
+            NMTVCUSTOMDRAW* nmtvcd = (NMTVCUSTOMDRAW*)m.LParamInternal;
 
             // Find out which stage we're drawing
             switch (nmtvcd->nmcd.dwDrawStage)
             {
                 // Do we want OwnerDraw for this paint cycle?
                 case CDDS.PREPAINT:
-                    m._Result = (nint)CDRF.NOTIFYITEMDRAW; // yes, we do...
+                    m.ResultInternal = (nint)CDRF.NOTIFYITEMDRAW; // yes, we do...
                     return;
                 // We've got opt-in on owner draw for items - so handle each one.
                 case CDDS.ITEMPREPAINT:
@@ -2730,7 +2730,7 @@ namespace System.Windows.Forms
                     {
                         // this can happen if we are presently inserting the node - it hasn't yet
                         // been added to the handle table
-                        m._Result = (nint)(CDRF.SKIPDEFAULT);
+                        m.ResultInternal = (nint)(CDRF.SKIPDEFAULT);
                         return;
                     }
 
@@ -2743,7 +2743,7 @@ namespace System.Windows.Forms
                     if (drawMode == TreeViewDrawMode.OwnerDrawText)
                     {
                         nmtvcd->clrText = nmtvcd->clrTextBk;
-                        m._Result = (nint)(CDRF.NEWFONT | CDRF.NOTIFYPOSTPAINT);
+                        m.ResultInternal = (nint)(CDRF.NEWFONT | CDRF.NOTIFYPOSTPAINT);
                         return;
                     }
                     else if (drawMode == TreeViewDrawMode.OwnerDrawAll)
@@ -2784,7 +2784,7 @@ namespace System.Windows.Forms
 
                         if (!e.DrawDefault)
                         {
-                            m._Result = (nint)CDRF.SKIPDEFAULT;
+                            m.ResultInternal = (nint)CDRF.SKIPDEFAULT;
                             return;
                         }
                     }
@@ -2814,7 +2814,7 @@ namespace System.Windows.Forms
 
                         // There is a problem in winctl that clips node fonts if the fontsize
                         // is larger than the treeview font size. The behavior is much better in comctl 5 and above.
-                        m._Result = (nint)CDRF.NEWFONT;
+                        m.ResultInternal = (nint)CDRF.NEWFONT;
                         return;
                     }
 
@@ -2872,7 +2872,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        m._Result = (nint)CDRF.NOTIFYSUBITEMDRAW;
+                        m.ResultInternal = (nint)CDRF.NOTIFYSUBITEMDRAW;
                         return;
                     }
 
@@ -2880,7 +2880,7 @@ namespace System.Windows.Forms
 
                 default:
                     // just in case we get a spurious message, tell it to do the right thing
-                    m._Result = (nint)CDRF.DODEFAULT;
+                    m.ResultInternal = (nint)CDRF.DODEFAULT;
                     return;
             }
         }
@@ -2924,7 +2924,7 @@ namespace System.Windows.Forms
 
         private unsafe bool WmShowToolTip(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
             IntPtr tooltipHandle = nmhdr->hwndFrom;
 
             var tvhip = new TVHITTESTINFO
@@ -2960,7 +2960,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmNeedText(ref Message m)
         {
-            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m._LParam;
+            NMTTDISPINFOW* ttt = (NMTTDISPINFOW*)m.LParamInternal;
             string tipText = controlToolTipText;
 
             var tvhip = new TVHITTESTINFO
@@ -2999,7 +2999,7 @@ namespace System.Windows.Forms
 
         private unsafe void WmNotify(ref Message m)
         {
-            User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
 
             // Custom draw code is handled separately.
             if ((nmhdr->code == (int)NM.CUSTOMDRAW))
@@ -3008,18 +3008,18 @@ namespace System.Windows.Forms
             }
             else
             {
-                NMTREEVIEW* nmtv = (NMTREEVIEW*)m._LParam;
+                NMTREEVIEW* nmtv = (NMTREEVIEW*)m.LParamInternal;
 
                 switch (nmtv->nmhdr.code)
                 {
                     case (int)TVN.ITEMEXPANDINGW:
-                        m._Result = TvnExpanding(nmtv);
+                        m.ResultInternal = TvnExpanding(nmtv);
                         break;
                     case (int)TVN.ITEMEXPANDEDW:
                         TvnExpanded(nmtv);
                         break;
                     case (int)TVN.SELCHANGINGW:
-                        m._Result = TvnSelecting(nmtv);
+                        m.ResultInternal = TvnSelecting(nmtv);
                         break;
                     case (int)TVN.SELCHANGEDW:
                         TvnSelected(nmtv);
@@ -3031,10 +3031,10 @@ namespace System.Windows.Forms
                         TvnBeginDrag(MouseButtons.Right, nmtv);
                         break;
                     case (int)TVN.BEGINLABELEDITW:
-                        m._Result = TvnBeginLabelEdit(*(NMTVDISPINFOW*)m._LParam);
+                        m.ResultInternal = TvnBeginLabelEdit(*(NMTVDISPINFOW*)m.LParamInternal);
                         break;
                     case (int)TVN.ENDLABELEDITW:
-                        m._Result = TvnEndLabelEdit(*(NMTVDISPINFOW*)m._LParam);
+                        m.ResultInternal = TvnEndLabelEdit(*(NMTVDISPINFOW*)m.LParamInternal);
                         break;
                     case (int)NM.CLICK:
                     case (int)NM.RCLICK:
@@ -3078,7 +3078,7 @@ namespace System.Windows.Forms
                                 User32.SendMessageW(this, User32.WM.CONTEXTMENU, Handle, (nint)User32.GetMessagePos());
                             }
 
-                            m._Result = 1;
+                            m.ResultInternal = 1;
                         }
 
                         if (!treeViewState[TREEVIEWSTATE_mouseUpFired])
@@ -3151,9 +3151,9 @@ namespace System.Windows.Forms
         {
             base.WndProc(ref m);
 
-            if (((User32.PRF)m._LParam & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
+            if (((User32.PRF)m.LParamInternal & User32.PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m._WParam);
+                using Graphics g = Graphics.FromHdc(m.WParamInternal);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);
@@ -3164,7 +3164,7 @@ namespace System.Windows.Forms
 
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.WINDOWPOSCHANGING:
                 case User32.WM.NCCALCSIZE:
@@ -3197,7 +3197,7 @@ namespace System.Windows.Forms
                     base.WndProc(ref m);
                     if (CheckBoxes)
                     {
-                        TVITEMW* item = (TVITEMW*)m._LParam;
+                        TVITEMW* item = (TVITEMW*)m.LParamInternal;
 
                         // Check for invalid node handle
                         if (item->hItem != IntPtr.Zero)
@@ -3218,19 +3218,19 @@ namespace System.Windows.Forms
 
                     break;
                 case User32.WM.NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
                     switch ((TTN)nmhdr->code)
                     {
                         case TTN.GETDISPINFOW:
                             // Setting the max width has the added benefit of enabling multiline tool tips
                             User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                             WmNeedText(ref m);
-                            m._Result = 1;
+                            m.ResultInternal = 1;
                             return;
                         case TTN.SHOW:
                             if (WmShowToolTip(ref m))
                             {
-                                m._Result = 1;
+                                m.ResultInternal = 1;
                                 return;
                             }
                             else
@@ -3275,7 +3275,7 @@ namespace System.Windows.Forms
                     treeViewState[TREEVIEWSTATE_mouseUpFired] = false;
                     var tvhip = new TVHITTESTINFO
                     {
-                        pt = PARAM.ToPoint(m._LParam)
+                        pt = PARAM.ToPoint(m.LParamInternal)
                     };
 
                     _mouseDownNode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhip);
@@ -3285,7 +3285,7 @@ namespace System.Windows.Forms
                     if ((tvhip.flags & TVHT.ONITEMSTATEICON) != 0)
                     {
                         // We do not pass the Message to the Control so fire MouseDown.
-                        OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, PARAM.ToPoint(m._LParam)));
+                        OnMouseDown(new MouseEventArgs(MouseButtons.Left, 1, PARAM.ToPoint(m.LParamInternal)));
                         if (!ValidationCancelled && CheckBoxes)
                         {
                             TreeNode node = NodeFromHandle(_mouseDownNode);
@@ -3297,7 +3297,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        m._Result = 0;
+                        m.ResultInternal = 0;
                     }
                     else
                     {
@@ -3308,7 +3308,7 @@ namespace System.Windows.Forms
                     break;
                 case User32.WM.LBUTTONUP:
                 case User32.WM.RBUTTONUP:
-                    Point point = PARAM.ToPoint(m._LParam);
+                    Point point = PARAM.ToPoint(m.LParamInternal);
 
                     var tvhi = new TVHITTESTINFO
                     {
@@ -3393,7 +3393,7 @@ namespace System.Windows.Forms
                     //Cache the hit-tested node for verification when mouse up is fired
                     var tvhit = new TVHITTESTINFO
                     {
-                        pt = PARAM.ToPoint(m._LParam)
+                        pt = PARAM.ToPoint(m.LParamInternal)
                     };
 
                     _mouseDownNode = User32.SendMessageW(this, (User32.WM)TVM.HITTEST, 0, ref tvhit);
@@ -3438,7 +3438,7 @@ namespace System.Windows.Forms
                             // VisualStudio7 # 156, only show the context menu when clicked in the client area
                             if (ClientRectangle.Contains(client) && treeNode.ContextMenuStrip is not null)
                             {
-                                bool keyboardActivated = m._LParam == -1;
+                                bool keyboardActivated = m.LParamInternal == -1;
                                 treeNode.ContextMenuStrip.ShowInternal(this, client, keyboardActivated);
                             }
                         }

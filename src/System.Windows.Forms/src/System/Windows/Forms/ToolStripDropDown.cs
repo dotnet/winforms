@@ -2095,7 +2095,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.NCACTIVATE:
                     // if someone clicks on a child control of the toolstrip dropdown, we want
@@ -2110,9 +2110,9 @@ namespace System.Windows.Forms
                     // when we get focus again, we should reactivate our message filter.
                     Debug.WriteLineIf(
                         s_snapFocusDebug.TraceVerbose,
-                        $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)m._WParam == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
+                        $"[ToolStripDropDown.WndProc] got a WM_ACTIVATE {((User32.WA)m.WParamInternal == User32.WA.ACTIVE ? "WA_ACTIVE" : "WA_INACTIVE")} - checking if we need to set the active toolstrip");
 
-                    if ((User32.WA)m._WParam == User32.WA.ACTIVE)
+                    if ((User32.WA)m.WParamInternal == User32.WA.ACTIVE)
                     {
                         if (Visible)
                         {
@@ -2124,12 +2124,12 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation(m._LParam)}");
+                            Debug.Fail($"Why are we being activated when we're not visible? Deactivating thing is {WindowsFormsUtils.GetControlInformation(m.LParamInternal)}");
                         }
                     }
                     else
                     {
-                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation(m._LParam)}");
+                        Debug.WriteLineIf(s_snapFocusDebug.TraceVerbose, $"[ToolStripDropDown.WndProc] activating thing is {WindowsFormsUtils.GetControlInformation(m.LParamInternal)}");
                     }
 
                     base.WndProc(ref m);
@@ -2188,7 +2188,7 @@ namespace System.Windows.Forms
         /// </summary>
         private unsafe void WmNCActivate(ref Message m)
         {
-            if (m._WParam == 0)
+            if (m.WParamInternal == 0)
             {
                 base.WndProc(ref m);
             }
@@ -2209,7 +2209,7 @@ namespace System.Windows.Forms
                             activeHwndHandleRef.Handle,
                             flags: User32.RDW.FRAME | User32.RDW.INVALIDATE);
 
-                        m._WParam = 1;
+                        m.WParamInternal = 1;
 
                         GC.KeepAlive(activeHwndHandleRef.Wrapper);
                     }

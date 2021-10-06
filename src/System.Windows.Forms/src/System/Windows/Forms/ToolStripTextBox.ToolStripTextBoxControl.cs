@@ -276,12 +276,12 @@ namespace System.Windows.Forms
                 g.DrawRectangle(pen, 0, 0, Width - 1, Height - 1);
 
                 // We've handled WM_NCPAINT.
-                m._Result = 0;
+                m.ResultInternal = 0;
             }
 
             protected override void WndProc(ref Message m)
             {
-                if (m._Msg == User32.WM.NCPAINT)
+                if (m.MsgInternal == User32.WM.NCPAINT)
                 {
                     WmNCPaint(ref m);
                     return;

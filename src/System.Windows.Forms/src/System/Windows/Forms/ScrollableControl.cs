@@ -1281,14 +1281,14 @@ namespace System.Windows.Forms
         {
             // The lparam is handle of the sending scrollbar, or NULL when
             // the scrollbar sending the message is the "form" scrollbar.
-            if (m._LParam != 0)
+            if (m.LParamInternal != 0)
             {
                 base.WndProc(ref m);
                 return;
             }
 
             Rectangle client = ClientRectangle;
-            User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m._WParam);
+            User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParamInternal);
             bool thumbTrack = loWord != User32.SBV.THUMBTRACK;
             int pos = -_displayRect.Y;
             int oldValue = pos;
@@ -1376,7 +1376,7 @@ namespace System.Windows.Forms
         {
             // The lparam is handle of the sending scrollbar, or NULL when
             // the scrollbar sending the message is the "form" scrollbar.
-            if (m._LParam != 0)
+            if (m.LParamInternal != 0)
             {
                 base.WndProc(ref m);
                 return;
@@ -1392,7 +1392,7 @@ namespace System.Windows.Forms
                 maxPos = HorizontalScroll.Maximum;
             }
 
-            User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m._WParam);
+            User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParamInternal);
             switch (loWord)
             {
                 case User32.SBH.THUMBPOSITION:
@@ -1467,7 +1467,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmOnScroll(ref Message m, int oldValue, int value, ScrollOrientation scrollOrientation)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m._WParam);
+            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParamInternal);
             if (type != ScrollEventType.EndScroll)
             {
                 ScrollEventArgs se = new ScrollEventArgs(type, oldValue, value, scrollOrientation);

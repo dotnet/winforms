@@ -1078,9 +1078,9 @@ namespace System.ComponentModel.Design
 
         private void WmActivate(ref Message m)
         {
-            if ((User32.WA)m._WParam == User32.WA.INACTIVE)
+            if ((User32.WA)m.WParamInternal == User32.WA.INACTIVE)
             {
-                IntPtr hwndActivating = m._LParam;
+                IntPtr hwndActivating = m.LParamInternal;
                 if (WindowOwnsWindow(Handle, hwndActivating))
                 {
                     Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI WmActivate] setting cancel close true because WindowsOwnWindow");

@@ -22499,8 +22499,8 @@ namespace System.Windows.Forms
                         !IsSharedCellReadOnly(dataGridViewCell, _ptCurrentCell.Y) &&
                         (EditMode == DataGridViewEditMode.EditOnKeystroke || EditMode == DataGridViewEditMode.EditOnKeystrokeOrF2))
                     {
-                        KeyEventArgs ke = new KeyEventArgs((Keys)m._WParam | ModifierKeys);
-                        if (ke.KeyCode != Keys.ProcessKey || m._LParam != 0x01) // Changing IME context does not trigger editing mode
+                        KeyEventArgs ke = new KeyEventArgs((Keys)m.WParamInternal | ModifierKeys);
+                        if (ke.KeyCode != Keys.ProcessKey || m.LParamInternal != 0x01) // Changing IME context does not trigger editing mode
                         {
                             Type editControlType = dataGridViewCell.EditType;
                             Type editingCellInterface = null;
@@ -22521,7 +22521,7 @@ namespace System.Windows.Forms
                                     // Forward the key message to the editing control if any
                                     if (EditingControl is not null)
                                     {
-                                        User32.SendMessageW(EditingControl, m._Msg, m._WParam, m._LParam);
+                                        User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                                         _dataGridViewState1[State1_ForwardCharMessage] = true;
                                         return true;
                                     }
@@ -22532,12 +22532,12 @@ namespace System.Windows.Forms
                 }
             }
             else if (_dataGridViewState1[State1_ForwardCharMessage]
-                && (m._Msg == User32.WM.SYSCHAR || m._Msg == User32.WM.CHAR || m._Msg == User32.WM.IME_CHAR))
+                && (m.MsgInternal == User32.WM.SYSCHAR || m.MsgInternal == User32.WM.CHAR || m.MsgInternal == User32.WM.IME_CHAR))
             {
                 _dataGridViewState1[State1_ForwardCharMessage] = false;
                 if (EditingControl is not null)
                 {
-                    User32.SendMessageW(EditingControl, m._Msg, m._WParam, m._LParam);
+                    User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return true;
                 }
             }
@@ -22548,14 +22548,14 @@ namespace System.Windows.Forms
         protected override bool ProcessKeyPreview(ref Message m)
         {
             bool dataGridViewWantsInputKey;
-            KeyEventArgs ke = new KeyEventArgs((Keys)m._WParam | ModifierKeys);
+            KeyEventArgs ke = new KeyEventArgs((Keys)m.WParamInternal | ModifierKeys);
 
             // Refactor the special keys into two parts.
             // 1. Escape and Space exist in both WM_CHAR and WM_KEYDOWN, WM_KEYUP.
             // 2. Other special keys do not exist in WM_CHAR message, and character code of WM_CHAR may have overlapped
             // w/ some of the key code. (Like character code of lowercase "q" is 0x71, it's overlapped w/ Keys.F2). This
             // may introduce problem when handling them.
-            if (m._Msg == User32.WM.CHAR)
+            if (m.MsgInternal == User32.WM.CHAR)
             {
                 switch (ke.KeyCode)
                 {
@@ -22597,7 +22597,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (EditingControl is not null && (m._Msg == User32.WM.KEYDOWN || m._Msg == User32.WM.SYSKEYDOWN))
+            if (EditingControl is not null && (m.MsgInternal == User32.WM.KEYDOWN || m.MsgInternal == User32.WM.SYSKEYDOWN))
             {
                 _dataGridViewState2[State2_CurrentCellWantsInputKey] =
                     ((IDataGridViewEditingControl)EditingControl).EditingControlWantsInputKey(ke.KeyData, dataGridViewWantsInputKey);
@@ -22610,7 +22610,7 @@ namespace System.Windows.Forms
 
             if (dataGridViewWantsInputKey)
             {
-                if (m._Msg == User32.WM.KEYDOWN || m._Msg == User32.WM.SYSKEYDOWN)
+                if (m.MsgInternal == User32.WM.KEYDOWN || m.MsgInternal == User32.WM.SYSKEYDOWN)
                 {
                     if (ProcessDataGridViewKey(ke))
                     {
@@ -30311,7 +30311,7 @@ namespace System.Windows.Forms
             bool keyboardActivated = false;
 
             // lparam will be -1 when the user invokes the context menu with the keyboard.
-            if (m._LParam == -1)
+            if (m.LParamInternal == -1)
             {
                 keyboardActivated = true;
                 client = new Point(Width / 2, Height / 2);
@@ -30319,7 +30319,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                client = PointToClient(PARAM.ToPoint(m._LParam));
+                client = PointToClient(PARAM.ToPoint(m.LParamInternal));
                 HitTestInfo hti = HitTest(client.X, client.Y);
                 DataGridViewCell dataGridViewCell = null;
                 switch (hti.Type)
@@ -30368,23 +30368,23 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmGetDlgCode(ref Message m)
         {
-            m._Result = m._Result | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS;
+            m.ResultInternal = m.ResultInternal | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS;
 
             Keys modifierKeys = ModifierKeys;
             if (GetTabKeyEffective((modifierKeys & Keys.Shift) == Keys.Shift, (modifierKeys & Keys.Control) == Keys.Control))
             {
-                m._Result = m._Result | (int)User32.DLGC.WANTTAB;
+                m.ResultInternal = m.ResultInternal | (int)User32.DLGC.WANTTAB;
             }
         }
 
         private unsafe bool WmNotify(ref Message m)
         {
-            if (m._LParam == 0)
+            if (m.LParamInternal == 0)
             {
                 return false;
             }
 
-            User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
+            User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParamInternal;
             if (nmhdr->code == (int)ComCtl32.TTN.GETDISPINFOW && !DesignMode)
             {
                 string toolTip = ToolTipPrivate;
@@ -30394,7 +30394,7 @@ namespace System.Windows.Forms
                     // Setting the max width has the added benefit of enabling multiline tool tips
                     User32.SendMessageW(nmhdr->hwndFrom, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
 
-                    ComCtl32.NMTTDISPINFOW* ttt = (ComCtl32.NMTTDISPINFOW*)m._LParam;
+                    ComCtl32.NMTTDISPINFOW* ttt = (ComCtl32.NMTTDISPINFOW*)m.LParamInternal;
                     _toolTipBuffer.SetText(toolTip);
                     ttt->lpszText = _toolTipBuffer.Buffer;
                     ttt->hinst = IntPtr.Zero;
@@ -30413,7 +30413,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.GETDLGCODE:
                     WmGetDlgCode(ref m);
@@ -30446,7 +30446,7 @@ namespace System.Windows.Forms
                     if (EditingControl is not null)
                     {
                         // Make sure that the first character is forwarded to the editing control.
-                        User32.SendMessageW(EditingControl, m._Msg, m._WParam, m._LParam);
+                        User32.SendMessageW(EditingControl, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     }
 
                     break;

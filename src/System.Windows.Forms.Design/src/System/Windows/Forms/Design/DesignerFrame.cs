@@ -207,7 +207,7 @@ namespace System.Windows.Forms.Design
                     if (!_designerRegion._messageMouseWheelProcessed)
                     {
                         _designerRegion._messageMouseWheelProcessed = true;
-                        User32.SendMessageW(_designerRegion.Handle, User32.WM.MOUSEWHEEL, m._WParam, m._LParam);
+                        User32.SendMessageW(_designerRegion.Handle, User32.WM.MOUSEWHEEL, m.WParamInternal, m.LParamInternal);
                         return;
                     }
 
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Design
                 case User32.WM.KEYDOWN:
                     User32.SBV wScrollNotify = 0;
                     User32.WM msg = User32.WM.NULL;
-                    Keys keycode = (Keys)(m._WParam & 0xFFFF);
+                    Keys keycode = (Keys)(m.WParamInternal & 0xFFFF);
                     switch (keycode)
                     {
                         case Keys.Up:
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.Design
 
                     break;
                 case User32.WM.CONTEXTMENU:
-                    User32.SendMessageW(_designer.Handle, m._Msg, m._WParam, m._LParam);
+                    User32.SendMessageW(_designer.Handle, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
             }
 
@@ -562,14 +562,14 @@ namespace System.Windows.Forms.Design
             protected override void WndProc(ref Message m)
             {
                 base.WndProc(ref m);
-                if (m._Msg == User32.WM.PARENTNOTIFY && (User32.WM)PARAM.LOWORD(m._WParam) == User32.WM.CREATE)
+                if (m.MsgInternal == User32.WM.PARENTNOTIFY && (User32.WM)PARAM.LOWORD(m.WParamInternal) == User32.WM.CREATE)
                 {
                     if (_overlayList != null)
                     {
                         bool ourWindow = false;
                         foreach (Control c in _overlayList)
                         {
-                            if (c.IsHandleCreated && m._LParam == c.Handle)
+                            if (c.IsHandleCreated && m.LParamInternal == c.Handle)
                             {
                                 ourWindow = true;
                                 break;

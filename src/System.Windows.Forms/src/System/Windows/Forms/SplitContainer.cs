@@ -2328,7 +2328,7 @@ namespace System.Windows.Forms
         private void WmSetCursor(ref Message m)
         {
             // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-            if (m._WParam == InternalHandle && (User32.HT)(m._LParam & 0x0000FFFF) == User32.HT.CLIENT)
+            if (m.WParamInternal == InternalHandle && (User32.HT)(m.LParamInternal & 0x0000FFFF) == User32.HT.CLIENT)
             {
                 Cursor.Current = OverrideCursor ?? Cursor;
             }
@@ -2508,10 +2508,10 @@ namespace System.Windows.Forms
 
             bool IMessageFilter.PreFilterMessage(ref Message m)
             {
-                if (m._Msg >= User32.WM.KEYFIRST && m._Msg <= User32.WM.KEYLAST)
+                if (m.MsgInternal >= User32.WM.KEYFIRST && m.MsgInternal <= User32.WM.KEYLAST)
                 {
-                    if ((m._Msg == User32.WM.KEYDOWN && (Keys)m._WParam == Keys.Escape)
-                        || (m._Msg == User32.WM.SYSKEYDOWN))
+                    if ((m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal == Keys.Escape)
+                        || (m.MsgInternal == User32.WM.SYSKEYDOWN))
                     {
                         // Notify that splitMOVE was reverted. This is used in ONKEYUP.
                         _owner._splitBegin = false;

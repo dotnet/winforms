@@ -21,10 +21,10 @@ internal static partial class Interop
             public Point pt;
 
             public static implicit operator Message(MSG msg)
-                => new Message { HWnd = msg.hwnd, Msg = (int)msg.message, _WParam = msg.wParam, _LParam = msg.lParam };
+                => new Message { HWnd = msg.hwnd, Msg = (int)msg.message, WParamInternal = msg.wParam, LParamInternal = msg.lParam };
 
             public static implicit operator MSG(Message message)
-                => new MSG { hwnd = message.HWnd, message = message._Msg, wParam = message._WParam, lParam = message._LParam };
+                => new MSG { hwnd = message.HWnd, message = message.MsgInternal, wParam = message.WParamInternal, lParam = message.LParamInternal };
         }
     }
 }

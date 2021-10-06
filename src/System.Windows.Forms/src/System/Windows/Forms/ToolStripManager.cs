@@ -1008,7 +1008,7 @@ namespace System.Windows.Forms
 
             Debug.WriteLineIf(ToolStrip.s_snapFocusDebug.TraceVerbose, "[ProcessMenuKey] Determining whether we should send focus to MenuStrip");
 
-            Keys keyData = (Keys)m._LParam;
+            Keys keyData = (Keys)m.LParamInternal;
 
             // Search for our menu to work with
             Control intendedControl = Control.FromHandle(m.HWnd);

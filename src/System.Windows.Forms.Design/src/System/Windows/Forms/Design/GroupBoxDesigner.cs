@@ -113,9 +113,9 @@ namespace System.Windows.Forms.Design
                     // the group box's designer to get these messages, however, so change this.
                     base.WndProc(ref m);
 
-                    if (m._Result == (int)User32.HT.TRANSPARENT)
+                    if (m.ResultInternal == (int)User32.HT.TRANSPARENT)
                     {
-                        m._Result = (nint)User32.HT.CLIENT;
+                        m.ResultInternal = (nint)User32.HT.CLIENT;
                     }
 
                     break;

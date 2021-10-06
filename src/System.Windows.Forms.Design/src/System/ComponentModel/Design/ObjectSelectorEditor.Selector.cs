@@ -198,10 +198,10 @@ namespace System.ComponentModel.Design
 
             protected unsafe override void WndProc(ref Message m)
             {
-                switch (m._Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.GETDLGCODE:
-                        m._Result = m._Result | (int)User32.DLGC.WANTALLKEYS;
+                        m.ResultInternal = m.ResultInternal | (int)User32.DLGC.WANTALLKEYS;
                         return;
                     case User32.WM.MOUSEMOVE:
                         if (clickSeen)
@@ -211,7 +211,7 @@ namespace System.ComponentModel.Design
 
                         break;
                     case User32.WM.REFLECT_NOTIFY:
-                        User32.NMHDR* nmtv = (User32.NMHDR*)m._LParam;
+                        User32.NMHDR* nmtv = (User32.NMHDR*)m.LParamInternal;
                         if (nmtv->code == (int)ComCtl32.NM.CLICK)
                         {
                             clickSeen = true;

@@ -4332,57 +4332,57 @@ namespace System.Windows.Forms
 
         protected unsafe override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.UNDO:
-                    if (m._LParam == 0)
+                    if (m.LParamInternal == 0)
                     {
                         _gridView.DoUndoCommand();
                     }
                     else
                     {
-                        m._Result = CanUndo ? 1 : 0;
+                        m.ResultInternal = CanUndo ? 1 : 0;
                     }
 
                     return;
                 case User32.WM.CUT:
-                    if (m._LParam == 0)
+                    if (m.LParamInternal == 0)
                     {
                         _gridView.DoCutCommand();
                     }
                     else
                     {
-                        m._Result = CanCut ? 1 : 0;
+                        m.ResultInternal = CanCut ? 1 : 0;
                     }
 
                     return;
 
                 case User32.WM.COPY:
-                    if (m._LParam == 0)
+                    if (m.LParamInternal == 0)
                     {
                         _gridView.DoCopyCommand();
                     }
                     else
                     {
-                        m._Result = CanCopy ? 1 : 0;
+                        m.ResultInternal = CanCopy ? 1 : 0;
                     }
 
                     return;
 
                 case User32.WM.PASTE:
-                    if (m._LParam == 0)
+                    if (m.LParamInternal == 0)
                     {
                         _gridView.DoPasteCommand();
                     }
                     else
                     {
-                        m._Result = CanPaste ? 1 : 0;
+                        m.ResultInternal = CanPaste ? 1 : 0;
                     }
 
                     return;
 
                 case User32.WM.COPYDATA:
-                    var cds = (User32.COPYDATASTRUCT*)m._LParam;
+                    var cds = (User32.COPYDATASTRUCT*)m.LParamInternal;
 
                     if (cds is not null && cds->lpData != IntPtr.Zero)
                     {
@@ -4390,12 +4390,12 @@ namespace System.Windows.Forms
                         _copyDataMessage = (int)cds->dwData;
                     }
 
-                    m._Result = 1;
+                    m.ResultInternal = 1;
                     return;
                 case (User32.WM)AutomationMessages.PGM_GETBUTTONCOUNT:
                     if (_toolStrip is not null)
                     {
-                        m._Result = _toolStrip.Items.Count;
+                        m.ResultInternal = _toolStrip.Items.Count;
                         return;
                     }
 
@@ -4403,16 +4403,16 @@ namespace System.Windows.Forms
                 case (User32.WM)AutomationMessages.PGM_GETBUTTONSTATE:
                     if (_toolStrip is not null)
                     {
-                        int index = (int)m._WParam;
+                        int index = (int)m.WParamInternal;
                         if (index >= 0 && index < _toolStrip.Items.Count)
                         {
                             if (_toolStrip.Items[index] is ToolStripButton button)
                             {
-                                m._Result = button.Checked ? 1 : 0;
+                                m.ResultInternal = button.Checked ? 1 : 0;
                             }
                             else
                             {
-                                m._Result = 0;
+                                m.ResultInternal = 0;
                             }
                         }
 
@@ -4423,7 +4423,7 @@ namespace System.Windows.Forms
                 case (User32.WM)AutomationMessages.PGM_SETBUTTONSTATE:
                     if (_toolStrip is not null)
                     {
-                        int index = (int)m._WParam;
+                        int index = (int)m.WParamInternal;
                         if (index >= 0 && index < _toolStrip.Items.Count && _toolStrip.Items[index] is ToolStripButton button)
                         {
                             button.Checked = !button.Checked;
@@ -4435,7 +4435,7 @@ namespace System.Windows.Forms
                             }
                             else
                             {
-                                switch ((int)m._WParam)
+                                switch ((int)m.WParamInternal)
                                 {
                                     case AlphaSortButtonIndex:
                                     case CategorySortButtonIndex:
@@ -4457,7 +4457,7 @@ namespace System.Windows.Forms
                 case (User32.WM)AutomationMessages.PGM_GETBUTTONTOOLTIPTEXT:
                     if (_toolStrip is not null)
                     {
-                        int index = (int)m._WParam;
+                        int index = (int)m.WParamInternal;
                         if (index >= 0 && index < _toolStrip.Items.Count)
                         {
                             string text;
@@ -4471,7 +4471,7 @@ namespace System.Windows.Forms
                             }
 
                             // Write text into test file.
-                            m._Result = AutomationMessages.WriteAutomationText(text);
+                            m.ResultInternal = AutomationMessages.WriteAutomationText(text);
                         }
 
                         return;
@@ -4482,43 +4482,43 @@ namespace System.Windows.Forms
                 case (User32.WM)AutomationMessages.PGM_GETTESTINGINFO:
                     {
                         // Get "testing info" string for Nth grid entry (or active entry if N < 0)
-                        string testingInfo = _gridView.GetTestingInfo((int)m._WParam);
-                        m._Result = AutomationMessages.WriteAutomationText(testingInfo);
+                        string testingInfo = _gridView.GetTestingInfo((int)m.WParamInternal);
+                        m.ResultInternal = AutomationMessages.WriteAutomationText(testingInfo);
                         return;
                     }
 
                 case (User32.WM)AutomationMessages.PGM_GETROWCOORDS:
                     if (m.Msg == _copyDataMessage)
                     {
-                        m._Result = _gridView.GetPropertyLocation(
+                        m.ResultInternal = _gridView.GetPropertyLocation(
                             _propertyName,
-                            getXY: m._LParam == 0,
-                            rowValue: m._WParam == 0);
+                            getXY: m.LParamInternal == 0,
+                            rowValue: m.WParamInternal == 0);
                         return;
                     }
 
                     break;
                 case (User32.WM)AutomationMessages.PGM_GETSELECTEDROW:
                 case (User32.WM)AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m._Result = User32.SendMessageW(_gridView, m._Msg, m._WParam, m._LParam);
+                    m.ResultInternal = User32.SendMessageW(_gridView, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
                 case (User32.WM)AutomationMessages.PGM_SETSELECTEDTAB:
-                    if (m._LParam != 0)
+                    if (m.LParamInternal != 0)
                     {
-                        string tabTypeName = AutomationMessages.ReadAutomationText(m._LParam);
+                        string tabTypeName = AutomationMessages.ReadAutomationText(m.LParamInternal);
 
                         for (int i = 0; i < _viewTabs.Length; i++)
                         {
                             if (_viewTabs[i].GetType().FullName == tabTypeName && _viewTabButtons[i].Visible)
                             {
                                 SelectViewTabButtonDefault(_viewTabButtons[i]);
-                                m._Result = 1;
+                                m.ResultInternal = 1;
                                 break;
                             }
                         }
                     }
 
-                    m._Result = 0;
+                    m.ResultInternal = 0;
                     return;
             }
 

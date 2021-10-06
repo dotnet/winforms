@@ -175,12 +175,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         protected override void WndProc(ref Message msg)
         {
-            switch (msg._Msg)
+            switch (msg.MsgInternal)
             {
                 case User32.WM.SHOWWINDOW:
-                    if ((int)msg._WParam != 0 && _dontShow)
+                    if ((int)msg.WParamInternal != 0 && _dontShow)
                     {
-                        msg._WParam = 0;
+                        msg.WParamInternal = 0;
                     }
 
                     break;
@@ -190,7 +190,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     // thru to controls underneath. This is due to a combination of old app-specific code in comctl32,
                     // functional changes between v5 and v6, and the specific way the property grid drives its tooltip.
                     // Workaround is to just force HTTRANSPARENT all the time.
-                    msg._Result = (nint)User32.HT.TRANSPARENT;
+                    msg.ResultInternal = (nint)User32.HT.TRANSPARENT;
                     return;
             }
 

@@ -283,10 +283,10 @@ namespace System.Windows.Forms.Design
             /// </summary>
             protected override void WndProc(ref Message m)
             {
-                switch (m._Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.NCHITTEST:
-                        m._Result = (nint)User32.HT.TRANSPARENT;
+                        m.ResultInternal = (nint)User32.HT.TRANSPARENT;
                         break;
                     default:
                         base.WndProc(ref m);

@@ -1872,9 +1872,9 @@ namespace System.Windows.Forms
                     if (activeObj is not null)
                     {
                         HRESULT hr = activeObj.TranslateAccelerator(&win32Message);
-                        msg._Msg = win32Message.message;
-                        msg._WParam = win32Message.wParam;
-                        msg._LParam = win32Message.lParam;
+                        msg.MsgInternal = win32Message.message;
+                        msg.WParamInternal = win32Message.wParam;
+                        msg.LParamInternal = win32Message.lParam;
                         msg.HWnd = win32Message.hwnd;
 
                         if (hr == HRESULT.S_OK)
@@ -3405,7 +3405,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 // Things we explicitly ignore and pass to the ocx's windproc
                 case User32.WM.ERASEBKGND:
@@ -3443,7 +3443,7 @@ namespace System.Windows.Forms
 
                 case User32.WM.KILLFOCUS:
                     {
-                        hwndFocus = m._WParam;
+                        hwndFocus = m.WParamInternal;
                         try
                         {
                             base.WndProc(ref m);
@@ -3457,7 +3457,7 @@ namespace System.Windows.Forms
                     }
 
                 case User32.WM.COMMAND:
-                    if (!ReflectMessage(m._LParam, ref m))
+                    if (!ReflectMessage(m.LParamInternal, ref m))
                     {
                         DefWndProc(ref m);
                     }
@@ -3544,9 +3544,9 @@ namespace System.Windows.Forms
                     break;
 
                 default:
-                    if (m._Msg == REGMSG_MSG)
+                    if (m.MsgInternal == REGMSG_MSG)
                     {
-                        m._Result = REGMSG_RETVAL;
+                        m.ResultInternal = REGMSG_RETVAL;
                         return;
                     }
 
@@ -3562,7 +3562,7 @@ namespace System.Windows.Forms
             if (IsHandleCreated)
             {
                 IntPtr wndProc = User32.GetWindowLong(this, User32.GWL.WNDPROC);
-                m._Result = User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m._WParam, m._LParam);
+                m.ResultInternal = User32.CallWindowProcW(wndProc, Handle, (User32.WM)m.Msg, m.WParamInternal, m.LParamInternal);
             }
         }
 

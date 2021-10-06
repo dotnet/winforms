@@ -150,14 +150,14 @@ namespace System.Windows.Forms
 
             protected override void WndProc(ref Message m)
             {
-                if (m._Msg == User32.WM.SHOWWINDOW)
+                if (m.MsgInternal == User32.WM.SHOWWINDOW)
                     return;
 
                 base.WndProc(ref m);
-                switch (m._Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.PARENTNOTIFY:
-                        if ((User32.WM)PARAM.LOWORD(m._WParam) == User32.WM.DESTROY)
+                        if ((User32.WM)PARAM.LOWORD(m.WParamInternal) == User32.WM.DESTROY)
                         {
                             User32.PostMessageW(this, (User32.WM)WM_CHECKDESTROY);
                         }

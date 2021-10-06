@@ -1406,10 +1406,10 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.CONTEXTMENU:
-                    if (!ShowContextMenu(PARAM.ToPoint(m._LParam)))
+                    if (!ShowContextMenu(PARAM.ToPoint(m.LParamInternal)))
                     {
                         DefWndProc(ref m);
                     }
