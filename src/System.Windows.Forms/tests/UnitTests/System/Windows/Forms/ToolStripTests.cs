@@ -4799,6 +4799,26 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData(RightToLeft.No)]
         [InlineData(RightToLeft.Yes)]
+        public void ToolStrip_GetNextItem_CyclesForwardExpected(RightToLeft rightToLeft)
+        {
+            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = false };
+            using ToolStripButton toolStripButton1 = new();
+            using ToolStripButton toolStripButton2 = new();
+            using ToolStripButton toolStripButton3 = new();
+            toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            ToolStripItem nextToolStripItem1 = toolStrip.GetNextItem(toolStripButton1, ArrowDirection.Right);
+            ToolStripItem nextToolStripItem2 = toolStrip.GetNextItem(toolStripButton2, ArrowDirection.Right);
+            ToolStripItem nextToolStripItem3 = toolStrip.GetNextItem(toolStripButton3, ArrowDirection.Right);
+
+            Assert.Equal(toolStripButton2, nextToolStripItem1);
+            Assert.Equal(toolStripButton3, nextToolStripItem2);
+            Assert.Equal(toolStripButton1, nextToolStripItem3);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
         public void ToolStrip_GetNextItem_ReturnsBackwardItem(RightToLeft rightToLeft)
         {
             using ToolStrip toolStrip = new()
@@ -4814,6 +4834,27 @@ namespace System.Windows.Forms.Tests
             ToolStripItem actual = toolStrip.GetNextItem(toolStrip.Items[0], ArrowDirection.Left);
 
             Assert.Equal(toolStripButton3, actual);
+            Assert.False(toolStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void ToolStrip_GetNextItem_CyclesBackwardExpected(RightToLeft rightToLeft)
+        {
+            using ToolStrip toolStrip = new() { RightToLeft = rightToLeft, TabStop = false };
+            using ToolStripButton toolStripButton1 = new();
+            using ToolStripButton toolStripButton2 = new();
+            using ToolStripButton toolStripButton3 = new();
+            toolStrip.Items.AddRange(new ToolStripItem[] { toolStripButton1, toolStripButton2, toolStripButton3 });
+            toolStrip.TestAccessor().Dynamic.LastKeyData = Keys.Shift | Keys.Tab;
+            ToolStripItem previousToolStripItem1 = toolStrip.GetNextItem(toolStripButton1, ArrowDirection.Left);
+            ToolStripItem previousToolStripItem2 = toolStrip.GetNextItem(toolStripButton3, ArrowDirection.Left);
+            ToolStripItem previousToolStripItem3 = toolStrip.GetNextItem(toolStripButton2, ArrowDirection.Left);
+
+            Assert.Equal(toolStripButton3, previousToolStripItem1);
+            Assert.Equal(toolStripButton2, previousToolStripItem2);
+            Assert.Equal(toolStripButton1, previousToolStripItem3);
             Assert.False(toolStrip.IsHandleCreated);
         }
 
