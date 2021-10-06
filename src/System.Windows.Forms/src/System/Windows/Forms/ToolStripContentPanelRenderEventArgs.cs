@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripContentPanelRenderEventArgs(Graphics g, ToolStripContentPanel? contentPanel)
         {
-            Graphics = g ?? throw new ArgumentNullException(nameof(g));
+            Graphics = g.OrThrowIfNull();
             ToolStripContentPanel = contentPanel;
         }
 
