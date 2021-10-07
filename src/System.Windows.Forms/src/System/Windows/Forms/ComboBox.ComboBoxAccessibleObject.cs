@@ -185,6 +185,25 @@ namespace System.Windows.Forms
                 }
             }
 
+            public override string DefaultAction
+            {
+                get
+                {
+                    string defaultAction = _owningComboBox.AccessibleDefaultActionDescription;
+                    if (defaultAction is not null)
+                    {
+                        return defaultAction;
+                    }
+
+                    if (!_owningComboBox.IsHandleCreated || _owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
+                    {
+                        return string.Empty;
+                    }
+
+                    return _owningComboBox.DroppedDown ? SR.AccessibleActionCollapse : SR.AccessibleActionExpand;
+                }
+            }
+
             /// <summary>
             ///  Gets the accessible property value.
             /// </summary>
@@ -289,6 +308,16 @@ namespace System.Windows.Forms
                 _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
                     ? _owningComboBox.ChildEditAccessibleObject
                     : DropDownButtonUiaProvider;
+
+            public override void DoDefaultAction()
+            {
+                if (!_owningComboBox.IsHandleCreated || _owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
+                {
+                    return;
+                }
+
+                _owningComboBox.DroppedDown = !_owningComboBox.DroppedDown;
+            }
         }
     }
 }
