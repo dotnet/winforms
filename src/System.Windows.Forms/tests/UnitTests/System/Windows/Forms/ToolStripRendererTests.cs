@@ -75,14 +75,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("e", () => renderer.DrawArrow(null));
         }
 
-        [WinFormsFact]
-        public void ToolStripRenderer_DrawArrow_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            var e = new ToolStripArrowRenderEventArgs(null, new SubToolStripItem(), Rectangle.Empty, Color.Red, ArrowDirection.Up);
-            Assert.Throws<NullReferenceException>(() => renderer.DrawArrow(e));
-        }
-
         public static IEnumerable<object[]> ToolStripItemRenderEventArgs_TestData()
         {
             yield return new object[] { null };
@@ -801,14 +793,6 @@ namespace System.Windows.Forms.Tests
         {
             var renderer = new SubToolStripRenderer();
             Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderArrow(null));
-        }
-
-        [WinFormsFact]
-        public void ToolStripRenderer_OnRenderArrow_NullEGraphics_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            var e = new ToolStripArrowRenderEventArgs(null, new SubToolStripItem(), Rectangle.Empty, Color.Red, ArrowDirection.Up);
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderArrow(e));
         }
 
         [WinFormsTheory]

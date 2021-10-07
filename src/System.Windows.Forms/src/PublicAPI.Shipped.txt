@@ -2770,9 +2770,9 @@ System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set
 ~System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem[] items) -> void
 ~System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.ToolStripAccessibleObject(System.Windows.Forms.ToolStrip owner) -> void
 ~System.Windows.Forms.ToolStrip.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
-~System.Windows.Forms.ToolStripArrowRenderEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.ToolStripArrowRenderEventArgs.Item.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripArrowRenderEventArgs.ToolStripArrowRenderEventArgs(System.Drawing.Graphics g, System.Windows.Forms.ToolStripItem toolStripItem, System.Drawing.Rectangle arrowRectangle, System.Drawing.Color arrowColor, System.Windows.Forms.ArrowDirection arrowDirection) -> void
+System.Windows.Forms.ToolStripArrowRenderEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.ToolStripArrowRenderEventArgs.Item.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStripArrowRenderEventArgs.ToolStripArrowRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem? toolStripItem, System.Drawing.Rectangle arrowRectangle, System.Drawing.Color arrowColor, System.Windows.Forms.ArrowDirection arrowDirection) -> void
 ~System.Windows.Forms.ToolStripButton.ToolStripButton(string text) -> void
 ~System.Windows.Forms.ToolStripButton.ToolStripButton(string text, System.Drawing.Image image) -> void
 ~System.Windows.Forms.ToolStripButton.ToolStripButton(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
