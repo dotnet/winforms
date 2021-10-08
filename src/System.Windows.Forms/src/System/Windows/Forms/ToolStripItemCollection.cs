@@ -12,7 +12,7 @@ using System.Windows.Forms.Layout;
 
 namespace System.Windows.Forms
 {
-    [Editor("System.Windows.Forms.Design.ToolStripCollectionEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+    [Editor($"System.Windows.Forms.Design.ToolStripCollectionEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
     [ListBindable(false)]
     public class ToolStripItemCollection : ArrangedElementCollection, IList
     {

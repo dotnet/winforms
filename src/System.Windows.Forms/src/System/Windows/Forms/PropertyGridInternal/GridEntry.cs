@@ -2014,7 +2014,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             // First scan the list and move any parenthesized properties to the front.
             for (int i = 0; i < props.Length; i++)
             {
-                if (((ParenthesizePropertyNameAttribute)props[i].Attributes[typeof(ParenthesizePropertyNameAttribute)]).NeedParenthesis)
+                if (props[i].GetAttribute<ParenthesizePropertyNameAttribute>().NeedParenthesis)
                 {
                     newProperties ??= new PropertyDescriptor[props.Length];
                     newProperties[newPosition++] = props[i];

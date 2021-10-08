@@ -57,7 +57,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         }
 
         public override bool AllowMerge
-            => ((MergablePropertyAttribute)_propertyDescriptor.Attributes[typeof(MergablePropertyAttribute)])?.IsDefaultAttribute() ?? true;
+            => _propertyDescriptor.GetAttribute<MergablePropertyAttribute>()?.IsDefaultAttribute() ?? true;
 
         protected override AttributeCollection Attributes => _propertyDescriptor.Attributes;
 
@@ -76,9 +76,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return null;
                 }
 
-                var helpAttribute = (HelpKeywordAttribute)_propertyDescriptor.Attributes[typeof(HelpKeywordAttribute)];
-
-                if (helpAttribute is not null && !helpAttribute.IsDefaultAttribute())
+                if (_propertyDescriptor.TryGetAttribute(out HelpKeywordAttribute helpAttribute) && !helpAttribute.IsDefaultAttribute())
                 {
                     return helpAttribute.HelpKeyword;
                 }
@@ -150,7 +148,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 if (!_parensAroundName.HasValue)
                 {
-                    _parensAroundName = ((ParenthesizePropertyNameAttribute)_propertyDescriptor.Attributes[typeof(ParenthesizePropertyNameAttribute)]).NeedParenthesis;
+                    _parensAroundName = _propertyDescriptor.GetAttribute<ParenthesizePropertyNameAttribute>()?.NeedParenthesis ?? false;
                 }
 
                 return _parensAroundName.Value;
@@ -314,10 +312,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (!IsValueEditable)
             {
-                var refreshAttr = (RefreshPropertiesAttribute)_propertyDescriptor.Attributes[typeof(RefreshPropertiesAttribute)];
-                if (refreshAttr is not null && !refreshAttr.RefreshProperties.Equals(RefreshProperties.None))
+                if (_propertyDescriptor.TryGetAttribute(out RefreshPropertiesAttribute refreshAttribute)
+                    && !refreshAttribute.RefreshProperties.Equals(RefreshProperties.None))
                 {
-                    OwnerGridView.Refresh(refreshAttr is not null && refreshAttr.Equals(RefreshPropertiesAttribute.All));
+                    OwnerGridView.Refresh(fullRefresh: refreshAttribute.Equals(RefreshPropertiesAttribute.All));
                 }
             }
         }
@@ -603,7 +601,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 // See if we need to refresh the property browser.
-                var refresh = (RefreshPropertiesAttribute)_propertyDescriptor.Attributes[typeof(RefreshPropertiesAttribute)];
+                var refresh = _propertyDescriptor.GetAttribute<RefreshPropertiesAttribute>();
                 bool needsRefresh = wasExpanded || (refresh is not null && !refresh.RefreshProperties.Equals(RefreshProperties.None));
 
                 if (needsRefresh)
