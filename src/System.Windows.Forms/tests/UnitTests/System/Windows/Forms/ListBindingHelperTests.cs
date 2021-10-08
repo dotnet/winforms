@@ -85,7 +85,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(GetList_NoSuchDataMember_TestData))]
         public void ListBindingHelper_GetList_NoSuchDataMember_ThrowsArgumentException(object dataSource, string dataMember)
         {
-            Assert.Throws<ArgumentException>(null, () => ListBindingHelper.GetList(dataSource, dataMember));
+            Assert.Throws<ArgumentException>(() => ListBindingHelper.GetList(dataSource, dataMember));
         }
 
         public static IEnumerable<object[]> GetList_DataMember_TestData()
@@ -449,7 +449,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(GetListItemProperties_NoSuchDataMember_TestData))]
         public void ListBindingHelper_GetListItemProperties_NoSuchDataMember_ThrowsArgumentException(object list, string dataMember)
         {
-            Assert.Throws<ArgumentException>(null, () => ListBindingHelper.GetListItemProperties(list, dataMember, null));
+            Assert.Throws<ArgumentException>(() => ListBindingHelper.GetListItemProperties(list, dataMember, null));
         }
 
         [Fact]

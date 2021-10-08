@@ -965,8 +965,8 @@ namespace System.Windows.Forms.Tests
             {
                 BalloonTipText = tipText
             };
-            Assert.Throws<ArgumentException>(null, () => notifyIcon.ShowBalloonTip(0));
-            Assert.Throws<ArgumentException>(null, () => notifyIcon.ShowBalloonTip(0, "Title", tipText, ToolTipIcon.Error));
+            Assert.Throws<ArgumentException>(() => notifyIcon.ShowBalloonTip(0));
+            Assert.Throws<ArgumentException>(() => notifyIcon.ShowBalloonTip(0, "Title", tipText, ToolTipIcon.Error));
         }
 
         [WinFormsTheory]

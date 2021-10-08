@@ -107,7 +107,7 @@ namespace System.Windows.Forms.Tests
             using var owner = new TabPage();
             using var control = new TabPage();
             var collection = new TabPage.TabPageControlCollection(owner);
-            Assert.Throws<ArgumentException>(null, () => collection.Add(control));
+            Assert.Throws<ArgumentException>(() => collection.Add(control));
         }
     }
 }

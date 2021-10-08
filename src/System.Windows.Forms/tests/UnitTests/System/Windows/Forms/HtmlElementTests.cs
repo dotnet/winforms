@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms.Tests
             const string Html = "<html><body><div id=\"id\"></div></body></html>";
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
-            Assert.Throws<ArgumentException>(null, () => element.GetAttribute(null));
+            Assert.Throws<ArgumentException>(() => element.GetAttribute(null));
         }
 
         [WinFormsFact]
@@ -1788,7 +1788,7 @@ namespace System.Windows.Forms.Tests
             const string Html = "<html><body><div id=\"id\"></div></body></html>";
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
-            Assert.Throws<ArgumentException>(null, () => element.GetElementsByTagName(null));
+            Assert.Throws<ArgumentException>(() => element.GetElementsByTagName(null));
         }
 
         [WinFormsFact]
@@ -2164,7 +2164,7 @@ namespace System.Windows.Forms.Tests
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
             HtmlElement newElement = document.CreateElement("H1");
-            Assert.Throws<ArgumentException>(null, () => element.InsertAdjacentElement(orient, newElement));
+            Assert.Throws<ArgumentException>(() => element.InsertAdjacentElement(orient, newElement));
         }
 
         [WinFormsFact]
@@ -2301,7 +2301,7 @@ namespace System.Windows.Forms.Tests
             const string Html = "<html><body><div id=\"id\"></div></body></html>";
             HtmlDocument document = await GetDocument(control, Html);
             HtmlElement element = document.GetElementById("id");
-            Assert.Throws<ArgumentException>(null, () => element.SetAttribute(null, "value"));
+            Assert.Throws<ArgumentException>(() => element.SetAttribute(null, "value"));
         }
 
         [WinFormsFact]

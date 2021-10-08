@@ -601,7 +601,7 @@ namespace System.Windows.Forms.Tests
             {
                 AllowItemReorder = true
             };
-            Assert.Throws<ArgumentException>(null, () => control.AllowDrop = true);
+            Assert.Throws<ArgumentException>(() => control.AllowDrop = true);
             Assert.False(control.AllowDrop);
 
             control.AllowDrop = false;
@@ -702,7 +702,7 @@ namespace System.Windows.Forms.Tests
             {
                 AllowDrop = true
             };
-            Assert.Throws<ArgumentException>(null, () => control.AllowItemReorder = true);
+            Assert.Throws<ArgumentException>(() => control.AllowItemReorder = true);
             Assert.False(control.AllowItemReorder);
 
             control.AllowItemReorder = false;

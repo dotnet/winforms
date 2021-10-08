@@ -729,7 +729,7 @@ namespace System.Windows.Forms.Tests
         public void Splitter_Dock_SetInvalid_ThrowsInvalidEnumArgumentException(DockStyle value)
         {
             using var control = new Splitter();
-            Assert.Throws<ArgumentException>(null, () => control.Dock = value);
+            Assert.Throws<ArgumentException>(() => control.Dock = value);
         }
 
         [WinFormsTheory]

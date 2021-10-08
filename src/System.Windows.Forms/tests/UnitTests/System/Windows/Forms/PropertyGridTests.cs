@@ -1024,7 +1024,7 @@ namespace System.Windows.Forms.Tests
         public void PropertyGrid_BackColor_SetTransparent_ThrowsArgmentException()
         {
             using var control = new PropertyGrid();
-            Assert.Throws<ArgumentException>(null, () => control.CommandsBackColor = Color.FromArgb(254, 1, 2, 3));
+            Assert.Throws<ArgumentException>(() => control.CommandsBackColor = Color.FromArgb(254, 1, 2, 3));
         }
 
         [WinFormsTheory]
@@ -1812,7 +1812,7 @@ namespace System.Windows.Forms.Tests
         public void PropertyGrid_HelpBackColor_SetTransparent_ThrowsArgmentException()
         {
             using var control = new PropertyGrid();
-            Assert.Throws<ArgumentException>(null, () => control.HelpBackColor = Color.FromArgb(254, 1, 2, 3));
+            Assert.Throws<ArgumentException>(() => control.HelpBackColor = Color.FromArgb(254, 1, 2, 3));
         }
 
         [WinFormsTheory]
@@ -2357,7 +2357,7 @@ namespace System.Windows.Forms.Tests
         public void PropertyGrid_SelectedGridItem_SetNull_ThrowsArgumentException()
         {
             using var control = new PropertyGrid();
-            Assert.Throws<ArgumentException>(null, () => control.SelectedGridItem = null);
+            Assert.Throws<ArgumentException>(() => control.SelectedGridItem = null);
         }
 
         [WinFormsFact]
@@ -2678,7 +2678,7 @@ namespace System.Windows.Forms.Tests
         public void PropertyGrid_SelectedObjects_SetNullInValue_ThrowsArgumentException()
         {
             using var control = new SubPropertyGrid();
-            Assert.Throws<ArgumentException>(null, () => control.SelectedObjects = new object[] { null });
+            Assert.Throws<ArgumentException>(() => control.SelectedObjects = new object[] { null });
         }
 
         public static IEnumerable<object[]> Site_Set_TestData()
@@ -3180,7 +3180,7 @@ namespace System.Windows.Forms.Tests
         public void PropertyGrid_ViewBackColor_SetTransparent_ThrowsArgmentException()
         {
             using var control = new PropertyGrid();
-            Assert.Throws<ArgumentException>(null, () => control.ViewBackColor = Color.FromArgb(254, 1, 2, 3));
+            Assert.Throws<ArgumentException>(() => control.ViewBackColor = Color.FromArgb(254, 1, 2, 3));
         }
 
         [WinFormsTheory]

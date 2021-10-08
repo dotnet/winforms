@@ -537,7 +537,7 @@ namespace System.Windows.Forms.Tests
             using var source = new BindingSource();
             var dataSource = new DataSource();
             context.Add(dataSource, source.CurrencyManager);
-            Assert.Throws<ArgumentException>(null, () => context[dataSource, "Property"]);
+            Assert.Throws<ArgumentException>(() => context[dataSource, "Property"]);
         }
 
         [Theory]
@@ -565,7 +565,7 @@ namespace System.Windows.Forms.Tests
         {
             var context = new SubBindingContext();
             var dataSource = new ParentDataSource();
-            Assert.Throws<ArgumentException>(null, () => context[dataSource, dataMember]);
+            Assert.Throws<ArgumentException>(() => context[dataSource, dataMember]);
         }
 
         [Fact]

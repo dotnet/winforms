@@ -608,7 +608,7 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Throws<ArgumentException>(null, () => document.Encoding = value);
+            Assert.Throws<ArgumentException>(() => document.Encoding = value);
         }
 
         [WinFormsFact]
@@ -1431,7 +1431,7 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Throws<ArgumentException>(null, () => document.CreateElement(null));
+            Assert.Throws<ArgumentException>(() => document.CreateElement(null));
         }
 
         [WinFormsTheory]
@@ -1602,7 +1602,7 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Throws<ArgumentException>(null, () => document.GetElementById(null));
+            Assert.Throws<ArgumentException>(() => document.GetElementById(null));
         }
 
         [WinFormsFact]
@@ -1658,7 +1658,7 @@ namespace System.Windows.Forms.Tests
 
             const string Html = "<html></html>";
             HtmlDocument document = await GetDocument(control, Html);
-            Assert.Throws<ArgumentException>(null, () => document.GetElementsByTagName(null));
+            Assert.Throws<ArgumentException>(() => document.GetElementsByTagName(null));
         }
 
         [WinFormsFact]
