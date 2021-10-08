@@ -28,8 +28,8 @@ namespace System.Windows.Forms.Design
 
         public override bool CanExtend(object extendee) => extendee is null || !Marshal.IsComObject(extendee);
 
-        private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs? e)
-            => _currentHost = e?.NewDesigner;
+        private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs e)
+            => _currentHost = e.NewDesigner;
 
         public override PropertyDescriptor? GetDefaultProperty(object obj)
         {
