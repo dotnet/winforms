@@ -7806,12 +7806,12 @@ namespace System.Windows.Forms.Tests
             {
                 ZoomFactor = value
             };
-            Assert.Equal(expected, control.ZoomFactor, 2);
+            Assert.Equal(expected, control.ZoomFactor, (float)2);
             Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.ZoomFactor = value;
-            Assert.Equal(expected, control.ZoomFactor, 2);
+            Assert.Equal(expected, control.ZoomFactor, (float)2);
             Assert.False(control.IsHandleCreated);
         }
 
