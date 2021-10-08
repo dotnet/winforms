@@ -39,7 +39,7 @@ namespace System.Windows.Forms
                 _owner = owner;
 
                 // Get the category for this dispid.
-                _dispid = (DispIdAttribute)baseDescriptor.Attributes[typeof(DispIdAttribute)];
+                _dispid = baseDescriptor.GetAttribute<DispIdAttribute>();
                 if (_dispid is not null)
                 {
                     // Look to see if this property has a property page.
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
                         Guid g = GetPropertyPage((Ole32.DispatchID)_dispid.Value);
                         if (!Guid.Empty.Equals(g))
                         {
-                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Making property: " + Name + " browsable because we found an property page.");
+                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, $"Making property: {Name} browsable because we found an property page.");
                             AddAttribute(new BrowsableAttribute(true));
                         }
                     }
@@ -92,42 +92,15 @@ namespace System.Windows.Forms
             }
 
             internal Ole32.DispatchID Dispid
-            {
-                get
-                {
-                    DispIdAttribute dispid = (DispIdAttribute)_baseDescriptor.Attributes[typeof(DispIdAttribute)];
-                    if (dispid is not null)
-                    {
-                        return (Ole32.DispatchID)dispid.Value;
-                    }
+                => _baseDescriptor.TryGetAttribute(out DispIdAttribute dispid)
+                    ? (Ole32.DispatchID)dispid.Value
+                    : Ole32.DispatchID.UNKNOWN;
 
-                    return Ole32.DispatchID.UNKNOWN;
-                }
-            }
+            public override bool IsReadOnly => _baseDescriptor.IsReadOnly;
 
-            public override bool IsReadOnly
-            {
-                get
-                {
-                    return _baseDescriptor.IsReadOnly;
-                }
-            }
+            public override Type PropertyType => _baseDescriptor.PropertyType;
 
-            public override Type PropertyType
-            {
-                get
-                {
-                    return _baseDescriptor.PropertyType;
-                }
-            }
-
-            internal bool SettingValue
-            {
-                get
-                {
-                    return GetFlag(FlagSettingValue);
-                }
-            }
+            internal bool SettingValue => GetFlag(FlagSettingValue);
 
             private void AddAttribute(Attribute attr)
             {
@@ -394,7 +367,7 @@ namespace System.Windows.Forms
                             // .Net type. If it is, don't bother with custom property pages. We already
                             // have a .Net Editor for this type.
 
-                            if (_baseDescriptor.Attributes[typeof(ComAliasNameAttribute)] is null)
+                            if (_baseDescriptor.GetAttribute<ComAliasNameAttribute>() is null)
                             {
                                 Guid g = GetPropertyPage(dispid);
 

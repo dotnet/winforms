@@ -22,19 +22,15 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public EventsTab(IServiceProvider? sp) => _serviceProvider = sp;
 
-        /// <inheritdoc />
         public override string TabName => SR.PBRSToolTipEvents;
 
-        /// <inheritdoc />
         public override string HelpKeyword => "Events";
 
-        /// <inheritdoc />
         public override bool CanExtend(object extendee) => extendee is null || !Marshal.IsComObject(extendee);
 
-        private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs? adevent)
-            => _currentHost = adevent?.NewDesigner;
+        private void OnActiveDesignerChanged(object? sender, ActiveDesignerEventArgs e)
+            => _currentHost = e.NewDesigner;
 
-        /// <inheritdoc />
         public override PropertyDescriptor? GetDefaultProperty(object obj)
         {
             if (GetEventBindingService(obj, context: null) is not IEventBindingService eventPropertyService)

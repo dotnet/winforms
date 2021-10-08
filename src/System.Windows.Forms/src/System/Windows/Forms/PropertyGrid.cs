@@ -35,7 +35,10 @@ namespace System.Windows.Forms
         private bool _helpVisible = true;
         private bool _toolbarVisible = true;
 
-        private ImageList[] _imageList = new ImageList[2];
+        private ImageList _normalButtonImages;
+        private ImageList _largeButtonImages;
+        private bool _largeButtons;
+
         private Bitmap _alphaBitmap;
         private Bitmap _categoryBitmap;
         private Bitmap _propertyPageBitmap;
@@ -45,7 +48,7 @@ namespace System.Windows.Forms
         private bool _drawFlatToolBar;
         private PropertyTab[] _viewTabs = Array.Empty<PropertyTab>();
         private PropertyTabScope[] _viewTabScopes = Array.Empty<PropertyTabScope>();
-        private Hashtable _viewTabProperties;
+        private Dictionary<string, GridEntry> _viewTabProperties;
 
         private ToolStripButton[] _viewTabButtons;
         private int _selectedViewTab;
@@ -58,7 +61,6 @@ namespace System.Windows.Forms
         private ToolStripButton _viewPropertyPagesButton;
         private readonly ToolStripSeparator _separator1;
         private readonly ToolStripSeparator _separator2;
-        private int _buttonType = NormalButtonSize;
 
         // Our main view
         private readonly PropertyGridView _gridView;
@@ -97,9 +99,6 @@ namespace System.Windows.Forms
         private const int AlphaSortButtonIndex = 1;
         private const int NoSortButtonIndex = 2;
 
-        private const int NormalButtonSize = 0;
-        private const int LargeButtonSize = 1;
-
         private const int ToolStripButtonPaddingY = 9;
         private int _toolStripButtonPaddingY = ToolStripButtonPaddingY;
         private static readonly Size s_defaultLargeButtonSize = new(32, 32);
@@ -127,8 +126,8 @@ namespace System.Windows.Forms
             }
         }
 
-        private readonly ComponentEventHandler _onComponentAdd;
-        private readonly ComponentEventHandler _onComponentRemove;
+        private readonly ComponentEventHandler _onComponentAdded;
+        private readonly ComponentEventHandler _onComponentRemoved;
         private readonly ComponentChangedEventHandler _onComponentChanged;
 
         // The cookies for our connection points on objects that support IPropertyNotifySink
@@ -143,8 +142,8 @@ namespace System.Windows.Forms
 
         public PropertyGrid()
         {
-            _onComponentAdd = OnComponentAdd;
-            _onComponentRemove = OnComponentRemove;
+            _onComponentAdded = OnComponentAdded;
+            _onComponentRemoved = OnComponentRemoved;
             _onComponentChanged = OnComponentChanged;
 
             SuspendLayout();
@@ -271,8 +270,8 @@ namespace System.Windows.Forms
                 {
                     if (_designerHost.TryGetService(out IComponentChangeService changeService))
                     {
-                        changeService.ComponentAdded -= _onComponentAdd;
-                        changeService.ComponentRemoved -= _onComponentRemove;
+                        changeService.ComponentAdded -= _onComponentAdded;
+                        changeService.ComponentRemoved -= _onComponentRemoved;
                         changeService.ComponentChanged -= _onComponentChanged;
                     }
 
@@ -293,8 +292,8 @@ namespace System.Windows.Forms
                 {
                     if (value.TryGetService(out IComponentChangeService changeService))
                     {
-                        changeService.ComponentAdded += _onComponentAdd;
-                        changeService.ComponentRemoved += _onComponentRemove;
+                        changeService.ComponentAdded += _onComponentAdded;
+                        changeService.ComponentRemoved += _onComponentRemoved;
                         changeService.ComponentChanged += _onComponentChanged;
                     }
 
@@ -1053,11 +1052,11 @@ namespace System.Windows.Forms
                         && (_viewTabs[EventsTabIndex] is EventsTab eventsTab))
                     {
                         showEvents = _viewTabButtons[EventsTabIndex].Visible;
-                        PropertyDescriptorCollection events;
                         var attributes = new Attribute[BrowsableAttributes.Count];
                         BrowsableAttributes.CopyTo(attributes, 0);
 
-                        HashSet<Type> eventTypes = _selectedObjects.Length > 10 ? new() : null;
+                        // Used to avoid looking up events on the same type multiple times.
+                        HashSet<Type> typesWithEvents = _selectedObjects.Length > 10 ? new() : null;
 
                         for (int i = 0; i < _selectedObjects.Length && showEvents; i++)
                         {
@@ -1070,21 +1069,22 @@ namespace System.Windows.Forms
 
                             Type objectType = currentObject.GetType();
 
-                            if (eventTypes is not null && eventTypes.Contains(objectType))
+                            if (typesWithEvents is not null && typesWithEvents.Contains(objectType))
                             {
                                 continue;
                             }
 
-                            // Make sure these things are sited components as well.
-                            showEvents = showEvents && currentObject is IComponent component && component.Site is not null;
+                            // Only show events if all objects have events and are sited.
+                            showEvents = showEvents
+                                && currentObject is IComponent component
+                                && component.Site is not null
+                                // Use the original (possibly ICustomTypeDescriptor) to check whether there are
+                                // properties as this is what what we'll actually use to fill the events tab.
+                                && (eventsTab.GetProperties(_selectedObjects[i], attributes)?.Count ?? 0) > 0;
 
-                            // Make sure we've also got events on all the objects.
-                            events = eventsTab.GetProperties(currentObject, attributes);
-                            showEvents = showEvents && events is not null && events.Count > 0;
-
-                            if (showEvents && eventTypes is not null)
+                            if (showEvents)
                             {
-                                eventTypes.Add(objectType);
+                                typesWithEvents?.Add(objectType);
                             }
                         }
                     }
@@ -1108,13 +1108,11 @@ namespace System.Windows.Forms
                     object designerKey = ActiveDesigner;
 
                     // Get the active designer and see if we've stashed away state for it.
-                    if (designerKey is not null && _designerSelections is not null && _designerSelections.ContainsKey(designerKey.GetHashCode()))
+                    if (TryGetSavedTabSelection(out int selectedTab))
                     {
-                        int buttonIndex = (int)_designerSelections[designerKey.GetHashCode()];
-
-                        if (buttonIndex < _viewTabs.Length && (buttonIndex == PropertiesTabIndex || _viewTabButtons[buttonIndex].Visible))
+                        if (selectedTab < _viewTabs.Length && (selectedTab == PropertiesTabIndex || _viewTabButtons[selectedTab].Visible))
                         {
-                            SelectViewTabButton(_viewTabButtons[buttonIndex], true);
+                            SelectViewTabButton(_viewTabButtons[selectedTab], updateSelection: true);
                         }
                     }
                     else
@@ -1172,7 +1170,7 @@ namespace System.Windows.Forms
 
                 ActiveDesigner = value?.GetService<IDesignerHost>();
 
-                ResumeAllLayout(this, true);
+                ResumeAllLayout(this, performLayout: true);
             }
         }
 
@@ -1201,32 +1199,35 @@ namespace System.Windows.Forms
         [DefaultValue(false)]
         public bool LargeButtons
         {
-            get => _buttonType == LargeButtonSize;
+            get => _largeButtons;
             set
             {
-                if (value == (_buttonType == LargeButtonSize))
+                if (value == _largeButtons)
                 {
                     return;
                 }
 
-                _buttonType = (value ? LargeButtonSize : NormalButtonSize);
+                _largeButtons = value;
                 if (value)
                 {
                     EnsureLargeButtons();
-                    if (_imageList is not null && _imageList[LargeButtonSize] is not null)
+                    if (_largeButtonImages is not null)
                     {
-                        _toolStrip.ImageScalingSize = _imageList[LargeButtonSize].ImageSize;
+                        _toolStrip.ImageScalingSize = _largeButtonImages.ImageSize;
                     }
+
+                    _toolStrip.ImageList = _largeButtonImages;
                 }
                 else
                 {
-                    if (_imageList is not null && _imageList[NormalButtonSize] is not null)
+                    if (_normalButtonImages is not null)
                     {
-                        _toolStrip.ImageScalingSize = _imageList[NormalButtonSize].ImageSize;
+                        _toolStrip.ImageScalingSize = _normalButtonImages.ImageSize;
                     }
+
+                    _toolStrip.ImageList = _normalButtonImages;
                 }
 
-                _toolStrip.ImageList = _imageList[_buttonType];
                 OnLayoutInternal(dividerOnly: false);
                 Invalidate();
                 _toolStrip.Invalidate();
@@ -1333,8 +1334,8 @@ namespace System.Windows.Forms
                 image = DpiHelper.CreateResizedBitmap(image, s_normalButtonSize);
             }
 
-            int result = _imageList[NormalButtonSize].Images.Count;
-            _imageList[NormalButtonSize].Images.Add(image);
+            int result = _normalButtonImages.Images.Count;
+            _normalButtonImages.Images.Add(image);
             return result;
         }
 
@@ -1410,7 +1411,9 @@ namespace System.Windows.Forms
             remove => base.MouseLeave -= value;
         }
 
-        /// <summary> Event that is fired when a property value is modified.</summary>
+        /// <summary>
+        ///  Event that is fired when a property value is modified.
+        /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.PropertyGridPropertyValueChangedDescr))]
         public event PropertyValueChangedEventHandler PropertyValueChanged
@@ -1425,7 +1428,9 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_comComponentNameChangedEvent, value);
         }
 
-        /// <summary> Event that is fired when the current view tab is changed, such as changing from Properties to Events</summary>
+        /// <summary>
+        ///  Event that is fired when the current view tab is changed, such as changing from Properties to Events.
+        /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.PropertyGridPropertyTabchangedDescr))]
         public event PropertyTabChangedEventHandler PropertyTabChanged
@@ -1434,7 +1439,9 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_propertyTabChangedEvent, value);
         }
 
-        /// <summary> Event that is fired when the sort mode is changed.</summary>
+        /// <summary>
+        ///  Event that is fired when the sort mode is changed.
+        /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.PropertyGridPropertySortChangedDescr))]
         public event EventHandler PropertySortChanged
@@ -1443,7 +1450,9 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_propertySortChangedEvent, value);
         }
 
-        /// <summary> Event that is fired when the selected GridItem is changed</summary>
+        /// <summary>
+        ///  Event that is fired when the selected <see cref="GridItem"/> is changed.
+        /// </summary>
         [SRCategory(nameof(SR.CatPropertyChanged))]
         [SRDescription(nameof(SR.PropertyGridSelectedGridItemChangedDescr))]
         public event SelectedGridItemChangedEventHandler SelectedGridItemChanged
@@ -1460,12 +1469,7 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_selectedObjectsChangedEvent, value);
         }
 
-        internal void AddTab(Type tabType, PropertyTabScope scope)
-        {
-            AddTab(tabType, @object: null, scope, setupToolbar: true);
-        }
-
-        internal void AddTab(Type tabType, object @object, PropertyTabScope type, bool setupToolbar)
+        internal void AddTab(Type tabType, PropertyTabScope type, object @object = null, bool setupToolbar = true)
         {
             PropertyTab tab = null;
             int tabIndex = -1;
@@ -1527,7 +1531,7 @@ namespace System.Windows.Forms
                         // Order tabs alphabetically, we've always got a property tab, so start after that.
                         for (int i = 1; i < _viewTabs.Length; i++)
                         {
-                            // skip the event tab
+                            // Skip the event tab.
                             if (_viewTabs[i] is EventsTab)
                             {
                                 continue;
@@ -1703,8 +1707,7 @@ namespace System.Windows.Forms
                     throw new ArgumentException(string.Format(SR.PropertyGridNoBitmap, tab.GetType().FullName));
                 }
 
-                string name = tab.TabName;
-                if (name is null || name.Length == 0)
+                if (string.IsNullOrEmpty(tab.TabName))
                 {
                     throw new ArgumentException(string.Format(SR.PropertyGridTabName, tab.GetType().FullName));
                 }
@@ -1832,15 +1835,11 @@ namespace System.Windows.Forms
                     _viewTabs = null;
                 }
 
-                if (_imageList is not null)
-                {
-                    for (int i = 0; i < _imageList.Length; i++)
-                    {
-                        _imageList[i]?.Dispose();
-                    }
+                _normalButtonImages?.Dispose();
+                _normalButtonImages = null;
 
-                    _imageList = null;
-                }
+                _largeButtonImages?.Dispose();
+                _largeButtonImages = null;
 
                 _alphaBitmap?.Dispose();
                 _alphaBitmap = null;
@@ -2005,8 +2004,6 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Walk through the current tabs to see if they're all valid for this Object
-
             // Make sure our toolbars are okay.
             SetupToolbar();
 
@@ -2015,6 +2012,7 @@ namespace System.Windows.Forms
                 _viewTabs.Length == _viewTabScopes.Length && _viewTabScopes.Length == _viewTabButtons.Length,
                 $"Uh oh, tab arrays aren't all the same length! tabs={_viewTabs.Length}, scopes={_viewTabScopes.Length}, buttons={_viewTabButtons.Length}");
 
+            // Walk through the current tabs to validate that they apply to all currently selected objects.
             // Skip the property tab since it's always valid.
             for (int i = 1; i < _viewTabs.Length; i++)
             {
@@ -2046,7 +2044,7 @@ namespace System.Windows.Forms
                     _viewTabButtons[i].Visible = canExtend;
                     if (!canExtend && i == _selectedViewTab)
                     {
-                        SelectViewTabButton(_viewTabButtons[PropertiesTabIndex], true);
+                        SelectViewTabButton(_viewTabButtons[PropertiesTabIndex], updateSelection: true);
                     }
                 }
             }
@@ -2054,12 +2052,12 @@ namespace System.Windows.Forms
 
         private void EnsureLargeButtons()
         {
-            if (_imageList[LargeButtonSize] is not null)
+            if (_largeButtonImages is not null)
             {
                 return;
             }
 
-            _imageList[LargeButtonSize] = new ImageList
+            _largeButtonImages = new ImageList
             {
                 ImageSize = s_largeButtonSize
             };
@@ -2078,13 +2076,13 @@ namespace System.Windows.Forms
             }
             else
             {
-                ImageList.ImageCollection images = _imageList[NormalButtonSize].Images;
+                ImageList.ImageCollection images = _normalButtonImages.Images;
 
                 for (int i = 0; i < images.Count; i++)
                 {
                     if (images[i] is Bitmap bitmap)
                     {
-                        _imageList[LargeButtonSize].Images.Add(new Bitmap(bitmap, s_largeButtonSize.Width, s_largeButtonSize.Height));
+                        _largeButtonImages.Images.Add(new Bitmap(bitmap, s_largeButtonSize.Width, s_largeButtonSize.Height));
                     }
                 }
             }
@@ -2104,7 +2102,7 @@ namespace System.Windows.Forms
                 Bitmap largeBitmap = DpiHelper.CreateResizedBitmap(transparentBitmap, s_largeButtonSize);
                 transparentBitmap.Dispose();
 
-                _imageList[LargeButtonSize].Images.Add(largeBitmap);
+                _largeButtonImages.Images.Add(largeBitmap);
             }
             catch (Exception ex)
             {
@@ -2140,91 +2138,48 @@ namespace System.Windows.Forms
         public void ExpandAllGridItems()
             => _gridView.RecursivelyExpand(_rootEntry, initialize: false, expand: true, PropertyGridView.MaxRecurseExpand);
 
-        private static Type[] GetCommonTabs(object[] objs, PropertyTabScope tabScope)
+        private static IEnumerable<Type> GetCommonTabs(object[] components, PropertyTabScope tabScope)
         {
-            if (objs is null || objs.Length == 0)
+            if (components is null || components.Length == 0)
             {
                 return Array.Empty<Type>();
             }
 
-            var tabTypes = new Type[5];
-            int types = 0;
-            int i, j, k;
-
-            if (!TypeDescriptorHelper.TryGetAttribute(objs[0], out PropertyTabAttribute tabAttribute))
+            if (!TypeDescriptorHelper.TryGetAttribute(components[0], out PropertyTabAttribute tabAttribute))
             {
                 return Array.Empty<Type>();
             }
 
-            // Filter out all the types of the current scope
-            for (i = 0; i < tabAttribute.TabScopes.Length; i++)
-            {
-                PropertyTabScope item = tabAttribute.TabScopes[i];
+            List<Type> tabClasses = new();
 
-                if (item == tabScope)
+            // Find all tab types that match the requested scope.
+            for (int i = 0; i < tabAttribute.TabScopes.Length; i++)
+            {
+                if (tabAttribute.TabScopes[i] == tabScope)
                 {
-                    if (types == tabTypes.Length)
-                    {
-                        var newTabs = new Type[types * 2];
-                        Array.Copy(tabTypes, 0, newTabs, 0, types);
-                        tabTypes = newTabs;
-                    }
-
-                    tabTypes[types++] = tabAttribute.TabClasses[i];
+                    tabClasses.Add(tabAttribute.TabClasses[i]);
                 }
             }
 
-            if (types == 0)
+            for (int i = 1; i < components.Length && tabClasses.Count > 0; i++)
             {
-                return Array.Empty<Type>();
-            }
-
-            bool found;
-
-            for (i = 1; i < objs.Length && types > 0; i++)
-            {
-                // Get the tab attribute.
-                if (!TypeDescriptorHelper.TryGetAttribute(objs[i], out tabAttribute))
+                if (!TypeDescriptorHelper.TryGetAttribute(components[i], out tabAttribute))
                 {
                     // If the current item has no tabs at all, we can fail right now.
                     return Array.Empty<Type>();
                 }
 
-                // Make sure the current tab has all the items in the array,
-                // if not, remove the items it doesn't have.
-                for (j = 0; j < types; j++)
+                // Remove any tab classes we can't find a match for.
+                for (int j = tabClasses.Count - 1; j >= 0; j--)
                 {
-                    found = false;
-                    for (k = 0; k < tabAttribute.TabClasses.Length; k++)
+                    if (!tabAttribute.TabClasses.Contains(tabClasses[j]))
                     {
-                        if (tabAttribute.TabClasses[k] == tabTypes[j])
-                        {
-                            found = true;
-                            break;
-                        }
-                    }
-
-                    // If we didn't find an item, remove it from the list
-                    if (!found)
-                    {
-                        // Swap in with the last item and decrement.
-                        tabTypes[j] = tabTypes[types - 1];
-                        tabTypes[types - 1] = null;
-                        types--;
-
-                        // Recheck this item since we'll be ending sooner.
-                        j--;
+                        tabClasses.RemoveAt(j);
                     }
                 }
             }
 
-            var returnTypes = new Type[types];
-            if (types > 0)
-            {
-                Array.Copy(tabTypes, 0, returnTypes, 0, types);
-            }
-
-            return returnTypes;
+            return tabClasses;
         }
 
         internal GridEntry GetDefaultGridEntry() => _defaultEntry ??= _currentEntries?[0];
@@ -2399,10 +2354,10 @@ namespace System.Windows.Forms
                 && selectedEntry.PropertyDescriptor?.Attributes is not null)
             {
                 // Fish out the DispIdAttribute which will tell us the DispId of the property that we're changing.
-                var dispIdAttribute = (DispIdAttribute)selectedEntry.PropertyDescriptor.Attributes[typeof(DispIdAttribute)];
-                if (dispIdAttribute is not null && !dispIdAttribute.IsDefaultAttribute())
+                if (selectedEntry.PropertyDescriptor.TryGetAttribute(out DispIdAttribute dispIdAttribute)
+                    && !dispIdAttribute.IsDefaultAttribute())
                 {
-                    fullRefresh = (dispID != (Ole32.DispatchID)dispIdAttribute.Value);
+                    fullRefresh = dispID != (Ole32.DispatchID)dispIdAttribute.Value;
                 }
             }
 
@@ -2439,8 +2394,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  We forward messages from several of our children
-        ///  to our mouse move so we can put up the splitter over their borders
+        ///  We forward messages from several of our children to our mouse move so
+        ///  we can put up the splitter over their borders.
         /// </summary>
         private void OnChildMouseDown(object sender, MouseEventArgs e)
         {
@@ -2454,21 +2409,19 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnComponentAdd(object sender, ComponentEventArgs e)
+        private void OnComponentAdded(object sender, ComponentEventArgs e)
         {
-            var attribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
-
-            if (attribute is null)
+            if (!TypeDescriptorHelper.TryGetAttribute(e.Component.GetType(), out PropertyTabAttribute tabAttribute))
             {
                 return;
             }
 
-            // Add all the document items.
-            for (int i = 0; i < attribute.TabClasses.Length; i++)
+            // Add all the document tabs.
+            for (int i = 0; i < tabAttribute.TabClasses.Length; i++)
             {
-                if (attribute.TabScopes[i] == PropertyTabScope.Document)
+                if (tabAttribute.TabScopes[i] == PropertyTabScope.Document)
                 {
-                    AddTab(attribute.TabClasses[i], e.Component, PropertyTabScope.Document, true);
+                    AddTab(tabAttribute.TabClasses[i], PropertyTabScope.Document, e.Component, setupToolbar: true);
                 }
             }
         }
@@ -2498,21 +2451,19 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnComponentRemove(object sender, ComponentEventArgs e)
+        private void OnComponentRemoved(object sender, ComponentEventArgs e)
         {
-            var attribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(e.Component.GetType())[typeof(PropertyTabAttribute)];
-
-            if (attribute is null)
+            if (!TypeDescriptorHelper.TryGetAttribute(e.Component.GetType(), out PropertyTabAttribute tabAttribute))
             {
                 return;
             }
 
             // Remove all the document items.
-            for (int i = 0; i < attribute.TabClasses.Length; i++)
+            for (int i = 0; i < tabAttribute.TabClasses.Length; i++)
             {
-                if (attribute.TabScopes[i] == PropertyTabScope.Document)
+                if (tabAttribute.TabScopes[i] == PropertyTabScope.Document)
                 {
-                    ReleaseTab(attribute.TabClasses[i], e.Component);
+                    ReleaseTab(tabAttribute.TabClasses[i], e.Component);
                 }
             }
 
@@ -3128,7 +3079,7 @@ namespace System.Windows.Forms
             OnButtonClick(sender, e);
         }
 
-        private void OnViewButtonClickPP(object sender, EventArgs e)
+        private void OnViewPropertyPagesButtonClick(object sender, EventArgs e)
         {
             if (_viewPropertyPagesButton.Enabled &&
                 _selectedObjects is not null &&
@@ -3413,11 +3364,10 @@ namespace System.Windows.Forms
             // Clear our current cache so we can do a full refresh.
             if (clearCached && _selectedViewTab != -1 && _viewTabs is not null)
             {
-                PropertyTab tab = _viewTabs[_selectedViewTab];
-                if (tab is not null && _viewTabProperties is not null)
+                PropertyTab selectedTab = _viewTabs[_selectedViewTab];
+                if (selectedTab is not null && _viewTabProperties is not null)
                 {
-                    string tabName = tab.TabName + _propertySortValue.ToString();
-                    _viewTabProperties.Remove(tabName);
+                    _viewTabProperties.Remove($"{selectedTab.TabName}{_propertySortValue}");
                 }
             }
 
@@ -3426,9 +3376,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Refreshes the tabs of the given scope by deleting them and requerying objects and documents
-        ///  for them.
+        ///  Refreshes the tabs of the specified <paramref name="tabScope"/>.
         /// </summary>
+        /// <param name="tabScope">
+        ///  Either <see cref="PropertyTabScope.Component"/> or <see cref="PropertyTabScope.Document"/>.
+        /// </param>
+        /// <remarks>
+        ///  <para>
+        ///   The <see cref="RefreshTabs(PropertyTabScope)"/> method first deletes the property tabs of the specified
+        ///   scope, it then requires the objects and documents to rebuild the tabs.
+        ///  </para>
+        /// </remarks>
         public void RefreshTabs(PropertyTabScope tabScope)
         {
             if (tabScope < PropertyTabScope.Document)
@@ -3436,22 +3394,17 @@ namespace System.Windows.Forms
                 throw new ArgumentException(SR.PropertyGridTabScope);
             }
 
-            RemoveTabs(tabScope, false);
+            RemoveTabs(tabScope, setupToolbar: false);
 
             // Check the component level tabs.
-            if (tabScope <= PropertyTabScope.Component)
+            if (tabScope <= PropertyTabScope.Component && _selectedObjects is not null && _selectedObjects.Length > 0)
             {
-                if (_selectedObjects is not null && _selectedObjects.Length > 0)
+                // Get the subset of PropertyTabs that are common to all selected objects.
+                foreach (Type tabType in GetCommonTabs(_selectedObjects, PropertyTabScope.Component))
                 {
-                    // Get the subset of PropertyTabs that's common to all objects.
-                    Type[] tabTypes = GetCommonTabs(_selectedObjects, PropertyTabScope.Component);
-
-                    for (int i = 0; i < tabTypes.Length; i++)
+                    foreach (var @object in _selectedObjects)
                     {
-                        for (int j = 0; j < _selectedObjects.Length; j++)
-                        {
-                            AddTab(tabTypes[i], _selectedObjects[j], PropertyTabScope.Component, false);
-                        }
+                        AddTab(tabType, PropertyTabScope.Component, @object, setupToolbar: false);
                     }
                 }
             }
@@ -3462,15 +3415,13 @@ namespace System.Windows.Forms
             {
                 foreach (IComponent component in components)
                 {
-                    var attribute = (PropertyTabAttribute)TypeDescriptor.GetAttributes(component.GetType())[typeof(PropertyTabAttribute)];
-
-                    if (attribute is not null)
+                    if (TypeDescriptorHelper.TryGetAttribute(components.GetType(), out PropertyTabAttribute tabAttribute))
                     {
-                        for (int j = 0; j < attribute.TabClasses.Length; j++)
+                        for (int i = 0; i < tabAttribute.TabClasses.Length; i++)
                         {
-                            if (attribute.TabScopes[j] == PropertyTabScope.Document)
+                            if (tabAttribute.TabScopes[i] == PropertyTabScope.Document)
                             {
-                                AddTab(attribute.TabClasses[j], component, PropertyTabScope.Document, false);
+                                AddTab(tabAttribute.TabClasses[i], PropertyTabScope.Document, component, setupToolbar: false);
                             }
                         }
                     }
@@ -3534,19 +3485,10 @@ namespace System.Windows.Forms
             }
         }
 
-        private void RemoveImage(int index)
-        {
-            _imageList[NormalButtonSize].Images.RemoveAt(index);
-            if (_imageList[LargeButtonSize] is not null)
-            {
-                _imageList[LargeButtonSize].Images.RemoveAt(index);
-            }
-        }
-
         /// <summary>
         ///  Removes all the tabs with a classification greater than or equal to the specified classification.
-        ///  For example, removing <see cref="PropertyTabScope.Document" /> will remove <see cref="PropertyTabScope.Document" />
-        ///  and <see cref="PropertyTabScope.Component" /> tabs.
+        ///  For example, removing <see cref="PropertyTabScope.Document"/> will remove <see cref="PropertyTabScope.Document"/>
+        ///  and <see cref="PropertyTabScope.Component"/> tabs.
         /// </summary>
         internal void RemoveTabs(PropertyTabScope classification, bool setupToolbar)
         {
@@ -3561,7 +3503,9 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ToolStripButton selectedButton = (_selectedViewTab >= 0 && _selectedViewTab < _viewTabButtons.Length ? _viewTabButtons[_selectedViewTab] : null);
+            ToolStripButton selectedButton = _selectedViewTab >= 0 && _selectedViewTab < _viewTabButtons.Length
+                ? _viewTabButtons[_selectedViewTab]
+                : null;
 
             for (int i = _viewTabs.Length - 1; i >= 0; i--)
             {
@@ -3595,7 +3539,7 @@ namespace System.Windows.Forms
             {
                 SetupToolbar();
 
-                Debug.Assert(_viewTabs is not null && _viewTabs.Length > 0, "Holy Moly!  We don't have any tabs left!");
+                Debug.Assert(_viewTabs is not null && _viewTabs.Length > 0, "We don't have any tabs left!");
 
                 _selectedViewTab = -1;
                 SelectViewTabButtonDefault(selectedButton);
@@ -3628,13 +3572,9 @@ namespace System.Windows.Forms
             }
 
             // Remove this tab from our "last selected" group
-            if (!GetFlag(Flags.ReInitTab) && ActiveDesigner is not null)
+            if (!GetFlag(Flags.ReInitTab) && TryGetSavedTabSelection(out int selectedTab) && selectedTab == tabIndex)
             {
-                int hashCode = ActiveDesigner.GetHashCode();
-                if (_designerSelections is not null && _designerSelections.ContainsKey(hashCode) && (int)_designerSelections[hashCode] == tabIndex)
-                {
-                    _designerSelections.Remove(hashCode);
-                }
+                _designerSelections.Remove(ActiveDesigner.GetHashCode());
             }
 
             ToolStripButton selectedButton = _viewTabButtons[_selectedViewTab];
@@ -3733,9 +3673,27 @@ namespace System.Windows.Forms
         {
             if (_designerHost is not null)
             {
-                _designerSelections ??= new Hashtable();
+                _designerSelections ??= new();
                 _designerSelections[_designerHost.GetHashCode()] = _selectedViewTab;
             }
+        }
+
+        private bool TryGetSavedTabSelection(out int selectedTab)
+        {
+            selectedTab = -1;
+            if (_designerSelections is null || ActiveDesigner is null)
+            {
+                return false;
+            }
+
+            int hashCode = ActiveDesigner.GetHashCode();
+            if (!_designerSelections.ContainsKey(hashCode))
+            {
+                return false;
+            }
+
+            selectedTab = (int)_designerSelections[hashCode];
+            return true;
         }
 
         private void SetHotCommandColors()
@@ -3874,37 +3832,28 @@ namespace System.Windows.Forms
 
             using var _ = new FreezePaintScope(this);
 
-            if (_imageList[NormalButtonSize] is null || fullRebuild)
+            if (_normalButtonImages is null || fullRebuild)
             {
-                _imageList[NormalButtonSize]?.Dispose();
-                _imageList[NormalButtonSize] = new ImageList();
+                _normalButtonImages?.Dispose();
+                _normalButtonImages = new ImageList();
                 if (DpiHelper.IsScalingRequired)
                 {
-                    _imageList[NormalButtonSize].ImageSize = s_normalButtonSize;
+                    _normalButtonImages.ImageSize = s_normalButtonSize;
                 }
             }
 
             // Setup our event handlers.
-            EventHandler ehViewTab = new(OnViewTabButtonClick);
-            EventHandler ehViewType = new(OnViewSortButtonClick);
-            EventHandler ehPP = new(OnViewButtonClickPP);
+            EventHandler tabButtonHandler = OnViewTabButtonClick;
+            EventHandler sortButtonHandler = OnViewSortButtonClick;
+            EventHandler propertyPagesButtonHandler = OnViewPropertyPagesButtonClick;
 
             Bitmap b;
             int i;
 
             // We manage the buttons as a separate list so the toolbar doesn't flash.
-            ArrayList buttonList;
+            List<ToolStripItem> buttonList = fullRebuild ? new() : new(_toolStrip.Items.OfType<ToolStripItem>());
 
-            if (fullRebuild)
-            {
-                buttonList = new ArrayList();
-            }
-            else
-            {
-                buttonList = new ArrayList(_toolStrip.Items);
-            }
-
-            // Setup the view type buttons.  We only need to do this once.
+            // Setup the view type buttons. We only need to do this once.
             if (_viewSortButtons is null || fullRebuild)
             {
                 _viewSortButtons = new ToolStripButton[3];
@@ -3914,11 +3863,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (_alphaBitmap is null)
-                    {
-                        _alphaBitmap = SortByPropertyImage;
-                    }
-
+                    _alphaBitmap ??= SortByPropertyImage;
                     alphaIndex = AddImage(_alphaBitmap);
                 }
                 catch (Exception)
@@ -3927,45 +3872,52 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    if (_categoryBitmap is null)
-                    {
-                        _categoryBitmap = SortByCategoryImage;
-                    }
-
+                    _categoryBitmap ??= SortByCategoryImage;
                     categoryIndex = AddImage(_categoryBitmap);
                 }
                 catch (Exception)
                 {
                 }
 
-                _viewSortButtons[AlphaSortButtonIndex] = CreatePushButton(SR.PBRSToolTipAlphabetic, alphaIndex, ehViewType, true);
-                _viewSortButtons[CategorySortButtonIndex] = CreatePushButton(SR.PBRSToolTipCategorized, categoryIndex, ehViewType, true);
+                _viewSortButtons[AlphaSortButtonIndex] = CreatePushButton(
+                    SR.PBRSToolTipAlphabetic,
+                    alphaIndex,
+                    sortButtonHandler,
+                    useRadioButtonRole: true);
+                _viewSortButtons[CategorySortButtonIndex] = CreatePushButton(
+                    SR.PBRSToolTipCategorized,
+                    categoryIndex,
+                    sortButtonHandler,
+                    useRadioButtonRole: true);
 
                 // We create a dummy hidden button for view sort.
-                _viewSortButtons[NoSortButtonIndex] = CreatePushButton(string.Empty, 0, ehViewType, true);
+                _viewSortButtons[NoSortButtonIndex] = CreatePushButton(
+                    string.Empty,
+                    0,
+                    sortButtonHandler,
+                    useRadioButtonRole: true);
+
                 _viewSortButtons[NoSortButtonIndex].Visible = false;
 
                 // Add the viewType buttons and a separator.
-                for (i = 0; i < _viewSortButtons.Length; i++)
-                {
-                    buttonList.Add(_viewSortButtons[i]);
-                }
+                buttonList.AddRange(_viewSortButtons);
             }
             else
             {
                 // Clear all the items from the toolStrip and image list after the first two.
                 int count = buttonList.Count;
 
-                for (i = count - 1; i >= 2; i--)
+                if (count > 2)
                 {
-                    buttonList.RemoveAt(i);
+                    buttonList.RemoveRange(2, count - 2);
                 }
 
-                count = _imageList[NormalButtonSize].Images.Count;
+                count = _normalButtonImages.Images.Count;
 
                 for (i = count - 1; i >= 2; i--)
                 {
-                    RemoveImage(i);
+                    _normalButtonImages.Images.RemoveAt(i);
+                    _largeButtonImages?.Images.RemoveAt(i);
                 }
             }
 
@@ -3976,7 +3928,7 @@ namespace System.Windows.Forms
 
             // If we've only got the properties tab, don't add the button
             // (or we'll just have a properties button that you can't do anything with).
-            bool doAdd = _viewTabs.Length > 1;
+            bool addViewTabButtons = _viewTabs.Length > 1;
 
             // Setup the view tab buttons.
             for (i = 0; i < _viewTabs.Length; i++)
@@ -3984,8 +3936,12 @@ namespace System.Windows.Forms
                 try
                 {
                     b = _viewTabs[i].Bitmap;
-                    _viewTabButtons[i] = CreatePushButton(_viewTabs[i].TabName, AddImage(b), ehViewTab, true);
-                    if (doAdd)
+                    _viewTabButtons[i] = CreatePushButton(
+                        _viewTabs[i].TabName,
+                        AddImage(b),
+                        tabButtonHandler,
+                        useRadioButtonRole: true);
+                    if (addViewTabButtons)
                     {
                         buttonList.Add(_viewTabButtons[i]);
                     }
@@ -3997,7 +3953,7 @@ namespace System.Windows.Forms
             }
 
             // If we didn't add anything, we don't need another separator either.
-            if (doAdd)
+            if (addViewTabButtons)
             {
                 buttonList.Add(_separator2);
             }
@@ -4007,11 +3963,7 @@ namespace System.Windows.Forms
 
             try
             {
-                if (_propertyPageBitmap is null)
-                {
-                    _propertyPageBitmap = ShowPropertyPageImage;
-                }
-
+                _propertyPageBitmap ??= ShowPropertyPageImage;
                 designPage = AddImage(_propertyPageBitmap);
             }
             catch (Exception)
@@ -4019,29 +3971,30 @@ namespace System.Windows.Forms
             }
 
             // We recreate this every time to ensure it's at the end.
-            _viewPropertyPagesButton = CreatePushButton(SR.PBRSToolTipPropertyPages, designPage, ehPP, false);
+            _viewPropertyPagesButton = CreatePushButton(
+                SR.PBRSToolTipPropertyPages,
+                designPage,
+                propertyPagesButtonHandler,
+                useRadioButtonRole: false);
             _viewPropertyPagesButton.Enabled = false;
             buttonList.Add(_viewPropertyPagesButton);
 
             // Dispose this so it will get recreated for any new buttons.
-            if (_imageList[LargeButtonSize] is not null)
-            {
-                _imageList[LargeButtonSize].Dispose();
-                _imageList[LargeButtonSize] = null;
-            }
+            _largeButtonImages?.Dispose();
+            _largeButtonImages = null;
 
-            if (_buttonType != NormalButtonSize)
+            if (LargeButtons)
             {
                 EnsureLargeButtons();
             }
 
-            _toolStrip.ImageList = _imageList[_buttonType];
+            _toolStrip.ImageList = LargeButtons ? _largeButtonImages : _normalButtonImages;
 
             _toolStrip.SuspendLayout();
             _toolStrip.Items.Clear();
             for (int j = 0; j < buttonList.Count; j++)
             {
-                _toolStrip.Items.Add(buttonList[j] as ToolStripItem);
+                _toolStrip.Items.Add(buttonList[j]);
             }
 
             _toolStrip.ResumeLayout();
@@ -4211,21 +4164,16 @@ namespace System.Windows.Forms
 
         internal void UpdateSelection()
         {
-            if (!GetFlag(Flags.PropertiesChanged))
+            if (!GetFlag(Flags.PropertiesChanged) || _viewTabs is null)
             {
                 return;
             }
 
-            if (_viewTabs is null)
-            {
-                return;
-            }
-
-            string tabName = _viewTabs[_selectedViewTab].TabName + _propertySortValue.ToString();
+            string tabName = $"{_viewTabs[_selectedViewTab].TabName}{_propertySortValue}";
 
             if (_viewTabProperties is not null && _viewTabProperties.ContainsKey(tabName))
             {
-                _rootEntry = (GridEntry)_viewTabProperties[tabName];
+                _rootEntry = _viewTabProperties[tabName];
                 _rootEntry?.Refresh();
             }
             else
@@ -4247,7 +4195,7 @@ namespace System.Windows.Forms
 
                 if (_rootEntry is null)
                 {
-                    _currentEntries = new GridEntryCollection(disposeItems: false);
+                    _currentEntries = new(disposeItems: false);
                     _gridView.ClearGridEntries();
                     return;
                 }
@@ -4257,7 +4205,7 @@ namespace System.Windows.Forms
                     _rootEntry.BrowsableAttributes = BrowsableAttributes;
                 }
 
-                _viewTabProperties ??= new Hashtable();
+                _viewTabProperties ??= new();
                 _viewTabProperties[tabName] = _rootEntry;
             }
 
@@ -4431,7 +4379,7 @@ namespace System.Windows.Forms
                             // Special treatment for the properties page button.
                             if (button == _viewPropertyPagesButton)
                             {
-                                OnViewButtonClickPP(button, EventArgs.Empty);
+                                OnViewPropertyPagesButtonClick(button, EventArgs.Empty);
                             }
                             else
                             {

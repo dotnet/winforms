@@ -173,7 +173,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             return value;
         }
 
-        /// <inheritdoc />
         protected override AttributeCollection CreateAttributeCollection() => new MergedAttributeCollection(this);
 
         private object GetPropertyOwnerForComponent(Array a, int i)
@@ -187,10 +186,8 @@ namespace System.Windows.Forms.PropertyGridInternal
             return propertyOwner;
         }
 
-        /// <inheritdoc />
         public override object GetEditor(Type editorBaseType) => _descriptors[0].GetEditor(editorBaseType);
 
-        /// <inheritdoc />
         public override object GetValue(object component)
         {
             Debug.Assert(component is Array, "MergePropertyDescriptor::GetValue called with non-array value");
@@ -224,7 +221,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 if (_collection is not null)
                 {
-                    if (!_collection.MergeCollection((ICollection)currentObject))
+                    if (!_collection.ReinitializeIfNotEqual((ICollection)currentObject))
                     {
                         allEqual = false;
                         return null;

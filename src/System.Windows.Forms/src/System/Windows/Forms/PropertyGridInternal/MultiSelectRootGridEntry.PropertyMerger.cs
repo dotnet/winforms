@@ -121,7 +121,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 {
                     PropertyDescriptor pivotProperty = objectProperties[0][i];
 
-                    bool match = pivotProperty.Attributes[typeof(MergablePropertyAttribute)].IsDefaultAttribute();
+                    bool match = pivotProperty.GetAttribute<MergablePropertyAttribute>().IsDefaultAttribute();
 
                     for (int j = 1; match && j < objectProperties.Length; j++)
                     {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             positions[j] += 1;
 
-                            if (!property.Attributes[typeof(MergablePropertyAttribute)].IsDefaultAttribute())
+                            if (!property.GetAttribute<MergablePropertyAttribute>().IsDefaultAttribute())
                             {
                                 match = false;
                                 break;
@@ -158,7 +158,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             // Got a match!
                             if (pivotProperty.Equals(property))
                             {
-                                if (!property.Attributes[typeof(MergablePropertyAttribute)].IsDefaultAttribute())
+                                if (!property.GetAttribute<MergablePropertyAttribute>().IsDefaultAttribute())
                                 {
                                     match = false;
                                     position++;

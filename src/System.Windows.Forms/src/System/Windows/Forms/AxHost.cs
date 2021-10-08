@@ -2787,7 +2787,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            ArrayList retProps = new ArrayList();
+            ArrayList returnProperties = new ArrayList();
 
             if (properties is null)
             {
@@ -2811,11 +2811,11 @@ namespace System.Windows.Forms
             {
                 for (int i = 0; i < baseProps.Count; ++i)
                 {
-                    Debug.Assert(baseProps[i] is not null, "Null base prop at location: " + i.ToString(CultureInfo.InvariantCulture));
+                    Debug.Assert(baseProps[i] is not null, $"Null base prop at location: {i}");
 
                     if (baseProps[i].DesignTimeOnly)
                     {
-                        retProps.Add(baseProps[i]);
+                        returnProperties.Add(baseProps[i]);
                         continue;
                     }
 
@@ -2833,28 +2833,28 @@ namespace System.Windows.Forms
                     {
                         if (propInfo is not null)
                         {
-                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Added AxPropertyDescriptor for: " + propName);
+                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, $"Added AxPropertyDescriptor for: {propName}");
                             prop = new AxPropertyDescriptor(baseProps[i], this);
                             ((AxPropertyDescriptor)prop).UpdateAttributes();
                         }
                         else
                         {
-                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Added PropertyDescriptor for: " + propName);
+                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, $"Added PropertyDescriptor for: {propName}");
                             prop = baseProps[i];
                         }
 
                         properties.Add(propName, prop);
-                        retProps.Add(prop);
+                        returnProperties.Add(prop);
                     }
                     else
                     {
                         PropertyDescriptor propDesc = (PropertyDescriptor)properties[propName];
-                        Debug.Assert(propDesc is not null, "Cannot find cached entry for: " + propName);
+                        Debug.Assert(propDesc is not null, $"Cannot find cached entry for: {propName}");
                         AxPropertyDescriptor axPropDesc = propDesc as AxPropertyDescriptor;
                         if ((propInfo is null && axPropDesc is not null) || (propInfo is not null && axPropDesc is null))
                         {
-                            Debug.Fail("Duplicate property with same name: " + propName);
-                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Duplicate property with same name: " + propName);
+                            Debug.Fail($"Duplicate property with same name: {propName}");
+                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, $"Duplicate property with same name: {propName}");
                         }
                         else
                         {
@@ -2863,22 +2863,20 @@ namespace System.Windows.Forms
                                 axPropDesc.UpdateAttributes();
                             }
 
-                            retProps.Add(propDesc);
+                            returnProperties.Add(propDesc);
                         }
                     }
                 }
 
-                // Filter only the Browsable attribute, since that is the only
-                // one we mess with.
-                //
+                // Filter only the Browsable attribute, since that is the only one we mess with.
                 if (attributes is not null)
                 {
                     Attribute browse = null;
-                    foreach (Attribute attr in attributes)
+                    foreach (Attribute attribute in attributes)
                     {
-                        if (attr is BrowsableAttribute)
+                        if (attribute is BrowsableAttribute)
                         {
-                            browse = attr;
+                            browse = attribute;
                         }
                     }
 
@@ -2886,20 +2884,14 @@ namespace System.Windows.Forms
                     {
                         ArrayList removeList = null;
 
-                        foreach (PropertyDescriptor prop in retProps)
+                        foreach (PropertyDescriptor prop in returnProperties)
                         {
-                            if (prop is AxPropertyDescriptor)
+                            if (prop is AxPropertyDescriptor
+                                && prop.TryGetAttribute(out BrowsableAttribute browsableAttribute)
+                                && !browsableAttribute.Equals(browse))
                             {
-                                Attribute attr = prop.Attributes[typeof(BrowsableAttribute)];
-                                if (attr is not null && !attr.Equals(browse))
-                                {
-                                    if (removeList is null)
-                                    {
-                                        removeList = new ArrayList();
-                                    }
-
-                                    removeList.Add(prop);
-                                }
+                                removeList ??= new ArrayList();
+                                removeList.Add(prop);
                             }
                         }
 
@@ -2907,19 +2899,18 @@ namespace System.Windows.Forms
                         {
                             foreach (object prop in removeList)
                             {
-                                retProps.Remove(prop);
+                                returnProperties.Remove(prop);
                             }
                         }
                     }
                 }
             }
 
-            PropertyDescriptor[] temp = new PropertyDescriptor[retProps.Count];
-            retProps.CopyTo(temp, 0);
+            PropertyDescriptor[] temp = new PropertyDescriptor[returnProperties.Count];
+            returnProperties.CopyTo(temp, 0);
 
             // Update our stashed values.
-            //
-            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Updating stashed values for : " + ((attributes is not null) ? attributes.Length.ToString(CultureInfo.InvariantCulture) : "<null>"));
+            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, $"Updating stashed values for : {attributes?.Length.ToString() ?? "<null>"}");
             propsStash = new PropertyDescriptorCollection(temp);
             attribsStash = attributes;
 

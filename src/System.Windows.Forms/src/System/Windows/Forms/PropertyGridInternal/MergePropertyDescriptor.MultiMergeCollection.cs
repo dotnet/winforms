@@ -46,24 +46,29 @@ namespace System.Windows.Forms.PropertyGridInternal
             public IEnumerator GetEnumerator() => _items?.GetEnumerator() ?? Array.Empty<object>().GetEnumerator();
 
             /// <summary>
-            ///  Ensures that the new collection equals the existing one.
-            ///  Otherwise, it wipes out the contents of the new collection.
+            ///  Compare the contents of this <see cref="MultiMergeCollection"/> collection against
+            ///  <paramref name="collection"/>. Reinitializes the contents of this <see cref="MultiMergeCollection"/>
+            ///  if not <see cref="Locked"/> and the <paramref name="collection"/> does not match.
             /// </summary>
-            public bool MergeCollection(ICollection newCollection)
+            /// <returns>
+            ///  'true' if <see cref="Locked"/> or <paramref name="collection"/> matches the contents of this
+            ///  <see cref="MultiMergeCollection"/>.
+            /// </returns>
+            public bool ReinitializeIfNotEqual(ICollection collection)
             {
                 if (Locked)
                 {
                     return true;
                 }
 
-                if (_items.Length != newCollection.Count)
+                if (_items.Length != collection.Count)
                 {
                     _items = Array.Empty<object>();
                     return false;
                 }
 
-                object[] newItems = new object[newCollection.Count];
-                newCollection.CopyTo(newItems, 0);
+                object[] newItems = new object[collection.Count];
+                collection.CopyTo(newItems, 0);
                 for (int i = 0; i < newItems.Length; i++)
                 {
                     if (((newItems[i] is null) != (_items[i] is null)) ||
