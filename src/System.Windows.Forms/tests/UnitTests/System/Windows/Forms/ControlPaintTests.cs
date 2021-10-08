@@ -849,8 +849,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawButton(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawButton(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawButton(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawButton(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -932,8 +932,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawCaptionButton(graphics, new Rectangle(0, 0, width, height), CaptionButton.Close, state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawCaptionButton(graphics, 0, 0, width, height, CaptionButton.Close, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawCaptionButton(graphics, new Rectangle(0, 0, width, height), CaptionButton.Close, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawCaptionButton(graphics, 0, 0, width, height, CaptionButton.Close, state));
         }
 
         [WinFormsTheory]
@@ -1013,8 +1013,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawCheckBox(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawCheckBox(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawCheckBox(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawCheckBox(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -1093,8 +1093,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawComboButton(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawComboButton(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawComboButton(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawComboButton(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -1472,8 +1472,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawMenuGlyph(graphics, new Rectangle(0, 0, width, height), glyph));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawMenuGlyph(graphics, 0, 0, width, height, glyph));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawMenuGlyph(graphics, new Rectangle(0, 0, width, height), glyph));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawMenuGlyph(graphics, 0, 0, width, height, glyph));
         }
 
         [WinFormsTheory]
@@ -1554,8 +1554,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawMixedCheckBox(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawMixedCheckBox(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawMixedCheckBox(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawMixedCheckBox(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -1634,8 +1634,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawRadioButton(graphics, new Rectangle(0, 0, width, height), state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawRadioButton(graphics, 0, 0, width, height, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawRadioButton(graphics, new Rectangle(0, 0, width, height), state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawRadioButton(graphics, 0, 0, width, height, state));
         }
 
         [WinFormsTheory]
@@ -1772,8 +1772,8 @@ namespace System.Windows.Forms.Tests
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawScrollButton(graphics, new Rectangle(0, 0, width, height), ScrollButton.Up, state));
-            Assert.Throws<ArgumentException>(null, () => ControlPaint.DrawScrollButton(graphics, 0, 0, width, height, ScrollButton.Up, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawScrollButton(graphics, new Rectangle(0, 0, width, height), ScrollButton.Up, state));
+            Assert.Throws<ArgumentException>(() => ControlPaint.DrawScrollButton(graphics, 0, 0, width, height, ScrollButton.Up, state));
         }
 
         [WinFormsTheory]

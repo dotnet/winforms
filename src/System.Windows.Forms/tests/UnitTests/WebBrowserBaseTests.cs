@@ -724,7 +724,7 @@ namespace System.Windows.Forms.Tests
                 Height = 20
             };
             using var bitmap = new Bitmap(10, 10);
-            Assert.Throws<ArgumentException>(null, () => control.DrawToBitmap(bitmap, new Rectangle(x, y, width, height)));
+            Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(x, y, width, height)));
         }
 
         [WinFormsTheory]
@@ -738,7 +738,7 @@ namespace System.Windows.Forms.Tests
                 Height = 20
             };
             using var bitmap = new Bitmap(10, 10);
-            Assert.Throws<ArgumentException>(null, () => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
+            Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
         }
 
         [WinFormsTheory]
@@ -752,7 +752,7 @@ namespace System.Windows.Forms.Tests
                 Height = height
             };
             using var bitmap = new Bitmap(10, 10);
-            Assert.Throws<ArgumentException>(null, () => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
+            Assert.Throws<ArgumentException>(() => control.DrawToBitmap(bitmap, new Rectangle(1, 2, 3, 4)));
         }
 
         [WinFormsFact]

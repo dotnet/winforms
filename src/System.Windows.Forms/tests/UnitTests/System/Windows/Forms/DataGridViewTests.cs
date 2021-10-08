@@ -938,7 +938,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridView_Parent_SetSame_ThrowsArgumentException()
         {
             using var control = new DataGridView();
-            Assert.Throws<ArgumentException>(null, () => control.Parent = control);
+            Assert.Throws<ArgumentException>(() => control.Parent = control);
             Assert.Null(control.Parent);
         }
 

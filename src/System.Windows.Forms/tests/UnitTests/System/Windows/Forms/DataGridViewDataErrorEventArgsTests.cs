@@ -61,7 +61,7 @@ namespace System.Windows.Forms.Tests
         public void ThrowException_SetTrueWithoutException_ThrowsArgumentException()
         {
             var e = new DataGridViewDataErrorEventArgs(null, 1, 2, DataGridViewDataErrorContexts.Formatting);
-            Assert.Throws<ArgumentException>(null, () => e.ThrowException = true);
+            Assert.Throws<ArgumentException>(() => e.ThrowException = true);
         }
     }
 }

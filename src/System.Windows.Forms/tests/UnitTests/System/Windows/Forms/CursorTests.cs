@@ -378,7 +378,7 @@ namespace System.Windows.Forms.Tests
             using var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
-            Assert.Throws<ArgumentException>(null, () => cursor.Draw(graphics, new Rectangle(Point.Empty, cursor.Size)));
+            Assert.Throws<ArgumentException>(() => cursor.Draw(graphics, new Rectangle(Point.Empty, cursor.Size)));
         }
 
         [Theory]
@@ -415,7 +415,7 @@ namespace System.Windows.Forms.Tests
             using var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
             graphics.Dispose();
-            Assert.Throws<ArgumentException>(null, () => cursor.DrawStretched(graphics, new Rectangle(Point.Empty, cursor.Size)));
+            Assert.Throws<ArgumentException>(() => cursor.DrawStretched(graphics, new Rectangle(Point.Empty, cursor.Size)));
         }
 
         public static IEnumerable<object[]> Equals_Object_TestData()

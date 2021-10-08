@@ -359,7 +359,7 @@ namespace System.Windows.Forms.Tests
                 ContainerControl = containerControl,
                 DataSource = value
             };
-            Assert.Throws<ArgumentException>(null, () => provider.DataMember = "NoSuchValue");
+            Assert.Throws<ArgumentException>(() => provider.DataMember = "NoSuchValue");
             Assert.Same(value, provider.DataSource);
             Assert.Equal("NoSuchValue", provider.DataMember);
         }
@@ -835,7 +835,7 @@ namespace System.Windows.Forms.Tests
                 ContainerControl = containerControl
             };
             var newDataSource = new DataClass();
-            Assert.Throws<ArgumentException>(null, () => provider.BindToDataAndErrors(newDataSource, "NoSuchValue"));
+            Assert.Throws<ArgumentException>(() => provider.BindToDataAndErrors(newDataSource, "NoSuchValue"));
             Assert.Same(newDataSource, provider.DataSource);
             Assert.Equal("NoSuchValue", provider.DataMember);
 
