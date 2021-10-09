@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         public sealed partial class ImageCollection : IList
         {
             private readonly ImageList _owner;
-            private readonly ArrayList _imageInfoCollection = new ArrayList();
+            private readonly List<ImageInfo> _imageInfoCollection = new List<ImageInfo>();
 
             ///  A caching mechanism for key accessor
             ///  We use an index here rather than control so that we don't have lifetime
@@ -481,7 +481,7 @@ namespace System.Windows.Forms
                 if (IsValidIndex(_lastAccessedIndex))
                 {
                     if ((_imageInfoCollection[_lastAccessedIndex] is not null) &&
-                        (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[_lastAccessedIndex]).Name, key, ignoreCase: true)))
+                        (WindowsFormsUtils.SafeCompareStrings(_imageInfoCollection[_lastAccessedIndex].Name, key, ignoreCase: true)))
                     {
                         return _lastAccessedIndex;
                     }
@@ -491,7 +491,7 @@ namespace System.Windows.Forms
                 for (int i = 0; i < Count; i++)
                 {
                     if ((_imageInfoCollection[i] is not null) &&
-                            (WindowsFormsUtils.SafeCompareStrings(((ImageInfo)_imageInfoCollection[i]).Name, key, ignoreCase: true)))
+                            (WindowsFormsUtils.SafeCompareStrings(_imageInfoCollection[i].Name, key, ignoreCase: true)))
                     {
                         _lastAccessedIndex = i;
                         return i;
@@ -595,7 +595,7 @@ namespace System.Windows.Forms
                     _imageInfoCollection[index] = new ImageInfo();
                 }
 
-                ((ImageInfo)_imageInfoCollection[index]).Name = name;
+                _imageInfoCollection[index].Name = name;
             }
         }
     }

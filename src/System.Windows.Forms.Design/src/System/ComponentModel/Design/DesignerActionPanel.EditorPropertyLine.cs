@@ -630,13 +630,13 @@ namespace System.ComponentModel.Design
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (m._Msg == User32.WM.ACTIVATE
+                    if (m.MsgInternal == User32.WM.ACTIVATE
                         && Visible
-                        && (User32.WA)PARAM.LOWORD(m._WParam) == User32.WA.INACTIVE
-                        && !OwnsWindow(m._LParam))
+                        && (User32.WA)PARAM.LOWORD(m.WParamInternal) == User32.WA.INACTIVE
+                        && !OwnsWindow(m.LParamInternal))
                     {
                         Visible = false;
-                        if (m._LParam == 0)
+                        if (m.LParamInternal == 0)
                         {
                             // We 're switching process, also dismiss the parent.
                             Control toplevel = _parentControl.TopLevelControl;

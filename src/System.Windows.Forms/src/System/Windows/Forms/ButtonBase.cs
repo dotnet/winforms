@@ -1289,7 +1289,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 // We don't respect this because the code below eats BM_SETSTATE.
                 // So we just invoke the click.
@@ -1308,7 +1308,7 @@ namespace System.Windows.Forms
 
             if (OwnerDraw)
             {
-                switch (m._Msg)
+                switch (m.MsgInternal)
                 {
                     case (User32.WM)User32.BM.SETSTATE:
                         // Ignore BM_SETSTATE - Windows gets confused and paints things,
@@ -1354,10 +1354,10 @@ namespace System.Windows.Forms
             }
             else
             {
-                switch (m._Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.REFLECT_COMMAND:
-                        if ((User32.BN)PARAM.HIWORD(m._WParam) == User32.BN.CLICKED && !ValidationCancelled)
+                        if ((User32.BN)PARAM.HIWORD(m.WParamInternal) == User32.BN.CLICKED && !ValidationCancelled)
                         {
                             OnClick(EventArgs.Empty);
                         }

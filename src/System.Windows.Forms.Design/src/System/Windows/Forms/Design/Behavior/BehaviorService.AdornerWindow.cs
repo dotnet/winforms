@@ -329,7 +329,7 @@ namespace System.Windows.Forms.Design.Behavior
                         }
 
                     case User32.WM.NCHITTEST:
-                        Point pt = PARAM.ToPoint(m._LParam);
+                        Point pt = PARAM.ToPoint(m.LParamInternal);
 
                         var pt1 = new Point();
                         pt1 = PointToClient(pt1);
@@ -337,11 +337,11 @@ namespace System.Windows.Forms.Design.Behavior
 
                         if (_behaviorService.PropagateHitTest(pt) && !ProcessingDrag)
                         {
-                            m._Result = (nint)User32.HT.TRANSPARENT;
+                            m.ResultInternal = (nint)User32.HT.TRANSPARENT;
                         }
                         else
                         {
-                            m._Result = (nint)User32.HT.CLIENT;
+                            m.ResultInternal = (nint)User32.HT.CLIENT;
                         }
 
                         break;

@@ -46,14 +46,14 @@ namespace System.ComponentModel.Design
 
             protected override void WndProc(ref Message m)
             {
-                switch (m._Msg)
+                switch (m.MsgInternal)
                 {
                     case User32.WM.KEYDOWN:
                         _lastKeyDown = m;
 
                         // The first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use
                         // that to sling focus to the grid.
-                        if (m._WParam == VK_PROCESSKEY)
+                        if (m.WParamInternal == VK_PROCESSKEY)
                         {
                             if (PropertyGrid is not null)
                             {
@@ -69,7 +69,7 @@ namespace System.ComponentModel.Design
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
                                 // Recreate the keystroke to the newly activated window.
-                                User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown._WParam, _lastKeyDown._LParam);
+                                User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
                             }
                         }
 
@@ -97,8 +97,8 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
                             IntPtr hWnd = User32.GetFocus();
-                            User32.SendMessageW(hWnd, User32.WM.KEYDOWN, _lastKeyDown._WParam, _lastKeyDown._LParam);
-                            User32.SendMessageW(hWnd, User32.WM.CHAR, m._WParam, m._LParam);
+                            User32.SendMessageW(hWnd, User32.WM.KEYDOWN, _lastKeyDown.WParamInternal, _lastKeyDown.LParamInternal);
+                            User32.SendMessageW(hWnd, User32.WM.CHAR, m.WParamInternal, m.LParamInternal);
                             return;
                         }
 

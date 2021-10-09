@@ -34,25 +34,15 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void Serialize(IDesignerSerializationManager manager, object value, MemberDescriptor descriptor, CodeStatementCollection statements)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             if (!(descriptor is EventDescriptor eventToSerialize))
             {
                 throw new ArgumentNullException(nameof(descriptor));
             }
 
-            if (statements is null)
-            {
-                throw new ArgumentNullException(nameof(statements));
-            }
+            ArgumentNullException.ThrowIfNull(statements, nameof(statements));
 
             try
             {

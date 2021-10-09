@@ -13,7 +13,7 @@
   </PropertyGroup>
 
   <PropertyGroup>
-    <NoWarn>$(NoWarn),WINFORMSDEV0001</NoWarn>
+    <NoWarn>$(NoWarn),WFDEV001</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>

@@ -1047,11 +1047,11 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.REFLECT_HSCROLL:
                 case User32.WM.REFLECT_VSCROLL:
-                    switch (PARAM.LOWORD(m._WParam))
+                    switch (PARAM.LOWORD(m.WParamInternal))
                     {
                         case NativeMethods.TB_LINEUP:
                         case NativeMethods.TB_LINEDOWN:

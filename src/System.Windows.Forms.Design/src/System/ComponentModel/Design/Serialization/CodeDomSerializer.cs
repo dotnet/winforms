@@ -62,10 +62,8 @@ namespace System.ComponentModel.Design.Serialization
         public virtual object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
             object instance = null;
-            if (manager is null || codeObject is null)
-            {
-                throw new ArgumentNullException(manager is null ? "manager" : "codeObject");
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(codeObject, nameof(codeObject));
 
             using (TraceScope("CodeDomSerializer::Deserialize"))
             {
@@ -168,15 +166,8 @@ namespace System.ComponentModel.Design.Serialization
         public virtual object Serialize(IDesignerSerializationManager manager, object value)
         {
             object result = null;
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             using (TraceScope("CodeDomSerializer::" + nameof(Serialize)))
             {
@@ -278,20 +269,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeStatementCollection SerializeMember(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (owningObject is null)
-            {
-                throw new ArgumentNullException(nameof(owningObject));
-            }
-
-            if (member is null)
-            {
-                throw new ArgumentNullException(nameof(member));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(owningObject, nameof(owningObject));
+            ArgumentNullException.ThrowIfNull(member, nameof(member));
 
             CodeStatementCollection statements = new CodeStatementCollection();
             // See if we have an existing expression for this member.  If not, fabricate one
@@ -327,20 +307,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeStatementCollection SerializeMemberAbsolute(IDesignerSerializationManager manager, object owningObject, MemberDescriptor member)
         {
-            if (manager is null)
-            {
-                throw new ArgumentNullException(nameof(manager));
-            }
-
-            if (owningObject is null)
-            {
-                throw new ArgumentNullException(nameof(owningObject));
-            }
-
-            if (member is null)
-            {
-                throw new ArgumentNullException(nameof(member));
-            }
+            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(owningObject, nameof(owningObject));
+            ArgumentNullException.ThrowIfNull(member, nameof(member));
 
             CodeStatementCollection statements;
             SerializeAbsoluteContext abs = new SerializeAbsoluteContext(member);

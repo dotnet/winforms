@@ -2013,7 +2013,7 @@ namespace System.Windows.Forms
         private void WmSetCursor(ref Message m)
         {
             // Accessing through the Handle property has side effects that break this logic. You must use InternalHandle.
-            if (m._WParam == InternalHandle && (User32.HT)PARAM.LOWORD(m._LParam) == User32.HT.CLIENT)
+            if (m.WParamInternal == InternalHandle && (User32.HT)PARAM.LOWORD(m.LParamInternal) == User32.HT.CLIENT)
             {
                 Cursor.Current = OverrideCursor ?? Cursor;
             }

@@ -941,7 +941,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WmReflectCommand(ref Message m)
         {
-            switch ((User32.LBN)PARAM.HIWORD(m._WParam))
+            switch ((User32.LBN)PARAM.HIWORD(m.WParamInternal))
             {
                 case User32.LBN.SELCHANGE:
                     LbnSelChange();
@@ -966,7 +966,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmReflectVKeyToItem(ref Message m)
         {
-            Keys keycode = (Keys)PARAM.LOWORD(m._WParam);
+            Keys keycode = (Keys)PARAM.LOWORD(m.WParamInternal);
             switch (keycode)
             {
                 case Keys.Up:
@@ -984,7 +984,7 @@ namespace System.Windows.Forms
                     break;
             }
 
-            m._Result = -1;
+            m.ResultInternal = -1;
         }
 
         /// <summary>
@@ -994,39 +994,39 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case WM.REFLECT_CHARTOITEM:
-                    m._Result = -1;
+                    m.ResultInternal = -1;
                     break;
                 case WM.REFLECT_VKEYTOITEM:
                     WmReflectVKeyToItem(ref m);
                     break;
                 default:
-                    if (m._Msg == LBC_GETCHECKSTATE)
+                    if (m.MsgInternal == LBC_GETCHECKSTATE)
                     {
-                        int item = (int)m._WParam;
+                        int item = (int)m.WParamInternal;
                         if (item < 0 || item >= Items.Count)
                         {
-                            m._Result = LB_ERR;
+                            m.ResultInternal = LB_ERR;
                         }
                         else
                         {
-                            m._Result = GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED;
+                            m.ResultInternal = GetItemChecked(item) ? LB_CHECKED : LB_UNCHECKED;
                         }
                     }
-                    else if (m._Msg == LBC_SETCHECKSTATE)
+                    else if (m.MsgInternal == LBC_SETCHECKSTATE)
                     {
-                        int item = (int)m._WParam;
-                        int state = (int)m._LParam;
+                        int item = (int)m.WParamInternal;
+                        int state = (int)m.LParamInternal;
                         if (item < 0 || item >= Items.Count || (state != LB_CHECKED && state != LB_UNCHECKED))
                         {
-                            m._Result = 0;
+                            m.ResultInternal = 0;
                         }
                         else
                         {
                             SetItemChecked(item, (state == LB_CHECKED));
-                            m._Result = 1;
+                            m.ResultInternal = 1;
                         }
                     }
                     else

@@ -677,9 +677,9 @@ namespace System.Windows.Forms
             if (modified)
             {
                 message.HWnd = msg.hwnd;
-                message._Msg = msg.message;
-                message._WParam = msg.wParam;
-                message._LParam = msg.lParam;
+                message.MsgInternal = msg.message;
+                message.WParamInternal = msg.wParam;
+                message.LParamInternal = msg.lParam;
             }
 
             return processed;

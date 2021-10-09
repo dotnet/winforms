@@ -59,15 +59,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Add(IComponent comp, DesignerActionListCollection designerActionListCollection)
         {
-            if (comp is null)
-            {
-                throw new ArgumentNullException(nameof(comp));
-            }
-
-            if (designerActionListCollection is null)
-            {
-                throw new ArgumentNullException(nameof(designerActionListCollection));
-            }
+            ArgumentNullException.ThrowIfNull(comp, nameof(comp));
+            ArgumentNullException.ThrowIfNull(designerActionListCollection, nameof(designerActionListCollection));
 
             DesignerActionListCollection dhlc = (DesignerActionListCollection)_designerActionLists[comp];
             if (dhlc != null)
@@ -122,10 +115,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public bool Contains(IComponent comp)
         {
-            if (comp is null)
-            {
-                throw new ArgumentNullException(nameof(comp));
-            }
+            ArgumentNullException.ThrowIfNull(comp, nameof(comp));
 
             return _designerActionLists.Contains(comp);
         }
@@ -161,10 +151,7 @@ namespace System.ComponentModel.Design
 
         public virtual DesignerActionListCollection GetComponentActions(IComponent component, ComponentActionsType type)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
 
             DesignerActionListCollection result = new DesignerActionListCollection();
             switch (type)
@@ -186,15 +173,8 @@ namespace System.ComponentModel.Design
 
         protected virtual void GetComponentDesignerActions(IComponent component, DesignerActionListCollection actionLists)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (actionLists is null)
-            {
-                throw new ArgumentNullException(nameof(actionLists));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(actionLists, nameof(actionLists));
 
             if (component.Site is IServiceContainer sc)
             {
@@ -297,15 +277,8 @@ namespace System.ComponentModel.Design
 
         protected virtual void GetComponentServiceActions(IComponent component, DesignerActionListCollection actionLists)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (actionLists is null)
-            {
-                throw new ArgumentNullException(nameof(actionLists));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(actionLists, nameof(actionLists));
 
             DesignerActionListCollection pushCollection = (DesignerActionListCollection)_designerActionLists[component];
             if (pushCollection != null)
@@ -344,10 +317,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Remove(IComponent comp)
         {
-            if (comp is null)
-            {
-                throw new ArgumentNullException(nameof(comp));
-            }
+            ArgumentNullException.ThrowIfNull(comp, nameof(comp));
 
             if (!_designerActionLists.Contains(comp))
             {
@@ -363,10 +333,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Remove(DesignerActionList actionList)
         {
-            if (actionList is null)
-            {
-                throw new ArgumentNullException(nameof(actionList));
-            }
+            ArgumentNullException.ThrowIfNull(actionList, nameof(actionList));
 
             //find the associated component
             foreach (IComponent comp in _designerActionLists.Keys)
@@ -384,15 +351,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void Remove(IComponent comp, DesignerActionList actionList)
         {
-            if (comp is null)
-            {
-                throw new ArgumentNullException(nameof(comp));
-            }
-
-            if (actionList is null)
-            {
-                throw new ArgumentNullException(nameof(actionList));
-            }
+            ArgumentNullException.ThrowIfNull(comp, nameof(comp));
+            ArgumentNullException.ThrowIfNull(actionList, nameof(actionList));
 
             if (!_designerActionLists.Contains(comp))
             {

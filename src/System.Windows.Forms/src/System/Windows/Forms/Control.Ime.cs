@@ -715,7 +715,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                m._Result = 0;
+                m.ResultInternal = 0;
             }
 
             Debug.Unindent();
@@ -753,7 +753,7 @@ namespace System.Windows.Forms
         {
             if (ImeSupported && ImeModeConversion.InputLanguageTable != ImeModeConversion.UnsupportedTable && !IgnoreWmImeNotify)
             {
-                int wparam = PARAM.ToInt(m._WParam);
+                int wparam = PARAM.ToInt(m.WParamInternal);
 
                 // The WM_IME_NOTIFY message is not consistent across the different IMEs, particularly the notification type
                 // we care about (IMN_SETCONVERSIONMODE & IMN_SETOPENSTATUS).
@@ -776,7 +776,7 @@ namespace System.Windows.Forms
                 {
                     Debug.WriteLineIf(
                         CompModSwitches.ImeMode.Level >= TraceLevel.Info,
-                        $"Inside WmImeNotify(m.wparam=[{m._WParam}]), this={this}");
+                        $"Inside WmImeNotify(m.wparam=[{m.WParamInternal}]), this={this}");
                     Debug.Indent();
 
                     // Synchronize internal properties with the IME context mode.

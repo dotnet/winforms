@@ -28,7 +28,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
-                _editor = editor ?? throw new ArgumentNullException(nameof(editor));
+                _editor = editor.OrThrowIfNull();
             }
 
             /// <summary>
@@ -174,10 +174,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             protected internal virtual DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
-                if (edSvc is null)
-                {
-                    throw new ArgumentNullException(nameof(edSvc));
-                }
+                ArgumentNullException.ThrowIfNull(edSvc, nameof(edSvc));
 
                 return edSvc.ShowDialog(this);
             }

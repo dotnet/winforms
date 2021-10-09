@@ -7,6 +7,7 @@ using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Windows.Forms;
 
 namespace System.ComponentModel.Design
 {
@@ -41,7 +42,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected UndoEngine(IServiceProvider provider)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _provider = provider.OrThrowIfNull();
             _unitStack = new Stack();
             _enabled = true;
 
@@ -305,10 +306,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected object GetService(Type serviceType)
         {
-            if (serviceType is null)
-            {
-                throw new ArgumentNullException(nameof(serviceType));
-            }
+            ArgumentNullException.ThrowIfNull(serviceType, nameof(serviceType));
 
             if (_provider != null)
             {
@@ -594,7 +592,7 @@ namespace System.ComponentModel.Design
                 UndoEngine.Trace("Creating undo unit '{0}'", name);
 
                 Name = name;
-                UndoEngine = engine ?? throw new ArgumentNullException(nameof(engine));
+                UndoEngine = engine.OrThrowIfNull();
                 _reverse = true;
                 if (UndoEngine.GetService(typeof(ISelectionService)) is ISelectionService ss)
                 {

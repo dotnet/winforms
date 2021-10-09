@@ -109,7 +109,12 @@ namespace System.Windows.Forms.Design.Tests
                 .Setup(s => s.GetService(typeof(IEventBindingService)))
                 .Returns(mockEventBindingService.Object);
 
-            foreach (ActiveDesignerEventArgs e in new object[] { null, new ActiveDesignerEventArgs(null, nullMockDesignerHost.Object), new ActiveDesignerEventArgs(null, invalidMockDesignerHost.Object), new ActiveDesignerEventArgs(null, mockDesignerHost.Object) })
+            foreach (ActiveDesignerEventArgs e in new object[]
+                {
+                    new ActiveDesignerEventArgs(null, nullMockDesignerHost.Object),
+                    new ActiveDesignerEventArgs(null, invalidMockDesignerHost.Object),
+                    new ActiveDesignerEventArgs(null, mockDesignerHost.Object)
+                })
             {
                 yield return new object[] { null, e, null };
                 yield return new object[] { new object(), e, null };

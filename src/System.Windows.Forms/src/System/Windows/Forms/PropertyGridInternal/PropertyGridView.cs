@@ -1549,12 +1549,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool FilterEditWndProc(ref Message m)
         {
             // If it's the TAB key, we keep it since we'll give them focus with it.
-            if (_dropDownHolder?.Visible == true && m._Msg == User32.WM.KEYDOWN && (Keys)m._WParam != Keys.Tab)
+            if (_dropDownHolder?.Visible == true && m.MsgInternal == User32.WM.KEYDOWN && (Keys)m.WParamInternal != Keys.Tab)
             {
                 Control control = _dropDownHolder.Component;
                 if (control is not null)
                 {
-                    m._Result = User32.SendMessageW(control, m._Msg, m._WParam, m._LParam);
+                    m.ResultInternal = User32.SendMessageW(control, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return true;
                 }
             }
@@ -5400,12 +5400,12 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private unsafe bool WmNotify(ref Message m)
         {
-            if (m._LParam == 0)
+            if (m.LParamInternal == 0)
             {
                 return false;
             }
 
-            var nmhdr = (User32.NMHDR*)m._LParam;
+            var nmhdr = (User32.NMHDR*)m.LParamInternal;
 
             if (nmhdr->hwndFrom == ToolTip.Handle)
             {
@@ -5453,7 +5453,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             itemRect.Offset(tipPt);
                             PositionTooltip(this, ToolTip, itemRect);
-                            m._Result = 1;
+                            m.ResultInternal = 1;
                             return true;
                         }
 
@@ -5492,7 +5492,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 case (int)User32.WM.IME_COMPOSITION:
                     EditTextBox.Focus();
-                    User32.PostMessageW(EditTextBox, User32.WM.IME_COMPOSITION, m._WParam, m._LParam);
+                    User32.PostMessageW(EditTextBox, User32.WM.IME_COMPOSITION, m.WParamInternal, m.LParamInternal);
                     return;
 
                 case (int)User32.WM.GETDLGCODE:
@@ -5509,18 +5509,18 @@ namespace System.Windows.Forms.PropertyGridInternal
                         }
                     }
 
-                    m._Result = (nint)flags;
+                    m.ResultInternal = (nint)flags;
                     return;
 
                 case (int)User32.WM.MOUSEMOVE:
 
                     // Check if it's the same position, of so eat the message.
-                    if (m._LParam == _lastMouseMove)
+                    if (m.LParamInternal == _lastMouseMove)
                     {
                         return;
                     }
 
-                    _lastMouseMove = (int)m._LParam;
+                    _lastMouseMove = (int)m.LParamInternal;
                     break;
 
                 case (int)User32.WM.NOTIFY:
@@ -5531,10 +5531,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
-                    m._Result = GetRowFromGridEntry(_selectedGridEntry);
+                    m.ResultInternal = GetRowFromGridEntry(_selectedGridEntry);
                     return;
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m._Result = Math.Min(_visibleRows, TotalProperties);
+                    m.ResultInternal = Math.Min(_visibleRows, TotalProperties);
                     return;
             }
 

@@ -91,10 +91,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                if (statementOwner is null)
-                {
-                    throw new ArgumentNullException(nameof(statementOwner));
-                }
+                ArgumentNullException.ThrowIfNull(statementOwner, nameof(statementOwner));
 
                 if (_table != null)
                 {
@@ -129,10 +126,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public bool ContainsKey(object statementOwner)
         {
-            if (statementOwner is null)
-            {
-                throw new ArgumentNullException(nameof(statementOwner));
-            }
+            ArgumentNullException.ThrowIfNull(statementOwner, nameof(statementOwner));
 
             if (_table != null)
             {
@@ -155,10 +149,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Populate(ICollection statementOwners)
         {
-            if (statementOwners is null)
-            {
-                throw new ArgumentNullException(nameof(statementOwners));
-            }
+            ArgumentNullException.ThrowIfNull(statementOwners, nameof(statementOwners));
 
             foreach (object o in statementOwners)
             {
@@ -171,10 +162,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Populate(object owner)
         {
-            if (owner is null)
-            {
-                throw new ArgumentNullException(nameof(owner));
-            }
+            ArgumentNullException.ThrowIfNull(owner, nameof(owner));
 
             AddOwner(owner, null);
         }

@@ -2221,9 +2221,9 @@ namespace System.Windows.Forms
                             case PreProcessControlState.MessageProcessed:
                                 // someone returned true from PreProcessMessage
                                 // no need to dispatch the message, its already been coped with.
-                                lpmsg->message = msg._Msg;
-                                lpmsg->wParam = msg._WParam;
-                                lpmsg->lParam = msg._LParam;
+                                lpmsg->message = msg.MsgInternal;
+                                lpmsg->wParam = msg.WParamInternal;
+                                lpmsg->lParam = msg.LParamInternal;
                                 return HRESULT.S_OK;
                             case PreProcessControlState.MessageNeeded:
                                 // Here we need to dispatch the message ourselves

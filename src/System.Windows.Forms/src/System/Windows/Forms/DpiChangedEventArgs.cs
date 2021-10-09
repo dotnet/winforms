@@ -20,9 +20,9 @@ namespace System.Windows.Forms
         internal unsafe DpiChangedEventArgs(int old, Message m)
         {
             DeviceDpiOld = old;
-            DeviceDpiNew = PARAM.SignedLOWORD(m._WParam);
-            Debug.Assert(PARAM.SignedHIWORD(m._WParam) == DeviceDpiNew, "Non-square pixels!");
-            RECT suggestedRect = *(RECT*)m._LParam;
+            DeviceDpiNew = PARAM.SignedLOWORD(m.WParamInternal);
+            Debug.Assert(PARAM.SignedHIWORD(m.WParamInternal) == DeviceDpiNew, "Non-square pixels!");
+            RECT suggestedRect = *(RECT*)m.LParamInternal;
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }
 

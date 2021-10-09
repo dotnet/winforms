@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -13,9 +11,14 @@ namespace System.Windows.Forms
         private Color _arrowColor = Color.Empty;
         private bool _arrowColorChanged;
 
-        public ToolStripArrowRenderEventArgs(Graphics g, ToolStripItem toolStripItem, Rectangle arrowRectangle, Color arrowColor, ArrowDirection arrowDirection)
+        public ToolStripArrowRenderEventArgs(
+            Graphics g,
+            ToolStripItem? toolStripItem,
+            Rectangle arrowRectangle,
+            Color arrowColor,
+            ArrowDirection arrowDirection)
         {
-            Graphics = g;
+            Graphics = g.OrThrowIfNull();
             Item = toolStripItem;
             ArrowRectangle = arrowRectangle;
             DefaultArrowColor = arrowColor;
@@ -40,6 +43,6 @@ namespace System.Windows.Forms
 
         public Graphics Graphics { get; }
 
-        public ToolStripItem Item { get; }
+        public ToolStripItem? Item { get; }
     }
 }

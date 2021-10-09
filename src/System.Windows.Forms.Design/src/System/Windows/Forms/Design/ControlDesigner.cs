@@ -426,7 +426,7 @@ namespace System.Windows.Forms.Design
         ///  want to block it from getting to Windows itself because it causes other messages to be generated.
         /// </summary>
         protected void BaseWndProc(ref Message m)
-            => m._Result = User32.DefWindowProcW(m.HWnd, m._Msg, m._WParam, m._LParam);
+            => m.ResultInternal = User32.DefWindowProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
 
         /// <summary>
         ///  Determines if the this designer can be parented to the specified designer -- generally this means if the
@@ -611,15 +611,8 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected bool EnableDesignMode(Control child, string name)
         {
-            if (child is null)
-            {
-                throw new ArgumentNullException(nameof(child));
-            }
-
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(child, nameof(child));
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
 
             if (!TryGetService(out INestedContainer nc))
             {
@@ -1738,10 +1731,10 @@ namespace System.Windows.Forms.Design
             IMouseHandler mouseHandler = null;
 
             // We look at WM_NCHITTEST to determine if the mouse is in a live region of the control
-            if (m._Msg == User32.WM.NCHITTEST && !_inHitTest)
+            if (m.MsgInternal == User32.WM.NCHITTEST && !_inHitTest)
             {
                 _inHitTest = true;
-                Point pt = PARAM.ToPoint(m._LParam);
+                Point pt = PARAM.ToPoint(m.LParamInternal);
                 try
                 {
                     _liveRegion = GetHitTest(pt);
@@ -1759,14 +1752,14 @@ namespace System.Windows.Forms.Design
             }
 
             // Check to see if the mouse is in a live region of the control and that the context key is not being fired
-            bool isContextKey = m._Msg == User32.WM.CONTEXTMENU;
-            if (_liveRegion && (IsMouseMessage(m._Msg) || isContextKey))
+            bool isContextKey = m.MsgInternal == User32.WM.CONTEXTMENU;
+            if (_liveRegion && (IsMouseMessage(m.MsgInternal) || isContextKey))
             {
                 // The ActiveX DataGrid control brings up a context menu on right mouse down when it is in edit mode.
                 // And, when we generate a WM_CONTEXTMENU message later, it calls DefWndProc() which by default calls
                 // the parent (formdesigner). The FormDesigner then brings up the AxHost context menu. This code
                 // causes recursive WM_CONTEXTMENU messages to be ignored till we return from the live region message.
-                if (m._Msg == User32.WM.CONTEXTMENU)
+                if (m.MsgInternal == User32.WM.CONTEXTMENU)
                 {
                     Debug.Assert(!s_inContextMenu, "Recursively hitting live region for context menu!!!");
                     s_inContextMenu = true;
@@ -1778,12 +1771,12 @@ namespace System.Windows.Forms.Design
                 }
                 finally
                 {
-                    if (m._Msg == User32.WM.CONTEXTMENU)
+                    if (m.MsgInternal == User32.WM.CONTEXTMENU)
                     {
                         s_inContextMenu = false;
                     }
 
-                    if (m._Msg == User32.WM.LBUTTONUP)
+                    if (m.MsgInternal == User32.WM.LBUTTONUP)
                     {
                         // terminate the drag. TabControl loses shortcut menu options after adding ActiveX control.
                         OnMouseDragEnd(true);
@@ -1800,9 +1793,9 @@ namespace System.Windows.Forms.Design
             // CONSIDER - I really don't like this one bit. We need a
             //          : centralized handler so we can do a global override for the tab order
             //          : UI, but the designer is a natural fit for an object oriented UI.
-            if ((m._Msg >= User32.WM.MOUSEFIRST && m._Msg <= User32.WM.MOUSELAST)
-                || (m._Msg >= User32.WM.NCMOUSEMOVE && m._Msg <= User32.WM.NCMBUTTONDBLCLK)
-                || m._Msg == User32.WM.SETCURSOR)
+            if ((m.MsgInternal >= User32.WM.MOUSEFIRST && m.MsgInternal <= User32.WM.MOUSELAST)
+                || (m.MsgInternal >= User32.WM.NCMOUSEMOVE && m.MsgInternal <= User32.WM.NCMBUTTONDBLCLK)
+                || m.MsgInternal == User32.WM.SETCURSOR)
             {
                 _eventService ??= GetService<IEventHandlerService>();
 
@@ -1812,20 +1805,20 @@ namespace System.Windows.Forms.Design
                 }
             }
 
-            if (m._Msg >= User32.WM.MOUSEFIRST && m._Msg <= User32.WM.MOUSELAST)
+            if (m.MsgInternal >= User32.WM.MOUSEFIRST && m.MsgInternal <= User32.WM.MOUSELAST)
             {
-                location = PARAM.ToPoint(m._LParam);
+                location = PARAM.ToPoint(m.LParamInternal);
                 User32.MapWindowPoints(m.HWnd, IntPtr.Zero, &location, 1);
             }
-            else if (m._Msg >= User32.WM.NCMOUSEMOVE && m._Msg <= User32.WM.NCMBUTTONDBLCLK)
+            else if (m.MsgInternal >= User32.WM.NCMOUSEMOVE && m.MsgInternal <= User32.WM.NCMBUTTONDBLCLK)
             {
-                location = PARAM.ToPoint(m._LParam);
+                location = PARAM.ToPoint(m.LParamInternal);
             }
 
             // This is implemented on the base designer for UI activation support.  We call it so that we can support
             // UI activation.
             MouseButtons button = MouseButtons.None;
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.CREATE:
                     DefWndProc(ref m);
@@ -1841,7 +1834,7 @@ namespace System.Windows.Forms.Design
 
                 case User32.WM.GETOBJECT:
                     // See "How to Handle WM_GETOBJECT" in MSDN
-                    if (m._LParam == User32.OBJID.CLIENT)
+                    if (m.LParamInternal == User32.OBJID.CLIENT)
                     {
                         Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
                         // Get an Lresult for the accessibility Object for this control
@@ -1850,7 +1843,7 @@ namespace System.Windows.Forms.Design
                         if (iacc is null)
                         {
                             // Accessibility is not supported on this control
-                            m._Result = 0;
+                            m.ResultInternal = 0;
                         }
                         else
                         {
@@ -1858,7 +1851,7 @@ namespace System.Windows.Forms.Design
                             punkAcc = Marshal.GetIUnknownForObject(iacc);
                             try
                             {
-                                m._Result = Oleacc.LresultFromObject(ref IID_IAccessible, m._WParam, punkAcc);
+                                m.ResultInternal = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParamInternal, punkAcc);
                             }
                             finally
                             {
@@ -1904,7 +1897,7 @@ namespace System.Windows.Forms.Design
                 case User32.WM.LBUTTONDBLCLK:
                 case User32.WM.NCRBUTTONDBLCLK:
                 case User32.WM.RBUTTONDBLCLK:
-                    if (m._Msg == User32.WM.NCRBUTTONDBLCLK || m._Msg == User32.WM.RBUTTONDBLCLK)
+                    if (m.MsgInternal == User32.WM.NCRBUTTONDBLCLK || m.MsgInternal == User32.WM.RBUTTONDBLCLK)
                     {
                         button = MouseButtons.Right;
                     }
@@ -1932,7 +1925,7 @@ namespace System.Windows.Forms.Design
                 case User32.WM.LBUTTONDOWN:
                 case User32.WM.NCRBUTTONDOWN:
                 case User32.WM.RBUTTONDOWN:
-                    if (m._Msg == User32.WM.NCRBUTTONDOWN || m._Msg == User32.WM.RBUTTONDOWN)
+                    if (m.MsgInternal == User32.WM.NCRBUTTONDOWN || m.MsgInternal == User32.WM.RBUTTONDOWN)
                     {
                         button = MouseButtons.Right;
                     }
@@ -1977,7 +1970,7 @@ namespace System.Windows.Forms.Design
 
                         if (_toolPassThrough)
                         {
-                            User32.SendMessageW(Control.Parent, m._Msg, m._WParam, GetParentPointFromLparam(m._LParam));
+                            User32.SendMessageW(Control.Parent, m.MsgInternal, m.WParamInternal, GetParentPointFromLparam(m.LParamInternal));
                             return;
                         }
 
@@ -2004,11 +1997,11 @@ namespace System.Windows.Forms.Design
 
                 case User32.WM.NCMOUSEMOVE:
                 case User32.WM.MOUSEMOVE:
-                    if (((User32.MK)m._WParam).HasFlag(User32.MK.LBUTTON))
+                    if (((User32.MK)m.WParamInternal).HasFlag(User32.MK.LBUTTON))
                     {
                         button = MouseButtons.Left;
                     }
-                    else if (((User32.MK)m._WParam).HasFlag(User32.MK.RBUTTON))
+                    else if (((User32.MK)m.WParamInternal).HasFlag(User32.MK.RBUTTON))
                     {
                         button = MouseButtons.Right;
                         _toolPassThrough = false;
@@ -2024,9 +2017,9 @@ namespace System.Windows.Forms.Design
                         {
                             User32.SendMessageW(
                                 Control.Parent.Handle,
-                                m._Msg,
-                                m._WParam,
-                                GetParentPointFromLparam(m._LParam));
+                                m.MsgInternal,
+                                m.WParamInternal,
+                                GetParentPointFromLparam(m.LParamInternal));
                             return;
                         }
 
@@ -2045,7 +2038,7 @@ namespace System.Windows.Forms.Design
 
                     // We eat WM_NCMOUSEMOVE messages, since we don't want the non-client area/ of design time
                     // controls to repaint on mouse move.
-                    if (m._Msg == User32.WM.MOUSEMOVE)
+                    if (m.MsgInternal == User32.WM.MOUSEMOVE)
                     {
                         BaseWndProc(ref m);
                     }
@@ -2056,7 +2049,7 @@ namespace System.Windows.Forms.Design
                 case User32.WM.NCRBUTTONUP:
                 case User32.WM.RBUTTONUP:
                     // This is implemented on the base designer for UI activation support.
-                    button = m._Msg == User32.WM.NCRBUTTONUP || m._Msg == User32.WM.RBUTTONUP
+                    button = m.MsgInternal == User32.WM.NCRBUTTONUP || m.MsgInternal == User32.WM.RBUTTONUP
                         ? MouseButtons.Right
                         : MouseButtons.Left;
 
@@ -2071,9 +2064,9 @@ namespace System.Windows.Forms.Design
                         {
                             User32.SendMessageW(
                                 Control.Parent.Handle,
-                                m._Msg,
-                                m._WParam,
-                                GetParentPointFromLparam(m._LParam));
+                                m.MsgInternal,
+                                m.WParamInternal,
+                                GetParentPointFromLparam(m.LParamInternal));
                             _toolPassThrough = false;
                             return;
                         }
@@ -2090,7 +2083,7 @@ namespace System.Windows.Forms.Design
                     break;
                 case User32.WM.PRINTCLIENT:
                     {
-                        using Graphics g = Graphics.FromHdc(m._WParam);
+                        using Graphics g = Graphics.FromHdc(m.WParamInternal);
                         using PaintEventArgs e = new PaintEventArgs(g, Control.ClientRectangle);
                         DefWndProc(ref m);
                         OnPaintAdornments(e);
@@ -2259,7 +2252,7 @@ namespace System.Windows.Forms.Design
                     // We handle this in addition to a right mouse button. Why?  Because we often eat the right mouse
                     // button, so it may never generate a WM_CONTEXTMENU.  However, the system may generate one in
                     // response to an F-10.
-                    location = PARAM.ToPoint(m._LParam);
+                    location = PARAM.ToPoint(m.LParamInternal);
 
                     bool handled = GetService<ToolStripKeyboardHandlingService>()?.OnContextMenu(location.X, location.Y) ?? false;
 
@@ -2276,12 +2269,12 @@ namespace System.Windows.Forms.Design
 
                     break;
                 default:
-                    if (m._Msg == User32.RegisteredMessage.WM_MOUSEENTER)
+                    if (m.MsgInternal == User32.RegisteredMessage.WM_MOUSEENTER)
                     {
                         OnMouseEnter();
                         BaseWndProc(ref m);
                     }
-                    else if (m._Msg < User32.WM.KEYFIRST || m._Msg > User32.WM.KEYLAST)
+                    else if (m.MsgInternal < User32.WM.KEYFIRST || m.MsgInternal > User32.WM.KEYLAST)
                     {
                         // We eat all key handling to the control.  Controls generally should not be getting focus
                         // anyway, so this shouldn't happen. However, we want to prevent this as much as possible.

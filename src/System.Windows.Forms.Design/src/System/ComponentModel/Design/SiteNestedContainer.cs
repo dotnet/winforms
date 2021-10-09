@@ -71,10 +71,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected override ISite CreateSite(IComponent component, string name)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
 
             return new NestedSite(component, _host, name, this);
         }

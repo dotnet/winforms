@@ -56,15 +56,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void Serialize(SerializationStore store, object value)
         {
-            if (store is null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(store, nameof(store));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -79,15 +72,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeAbsolute(SerializationStore store, object value)
         {
-            if (store is null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
-
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(store, nameof(store));
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -102,20 +88,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeMember(SerializationStore store, object owningObject, MemberDescriptor member)
         {
-            if (store is null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
-
-            if (owningObject is null)
-            {
-                throw new ArgumentNullException(nameof(owningObject));
-            }
-
-            if (member is null)
-            {
-                throw new ArgumentNullException(nameof(member));
-            }
+            ArgumentNullException.ThrowIfNull(store, nameof(store));
+            ArgumentNullException.ThrowIfNull(owningObject, nameof(owningObject));
+            ArgumentNullException.ThrowIfNull(member, nameof(member));
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -131,20 +106,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeMemberAbsolute(SerializationStore store, object owningObject, MemberDescriptor member)
         {
-            if (store is null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
-
-            if (owningObject is null)
-            {
-                throw new ArgumentNullException(nameof(owningObject));
-            }
-
-            if (member is null)
-            {
-                throw new ArgumentNullException(nameof(member));
-            }
+            ArgumentNullException.ThrowIfNull(store, nameof(store));
+            ArgumentNullException.ThrowIfNull(owningObject, nameof(owningObject));
+            ArgumentNullException.ThrowIfNull(member, nameof(member));
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -159,10 +123,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override ICollection Deserialize(SerializationStore store)
         {
-            if (store is null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
+            ArgumentNullException.ThrowIfNull(store, nameof(store));
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -177,15 +138,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override ICollection Deserialize(SerializationStore store, IContainer container)
         {
-            if (store is null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
-
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(store, nameof(store));
+            ArgumentNullException.ThrowIfNull(container, nameof(container));
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -200,15 +154,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void DeserializeTo(SerializationStore store, IContainer container, bool validateRecycledTypes, bool applyDefaults)
         {
-            if (store is null)
-            {
-                throw new ArgumentNullException(nameof(store));
-            }
-
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(store, nameof(store));
+            ArgumentNullException.ThrowIfNull(container, nameof(container));
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -656,10 +603,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
             {
-                if (info is null)
-                {
-                    throw new ArgumentNullException(nameof(info));
-                }
+                ArgumentNullException.ThrowIfNull(info, nameof(info));
 
                 info.AddValue(StateKey, _objectState);
                 info.AddValue(NameKey, _objectNames);
@@ -1542,10 +1486,7 @@ namespace System.ComponentModel.Design.Serialization
                 // IServiceProvider
                 object IServiceProvider.GetService(Type serviceType)
                 {
-                    if (serviceType is null)
-                    {
-                        throw new ArgumentNullException(nameof(serviceType));
-                    }
+                    ArgumentNullException.ThrowIfNull(serviceType, nameof(serviceType));
 
                     if (serviceType == typeof(IResourceService))
                     {

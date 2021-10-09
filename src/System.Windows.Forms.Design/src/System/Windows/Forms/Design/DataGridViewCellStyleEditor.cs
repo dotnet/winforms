@@ -15,10 +15,7 @@ namespace System.Windows.Forms.Design
 
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
+            ArgumentNullException.ThrowIfNull(provider, nameof(provider));
 
             if (!provider.TryGetService(out IWindowsFormsEditorService editorService))
             {

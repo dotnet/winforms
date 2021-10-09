@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.CodeDom;
+using System.Windows.Forms;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -17,9 +18,9 @@ namespace System.ComponentModel.Design.Serialization
     {
         public ExpressionContext(CodeExpression expression, Type expressionType, object owner, object presetValue)
         {
-            Expression = expression ?? throw new ArgumentNullException(nameof(expression));
-            ExpressionType = expressionType ?? throw new ArgumentNullException(nameof(expressionType));
-            Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            Expression = expression.OrThrowIfNull();
+            ExpressionType = expressionType.OrThrowIfNull();
+            Owner = owner.OrThrowIfNull();
             PresetValue = presetValue;
         }
 

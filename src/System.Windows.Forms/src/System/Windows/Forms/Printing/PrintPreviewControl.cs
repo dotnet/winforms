@@ -311,7 +311,7 @@ namespace System.Windows.Forms
 
         private unsafe int AdjustScroll(Message m, int pos, int maxPos, bool horizontal)
         {
-            switch ((User32.SBH)PARAM.LOWORD(m._WParam))
+            switch ((User32.SBH)PARAM.LOWORD(m.WParamInternal))
             {
                 case User32.SBH.THUMBPOSITION:
                 case User32.SBH.THUMBTRACK:
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        pos = PARAM.HIWORD(m._WParam);
+                        pos = PARAM.HIWORD(m.WParamInternal);
                     }
 
                     break;
@@ -701,7 +701,7 @@ namespace System.Windows.Forms
         {
             // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
             // the message is the built-in Window scrollbar.
-            if (m._LParam != 0)
+            if (m.LParamInternal != 0)
             {
                 base.WndProc(ref m);
                 return;
@@ -774,7 +774,7 @@ namespace System.Windows.Forms
         {
             // The lparam is the handle of the sending scrollbar, or NULL when the scrollbar sending
             // the message is the built-in Window scrollbar.
-            if (m._LParam != 0)
+            if (m.LParamInternal != 0)
             {
                 base.WndProc(ref m);
                 return;
@@ -793,7 +793,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmKeyDown(ref Message msg)
         {
-            Keys keyData = (Keys)msg._WParam | ModifierKeys;
+            Keys keyData = (Keys)msg.WParamInternal | ModifierKeys;
             Point locPos = Position;
             int pos;
             int maxPos;
@@ -926,7 +926,7 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            switch (m._Msg)
+            switch (m.MsgInternal)
             {
                 case User32.WM.VSCROLL:
                     WmVScroll(ref m);

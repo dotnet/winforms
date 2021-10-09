@@ -2097,7 +2097,7 @@ namespace System.Windows.Forms
         {
             if (!textBoxFlags[codeUpdateText] && !textBoxFlags[creatingHandle])
             {
-                EN wParamAsEN = (EN)PARAM.HIWORD(m._WParam);
+                EN wParamAsEN = (EN)PARAM.HIWORD(m.WParamInternal);
                 if (wParamAsEN == EN.CHANGE && CanRaiseTextChangedEvent)
                 {
                     OnTextChanged(EventArgs.Empty);
@@ -2125,12 +2125,12 @@ namespace System.Windows.Forms
             if (AcceptsTab)
             {
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBox wants tabs");
-                m._Result = m._Result | (int)DLGC.WANTTAB;
+                m.ResultInternal = m.ResultInternal | (int)DLGC.WANTTAB;
             }
             else
             {
                 Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "TextBox doesn't want tabs");
-                m._Result = m._Result & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS);
+                m.ResultInternal = m.ResultInternal & ~(int)(DLGC.WANTTAB | DLGC.WANTALLKEYS);
             }
         }
 
@@ -2148,14 +2148,14 @@ namespace System.Windows.Forms
             bool keyboardActivated = false;
 
             // LParam will be -1 when the user invokes the context menu with the keyboard.
-            if (m._LParam == -1)
+            if (m.LParamInternal == -1)
             {
                 keyboardActivated = true;
                 client = new Point(Width / 2, Height / 2);
             }
             else
             {
-                client = PointToClient(PARAM.ToPoint(m._LParam));
+                client = PointToClient(PARAM.ToPoint(m.LParamInternal));
             }
 
             // Only show the context menu when clicked in the client area.

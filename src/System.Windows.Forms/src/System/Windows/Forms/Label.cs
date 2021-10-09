@@ -1498,8 +1498,8 @@ namespace System.Windows.Forms
                     // this so we can tell what's going on.
 
                     Rectangle rectInScreen = RectangleToScreen(new Rectangle(0, 0, Width, Height));
-                    Point pt = new Point((int)m._LParam);
-                    m._Result = (nint)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
+                    Point pt = new Point((int)m.LParamInternal);
+                    m.ResultInternal = (nint)(rectInScreen.Contains(pt) ? User32.HT.CLIENT : User32.HT.NOWHERE);
                     break;
 
                 default:

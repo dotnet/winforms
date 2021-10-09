@@ -396,7 +396,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return m._Result;
+            return m.ResultInternal;
         }
 
         /// <summary>
@@ -509,15 +509,15 @@ namespace System.Windows.Forms
 
                     // At this point, there isn't much we can do.  There's a small chance the following
                     // line will allow the rest of the program to run, but don't get your hopes up.
-                    m._Result = User32.DefWindowProcW(m.HWnd, m._Msg, m._WParam, m._LParam);
+                    m.ResultInternal = User32.DefWindowProcW(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
                     return;
                 }
 
-                m._Result = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, m._Msg, m._WParam, m._LParam);
+                m.ResultInternal = User32.CallWindowProcW(_priorWindowProcHandle, m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
             }
             else
             {
-                m._Result = PreviousWindow.Callback(m.HWnd, m._Msg, m._WParam, m._LParam);
+                m.ResultInternal = PreviousWindow.Callback(m.HWnd, m.MsgInternal, m.WParamInternal, m.LParamInternal);
             }
         }
 

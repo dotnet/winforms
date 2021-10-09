@@ -37,7 +37,7 @@ namespace System.ComponentModel.Design
             private Button _okButton;
             private Button _downButton;
             private Button _upButton;
-            private PropertyGrid _propertyBrowser;
+            private PropertyGrid _propertyGrid;
             private Label _membersLabel;
             private Label _propertiesLabel;
             private readonly ContextMenuStrip _addDownMenu;
@@ -389,20 +389,20 @@ namespace System.ComponentModel.Design
 
             private void HookEvents()
             {
-                _listbox.KeyDown += new KeyEventHandler(Listbox_keyDown);
-                _listbox.DrawItem += new DrawItemEventHandler(Listbox_drawItem);
-                _listbox.SelectedIndexChanged += new EventHandler(Listbox_SelectedIndexChanged);
-                _listbox.HandleCreated += new EventHandler(Listbox_HandleCreated);
-                _upButton.Click += new EventHandler(UpButton_Click);
-                _downButton.Click += new EventHandler(DownButton_click);
-                _propertyBrowser.PropertyValueChanged += new PropertyValueChangedEventHandler(PropertyGrid_propertyValueChanged);
-                _addButton.Click += new EventHandler(AddButton_click);
-                _removeButton.Click += new EventHandler(RemoveButton_Click);
-                _okButton.Click += new EventHandler(OKButton_Click);
-                _cancelButton.Click += new EventHandler(CancelButton_click);
-                HelpButtonClicked += new CancelEventHandler(CollectionEditor_HelpButtonClicked);
-                HelpRequested += new HelpEventHandler(Form_HelpRequested);
-                Shown += new EventHandler(Form_Shown);
+                _listbox.KeyDown += Listbox_keyDown;
+                _listbox.DrawItem += Listbox_drawItem;
+                _listbox.SelectedIndexChanged += Listbox_SelectedIndexChanged;
+                _listbox.HandleCreated += Listbox_HandleCreated;
+                _upButton.Click += UpButton_Click;
+                _downButton.Click += DownButton_click;
+                _propertyGrid.PropertyValueChanged += PropertyGrid_propertyValueChanged;
+                _addButton.Click += AddButton_click;
+                _removeButton.Click += RemoveButton_Click;
+                _okButton.Click += OKButton_Click;
+                _cancelButton.Click += CancelButton_click;
+                HelpButtonClicked += CollectionEditor_HelpButtonClicked;
+                HelpRequested += Form_HelpRequested;
+                Shown += Form_Shown;
             }
 
             private void InitializeComponent()
@@ -413,7 +413,7 @@ namespace System.ComponentModel.Design
                 _upButton = new Button();
                 _downButton = new Button();
                 _propertiesLabel = new Label();
-                _propertyBrowser = new PropertyGrid();
+                _propertyGrid = new PropertyGrid();
                 _addButton = new SplitButton();
                 _removeButton = new Button();
                 _okButton = new Button();
@@ -449,11 +449,11 @@ namespace System.ComponentModel.Design
                 _propertiesLabel.Margin = new Padding(0, 0, 3, 3);
                 _propertiesLabel.Name = "propertiesLabel";
 
-                resources.ApplyResources(_propertyBrowser, "propertyBrowser");
-                _propertyBrowser.CommandsVisibleIfAvailable = false;
-                _propertyBrowser.Margin = new Padding(3, 3, 0, 3);
-                _propertyBrowser.Name = "propertyBrowser";
-                _overArchingTableLayoutPanel.SetRowSpan(_propertyBrowser, 3);
+                resources.ApplyResources(_propertyGrid, "propertyBrowser");
+                _propertyGrid.CommandsVisibleIfAvailable = false;
+                _propertyGrid.Margin = new Padding(3, 3, 0, 3);
+                _propertyGrid.Name = "propertyBrowser";
+                _overArchingTableLayoutPanel.SetRowSpan(_propertyGrid, 3);
 
                 resources.ApplyResources(_addButton, "addButton");
                 _addButton.Margin = new Padding(0, 3, 3, 3);
@@ -486,7 +486,7 @@ namespace System.ComponentModel.Design
                 _overArchingTableLayoutPanel.Controls.Add(_propertiesLabel, 2, 0);
                 _overArchingTableLayoutPanel.Controls.Add(_membersLabel, 0, 0);
                 _overArchingTableLayoutPanel.Controls.Add(_listbox, 0, 1);
-                _overArchingTableLayoutPanel.Controls.Add(_propertyBrowser, 2, 1);
+                _overArchingTableLayoutPanel.Controls.Add(_propertyGrid, 2, 1);
                 _overArchingTableLayoutPanel.Controls.Add(_okCancelTableLayoutPanel, 0, 4);
                 _overArchingTableLayoutPanel.Controls.Add(_upButton, 1, 1);
                 _overArchingTableLayoutPanel.Name = "overArchingTableLayoutPanel";
@@ -768,7 +768,7 @@ namespace System.ComponentModel.Design
 
                 // Now update the list box.
                 _listbox.Items.Clear();
-                _propertyBrowser.Site = new PropertyGridSite(Context, _propertyBrowser);
+                _propertyGrid.Site = new PropertyGridSite(Context, _propertyGrid);
                 if (EditValue != null)
                 {
                     SuspendEnabledUpdates();
@@ -979,13 +979,13 @@ namespace System.ComponentModel.Design
             /// </summary>
             protected internal override DialogResult ShowEditorDialog(IWindowsFormsEditorService edSvc)
             {
-                IComponentChangeService cs = _editor.Context.GetService(typeof(IComponentChangeService)) as IComponentChangeService;
+                IComponentChangeService changeService = _editor.Context.GetService<IComponentChangeService>();
                 DialogResult result = DialogResult.OK;
                 try
                 {
-                    if (cs != null)
+                    if (changeService is not null)
                     {
-                        cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
+                        changeService.ComponentChanged += OnComponentChanged;
                     }
 
                     // This is cached across requests, so reset the initial focus.
@@ -994,9 +994,9 @@ namespace System.ComponentModel.Design
                 }
                 finally
                 {
-                    if (cs != null)
+                    if (changeService is not null)
                     {
-                        cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
+                        changeService.ComponentChanged -= OnComponentChanged;
                     }
                 }
 
@@ -1060,7 +1060,7 @@ namespace System.ComponentModel.Design
                 _removeButton.Enabled = editEnabled && AllowRemoveInstance(((ListItem)_listbox.SelectedItem).Value);
                 _upButton.Enabled = editEnabled && _listbox.Items.Count > 1;
                 _downButton.Enabled = editEnabled && _listbox.Items.Count > 1;
-                _propertyBrowser.Enabled = editEnabled;
+                _propertyGrid.Enabled = editEnabled;
                 _addButton.Enabled = CollectionEditable;
 
                 if (_listbox.SelectedItem != null)
@@ -1095,8 +1095,8 @@ namespace System.ComponentModel.Design
 
                     if (_editor.IsAnyObjectInheritedReadOnly(items))
                     {
-                        _propertyBrowser.SelectedObjects = null;
-                        _propertyBrowser.Enabled = false;
+                        _propertyGrid.SelectedObjects = null;
+                        _propertyGrid.Enabled = false;
                         _removeButton.Enabled = false;
                         _upButton.Enabled = false;
                         _downButton.Enabled = false;
@@ -1104,14 +1104,14 @@ namespace System.ComponentModel.Design
                     }
                     else
                     {
-                        _propertyBrowser.Enabled = true;
-                        _propertyBrowser.SelectedObjects = items;
+                        _propertyGrid.Enabled = true;
+                        _propertyGrid.SelectedObjects = items;
                     }
                 }
                 else
                 {
                     _propertiesLabel.Text = SR.CollectionEditorPropertiesNone;
-                    _propertyBrowser.SelectedObject = null;
+                    _propertyGrid.SelectedObject = null;
                 }
             }
 

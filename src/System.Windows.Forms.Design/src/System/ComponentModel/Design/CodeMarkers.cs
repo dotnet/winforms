@@ -172,10 +172,7 @@ namespace System.ComponentModel.Design
 
             // Check the arguments only after checking whether code markers are enabled
             // This allows the calling code to pass null value and avoid calculation of data if nothing is to be logged
-            if (aBuff is null)
-            {
-                throw new ArgumentNullException(nameof(aBuff));
-            }
+            ArgumentNullException.ThrowIfNull(aBuff, nameof(aBuff));
 
             try
             {
@@ -233,10 +230,7 @@ namespace System.ComponentModel.Design
 
             // Check the arguments only after checking whether code markers are enabled
             // This allows the calling code to pass null value and avoid calculation of data if nothing is to be logged
-            if (stringData is null)
-            {
-                throw new ArgumentNullException(nameof(stringData));
-            }
+            ArgumentNullException.ThrowIfNull(stringData, nameof(stringData));
 
             try
             {
@@ -322,10 +316,7 @@ namespace System.ComponentModel.Design
         /// <returns>Whether CodeMarkers are enabled in the registry</returns>
         private static bool UsePrivateCodeMarkers(string regRoot, RegistryView registryView)
         {
-            if (regRoot is null)
-            {
-                throw new ArgumentNullException(nameof(regRoot));
-            }
+            ArgumentNullException.ThrowIfNull(regRoot, nameof(regRoot));
 
             // Reads the Performance subkey from the given registry key
             using (RegistryKey baseKey = RegistryKey.OpenBaseKey(RegistryHive.LocalMachine, registryView))

@@ -1669,7 +1669,7 @@ namespace System.Windows.Forms.Design
                 case User32.WM.CONTEXTMENU:
                     {
                         // Pop a context menu for the composition designer.
-                        Point location = PARAM.ToPoint(m._LParam);
+                        Point location = PARAM.ToPoint(m.LParamInternal);
                         if (location.X == -1 && location.Y == -1)
                         {
                             // For shift-F10.
@@ -1686,7 +1686,7 @@ namespace System.Windows.Forms.Design
                         {
                             // Get a hit test on any glyphs that we are managing this way.
                             // We know where to route appropriate messages.
-                            Point location = PARAM.ToPoint(m._LParam);
+                            Point location = PARAM.ToPoint(m.LParamInternal);
                             location.Offset(PointToClient(default));
                             glyphManager.GetHitTest(location);
                         }
@@ -2632,7 +2632,7 @@ namespace System.Windows.Forms.Design
                         // this message will be bubbled up to our parent, which would pop up a container context menu
                         // instead of our own.
 
-                        Point location = PARAM.ToPoint(m._LParam);
+                        Point location = PARAM.ToPoint(m.LParamInternal);
                         if (location.X == -1 && location.Y == -1)
                         {
                             // for shift-F10
@@ -2645,7 +2645,7 @@ namespace System.Windows.Forms.Design
                         if (_tray.glyphManager != null)
                         {
                             // Make sure tha we send our glyphs hit test messages over the TrayControls too
-                            Point pt = PARAM.ToPoint(m._LParam);
+                            Point pt = PARAM.ToPoint(m.LParamInternal);
                             var pt1 = new Point();
                             pt1 = PointToClient(pt1);
                             pt.Offset(pt1.X, pt1.Y);

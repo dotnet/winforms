@@ -3793,28 +3793,21 @@ namespace System.Windows.Forms.Tests
         {
             using SubPropertyGrid propertyGrid = new SubPropertyGrid();
 
-            var imageLists = propertyGrid.TestAccessor().Dynamic._imageList as ImageList[];
+            ImageList normalButtons = propertyGrid.TestAccessor().Dynamic._normalButtonImages;
 
-            Assert.NotNull(imageLists);
-            Assert.Equal(2, imageLists.Length);
-            var imageList1 = imageLists[0];
-            Assert.NotNull(imageList1);
+            Assert.NotNull(normalButtons);
 
             propertyGrid.OnSystemColorsChanged(EventArgs.Empty);
 
-            imageLists = propertyGrid.TestAccessor().Dynamic._imageList as ImageList[];
-
-            Assert.NotNull(imageLists);
-            Assert.Equal(2, imageLists.Length);
-            var imageList2 = imageLists[0];
-            Assert.NotNull(imageList2);
-            Assert.NotSame(imageList1, imageList2);
+            ImageList newNormalButtons = propertyGrid.TestAccessor().Dynamic._normalButtonImages;
+            Assert.NotNull(newNormalButtons);
+            Assert.NotSame(normalButtons, newNormalButtons);
 
             GC.Collect();
             GC.WaitForPendingFinalizers();
 
 #if DEBUG
-            Assert.True(imageList1.IsDisposed);
+            Assert.True(normalButtons.IsDisposed);
 #endif
         }
 

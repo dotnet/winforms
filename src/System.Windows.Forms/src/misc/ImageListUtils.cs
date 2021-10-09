@@ -22,9 +22,9 @@ namespace System.Windows.Forms
             PropertyDescriptor imageListProp = null;
             object parentInstance = instance;
 
-            if (currentComponent.Attributes[typeof(RelatedImageListAttribute)] is RelatedImageListAttribute relILAttr)
+            if (currentComponent.TryGetAttribute(out RelatedImageListAttribute relatedAttribute))
             {
-                string[] pathInfo = relILAttr.RelatedImageList.Split('.');
+                string[] pathInfo = relatedAttribute.RelatedImageList.Split('.');
                 for (int i = 0; i < pathInfo.Length; i++)
                 {
                     if (parentInstance is null)

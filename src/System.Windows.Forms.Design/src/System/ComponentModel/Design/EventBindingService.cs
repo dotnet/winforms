@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected EventBindingService(IServiceProvider provider)
         {
-            _provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            _provider = provider.OrThrowIfNull();
         }
 
         /// <summary>
@@ -110,15 +110,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         string IEventBindingService.CreateUniqueMethodName(IComponent component, EventDescriptor e)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(e, nameof(e));
 
             return CreateUniqueMethodName(component, e);
         }
@@ -129,10 +122,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         ICollection IEventBindingService.GetCompatibleMethods(EventDescriptor e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e, nameof(e));
 
             return GetCompatibleMethods(e);
         }
@@ -189,10 +179,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         PropertyDescriptorCollection IEventBindingService.GetEventProperties(EventDescriptorCollection events)
         {
-            if (events is null)
-            {
-                throw new ArgumentNullException(nameof(events));
-            }
+            ArgumentNullException.ThrowIfNull(events, nameof(events));
 
             List<PropertyDescriptor> props = new List<PropertyDescriptor>(events.Count);
 
@@ -217,10 +204,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         PropertyDescriptor IEventBindingService.GetEventProperty(EventDescriptor e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e, nameof(e));
 
             PropertyDescriptor prop = new EventPropertyDescriptor(e, this);
 
@@ -251,15 +235,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool IEventBindingService.ShowCode(IComponent component, EventDescriptor e)
         {
-            if (component is null)
-            {
-                throw new ArgumentNullException(nameof(component));
-            }
-
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(e, nameof(e));
 
             PropertyDescriptor prop = ((IEventBindingService)this).GetEventProperty(e);
             string methodName = (string)prop.GetValue(component);

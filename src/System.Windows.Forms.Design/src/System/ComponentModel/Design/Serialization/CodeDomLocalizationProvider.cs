@@ -35,10 +35,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public CodeDomLocalizationProvider(IServiceProvider provider, CodeDomLocalizationModel model)
         {
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
+            ArgumentNullException.ThrowIfNull(provider, nameof(provider));
 
             _model = model;
             Initialize(provider);
@@ -53,15 +50,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public CodeDomLocalizationProvider(IServiceProvider provider, CodeDomLocalizationModel model, CultureInfo[] supportedCultures)
         {
-            if (provider is null)
-            {
-                throw new ArgumentNullException(nameof(provider));
-            }
-
-            if (supportedCultures is null)
-            {
-                throw new ArgumentNullException(nameof(supportedCultures));
-            }
+            ArgumentNullException.ThrowIfNull(provider, nameof(provider));
+            ArgumentNullException.ThrowIfNull(supportedCultures, nameof(supportedCultures));
 
             _model = model;
             _supportedCultures = (CultureInfo[])supportedCultures.Clone();

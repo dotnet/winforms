@@ -41,7 +41,7 @@ namespace System.Windows.Forms
 
             private unsafe void WmWindowPosChanging(ref Message m)
             {
-                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m._LParam;
+                User32.WINDOWPOS* wp = (User32.WINDOWPOS*)m.LParamInternal;
                 wp->x = 0;
                 wp->y = 0;
                 Size s = WebBrowserBase.webBrowserBaseChangingSize;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms
                     wp->cy = s.Height;
                 }
 
-                m._Result = 0;
+                m.ResultInternal = 0;
             }
         }
     }

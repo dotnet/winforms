@@ -264,10 +264,10 @@ namespace System.Windows.Forms
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            switch ((Keys)m._WParam)
+            switch ((Keys)m.WParamInternal)
             {
                 case Keys.Enter:
-                    if (m._Msg == User32.WM.CHAR
+                    if (m.MsgInternal == User32.WM.CHAR
                         && !(ModifierKeys == Keys.Shift && Multiline && AcceptsReturn))
                     {
                         // Ignore the Enter key and don't add it to the textbox content. This happens when failing
@@ -279,7 +279,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.LineFeed:
-                    if (m._Msg == User32.WM.CHAR && ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
+                    if (m.MsgInternal == User32.WM.CHAR && ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
                     {
                         // Ignore linefeed character when user hits Ctrl-Enter to commit the cell.
                         return true;
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.A:
-                    if (m._Msg == User32.WM.KEYDOWN && ModifierKeys == Keys.Control)
+                    if (m.MsgInternal == User32.WM.KEYDOWN && ModifierKeys == Keys.Control)
                     {
                         SelectAll();
                         return true;

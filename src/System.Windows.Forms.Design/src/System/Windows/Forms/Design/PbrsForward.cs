@@ -121,22 +121,22 @@ namespace System.Windows.Forms.Design
                     {
                         foreach (BufferedKey bk in bufferedChars)
                         {
-                            if (bk.KeyChar._Msg == User32.WM.CHAR)
+                            if (bk.KeyChar.MsgInternal == User32.WM.CHAR)
                             {
-                                if (bk.KeyDown._Msg != 0)
+                                if (bk.KeyDown.MsgInternal != 0)
                                 {
-                                    User32.SendMessageW(hWnd, User32.WM.KEYDOWN, bk.KeyDown._WParam, bk.KeyDown._LParam);
+                                    User32.SendMessageW(hWnd, User32.WM.KEYDOWN, bk.KeyDown.WParamInternal, bk.KeyDown.LParamInternal);
                                 }
 
-                                User32.SendMessageW(hWnd, User32.WM.CHAR, bk.KeyChar._WParam, bk.KeyChar._LParam);
-                                if (bk.KeyUp._Msg != 0)
+                                User32.SendMessageW(hWnd, User32.WM.CHAR, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
+                                if (bk.KeyUp.MsgInternal != 0)
                                 {
-                                    User32.SendMessageW(hWnd, User32.WM.KEYUP, bk.KeyUp._WParam, bk.KeyUp._LParam);
+                                    User32.SendMessageW(hWnd, User32.WM.KEYUP, bk.KeyUp.WParamInternal, bk.KeyUp.LParamInternal);
                                 }
                             }
                             else
                             {
-                                User32.SendMessageW(hWnd, bk.KeyChar._Msg, bk.KeyChar._WParam, bk.KeyChar._LParam);
+                                User32.SendMessageW(hWnd, bk.KeyChar.MsgInternal, bk.KeyChar.WParamInternal, bk.KeyChar.LParamInternal);
                             }
                         }
                     }

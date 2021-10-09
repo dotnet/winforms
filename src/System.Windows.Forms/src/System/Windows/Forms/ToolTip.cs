@@ -2032,7 +2032,7 @@ namespace System.Windows.Forms
             if (cursorLocation.X >= r.left && cursorLocation.X <= r.right &&
                 cursorLocation.Y >= r.top && cursorLocation.Y <= r.bottom)
             {
-                message._Result = (nint)User32.MA.NOACTIVATE;
+                message.ResultInternal = (nint)User32.MA.NOACTIVATE;
             }
         }
 
@@ -2043,7 +2043,7 @@ namespace System.Windows.Forms
         {
             var point = (Point)message.GetLParam(typeof(Point));
             bool result = false;
-            message._Result = GetWindowFromPoint(point, ref result);
+            message.ResultInternal = GetWindowFromPoint(point, ref result);
         }
 
         /// <summary>
@@ -2156,7 +2156,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)message._LParam;
+            User32.WINDOWPOS* wp = (User32.WINDOWPOS*)message.LParamInternal;
 
             Cursor currentCursor = Cursor.Current;
             Point cursorPos = Cursor.Position;
@@ -2234,7 +2234,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            message._Result = 0;
+            message.ResultInternal = 0;
         }
 
         /// <summary>

@@ -84,10 +84,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             public override object GetValue(object component)
             {
-                if (component is null)
-                {
-                    throw new ArgumentNullException(nameof(component));
-                }
+                ArgumentNullException.ThrowIfNull(component, nameof(component));
 
                 // We must locate the sited component, because we store data on the dictionary
                 // service for the component.

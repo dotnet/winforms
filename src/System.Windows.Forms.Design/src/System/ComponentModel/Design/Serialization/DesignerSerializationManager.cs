@@ -6,6 +6,7 @@ using System.Collections;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
+using System.Windows.Forms;
 
 namespace System.ComponentModel.Design.Serialization
 {
@@ -50,7 +51,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public DesignerSerializationManager(IServiceProvider provider)
         {
-            this.provider = provider ?? throw new ArgumentNullException(nameof(provider));
+            this.provider = provider.OrThrowIfNull();
             preserveNames = true;
             validateRecycledTypes = true;
         }
@@ -403,10 +404,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public object GetSerializer(Type objectType, Type serializerType)
         {
-            if (serializerType is null)
-            {
-                throw new ArgumentNullException(nameof(serializerType));
-            }
+            ArgumentNullException.ThrowIfNull(serializerType, nameof(serializerType));
 
             object serializer = null;
             if (objectType != null)
@@ -620,10 +618,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
         {
-            if (property is null)
-            {
-                throw new ArgumentNullException(nameof(property));
-            }
+            ArgumentNullException.ThrowIfNull(property, nameof(property));
 
             // owner can be null for static properties.
             return new WrappedPropertyDescriptor(property, owner);
@@ -764,10 +759,7 @@ namespace System.ComponentModel.Design.Serialization
         object IDesignerSerializationManager.GetInstance(string name)
         {
             object instance = null;
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
 
             CheckSession();
             // Check our local nametable first
@@ -797,10 +789,7 @@ namespace System.ComponentModel.Design.Serialization
         string IDesignerSerializationManager.GetName(object value)
         {
             string name = null;
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value, nameof(value));
 
             CheckSession();
             // Check our local nametable first
@@ -900,15 +889,8 @@ namespace System.ComponentModel.Design.Serialization
         void IDesignerSerializationManager.SetName(object instance, string name)
         {
             CheckSession();
-            if (instance is null)
-            {
-                throw new ArgumentNullException(nameof(instance));
-            }
-
-            if (name is null)
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentNullException.ThrowIfNull(instance, nameof(instance));
+            ArgumentNullException.ThrowIfNull(name, nameof(name));
 
             if (instancesByName is null)
             {
