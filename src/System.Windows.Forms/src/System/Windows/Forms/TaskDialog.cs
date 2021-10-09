@@ -354,7 +354,7 @@ namespace System.Windows.Forms
         /// </exception>
         public static TaskDialogButton ShowDialog(IWin32Window owner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
-            => ShowDialog(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
+            => ShowDialog(owner.OrThrowIfNull().Handle,
                           page.OrThrowIfNull(),
                           startupLocation);
 

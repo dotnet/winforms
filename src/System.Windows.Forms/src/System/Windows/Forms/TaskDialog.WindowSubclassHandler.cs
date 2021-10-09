@@ -13,7 +13,7 @@ namespace System.Windows.Forms
             private readonly TaskDialog _taskDialog;
 
             public WindowSubclassHandler(TaskDialog taskDialog)
-                : base(taskDialog?.Handle ?? throw new ArgumentNullException(nameof(taskDialog)))
+                : base(taskDialog.OrThrowIfNull().Handle)
             {
                 _taskDialog = taskDialog;
             }
