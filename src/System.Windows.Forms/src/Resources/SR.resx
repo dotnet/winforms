@@ -6841,4 +6841,13 @@ Stack trace where the illegal operation occurred was:
   <data name="ListViewCannotAddGroupsToVirtualListView" xml:space="preserve">
     <value>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</value>
   </data>
+  <data name="ParentPropertyNotSetInGetNextControl" xml:space="preserve">
+    <value>{0} property should be set for {1}.</value>
+  </data>
+  <data name="ControlsPropertyNotSetInGetNextControl" xml:space="preserve">
+    <value>{0} property should be set for {1}.</value>
+  </data>
+  <data name="ControlsCollectionShouldNotBeEmptyInGetNextControl" xml:space="preserve">
+    <value>{0} collection shouldn't be empty for {1}.</value>
+  </data>
 </root>

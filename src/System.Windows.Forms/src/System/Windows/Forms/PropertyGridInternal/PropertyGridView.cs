@@ -188,7 +188,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return false;
                 }
 
-                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != IntPtr.Zero;
+                return User32.SendMessageW(EditTextBox, (User32.WM)User32.EM.CANUNDO) != 0;
             }
         }
 
@@ -347,20 +347,9 @@ namespace System.Windows.Forms.PropertyGridInternal
             => DropDownListBox.Visible ? DropDownListBox.AccessibilityObject : null;
 
         internal bool DrawValuesRightToLeft
-        {
-            get
-            {
-                if (_editTextBox is not null && _editTextBox.IsHandleCreated)
-                {
-                    int exStyle = unchecked((int)(long)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE));
-                    return (exStyle & (int)User32.WS_EX.RTLREADING) != 0;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
+            => _editTextBox is not null
+                && _editTextBox.IsHandleCreated
+                && ((User32.WS_EX)User32.GetWindowLong(_editTextBox, User32.GWL.EXSTYLE)).HasFlag(User32.WS_EX.RTLREADING);
 
         internal DropDownHolder DropDownControlHolder => _dropDownHolder;
 
@@ -823,7 +812,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 if (_selectedRow != -1)
                 {
                     GridEntry gridEntry = GetGridEntryFromRow(_selectedRow);
-                    if (gridEntry is not null)
+                    if (gridEntry is not null && IsAccessibilityObjectCreated)
                     {
                         gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                         gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
@@ -1514,7 +1503,7 @@ namespace System.Windows.Forms.PropertyGridInternal
             EditTextBox.SelectAll();
 
             var gridEntry = GetGridEntryFromRow(_selectedRow);
-            if (gridEntry is not null)
+            if (gridEntry is not null && IsAccessibilityObjectCreated)
             {
                 gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
                 gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
@@ -1560,12 +1549,12 @@ namespace System.Windows.Forms.PropertyGridInternal
         private bool FilterEditWndProc(ref Message m)
         {
             // If it's the TAB key, we keep it since we'll give them focus with it.
-            if (_dropDownHolder is not null && _dropDownHolder.Visible && m.Msg == (int)User32.WM.KEYDOWN && (int)m.WParam != (int)Keys.Tab)
+            if (_dropDownHolder?.Visible == true && m._Msg == User32.WM.KEYDOWN && (Keys)m._WParam != Keys.Tab)
             {
                 Control control = _dropDownHolder.Component;
                 if (control is not null)
                 {
-                    m.Result = User32.SendMessageW(control, (User32.WM)m.Msg, m.WParam, m.LParam);
+                    m._Result = User32.SendMessageW(control, m._Msg, m._WParam, m._LParam);
                     return true;
                 }
             }
@@ -2241,7 +2230,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private void OnDropDownButtonGotFocus(object sender, EventArgs e)
         {
-            if (sender is DropDownButton dropDownButton)
+            if (sender is DropDownButton dropDownButton && dropDownButton.IsAccessibilityObjectCreated)
             {
                 dropDownButton.AccessibilityObject.SetFocus();
             }
@@ -2502,9 +2491,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 Debug.WriteLineIf(s_gridViewDebugPaint.TraceVerbose, "adding gridEntry focus");
                 _selectedGridEntry.HasFocus = true;
                 InvalidateRow(_selectedRow);
-                (EditTextBox.AccessibilityObject as ControlAccessibleObject).NotifyClients(AccessibleEvents.Focus);
 
-                EditTextBox.AccessibilityObject.SetFocus();
+                if (EditTextBox.IsAccessibilityObjectCreated)
+                {
+                    (EditTextBox.AccessibilityObject as ControlAccessibleObject).NotifyClients(AccessibleEvents.Focus);
+                    EditTextBox.AccessibilityObject.SetFocus();
+                }
             }
             else
             {
@@ -2685,13 +2677,13 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             if (delta < SystemInformation.DoubleClickTime)
             {
-                Point screenPoint = EditTextBox.PointToScreen(new(e.X, e.Y));
+                Point screenPoint = EditTextBox.PointToScreen(e.Location);
 
                 if (Math.Abs(screenPoint.X - _rowSelectPos.X) < SystemInformation.DoubleClickSize.Width &&
                     Math.Abs(screenPoint.Y - _rowSelectPos.Y) < SystemInformation.DoubleClickSize.Height)
                 {
                     DoubleClickRow(_selectedRow, toggleExpand: false, RowValue);
-                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(e.X, e.Y));
+                    User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromPoint(e.Location));
                     EditTextBox.SelectAll();
                 }
 
@@ -3550,8 +3542,8 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 Point editPoint = PointToScreen(_lastMouseDown);
                 editPoint = EditTextBox.PointToClient(editPoint);
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
-                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, IntPtr.Zero, PARAM.FromLowHigh(editPoint.X, editPoint.Y));
+                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONDOWN, 0, PARAM.FromPoint(editPoint));
+                User32.SendMessageW(EditTextBox, User32.WM.LBUTTONUP, 0, PARAM.FromPoint(editPoint));
             }
 
             if (setSelectTime)
@@ -3903,7 +3895,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             RECT rect = itemRect;
 
-            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, (IntPtr)1, ref rect);
+            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.ADJUSTRECT, 1, ref rect);
 
             // Now offset it back to screen coords.
             Point location = parent.PointToScreen(new(rect.left, rect.top));
@@ -4669,12 +4661,15 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             entry.InternalExpanded = value;
 
-            var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
-            var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
-            _selectedGridEntry?.AccessibilityObject?.RaiseAutomationPropertyChangedEvent(
-                UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                oldExpandedState,
-                newExpandedState);
+            if (_selectedGridEntry is not null && IsAccessibilityObjectCreated)
+            {
+                var oldExpandedState = value ? UiaCore.ExpandCollapseState.Collapsed : UiaCore.ExpandCollapseState.Expanded;
+                var newExpandedState = value ? UiaCore.ExpandCollapseState.Expanded : UiaCore.ExpandCollapseState.Collapsed;
+                _selectedGridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    oldExpandedState,
+                    newExpandedState);
+            }
 
             RecalculateProperties();
             GridEntry selectedEntry = _selectedGridEntry;
@@ -5405,62 +5400,64 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         private unsafe bool WmNotify(ref Message m)
         {
-            if (m.LParam != IntPtr.Zero)
+            if (m._LParam == 0)
             {
-                var nmhdr = (User32.NMHDR*)m.LParam;
+                return false;
+            }
 
-                if (nmhdr->hwndFrom == ToolTip.Handle)
+            var nmhdr = (User32.NMHDR*)m._LParam;
+
+            if (nmhdr->hwndFrom == ToolTip.Handle)
+            {
+                switch ((ComCtl32.TTN)nmhdr->code)
                 {
-                    switch ((ComCtl32.TTN)nmhdr->code)
-                    {
-                        case ComCtl32.TTN.POP:
+                    case ComCtl32.TTN.POP:
+                        break;
+                    case ComCtl32.TTN.SHOW:
+                        // We want to move the tooltip over where our text would be.
+                        Point mouseLoc = Cursor.Position;
+                        mouseLoc = PointToClient(mouseLoc);
+                        mouseLoc = FindPosition(mouseLoc.X, mouseLoc.Y);
+
+                        if (mouseLoc == InvalidPosition)
+                        {
                             break;
-                        case ComCtl32.TTN.SHOW:
-                            // We want to move the tooltip over where our text would be.
-                            Point mouseLoc = Cursor.Position;
-                            mouseLoc = PointToClient(mouseLoc);
-                            mouseLoc = FindPosition(mouseLoc.X, mouseLoc.Y);
+                        }
 
-                            if (mouseLoc == InvalidPosition)
-                            {
-                                break;
-                            }
+                        GridEntry curEntry = GetGridEntryFromRow(mouseLoc.Y);
 
-                            GridEntry curEntry = GetGridEntryFromRow(mouseLoc.Y);
-
-                            if (curEntry is null)
-                            {
-                                break;
-                            }
-
-                            // Get the proper rectangle.
-                            Rectangle itemRect = GetRectangle(mouseLoc.Y, mouseLoc.X);
-                            Point tipPt = Point.Empty;
-
-                            // If we need a tooltip, move the tooltip control to that point.
-                            if (mouseLoc.X == RowLabel)
-                            {
-                                tipPt = curEntry.GetLabelToolTipLocation(mouseLoc.X - itemRect.X, mouseLoc.Y - itemRect.Y);
-                            }
-                            else if (mouseLoc.X == RowValue)
-                            {
-                                tipPt = curEntry.ValueToolTipLocation;
-                            }
-                            else
-                            {
-                                break;
-                            }
-
-                            if (tipPt != InvalidPoint)
-                            {
-                                itemRect.Offset(tipPt);
-                                PositionTooltip(this, ToolTip, itemRect);
-                                m.Result = (IntPtr)1;
-                                return true;
-                            }
-
+                        if (curEntry is null)
+                        {
                             break;
-                    }
+                        }
+
+                        // Get the proper rectangle.
+                        Rectangle itemRect = GetRectangle(mouseLoc.Y, mouseLoc.X);
+                        Point tipPt = Point.Empty;
+
+                        // If we need a tooltip, move the tooltip control to that point.
+                        if (mouseLoc.X == RowLabel)
+                        {
+                            tipPt = curEntry.GetLabelToolTipLocation(mouseLoc.X - itemRect.X, mouseLoc.Y - itemRect.Y);
+                        }
+                        else if (mouseLoc.X == RowValue)
+                        {
+                            tipPt = curEntry.ValueToolTipLocation;
+                        }
+                        else
+                        {
+                            break;
+                        }
+
+                        if (tipPt != InvalidPoint)
+                        {
+                            itemRect.Offset(tipPt);
+                            PositionTooltip(this, ToolTip, itemRect);
+                            m._Result = 1;
+                            return true;
+                        }
+
+                        break;
                 }
             }
 
@@ -5495,38 +5492,35 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                 case (int)User32.WM.IME_COMPOSITION:
                     EditTextBox.Focus();
-                    User32.PostMessageW(EditTextBox, User32.WM.IME_COMPOSITION, m.WParam, m.LParam);
+                    User32.PostMessageW(EditTextBox, User32.WM.IME_COMPOSITION, m._WParam, m._LParam);
                     return;
 
                 case (int)User32.WM.GETDLGCODE:
 
-                    int flags = (int)(User32.DLGC.WANTCHARS | User32.DLGC.WANTARROWS);
+                    User32.DLGC flags = User32.DLGC.WANTCHARS | User32.DLGC.WANTARROWS;
 
-                    if (_selectedGridEntry is not null)
+                    if (_selectedGridEntry is not null && (ModifierKeys & Keys.Shift) == 0)
                     {
-                        if ((ModifierKeys & Keys.Shift) == 0)
+                        // If we're going backwards, we don't want the tab.
+                        // Otherwise we only want it if we have an edit.
+                        if (_editTextBox.Visible)
                         {
-                            // If we're going backwards, we don't want the tab.
-                            // Otherwise we only want it if we have an edit.
-                            if (_editTextBox.Visible)
-                            {
-                                flags |= (int)User32.DLGC.WANTTAB;
-                            }
+                            flags |= User32.DLGC.WANTTAB;
                         }
                     }
 
-                    m.Result = (IntPtr)flags;
+                    m._Result = (nint)flags;
                     return;
 
                 case (int)User32.WM.MOUSEMOVE:
 
                     // Check if it's the same position, of so eat the message.
-                    if (unchecked((int)(long)m.LParam) == _lastMouseMove)
+                    if (m._LParam == _lastMouseMove)
                     {
                         return;
                     }
 
-                    _lastMouseMove = unchecked((int)(long)m.LParam);
+                    _lastMouseMove = (int)m._LParam;
                     break;
 
                 case (int)User32.WM.NOTIFY:
@@ -5537,10 +5531,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     break;
                 case AutomationMessages.PGM_GETSELECTEDROW:
-                    m.Result = (IntPtr)GetRowFromGridEntry(_selectedGridEntry);
+                    m._Result = GetRowFromGridEntry(_selectedGridEntry);
                     return;
                 case AutomationMessages.PGM_GETVISIBLEROWCOUNT:
-                    m.Result = (IntPtr)Math.Min(_visibleRows, TotalProperties);
+                    m._Result = Math.Min(_visibleRows, TotalProperties);
                     return;
             }
 

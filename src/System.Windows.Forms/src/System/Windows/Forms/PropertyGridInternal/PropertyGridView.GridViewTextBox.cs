@@ -135,7 +135,10 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 base.OnGotFocus(e);
 
-                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                if (IsAccessibilityObjectCreated)
+                {
+                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                }
             }
 
             protected override void OnKeyDown(KeyEventArgs e)
@@ -289,9 +292,9 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private unsafe bool WmNotify(ref Message m)
             {
-                if (m.LParam != IntPtr.Zero)
+                if (m._LParam != 0)
                 {
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
 
                     if (nmhdr->hwndFrom == PropertyGridView.ToolTip.Handle)
                     {
@@ -299,7 +302,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                         {
                             case ComCtl32.TTN.SHOW:
                                 PositionTooltip(this, PropertyGridView.ToolTip, ClientRectangle);
-                                m.Result = (IntPtr)1;
+                                m._Result = 1;
                                 return true;
                             default:
                                 PropertyGridView.WndProc(ref m);
@@ -318,28 +321,28 @@ namespace System.Windows.Forms.PropertyGridInternal
                     return;
                 }
 
-                switch ((User32.WM)m.Msg)
+                switch (m._Msg)
                 {
                     case User32.WM.STYLECHANGED:
-                        if ((unchecked((int)(long)m.WParam) & (int)User32.GWL.EXSTYLE) != 0)
+                        if ((User32.GWL)m._WParam == User32.GWL.EXSTYLE)
                         {
                             PropertyGridView.Invalidate();
                         }
 
                         break;
                     case User32.WM.MOUSEMOVE:
-                        if (unchecked((int)(long)m.LParam) == _lastMove)
+                        if (m._LParam == _lastMove)
                         {
                             return;
                         }
 
-                        _lastMove = unchecked((int)(long)m.LParam);
+                        _lastMove = (int)m._LParam;
                         break;
                     case User32.WM.DESTROY:
                         _mouseHook.HookMouseDown = false;
                         break;
                     case User32.WM.SHOWWINDOW:
-                        if (IntPtr.Zero == m.WParam)
+                        if (m._WParam == 0)
                         {
                             _mouseHook.HookMouseDown = false;
                         }
@@ -355,10 +358,10 @@ namespace System.Windows.Forms.PropertyGridInternal
 
                     case User32.WM.GETDLGCODE:
 
-                        m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTARROWS | (int)User32.DLGC.WANTCHARS);
+                        m._Result = m._Result | (nint)(User32.DLGC.WANTARROWS | User32.DLGC.WANTCHARS);
                         if (PropertyGridView.EditTextBoxNeedsCommit || PropertyGridView.WantsTab(forward: (ModifierKeys & Keys.Shift) == 0))
                         {
-                            m.Result = (IntPtr)((long)m.Result | (int)User32.DLGC.WANTALLKEYS | (int)User32.DLGC.WANTTAB);
+                            m._Result = m._Result | (nint)(User32.DLGC.WANTALLKEYS | User32.DLGC.WANTTAB);
                         }
 
                         return;

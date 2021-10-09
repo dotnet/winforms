@@ -22,17 +22,17 @@ abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string?
 ~override System.Windows.Forms.AxHost.Cursor.set -> void
 ~override System.Windows.Forms.AxHost.Font.get -> System.Drawing.Font
 ~override System.Windows.Forms.AxHost.Font.set -> void
-~override System.Windows.Forms.AxHost.InvalidActiveXStateException.ToString() -> string
+override System.Windows.Forms.AxHost.InvalidActiveXStateException.ToString() -> string!
 ~override System.Windows.Forms.AxHost.OnBackColorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.OnForeColorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.OnHandleCreated(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.OnLostFocus(System.EventArgs e) -> void
 ~override System.Windows.Forms.AxHost.Site.set -> void
-~override System.Windows.Forms.AxHost.StateConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.AxHost.StateConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.AxHost.StateConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.AxHost.StateConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.AxHost.StateConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.AxHost.StateConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.AxHost.StateConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.AxHost.StateConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.AxHost.Text.get -> string
 ~override System.Windows.Forms.AxHost.Text.set -> void
 ~override System.Windows.Forms.BindingMemberInfo.Equals(object otherObject) -> bool
@@ -1504,7 +1504,7 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Windows.Forms.AxHost.ContainingControl.set -> void
 ~System.Windows.Forms.AxHost.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~System.Windows.Forms.AxHost.GetOcx() -> object
-~System.Windows.Forms.AxHost.InvalidActiveXStateException.InvalidActiveXStateException(string name, System.Windows.Forms.AxHost.ActiveXInvokeKind kind) -> void
+System.Windows.Forms.AxHost.InvalidActiveXStateException.InvalidActiveXStateException(string? name, System.Windows.Forms.AxHost.ActiveXInvokeKind kind) -> void
 ~System.Windows.Forms.AxHost.OcxState.get -> System.Windows.Forms.AxHost.State
 ~System.Windows.Forms.AxHost.OcxState.set -> void
 ~System.Windows.Forms.AxHost.RaiseOnMouseDown(object o1, object o2, object o3, object o4) -> void
@@ -1514,7 +1514,7 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Windows.Forms.AxHost.ShowPropertyPages(System.Windows.Forms.Control control) -> void
 ~System.Windows.Forms.AxHost.State.State(System.IO.Stream ms, int storageType, bool manualUpdate, string licKey) -> void
 ~System.Windows.Forms.AxHost.State.State(System.Runtime.Serialization.SerializationInfo info, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.AxHost.TypeLibraryTimeStampAttribute.TypeLibraryTimeStampAttribute(string timestamp) -> void
+System.Windows.Forms.AxHost.TypeLibraryTimeStampAttribute.TypeLibraryTimeStampAttribute(string! timestamp) -> void
 ~System.Windows.Forms.BaseCollection.CopyTo(System.Array ar, int index) -> void
 ~System.Windows.Forms.BaseCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.BaseCollection.SyncRoot.get -> object
@@ -1796,10 +1796,10 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Windows.Forms.DataGridView.TopLeftHeaderCell.set -> void
 ~System.Windows.Forms.DataGridView.UserSetCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.DataGridView.VerticalScrollBar.get -> System.Windows.Forms.ScrollBar
-~System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn
-~System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs(System.Windows.Forms.DataGridViewColumn dataGridViewColumn, System.Windows.Forms.DataGridViewAutoSizeColumnMode previousMode) -> void
-~System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[] previousModes) -> void
-~System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]
+System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.Column.get -> System.Windows.Forms.DataGridViewColumn?
+System.Windows.Forms.DataGridViewAutoSizeColumnModeEventArgs.DataGridViewAutoSizeColumnModeEventArgs(System.Windows.Forms.DataGridViewColumn? dataGridViewColumn, System.Windows.Forms.DataGridViewAutoSizeColumnMode previousMode) -> void
+System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.DataGridViewAutoSizeColumnsModeEventArgs(System.Windows.Forms.DataGridViewAutoSizeColumnMode[]? previousModes) -> void
+System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get -> System.Windows.Forms.DataGridViewAutoSizeColumnMode[]?
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.get -> string
 ~System.Windows.Forms.DataGridViewButtonColumn.Text.set -> void
 ~System.Windows.Forms.DataGridViewCell.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
@@ -2480,8 +2480,8 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.ListViewItem.Text.set -> void
 ~System.Windows.Forms.ListViewItem.ToolTipText.get -> string
 ~System.Windows.Forms.ListViewItem.ToolTipText.set -> void
-~System.Windows.Forms.ListViewItemMouseHoverEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListViewItemMouseHoverEventArgs.ListViewItemMouseHoverEventArgs(System.Windows.Forms.ListViewItem item) -> void
+System.Windows.Forms.ListViewItemMouseHoverEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.ListViewItemMouseHoverEventArgs.ListViewItemMouseHoverEventArgs(System.Windows.Forms.ListViewItem? item) -> void
 ~System.Windows.Forms.ListViewItemSelectionChangedEventArgs.Item.get -> System.Windows.Forms.ListViewItem
 ~System.Windows.Forms.ListViewItemSelectionChangedEventArgs.ListViewItemSelectionChangedEventArgs(System.Windows.Forms.ListViewItem item, int itemIndex, bool isSelected) -> void
 ~System.Windows.Forms.MaskedTextBox.Culture.get -> System.Globalization.CultureInfo
@@ -2513,10 +2513,10 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.MonthCalendar.MonthlyBoldedDates.set -> void
 ~System.Windows.Forms.MonthCalendar.SelectionRange.get -> System.Windows.Forms.SelectionRange
 ~System.Windows.Forms.MonthCalendar.SelectionRange.set -> void
-~System.Windows.Forms.NodeLabelEditEventArgs.Label.get -> string
-~System.Windows.Forms.NodeLabelEditEventArgs.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode node) -> void
-~System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode node, string label) -> void
+System.Windows.Forms.NodeLabelEditEventArgs.Label.get -> string?
+System.Windows.Forms.NodeLabelEditEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode? node) -> void
+System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Windows.Forms.TreeNode? node, string? label) -> void
 ~System.Windows.Forms.NotifyIcon.BalloonTipText.get -> string
 ~System.Windows.Forms.NotifyIcon.BalloonTipText.set -> void
 ~System.Windows.Forms.NotifyIcon.BalloonTipTitle.get -> string
@@ -3096,9 +3096,9 @@ System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set
 ~System.Windows.Forms.WebBrowser.WebBrowserSite.WebBrowserSite(System.Windows.Forms.WebBrowser host) -> void
 ~System.Windows.Forms.WebBrowserBase.ActiveXInstance.get -> object
 ~System.Windows.Forms.WebBrowserBase.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
-~System.Windows.Forms.WebBrowserNavigatingEventArgs.TargetFrameName.get -> string
-~System.Windows.Forms.WebBrowserNavigatingEventArgs.Url.get -> System.Uri
-~System.Windows.Forms.WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs(System.Uri url, string targetFrameName) -> void
+System.Windows.Forms.WebBrowserNavigatingEventArgs.TargetFrameName.get -> string?
+System.Windows.Forms.WebBrowserNavigatingEventArgs.Url.get -> System.Uri?
+System.Windows.Forms.WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs(System.Uri? url, string? targetFrameName) -> void
 ~virtual System.Drawing.Design.PropertyValueUIItem.Image.get -> System.Drawing.Image
 ~virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Drawing.Design.PropertyValueUIItemInvokeHandler
 ~virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string

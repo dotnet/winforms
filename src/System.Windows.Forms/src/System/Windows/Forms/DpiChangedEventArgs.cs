@@ -5,7 +5,6 @@
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-using System.Runtime.InteropServices;
 using static Interop;
 
 namespace System.Windows.Forms
@@ -18,12 +17,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Parameter units are pixels(dots) per inch.
         /// </summary>
-        internal DpiChangedEventArgs(int old, Message m)
+        internal unsafe DpiChangedEventArgs(int old, Message m)
         {
             DeviceDpiOld = old;
-            DeviceDpiNew = PARAM.SignedLOWORD(m.WParam);
-            Debug.Assert(PARAM.SignedHIWORD(m.WParam) == DeviceDpiNew, "Non-square pixels!");
-            RECT suggestedRect = Marshal.PtrToStructure<RECT>(m.LParam);
+            DeviceDpiNew = PARAM.SignedLOWORD(m._WParam);
+            Debug.Assert(PARAM.SignedHIWORD(m._WParam) == DeviceDpiNew, "Non-square pixels!");
+            RECT suggestedRect = *(RECT*)m._LParam;
             SuggestedRectangle = Rectangle.FromLTRB(suggestedRect.left, suggestedRect.top, suggestedRect.right, suggestedRect.bottom);
         }
 

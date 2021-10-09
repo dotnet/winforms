@@ -6,6 +6,6 @@ internal static partial class Interop
 {
     internal static partial class User32
     {
-        public delegate IntPtr HOOKPROC(User32.HC nCode, IntPtr wParam, IntPtr lParam);
+        public delegate nint HOOKPROC(HC nCode, nint wParam, nint lParam);
     }
 }

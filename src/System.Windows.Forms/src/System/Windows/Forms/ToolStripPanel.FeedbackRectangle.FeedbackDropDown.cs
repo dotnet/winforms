@@ -106,9 +106,9 @@ namespace System.Windows.Forms
 
                 protected override void WndProc(ref Message m)
                 {
-                    if (m.Msg == (int)User32.WM.NCHITTEST)
+                    if (m._Msg == User32.WM.NCHITTEST)
                     {
-                        m.Result = (IntPtr)User32.HT.TRANSPARENT;
+                        m._Result = (nint)User32.HT.TRANSPARENT;
                     }
 
                     base.WndProc(ref m);

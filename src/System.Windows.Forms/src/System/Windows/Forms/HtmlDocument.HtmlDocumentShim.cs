@@ -33,10 +33,10 @@ namespace System.Windows.Forms
             {
                 _htmlDocument = htmlDocument;
                 // snap our associated window so we know when to disconnect.
-                if (_htmlDocument != null)
+                if (_htmlDocument is not null)
                 {
                     HtmlWindow window = htmlDocument.Window;
-                    if (window != null)
+                    if (window is not null)
                     {
                         _associatedWindow = window.NativeHtmlWindow;
                     }
@@ -91,7 +91,7 @@ namespace System.Windows.Forms
             public override void DetachEventHandler(string eventName, EventHandler eventHandler)
             {
                 HtmlToClrEventProxy proxy = RemoveEventProxy(eventHandler);
-                if (proxy != null)
+                if (proxy is not null)
                 {
                     ((IHTMLDocument3)NativeHtmlDocument2).DetachEvent(eventName, proxy);
                 }
@@ -102,7 +102,7 @@ namespace System.Windows.Forms
             //
             public override void DisconnectFromEvents()
             {
-                if (_cookie != null)
+                if (_cookie is not null)
                 {
                     _cookie.Disconnect();
                     _cookie = null;
@@ -114,7 +114,7 @@ namespace System.Windows.Forms
                 base.Dispose(disposing);
                 if (disposing)
                 {
-                    if (_htmlDocument != null)
+                    if (_htmlDocument is not null)
                     {
                         Marshal.FinalReleaseComObject(_htmlDocument.NativeHtmlDocument2);
                     }

@@ -67,11 +67,10 @@ namespace System.Windows.Forms.Design
             }
         }
 
-        /// <summary>
-        ///  We override GetHitTest to make the header in report view UI-active.
-        /// </summary>
         protected unsafe override bool GetHitTest(Point point)
         {
+            // We override GetHitTest to make the header in report view UI-active.
+
             ListView listView = (ListView)Component;
             if (listView.View == View.Details)
             {
@@ -85,7 +84,7 @@ namespace System.Windows.Forms.Design
                     {
                         User32.MapWindowPoints(IntPtr.Zero, headerHwnd, &point, 1);
                         _hdrhit.pt = point;
-                        User32.SendMessageW(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, IntPtr.Zero, ref _hdrhit);
+                        User32.SendMessageW(headerHwnd, (User32.WM)ComCtl32.HDM.HITTEST, 0, ref _hdrhit);
                         if (_hdrhit.flags == ComCtl32.HHT.ONDIVIDER)
                             return true;
                     }
@@ -136,7 +135,7 @@ namespace System.Windows.Forms.Design
             {
                 case (int)User32.WM.NOTIFY:
                 case (int)User32.WM.REFLECT_NOTIFY:
-                    User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                    User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
                     if (nmhdr->code == (int)ComCtl32.HDN.ENDTRACKW)
                     {
                         // Re-codegen if the columns have been resized

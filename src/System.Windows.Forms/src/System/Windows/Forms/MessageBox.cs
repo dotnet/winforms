@@ -344,9 +344,15 @@ namespace System.Windows.Forms
             return result;
         }
 
-        private static DialogResult ShowCore(IWin32Window owner, string text, string caption,
-                                             MessageBoxButtons buttons, MessageBoxIcon icon, MessageBoxDefaultButton defaultButton,
-                                             MessageBoxOptions options, bool showHelp)
+        private static DialogResult ShowCore(
+            IWin32Window owner,
+            string text,
+            string caption,
+            MessageBoxButtons buttons,
+            MessageBoxIcon icon,
+            MessageBoxDefaultButton defaultButton,
+            MessageBoxOptions options,
+            bool showHelp)
         {
             MB style = GetMessageBoxStyle(owner, buttons, icon, defaultButton, options, showHelp);
 
@@ -385,7 +391,7 @@ namespace System.Windows.Forms
             Application.BeginModalMessageLoop();
             try
             {
-                return (DialogResult)MessageBoxW(new HandleRef(owner, handle), text, caption, style);
+                return (DialogResult)MessageBoxW(handle, text, caption, style);
             }
             finally
             {
@@ -395,7 +401,8 @@ namespace System.Windows.Forms
                 // Right after the dialog box is closed, Windows sends WM_SETFOCUS back to the previously active control
                 // but since we have disabled this thread main window the message is lost. So we have to send it again after
                 // we enable the main window.
-                User32.SendMessageW(new HandleRef(owner, handle), User32.WM.SETFOCUS);
+                User32.SendMessageW(handle, User32.WM.SETFOCUS);
+                GC.KeepAlive(owner);
             }
         }
     }

@@ -116,15 +116,14 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <summary>
             ///  HookProc used for catch mouse messages.
             /// </summary>
-            private unsafe IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
+            private unsafe nint MouseHookProc(User32.HC nCode, nint wparam, nint lparam)
             {
-                GC.KeepAlive(this);
                 if (nCode == User32.HC.ACTION)
                 {
                     var mhs = (User32.MOUSEHOOKSTRUCT*)lparam;
                     if (mhs is not null)
                     {
-                        switch (unchecked((User32.WM)(long)wparam))
+                        switch ((User32.WM)wparam)
                         {
                             case User32.WM.LBUTTONDOWN:
                             case User32.WM.MBUTTONDOWN:
@@ -135,7 +134,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                             case User32.WM.MOUSEACTIVATE:
                                 if (ProcessMouseDown(mhs->hWnd))
                                 {
-                                    return (IntPtr)1;
+                                    return 1;
                                 }
 
                                 break;
@@ -143,7 +142,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                     }
                 }
 
-                return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
+                return User32.CallNextHookEx(_mouseHookHandle, nCode, wparam, lparam);
             }
 
             /// <summary>

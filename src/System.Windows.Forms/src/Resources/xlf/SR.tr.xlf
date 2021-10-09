@@ -2062,6 +2062,16 @@
         <target state="translated">Ekran sonsuz büyüklükte olsaydı denetimin boyutu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
+        <source>{0} collection shouldn't be empty for {1}.</source>
+        <target state="new">{0} collection shouldn't be empty for {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="new">{0} property should be set for {1}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">AddNew için listenin IbindingList olması gerekir.</target>
@@ -6293,7 +6303,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
         <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <target state="translated">ListView sanal moddayken ListView grupları koleksiyonuna grup ekleyemezsiniz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
@@ -7534,6 +7544,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="PanelBorderStyleDescr">
         <source>Indicates whether the panel should have a border.</source>
         <target state="translated">Bölmenin kenarlığı olup olmayacağını gösterir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ParentPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">

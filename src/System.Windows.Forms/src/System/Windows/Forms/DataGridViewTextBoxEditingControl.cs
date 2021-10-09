@@ -242,7 +242,10 @@ namespace System.Windows.Forms
         protected override void OnGotFocus(EventArgs e)
         {
             base.OnGotFocus(e);
-            AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         protected override void OnMouseWheel(MouseEventArgs e)
@@ -254,29 +257,29 @@ namespace System.Windows.Forms
         protected override void OnTextChanged(EventArgs e)
         {
             base.OnTextChanged(e);
+
             // Let the DataGridView know about the value change
             NotifyDataGridViewOfValueChange();
         }
 
         protected override bool ProcessKeyEventArgs(ref Message m)
         {
-            switch ((Keys)PARAM.ToInt(m.WParam))
+            switch ((Keys)m._WParam)
             {
                 case Keys.Enter:
-                    if (m.Msg == (int)User32.WM.CHAR &&
-                        !(ModifierKeys == Keys.Shift && Multiline && AcceptsReturn))
+                    if (m._Msg == User32.WM.CHAR
+                        && !(ModifierKeys == Keys.Shift && Multiline && AcceptsReturn))
                     {
-                        // Ignore the Enter key and don't add it to the textbox content. This happens when failing validation brings
-                        // up a dialog box for example.
-                        // Shift-Enter for multiline textboxes need to be accepted however.
+                        // Ignore the Enter key and don't add it to the textbox content. This happens when failing
+                        // validation brings up a dialog box for example. Shift-Enter for multiline textboxes need to
+                        // be accepted however.
                         return true;
                     }
 
                     break;
 
                 case Keys.LineFeed:
-                    if (m.Msg == (int)User32.WM.CHAR &&
-                        ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
+                    if (m._Msg == User32.WM.CHAR && ModifierKeys == Keys.Control && Multiline && AcceptsReturn)
                     {
                         // Ignore linefeed character when user hits Ctrl-Enter to commit the cell.
                         return true;
@@ -285,7 +288,7 @@ namespace System.Windows.Forms
                     break;
 
                 case Keys.A:
-                    if (m.Msg == (int)User32.WM.KEYDOWN && ModifierKeys == Keys.Control)
+                    if (m._Msg == User32.WM.KEYDOWN && ModifierKeys == Keys.Control)
                     {
                         SelectAll();
                         return true;
@@ -318,7 +321,8 @@ namespace System.Windows.Forms
             base.OnHandleCreated(e);
             if (IsHandleCreated)
             {
-                _dataGridView?.SetAccessibleObjectParent(this.AccessibilityObject);
+                // The null-check was added as a fix for a https://github.com/dotnet/winforms/issues/2138
+                _dataGridView?.SetAccessibleObjectParent(AccessibilityObject);
             }
         }
     }

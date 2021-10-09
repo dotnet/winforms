@@ -251,11 +251,11 @@ namespace System.Windows.Forms
         private bool WriteImageList(Stream stream)
         {
             IntPtr handle = IntPtr.Zero;
-            if (_imageList != null)
+            if (_imageList is not null)
             {
                 handle = _imageList.Handle;
             }
-            else if (_nativeImageList != null)
+            else if (_nativeImageList is not null)
             {
                 handle = _nativeImageList.Handle;
             }
@@ -295,7 +295,7 @@ namespace System.Windows.Forms
         {
             if (disposing)
             {
-                if (_nativeImageList != null)
+                if (_nativeImageList is not null)
                 {
                     _nativeImageList.Dispose();
                     _nativeImageList = null;

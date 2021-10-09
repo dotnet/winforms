@@ -2062,6 +2062,16 @@
         <target state="translated">Le taille du contrôle si l'écran était sans limites.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
+        <source>{0} collection shouldn't be empty for {1}.</source>
+        <target state="new">{0} collection shouldn't be empty for {1}.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ControlsPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="new">{0} property should be set for {1}.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
         <source>The list must be an IBindingList to AddNew.</source>
         <target state="translated">La liste doit être un IBindingList pour AddNew.</target>
@@ -6293,7 +6303,7 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       </trans-unit>
       <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
         <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <target state="translated">Vous ne pouvez pas ajouter de groupes à la collection de groupes ListView quand le ListView est en mode virtuel.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
@@ -7534,6 +7544,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="PanelBorderStyleDescr">
         <source>Indicates whether the panel should have a border.</source>
         <target state="translated">Indique si le panneau doit avoir une bordure.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ParentPropertyNotSetInGetNextControl">
+        <source>{0} property should be set for {1}.</source>
+        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">

@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         ///  An instance of this class my be obtained either by calling getOcxState on an
         ///  AxHost object, or by reading in from a stream.
         /// </summary>
-        [TypeConverterAttribute(typeof(TypeConverter))]
+        [TypeConverter(typeof(TypeConverter))]
         [Serializable] // This exchanges with the native code.
         public class State : ISerializable
         {

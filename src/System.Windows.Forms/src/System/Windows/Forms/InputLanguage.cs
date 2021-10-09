@@ -169,7 +169,7 @@ namespace System.Windows.Forms
                 // Look for a substitution
                 RegistryKey? substitutions = Registry.CurrentUser.OpenSubKey("Keyboard Layout\\Substitutes");
                 string[]? encodings = null;
-                if (substitutions != null)
+                if (substitutions is not null)
                 {
                     encodings = substitutions.GetValueNames();
 
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
                 }
 
                 using RegistryKey? layouts = Registry.LocalMachine.OpenSubKey("SYSTEM\\CurrentControlSet\\Control\\Keyboard Layouts");
-                if (layouts != null)
+                if (layouts is not null)
                 {
                     encodings = layouts.GetSubKeyNames();
 
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
                                 layoutName = (string?)key.GetValue("Layout Text");
                             }
 
-                            if (layoutName != null)
+                            if (layoutName is not null)
                             {
                                 return layoutName;
                             }
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
                                     layoutName = (string?)key.GetValue("Layout Text");
                                 }
 
-                                if (layoutName != null)
+                                if (layoutName is not null)
                                 {
                                     return layoutName;
                                 }
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static string? GetLocalizedKeyboardLayoutName(string? layoutDisplayName)
         {
-            if (layoutDisplayName != null)
+            if (layoutDisplayName is not null)
             {
                 var sb = new StringBuilder(512);
                 HRESULT res = Shlwapi.SHLoadIndirectString(layoutDisplayName, sb, (uint)sb.Capacity, IntPtr.Zero);
@@ -301,7 +301,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static InputLanguageChangedEventArgs CreateInputLanguageChangedEventArgs(Message m)
         {
-            return new InputLanguageChangedEventArgs(new InputLanguage(m.LParam), unchecked((byte)(long)m.WParam));
+            return new InputLanguageChangedEventArgs(new InputLanguage(m._LParam), (byte)m._WParam);
         }
 
         /// <summary>
@@ -309,10 +309,10 @@ namespace System.Windows.Forms
         /// </summary>
         internal static InputLanguageChangingEventArgs CreateInputLanguageChangingEventArgs(Message m)
         {
-            var inputLanguage = new InputLanguage(m.LParam);
+            var inputLanguage = new InputLanguage(m._LParam);
 
             // NOTE: by default we should allow any locale switch
-            bool localeSupportedBySystem = m.WParam != IntPtr.Zero;
+            bool localeSupportedBySystem = m._WParam != 0;
             return new InputLanguageChangingEventArgs(inputLanguage, localeSupportedBySystem);
         }
 

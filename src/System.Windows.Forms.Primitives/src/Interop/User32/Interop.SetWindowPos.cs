@@ -22,7 +22,7 @@ internal static partial class Interop
             int y = 0,
             int cx = 0,
             int cy = 0,
-            SWP flags = (SWP)0);
+            SWP flags = default);
 
         public static BOOL SetWindowPos(
             HandleRef hWnd,
@@ -31,7 +31,7 @@ internal static partial class Interop
             int y = 0,
             int cx = 0,
             int cy = 0,
-            SWP flags = (SWP)0)
+            SWP flags = default)
         {
             BOOL result = SetWindowPos(hWnd.Handle, hWndInsertAfter, x, y, cx, cy, flags);
             GC.KeepAlive(hWnd.Wrapper);
@@ -39,17 +39,16 @@ internal static partial class Interop
         }
 
         public static BOOL SetWindowPos(
-            HandleRef hWnd,
-            HandleRef hWndInsertAfter,
+            IHandle hWnd,
+            IntPtr hWndInsertAfter,
             int x = 0,
             int y = 0,
             int cx = 0,
             int cy = 0,
-            SWP flags = (SWP)0)
+            SWP flags = default)
         {
-            BOOL result = SetWindowPos(hWnd.Handle, hWndInsertAfter.Handle, x, y, cx, cy, flags);
-            GC.KeepAlive(hWnd.Wrapper);
-            GC.KeepAlive(hWndInsertAfter.Wrapper);
+            BOOL result = SetWindowPos(hWnd.Handle, hWndInsertAfter, x, y, cx, cy, flags);
+            GC.KeepAlive(hWnd);
             return result;
         }
     }

@@ -1030,13 +1030,16 @@ namespace System.Windows.Forms
                     break;
             }
 
-            var cellName = AccessibilityObject.Name ?? string.Empty;
-            AccessibilityObject.InternalRaiseAutomationNotification(
-                Automation.AutomationNotificationKind.Other,
-                Automation.AutomationNotificationProcessing.MostRecent,
-                isCheckboxChecked
-                    ? string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName)
-                    : string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName));
+            if (IsParentAccessibilityObjectCreated)
+            {
+                var cellName = AccessibilityObject.Name ?? string.Empty;
+                AccessibilityObject.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.Other,
+                    Automation.AutomationNotificationProcessing.MostRecent,
+                    isCheckboxChecked
+                        ? string.Format(SR.DataGridViewCheckBoxCellCheckedStateDescription, cellName)
+                        : string.Format(SR.DataGridViewCheckBoxCellUncheckedStateDescription, cellName));
+            }
         }
 
         private void NotifyMSAAClient(int columnIndex, int rowIndex)
@@ -1056,7 +1059,7 @@ namespace System.Windows.Forms
             int childID = visibleColumnIndex + rowHeaderIncrement;  // + 1 because the column header cell is at index 0 in top header row acc obj
                                                                     //     same thing for the row header cell in the data grid view row acc obj
 
-            if (DataGridView.AccessibilityObject is Control.ControlAccessibleObject accessibleObject)
+            if (DataGridView.IsAccessibilityObjectCreated && DataGridView.AccessibilityObject is Control.ControlAccessibleObject accessibleObject)
             {
                 accessibleObject.NotifyClients(AccessibleEvents.StateChange, objectID, childID);
             }

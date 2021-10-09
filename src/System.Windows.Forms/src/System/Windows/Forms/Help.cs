@@ -54,7 +54,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void ShowHelp(Control parent, string url, string keyword)
         {
-            if (keyword != null && keyword.Length != 0)
+            if (keyword is not null && keyword.Length != 0)
             {
                 ShowHelp(parent, url, HelpNavigator.Topic, keyword);
             }
@@ -132,14 +132,14 @@ namespace System.Windows.Forms
             string pathAndFileName = url; //This is our best guess at the path yet.
 
             file = Resolve(url);
-            if (file != null)
+            if (file is not null)
             { // Can't assume we have a good url
                 pathAndFileName = file.AbsoluteUri;
             }
 
             if (file is null || file.IsFile)
             {
-                string localPath = (file != null && file.IsFile) ? file.LocalPath : url;
+                string localPath = (file is not null && file.IsFile) ? file.LocalPath : url;
 
                 // If this is a local path, convert it to a short path name. Pass 0 as the length the first time
                 uint requiredStringSize = Kernel32.GetShortPathNameW(localPath, null, 0);
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
             }
 
             HandleRef handle;
-            if (parent != null)
+            if (parent is not null)
             {
                 handle = new HandleRef(parent, parent.Handle);
             }
@@ -243,7 +243,7 @@ namespace System.Windows.Forms
                     //
                     break;
                 case HelpNavigator.Topic:
-                    if (param != null && param is string)
+                    if (param is not null && param is string)
                     {
                         file = new Uri(file.ToString() + "#" + (string)param);
                     }
@@ -252,7 +252,7 @@ namespace System.Windows.Forms
             }
 
             HandleRef handle;
-            if (parent != null)
+            if (parent is not null)
             {
                 handle = new HandleRef(parent, parent.Handle);
             }
@@ -284,7 +284,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            if (file != null && file.Scheme == "file")
+            if (file is not null && file.Scheme == "file")
             {
                 string localPath = file.LocalPath + file.Fragment;
                 Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "file, check for existence");
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
                     // Ignore invalid uris.
                 }
 
-                if (file != null && file.Scheme == "file")
+                if (file is not null && file.Scheme == "file")
                 {
                     string localPath = file.LocalPath + file.Fragment;
                     Debug.WriteLineIf(WindowsFormsHelpTrace.TraceVerbose, "file, check for existence");

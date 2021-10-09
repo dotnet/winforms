@@ -737,39 +737,39 @@ namespace System.Windows.Forms
 
         private void WndProc(ref Message msg)
         {
-            switch ((User32.WM)msg.Msg)
+            switch (msg._Msg)
             {
                 case (User32.WM)WM_TRAYMOUSEMESSAGE:
-                    switch (PARAM.ToInt(msg.LParam))
+                    switch ((User32.WM)msg._LParam)
                     {
-                        case (int)User32.WM.LBUTTONDBLCLK:
+                        case User32.WM.LBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Left, 2);
                             break;
-                        case (int)User32.WM.LBUTTONDOWN:
+                        case User32.WM.LBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Left, 1);
                             break;
-                        case (int)User32.WM.LBUTTONUP:
+                        case User32.WM.LBUTTONUP:
                             WmMouseUp(ref msg, MouseButtons.Left);
                             break;
-                        case (int)User32.WM.MBUTTONDBLCLK:
+                        case User32.WM.MBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Middle, 2);
                             break;
-                        case (int)User32.WM.MBUTTONDOWN:
+                        case User32.WM.MBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Middle, 1);
                             break;
-                        case (int)User32.WM.MBUTTONUP:
+                        case User32.WM.MBUTTONUP:
                             WmMouseUp(ref msg, MouseButtons.Middle);
                             break;
-                        case (int)User32.WM.MOUSEMOVE:
+                        case User32.WM.MOUSEMOVE:
                             WmMouseMove(ref msg);
                             break;
-                        case (int)User32.WM.RBUTTONDBLCLK:
+                        case User32.WM.RBUTTONDBLCLK:
                             WmMouseDown(ref msg, MouseButtons.Right, 2);
                             break;
-                        case (int)User32.WM.RBUTTONDOWN:
+                        case User32.WM.RBUTTONDOWN:
                             WmMouseDown(ref msg, MouseButtons.Right, 1);
                             break;
-                        case (int)User32.WM.RBUTTONUP:
+                        case User32.WM.RBUTTONUP:
                             if (contextMenuStrip is not null)
                             {
                                 ShowContextMenu();
@@ -777,25 +777,25 @@ namespace System.Windows.Forms
 
                             WmMouseUp(ref msg, MouseButtons.Right);
                             break;
-                        case (int)NIN.BALLOONSHOW:
+                        case (User32.WM)NIN.BALLOONSHOW:
                             OnBalloonTipShown();
                             break;
-                        case (int)NIN.BALLOONHIDE:
+                        case (User32.WM)NIN.BALLOONHIDE:
                             OnBalloonTipClosed();
                             break;
-                        case (int)NIN.BALLOONTIMEOUT:
+                        case (User32.WM)NIN.BALLOONTIMEOUT:
                             OnBalloonTipClosed();
                             break;
-                        case (int)NIN.BALLOONUSERCLICK:
+                        case (User32.WM)NIN.BALLOONUSERCLICK:
                             OnBalloonTipClicked();
                             break;
                     }
 
                     break;
                 case User32.WM.COMMAND:
-                    if (IntPtr.Zero == msg.LParam)
+                    if (msg._LParam == 0)
                     {
-                        if (Command.DispatchID(PARAM.ToInt(msg.WParam) & 0xFFFF))
+                        if (Command.DispatchID((int)msg._WParam & 0xFFFF))
                         {
                             return;
                         }

@@ -16,7 +16,7 @@ namespace System
             Application.ThreadException += OnThreadException;
         }
 
-        public void Dispose()
+        public virtual void Dispose()
         {
             Application.ThreadException -= OnThreadException;
         }

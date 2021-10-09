@@ -77,7 +77,7 @@ namespace System.Windows.Forms
 
             public void Dispose()
             {
-                if (_control != null)
+                if (_control is not null)
                 {
                     _control.HandleCreated -= new EventHandler(OnCreateHandle);
                     _control.HandleDestroyed -= new EventHandler(OnDestroyHandle);
@@ -278,7 +278,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void StartBlinking()
             {
-                if (_window != null)
+                if (_window is not null)
                 {
                     BlinkPhase = _startingBlinkPhase;
                     _window.StartBlinking();
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
                 // if we are recreating the control, then add the control.
                 if (_window is null &&
                     (_control.Created || _control.RecreatingHandle) &&
-                    _control.Visible && _control.ParentInternal != null &&
+                    _control.Visible && _control.ParentInternal is not null &&
                     _error.Length > 0)
                 {
                     _window = _provider.EnsureErrorWindow(_control.ParentInternal);
@@ -311,7 +311,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void RemoveFromWindow()
             {
-                if (_window != null)
+                if (_window is not null)
                 {
                     _window.Remove(this);
                     _window = null;

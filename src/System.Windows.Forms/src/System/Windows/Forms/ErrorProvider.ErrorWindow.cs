@@ -136,12 +136,12 @@ namespace System.Windows.Forms
                     _tipWindow = new NativeWindow();
                     _tipWindow.CreateHandle(cparams);
 
-                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, IntPtr.Zero, (IntPtr)SystemInformation.MaxWindowTrackSize.Width);
+                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETMAXTIPWIDTH, 0, SystemInformation.MaxWindowTrackSize.Width);
                     User32.SetWindowPos(
                         new HandleRef(_tipWindow, _tipWindow.Handle),
                         User32.HWND_TOP,
                         flags: User32.SWP.NOSIZE | User32.SWP.NOMOVE | User32.SWP.NOACTIVATE);
-                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (IntPtr)ComCtl32.TTDT.INITIAL, (IntPtr)0);
+                    User32.SendMessageW(_tipWindow, (User32.WM)ComCtl32.TTM.SETDELAYTIME, (nint)ComCtl32.TTDT.INITIAL, 0);
                 }
 
                 return true;
@@ -152,13 +152,13 @@ namespace System.Windows.Forms
             /// </summary>
             private void EnsureDestroyed()
             {
-                if (_timer != null)
+                if (_timer is not null)
                 {
                     _timer.Dispose();
                     _timer = null;
                 }
 
-                if (_tipWindow != null)
+                if (_tipWindow is not null)
                 {
                     _tipWindow.DestroyHandle();
                     _tipWindow = null;
@@ -233,7 +233,7 @@ namespace System.Windows.Forms
 
                 if (blinkPhase == 0 && _provider.BlinkStyle != ErrorBlinkStyle.AlwaysBlink)
                 {
-                    Debug.Assert(_timer != null);
+                    Debug.Assert(_timer is not null);
                     _timer.Stop();
                 }
 
@@ -277,7 +277,7 @@ namespace System.Windows.Forms
             {
                 _items.Remove(item);
 
-                if (_tipWindow != null)
+                if (_tipWindow is not null)
                 {
                     var info = new ComCtl32.ToolInfoWrapper<ErrorWindow>(this, item.Id);
                     info.SendMessage(_tipWindow, (User32.WM)ComCtl32.TTM.DELTOOLW);
@@ -373,7 +373,7 @@ namespace System.Windows.Forms
                         iconRegion.Region.Translate(-iconBounds.X, -iconBounds.Y);
                     }
 
-                    if (_tipWindow != null)
+                    if (_tipWindow is not null)
                     {
                         ComCtl32.TTF flags = ComCtl32.TTF.SUBCLASS;
                         if (_provider.RightToLeft)
@@ -424,23 +424,22 @@ namespace System.Windows.Forms
             /// </summary>
             private void WmGetObject(ref Message m)
             {
-                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, "In WmGetObject, this = " + GetType().FullName + ", lParam = " + m.LParam.ToString());
+                Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"In WmGetObject, this = {GetType().FullName}, lParam = {m._LParam}");
 
-                if (m.Msg == (int)User32.WM.GETOBJECT && m.LParam == (IntPtr)NativeMethods.UiaRootObjectId)
+                if (m.Msg == (int)User32.WM.GETOBJECT && m._LParam == NativeMethods.UiaRootObjectId)
                 {
                     // If the requested object identifier is UiaRootObjectId,
                     // we should return an UI Automation provider using the UiaReturnRawElementProvider function.
-                    InternalAccessibleObject intAccessibleObject = new InternalAccessibleObject(AccessibilityObject);
-                    m.Result = UiaCore.UiaReturnRawElementProvider(
-                        new HandleRef(this, Handle),
-                        m.WParam,
-                        m.LParam,
-                        intAccessibleObject);
+                    m._Result = UiaCore.UiaReturnRawElementProvider(
+                        this,
+                        m._WParam,
+                        m._LParam,
+                        AccessibilityObject);
 
                     return;
                 }
 
-                // some accessible object requested that we don't care about, so do default message processing
+                // Some accessible object requested that we don't care about, so do default message processing.
                 DefWndProc(ref m);
             }
 
@@ -449,13 +448,13 @@ namespace System.Windows.Forms
             /// </summary>
             protected unsafe override void WndProc(ref Message m)
             {
-                switch ((User32.WM)m.Msg)
+                switch (m._Msg)
                 {
                     case User32.WM.GETOBJECT:
                         WmGetObject(ref m);
                         break;
                     case User32.WM.NOTIFY:
-                        User32.NMHDR* nmhdr = (User32.NMHDR*)m.LParam;
+                        User32.NMHDR* nmhdr = (User32.NMHDR*)m._LParam;
                         if (nmhdr->code == (int)ComCtl32.TTN.SHOW || nmhdr->code == (int)ComCtl32.TTN.POP)
                         {
                             OnToolTipVisibilityChanging(nmhdr->idFrom, nmhdr->code == (int)ComCtl32.TTN.SHOW);

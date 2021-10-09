@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests.Dpi
         public static void TriggerDpiMessage(User32.WM message, Control control, int newDpi)
         {
             double factor = newDpi / DpiHelper.LogicalDpi;
-            IntPtr wParam = PARAM.FromLowHigh(newDpi, newDpi);
+            nint wParam = PARAM.FromLowHigh(newDpi, newDpi);
 
             _ = message switch
             {
@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 _ => throw new NotImplementedException()
             };
 
-            IntPtr SendWmDpiChangedMessage()
+            nint SendWmDpiChangedMessage()
             {
                 RECT suggestedRect = new(0,
                     0,

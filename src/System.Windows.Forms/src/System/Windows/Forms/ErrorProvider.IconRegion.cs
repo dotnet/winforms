@@ -16,21 +16,21 @@ namespace System.Windows.Forms
         /// </summary>
         internal class IconRegion : IHandle
         {
-            private Region region;
-            private readonly Icon icon;
+            private Region _region;
+            private readonly Icon _icon;
 
             /// <summary>
             ///  Constructor that takes an Icon and extracts its 16x16 version.
             /// </summary>
             public IconRegion(Icon icon)
             {
-                this.icon = new Icon(icon, 16, 16);
+                _icon = new Icon(icon, 16, 16);
             }
 
             /// <summary>
             ///  Returns the handle of the icon.
             /// </summary>
-            public IntPtr Handle => icon.Handle;
+            public IntPtr Handle => _icon.Handle;
 
             /// <summary>
             ///  Returns the handle of the region.
@@ -39,15 +39,15 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (region is null)
+                    if (_region is null)
                     {
-                        region = new Region(new Rectangle(0, 0, 0, 0));
+                        _region = new Region(new Rectangle(0, 0, 0, 0));
 
                         IntPtr mask = IntPtr.Zero;
                         try
                         {
-                            Size size = icon.Size;
-                            Bitmap bitmap = icon.ToBitmap();
+                            Size size = _icon.Size;
+                            Bitmap bitmap = _icon.ToBitmap();
                             mask = ControlPaint.CreateHBitmapTransparencyMask(bitmap);
                             bitmap.Dispose();
 
@@ -67,43 +67,43 @@ namespace System.Windows.Forms
                                     // see if bit is set in mask. bits in byte are reversed. 0 is black (set).
                                     if ((bits[y * widthInBytes + x / 8] & (1 << (7 - (x % 8)))) == 0)
                                     {
-                                        region.Union(new Rectangle(x, y, 1, 1));
+                                        _region.Union(new Rectangle(x, y, 1, 1));
                                     }
                                 }
                             }
 
-                            region.Intersect(new Rectangle(0, 0, size.Width, size.Height));
+                            _region.Intersect(new Rectangle(0, 0, size.Width, size.Height));
                         }
                         finally
                         {
                             if (mask != IntPtr.Zero)
                             {
-                                Gdi32.DeleteObject(mask);
+                                Gdi32.DeleteObject((Gdi32.HGDIOBJ)mask);
                             }
                         }
                     }
 
-                    return region;
+                    return _region;
                 }
             }
 
             /// <summary>
             ///  Return the size of the icon.
             /// </summary>
-            public Size Size => icon.Size;
+            public Size Size => _icon.Size;
 
             /// <summary>
             ///  Release any resources held by this Object.
             /// </summary>
             public void Dispose()
             {
-                if (region != null)
+                if (_region is not null)
                 {
-                    region.Dispose();
-                    region = null;
+                    _region.Dispose();
+                    _region = null;
                 }
 
-                icon.Dispose();
+                _icon.Dispose();
             }
         }
     }

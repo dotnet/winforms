@@ -50,14 +50,14 @@ namespace System.Windows.Forms
 
                 // make sure we don't add a form that has a valid mdi parent
                 //
-                if (value is Form && ((Form)value).MdiParentInternal != null)
+                if (value is Form && ((Form)value).MdiParentInternal is not null)
                 {
                     throw new ArgumentException(SR.FormMDIParentCannotAdd, nameof(value));
                 }
 
                 base.Add(value);
 
-                if (owner.ctlClient != null)
+                if (owner.ctlClient is not null)
                 {
                     owner.ctlClient.SendToBack();
                 }

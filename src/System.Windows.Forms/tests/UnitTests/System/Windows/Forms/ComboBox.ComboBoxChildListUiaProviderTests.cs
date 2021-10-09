@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Drawing;
 using Xunit;
 using static Interop;
 
@@ -79,6 +80,45 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expectedItem, nextItem);
             Assert.True(comboBox.IsHandleCreated);
+        }
+
+        public static IEnumerable<object[]> ChildListAccessibleObject_BoundingRectangle_ReturnsCorrectWidth_IfComboBoxIsScrollable_TestData()
+        {
+            foreach (ComboBoxStyle comboBoxStyle in Enum.GetValues(typeof(ComboBoxStyle)))
+            {
+                yield return new object[] { comboBoxStyle };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ChildListAccessibleObject_BoundingRectangle_ReturnsCorrectWidth_IfComboBoxIsScrollable_TestData))]
+        public void ChildListAccessibleObject_BoundingRectangle_ReturnsCorrectWidth_IfComboBoxIsScrollable(ComboBoxStyle comboBoxStyle)
+        {
+            const int expectedWidth = 100;
+
+            using ComboBox comboBox = new()
+            {
+                DropDownStyle = comboBoxStyle,
+                IntegralHeight = false
+            };
+            comboBox.Items.AddRange(Enumerable.Range(0, 11).Cast<object>().ToArray());
+            comboBox.CreateControl();
+
+            if (comboBoxStyle == ComboBoxStyle.Simple)
+            {
+                comboBox.Size = new Size(expectedWidth, 150);
+            }
+            else
+            {
+                comboBox.Size = new Size(expectedWidth, comboBox.Size.Height);
+                comboBox.DropDownHeight = 120;
+                comboBox.DroppedDown = true;
+            }
+
+            UiaCore.IRawElementProviderFragment childListUiaProvider = comboBox.ChildListAccessibleObject;
+            UiaCore.UiaRect actual = childListUiaProvider.BoundingRectangle;
+
+            Assert.Equal(expectedWidth, actual.width);
         }
     }
 }

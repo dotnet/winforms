@@ -1260,7 +1260,7 @@ namespace System.Windows.Forms
                     this,
                     User32.WM.HSCROLL,
                     PARAM.FromLowHigh((RightToLeft == RightToLeft.Yes) ? (int)User32.SBH.RIGHT : (int)User32.SBH.LEFT, 0),
-                    IntPtr.Zero);
+                    0);
             }
         }
 
@@ -1280,14 +1280,14 @@ namespace System.Windows.Forms
         {
             // The lparam is handle of the sending scrollbar, or NULL when
             // the scrollbar sending the message is the "form" scrollbar.
-            if (m.LParam != IntPtr.Zero)
+            if (m._LParam != 0)
             {
                 base.WndProc(ref m);
                 return;
             }
 
             Rectangle client = ClientRectangle;
-            User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m.WParam);
+            User32.SBV loWord = (User32.SBV)PARAM.LOWORD(m._WParam);
             bool thumbTrack = loWord != User32.SBV.THUMBTRACK;
             int pos = -_displayRect.Y;
             int oldValue = pos;
@@ -1375,7 +1375,7 @@ namespace System.Windows.Forms
         {
             // The lparam is handle of the sending scrollbar, or NULL when
             // the scrollbar sending the message is the "form" scrollbar.
-            if (m.LParam != IntPtr.Zero)
+            if (m._LParam != 0)
             {
                 base.WndProc(ref m);
                 return;
@@ -1391,7 +1391,7 @@ namespace System.Windows.Forms
                 maxPos = HorizontalScroll.Maximum;
             }
 
-            User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m.WParam);
+            User32.SBH loWord = (User32.SBH)PARAM.LOWORD(m._WParam);
             switch (loWord)
             {
                 case User32.SBH.THUMBPOSITION:
@@ -1466,7 +1466,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmOnScroll(ref Message m, int oldValue, int value, ScrollOrientation scrollOrientation)
         {
-            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m.WParam);
+            ScrollEventType type = (ScrollEventType)PARAM.LOWORD(m._WParam);
             if (type != ScrollEventType.EndScroll)
             {
                 ScrollEventArgs se = new ScrollEventArgs(type, oldValue, value, scrollOrientation);

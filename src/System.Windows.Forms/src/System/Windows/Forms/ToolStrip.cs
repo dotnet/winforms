@@ -2254,7 +2254,7 @@ namespace System.Windows.Forms
                 case ArrowDirection.Right:
                     return GetNextItemHorizontal(start, forward: true);
                 case ArrowDirection.Left:
-                    bool forward = LastKeyData == Keys.Tab;
+                    bool forward = LastKeyData == Keys.Tab || TabStop;
                     return GetNextItemHorizontal(start, forward);
                 case ArrowDirection.Down:
                     return GetNextItemVertical(start, down: true);
@@ -2913,8 +2913,8 @@ namespace System.Windows.Forms
             User32.SendMessageW(
                 this,
                 User32.WM.PRINT,
-                (IntPtr)imageHdc.HDC,
-                (IntPtr)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
+                imageHdc.HDC,
+                (nint)(User32.PRF.CHILDREN | User32.PRF.CLIENT | User32.PRF.ERASEBKGND | User32.PRF.NONCLIENT));
 
             // Now BLT the result to the destination bitmap.
             Gdi32.BitBlt(
@@ -4925,12 +4925,12 @@ namespace System.Windows.Forms
 
         protected override void WndProc(ref Message m)
         {
-            if (m.Msg == (int)User32.WM.SETFOCUS)
+            if (m._Msg == User32.WM.SETFOCUS)
             {
-                SnapFocus(m.WParam);
+                SnapFocus(m._WParam);
             }
 
-            if (m.Msg == (int)User32.WM.MOUSEACTIVATE)
+            if (m._Msg == User32.WM.MOUSEACTIVATE)
             {
                 // we want to prevent taking focus if someone clicks on the toolstrip dropdown
                 // itself.  the mouse message will still go through, but focus won't be taken.
@@ -4944,7 +4944,7 @@ namespace System.Windows.Forms
                 if (hwndClicked == Handle)
                 {
                     _lastMouseDownedItem = null;
-                    m.Result = (IntPtr)User32.MA.NOACTIVATE;
+                    m._Result = (nint)User32.MA.NOACTIVATE;
 
                     if (!IsDropDown && !IsInDesignMode)
                     {
@@ -4959,7 +4959,7 @@ namespace System.Windows.Forms
                             {
                                 // Activate the window, and discard the mouse message.
                                 // this appears to be the same behavior as office.
-                                m.Result = (IntPtr)User32.MA.ACTIVATEANDEAT;
+                                m._Result = (nint)User32.MA.ACTIVATEANDEAT;
                             }
                         }
                     }

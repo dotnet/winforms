@@ -232,7 +232,7 @@ namespace System.Windows.Forms.Tests
         public void OwnerWndProc_HelpMessage_CallsHelpRequest()
         {
             using var dialog = new SubCommonDialog();
-            FieldInfo field = typeof(CommonDialog).GetField("s_helpMsg", BindingFlags.NonPublic | BindingFlags.Static);
+            FieldInfo field = typeof(CommonDialog).GetField("s_helpMessage", BindingFlags.NonPublic | BindingFlags.Static);
             Assert.NotNull(field);
 
             int callCount = 0;
@@ -252,7 +252,7 @@ namespace System.Windows.Forms.Tests
         public void OwnerWndProc_NonHelpMessage_DoesNotCallHelpRequest()
         {
             using var dialog = new SubCommonDialog();
-            FieldInfo field = typeof(CommonDialog).GetField("s_helpMsg", BindingFlags.NonPublic | BindingFlags.Static);
+            FieldInfo field = typeof(CommonDialog).GetField("s_helpMessage", BindingFlags.NonPublic | BindingFlags.Static);
             Assert.NotNull(field);
 
             int callCount = 0;

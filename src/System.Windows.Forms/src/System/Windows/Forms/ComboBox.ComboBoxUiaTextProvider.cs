@@ -43,7 +43,7 @@ namespace System.Windows.Forms
                     ? GetFormattingRectangle()
                     : Rectangle.Empty;
 
-            public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(new InternalAccessibleObject(_owningComboBox.ChildEditAccessibleObject), this, 0, TextLength);
+            public override UiaCore.ITextRangeProvider DocumentRange => new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start: 0, TextLength);
 
             public override ES EditStyle
                 => _owningComboBox.IsHandleCreated
@@ -73,7 +73,7 @@ namespace System.Windows.Forms
                         return false;
                     }
 
-                    ES extendedStyle = (ES)(long)GetWindowLong(_owningChildEdit, GWL.STYLE);
+                    ES extendedStyle = (ES)GetWindowLong(_owningChildEdit, GWL.STYLE);
                     return extendedStyle.HasFlag(ES.AUTOHSCROLL);
                 }
             }
@@ -115,7 +115,7 @@ namespace System.Windows.Forms
 
             public override int TextLength
                 => _owningComboBox.IsHandleCreated
-                    ? (int)(long)SendMessageW(_owningChildEdit, WM.GETTEXTLENGTH)
+                    ? (int)SendMessageW(_owningChildEdit, WM.GETTEXTLENGTH)
                     : -1;
 
             public override WS_EX WindowExStyle
@@ -143,9 +143,7 @@ namespace System.Windows.Forms
                     isActive = BOOL.TRUE;
                 }
 
-                var internalAccessibleObject = new InternalAccessibleObject(_owningComboBox.ChildEditAccessibleObject);
-
-                return new UiaTextRange(internalAccessibleObject, this, _owningComboBox.SelectionStart, _owningComboBox.SelectionStart);
+                return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, _owningComboBox.SelectionStart, _owningComboBox.SelectionStart);
             }
 
             public override int GetLineFromCharIndex(int charIndex)
@@ -223,9 +221,7 @@ namespace System.Windows.Forms
                 // If there is no selection, start and end parameters are the position of the caret.
                 SendMessageW(_owningChildEdit, (WM)EM.GETSEL, ref start, ref end);
 
-                var internalAccessibleObject = new InternalAccessibleObject(_owningComboBox.ChildEditAccessibleObject);
-
-                return new UiaCore.ITextRangeProvider[] { new UiaTextRange(internalAccessibleObject, this, start, end) };
+                return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end) };
             }
 
             public override void GetVisibleRangePoints(out int visibleStart, out int visibleEnd)
@@ -266,9 +262,8 @@ namespace System.Windows.Forms
                 }
 
                 GetVisibleRangePoints(out int start, out int end);
-                var internalAccessibleObject = new InternalAccessibleObject(_owningComboBox.ChildEditAccessibleObject);
 
-                return new UiaCore.ITextRangeProvider[] { new UiaTextRange(internalAccessibleObject, this, start, end) };
+                return new UiaCore.ITextRangeProvider[] { new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, end) };
             }
 
             public override bool LineScroll(int charactersHorizontal, int linesVertical)
@@ -293,8 +288,7 @@ namespace System.Windows.Forms
             /// </returns>
             public override UiaCore.ITextRangeProvider RangeFromAnnotation(UiaCore.IRawElementProviderSimple annotationElement)
             {
-                InternalAccessibleObject internalAccessibleObject = new(_owningComboBox.ChildEditAccessibleObject);
-                return new UiaTextRange(internalAccessibleObject, this, 0, 0);
+                return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start: 0, end: 0);
             }
 
             public override UiaCore.ITextRangeProvider? RangeFromChild(UiaCore.IRawElementProviderSimple childElement)
@@ -322,7 +316,7 @@ namespace System.Windows.Forms
                 // (Essentially ScreenToClient but MapWindowPoints accounts for window mirroring using WS_EX_LAYOUTRTL.)
                 if (MapWindowPoint(IntPtr.Zero, _owningChildEdit, ref clientLocation) == 0)
                 {
-                    return new UiaTextRange(new InternalAccessibleObject(_owningComboBox.ChildEditAccessibleObject), this, 0, 0);
+                    return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start: 0, end: 0);
                 }
 
                 // We have to deal with the possibility that the coordinate is inside the window rect
@@ -338,7 +332,7 @@ namespace System.Windows.Forms
                 // Get the character at those client coordinates.
                 int start = GetCharIndexFromPosition(clientLocation);
 
-                return new UiaTextRange(new InternalAccessibleObject(_owningComboBox.ChildEditAccessibleObject), this, start, start);
+                return new UiaTextRange(_owningComboBox.ChildEditAccessibleObject, this, start, start);
             }
 
             public override void SetSelection(int start, int end)
@@ -360,12 +354,12 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                SendMessageW(_owningChildEdit, (WM)EM.SETSEL, (IntPtr)start, (IntPtr)end);
+                SendMessageW(_owningChildEdit, (WM)EM.SETSEL, start, end);
             }
 
             private int GetCharIndexFromPosition(Point pt)
             {
-                int index = (int)(long)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, IntPtr.Zero, PARAM.FromLowHigh(pt.X, pt.Y));
+                int index = (int)User32.SendMessageW(_owningChildEdit, (WM)EM.CHARFROMPOS, 0, PARAM.FromPoint(pt));
                 index = PARAM.LOWORD(index);
 
                 if (index < 0)
@@ -391,7 +385,7 @@ namespace System.Windows.Forms
             {
                 // Send an EM_GETRECT message to find out the bounding rectangle.
                 RECT rectangle = new RECT();
-                SendMessageW(_owningChildEdit, (WM)EM.GETRECT, IntPtr.Zero, ref rectangle);
+                SendMessageW(_owningChildEdit, (WM)EM.GETRECT, 0, ref rectangle);
 
                 return rectangle;
             }
@@ -403,7 +397,7 @@ namespace System.Windows.Forms
                     return Point.Empty;
                 }
 
-                int i = (int)(long)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, (IntPtr)index);
+                int i = (int)SendMessageW(_owningChildEdit, (WM)EM.POSFROMCHAR, index);
 
                 return new Point(PARAM.SignedLOWORD(i), PARAM.SignedHIWORD(i));
             }

@@ -17,7 +17,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal InputLanguageCollection(InputLanguage[] value)
         {
-            Debug.Assert(value != null);
+            Debug.Assert(value is not null);
             Debug.Assert(Array.IndexOf(value, null!) == -1, "Should not contain null");
 
             InnerList.AddRange(value);

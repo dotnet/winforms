@@ -264,7 +264,7 @@ namespace System.Windows.Forms.Tests
 
             itemAccessibleObject.ScrollIntoView();
 
-            int actual = unchecked((int)(long)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX));
+            int actual = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX);
 
             Assert.Equal(0, actual); // ScrollIntoView didn't scroll to the tested item because the combobox is disabled
         }
@@ -354,7 +354,7 @@ namespace System.Windows.Forms.Tests
 
             itemAccessibleObject.ScrollIntoView();
 
-            int actual = unchecked((int)(long)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX));
+            int actual = (int)User32.SendMessageW(comboBox, (User32.WM)User32.CB.GETTOPINDEX);
 
             Assert.Equal(expected, actual);
         }

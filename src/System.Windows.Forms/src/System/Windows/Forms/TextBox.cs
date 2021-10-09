@@ -357,7 +357,7 @@ namespace System.Windows.Forms
                         if (PasswordChar != value)
                         {
                             // Set the password mode.
-                            SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (IntPtr)value);
+                            SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (nint)value);
 
                             // Disable IME if setting the control to password mode.
                             VerifyImeRestrictedModeChanged();
@@ -554,14 +554,10 @@ namespace System.Windows.Forms
         {
             base.OnBackColorChanged(e);
 
-            // Force repainting of the entire window frame
+            // Force repainting of the entire window frame.
             if (Application.RenderWithVisualStyles && IsHandleCreated && BorderStyle == BorderStyle.Fixed3D)
             {
-                RedrawWindow(
-                    new HandleRef(this, Handle),
-                    null,
-                    IntPtr.Zero,
-                    RDW.INVALIDATE | RDW.FRAME);
+                RedrawWindow(this, flags: RDW.INVALIDATE | RDW.FRAME);
             }
         }
 
@@ -613,7 +609,7 @@ namespace System.Windows.Forms
             {
                 if (!useSystemPasswordChar)
                 {
-                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (IntPtr)passwordChar);
+                    SendMessageW(this, (WM)EM.SETPASSWORDCHAR, (nint)passwordChar);
                 }
             }
 
@@ -648,9 +644,9 @@ namespace System.Windows.Forms
         {
             base.OnKeyUp(e);
 
-            if (IsHandleCreated && ContainsNavigationKeyCode(e.KeyCode))
+            if (IsHandleCreated && IsAccessibilityObjectCreated && ContainsNavigationKeyCode(e.KeyCode))
             {
-                AccessibilityObject?.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
+                AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextSelectionChangedEventId);
             }
         }
 
@@ -676,7 +672,7 @@ namespace System.Windows.Forms
         {
             base.OnMouseDown(e);
 
-            if (IsHandleCreated)
+            if (IsHandleCreated && IsAccessibilityObjectCreated)
             {
                 // As there is no corresponding windows notification
                 // about text selection changed for TextBox assuming
@@ -845,10 +841,10 @@ namespace System.Windows.Forms
         private void WmPrint(ref Message m)
         {
             base.WndProc(ref m);
-            if (((PRF)m.LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
+            if (((PRF)m._LParam & PRF.NONCLIENT) != 0 && Application.RenderWithVisualStyles
                 && BorderStyle == BorderStyle.Fixed3D)
             {
-                using Graphics g = Graphics.FromHdc(m.WParam);
+                using Graphics g = Graphics.FromHdc(m._WParam);
                 Rectangle rect = new Rectangle(0, 0, Size.Width - 1, Size.Height - 1);
                 using var pen = VisualStyleInformation.TextControlBorder.GetCachedPenScope();
                 g.DrawRectangle(pen, rect);

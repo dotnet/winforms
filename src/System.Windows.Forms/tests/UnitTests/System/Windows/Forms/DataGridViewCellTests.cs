@@ -4831,6 +4831,9 @@ namespace System.Windows.Forms.Tests
         {
             using DataGridView dataGridView = new DataGridView();
             dataGridView.CreateControl();
+
+            Assert.True(dataGridView.AccessibilityObject is Control.ControlAccessibleObject);
+
             using DataGridViewTextBoxColumn column1 = new DataGridViewTextBoxColumn();
             dataGridView.Columns.Add(column1);
             dataGridView.Rows.Add();
@@ -6535,6 +6538,9 @@ namespace System.Windows.Forms.Tests
             cell.MockAccessibleObject = mockAccessibleObject.Object;
             cell.Value = false;
             dataGridView.CurrentCell = cell;
+
+            // Enforce accessible object creation
+            _ = dataGridView.AccessibilityObject;
 
             // Checkbox is checked
             dataGridView.BeginEdit(false);

@@ -88,7 +88,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                private unsafe IntPtr MouseHookProc(User32.HC nCode, IntPtr wparam, IntPtr lparam)
+                private unsafe nint MouseHookProc(User32.HC nCode, nint wparam, nint lparam)
                 {
                     if (_isHooked && nCode == User32.HC.ACTION && lparam != IntPtr.Zero)
                     {
@@ -96,9 +96,9 @@ namespace System.Windows.Forms.Design.Behavior
 
                         try
                         {
-                            if (ProcessMouseMessage(mhs->hWnd, unchecked((int)(long)wparam), mhs->pt.X, mhs->pt.Y))
+                            if (ProcessMouseMessage(mhs->hWnd, (User32.WM)wparam, mhs->pt.X, mhs->pt.Y))
                             {
-                                return (IntPtr)1;
+                                return 1;
                             }
                         }
                         catch (Exception ex)
@@ -122,7 +122,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
 
                     Debug.Assert(_isHooked, "How did we get here when we are disposed?");
-                    return User32.CallNextHookEx(new HandleRef(this, _mouseHookHandle), nCode, wparam, lparam);
+                    return User32.CallNextHookEx(_mouseHookHandle, nCode, wparam, lparam);
                 }
 
                 private void UnhookMouse()
@@ -139,7 +139,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                 }
 
-                private bool ProcessMouseMessage(IntPtr hWnd, int msg, int x, int y)
+                private bool ProcessMouseMessage(IntPtr hWnd, User32.WM msg, int x, int y)
                 {
                     if (_processingMessage)
                     {
@@ -176,7 +176,7 @@ namespace System.Windows.Forms.Design.Behavior
                                 _processingMessage = true;
                                 var pt = new Point(x, y);
                                 adornerWindow.PointToClient(pt);
-                                Message m = Message.Create(hWnd, msg, (IntPtr)0, PARAM.FromLowHigh(pt.Y, pt.X));
+                                Message m = Message.Create(hWnd, msg, 0, PARAM.FromLowHigh(pt.Y, pt.X));
 
                                 // No one knows why we get an extra click here from VS. As a workaround, we check the TimeStamp and discard it.
                                 if (m.Msg == (int)User32.WM.LBUTTONDOWN)

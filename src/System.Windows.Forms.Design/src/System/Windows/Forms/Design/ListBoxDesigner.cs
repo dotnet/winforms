@@ -195,7 +195,7 @@ namespace System.Windows.Forms.Design
             if (lb.IsHandleCreated && lb.Items.Count == 0)
             {
                 User32.SendMessageW(lb, (User32.WM)User32.LB.RESETCONTENT);
-                User32.SendMessageW(lb, (User32.WM)User32.LB.ADDSTRING, IntPtr.Zero, name);
+                User32.SendMessageW(lb, (User32.WM)User32.LB.ADDSTRING, 0, name);
             }
         }
 

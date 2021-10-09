@@ -46,15 +46,16 @@ namespace System.ComponentModel.Design
 
             protected override void WndProc(ref Message m)
             {
-                switch ((User32.WM)m.Msg)
+                switch (m._Msg)
                 {
                     case User32.WM.KEYDOWN:
                         _lastKeyDown = m;
 
-                        // the first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use that to sling focus to the grid.
-                        if (unchecked((int)(long)m.WParam) == VK_PROCESSKEY)
+                        // The first thing the ime does on a key it cares about is send a VK_PROCESSKEY, so we use
+                        // that to sling focus to the grid.
+                        if (m._WParam == VK_PROCESSKEY)
                         {
-                            if (PropertyGrid != null)
+                            if (PropertyGrid is not null)
                             {
                                 PropertyGrid.Focus();
                                 User32.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));
@@ -67,8 +68,8 @@ namespace System.ComponentModel.Design
 
                             if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                             {
-                                // recreate the keystroke to the newly activated window
-                                User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
+                                // Recreate the keystroke to the newly activated window.
+                                User32.SendMessageW(User32.GetFocus(), User32.WM.KEYDOWN, _lastKeyDown._WParam, _lastKeyDown._LParam);
                             }
                         }
 
@@ -96,8 +97,8 @@ namespace System.ComponentModel.Design
                         if (PropertyGrid.Focused || PropertyGrid.ContainsFocus)
                         {
                             IntPtr hWnd = User32.GetFocus();
-                            User32.SendMessageW(hWnd, User32.WM.KEYDOWN, _lastKeyDown.WParam, _lastKeyDown.LParam);
-                            User32.SendMessageW(hWnd, User32.WM.CHAR, m.WParam, m.LParam);
+                            User32.SendMessageW(hWnd, User32.WM.KEYDOWN, _lastKeyDown._WParam, _lastKeyDown._LParam);
+                            User32.SendMessageW(hWnd, User32.WM.CHAR, m._WParam, m._LParam);
                             return;
                         }
 

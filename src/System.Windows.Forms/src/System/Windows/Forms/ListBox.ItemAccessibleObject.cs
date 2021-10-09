@@ -266,14 +266,14 @@ namespace System.Windows.Forms
 
                 if (_owningListBox.SelectedIndex == -1) //no item selected
                 {
-                    User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETCARETINDEX, (IntPtr)currentIndex);
+                    User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETCARETINDEX, currentIndex);
                     return;
                 }
 
-                int firstVisibleIndex = (int)(long)User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.GETTOPINDEX);
+                int firstVisibleIndex = (int)User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.GETTOPINDEX);
                 if (currentIndex < firstVisibleIndex)
                 {
-                    User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETTOPINDEX, (IntPtr)currentIndex);
+                    User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.SETTOPINDEX, currentIndex);
                     return;
                 }
 
@@ -283,7 +283,7 @@ namespace System.Windows.Forms
 
                 for (int i = firstVisibleIndex; i < itemsCount; i++)
                 {
-                    int itemHeight = (int)(long)User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.GETITEMHEIGHT, (IntPtr)i);
+                    int itemHeight = (int)User32.SendMessageW(_owningListBox, (User32.WM)User32.LB.GETITEMHEIGHT, i);
 
                     if ((itemsHeightSum += itemHeight) <= listBoxHeight)
                     {

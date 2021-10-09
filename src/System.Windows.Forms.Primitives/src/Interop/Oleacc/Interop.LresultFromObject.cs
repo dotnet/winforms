@@ -9,11 +9,11 @@ internal static partial class Interop
     internal static partial class Oleacc
     {
         [DllImport(Libraries.Oleacc, ExactSpelling = true)]
-        public static extern IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, IntPtr pAcc);
+        public static extern nint LresultFromObject(ref Guid refiid, nint wParam, IntPtr pAcc);
 
-        public static IntPtr LresultFromObject(ref Guid refiid, IntPtr wParam, HandleRef pAcc)
+        public static nint LresultFromObject(ref Guid refiid, nint wParam, HandleRef pAcc)
         {
-            IntPtr result = LresultFromObject(ref refiid, wParam, pAcc.Handle);
+            nint result = LresultFromObject(ref refiid, wParam, pAcc.Handle);
             GC.KeepAlive(pAcc.Wrapper);
             return result;
         }

@@ -6,20 +6,21 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    public class ToolStripSettingsManagerTests : IClassFixture<ThreadExceptionFixture>
+    public class ToolStripSettingsManagerTests : IClassFixture<UserConfigDisposableFixture>
     {
         [WinFormsFact]
         public void ToolStripSettingsManager_Save_Load_RoundTripExpected()
         {
             using var mainForm = new Form();
 
-            using ToolStrip toolStrip = new ToolStrip();
+            using var toolStrip = new ToolStrip();
             toolStrip.Name = "Child";
             toolStrip.Size = new Drawing.Size(10, 10);
             toolStrip.Visible = false;
             mainForm.Controls.Add(toolStrip);
 
-            ToolStripSettingsManager toolStripSettingsManager = new ToolStripSettingsManager(mainForm, "MainForm");
+            var toolStripSettingsManager = new ToolStripSettingsManager(mainForm, "MainForm");
+
             toolStripSettingsManager.Save();
 
             toolStrip.Size = new Drawing.Size(5, 5);

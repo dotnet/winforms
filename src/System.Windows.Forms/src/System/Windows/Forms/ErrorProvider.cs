@@ -176,14 +176,14 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (_parentControl != null)
+                if (_parentControl is not null)
                 {
                     _parentControl.BindingContextChanged -= _propChangedEvent;
                 }
 
                 _parentControl = value;
 
-                if (_parentControl != null)
+                if (_parentControl is not null)
                 {
                     _parentControl.BindingContextChanged += _propChangedEvent;
                 }
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
                     UnwireEvents(_errorManager);
 
                     // Get the new errorManager
-                    if (_parentControl != null && _dataSource != null && _parentControl.BindingContext != null)
+                    if (_parentControl is not null && _dataSource is not null && _parentControl.BindingContext is not null)
                     {
                         _errorManager = _parentControl.BindingContext[_dataSource, _dataMember];
                     }
@@ -281,7 +281,7 @@ namespace System.Windows.Forms
 
                     // See if there are errors at the current item in the list, without waiting for
                     // the position to change
-                    if (_errorManager != null)
+                    if (_errorManager is not null)
                     {
                         UpdateBinding();
                     }
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
             get => _dataSource;
             set
             {
-                if (_parentControl != null && _parentControl.BindingContext != null && value != null && !string.IsNullOrEmpty(_dataMember))
+                if (_parentControl is not null && _parentControl.BindingContext is not null && value is not null && !string.IsNullOrEmpty(_dataMember))
                 {
                     // Let's check if the datamember exists in the new data source
                     try
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldSerializeDataSource() => _dataSource != null;
+        private bool ShouldSerializeDataSource() => _dataSource is not null;
 
         /// <summary>
         ///  Indicates the sub-list of data from the DataSource to bind errors against.
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
         private void ErrorManager_BindingComplete(object sender, BindingCompleteEventArgs e)
         {
             Binding binding = e.Binding;
-            if (binding != null && binding.Control != null)
+            if (binding is not null && binding.Control is not null)
             {
                 SetError(binding.Control, (e.ErrorText ?? string.Empty));
             }
@@ -421,7 +421,7 @@ namespace System.Windows.Forms
             {
                 for (int j = 0; j < bindingsCount; j++)
                 {
-                    if (errBindings[j].Control != null)
+                    if (errBindings[j].Control is not null)
                     {
                         // Ignore everything but bindings to Controls
                         SetError(errBindings[j].Control, "");
@@ -631,10 +631,10 @@ namespace System.Windows.Forms
         {
             ISupportInitializeNotification dsInit = (DataSource as ISupportInitializeNotification);
 
-            Debug.Assert(dsInit != null, "ErrorProvider: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
+            Debug.Assert(dsInit is not null, "ErrorProvider: ISupportInitializeNotification.Initialized event received, but current DataSource does not support ISupportInitializeNotification!");
             Debug.Assert(dsInit.IsInitialized, "ErrorProvider: DataSource sent ISupportInitializeNotification.Initialized event but before it had finished initializing.");
 
-            if (dsInit != null)
+            if (dsInit is not null)
             {
                 dsInit.Initialized -= new EventHandler(DataSource_Initialized);
             }
@@ -692,7 +692,7 @@ namespace System.Windows.Forms
         /// </summary>
         void DisposeRegion()
         {
-            if (_region != null)
+            if (_region is not null)
             {
                 _region.Dispose();
                 _region = null;

@@ -350,7 +350,10 @@ namespace System.Windows.Forms
                 {
                     listView.SetItemState(Index, value ? LVIS.FOCUSED : 0, LVIS.FOCUSED);
 
-                    AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                    if (listView.IsAccessibilityObjectCreated)
+                    {
+                        AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                    }
                 }
             }
         }
@@ -857,7 +860,7 @@ namespace System.Windows.Forms
                     lv.Focus();
                 }
 
-                User32.SendMessageW(lv, (User32.WM)LVM.EDITLABELW, (IntPtr)Index);
+                User32.SendMessageW(lv, (User32.WM)LVM.EDITLABELW, Index);
             }
         }
 
@@ -867,11 +870,12 @@ namespace System.Windows.Forms
             for (int index = 0; index < SubItems.Count; ++index)
             {
                 ListViewSubItem subItem = SubItems[index];
-                clonedSubItems[index] = new ListViewSubItem(null,
-                                                            subItem.Text,
-                                                            subItem.ForeColor,
-                                                            subItem.BackColor,
-                                                            subItem.Font)
+                clonedSubItems[index] = new ListViewSubItem(
+                    owner: null,
+                    subItem.Text,
+                    subItem.ForeColor,
+                    subItem.BackColor,
+                    subItem.Font)
                 {
                     Tag = subItem.Tag
                 };
@@ -1052,15 +1056,15 @@ namespace System.Windows.Forms
                 lvItem.mask |= LVIF.GROUPID;
                 lvItem.iGroupId = listView.GetNativeGroupId(this);
 
-                IntPtr result = User32.SendMessageW(listView, (User32.WM)LVM.ISGROUPVIEWENABLED);
-                Debug.Assert(!updateOwner || result != IntPtr.Zero, "Groups not enabled");
-                result = User32.SendMessageW(listView, (User32.WM)LVM.HASGROUP, (IntPtr)lvItem.iGroupId);
-                Debug.Assert(!updateOwner || result != IntPtr.Zero, "Doesn't contain group id: " + lvItem.iGroupId.ToString(CultureInfo.InvariantCulture));
+                nint result = User32.SendMessageW(listView, (User32.WM)LVM.ISGROUPVIEWENABLED);
+                Debug.Assert(!updateOwner || result != 0, "Groups not enabled");
+                result = User32.SendMessageW(listView, (User32.WM)LVM.HASGROUP, lvItem.iGroupId);
+                Debug.Assert(!updateOwner || result != 0, $"Doesn't contain group id: {lvItem.iGroupId}");
             }
 
             if (updateOwner)
             {
-                User32.SendMessageW(listView, (User32.WM)LVM.SETITEMW, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WM)LVM.SETITEMW, 0, ref lvItem);
             }
         }
 
@@ -1089,7 +1093,7 @@ namespace System.Windows.Forms
                 }
 
                 lvItem.iItem = displayIndex;
-                User32.SendMessageW(listView, (User32.WM)LVM.GETITEMW, IntPtr.Zero, ref lvItem);
+                User32.SendMessageW(listView, (User32.WM)LVM.GETITEMW, 0, ref lvItem);
 
                 // Update this class' information
                 if (checkSelection)
