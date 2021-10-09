@@ -294,7 +294,7 @@ namespace System.Windows.Forms
 
         public TreeNode[] Find(string key, bool searchAllChildren)
         {
-            ArgumentValidation.ThrowIfNullOrEmpty(key, SR.FindKeyMayNotBeEmptyOrNull);
+            ArgumentValidation.ThrowIfNullOrEmptyWithMessage(key, SR.FindKeyMayNotBeEmptyOrNull);
 
             List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, new List<TreeNode>());
 
