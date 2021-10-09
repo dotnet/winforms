@@ -122,8 +122,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                DataGridViewCell dataGridViewCell = value;
-                ArgumentNullException.ThrowIfNull(dataGridViewCell, nameof(value));
+                DataGridViewCell dataGridViewCell = value.OrThrowIfNull();
 
                 if (dataGridViewCell.DataGridView is not null)
                 {
