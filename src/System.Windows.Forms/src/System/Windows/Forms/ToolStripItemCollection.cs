@@ -243,11 +243,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItem[] Find(string key, bool searchAllChildren)
         {
-            ArgumentNullException.ThrowIfNull(key, nameof(key));
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
-            }
+            ArgumentValidation.ThrowIfNullOrEmptyWithMessage(key, SR.FindKeyMayNotBeEmptyOrNull);
 
             List<ToolStripItem> foundItems = new();
             FindInternal(key, searchAllChildren, this, foundItems);

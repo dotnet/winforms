@@ -294,11 +294,7 @@ namespace System.Windows.Forms
 
         public TreeNode[] Find(string key, bool searchAllChildren)
         {
-            ArgumentNullException.ThrowIfNull(key, nameof(key));
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
-            }
+            ArgumentValidation.ThrowIfNullOrEmpty(key, SR.FindKeyMayNotBeEmptyOrNull);
 
             List<TreeNode> foundNodes = FindInternal(key, searchAllChildren, this, new List<TreeNode>());
 

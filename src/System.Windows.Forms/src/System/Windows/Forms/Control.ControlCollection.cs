@@ -205,10 +205,7 @@ namespace System.Windows.Forms
             public Control[] Find(string key, bool searchAllChildren)
             {
                 ArgumentNullException.ThrowIfNull(key, nameof(key));
-                if (string.IsNullOrEmpty(key))
-                {
-                    throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
-                }
+                ArgumentValidation.ThrowIfNullOrEmptyWithMessage(key, SR.FindKeyMayNotBeEmptyOrNull);
 
                 List<Control> foundControls = new();
                 FindInternal(key, searchAllChildren, this, foundControls);
