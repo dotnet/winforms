@@ -91,7 +91,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ThrowIfNullOrEmpty_ParamIsNull()
         {
-            string param = null;
+            string? param = null;
             var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNullOrEmpty(param));
             Assert.Equal(nameof(param), exception.ParamName);
         }
@@ -114,7 +114,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ThrowIfNullOrEmpty_ParamIsNull_DifferentParamName()
         {
-            string param = null;
+            string? param = null;
             var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNullOrEmpty(param, "paramName"));
             Assert.Equal("paramName", exception.ParamName);
         }
@@ -137,7 +137,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ThrowIfNullOrEmptyWithMessage_ParamIsNull()
         {
-            string param = null;
+            string? param = null;
             var message = "message";
             var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNullOrEmptyWithMessage(param, message));
             Assert.StartsWith(message, exception.Message);
@@ -164,7 +164,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void ThrowIfNullOrEmptyWithMessage_ParamIsNull_DifferentParamName()
         {
-            string param = null;
+            string? param = null;
             var message = "message";
             var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNullOrEmptyWithMessage(param, message, "paramName"));
             Assert.StartsWith(message, exception.Message);
@@ -192,7 +192,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void OrThrowIfNullOrEmpty_ParamIsNull()
         {
-            string param = null;
+            string? param = null;
             var exception = Assert.Throws<ArgumentNullException>(() => _ = param.OrThrowIfNullOrEmpty());
             Assert.Equal(nameof(param), exception.ParamName);
         }
@@ -216,7 +216,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void OrThrowIfNullOrEmpty_ParamIsNull_DifferentParamName()
         {
-            string param = null;
+            string? param = null;
             var exception = Assert.Throws<ArgumentNullException>(() => _ = param.OrThrowIfNullOrEmpty("paramName"));
             Assert.Equal("paramName", exception.ParamName);
         }
