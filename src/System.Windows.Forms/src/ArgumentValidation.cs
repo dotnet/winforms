@@ -28,6 +28,14 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static void ThrowIfNullOrEmptyWithMessage(string argument, string message, [CallerArgumentExpression("argument")] string? paramName = null)
+        {
+            if (string.IsNullOrEmpty(argument))
+            {
+                throw new ArgumentNullException(paramName, message);
+            }
+        }
+
         internal static void ThrowIfNull(Interop.Gdi32.HDC argument, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             if (argument.IsNull)
