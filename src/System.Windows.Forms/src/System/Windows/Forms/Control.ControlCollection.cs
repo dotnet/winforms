@@ -204,7 +204,6 @@ namespace System.Windows.Forms
             /// </summary>
             public Control[] Find(string key, bool searchAllChildren)
             {
-                ArgumentNullException.ThrowIfNull(key);
                 ArgumentValidation.ThrowIfNullOrEmptyWithMessage(key, SR.FindKeyMayNotBeEmptyOrNull);
 
                 List<Control> foundControls = new();
