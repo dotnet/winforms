@@ -93,7 +93,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddRange(string[] value)
         {
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(value);
 
             data.AddRange(value);
             OnCollectionChanged(new CollectionChangeEventArgs(CollectionChangeAction.Refresh, null));

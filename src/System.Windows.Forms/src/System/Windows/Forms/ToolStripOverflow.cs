@@ -22,7 +22,7 @@ namespace System.Windows.Forms
 
         public ToolStripOverflow(ToolStripItem parentItem) : base(parentItem)
         {
-            ArgumentNullException.ThrowIfNull(parentItem, nameof(parentItem));
+            ArgumentNullException.ThrowIfNull(parentItem);
 
             ownerItem = parentItem as ToolStripOverflowButton;
         }

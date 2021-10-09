@@ -187,7 +187,7 @@ namespace System.Windows.Forms
             /// </summary>
             public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
             {
-                ArgumentNullException.ThrowIfNull(propertyValues, nameof(propertyValues));
+                ArgumentNullException.ThrowIfNull(propertyValues);
 
                 try
                 {

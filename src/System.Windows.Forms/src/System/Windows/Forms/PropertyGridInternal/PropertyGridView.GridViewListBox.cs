@@ -15,7 +15,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             public GridViewListBox(PropertyGridView gridView)
             {
-                ArgumentNullException.ThrowIfNull(gridView, nameof(gridView));
+                ArgumentNullException.ThrowIfNull(gridView);
 
                 IntegralHeight = false;
                 _owningPropertyGridView = gridView;

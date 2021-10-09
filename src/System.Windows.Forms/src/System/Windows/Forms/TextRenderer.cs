@@ -300,7 +300,7 @@ namespace System.Windows.Forms
             Color backColor,
             TextFormatFlags flags = TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             // Avoid creating the HDC, etc if we're not going to do any drawing
             if (text.IsEmpty || foreColor == Color.Transparent)
@@ -533,7 +533,7 @@ namespace System.Windows.Forms
             Size proposedSize,
             TextFormatFlags flags = TextFormatFlags.Bottom)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             if (text.IsEmpty)
                 return Size.Empty;

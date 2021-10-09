@@ -599,7 +599,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal int Find(PropertyDescriptor property, object key, bool keepIndex)
         {
-            ArgumentNullException.ThrowIfNull(key, nameof(key));
+            ArgumentNullException.ThrowIfNull(key);
 
             if (property is not null && (list is IBindingList) && ((IBindingList)list).SupportsSearching)
             {

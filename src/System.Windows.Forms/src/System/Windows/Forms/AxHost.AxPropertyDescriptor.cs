@@ -141,7 +141,7 @@ namespace System.Windows.Forms
 
             public override object GetEditor(Type editorBaseType)
             {
-                ArgumentNullException.ThrowIfNull(editorBaseType, nameof(editorBaseType));
+                ArgumentNullException.ThrowIfNull(editorBaseType);
 
                 if (_dispid is not null)
                 {

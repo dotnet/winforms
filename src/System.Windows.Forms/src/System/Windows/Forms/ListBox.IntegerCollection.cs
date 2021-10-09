@@ -180,7 +180,7 @@ namespace System.Windows.Forms
             /// </summary>
             private void AddRangeInternal(ICollection items)
             {
-                ArgumentNullException.ThrowIfNull(items, nameof(items));
+                ArgumentNullException.ThrowIfNull(items);
 
                 owner.BeginUpdate();
                 try
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
 
             public void CopyTo(Array destination, int index)
             {
-                ArgumentNullException.ThrowIfNull(destination, nameof(destination));
+                ArgumentNullException.ThrowIfNull(destination);
 
                 int cnt = Count;
                 for (int i = 0; i < cnt; i++)

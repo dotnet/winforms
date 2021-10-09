@@ -331,21 +331,21 @@ namespace System.Windows.Forms
 
         public virtual void SetAudio(byte[] audioBytes)
         {
-            ArgumentNullException.ThrowIfNull(audioBytes, nameof(audioBytes));
+            ArgumentNullException.ThrowIfNull(audioBytes);
 
             SetAudio(new MemoryStream(audioBytes));
         }
 
         public virtual void SetAudio(Stream audioStream)
         {
-            ArgumentNullException.ThrowIfNull(audioStream, nameof(audioStream));
+            ArgumentNullException.ThrowIfNull(audioStream);
 
             SetData(DataFormats.WaveAudio, false, audioStream);
         }
 
         public virtual void SetFileDropList(StringCollection filePaths)
         {
-            ArgumentNullException.ThrowIfNull(filePaths, nameof(filePaths));
+            ArgumentNullException.ThrowIfNull(filePaths);
 
             string[] strings = new string[filePaths.Count];
             filePaths.CopyTo(strings, 0);
@@ -354,7 +354,7 @@ namespace System.Windows.Forms
 
         public virtual void SetImage(Image image)
         {
-            ArgumentNullException.ThrowIfNull(image, nameof(image));
+            ArgumentNullException.ThrowIfNull(image);
 
             SetData(DataFormats.Bitmap, true, image);
         }

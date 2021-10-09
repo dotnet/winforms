@@ -615,7 +615,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (PaintBorder(paintParts))
             {

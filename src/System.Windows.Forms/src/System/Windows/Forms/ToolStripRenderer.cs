@@ -612,7 +612,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e)
         {
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -791,7 +791,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -834,7 +834,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -863,7 +863,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -969,7 +969,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -1039,7 +1039,7 @@ namespace System.Windows.Forms
 
         private static Image CreateDisabledImage(Image normalImage, ImageAttributes imgAttrib)
         {
-            ArgumentNullException.ThrowIfNull(normalImage, nameof(normalImage));
+            ArgumentNullException.ThrowIfNull(normalImage);
 
             if (imgAttrib is null)
             {

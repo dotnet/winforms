@@ -78,7 +78,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public int Add(Control value)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (!(value is ISupportToolStripPanel control))
                 {
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void AddRange(Control[] value)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 ToolStripPanel currentOwner = ToolStripPanel;
 
@@ -219,7 +219,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void Insert(int index, Control value)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (!(value is ISupportToolStripPanel control))
                 {
@@ -303,7 +303,7 @@ namespace System.Windows.Forms
             [EditorBrowsable(EditorBrowsableState.Never)]
             public void CopyTo(Control[] array, int index)
             {
-                ArgumentNullException.ThrowIfNull(array, nameof(array));
+                ArgumentNullException.ThrowIfNull(array);
 
                 if (index < 0)
                 {

@@ -224,7 +224,7 @@ namespace System.Windows.Forms
 
         public void InsertEntry(int index, Entry item)
         {
-            ArgumentNullException.ThrowIfNull(item, nameof(item));
+            ArgumentNullException.ThrowIfNull(item);
 
             _entries.Insert(index, item);
             Version++;

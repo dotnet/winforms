@@ -29,7 +29,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (rowIndex != -1)
             {
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                 return Rectangle.Empty;
             }
 
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             ComputeBorderStyleCellStateAndCellBounds(rowIndex, out DataGridViewAdvancedBorderStyle dgvabsEffective, out DataGridViewElementStates cellState, out Rectangle cellBounds);
 
@@ -149,7 +149,7 @@ namespace System.Windows.Forms
                 return new Size(-1, -1);
             }
 
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             Rectangle borderWidthsRect = BorderWidths(DataGridView.AdjustedTopLeftHeaderBorderStyle);
             int borderAndPaddingWidths = borderWidthsRect.Left + borderWidthsRect.Width + cellStyle.Padding.Horizontal;
@@ -186,7 +186,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             PaintPrivate(graphics,
                 clipBounds,

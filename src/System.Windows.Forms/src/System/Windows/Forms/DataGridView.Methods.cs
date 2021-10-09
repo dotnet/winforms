@@ -10032,7 +10032,7 @@ namespace System.Windows.Forms
 
         public void InvalidateCell(DataGridViewCell dataGridViewCell)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewCell, nameof(dataGridViewCell));
+            ArgumentNullException.ThrowIfNull(dataGridViewCell);
 
             if (dataGridViewCell.DataGridView != this)
             {
@@ -11001,7 +11001,7 @@ namespace System.Windows.Forms
         internal void OnAddingColumn(DataGridViewColumn dataGridViewColumn)
         {
             // throw an exception if the column to be added breaks the rules
-            ArgumentNullException.ThrowIfNull(dataGridViewColumn, nameof(dataGridViewColumn));
+            ArgumentNullException.ThrowIfNull(dataGridViewColumn);
 
             if (dataGridViewColumn.DataGridView is not null)
             {
@@ -11252,7 +11252,7 @@ namespace System.Windows.Forms
             // Note dataGridViewRow.DataGridView is not null for duplication of shared rows.
 
             // throw an exception if the row to be added breaks the rules
-            ArgumentNullException.ThrowIfNull(dataGridViewRow, nameof(dataGridViewRow));
+            ArgumentNullException.ThrowIfNull(dataGridViewRow);
 
             // !Do not check for dataGridViewRow.Selected flag. Caller does it instead!
             // !Do not check for dataGridViewRow.DataGridView is not null. Caller does it instead!
@@ -28622,7 +28622,7 @@ namespace System.Windows.Forms
 
         public virtual void Sort(DataGridViewColumn dataGridViewColumn, ListSortDirection direction)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewColumn, nameof(dataGridViewColumn));
+            ArgumentNullException.ThrowIfNull(dataGridViewColumn);
 
             if (direction != ListSortDirection.Ascending && direction != ListSortDirection.Descending)
             {
@@ -28644,7 +28644,7 @@ namespace System.Windows.Forms
 
         public virtual void Sort(IComparer comparer)
         {
-            ArgumentNullException.ThrowIfNull(comparer, nameof(comparer));
+            ArgumentNullException.ThrowIfNull(comparer);
 
             if (VirtualMode)
             {

@@ -47,7 +47,7 @@ namespace System.Windows.Forms
 
         public void SetFlowBreak(object child, bool value)
         {
-            ArgumentNullException.ThrowIfNull(child, nameof(child));
+            ArgumentNullException.ThrowIfNull(child);
 
             IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
             if (GetFlowBreak(child) != value)
@@ -58,7 +58,7 @@ namespace System.Windows.Forms
 
         public bool GetFlowBreak(object child)
         {
-            ArgumentNullException.ThrowIfNull(child, nameof(child));
+            ArgumentNullException.ThrowIfNull(child);
 
             IArrangedElement element = FlowLayout.Instance.CastToArrangedElement(child);
             return CommonProperties.GetFlowBreak(element);

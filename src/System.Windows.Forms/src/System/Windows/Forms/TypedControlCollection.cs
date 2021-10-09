@@ -34,7 +34,7 @@ namespace System.Windows.Forms
             // Check parenting first for consistency
             Control.CheckParentingCycle(_ownerControl, value);
 
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(value);
 
             if (IsReadOnly)
             {

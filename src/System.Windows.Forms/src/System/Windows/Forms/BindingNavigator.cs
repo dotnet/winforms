@@ -60,7 +60,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Never)]
         public BindingNavigator(IContainer container) : this(false)
         {
-            ArgumentNullException.ThrowIfNull(container, nameof(container));
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }

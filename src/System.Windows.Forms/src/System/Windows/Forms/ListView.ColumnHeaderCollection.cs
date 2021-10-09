@@ -275,7 +275,7 @@ namespace System.Windows.Forms
 
             public virtual void AddRange(ColumnHeader[] values)
             {
-                ArgumentNullException.ThrowIfNull(values, nameof(values));
+                ArgumentNullException.ThrowIfNull(values);
 
                 Hashtable usedIndices = new Hashtable();
                 int[] indices = new int[values.Length];

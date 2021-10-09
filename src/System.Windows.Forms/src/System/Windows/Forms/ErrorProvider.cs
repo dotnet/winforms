@@ -74,7 +74,7 @@ namespace System.Windows.Forms
 
         public ErrorProvider(ContainerControl parentControl) : this()
         {
-            ArgumentNullException.ThrowIfNull(parentControl, nameof(parentControl));
+            ArgumentNullException.ThrowIfNull(parentControl);
 
             _parentControl = parentControl;
             _propChangedEvent = new EventHandler(ParentControl_BindingContextChanged);
@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
         public ErrorProvider(IContainer container) : this()
         {
-            ArgumentNullException.ThrowIfNull(container, nameof(container));
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }
@@ -704,7 +704,7 @@ namespace System.Windows.Forms
         /// </summary>
         private ControlItem EnsureControlItem(Control control)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             ControlItem item = (ControlItem)_items[control];
             if (item is null)

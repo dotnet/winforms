@@ -161,7 +161,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                ArgumentNullException.ThrowIfNull(columnName, nameof(columnName));
+                ArgumentNullException.ThrowIfNull(columnName);
 
                 int itemCount = _items.Count;
                 for (int i = 0; i < itemCount; ++i)
@@ -245,7 +245,7 @@ namespace System.Windows.Forms
 
         public virtual void AddRange(params DataGridViewColumn[] dataGridViewColumns)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewColumns, nameof(dataGridViewColumns));
+            ArgumentNullException.ThrowIfNull(dataGridViewColumns);
 
             Debug.Assert(DataGridView is not null);
             if (DataGridView.NoDimensionChangeAllowed)
@@ -404,7 +404,7 @@ namespace System.Windows.Forms
 
         public virtual bool Contains(string columnName)
         {
-            ArgumentNullException.ThrowIfNull(columnName, nameof(columnName));
+            ArgumentNullException.ThrowIfNull(columnName);
 
             int itemCount = _items.Count;
             for (int i = 0; i < itemCount; ++i)
@@ -765,7 +765,7 @@ namespace System.Windows.Forms
                                                 DataGridViewElementStates includeFilter,
                                                 DataGridViewElementStates excludeFilter)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewColumnStart, nameof(dataGridViewColumnStart));
+            ArgumentNullException.ThrowIfNull(dataGridViewColumnStart);
 
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
@@ -837,7 +837,7 @@ namespace System.Windows.Forms
                                                              DataGridViewElementStates includeFilter,
                                                              DataGridViewElementStates excludeFilter)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewColumnStart, nameof(dataGridViewColumnStart));
+            ArgumentNullException.ThrowIfNull(dataGridViewColumnStart);
 
             if ((includeFilter & ~(DataGridViewElementStates.Displayed | DataGridViewElementStates.Frozen | DataGridViewElementStates.Resizable |
                 DataGridViewElementStates.ReadOnly | DataGridViewElementStates.Selected | DataGridViewElementStates.Visible)) != 0)
@@ -927,7 +927,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.DataGridView_CannotAlterDisplayIndexWithinAdjustments);
             }
 
-            ArgumentNullException.ThrowIfNull(dataGridViewColumn, nameof(dataGridViewColumn));
+            ArgumentNullException.ThrowIfNull(dataGridViewColumn);
 
             int originalDisplayIndex = dataGridViewColumn.DisplayIndex;
             if (originalDisplayIndex == -1)
@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(DataGridViewColumn dataGridViewColumn)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewColumn, nameof(dataGridViewColumn));
+            ArgumentNullException.ThrowIfNull(dataGridViewColumn);
 
             if (dataGridViewColumn.DataGridView != DataGridView)
             {
@@ -1074,7 +1074,7 @@ namespace System.Windows.Forms
 
         public virtual void Remove(string columnName)
         {
-            ArgumentNullException.ThrowIfNull(columnName, nameof(columnName));
+            ArgumentNullException.ThrowIfNull(columnName);
 
             int itemsCount = _items.Count;
             for (int i = 0; i < itemsCount; ++i)

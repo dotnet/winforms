@@ -78,7 +78,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public static bool IsElementDefined(VisualStyleElement element)
         {
-            ArgumentNullException.ThrowIfNull(element, nameof(element));
+            ArgumentNullException.ThrowIfNull(element);
 
             return IsCombinationDefined(element.ClassName, element.Part);
         }
@@ -143,7 +143,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public VisualStyleRenderer(string className, int part, int state)
         {
-            ArgumentNullException.ThrowIfNull(className, nameof(className));
+            ArgumentNullException.ThrowIfNull(className);
 
             if (!IsCombinationDefined(className, part))
                 throw new ArgumentException(SR.VisualStylesInvalidCombination);
@@ -195,7 +195,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void SetParameters(VisualStyleElement element)
         {
-            ArgumentNullException.ThrowIfNull(element, nameof(element));
+            ArgumentNullException.ThrowIfNull(element);
 
             SetParameters(element.ClassName, element.Part, element.State);
         }
@@ -220,7 +220,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawBackground(IDeviceContext dc, Rectangle bounds)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             DrawBackground(hdc, bounds, IntPtr.Zero);
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawBackground(IDeviceContext dc, Rectangle bounds, Rectangle clipRectangle)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             DrawBackground(hdc, bounds, clipRectangle, IntPtr.Zero);
@@ -290,7 +290,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle DrawEdge(IDeviceContext dc, Rectangle bounds, Edges edges, EdgeStyle style, EdgeEffects effects)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             return DrawEdge(hdc, bounds, edges, style, effects);
@@ -323,8 +323,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, Image image)
         {
-            ArgumentNullException.ThrowIfNull(g, nameof(g));
-            ArgumentNullException.ThrowIfNull(image, nameof(image));
+            ArgumentNullException.ThrowIfNull(g);
+            ArgumentNullException.ThrowIfNull(image);
 
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
@@ -338,8 +338,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawImage(Graphics g, Rectangle bounds, ImageList imageList, int imageIndex)
         {
-            ArgumentNullException.ThrowIfNull(g, nameof(g));
-            ArgumentNullException.ThrowIfNull(imageList, nameof(imageList));
+            ArgumentNullException.ThrowIfNull(g);
+            ArgumentNullException.ThrowIfNull(imageList);
 
             if (imageIndex < 0 || imageIndex >= imageList.Images.Count)
                 throw new ArgumentOutOfRangeException(nameof(imageIndex), imageIndex, string.Format(SR.InvalidArgument, nameof(imageIndex), imageIndex));
@@ -359,8 +359,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawParentBackground(IDeviceContext dc, Rectangle bounds, Control childControl)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
-            ArgumentNullException.ThrowIfNull(childControl, nameof(childControl));
+            ArgumentNullException.ThrowIfNull(dc);
+            ArgumentNullException.ThrowIfNull(childControl);
 
             if (bounds.Width < 0 || bounds.Height < 0)
                 return;
@@ -394,7 +394,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public void DrawText(IDeviceContext dc, Rectangle bounds, string? textToDraw, bool drawDisabled, TextFormatFlags flags)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             DrawText(hdc, bounds, textToDraw, drawDisabled, flags);
@@ -418,7 +418,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle GetBackgroundContentRectangle(IDeviceContext dc, Rectangle bounds)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             return GetBackgroundContentRectangle(hdc, bounds);
@@ -439,7 +439,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Rectangle GetBackgroundExtent(IDeviceContext dc, Rectangle contentBounds)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             if (contentBounds.Width < 0 || contentBounds.Height < 0)
                 return Rectangle.Empty;
@@ -457,7 +457,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Region? GetBackgroundRegion(IDeviceContext dc, Rectangle bounds)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             if (bounds.Width < 0 || bounds.Height < 0)
                 return null;
@@ -542,7 +542,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Font? GetFont(IDeviceContext dc, FontProperty prop)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
 
@@ -589,7 +589,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public Size GetPartSize(IDeviceContext dc, ThemeSizeType type)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             return GetPartSize(hdc, type, IntPtr.Zero);
@@ -621,7 +621,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Size GetPartSize(IDeviceContext dc, Rectangle bounds, ThemeSizeType type)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             // Valid values are 0x0 to 0x2
             SourceGenerated.EnumValidator.Validate(type, nameof(type));
@@ -649,7 +649,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Padding GetMargins(IDeviceContext dc, MarginProperty prop)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             // Valid values are 0xe11 to 0xe13
             SourceGenerated.EnumValidator.Validate(prop, nameof(prop));
@@ -682,7 +682,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, string textToDraw, TextFormatFlags flags)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
             ArgumentValidation.ThrowIfNullOrEmpty(textToDraw);
 
             using var hdc = new DeviceContextHdcScope(dc);
@@ -695,7 +695,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, Rectangle bounds, string textToDraw, TextFormatFlags flags)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
             ArgumentValidation.ThrowIfNullOrEmpty(textToDraw);
 
             using var hdc = new DeviceContextHdcScope(dc);
@@ -709,7 +709,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public TextMetrics GetTextMetrics(IDeviceContext dc)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeTextMetrics(this, hdc, Part, State, out TextMetrics tm);
@@ -721,7 +721,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, Point pt, HitTestOptions options)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT backgroundRect = backgroundRectangle;
@@ -734,8 +734,8 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(Graphics g, Rectangle backgroundRectangle, Region region, Point pt, HitTestOptions options)
         {
-            ArgumentNullException.ThrowIfNull(g, nameof(g));
-            ArgumentNullException.ThrowIfNull(region, nameof(region));
+            ArgumentNullException.ThrowIfNull(g);
+            ArgumentNullException.ThrowIfNull(region);
 
             IntPtr hRgn = region.GetHrgn(g);
             return HitTestBackground(g, backgroundRectangle, hRgn, pt, options);
@@ -746,7 +746,7 @@ namespace System.Windows.Forms.VisualStyles
         /// </summary>
         public HitTestCode HitTestBackground(IDeviceContext dc, Rectangle backgroundRectangle, IntPtr hRgn, Point pt, HitTestOptions options)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT backgroundRect = backgroundRectangle;

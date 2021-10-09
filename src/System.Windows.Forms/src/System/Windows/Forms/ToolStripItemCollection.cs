@@ -117,7 +117,7 @@ namespace System.Windows.Forms
 
         public void AddRange(ToolStripItem[] toolStripItems)
         {
-            ArgumentNullException.ThrowIfNull(toolStripItems, nameof(toolStripItems));
+            ArgumentNullException.ThrowIfNull(toolStripItems);
 
             if (IsReadOnly)
             {
@@ -137,7 +137,7 @@ namespace System.Windows.Forms
 
         public void AddRange(ToolStripItemCollection toolStripItems)
         {
-            ArgumentNullException.ThrowIfNull(toolStripItems, nameof(toolStripItems));
+            ArgumentNullException.ThrowIfNull(toolStripItems);
 
             if (IsReadOnly)
             {
@@ -218,7 +218,7 @@ namespace System.Windows.Forms
 
         private void CheckCanAddOrInsertItem(ToolStripItem value)
         {
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(value);
 
             if (IsReadOnly)
             {

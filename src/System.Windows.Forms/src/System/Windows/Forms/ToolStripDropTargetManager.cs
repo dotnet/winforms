@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         public ToolStripDropTargetManager(ToolStrip owner)
         {
             this.owner = owner;
-            ArgumentNullException.ThrowIfNull(owner, nameof(owner));
+            ArgumentNullException.ThrowIfNull(owner);
         }
 
         public void EnsureRegistered(IDropTarget dropTarget)

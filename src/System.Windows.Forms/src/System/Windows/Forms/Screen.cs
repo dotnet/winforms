@@ -332,7 +332,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static Screen FromControl(Control control)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             return FromHandle(control.Handle);
         }

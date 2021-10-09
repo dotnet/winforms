@@ -14,7 +14,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(columnIndex));
             }
 
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             ColumnIndex = columnIndex;
         }

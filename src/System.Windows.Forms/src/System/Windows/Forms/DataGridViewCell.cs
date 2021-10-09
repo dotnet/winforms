@@ -929,8 +929,8 @@ namespace System.Windows.Forms
             bool isFirstDisplayedColumn,
             bool isFirstDisplayedRow)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewAdvancedBorderStyleInput, nameof(dataGridViewAdvancedBorderStyleInput));
-            ArgumentNullException.ThrowIfNull(dataGridViewAdvancedBorderStylePlaceholder, nameof(dataGridViewAdvancedBorderStylePlaceholder));
+            ArgumentNullException.ThrowIfNull(dataGridViewAdvancedBorderStyleInput);
+            ArgumentNullException.ThrowIfNull(dataGridViewAdvancedBorderStylePlaceholder);
 
             switch (dataGridViewAdvancedBorderStyleInput.All)
             {
@@ -988,7 +988,7 @@ namespace System.Windows.Forms
 
         protected virtual Rectangle BorderWidths(DataGridViewAdvancedBorderStyle advancedBorderStyle)
         {
-            ArgumentNullException.ThrowIfNull(advancedBorderStyle, nameof(advancedBorderStyle));
+            ArgumentNullException.ThrowIfNull(advancedBorderStyle);
 
             Rectangle rect = new Rectangle
             {
@@ -2727,8 +2727,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static int MeasureTextHeight(Graphics graphics, string text, Font font, int maxWidth, TextFormatFlags flags, out bool widthTruncated)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
-            ArgumentNullException.ThrowIfNull(font, nameof(font));
+            ArgumentNullException.ThrowIfNull(graphics);
+            ArgumentNullException.ThrowIfNull(font);
 
             if (maxWidth <= 0)
             {
@@ -2750,8 +2750,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Size MeasureTextPreferredSize(Graphics graphics, string text, Font font, float maxRatio, TextFormatFlags flags)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
-            ArgumentNullException.ThrowIfNull(font, nameof(font));
+            ArgumentNullException.ThrowIfNull(graphics);
+            ArgumentNullException.ThrowIfNull(font);
 
             if (maxRatio <= 0.0F)
             {
@@ -2795,8 +2795,8 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         public static Size MeasureTextSize(Graphics graphics, string text, Font font, TextFormatFlags flags)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
-            ArgumentNullException.ThrowIfNull(font, nameof(font));
+            ArgumentNullException.ThrowIfNull(graphics);
+            ArgumentNullException.ThrowIfNull(font);
 
             if (!DataGridViewUtilities.ValidTextFormatFlags(flags))
             {
@@ -3352,9 +3352,9 @@ namespace System.Windows.Forms
             DataGridViewCellStyle cellStyle,
             DataGridViewAdvancedBorderStyle advancedBorderStyle)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
-            ArgumentNullException.ThrowIfNull(advancedBorderStyle, nameof(advancedBorderStyle));
+            ArgumentNullException.ThrowIfNull(graphics);
+            ArgumentNullException.ThrowIfNull(cellStyle);
+            ArgumentNullException.ThrowIfNull(advancedBorderStyle);
 
             if (DataGridView is null)
             {
@@ -3752,7 +3752,7 @@ namespace System.Windows.Forms
 
         protected virtual void PaintErrorIcon(Graphics graphics, Rectangle clipBounds, Rectangle cellValueBounds, string errorText)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             if (DataGridView is null)
             {
@@ -3769,7 +3769,7 @@ namespace System.Windows.Forms
 
         private static void PaintErrorIcon(Graphics graphics, Rectangle iconBounds)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             Bitmap bmp = ErrorBitmap;
             if (bmp is not null)
@@ -3917,7 +3917,7 @@ namespace System.Windows.Forms
                                                     TypeConverter formattedValueTypeConverter,
                                                     TypeConverter valueTypeConverter)
         {
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (FormattedValueType is null)
             {

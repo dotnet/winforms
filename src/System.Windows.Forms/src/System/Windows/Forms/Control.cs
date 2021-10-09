@@ -5275,7 +5275,7 @@ namespace System.Windows.Forms
 
         public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
         {
-            ArgumentNullException.ThrowIfNull(bitmap, nameof(bitmap));
+            ArgumentNullException.ThrowIfNull(bitmap);
 
             if (targetBounds.Width <= 0 || targetBounds.Height <= 0
                 || targetBounds.X < 0 || targetBounds.Y < 0)
@@ -5327,7 +5327,7 @@ namespace System.Windows.Forms
         public object EndInvoke(IAsyncResult asyncResult)
         {
             using var scope = MultithreadSafeCallScope.Create();
-            ArgumentNullException.ThrowIfNull(asyncResult, nameof(asyncResult));
+            ArgumentNullException.ThrowIfNull(asyncResult);
 
             if (!(asyncResult is ThreadMethodEntry entry))
             {
@@ -7559,7 +7559,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPrint(PaintEventArgs e)
         {
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if (GetStyle(ControlStyles.UserPaint))
             {
@@ -8573,7 +8573,7 @@ namespace System.Windows.Forms
 
         internal void PaintBackground(PaintEventArgs e, Rectangle rectangle, Color backColor, Point scrollOffset)
         {
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RenderColorTransparent(backColor))
             {

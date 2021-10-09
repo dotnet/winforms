@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format) : base(g, item)
         {
-            ArgumentNullException.ThrowIfNull(item, nameof(item));
+            ArgumentNullException.ThrowIfNull(item);
 
             Text = text;
             TextRectangle = textRectangle;
@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItemTextRenderEventArgs(Graphics g, ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, ContentAlignment textAlign) : base(g, item)
         {
-            ArgumentNullException.ThrowIfNull(item, nameof(item));
+            ArgumentNullException.ThrowIfNull(item);
 
             Text = text;
             TextRectangle = textRectangle;

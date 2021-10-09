@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
         {
-            ArgumentNullException.ThrowIfNull(destinationType, nameof(destinationType));
+            ArgumentNullException.ThrowIfNull(destinationType);
 
             if (destinationType == typeof(string) && (value is null))
             {

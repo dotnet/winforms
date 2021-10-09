@@ -49,7 +49,7 @@ namespace System.Windows.Forms
 
             ToolStripPanelRow = parent;
             _wrappedToolStrip = control as ToolStrip;
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
             if (_wrappedToolStrip is null)
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.TypedControlCollectionShouldBeOfType, typeof(ToolStrip).Name)), control.GetType().Name);

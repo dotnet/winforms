@@ -140,7 +140,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    ArgumentNullException.ThrowIfNull(value, nameof(value));
+                    ArgumentNullException.ThrowIfNull(value);
 
                     if (!(value is Bitmap bitmap))
                     {
@@ -275,7 +275,7 @@ namespace System.Windows.Forms
 
             public void Add(Icon value)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 // Don't clone it now is a breaking change, so we have to keep track of this specific icon and dispose that
                 Add(new Original(value.Clone(), OriginalOptions.OwnsImage), null);
@@ -286,7 +286,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void Add(Image value)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 var original = new Original(value, OriginalOptions.Default);
                 Add(original, null);
@@ -299,7 +299,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int Add(Image value, Color transparentColor)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 var original = new Original(value, OriginalOptions.CustomTransparentColor, transparentColor);
                 return Add(original, null);
@@ -307,7 +307,7 @@ namespace System.Windows.Forms
 
             private int Add(Original original, ImageInfo imageInfo)
             {
-                ArgumentNullException.ThrowIfNull(original, nameof(original));
+                ArgumentNullException.ThrowIfNull(original);
                 ArgumentNullException.ThrowIfNull(original._image, nameof(original));
 
                 int index = -1;
@@ -375,7 +375,7 @@ namespace System.Windows.Forms
 
             public void AddRange(Image[] images)
             {
-                ArgumentNullException.ThrowIfNull(images, nameof(images));
+                ArgumentNullException.ThrowIfNull(images);
 
                 _isBatchAdd = true;
                 foreach (Image image in images)
@@ -393,7 +393,7 @@ namespace System.Windows.Forms
             /// </summary>
             public int AddStrip(Image value)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 // strip width must be a positive multiple of image list width
                 if (value.Width == 0 || (value.Width % _owner.ImageSize.Width) != 0)

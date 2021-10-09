@@ -83,7 +83,7 @@ namespace System.Windows.Forms
 
             public void Add(TabPage value)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 _owner.Controls.Add(value);
             }
@@ -142,7 +142,7 @@ namespace System.Windows.Forms
 
             public void AddRange(TabPage[] pages)
             {
-                ArgumentNullException.ThrowIfNull(pages, nameof(pages));
+                ArgumentNullException.ThrowIfNull(pages);
 
                 foreach (TabPage page in pages)
                 {
@@ -152,7 +152,7 @@ namespace System.Windows.Forms
 
             public bool Contains(TabPage page)
             {
-                ArgumentNullException.ThrowIfNull(page, nameof(page));
+                ArgumentNullException.ThrowIfNull(page);
 
                 return IndexOf(page) != -1;
             }
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(TabPage page)
             {
-                ArgumentNullException.ThrowIfNull(page, nameof(page));
+                ArgumentNullException.ThrowIfNull(page);
 
                 for (int index = 0; index < Count; ++index)
                 {
@@ -339,7 +339,7 @@ namespace System.Windows.Forms
 
             public void Remove(TabPage value)
             {
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 _owner.Controls.Remove(value);
             }

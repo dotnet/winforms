@@ -28,11 +28,11 @@ namespace System.Windows.Forms
 
             if (itemIndex == -1)
             {
-                ArgumentNullException.ThrowIfNull(item, nameof(item));
+                ArgumentNullException.ThrowIfNull(item);
             }
             else
             {
-                ArgumentNullException.ThrowIfNull(subItem, nameof(subItem));
+                ArgumentNullException.ThrowIfNull(subItem);
             }
 
             Bounds = bounds;

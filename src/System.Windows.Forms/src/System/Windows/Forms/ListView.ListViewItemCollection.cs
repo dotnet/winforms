@@ -257,14 +257,14 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewItem[] items)
             {
-                ArgumentNullException.ThrowIfNull(items, nameof(items));
+                ArgumentNullException.ThrowIfNull(items);
 
                 InnerList.AddRange(items);
             }
 
             public void AddRange(ListViewItemCollection items)
             {
-                ArgumentNullException.ThrowIfNull(items, nameof(items));
+                ArgumentNullException.ThrowIfNull(items);
 
                 ListViewItem[] itemArray = new ListViewItem[items.Count];
                 items.CopyTo(itemArray, 0);

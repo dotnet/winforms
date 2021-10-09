@@ -282,7 +282,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetContentBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (DataGridView is null || rowIndex < 0 || OwningColumn is null)
             {
@@ -335,7 +335,7 @@ namespace System.Windows.Forms
 
         protected override Rectangle GetErrorIconBounds(Graphics graphics, DataGridViewCellStyle cellStyle, int rowIndex)
         {
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             if (DataGridView is null ||
                 rowIndex < 0 ||
@@ -430,7 +430,7 @@ namespace System.Windows.Forms
                 return new Size(-1, -1);
             }
 
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             Size preferredSize;
             Rectangle borderWidthsRect = StdBorderWidths;
@@ -713,7 +713,7 @@ namespace System.Windows.Forms
             DataGridViewAdvancedBorderStyle advancedBorderStyle,
             DataGridViewPaintParts paintParts)
         {
-            ArgumentNullException.ThrowIfNull(cellStyle, nameof(cellStyle));
+            ArgumentNullException.ThrowIfNull(cellStyle);
 
             PaintPrivate(graphics,
                 clipBounds,

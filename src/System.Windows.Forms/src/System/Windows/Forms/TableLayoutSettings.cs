@@ -248,7 +248,7 @@ namespace System.Windows.Forms
 
         public int GetColumnSpan(object control)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -263,7 +263,7 @@ namespace System.Windows.Forms
 
         public void SetColumnSpan(object control, int value)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             if (value < 1)
             {
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
 
         public int GetRowSpan(object control)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -305,7 +305,7 @@ namespace System.Windows.Forms
 
         public void SetRowSpan(object control, int value)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             if (value < 1)
             {
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetRow(object control)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -359,7 +359,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetRow(object control, int row)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             if (row < -1)
             {
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public TableLayoutPanelCellPosition GetCellPosition(object control)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
         }
@@ -390,7 +390,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
         }
@@ -403,7 +403,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetColumn(object control)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -424,7 +424,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetColumn(object control, int column)
         {
-            ArgumentNullException.ThrowIfNull(control, nameof(control));
+            ArgumentNullException.ThrowIfNull(control);
 
             if (column < -1)
             {

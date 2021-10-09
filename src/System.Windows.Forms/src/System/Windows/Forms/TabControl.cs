@@ -1015,7 +1015,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DeselectTab(TabPage tabPage)
         {
-            ArgumentNullException.ThrowIfNull(tabPage, nameof(tabPage));
+            ArgumentNullException.ThrowIfNull(tabPage);
 
             int index = FindTabPage(tabPage);
             DeselectTab(index);
@@ -1026,7 +1026,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void DeselectTab(string tabPageName)
         {
-            ArgumentNullException.ThrowIfNull(tabPageName, nameof(tabPageName));
+            ArgumentNullException.ThrowIfNull(tabPageName);
 
             TabPage tabPage = TabPages[tabPageName];
             DeselectTab(tabPage);
@@ -1145,7 +1145,7 @@ namespace System.Windows.Forms
 
         protected string GetToolTipText(object item)
         {
-            ArgumentNullException.ThrowIfNull(item, nameof(item));
+            ArgumentNullException.ThrowIfNull(item);
 
             if (!(item is TabPage tabPage))
             {
@@ -1201,7 +1201,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            ArgumentNullException.ThrowIfNull(tabPage, nameof(tabPage));
+            ArgumentNullException.ThrowIfNull(tabPage);
 
             index = IsHandleCreated ? SendMessage(ComCtl32.TCM.INSERTITEMW, index, tabPage) : index;
             if (index >= 0)
@@ -1704,7 +1704,7 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
             }
 
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(value);
 
             if (IsHandleCreated)
             {
@@ -1737,7 +1737,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SelectTab(TabPage tabPage)
         {
-            ArgumentNullException.ThrowIfNull(tabPage, nameof(tabPage));
+            ArgumentNullException.ThrowIfNull(tabPage);
 
             int index = FindTabPage(tabPage);
             SelectTab(index);
@@ -1748,7 +1748,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SelectTab(string tabPageName)
         {
-            ArgumentNullException.ThrowIfNull(tabPageName, nameof(tabPageName));
+            ArgumentNullException.ThrowIfNull(tabPageName);
 
             TabPage tabPage = TabPages[tabPageName];
             SelectTab(tabPage);

@@ -257,7 +257,7 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe static IntPtr CreateHBitmapTransparencyMask(Bitmap bitmap)
         {
-            ArgumentNullException.ThrowIfNull(bitmap, nameof(bitmap));
+            ArgumentNullException.ThrowIfNull(bitmap);
 
             Size size = bitmap.Size;
             int width = bitmap.Width;
@@ -405,7 +405,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal static void PrintBorder(Graphics graphics, Rectangle bounds, BorderStyle style, Border3DStyle b3dStyle)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             switch (style)
             {
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
             Point scrollOffset = default,
             RightToLeft rightToLeft = RightToLeft.No)
         {
-            ArgumentNullException.ThrowIfNull(g, nameof(g));
+            ArgumentNullException.ThrowIfNull(g);
 
             if (backgroundImageLayout == ImageLayout.Tile)
             {
@@ -534,7 +534,7 @@ namespace System.Windows.Forms
 
         public static void DrawBorder(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             switch (style)
             {
@@ -566,7 +566,7 @@ namespace System.Windows.Forms
             Color rightColor, int rightWidth, ButtonBorderStyle rightStyle,
             Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             DrawBorder(
                 (IDeviceContext)graphics,
@@ -1049,7 +1049,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawBorder3D(Graphics graphics, int x, int y, int width, int height, Border3DStyle style, Border3DSide sides)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             User32.EDGE edge = (User32.EDGE)((uint)style & 0x0F);
             User32.BF flags = (User32.BF)sides | (User32.BF)((uint)style & ~0x0F);
@@ -1081,7 +1081,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void DrawBorderComplex(Graphics graphics, Rectangle bounds, Color color, ButtonBorderStyle style)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             if (style == ButtonBorderStyle.Inset)
             {
@@ -1170,7 +1170,7 @@ namespace System.Windows.Forms
             Color color,
             ButtonBorderStyle style = ButtonBorderStyle.Solid)
         {
-            ArgumentNullException.ThrowIfNull(context, nameof(context));
+            ArgumentNullException.ThrowIfNull(context);
 
             if (color.HasTransparency() || style != ButtonBorderStyle.Solid)
             {
@@ -1299,7 +1299,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawContainerGrabHandle(Graphics graphics, Rectangle bounds)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             Brush brush = Brushes.White;
             Pen pen = Pens.Black;
@@ -1343,7 +1343,7 @@ namespace System.Windows.Forms
         /// </summary>
         private static void DrawFlatCheckBox(Graphics graphics, Rectangle rectangle, ButtonState state)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             // Background color of checkbox
 
@@ -1368,7 +1368,7 @@ namespace System.Windows.Forms
             Brush background,
             ButtonState state)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
             if (rectangle.Width < 0 || rectangle.Height < 0)
                 throw new ArgumentOutOfRangeException(nameof(rectangle));
 
@@ -1440,7 +1440,7 @@ namespace System.Windows.Forms
 
         private static void DrawFocusRectangle(Graphics graphics, Rectangle rectangle, Color color, bool highContrast, bool blackAndWhite = false)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             rectangle.Width--;
             rectangle.Height--;
@@ -1461,7 +1461,7 @@ namespace System.Windows.Forms
             Color foreColor,
             Color backColor)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
             if (width < 0)
                 throw new ArgumentOutOfRangeException(nameof(width));
             if (height < 0)
@@ -1517,7 +1517,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawGrabHandle(Graphics graphics, Rectangle rectangle, bool primary, bool enabled)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             Pen pen = primary
                 ? s_grabPenPrimary ??= Pens.Black
@@ -1544,7 +1544,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawGrid(Graphics graphics, Rectangle area, Size pixelsBetweenDots, Color backColor)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
             if (pixelsBetweenDots.Width <= 0 || pixelsBetweenDots.Height <= 0)
                 throw new ArgumentOutOfRangeException(nameof(pixelsBetweenDots));
 
@@ -1593,7 +1593,7 @@ namespace System.Windows.Forms
             Rectangle destination,
             Color replaceBlack)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             using var attributes = new ImageAttributes();
             attributes.SetColorMatrix(RemapBlackAndWhitePreserveTransparentMatrix(replaceBlack, Color.White));
@@ -1641,8 +1641,8 @@ namespace System.Windows.Forms
         /// </summary>
         internal static void DrawImageDisabled(Graphics graphics, Image image, Rectangle imageBounds, bool unscaledImage)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
-            ArgumentNullException.ThrowIfNull(image, nameof(image));
+            ArgumentNullException.ThrowIfNull(graphics);
+            ArgumentNullException.ThrowIfNull(image);
 
             Size imageSize = image.Size;
 
@@ -1702,7 +1702,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawLockedFrame(Graphics graphics, Rectangle rectangle, bool primary)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             Pen pen = primary ? Pens.White : Pens.Black;
 
@@ -1893,7 +1893,7 @@ namespace System.Windows.Forms
             Rectangle insideRect,
             Color backColor)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             Brush frameBrush = active ? GetActiveBrush(backColor) : GetSelectedBrush(backColor);
 
@@ -1914,7 +1914,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawSizeGrip(Graphics graphics, Color backColor, int x, int y, int width, int height)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             using var bright = GdiPlusCache.GetCachedPenScope(LightLight(backColor));
             using var dark = GdiPlusCache.GetCachedPenScope(Dark(backColor));
@@ -1971,7 +1971,7 @@ namespace System.Windows.Forms
             RectangleF layoutRectangle,
             StringFormat format)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             if (SystemInformation.HighContrast)
             {
@@ -2003,7 +2003,7 @@ namespace System.Windows.Forms
             Rectangle layoutRectangle,
             TextFormatFlags format)
         {
-            ArgumentNullException.ThrowIfNull(dc, nameof(dc));
+            ArgumentNullException.ThrowIfNull(dc);
 
             // This must come before creating the scope.
             Gdi32.QUALITY quality = TextRenderer.FontQualityFromTextRenderingHint(dc);
@@ -2042,7 +2042,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawVisualStyleBorder(Graphics graphics, Rectangle bounds)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             using var borderPen = VisualStyles.VisualStyleInformation.TextControlBorder.GetCachedPenScope();
             graphics.DrawRectangle(borderPen, bounds);

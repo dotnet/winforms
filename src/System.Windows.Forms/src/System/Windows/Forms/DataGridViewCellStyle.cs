@@ -45,7 +45,7 @@ namespace System.Windows.Forms
 
         public DataGridViewCellStyle(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewCellStyle, nameof(dataGridViewCellStyle));
+            ArgumentNullException.ThrowIfNull(dataGridViewCellStyle);
 
             propertyStore = new PropertyStore();
             scope = DataGridViewCellStyleScopes.None;
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
 
         public virtual void ApplyStyle(DataGridViewCellStyle dataGridViewCellStyle)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewCellStyle, nameof(dataGridViewCellStyle));
+            ArgumentNullException.ThrowIfNull(dataGridViewCellStyle);
 
             if (!dataGridViewCellStyle.BackColor.IsEmpty)
             {

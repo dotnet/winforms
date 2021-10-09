@@ -77,7 +77,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ImageList(IContainer container) : this()
         {
-            ArgumentNullException.ThrowIfNull(container, nameof(container));
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }

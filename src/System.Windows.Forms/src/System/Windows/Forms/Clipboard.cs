@@ -44,7 +44,7 @@ namespace System.Windows.Forms
                 throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
             }
 
-            ArgumentNullException.ThrowIfNull(data, nameof(data));
+            ArgumentNullException.ThrowIfNull(data);
 
             if (retryTimes < 0)
             {
@@ -315,14 +315,14 @@ namespace System.Windows.Forms
 
         public static void SetAudio(byte[] audioBytes)
         {
-            ArgumentNullException.ThrowIfNull(audioBytes, nameof(audioBytes));
+            ArgumentNullException.ThrowIfNull(audioBytes);
 
             SetAudio(new MemoryStream(audioBytes));
         }
 
         public static void SetAudio(Stream audioStream)
         {
-            ArgumentNullException.ThrowIfNull(audioStream, nameof(audioStream));
+            ArgumentNullException.ThrowIfNull(audioStream);
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.WaveAudio, false, audioStream);
@@ -331,7 +331,7 @@ namespace System.Windows.Forms
 
         public static void SetData(string format, object data)
         {
-            ArgumentNullException.ThrowIfNull(format, nameof(format));
+            ArgumentNullException.ThrowIfNull(format);
             if (string.IsNullOrWhiteSpace(format))
             {
                 throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
@@ -345,7 +345,7 @@ namespace System.Windows.Forms
 
         public static void SetFileDropList(StringCollection filePaths)
         {
-            ArgumentNullException.ThrowIfNull(filePaths, nameof(filePaths));
+            ArgumentNullException.ThrowIfNull(filePaths);
 
             if (filePaths.Count == 0)
             {
@@ -377,7 +377,7 @@ namespace System.Windows.Forms
 
         public static void SetImage(Image image)
         {
-            ArgumentNullException.ThrowIfNull(image, nameof(image));
+            ArgumentNullException.ThrowIfNull(image);
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.Bitmap, true, image);

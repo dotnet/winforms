@@ -244,7 +244,7 @@ namespace System.Windows.Forms
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         public virtual void AddRange(params DataGridViewCell[] dataGridViewCells)
         {
-            ArgumentNullException.ThrowIfNull(dataGridViewCells, nameof(dataGridViewCells));
+            ArgumentNullException.ThrowIfNull(dataGridViewCells);
 
             if (_owner.DataGridView is not null)
             {

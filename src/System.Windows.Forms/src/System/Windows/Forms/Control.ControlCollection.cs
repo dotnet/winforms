@@ -157,7 +157,7 @@ namespace System.Windows.Forms
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls)
             {
-                ArgumentNullException.ThrowIfNull(controls, nameof(controls));
+                ArgumentNullException.ThrowIfNull(controls);
 
                 if (controls.Length > 0)
                 {
@@ -204,7 +204,7 @@ namespace System.Windows.Forms
             /// </summary>
             public Control[] Find(string key, bool searchAllChildren)
             {
-                ArgumentNullException.ThrowIfNull(key, nameof(key));
+                ArgumentNullException.ThrowIfNull(key);
                 ArgumentValidation.ThrowIfNullOrEmptyWithMessage(key, SR.FindKeyMayNotBeEmptyOrNull);
 
                 List<Control> foundControls = new();
@@ -479,7 +479,7 @@ namespace System.Windows.Forms
             internal virtual void SetChildIndexInternal(Control child, int newIndex)
             {
                 // Sanity check parameters
-                ArgumentNullException.ThrowIfNull(child, nameof(child));
+                ArgumentNullException.ThrowIfNull(child);
 
                 int currentIndex = GetChildIndex(child);
 

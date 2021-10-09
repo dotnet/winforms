@@ -1255,7 +1255,7 @@ namespace System.Windows.Forms
         /// <seealso href="https://docs.microsoft.com/windows/uwp/design/input/text-scaling">Windows Text scaling</seealso>
         public static void SetDefaultFont(Font font)
         {
-            ArgumentNullException.ThrowIfNull(font, nameof(font));
+            ArgumentNullException.ThrowIfNull(font);
 
             if (NativeWindow.AnyHandleCreated)
                 throw new InvalidOperationException(string.Format(SR.Win32WindowAlreadyCreated, nameof(SetDefaultFont)));

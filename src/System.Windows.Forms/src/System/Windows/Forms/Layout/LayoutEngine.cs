@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Layout
 
         public virtual void InitLayout(object child, BoundsSpecified specified)
         {
-            ArgumentNullException.ThrowIfNull(child, nameof(child));
+            ArgumentNullException.ThrowIfNull(child);
 
             InitLayoutCore(CastToArrangedElement(child), specified);
         }
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Layout
 
         public virtual bool Layout(object container, LayoutEventArgs layoutEventArgs)
         {
-            ArgumentNullException.ThrowIfNull(container, nameof(container));
+            ArgumentNullException.ThrowIfNull(container);
             return LayoutCore(CastToArrangedElement(container), layoutEventArgs);
         }
 

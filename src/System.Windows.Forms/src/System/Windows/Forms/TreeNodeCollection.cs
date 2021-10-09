@@ -63,7 +63,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                ArgumentNullException.ThrowIfNull(value, nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
 
                 TreeView tv = owner.treeView;
                 TreeNode actual = owner.children[index];
@@ -265,7 +265,7 @@ namespace System.Windows.Forms
 
         public virtual void AddRange(TreeNode[] nodes)
         {
-            ArgumentNullException.ThrowIfNull(nodes, nameof(nodes));
+            ArgumentNullException.ThrowIfNull(nodes);
 
             if (nodes.Length == 0)
             {
@@ -349,7 +349,7 @@ namespace System.Windows.Forms
 
         private int AddInternal(TreeNode node, int delta)
         {
-            ArgumentNullException.ThrowIfNull(node, nameof(node));
+            ArgumentNullException.ThrowIfNull(node);
 
             if (node._handle != IntPtr.Zero)
             {
@@ -408,7 +408,7 @@ namespace System.Windows.Forms
 
         int IList.Add(object node)
         {
-            ArgumentNullException.ThrowIfNull(node, nameof(node));
+            ArgumentNullException.ThrowIfNull(node);
 
             if (node is TreeNode)
             {

@@ -76,7 +76,7 @@ namespace System.Resources
 
         public ResXDataNode(string name, object value, Func<Type, string> typeNameConverter)
         {
-            ArgumentNullException.ThrowIfNull(name, nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
             if (name.Length == 0)
             {
                 throw (new ArgumentException(nameof(name)));

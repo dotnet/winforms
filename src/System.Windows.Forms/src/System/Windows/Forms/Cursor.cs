@@ -80,7 +80,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Cursor(Stream stream)
         {
-            ArgumentNullException.ThrowIfNull(stream, nameof(stream));
+            ArgumentNullException.ThrowIfNull(stream);
 
             int length = checked((int)stream.Length);
             _cursorData = new byte[length];
@@ -243,7 +243,7 @@ namespace System.Windows.Forms
         // This method is way more powerful than what we expose, but I'll leave it in place.
         private void DrawImageCore(Graphics graphics, Rectangle imageRect, Rectangle targetRect, bool stretch)
         {
-            ArgumentNullException.ThrowIfNull(graphics, nameof(graphics));
+            ArgumentNullException.ThrowIfNull(graphics);
 
             // Support GDI+ Translate method
             targetRect.X += (int)graphics.Transform.OffsetX;

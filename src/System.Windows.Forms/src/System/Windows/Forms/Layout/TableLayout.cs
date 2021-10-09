@@ -27,7 +27,7 @@ namespace System.Windows.Forms.Layout
 
         private static void Sort(object[] array, IComparer comparer)
         {
-            ArgumentNullException.ThrowIfNull(array, nameof(array));
+            ArgumentNullException.ThrowIfNull(array);
 
             if (array.Length > 1)
             {

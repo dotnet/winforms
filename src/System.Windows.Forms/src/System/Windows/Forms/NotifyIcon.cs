@@ -72,7 +72,7 @@ namespace System.Windows.Forms
         /// </summary>
         public NotifyIcon(IContainer container) : this()
         {
-            ArgumentNullException.ThrowIfNull(container, nameof(container));
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }

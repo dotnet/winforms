@@ -122,7 +122,7 @@ namespace System.Windows.Forms
 
             private int AddInternal(object item)
             {
-                ArgumentNullException.ThrowIfNull(item, nameof(item));
+                ArgumentNullException.ThrowIfNull(item);
 
                 int index = -1;
                 if (!_owner._sorted)
@@ -197,7 +197,7 @@ namespace System.Windows.Forms
 
             internal void AddRangeInternal(IList items)
             {
-                ArgumentNullException.ThrowIfNull(items, nameof(items));
+                ArgumentNullException.ThrowIfNull(items);
 
                 foreach (object item in items)
                 {
@@ -273,7 +273,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                ArgumentNullException.ThrowIfNull(destination, nameof(destination));
+                ArgumentNullException.ThrowIfNull(destination);
 
                 int count = InnerList.Count;
 
@@ -290,7 +290,7 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                ArgumentNullException.ThrowIfNull(destination, nameof(destination));
+                ArgumentNullException.ThrowIfNull(destination);
 
                 int count = InnerList.Count;
 
@@ -323,7 +323,7 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                ArgumentNullException.ThrowIfNull(item, nameof(item));
+                ArgumentNullException.ThrowIfNull(item);
 
                 if (index < 0 || index > Count)
                 {
