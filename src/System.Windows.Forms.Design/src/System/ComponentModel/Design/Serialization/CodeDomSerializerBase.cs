@@ -36,8 +36,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(type, nameof(type));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(type);
 
             return manager.CreateInstance(type, parameters, name, addToContainer);
         }
@@ -147,8 +147,8 @@ namespace System.ComponentModel.Design.Serialization
 
         internal static void Error(IDesignerSerializationManager manager, string exceptionText, string helpLink)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(exceptionText, nameof(exceptionText));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(exceptionText);
 
             CodeStatement statement = (CodeStatement)manager.Context[typeof(CodeStatement)];
             CodeLinePragma linePragma = null;
@@ -2085,8 +2085,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             CodeExpression expression = null;
 
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             Trace("GetExpression called for object {0}", value.ToString());
 
@@ -2191,7 +2191,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected CodeDomSerializer GetSerializer(IDesignerSerializationManager manager, object value)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
+            ArgumentNullException.ThrowIfNull(manager);
 
             if (value != null)
             {
@@ -2304,8 +2304,8 @@ namespace System.ComponentModel.Design.Serialization
         protected bool IsSerialized(IDesignerSerializationManager manager, object value, bool honorPreset)
         {
             bool hasExpression = false;
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             // Is the expression part of a prior SetExpression call?
             if (manager.Context[typeof(ExpressionTable)] is ExpressionTable table && table.GetExpression(value) != null && (!honorPreset || !table.ContainsPresetExpression(value)))
@@ -2325,8 +2325,8 @@ namespace System.ComponentModel.Design.Serialization
         protected CodeExpression SerializeCreationExpression(IDesignerSerializationManager manager, object value, out bool isComplete)
         {
             isComplete = false;
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             TypeConverter converter = TypeDescriptor.GetConverter(value);
             // See if there is an ExpressionContext with a preset value we're interested in.  If so, that will dictate our creation expression.
@@ -2510,8 +2510,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected string GetUniqueName(IDesignerSerializationManager manager, object value)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             string name = manager.GetName(value);
             if (name is null)
@@ -2558,10 +2558,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeEvent(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, EventDescriptor descriptor)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(statements, nameof(statements));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
-            ArgumentNullException.ThrowIfNull(descriptor, nameof(descriptor));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(statements);
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(descriptor);
 
             using (TraceScope("CodeDomSerializerBase::" + nameof(SerializeEvent)))
             {
@@ -2724,10 +2724,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SerializeProperty(IDesignerSerializationManager manager, CodeStatementCollection statements, object value, PropertyDescriptor propertyToSerialize)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
-            ArgumentNullException.ThrowIfNull(propertyToSerialize, nameof(propertyToSerialize));
-            ArgumentNullException.ThrowIfNull(statements, nameof(statements));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(propertyToSerialize);
+            ArgumentNullException.ThrowIfNull(statements);
 
             Trace("CodeDomSerializerBase::" + nameof(SerializeProperty) + " {0}", propertyToSerialize.Name);
             // Now look for a MemberCodeDomSerializer for the property.  If we can't find one, then we can't serialize the property
@@ -3072,9 +3072,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected void SetExpression(IDesignerSerializationManager manager, object value, CodeExpression expression, bool isPreset)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
-            ArgumentNullException.ThrowIfNull(expression, nameof(expression));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
+            ArgumentNullException.ThrowIfNull(expression);
 
             ExpressionTable table = (ExpressionTable)manager.Context[typeof(ExpressionTable)];
             if (table is null)

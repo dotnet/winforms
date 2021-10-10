@@ -82,8 +82,8 @@ namespace System.ComponentModel.Design.Serialization
         {
             object instance = null;
 
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(codeObject, nameof(codeObject));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(codeObject);
 
             using (TraceScope("ResourceCodeDomSerializer::Deserialize"))
             {
@@ -155,8 +155,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override object DeserializeInstance(IDesignerSerializationManager manager, Type type, object[] parameters, string name, bool addToContainer)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(type, nameof(type));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(type);
 
             if (name != null && name.Equals(ResourceManagerName) && typeof(ResourceManager).IsAssignableFrom(type))
             {
@@ -970,7 +970,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public override ResourceSet GetResourceSet(CultureInfo culture, bool createIfNotExists, bool tryParents)
             {
-                ArgumentNullException.ThrowIfNull(culture, nameof(culture));
+                ArgumentNullException.ThrowIfNull(culture);
 
                 CultureInfo lastCulture;
                 do

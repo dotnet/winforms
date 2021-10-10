@@ -350,7 +350,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ISelectionService.GetComponentSelected(object component)
         {
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(component);
 
             return (_selection != null && _selection.Contains(component));
         }

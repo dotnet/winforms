@@ -56,8 +56,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void Serialize(SerializationStore store, object value)
         {
-            ArgumentNullException.ThrowIfNull(store, nameof(store));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(store);
+            ArgumentNullException.ThrowIfNull(value);
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -72,8 +72,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeAbsolute(SerializationStore store, object value)
         {
-            ArgumentNullException.ThrowIfNull(store, nameof(store));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(store);
+            ArgumentNullException.ThrowIfNull(value);
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -88,9 +88,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeMember(SerializationStore store, object owningObject, MemberDescriptor member)
         {
-            ArgumentNullException.ThrowIfNull(store, nameof(store));
-            ArgumentNullException.ThrowIfNull(owningObject, nameof(owningObject));
-            ArgumentNullException.ThrowIfNull(member, nameof(member));
+            ArgumentNullException.ThrowIfNull(store);
+            ArgumentNullException.ThrowIfNull(owningObject);
+            ArgumentNullException.ThrowIfNull(member);
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -106,9 +106,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void SerializeMemberAbsolute(SerializationStore store, object owningObject, MemberDescriptor member)
         {
-            ArgumentNullException.ThrowIfNull(store, nameof(store));
-            ArgumentNullException.ThrowIfNull(owningObject, nameof(owningObject));
-            ArgumentNullException.ThrowIfNull(member, nameof(member));
+            ArgumentNullException.ThrowIfNull(store);
+            ArgumentNullException.ThrowIfNull(owningObject);
+            ArgumentNullException.ThrowIfNull(member);
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -123,7 +123,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override ICollection Deserialize(SerializationStore store)
         {
-            ArgumentNullException.ThrowIfNull(store, nameof(store));
+            ArgumentNullException.ThrowIfNull(store);
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -138,8 +138,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override ICollection Deserialize(SerializationStore store, IContainer container)
         {
-            ArgumentNullException.ThrowIfNull(store, nameof(store));
-            ArgumentNullException.ThrowIfNull(container, nameof(container));
+            ArgumentNullException.ThrowIfNull(store);
+            ArgumentNullException.ThrowIfNull(container);
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -154,8 +154,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override void DeserializeTo(SerializationStore store, IContainer container, bool validateRecycledTypes, bool applyDefaults)
         {
-            ArgumentNullException.ThrowIfNull(store, nameof(store));
-            ArgumentNullException.ThrowIfNull(container, nameof(container));
+            ArgumentNullException.ThrowIfNull(store);
+            ArgumentNullException.ThrowIfNull(container);
 
             if (!(store is CodeDomSerializationStore cdStore))
             {
@@ -603,7 +603,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
             {
-                ArgumentNullException.ThrowIfNull(info, nameof(info));
+                ArgumentNullException.ThrowIfNull(info);
 
                 info.AddValue(StateKey, _objectState);
                 info.AddValue(NameKey, _objectNames);
@@ -1486,7 +1486,7 @@ namespace System.ComponentModel.Design.Serialization
                 // IServiceProvider
                 object IServiceProvider.GetService(Type serviceType)
                 {
-                    ArgumentNullException.ThrowIfNull(serviceType, nameof(serviceType));
+                    ArgumentNullException.ThrowIfNull(serviceType);
 
                     if (serviceType == typeof(IResourceService))
                     {

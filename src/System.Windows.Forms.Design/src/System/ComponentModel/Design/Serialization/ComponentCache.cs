@@ -55,7 +55,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                ArgumentNullException.ThrowIfNull(component, nameof(component));
+                ArgumentNullException.ThrowIfNull(component);
 
                 if (_cache != null && _cache.TryGetValue(component, out Entry result))
                 {

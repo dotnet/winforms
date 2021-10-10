@@ -563,7 +563,7 @@ namespace System.Drawing.Design
             ITypeResolutionService ts = null;
             Type type = null;
 
-            ArgumentNullException.ThrowIfNull(typeName, nameof(typeName));
+            ArgumentNullException.ThrowIfNull(typeName);
 
             if (host != null)
             {

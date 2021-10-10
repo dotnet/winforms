@@ -652,7 +652,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void SetBytes(byte[] bytes)
         {
-            ArgumentNullException.ThrowIfNull(bytes, nameof(bytes));
+            ArgumentNullException.ThrowIfNull(bytes);
 
             if (_dataBuf != null)
             {

@@ -44,8 +44,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual object Deserialize(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(declaration, nameof(declaration));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(declaration);
 
             object rootObject = null;
             using (TraceScope("TypeCodeDomSerializer::Deserialize"))
@@ -347,9 +347,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration declaration, object value)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(declaration, nameof(declaration));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(declaration);
+            ArgumentNullException.ThrowIfNull(value);
 
             if (!(declaration.UserData[s_initMethodKey] is CodeConstructor ctor))
             {
@@ -365,8 +365,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration declaration)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(declaration, nameof(declaration));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(declaration);
 
             foreach (CodeTypeMember member in declaration.Members)
             {
@@ -411,8 +411,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public virtual CodeTypeDeclaration Serialize(IDesignerSerializationManager manager, object root, ICollection members)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(root, nameof(root));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(root);
 
             Trace("TypeCodeDomSerializer::Serialize");
 

@@ -61,7 +61,7 @@ namespace System.ComponentModel.Design
         /// <param name="parentProvider"> The parent service provider.  If there is no parent used to resolve services this can be null. </param>
         public DesignSurface(IServiceProvider parentProvider, Type rootComponentType) : this(parentProvider)
         {
-            ArgumentNullException.ThrowIfNull(rootComponentType, nameof(rootComponentType));
+            ArgumentNullException.ThrowIfNull(rootComponentType);
 
             BeginLoad(rootComponentType);
         }
@@ -238,7 +238,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void BeginLoad(DesignerLoader loader)
         {
-            ArgumentNullException.ThrowIfNull(loader, nameof(loader));
+            ArgumentNullException.ThrowIfNull(loader);
 
             if (_host is null)
             {
@@ -255,7 +255,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void BeginLoad(Type rootComponentType)
         {
-            ArgumentNullException.ThrowIfNull(rootComponentType, nameof(rootComponentType));
+            ArgumentNullException.ThrowIfNull(rootComponentType);
 
             if (_host is null)
             {
@@ -279,7 +279,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected internal virtual IDesigner CreateDesigner(IComponent component, bool rootDesigner)
         {
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(component);
 
             if (_host is null)
             {
@@ -305,7 +305,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected internal virtual object CreateInstance(Type type)
         {
-            ArgumentNullException.ThrowIfNull(type, nameof(type));
+            ArgumentNullException.ThrowIfNull(type);
 
             // Locate an appropriate constructor for IComponents.
             object instance = null;
@@ -353,7 +353,7 @@ namespace System.ComponentModel.Design
                 throw new ObjectDisposedException(GetType().FullName);
             }
 
-            ArgumentNullException.ThrowIfNull(owningComponent, nameof(owningComponent));
+            ArgumentNullException.ThrowIfNull(owningComponent);
 
             return new SiteNestedContainer(owningComponent, containerName, _host);
         }

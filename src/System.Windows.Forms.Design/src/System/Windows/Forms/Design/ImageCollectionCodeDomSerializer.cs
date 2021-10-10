@@ -22,8 +22,8 @@ namespace System.Windows.Forms.Design
         public override object Deserialize(IDesignerSerializationManager manager, object codeObject)
         {
             // REVIEW: Please look at this carefully - This is just copied from ControlCodeDomSerializer
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(codeObject, nameof(codeObject));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(codeObject);
 
             // Find our base class's serializer.
             CodeDomSerializer serializer = (CodeDomSerializer)manager.GetSerializer(typeof(Component), typeof(CodeDomSerializer));

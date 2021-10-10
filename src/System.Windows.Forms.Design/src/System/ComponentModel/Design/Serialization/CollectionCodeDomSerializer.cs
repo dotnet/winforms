@@ -124,7 +124,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected bool MethodSupportsSerialization(MethodInfo method)
         {
-            ArgumentNullException.ThrowIfNull(method, nameof(method));
+            ArgumentNullException.ThrowIfNull(method);
 
             object[] attrs = method.GetCustomAttributes(typeof(DesignerSerializationVisibilityAttribute), true);
             if (attrs.Length > 0)
@@ -145,8 +145,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public override object Serialize(IDesignerSerializationManager manager, object value)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(value);
 
             object result = null;
             using (TraceScope("CollectionCodeDomSerializer::" + nameof(Serialize)))
@@ -307,10 +307,10 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected virtual object SerializeCollection(IDesignerSerializationManager manager, CodeExpression targetExpression, Type targetType, ICollection originalCollection, ICollection valuesToSerialize)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(targetType, nameof(targetType));
-            ArgumentNullException.ThrowIfNull(originalCollection, nameof(originalCollection));
-            ArgumentNullException.ThrowIfNull(valuesToSerialize, nameof(valuesToSerialize));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(targetType);
+            ArgumentNullException.ThrowIfNull(originalCollection);
+            ArgumentNullException.ThrowIfNull(valuesToSerialize);
 
             object result = null;
             bool serialized = false;
