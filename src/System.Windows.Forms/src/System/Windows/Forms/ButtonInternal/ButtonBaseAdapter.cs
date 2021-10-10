@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms.Layout;
@@ -42,7 +40,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal virtual Size GetPreferredSizeCore(Size proposedSize)
         {
-            LayoutOptions options = default;
+            LayoutOptions? options = default;
             using (var screen = GdiCache.GetScreenHdc())
             using (PaintEventArgs pe = new PaintEventArgs(screen, new Rectangle()))
             {
@@ -423,7 +421,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (color.HasTransparency())
             {
-                Graphics graphics = deviceContext.TryGetGraphics(create: true);
+                Graphics? graphics = deviceContext.TryGetGraphics(create: true);
                 if (graphics is not null)
                 {
                     using var pen = color.GetCachedPenScope();
