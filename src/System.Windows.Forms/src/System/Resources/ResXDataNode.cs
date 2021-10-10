@@ -186,7 +186,6 @@ namespace System.Resources
             set
             {
                 ArgumentNullException.ThrowIfNull(value, nameof(Name));
-
                 if (value.Length == 0)
                 {
                     throw new ArgumentException(nameof(Name));
