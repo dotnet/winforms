@@ -1827,8 +1827,8 @@ System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get 
 ~System.Windows.Forms.DataGridViewCellCollection.this[int index].set -> void
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].set -> void
-~System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.set -> void
+System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.set -> void
 ~System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.get -> string
 ~System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.set -> void
 ~System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
