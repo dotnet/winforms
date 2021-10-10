@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -13,13 +11,13 @@ namespace System.Windows.Forms
     {
         public partial class IntegerCollection : IList
         {
-            private readonly ListBox owner;
-            private int[] innerArray;
-            private int count;
+            private readonly ListBox _owner;
+            private int[]? _innerArray;
+            private int _count;
 
             public IntegerCollection(ListBox owner)
             {
-                this.owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
@@ -30,7 +28,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return count;
+                    return _count;
                 }
             }
 
@@ -71,7 +69,7 @@ namespace System.Windows.Forms
                 return IndexOf(item) != -1;
             }
 
-            bool IList.Contains(object item)
+            bool IList.Contains(object? item)
             {
                 if (item is int)
                 {
@@ -85,23 +83,23 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                count = 0;
-                innerArray = null;
+                _count = 0;
+                _innerArray = null;
             }
 
             public int IndexOf(int item)
             {
                 int index = -1;
 
-                if (innerArray is not null)
+                if (_innerArray is not null)
                 {
-                    index = Array.IndexOf(innerArray, item);
+                    index = Array.IndexOf(_innerArray, item);
 
                     // We initialize innerArray with more elements than needed in the method EnsureSpace,
                     // and we don't actually remove element from innerArray in the method RemoveAt,
                     // so there maybe some elements which are not actually in innerArray will be found
                     // and we need to filter them out
-                    if (index >= count)
+                    if (index >= _count)
                     {
                         index = -1;
                     }
@@ -110,16 +108,14 @@ namespace System.Windows.Forms
                 return index;
             }
 
-            int IList.IndexOf(object item)
+            int IList.IndexOf(object? item)
             {
-                if (item is int)
+                if (item is int itemAsInt)
                 {
-                    return IndexOf((int)item);
+                    return IndexOf(itemAsInt);
                 }
-                else
-                {
-                    return -1;
-                }
+
+                return -1;
             }
 
             /// <summary>
@@ -134,8 +130,8 @@ namespace System.Windows.Forms
                 int index = IndexOf(item);
                 if (index == -1)
                 {
-                    innerArray[count++] = item;
-                    Array.Sort(innerArray, 0, count);
+                    _innerArray![_count++] = item;
+                    Array.Sort(_innerArray, 0, _count);
                     index = IndexOf(item);
                 }
 
@@ -150,12 +146,12 @@ namespace System.Windows.Forms
             public int Add(int item)
             {
                 int index = AddInternal(item);
-                owner.UpdateCustomTabOffsets();
+                _owner.UpdateCustomTabOffsets();
 
                 return index;
             }
 
-            int IList.Add(object item)
+            int IList.Add(object? item)
             {
                 if (!(item is int))
                 {
@@ -167,12 +163,12 @@ namespace System.Windows.Forms
 
             public void AddRange(int[] items)
             {
-                AddRangeInternal((ICollection)items);
+                AddRangeInternal(items);
             }
 
             public void AddRange(IntegerCollection value)
             {
-                AddRangeInternal((ICollection)value);
+                AddRangeInternal(value);
             }
 
             /// <summary>
@@ -180,12 +176,9 @@ namespace System.Windows.Forms
             /// </summary>
             private void AddRangeInternal(ICollection items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
-                owner.BeginUpdate();
+                _owner.BeginUpdate();
                 try
                 {
                     EnsureSpace(items.Count);
@@ -201,11 +194,11 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    owner.UpdateCustomTabOffsets();
+                    _owner.UpdateCustomTabOffsets();
                 }
                 finally
                 {
-                    owner.EndUpdate();
+                    _owner.EndUpdate();
                 }
             }
 
@@ -215,16 +208,16 @@ namespace System.Windows.Forms
             /// </summary>
             private void EnsureSpace(int elements)
             {
-                if (innerArray is null)
+                if (_innerArray is null)
                 {
-                    innerArray = new int[Math.Max(elements, 4)];
+                    _innerArray = new int[Math.Max(elements, 4)];
                 }
-                else if (count + elements >= innerArray.Length)
+                else if (_count + elements >= _innerArray.Length)
                 {
-                    int newLength = Math.Max(innerArray.Length * 2, innerArray.Length + elements);
+                    int newLength = Math.Max(_innerArray.Length * 2, _innerArray.Length + elements);
                     int[] newEntries = new int[newLength];
-                    innerArray.CopyTo(newEntries, 0);
-                    innerArray = newEntries;
+                    _innerArray.CopyTo(newEntries, 0);
+                    _innerArray = newEntries;
                 }
             }
 
@@ -233,12 +226,12 @@ namespace System.Windows.Forms
                 Clear();
             }
 
-            void IList.Insert(int index, object value)
+            void IList.Insert(int index, object? value)
             {
                 throw new NotSupportedException(SR.ListBoxCantInsertIntoIntegerCollection);
             }
 
-            void IList.Remove(object value)
+            void IList.Remove(object? value)
             {
                 if (!(value is int))
                 {
@@ -272,15 +265,15 @@ namespace System.Windows.Forms
             /// </summary>
             public void RemoveAt(int index)
             {
-                if (index < 0 || index >= count)
+                if (index < 0 || index >= _count)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                count--;
-                for (int i = index; i < count; i++)
+                _count--;
+                for (int i = index; i < _count; i++)
                 {
-                    innerArray[i] = innerArray[i + 1];
+                    _innerArray![i] = _innerArray[i + 1];
                 }
             }
 
@@ -291,26 +284,27 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (index < 0 || index >= count)
+                    if (index < 0 || index >= _count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return innerArray[index];
+                    return _innerArray![index];
                 }
+
                 set
                 {
-                    if (index < 0 || index >= count)
+                    if (index < 0 || index >= _count)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    innerArray[index] = (int)value;
-                    owner.UpdateCustomTabOffsets();
+                    _innerArray![index] = value;
+                    _owner.UpdateCustomTabOffsets();
                 }
             }
 
-            object IList.this[int index]
+            object? IList.this[int index]
             {
                 get
                 {
@@ -331,10 +325,7 @@ namespace System.Windows.Forms
 
             public void CopyTo(Array destination, int index)
             {
-                if (destination is null)
-                {
-                    throw new ArgumentNullException(nameof(destination));
-                }
+                ArgumentNullException.ThrowIfNull(destination);
 
                 int cnt = Count;
                 for (int i = 0; i < cnt; i++)
