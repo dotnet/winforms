@@ -1034,7 +1034,7 @@ namespace System.Drawing.Design
 
             private string GetPropertyName(object key)
             {
-                ArgumentNullException.ThrowIfNull(key, nameof(key));
+                ArgumentNullException.ThrowIfNull(key);
 
                 if (!(key is string propertyName) || propertyName.Length == 0)
                 {
