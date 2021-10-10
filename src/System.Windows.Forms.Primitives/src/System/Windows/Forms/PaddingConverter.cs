@@ -122,7 +122,7 @@ namespace System.Windows.Forms
 
         public override object CreateInstance(ITypeDescriptorContext? context, IDictionary propertyValues)
         {
-            ArgumentNullException.ThrowIfNull(propertyValues, nameof(propertyValues));
+            ArgumentNullException.ThrowIfNull(propertyValues);
 
             var original = context?.PropertyDescriptor?.GetValue(context.Instance);
             try
