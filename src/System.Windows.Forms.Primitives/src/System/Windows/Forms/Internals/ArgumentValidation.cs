@@ -14,6 +14,16 @@ namespace System.Windows.Forms
             return argument;
         }
 
+        internal static T OrThrowIfNullWithMessage<T>(this T? argument, string message, [CallerArgumentExpression("argument")] string? paramName = null)
+        {
+            if (argument == null)
+            {
+                throw new ArgumentNullException(paramName, message);
+            }
+
+            return argument!;
+        }
+
         internal static IntPtr OrThrowIfZero(this IntPtr argument, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             if (argument == IntPtr.Zero)

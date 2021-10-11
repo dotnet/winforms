@@ -34,6 +34,36 @@ namespace System.Windows.Forms.Tests
         }
 
         [Fact]
+        public void OrThrowIfNullWithMessage_ParamIsNull()
+        {
+            object? param = null;
+            var message = "message";
+            var exception = Assert.Throws<ArgumentNullException>(() => _ = param.OrThrowIfNullWithMessage(message));
+            Assert.StartsWith(message, exception.Message);
+            Assert.Equal(nameof(param), exception.ParamName);
+        }
+
+        [Fact]
+        public void OrThrowIfNullWithMessage_ParamIsNull_DifferentParamName()
+        {
+            var paramName = "param2";
+            object? param = null;
+            var message = "message";
+            var exception = Assert.Throws<ArgumentNullException>(() => _ = param.OrThrowIfNullWithMessage(message, paramName));
+            Assert.StartsWith(message, exception.Message);
+            Assert.Equal(paramName, exception.ParamName);
+        }
+
+        [Fact]
+        public void OrThrowIfNullWithMessage_ParamIsNotNull()
+        {
+            var param = new object();
+            var message = "message";
+            var variable = param.OrThrowIfNullWithMessage(message);
+            Assert.Equal(param, variable);
+        }
+
+        [Fact]
         public void OrThrowIfZero_ParamIsZero()
         {
             var param = IntPtr.Zero;
