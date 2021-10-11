@@ -5251,7 +5251,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ListView_OnSelectedIndexChanged_TestData))]
         public void ListView_OnSelectedIndexChanged_DoesNotInvoke_RaiseAutomationEvent_SecondTime(View view, bool virtualMode, bool showGroups, bool withinGroup)
         {
-            using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup);
+            using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup, createControl: true);
             ListViewItem listViewItem = listView.Items[0];
 
             Assert.NotNull(listViewItem.AccessibilityObject);
@@ -5267,6 +5267,58 @@ namespace System.Windows.Forms.Tests
             listView.CallSelectedIndexChanged();
 
             Assert.Equal(2, accessibleObject.RaiseAutomationEventCalls);
+        }
+
+        public static IEnumerable<object[]> ListView_OnGroupCollapsedStateChanged_InvokeRaiseAutomationEvent_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                foreach (bool virtualMode in new[] { true, false })
+                {
+                    // View.Tile is not supported by ListView in virtual mode
+                    if (view == View.Tile)
+                    {
+                        continue;
+                    }
+
+                    foreach (bool showGroups in new[] { true, false })
+                    {
+                        foreach (bool withinGroup in new[] { true, false })
+                        {
+                            foreach (bool createControl in new[] { true, false })
+                            {
+                                foreach (int groupId in new[] { -1, 0, 1 })
+                                {
+                                    yield return new object[] { view, virtualMode, showGroups, withinGroup, createControl, groupId };
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListView_OnGroupCollapsedStateChanged_InvokeRaiseAutomationEvent_TestData))]
+        public void ListView_OnGroupCollapsedStateChanged_InvokeRaiseAutomationEvent_AsExpected(
+            View view,
+            bool virtualMode,
+            bool showGroups,
+            bool withinGroup,
+            bool createControl,
+            int groupId)
+        {
+            using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup, createControl);
+            SubListViewAccessibleObject accessibleObject = new (listView);
+            int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
+            listView.Properties.SetObject(accessibilityProperty, accessibleObject);
+
+            listView.OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(groupId));
+
+            int expectedCount = listView.GroupsEnabled && groupId == 0 ? 1 : 0;
+
+            Assert.Equal(expectedCount, accessibleObject.RaiseAutomationNotificationCallCount);
+            Assert.Equal(createControl, listView.IsHandleCreated);
         }
 
         private class SubListViewItem : ListViewItem
@@ -5359,10 +5411,12 @@ namespace System.Windows.Forms.Tests
 
             public new void OnGotFocus(EventArgs e) => base.OnGotFocus(e);
 
+            public new void OnGroupCollapsedStateChanged(ListViewGroupEventArgs e) => base.OnGroupCollapsedStateChanged(e);
+
             public new void SetStyle(ControlStyles flag, bool value) => base.SetStyle(flag, value);
         }
 
-        private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup)
+        private SubListView GetSubListViewWithData(View view, bool virtualMode, bool showGroups, bool withinGroup, bool createControl)
         {
             SubListView listView = new()
             {
@@ -5405,7 +5459,10 @@ namespace System.Windows.Forms.Tests
                 listView.Items.Add(listItem2);
             }
 
-            listView.CreateControl();
+            if (createControl)
+            {
+                listView.CreateControl();
+            }
 
             return listView;
         }
