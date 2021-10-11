@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         internal static string OrThrowIfNullOrEmpty(this string? argument, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             ThrowIfNullOrEmpty(argument, paramName);
-            return argument;
+            return argument!;
         }
 
         internal static void ThrowIfNullOrEmpty(string? argument, [CallerArgumentExpression("argument")] string? paramName = null)
