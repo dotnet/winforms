@@ -11,7 +11,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void OrThrowIfNull_ParamIsNull()
         {
-            string? param = null;
+            object? param = null;
             var exception = Assert.Throws<ArgumentNullException>(() => _ = param.OrThrowIfNull());
             Assert.Equal(nameof(param), exception.ParamName);
         }
@@ -20,7 +20,7 @@ namespace System.Windows.Forms.Tests
         public void OrThrowIfNull_ParamIsNull_DifferentParamName()
         {
             string paramName = "param2";
-            string? param = null;
+            object? param = null;
             var exception = Assert.Throws<ArgumentNullException>(() => _ = param.OrThrowIfNull(paramName));
             Assert.Equal(paramName, exception.ParamName);
         }
@@ -28,7 +28,7 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void OrThrowIfNull_ParamIsNotNull()
         {
-            var param = "metamorphosator";
+            var param = new object();
             var variable = param.OrThrowIfNull();
             Assert.Equal(param, variable);
         }
