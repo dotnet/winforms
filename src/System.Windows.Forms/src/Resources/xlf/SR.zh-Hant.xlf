@@ -2064,12 +2064,12 @@
       </trans-unit>
       <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
         <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="new">{0} collection shouldn't be empty for {1}.</target>
+        <target state="translated">{1} 的 {0} 集合不得為空白。</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlsPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">應為 {1} 設定 {0} 屬性。</target>
         <note />
       </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
@@ -7548,7 +7548,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ParentPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">應為 {1} 設定 {0} 屬性。</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">

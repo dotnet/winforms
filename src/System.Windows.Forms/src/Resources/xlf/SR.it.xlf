@@ -2064,12 +2064,12 @@
       </trans-unit>
       <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
         <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="new">{0} collection shouldn't be empty for {1}.</target>
+        <target state="translated">{0} raccolta non deve essere vuota per {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlsPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">{0} proprietà deve essere impostata per {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
@@ -7548,7 +7548,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ParentPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">{0} proprietà deve essere impostata per {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
