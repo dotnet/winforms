@@ -683,7 +683,7 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, string textToDraw, TextFormatFlags flags)
         {
             ArgumentNullException.ThrowIfNull(dc);
-            ArgumentValidation.ThrowIfNullOrEmpty(textToDraw);
+            textToDraw.ThrowIfNullOrEmpty();
 
             using var hdc = new DeviceContextHdcScope(dc);
             _lastHResult = GetThemeTextExtent(this, hdc, Part, State, textToDraw, textToDraw.Length, (uint)flags, null, out RECT rect);
@@ -696,7 +696,7 @@ namespace System.Windows.Forms.VisualStyles
         public unsafe Rectangle GetTextExtent(IDeviceContext dc, Rectangle bounds, string textToDraw, TextFormatFlags flags)
         {
             ArgumentNullException.ThrowIfNull(dc);
-            ArgumentValidation.ThrowIfNullOrEmpty(textToDraw);
+            textToDraw.ThrowIfNullOrEmpty();
 
             using var hdc = new DeviceContextHdcScope(dc);
             RECT boundsRect = bounds;

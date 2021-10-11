@@ -92,7 +92,7 @@ namespace System.Windows.Forms.Tests
         public void ThrowIfNullOrEmpty_ParamIsNull()
         {
             string? param = null;
-            var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNullOrEmpty(param));
+            var exception = Assert.Throws<ArgumentNullException>(() => param.ThrowIfNullOrEmpty());
             Assert.Equal(nameof(param), exception.ParamName);
         }
 
@@ -100,7 +100,7 @@ namespace System.Windows.Forms.Tests
         public void ThrowIfNullOrEmpty_ParamIsEmpty()
         {
             string param = string.Empty;
-            var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNullOrEmpty(param));
+            var exception = Assert.Throws<ArgumentNullException>(() => param.ThrowIfNullOrEmpty());
             Assert.Equal(nameof(param), exception.ParamName);
         }
 
@@ -115,7 +115,7 @@ namespace System.Windows.Forms.Tests
         public void ThrowIfNullOrEmpty_ParamIsNull_DifferentParamName()
         {
             string? param = null;
-            var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNullOrEmpty(param, "paramName"));
+            var exception = Assert.Throws<ArgumentNullException>(() => param.ThrowIfNullOrEmpty("paramName"));
             Assert.Equal("paramName", exception.ParamName);
         }
 
@@ -123,7 +123,7 @@ namespace System.Windows.Forms.Tests
         public void ThrowIfNullOrEmpty_ParamIsEmpty_DifferentParamName()
         {
             var param = string.Empty;
-            var exception = Assert.Throws<ArgumentNullException>(() => ArgumentValidation.ThrowIfNullOrEmpty(param, "paramName"));
+            var exception = Assert.Throws<ArgumentNullException>(() => param.ThrowIfNullOrEmpty("paramName"));
             Assert.Equal("paramName", exception.ParamName);
         }
 

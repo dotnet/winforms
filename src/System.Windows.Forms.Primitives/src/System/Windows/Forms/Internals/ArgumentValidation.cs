@@ -30,7 +30,7 @@ namespace System.Windows.Forms
             return argument!;
         }
 
-        internal static void ThrowIfNullOrEmpty(string? argument, [CallerArgumentExpression("argument")] string? paramName = null)
+        internal static void ThrowIfNullOrEmpty(this string? argument, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             if (string.IsNullOrEmpty(argument))
             {

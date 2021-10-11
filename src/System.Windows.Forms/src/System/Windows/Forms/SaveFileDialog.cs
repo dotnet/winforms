@@ -54,7 +54,7 @@ namespace System.Windows.Forms
         public Stream OpenFile()
         {
             string filename = FileNames[0];
-            ArgumentValidation.ThrowIfNullOrEmpty(filename);
+            filename.ThrowIfNullOrEmpty();
             return new FileStream(filename, FileMode.Create, FileAccess.ReadWrite);
         }
 
