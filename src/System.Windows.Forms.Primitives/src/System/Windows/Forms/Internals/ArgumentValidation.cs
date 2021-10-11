@@ -8,7 +8,7 @@ namespace System.Windows.Forms
 {
     internal static class ArgumentValidation
     {
-        internal static T OrThrowIfNull<T>(this T argument, [CallerArgumentExpression("argument")] string? paramName = null)
+        internal static T OrThrowIfNull<T>(this T? argument, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             ArgumentNullException.ThrowIfNull(argument, paramName);
             return argument;
@@ -24,7 +24,7 @@ namespace System.Windows.Forms
             return argument;
         }
 
-        internal static string OrThrowIfNullOrEmpty(this string argument, [CallerArgumentExpression("argument")] string? paramName = null)
+        internal static string OrThrowIfNullOrEmpty(this string? argument, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             ThrowIfNullOrEmpty(argument, paramName);
             return argument;
