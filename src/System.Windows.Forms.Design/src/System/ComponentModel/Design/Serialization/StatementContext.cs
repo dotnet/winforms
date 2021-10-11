@@ -91,7 +91,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             get
             {
-                ArgumentNullException.ThrowIfNull(statementOwner, nameof(statementOwner));
+                ArgumentNullException.ThrowIfNull(statementOwner);
 
                 if (_table != null)
                 {
@@ -126,7 +126,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public bool ContainsKey(object statementOwner)
         {
-            ArgumentNullException.ThrowIfNull(statementOwner, nameof(statementOwner));
+            ArgumentNullException.ThrowIfNull(statementOwner);
 
             if (_table != null)
             {
@@ -149,7 +149,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Populate(ICollection statementOwners)
         {
-            ArgumentNullException.ThrowIfNull(statementOwners, nameof(statementOwners));
+            ArgumentNullException.ThrowIfNull(statementOwners);
 
             foreach (object o in statementOwners)
             {
@@ -162,7 +162,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public void Populate(object owner)
         {
-            ArgumentNullException.ThrowIfNull(owner, nameof(owner));
+            ArgumentNullException.ThrowIfNull(owner);
 
             AddOwner(owner, null);
         }

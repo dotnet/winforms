@@ -27,7 +27,7 @@ namespace System.ComponentModel.Design
             {
                 get
                 {
-                    ArgumentNullException.ThrowIfNull(propertyName, nameof(propertyName));
+                    ArgumentNullException.ThrowIfNull(propertyName);
 
                     // First, check to see if the name is in the given properties table
                     if (_properties != null && _properties.ContainsKey(propertyName))
@@ -76,7 +76,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             internal bool ShouldSerializeValue(string propertyName, object defaultValue)
             {
-                ArgumentNullException.ThrowIfNull(propertyName, nameof(propertyName));
+                ArgumentNullException.ThrowIfNull(propertyName);
 
                 return Contains(propertyName)
                     ? !Equals(this[propertyName], defaultValue)

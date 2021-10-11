@@ -404,7 +404,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         public object GetSerializer(Type objectType, Type serializerType)
         {
-            ArgumentNullException.ThrowIfNull(serializerType, nameof(serializerType));
+            ArgumentNullException.ThrowIfNull(serializerType);
 
             object serializer = null;
             if (objectType != null)
@@ -618,7 +618,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private PropertyDescriptor WrapProperty(PropertyDescriptor property, object owner)
         {
-            ArgumentNullException.ThrowIfNull(property, nameof(property));
+            ArgumentNullException.ThrowIfNull(property);
 
             // owner can be null for static properties.
             return new WrappedPropertyDescriptor(property, owner);
@@ -759,7 +759,7 @@ namespace System.ComponentModel.Design.Serialization
         object IDesignerSerializationManager.GetInstance(string name)
         {
             object instance = null;
-            ArgumentNullException.ThrowIfNull(name, nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
 
             CheckSession();
             // Check our local nametable first
@@ -789,7 +789,7 @@ namespace System.ComponentModel.Design.Serialization
         string IDesignerSerializationManager.GetName(object value)
         {
             string name = null;
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(value);
 
             CheckSession();
             // Check our local nametable first
@@ -889,8 +889,8 @@ namespace System.ComponentModel.Design.Serialization
         void IDesignerSerializationManager.SetName(object instance, string name)
         {
             CheckSession();
-            ArgumentNullException.ThrowIfNull(instance, nameof(instance));
-            ArgumentNullException.ThrowIfNull(name, nameof(name));
+            ArgumentNullException.ThrowIfNull(instance);
+            ArgumentNullException.ThrowIfNull(name);
 
             if (instancesByName is null)
             {

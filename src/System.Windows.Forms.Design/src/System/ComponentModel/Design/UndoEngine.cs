@@ -306,7 +306,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected object GetService(Type serviceType)
         {
-            ArgumentNullException.ThrowIfNull(serviceType, nameof(serviceType));
+            ArgumentNullException.ThrowIfNull(serviceType);
 
             if (_provider != null)
             {

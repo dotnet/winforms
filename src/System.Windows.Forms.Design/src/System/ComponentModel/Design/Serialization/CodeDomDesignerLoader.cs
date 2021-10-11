@@ -1118,7 +1118,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         string INameCreationService.CreateName(IContainer container, Type dataType)
         {
-            ArgumentNullException.ThrowIfNull(dataType, nameof(dataType));
+            ArgumentNullException.ThrowIfNull(dataType);
 
             string finalName;
             string baseName = dataType.Name;
@@ -1216,7 +1216,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         bool INameCreationService.IsValidName(string name)
         {
-            ArgumentNullException.ThrowIfNull(name, nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
 
             if (name.Length == 0)
             {
@@ -1288,7 +1288,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         void INameCreationService.ValidateName(string name)
         {
-            ArgumentNullException.ThrowIfNull(name, nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
 
             if (name.Length == 0)
             {
