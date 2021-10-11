@@ -2611,8 +2611,8 @@ System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.get
 System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set -> void
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string relatedImageList) -> void
-~System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.set -> void
+System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.set -> void
 ~System.Windows.Forms.RichTextBox.CanPaste(System.Windows.Forms.DataFormats.Format clipFormat) -> bool
 ~System.Windows.Forms.RichTextBox.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~System.Windows.Forms.RichTextBox.Find(char[] characterSet) -> int
