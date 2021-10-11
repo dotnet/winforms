@@ -315,7 +315,7 @@ namespace System.Windows.Forms
             /// </summary>
             public ListViewItem[] Find(string key, bool searchAllSubItems)
             {
-                ArgumentValidation.ThrowIfNullOrEmptyWithMessage(key, SR.FindKeyMayNotBeEmptyOrNull);
+                key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
                 List<ListViewItem> foundItems = new();
                 FindInternal(key, searchAllSubItems, this, foundItems);

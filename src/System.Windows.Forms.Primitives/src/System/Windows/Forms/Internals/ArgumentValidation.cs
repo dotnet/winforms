@@ -38,7 +38,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal static void ThrowIfNullOrEmptyWithMessage(string? argument, string message, [CallerArgumentExpression("argument")] string? paramName = null)
+        internal static void ThrowIfNullOrEmptyWithMessage(this string? argument, string message, [CallerArgumentExpression("argument")] string? paramName = null)
         {
             if (string.IsNullOrEmpty(argument))
             {
