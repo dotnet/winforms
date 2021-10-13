@@ -248,5 +248,98 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(comboBox.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_DefaultAction_IfAccessibleDefaultActionDescriptionIsNotNull_ReturnsAccessibleDefaultActionDescription()
+        {
+            using ComboBox comboBox = new() { AccessibleDefaultActionDescription = "Test" };
+
+            Assert.Equal(comboBox.AccessibleDefaultActionDescription, comboBox.AccessibilityObject.DefaultAction);
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_DefaultAction_IfHandleIsNotCreated_ReturnsNull()
+        {
+            using ComboBox comboBox = new();
+
+            Assert.Empty(comboBox.AccessibilityObject.DefaultAction);
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_DefaultAction_IfHandleIsCreatedAndDropDownStyleIsSimple_ReturnsNull()
+        {
+            using ComboBox comboBox = new() { DropDownStyle = ComboBoxStyle.Simple };
+            comboBox.CreateControl();
+
+            Assert.True(comboBox.IsHandleCreated);
+            Assert.Empty(comboBox.AccessibilityObject.DefaultAction);
+        }
+
+        public static IEnumerable<object[]> ComboBoxAccessibleObject_DefaultAction_IfHandleIsCreated_ReturnsExpected_TestData()
+        {
+            yield return new object[] { ComboBoxStyle.DropDown, false, SR.AccessibleActionExpand };
+            yield return new object[] { ComboBoxStyle.DropDown, true, SR.AccessibleActionCollapse };
+            yield return new object[] { ComboBoxStyle.DropDownList, false, SR.AccessibleActionExpand };
+            yield return new object[] { ComboBoxStyle.DropDownList, true, SR.AccessibleActionCollapse };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ComboBoxAccessibleObject_DefaultAction_IfHandleIsCreated_ReturnsExpected_TestData))]
+        public void ComboBoxAccessibleObject_DefaultAction_IfHandleIsCreated_ReturnsExpected(ComboBoxStyle style, bool droppedDown, string expectedAction)
+        {
+            using ComboBox comboBox = new() { DropDownStyle = style };
+            comboBox.CreateControl();
+            comboBox.DroppedDown = droppedDown;
+
+            Assert.True(comboBox.IsHandleCreated);
+            Assert.Equal(expectedAction, comboBox.AccessibilityObject.DefaultAction);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_DoDefaultAction_IfHandleIsNotCreated_DoesNotExpand()
+        {
+            using ComboBox comboBox = new();
+
+            Assert.False(comboBox.DroppedDown);
+
+            comboBox.AccessibilityObject.DoDefaultAction();
+
+            Assert.False(comboBox.DroppedDown);
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void ComboBoxAccessibleObject_DoDefaultAction_IfHandleIsCreatedAndDropDownStyleIsSimple_DoesNotCollapse()
+        {
+            using ComboBox comboBox = new() { DropDownStyle = ComboBoxStyle.Simple };
+            comboBox.CreateControl();
+
+            Assert.True(comboBox.IsHandleCreated);
+            Assert.True(comboBox.DroppedDown);
+
+            comboBox.AccessibilityObject.DoDefaultAction();
+
+            Assert.True(comboBox.DroppedDown);
+        }
+
+        [WinFormsTheory]
+        [InlineData(ComboBoxStyle.DropDown, false, true)]
+        [InlineData(ComboBoxStyle.DropDown, true, false)]
+        [InlineData(ComboBoxStyle.DropDownList, false, true)]
+        [InlineData(ComboBoxStyle.DropDownList, true, false)]
+        public void ComboBoxAccessibleObject_DoDefaultAction_IfHandleIsCreated_DoesExpected(ComboBoxStyle style, bool droppedDown, bool expectedDroppedDown)
+        {
+            using ComboBox comboBox = new() { DropDownStyle = style };
+            comboBox.CreateControl();
+            comboBox.DroppedDown = droppedDown;
+
+            Assert.True(comboBox.IsHandleCreated);
+
+            comboBox.AccessibilityObject.DoDefaultAction();
+
+            Assert.Equal(expectedDroppedDown, comboBox.DroppedDown);
+        }
     }
 }
