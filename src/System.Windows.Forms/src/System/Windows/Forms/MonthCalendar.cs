@@ -2181,11 +2181,16 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
 
-            if (start.Ticks < _minDate.Ticks || end.Ticks < _minDate.Ticks)
+            // We should use the Date for comparison in this case. The user can work in the calendar only with dates,
+            // while the minimum / maximum date can contain the date and custom time, which, when comparing Ticks,
+            // may lead to incorrect calculation.
+            if (start.Date < _minDate.Date || end.Date < _minDate.Date)
             {
+                // When calendar control is switched from a date display mode to year, decade or century mode, displayed range
+                // is changed proportional to the scale change. Thus we need to enforce user-defined selection again.
                 SetSelRange(_minDate, _minDate);
             }
-            else if (start.Ticks > _maxDate.Ticks || end.Ticks > _maxDate.Ticks)
+            else if (start.Date > _maxDate.Date || end.Date > _maxDate.Date)
             {
                 SetSelRange(_maxDate, _maxDate);
             }
@@ -2245,11 +2250,16 @@ namespace System.Windows.Forms
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.ValueChange, -1);
 
-            if (start.Ticks < _minDate.Ticks || end.Ticks < _minDate.Ticks)
+            // We should use the Date for comparison in this case. The user can work in the calendar only with dates,
+            // while the minimum / maximum date can contain the date and custom time, which, when comparing Ticks,
+            // may lead to incorrect calculation.
+            if (start.Date < _minDate.Date || end.Date < _minDate.Date)
             {
+                // When calendar control is switched from a date display mode to year, decade or century mode, displayed range
+                // is changed proportional to the scale change. Thus we need to enforce user-defined selection again.
                 SetSelRange(_minDate, _minDate);
             }
-            else if (start.Ticks > _maxDate.Ticks || end.Ticks > _maxDate.Ticks)
+            else if (start.Date > _maxDate.Date || end.Date > _maxDate.Date)
             {
                 SetSelRange(_maxDate, _maxDate);
             }

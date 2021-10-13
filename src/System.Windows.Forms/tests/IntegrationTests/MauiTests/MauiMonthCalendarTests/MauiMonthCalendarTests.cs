@@ -135,5 +135,184 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
 
             return new ScenarioResult(cell != null);
         }
+
+        [Scenario(true)]
+        public ScenarioResult MonthCalendar_Click_Date_InvokeEvents(TParams p)
+        {
+            using var wrapper = new MonthCalendarWrapper(this);
+            DateTime newDate = DateTime.Today.AddDays(1);
+            Action click = () => MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+            (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(wrapper, click);
+
+            if (testData.CallDateSelectedCount == 0)
+            {
+                return new ScenarioResult(false, "`DateSelected` event is not firing");
+            }
+
+            if (testData.CallDateChangedCount == 0)
+            {
+                return new ScenarioResult(false, "`DateChanged` event is not firing");
+            }
+
+            return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult MonthCalendar_Click_MinimumDate_InvokeEvents(TParams p)
+        {
+            using var wrapper = new MonthCalendarWrapper(this);
+            DateTime newDate = DateTime.Today.AddDays(-1);
+            Action click = () => MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+            (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(wrapper, click);
+
+            if (testData.CallDateSelectedCount == 0)
+            {
+                return new ScenarioResult(false, "`DateSelected` event is not firing");
+            }
+
+            if (testData.CallDateChangedCount == 0)
+            {
+                return new ScenarioResult(false, "`DateChanged` event is not firing");
+            }
+
+            return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult MonthCalendar_Click_MaximumDate_InvokeEvents(TParams p)
+        {
+            using var wrapper = new MonthCalendarWrapper(this);
+            DateTime newDate = DateTime.Today.AddDays(2);
+            Action click = () => MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+            (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(wrapper, click);
+
+            if (testData.CallDateSelectedCount == 0)
+            {
+                return new ScenarioResult(false, "`DateSelected` event is not firing");
+            }
+
+            if (testData.CallDateChangedCount == 0)
+            {
+                return new ScenarioResult(false, "`DateChanged` event is not firing");
+            }
+
+            return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult MonthCalendar_DoubleClick_Date_InvokeEvents(TParams p)
+        {
+            using var wrapper = new MonthCalendarWrapper(this);
+            DateTime newDate = DateTime.Today.AddDays(1);
+            Action click = () =>
+            {
+                MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+                Thread.Sleep(500);
+                MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+            };
+
+            (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(wrapper, click);
+
+            if (testData.CallDateSelectedCount != 2)
+            {
+                return new ScenarioResult(false, "`DateSelected` event should be firing twice");
+            }
+
+            if (testData.CallDateChangedCount != 1)
+            {
+                return new ScenarioResult(false, "`DateChanged` event should be firing only one time");
+            }
+
+            return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult MonthCalendar_DoubleClick_MinDate_InvokeEvents(TParams p)
+        {
+            using var wrapper = new MonthCalendarWrapper(this);
+            DateTime newDate = DateTime.Today.AddDays(-1);
+            Action click = () =>
+            {
+                MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+                Thread.Sleep(500);
+                MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+            };
+
+            (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(wrapper, click);
+
+            if (testData.CallDateSelectedCount != 2)
+            {
+                return new ScenarioResult(false, "`DateSelected` event should be firing twice");
+            }
+
+            if (testData.CallDateChangedCount != 1)
+            {
+                return new ScenarioResult(false, "`DateChanged` event should be firing only one time");
+            }
+
+            return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
+        }
+
+        [Scenario(true)]
+        public ScenarioResult MonthCalendar_DoubleClick_MaxDate_InvokeEvents(TParams p)
+        {
+            using var wrapper = new MonthCalendarWrapper(this);
+            DateTime newDate = DateTime.Today.AddDays(2);
+            Action click = () =>
+            {
+                MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+                Thread.Sleep(500);
+                MouseHelper.SendClick(GetCellPositionByDate(wrapper.Calendar, newDate));
+            };
+
+            (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(wrapper, click);
+
+            if (testData.CallDateSelectedCount != 2)
+            {
+                return new ScenarioResult(false, "`DateSelected` event should be firing twice");
+            }
+
+            if (testData.CallDateChangedCount != 1)
+            {
+                return new ScenarioResult(false, "`DateChanged` event should be firing only one time");
+            }
+
+            return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
+        }
+
+        private Point GetCellPositionByDate(MonthCalendar calendar, DateTime dateTime)
+        {
+            MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)calendar.AccessibilityObject;
+            return accessibleObject.TestAccessor().Dynamic.GetCellByDate(dateTime.Date).Bounds.Location;
+        }
+
+        private (int callDateSelectedCount, int callDateChangedCount, DateTime selectedDate) MonthCalendar_MinimumMaximum_Action(MonthCalendarWrapper wrapper, Action action)
+        {
+            int callDateSelectedCount = 0;
+            int callDateChangedCount = 0;
+
+            Application.DoEvents();
+
+            wrapper.Calendar.MinDate = DateTime.Now.AddDays(-1);
+            wrapper.Calendar.MaxDate = DateTime.Now.AddDays(2);
+            wrapper.Calendar.DateSelected += calendar_DateSelected;
+            wrapper.Calendar.DateChanged += calendar_DateChanged;
+
+            Application.DoEvents();
+
+            action();
+
+            Application.DoEvents();
+
+            wrapper.Calendar.MinDate = DateTimePicker.MinimumDateTime;
+            wrapper.Calendar.MaxDate = DateTimePicker.MaximumDateTime;
+            wrapper.Calendar.DateSelected -= calendar_DateSelected;
+            wrapper.Calendar.DateChanged -= calendar_DateChanged;
+
+            return (callDateSelectedCount, callDateChangedCount, wrapper.Calendar.SelectionStart.Date);
+
+            void calendar_DateSelected(object sender, DateRangeEventArgs e) => callDateSelectedCount++;
+            void calendar_DateChanged(object sender, DateRangeEventArgs e) => callDateChangedCount++;
+        }
     }
 }

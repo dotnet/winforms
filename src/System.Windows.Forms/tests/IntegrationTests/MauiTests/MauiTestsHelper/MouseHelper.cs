@@ -16,6 +16,11 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             SendMouseInput(x, y, MOUSEEVENTF.MOVE | MOUSEEVENTF.ABSOLUTE);
         }
 
+        public static void SendClick(Point point)
+        {
+            SendClick(point.X, point.Y);
+        }
+
         public static void SendClick(int x, int y)
         {
             var previousPosition = new Point();
