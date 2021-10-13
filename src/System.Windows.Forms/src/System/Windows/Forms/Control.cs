@@ -6059,41 +6059,60 @@ namespace System.Windows.Forms
                     int targetIndex = ctl._tabIndex;
                     bool hitCtl = false;
                     Control found = null;
-                    Control p = ctl._parent;
+                    Control parent = ctl._parent;
+
+                    if (parent is null)
+                    {
+                        Debug.Assert(parent is null, $"'{nameof(Control.Parent)}' property should be set for {ctl}.");
+                        return null;
+                    }
 
                     // Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must
                     // start with the same tab index as ctl, because there can be dups.
-                    int parentControlCount = 0;
 
-                    ControlCollection parentControls = (ControlCollection)p.Properties.GetObject(s_controlsCollectionProperty);
+                    ControlCollection siblings = GetControlCollection(parent);
 
-                    if (parentControls is not null)
+                    if (siblings is null)
                     {
-                        parentControlCount = parentControls.Count;
+                        Debug.Assert(siblings is null,
+                            $"'{nameof(Control.Controls)}' property should be set for {parent}.");
+
+                        return null;
                     }
 
-                    for (int c = parentControlCount - 1; c >= 0; c--)
+                    int siblingCount = siblings.Count;
+
+                    if (siblingCount == 0)
                     {
+                        Debug.Assert(siblingCount == 0,
+                            $"'{nameof(Control.Controls)}' collection shouldn't be empty for {parent}.");
+
+                        return null;
+                    }
+
+                    for (int c = siblingCount - 1; c >= 0; c--)
+                    {
+                        Control sibling = siblings[c];
                         // The logic for this is a bit lengthy, so I have broken it into separate
                         // clauses:
 
                         // We are not interested in ourself.
-                        if (parentControls[c] != ctl)
+                        if (sibling != ctl)
                         {
                             // We are interested in controls with <= tab indexes to ctl.  We must include those
                             // controls with equal indexes to account for duplicate indexes.
-                            if (parentControls[c]._tabIndex <= targetIndex)
+                            if (sibling._tabIndex <= targetIndex)
                             {
                                 // Check to see if this control replaces the "best match" we've already
                                 // found.
-                                if (found is null || found._tabIndex < parentControls[c]._tabIndex)
+                                if (found is null || found._tabIndex < sibling._tabIndex)
                                 {
                                     // Finally, check to make sure that if this tab index is the same as ctl,
                                     // that we've already encountered ctl in the z-order.  If it isn't the same,
                                     // than we're more than happy with it.
-                                    if (parentControls[c]._tabIndex != targetIndex || hitCtl)
+                                    if (sibling._tabIndex != targetIndex || hitCtl)
                                     {
-                                        found = parentControls[c];
+                                        found = sibling;
                                     }
                                 }
                             }
@@ -6114,27 +6133,35 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (p == this)
+                        if (parent == this)
                         {
                             return null;
                         }
                         else
                         {
-                            return p;
+                            // If we don't found any siblings, and the control is a ToolStripItem that hosts a control itself,
+                            // then we shouldn't return its parent, because it would be the same ToolStrip we're currently at.
+                            // Instead, we should return the control that is previous to the current ToolStrip
+                            if (ctl.ToolStripControlHost is not null)
+                            {
+                                return GetNextControl(ctl._parent, forward: false);
+                            }
+
+                            return parent;
                         }
                     }
                 }
 
-                // We found a control.  Walk into this control to find the proper sub control within it to select.
-                ControlCollection ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
+                // We found a control.  Walk into this control to find the proper child control within it to select.
+                ControlCollection children = GetControlCollection(ctl);
 
-                while (ctlControls is not null && ctlControls.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
+                while (children is not null && children.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
                 {
-                    Control found = ctl.GetFirstChildControlInTabOrder(/*forward=*/false);
+                    Control found = ctl.GetFirstChildControlInTabOrder(forward: false);
                     if (found is not null)
                     {
                         ctl = found;
-                        ctlControls = (ControlCollection)ctl.Properties.GetObject(s_controlsCollectionProperty);
+                        children = GetControlCollection(ctl);
                     }
                     else
                     {
@@ -6144,6 +6171,9 @@ namespace System.Windows.Forms
             }
 
             return ctl == this ? null : ctl;
+
+            static ControlCollection GetControlCollection(Control control)
+               => (ControlCollection)control.Properties.GetObject(s_controlsCollectionProperty);
         }
 
         /// <summary>
