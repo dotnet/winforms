@@ -71,14 +71,12 @@ namespace System.Windows.Forms
 
             bool IList.Contains(object? item)
             {
-                if (item is int)
+                if (item is int itemAsInt)
                 {
-                    return Contains((int)item);
+                    return Contains(itemAsInt);
                 }
-                else
-                {
-                    return false;
-                }
+
+                return false;
             }
 
             public void Clear()
