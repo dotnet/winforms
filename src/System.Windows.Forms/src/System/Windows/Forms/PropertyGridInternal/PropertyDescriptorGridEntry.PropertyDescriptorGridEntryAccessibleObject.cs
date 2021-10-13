@@ -103,15 +103,13 @@ namespace System.Windows.Forms.PropertyGridInternal
             internal override bool IsIAccessibleExSupported() => true;
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.ValuePatternId ||
-                    (patternId == UiaCore.UIA.ExpandCollapsePatternId && _owningPropertyDescriptorGridEntry.Enumerable))
+                => patternId switch
                 {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                    UiaCore.UIA.ValuePatternId => true,
+                    UiaCore.UIA.ExpandCollapsePatternId when
+                        _owningPropertyDescriptorGridEntry.Enumerable || _owningPropertyDescriptorGridEntry.NeedsDropDownButton => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
             private void ExpandOrCollapse()
             {
