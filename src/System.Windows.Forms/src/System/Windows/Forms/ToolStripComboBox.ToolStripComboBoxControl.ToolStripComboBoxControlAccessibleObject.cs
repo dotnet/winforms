@@ -14,12 +14,9 @@ namespace System.Windows.Forms
         {
             internal class ToolStripComboBoxControlAccessibleObject : ComboBoxAccessibleObject
             {
-                private readonly ChildAccessibleObject _childAccessibleObject;
-
                 public ToolStripComboBoxControlAccessibleObject(ToolStripComboBoxControl toolStripComboBoxControl)
                     : base(toolStripComboBoxControl)
                 {
-                    _childAccessibleObject = new ChildAccessibleObject(toolStripComboBoxControl, toolStripComboBoxControl.InternalHandle);
                 }
 
                 internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)

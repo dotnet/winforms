@@ -133,28 +133,16 @@ namespace System.Windows.Forms
                 }
 
                 /// <summary>
-                ///  Gets the runtime ID.
+                ///  Gets the runtime ID. We need to provide a unique ID others are implementing this in the same manner first item
+                ///  is static - 0x2a (RuntimeIDFirstItem) second item can be anything, but it's good to supply HWND.
                 /// </summary>
                 internal override int[] RuntimeId
-                {
-                    get
+                    => new int[]
                     {
-                        if (_owner is null)
-                        {
-                            return base.RuntimeId;
-                        }
-
-                        // We need to provide a unique ID others are implementing this in the same manner first item
-                        // is static - 0x2a (RuntimeIDFirstItem) second item can be anything, but here it is a hash.
-
-                        var runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem;
-                        runtimeId[1] = (int)(long)_owner.InternalHandle;
-                        runtimeId[2] = _owner.GetHashCode();
-
-                        return runtimeId;
-                    }
-                }
+                        RuntimeIDFirstItem,
+                        PARAM.ToInt(_owner.InternalHandle),
+                        _owner.GetHashCode()
+                    };
             }
         }
     }

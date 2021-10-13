@@ -145,17 +145,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the runtime ID.
             /// </summary>
-            internal override int[] RuntimeId
-            {
-                get
-                {
-                    var runtimeId = new int[2];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = GetHashCode();
-
-                    return runtimeId;
-                }
-            }
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
         }
     }
 }

@@ -29,8 +29,11 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsFact]
         public unsafe void AccessibleObject_IAccessibleExGetRuntimeId_Invoke_ReturnsExpected()
         {
-            var o = new AccessibleObject();
-            AssertSuccess(Test_IAccessibleExGetRuntimeId(o, null));
+            using (new NoAssertContext())
+            {
+                var o = new AccessibleObject();
+                AssertSuccess(Test_IAccessibleExGetRuntimeId(o, null));
+            }
         }
 
         [WinFormsTheory]
@@ -177,8 +180,11 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsFact]
         public unsafe void AccessibleObject_IRawElementProviderFragmentGetRuntimeId_Invoke_ReturnsExpected()
         {
-            var o = new AccessibleObject();
-            AssertSuccess(Test_IRawElementProviderFragmentGetRuntimeId(o, null));
+            using (new NoAssertContext())
+            {
+                var o = new AccessibleObject();
+                AssertSuccess(Test_IRawElementProviderFragmentGetRuntimeId(o, null));
+            }
         }
 
         [WinFormsTheory]

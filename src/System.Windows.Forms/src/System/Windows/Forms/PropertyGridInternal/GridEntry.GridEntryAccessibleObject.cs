@@ -177,33 +177,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            internal override int[]? RuntimeId
-            {
-                get
+            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a. Second item
+            // can be anything, but it's good to supply HWND. Third and others are optional, but in case of GridItem we need it, to make it unique.
+            // Grid items are not controls, they don't have hwnd - we use hwnd of PropertyGridView.
+            internal override int[] RuntimeId =>
+                _runtimeId ??= new int[]
                 {
-                    if (_owningGridEntry.OwnerGridView is null || !_owningGridEntry.OwnerGridView.IsHandleCreated)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    if (_runtimeId is null)
-                    {
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item is static - 0x2a
-                        // second item can be anything, but it's good to supply HWND
-                        // third and others are optional, but in case of GridItem we need it, to make it unique
-                        // grid items are not controls, they don't have hwnd - we use hwnd of PropertyGridView
-
-                        _runtimeId = new int[3];
-                        _runtimeId[0] = 0x2a;
-                        _runtimeId[1] = (int)(long)_owningGridEntry.OwnerGridView.InternalHandle;
-                        _runtimeId[2] = GetHashCode();
-                    }
-
-                    return _runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(_owningGridEntry.OwnerGridView?.InternalHandle ?? IntPtr.Zero),
+                    GetHashCode()
+                };
 
             private PropertyGridView? PropertyGridView
             {

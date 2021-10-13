@@ -123,22 +123,12 @@ namespace System.Windows.Forms
             public override AccessibleRole Role => AccessibleRole.Row;
 
             internal override int[] RuntimeId
-            {
-                get
+                => runtimeId ??= new int[]
                 {
-                    if (runtimeId is null)
-                    {
-                        runtimeId = new int[]
-                        {
-                            RuntimeIDFirstItem, // first item is static - 0x2a,
-                            Parent.GetHashCode(),
-                            GetHashCode()
-                        };
-                    }
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem, // first item is static - 0x2a
+                    Parent.GetHashCode(),
+                    GetHashCode()
+                };
 
             private AccessibleObject SelectedCellsAccessibilityObject
             {

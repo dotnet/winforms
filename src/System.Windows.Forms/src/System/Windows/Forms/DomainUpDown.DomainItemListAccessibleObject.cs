@@ -57,6 +57,8 @@ namespace System.Windows.Forms
                 }
             }
 
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, GetHashCode() };
+
             public override AccessibleObject GetChild(int index)
             {
                 if (index >= 0 && index < GetChildCount())

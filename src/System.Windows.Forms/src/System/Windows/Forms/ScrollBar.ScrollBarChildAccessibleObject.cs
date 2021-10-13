@@ -60,23 +60,13 @@ namespace System.Windows.Forms
 
             internal ScrollBarAccessibleObject ParentInternal => (ScrollBarAccessibleObject)OwningScrollBar.AccessibilityObject;
 
-            internal override int[]? RuntimeId
-            {
-                get
+            internal override int[] RuntimeId
+                => new int[]
                 {
-                    if (!OwningScrollBar.IsHandleCreated)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    var runtimeId = new int[3];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = PARAM.ToInt(OwningScrollBar.InternalHandle);
-                    runtimeId[2] = GetChildId();
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(OwningScrollBar.InternalHandle),
+                    GetChildId()
+                };
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 => direction switch

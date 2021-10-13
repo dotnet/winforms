@@ -217,6 +217,11 @@
         <target state="translated">해당 UI 요소는 라이브 영역이 아닙니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="new">{0} doesn't support {1} property. It must be overriden in the derived class.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">한 스레드에 만든 컨트롤은 다른 스레드에 있는 컨트롤의 부모가 될 수 없습니다.</target>

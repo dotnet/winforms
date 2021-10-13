@@ -8,6 +8,8 @@
 #include <atlbase.h>
 using namespace ATL;
 
+#define COR_E_NOTSUPPORTED 0x80131515
+
 TEST const WCHAR* WINAPI Test_IAccessibleExConvertReturnedElement(IUnknown* pUnknown)
 {
     return RunTest([&](std::wstringstream& output)
@@ -95,13 +97,12 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetRuntimeId(IUnknown* pUnknown, int*
 
         SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
         hr = pAccessibleEx->GetRuntimeId(&result);
-        assertEqualHr(S_OK, hr);
-        assertNull(result);
+        assertEqualHr(COR_E_NOTSUPPORTED, hr);
         SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pAccessibleEx->GetRuntimeId(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(COR_E_NOTSUPPORTED, hr);
 
         return S_OK;
     });
@@ -353,13 +354,12 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetRuntimeId(IUnknown* 
 
         SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
         hr = pRawElementProviderFragment->GetRuntimeId(&result);
-        assertEqualHr(S_OK, hr);
-        assertNull(result);
+        assertEqualHr(COR_E_NOTSUPPORTED, hr);
         SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pRawElementProviderFragment->GetRuntimeId(NULL);
-        assertEqualHr(S_OK, hr);
+        assertEqualHr(COR_E_NOTSUPPORTED, hr);
 
         return S_OK;
     });

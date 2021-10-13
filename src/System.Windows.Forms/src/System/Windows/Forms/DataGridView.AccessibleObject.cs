@@ -219,20 +219,12 @@ namespace System.Windows.Forms
             }
             */
 
-            internal override int[]? RuntimeId
-            {
-                get
+            internal override int[] RuntimeId
+                => runtimeId ??= new int[]
                 {
-                    if (runtimeId is null)
-                    {
-                        runtimeId = new int[2];
-                        runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
-                        runtimeId[1] = GetHashCode();
-                    }
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem, // first item is static - 0x2a
+                    GetHashCode()
+                };
 
             internal override bool IsIAccessibleExSupported() => true;
 

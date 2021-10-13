@@ -17,6 +17,8 @@ namespace System.Windows.Forms
                 _owningColumnHeader = columnHeader ?? throw new ArgumentNullException(nameof(columnHeader));
             }
 
+            internal override int[] RuntimeId => new int[] { RuntimeIDFirstItem, _owningColumnHeader.GetHashCode() };
+
             internal override object? GetPropertyValue(UIA propertyID)
                 => propertyID switch
                 {

@@ -90,11 +90,11 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override int[]? RuntimeId
+            internal override int[] RuntimeId
                 => new int[]
                 {
                     RuntimeIDFirstItem,
-                    (int)(long)_owningLinkLabel.InternalHandle,
+                    PARAM.ToInt(_owningLinkLabel.InternalHandle),
                     _owningLinkLabel.GetHashCode()
                 };
         }

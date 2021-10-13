@@ -90,21 +90,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal override int[]? RuntimeId
-            {
-                get
+            internal override int[] RuntimeId
+                => runtimeId ??= new int[]
                 {
-                    if (runtimeId is null)
-                    {
-                        runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
-                        runtimeId[1] = Parent.GetHashCode();
-                        runtimeId[2] = GetHashCode();
-                    }
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem, // first item is static - 0x2a
+                    Parent.GetHashCode(),
+                    GetHashCode()
+                };
 
             public override string Value
             {

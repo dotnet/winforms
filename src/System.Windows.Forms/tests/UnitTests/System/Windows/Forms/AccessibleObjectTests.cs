@@ -9,6 +9,7 @@ using Moq;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
 using static Interop;
+using System.Reflection;
 
 namespace System.Windows.Forms.Tests
 {
@@ -2574,6 +2575,35 @@ namespace System.Windows.Forms.Tests
             AccessibleObject accessibleObject = new AccessibleObject();
 
             Assert.Null(accessibleObject.GetPropertyValue(Interop.UiaCore.UIA.ControlTypePropertyId));
+        }
+
+        public static IEnumerable<object[]> AccessibleObject_RuntimeId_IsOverriden_TestData()
+        {
+            Assembly assembly = typeof(AccessibleObject).Assembly;
+            foreach (Type type in assembly.GetTypes())
+            {
+                // ComboBox.ChildAccessibleObject is more like an abstract class, so we should check its direct inheritors instead of it
+                if (type.BaseType != typeof(AccessibleObject) && type.BaseType != typeof(ComboBox.ChildAccessibleObject))
+                {
+                    continue;
+                }
+
+                if (type == typeof(ComboBox.ChildAccessibleObject))
+                {
+                    continue;
+                }
+
+                yield return new object[] { type };
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(AccessibleObject_RuntimeId_IsOverriden_TestData))]
+        public void AccessibleObject_RuntimeId_IsOverriden(Type type)
+        {
+            PropertyInfo runtimeIdProperty = type.GetProperty(nameof(AccessibleObject.RuntimeId), BindingFlags.NonPublic | BindingFlags.Instance);
+
+            Assert.Equal(type, runtimeIdProperty.DeclaringType);
         }
 
         private class SubAccessibleObject : AccessibleObject
