@@ -90,10 +90,6 @@ internal static partial class ApplicationConfiguration
     /// </summary>
     public static void Initialize()
     {{
-        // Set STAThread
-        Thread.CurrentThread.SetApartmentState(ApartmentState.Unknown);
-        Thread.CurrentThread.SetApartmentState(ApartmentState.STA);
-
 {2}
     }}
 }}
