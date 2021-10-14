@@ -66,10 +66,12 @@
   </PropertyGroup>
   <!-- Test related -->
   <PropertyGroup>
-    <VerifyXunitVersion>11.18.2</VerifyXunitVersion>
-    <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
-    <MicrosoftWindowsCompatibilityVersion>7.0.0-alpha.1.21556.5</MicrosoftWindowsCompatibilityVersion>
+    <BenDemystifierVersion>0.3.0</BenDemystifierVersion>
+    <MicrosoftVisualStudioThreadingVersion>17.0.15-alpha</MicrosoftVisualStudioThreadingVersion>
+    <MicrosoftWindowsCompatibilityVersion>7.0.0-alpha.1.21528.1</MicrosoftWindowsCompatibilityVersion>
     <MoqPackageVersion>4.10.0</MoqPackageVersion>
+    <!-- This is needed for Verify.Xunit to pull correct version of System.Speech -->
+    <VerifyXunitVersion>11.18.2</VerifyXunitVersion>
   </PropertyGroup>
   <!-- Code Coverage -->
   <PropertyGroup>
