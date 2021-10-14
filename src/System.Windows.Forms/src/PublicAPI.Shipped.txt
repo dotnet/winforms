@@ -2645,9 +2645,9 @@ System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.set -> void
 ~System.Windows.Forms.ScrollableControl.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties
 ~System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control activeControl) -> void
 ~System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
-~System.Windows.Forms.SelectedGridItemChangedEventArgs.NewSelection.get -> System.Windows.Forms.GridItem
-~System.Windows.Forms.SelectedGridItemChangedEventArgs.OldSelection.get -> System.Windows.Forms.GridItem
-~System.Windows.Forms.SelectedGridItemChangedEventArgs.SelectedGridItemChangedEventArgs(System.Windows.Forms.GridItem oldSel, System.Windows.Forms.GridItem newSel) -> void
+System.Windows.Forms.SelectedGridItemChangedEventArgs.NewSelection.get -> System.Windows.Forms.GridItem?
+System.Windows.Forms.SelectedGridItemChangedEventArgs.OldSelection.get -> System.Windows.Forms.GridItem?
+System.Windows.Forms.SelectedGridItemChangedEventArgs.SelectedGridItemChangedEventArgs(System.Windows.Forms.GridItem? oldSel, System.Windows.Forms.GridItem? newSel) -> void
 ~System.Windows.Forms.SelectionRange.SelectionRange(System.Windows.Forms.SelectionRange range) -> void
 ~System.Windows.Forms.SplitContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.SplitContainer.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs e) -> void
