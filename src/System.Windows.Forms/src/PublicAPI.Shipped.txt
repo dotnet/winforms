@@ -2290,10 +2290,10 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.ListBox.FindString(string s, int startIndex) -> int
 ~System.Windows.Forms.ListBox.FindStringExact(string s) -> int
 ~System.Windows.Forms.ListBox.FindStringExact(string s, int startIndex) -> int
-~System.Windows.Forms.ListBox.IntegerCollection.AddRange(int[] items) -> void
-~System.Windows.Forms.ListBox.IntegerCollection.AddRange(System.Windows.Forms.ListBox.IntegerCollection value) -> void
-~System.Windows.Forms.ListBox.IntegerCollection.CopyTo(System.Array destination, int index) -> void
-~System.Windows.Forms.ListBox.IntegerCollection.IntegerCollection(System.Windows.Forms.ListBox owner) -> void
+System.Windows.Forms.ListBox.IntegerCollection.AddRange(int[]! items) -> void
+System.Windows.Forms.ListBox.IntegerCollection.AddRange(System.Windows.Forms.ListBox.IntegerCollection! value) -> void
+System.Windows.Forms.ListBox.IntegerCollection.CopyTo(System.Array! destination, int index) -> void
+System.Windows.Forms.ListBox.IntegerCollection.IntegerCollection(System.Windows.Forms.ListBox! owner) -> void
 ~System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array destination, int index) -> void
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
