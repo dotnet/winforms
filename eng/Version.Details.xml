@@ -13,7 +13,7 @@ Note: if the Uri is a new place, you will need to add a subscription from that p
     </Dependency>
     <Dependency Name="Microsoft.NETCore.Platforms" Version="5.0.4">
       <Uri>https://dev.azure.com/dnceng/internal/_git/dotnet-runtime</Uri>
-      <Sha>e234755a116df89304d6edb35e943e9b231ccc46</Sha>
+      <Sha>f431858f8b1f1510723ace6343786c9194dbd7fc6</Sha>
     </Dependency>
     <Dependency Name="Microsoft.Win32.Registry" Version="5.0.0">
       <Uri>https://github.com/dotnet/runtime</Uri>
