@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Constructs a ListViewItemSelectionChangedEventArgs object.
         /// </summary>
-        public ListViewItemSelectionChangedEventArgs(ListViewItem item, int itemIndex, bool isSelected)
+        public ListViewItemSelectionChangedEventArgs(ListViewItem? item, int itemIndex, bool isSelected)
         {
             Item = item;
             ItemIndex = itemIndex;
@@ -24,7 +22,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The list view item whose selection changed
         /// </summary>
-        public ListViewItem Item { get; }
+        public ListViewItem? Item { get; }
 
         /// <summary>
         ///  The list view item's index
