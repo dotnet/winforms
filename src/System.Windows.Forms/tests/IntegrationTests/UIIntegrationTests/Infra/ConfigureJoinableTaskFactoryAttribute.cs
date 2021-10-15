@@ -25,7 +25,7 @@ namespace System.Windows.Forms.UI.IntegrationTests.Infra
 
             Application.ThreadException += HandleApplicationThreadException;
 
-            Assert.Null(ThreadHelper.JoinableTaskContext); // "Tests with joinable tasks must not be run in parallel!");
+            //Assert.Null(ThreadHelper.JoinableTaskContext); // "Tests with joinable tasks must not be run in parallel!");
 
             if (Thread.CurrentThread.GetApartmentState() != ApartmentState.STA)
             {
