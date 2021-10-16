@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             ///  this method to ensure that child tab pages are not added to it, as these
             ///  are illegal.
             /// </summary>
-            public override void Add(Control value)
+            public override void Add(Control? value)
             {
                 if (value is TabPage)
                 {
