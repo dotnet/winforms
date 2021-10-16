@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.ButtonInternal
@@ -23,7 +21,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal override void PaintUp(PaintEventArgs e, CheckState state)
         {
-            bool hasCustomBorder = (Control.FlatAppearance.BorderSize != BorderSize || !Control.FlatAppearance.BorderColor.IsEmpty);
+            bool hasCustomBorder = Control.FlatAppearance.BorderSize != BorderSize || !Control.FlatAppearance.BorderColor.IsEmpty;
 
             ColorData colors = PaintFlatRender(e).Calculate();
             LayoutData layout = PaintFlatLayout(
@@ -210,7 +208,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                bool hasCustomBorder = (Control.FlatAppearance.BorderSize != BorderSize || !Control.FlatAppearance.BorderColor.IsEmpty);
+                bool hasCustomBorder = Control.FlatAppearance.BorderSize != BorderSize || !Control.FlatAppearance.BorderColor.IsEmpty;
 
                 ColorData colors = PaintFlatRender(e).Calculate();
                 LayoutData layout = PaintFlatLayout(
