@@ -2244,8 +2244,8 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.ImageList.Tag.get -> object
 ~System.Windows.Forms.ImageList.Tag.set -> void
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.ItemCheckedEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Forms.ListViewItem item) -> void
+System.Windows.Forms.ItemCheckedEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Forms.ListViewItem? item) -> void
 ~System.Windows.Forms.KeysConverter.Compare(object a, object b) -> int
 ~System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
 ~System.Windows.Forms.Label.DrawImage(System.Drawing.Graphics g, System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> void
