@@ -95,7 +95,8 @@ namespace System.Windows.Forms
                     ? UiaCore.ExpandCollapseState.Collapsed
                     : UiaCore.ExpandCollapseState.Expanded;
 
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => _owningListView.AccessibilityObject;
+            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+                => _owningListView.AccessibilityObject;
 
             public override string Name
                 => _owningGroup.Header;
@@ -298,15 +299,12 @@ namespace System.Windows.Forms
             }
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-            {
-                if (patternId == UiaCore.UIA.LegacyIAccessiblePatternId ||
-                    patternId == UiaCore.UIA.ExpandCollapsePatternId)
+                => patternId switch
                 {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
-            }
+                    UiaCore.UIA.LegacyIAccessiblePatternId => true,
+                    UiaCore.UIA.ExpandCollapsePatternId => _owningGroup.CollapsedState != ListViewGroupCollapsedState.Default,
+                    _ => base.IsPatternSupported(patternId),
+                };
 
             internal override unsafe void SetFocus()
             {
