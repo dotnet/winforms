@@ -501,7 +501,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
         }
 
-        internal void PaintButtonBackground(PaintEventArgs e, Rectangle bounds, Brush background)
+        internal void PaintButtonBackground(PaintEventArgs e, Rectangle bounds, Brush? background)
         {
             if (background is null)
             {
