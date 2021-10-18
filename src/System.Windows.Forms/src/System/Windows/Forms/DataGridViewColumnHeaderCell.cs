@@ -1031,7 +1031,21 @@ namespace System.Windows.Forms
 
             if (paint && displaySortGlyph && PaintContentBackground(paintParts))
             {
+                static Color Darker(Color color)
+                {
+                    // Get a color 10% darker
+                    const float Offset = 0.9f; // 90%
+                    return Color.FromArgb(color.A, (int)(color.R * Offset), (int)(color.G * Offset), (int)(color.B * Offset));
+                }
+
                 (Color darkColor, Color lightColor) = GetContrastedColors(cellStyle.BackColor);
+
+                if (!SystemInformation.HighContrast)
+                {
+                    // Colors in HighContrast modes have own value with a correct constrast
+                    darkColor = Darker(darkColor);
+                }
+
                 using var penControlDark = darkColor.GetCachedPenScope();
                 using var penControlLightLight = lightColor.GetCachedPenScope();
 
