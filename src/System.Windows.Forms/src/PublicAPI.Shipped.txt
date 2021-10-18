@@ -1428,10 +1428,10 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Drawing.Design.IPropertyValueUIService.AddPropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
 ~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
 ~System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
-~System.Drawing.Design.PaintValueEventArgs.Context.get -> System.ComponentModel.ITypeDescriptorContext
-~System.Drawing.Design.PaintValueEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Drawing.Design.PaintValueEventArgs.PaintValueEventArgs(System.ComponentModel.ITypeDescriptorContext context, object value, System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds) -> void
-~System.Drawing.Design.PaintValueEventArgs.Value.get -> object
+System.Drawing.Design.PaintValueEventArgs.Context.get -> System.ComponentModel.ITypeDescriptorContext?
+System.Drawing.Design.PaintValueEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Drawing.Design.PaintValueEventArgs.PaintValueEventArgs(System.ComponentModel.ITypeDescriptorContext? context, object? value, System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds) -> void
+System.Drawing.Design.PaintValueEventArgs.Value.get -> object?
 ~System.Drawing.Design.PropertyValueUIItem.PropertyValueUIItem(System.Drawing.Image uiItemImage, System.Drawing.Design.PropertyValueUIItemInvokeHandler handler, string tooltip) -> void
 ~System.Drawing.Design.UITypeEditor.EditValue(System.IServiceProvider provider, object value) -> object
 ~System.Drawing.Design.UITypeEditor.PaintValue(object value, System.Drawing.Graphics canvas, System.Drawing.Rectangle rectangle) -> void
