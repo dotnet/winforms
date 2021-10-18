@@ -3044,8 +3044,8 @@ System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanelR
 ~System.Windows.Forms.TreeNodeCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.TreeNodeCollection.IndexOf(System.Windows.Forms.TreeNode node) -> int
 ~System.Windows.Forms.TreeNodeCollection.Remove(System.Windows.Forms.TreeNode node) -> void
-~System.Windows.Forms.TreeNodeMouseHoverEventArgs.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNodeMouseHoverEventArgs.TreeNodeMouseHoverEventArgs(System.Windows.Forms.TreeNode node) -> void
+System.Windows.Forms.TreeNodeMouseHoverEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNodeMouseHoverEventArgs.TreeNodeMouseHoverEventArgs(System.Windows.Forms.TreeNode? node) -> void
 ~System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag
 ~System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode
