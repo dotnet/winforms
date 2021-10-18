@@ -2559,9 +2559,9 @@ System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Window
 ~System.Windows.Forms.PictureBox.InitialImage.set -> void
 ~System.Windows.Forms.PictureBox.Load(string url) -> void
 ~System.Windows.Forms.PictureBox.LoadAsync(string url) -> void
-~System.Windows.Forms.PopupEventArgs.AssociatedControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.PopupEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window
-~System.Windows.Forms.PopupEventArgs.PopupEventArgs(System.Windows.Forms.IWin32Window associatedWindow, System.Windows.Forms.Control associatedControl, bool isBalloon, System.Drawing.Size size) -> void
+System.Windows.Forms.PopupEventArgs.AssociatedControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.PopupEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window?
+System.Windows.Forms.PopupEventArgs.PopupEventArgs(System.Windows.Forms.IWin32Window? associatedWindow, System.Windows.Forms.Control? associatedControl, bool isBalloon, System.Drawing.Size size) -> void
 ~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController) -> void
 ~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController, string dialogTitle) -> void
 ~System.Windows.Forms.PrintDialog.Document.get -> System.Drawing.Printing.PrintDocument
