@@ -1829,11 +1829,11 @@ System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get 
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].set -> void
 System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
 System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.set -> void
-~System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.get -> string
-~System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.set -> void
-~System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.set -> void
-~System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormattingEventArgs(int columnIndex, int rowIndex, object value, System.Type desiredType, System.Windows.Forms.DataGridViewCellStyle cellStyle) -> void
+System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.set -> void
+System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
+System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.set -> void
+System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormattingEventArgs(int columnIndex, int rowIndex, object? value, System.Type? desiredType, System.Windows.Forms.DataGridViewCellStyle? cellStyle) -> void
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.AdvancedBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.DataGridViewCellPaintingEventArgs(System.Windows.Forms.DataGridView dataGridView, System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, int columnIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
