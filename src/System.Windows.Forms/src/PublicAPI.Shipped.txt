@@ -2836,7 +2836,7 @@ System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanelR
 ~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
 ~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
 ~System.Windows.Forms.ToolStripDropDownItemAccessibleObject.ToolStripDropDownItemAccessibleObject(System.Windows.Forms.ToolStripDropDownItem item) -> void
-System.Windows.Forms.ToolStripGripRenderEventArgs.ToolStripGripRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStrip! toolStrip) -> void
+System.Windows.Forms.ToolStripGripRenderEventArgs.ToolStripGripRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStrip? toolStrip) -> void
 ~System.Windows.Forms.ToolStripItem.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
 ~System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.get -> string
 ~System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.set -> void
