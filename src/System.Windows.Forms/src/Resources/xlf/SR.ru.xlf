@@ -219,7 +219,7 @@
       </trans-unit>
       <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
         <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="new">{0} doesn't support {1} property. It must be overriden in the derived class.</target>
+        <target state="translated">{0} не поддерживает свойство {1}. Его необходимо переопределить в производном классе.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
