@@ -49,6 +49,8 @@ namespace System.Windows.Forms
 
                 VisualStyleRenderer.SetParameters(s_headerElement.ClassName, s_headerElement.Part, headerState);
                 VisualStyleRenderer.DrawBackground(g, bounds, rectClip);
+
+                ControlPaint.EnforceHeaderCellDividerContrast(g, bounds);
             }
         }
     }

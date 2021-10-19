@@ -2238,7 +2238,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                return SystemColors.ControlDark;
+                return SystemColors.WindowFrame;
             }
         }
 
