@@ -46,7 +46,7 @@
   </PropertyGroup>
   <!-- Docs / Intellisense -->
   <PropertyGroup>
-    <MicrosoftPrivateIntellisenseVersion>6.0.0-preview-20210916.1</MicrosoftPrivateIntellisenseVersion>
+    <MicrosoftPrivateIntellisenseVersion>6.0.0-preview-20211019.1</MicrosoftPrivateIntellisenseVersion>
   </PropertyGroup>
   <!-- Arcade -->
   <PropertyGroup>

@@ -1,7 +1,8 @@
 ﻿<Project>
 
   <PropertyGroup>
-    <_DotnetApiDocsFilesRoot>$([MSBuild]::NormalizeDirectory('$(NuGetPackageRoot)', 'microsoft.private.intellisense', '$(MicrosoftPrivateIntellisenseVersion)', 'IntellisenseFiles', 'net'))</_DotnetApiDocsFilesRoot>
+    <_DotnetApiDocsPackageName>Microsoft.Private.Intellisense</_DotnetApiDocsPackageName>
+    <_DotnetApiDocsFilesRoot>$([MSBuild]::NormalizeDirectory('$(NuGetPackageRoot)', '$(_DotnetApiDocsPackageName)', '$(MicrosoftPrivateIntellisenseVersion)', 'IntellisenseFiles', 'windowsdesktop'))</_DotnetApiDocsFilesRoot>
     <_IntellisenseXmlDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsBinDir)', 'docs'))</_IntellisenseXmlDir>
   </PropertyGroup>
 
@@ -89,7 +90,7 @@
     <PropertyGroup>
       <IntellisenseXmlFileSource>$(_IntellisenseXmlDir)$(AssemblyName).xml</IntellisenseXmlFileSource>
 
-      <!-- Set the xml destination (for a later step that copies files from the dotnet-api-docs to local build artifacts) -->
+      <!-- Set the xml destination (for a later step that copies files from the $(_DotnetApiDocsPackageName) package to local build artifacts) -->
       <IntellisenseXmlDest Condition="'$(ProduceReferenceAssembly)' == 'true' And '$(PackageAsRefAndLib)' != 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetRefPath)', '.xml'))</IntellisenseXmlDest>
       <IntellisenseXmlDest Condition="'$(PackageAsRefAndLib)' == 'true'" >$([System.IO.Path]::ChangeExtension('$(TargetPath)', '.xml'))</IntellisenseXmlDest>
       <IntellisenseXmlDestDir Condition="'$(IntellisenseXmlDest)' != ''">$([System.IO.Path]::GetDirectoryName('$(IntellisenseXmlDest)'))</IntellisenseXmlDestDir>
@@ -102,7 +103,7 @@
       Contact the intellisense team for guidance.
     -->
     <Error  Condition="!Exists('$(IntellisenseXmlFileSource)') and '$(IsFacadeAssembly)' != 'true' and '$(IsAnalyzerProject)' != 'true'" 
-            Text="$(AssemblyName).xml not found in dotnet-api-docs package. Contact the intellisense team about adding the docs for this assembly."
+            Text="$(AssemblyName).xml was not found in $(_DotnetApiDocsPackageName) package. Contact the intellisense team about adding the docs for this assembly."
     />
 
     <ItemGroup>
