@@ -4465,6 +4465,21 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnGroupCollapsedStateChanged(ListViewGroupEventArgs e)
         {
+            if (IsAccessibilityObjectCreated && GroupsEnabled && e.GroupIndex >= 0 && e.GroupIndex < Groups.Count)
+            {
+                ListViewGroup listViewGroup = Groups[e.GroupIndex];
+                // A fix for https://github.com/dotnet/winforms/issues/3269.
+                // Unfortunately we cannot use RaiseAutomationEvent method here since the control does not respond to
+                // CollapseState messages. Use RaiseAutomationNotification instead to announce a custom notification.
+                // See https://docs.microsoft.com/dotnet/api/system.windows.forms.accessibleobject.raiseautomationnotification.
+                AccessibilityObject.InternalRaiseAutomationNotification(
+                    Automation.AutomationNotificationKind.ActionCompleted,
+                    Automation.AutomationNotificationProcessing.CurrentThenMostRecent,
+                    listViewGroup.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                        ? string.Format(SR.ListViewGroupCollapsedStateName, listViewGroup.Header)
+                        : string.Format(SR.ListViewGroupExpandedStateName, listViewGroup.Header));
+            }
+
             ((EventHandler<ListViewGroupEventArgs>)Events[EVENT_GROUPCOLLAPSEDSTATECHANGED])?.Invoke(this, e);
         }
 

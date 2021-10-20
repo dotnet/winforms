@@ -6853,4 +6853,10 @@ Stack trace where the illegal operation occurred was:
   <data name="AccessibleObjectRuntimeIdNotSupported" xml:space="preserve">
     <value>{0} doesn't support {1} property. It must be overriden in the derived class.</value>
   </data>
+  <data name="ListViewGroupCollapsedStateName" xml:space="preserve">
+    <value>{0}, group, collapsed</value>
+  </data>
+  <data name="ListViewGroupExpandedStateName" xml:space="preserve">
+    <value>{0}, group, expanded</value>
+  </data>
 </root>

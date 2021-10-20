@@ -6436,6 +6436,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">ListViewGroup öğesinin CollapsedState özelliği değiştiğinde tetiklenen olay.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="new">{0}, group, collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Parametre ListViewGroup türünde olmalıdır.</target>
@@ -6449,6 +6454,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="new">{0}, group, expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

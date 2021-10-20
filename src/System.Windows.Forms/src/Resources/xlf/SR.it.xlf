@@ -6436,6 +6436,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
         <target state="translated">Evento generato quando la proprietà CollapsedState di un elemento ListViewGroup cambia.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="new">{0}, group, collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Il parametro deve essere di tipo ListViewGroup.</target>
@@ -6449,6 +6454,11 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="new">{0}, group, expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

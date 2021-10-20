@@ -6436,6 +6436,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ListViewGroup の CollapsedState プロパティが変更するときに発生するイベントです。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="new">{0}, group, collapsed</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">パラメーターは、型 ListViewGroup でなければなりません。</target>
@@ -6449,6 +6454,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="new">{0}, group, expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
