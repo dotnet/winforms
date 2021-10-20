@@ -25,7 +25,7 @@ stages:
       - job: Windows
         pool: 
           name: ${{ parameters.agentPoolName }}
-          queue: ${{ parameters.agentPool }}
+          demands: ImageOverride -equals ${{ parameters.agentPool }}
 
         variables:
 
