@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -13,6 +13,16 @@ namespace System.Windows.Forms.Tests
         public void ToolStripSplitButtonUiaProvider_Ctor_OwnerToolStripSplitButtonCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => new ToolStripSplitButtonUiaProvider(null));
+        }
+
+        [WinFormsFact]
+        public void ToolStripSplitButtonUiaProvider_IsIAccessibleExSupported_ReturnsExpected()
+        {
+            using ToolStripSplitButton toolStripSplitButton = new();
+
+            ToolStripSplitButtonUiaProvider accessibleObject = new(toolStripSplitButton);
+
+            Assert.True(accessibleObject.IsIAccessibleExSupported());
         }
     }
 }
