@@ -1857,8 +1857,8 @@ System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormatt
 ~System.Windows.Forms.DataGridViewCellStyle.Tag.get -> object
 ~System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
 ~System.Windows.Forms.DataGridViewCellStyleContentChangedEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.get -> string
-~System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.set -> void
+System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.get -> string?
+System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.set -> void
 ~System.Windows.Forms.DataGridViewCellValidatingEventArgs.FormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
