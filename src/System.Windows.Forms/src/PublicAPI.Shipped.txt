@@ -1739,8 +1739,8 @@ System.Windows.Forms.ColumnReorderedEventArgs.Header.get -> System.Windows.Forms
 ~System.Windows.Forms.ControlBindingsCollection.ControlBindingsCollection(System.Windows.Forms.IBindableComponent control) -> void
 ~System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding binding) -> void
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
-~System.Windows.Forms.ControlEventArgs.Control.get -> System.Windows.Forms.Control
-~System.Windows.Forms.ControlEventArgs.ControlEventArgs(System.Windows.Forms.Control control) -> void
+System.Windows.Forms.ControlEventArgs.Control.get -> System.Windows.Forms.Control?
+System.Windows.Forms.ControlEventArgs.ControlEventArgs(System.Windows.Forms.Control? control) -> void
 ~System.Windows.Forms.CreateParams.Caption.get -> string
 ~System.Windows.Forms.CreateParams.Caption.set -> void
 ~System.Windows.Forms.CreateParams.ClassName.get -> string

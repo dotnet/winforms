@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -14,7 +12,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Creates a new ControlEventArgs.
         /// </summary>
-        public ControlEventArgs(Control control)
+        public ControlEventArgs(Control? control)
         {
             Control = control;
         }
@@ -22,6 +20,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the control object stored in this event.
         /// </summary>
-        public Control Control { get; }
+        public Control? Control { get; }
     }
 }
