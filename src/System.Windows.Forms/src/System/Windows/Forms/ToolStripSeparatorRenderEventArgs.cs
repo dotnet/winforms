@@ -15,7 +15,7 @@ namespace System.Windows.Forms
         ///  This class represents all the information to render the ToolStrip
         /// </summary>
         public ToolStripSeparatorRenderEventArgs(Graphics g, ToolStripSeparator? separator, bool vertical)
-            : base(g.OrThrowIfNull(), separator)
+            : base(g, separator)
         {
             Vertical = vertical;
         }
