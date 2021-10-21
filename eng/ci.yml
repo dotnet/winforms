@@ -1,8 +1,8 @@
 parameters:
   # parameters should default to values for running in the External / Public
   # be read from a user-defined variable (Azure DevOps limitation)
-  agentPoolName: Hosted Windows 2019 with VS2019
-  agentPool: ''
+  agentPoolName: NetCore1ESPool-Svc-Public
+  agentPool: Build.Windows.10.Amd64.VS2019.Open
   runAsPublic: true                      
   repoName: dotnet/winforms              
 
@@ -25,7 +25,7 @@ stages:
       - job: Windows
         pool: 
           name: ${{ parameters.agentPoolName }}
-          queue: ${{ parameters.agentPool }}
+          demands: ImageOverride -equals ${{ parameters.agentPool }}
 
         variables:
 
