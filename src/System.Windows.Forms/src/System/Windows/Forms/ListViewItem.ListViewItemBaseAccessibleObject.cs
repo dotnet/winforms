@@ -176,7 +176,8 @@ namespace System.Windows.Forms
                     UiaCore.UIA.HasKeyboardFocusPropertyId => OwningListItemFocused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
-                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
+                    UiaCore.UIA.IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
+                                                        || (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
                     UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.SelectionItemPatternId),
                     UiaCore.UIA.IsScrollItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ScrollItemPatternId),

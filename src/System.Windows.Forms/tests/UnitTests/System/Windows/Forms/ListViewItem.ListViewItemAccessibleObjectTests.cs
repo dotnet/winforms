@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Reflection;
 using Xunit;
 using static System.Windows.Forms.ListViewItem;
+using static Interop;
 using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
@@ -1197,7 +1198,7 @@ namespace System.Windows.Forms.Tests
             return listView;
         }
 
-        private ListView GetListViewWithData(View view, bool createControl, bool virtualMode, bool showGroups)
+        private ListView GetListViewWithData(View view, bool createControl, bool virtualMode, bool showGroups, bool groupsEnabled = true, bool itemsInGroup = true, ListViewGroupCollapsedState state = ListViewGroupCollapsedState.Default)
         {
             ListView listView = new()
             {
@@ -1212,12 +1213,15 @@ namespace System.Windows.Forms.Tests
             ListViewItem listItem3 = new("Item 3");
             ListViewItem listItem4 = new(new string[] { "Test Item 4", "Item B", "Item C", "Item D" }, -1);
 
-            if (!virtualMode)
+            if (!virtualMode && groupsEnabled)
             {
-                ListViewGroup listViewGroup = new("Test");
+                ListViewGroup listViewGroup = new("Test") { CollapsedState = state};
                 listView.Groups.Add(listViewGroup);
-                listItem1.Group = listViewGroup;
-                listItem2.Group = listViewGroup;
+                if (itemsInGroup)
+                {
+                    listItem1.Group = listViewGroup;
+                    listItem2.Group = listViewGroup;
+                }
             }
 
             listView.Columns.Add(new ColumnHeader() { Name = "Column 1" });
@@ -1798,6 +1802,52 @@ namespace System.Windows.Forms.Tests
             listView.View = newView;
 
             Assert.NotEqual(2, accessibleObject.GetChildCount());
+        }
+
+        public static IEnumerable<object[]> ListViewItemAccessibleObject_GetPropertyValue_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                foreach (bool createControl in new[] { true, false })
+                {
+                    foreach (bool virtualMode in new[] { true, false })
+                    {
+                        // View.Tile is not supported by ListView in virtual mode
+                        if (virtualMode && view == View.Tile)
+                        {
+                            continue;
+                        }
+
+                        foreach (bool showGroups in new[] { true, false })
+                        {
+                            foreach (bool groupsEnabled in new[] { true, false })
+                            {
+                                foreach (bool itemsInGroup in new[] { true, false })
+                                {
+                                    foreach (ListViewGroupCollapsedState state in Enum.GetValues(typeof(ListViewGroupCollapsedState)))
+                                    {
+                                        yield return new object[] { view, createControl, virtualMode, showGroups, groupsEnabled, itemsInGroup, state };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewItemAccessibleObject_GetPropertyValue_TestData))]
+        public void ListViewItemAccessibleObject_GetPropertyValue_ReturnsFalseWhenCollapsedOrOffScreen(View view, bool createControl, bool virtualMode, bool showGroups, bool groupsEnabled, bool itemsInGroup, ListViewGroupCollapsedState state)
+        {
+            using ListView listView = GetListViewWithData(view, createControl, virtualMode, showGroups, groupsEnabled, itemsInGroup, state);
+            ListViewItemBaseAccessibleObject accessibleObject = (ListViewItemBaseAccessibleObject)listView.Items[0].AccessibilityObject;
+
+            bool expected = listView.GroupsDisplayed && listView.Items[0].Group?.CollapsedState == ListViewGroupCollapsedState.Collapsed;
+            bool actual = (bool)accessibleObject.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId);
+
+            Assert.Equal(expected, actual);
+            Assert.Equal(createControl, listView.IsHandleCreated);
         }
 
         private ListView GetBoundsListView(View view, bool showGroups, bool virtualMode)
