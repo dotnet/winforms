@@ -101,6 +101,22 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static bool CanNotifyClients()
+        {
+            // While handling accessibility events, accessibility clients (JAWS, Inspect),
+            // can access AccessibleObject associated with the event. In the designer scenario, controls are not
+            // receiving messages directly and might not respond to messages while in the notification call.
+            // This will make the server process unresponsive and will cause VisualStudio to become unresponsive.
+            //
+            // The following compat switch is set in the designer server process to prevent controls from sending notification.
+            if (AppContext.TryGetSwitch("Switch.System.Windows.Forms.AccessibleObject.NoClientNotifications", out bool isEnabled))
+            {
+                return !isEnabled;
+            }
+
+            return true;
+        }
+
         /// <summary>
         ///  Gets a description of the default action for an object.
         /// </summary>
@@ -1926,7 +1942,7 @@ namespace System.Windows.Forms
         /// </returns>
         public bool RaiseAutomationNotification(AutomationNotificationKind notificationKind, AutomationNotificationProcessing notificationProcessing, string notificationText)
         {
-            if (!notificationEventAvailable)
+            if (!notificationEventAvailable || !CanNotifyClients())
             {
                 return false;
             }
@@ -1962,7 +1978,7 @@ namespace System.Windows.Forms
 
         internal virtual bool RaiseAutomationEvent(UiaCore.UIA eventId)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients())
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationEvent(this, eventId);
                 return result == HRESULT.S_OK;
@@ -1973,7 +1989,7 @@ namespace System.Windows.Forms
 
         internal virtual bool RaiseAutomationPropertyChangedEvent(UiaCore.UIA propertyId, object oldValue, object newValue)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients())
             {
                 HRESULT result = UiaCore.UiaRaiseAutomationPropertyChangedEvent(this, propertyId, oldValue, newValue);
                 return result == HRESULT.S_OK;
@@ -1994,7 +2010,7 @@ namespace System.Windows.Forms
 
         internal bool RaiseStructureChangedEvent(UiaCore.StructureChangeType structureChangeType, int[] runtimeId)
         {
-            if (UiaCore.UiaClientsAreListening().IsTrue())
+            if (UiaCore.UiaClientsAreListening().IsTrue() && CanNotifyClients())
             {
                 HRESULT result = UiaCore.UiaRaiseStructureChangedEvent(this, structureChangeType, runtimeId, runtimeId is null ? 0 : runtimeId.Length);
                 return result == HRESULT.S_OK;
