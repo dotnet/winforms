@@ -400,6 +400,11 @@ namespace System.Windows.Forms
 
             public void NotifyClients(AccessibleEvents accEvent)
             {
+                if (!CanNotifyClients())
+                {
+                    return;
+                }
+
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = self");
 
@@ -408,6 +413,11 @@ namespace System.Windows.Forms
 
             public void NotifyClients(AccessibleEvents accEvent, int childID)
             {
+                if (!CanNotifyClients())
+                {
+                    return;
+                }
+
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
@@ -416,6 +426,11 @@ namespace System.Windows.Forms
 
             public void NotifyClients(AccessibleEvents accEvent, int objectID, int childID)
             {
+                if (!CanNotifyClients())
+                {
+                    return;
+                }
+
                 Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo,
                     $"Control.NotifyClients: this = {ToString()}, accEvent = {accEvent}, childID = {childID}");
 
