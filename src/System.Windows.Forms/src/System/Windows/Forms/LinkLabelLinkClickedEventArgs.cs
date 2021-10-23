@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -14,11 +12,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref='LinkLabelLinkClickedEventArgs'/> class, given the link.
         /// </summary>
-        public LinkLabelLinkClickedEventArgs(LinkLabel.Link link) : this(link, MouseButtons.Left)
+        public LinkLabelLinkClickedEventArgs(LinkLabel.Link? link)
+            : this(link, MouseButtons.Left)
         {
         }
 
-        public LinkLabelLinkClickedEventArgs(LinkLabel.Link link, MouseButtons button)
+        public LinkLabelLinkClickedEventArgs(LinkLabel.Link? link, MouseButtons button)
         {
             Link = link;
             Button = button;
@@ -27,7 +26,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets the <see cref='LinkLabel.Link'/> that was clicked.
         /// </summary>
-        public LinkLabel.Link Link { get; }
+        public LinkLabel.Link? Link { get; }
 
         /// <summary>
         ///  Gets the mouseButton which causes the link to be clicked
