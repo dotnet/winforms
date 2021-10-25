@@ -1652,9 +1652,9 @@ System.Windows.Forms.ColumnReorderedEventArgs.Header.get -> System.Windows.Forms
 ~System.Windows.Forms.ComboBox.SelectedItem.set -> void
 ~System.Windows.Forms.ComboBox.SelectedText.get -> string
 ~System.Windows.Forms.ComboBox.SelectedText.set -> void
-~System.Windows.Forms.CommonDialog.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
-~System.Windows.Forms.CommonDialog.Tag.get -> object
-~System.Windows.Forms.CommonDialog.Tag.set -> void
+System.Windows.Forms.CommonDialog.ShowDialog(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.CommonDialog.Tag.get -> object?
+System.Windows.Forms.CommonDialog.Tag.set -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, System.IntPtr parentHandle) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey key) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
@@ -3164,7 +3164,7 @@ System.Windows.Forms.WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs
 ~virtual System.Windows.Forms.ComboBox.OnSelectedItemChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.CommonDialog.OnHelpRequest(System.EventArgs e) -> void
+virtual System.Windows.Forms.CommonDialog.OnHelpRequest(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.BackgroundImage.get -> System.Drawing.Image
 ~virtual System.Windows.Forms.Control.BackgroundImage.set -> void
@@ -6558,7 +6558,7 @@ System.Windows.Forms.ComboBoxStyle.DropDownList = 2 -> System.Windows.Forms.Comb
 System.Windows.Forms.ComboBoxStyle.Simple = 0 -> System.Windows.Forms.ComboBoxStyle
 System.Windows.Forms.CommonDialog
 System.Windows.Forms.CommonDialog.CommonDialog() -> void
-System.Windows.Forms.CommonDialog.HelpRequest -> System.EventHandler
+System.Windows.Forms.CommonDialog.HelpRequest -> System.EventHandler?
 System.Windows.Forms.CommonDialog.ShowDialog() -> System.Windows.Forms.DialogResult
 System.Windows.Forms.ComponentModel.Com2Interop.Com2Variant
 System.Windows.Forms.ComponentModel.Com2Interop.Com2Variant.Com2Variant() -> void
