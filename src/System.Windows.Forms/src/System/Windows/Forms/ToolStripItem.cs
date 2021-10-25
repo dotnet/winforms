@@ -2198,10 +2198,12 @@ namespace System.Windows.Forms
                     break;
                 case ToolStripItemEventType.MouseLeave:
                     // disabled toolstrip items should also clear tooltips.
+                    // disabled toolstrip items should also handle leave.
                     // we won't raise mouse events though.
                     if (!Enabled && ParentInternal is not null)
                     {
                         ParentInternal.UpdateToolTip(null);
+                        HandleLeave();
                     }
                     else
                     {
