@@ -2282,9 +2282,9 @@ System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Fo
 ~System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
 ~System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.LinkLabelLinkClickedEventArgs.Link.get -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs(System.Windows.Forms.LinkLabel.Link link) -> void
-~System.Windows.Forms.LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs(System.Windows.Forms.LinkLabel.Link link, System.Windows.Forms.MouseButtons button) -> void
+System.Windows.Forms.LinkLabelLinkClickedEventArgs.Link.get -> System.Windows.Forms.LinkLabel.Link?
+System.Windows.Forms.LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs(System.Windows.Forms.LinkLabel.Link? link) -> void
+System.Windows.Forms.LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs(System.Windows.Forms.LinkLabel.Link? link, System.Windows.Forms.MouseButtons button) -> void
 ~System.Windows.Forms.ListBox.CustomTabOffsets.get -> System.Windows.Forms.ListBox.IntegerCollection
 ~System.Windows.Forms.ListBox.FindString(string s) -> int
 ~System.Windows.Forms.ListBox.FindString(string s, int startIndex) -> int
