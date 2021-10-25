@@ -46,7 +46,11 @@ namespace System.Windows.Forms.ButtonInternal
 
             if (state == CheckState.Unchecked)
             {
-                ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow);
+                Color borderColor = colors.Options.HighContrast
+                    ? colors.WindowText
+                    : ControlPaint.Darker(colors.ButtonShadow, ButtonBorderDarkerOffset);
+
+                ControlPaint.DrawBorderSimple(e, r, borderColor);
             }
             else
             {

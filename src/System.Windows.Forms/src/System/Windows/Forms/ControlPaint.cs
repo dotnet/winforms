@@ -308,11 +308,14 @@ namespace System.Windows.Forms
             }
         }
 
-        /// <summary>
-        ///  Creates a Win32 HBITMAP out of the image. You are responsible for deleting the HBITMAP. If the image uses
-        ///  transparency, the background will be filled with the specified color.
-        /// </summary>
-        public static IntPtr CreateHBitmapColorMask(Bitmap bitmap, IntPtr monochromeMask)
+    internal static Color Darker(Color color, float offset)
+        => Color.FromArgb(color.A, (int)(color.R* offset), (int) (color.G* offset), (int) (color.B* offset));
+
+    /// <summary>
+    ///  Creates a Win32 HBITMAP out of the image. You are responsible for deleting the HBITMAP. If the image uses
+    ///  transparency, the background will be filled with the specified color.
+    /// </summary>
+    public static IntPtr CreateHBitmapColorMask(Bitmap bitmap, IntPtr monochromeMask)
         {
             Size size = bitmap.Size;
 
