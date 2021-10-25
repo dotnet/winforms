@@ -508,7 +508,7 @@ override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.Label.Text.get -> string
 ~override System.Windows.Forms.Label.Text.set -> void
 ~override System.Windows.Forms.Label.ToString() -> string
-~override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object obj) -> bool
+override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object? obj) -> bool
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
@@ -2255,7 +2255,7 @@ System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Fo
 ~System.Windows.Forms.Label.ImageKey.set -> void
 ~System.Windows.Forms.Label.ImageList.get -> System.Windows.Forms.ImageList
 ~System.Windows.Forms.Label.ImageList.set -> void
-~System.Windows.Forms.Layout.ArrangedElementCollection.CopyTo(System.Array array, int index) -> void
+System.Windows.Forms.Layout.ArrangedElementCollection.CopyTo(System.Array! array, int index) -> void
 ~System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent
 ~System.Windows.Forms.LayoutEventArgs.AffectedControl.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.LayoutEventArgs.AffectedProperty.get -> string
@@ -3597,7 +3597,7 @@ virtual System.Windows.Forms.Design.PropertyTab.HelpKeyword.get -> string?
 ~virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control ctl, string helpString) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control ctl, bool value) -> void
 ~virtual System.Windows.Forms.Label.OnTextAlignChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Layout.ArrangedElementCollection.GetEnumerator() -> System.Collections.IEnumerator
+virtual System.Windows.Forms.Layout.ArrangedElementCollection.GetEnumerator() -> System.Collections.IEnumerator!
 ~virtual System.Windows.Forms.Layout.LayoutEngine.InitLayout(object child, System.Windows.Forms.BoundsSpecified specified) -> void
 ~virtual System.Windows.Forms.Layout.LayoutEngine.Layout(object container, System.Windows.Forms.LayoutEventArgs layoutEventArgs) -> bool
 ~virtual System.Windows.Forms.LayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
