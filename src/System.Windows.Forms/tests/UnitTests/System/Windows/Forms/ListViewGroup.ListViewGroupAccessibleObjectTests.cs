@@ -1124,6 +1124,55 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
+        public static IEnumerable<object[]> ListViewGroupAccessibleObject_IsPatternSupported_TestData()
+        {
+            foreach (View view in Enum.GetValues(typeof(View)))
+            {
+                foreach (bool showGroups in new[] { true, false })
+                {
+                    foreach (bool createHandle in new[] { true, false })
+                    {
+                        foreach (ListViewGroupCollapsedState listViewGroupCollapsedState in Enum.GetValues(typeof(ListViewGroupCollapsedState)))
+                        {
+                            yield return new object[] { view, showGroups, createHandle, listViewGroupCollapsedState };
+                        }
+                    }
+                }
+            }
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(ListViewGroupAccessibleObject_IsPatternSupported_TestData))]
+        public void ListViewGroupAccessibleObject_IsPatternSupported_ReturnFalse_ForCollapsedStateDefault(View view, bool showGroups, bool createHandle, ListViewGroupCollapsedState listViewGroupCollapsedState)
+        {
+            using ListView listView = new()
+            {
+                View = view,
+                ShowGroups = showGroups,
+            };
+
+            ListViewGroup listGroup = new("Test")
+            {
+                CollapsedState = listViewGroupCollapsedState,
+            };
+
+            listView.Groups.Add(listGroup);
+            ListViewItem item = new("Test");
+            item.Group = listGroup;
+            listView.Items.Add(item);
+            ListViewGroupAccessibleObject accessibleObject = new(listGroup, false);
+
+            if (createHandle)
+            {
+                listView.CreateControl();
+            }
+
+            bool expectedPatternSupported = listViewGroupCollapsedState != ListViewGroupCollapsedState.Default;
+
+            Assert.Equal(expectedPatternSupported, accessibleObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
+            Assert.Equal(createHandle, listView.IsHandleCreated);
+        }
+
         private ListView GetListViewItemWithInvisibleItems(View view)
         {
             ListView listView = new ListView() { View = view };
