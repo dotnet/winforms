@@ -6438,7 +6438,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateName">
         <source>{0}, group, collapsed</source>
-        <target state="new">{0}, group, collapsed</target>
+        <target state="translated">{0}, グループ, 折りたたみ済み</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6458,7 +6458,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupExpandedStateName">
         <source>{0}, group, expanded</source>
-        <target state="new">{0}, group, expanded</target>
+        <target state="translated">{0}, グループ, 展開済み</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
