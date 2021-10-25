@@ -19,7 +19,7 @@ namespace System.Windows.Forms
         public DropTarget(IDropTarget owner)
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "DropTarget created");
-            _owner = owner;
+            _owner = owner.OrThrowIfNull();
         }
 
 #if DEBUG
