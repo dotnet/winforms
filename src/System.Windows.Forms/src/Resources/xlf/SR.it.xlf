@@ -6438,7 +6438,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateName">
         <source>{0}, group, collapsed</source>
-        <target state="new">{0}, group, collapsed</target>
+        <target state="translated">{0}, gruppo, compresso</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6458,7 +6458,7 @@ Traccia dello stack da cui si è verificata l'operazione non valida:
       </trans-unit>
       <trans-unit id="ListViewGroupExpandedStateName">
         <source>{0}, group, expanded</source>
-        <target state="new">{0}, group, expanded</target>
+        <target state="translated">{0}, gruppo, espanso</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
