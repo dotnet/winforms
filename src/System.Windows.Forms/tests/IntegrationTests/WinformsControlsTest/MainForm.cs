@@ -148,10 +148,6 @@ namespace WinformsControlsTest
                 new InitInfo("ToggleFormIcon", (obj, e) => ShowIcon = !ShowIcon)
             },
             {
-                MainFormControlsTabOrder.FileDialogButton,
-                new InitInfo("FileDialog", (obj, e) => new FileDialog().Show(this))
-            },
-            {
                 MainFormControlsTabOrder.ErrorProviderButton,
                 new InitInfo("ErrorProvider", (obj, e) => new ErrorProviderTest().Show(this))
             },
