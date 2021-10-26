@@ -18,7 +18,8 @@ namespace System.Windows.Forms.ButtonInternal
         // SystemInformation.Border3DSize + 2 pixels for focus rect
         protected const int ButtonBorderSize = 4;
 
-        internal ButtonBaseAdapter(ButtonBase control) => Control = control;
+        internal ButtonBaseAdapter(ButtonBase control) =>
+            Control = control.OrThrowIfNull();
 
         protected ButtonBase Control { get; }
 
