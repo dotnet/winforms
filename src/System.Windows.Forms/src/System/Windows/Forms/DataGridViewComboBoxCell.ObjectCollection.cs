@@ -112,10 +112,7 @@ namespace System.Windows.Forms
                 //this.owner.CheckNoSharedCell();
                 owner.CheckNoDataSource();
 
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 int index = InnerArray.Add(item);
 
@@ -167,10 +164,7 @@ namespace System.Windows.Forms
             /// </summary>
             internal void AddRangeInternal(ICollection items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 foreach (object item in items)
                 {
@@ -217,7 +211,7 @@ namespace System.Windows.Forms
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    InnerArray[index] = value ?? throw new ArgumentNullException(nameof(value));
+                    InnerArray[index] = value.OrThrowIfNull();
                     owner.OnItemsCollectionChanged();
                 }
             }
@@ -277,10 +271,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(object value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 return InnerArray.IndexOf(value);
             }
@@ -297,10 +288,7 @@ namespace System.Windows.Forms
                 //this.owner.CheckNoSharedCell();
                 owner.CheckNoDataSource();
 
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 if (index < 0 || index > InnerArray.Count)
                 {

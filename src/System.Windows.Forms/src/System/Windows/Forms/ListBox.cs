@@ -2150,10 +2150,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void SetItemsCore(IList value)
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             BeginUpdate();
             Items.ClearInternal();

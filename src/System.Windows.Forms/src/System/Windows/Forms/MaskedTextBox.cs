@@ -124,10 +124,7 @@ namespace System.Windows.Forms
         /// </summary>
         public MaskedTextBox(string mask)
         {
-            if (mask is null)
-            {
-                throw new ArgumentNullException();
-            }
+            ArgumentNullException.ThrowIfNull(mask);
 
             MaskedTextProvider maskedTextProvider = new MaskedTextProvider(mask, CultureInfo.CurrentCulture);
             flagState[IS_NULL_MASK] = false;
@@ -139,10 +136,7 @@ namespace System.Windows.Forms
         /// </summary>
         public MaskedTextBox(MaskedTextProvider maskedTextProvider)
         {
-            if (maskedTextProvider is null)
-            {
-                throw new ArgumentNullException();
-            }
+            ArgumentNullException.ThrowIfNull(maskedTextProvider);
 
             flagState[IS_NULL_MASK] = false;
             Initialize(maskedTextProvider);
@@ -357,10 +351,7 @@ namespace System.Windows.Forms
 
             set
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException();
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (!maskedTextProvider.Culture.Equals(value))
                 {

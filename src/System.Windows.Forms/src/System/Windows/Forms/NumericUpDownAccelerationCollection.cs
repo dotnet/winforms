@@ -24,10 +24,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Add(NumericUpDownAcceleration acceleration)
         {
-            if (acceleration is null)
-            {
-                throw new ArgumentNullException(nameof(acceleration));
-            }
+            ArgumentNullException.ThrowIfNull(acceleration);
 
             // Keep the array sorted, insert in the right spot.
             int index = 0;
@@ -122,18 +119,12 @@ namespace System.Windows.Forms
         /// </summary>
         public void AddRange(params NumericUpDownAcceleration[] accelerations)
         {
-            if (accelerations is null)
-            {
-                throw new ArgumentNullException(nameof(accelerations));
-            }
+            ArgumentNullException.ThrowIfNull(accelerations);
 
             // Accept the range only if ALL elements in the array are not null.
             foreach (NumericUpDownAcceleration acceleration in accelerations)
             {
-                if (acceleration is null)
-                {
-                    throw new ArgumentNullException(SR.NumericUpDownAccelerationCollectionAtLeastOneEntryIsNull);
-                }
+                ArgumentNullException.ThrowIfNull(acceleration);
             }
 
             // The expected array size is typically small (5 items?), so we don't need to try to be smarter about the

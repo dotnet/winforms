@@ -248,10 +248,7 @@ namespace System.Windows.Forms
 
         public int GetColumnSpan(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -266,10 +263,7 @@ namespace System.Windows.Forms
 
         public void SetColumnSpan(object control, int value)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (value < 1)
             {
@@ -296,10 +290,7 @@ namespace System.Windows.Forms
 
         public int GetRowSpan(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -314,10 +305,7 @@ namespace System.Windows.Forms
 
         public void SetRowSpan(object control, int value)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (value < 1)
             {
@@ -350,10 +338,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetRow(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -374,10 +359,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetRow(object control, int row)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (row < -1)
             {
@@ -395,10 +377,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public TableLayoutPanelCellPosition GetCellPosition(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             return new TableLayoutPanelCellPosition(GetColumn(control), GetRow(control));
         }
@@ -411,10 +390,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public void SetCellPosition(object control, TableLayoutPanelCellPosition cellPosition)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             SetCellPosition(control, cellPosition.Row, cellPosition.Column, rowSpecified: true, colSpecified: true);
         }
@@ -427,10 +403,7 @@ namespace System.Windows.Forms
         [DefaultValue(-1)]
         public int GetColumn(object control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (IsStub)
             {
@@ -451,10 +424,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void SetColumn(object control, int column)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             if (column < -1)
             {

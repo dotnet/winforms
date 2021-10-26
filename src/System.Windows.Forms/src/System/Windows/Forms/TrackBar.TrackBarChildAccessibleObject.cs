@@ -13,7 +13,7 @@ namespace System.Windows.Forms
         {
             public TrackBarChildAccessibleObject(TrackBar owningTrackBar)
             {
-                OwningTrackBar = owningTrackBar ?? throw new ArgumentNullException(nameof(owningTrackBar));
+                OwningTrackBar = owningTrackBar.OrThrowIfNull();
             }
 
             public override Rectangle Bounds

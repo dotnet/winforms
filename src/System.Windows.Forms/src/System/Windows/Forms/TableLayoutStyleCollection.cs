@@ -28,10 +28,7 @@ namespace System.Windows.Forms
 
         int IList.Add(object style)
         {
-            if (style is null)
-            {
-                throw new ArgumentNullException(nameof(style));
-            }
+            ArgumentNullException.ThrowIfNull(style);
 
             EnsureNotOwned((TableLayoutStyle)style);
             ((TableLayoutStyle)style).Owner = Owner;
@@ -47,10 +44,7 @@ namespace System.Windows.Forms
 
         void IList.Insert(int index, object style)
         {
-            if (style is null)
-            {
-                throw new ArgumentNullException(nameof(style));
-            }
+            ArgumentNullException.ThrowIfNull(style);
 
             EnsureNotOwned((TableLayoutStyle)style);
             ((TableLayoutStyle)style).Owner = Owner;
@@ -63,10 +57,7 @@ namespace System.Windows.Forms
             get => _innerList[index];
             set
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 TableLayoutStyle style = (TableLayoutStyle)value;
                 EnsureNotOwned(style);

@@ -23,7 +23,7 @@ namespace System.Windows.Forms
 
             public ListViewSubItemCollection(ListViewItem owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
 
                     ListViewSubItem oldSubItem = _owner.subItems[index];
 
-                    _owner.subItems[index] = value ?? throw new ArgumentNullException(nameof(value));
+                    _owner.subItems[index] = value.OrThrowIfNull();
                     value._owner = _owner;
 
                     oldSubItem._owner = null;
@@ -112,10 +112,7 @@ namespace System.Windows.Forms
 
             public ListViewSubItem Add(ListViewSubItem item)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 EnsureSubItemSpace(1, -1);
                 item._owner = _owner;
@@ -140,10 +137,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewSubItem[] items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (ListViewSubItem item in items)
@@ -160,10 +154,7 @@ namespace System.Windows.Forms
 
             public void AddRange(string[] items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (string item in items)
@@ -179,10 +170,7 @@ namespace System.Windows.Forms
 
             public void AddRange(string[] items, Color foreColor, Color backColor, Font font)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 EnsureSubItemSpace(items.Length, -1);
                 foreach (string item in items)
@@ -362,10 +350,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 item._owner = _owner;
 

@@ -33,10 +33,7 @@ namespace System.Windows.Forms
 
         public unsafe DCMapping(Gdi32.HDC hdc, Rectangle bounds)
         {
-            if (hdc.IsNull)
-            {
-                throw new ArgumentNullException(nameof(hdc));
-            }
+            ArgumentNullException.ThrowIfNull(hdc);
 
             bool success;
 

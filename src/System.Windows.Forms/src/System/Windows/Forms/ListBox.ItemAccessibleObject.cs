@@ -23,9 +23,9 @@ namespace System.Windows.Forms
 
             public ListBoxItemAccessibleObject(ListBox owningListBox, ItemArray.Entry itemEntry, ListBoxAccessibleObject owningAccessibleObject)
             {
-                _owningListBox = owningListBox ?? throw new ArgumentNullException(nameof(owningListBox));
-                _itemEntry = itemEntry ?? throw new ArgumentNullException(nameof(itemEntry));
-                _owningAccessibleObject = owningAccessibleObject ?? throw new ArgumentNullException(nameof(owningAccessibleObject));
+                _owningListBox = owningListBox.OrThrowIfNull();
+                _itemEntry = itemEntry.OrThrowIfNull();
+                _owningAccessibleObject = owningAccessibleObject.OrThrowIfNull();
             }
 
             private protected int CurrentIndex

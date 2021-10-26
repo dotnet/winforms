@@ -331,30 +331,21 @@ namespace System.Windows.Forms
 
         public virtual void SetAudio(byte[] audioBytes)
         {
-            if (audioBytes is null)
-            {
-                throw new ArgumentNullException(nameof(audioBytes));
-            }
+            ArgumentNullException.ThrowIfNull(audioBytes);
 
             SetAudio(new MemoryStream(audioBytes));
         }
 
         public virtual void SetAudio(Stream audioStream)
         {
-            if (audioStream is null)
-            {
-                throw new ArgumentNullException(nameof(audioStream));
-            }
+            ArgumentNullException.ThrowIfNull(audioStream);
 
             SetData(DataFormats.WaveAudio, false, audioStream);
         }
 
         public virtual void SetFileDropList(StringCollection filePaths)
         {
-            if (filePaths is null)
-            {
-                throw new ArgumentNullException(nameof(filePaths));
-            }
+            ArgumentNullException.ThrowIfNull(filePaths);
 
             string[] strings = new string[filePaths.Count];
             filePaths.CopyTo(strings, 0);
@@ -363,10 +354,7 @@ namespace System.Windows.Forms
 
         public virtual void SetImage(Image image)
         {
-            if (image is null)
-            {
-                throw new ArgumentNullException(nameof(image));
-            }
+            ArgumentNullException.ThrowIfNull(image);
 
             SetData(DataFormats.Bitmap, true, image);
         }
@@ -378,10 +366,7 @@ namespace System.Windows.Forms
 
         public virtual void SetText(string textData, TextDataFormat format)
         {
-            if (string.IsNullOrEmpty(textData))
-            {
-                throw new ArgumentNullException(nameof(textData));
-            }
+            textData.ThrowIfNullOrEmpty();
 
             //valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(format, nameof(format));

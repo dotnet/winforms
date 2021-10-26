@@ -88,10 +88,7 @@ namespace System.Windows.Forms
 
         public Binding Add(string propertyName, object dataSource, string dataMember, bool formattingEnabled, DataSourceUpdateMode updateMode, object nullValue, string formatString, IFormatProvider formatInfo)
         {
-            if (dataSource is null)
-            {
-                throw new ArgumentNullException(nameof(dataSource));
-            }
+            ArgumentNullException.ThrowIfNull(dataSource);
 
             var binding = new Binding(propertyName, dataSource, dataMember, formattingEnabled, updateMode, nullValue, formatString, formatInfo);
             Add(binding);
@@ -107,10 +104,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void AddCore(Binding dataBinding)
         {
-            if (dataBinding is null)
-            {
-                throw new ArgumentNullException(nameof(dataBinding));
-            }
+            ArgumentNullException.ThrowIfNull(dataBinding);
 
             if (dataBinding.BindableComponent == _control)
             {
@@ -180,10 +174,7 @@ namespace System.Windows.Forms
 
         protected override void RemoveCore(Binding dataBinding)
         {
-            if (dataBinding is null)
-            {
-                throw new ArgumentNullException(nameof(dataBinding));
-            }
+            ArgumentNullException.ThrowIfNull(dataBinding);
 
             if (dataBinding.BindableComponent != _control)
             {

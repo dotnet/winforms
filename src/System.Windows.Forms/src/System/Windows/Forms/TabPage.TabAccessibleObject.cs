@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
             public TabAccessibleObject(TabPage owningTabPage)
             {
-                _owningTabPage = owningTabPage ?? throw new ArgumentNullException(nameof(owningTabPage));
+                _owningTabPage = owningTabPage.OrThrowIfNull();
             }
 
             public override Rectangle Bounds

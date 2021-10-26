@@ -2677,13 +2677,12 @@ namespace System.Windows.Forms
         public bool IsAncestorSiteInDesignMode =>
             GetSitedParentSite(this) is ISite parentSite ? parentSite.DesignMode : false;
 
-        private ISite GetSitedParentSite(Control control) =>
-            control is null
-                ? throw new ArgumentNullException(nameof(control))
-                : (control.Site is not null && control.Site.DesignMode) ||
-                  control.Parent is null
-                    ? control.Site
-                    : GetSitedParentSite(control.Parent);
+        private ISite GetSitedParentSite(Control control)
+        {
+            ArgumentNullException.ThrowIfNull(control);
+            return (control.Site is not null && control.Site.DesignMode) || control.Parent is null ?
+                control.Site : GetSitedParentSite(control.Parent);
+        }
 
         // If the control on which GetContainerControl( ) is called is a ContainerControl, then we don't return the parent
         // but return the same control. This is Everett behavior so we cannot change this since this would be a breaking change.
@@ -5276,10 +5275,7 @@ namespace System.Windows.Forms
 
         public void DrawToBitmap(Bitmap bitmap, Rectangle targetBounds)
         {
-            if (bitmap is null)
-            {
-                throw new ArgumentNullException(nameof(bitmap));
-            }
+            ArgumentNullException.ThrowIfNull(bitmap);
 
             if (targetBounds.Width <= 0 || targetBounds.Height <= 0
                 || targetBounds.X < 0 || targetBounds.Y < 0)
@@ -5331,10 +5327,7 @@ namespace System.Windows.Forms
         public object EndInvoke(IAsyncResult asyncResult)
         {
             using var scope = MultithreadSafeCallScope.Create();
-            if (asyncResult is null)
-            {
-                throw new ArgumentNullException(nameof(asyncResult));
-            }
+            ArgumentNullException.ThrowIfNull(asyncResult);
 
             if (!(asyncResult is ThreadMethodEntry entry))
             {
@@ -7595,10 +7588,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPrint(PaintEventArgs e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             if (GetStyle(ControlStyles.UserPaint))
             {
@@ -8612,8 +8602,7 @@ namespace System.Windows.Forms
 
         internal void PaintBackground(PaintEventArgs e, Rectangle rectangle, Color backColor, Point scrollOffset)
         {
-            if (e is null)
-                throw new ArgumentNullException(nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RenderColorTransparent(backColor))
             {

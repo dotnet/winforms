@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
         /// </summary>
         public Cursor(Type type, string resource)
-            : this((type ?? throw new ArgumentNullException(nameof(type))).Module.Assembly.GetManifestResourceStream(type, resource)!)
+            : this((type.OrThrowIfNull()).Module.Assembly.GetManifestResourceStream(type, resource)!)
         {
         }
 
@@ -80,10 +80,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Cursor(Stream stream)
         {
-            if (stream is null)
-            {
-                throw new ArgumentNullException(nameof(stream));
-            }
+            ArgumentNullException.ThrowIfNull(stream);
 
             int length = checked((int)stream.Length);
             _cursorData = new byte[length];
@@ -246,10 +243,7 @@ namespace System.Windows.Forms
         // This method is way more powerful than what we expose, but I'll leave it in place.
         private void DrawImageCore(Graphics graphics, Rectangle imageRect, Rectangle targetRect, bool stretch)
         {
-            if (graphics is null)
-            {
-                throw new ArgumentNullException(nameof(graphics));
-            }
+            ArgumentNullException.ThrowIfNull(graphics);
 
             // Support GDI+ Translate method
             targetRect.X += (int)graphics.Transform.OffsetX;

@@ -257,20 +257,14 @@ namespace System.Windows.Forms
 
             public void AddRange(ListViewItem[] items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 InnerList.AddRange(items);
             }
 
             public void AddRange(ListViewItemCollection items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 ListViewItem[] itemArray = new ListViewItem[items.Count];
                 items.CopyTo(itemArray, 0);
@@ -321,10 +315,7 @@ namespace System.Windows.Forms
             /// </summary>
             public ListViewItem[] Find(string key, bool searchAllSubItems)
             {
-                if (string.IsNullOrEmpty(key))
-                {
-                    throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
-                }
+                key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
                 List<ListViewItem> foundItems = new();
                 FindInternal(key, searchAllSubItems, this, foundItems);

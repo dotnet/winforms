@@ -110,15 +110,8 @@ namespace System.Windows.Forms
         /// </remarks>
         protected virtual void AddCore(object dataSource, BindingManagerBase listManager)
         {
-            if (dataSource is null)
-            {
-                throw new ArgumentNullException(nameof(dataSource));
-            }
-
-            if (listManager is null)
-            {
-                throw new ArgumentNullException(nameof(listManager));
-            }
+            ArgumentNullException.ThrowIfNull(dataSource);
+            ArgumentNullException.ThrowIfNull(listManager);
 
             _listManagers[GetKey(dataSource, string.Empty)] = new WeakReference(listManager, false);
         }
@@ -192,11 +185,7 @@ namespace System.Windows.Forms
 
             internal HashKey(object dataSource, string dataMember)
             {
-                if (dataSource is null)
-                {
-                    throw new ArgumentNullException(nameof(dataSource));
-                }
-
+                ArgumentNullException.ThrowIfNull(dataSource);
                 if (dataMember is null)
                 {
                     dataMember = string.Empty;
@@ -409,10 +398,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void UpdateBinding(BindingContext newBindingContext, Binding binding)
         {
-            if (binding is null)
-            {
-                throw new ArgumentNullException(nameof(binding));
-            }
+            ArgumentNullException.ThrowIfNull(binding);
 
             BindingManagerBase oldManager = binding.BindingManagerBase;
             if (oldManager is not null)

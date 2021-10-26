@@ -54,10 +54,7 @@ namespace System.Windows.Forms
             {
                 // GDI+ throws OOM if it can't confirm a valid HDC. We'll throw a more meaningful error here
                 // for easier diagnosis.
-                if (scope.HDC.IsNull)
-                {
-                    throw new ArgumentNullException("hdc");
-                }
+                ArgumentValidation.ThrowIfNull(scope.HDC, "hdc");
 
                 Gdi32.OBJ type = Gdi32.GetObjectType(scope.HDC);
                 if (type == Gdi32.OBJ.DC

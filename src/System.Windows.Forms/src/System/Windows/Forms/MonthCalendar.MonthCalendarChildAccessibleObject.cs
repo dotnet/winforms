@@ -17,7 +17,7 @@ namespace System.Windows.Forms
 
             public MonthCalendarChildAccessibleObject(MonthCalendarAccessibleObject calendarAccessibleObject)
             {
-                _monthCalendarAccessibleObject = calendarAccessibleObject ?? throw new ArgumentNullException(nameof(calendarAccessibleObject));
+                _monthCalendarAccessibleObject = calendarAccessibleObject.OrThrowIfNull();
             }
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)

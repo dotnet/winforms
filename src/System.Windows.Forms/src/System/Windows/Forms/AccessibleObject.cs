@@ -1692,8 +1692,8 @@ namespace System.Windows.Forms
 
         internal void UseTextProviders(UiaTextProvider textProvider, UiaTextProvider2 textProvider2)
         {
-            _textProvider = textProvider ?? throw new ArgumentNullException(nameof(textProvider));
-            _textProvider2 = textProvider2 ?? throw new ArgumentNullException(nameof(textProvider2));
+            _textProvider = textProvider.OrThrowIfNull();
+            _textProvider2 = textProvider2.OrThrowIfNull();
         }
 
         /// <summary>

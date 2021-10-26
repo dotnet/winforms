@@ -612,10 +612,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderArrow(ToolStripArrowRenderEventArgs e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -794,10 +791,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemImage(ToolStripItemImageRenderEventArgs e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -840,10 +834,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderItemCheck(ToolStripItemImageRenderEventArgs e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -872,10 +863,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnRenderItemText(ToolStripItemTextRenderEventArgs e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -981,10 +969,7 @@ namespace System.Windows.Forms
 
         protected virtual void OnRenderStatusStripSizingGrip(ToolStripRenderEventArgs e)
         {
-            if (e is null)
-            {
-                throw new ArgumentNullException(nameof(e));
-            }
+            ArgumentNullException.ThrowIfNull(e);
 
             if (RendererOverride is not null)
             {
@@ -1054,10 +1039,7 @@ namespace System.Windows.Forms
 
         private static Image CreateDisabledImage(Image normalImage, ImageAttributes imgAttrib)
         {
-            if (normalImage is null)
-            {
-                throw new ArgumentNullException(nameof(normalImage));
-            }
+            ArgumentNullException.ThrowIfNull(normalImage);
 
             if (imgAttrib is null)
             {

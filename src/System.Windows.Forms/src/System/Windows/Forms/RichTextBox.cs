@@ -1883,10 +1883,7 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe int Find(string str, int start, int end, RichTextBoxFinds options)
         {
-            if (str is null)
-            {
-                throw new ArgumentNullException(nameof(str));
-            }
+            ArgumentNullException.ThrowIfNull(str);
 
             int textLen = TextLength;
             if (start < 0 || start > textLen)
@@ -2040,10 +2037,7 @@ namespace System.Windows.Forms
 
             int textLength = TextLength;
 
-            if (characterSet is null)
-            {
-                throw new ArgumentNullException(nameof(characterSet));
-            }
+            ArgumentNullException.ThrowIfNull(characterSet);
 
             if (start < 0 || start > textLength)
             {
@@ -2414,10 +2408,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void LoadFile(Stream data, RichTextBoxStreamType fileType)
         {
-            if (data is null)
-            {
-                throw new ArgumentNullException(nameof(data));
-            }
+            ArgumentNullException.ThrowIfNull(data);
 
             SourceGenerated.EnumValidator.Validate(fileType, nameof(fileType));
 

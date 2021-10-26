@@ -8,7 +8,7 @@ namespace System.Windows.Forms
     {
         public DataGridViewRowEventArgs(DataGridViewRow dataGridViewRow)
         {
-            Row = dataGridViewRow ?? throw new ArgumentNullException(nameof(dataGridViewRow));
+            Row = dataGridViewRow.OrThrowIfNull();
         }
 
         public DataGridViewRow Row { get; }

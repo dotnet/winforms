@@ -24,7 +24,7 @@ namespace System.Windows.Forms
                 public ListViewSubItemAccessibleObject(ListViewSubItem? owningSubItem, ListViewItem owningItem)
                 {
                     OwningSubItem = owningSubItem;
-                    _owningItem = owningItem ?? throw new ArgumentNullException(nameof(owningItem));
+                    _owningItem = owningItem.OrThrowIfNull();
                     _owningListView = owningItem.ListView ?? owningItem.Group?.ListView ?? throw new InvalidOperationException(nameof(owningItem.ListView));
                 }
 

@@ -29,10 +29,7 @@ namespace System.Windows.Forms
 
         protected override void AddCore(Binding dataBinding)
         {
-            if (dataBinding is null)
-            {
-                throw new ArgumentNullException(nameof(dataBinding));
-            }
+            ArgumentNullException.ThrowIfNull(dataBinding);
 
             if (dataBinding.BindingManagerBase == _bindingManagerBase)
             {
@@ -61,10 +58,7 @@ namespace System.Windows.Forms
 
         protected override void RemoveCore(Binding dataBinding)
         {
-            if (dataBinding is null)
-            {
-                throw new ArgumentNullException(nameof(dataBinding));
-            }
+            ArgumentNullException.ThrowIfNull(dataBinding);
 
             if (dataBinding.BindingManagerBase != _bindingManagerBase)
             {

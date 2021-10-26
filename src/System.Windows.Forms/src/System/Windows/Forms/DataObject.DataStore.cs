@@ -108,10 +108,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
                 if (string.IsNullOrWhiteSpace(format))
                 {
-                    if (format is null)
-                    {
-                        throw new ArgumentNullException(nameof(format));
-                    }
+                    ArgumentNullException.ThrowIfNull(format);
 
                     throw new ArgumentException(SR.DataObjectWhitespaceEmptyFormatNotAllowed, nameof(format));
                 }
@@ -144,10 +141,7 @@ namespace System.Windows.Forms
             public virtual void SetData(Type format, object data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
-                if (format is null)
-                {
-                    throw new ArgumentNullException(nameof(format));
-                }
+                ArgumentNullException.ThrowIfNull(format);
 
                 SetData(format.FullName, data);
             }
@@ -155,10 +149,7 @@ namespace System.Windows.Forms
             public virtual void SetData(object data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + data?.ToString() ?? "(null)");
-                if (data is null)
-                {
-                    throw new ArgumentNullException(nameof(data));
-                }
+                ArgumentNullException.ThrowIfNull(data);
 
                 if (data is ISerializable
                     && !this.data.ContainsKey(DataFormats.Serializable))

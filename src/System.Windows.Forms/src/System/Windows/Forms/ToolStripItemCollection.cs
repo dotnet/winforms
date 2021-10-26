@@ -38,7 +38,7 @@ namespace System.Windows.Forms
 
         public ToolStripItemCollection(ToolStrip owner, ToolStripItem[] value)
         {
-            _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+            _owner = owner.OrThrowIfNull();
             AddRange(value);
         }
 
@@ -117,10 +117,7 @@ namespace System.Windows.Forms
 
         public void AddRange(ToolStripItem[] toolStripItems)
         {
-            if (toolStripItems is null)
-            {
-                throw new ArgumentNullException(nameof(toolStripItems));
-            }
+            ArgumentNullException.ThrowIfNull(toolStripItems);
 
             if (IsReadOnly)
             {
@@ -140,10 +137,7 @@ namespace System.Windows.Forms
 
         public void AddRange(ToolStripItemCollection toolStripItems)
         {
-            if (toolStripItems is null)
-            {
-                throw new ArgumentNullException(nameof(toolStripItems));
-            }
+            ArgumentNullException.ThrowIfNull(toolStripItems);
 
             if (IsReadOnly)
             {
@@ -224,10 +218,7 @@ namespace System.Windows.Forms
 
         private void CheckCanAddOrInsertItem(ToolStripItem value)
         {
-            if (value is null)
-            {
-                throw new ArgumentNullException(nameof(value));
-            }
+            ArgumentNullException.ThrowIfNull(value);
 
             if (IsReadOnly)
             {
@@ -252,10 +243,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItem[] Find(string key, bool searchAllChildren)
         {
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
-            }
+            key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
             List<ToolStripItem> foundItems = new();
             FindInternal(key, searchAllChildren, this, foundItems);

@@ -14,7 +14,7 @@ namespace System.Windows.Forms
 
         public DropSource(ISupportOleDropSource peer)
         {
-            _peer = peer ?? throw new ArgumentNullException(nameof(peer));
+            _peer = peer.OrThrowIfNull();
         }
 
         public HRESULT QueryContinueDrag(BOOL fEscapePressed, User32.MK grfKeyState)

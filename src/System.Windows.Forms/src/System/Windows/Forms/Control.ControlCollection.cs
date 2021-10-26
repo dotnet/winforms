@@ -28,7 +28,7 @@ namespace System.Windows.Forms
 
             public ControlCollection(Control owner)
             {
-                Owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                Owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
@@ -157,10 +157,7 @@ namespace System.Windows.Forms
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
             public virtual void AddRange(Control[] controls)
             {
-                if (controls is null)
-                {
-                    throw new ArgumentNullException(nameof(controls));
-                }
+                ArgumentNullException.ThrowIfNull(controls);
 
                 if (controls.Length > 0)
                 {
@@ -207,10 +204,7 @@ namespace System.Windows.Forms
             /// </summary>
             public Control[] Find(string key, bool searchAllChildren)
             {
-                if (string.IsNullOrEmpty(key))
-                {
-                    throw new ArgumentNullException(nameof(key), SR.FindKeyMayNotBeEmptyOrNull);
-                }
+                key.ThrowIfNullOrEmptyWithMessage(SR.FindKeyMayNotBeEmptyOrNull);
 
                 List<Control> foundControls = new();
                 FindInternal(key, searchAllChildren, this, foundControls);
@@ -484,10 +478,7 @@ namespace System.Windows.Forms
             internal virtual void SetChildIndexInternal(Control child, int newIndex)
             {
                 // Sanity check parameters
-                if (child is null)
-                {
-                    throw new ArgumentNullException(nameof(child));
-                }
+                ArgumentNullException.ThrowIfNull(child);
 
                 int currentIndex = GetChildIndex(child);
 

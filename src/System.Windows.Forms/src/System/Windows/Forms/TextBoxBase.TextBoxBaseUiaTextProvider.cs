@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
             public TextBoxBaseUiaTextProvider(TextBoxBase owner)
             {
-                _owningTextBoxBase = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owningTextBoxBase = owner.OrThrowIfNull();
             }
 
             public override UiaCore.ITextRangeProvider[]? GetSelection()

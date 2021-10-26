@@ -18,7 +18,7 @@ namespace System.Windows.Forms
 
                 public UpDownEditAccessibleObject(UpDownEdit owner, UpDownBase parent) : base(owner)
                 {
-                    _parent = parent ?? throw new ArgumentNullException(nameof(parent));
+                    _parent = parent.OrThrowIfNull();
                     _owningUpDownEdit = owner;
                     _textProvider = new TextBoxBaseUiaTextProvider(owner);
                     UseTextProviders(_textProvider, _textProvider);

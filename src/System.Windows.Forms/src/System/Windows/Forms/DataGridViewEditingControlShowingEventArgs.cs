@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         public DataGridViewCellStyle CellStyle
         {
             get => _cellStyle;
-            set => _cellStyle = value ?? throw new ArgumentNullException(nameof(value));
+            set => _cellStyle = value.OrThrowIfNull();
         }
     }
 }

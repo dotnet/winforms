@@ -46,10 +46,7 @@ namespace System.Windows.Forms
         /// </summary>
         public Timer(IContainer container) : this()
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }

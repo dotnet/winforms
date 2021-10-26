@@ -327,10 +327,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static InputLanguage? FromCulture(CultureInfo culture)
         {
-            if (culture is null)
-            {
-                throw new ArgumentNullException(nameof(culture));
-            }
+            ArgumentNullException.ThrowIfNull(culture);
 
             // KeyboardLayoutId is the LCID for built-in cultures, but it
             // is the CU-preferred keyboard language for custom cultures.

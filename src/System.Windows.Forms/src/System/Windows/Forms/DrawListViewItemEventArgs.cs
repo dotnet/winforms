@@ -21,8 +21,8 @@ namespace System.Windows.Forms
             int itemIndex,
             ListViewItemStates state)
         {
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
-            Item = item ?? throw new ArgumentNullException(nameof(item));
+            Graphics = graphics.OrThrowIfNull();
+            Item = item.OrThrowIfNull();
             Bounds = bounds;
             ItemIndex = itemIndex;
             State = state;

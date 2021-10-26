@@ -3854,10 +3854,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal ColumnHeader InsertColumn(int index, ColumnHeader ch, bool refreshSubItems = true)
         {
-            if (ch is null)
-            {
-                throw new ArgumentNullException(nameof(ch));
-            }
+            ArgumentNullException.ThrowIfNull(ch);
 
             if (ch.OwnerListview is not null)
             {

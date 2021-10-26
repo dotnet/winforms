@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         /// </summary>
         public InputLanguageChangingEventArgs(InputLanguage inputLanguage, bool sysCharSet)
         {
-            InputLanguage = inputLanguage ?? throw new ArgumentNullException(nameof(inputLanguage));
+            InputLanguage = inputLanguage.OrThrowIfNull();
             Culture = inputLanguage.Culture;
             SysCharSet = sysCharSet;
         }

@@ -264,10 +264,7 @@ namespace System.Resources
         /// </summary>
         public virtual void AddAlias(string aliasName, AssemblyName assemblyName)
         {
-            if (assemblyName is null)
-            {
-                throw new ArgumentNullException(nameof(assemblyName));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyName);
 
             if (_cachedAliases is null)
             {

@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
             public ListViewGroupAccessibleObject(ListViewGroup owningGroup, bool owningGroupIsDefault)
             {
-                _owningGroup = owningGroup ?? throw new ArgumentNullException(nameof(owningGroup));
+                _owningGroup = owningGroup.OrThrowIfNull();
 
                 // Using item from group for getting of ListView is a workaround for https://github.com/dotnet/winforms/issues/4019
                 _owningListView = owningGroup.ListView

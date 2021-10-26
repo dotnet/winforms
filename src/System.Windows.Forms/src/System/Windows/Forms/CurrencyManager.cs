@@ -220,10 +220,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (tempList is null)
-                    {
-                        throw new ArgumentNullException(nameof(dataSource));
-                    }
+                    ArgumentNullException.ThrowIfNull(tempList, nameof(dataSource));
 
                     throw new ArgumentException(string.Format(SR.ListManagerSetDataSource, tempList.GetType().FullName), nameof(dataSource));
                 }
@@ -602,10 +599,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal int Find(PropertyDescriptor property, object key, bool keepIndex)
         {
-            if (key is null)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
+            ArgumentNullException.ThrowIfNull(key);
 
             if (property is not null && (list is IBindingList) && ((IBindingList)list).SupportsSearching)
             {

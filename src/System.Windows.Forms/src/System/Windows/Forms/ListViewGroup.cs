@@ -416,10 +416,7 @@ namespace System.Windows.Forms
 
         void ISerializable.GetObjectData(SerializationInfo info, StreamingContext context)
         {
-            if (info is null)
-            {
-                throw new ArgumentNullException(nameof(info));
-            }
+            ArgumentNullException.ThrowIfNull(info);
 
             info.AddValue(nameof(Header), Header);
             info.AddValue(nameof(HeaderAlignment), HeaderAlignment);

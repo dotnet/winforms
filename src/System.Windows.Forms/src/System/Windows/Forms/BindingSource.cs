@@ -107,10 +107,7 @@ namespace System.Windows.Forms
 
         public BindingSource(IContainer container) : this()
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }

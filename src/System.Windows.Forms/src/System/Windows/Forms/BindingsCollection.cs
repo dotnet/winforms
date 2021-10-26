@@ -48,10 +48,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void AddCore(Binding dataBinding)
         {
-            if (dataBinding is null)
-            {
-                throw new ArgumentNullException(nameof(dataBinding));
-            }
+            ArgumentNullException.ThrowIfNull(dataBinding);
 
             List.Add(dataBinding);
         }

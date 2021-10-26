@@ -62,10 +62,7 @@ namespace System.Windows.Forms
             /// </summary>
             object IServiceProvider.GetService(Type service)
             {
-                if (service is null)
-                {
-                    throw new ArgumentNullException(nameof(service));
-                }
+                ArgumentNullException.ThrowIfNull(service);
 
                 // We have to implement our own dictionary service. If we don't,
                 // the properties of the underlying component will end up being

@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     [DesignerSerializer("System.Windows.Forms.Design.TableLayoutControlCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign, "System.ComponentModel.Design.Serialization.CodeDomSerializer, " + AssemblyRef.SystemDesign)]
     public class TableLayoutControlCollection : Control.ControlCollection
     {
-        public TableLayoutControlCollection(TableLayoutPanel container) : base(container ?? throw new ArgumentNullException(nameof(container)))
+        public TableLayoutControlCollection(TableLayoutPanel container) : base(container.OrThrowIfNull())
         {
             Container = container;
         }

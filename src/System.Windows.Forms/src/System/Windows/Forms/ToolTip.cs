@@ -83,7 +83,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolTip(IContainer cont) : this()
         {
-            _ = cont ?? throw new ArgumentNullException(nameof(cont));
+            _ = cont.OrThrowIfNull();
 
             cont.Add(this);
 
@@ -1226,10 +1226,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void SetToolTipInternal(Control control, TipInfo info)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             bool exists = _tools.ContainsKey(control);
             bool empty = info is null || string.IsNullOrEmpty(info.Caption);
@@ -1320,10 +1317,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void ShowTooltip(string text, IWin32Window window, int duration)
         {
-            if (window is null)
-            {
-                throw new ArgumentNullException(nameof(window));
-            }
+            ArgumentNullException.ThrowIfNull(window);
 
             if (window is Control associatedControl)
             {
@@ -1408,10 +1402,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, int duration)
         {
-            if (window is null)
-            {
-                throw new ArgumentNullException(nameof(window));
-            }
+            ArgumentNullException.ThrowIfNull(window);
 
             if (duration < 0)
             {
@@ -1429,10 +1420,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, Point point)
         {
-            if (window is null)
-            {
-                throw new ArgumentNullException(nameof(window));
-            }
+            ArgumentNullException.ThrowIfNull(window);
 
             if (IsWindowActive(window))
             {
@@ -1452,10 +1440,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, Point point, int duration)
         {
-            if (window is null)
-            {
-                throw new ArgumentNullException(nameof(window));
-            }
+            ArgumentNullException.ThrowIfNull(window);
 
             if (duration < 0)
             {
@@ -1480,10 +1465,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, int x, int y)
         {
-            if (window is null)
-            {
-                throw new ArgumentNullException(nameof(window));
-            }
+            ArgumentNullException.ThrowIfNull(window);
 
             if (IsWindowActive(window))
             {
@@ -1501,10 +1483,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Show(string text, IWin32Window window, int x, int y, int duration)
         {
-            if (window is null)
-            {
-                throw new ArgumentNullException(nameof(window));
-            }
+            ArgumentNullException.ThrowIfNull(window);
 
             if (duration < 0)
             {
@@ -1525,10 +1504,7 @@ namespace System.Windows.Forms
 
         internal void ShowKeyboardToolTip(string text, IKeyboardToolTip tool, int duration)
         {
-            if (tool is null)
-            {
-                throw new ArgumentNullException(nameof(tool));
-            }
+            ArgumentNullException.ThrowIfNull(tool);
 
             if (duration < 0)
             {
@@ -1769,10 +1745,7 @@ namespace System.Windows.Forms
         /// </summary>
         public void Hide(IWin32Window win)
         {
-            if (win is null)
-            {
-                throw new ArgumentNullException(nameof(win));
-            }
+            ArgumentNullException.ThrowIfNull(win);
 
             if (_window is null)
             {

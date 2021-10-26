@@ -35,7 +35,7 @@ namespace System.Windows.Forms.Design
                 isActive = false;
                 isDirty = false;
 
-                this.form = form ?? throw new ArgumentNullException(nameof(form));
+                this.form = form.OrThrowIfNull();
 
                 try
                 {

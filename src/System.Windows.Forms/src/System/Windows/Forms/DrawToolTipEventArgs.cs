@@ -27,7 +27,7 @@ namespace System.Windows.Forms
             Color foreColor,
             Font? font)
         {
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Graphics = graphics.OrThrowIfNull();
             AssociatedWindow = associatedWindow;
             AssociatedControl = associatedControl;
             Bounds = bounds;

@@ -25,14 +25,14 @@ namespace System.Windows.Forms
 
             public ControlAccessibleObject(Control ownerControl)
             {
-                Owner = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
+                Owner = ownerControl.OrThrowIfNull();
                 InitHandle(ownerControl);
             }
 
             internal ControlAccessibleObject(Control ownerControl, int accObjId)
             {
                 AccessibleObjectId = accObjId; // ...must set this *before* setting the Handle property
-                Owner = ownerControl ?? throw new ArgumentNullException(nameof(ownerControl));
+                Owner = ownerControl.OrThrowIfNull();
                 InitHandle(ownerControl);
             }
 

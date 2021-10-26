@@ -32,7 +32,7 @@ namespace System.Windows.Forms
 
             public ComboBoxUiaTextProvider(ComboBox owner)
             {
-                _owningComboBox = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owningComboBox = owner.OrThrowIfNull();
                 Debug.Assert(_owningComboBox.IsHandleCreated);
 
                 _owningChildEdit = owner._childEdit;

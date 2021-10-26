@@ -7,7 +7,7 @@ namespace System.Windows.Forms
     public class DataGridViewRowDividerDoubleClickEventArgs : HandledMouseEventArgs
     {
         public DataGridViewRowDividerDoubleClickEventArgs(int rowIndex, HandledMouseEventArgs e)
-            : base((e ?? throw new ArgumentNullException(nameof(e))).Button, e.Clicks, e.X, e.Y, e.Delta, e.Handled)
+            : base((e.OrThrowIfNull()).Button, e.Clicks, e.X, e.Y, e.Delta, e.Handled)
         {
             if (rowIndex < -1)
             {

@@ -133,7 +133,7 @@ namespace System.Windows.Forms
                 // access the controls from the task dialog's callback.
                 DenyIfBound();
 
-                _buttons = value ?? throw new ArgumentNullException(nameof(value));
+                _buttons = value.OrThrowIfNull();
             }
         }
 
@@ -164,7 +164,7 @@ namespace System.Windows.Forms
                 // access the controls from the task dialog's callback.
                 DenyIfBound();
 
-                _radioButtons = value ?? throw new ArgumentNullException(nameof(value));
+                _radioButtons = value.OrThrowIfNull();
             }
         }
 
@@ -575,10 +575,7 @@ namespace System.Windows.Forms
         /// </exception>
         public void Navigate(TaskDialogPage page)
         {
-            if (page is null)
-            {
-                throw new ArgumentNullException(nameof(page));
-            }
+            ArgumentNullException.ThrowIfNull(page);
 
             if (BoundDialog is null)
             {

@@ -322,7 +322,7 @@ namespace System.Windows.Forms
         public static TaskDialogButton ShowDialog(TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
             => ShowDialog(IntPtr.Zero,
-                          page ?? throw new ArgumentNullException(nameof(page)),
+                          page.OrThrowIfNull(),
                           startupLocation);
 
         /// <summary>
@@ -354,8 +354,8 @@ namespace System.Windows.Forms
         /// </exception>
         public static TaskDialogButton ShowDialog(IWin32Window owner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
-            => ShowDialog(owner?.Handle ?? throw new ArgumentNullException(nameof(owner)),
-                          page ?? throw new ArgumentNullException(nameof(page)),
+            => ShowDialog(owner.OrThrowIfNull().Handle,
+                          page.OrThrowIfNull(),
                           startupLocation);
 
         /// <summary>
@@ -389,10 +389,7 @@ namespace System.Windows.Forms
         public static unsafe TaskDialogButton ShowDialog(IntPtr hwndOwner, TaskDialogPage page,
                                                   TaskDialogStartupLocation startupLocation = TaskDialogStartupLocation.CenterOwner)
         {
-            if (page is null)
-            {
-                throw new ArgumentNullException(nameof(page));
-            }
+            ArgumentNullException.ThrowIfNull(page);
 
             TaskDialog dialog = new TaskDialog();
             return dialog.ShowDialogInternal(hwndOwner, page, startupLocation);

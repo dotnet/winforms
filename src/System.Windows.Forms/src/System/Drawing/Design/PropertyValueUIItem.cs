@@ -4,6 +4,8 @@
 
 #nullable disable
 
+using System.Windows.Forms;
+
 namespace System.Drawing.Design
 {
     /// <summary>
@@ -17,8 +19,8 @@ namespace System.Drawing.Design
         /// <param name="tooltip">The ToolTip to display for this item.</param>
         public PropertyValueUIItem(Image uiItemImage, PropertyValueUIItemInvokeHandler handler, string tooltip)
         {
-            Image = uiItemImage ?? throw new ArgumentNullException(nameof(uiItemImage));
-            InvokeHandler = handler ?? throw new ArgumentNullException(nameof(handler));
+            Image = uiItemImage.OrThrowIfNull();
+            InvokeHandler = handler.OrThrowIfNull();
             ToolTip = tooltip;
         }
 

@@ -76,10 +76,7 @@ namespace System.Windows.Forms
         public Stream OpenFile()
         {
             string filename = FileNames[0];
-            if (string.IsNullOrEmpty(filename))
-            {
-                throw new ArgumentNullException(nameof(FileName));
-            }
+            ArgumentNullException.ThrowIfNull(filename);
 
             return new FileStream(filename, FileMode.Open, FileAccess.Read, FileShare.Read);
         }

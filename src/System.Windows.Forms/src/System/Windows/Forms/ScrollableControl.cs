@@ -688,8 +688,7 @@ namespace System.Windows.Forms
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            if (e is null)
-                throw new ArgumentNullException(nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             if ((HScroll || VScroll) &&
                 BackgroundImage is not null &&

@@ -23,14 +23,14 @@ namespace System.Windows.Forms
             bool isFirstDisplayedRow,
             bool isLastVisibleRow)
         {
-            _dataGridView = dataGridView ?? throw new ArgumentNullException(nameof(dataGridView));
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            _dataGridView = dataGridView.OrThrowIfNull();
+            Graphics = graphics.OrThrowIfNull();
             ClipBounds = clipBounds;
             RowBounds = rowBounds;
             RowIndex = rowIndex;
             State = rowState;
             ErrorText = errorText;
-            InheritedRowStyle = inheritedRowStyle ?? throw new ArgumentNullException(nameof(inheritedRowStyle));
+            InheritedRowStyle = inheritedRowStyle.OrThrowIfNull();
             IsFirstDisplayedRow = isFirstDisplayedRow;
             IsLastVisibleRow = isLastVisibleRow;
         }

@@ -24,7 +24,7 @@ namespace System.Windows.Forms
 
             public ObjectCollection(ListBox owner)
             {
-                _owner = owner ?? throw new ArgumentNullException(nameof(owner));
+                _owner = owner.OrThrowIfNull();
             }
 
             /// <summary>
@@ -33,10 +33,7 @@ namespace System.Windows.Forms
             public ObjectCollection(ListBox owner, ObjectCollection value)
                 : this(owner)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 AddRange(value);
             }
@@ -47,10 +44,7 @@ namespace System.Windows.Forms
             public ObjectCollection(ListBox owner, object[] value)
                 : this(owner)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 AddRange(value);
             }
@@ -103,10 +97,7 @@ namespace System.Windows.Forms
 
             private int AddInternal(object item)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 int index = -1;
                 if (!_owner.sorted)
@@ -179,10 +170,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ObjectCollection value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 _owner.CheckNoDataSource();
                 AddRangeInternal(value);
@@ -190,10 +178,7 @@ namespace System.Windows.Forms
 
             public void AddRange(object[] items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 _owner.CheckNoDataSource();
                 AddRangeInternal(items);
@@ -295,10 +280,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                if (destination is null)
-                {
-                    throw new ArgumentNullException(nameof(destination));
-                }
+                ArgumentNullException.ThrowIfNull(destination);
 
                 int count = InnerArray.Count;
                 for (int i = 0; i < count; i++)
@@ -309,10 +291,7 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                if (destination is null)
-                {
-                    throw new ArgumentNullException(nameof(destination));
-                }
+                ArgumentNullException.ThrowIfNull(destination);
 
                 int count = InnerArray.Count;
                 for (int i = 0; i < count; i++)
@@ -328,10 +307,7 @@ namespace System.Windows.Forms
 
             public int IndexOf(object value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 return InnerArray.IndexOf(value);
             }
@@ -340,10 +316,7 @@ namespace System.Windows.Forms
 
             internal int IndexOfIdentifier(object value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 return InnerArray.IndexOf(value);
             }
@@ -366,10 +339,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 // If the List box is sorted, then nust treat this like an add
                 // because we are going to twiddle the index anyway.
@@ -451,10 +421,7 @@ namespace System.Windows.Forms
 
             internal void SetItemInternal(int index, object value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 if (index < 0 || index >= InnerArray.Count)
                 {

@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     {
         public DataGridViewCellStateChangedEventArgs(DataGridViewCell dataGridViewCell, DataGridViewElementStates stateChanged)
         {
-            Cell = dataGridViewCell ?? throw new ArgumentNullException(nameof(dataGridViewCell));
+            Cell = dataGridViewCell.OrThrowIfNull();
             StateChanged = stateChanged;
         }
 

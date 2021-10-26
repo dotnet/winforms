@@ -122,10 +122,7 @@ namespace System.Windows.Forms
 
             private int AddInternal(object item)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 int index = -1;
                 if (!_owner._sorted)
@@ -200,10 +197,7 @@ namespace System.Windows.Forms
 
             internal void AddRangeInternal(IList items)
             {
-                if (items is null)
-                {
-                    throw new ArgumentNullException(nameof(items));
-                }
+                ArgumentNullException.ThrowIfNull(items);
 
                 foreach (object item in items)
                 {
@@ -279,10 +273,7 @@ namespace System.Windows.Forms
             /// </summary>
             public void CopyTo(object[] destination, int arrayIndex)
             {
-                if (destination is null)
-                {
-                    throw new ArgumentNullException(nameof(destination));
-                }
+                ArgumentNullException.ThrowIfNull(destination);
 
                 int count = InnerList.Count;
 
@@ -299,10 +290,7 @@ namespace System.Windows.Forms
 
             void ICollection.CopyTo(Array destination, int index)
             {
-                if (destination is null)
-                {
-                    throw new ArgumentNullException(nameof(destination));
-                }
+                ArgumentNullException.ThrowIfNull(destination);
 
                 int count = InnerList.Count;
 
@@ -335,10 +323,7 @@ namespace System.Windows.Forms
             {
                 _owner.CheckNoDataSource();
 
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
 
                 if (index < 0 || index > Count)
                 {
@@ -435,7 +420,7 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                InnerList[index].Item = value ?? throw new ArgumentNullException(nameof(value));
+                InnerList[index].Item = value.OrThrowIfNull();
 
                 // If the native control has been created, and the display text of the new list item object
                 // is different to the current text in the native list item, recreate the native list item...

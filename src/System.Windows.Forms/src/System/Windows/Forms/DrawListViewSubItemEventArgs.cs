@@ -24,18 +24,15 @@ namespace System.Windows.Forms
             ColumnHeader? header,
             ListViewItemStates itemState)
         {
-            Graphics = graphics ?? throw new ArgumentNullException(nameof(graphics));
+            Graphics = graphics.OrThrowIfNull();
 
             if (itemIndex == -1)
             {
-                if (item is null)
-                {
-                    throw new ArgumentNullException(nameof(item));
-                }
+                ArgumentNullException.ThrowIfNull(item);
             }
-            else if (subItem is null)
+            else
             {
-                throw new ArgumentNullException(nameof(subItem));
+                ArgumentNullException.ThrowIfNull(subItem);
             }
 
             Bounds = bounds;

@@ -671,10 +671,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void LoadSettings(Form targetForm)
         {
-            if (targetForm is null)
-            {
-                throw new ArgumentNullException(nameof(targetForm));
-            }
+            ArgumentNullException.ThrowIfNull(targetForm);
 
             LoadSettings(targetForm, targetForm.GetType().FullName);
         }
@@ -684,15 +681,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static void LoadSettings(Form targetForm, string key)
         {
-            if (targetForm is null)
-            {
-                throw new ArgumentNullException(nameof(targetForm));
-            }
-
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
+            ArgumentNullException.ThrowIfNull(targetForm);
+            key.ThrowIfNullOrEmpty();
 
             ToolStripSettingsManager settingsManager = new ToolStripSettingsManager(targetForm, key);
 
@@ -704,10 +694,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void SaveSettings(Form sourceForm)
         {
-            if (sourceForm is null)
-            {
-                throw new ArgumentNullException(nameof(sourceForm));
-            }
+            ArgumentNullException.ThrowIfNull(sourceForm);
 
             SaveSettings(sourceForm, sourceForm.GetType().FullName);
         }
@@ -717,15 +704,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static void SaveSettings(Form sourceForm, string key)
         {
-            if (sourceForm is null)
-            {
-                throw new ArgumentNullException(nameof(sourceForm));
-            }
-
-            if (string.IsNullOrEmpty(key))
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
+            ArgumentNullException.ThrowIfNull(sourceForm);
+            ArgumentNullException.ThrowIfNull(key);
 
             var settingsManager = new ToolStripSettingsManager(sourceForm, key);
             settingsManager.Save();
@@ -1208,15 +1188,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool Merge(ToolStrip sourceToolStrip, ToolStrip targetToolStrip)
         {
-            if (sourceToolStrip is null)
-            {
-                throw new ArgumentNullException(nameof(sourceToolStrip));
-            }
-
-            if (targetToolStrip is null)
-            {
-                throw new ArgumentNullException(nameof(targetToolStrip));
-            }
+            ArgumentNullException.ThrowIfNull(sourceToolStrip);
+            ArgumentNullException.ThrowIfNull(targetToolStrip);
 
             if (targetToolStrip == sourceToolStrip)
             {
@@ -1390,15 +1363,8 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool Merge(ToolStrip sourceToolStrip, string targetName)
         {
-            if (sourceToolStrip is null)
-            {
-                throw new ArgumentNullException(nameof(sourceToolStrip));
-            }
-
-            if (targetName is null)
-            {
-                throw new ArgumentNullException(nameof(targetName));
-            }
+            ArgumentNullException.ThrowIfNull(sourceToolStrip);
+            ArgumentNullException.ThrowIfNull(targetName);
 
             ToolStrip target = FindToolStrip(targetName);
             if (target is null)
@@ -1417,10 +1383,7 @@ namespace System.Windows.Forms
         internal static bool RevertMergeInternal(ToolStrip targetToolStrip, ToolStrip sourceToolStrip, bool revertMDIControls)
         {
             bool result = false;
-            if (targetToolStrip is null)
-            {
-                throw new ArgumentNullException(nameof(targetToolStrip));
-            }
+            ArgumentNullException.ThrowIfNull(targetToolStrip);
 
             if (targetToolStrip == sourceToolStrip)
             {
@@ -1525,10 +1488,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool RevertMerge(ToolStrip targetToolStrip, ToolStrip sourceToolStrip)
         {
-            if (sourceToolStrip is null)
-            {
-                throw new ArgumentNullException(nameof(sourceToolStrip));
-            }
+            ArgumentNullException.ThrowIfNull(sourceToolStrip);
 
             return RevertMergeInternal(targetToolStrip, sourceToolStrip, revertMDIControls: false);
         }

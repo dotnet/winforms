@@ -26,7 +26,7 @@ namespace System.Windows.Forms
 
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem)
             {
-                _ownerItem = ownerItem ?? throw new ArgumentNullException(nameof(ownerItem));
+                _ownerItem = ownerItem.OrThrowIfNull();
             }
 
             public override string DefaultAction

@@ -74,10 +74,7 @@ namespace System.Windows.Forms
 
         public ErrorProvider(ContainerControl parentControl) : this()
         {
-            if (parentControl is null)
-            {
-                throw new ArgumentNullException(nameof(parentControl));
-            }
+            ArgumentNullException.ThrowIfNull(parentControl);
 
             _parentControl = parentControl;
             _propChangedEvent = new EventHandler(ParentControl_BindingContextChanged);
@@ -86,10 +83,7 @@ namespace System.Windows.Forms
 
         public ErrorProvider(IContainer container) : this()
         {
-            if (container is null)
-            {
-                throw new ArgumentNullException(nameof(container));
-            }
+            ArgumentNullException.ThrowIfNull(container);
 
             container.Add(this);
         }
@@ -573,7 +567,7 @@ namespace System.Windows.Forms
             }
             set
             {
-                _icon = value ?? throw new ArgumentNullException(nameof(value));
+                _icon = value.OrThrowIfNull();
                 DisposeRegion();
                 ErrorWindow[] array = new ErrorWindow[_windows.Values.Count];
                 _windows.Values.CopyTo(array, 0);
@@ -710,10 +704,7 @@ namespace System.Windows.Forms
         /// </summary>
         private ControlItem EnsureControlItem(Control control)
         {
-            if (control is null)
-            {
-                throw new ArgumentNullException(nameof(control));
-            }
+            ArgumentNullException.ThrowIfNull(control);
 
             ControlItem item = (ControlItem)_items[control];
             if (item is null)

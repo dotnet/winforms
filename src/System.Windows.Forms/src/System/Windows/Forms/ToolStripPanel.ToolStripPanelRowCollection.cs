@@ -44,10 +44,7 @@ namespace System.Windows.Forms
 
             public int Add(ToolStripPanelRow value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 int retVal = InnerList.Add(value);
                 OnAdd(value, retVal);
@@ -56,10 +53,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ToolStripPanelRow[] value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 ToolStripPanel currentOwner = _owner;
                 if (currentOwner is not null)
@@ -85,10 +79,7 @@ namespace System.Windows.Forms
 
             public void AddRange(ToolStripPanelRowCollection value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 ToolStripPanel currentOwner = _owner;
                 if (currentOwner is not null)
@@ -164,10 +155,7 @@ namespace System.Windows.Forms
 
             public void Insert(int index, ToolStripPanelRow value)
             {
-                if (value is null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 InnerList.Insert(index, value);
                 OnAdd(value, index);

@@ -19,8 +19,8 @@ namespace System.Windows.Forms
 
                 public LinkAccessibleObject(Link link, LinkLabel owner) : base()
                 {
-                    _owningLink = link ?? throw new ArgumentNullException(nameof(link));
-                    _owningLinkLabel = owner ?? throw new ArgumentNullException(nameof(owner));
+                    _owningLink = link.OrThrowIfNull();
+                    _owningLinkLabel = owner.OrThrowIfNull();
                     _linkLabelAccessibleObject = (LinkLabelAccessibleObject)_owningLinkLabel.AccessibilityObject;
                 }
 
