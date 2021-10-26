@@ -69,28 +69,15 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override int[]? RuntimeId
-            {
-                get
+            // We need to provide a unique ID. Others are implementing this in the same manner. First item is static - 0x2a (RuntimeIDFirstItem).
+            // Second item can be anything, but it's good to supply HWND.
+            internal override int[] RuntimeId
+                => new int[]
                 {
-                    if (_owningComboBox is not null)
-                    {
-                        // we need to provide a unique ID
-                        // others are implementing this in the same manner
-                        // first item is static - 0x2a (RuntimeIDFirstItem)
-                        // second item can be anything, but here it is a hash
-
-                        var runtimeId = new int[3];
-                        runtimeId[0] = RuntimeIDFirstItem;
-                        runtimeId[1] = (int)(long)_owningComboBox.InternalHandle;
-                        runtimeId[2] = _owningComboBox.GetHashCode();
-
-                        return runtimeId;
-                    }
-
-                    return base.RuntimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(_owningComboBox.InternalHandle),
+                    _owningComboBox.GetHashCode()
+                };
 
             internal override void Expand()
             {
@@ -182,6 +169,25 @@ namespace System.Windows.Forms
                 get
                 {
                     return this;
+                }
+            }
+
+            public override string DefaultAction
+            {
+                get
+                {
+                    string defaultAction = _owningComboBox.AccessibleDefaultActionDescription;
+                    if (defaultAction is not null)
+                    {
+                        return defaultAction;
+                    }
+
+                    if (!_owningComboBox.IsHandleCreated || _owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
+                    {
+                        return string.Empty;
+                    }
+
+                    return _owningComboBox.DroppedDown ? SR.AccessibleActionCollapse : SR.AccessibleActionExpand;
                 }
             }
 
@@ -289,6 +295,16 @@ namespace System.Windows.Forms
                 _owningComboBox.DropDownStyle == ComboBoxStyle.Simple
                     ? _owningComboBox.ChildEditAccessibleObject
                     : DropDownButtonUiaProvider;
+
+            public override void DoDefaultAction()
+            {
+                if (!_owningComboBox.IsHandleCreated || _owningComboBox.DropDownStyle == ComboBoxStyle.Simple)
+                {
+                    return;
+                }
+
+                _owningComboBox.DroppedDown = !_owningComboBox.DroppedDown;
+            }
         }
     }
 }

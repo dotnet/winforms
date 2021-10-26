@@ -34,9 +34,9 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override CodeMemberMethod GetInitializeMethod(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl, object value)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(typeDecl, nameof(typeDecl));
-            ArgumentNullException.ThrowIfNull(value, nameof(value));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(typeDecl);
+            ArgumentNullException.ThrowIfNull(value);
 
             if (!(typeDecl.UserData[_initMethodKey] is CodeMemberMethod method))
             {
@@ -63,8 +63,8 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         protected override CodeMemberMethod[] GetInitializeMethods(IDesignerSerializationManager manager, CodeTypeDeclaration typeDecl)
         {
-            ArgumentNullException.ThrowIfNull(manager, nameof(manager));
-            ArgumentNullException.ThrowIfNull(typeDecl, nameof(typeDecl));
+            ArgumentNullException.ThrowIfNull(manager);
+            ArgumentNullException.ThrowIfNull(typeDecl);
 
             foreach (CodeTypeMember member in typeDecl.Members)
             {

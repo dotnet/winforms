@@ -709,10 +709,9 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ToolStripContentPanelRenderEventArgs_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new ToolStripContentPanelRenderEventArgs(null, null) };
 
-            using var image = new Bitmap(10, 10);
-            using Graphics graphics = Graphics.FromImage(image);
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
             yield return new object[] { new ToolStripContentPanelRenderEventArgs(graphics, null) };
             yield return new object[] { new ToolStripContentPanelRenderEventArgs(graphics, new ToolStripContentPanel()) };
         }

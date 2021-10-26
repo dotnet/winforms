@@ -1639,7 +1639,7 @@ namespace System.Windows.Forms
             {
                 darkColor = darkDistance < ContrastThreshold
                     ? ControlPaint.Dark(baseline)
-                    : SystemColors.ControlDark;
+                    : SystemColors.WindowFrame;
 
                 lightColor = lightDistance < ContrastThreshold
                     ? ControlPaint.Light(baseline)

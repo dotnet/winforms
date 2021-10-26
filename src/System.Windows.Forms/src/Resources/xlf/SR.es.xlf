@@ -217,6 +217,11 @@
         <target state="translated">El elemento de interfaz de usuario correspondiente no es una región activa.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} no admite {1} propiedad. Debe reemplazarse en la clase derivada.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Los controles creados en un subproceso no pueden tener controles primarios en un control en un subproceso diferente.</target>
@@ -6431,6 +6436,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
         <target state="translated">Evento que se desencadena cuando cambia la propiedad CollapsedState de un elemento ListViewGroup.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, grupo, contraído</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">El parámetro debe ser de tipo ListViewGroup.</target>
@@ -6444,6 +6454,11 @@ El seguimiento de la pila donde tuvo lugar la operación no válida fue:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, grupo, expandido</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

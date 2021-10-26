@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public object GetHandler(Type handlerType)
         {
-            ArgumentNullException.ThrowIfNull(handlerType, nameof(handlerType));
+            ArgumentNullException.ThrowIfNull(handlerType);
 
             if (_lastHandlerType is null)
             {
@@ -73,7 +73,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void PopHandler(object handler)
         {
-            ArgumentNullException.ThrowIfNull(handler, nameof(handler));
+            ArgumentNullException.ThrowIfNull(handler);
 
             var node = _handlers.Find(handler);
             if (node != null)
@@ -90,7 +90,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         public void PushHandler(object handler)
         {
-            ArgumentNullException.ThrowIfNull(handler, nameof(handler));
+            ArgumentNullException.ThrowIfNull(handler);
 
             _handlers.AddFirst(handler);
             _lastHandlerType = handler.GetType();

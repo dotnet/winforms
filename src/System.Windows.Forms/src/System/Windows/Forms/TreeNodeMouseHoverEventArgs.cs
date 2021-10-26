@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -11,11 +9,11 @@ namespace System.Windows.Forms
     /// </summary>
     public class TreeNodeMouseHoverEventArgs : EventArgs
     {
-        public TreeNodeMouseHoverEventArgs(TreeNode node)
+        public TreeNodeMouseHoverEventArgs(TreeNode? node)
         {
             Node = node;
         }
 
-        public TreeNode Node { get; }
+        public TreeNode? Node { get; }
     }
 }

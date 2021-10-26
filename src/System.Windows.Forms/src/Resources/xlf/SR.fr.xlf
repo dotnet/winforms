@@ -217,6 +217,11 @@
         <target state="translated">L'élément d'interface utilisateur correspondant n'est pas une zone dynamique.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} ne prend pas en charge {1} la propriété. Il doit être remplacé dans la classe dérivée.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Les contrôles créés sur un thread ne peuvent pas être parents d'un contrôle d'un autre thread.</target>
@@ -6431,6 +6436,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
         <target state="translated">Événement déclenché quand la propriété CollapsedState d'un ListViewGroup change.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, groupe, réduit</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Le paramètre doit être de type ListViewGroup.</target>
@@ -6444,6 +6454,11 @@ Cette opération non conforme s'est produite sur la trace de la pile :
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, groupe, développé</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

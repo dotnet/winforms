@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.ComponentModel;
 using System.Drawing;
 using Xunit;
 using static Interop;
@@ -82,6 +83,44 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.Equal(UiaCore.ExpandCollapseState.Expanded, selectedGridEntryAccessibleObject.ExpandCollapseState);
         }
 
+        [WinFormsFact]
+        public void PropertyDescriptorGridEntryAccessibleObject_IsPatternSupported_IfExpandCollapsePatternAndEnumerable_ReturnsTrue()
+        {
+            using PropertyGrid propertyGrid = new();
+            using PropertyGridView propertyGridView = new(serviceProvider: null, propertyGrid);
+
+            TestGridEntry parent = new(propertyGrid, peParent: null, propertyGridView);
+            PropertyDescriptor propertyDescriptor = TypeDescriptor.GetProperties(typeof(TestEntity)).
+                Find(nameof(TestEntity.SizeProperty), ignoreCase: false);
+
+            EnumerablePropertyDescriptorGridEntry gridEntry = new(propertyGrid, parent, propertyDescriptor, hide: false);
+            AccessibleObject accessibleObject = gridEntry.AccessibilityObject;
+
+            Assert.True(gridEntry.Enumerable);
+            Assert.True(accessibleObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
+            Assert.False(propertyGrid.IsHandleCreated);
+            Assert.False(propertyGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void PropertyDescriptorGridEntryAccessibleObject_IsPatternSupported_IfExpandCollapsePatternAndDropDownEditable_ReturnsTrue()
+        {
+            using PropertyGrid propertyGrid = new();
+            using PropertyGridView propertyGridView = new(serviceProvider: null, propertyGrid);
+
+            TestGridEntry parent = new(propertyGrid, peParent: null, propertyGridView);
+            PropertyDescriptor propertyDescriptor = TypeDescriptor.GetProperties(typeof(TestEntity)).
+                Find(nameof(TestEntity.SizeProperty), ignoreCase: false);
+
+            DropDownEditablePropertyDescriptorGridEntry gridEntry = new(propertyGrid, parent, propertyDescriptor, hide: false);
+            AccessibleObject accessibleObject = gridEntry.AccessibilityObject;
+
+            Assert.True(gridEntry.NeedsDropDownButton);
+            Assert.True(accessibleObject.IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId));
+            Assert.False(propertyGrid.IsHandleCreated);
+            Assert.False(propertyGridView.IsHandleCreated);
+        }
+
         private class TestGridEntry : GridEntry
         {
             readonly PropertyGridView _propertyGridView;
@@ -134,6 +173,26 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             {
                 get; set;
             }
+        }
+
+        private class EnumerablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
+        {
+            public EnumerablePropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry parent, PropertyDescriptor propertyDescriptor, bool hide)
+                : base(ownerGrid, parent, propertyDescriptor, hide)
+            {
+            }
+
+            internal override bool Enumerable => true;
+        }
+
+        private class DropDownEditablePropertyDescriptorGridEntry : PropertyDescriptorGridEntry
+        {
+            public DropDownEditablePropertyDescriptorGridEntry(PropertyGrid ownerGrid, GridEntry parent, PropertyDescriptor propertyDescriptor, bool hide)
+                : base(ownerGrid, parent, propertyDescriptor, hide)
+            {
+            }
+
+            public override bool NeedsDropDownButton => true;
         }
     }
 }

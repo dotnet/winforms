@@ -64,7 +64,7 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderSimple? ItemSelectionContainer => OwningTabControl?.AccessibilityObject;
 
-            internal override int[]? RuntimeId
+            internal override int[] RuntimeId
                 => new int[]
                 {
                     RuntimeIDFirstItem,

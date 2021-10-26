@@ -217,6 +217,11 @@
         <target state="translated">Odpowiadający element interfejsu użytkownika nie jest regionem dynamicznym.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} nie obsługuje właściwości {1}. Musi zostać zastąpiona w klasie pochodnej.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Formanty utworzone w jednym wątku nie mogą być nadrzędne w stosunku do formantów w innym wątku.</target>
@@ -6431,6 +6436,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
         <target state="translated">Zdarzenie wywoływane, gdy zostanie zmieniona właściwość CollapsedState elementu ListViewGroup.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, grupa, zwinięta</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Parametr musi być typu ListViewGroup.</target>
@@ -6444,6 +6454,11 @@ Stos śledzenia, w którym wystąpiła zabroniona operacja:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, grupa, rozwinięta</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

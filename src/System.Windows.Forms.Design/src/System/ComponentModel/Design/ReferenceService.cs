@@ -225,7 +225,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         IComponent IReferenceService.GetComponent(object reference)
         {
-            ArgumentNullException.ThrowIfNull(reference, nameof(reference));
+            ArgumentNullException.ThrowIfNull(reference);
 
             EnsureReferences();
             foreach (ReferenceHolder holder in _references)
@@ -244,7 +244,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         string IReferenceService.GetName(object reference)
         {
-            ArgumentNullException.ThrowIfNull(reference, nameof(reference));
+            ArgumentNullException.ThrowIfNull(reference);
 
             EnsureReferences();
             foreach (ReferenceHolder holder in _references)
@@ -263,7 +263,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         object IReferenceService.GetReference(string name)
         {
-            ArgumentNullException.ThrowIfNull(name, nameof(name));
+            ArgumentNullException.ThrowIfNull(name);
 
             EnsureReferences();
             foreach (ReferenceHolder holder in _references)
@@ -298,7 +298,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         object[] IReferenceService.GetReferences(Type baseType)
         {
-            ArgumentNullException.ThrowIfNull(baseType, nameof(baseType));
+            ArgumentNullException.ThrowIfNull(baseType);
 
             EnsureReferences();
             ArrayList results = new ArrayList(_references.Count);

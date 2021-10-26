@@ -217,6 +217,11 @@
         <target state="translated">対応する UI 要素が、ライブ リージョンではありません。</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} は {1} プロパティをサポートしていません。派生クラスでオーバーライドする必要があります。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">あるスレッドで作成されたコントロールに対して、別のスレッドのコントロールを親にすることはできません。</target>
@@ -6431,6 +6436,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ListViewGroup の CollapsedState プロパティが変更するときに発生するイベントです。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, グループ, 折りたたみ済み</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">パラメーターは、型 ListViewGroup でなければなりません。</target>
@@ -6444,6 +6454,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, グループ, 展開済み</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

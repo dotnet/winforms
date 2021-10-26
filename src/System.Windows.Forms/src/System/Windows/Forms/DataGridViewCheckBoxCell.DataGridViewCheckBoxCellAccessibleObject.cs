@@ -136,20 +136,7 @@ namespace System.Windows.Forms
 
             internal override bool IsIAccessibleExSupported() => true;
 
-            internal override int[] RuntimeId
-            {
-                get
-                {
-                    if (runtimeId is null)
-                    {
-                        runtimeId = new int[2];
-                        runtimeId[0] = RuntimeIDFirstItem; // first item is static - 0x2a
-                        runtimeId[1] = GetHashCode();
-                    }
-
-                    return runtimeId;
-                }
-            }
+            internal override int[] RuntimeId => runtimeId ??= new int[] { RuntimeIDFirstItem, GetHashCode() };
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch

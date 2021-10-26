@@ -69,7 +69,7 @@ namespace System.Windows.Forms
         public virtual Scope GetEntry(TKey key)
         {
             // NOTE: Measure carefully when changing logic in this method. Code has been optimized for performance.
-            ArgumentNullException.ThrowIfNull(key, nameof(key));
+            ArgumentNullException.ThrowIfNull(key);
 
             Scope scope;
 

@@ -131,11 +131,11 @@ namespace System.Windows.Forms
 
                 public override AccessibleRole Role => AccessibleRole.Link;
 
-                internal override int[]? RuntimeId
+                internal override int[] RuntimeId
                     => new int[]
                     {
                         RuntimeIDFirstItem,
-                        (int)(long)_owningLinkLabel.InternalHandle,
+                        PARAM.ToInt(_owningLinkLabel.InternalHandle),
                         _owningLink.GetHashCode()
                     };
 

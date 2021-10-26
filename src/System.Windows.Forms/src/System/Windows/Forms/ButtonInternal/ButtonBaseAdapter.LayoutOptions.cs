@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
@@ -31,8 +29,8 @@ namespace System.Windows.Forms.ButtonInternal
             public int PaddingSize { get; set; }
             public bool MaxFocus { get; set; }
             public bool FocusOddEvenFixup { get; set; }
-            public Font Font { get; set; }
-            public string Text { get; set; }
+            public Font Font { get; set; } = null!;
+            public string? Text { get; set; }
             public Size ImageSize { get; set; }
             public int CheckSize { get; set; }
             public int CheckPaddingSize { get; set; }

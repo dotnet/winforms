@@ -292,7 +292,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public DesignSurface CreateDesignSurface(IServiceProvider parentProvider)
         {
-            ArgumentNullException.ThrowIfNull(parentProvider, nameof(parentProvider));
+            ArgumentNullException.ThrowIfNull(parentProvider);
 
             IServiceProvider mergedProvider = new MergedServiceProvider(parentProvider, this);
 
@@ -457,7 +457,7 @@ namespace System.ComponentModel.Design
 
             object IServiceProvider.GetService(Type serviceType)
             {
-                ArgumentNullException.ThrowIfNull(serviceType, nameof(serviceType));
+                ArgumentNullException.ThrowIfNull(serviceType);
 
                 object service = _primaryProvider.GetService(serviceType);
 

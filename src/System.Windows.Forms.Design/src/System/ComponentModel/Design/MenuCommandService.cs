@@ -87,7 +87,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void AddCommand(MenuCommand command)
         {
-            ArgumentNullException.ThrowIfNull(command, nameof(command));
+            ArgumentNullException.ThrowIfNull(command);
 
             // If the command already exists, it is an error to add
             // a duplicate.
@@ -127,7 +127,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void AddVerb(DesignerVerb verb)
         {
-            ArgumentNullException.ThrowIfNull(verb, nameof(verb));
+            ArgumentNullException.ThrowIfNull(verb);
 
             if (_globalVerbs is null)
             {
@@ -429,7 +429,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected object GetService(Type serviceType)
         {
-            ArgumentNullException.ThrowIfNull(serviceType, nameof(serviceType));
+            ArgumentNullException.ThrowIfNull(serviceType);
 
             if (_serviceProvider != null)
             {
@@ -527,7 +527,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void RemoveCommand(MenuCommand command)
         {
-            ArgumentNullException.ThrowIfNull(command, nameof(command));
+            ArgumentNullException.ThrowIfNull(command);
 
             ArrayList commands;
             lock (_commandGroupsLock)
@@ -564,7 +564,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public virtual void RemoveVerb(DesignerVerb verb)
         {
-            ArgumentNullException.ThrowIfNull(verb, nameof(verb));
+            ArgumentNullException.ThrowIfNull(verb);
 
             if (_globalVerbs != null)
             {

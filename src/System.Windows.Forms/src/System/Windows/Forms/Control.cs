@@ -6027,20 +6027,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                ControlCollection children = GetControlCollection(ctl);
-
-                if (children is not null && children.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
-                {
-                    Control found = ctl.GetFirstChildControlInTabOrder(forward: false);
-                    if (found is not null)
-                    {
-                        return found;
-                    }
-                }
-
-                // Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must
-                // start with the same tab index as ctl, because there can be dups.
-                while (ctl != this)
+                if (ctl != this)
                 {
                     int targetIndex = ctl._tabIndex;
                     bool hitCtl = false;
@@ -6058,7 +6045,8 @@ namespace System.Windows.Forms
                     if (siblings is null)
                     {
                         throw new InvalidOperationException(
-                            string.Format(SR.ControlsPropertyNotSetInGetNextControl, nameof(Control.Controls), parent));
+                            string.Format(SR.ControlsPropertyNotSetInGetNextControl,
+                                nameof(Control.Controls), parent));
                     }
 
                     int siblingCount = siblings.Count;
@@ -6066,12 +6054,17 @@ namespace System.Windows.Forms
                     if (siblingCount == 0)
                     {
                         throw new InvalidOperationException(
-                           string.Format(SR.ControlsCollectionShouldNotBeEmptyInGetNextControl, nameof(Control.Controls), parent));
+                            string.Format(SR.ControlsCollectionShouldNotBeEmptyInGetNextControl,
+                                nameof(Control.Controls), parent));
                     }
 
+                    // Cycle through the controls in reverse z-order looking for the next lowest tab index.  We must
+                    // start with the same tab index as ctl, because there can be dups.
                     for (int c = siblingCount - 1; c >= 0; c--)
                     {
                         Control sibling = siblings[c];
+                        // The logic for this is a bit lengthy, so I have broken it into separate
+                        // clauses:
 
                         // We are not interested in ourself.
                         if (sibling != ctl)
@@ -6102,18 +6095,54 @@ namespace System.Windows.Forms
                         }
                     }
 
+                    // If we were unable to find a control we should return the control's parent.  However, if that parent is us, return
+                    // NULL.
                     if (found is not null)
                     {
-                        return found;
+                        ctl = found;
                     }
+                    else
+                    {
+                        if (parent == this)
+                        {
+                            return null;
+                        }
+                        else
+                        {
+                            // If we don't found any siblings, and the control is a ToolStripItem that hosts a control itself,
+                            // then we shouldn't return its parent, because it would be the same ToolStrip we're currently at.
+                            // Instead, we should return the control that is previous to the current ToolStrip
+                            if (ctl.ToolStripControlHost is not null)
+                            {
+                                return GetNextControl(ctl._parent, forward: false);
+                            }
 
-                    ctl = ctl._parent;
+                            return parent;
+                        }
+                    }
+                }
+
+                // We found a control.  Walk into this control to find the proper child control within it to select.
+                ControlCollection children = GetControlCollection(ctl);
+
+                while (children is not null && children.Count > 0 && (ctl == this || !IsFocusManagingContainerControl(ctl)))
+                {
+                    Control found = ctl.GetFirstChildControlInTabOrder(forward: false);
+                    if (found is not null)
+                    {
+                        ctl = found;
+                        children = GetControlCollection(ctl);
+                    }
+                    else
+                    {
+                        break;
+                    }
                 }
             }
 
             return ctl == this ? null : ctl;
 
-            ControlCollection GetControlCollection(Control control)
+            static ControlCollection GetControlCollection(Control control)
                => (ControlCollection)control.Properties.GetObject(s_controlsCollectionProperty);
         }
 

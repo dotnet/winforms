@@ -51,7 +51,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void InitializeDialog(OpenFileDialog openFileDialog)
         {
-            ArgumentNullException.ThrowIfNull(openFileDialog, nameof(openFileDialog));
+            ArgumentNullException.ThrowIfNull(openFileDialog);
 
             openFileDialog.Filter = SR.GenericFileFilter;
             openFileDialog.Title = SR.GenericOpenFile;

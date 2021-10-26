@@ -171,7 +171,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         internal bool AddToContainerPreProcess(IComponent component, string name, IContainer containerToAddTo)
         {
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(component);
 
             // We should never add anything while we're unloading.
             if (_state[s_stateUnloading])
@@ -486,7 +486,7 @@ namespace System.ComponentModel.Design
         protected override object GetService(Type service)
         {
             object serviceInstance = null;
-            ArgumentNullException.ThrowIfNull(service, nameof(service));
+            ArgumentNullException.ThrowIfNull(service);
 
             if (service == typeof(IMultitargetHelperService))
             {
@@ -629,7 +629,7 @@ namespace System.ComponentModel.Design
 
         internal bool RemoveFromContainerPreProcess(IComponent component, IContainer container)
         {
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(component);
 
             ISite site = component.Site;
             if (site is null || site.Container != container)
@@ -1029,7 +1029,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         IComponent IDesignerHost.CreateComponent(Type componentType, string name)
         {
-            ArgumentNullException.ThrowIfNull(componentType, nameof(componentType));
+            ArgumentNullException.ThrowIfNull(componentType);
 
             IComponent component;
             LicenseContext oldContext = LicenseManager.CurrentContext;
@@ -1108,7 +1108,7 @@ namespace System.ComponentModel.Design
         void IDesignerHost.DestroyComponent(IComponent component)
         {
             string name;
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(component);
 
             if (component.Site != null && component.Site.Name != null)
             {
@@ -1154,7 +1154,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         IDesigner IDesignerHost.GetDesigner(IComponent component)
         {
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
+            ArgumentNullException.ThrowIfNull(component);
 
             return _designers[component] as IDesigner;
         }
@@ -1164,7 +1164,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         Type IDesignerHost.GetType(string typeName)
         {
-            ArgumentNullException.ThrowIfNull(typeName, nameof(typeName));
+            ArgumentNullException.ThrowIfNull(typeName);
 
             if (GetService(typeof(ITypeResolutionService)) is ITypeResolutionService ts)
             {
@@ -1740,7 +1740,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             object IServiceProvider.GetService(Type service)
             {
-                ArgumentNullException.ThrowIfNull(service, nameof(service));
+                ArgumentNullException.ThrowIfNull(service);
 
                 // We always resolve IDictionaryService to ourselves.
                 if (service == typeof(IDictionaryService))

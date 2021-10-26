@@ -217,6 +217,11 @@
         <target state="translated">對應的 UI 元素不是即時區域。</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} 不支援 {1} 屬性。必須在衍生類別中加以覆寫。</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">不可以在不同執行緒上建立控制項的父項。</target>
@@ -6431,6 +6436,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">ListViewGroup 的 CollapsedState 屬性變更時引發的事件。</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}，群組，已摺疊</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">參數的類型必須為 ListViewGroup。</target>
@@ -6444,6 +6454,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}，群組，已展開</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

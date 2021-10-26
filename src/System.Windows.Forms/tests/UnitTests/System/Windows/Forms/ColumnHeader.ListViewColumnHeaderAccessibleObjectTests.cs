@@ -4,6 +4,7 @@
 
 using Xunit;
 using static System.Windows.Forms.ColumnHeader;
+using static Interop.UiaCore;
 
 namespace System.Windows.Forms.Tests
 {
@@ -13,6 +14,27 @@ namespace System.Windows.Forms.Tests
         public void ListViewColumnHeaderAccessibleObject_Ctor_OwnerColumnHeaderCannotBeNull()
         {
             Assert.Throws<ArgumentNullException>(() => new ListViewColumnHeaderAccessibleObject(null));
+        }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_GetPropertyValue_ControlType_ReturnsExpected()
+        {
+            using ColumnHeader columnHeader = new();
+
+            ListViewColumnHeaderAccessibleObject accessibleObject = new(columnHeader);
+
+            Assert.Equal(UIA.HeaderItemControlTypeId, accessibleObject.GetPropertyValue(UIA.ControlTypePropertyId));
+        }
+
+        [WinFormsFact]
+        public void ListViewColumnHeaderAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        {
+            string testText = "This is a simple text for testing.";
+            using ColumnHeader columnHeader = new() { Text = testText };
+
+            ListViewColumnHeaderAccessibleObject accessibleObject = new(columnHeader);
+
+            Assert.Equal(testText, accessibleObject.GetPropertyValue(UIA.NamePropertyId));
         }
     }
 }

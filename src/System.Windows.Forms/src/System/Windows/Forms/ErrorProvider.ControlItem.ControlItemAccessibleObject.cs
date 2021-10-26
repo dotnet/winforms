@@ -4,6 +4,7 @@
 
 #nullable disable
 
+using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -159,14 +160,15 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        var runtimeId = new int[4];
+                        Debug.Assert(_window.AccessibilityObject.RuntimeId.Length >= 3);
 
-                        runtimeId[0] = _window.AccessibilityObject.RuntimeId[0];
-                        runtimeId[1] = _window.AccessibilityObject.RuntimeId[1];
-                        runtimeId[2] = _window.AccessibilityObject.RuntimeId[2];
-                        runtimeId[3] = _controlItem.GetHashCode();
-
-                        return runtimeId;
+                        return new int[]
+                        {
+                            _window.AccessibilityObject.RuntimeId[0],
+                            _window.AccessibilityObject.RuntimeId[1],
+                            _window.AccessibilityObject.RuntimeId[2],
+                            _controlItem.GetHashCode()
+                        };
                     }
                 }
 

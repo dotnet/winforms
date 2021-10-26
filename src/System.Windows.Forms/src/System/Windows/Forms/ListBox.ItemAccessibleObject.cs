@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using System.Runtime.InteropServices;
 using Accessibility;
@@ -48,23 +49,21 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the runtime ID.
             /// </summary>
-            internal override int[]? RuntimeId
+            internal override int[] RuntimeId
             {
                 get
                 {
-                    if (_owningAccessibleObject.RuntimeId is null)
+                    int[] parentRuntimeId = _owningAccessibleObject.RuntimeId;
+
+                    Debug.Assert(parentRuntimeId.Length >= 3);
+
+                    return new int[]
                     {
-                        return base.RuntimeId;
-                    }
-
-                    var runtimeId = new int[4];
-
-                    runtimeId[0] = _owningAccessibleObject.RuntimeId[0];
-                    runtimeId[1] = _owningAccessibleObject.RuntimeId[1];
-                    runtimeId[2] = _owningAccessibleObject.RuntimeId[2];
-                    runtimeId[3] = _itemEntry.GetHashCode();
-
-                    return runtimeId;
+                        parentRuntimeId[0],
+                        parentRuntimeId[1],
+                        parentRuntimeId[2],
+                        _itemEntry.GetHashCode()
+                    };
                 }
             }
 

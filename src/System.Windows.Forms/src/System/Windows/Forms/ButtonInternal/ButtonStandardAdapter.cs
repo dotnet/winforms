@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
@@ -61,8 +59,7 @@ namespace System.Windows.Forms.ButtonInternal
         {
             PushButtonState pbState = DetermineState(up);
 
-            // First handle transparent case
-
+            // First handle transparent case.
             if (ButtonRenderer.IsBackgroundPartiallyTransparent(pbState))
             {
                 ButtonRenderer.DrawParentBackground(e, bounds, Control);
@@ -81,7 +78,7 @@ namespace System.Windows.Forms.ButtonInternal
             // Changing this because GetThemeMargins simply does not work in some cases.
             bounds.Inflate(-ButtonBorderSize, -ButtonBorderSize);
 
-            //only paint if the user said not to use the themed backcolor.
+            // Only paint if the user said not to use the themed backcolor.
             if (!Control.UseVisualStyleBackColor)
             {
                 bool isHighContrastHighlighted = up && IsHighContrastHighlighted();
@@ -141,7 +138,7 @@ namespace System.Windows.Forms.ButtonInternal
             }
             else
             {
-                Brush backbrush = null;
+                Brush? backbrush = null;
                 if (state == CheckState.Indeterminate)
                 {
                     backbrush = CreateDitherBrush(colors.Highlight, colors.ButtonFace);

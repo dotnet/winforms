@@ -53,23 +53,13 @@ namespace System.Windows.Forms
 
             internal TrackBarAccessibleObject ParentInternal => (TrackBarAccessibleObject)OwningTrackBar.AccessibilityObject;
 
-            internal override int[]? RuntimeId
-            {
-                get
+            internal override int[] RuntimeId
+                => new int[]
                 {
-                    if (!OwningTrackBar.IsHandleCreated)
-                    {
-                        return base.RuntimeId;
-                    }
-
-                    var runtimeId = new int[3];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = PARAM.ToInt(OwningTrackBar.InternalHandle);
-                    runtimeId[2] = GetChildId();
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(OwningTrackBar.InternalHandle),
+                    GetChildId()
+                };
 
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 => direction switch

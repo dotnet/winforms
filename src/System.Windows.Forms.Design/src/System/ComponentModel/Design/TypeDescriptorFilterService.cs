@@ -40,8 +40,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterAttributes(IComponent component, IDictionary attributes)
         {
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
-            ArgumentNullException.ThrowIfNull(attributes, nameof(attributes));
+            ArgumentNullException.ThrowIfNull(component);
+            ArgumentNullException.ThrowIfNull(attributes);
 
             IDesigner designer = GetDesigner(component);
 
@@ -59,8 +59,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterEvents(IComponent component, IDictionary events)
         {
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
-            ArgumentNullException.ThrowIfNull(events, nameof(events));
+            ArgumentNullException.ThrowIfNull(component);
+            ArgumentNullException.ThrowIfNull(events);
 
             IDesigner designer = GetDesigner(component);
 
@@ -78,8 +78,8 @@ namespace System.ComponentModel.Design
         /// </summary>
         bool ITypeDescriptorFilterService.FilterProperties(IComponent component, IDictionary properties)
         {
-            ArgumentNullException.ThrowIfNull(component, nameof(component));
-            ArgumentNullException.ThrowIfNull(properties, nameof(properties));
+            ArgumentNullException.ThrowIfNull(component);
+            ArgumentNullException.ThrowIfNull(properties);
 
             IDesigner designer = GetDesigner(component);
 

@@ -874,7 +874,7 @@ namespace System.Windows.Forms.Design
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
         {
-            ArgumentNullException.ThrowIfNull(treeView, nameof(treeView));
+            ArgumentNullException.ThrowIfNull(treeView);
 
             treeView.HotTracking = true;
             treeView.ShowLines = false;
@@ -891,7 +891,7 @@ namespace System.Windows.Forms.Design
         /// <param name="listView">The list view control to modify</param>
         public static void ApplyListViewThemeStyles(ListView listView)
         {
-            ArgumentNullException.ThrowIfNull(listView, nameof(listView));
+            ArgumentNullException.ThrowIfNull(listView);
 
             IntPtr hwnd = listView.Handle;
             UxTheme.SetWindowTheme(hwnd, "Explorer", null);

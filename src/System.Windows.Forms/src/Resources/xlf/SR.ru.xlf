@@ -217,6 +217,11 @@
         <target state="translated">Соответствующий элемент пользовательского интерфейса не является динамической областью.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} не поддерживает свойство {1}. Его необходимо переопределить в производном классе.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Элементы управления, созданные в одном потоке, не могут быть родительскими для элемента управления в другом потоке.</target>
@@ -6432,6 +6437,11 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Событие, возникающее при изменении свойства CollapsedState для ListViewGroup.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, группа, свернуто</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Параметр должен иметь тип ListViewGroup.</target>
@@ -6445,6 +6455,11 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, группа, развернуто</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

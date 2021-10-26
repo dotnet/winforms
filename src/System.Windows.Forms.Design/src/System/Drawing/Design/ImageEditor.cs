@@ -54,7 +54,7 @@ namespace System.Drawing.Design
 
         protected static string CreateFilterEntry(ImageEditor e)
         {
-            ArgumentNullException.ThrowIfNull(e, nameof(e));
+            ArgumentNullException.ThrowIfNull(e);
 
             string[] extenders = e.GetExtensions();
             string description = e.GetFileDialogDescription();
@@ -160,7 +160,7 @@ namespace System.Drawing.Design
 
         protected virtual Image LoadFromStream(Stream stream)
         {
-            ArgumentNullException.ThrowIfNull(stream, nameof(stream));
+            ArgumentNullException.ThrowIfNull(stream);
 
             // Copy the original stream to a new memory stream to avoid locking the file.
             // The created image will take over ownership of the stream.

@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using System.Drawing;
 using static Interop;
 
@@ -96,23 +97,22 @@ namespace System.Windows.Forms
                 private ListViewItemBaseAccessibleObject ParentInternal
                     => (ListViewItemBaseAccessibleObject)_owningItem.AccessibilityObject;
 
-                internal override int[]? RuntimeId
+                internal override int[] RuntimeId
                 {
                     get
                     {
                         var owningItemRuntimeId = Parent.RuntimeId;
-                        if (owningItemRuntimeId is null)
-                        {
-                            return base.RuntimeId;
-                        }
 
-                        var runtimeId = new int[5];
-                        runtimeId[0] = owningItemRuntimeId[0];
-                        runtimeId[1] = owningItemRuntimeId[1];
-                        runtimeId[2] = owningItemRuntimeId[2];
-                        runtimeId[3] = owningItemRuntimeId[3];
-                        runtimeId[4] = ParentInternal.GetChildIndex(this);
-                        return runtimeId;
+                        Debug.Assert(owningItemRuntimeId.Length >= 4);
+
+                        return new int[]
+                        {
+                            owningItemRuntimeId[0],
+                            owningItemRuntimeId[1],
+                            owningItemRuntimeId[2],
+                            owningItemRuntimeId[3],
+                            ParentInternal.GetChildIndex(this)
+                        };
                     }
                 }
 

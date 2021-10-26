@@ -1698,6 +1698,26 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  This method is needed as a workaround for the https://github.com/dotnet/winforms/issues/3043.
+        ///  Since the row header and column header dividing lines drawn by the
+        ///  https://docs.microsoft.com/dotnet/api/system.windows.forms.visualstyles.visualstylerenderer.drawbackground
+        ///  method has low contrast, we draw a lines with a suitable contrast on top of it.
+        /// </summary>
+        internal static void EnforceHeaderCellDividerContrast(Graphics graphics, Rectangle bounds)
+        {
+            using Pen pen = new(SystemColors.WindowFrame, 1);
+
+            // -1 when calculating X coordinates is necessary because without this the line will not be drawn.
+            // This is most likely due to the fact that drawing the next cell overlaps the line
+            // we have drawn and it is not displayed.
+            // -1 when calculating Y coordinates, it is necessary that there are no gaps
+            // between the dividing line and the upper line of the border.
+            Point start = new(bounds.X + bounds.Width - 1, bounds.Y - 1);
+            Point end = new(bounds.X + bounds.Width - 1, bounds.Y + bounds.Height);
+            graphics.DrawLine(pen, start, end);
+        }
+
+        /// <summary>
         ///  Draws a locked selection frame around the given rectangle.
         /// </summary>
         public static void DrawLockedFrame(Graphics graphics, Rectangle rectangle, bool primary)

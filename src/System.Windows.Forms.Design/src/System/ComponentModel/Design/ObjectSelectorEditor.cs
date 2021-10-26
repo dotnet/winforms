@@ -61,7 +61,7 @@ namespace System.ComponentModel.Design
         /// <param name="treeView">The tree view control to modify</param>
         public static void ApplyTreeViewThemeStyles(TreeView treeView)
         {
-            ArgumentNullException.ThrowIfNull(treeView, nameof(treeView));
+            ArgumentNullException.ThrowIfNull(treeView);
 
             treeView.HotTracking = true;
             treeView.ShowLines = false;

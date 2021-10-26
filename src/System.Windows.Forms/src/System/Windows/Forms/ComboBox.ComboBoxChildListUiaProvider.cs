@@ -257,17 +257,12 @@ namespace System.Windows.Forms
             ///  Gets the runtime ID.
             /// </summary>
             internal override int[] RuntimeId
-            {
-                get
+                => new int[]
                 {
-                    var runtimeId = new int[3];
-                    runtimeId[0] = RuntimeIDFirstItem;
-                    runtimeId[1] = (int)(long)_owningComboBox.InternalHandle;
-                    runtimeId[2] = _owningComboBox.GetListNativeWindowRuntimeIdPart();
-
-                    return runtimeId;
-                }
-            }
+                    RuntimeIDFirstItem,
+                    PARAM.ToInt(_owningComboBox.InternalHandle),
+                    _owningComboBox.GetListNativeWindowRuntimeIdPart()
+                };
 
             /// <summary>
             ///  Gets the accessible state.

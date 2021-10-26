@@ -217,6 +217,11 @@
         <target state="translated">O elemento de interface do usuário correspondente não é uma região dinâmica.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} não dá suporte à propriedade {1}. Ele deve ser substituído na classe derivada.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Os controles criados em um thread não podem ser controles pai de um controle em um outro thread.</target>
@@ -6431,6 +6436,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
         <target state="translated">Evento gerado quando a propriedade CollapsedState de um ListViewGroup é alterada.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, grupo, recolhido</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">O parâmetro deve ser do tipo ListViewGroup.</target>
@@ -6444,6 +6454,11 @@ Rastreamento de pilha em que a operação ilegal ocorreu:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, grupo, expandido</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

@@ -563,7 +563,7 @@ namespace System.Drawing.Design
             ITypeResolutionService ts = null;
             Type type = null;
 
-            ArgumentNullException.ThrowIfNull(typeName, nameof(typeName));
+            ArgumentNullException.ThrowIfNull(typeName);
 
             if (host != null)
             {
@@ -1034,7 +1034,7 @@ namespace System.Drawing.Design
 
             private string GetPropertyName(object key)
             {
-                ArgumentNullException.ThrowIfNull(key, nameof(key));
+                ArgumentNullException.ThrowIfNull(key);
 
                 if (!(key is string propertyName) || propertyName.Length == 0)
                 {

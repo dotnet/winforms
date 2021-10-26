@@ -217,6 +217,11 @@
         <target state="translated">Karşılık gelen kullanıcı arabirimi öğesi canlı bir bölge değil.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0}, {1} özelliğini desteklemez. Türetilmiş sınıfta geçersiz kılınmalıdır.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Bir iş parçacığında oluşturulan denetimler, farklı bir iş parçacığındaki denetimin üst öğesi yapılamaz.</target>
@@ -6431,6 +6436,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">ListViewGroup öğesinin CollapsedState özelliği değiştiğinde tetiklenen olay.</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, grup, daraltılmış</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Parametre ListViewGroup türünde olmalıdır.</target>
@@ -6444,6 +6454,11 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, grup, genişletilmiş</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">

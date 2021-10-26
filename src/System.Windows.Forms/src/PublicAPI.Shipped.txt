@@ -508,7 +508,7 @@ override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.Label.Text.get -> string
 ~override System.Windows.Forms.Label.Text.set -> void
 ~override System.Windows.Forms.Label.ToString() -> string
-~override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object obj) -> bool
+override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object? obj) -> bool
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.Layout.TableLayoutSettingsTypeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
@@ -1428,10 +1428,10 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~System.Drawing.Design.IPropertyValueUIService.AddPropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
 ~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
 ~System.Drawing.Design.IPropertyValueUIService.RemovePropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
-~System.Drawing.Design.PaintValueEventArgs.Context.get -> System.ComponentModel.ITypeDescriptorContext
-~System.Drawing.Design.PaintValueEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Drawing.Design.PaintValueEventArgs.PaintValueEventArgs(System.ComponentModel.ITypeDescriptorContext context, object value, System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds) -> void
-~System.Drawing.Design.PaintValueEventArgs.Value.get -> object
+System.Drawing.Design.PaintValueEventArgs.Context.get -> System.ComponentModel.ITypeDescriptorContext?
+System.Drawing.Design.PaintValueEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Drawing.Design.PaintValueEventArgs.PaintValueEventArgs(System.ComponentModel.ITypeDescriptorContext? context, object? value, System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds) -> void
+System.Drawing.Design.PaintValueEventArgs.Value.get -> object?
 ~System.Drawing.Design.PropertyValueUIItem.PropertyValueUIItem(System.Drawing.Image uiItemImage, System.Drawing.Design.PropertyValueUIItemInvokeHandler handler, string tooltip) -> void
 ~System.Drawing.Design.UITypeEditor.EditValue(System.IServiceProvider provider, object value) -> object
 ~System.Drawing.Design.UITypeEditor.PaintValue(object value, System.Drawing.Graphics canvas, System.Drawing.Rectangle rectangle) -> void
@@ -1652,9 +1652,9 @@ System.Windows.Forms.ColumnReorderedEventArgs.Header.get -> System.Windows.Forms
 ~System.Windows.Forms.ComboBox.SelectedItem.set -> void
 ~System.Windows.Forms.ComboBox.SelectedText.get -> string
 ~System.Windows.Forms.ComboBox.SelectedText.set -> void
-~System.Windows.Forms.CommonDialog.ShowDialog(System.Windows.Forms.IWin32Window owner) -> System.Windows.Forms.DialogResult
-~System.Windows.Forms.CommonDialog.Tag.get -> object
-~System.Windows.Forms.CommonDialog.Tag.set -> void
+System.Windows.Forms.CommonDialog.ShowDialog(System.Windows.Forms.IWin32Window? owner) -> System.Windows.Forms.DialogResult
+System.Windows.Forms.CommonDialog.Tag.get -> object?
+System.Windows.Forms.CommonDialog.Tag.set -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.ICom2PropertyPageDisplayService.ShowPropertyPage(string title, object component, int dispid, System.Guid pageGuid, System.IntPtr parentHandle) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.LoadState(Microsoft.Win32.RegistryKey key) -> void
 ~System.Windows.Forms.ComponentModel.Com2Interop.IComPropertyBrowser.SaveState(Microsoft.Win32.RegistryKey key) -> void
@@ -1739,8 +1739,8 @@ System.Windows.Forms.ColumnReorderedEventArgs.Header.get -> System.Windows.Forms
 ~System.Windows.Forms.ControlBindingsCollection.ControlBindingsCollection(System.Windows.Forms.IBindableComponent control) -> void
 ~System.Windows.Forms.ControlBindingsCollection.Remove(System.Windows.Forms.Binding binding) -> void
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
-~System.Windows.Forms.ControlEventArgs.Control.get -> System.Windows.Forms.Control
-~System.Windows.Forms.ControlEventArgs.ControlEventArgs(System.Windows.Forms.Control control) -> void
+System.Windows.Forms.ControlEventArgs.Control.get -> System.Windows.Forms.Control?
+System.Windows.Forms.ControlEventArgs.ControlEventArgs(System.Windows.Forms.Control? control) -> void
 ~System.Windows.Forms.CreateParams.Caption.get -> string
 ~System.Windows.Forms.CreateParams.Caption.set -> void
 ~System.Windows.Forms.CreateParams.ClassName.get -> string
@@ -1827,13 +1827,13 @@ System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get 
 ~System.Windows.Forms.DataGridViewCellCollection.this[int index].set -> void
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].get -> System.Windows.Forms.DataGridViewCell
 ~System.Windows.Forms.DataGridViewCellCollection.this[string columnName].set -> void
-~System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
-~System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.set -> void
-~System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.get -> string
-~System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.set -> void
-~System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.set -> void
-~System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormattingEventArgs(int columnIndex, int rowIndex, object value, System.Type desiredType, System.Windows.Forms.DataGridViewCellStyle cellStyle) -> void
+System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip?
+System.Windows.Forms.DataGridViewCellContextMenuStripNeededEventArgs.ContextMenuStrip.set -> void
+System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.get -> string?
+System.Windows.Forms.DataGridViewCellErrorTextNeededEventArgs.ErrorText.set -> void
+System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle?
+System.Windows.Forms.DataGridViewCellFormattingEventArgs.CellStyle.set -> void
+System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormattingEventArgs(int columnIndex, int rowIndex, object? value, System.Type? desiredType, System.Windows.Forms.DataGridViewCellStyle? cellStyle) -> void
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.AdvancedBorderStyle.get -> System.Windows.Forms.DataGridViewAdvancedBorderStyle
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.DataGridViewCellPaintingEventArgs(System.Windows.Forms.DataGridView dataGridView, System.Drawing.Graphics graphics, System.Drawing.Rectangle clipBounds, System.Drawing.Rectangle cellBounds, int rowIndex, int columnIndex, System.Windows.Forms.DataGridViewElementStates cellState, object value, object formattedValue, string errorText, System.Windows.Forms.DataGridViewCellStyle cellStyle, System.Windows.Forms.DataGridViewAdvancedBorderStyle advancedBorderStyle, System.Windows.Forms.DataGridViewPaintParts paintParts) -> void
@@ -1857,8 +1857,8 @@ System.Windows.Forms.DataGridViewAutoSizeColumnsModeEventArgs.PreviousModes.get 
 ~System.Windows.Forms.DataGridViewCellStyle.Tag.get -> object
 ~System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
 ~System.Windows.Forms.DataGridViewCellStyleContentChangedEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.get -> string
-~System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.set -> void
+System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.get -> string?
+System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.set -> void
 ~System.Windows.Forms.DataGridViewCellValidatingEventArgs.FormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
@@ -2244,8 +2244,8 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.ImageList.Tag.get -> object
 ~System.Windows.Forms.ImageList.Tag.set -> void
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.ItemCheckedEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Forms.ListViewItem item) -> void
+System.Windows.Forms.ItemCheckedEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.ItemCheckedEventArgs.ItemCheckedEventArgs(System.Windows.Forms.ListViewItem? item) -> void
 ~System.Windows.Forms.KeysConverter.Compare(object a, object b) -> int
 ~System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
 ~System.Windows.Forms.Label.DrawImage(System.Drawing.Graphics g, System.Drawing.Image image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> void
@@ -2255,7 +2255,7 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.Label.ImageKey.set -> void
 ~System.Windows.Forms.Label.ImageList.get -> System.Windows.Forms.ImageList
 ~System.Windows.Forms.Label.ImageList.set -> void
-~System.Windows.Forms.Layout.ArrangedElementCollection.CopyTo(System.Array array, int index) -> void
+System.Windows.Forms.Layout.ArrangedElementCollection.CopyTo(System.Array! array, int index) -> void
 ~System.Windows.Forms.LayoutEventArgs.AffectedComponent.get -> System.ComponentModel.IComponent
 ~System.Windows.Forms.LayoutEventArgs.AffectedControl.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.LayoutEventArgs.AffectedProperty.get -> string
@@ -2282,18 +2282,18 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.LinkLabel.OverrideCursor.get -> System.Windows.Forms.Cursor
 ~System.Windows.Forms.LinkLabel.OverrideCursor.set -> void
 ~System.Windows.Forms.LinkLabel.PointInLink(int x, int y) -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.LinkLabelLinkClickedEventArgs.Link.get -> System.Windows.Forms.LinkLabel.Link
-~System.Windows.Forms.LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs(System.Windows.Forms.LinkLabel.Link link) -> void
-~System.Windows.Forms.LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs(System.Windows.Forms.LinkLabel.Link link, System.Windows.Forms.MouseButtons button) -> void
+System.Windows.Forms.LinkLabelLinkClickedEventArgs.Link.get -> System.Windows.Forms.LinkLabel.Link?
+System.Windows.Forms.LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs(System.Windows.Forms.LinkLabel.Link? link) -> void
+System.Windows.Forms.LinkLabelLinkClickedEventArgs.LinkLabelLinkClickedEventArgs(System.Windows.Forms.LinkLabel.Link? link, System.Windows.Forms.MouseButtons button) -> void
 ~System.Windows.Forms.ListBox.CustomTabOffsets.get -> System.Windows.Forms.ListBox.IntegerCollection
 ~System.Windows.Forms.ListBox.FindString(string s) -> int
 ~System.Windows.Forms.ListBox.FindString(string s, int startIndex) -> int
 ~System.Windows.Forms.ListBox.FindStringExact(string s) -> int
 ~System.Windows.Forms.ListBox.FindStringExact(string s, int startIndex) -> int
-~System.Windows.Forms.ListBox.IntegerCollection.AddRange(int[] items) -> void
-~System.Windows.Forms.ListBox.IntegerCollection.AddRange(System.Windows.Forms.ListBox.IntegerCollection value) -> void
-~System.Windows.Forms.ListBox.IntegerCollection.CopyTo(System.Array destination, int index) -> void
-~System.Windows.Forms.ListBox.IntegerCollection.IntegerCollection(System.Windows.Forms.ListBox owner) -> void
+System.Windows.Forms.ListBox.IntegerCollection.AddRange(int[]! items) -> void
+System.Windows.Forms.ListBox.IntegerCollection.AddRange(System.Windows.Forms.ListBox.IntegerCollection! value) -> void
+System.Windows.Forms.ListBox.IntegerCollection.CopyTo(System.Array! destination, int index) -> void
+System.Windows.Forms.ListBox.IntegerCollection.IntegerCollection(System.Windows.Forms.ListBox! owner) -> void
 ~System.Windows.Forms.ListBox.Items.get -> System.Windows.Forms.ListBox.ObjectCollection
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.CopyTo(System.Array destination, int index) -> void
 ~System.Windows.Forms.ListBox.SelectedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
@@ -2482,8 +2482,8 @@ System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows
 ~System.Windows.Forms.ListViewItem.ToolTipText.set -> void
 System.Windows.Forms.ListViewItemMouseHoverEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
 System.Windows.Forms.ListViewItemMouseHoverEventArgs.ListViewItemMouseHoverEventArgs(System.Windows.Forms.ListViewItem? item) -> void
-~System.Windows.Forms.ListViewItemSelectionChangedEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.ListViewItemSelectionChangedEventArgs.ListViewItemSelectionChangedEventArgs(System.Windows.Forms.ListViewItem item, int itemIndex, bool isSelected) -> void
+System.Windows.Forms.ListViewItemSelectionChangedEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.ListViewItemSelectionChangedEventArgs.ListViewItemSelectionChangedEventArgs(System.Windows.Forms.ListViewItem? item, int itemIndex, bool isSelected) -> void
 ~System.Windows.Forms.MaskedTextBox.Culture.get -> System.Globalization.CultureInfo
 ~System.Windows.Forms.MaskedTextBox.Culture.set -> void
 ~System.Windows.Forms.MaskedTextBox.FormatProvider.get -> System.IFormatProvider
@@ -2559,9 +2559,9 @@ System.Windows.Forms.NodeLabelEditEventArgs.NodeLabelEditEventArgs(System.Window
 ~System.Windows.Forms.PictureBox.InitialImage.set -> void
 ~System.Windows.Forms.PictureBox.Load(string url) -> void
 ~System.Windows.Forms.PictureBox.LoadAsync(string url) -> void
-~System.Windows.Forms.PopupEventArgs.AssociatedControl.get -> System.Windows.Forms.Control
-~System.Windows.Forms.PopupEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window
-~System.Windows.Forms.PopupEventArgs.PopupEventArgs(System.Windows.Forms.IWin32Window associatedWindow, System.Windows.Forms.Control associatedControl, bool isBalloon, System.Drawing.Size size) -> void
+System.Windows.Forms.PopupEventArgs.AssociatedControl.get -> System.Windows.Forms.Control?
+System.Windows.Forms.PopupEventArgs.AssociatedWindow.get -> System.Windows.Forms.IWin32Window?
+System.Windows.Forms.PopupEventArgs.PopupEventArgs(System.Windows.Forms.IWin32Window? associatedWindow, System.Windows.Forms.Control? associatedControl, bool isBalloon, System.Drawing.Size size) -> void
 ~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController) -> void
 ~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController, string dialogTitle) -> void
 ~System.Windows.Forms.PrintDialog.Document.get -> System.Drawing.Printing.PrintDocument
@@ -2611,8 +2611,8 @@ System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.get
 System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set -> void
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageList.get -> string
 ~System.Windows.Forms.RelatedImageListAttribute.RelatedImageListAttribute(string relatedImageList) -> void
-~System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem
-~System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.set -> void
+System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.get -> System.Windows.Forms.ListViewItem?
+System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.set -> void
 ~System.Windows.Forms.RichTextBox.CanPaste(System.Windows.Forms.DataFormats.Format clipFormat) -> bool
 ~System.Windows.Forms.RichTextBox.DrawToBitmap(System.Drawing.Bitmap bitmap, System.Drawing.Rectangle targetBounds) -> void
 ~System.Windows.Forms.RichTextBox.Find(char[] characterSet) -> int
@@ -2645,9 +2645,9 @@ System.Windows.Forms.PropertyGridInternal.IRootGridEntry.BrowsableAttributes.set
 ~System.Windows.Forms.ScrollableControl.HorizontalScroll.get -> System.Windows.Forms.HScrollProperties
 ~System.Windows.Forms.ScrollableControl.ScrollControlIntoView(System.Windows.Forms.Control activeControl) -> void
 ~System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
-~System.Windows.Forms.SelectedGridItemChangedEventArgs.NewSelection.get -> System.Windows.Forms.GridItem
-~System.Windows.Forms.SelectedGridItemChangedEventArgs.OldSelection.get -> System.Windows.Forms.GridItem
-~System.Windows.Forms.SelectedGridItemChangedEventArgs.SelectedGridItemChangedEventArgs(System.Windows.Forms.GridItem oldSel, System.Windows.Forms.GridItem newSel) -> void
+System.Windows.Forms.SelectedGridItemChangedEventArgs.NewSelection.get -> System.Windows.Forms.GridItem?
+System.Windows.Forms.SelectedGridItemChangedEventArgs.OldSelection.get -> System.Windows.Forms.GridItem?
+System.Windows.Forms.SelectedGridItemChangedEventArgs.SelectedGridItemChangedEventArgs(System.Windows.Forms.GridItem? oldSel, System.Windows.Forms.GridItem? newSel) -> void
 ~System.Windows.Forms.SelectionRange.SelectionRange(System.Windows.Forms.SelectionRange range) -> void
 ~System.Windows.Forms.SplitContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.SplitContainer.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs e) -> void
@@ -2806,9 +2806,9 @@ System.Windows.Forms.ToolStripArrowRenderEventArgs.ToolStripArrowRenderEventArgs
 ~System.Windows.Forms.ToolStripContentPanel.Name.set -> void
 ~System.Windows.Forms.ToolStripContentPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.ToolStripContentPanel.Renderer.set -> void
-~System.Windows.Forms.ToolStripContentPanelRenderEventArgs.Graphics.get -> System.Drawing.Graphics
-~System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanel.get -> System.Windows.Forms.ToolStripContentPanel
-~System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanelRenderEventArgs(System.Drawing.Graphics g, System.Windows.Forms.ToolStripContentPanel contentPanel) -> void
+System.Windows.Forms.ToolStripContentPanelRenderEventArgs.Graphics.get -> System.Drawing.Graphics!
+System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanel.get -> System.Windows.Forms.ToolStripContentPanel?
+System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanelRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripContentPanel? contentPanel) -> void
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
@@ -3044,8 +3044,8 @@ System.Windows.Forms.ToolStripArrowRenderEventArgs.ToolStripArrowRenderEventArgs
 ~System.Windows.Forms.TreeNodeCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.TreeNodeCollection.IndexOf(System.Windows.Forms.TreeNode node) -> int
 ~System.Windows.Forms.TreeNodeCollection.Remove(System.Windows.Forms.TreeNode node) -> void
-~System.Windows.Forms.TreeNodeMouseHoverEventArgs.Node.get -> System.Windows.Forms.TreeNode
-~System.Windows.Forms.TreeNodeMouseHoverEventArgs.TreeNodeMouseHoverEventArgs(System.Windows.Forms.TreeNode node) -> void
+System.Windows.Forms.TreeNodeMouseHoverEventArgs.Node.get -> System.Windows.Forms.TreeNode?
+System.Windows.Forms.TreeNodeMouseHoverEventArgs.TreeNodeMouseHoverEventArgs(System.Windows.Forms.TreeNode? node) -> void
 ~System.Windows.Forms.TreeView.GetItemRenderStyles(System.Windows.Forms.TreeNode node, int state) -> System.Windows.Forms.OwnerDrawPropertyBag
 ~System.Windows.Forms.TreeView.GetNodeAt(int x, int y) -> System.Windows.Forms.TreeNode
 ~System.Windows.Forms.TreeView.GetNodeAt(System.Drawing.Point pt) -> System.Windows.Forms.TreeNode
@@ -3164,7 +3164,7 @@ System.Windows.Forms.WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs
 ~virtual System.Windows.Forms.ComboBox.OnSelectedItemChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnSelectionChangeCommitted(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ComboBox.OnTextUpdate(System.EventArgs e) -> void
-~virtual System.Windows.Forms.CommonDialog.OnHelpRequest(System.EventArgs e) -> void
+virtual System.Windows.Forms.CommonDialog.OnHelpRequest(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ContainerControl.OnAutoValidateChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Control.BackgroundImage.get -> System.Drawing.Image
 ~virtual System.Windows.Forms.Control.BackgroundImage.set -> void
@@ -3597,7 +3597,7 @@ virtual System.Windows.Forms.Design.PropertyTab.HelpKeyword.get -> string?
 ~virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control ctl, string helpString) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control ctl, bool value) -> void
 ~virtual System.Windows.Forms.Label.OnTextAlignChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Layout.ArrangedElementCollection.GetEnumerator() -> System.Collections.IEnumerator
+virtual System.Windows.Forms.Layout.ArrangedElementCollection.GetEnumerator() -> System.Collections.IEnumerator!
 ~virtual System.Windows.Forms.Layout.LayoutEngine.InitLayout(object child, System.Windows.Forms.BoundsSpecified specified) -> void
 ~virtual System.Windows.Forms.Layout.LayoutEngine.Layout(object container, System.Windows.Forms.LayoutEventArgs layoutEventArgs) -> bool
 ~virtual System.Windows.Forms.LayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
@@ -6558,7 +6558,7 @@ System.Windows.Forms.ComboBoxStyle.DropDownList = 2 -> System.Windows.Forms.Comb
 System.Windows.Forms.ComboBoxStyle.Simple = 0 -> System.Windows.Forms.ComboBoxStyle
 System.Windows.Forms.CommonDialog
 System.Windows.Forms.CommonDialog.CommonDialog() -> void
-System.Windows.Forms.CommonDialog.HelpRequest -> System.EventHandler
+System.Windows.Forms.CommonDialog.HelpRequest -> System.EventHandler?
 System.Windows.Forms.CommonDialog.ShowDialog() -> System.Windows.Forms.DialogResult
 System.Windows.Forms.ComponentModel.Com2Interop.Com2Variant
 System.Windows.Forms.ComponentModel.Com2Interop.Com2Variant.Com2Variant() -> void

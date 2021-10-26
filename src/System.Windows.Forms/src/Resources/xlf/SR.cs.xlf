@@ -217,6 +217,11 @@
         <target state="translated">Odpovídající prvek uživatelského rozhraní není aktivní oblast.</target>
         <note />
       </trans-unit>
+      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
+        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
+        <target state="translated">{0} nepodporuje vlastnost {1}. Musí to být přepsáno v odvozené třídě.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Ovládací prvky vytvořené v jednom vlákně nelze nadřadit ovládacím prvkům v jiném vlákně.</target>
@@ -6431,6 +6436,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Událost aktivovaná v případě změny vlastnosti CollapsedState položky ListViewGroup</target>
         <note />
       </trans-unit>
+      <trans-unit id="ListViewGroupCollapsedStateName">
+        <source>{0}, group, collapsed</source>
+        <target state="translated">{0}, skupina, sbaleno</target>
+        <note />
+      </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
         <source>Parameter must be of type ListViewGroup.</source>
         <target state="translated">Parametr musí být typu ListViewGroup.</target>
@@ -6444,6 +6454,11 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="ListViewGroupDefaultHeader">
         <source>ListViewGroup</source>
         <target state="translated">ListViewGroup</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="ListViewGroupExpandedStateName">
+        <source>{0}, group, expanded</source>
+        <target state="translated">{0}, skupina, rozbaleno</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
