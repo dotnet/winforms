@@ -172,5 +172,25 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.Equal(expectedRole, actual);
             Assert.False(propertyGrid.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void GridViewTextBoxAccessibleObject_RuntimeId_ReturnsNull()
+        {
+            using PropertyGrid propertyGrid = new() { SelectedObject = new TestEntityWithTextField() { TextProperty = "Test" } };
+
+            PropertyGridView propertyGridView = propertyGrid.TestAccessor().GridView;
+            int firstPropertyIndex = 1; // Index 0 corresponds to the category grid entry.
+            PropertyDescriptorGridEntry gridEntry = (PropertyDescriptorGridEntry)propertyGridView.AccessibilityGetGridEntries()[firstPropertyIndex];
+
+            // Force the entry edit control Handle creation.
+            // GridViewEditAccessibleObject exists, if its control is already created.
+            // In UI case an entry edit control is created when an PropertyGridView gets focus.
+            Assert.NotEqual(IntPtr.Zero, propertyGridView.TestAccessor().Dynamic.EditTextBox.Handle);
+
+            AccessibleObject editFieldAccessibleObject = (AccessibleObject)gridEntry.AccessibilityObject.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+            propertyGridView.TestAccessor().Dynamic._selectedGridEntry = null;
+
+            Assert.NotNull(editFieldAccessibleObject.RuntimeId);
+        }
     }
 }

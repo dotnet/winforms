@@ -140,28 +140,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
 
                 internal override int[] RuntimeId
-                {
-                    get
+                    => new int[]
                     {
-                        int[]? selectedGridEntryAccessibleRuntimeId =
-                            _owningPropertyGridView.SelectedGridEntry?.AccessibilityObject.RuntimeId;
-
-                        if (selectedGridEntryAccessibleRuntimeId is null)
-                        {
-                            throw new InvalidOperationException();
-                        }
-
-                        int[] runtimeId = new int[selectedGridEntryAccessibleRuntimeId.Length + 1];
-                        for (int i = 0; i < selectedGridEntryAccessibleRuntimeId.Length; i++)
-                        {
-                            runtimeId[i] = selectedGridEntryAccessibleRuntimeId[i];
-                        }
-
-                        runtimeId[^1] = 1;
-
-                        return runtimeId;
-                    }
-                }
+                        RuntimeIDFirstItem,
+                        PARAM.ToInt(Owner.InternalHandle),
+                        GetHashCode()
+                    };
 
                 internal override bool IsReadOnly
                     => _owningPropertyGridView.SelectedGridEntry is not PropertyDescriptorGridEntry propertyDescriptorGridEntry
