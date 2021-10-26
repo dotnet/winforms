@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
@@ -41,14 +39,14 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  Occurs when the user clicks the Help button on a common
         ///  dialog box.
         /// </summary>
         [SRDescription(nameof(SR.CommonDialogHelpRequested))]
-        public event EventHandler HelpRequest
+        public event EventHandler? HelpRequest
         {
             add => Events.AddHandler(s_helpRequestEvent, value);
             remove => Events.RemoveHandler(s_helpRequestEvent, value);
@@ -109,7 +107,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected virtual void OnHelpRequest(EventArgs e)
         {
-            EventHandler handler = (EventHandler)Events[s_helpRequestEvent];
+            EventHandler? handler = (EventHandler?)Events[s_helpRequestEvent];
             handler?.Invoke(this, e);
         }
 
@@ -161,7 +159,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Runs a common dialog box, parented to the given IWin32Window.
         /// </summary>
-        public DialogResult ShowDialog(IWin32Window owner)
+        public DialogResult ShowDialog(IWin32Window? owner)
         {
             if (!SystemInformation.UserInteractive)
             {
@@ -170,7 +168,7 @@ namespace System.Windows.Forms
 
             // This will be used if there is no owner or active window.
             // Declared here so it can be kept alive.
-            NativeWindow nativeWindow = null;
+            NativeWindow? nativeWindow = null;
 
             IntPtr ownerHwnd = IntPtr.Zero;
             DialogResult result = DialogResult.Cancel;
