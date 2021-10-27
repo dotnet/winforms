@@ -18,8 +18,6 @@ namespace System.Windows.Forms
         /// </summary>
         public class ControlAccessibleObject : AccessibleObject
         {
-            private static IntPtr s_oleAccAvailable = NativeMethods.InvalidIntPtr;
-
             private IntPtr _handle = IntPtr.Zero;   // Associated window handle (if any)
             private bool _getOwnerControlHandle;
 
@@ -218,33 +216,12 @@ namespace System.Windows.Forms
                     _handle = value;
                     _getOwnerControlHandle = false;
 
-                    if (s_oleAccAvailable == IntPtr.Zero || _handle == IntPtr.Zero)
+                    if (_handle == IntPtr.Zero)
                     {
                         return;
                     }
 
-                    bool freeLib = false;
-
-                    if (s_oleAccAvailable == NativeMethods.InvalidIntPtr)
-                    {
-                        s_oleAccAvailable = Kernel32.LoadLibraryFromSystemPathIfAvailable(Libraries.Oleacc);
-                        freeLib = (s_oleAccAvailable != IntPtr.Zero);
-                    }
-
-                    // Update systemIAccessible
-                    //
-                    // We need to store internally the system provided
-                    // IAccessible, because some windows forms controls use it
-                    // as the default IAccessible implementation.
-                    if (s_oleAccAvailable != IntPtr.Zero)
-                    {
-                        UseStdAccessibleObjects(_handle);
-                    }
-
-                    if (freeLib)
-                    {
-                        Kernel32.FreeLibrary(s_oleAccAvailable);
-                    }
+                    UseStdAccessibleObjects(_handle);
                 }
             }
 
