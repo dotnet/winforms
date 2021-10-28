@@ -10,8 +10,11 @@ namespace System.Windows.Forms
     {
         protected class DataGridViewComboBoxCellAccessibleObject : DataGridViewCellAccessibleObject
         {
+            private readonly DataGridViewComboBoxCell? _owningComboBoxCell;
+
             public DataGridViewComboBoxCellAccessibleObject(DataGridViewCell? owner) : base(owner)
             {
+                _owningComboBoxCell = owner as DataGridViewComboBoxCell;
             }
 
             internal override bool IsIAccessibleExSupported() => true;
@@ -19,13 +22,19 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ComboBoxControlTypeId,
+                    UiaCore.UIA.ControlTypePropertyId => IsInComboBoxMode
+                                                            ? UiaCore.UIA.ComboBoxControlTypeId
+                                                            : UiaCore.UIA.DataItemControlTypeId,
                     UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
                     _ => base.GetPropertyValue(propertyID)
                 };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => patternId == UiaCore.UIA.ExpandCollapsePatternId ? true : base.IsPatternSupported(patternId);
+                => patternId switch
+                {
+                    UiaCore.UIA.ExpandCollapsePatternId => IsInComboBoxMode,
+                    _ => base.IsPatternSupported(patternId)
+                };
 
             internal override UiaCore.ExpandCollapseState ExpandCollapseState
             {
@@ -44,6 +53,10 @@ namespace System.Windows.Forms
                     return UiaCore.ExpandCollapseState.Collapsed;
                 }
             }
+
+            private bool IsInComboBoxMode
+                => _owningComboBoxCell is not null &&
+                (_owningComboBoxCell.DisplayStyle != DataGridViewComboBoxDisplayStyle.Nothing || _owningComboBoxCell.IsInEditMode);
         }
     }
 }
