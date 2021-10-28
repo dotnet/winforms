@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -19,8 +17,7 @@ namespace System.Windows.Forms
 
         public HRESULT QueryContinueDrag(BOOL fEscapePressed, User32.MK grfKeyState)
         {
-            QueryContinueDragEventArgs qcdevent = null;
-            bool escapePressed = (fEscapePressed != 0);
+            bool escapePressed = fEscapePressed != 0;
             DragAction action = DragAction.Continue;
             if (escapePressed)
             {
@@ -33,7 +30,7 @@ namespace System.Windows.Forms
                 action = DragAction.Drop;
             }
 
-            qcdevent = new QueryContinueDragEventArgs((int)grfKeyState, escapePressed, action);
+            QueryContinueDragEventArgs qcdevent = new QueryContinueDragEventArgs((int)grfKeyState, escapePressed, action);
             _peer.OnQueryContinueDrag(qcdevent);
 
             switch (qcdevent.Action)
