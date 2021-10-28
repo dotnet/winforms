@@ -57,7 +57,7 @@ namespace System.ComponentModel.Design
 
             private void OnParentControlFontChanged(object sender, EventArgs e)
             {
-                if (_label != null && _label.Font != null)
+                if (_label is not null && _label.Font is not null)
                 {
                     _label.Font = GetFont();
                 }

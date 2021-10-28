@@ -32,7 +32,7 @@ namespace System.ComponentModel.Design
 
             private void ActivateDropDown()
             {
-                if (_editor != null)
+                if (_editor is not null)
                 {
                     try
                     {
@@ -56,14 +56,14 @@ namespace System.ComponentModel.Design
                     listBox.KeyDown += new KeyEventHandler(OnListBoxKeyDown);
 
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
-                    if (standardValues != null)
+                    if (standardValues is not null)
                     {
                         foreach (object o in standardValues)
                         {
                             string newItem = PropertyDescriptor.Converter.ConvertToString(TypeDescriptorContext, CultureInfo.CurrentCulture, o);
                             listBox.Items.Add(newItem);
 
-                            if ((o != null) && o.Equals(Value))
+                            if ((o is not null) && o.Equals(Value))
                             {
                                 listBox.SelectedItem = newItem;
                             }
@@ -113,7 +113,7 @@ namespace System.ComponentModel.Design
 
                     if (!_ignoreDropDownValue)
                     {
-                        if (listBox.SelectedItem != null)
+                        if (listBox.SelectedItem is not null)
                         {
                             SetValue(listBox.SelectedItem);
                         }
@@ -134,7 +134,7 @@ namespace System.ComponentModel.Design
 
             private void CloseDropDown()
             {
-                if (_dropDownHolder != null)
+                if (_dropDownHolder is not null)
                 {
                     _dropDownHolder.Visible = false;
                 }
@@ -234,7 +234,7 @@ namespace System.ComponentModel.Design
 
                 base.OnPropertyTaskItemUpdated(toolTip, ref currentTabIndex);
 
-                if (_editor != null)
+                if (_editor is not null)
                 {
                     _button.Ellipsis = (_editor.GetEditStyle(TypeDescriptorContext) == UITypeEditorEditStyle.Modal);
                     _hasSwatch = _editor.GetPaintValueSupported(TypeDescriptorContext);
@@ -426,7 +426,7 @@ namespace System.ComponentModel.Design
             DialogResult IWindowsFormsEditorService.ShowDialog(Form dialog)
             {
                 IUIService uiService = (IUIService)ServiceProvider.GetService(typeof(IUIService));
-                if (uiService != null)
+                if (uiService is not null)
                 {
                     return uiService.ShowDialog(dialog);
                 }
@@ -532,7 +532,7 @@ namespace System.ComponentModel.Design
                         cp.ExStyle |= (int)User32.WS_EX.TOOLWINDOW;
                         cp.Style |= unchecked((int)(User32.WS.POPUP | User32.WS.BORDER));
                         cp.ClassStyle |= (int)User32.CS.SAVEBITS;
-                        if (_parentControl != null)
+                        if (_parentControl is not null)
                         {
                             if (!_parentControl.IsDisposed)
                             {
@@ -546,7 +546,7 @@ namespace System.ComponentModel.Design
 
                 public virtual void FocusComponent()
                 {
-                    if (_hostedControl != null && Visible)
+                    if (_hostedControl is not null && Visible)
                     {
                         _hostedControl.Focus();
                     }
@@ -621,7 +621,7 @@ namespace System.ComponentModel.Design
                         User32.SetWindowLong(this, User32.GWL.HWNDPARENT, IntPtr.Zero);
 
                         // sometimes activation goes to LALA land - if our parent control is still  around, remind it to take focus.
-                        if (parent != null && parent.Visible)
+                        if (parent is not null && parent.Visible)
                         {
                             parent.Focus();
                         }
@@ -789,7 +789,7 @@ namespace System.ComponentModel.Design
                                     }
                                     finally
                                     {
-                                        if (attrs != null)
+                                        if (attrs is not null)
                                         {
                                             attrs.Dispose();
                                         }
@@ -797,7 +797,7 @@ namespace System.ComponentModel.Design
                                 }
                                 finally
                                 {
-                                    if (icon != null)
+                                    if (icon is not null)
                                     {
                                         icon.Dispose();
                                     }

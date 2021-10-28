@@ -166,7 +166,7 @@ namespace System.ComponentModel.Design
                         return true;
                     }
 
-                    if ((treeNodes[i].Nodes != null) && (treeNodes[i].Nodes.Count != 0))
+                    if ((treeNodes[i].Nodes is not null) && (treeNodes[i].Nodes.Count != 0))
                     {
                         treeNodes[i].Expand();
                         if (SetSelection(value, treeNodes[i].Nodes))

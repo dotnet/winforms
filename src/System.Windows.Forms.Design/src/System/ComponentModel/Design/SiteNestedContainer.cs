@@ -93,7 +93,7 @@ namespace System.ComponentModel.Design
         protected override object GetService(Type serviceType)
         {
             object service = base.GetService(serviceType);
-            if (service != null)
+            if (service is not null)
             {
                 return service;
             }
@@ -103,7 +103,7 @@ namespace System.ComponentModel.Design
                 return _services ?? (_services = new ServiceContainer(_host));
             }
 
-            if (_services != null)
+            if (_services is not null)
             {
                 return _services.GetService(serviceType);
             }

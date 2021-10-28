@@ -30,7 +30,7 @@ namespace System.ComponentModel.Design
                     ArgumentNullException.ThrowIfNull(propertyName);
 
                     // First, check to see if the name is in the given properties table
-                    if (_properties != null && _properties.ContainsKey(propertyName))
+                    if (_properties is not null && _properties.ContainsKey(propertyName))
                     {
                         return _properties[propertyName];
                     }
@@ -51,7 +51,7 @@ namespace System.ComponentModel.Design
             /// <summary>
             ///  Returns true if this shadow properties object contains the given property name.
             /// </summary>
-            public bool Contains(string propertyName) => _properties != null && _properties.ContainsKey(propertyName);
+            public bool Contains(string propertyName) => _properties is not null && _properties.ContainsKey(propertyName);
 
             /// <summary>
             ///  Returns the underlying property descriptor for this property on the component

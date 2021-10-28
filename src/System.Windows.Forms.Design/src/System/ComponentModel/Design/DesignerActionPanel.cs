@@ -75,7 +75,7 @@ namespace System.ComponentModel.Design
             _toolTip = new ToolTip();
             // Try to get the font from the IUIService, otherwise, use the default
             IUIService uiService = (IUIService)ServiceProvider.GetService(typeof(IUIService));
-            if (uiService != null)
+            if (uiService is not null)
             {
                 Font = (Font)uiService.Styles["DialogFont"];
                 if (uiService.Styles["VsColorPanelGradientDark"] is Color)
@@ -206,7 +206,7 @@ namespace System.ComponentModel.Design
             get
             {
                 Control activeControl = ActiveControl;
-                if (activeControl != null)
+                if (activeControl is not null)
                 {
                     return activeControl.Tag as Line;
                 }
@@ -505,11 +505,11 @@ namespace System.ComponentModel.Design
 
         private void OnFormClosing(object sender, CancelEventArgs e)
         {
-            if (!e.Cancel && TopLevelControl != null)
+            if (!e.Cancel && TopLevelControl is not null)
             {
                 Debug.Assert(TopLevelControl is Form, "DesignerActionPanel must be hosted on a Form.");
                 Form form = (Form)TopLevelControl;
-                if (form != null)
+                if (form is not null)
                 {
                     form.Closing -= new CancelEventHandler(OnFormClosing);
                 }
@@ -609,7 +609,7 @@ namespace System.ComponentModel.Design
         {
             // TODO: RightToLeft management for left/right arrow keys (from old DesignerActionPanel)
             Line focusedLine = FocusedLine;
-            if (focusedLine != null)
+            if (focusedLine is not null)
             {
                 if (focusedLine.ProcessDialogKey(keyData))
                 {
@@ -635,10 +635,10 @@ namespace System.ComponentModel.Design
 
             foreach (DesignerActionList list in lists)
             {
-                if (list != null)
+                if (list is not null)
                 {
                     IEnumerable items = list.GetSortedActionItems();
-                    if (items != null)
+                    if (items is not null)
                     {
                         foreach (DesignerActionItem item in items)
                         {
@@ -668,10 +668,10 @@ namespace System.ComponentModel.Design
                                 }
                             }
 
-                            if (relatedComponent != null)
+                            if (relatedComponent is not null)
                             {
                                 IEnumerable<LineInfo> relatedLineInfos = ProcessRelatedTaskItems(relatedComponent);
-                                if (relatedLineInfos != null)
+                                if (relatedLineInfos is not null)
                                 {
                                     foreach (LineInfo relatedLineInfo in relatedLineInfos)
                                     {
@@ -688,10 +688,10 @@ namespace System.ComponentModel.Design
         private IEnumerable<LineInfo> ProcessRelatedTaskItems(IComponent relatedComponent)
         {
             // Add the related tasks
-            Debug.Assert(relatedComponent != null);
+            Debug.Assert(relatedComponent is not null);
             DesignerActionListCollection relatedLists = null;
             DesignerActionService actionService = (DesignerActionService)ServiceProvider.GetService(typeof(DesignerActionService));
-            if (actionService != null)
+            if (actionService is not null)
             {
                 relatedLists = actionService.GetComponentActions(relatedComponent);
             }
@@ -705,7 +705,7 @@ namespace System.ComponentModel.Design
                 }
 
                 IDesignerHost host = (IDesignerHost)serviceProvider.GetService(typeof(IDesignerHost));
-                if (host != null)
+                if (host is not null)
                 {
                     if (host.GetDesigner(relatedComponent) is ComponentDesigner componentDesigner)
                     {
@@ -716,23 +716,23 @@ namespace System.ComponentModel.Design
 
             List<LineInfo> lineInfos = new List<LineInfo>();
 
-            if (relatedLists != null)
+            if (relatedLists is not null)
             {
                 foreach (DesignerActionList relatedList in relatedLists)
                 {
-                    if (relatedList != null)
+                    if (relatedList is not null)
                     {
                         IEnumerable items = relatedList.GetSortedActionItems();
-                        if (items != null)
+                        if (items is not null)
                         {
                             foreach (DesignerActionItem relatedItem in items)
                             {
-                                if (relatedItem != null)
+                                if (relatedItem is not null)
                                 {
                                     if (relatedItem.AllowAssociate)
                                     {
                                         LineInfo lineInfo = ProcessTaskItem(relatedList, relatedItem);
-                                        if (lineInfo != null)
+                                        if (lineInfo is not null)
                                         {
                                             lineInfos.Add(lineInfo);
                                         }
@@ -820,7 +820,7 @@ namespace System.ComponentModel.Design
         private void ShowError(string errorMessage)
         {
             IUIService uiService = (IUIService)ServiceProvider.GetService(typeof(IUIService));
-            if (uiService != null)
+            if (uiService is not null)
             {
                 uiService.ShowError(errorMessage);
             }
@@ -904,7 +904,7 @@ namespace System.ComponentModel.Design
                 // Store the focus state
                 string focusId = string.Empty;
                 Line focusedLine = FocusedLine;
-                if (focusedLine != null)
+                if (focusedLine is not null)
                 {
                     focusId = focusedLine.FocusId;
                 }

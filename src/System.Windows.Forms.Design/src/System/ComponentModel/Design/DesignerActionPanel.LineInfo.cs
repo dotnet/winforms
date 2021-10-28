@@ -16,7 +16,7 @@ namespace System.ComponentModel.Design
 
             public LineInfo(DesignerActionList list, DesignerActionItem item, Line line)
             {
-                Debug.Assert(line != null);
+                Debug.Assert(line is not null);
                 Line = line;
                 Item = item;
                 List = list;

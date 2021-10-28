@@ -100,7 +100,7 @@ namespace System.ComponentModel.Design
 
             private void OnParentControlFontChanged(object sender, EventArgs e)
             {
-                if (_titleLabel != null && _subtitleLabel != null)
+                if (_titleLabel is not null && _subtitleLabel is not null)
                 {
                     _titleLabel.Font = new Font(ActionPanel.Font, FontStyle.Bold);
                     _subtitleLabel.Font = ActionPanel.Font;

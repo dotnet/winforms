@@ -160,7 +160,7 @@ namespace System.ComponentModel.Design
 
             Type[] args = evInfo.EventHandlerType.GetGenericArguments();
 
-            if (args != null && args.Length > 0)
+            if (args is not null && args.Length > 0)
             {
                 for (int i = 0; i < args.Length; i++)
                 {

@@ -39,7 +39,7 @@ namespace System.ComponentModel.Design
             ///  If there is just a reset method, this always returns true.  If none of these
             ///  cases apply, this returns false.
             /// </summary>
-            public override bool CanResetValue(object component) => GetValue(component) != null;
+            public override bool CanResetValue(object component) => GetValue(component) is not null;
 
             /// <summary>
             ///  Retrieves the type of the component this PropertyDescriptor is bound to.
@@ -101,7 +101,7 @@ namespace System.ComponentModel.Design
                     {
                         IComponent baseComponent = rs.GetComponent(component);
 
-                        if (baseComponent != null)
+                        if (baseComponent is not null)
                         {
                             site = baseComponent.Site;
                         }
@@ -392,11 +392,11 @@ namespace System.ComponentModel.Design
                     // We cannot cache this because it depends on the contents of the source file.
                     string[] eventMethods = null;
 
-                    if (context != null)
+                    if (context is not null)
                     {
                         IEventBindingService ebs = (IEventBindingService)context.GetService(typeof(IEventBindingService));
 
-                        if (ebs != null)
+                        if (ebs is not null)
                         {
                             ICollection methods = ebs.GetCompatibleMethods(_evt);
                             eventMethods = new string[methods.Count];
