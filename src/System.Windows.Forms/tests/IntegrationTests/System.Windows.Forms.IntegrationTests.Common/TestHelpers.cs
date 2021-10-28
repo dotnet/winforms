@@ -263,6 +263,17 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
+        ///  Presses Backspace on the given process if it can be made the foreground process
+        /// </summary>
+        /// <param name="process">The process to send the Backspace key to</param>
+        /// <returns>Whether or not the Backspace key was pressed on the process</returns>
+        /// <seealso cref="SendKeysToProcess(Process, string, bool)"/>
+        public static bool SendBackspaceKeyToProcess(Process process, bool switchToMainWindow = true)
+        {
+            return SendKeysToProcess(process, "{BACKSPACE}", switchToMainWindow);
+        }
+
+        /// <summary>
         ///  Presses Right on the given process if it can be made the foreground process
         /// </summary>
         /// <param name="process">The process to send the Right key to</param>

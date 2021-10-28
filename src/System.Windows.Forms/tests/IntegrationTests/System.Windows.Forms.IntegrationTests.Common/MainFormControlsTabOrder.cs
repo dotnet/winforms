@@ -29,7 +29,6 @@ namespace System.Windows.Forms.IntegrationTests.Common
         PictureBoxesButton,
         FormBorderStylesButton,
         ToggleIconButton,
-        FileDialogButton,
         ErrorProviderButton,
         TaskDialogButton,
         MessageBoxButton,
