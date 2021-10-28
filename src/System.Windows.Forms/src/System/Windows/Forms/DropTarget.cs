@@ -84,9 +84,17 @@ namespace System.Windows.Forms
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragOver received");
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "\t" + (pt.X) + "," + (pt.Y));
             DragEventArgs? drgevent = CreateDragEventArgs(null, grfKeyState, pt, pdwEffect);
-            _owner.OnDragOver(drgevent);
-            pdwEffect = (uint)drgevent!.Effect;
-            _lastEffect = drgevent.Effect;
+            if (drgevent is not null)
+            {
+                _owner.OnDragOver(drgevent);
+                pdwEffect = (uint)drgevent.Effect;
+                _lastEffect = drgevent.Effect;
+            }
+            else
+            {
+                pdwEffect = (uint)DragDropEffects.None;
+            }
+
             return HRESULT.S_OK;
         }
 
