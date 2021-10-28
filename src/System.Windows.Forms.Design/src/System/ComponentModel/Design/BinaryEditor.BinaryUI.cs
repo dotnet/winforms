@@ -43,12 +43,12 @@ namespace System.ComponentModel.Design
                     _value = value;
                     byte[] bytes = null;
 
-                    if (value != null)
+                    if (value is not null)
                     {
                         bytes = _editor.ConvertToBytes(value);
                     }
 
-                    if (bytes != null)
+                    if (bytes is not null)
                     {
                         _byteViewer.SetBytes(bytes);
                         _byteViewer.Enabled = true;

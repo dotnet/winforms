@@ -139,7 +139,7 @@ namespace System.ComponentModel.Design
                 {
                     foreach (object instance in instances)
                     {
-                        if (instance != null)
+                        if (instance is not null)
                         {
                             _dirty = true;
                             _createdItems.Add(instance);
@@ -204,7 +204,7 @@ namespace System.ComponentModel.Design
             /// </summary>
             private bool AllowRemoveInstance(object value)
             {
-                if (_createdItems != null && _createdItems.Contains(value))
+                if (_createdItems is not null && _createdItems.Contains(value))
                 {
                     return true;
                 }
@@ -225,7 +225,7 @@ namespace System.ComponentModel.Design
 
                 SizeF size = g.MeasureString(GetDisplayText(item), _listbox.Font);
                 int pic = 0;
-                if (item.Editor != null && item.Editor.GetPaintValueSupported())
+                if (item.Editor is not null && item.Editor.GetPaintValueSupported())
                 {
                     pic = PaintWidth + TextIndent;
                 }
@@ -250,10 +250,10 @@ namespace System.ComponentModel.Design
                     _dirty = false;
                     _listbox.Items.Clear();
 
-                    if (_createdItems != null)
+                    if (_createdItems is not null)
                     {
                         object[] items = _createdItems.ToArray();
-                        if (items.Length > 0 && items[0] is IComponent && ((IComponent)items[0]).Site != null)
+                        if (items.Length > 0 && items[0] is IComponent && ((IComponent)items[0]).Site is not null)
                         {
                             // here we bail now because we don't want to do the "undo" manually,
                             // we're part of a transaction, we've added item, the rollback will be
@@ -271,7 +271,7 @@ namespace System.ComponentModel.Design
                         _createdItems.Clear();
                     }
 
-                    if (_removedItems != null)
+                    if (_removedItems is not null)
                     {
                         _removedItems.Clear();
                     }
@@ -279,7 +279,7 @@ namespace System.ComponentModel.Design
                     // Restore the original contents. Because objects get parented during CreateAndAddInstance, the underlying collection
                     // gets changed during add, but not other operations. Not all consumers of this dialog can roll back every single change,
                     // but this will at least roll back the additions, removals and reordering. See ASURT #85470.
-                    if (_originalItems != null && (_originalItems.Count > 0))
+                    if (_originalItems is not null && (_originalItems.Count > 0))
                     {
                         object[] items = new object[_originalItems.Count];
                         for (int i = 0; i < _originalItems.Count; i++)
@@ -312,7 +312,7 @@ namespace System.ComponentModel.Design
                     object instance = CreateInstance(type);
                     IList multipleInstance = _editor.GetObjectsFromInstance(instance);
 
-                    if (multipleInstance != null)
+                    if (multipleInstance is not null)
                     {
                         AddItems(multipleInstance);
                     }
@@ -528,7 +528,7 @@ namespace System.ComponentModel.Design
                 {
                     int old = _listbox.HorizontalExtent;
 
-                    if (item != null)
+                    if (item is not null)
                     {
                         int w = CalcItemWidth(g, item);
                         if (w > old)
@@ -601,7 +601,7 @@ namespace System.ComponentModel.Design
 
                     offset += 2;
 
-                    if (item.Editor != null && item.Editor.GetPaintValueSupported())
+                    if (item.Editor is not null && item.Editor.GetPaintValueSupported())
                     {
                         Rectangle baseVar = new Rectangle(e.Bounds.X + offset, e.Bounds.Y + 1, PaintWidth, e.Bounds.Height - 3);
                         g.DrawRectangle(SystemPens.ControlText, baseVar.X, baseVar.Y, baseVar.Width - 1, baseVar.Height - 1);
@@ -703,7 +703,7 @@ namespace System.ComponentModel.Design
                         Items = items;
                     }
 
-                    if (_removedItems != null && _dirty)
+                    if (_removedItems is not null && _dirty)
                     {
                         object[] deadItems = _removedItems.ToArray();
 
@@ -734,7 +734,7 @@ namespace System.ComponentModel.Design
             private void OnComponentChanged(object sender, ComponentChangedEventArgs e)
             {
                 // see if this is any of the items in our list...this can happen if we launched a child editor
-                if (!_dirty && _originalItems != null)
+                if (!_dirty && _originalItems is not null)
                 {
                     foreach (object item in _originalItems)
                     {
@@ -769,7 +769,7 @@ namespace System.ComponentModel.Design
                 // Now update the list box.
                 _listbox.Items.Clear();
                 _propertyGrid.Site = new PropertyGridSite(Context, _propertyGrid);
-                if (EditValue != null)
+                if (EditValue is not null)
                 {
                     SuspendEnabledUpdates();
                     try
@@ -892,13 +892,13 @@ namespace System.ComponentModel.Design
             /// </summary>
             private void RemoveInternal(ListItem item)
             {
-                if (item != null)
+                if (item is not null)
                 {
                     _editor.OnItemRemoving(item.Value);
 
                     _dirty = true;
 
-                    if (_createdItems != null && _createdItems.Contains(item.Value))
+                    if (_createdItems is not null && _createdItems.Contains(item.Value))
                     {
                         DestroyInstance(item.Value);
                         _createdItems.Remove(item.Value);
@@ -1056,14 +1056,14 @@ namespace System.ComponentModel.Design
                     return;
                 }
 
-                bool editEnabled = (_listbox.SelectedItem != null) && CollectionEditable;
+                bool editEnabled = (_listbox.SelectedItem is not null) && CollectionEditable;
                 _removeButton.Enabled = editEnabled && AllowRemoveInstance(((ListItem)_listbox.SelectedItem).Value);
                 _upButton.Enabled = editEnabled && _listbox.Items.Count > 1;
                 _downButton.Enabled = editEnabled && _listbox.Items.Count > 1;
                 _propertyGrid.Enabled = editEnabled;
                 _addButton.Enabled = CollectionEditable;
 
-                if (_listbox.SelectedItem != null)
+                if (_listbox.SelectedItem is not null)
                 {
                     object[] items;
 
@@ -1174,7 +1174,7 @@ namespace System.ComponentModel.Design
                         else
                         {
                             object nextValue = li.Value;
-                            if (_value != null)
+                            if (_value is not null)
                             {
                                 if (nextValue is null)
                                 {
@@ -1192,7 +1192,7 @@ namespace System.ComponentModel.Design
                             }
                             else
                             {
-                                if (nextValue != null)
+                                if (nextValue is not null)
                                 {
                                     _value = null;
                                     break;

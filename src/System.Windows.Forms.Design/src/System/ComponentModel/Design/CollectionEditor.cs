@@ -102,7 +102,7 @@ namespace System.ComponentModel.Design
                     initializer.InitializeNewComponent(null);
                 }
 
-                if (instance != null)
+                if (instance is not null)
                 {
                     return instance;
                 }

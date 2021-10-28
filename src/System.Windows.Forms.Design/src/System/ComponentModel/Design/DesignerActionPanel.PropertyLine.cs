@@ -79,13 +79,13 @@ namespace System.ComponentModel.Design
                 try
                 {
                     // Only push the change if the values are different
-                    if (newValue != null)
+                    if (newValue is not null)
                     {
                         Type valueType = newValue.GetType();
                         // If it's not assignable, try to convert it
                         if (!PropertyDescriptor.PropertyType.IsAssignableFrom(valueType))
                         {
-                            if (PropertyDescriptor.Converter != null)
+                            if (PropertyDescriptor.Converter is not null)
                             {
                                 // If we can't convert it, show an error
                                 if (!PropertyDescriptor.Converter.CanConvertFrom(_typeDescriptorContext, valueType))

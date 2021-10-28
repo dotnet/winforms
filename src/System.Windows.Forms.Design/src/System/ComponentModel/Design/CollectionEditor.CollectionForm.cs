@@ -95,7 +95,7 @@ namespace System.ComponentModel.Design
                     bool canChange = false;
                     try
                     {
-                        if (Context != null)
+                        if (Context is not null)
                         {
                             canChange = Context.OnComponentChanging();
                         }

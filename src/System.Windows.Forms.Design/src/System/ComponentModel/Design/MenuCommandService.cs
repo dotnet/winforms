@@ -92,7 +92,7 @@ namespace System.ComponentModel.Design
             // If the command already exists, it is an error to add
             // a duplicate.
             //
-            if (((IMenuCommandService)this).FindCommand(command.CommandID) != null)
+            if (((IMenuCommandService)this).FindCommand(command.CommandID) is not null)
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, SR.MenuCommandService_DuplicateCommand, command.CommandID.ToString()));
             }
@@ -158,13 +158,13 @@ namespace System.ComponentModel.Design
         {
             if (disposing)
             {
-                if (_selectionService != null)
+                if (_selectionService is not null)
                 {
                     _selectionService.SelectionChanging -= new EventHandler(OnSelectionChanging);
                     _selectionService = null;
                 }
 
-                if (_serviceProvider != null)
+                if (_serviceProvider is not null)
                 {
                     _serviceProvider = null;
                     TypeDescriptor.Refreshed -= new RefreshEventHandler(OnTypeRefreshed);
@@ -196,7 +196,7 @@ namespace System.ComponentModel.Design
             //
             bool useGlobalVerbs = false;
 
-            if (_currentVerbs is null && _serviceProvider != null)
+            if (_currentVerbs is null && _serviceProvider is not null)
             {
                 Hashtable buildVerbs = null;
                 ArrayList verbsOrder;
@@ -205,7 +205,7 @@ namespace System.ComponentModel.Design
                 {
                     _selectionService = GetService(typeof(ISelectionService)) as ISelectionService;
 
-                    if (_selectionService != null)
+                    if (_selectionService is not null)
                     {
                         _selectionService.SelectionChanging += new EventHandler(OnSelectionChanging);
                     }
@@ -216,7 +216,7 @@ namespace System.ComponentModel.Design
                 DesignerVerbCollection designerActionVerbs = new DesignerVerbCollection(); // we instantiate this one here...
                 IDesignerHost designerHost = GetService(typeof(IDesignerHost)) as IDesignerHost;
 
-                if (_selectionService != null && designerHost != null && _selectionService.SelectionCount == 1)
+                if (_selectionService is not null && designerHost is not null && _selectionService.SelectionCount == 1)
                 {
                     object selectedComponent = _selectionService.PrimarySelection;
                     if (selectedComponent is IComponent &&
@@ -226,10 +226,10 @@ namespace System.ComponentModel.Design
 
                         // LOCAL VERBS
                         IDesigner designer = designerHost.GetDesigner((IComponent)selectedComponent);
-                        if (designer != null)
+                        if (designer is not null)
                         {
                             localVerbs = designer.Verbs;
-                            if (localVerbs != null)
+                            if (localVerbs is not null)
                             {
                                 verbCount += localVerbs.Count;
                                 _verbSourceType = selectedComponent.GetType();
@@ -242,20 +242,20 @@ namespace System.ComponentModel.Design
 
                         // DesignerAction Verbs
                         DesignerActionService daSvc = GetService(typeof(DesignerActionService)) as DesignerActionService;
-                        if (daSvc != null)
+                        if (daSvc is not null)
                         {
                             DesignerActionListCollection actionLists = daSvc.GetComponentActions(selectedComponent as IComponent);
-                            if (actionLists != null)
+                            if (actionLists is not null)
                             {
                                 foreach (DesignerActionList list in actionLists)
                                 {
                                     DesignerActionItemCollection dai = list.GetSortedActionItems();
-                                    if (dai != null)
+                                    if (dai is not null)
                                     {
                                         for (int i = 0; i < dai.Count; i++)
                                         {
                                             DesignerActionMethodItem dami = dai[i] as DesignerActionMethodItem;
-                                            if (dami != null && dami.IncludeAsDesignerVerb)
+                                            if (dami is not null && dami.IncludeAsDesignerVerb)
                                             {
                                                 EventHandler handler = new EventHandler(dami.Invoke);
                                                 DesignerVerb verb = new DesignerVerb(dami.DisplayName, handler);
@@ -304,7 +304,7 @@ namespace System.ComponentModel.Design
                     }
                 }
 
-                if (localVerbs != null && localVerbs.Count > 0)
+                if (localVerbs is not null && localVerbs.Count > 0)
                 {
                     for (int i = 0; i < localVerbs.Count; i++)
                     {
@@ -355,7 +355,7 @@ namespace System.ComponentModel.Design
                 _commandGroups.TryGetValue(guid, out commands);
             }
 
-            if (commands != null)
+            if (commands is not null)
             {
                 Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "\t...MCS Found group");
                 foreach (MenuCommand command in commands)
@@ -371,7 +371,7 @@ namespace System.ComponentModel.Design
             // Next, search the verb list as well.
             //
             EnsureVerbs();
-            if (_currentVerbs != null)
+            if (_currentVerbs is not null)
             {
                 int currentID = StandardCommands.VerbFirst.ID;
                 foreach (DesignerVerb verb in _currentVerbs)
@@ -431,7 +431,7 @@ namespace System.ComponentModel.Design
         {
             ArgumentNullException.ThrowIfNull(serviceType);
 
-            if (_serviceProvider != null)
+            if (_serviceProvider is not null)
             {
                 return _serviceProvider.GetService(serviceType);
             }
@@ -449,7 +449,7 @@ namespace System.ComponentModel.Design
         {
             // try to find it locally
             MenuCommand cmd = ((IMenuCommandService)this).FindCommand(commandID);
-            if (cmd != null)
+            if (cmd is not null)
             {
                 cmd.Invoke();
                 return true;
@@ -468,7 +468,7 @@ namespace System.ComponentModel.Design
         {
             // try to find it locally
             MenuCommand cmd = ((IMenuCommandService)this).FindCommand(commandId);
-            if (cmd != null)
+            if (cmd is not null)
             {
                 cmd.Invoke(arg);
                 return true;
@@ -482,7 +482,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnCommandChanged(object sender, EventArgs e)
         {
-            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "Command dirty: " + ((sender != null) ? sender.ToString() : "(null sender)"));
+            Debug.WriteLineIf(MENUSERVICE.TraceVerbose, "Command dirty: " + ((sender is not null) ? sender.ToString() : "(null sender)"));
             OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandChanged, (MenuCommand)sender));
         }
 
@@ -491,7 +491,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         protected virtual void OnCommandsChanged(MenuCommandsChangedEventArgs e)
         {
-            if (_commandsChangedHandler != null)
+            if (_commandsChangedHandler is not null)
             {
                 _commandsChangedHandler(this, e);
             }
@@ -503,7 +503,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnTypeRefreshed(RefreshEventArgs e)
         {
-            if (_verbSourceType != null && _verbSourceType.IsAssignableFrom(e.TypeChanged))
+            if (_verbSourceType is not null && _verbSourceType.IsAssignableFrom(e.TypeChanged))
             {
                 _currentVerbs = null;
             }
@@ -515,7 +515,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         private void OnSelectionChanging(object sender, EventArgs e)
         {
-            if (_currentVerbs != null)
+            if (_currentVerbs is not null)
             {
                 _currentVerbs = null;
                 OnCommandsChanged(new MenuCommandsChangedEventArgs(MenuCommandsChangedType.CommandChanged, null));
@@ -566,7 +566,7 @@ namespace System.ComponentModel.Design
         {
             ArgumentNullException.ThrowIfNull(verb);
 
-            if (_globalVerbs != null)
+            if (_globalVerbs is not null)
             {
                 int index = _globalVerbs.IndexOf(verb);
                 if (index != -1)

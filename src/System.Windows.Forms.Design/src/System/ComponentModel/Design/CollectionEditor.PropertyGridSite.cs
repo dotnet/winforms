@@ -31,7 +31,7 @@ namespace System.ComponentModel.Design
 
             public object GetService(Type t)
             {
-                if (!_inGetService && _sp != null)
+                if (!_inGetService && _sp is not null)
                 {
                     try
                     {

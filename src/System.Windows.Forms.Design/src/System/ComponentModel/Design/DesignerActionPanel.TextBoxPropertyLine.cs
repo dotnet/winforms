@@ -194,7 +194,7 @@ namespace System.ComponentModel.Design
             protected TypeConverter.StandardValuesCollection GetStandardValues()
             {
                 TypeConverter converter = PropertyDescriptor.Converter;
-                if (converter != null &&
+                if (converter is not null &&
                     converter.GetStandardValuesSupported(TypeDescriptorContext))
                 {
                     return converter.GetStandardValues(TypeDescriptorContext);
@@ -210,7 +210,7 @@ namespace System.ComponentModel.Design
                     e.Handled = true;
                     // Try to find the existing value and then pick the one after it
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
-                    if (standardValues != null)
+                    if (standardValues is not null)
                     {
                         for (int i = 0; i < standardValues.Count; i++)
                         {
@@ -240,7 +240,7 @@ namespace System.ComponentModel.Design
                     e.Handled = true;
                     // Try to find the existing value and then pick the one before it
                     TypeConverter.StandardValuesCollection standardValues = GetStandardValues();
-                    if (standardValues != null)
+                    if (standardValues is not null)
                     {
                         for (int i = 0; i < standardValues.Count; i++)
                         {

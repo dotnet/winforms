@@ -82,7 +82,7 @@ namespace System.ComponentModel.Design
                             break;
                         }
 
-                        if (PropertyGrid != null)
+                        if (PropertyGrid is not null)
                         {
                             PropertyGrid.Focus();
                             User32.SetFocus(new HandleRef(PropertyGrid, PropertyGrid.Handle));

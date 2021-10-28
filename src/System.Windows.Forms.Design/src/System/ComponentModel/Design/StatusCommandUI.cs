@@ -47,7 +47,7 @@ namespace System.ComponentModel.Design
             {
                 if (_statusRectCommand is null)
                 {
-                    if (MenuService != null)
+                    if (MenuService is not null)
                     {
                         _statusRectCommand = MenuService.FindCommand(MenuCommands.SetStatusRectangle);
                     }
@@ -75,7 +75,7 @@ namespace System.ComponentModel.Design
             else
             {
                 PropertyDescriptor BoundsProp = TypeDescriptor.GetProperties(selectedComponent)["Bounds"];
-                if (BoundsProp != null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
+                if (BoundsProp is not null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
                 {
                     bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
                 }
@@ -87,7 +87,7 @@ namespace System.ComponentModel.Design
                 bounds.Y = location.Y;
             }
 
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }
@@ -111,13 +111,13 @@ namespace System.ComponentModel.Design
             else
             {
                 PropertyDescriptor BoundsProp = TypeDescriptor.GetProperties(selectedComponent)["Bounds"];
-                if (BoundsProp != null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
+                if (BoundsProp is not null && typeof(Rectangle).IsAssignableFrom(BoundsProp.PropertyType))
                 {
                     bounds = (Rectangle)BoundsProp.GetValue(selectedComponent);
                 }
             }
 
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }
@@ -128,7 +128,7 @@ namespace System.ComponentModel.Design
         /// </summary>
         public void SetStatusInformation(Rectangle bounds)
         {
-            if (StatusRectCommand != null)
+            if (StatusRectCommand is not null)
             {
                 StatusRectCommand.Invoke(bounds);
             }

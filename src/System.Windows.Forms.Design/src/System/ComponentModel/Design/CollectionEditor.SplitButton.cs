@@ -274,7 +274,7 @@ namespace System.ComponentModel.Design
             private void ShowContextMenuStrip()
             {
                 State = PushButtonState.Pressed;
-                if (ContextMenuStrip != null)
+                if (ContextMenuStrip is not null)
                 {
                     ContextMenuStrip.Closed += new ToolStripDropDownClosedEventHandler(ContextMenuStrip_Closed);
                     ContextMenuStrip.Show(this, 0, Height);

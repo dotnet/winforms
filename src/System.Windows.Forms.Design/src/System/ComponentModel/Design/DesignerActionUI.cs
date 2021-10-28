@@ -86,19 +86,19 @@ namespace System.ComponentModel.Design
             _lastPanelComponent = null;
 
             IComponentChangeService cs = (IComponentChangeService)serviceProvider.GetService(typeof(IComponentChangeService));
-            if (cs != null)
+            if (cs is not null)
             {
                 cs.ComponentChanged += new ComponentChangedEventHandler(OnComponentChanged);
             }
 
-            if (_menuCommandService != null)
+            if (_menuCommandService is not null)
             {
                 _cmdShowDesignerActions = new MenuCommand(new EventHandler(OnKeyShowDesignerActions), MenuCommands.KeyInvokeSmartTag);
                 _menuCommandService.AddCommand(_cmdShowDesignerActions);
             }
 
             _uiService = (IUIService)serviceProvider.GetService(typeof(IUIService));
-            if (_uiService != null)
+            if (_uiService is not null)
             {
                 _mainParentWindow = _uiService.GetDialogOwnerWindow();
             }
@@ -114,24 +114,24 @@ namespace System.ComponentModel.Design
         // Don't need to dispose of designerActionUIService.
         public void Dispose()
         {
-            if (_marshalingControl != null)
+            if (_marshalingControl is not null)
             {
                 _marshalingControl.Dispose();
                 _marshalingControl = null;
             }
 
-            if (_serviceProvider != null)
+            if (_serviceProvider is not null)
             {
                 IComponentChangeService cs = (IComponentChangeService)_serviceProvider.GetService(typeof(IComponentChangeService));
-                if (cs != null)
+                if (cs is not null)
                 {
                     cs.ComponentChanged -= new ComponentChangedEventHandler(OnComponentChanged);
                 }
 
-                if (_cmdShowDesignerActions != null)
+                if (_cmdShowDesignerActions is not null)
                 {
                     IMenuCommandService mcs = (IMenuCommandService)_serviceProvider.GetService(typeof(IMenuCommandService));
-                    if (mcs != null)
+                    if (mcs is not null)
                     {
                         mcs.RemoveCommand(_cmdShowDesignerActions);
                     }
@@ -141,7 +141,7 @@ namespace System.ComponentModel.Design
             _serviceProvider = null;
             _behaviorService = null;
             _selSvc = null;
-            if (_designerActionService != null)
+            if (_designerActionService is not null)
             {
                 _designerActionService.DesignerActionListsChanged -= new DesignerActionListsChangedEventHandler(OnDesignerActionsChanged);
                 if (_disposeActionService)
@@ -152,7 +152,7 @@ namespace System.ComponentModel.Design
 
             _designerActionService = null;
 
-            if (_designerActionUIService != null)
+            if (_designerActionUIService is not null)
             {
                 _designerActionUIService.DesignerActionUIStateChange -= new DesignerActionUIStateChangeEventHandler(OnDesignerActionUIStateChange);
                 if (_disposeActionUIService)
@@ -185,7 +185,7 @@ namespace System.ComponentModel.Design
                 dalColl = _designerActionService.GetComponentActions(comp);
             }
 
-            if (dalColl != null && dalColl.Count > 0)
+            if (dalColl is not null && dalColl.Count > 0)
             {
                 DesignerActionGlyph dag = null;
                 if (_componentToGlyph[comp] is null)
@@ -199,7 +199,7 @@ namespace System.ComponentModel.Design
                         if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray)
                         {
                             ComponentTray.TrayControl trayControl = compTray.GetTrayControlFromComponent(comp);
-                            if (trayControl != null)
+                            if (trayControl is not null)
                             {
                                 Rectangle trayBounds = trayControl.Bounds;
                                 dag = new DesignerActionGlyph(dab, trayBounds, compTray);
@@ -214,7 +214,7 @@ namespace System.ComponentModel.Design
                         dag = new DesignerActionGlyph(dab, _designerActionAdorner);
                     }
 
-                    if (dag != null)
+                    if (dag is not null)
                     {
                         //store off this relationship
                         _componentToGlyph.Add(comp, dag);
@@ -223,7 +223,7 @@ namespace System.ComponentModel.Design
                 else
                 {
                     dag = _componentToGlyph[comp] as DesignerActionGlyph;
-                    if (dag != null)
+                    if (dag is not null)
                     {
                         if (dag.Behavior is DesignerActionBehavior behavior)
                         {
@@ -256,7 +256,7 @@ namespace System.ComponentModel.Design
             }
 
             // If the smart tag is showing, we only move the smart tag if the changing  component is the component for the currently showing smart tag.
-            if (_lastPanelComponent != null && !_lastPanelComponent.Equals(ce.Component))
+            if (_lastPanelComponent is not null && !_lastPanelComponent.Equals(ce.Component))
             {
                 return;
             }
@@ -311,9 +311,9 @@ namespace System.ComponentModel.Design
 
         private void DesignerTransactionClosed(object sender, DesignerTransactionCloseEventArgs e)
         {
-            if (e.LastTransaction && _relatedComponentTransaction != null)
+            if (e.LastTransaction && _relatedComponentTransaction is not null)
             {
-                // surprise surprise we can get multiple even with e.LastTransaction set to true, even though we unhook here this is because the list on which we enumerate (the event handler list) is copied before it's enumerated on which means that if the undo engine for example creates and commit a transaction during the OnCancel of another  completed transaction we will get this twice. So we have to check also for relatedComponentTransaction != null
+                // surprise surprise we can get multiple even with e.LastTransaction set to true, even though we unhook here this is because the list on which we enumerate (the event handler list) is copied before it's enumerated on which means that if the undo engine for example creates and commit a transaction during the OnCancel of another  completed transaction we will get this twice. So we have to check also for relatedComponentTransaction is not null
                 _inTransaction = false;
                 IDesignerHost host = _serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost;
                 host.TransactionClosed -= new DesignerTransactionCloseEventHandler(DesignerTransactionClosed);
@@ -325,7 +325,7 @@ namespace System.ComponentModel.Design
         private void RecreateInternal(IComponent comp)
         {
             DesignerActionGlyph glyph = GetDesignerActionGlyph(comp);
-            if (glyph != null)
+            if (glyph is not null)
             {
                 VerifyGlyphIsInAdorner(glyph);
                 // this could happen when a verb change state or suddenly a control gets a new action in the panel and we are the primary selection in that case there would not be a glyph active in the adorner to be shown because we update that on selection change. We have to do that here too. Sad really...
@@ -344,11 +344,11 @@ namespace System.ComponentModel.Design
             }
 
             //recreate a designeraction panel
-            if (glyphWithPanelToRegen != null)
+            if (glyphWithPanelToRegen is not null)
             {
                 if (glyphWithPanelToRegen.Behavior is DesignerActionBehavior behaviorWithPanelToRegen)
                 {
-                    Debug.Assert(behaviorWithPanelToRegen.RelatedComponent != null, "could not find related component for this refresh");
+                    Debug.Assert(behaviorWithPanelToRegen.RelatedComponent is not null, "could not find related component for this refresh");
                     DesignerActionPanel dap = designerActionHost.CurrentPanel; // WE DO NOT RECREATE THE WHOLE THING / WE UPDATE THE TASKS - should flicker less
                     dap.UpdateTasks(behaviorWithPanelToRegen.ActionLists, new DesignerActionListCollection(), string.Format(SR.DesignerActionPanel_DefaultPanelTitle,
                         behaviorWithPanelToRegen.RelatedComponent.GetType().Name), null);
@@ -362,14 +362,14 @@ namespace System.ComponentModel.Design
             if (glyph.IsInComponentTray)
             {
                 ComponentTray compTray = _serviceProvider.GetService(typeof(ComponentTray)) as ComponentTray;
-                if (compTray.SelectionGlyphs != null && !compTray.SelectionGlyphs.Contains(glyph))
+                if (compTray.SelectionGlyphs is not null && !compTray.SelectionGlyphs.Contains(glyph))
                 {
                     compTray.SelectionGlyphs.Insert(0, glyph);
                 }
             }
             else
             {
-                if (_designerActionAdorner != null && _designerActionAdorner.Glyphs != null && !_designerActionAdorner.Glyphs.Contains(glyph))
+                if (_designerActionAdorner is not null && _designerActionAdorner.Glyphs is not null && !_designerActionAdorner.Glyphs.Contains(glyph))
                 {
                     _designerActionAdorner.Glyphs.Insert(0, glyph);
                 }
@@ -384,7 +384,7 @@ namespace System.ComponentModel.Design
         private void OnDesignerActionsChanged(object sender, DesignerActionListsChangedEventArgs e)
         {
             // We need to invoke this async because the designer action service will  raise this event from the thread pool.
-            if (_marshalingControl != null && _marshalingControl.IsHandleCreated)
+            if (_marshalingControl is not null && _marshalingControl.IsHandleCreated)
             {
                 _marshalingControl.BeginInvoke(new ActionChangedEventHandler(OnInvokedDesignerActionChanged), new object[] { sender, e });
             }
@@ -393,11 +393,11 @@ namespace System.ComponentModel.Design
         private void OnDesignerActionUIStateChange(object sender, DesignerActionUIStateChangeEventArgs e)
         {
             IComponent comp = e.RelatedObject as IComponent;
-            Debug.Assert(comp != null || e.ChangeType == DesignerActionUIStateChangeType.Hide, "related object is not an IComponent, something is wrong here...");
-            if (comp != null)
+            Debug.Assert(comp is not null || e.ChangeType == DesignerActionUIStateChangeType.Hide, "related object is not an IComponent, something is wrong here...");
+            if (comp is not null)
             {
                 DesignerActionGlyph relatedGlyph = GetDesignerActionGlyph(comp);
-                if (relatedGlyph != null)
+                if (relatedGlyph is not null)
                 {
                     if (e.ChangeType == DesignerActionUIStateChangeType.Show)
                     {
@@ -447,7 +447,7 @@ namespace System.ComponentModel.Design
                 if (primSel == e.RelatedObject)
                 {
                     g = GetDesignerActionGlyph(relatedComponent, e.ActionLists);
-                    if (g != null)
+                    if (g is not null)
                     {
                         VerifyGlyphIsInAdorner(g);
                     }
@@ -463,7 +463,7 @@ namespace System.ComponentModel.Design
                 //only remove our glyph if there are no more DesignerActions associated with it.
                 RemoveActionGlyph(e.RelatedObject);
             }
-            else if (g != null)
+            else if (g is not null)
             {
                 // we need to recreate the panel here, since it's content has changed...
                 RecreatePanel(e.RelatedObject as IComponent);
@@ -495,7 +495,7 @@ namespace System.ComponentModel.Design
             }
 
             DesignerActionGlyph glyph = (DesignerActionGlyph)_componentToGlyph[primarySelection];
-            if (glyph != null && glyph.Behavior is DesignerActionBehavior)
+            if (glyph is not null && glyph.Behavior is DesignerActionBehavior)
             {
                 // show the menu
                 if (glyph.Behavior is DesignerActionBehavior behavior)
@@ -532,12 +532,12 @@ namespace System.ComponentModel.Design
             }
 
             DesignerActionGlyph glyph = (DesignerActionGlyph)_componentToGlyph[relatedObject];
-            if (glyph != null)
+            if (glyph is not null)
             {
                 // Check ComponentTray first
-                if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray && compTray.SelectionGlyphs != null)
+                if (_serviceProvider.GetService(typeof(ComponentTray)) is ComponentTray compTray && compTray.SelectionGlyphs is not null)
                 {
-                    if (compTray != null && compTray.SelectionGlyphs.Contains(glyph))
+                    if (compTray is not null && compTray.SelectionGlyphs.Contains(glyph))
                     {
                         compTray.SelectionGlyphs.Remove(glyph);
                     }
@@ -563,13 +563,13 @@ namespace System.ComponentModel.Design
         {
             if (e.LastTransaction)
             {
-                IDesignerHost host = (_serviceProvider != null) ? _serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost : null;
-                if (host != null)
+                IDesignerHost host = (_serviceProvider is not null) ? _serviceProvider.GetService(typeof(IDesignerHost)) as IDesignerHost : null;
+                if (host is not null)
                 {
                     host.TransactionClosed -= new DesignerTransactionCloseEventHandler(InvalidateGlyphOnLastTransaction);
                 }
 
-                if (_relatedGlyphTransaction != null)
+                if (_relatedGlyphTransaction is not null)
                 {
                     _relatedGlyphTransaction.InvalidateOwnerLocation();
                 }
@@ -588,7 +588,7 @@ namespace System.ComponentModel.Design
 
         internal bool IsDesignerActionPanelVisible
         {
-            get => (designerActionHost != null && designerActionHost.Visible);
+            get => (designerActionHost is not null && designerActionHost.Visible);
         }
 
         internal IComponent LastPanelComponent
@@ -620,7 +620,7 @@ namespace System.ComponentModel.Design
             if (e.Cancel == false)
             { // we WILL disappear
                 Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "[DesignerActionUI.toolStripDropDown_Closing] Closing...");
-                Debug.Assert(_lastPanelComponent != null, "last panel component should not be null here... " +
+                Debug.Assert(_lastPanelComponent is not null, "last panel component should not be null here... " +
                     "(except if you're currently debugging VS where deactivation messages in the middle of the pump can mess up everything...)");
                 if (_lastPanelComponent is null)
                 {
@@ -643,7 +643,7 @@ namespace System.ComponentModel.Design
 
                 _lastPanelComponent = null;
                 // panel is going away, pop the behavior that's on the stack...
-                Debug.Assert(_dapkb != null, "why is dapkb null?");
+                Debug.Assert(_dapkb is not null, "why is dapkb null?");
                 Behavior popBehavior = _behaviorService.PopBehavior(_dapkb);
                 Debug.Assert(popBehavior is DesignerActionKeyboardBehavior, "behavior returned is of the wrong kind?");
             }
@@ -667,7 +667,7 @@ namespace System.ComponentModel.Design
             }
 
             // check that the glyph is still visible in the adorner window
-            if (_behaviorService != null &&
+            if (_behaviorService is not null &&
                 !_behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
             {
                 HideDesignerActionPanel();
@@ -693,7 +693,7 @@ namespace System.ComponentModel.Design
             //ISSUE: we can't have this special cased here - we should find a more generic approach to solving this problem
             else if (relatedComponent is ToolStripItem)
             {
-                if (relatedComponent is ToolStripItem item && item.Owner != null)
+                if (relatedComponent is ToolStripItem item && item.Owner is not null)
                 {
                     glyphLocationScreenCoord = _behaviorService.AdornerWindowPointToScreen(glyph.Bounds.Location);
                 }
@@ -735,10 +735,10 @@ namespace System.ComponentModel.Design
             Point location = UpdateDAPLocation(relatedComponent, glyph);
 
             // check that the panel will have at least it's parent glyph visible on the adorner window
-            if (_behaviorService != null &&
+            if (_behaviorService is not null &&
                 _behaviorService.AdornerWindowControl.DisplayRectangle.IntersectsWith(glyph.Bounds))
             {
-                if (_mainParentWindow != null && _mainParentWindow.Handle != IntPtr.Zero)
+                if (_mainParentWindow is not null && _mainParentWindow.Handle != IntPtr.Zero)
                 {
                     Debug.WriteLineIf(s_designerActionPanelTraceSwitch.TraceVerbose, "Assigning owner to mainParentWindow");
                     Debug.WriteLineIf(DropDownVisibilityDebug.TraceVerbose, "Assigning owner to mainParentWindow");
@@ -763,7 +763,7 @@ namespace System.ComponentModel.Design
         {
             _cancelClose = false;
             // force the panel to be the active window - for some reason someone else could have forced VS to become active for real while we were ignoring close. This might be bad cause we'd be in a bad state.
-            if (designerActionHost != null && designerActionHost.Handle != IntPtr.Zero && designerActionHost.Visible)
+            if (designerActionHost is not null && designerActionHost.Handle != IntPtr.Zero && designerActionHost.Visible)
             {
                 User32.SetActiveWindow(new HandleRef(this, designerActionHost.Handle));
                 designerActionHost.CheckFocusIsRight();
@@ -789,7 +789,7 @@ namespace System.ComponentModel.Design
         {
             get
             {
-                if (_panel != null)
+                if (_panel is not null)
                 {
                     return _panel.Control as DesignerActionPanel;
                 }
@@ -808,7 +808,7 @@ namespace System.ComponentModel.Design
 
         public void UpdateContainerSize()
         {
-            if (CurrentPanel != null)
+            if (CurrentPanel is not null)
             {
                 Size panelSize = CurrentPanel.GetPreferredSize(new Size(150, int.MaxValue));
                 if (CurrentPanel.Size == panelSize)
@@ -836,7 +836,7 @@ namespace System.ComponentModel.Design
             }
 
             focusedControl = User32.GetFocus();
-            if (CurrentPanel != null && CurrentPanel.Handle == focusedControl)
+            if (CurrentPanel is not null && CurrentPanel.Handle == focusedControl)
             {
                 Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "    selecting next available control on the panel...");
                 CurrentPanel.SelectNextControl(null, true, true, true, true);
@@ -880,7 +880,7 @@ namespace System.ComponentModel.Design
                     e.Cancel = true;
                     Debug.WriteLineIf(DesignerActionUI.DropDownVisibilityDebug.TraceVerbose, "[DesignerActionToolStripDropDown.OnClosing] Cancel close - the window activating is owned by this window");
                 }
-                else if (_mainParentWindow != null && !WindowOwnsWindow(_mainParentWindow.Handle, hwndActivating))
+                else if (_mainParentWindow is not null && !WindowOwnsWindow(_mainParentWindow.Handle, hwndActivating))
                 {
                     if (IsWindowEnabled(_mainParentWindow.Handle))
                     {
@@ -923,16 +923,16 @@ namespace System.ComponentModel.Design
 
         public void SetDesignerActionPanel(DesignerActionPanel panel, Glyph relatedGlyph)
         {
-            if (_panel != null && panel == (DesignerActionPanel)_panel.Control)
+            if (_panel is not null && panel == (DesignerActionPanel)_panel.Control)
             {
                 return;
             }
 
-            Debug.Assert(relatedGlyph != null, "related glyph cannot be null");
+            Debug.Assert(relatedGlyph is not null, "related glyph cannot be null");
             _relatedGlyph = relatedGlyph;
             panel.SizeChanged += new EventHandler(PanelResized);
             // hook up the event
-            if (_panel != null)
+            if (_panel is not null)
             {
                 Items.Remove(_panel);
                 _panel.Dispose();
@@ -963,7 +963,7 @@ namespace System.ComponentModel.Design
             {
                 SuspendLayout();
                 Size = ctrl.Size;
-                if (_panel != null)
+                if (_panel is not null)
                 {
                     _panel.Size = ctrl.Size;
                 }
@@ -1042,7 +1042,7 @@ namespace System.ComponentModel.Design
             string typeOfControl = "Unknown";
             string nameOfControl = string.Empty;
             Control c = FromHandle(hwnd);
-            if (c != null)
+            if (c is not null)
             {
                 typeOfControl = c.GetType().Name;
                 if (!string.IsNullOrEmpty(c.Name))
@@ -1055,7 +1055,7 @@ namespace System.ComponentModel.Design
                     // some extra debug info for toolstripdropdowns...
                     if (c is ToolStripDropDown dd)
                     {
-                        if (dd.OwnerItem != null)
+                        if (dd.OwnerItem is not null)
                         {
                             nameOfControl += "OwnerItem: [" + dd.OwnerItem.ToString() + "]";
                         }
