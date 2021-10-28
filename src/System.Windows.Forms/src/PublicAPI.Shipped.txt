@@ -1841,8 +1841,8 @@ System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormatt
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.FormattedValue.get -> object
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.Graphics.get -> System.Drawing.Graphics
 ~System.Windows.Forms.DataGridViewCellPaintingEventArgs.Value.get -> object
-~System.Windows.Forms.DataGridViewCellStateChangedEventArgs.Cell.get -> System.Windows.Forms.DataGridViewCell
-~System.Windows.Forms.DataGridViewCellStateChangedEventArgs.DataGridViewCellStateChangedEventArgs(System.Windows.Forms.DataGridViewCell dataGridViewCell, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
+System.Windows.Forms.DataGridViewCellStateChangedEventArgs.Cell.get -> System.Windows.Forms.DataGridViewCell!
+System.Windows.Forms.DataGridViewCellStateChangedEventArgs.DataGridViewCellStateChangedEventArgs(System.Windows.Forms.DataGridViewCell! dataGridViewCell, System.Windows.Forms.DataGridViewElementStates stateChanged) -> void
 ~System.Windows.Forms.DataGridViewCellStyle.DataGridViewCellStyle(System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle) -> void
 ~System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.get -> object
 ~System.Windows.Forms.DataGridViewCellStyle.DataSourceNullValue.set -> void
@@ -1856,10 +1856,10 @@ System.Windows.Forms.DataGridViewCellFormattingEventArgs.DataGridViewCellFormatt
 ~System.Windows.Forms.DataGridViewCellStyle.NullValue.set -> void
 ~System.Windows.Forms.DataGridViewCellStyle.Tag.get -> object
 ~System.Windows.Forms.DataGridViewCellStyle.Tag.set -> void
-~System.Windows.Forms.DataGridViewCellStyleContentChangedEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
+System.Windows.Forms.DataGridViewCellStyleContentChangedEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
 System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.get -> string?
 System.Windows.Forms.DataGridViewCellToolTipTextNeededEventArgs.ToolTipText.set -> void
-~System.Windows.Forms.DataGridViewCellValidatingEventArgs.FormattedValue.get -> object
+System.Windows.Forms.DataGridViewCellValidatingEventArgs.FormattedValue.get -> object?
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.get -> object
 ~System.Windows.Forms.DataGridViewCheckBoxCell.FalseValue.set -> void
 ~System.Windows.Forms.DataGridViewCheckBoxCell.IndeterminateValue.get -> object
