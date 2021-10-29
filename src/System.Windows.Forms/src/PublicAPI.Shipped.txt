@@ -2862,8 +2862,8 @@ System.Windows.Forms.ToolStripGripRenderEventArgs.ToolStripGripRenderEventArgs(S
 ~System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToolStripItemAccessibleObject(System.Windows.Forms.ToolStripItem ownerItem) -> void
 ~System.Windows.Forms.ToolStripItem.ToolTipText.get -> string
 ~System.Windows.Forms.ToolStripItem.ToolTipText.set -> void
-~System.Windows.Forms.ToolStripItemClickedEventArgs.ClickedItem.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripItemClickedEventArgs.ToolStripItemClickedEventArgs(System.Windows.Forms.ToolStripItem clickedItem) -> void
+System.Windows.Forms.ToolStripItemClickedEventArgs.ClickedItem.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStripItemClickedEventArgs.ToolStripItemClickedEventArgs(System.Windows.Forms.ToolStripItem? clickedItem) -> void
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image) -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripItemCollection.Add(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
@@ -2878,8 +2878,8 @@ System.Windows.Forms.ToolStripGripRenderEventArgs.ToolStripGripRenderEventArgs(S
 ~System.Windows.Forms.ToolStripItemCollection.Insert(int index, System.Windows.Forms.ToolStripItem value) -> void
 ~System.Windows.Forms.ToolStripItemCollection.Remove(System.Windows.Forms.ToolStripItem value) -> void
 ~System.Windows.Forms.ToolStripItemCollection.ToolStripItemCollection(System.Windows.Forms.ToolStrip owner, System.Windows.Forms.ToolStripItem[] value) -> void
-~System.Windows.Forms.ToolStripItemEventArgs.Item.get -> System.Windows.Forms.ToolStripItem
-~System.Windows.Forms.ToolStripItemEventArgs.ToolStripItemEventArgs(System.Windows.Forms.ToolStripItem item) -> void
+System.Windows.Forms.ToolStripItemEventArgs.Item.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStripItemEventArgs.ToolStripItemEventArgs(System.Windows.Forms.ToolStripItem? item) -> void
 ~System.Windows.Forms.ToolStripItemImageRenderEventArgs.Image.get -> System.Drawing.Image
 ~System.Windows.Forms.ToolStripItemImageRenderEventArgs.ToolStripItemImageRenderEventArgs(System.Drawing.Graphics g, System.Windows.Forms.ToolStripItem item, System.Drawing.Image image, System.Drawing.Rectangle imageRectangle) -> void
 ~System.Windows.Forms.ToolStripItemImageRenderEventArgs.ToolStripItemImageRenderEventArgs(System.Drawing.Graphics g, System.Windows.Forms.ToolStripItem item, System.Drawing.Rectangle imageRectangle) -> void
