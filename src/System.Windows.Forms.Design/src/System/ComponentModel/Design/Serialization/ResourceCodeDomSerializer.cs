@@ -158,7 +158,7 @@ namespace System.ComponentModel.Design.Serialization
             ArgumentNullException.ThrowIfNull(manager);
             ArgumentNullException.ThrowIfNull(type);
 
-            if (name != null && name.Equals(ResourceManagerName) && typeof(ResourceManager).IsAssignableFrom(type))
+            if (name is not null && name.Equals(ResourceManagerName) && typeof(ResourceManager).IsAssignableFrom(type))
             {
                 return CreateResourceManager(manager);
             }
@@ -185,13 +185,13 @@ namespace System.ComponentModel.Design.Serialization
         {
             // Is there an ExpressionContext we can work with?
             ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
-            if (tree != null)
+            if (tree is not null)
             {
                 return tree.ExpressionType;
             }
 
             // Party on the object, if we can.  It is the best identity we can get.
-            if (value != null)
+            if (value is not null)
             {
                 Type castTo = value.GetType();
                 while (!castTo.IsPublic && !castTo.IsNestedPublic)
@@ -286,7 +286,7 @@ namespace System.ComponentModel.Design.Serialization
                         sm.DeclarationAdded = true;
                         // If we have a root context, then we can write out a reasonable resource manager constructor. If not, then we're a bit hobbled because we have to guess at the resource name.
                         TraceWarningIf(statements is null, "No CodeStatementCollection on serialization stack, we cannot serialize resource manager creation statements.");
-                        if (statements != null)
+                        if (statements is not null)
                         {
                             CodeExpression[] parameters;
                             if (manager.Context[typeof(RootContext)] is RootContext rootCtx)
@@ -329,7 +329,7 @@ namespace System.ComponentModel.Design.Serialization
                 bool needCast;
                 string methodName;
 
-                if (value is string || (tree != null && tree.ExpressionType == typeof(string)))
+                if (value is string || (tree is not null && tree.ExpressionType == typeof(string)))
                 {
                     needCast = false;
                     methodName = "GetString";
@@ -350,7 +350,7 @@ namespace System.ComponentModel.Design.Serialization
                 if (needCast)
                 {
                     Type castTo = GetCastType(manager, value);
-                    if (castTo != null)
+                    if (castTo is not null)
                     {
                         Trace("Supplying cast to {0}", castTo.Name);
                         expression = new CodeCastExpression(castTo, methodInvoke);
@@ -426,7 +426,7 @@ namespace System.ComponentModel.Design.Serialization
         internal void ApplyCacheEntry(IDesignerSerializationManager manager, ComponentCache.Entry entry)
         {
             SerializationResourceManager sm = GetResourceManager(manager);
-            if (entry.Metadata != null)
+            if (entry.Metadata is not null)
             {
                 foreach (ComponentCache.ResourceEntry re in entry.Metadata)
                 {
@@ -434,7 +434,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            if (entry.Resources != null)
+            if (entry.Resources is not null)
             {
                 foreach (ComponentCache.ResourceEntry re in entry.Resources)
                 {
@@ -507,7 +507,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             object comp = rootCtx.Value;
                             PropertyDescriptor prop = TypeDescriptor.GetProperties(comp)["LoadLanguage"];
-                            if (prop != null && prop.PropertyType == typeof(CultureInfo))
+                            if (prop is not null && prop.PropertyType == typeof(CultureInfo))
                             {
                                 _localizationLanguage = (CultureInfo)prop.GetValue(comp);
                             }
@@ -530,7 +530,7 @@ namespace System.ComponentModel.Design.Serialization
                     if (_readCulture is null)
                     {
                         CultureInfo locCulture = LocalizationLanguage;
-                        if (locCulture != null)
+                        if (locCulture is not null)
                         {
                             _readCulture = locCulture;
                         }
@@ -590,7 +590,7 @@ namespace System.ComponentModel.Design.Serialization
                     {
                         IResourceService rs = (IResourceService)_manager.GetService(typeof(IResourceService));
 
-                        if (rs != null)
+                        if (rs is not null)
                         {
                             // We always write with the culture we read with.  In the event of a language change during localization, we will write the new language to the source code and then perform a reload.
                             _writer = rs.GetResourceWriter(ReadCulture);
@@ -671,14 +671,14 @@ namespace System.ComponentModel.Design.Serialization
 
                 // .NET Framework 4.0 (Dev10 #425129): Control location moves due to incorrect anchor info when resource files are reloaded.
                 Windows.Forms.Control control = value as Windows.Forms.Control;
-                if (control != null)
+                if (control is not null)
                 {
                     control.SuspendLayout();
                 }
 
                 base.ApplyResources(value, objectName, culture);
 
-                if (control != null)
+                if (control is not null)
                 {
                     control.ResumeLayout(false);
                 }
@@ -689,7 +689,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private CompareValue CompareWithParentValue(string name, object value)
             {
-                Debug.Assert(name != null, "name is null");
+                Debug.Assert(name is not null, "name is null");
                 // If there is no parent culture, treat that as being different from the parent's resource, which results in the "normal" code path for the caller.
                 if (ReadCulture.Equals(CultureInfo.InvariantCulture))
                 {
@@ -710,7 +710,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             return CompareValue.Same;
                         }
-                        else if (parentValue != null)
+                        else if (parentValue is not null)
                         {
                             if (parentValue.Equals(value))
                             {
@@ -786,11 +786,11 @@ namespace System.ComponentModel.Design.Serialization
                 if (_mergedMetadata is null)
                 {
                     Hashtable t = GetMetadata();
-                    if (t != null)
+                    if (t is not null)
                     {
                         // This is for backwards compatibility and also for the case when our reader/writer don't support metadata.  We must merge the original enumeration data in here or  else existing design time properties won't show up.  That would be really bad for things like Localizable.
                         Hashtable it = GetResourceSet(CultureInfo.InvariantCulture);
-                        if (it != null)
+                        if (it is not null)
                         {
                             foreach (DictionaryEntry de in it)
                             {
@@ -805,7 +805,7 @@ namespace System.ComponentModel.Design.Serialization
                     }
                 }
 
-                if (_mergedMetadata != null)
+                if (_mergedMetadata is not null)
                 {
                     return _mergedMetadata.GetEnumerator();
                 }
@@ -819,7 +819,7 @@ namespace System.ComponentModel.Design.Serialization
             public IDictionaryEnumerator GetEnumerator(CultureInfo culture)
             {
                 Hashtable ht = GetResourceSet(culture);
-                if (ht != null)
+                if (ht is not null)
                 {
                     return ht.GetEnumerator();
                 }
@@ -835,10 +835,10 @@ namespace System.ComponentModel.Design.Serialization
                 if (_metadata is null)
                 {
                     IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
-                    if (resSvc != null)
+                    if (resSvc is not null)
                     {
                         IResourceReader reader = resSvc.GetResourceReader(CultureInfo.InvariantCulture);
-                        if (reader != null)
+                        if (reader is not null)
                         {
                             try
                             {
@@ -876,7 +876,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public object GetObject(string resourceName, bool forceInvariant)
             {
-                Debug.Assert(_manager != null, "This resource manager object has been destroyed.");
+                Debug.Assert(_manager is not null, "This resource manager object has been destroyed.");
                 // We fetch the read culture if someone asks for a culture-sensitive string.  If forceInvariant is set, we always use the invariant culture.
                 CultureInfo culture;
 
@@ -893,7 +893,7 @@ namespace System.ComponentModel.Design.Serialization
                 while (value is null)
                 {
                     Hashtable rs = GetResourceSet(culture);
-                    if (rs != null)
+                    if (rs is not null)
                     {
                         value = rs[resourceName];
                     }
@@ -914,17 +914,17 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             private Hashtable GetResourceSet(CultureInfo culture)
             {
-                Debug.Assert(culture != null, "null parameter");
+                Debug.Assert(culture is not null, "null parameter");
                 Hashtable rs = null;
                 object objRs = ResourceTable[culture];
                 if (objRs is null)
                 {
                     IResourceService resSvc = (IResourceService)_manager.GetService(typeof(IResourceService));
                     TraceErrorIf(resSvc is null, "IResourceService is not available.  We will not be able to load resources.");
-                    if (resSvc != null)
+                    if (resSvc is not null)
                     {
                         IResourceReader reader = resSvc.GetResourceReader(culture);
-                        if (reader != null)
+                        if (reader is not null)
                         {
                             try
                             {
@@ -1002,7 +1002,7 @@ namespace System.ComponentModel.Design.Serialization
             private void OnSerializationComplete(object sender, EventArgs e)
             {
                 // Commit any changes we have made.
-                if (_writer != null)
+                if (_writer is not null)
                 {
                     _writer.Close();
                     _writer = null;
@@ -1011,17 +1011,17 @@ namespace System.ComponentModel.Design.Serialization
                 if (_invariantCultureResourcesDirty || _metadataResourcesDirty)
                 {
                     IResourceService service = (IResourceService)_manager.GetService(typeof(IResourceService));
-                    if (service != null)
+                    if (service is not null)
                     {
                         IResourceWriter invariantWriter = service.GetResourceWriter(CultureInfo.InvariantCulture);
-                        Debug.Assert(invariantWriter != null, "GetResourceWriter returned null for the InvariantCulture");
+                        Debug.Assert(invariantWriter is not null, "GetResourceWriter returned null for the InvariantCulture");
 
                         try
                         {
                             // Do the invariant resources first
                             Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
                             object objRs = ResourceTable[CultureInfo.InvariantCulture];
-                            Debug.Assert(objRs != null && objRs is Hashtable, "ResourceSet for the InvariantCulture not loaded, but it's considered dirty?");
+                            Debug.Assert(objRs is not null && objRs is Hashtable, "ResourceSet for the InvariantCulture not loaded, but it's considered dirty?");
                             Hashtable resourceSet = (Hashtable)objRs;
 
                             // Dump the hash table to the resource writer
@@ -1036,7 +1036,7 @@ namespace System.ComponentModel.Design.Serialization
                             _invariantCultureResourcesDirty = false;
 
                             // Followed by the metadata.
-                            Debug.Assert(_metadata != null, "No metadata, but it's dirty?");
+                            Debug.Assert(_metadata is not null, "No metadata, but it's dirty?");
                             if (invariantWriter is ResXResourceWriter resxWriter)
                             {
                                 foreach (DictionaryEntry de in _metadata)
@@ -1070,7 +1070,7 @@ namespace System.ComponentModel.Design.Serialization
             /// </summary>
             public void SetMetadata(IDesignerSerializationManager manager, string resourceName, object value, bool shouldSerializeValue, bool applyingCachedResources)
             {
-                if (value != null && (!value.GetType().IsSerializable))
+                if (value is not null && (!value.GetType().IsSerializable))
                 {
                     Debug.Fail("Cannot save a non-serializable value into resources.  Add serializable to " + (value is null ? "(null)" : value.GetType().Name));
                     return;
@@ -1096,7 +1096,7 @@ namespace System.ComponentModel.Design.Serialization
                     // Check if the invariant writer supports metadata. If not, we need to push metadata as regular data.
                     IResourceWriter invariantWriter = null;
                     IResourceService service = (IResourceService)manager.GetService(typeof(IResourceService));
-                    if (service != null)
+                    if (service is not null)
                     {
                         invariantWriter = service.GetResourceWriter(CultureInfo.InvariantCulture);
                     }
@@ -1126,8 +1126,8 @@ namespace System.ComponentModel.Design.Serialization
                         _invariantCultureResourcesDirty = true;
                     }
 
-                    Debug.Assert(t != null, "Don't know where to push metadata.");
-                    if (t != null)
+                    Debug.Assert(t is not null, "Don't know where to push metadata.");
+                    if (t is not null)
                     {
                         if (shouldSerializeValue)
                         {
@@ -1155,7 +1155,7 @@ namespace System.ComponentModel.Design.Serialization
             public void SetValue(IDesignerSerializationManager manager, string resourceName, object value, bool forceInvariant, bool shouldSerializeInvariant, bool ensureInvariant, bool applyingCachedResources)
             {
                 // Values we are going to serialize must be serializable or else the resource writer will fail when we close it.
-                if (value != null && (!value.GetType().IsSerializable))
+                if (value is not null && (!value.GetType().IsSerializable))
                 {
                     Debug.Fail("Cannot save a non-serializable value into resources.  Add serializable to " + (value is null ? "(null)" : value.GetType().Name));
                     return;
@@ -1173,7 +1173,7 @@ namespace System.ComponentModel.Design.Serialization
                     else
                     {
                         Hashtable resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
-                        Debug.Assert(resourceSet != null, "No ResourceSet for the InvariantCulture?");
+                        Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                         if (shouldSerializeInvariant)
                         {
                             resourceSet[resourceName] = value;
@@ -1203,7 +1203,7 @@ namespace System.ComponentModel.Design.Serialization
                                 // Add resource to InvariantCulture
                                 Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
                                 Hashtable resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
-                                Debug.Assert(resourceSet != null, "No ResourceSet for the InvariantCulture?");
+                                Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                                 resourceSet[resourceName] = value;
                                 _invariantCultureResourcesDirty = true;
                                 Writer.AddResource(resourceName, value);
@@ -1215,10 +1215,10 @@ namespace System.ComponentModel.Design.Serialization
                                 bool writeValue = true;
                                 bool writeInvariant = false;
                                 PropertyDescriptor prop = (PropertyDescriptor)manager.Context[typeof(PropertyDescriptor)];
-                                if (prop != null)
+                                if (prop is not null)
                                 {
                                     ExpressionContext tree = (ExpressionContext)manager.Context[typeof(ExpressionContext)];
-                                    if (tree != null && tree.Expression is CodePropertyReferenceExpression)
+                                    if (tree is not null && tree.Expression is CodePropertyReferenceExpression)
                                     {
                                         writeValue = prop.ShouldSerializeValue(tree.Owner);
                                         writeInvariant = !prop.CanResetValue(tree.Owner);
@@ -1233,7 +1233,7 @@ namespace System.ComponentModel.Design.Serialization
                                         // Add resource to InvariantCulture
                                         Debug.Assert(!ReadCulture.Equals(CultureInfo.InvariantCulture), "invariantCultureResourcesDirty should only come into play when readCulture != CultureInfo.InvariantCulture; check that CompareWithParentValue is correct");
                                         Hashtable resourceSet = GetResourceSet(CultureInfo.InvariantCulture);
-                                        Debug.Assert(resourceSet != null, "No ResourceSet for the InvariantCulture?");
+                                        Debug.Assert(resourceSet is not null, "No ResourceSet for the InvariantCulture?");
                                         resourceSet[resourceName] = value;
                                         _invariantCultureResourcesDirty = true;
                                     }
@@ -1261,7 +1261,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 string nameBase;
                 bool appendCount = false;
-                if (tree != null)
+                if (tree is not null)
                 {
                     if (tree.Owner == RootComponent)
                     {
@@ -1273,7 +1273,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (nameBase is null)
                         {
                             IReferenceService referenceService = (IReferenceService)manager.GetService(typeof(IReferenceService));
-                            if (referenceService != null)
+                            if (referenceService is not null)
                             {
                                 nameBase = referenceService.GetName(tree.Owner);
                             }
@@ -1308,7 +1308,7 @@ namespace System.ComponentModel.Design.Serialization
                         nameBase = "resource";
                     }
 
-                    if (expressionName != null)
+                    if (expressionName is not null)
                     {
                         nameBase += "." + expressionName;
                     }

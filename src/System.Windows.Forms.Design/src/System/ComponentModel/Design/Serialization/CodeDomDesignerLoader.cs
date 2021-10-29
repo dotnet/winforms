@@ -74,7 +74,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private void ClearDocument()
         {
-            if (_documentType != null)
+            if (_documentType is not null)
             {
                 LoaderHost.RemoveService(typeof(CodeTypeDeclaration));
                 _documentType = null;
@@ -113,7 +113,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
             }
 
-            if (_extenderProviderService != null)
+            if (_extenderProviderService is not null)
             {
                 foreach (IExtenderProvider p in _extenderProviders)
                 {
@@ -150,7 +150,7 @@ namespace System.ComponentModel.Design.Serialization
             // spit this line by line so it respects the indent.
             StringReader sr = new StringReader(sw.ToString());
 
-            for (string ln = sr.ReadLine(); ln != null; ln = sr.ReadLine())
+            for (string ln = sr.ReadLine(); ln is not null; ln = sr.ReadLine())
             {
                 Debug.WriteLine(ln);
             }
@@ -168,7 +168,7 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     Type attributeBaseType = Type.GetType(da.DesignerBaseTypeName);
 
-                    if (attributeBaseType != null && attributeBaseType == typeof(IRootDesigner))
+                    if (attributeBaseType is not null && attributeBaseType == typeof(IRootDesigner))
                     {
                         return true;
                     }
@@ -191,7 +191,7 @@ namespace System.ComponentModel.Design.Serialization
         /// </summary>
         private void EnsureDocument(IDesignerSerializationManager manager)
         {
-            Debug.Assert(manager != null, "Should pass a serialization manager into EnsureDocument");
+            Debug.Assert(manager is not null, "Should pass a serialization manager into EnsureDocument");
 
             // If we do not yet have the compile unit, ask for it.
             if (_documentCompileUnit is null)
@@ -216,7 +216,7 @@ namespace System.ComponentModel.Design.Serialization
                 ArrayList failures = null;
                 bool firstClass = true;
 
-                if (_documentCompileUnit.UserData[typeof(InvalidOperationException)] != null)
+                if (_documentCompileUnit.UserData[typeof(InvalidOperationException)] is not null)
                 {
                     if (_documentCompileUnit.UserData[typeof(InvalidOperationException)] is InvalidOperationException invalidOp)
                     {
@@ -240,7 +240,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             Type t = LoaderHost.GetType(CodeDomSerializerBase.GetTypeNameFromCodeTypeReference(manager, typeRef));
 
-                            if (t != null && !(t.IsInterface))
+                            if (t is not null && !(t.IsInterface))
                             {
                                 baseType = t;
                                 break;
@@ -260,7 +260,7 @@ namespace System.ComponentModel.Design.Serialization
                         // We have a potential type.  The next step is to examine the type's attributes
                         // and see if there is a root designer serializer attribute that supports the
                         // code dom.
-                        if (baseType != null)
+                        if (baseType is not null)
                         {
                             bool foundAttribute = false;
 
@@ -277,11 +277,11 @@ namespace System.ComponentModel.Design.Serialization
                                     string typeName = ra.SerializerBaseTypeName;
 
                                     // This serializer must support a CodeDomSerializer or we're not interested.
-                                    if (typeName != null && LoaderHost.GetType(typeName) == typeof(CodeDomSerializer))
+                                    if (typeName is not null && LoaderHost.GetType(typeName) == typeof(CodeDomSerializer))
                                     {
                                         Type serializerType = LoaderHost.GetType(ra.SerializerTypeName);
 
-                                        if (serializerType != null)
+                                        if (serializerType is not null)
                                         {
                                             foundAttribute = true;
 
@@ -305,7 +305,7 @@ namespace System.ComponentModel.Design.Serialization
                             {
                                 _typeSerializer = manager.GetSerializer(baseType, typeof(TypeCodeDomSerializer)) as TypeCodeDomSerializer;
 
-                                if (!firstClass && _typeSerializer != null)
+                                if (!firstClass && _typeSerializer is not null)
                                 {
                                     _typeSerializer = null;
                                     _documentCompileUnit = null;
@@ -334,7 +334,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
 
                         // If we found a serializer, then we're done.  Save this type and namespace for later use.
-                        if (_rootSerializer != null || _typeSerializer != null)
+                        if (_rootSerializer is not null || _typeSerializer is not null)
                         {
                             _documentNamespace = ns;
                             _documentType = typeDecl;
@@ -344,7 +344,7 @@ namespace System.ComponentModel.Design.Serialization
                         firstClass = false;
                     }
 
-                    if (_documentType != null)
+                    if (_documentType is not null)
                     {
                         break;
                     }
@@ -361,7 +361,7 @@ namespace System.ComponentModel.Design.Serialization
                     // description to the user.
                     Exception ex;
 
-                    if (failures != null)
+                    if (failures is not null)
                     {
                         StringBuilder builder = new StringBuilder();
 
@@ -406,7 +406,7 @@ namespace System.ComponentModel.Design.Serialization
             bool codeDomDirty = false;
             CodeDomProvider provider = CodeDomProvider;
 
-            if (provider != null)
+            if (provider is not null)
             {
                 caseInsensitive = ((provider.LanguageOptions & LanguageOptions.CaseInsensitive) != 0);
             }
@@ -506,7 +506,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 object existingSlot = docMemberHash[memberName];
 
-                if (existingSlot != null)
+                if (existingSlot is not null)
                 {
                     int slot = (int)existingSlot;
                     CodeTypeMember existingMember = docDecl.Members[slot];
@@ -649,7 +649,7 @@ namespace System.ComponentModel.Design.Serialization
 
             _extenderProviderService = GetService(typeof(IExtenderProviderService)) as IExtenderProviderService;
 
-            if (_extenderProviderService != null)
+            if (_extenderProviderService is not null)
             {
                 _extenderProviders = new IExtenderProvider[]
                 {
@@ -711,7 +711,7 @@ namespace System.ComponentModel.Design.Serialization
             }
 
             // EndTimingMark("Reload Parse I");
-            if (_documentCompileUnit != null)
+            if (_documentCompileUnit is not null)
             {
                 reload = reloader.ShouldReloadDesigner(_documentCompileUnit);
                 reload |= (_documentType is null || !_documentType.Name.Equals(oldTypeName));
@@ -737,7 +737,7 @@ namespace System.ComponentModel.Design.Serialization
             // Make sure that we're removed any event sinks we added after we finished the load.
             IComponentChangeService cs = (IComponentChangeService)GetService(typeof(IComponentChangeService));
 
-            if (cs != null)
+            if (cs is not null)
             {
                 cs.ComponentRemoved -= new ComponentEventHandler(OnComponentRemoved);
                 cs.ComponentRename -= new ComponentRenameEventHandler(OnComponentRename);
@@ -843,14 +843,14 @@ namespace System.ComponentModel.Design.Serialization
 
             // Ask the serializer for the root component to serialize.  This should return
             // a CodeTypeDeclaration, which we will plug into our existing code DOM tree.
-            Debug.Assert(_rootSerializer != null || _typeSerializer != null, "What are we saving right now?  Base component has no serializer: " + LoaderHost.RootComponent.GetType().FullName);
+            Debug.Assert(_rootSerializer is not null || _typeSerializer is not null, "What are we saving right now?  Base component has no serializer: " + LoaderHost.RootComponent.GetType().FullName);
 
-            if (_rootSerializer != null)
+            if (_rootSerializer is not null)
             {
                 typeDecl = _rootSerializer.Serialize(manager, LoaderHost.RootComponent) as CodeTypeDeclaration;
-                Debug.Assert(typeDecl != null, "Root CodeDom serializer must return a CodeTypeDeclaration");
+                Debug.Assert(typeDecl is not null, "Root CodeDom serializer must return a CodeTypeDeclaration");
             }
-            else if (_typeSerializer != null)
+            else if (_typeSerializer is not null)
             {
                 typeDecl = _typeSerializer.Serialize(manager, LoaderHost.RootComponent, LoaderHost.Container.Components);
             }
@@ -869,7 +869,7 @@ namespace System.ComponentModel.Design.Serialization
             // Now we must integrate the code DOM tree from the serializer with
             // our own tree.  If changes were made to the tree this will
             // return true.
-            if (typeDecl != null && IntegrateSerializedTree(manager, typeDecl))
+            if (typeDecl is not null && IntegrateSerializedTree(manager, typeDecl))
             {
                 s_codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXIntegrateSerializedTreeEnd);
 #if DEBUG
@@ -902,14 +902,14 @@ namespace System.ComponentModel.Design.Serialization
 
             // Ok, now we have a document, and a root serializer and a namespace.  Or,
             // at least we better.
-            Debug.Assert(_documentType != null, "EnsureDocument didn't create a document type");
-            Debug.Assert(_documentNamespace != null, "EnsureDocument didn't create a document namespace");
-            Debug.Assert(_rootSerializer != null || _typeSerializer != null, "EnsureDocument didn't create a root serializer");
+            Debug.Assert(_documentType is not null, "EnsureDocument didn't create a document type");
+            Debug.Assert(_documentNamespace is not null, "EnsureDocument didn't create a document namespace");
+            Debug.Assert(_rootSerializer is not null || _typeSerializer is not null, "EnsureDocument didn't create a root serializer");
 
             // StartTimingMark();
             s_codemarkers.CodeMarker((int)CodeMarkerEvent.perfFXDeserializeStart);
 
-            if (_rootSerializer != null)
+            if (_rootSerializer is not null)
             {
                 _rootSerializer.Deserialize(manager, _documentType);
             }
@@ -933,7 +933,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             if (LoaderHost.RootComponent == component)
             {
-                if (_documentType != null)
+                if (_documentType is not null)
                 {
                     _documentType.Name = newName;
                 }
@@ -1010,17 +1010,17 @@ namespace System.ComponentModel.Design.Serialization
                 return false;
             }
 
-            if (typeLeft.TypeArguments != null && typeRight.TypeArguments is null)
+            if (typeLeft.TypeArguments is not null && typeRight.TypeArguments is null)
             {
                 return false;
             }
 
-            if (typeLeft.TypeArguments is null && typeRight.TypeArguments != null)
+            if (typeLeft.TypeArguments is null && typeRight.TypeArguments is not null)
             {
                 return false;
             }
 
-            if (typeLeft.TypeArguments != null && typeRight.TypeArguments != null)
+            if (typeLeft.TypeArguments is not null && typeRight.TypeArguments is not null)
             {
                 if (typeLeft.TypeArguments.Count != typeRight.TypeArguments.Count)
                 {
@@ -1147,7 +1147,7 @@ namespace System.ComponentModel.Design.Serialization
             CodeTypeDeclaration type = _documentType;
             Hashtable memberHash = new Hashtable(StringComparer.CurrentCultureIgnoreCase);
 
-            if (type != null)
+            if (type is not null)
             {
                 foreach (CodeTypeMember member in type.Members)
                 {
@@ -1159,7 +1159,7 @@ namespace System.ComponentModel.Design.Serialization
             // against which to check the result. Otherwise, the name build here might be appended to
             // with yet another iterator elsewhere. FWIW, this check is identical to the check used in
             // BaseDesignerLoader's implementation of INameCreationService.CreateName().
-            if (container != null)
+            if (container is not null)
             {
                 int idx = 0;
                 bool conflict;
@@ -1171,12 +1171,12 @@ namespace System.ComponentModel.Design.Serialization
                     conflict = false;
                     finalName = string.Format(CultureInfo.CurrentCulture, "{0}{1}", baseName, idx.ToString(CultureInfo.InvariantCulture));
 
-                    if (container != null && container.Components[finalName] != null)
+                    if (container is not null && container.Components[finalName] is not null)
                     {
                         conflict = true;
                     }
 
-                    if (!conflict && memberHash[finalName] != null)
+                    if (!conflict && memberHash[finalName] is not null)
                     {
                         conflict = true;
                     }
@@ -1194,13 +1194,13 @@ namespace System.ComponentModel.Design.Serialization
             {
                 CodeDomProvider provider = CodeDomProvider;
 
-                if (provider != null)
+                if (provider is not null)
                 {
                     _codeGenerator = provider.CreateGenerator();
                 }
             }
 
-            if (_codeGenerator != null)
+            if (_codeGenerator is not null)
             {
                 finalName = _codeGenerator.CreateValidIdentifier(finalName);
             }
@@ -1227,13 +1227,13 @@ namespace System.ComponentModel.Design.Serialization
             {
                 CodeDomProvider provider = CodeDomProvider;
 
-                if (provider != null)
+                if (provider is not null)
                 {
                     _codeGenerator = provider.CreateGenerator();
                 }
             }
 
-            if (_codeGenerator != null)
+            if (_codeGenerator is not null)
             {
                 if (!_codeGenerator.IsValidIdentifier(name))
                 {
@@ -1253,7 +1253,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 CodeTypeDeclaration type = _documentType;
 
-                if (type != null)
+                if (type is not null)
                 {
                     foreach (CodeTypeMember member in type.Members)
                     {
@@ -1268,7 +1268,7 @@ namespace System.ComponentModel.Design.Serialization
                 // the document type does not have all the necessary
                 // members in it yet.  So, we need to check the container
                 // as well.
-                if (Modified && LoaderHost.Container.Components[name] != null)
+                if (Modified && LoaderHost.Container.Components[name] is not null)
                 {
                     return false;
                 }
@@ -1302,13 +1302,13 @@ namespace System.ComponentModel.Design.Serialization
             {
                 CodeDomProvider provider = CodeDomProvider;
 
-                if (provider != null)
+                if (provider is not null)
                 {
                     _codeGenerator = provider.CreateGenerator();
                 }
             }
 
-            if (_codeGenerator != null)
+            if (_codeGenerator is not null)
             {
                 _codeGenerator.ValidateIdentifier(name);
 
@@ -1341,7 +1341,7 @@ namespace System.ComponentModel.Design.Serialization
             bool dup = false;
             CodeTypeDeclaration type = _documentType;
 
-            if (type != null)
+            if (type is not null)
             {
                 foreach (CodeTypeMember member in type.Members)
                 {
@@ -1357,7 +1357,7 @@ namespace System.ComponentModel.Design.Serialization
             // the document type does not have all the necessary
             // members in it yet.  So, we need to check the container
             // as well.
-            if (!dup && Modified && LoaderHost.Container.Components[name] != null)
+            if (!dup && Modified && LoaderHost.Container.Components[name] is not null)
             {
                 dup = true;
             }

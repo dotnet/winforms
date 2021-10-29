@@ -44,7 +44,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             // If this isn't a serializer type we recognize, do nothing.  Also, if metadata specified
             // a custom serializer, then use it.
-            if (currentSerializer != null)
+            if (currentSerializer is not null)
             {
                 return null;
             }
@@ -106,7 +106,7 @@ namespace System.ComponentModel.Design.Serialization
         private object GetMemberCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             // Don't provide our serializer if someone else already had one
-            if (currentSerializer != null)
+            if (currentSerializer is not null)
             {
                 return null;
             }
@@ -130,7 +130,7 @@ namespace System.ComponentModel.Design.Serialization
         private object GetTypeCodeDomSerializer(IDesignerSerializationManager manager, object currentSerializer, Type objectType, Type serializerType)
         {
             // Don't provide our serializer if someone else already had one
-            if (currentSerializer != null)
+            if (currentSerializer is not null)
             {
                 return null;
             }

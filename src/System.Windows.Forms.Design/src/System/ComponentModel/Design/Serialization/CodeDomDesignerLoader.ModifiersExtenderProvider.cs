@@ -60,13 +60,13 @@ namespace System.ComponentModel.Design.Serialization
                 {
                     ISite site = c.Site;
 
-                    if (site != null)
+                    if (site is not null)
                     {
                         _host = (IDesignerHost)site.GetService(typeof(IDesignerHost));
                     }
                 }
 
-                if (_host != null)
+                if (_host is not null)
                 {
                     baseComponent = _host.RootComponent;
                 }
@@ -96,7 +96,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     object value = dictionary.GetValue("GenerateMember");
 
@@ -126,11 +126,11 @@ namespace System.ComponentModel.Design.Serialization
             {
                 ISite site = comp.Site;
 
-                if (site != null)
+                if (site is not null)
                 {
                     IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                    if (dictionary != null)
+                    if (dictionary is not null)
                     {
                         object value = dictionary.GetValue("Modifiers");
 
@@ -146,7 +146,7 @@ namespace System.ComponentModel.Design.Serialization
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(comp);
                 PropertyDescriptor prop = props["DefaultModifiers"];
 
-                if (prop != null && prop.PropertyType == typeof(MemberAttributes))
+                if (prop is not null && prop.PropertyType == typeof(MemberAttributes))
                 {
                     return (MemberAttributes)prop.GetValue(comp);
                 }
@@ -172,7 +172,7 @@ namespace System.ComponentModel.Design.Serialization
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
                 bool oldValue = GetGenerateMember(comp);
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     dictionary.SetValue("GenerateMember", generate);
                 }
@@ -219,7 +219,7 @@ namespace System.ComponentModel.Design.Serialization
 
                 IDictionaryService dictionary = (IDictionaryService)site.GetService(typeof(IDictionaryService));
 
-                if (dictionary != null)
+                if (dictionary is not null)
                 {
                     dictionary.SetValue("Modifiers", modifiers);
                 }
