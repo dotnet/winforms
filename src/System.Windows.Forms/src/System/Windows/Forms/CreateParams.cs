@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Text;
 
 namespace System.Windows.Forms
@@ -17,12 +15,12 @@ namespace System.Windows.Forms
         ///  class name in this field. For example, to subclass the standard edit
         ///  control, set this field to "EDIT".
         /// </summary>
-        public string ClassName { get; set; }
+        public string? ClassName { get; set; }
 
         /// <summary>
         ///  The initial caption your control will have.
         /// </summary>
-        public string Caption { get; set; }
+        public string? Caption { get; set; }
 
         /// <summary>
         ///  Window style bits. This must be a combination of WS_XXX style flags and
@@ -70,7 +68,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Any extra information that the underlying handle might want.
         /// </summary>
-        public object Param { get; set; }
+        public object? Param { get; set; }
 
         public override string ToString()
         {
