@@ -5772,6 +5772,32 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, callCount);
         }
 
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void ToolStrip_OnMouseLeave_UnselectsToolStripItem(bool toolStripItemEnabled)
+        {
+            using var toolStrip = new SubToolStrip()
+            {
+                GripStyle = ToolStripGripStyle.Hidden
+            };
+            using var item = new SubToolStripItem()
+            {
+                Enabled = toolStripItemEnabled,
+                Parent = toolStrip,
+                SupportsDisabledHotTracking = true
+            };
+
+            item.SetPlacement(ToolStripItemPlacement.Main);
+            toolStrip.Items.Add(item);
+            toolStrip.SetDisplayedItems();
+
+            toolStrip.OnMouseMove(new MouseEventArgs(MouseButtons.Left, 1, item.Bounds.X, item.Bounds.Y, 0));
+            Assert.True(item.Selected);
+
+            toolStrip.OnMouseLeave(new EventArgs());
+            Assert.False(item.Selected);
+        }
+
         [WinFormsFact]
         public void ToolStrip_OnPaint_NullE_ThrowsNullReferenceException()
         {
