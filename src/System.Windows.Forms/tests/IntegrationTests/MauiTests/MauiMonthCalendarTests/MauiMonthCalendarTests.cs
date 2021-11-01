@@ -136,7 +136,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(cell != null);
         }
 
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult MonthCalendar_Click_Date_InvokeEvents(TParams p)
         {
             using var wrapper = new MonthCalendarWrapper(this);
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
         }
 
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult MonthCalendar_Click_MinimumDate_InvokeEvents(TParams p)
         {
             using var wrapper = new MonthCalendarWrapper(this);
@@ -178,7 +178,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
         }
 
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult MonthCalendar_Click_MaximumDate_InvokeEvents(TParams p)
         {
             using var wrapper = new MonthCalendarWrapper(this);
@@ -199,7 +199,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
         }
 
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult MonthCalendar_DoubleClick_Date_InvokeEvents(TParams p)
         {
             using var wrapper = new MonthCalendarWrapper(this);
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
         }
 
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult MonthCalendar_DoubleClick_MinDate_InvokeEvents(TParams p)
         {
             using var wrapper = new MonthCalendarWrapper(this);
@@ -253,7 +253,7 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
             return new ScenarioResult(testData.SelectedDate.Date == newDate.Date, "The selected date has not changed");
         }
 
-        [Scenario(true)]
+        [Scenario(false)]
         public ScenarioResult MonthCalendar_DoubleClick_MaxDate_InvokeEvents(TParams p)
         {
             using var wrapper = new MonthCalendarWrapper(this);
