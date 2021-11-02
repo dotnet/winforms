@@ -86,7 +86,7 @@ namespace System.ComponentModel.Design.Serialization
 
             int IEqualityComparer.GetHashCode(object x)
             {
-                if (x != null)
+                if (x is not null)
                 {
                     return x.GetHashCode();
                 }

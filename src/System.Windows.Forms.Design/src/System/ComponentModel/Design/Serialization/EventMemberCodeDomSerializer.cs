@@ -52,12 +52,12 @@ namespace System.ComponentModel.Design.Serialization
                     PropertyDescriptor prop = eventBindings.GetEventProperty(eventToSerialize);
                     string methodName = (string)prop.GetValue(value);
 
-                    if (methodName != null)
+                    if (methodName is not null)
                     {
                         Trace("Event {0} bound to {1}", eventToSerialize.Name, methodName);
                         CodeExpression eventTarget = SerializeToExpression(manager, value);
                         TraceWarningIf(eventTarget is null, "Object has no name and no property ref in context so we cannot serialize events: {0}", value);
-                        if (eventTarget != null)
+                        if (eventTarget is not null)
                         {
                             CodeTypeReference delegateTypeRef = new CodeTypeReference(eventToSerialize.EventType);
                             CodeDelegateCreateExpression delegateCreate = new CodeDelegateCreateExpression(delegateTypeRef, _thisRef, methodName);

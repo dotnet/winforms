@@ -102,7 +102,7 @@ namespace System.ComponentModel.Design.Serialization
                         originalValues[value] = count;
                     }
                 }
-                else if (result != null)
+                else if (result is not null)
                 {
                     // this one isn't in the old list, so add it to our  result list.
                     result.Add(value);
@@ -111,7 +111,7 @@ namespace System.ComponentModel.Design.Serialization
                 // this item isn't in the list and we haven't yet created our array list so just keep on going.
             }
 
-            if (result != null)
+            if (result is not null)
             {
                 return result;
             }
@@ -130,7 +130,7 @@ namespace System.ComponentModel.Design.Serialization
             if (attrs.Length > 0)
             {
                 DesignerSerializationVisibilityAttribute vis = (DesignerSerializationVisibilityAttribute)attrs[0];
-                if (vis != null && vis.Visibility == DesignerSerializationVisibility.Hidden)
+                if (vis is not null && vis.Visibility == DesignerSerializationVisibility.Hidden)
                 {
                     Trace("Member {0} does not support serialization.", method.Name);
                     return false;
@@ -190,7 +190,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                     }
 
-                    if (target != null || isArray)
+                    if (target is not null || isArray)
                     {
                         if (prop is InheritedPropertyDescriptor inheritedDesc && !isArray)
                         {
@@ -200,11 +200,11 @@ namespace System.ComponentModel.Design.Serialization
                         result = SerializeCollection(manager, target, collectionType, collection, subset);
 
                         // See if we should emit a clear for this collection.
-                        if (target != null && ShouldClearCollection(manager, collection))
+                        if (target is not null && ShouldClearCollection(manager, collection))
                         {
                             CodeStatementCollection resultCol = result as CodeStatementCollection;
                             // If non empty collection is being serialized, but no statements were generated, there is no need to clear.
-                            if (collection.Count > 0 && (result is null || (resultCol != null && resultCol.Count == 0)))
+                            if (collection.Count > 0 && (result is null || (resultCol is not null && resultCol.Count == 0)))
                             {
                                 return null;
                             }
@@ -220,7 +220,7 @@ namespace System.ComponentModel.Design.Serialization
                                 result = resultCol;
                             }
 
-                            if (resultCol != null)
+                            if (resultCol is not null)
                             {
                                 CodeMethodInvokeExpression clearMethod = new CodeMethodInvokeExpression(target, "Clear");
                                 CodeExpressionStatement clearStmt = new CodeExpressionStatement(clearMethod);
@@ -252,17 +252,17 @@ namespace System.ComponentModel.Design.Serialization
                 Type objType = provider.GetReflectionType(obj);
                 MethodInfo candidate = null;
                 Type candidateType = null;
-                if (final is null || (finalType != null && !finalType.IsAssignableFrom(objType)))
+                if (final is null || (finalType is not null && !finalType.IsAssignableFrom(objType)))
                 {
                     foreach (MethodInfo method in methods)
                     {
                         ParameterInfo parameter = method.GetParameters()[0];
-                        if (parameter != null)
+                        if (parameter is not null)
                         {
                             Type type = parameter.ParameterType.IsArray ? parameter.ParameterType.GetElementType() : parameter.ParameterType;
-                            if (type != null && type.IsAssignableFrom(objType))
+                            if (type is not null && type.IsAssignableFrom(objType))
                             {
-                                if (final != null)
+                                if (final is not null)
                                 {
                                     if (type.IsAssignableFrom(finalType))
                                     {
@@ -318,9 +318,9 @@ namespace System.ComponentModel.Design.Serialization
             {
                 Trace("Collection is array");
                 CodeArrayCreateExpression arrayCreate = SerializeArray(manager, targetType, originalCollection, valuesToSerialize);
-                if (arrayCreate != null)
+                if (arrayCreate is not null)
                 {
-                    if (targetExpression != null)
+                    if (targetExpression is not null)
                     {
                         result = new CodeAssignStatement(targetExpression, arrayCreate);
                     }
@@ -372,7 +372,7 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 MethodInfo addRangeMethodToUse = ChooseMethodByType(provider, addRangeMethods, valuesToSerialize);
-                if (addRangeMethodToUse != null)
+                if (addRangeMethodToUse is not null)
                 {
                     Type elementType = provider.GetRuntimeType(addRangeMethodToUse.GetParameters()[0].ParameterType.GetElementType());
                     result = SerializeViaAddRange(manager, targetExpression, targetType, elementType, valuesToSerialize);
@@ -381,7 +381,7 @@ namespace System.ComponentModel.Design.Serialization
                 else
                 {
                     MethodInfo addMethodToUse = ChooseMethodByType(provider, addMethods, valuesToSerialize);
-                    if (addMethodToUse != null)
+                    if (addMethodToUse is not null)
                     {
                         Type elementType = provider.GetRuntimeType(addMethodToUse.GetParameters()[0].ParameterType);
                         result = SerializeViaAdd(manager, targetExpression, targetType, elementType, valuesToSerialize);
@@ -452,7 +452,7 @@ namespace System.ComponentModel.Design.Serialization
                         }
                         finally
                         {
-                            if (newCtx != null)
+                            if (newCtx is not null)
                             {
                                 Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                                 manager.Context.Pop();
@@ -461,7 +461,7 @@ namespace System.ComponentModel.Design.Serialization
 
                         if (expression is CodeExpression)
                         {
-                            if (o != null && o.GetType() != elementType)
+                            if (o is not null && o.GetType() != elementType)
                             {
                                 expression = new CodeCastExpression(elementType, expression);
                             }
@@ -511,7 +511,7 @@ namespace System.ComponentModel.Design.Serialization
                         if (!genCode)
                         {
                             InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)];
-                            if (ia != null)
+                            if (ia is not null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                                 {
@@ -553,19 +553,19 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             finally
                             {
-                                if (newCtx != null)
+                                if (newCtx is not null)
                                 {
                                     Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                                     manager.Context.Pop();
                                 }
                             }
 
-                            if (o != null && !elementType.IsAssignableFrom(o.GetType()) && o.GetType().IsPrimitive)
+                            if (o is not null && !elementType.IsAssignableFrom(o.GetType()) && o.GetType().IsPrimitive)
                             {
                                 serializedObj = new CodeCastExpression(elementType, serializedObj);
                             }
 
-                            if (serializedObj != null)
+                            if (serializedObj is not null)
                             {
                                 statement.Parameters.Add(serializedObj);
                                 statements.Add(statement);
@@ -604,7 +604,7 @@ namespace System.ComponentModel.Design.Serialization
                         {
                             InheritanceAttribute ia = (InheritanceAttribute)TypeDescriptor.GetAttributes(o)[typeof(InheritanceAttribute)];
 
-                            if (ia != null)
+                            if (ia is not null)
                             {
                                 if (ia.InheritanceLevel == InheritanceLevel.InheritedReadOnly)
                                 {
@@ -640,17 +640,17 @@ namespace System.ComponentModel.Design.Serialization
                             }
                             finally
                             {
-                                if (newCtx != null)
+                                if (newCtx is not null)
                                 {
                                     Debug.Assert(manager.Context.Current == newCtx, "Context stack corrupted.");
                                     manager.Context.Pop();
                                 }
                             }
 
-                            if (exp != null)
+                            if (exp is not null)
                             {
                                 // Check to see if we need a cast
-                                if (o != null && !elementType.IsAssignableFrom(o.GetType()))
+                                if (o is not null && !elementType.IsAssignableFrom(o.GetType()))
                                 {
                                     exp = new CodeCastExpression(elementType, exp);
                                 }
@@ -695,7 +695,7 @@ namespace System.ComponentModel.Design.Serialization
         {
             bool shouldClear = false;
             PropertyDescriptor clearProp = manager.Properties["ClearCollections"];
-            if (clearProp != null && clearProp.PropertyType == typeof(bool) && ((bool)clearProp.GetValue(manager) == true))
+            if (clearProp is not null && clearProp.PropertyType == typeof(bool) && ((bool)clearProp.GetValue(manager) == true))
             {
                 shouldClear = true;
             }
@@ -704,7 +704,7 @@ namespace System.ComponentModel.Design.Serialization
             {
                 SerializeAbsoluteContext absolute = (SerializeAbsoluteContext)manager.Context[typeof(SerializeAbsoluteContext)];
                 PropertyDescriptor prop = manager.Context[typeof(PropertyDescriptor)] as PropertyDescriptor;
-                if (absolute != null && absolute.ShouldSerialize(prop))
+                if (absolute is not null && absolute.ShouldSerialize(prop))
                 {
                     shouldClear = true;
                 }
