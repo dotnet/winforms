@@ -56,8 +56,8 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetIAccessiblePair(IUnknown* pUnknown
         long idChild = 1;
         CComPtr<IAccessible> result;
         hr = pAccessibleEx->GetIAccessiblePair(&result, &idChild);
-        assertEqualHr(E_POINTER, hr);
-        assertNull(result.p);
+        assertEqualHr(S_OK, hr);
+        assertNotNull(result.p);
         assertEqualInt(0, idChild);
 
         // Negative tests.
@@ -70,8 +70,9 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetIAccessiblePair(IUnknown* pUnknown
 #endif
         assertEqualInt(1, idChild);
 
+        result = NULL;
         hr = pAccessibleEx->GetIAccessiblePair(&result, NULL);
-        assertEqualHr(E_POINTER, hr);
+        assertEqualHr(E_INVALIDARG, hr);
         assertNull(result.p);
 
         hr = pAccessibleEx->GetIAccessiblePair(NULL, NULL);

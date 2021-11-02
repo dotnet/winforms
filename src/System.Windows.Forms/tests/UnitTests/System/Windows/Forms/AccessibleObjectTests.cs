@@ -2606,6 +2606,35 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(type, runtimeIdProperty.DeclaringType);
         }
 
+        [WinFormsFact]
+        public unsafe void AccessibleObject_GetIAccessiblePair_Invoke_ReturnsExpected()
+        {
+            const int expectedIdChild = NativeMethods.CHILDID_SELF;
+
+            AccessibleObject accessibleObject = new();
+
+            // Use some number different from the expected to ensure that the value is changed
+            int idChild = unchecked((int)0xdeadbeef);
+            Assert.NotEqual(expectedIdChild, idChild);
+
+            HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, &idChild);
+
+            Assert.Equal(HRESULT.S_OK, result);
+            Assert.Equal(accessibleObject, pAcc);
+            Assert.Equal(expectedIdChild, idChild);
+        }
+
+        [WinFormsFact]
+        public unsafe void AccessibleObject_GetIAccessiblePair_InvokeWithInvalidArgument_ReturnsError()
+        {
+            AccessibleObject accessibleObject = new();
+
+            HRESULT result = ((UiaCore.IAccessibleEx)accessibleObject).GetIAccessiblePair(out object pAcc, null);
+
+            Assert.Equal(HRESULT.E_INVALIDARG, result);
+            Assert.Null(pAcc);
+        }
+
         private class SubAccessibleObject : AccessibleObject
         {
             public new void UseStdAccessibleObjects(IntPtr handle) => base.UseStdAccessibleObjects(handle);
