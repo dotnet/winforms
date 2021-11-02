@@ -283,6 +283,52 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void Set_TextAlign_With_Enum_Values()
+        {
+            using Label label = new();
+            label.AutoSize = true;
+
+            foreach (int value in Enum.GetValues(typeof(ContentAlignment)))
+            {
+                try
+                {
+                    label.TextAlign = (ContentAlignment)value;
+                }
+                catch
+                {
+                    Assert.Throws<Exception>(() => Console.WriteLine($"Failed to set ContentAlignment: {value}"));
+                }
+            }
+        }
+
+        [WinFormsFact]
+        public void Set_TextAlign_With_Enum_Names()
+        {
+            using Label label = new();
+            label.AutoSize = true;
+
+            foreach (string value in Enum.GetNames(typeof(ContentAlignment)))
+            {
+                try
+                {
+                    label.TextAlign = (ContentAlignment)Enum.Parse(typeof(ContentAlignment), value);
+                }
+                catch
+                {
+                    Assert.Throws<Exception>(() => Console.WriteLine($"Failed to set ContentAlignment: {value}"));
+                }
+            }
+        }
+
+        [WinFormsFact]
+        public void Set_TextAlign_With_Invalid_Enum_Value()
+        {
+            using Label label = new();
+            label.AutoSize = true;
+            Assert.Throws<InvalidEnumArgumentException>(() => label.TextAlign = (ContentAlignment)(-1));
+        }
+
         public class SubLabel : Label
         {
             public new bool CanEnableIme => base.CanEnableIme;
