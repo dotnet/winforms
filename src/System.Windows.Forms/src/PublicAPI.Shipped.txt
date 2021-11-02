@@ -126,7 +126,7 @@ override System.Windows.Forms.AxHost.StateConverter.ConvertTo(System.ComponentMo
 ~override System.Windows.Forms.Control.Site.set -> void
 ~override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding dataBinding) -> void
 ~override System.Windows.Forms.ControlBindingsCollection.RemoveCore(System.Windows.Forms.Binding dataBinding) -> void
-~override System.Windows.Forms.CreateParams.ToString() -> string
+override System.Windows.Forms.CreateParams.ToString() -> string!
 ~override System.Windows.Forms.CurrencyManager.Current.get -> object
 ~override System.Windows.Forms.CurrencyManager.GetItemProperties() -> System.ComponentModel.PropertyDescriptorCollection
 ~override System.Windows.Forms.CursorConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
@@ -1741,12 +1741,12 @@ System.Windows.Forms.CommonDialog.Tag.set -> void
 ~System.Windows.Forms.ControlBindingsCollection.this[string propertyName].get -> System.Windows.Forms.Binding
 System.Windows.Forms.ControlEventArgs.Control.get -> System.Windows.Forms.Control?
 System.Windows.Forms.ControlEventArgs.ControlEventArgs(System.Windows.Forms.Control? control) -> void
-~System.Windows.Forms.CreateParams.Caption.get -> string
-~System.Windows.Forms.CreateParams.Caption.set -> void
-~System.Windows.Forms.CreateParams.ClassName.get -> string
-~System.Windows.Forms.CreateParams.ClassName.set -> void
-~System.Windows.Forms.CreateParams.Param.get -> object
-~System.Windows.Forms.CreateParams.Param.set -> void
+System.Windows.Forms.CreateParams.Caption.get -> string?
+System.Windows.Forms.CreateParams.Caption.set -> void
+System.Windows.Forms.CreateParams.ClassName.get -> string?
+System.Windows.Forms.CreateParams.ClassName.set -> void
+System.Windows.Forms.CreateParams.Param.get -> object?
+System.Windows.Forms.CreateParams.Param.set -> void
 ~System.Windows.Forms.CurrencyManager.List.get -> System.Collections.IList
 ~System.Windows.Forms.DataFormats.Format.Format(string name, int id) -> void
 ~System.Windows.Forms.DataFormats.Format.Name.get -> string
