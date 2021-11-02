@@ -35,7 +35,7 @@ namespace System.Windows.Forms
                         return 0;
                     }
 
-                    return _ownerPropertyGrid._viewTabs.Length;
+                    return _ownerPropertyGrid._tabs.Count;
                 }
             }
 
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.PropertyGridPropertyTabCollectionReadOnly);
                     }
 
-                    return _ownerPropertyGrid._viewTabs[index];
+                    return _ownerPropertyGrid._tabs[index].Tab;
                 }
             }
 
@@ -100,9 +100,14 @@ namespace System.Windows.Forms
                     return;
                 }
 
-                if (_ownerPropertyGrid._viewTabs.Length > 0)
+                if (_ownerPropertyGrid._tabs.Count > 0)
                 {
-                    Array.Copy(_ownerPropertyGrid._viewTabs, 0, dest, index, _ownerPropertyGrid._viewTabs.Length);
+                    Array.Copy(
+                        _ownerPropertyGrid._tabs.Select(i => i.Tab).ToArray(),
+                        0,
+                        dest,
+                        index,
+                        _ownerPropertyGrid._tabs.Count);
                 }
             }
 
@@ -116,7 +121,7 @@ namespace System.Windows.Forms
                     return Array.Empty<PropertyTab>().GetEnumerator();
                 }
 
-                return _ownerPropertyGrid._viewTabs.GetEnumerator();
+                return _ownerPropertyGrid._tabs.Select(i => i.Tab).GetEnumerator();
             }
 
             public void RemoveTabType(Type propertyTabType)
