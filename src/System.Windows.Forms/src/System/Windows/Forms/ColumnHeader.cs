@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Design;
 using static Interop;
@@ -24,18 +22,18 @@ namespace System.Windows.Forms
 #pragma warning disable 0414
         internal int _index = -1;
 #pragma warning restore 0414
-        internal string _text;
+        internal string? _text;
         internal string _name;
         internal int _width = 60;
 
         // Use TextAlign property instead of this member variable, always
         private HorizontalAlignment _textAlign = HorizontalAlignment.Left;
         private bool _textAlignInitialized;
-        private AccessibleObject _accessibilityObject;
+        private AccessibleObject? _accessibilityObject;
         private readonly ColumnHeaderImageListIndexer _imageIndexer;
 
         // We need to send some messages to ListView when it gets initialized.
-        internal ListView OwnerListview
+        internal ListView? OwnerListview
         {
             get
             {
@@ -58,6 +56,7 @@ namespace System.Windows.Forms
         public ColumnHeader()
         {
             _imageIndexer = new ColumnHeaderImageListIndexer(this);
+            _name = string.Empty;
         }
 
         /// <summary>
@@ -140,7 +139,7 @@ namespace System.Windows.Forms
                 // set the display indices. This is not an expensive operation because
                 // we only set an integer in the column header class
                 bool hdrMovedForward = value > DisplayIndexInternal;
-                ColumnHeader movedHdr = null;
+                ColumnHeader? movedHdr = null;
                 for (int i = 0; i < ListView.Columns.Count; i++)
                 {
                     ColumnHeader hdr = ListView.Columns[i];
@@ -159,8 +158,12 @@ namespace System.Windows.Forms
                     }
                 }
 
-                movedHdr.DisplayIndexInternal = value;
-                colsOrder[movedHdr.DisplayIndexInternal] = movedHdr.Index;
+                if (movedHdr is not null)
+                {
+                    movedHdr.DisplayIndexInternal = value;
+                    colsOrder[movedHdr.DisplayIndexInternal] = movedHdr.Index;
+                }
+
                 SetDisplayIndices(colsOrder);
             }
         }
@@ -224,7 +227,7 @@ namespace System.Windows.Forms
         }
 
         [Browsable(false)]
-        public ImageList ImageList
+        public ImageList? ImageList
         {
             // we added the ImageList property so that the ImageIndexConverter can find our image list
             get
@@ -264,14 +267,14 @@ namespace System.Windows.Forms
         ///  Returns the ListView control that this column is displayed in.  May be null
         /// </summary>
         [Browsable(false)]
-        public ListView ListView { get; private set; }
+        public ListView? ListView { get; private set; }
 
         /// <summary>
         ///  The Name of the column header
         /// </summary>
         [Browsable(false)]
         [SRDescription(nameof(SR.ColumnHeaderNameDescr))]
-        public string Name
+        public string? Name
         {
             get
             {
@@ -300,7 +303,7 @@ namespace System.Windows.Forms
         /// </summary>
         [Localizable(true)]
         [SRDescription(nameof(SR.ColumnCaption))]
-        public string Text
+        public string? Text
         {
             get
             {
@@ -374,7 +377,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         internal int WidthInternal
         {
@@ -443,7 +446,7 @@ namespace System.Windows.Forms
         public object Clone()
         {
             Type clonedType = GetType();
-            ColumnHeader columnHeader = null;
+            ColumnHeader columnHeader;
 
             if (clonedType == typeof(ColumnHeader))
             {
@@ -451,7 +454,7 @@ namespace System.Windows.Forms
             }
             else
             {
-                columnHeader = (ColumnHeader)Activator.CreateInstance(clonedType);
+                columnHeader = (ColumnHeader)Activator.CreateInstance(clonedType)!;
             }
 
             columnHeader._text = _text;
@@ -485,7 +488,7 @@ namespace System.Windows.Forms
         // Set the display indices of the listview columns
         private unsafe void SetDisplayIndices(int[] cols)
         {
-            if (ListView.IsHandleCreated && !ListView.Disposing)
+            if (ListView is not null && ListView.IsHandleCreated && !ListView.Disposing)
             {
                 fixed (int* pCols = cols)
                 {
