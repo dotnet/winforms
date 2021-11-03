@@ -1653,8 +1653,9 @@ namespace System.Windows.Forms
             {
                 tab = CreatePropertyTab(tabType);
             }
-            catch (Exception)
+            catch (Exception exception)
             {
+                Debug.Fail($"{nameof(CreatePropertyTab)} failed. {exception.Message}");
                 return null;
             }
 
@@ -1689,13 +1690,12 @@ namespace System.Windows.Forms
                         tab = (PropertyTab)Activator.CreateInstance(tabType);
                     }
                 }
-                catch
+                catch (Exception exception)
                 {
+                    Debug.Fail($"Failed to create {nameof(PropertyTab)}. {exception.Message}");
                     tab = null;
                 }
             }
-
-            Debug.Assert(tab is not null, "Failed to create tab!");
 
             if (tab is not null)
             {
