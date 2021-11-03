@@ -43,15 +43,13 @@ namespace System.Windows.Forms
         private Bitmap _categoryBitmap;
         private Bitmap _propertyPageBitmap;
 
-        // Our array of view tabs
-        private bool _viewTabsDirty = true;
-        private bool _drawFlatToolBar;
-        private PropertyTab[] _viewTabs = Array.Empty<PropertyTab>();
-        private PropertyTabScope[] _viewTabScopes = Array.Empty<PropertyTabScope>();
-        private Dictionary<string, GridEntry> _viewTabProperties;
+        private readonly List<TabInfo> _tabs = new();
+        private TabInfo _selectedTab;
+        private bool _tabsDirty = true;
 
-        private ToolStripButton[] _viewTabButtons;
-        private int _selectedViewTab;
+        private bool _drawFlatToolBar;
+
+        private Dictionary<string, GridEntry> _viewTabProperties;
 
         // Our view type buttons (Alpha vs. categorized)
         private ToolStripButton[] _viewSortButtons;
@@ -1023,22 +1021,22 @@ namespace System.Windows.Forms
                     _rootEntry?.Dispose();
                     _rootEntry = null;
 
-                    if (!classesSame && !GetFlag(Flags.TabsChanging) && _selectedViewTab < _viewTabButtons.Length)
+                    if (!classesSame && !GetFlag(Flags.TabsChanging))
                     {
                         // Throw away any extra component only tabs.
 
-                        Type tabType = _selectedViewTab == -1 ? null : _viewTabs[_selectedViewTab].GetType();
+                        Type tabType = _selectedTab?.TabType;
                         ToolStripButton viewTabButton = null;
                         RefreshTabs(PropertyTabScope.Component);
                         EnableTabs();
 
                         if (tabType is not null)
                         {
-                            for (int i = 0; i < _viewTabs.Length; i++)
+                            foreach (var tab in _tabs)
                             {
-                                if (_viewTabs[i].GetType() == tabType && _viewTabButtons[i].Visible)
+                                if (tab.TabType == tabType && tab.Button.Visible)
                                 {
-                                    viewTabButton = _viewTabButtons[i];
+                                    viewTabButton = tab.Button;
                                     break;
                                 }
                             }
@@ -1048,10 +1046,10 @@ namespace System.Windows.Forms
                     }
 
                     // Make sure we've also got events on all the objects.
-                    if (showEvents && _viewTabs is not null && _viewTabs.Length > EventsTabIndex
-                        && (_viewTabs[EventsTabIndex] is EventsTab eventsTab))
+                    if (showEvents && _tabs.Count > EventsTabIndex
+                        && _tabs[EventsTabIndex] is { } eventTab && eventTab.Tab is EventsTab)
                     {
-                        showEvents = _viewTabButtons[EventsTabIndex].Visible;
+                        showEvents = eventTab.Button.Visible;
                         var attributes = new Attribute[BrowsableAttributes.Count];
                         BrowsableAttributes.CopyTo(attributes, 0);
 
@@ -1080,7 +1078,7 @@ namespace System.Windows.Forms
                                 && component.Site is not null
                                 // Use the original (possibly ICustomTypeDescriptor) to check whether there are
                                 // properties as this is what what we'll actually use to fill the events tab.
-                                && (eventsTab.GetProperties(_selectedObjects[i], attributes)?.Count ?? 0) > 0;
+                                && (eventTab.Tab.GetProperties(_selectedObjects[i], attributes)?.Count ?? 0) > 0;
 
                             if (showEvents)
                             {
@@ -1110,9 +1108,9 @@ namespace System.Windows.Forms
                     // Get the active designer and see if we've stashed away state for it.
                     if (TryGetSavedTabSelection(out int selectedTab))
                     {
-                        if (selectedTab < _viewTabs.Length && (selectedTab == PropertiesTabIndex || _viewTabButtons[selectedTab].Visible))
+                        if (selectedTab < _tabs.Count && (selectedTab == PropertiesTabIndex || _tabs[selectedTab].Button.Visible))
                         {
-                            SelectViewTabButton(_viewTabButtons[selectedTab], updateSelection: true);
+                            SelectViewTabButton(_tabs[selectedTab].Button, updateSelection: true);
                         }
                     }
                     else
@@ -1141,8 +1139,8 @@ namespace System.Windows.Forms
         {
             get
             {
-                Debug.Assert(_selectedViewTab < _viewTabs.Length && _selectedViewTab >= 0, "Invalid tab selection!");
-                return _viewTabs[_selectedViewTab];
+                Debug.Assert(_selectedTab is not null, "Invalid tab selection!");
+                return _selectedTab?.Tab;
             }
         }
 
@@ -1256,7 +1254,7 @@ namespace System.Windows.Forms
                 OnLayoutInternal(dividerOnly: false);
                 if (value)
                 {
-                    SetupToolbar(_viewTabsDirty);
+                    SetupToolbar(fullRebuild: _tabsDirty);
                 }
 
                 Invalidate();
@@ -1329,7 +1327,8 @@ namespace System.Windows.Forms
             }
 
             // Resize bitmap only if resizing is needed in order to avoid image distortion.
-            if (DpiHelper.IsScalingRequired && (image.Size.Width != s_normalButtonSize.Width || image.Size.Height != s_normalButtonSize.Height))
+            if (DpiHelper.IsScalingRequired
+                && (image.Size.Width != s_normalButtonSize.Width || image.Size.Height != s_normalButtonSize.Height))
             {
                 image = DpiHelper.CreateResizedBitmap(image, s_normalButtonSize);
             }
@@ -1469,28 +1468,21 @@ namespace System.Windows.Forms
             remove => Events.RemoveHandler(s_selectedObjectsChangedEvent, value);
         }
 
-        internal void AddTab(Type tabType, PropertyTabScope type, object @object = null, bool setupToolbar = true)
+        internal void AddTab(Type tabType, PropertyTabScope scope, object @object = null, bool setupToolbar = true)
         {
             PropertyTab tab = null;
             int tabIndex = -1;
 
-            if (_viewTabs is not null)
+            // Check to see if we've already got a tab of this type.
+            for (int i = 0; i < _tabs.Count; i++)
             {
-                // Check to see if we've already got a tab of this type.
-                for (int i = 0; i < _viewTabs.Length; i++)
+                Debug.Assert(_tabs[i] is not null, "Null item in tab array!");
+                if (tabType == _tabs[i].Tab.GetType())
                 {
-                    Debug.Assert(_viewTabs[i] is not null, "Null item in tab array!");
-                    if (tabType == _viewTabs[i].GetType())
-                    {
-                        tab = _viewTabs[i];
-                        tabIndex = i;
-                        break;
-                    }
+                    tab = _tabs[i].Tab;
+                    tabIndex = i;
+                    break;
                 }
-            }
-            else
-            {
-                tabIndex = 0;
             }
 
             if (tab is null)
@@ -1503,65 +1495,54 @@ namespace System.Windows.Forms
                     host = site.GetService<IDesignerHost>();
                 }
 
-                try
-                {
-                    tab = CreateTab(tabType, host);
-                }
-                catch (Exception)
+                tab = CreateTab(tabType, host);
+
+                if (tab is null)
                 {
                     return;
                 }
 
-                // Add it at the end of the array.
-                if (_viewTabs is not null)
+                // Default to inserting at the end.
+                tabIndex = _tabs.Count;
+
+                // Find the insertion position. Special case for event's and properties.
+                if (tabType == DefaultTabType)
                 {
-                    tabIndex = _viewTabs.Length;
+                    tabIndex = PropertiesTabIndex;
+                }
+                else if (typeof(EventsTab).IsAssignableFrom(tabType))
+                {
+                    tabIndex = EventsTabIndex;
+                }
+                else
+                {
+                    // Order tabs alphabetically, we've always got a property tab, so start after that.
+                    for (int i = 1; i < _tabs.Count; i++)
+                    {
+                        var current = _tabs[i].Tab;
 
-                    // Find the insertion position. Special case for event's and properties.
-                    if (tabType == DefaultTabType)
-                    {
-                        tabIndex = PropertiesTabIndex;
-                    }
-                    else if (typeof(EventsTab).IsAssignableFrom(tabType))
-                    {
-                        tabIndex = EventsTabIndex;
-                    }
-                    else
-                    {
-                        // Order tabs alphabetically, we've always got a property tab, so start after that.
-                        for (int i = 1; i < _viewTabs.Length; i++)
+                        // Skip the event tab.
+                        if (current is EventsTab)
                         {
-                            // Skip the event tab.
-                            if (_viewTabs[i] is EventsTab)
-                            {
-                                continue;
-                            }
+                            continue;
+                        }
 
-                            if (string.Compare(tab.TabName, _viewTabs[i].TabName, ignoreCase: false, CultureInfo.InvariantCulture) < 0)
-                            {
-                                tabIndex = i;
-                                break;
-                            }
+                        if (string.Compare(tab.TabName, current.TabName, ignoreCase: false, CultureInfo.InvariantCulture) < 0)
+                        {
+                            tabIndex = i;
+                            break;
                         }
                     }
                 }
 
-                // Now add the tab to the tabs array.
-                var newTabs = new PropertyTab[_viewTabs.Length + 1];
-                Array.Copy(_viewTabs, 0, newTabs, 0, tabIndex);
-                Array.Copy(_viewTabs, tabIndex, newTabs, tabIndex + 1, _viewTabs.Length - tabIndex);
-                newTabs[tabIndex] = tab;
-                _viewTabs = newTabs;
+                ToolStripButton button = CreatePushButton(
+                    tab.TabName,
+                    imageIndex: -1,
+                    OnViewTabButtonClick,
+                    useRadioButtonRole: true);
 
-                _viewTabsDirty = true;
-
-                var newTabScopes = new PropertyTabScope[_viewTabScopes.Length + 1];
-                Array.Copy(_viewTabScopes, 0, newTabScopes, 0, tabIndex);
-                Array.Copy(_viewTabScopes, tabIndex, newTabScopes, tabIndex + 1, _viewTabScopes.Length - tabIndex);
-                newTabScopes[tabIndex] = type;
-                _viewTabScopes = newTabScopes;
-
-                Debug.Assert(_viewTabs is not null, "Tab array destroyed!");
+                _tabs.Insert(tabIndex, new(tab, scope, button));
+                _tabsDirty = true;
             }
 
             if (tab is not null && @object is not null)
@@ -1666,7 +1647,17 @@ namespace System.Windows.Forms
 
         private PropertyTab CreateTab(Type tabType, IDesignerHost host)
         {
-            PropertyTab tab = CreatePropertyTab(tabType);
+            PropertyTab tab;
+
+            try
+            {
+                tab = CreatePropertyTab(tabType);
+            }
+            catch (Exception exception)
+            {
+                Debug.Fail($"{nameof(CreatePropertyTab)} failed. {exception.Message}");
+                return null;
+            }
 
             if (tab is null)
             {
@@ -1687,18 +1678,24 @@ namespace System.Windows.Forms
                     parameter = Site;
                 }
 
-                if (parameter is not null && constructor is not null)
+                try
                 {
-                    tab = (PropertyTab)constructor.Invoke(new object[] { parameter });
+                    if (parameter is not null && constructor is not null)
+                    {
+                        tab = (PropertyTab)constructor.Invoke(new object[] { parameter });
+                    }
+                    else
+                    {
+                        // Just call the default constructor.
+                        tab = (PropertyTab)Activator.CreateInstance(tabType);
+                    }
                 }
-                else
+                catch (Exception exception)
                 {
-                    // Just call the default constructor.
-                    tab = (PropertyTab)Activator.CreateInstance(tabType);
+                    Debug.Fail($"Failed to create {nameof(PropertyTab)}. {exception.Message}");
+                    tab = null;
                 }
             }
-
-            Debug.Assert(tab is not null, "Failed to create tab!");
 
             if (tab is not null)
             {
@@ -1716,7 +1713,11 @@ namespace System.Windows.Forms
             return tab;
         }
 
-        private ToolStripButton CreatePushButton(string toolTipText, int imageIndex, EventHandler eventHandler, bool useRadioButtonRole = false)
+        private ToolStripButton CreatePushButton(
+            string toolTipText,
+            int imageIndex,
+            EventHandler eventHandler,
+            bool useRadioButtonRole = false)
         {
             PropertyGridToolStripButton button = new(this, useRadioButtonRole)
             {
@@ -1825,15 +1826,12 @@ namespace System.Windows.Forms
 
                 ActiveDesigner = null;
 
-                if (_viewTabs is not null)
+                foreach (var tabInfo in _tabs)
                 {
-                    for (int i = 0; i < _viewTabs.Length; i++)
-                    {
-                        _viewTabs[i].Dispose();
-                    }
-
-                    _viewTabs = null;
+                    tabInfo.Tab.Dispose();
                 }
+
+                _tabs.Clear();
 
                 _normalButtonImages?.Dispose();
                 _normalButtonImages = null;
@@ -2007,17 +2005,10 @@ namespace System.Windows.Forms
             // Make sure our toolbars are okay.
             SetupToolbar();
 
-            Debug.Assert(_viewTabs is not null, "Invalid tab array");
-            Debug.Assert(
-                _viewTabs.Length == _viewTabScopes.Length && _viewTabScopes.Length == _viewTabButtons.Length,
-                $"Uh oh, tab arrays aren't all the same length! tabs={_viewTabs.Length}, scopes={_viewTabScopes.Length}, buttons={_viewTabButtons.Length}");
-
             // Walk through the current tabs to validate that they apply to all currently selected objects.
             // Skip the property tab since it's always valid.
-            for (int i = 1; i < _viewTabs.Length; i++)
+            foreach (var tab in _tabs)
             {
-                Debug.Assert(_viewTabs[i] is not null, "Invalid tab array entry");
-
                 bool canExtend = true;
 
                 // Make sure the tab is valid for all objects.
@@ -2025,7 +2016,7 @@ namespace System.Windows.Forms
                 {
                     try
                     {
-                        if (!_viewTabs[i].CanExtend(GetUnwrappedObject(j)))
+                        if (!tab.Tab.CanExtend(GetUnwrappedObject(j)))
                         {
                             canExtend = false;
                             break;
@@ -2039,12 +2030,12 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (canExtend != _viewTabButtons[i].Visible)
+                if (canExtend != tab.Button.Visible)
                 {
-                    _viewTabButtons[i].Visible = canExtend;
-                    if (!canExtend && i == _selectedViewTab)
+                    tab.Button.Visible = canExtend;
+                    if (!canExtend && tab == _selectedTab)
                     {
-                        SelectViewTabButton(_viewTabButtons[PropertiesTabIndex], updateSelection: true);
+                        SelectViewTabButton(_tabs[PropertiesTabIndex].Button, updateSelection: true);
                     }
                 }
             }
@@ -2067,9 +2058,9 @@ namespace System.Windows.Forms
                 AddLargeImage(_alphaBitmap);
                 AddLargeImage(_categoryBitmap);
 
-                foreach (PropertyTab tab in _viewTabs)
+                foreach (var tab in _tabs)
                 {
-                    AddLargeImage(tab.Bitmap);
+                    AddLargeImage(tab.Tab.Bitmap);
                 }
 
                 AddLargeImage(_propertyPageBitmap);
@@ -2571,7 +2562,7 @@ namespace System.Windows.Forms
                 if (_oldDeviceDpi != _deviceDpi)
                 {
                     RescaleConstants();
-                    SetupToolbar(true);
+                    SetupToolbar(fullRebuild: true);
                 }
 
                 // No toolbar or help or commands visible, just fill the whole thing with the grid.
@@ -3362,9 +3353,9 @@ namespace System.Windows.Forms
         internal void RefreshProperties(bool clearCached)
         {
             // Clear our current cache so we can do a full refresh.
-            if (clearCached && _selectedViewTab != -1 && _viewTabs is not null)
+            if (clearCached && _selectedTab is not null)
             {
-                PropertyTab selectedTab = _viewTabs[_selectedViewTab];
+                PropertyTab selectedTab = _selectedTab.Tab;
                 if (selectedTab is not null && _viewTabProperties is not null)
                 {
                     _viewTabProperties.Remove($"{selectedTab.TabName}{_propertySortValue}");
@@ -3435,11 +3426,11 @@ namespace System.Windows.Forms
         {
             PropertyTab tab = null;
             int tabIndex = -1;
-            for (int i = 0; i < _viewTabs.Length; i++)
+            for (int i = 0; i < _tabs.Count; i++)
             {
-                if (tabType == _viewTabs[i].GetType())
+                if (tabType == _tabs[i].Tab.GetType())
                 {
-                    tab = _viewTabs[i];
+                    tab = _tabs[i].Tab;
                     tabIndex = i;
                     break;
                 }
@@ -3479,7 +3470,7 @@ namespace System.Windows.Forms
             }
 
             // We don't remove PropertyTabScope.Global tabs here.  Our owner has to do that.
-            if (killTab && _viewTabScopes[tabIndex] > PropertyTabScope.Global)
+            if (killTab && _tabs[tabIndex].Scope > PropertyTabScope.Global)
             {
                 RemoveTab(tabIndex, false);
             }
@@ -3498,77 +3489,53 @@ namespace System.Windows.Forms
             }
 
             // In case we've been disposed.
-            if (_viewTabButtons is null || _viewTabs is null || _viewTabScopes is null)
+            if (_tabs.Count == 0)
             {
                 return;
             }
 
-            ToolStripButton selectedButton = _selectedViewTab >= 0 && _selectedViewTab < _viewTabButtons.Length
-                ? _viewTabButtons[_selectedViewTab]
-                : null;
+            ToolStripButton selectedButton = _selectedTab?.Button;
 
-            for (int i = _viewTabs.Length - 1; i >= 0; i--)
+            if (_tabs.RemoveAll(i => i.Scope >= classification) > 0)
             {
-                if (_viewTabScopes[i] >= classification)
-                {
-                    // Adjust the selected view tab because we're deleting.
-                    if (_selectedViewTab == i)
-                    {
-                        _selectedViewTab = -1;
-                    }
-                    else if (_selectedViewTab > i)
-                    {
-                        _selectedViewTab--;
-                    }
-
-                    var newTabs = new PropertyTab[_viewTabs.Length - 1];
-                    Array.Copy(_viewTabs, 0, newTabs, 0, i);
-                    Array.Copy(_viewTabs, i + 1, newTabs, i, _viewTabs.Length - i - 1);
-                    _viewTabs = newTabs;
-
-                    var newTabScopes = new PropertyTabScope[_viewTabScopes.Length - 1];
-                    Array.Copy(_viewTabScopes, 0, newTabScopes, 0, i);
-                    Array.Copy(_viewTabScopes, i + 1, newTabScopes, i, _viewTabScopes.Length - i - 1);
-                    _viewTabScopes = newTabScopes;
-
-                    _viewTabsDirty = true;
-                }
+                _tabsDirty = true;
+                _selectedTab = _tabs.FirstOrDefault();
             }
 
-            if (setupToolbar && _viewTabsDirty)
+            if (setupToolbar && _tabsDirty)
             {
                 SetupToolbar();
 
-                Debug.Assert(_viewTabs is not null && _viewTabs.Length > 0, "We don't have any tabs left!");
+                Debug.Assert(_tabs.Count > 0, "We don't have any tabs left!");
 
-                _selectedViewTab = -1;
+                _selectedTab = null;
                 SelectViewTabButtonDefault(selectedButton);
 
                 // Clear the component refs of the tabs.
-                for (int i = 0; i < _viewTabs.Length; i++)
+                foreach (TabInfo info  in _tabs)
                 {
-                    _viewTabs[i].Components = Array.Empty<object>();
+                    info.Tab.Components = Array.Empty<object>();
                 }
             }
         }
 
         internal void RemoveTab(int tabIndex, bool setupToolbar)
         {
-            Debug.Assert(_viewTabs is not null, "Tab array destroyed!");
+            Debug.Assert(_tabs.Count > 0, "Tab array destroyed!");
 
-            if (tabIndex >= _viewTabs.Length || tabIndex < 0)
+            if (tabIndex >= _tabs.Count || tabIndex < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(tabIndex), SR.PropertyGridBadTabIndex);
             }
 
-            if (_viewTabScopes[tabIndex] == PropertyTabScope.Static)
+            if (_tabs[tabIndex].Scope == PropertyTabScope.Static)
             {
                 throw new ArgumentException(SR.PropertyGridRemoveStaticTabs);
             }
 
-            if (_selectedViewTab == tabIndex)
+            if (_selectedTab == _tabs[tabIndex])
             {
-                _selectedViewTab = PropertiesTabIndex;
+                _selectedTab = _tabs[PropertiesTabIndex];
             }
 
             // Remove this tab from our "last selected" group
@@ -3577,24 +3544,15 @@ namespace System.Windows.Forms
                 _designerSelections.Remove(ActiveDesigner.GetHashCode());
             }
 
-            ToolStripButton selectedButton = _viewTabButtons[_selectedViewTab];
+            ToolStripButton selectedButton = _selectedTab.Button;
 
-            var newTabs = new PropertyTab[_viewTabs.Length - 1];
-            Array.Copy(_viewTabs, 0, newTabs, 0, tabIndex);
-            Array.Copy(_viewTabs, tabIndex + 1, newTabs, tabIndex, _viewTabs.Length - tabIndex - 1);
-            _viewTabs = newTabs;
-
-            var newTabScopes = new PropertyTabScope[_viewTabScopes.Length - 1];
-            Array.Copy(_viewTabScopes, 0, newTabScopes, 0, tabIndex);
-            Array.Copy(_viewTabScopes, tabIndex + 1, newTabScopes, tabIndex, _viewTabScopes.Length - tabIndex - 1);
-            _viewTabScopes = newTabScopes;
-
-            _viewTabsDirty = true;
+            _tabs.RemoveAt(tabIndex);
+            _tabsDirty = true;
 
             if (setupToolbar)
             {
                 SetupToolbar();
-                _selectedViewTab = -1;
+                _selectedTab = null;
                 SelectViewTabButtonDefault(selectedButton);
             }
         }
@@ -3602,9 +3560,9 @@ namespace System.Windows.Forms
         internal void RemoveTab(Type tabType)
         {
             int tabIndex = -1;
-            for (int i = 0; i < _viewTabs.Length; i++)
+            for (int i = 0; i < _tabs.Count; i++)
             {
-                if (tabType == _viewTabs[i].GetType())
+                if (tabType == _tabs[i].GetType())
                 {
                     tabIndex = i;
                     break;
@@ -3617,17 +3575,8 @@ namespace System.Windows.Forms
                 return;
             }
 
-            var newTabs = new PropertyTab[_viewTabs.Length - 1];
-            Array.Copy(_viewTabs, 0, newTabs, 0, tabIndex);
-            Array.Copy(_viewTabs, tabIndex + 1, newTabs, tabIndex, _viewTabs.Length - tabIndex - 1);
-            _viewTabs = newTabs;
-
-            var newTabScopes = new PropertyTabScope[_viewTabScopes.Length - 1];
-            Array.Copy(_viewTabScopes, 0, newTabScopes, 0, tabIndex);
-            Array.Copy(_viewTabScopes, tabIndex + 1, newTabScopes, tabIndex, _viewTabScopes.Length - tabIndex - 1);
-            _viewTabScopes = newTabScopes;
-
-            _viewTabsDirty = true;
+            _tabs.RemoveAt(tabIndex);
+            _tabsDirty = true;
             SetupToolbar();
         }
 
@@ -3674,7 +3623,7 @@ namespace System.Windows.Forms
             if (_designerHost is not null)
             {
                 _designerSelections ??= new();
-                _designerSelections[_designerHost.GetHashCode()] = _selectedViewTab;
+                _designerSelections[_designerHost.GetHashCode()] = _selectedTab;
             }
         }
 
@@ -3703,7 +3652,7 @@ namespace System.Windows.Forms
 
         private void SelectViewTabButton(ToolStripButton button, bool updateSelection)
         {
-            Debug.Assert(_viewTabButtons is not null, "No view tab buttons to select!");
+            Debug.Assert(_tabs.Count > 0, "No view tab buttons to select!");
 
             if (!SelectViewTabButtonDefault(button))
             {
@@ -3718,40 +3667,34 @@ namespace System.Windows.Forms
 
         private bool SelectViewTabButtonDefault(ToolStripButton button)
         {
-            // Make sure our selection number is valid.
-            if (_selectedViewTab >= 0 && _selectedViewTab >= _viewTabButtons.Length)
-            {
-                _selectedViewTab = -1;
-            }
-
             // Is this tab button checked? If so, do nothing.
-            if (_selectedViewTab >= 0 && _selectedViewTab < _viewTabButtons.Length &&
-                button == _viewTabButtons[_selectedViewTab])
+            if (button == _selectedTab?.Button)
             {
-                _viewTabButtons[_selectedViewTab].Checked = true;
+                button.Checked = true;
                 return true;
             }
 
             PropertyTab oldTab = null;
 
             // Unselect what's selected.
-            if (_selectedViewTab != -1)
+            if (_selectedTab is not null)
             {
-                _viewTabButtons[_selectedViewTab].Checked = false;
-                oldTab = _viewTabs[_selectedViewTab];
+                _selectedTab.Button.Checked = false;
+                oldTab = _selectedTab.Tab;
             }
 
             // Get the new index of the button.
-            for (int i = 0; i < _viewTabButtons.Length; i++)
+            foreach (TabInfo info in _tabs)
             {
-                if (_viewTabButtons[i] == button)
+                if (info.Button == button)
                 {
-                    _selectedViewTab = i;
-                    _viewTabButtons[i].Checked = true;
+                    _selectedTab = info;
+                    info.Button.Checked = true;
+
                     try
                     {
                         SetFlag(Flags.TabsChanging, true);
-                        OnPropertyTabChanged(new PropertyTabChangedEventArgs(oldTab, _viewTabs[i]));
+                        OnPropertyTabChanged(new(oldTab, info.Tab));
                     }
                     finally
                     {
@@ -3763,21 +3706,21 @@ namespace System.Windows.Forms
             }
 
             // Select the first tab if we didn't find that one.
-            _selectedViewTab = PropertiesTabIndex;
-            Debug.Assert(_viewTabs[PropertiesTabIndex].GetType() == DefaultTabType, "First item is not property tab!");
-            SelectViewTabButton(_viewTabButtons[PropertiesTabIndex], false);
+            _selectedTab = _tabs[PropertiesTabIndex];
+            Debug.Assert(_tabs[PropertiesTabIndex].Tab.GetType() == DefaultTabType, "First item is not property tab!");
+            SelectViewTabButton(_tabs[PropertiesTabIndex].Button, updateSelection: false);
             return false;
         }
 
         private void SetSelectState(int state)
         {
-            if (state >= (_viewTabs.Length * _viewSortButtons.Length))
+            if (state >= (_tabs.Count * _viewSortButtons.Length))
             {
                 state = 0;
             }
             else if (state < 0)
             {
-                state = (_viewTabs.Length * _viewSortButtons.Length) - 1;
+                state = (_tabs.Count * _viewSortButtons.Length) - 1;
             }
 
             // NOTE: See GetSelectState for the full description of the state transitions
@@ -3797,7 +3740,7 @@ namespace System.Windows.Forms
 
                 Debug.Assert(view < _viewSortButtons.Length, "Can't select view type > 1");
 
-                OnViewTabButtonClick(_viewTabButtons[tab], EventArgs.Empty);
+                OnViewTabButtonClick(_tabs[tab].Button, EventArgs.Empty);
                 OnViewSortButtonClick(_viewSortButtons[view], EventArgs.Empty);
             }
         }
@@ -3825,7 +3768,7 @@ namespace System.Windows.Forms
         private void SetupToolbar(bool fullRebuild)
         {
             // If the tab array hasn't changed, don't bother to do all this work.
-            if (!_viewTabsDirty && !fullRebuild)
+            if (!_tabsDirty && !fullRebuild)
             {
                 return;
             }
@@ -3847,7 +3790,6 @@ namespace System.Windows.Forms
             EventHandler sortButtonHandler = OnViewSortButtonClick;
             EventHandler propertyPagesButtonHandler = OnViewPropertyPagesButtonClick;
 
-            Bitmap b;
             int i;
 
             // We manage the buttons as a separate list so the toolbar doesn't flash.
@@ -3923,38 +3865,23 @@ namespace System.Windows.Forms
 
             buttonList.Add(_separator1);
 
-            // Here's our buttons array.
-            _viewTabButtons = new ToolStripButton[_viewTabs.Length];
-
             // If we've only got the properties tab, don't add the button
             // (or we'll just have a properties button that you can't do anything with).
-            bool addViewTabButtons = _viewTabs.Length > 1;
-
-            // Setup the view tab buttons.
-            for (i = 0; i < _viewTabs.Length; i++)
+            if (_tabs.Count > 1)
             {
-                try
+                foreach (TabInfo info in _tabs)
                 {
-                    b = _viewTabs[i].Bitmap;
-                    _viewTabButtons[i] = CreatePushButton(
-                        _viewTabs[i].TabName,
-                        AddImage(b),
-                        tabButtonHandler,
-                        useRadioButtonRole: true);
-                    if (addViewTabButtons)
+                    try
                     {
-                        buttonList.Add(_viewTabButtons[i]);
+                        info.Button.ImageIndex = AddImage(info.Tab.Bitmap);
+                        buttonList.Add(info.Button);
+                    }
+                    catch (Exception ex)
+                    {
+                        Debug.Fail(ex.ToString());
                     }
                 }
-                catch (Exception ex)
-                {
-                    Debug.Fail(ex.ToString());
-                }
-            }
 
-            // If we didn't add anything, we don't need another separator either.
-            if (addViewTabButtons)
-            {
                 buttonList.Add(_separator2);
             }
 
@@ -3999,27 +3926,23 @@ namespace System.Windows.Forms
 
             _toolStrip.ResumeLayout();
 
-            if (_viewTabsDirty)
+            if (_tabsDirty)
             {
                 // If we're redoing our tabs make sure we setup the toolbar area correctly.
                 OnLayoutInternal(dividerOnly: false);
             }
 
-            _viewTabsDirty = false;
+            _tabsDirty = false;
         }
 
         protected void ShowEventsButton(bool value)
         {
-            if (_viewTabs is not null && _viewTabs.Length > EventsTabIndex && (_viewTabs[EventsTabIndex] is EventsTab))
+            if (_tabs.Count > EventsTabIndex && _tabs[EventsTabIndex] is { } info && info.Tab is EventsTab)
             {
-                Debug.Assert(
-                    _viewTabButtons is not null && _viewTabButtons.Length > EventsTabIndex && _viewTabButtons[EventsTabIndex] is not null,
-                    "Events button is not at EVENTS position");
-
-                _viewTabButtons[EventsTabIndex].Visible = value;
-                if (!value && _selectedViewTab == EventsTabIndex)
+                info.Button.Visible = value;
+                if (!value && _selectedTab == info)
                 {
-                    SelectViewTabButton(_viewTabButtons[PropertiesTabIndex], true);
+                    SelectViewTabButton(_tabs[PropertiesTabIndex].Button, updateSelection: true);
                 }
             }
 
@@ -4110,7 +4033,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private bool ShouldForwardChildMouseMessage(Control child, MouseEventArgs e, ref Point pt)
+        private bool ShouldForwardChildMouseMessage(Control child, MouseEventArgs e, ref Point point)
         {
             Size size = child.Size;
 
@@ -4122,7 +4045,7 @@ namespace System.Windows.Forms
                 temp = WindowsFormsUtils.TranslatePoint(temp, child, this);
 
                 // Forward the message.
-                pt = temp;
+                point = temp;
                 return true;
             }
 
@@ -4133,7 +4056,7 @@ namespace System.Windows.Forms
         {
             // If the only view available is properties-view, there's no need to show the button.
 
-            if (_viewTabButtons is null)
+            if (_tabs.Count <= 1)
             {
                 return;
             }
@@ -4141,35 +4064,27 @@ namespace System.Windows.Forms
             bool shouldBeVisible = false;
 
             // Starts at index 1, since index 0 is properties-view
-            for (int i = 1; i < _viewTabButtons.Length; i++)
+            for (int i = 1; i < _tabs.Count; i++)
             {
-                if (_viewTabButtons[i].Visible)
+                if (_tabs[i].Button.Visible)
                 {
                     shouldBeVisible = true;
                     break;
                 }
             }
 
-            if (shouldBeVisible)
-            {
-                _viewTabButtons[PropertiesTabIndex].Visible = true;
-                _separator2.Visible = true;
-            }
-            else
-            {
-                _viewTabButtons[PropertiesTabIndex].Visible = false;
-                _separator2.Visible = false;
-            }
+            _tabs[PropertiesTabIndex].Button.Visible = shouldBeVisible;
+            _separator2.Visible = shouldBeVisible;
         }
 
         internal void UpdateSelection()
         {
-            if (!GetFlag(Flags.PropertiesChanged) || _viewTabs is null)
+            if (!GetFlag(Flags.PropertiesChanged) || _tabs.Count == 0)
             {
                 return;
             }
 
-            string tabName = $"{_viewTabs[_selectedViewTab].TabName}{_propertySortValue}";
+            string tabName = $"{_selectedTab.Tab.TabName}{_propertySortValue}";
 
             if (_viewTabProperties is not null && _viewTabProperties.ContainsKey(tabName))
             {
@@ -4455,11 +4370,14 @@ namespace System.Windows.Forms
                     {
                         string tabTypeName = AutomationMessages.ReadAutomationText(m.LParamInternal);
 
-                        for (int i = 0; i < _viewTabs.Length; i++)
+                        foreach (TabInfo info in _tabs)
                         {
-                            if (_viewTabs[i].GetType().FullName == tabTypeName && _viewTabButtons[i].Visible)
+                            if (info.Tab.GetType().FullName == tabTypeName && info.Button.Visible)
                             {
-                                SelectViewTabButtonDefault(_viewTabButtons[i]);
+                                SelectViewTabButtonDefault(info.Button);
+
+                                // This gets set again to 0 below. This seems wrong, but has always been this way.
+                                // Leaving this should we find we need to return instead of break.
                                 m.ResultInternal = 1;
                                 break;
                             }

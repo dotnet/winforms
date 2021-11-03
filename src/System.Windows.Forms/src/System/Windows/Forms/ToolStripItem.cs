@@ -1083,14 +1083,15 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [RefreshProperties(RefreshProperties.Repaint)]
         [TypeConverter(typeof(NoneExcludedImageIndexConverter))]
-        [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
+        [Editor($"System.Windows.Forms.Design.ImageIndexEditor, {AssemblyRef.SystemDesign}", typeof(UITypeEditor))]
         [Browsable(false)]
         [RelatedImageList("Owner.ImageList")]
         public int ImageIndex
         {
             get
             {
-                if ((Owner is not null) && ImageIndexer.Index != ImageList.Indexer.DefaultIndex && Owner.ImageList is not null && ImageIndexer.Index >= Owner.ImageList.Images.Count)
+                if ((Owner is not null) && ImageIndexer.Index != ImageList.Indexer.DefaultIndex
+                    && Owner.ImageList is not null && ImageIndexer.Index >= Owner.ImageList.Images.Count)
                 {
                     return Owner.ImageList.Images.Count - 1;
                 }
@@ -1101,11 +1102,14 @@ namespace System.Windows.Forms
             {
                 if (value < ImageList.Indexer.DefaultIndex)
                 {
-                    throw new ArgumentOutOfRangeException(nameof(value), string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
+                    throw new ArgumentOutOfRangeException(
+                        nameof(value),
+                        string.Format(SR.InvalidLowBoundArgumentEx, nameof(ImageIndex), value, ImageList.Indexer.DefaultIndex));
                 }
 
                 ImageIndexer.Index = value;
                 _state[s_stateInvalidMirroredImage] = true;
+
                 // Set the Image Property to null
                 Properties.SetObject(s_imageProperty, null);
 
