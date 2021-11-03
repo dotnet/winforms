@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             IntPtr fileId = IntPtr.Zero;
             string fullFileName = GenerateLogFileName(ref fileId);
 
-            if (fullFileName != null)
+            if (fullFileName is not null)
             {
                 try
                 {
@@ -96,9 +96,9 @@ namespace System.Windows.Forms
             string fullFileName = null;
 
             string filePath = System.Environment.GetEnvironmentVariable("TEMP");
-            Debug.Assert(filePath != null, "Could not get value of the TEMP environment variable");
+            Debug.Assert(filePath is not null, "Could not get value of the TEMP environment variable");
 
-            if (filePath != null)
+            if (filePath is not null)
             {
                 if (fileId == IntPtr.Zero) // Create id
                 {

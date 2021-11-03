@@ -106,7 +106,7 @@ namespace System.ComponentModel
                     }
                 }
 
-                if (cleanupList != null)
+                if (cleanupList is not null)
                 {
                     foreach (object o in cleanupList)
                     {
@@ -128,7 +128,7 @@ namespace System.ComponentModel
                     return y is null;
                 }
 
-                if (y != null && x.GetHashCode() == y.GetHashCode())
+                if (y is not null && x.GetHashCode() == y.GetHashCode())
                 {
                     if (x is WeakReference wX)
                     {

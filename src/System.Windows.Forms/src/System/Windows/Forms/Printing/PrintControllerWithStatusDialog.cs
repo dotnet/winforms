@@ -36,7 +36,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (_underlyingController != null)
+                if (_underlyingController is not null)
                 {
                     return _underlyingController.IsPreview;
                 }
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
             }
             catch
             {
-                if (_backgroundThread != null)
+                if (_backgroundThread is not null)
                 {
                     _backgroundThread.Stop();
                 }
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
             }
             finally
             {
-                if (_backgroundThread != null && _backgroundThread._canceled)
+                if (_backgroundThread is not null && _backgroundThread._canceled)
                 {
                     e.Cancel = true;
                 }
@@ -93,13 +93,13 @@ namespace System.Windows.Forms
         {
             base.OnStartPage(document, e);
 
-            if (_backgroundThread != null)
+            if (_backgroundThread is not null)
             {
                 _backgroundThread.UpdateLabel();
             }
 
             Graphics result = _underlyingController.OnStartPage(document, e);
-            if (_backgroundThread != null && _backgroundThread._canceled)
+            if (_backgroundThread is not null && _backgroundThread._canceled)
             {
                 e.Cancel = true;
             }
@@ -113,7 +113,7 @@ namespace System.Windows.Forms
         public override void OnEndPage(PrintDocument document, PrintPageEventArgs e)
         {
             _underlyingController.OnEndPage(document, e);
-            if (_backgroundThread != null && _backgroundThread._canceled)
+            if (_backgroundThread is not null && _backgroundThread._canceled)
             {
                 e.Cancel = true;
             }
@@ -129,12 +129,12 @@ namespace System.Windows.Forms
         public override void OnEndPrint(PrintDocument document, PrintEventArgs e)
         {
             _underlyingController.OnEndPrint(document, e);
-            if (_backgroundThread != null && _backgroundThread._canceled)
+            if (_backgroundThread is not null && _backgroundThread._canceled)
             {
                 e.Cancel = true;
             }
 
-            if (_backgroundThread != null)
+            if (_backgroundThread is not null)
             {
                 _backgroundThread.Stop();
             }

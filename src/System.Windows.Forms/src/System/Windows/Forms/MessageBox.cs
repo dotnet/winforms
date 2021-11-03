@@ -62,7 +62,7 @@ namespace System.Windows.Forms
                 throw new InvalidOperationException(SR.CantShowModalOnNonInteractive);
             }
 
-            if (owner != null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
+            if (owner is not null && (options & (MessageBoxOptions.ServiceNotification | MessageBoxOptions.DefaultDesktopOnly)) != 0)
             {
                 throw new ArgumentException(SR.CantShowMBServiceWithOwner, nameof(options));
             }

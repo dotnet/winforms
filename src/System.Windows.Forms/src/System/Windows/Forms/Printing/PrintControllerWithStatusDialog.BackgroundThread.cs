@@ -33,7 +33,7 @@ namespace System.Windows.Forms
             {
                 lock (this)
                 {
-                    if (_dialog != null && _dialog.IsHandleCreated)
+                    if (_dialog is not null && _dialog.IsHandleCreated)
                     {
                         _dialog.BeginInvoke(new MethodInvoker(_dialog.Close));
                         return;
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
             // Called from any thread
             internal void UpdateLabel()
             {
-                if (_dialog != null && _dialog.IsHandleCreated)
+                if (_dialog is not null && _dialog.IsHandleCreated)
                 {
                     _dialog.BeginInvoke(new MethodInvoker(ThreadUnsafeUpdateLabel));
                     // Don't wait for a response
@@ -81,7 +81,7 @@ namespace System.Windows.Forms
                 {
                     lock (this)
                     {
-                        if (_dialog != null)
+                        if (_dialog is not null)
                         {
                             _dialog.Dispose();
                             _dialog = null;

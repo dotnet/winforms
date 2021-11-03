@@ -26,6 +26,6 @@ namespace System.Windows.Forms
         internal bool TryGetService<T>(
             [NotNullWhen(true)] out T? service)
             where T : class
-            => (service = GetService(typeof(T)) as T) != null;
+            => (service = GetService(typeof(T)) as T) is not null;
     }
 }

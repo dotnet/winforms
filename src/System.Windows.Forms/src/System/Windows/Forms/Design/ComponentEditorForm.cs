@@ -167,10 +167,10 @@ namespace System.Windows.Forms.Design
         private void OnConfigureUI()
         {
             Font uiFont = Control.DefaultFont;
-            if (component.Site != null)
+            if (component.Site is not null)
             {
                 IUIService uiService = (IUIService)component.Site.GetService(typeof(IUIService));
-                if (uiService != null)
+                if (uiService is not null)
                 {
                     uiFont = (Font)uiService.Styles["DialogFont"];
                 }
@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Design
 
             int selectorWidth = MIN_SELECTOR_WIDTH;
 
-            if (pageSites != null)
+            if (pageSites is not null)
             {
                 // Add the nodes corresponding to the pages
                 for (int n = 0; n < pageSites.Length; n++)
@@ -225,7 +225,7 @@ namespace System.Windows.Forms.Design
 
             string caption = string.Empty;
             ISite site = component.Site;
-            if (site != null)
+            if (site is not null)
             {
                 caption = string.Format(SR.ComponentEditorFormProperties, site.Name);
             }
@@ -242,7 +242,7 @@ namespace System.Windows.Forms.Design
             grayStrip.Bounds = new Rectangle(pageHostBounds.X, BUTTON_PAD,
                                              pageHostBounds.Width, STRIP_HEIGHT);
 
-            if (pageSites != null)
+            if (pageSites is not null)
             {
                 Rectangle pageBounds = new Rectangle(0, 0, pageHostBounds.Width, pageHostBounds.Height);
                 for (int n = 0; n < pageSites.Length; n++)
