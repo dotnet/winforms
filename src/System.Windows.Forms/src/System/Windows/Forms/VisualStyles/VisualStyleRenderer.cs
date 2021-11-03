@@ -801,7 +801,7 @@ namespace System.Windows.Forms.VisualStyles
         {
             ThemeHandle? tHandle = null;
 
-            if (t_themeHandles != null)
+            if (t_themeHandles is not null)
             {
                 string[] classNames = new string[t_themeHandles.Keys.Count];
                 t_themeHandles.Keys.CopyTo(classNames, 0);
@@ -809,7 +809,7 @@ namespace System.Windows.Forms.VisualStyles
                 foreach (string className in classNames)
                 {
                     tHandle = (ThemeHandle?)t_themeHandles[className];
-                    if (tHandle != null)
+                    if (tHandle is not null)
                     {
                         tHandle.Dispose();
                     }
@@ -819,7 +819,7 @@ namespace System.Windows.Forms.VisualStyles
                     if (AreClientAreaVisualStylesSupported)
                     {
                         tHandle = ThemeHandle.Create(className, false);
-                        if (tHandle != null)
+                        if (tHandle is not null)
                         {
                             t_themeHandles[className] = tHandle;
                         }

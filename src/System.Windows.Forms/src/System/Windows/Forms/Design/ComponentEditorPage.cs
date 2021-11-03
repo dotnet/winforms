@@ -207,7 +207,7 @@ namespace System.Windows.Forms.Design
         /// </summary>
         protected virtual void SetDirty()
         {
-            if (!IsLoading() && PageSite != null)
+            if (!IsLoading() && PageSite is not null)
             {
                 PageSite.SetDirty();
             }

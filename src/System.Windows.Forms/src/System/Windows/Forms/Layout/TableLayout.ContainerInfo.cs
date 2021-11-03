@@ -205,7 +205,7 @@ namespace System.Windows.Forms.Layout
                 set
                 {
                     _rowStyles = value;
-                    if (_rowStyles != null)
+                    if (_rowStyles is not null)
                     {
                         _rowStyles.EnsureOwnership(_container);
                     }
@@ -226,7 +226,7 @@ namespace System.Windows.Forms.Layout
                 set
                 {
                     _colStyles = value;
-                    if (_colStyles != null)
+                    if (_colStyles is not null)
                     {
                         _colStyles.EnsureOwnership(_container);
                     }
@@ -348,7 +348,7 @@ namespace System.Windows.Forms.Layout
             {
                 get
                 {
-                    if (_colStyles != null)
+                    if (_colStyles is not null)
                     {
                         bool foundAny = false;
                         foreach (ColumnStyle style in _colStyles)

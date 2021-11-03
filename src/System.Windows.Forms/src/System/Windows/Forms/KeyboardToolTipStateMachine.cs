@@ -103,7 +103,7 @@ namespace System.Windows.Forms
 
         private bool IsToolTracked(IKeyboardToolTip sender)
         {
-            return _toolToTip[sender] != null;
+            return _toolToTip[sender] is not null;
         }
 
         public void NotifyAboutLostFocus(IKeyboardToolTip sender)
@@ -246,7 +246,7 @@ namespace System.Windows.Forms
             try
             {
                 ToolTip toolTip = _toolToTip[source];
-                if ((_currentTool is null || _currentTool.CanShowToolTipsNow()) && toolTip != null)
+                if ((_currentTool is null || _currentTool.CanShowToolTipsNow()) && toolTip is not null)
                 {
                     _currentState = Transition(source, toolTip, @event);
                 }
@@ -290,10 +290,10 @@ namespace System.Windows.Forms
 
         private SmState FullFsmReset()
         {
-            if (_currentState == SmState.Shown && _currentTool != null)
+            if (_currentState == SmState.Shown && _currentTool is not null)
             {
                 ToolTip currentToolTip = _toolToTip[_currentTool];
-                if (currentToolTip != null)
+                if (currentToolTip is not null)
                 {
                     currentToolTip.HideToolTip(_currentTool);
                 }
@@ -312,7 +312,7 @@ namespace System.Windows.Forms
 
         private void Reset(ToolTip toolTipToReset)
         {
-            if (toolTipToReset is null || (_currentTool != null && _toolToTip[_currentTool] == toolTipToReset))
+            if (toolTipToReset is null || (_currentTool is not null && _toolToTip[_currentTool] == toolTipToReset))
             {
                 FullFsmReset();
             }
@@ -332,7 +332,7 @@ namespace System.Windows.Forms
 
         private void OnFormDeactivation(ToolTip sender)
         {
-            if (_currentTool != null && _toolToTip[_currentTool] == sender)
+            if (_currentTool is not null && _toolToTip[_currentTool] == sender)
             {
                 FullFsmReset();
             }

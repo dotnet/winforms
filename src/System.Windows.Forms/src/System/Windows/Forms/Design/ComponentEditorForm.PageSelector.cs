@@ -204,7 +204,7 @@ namespace System.Windows.Forms.Design
                     case ComCtl32.CDDS.ITEMPREPAINT:
                         {
                             TreeNode itemNode = TreeNode.FromHandle(this, nmtvcd->nmcd.dwItemSpec);
-                            if (itemNode != null)
+                            if (itemNode is not null)
                             {
                                 int state = STATE_NORMAL;
                                 ComCtl32.CDIS itemState = nmtvcd->nmcd.uItemState;

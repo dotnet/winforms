@@ -45,7 +45,7 @@ namespace System.Windows.Forms.Layout
         public static Size OldGetLargestStringSizeInCollection(Font? font, ICollection? objects)
         {
             Size largestSize = Size.Empty;
-            if (objects != null)
+            if (objects is not null)
             {
                 foreach (object obj in objects)
                 {
