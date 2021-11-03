@@ -1483,7 +1483,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlCreatedDescr))]
-        public bool Created => (_state & States.Created) != 0;
+        public bool Created => GetState(States.Created);
 
         /// <summary>
         ///  Returns the CreateParams used to create the handle for this control.
@@ -3032,7 +3032,7 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.ControlRecreatingHandleDescr))]
-        public bool RecreatingHandle => (_state & States.Recreate) != 0;
+        public bool RecreatingHandle => GetState(States.Recreate);
 
         internal virtual void AddReflectChild()
         {
@@ -4989,7 +4989,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void CreateControl(bool fIgnoreVisible)
         {
-            bool ready = (_state & States.Created) == 0;
+            bool ready = !GetState(States.Created);
 
             // PERF: Only "create" the control if it is
             //     : visible. This has the effect of delayed handle creation of
@@ -4998,7 +4998,7 @@ namespace System.Windows.Forms
 
             if (ready || fIgnoreVisible)
             {
-                _state |= States.Created;
+                SetState(States.Created, true);
                 bool createdOK = false;
                 try
                 {
@@ -5033,7 +5033,7 @@ namespace System.Windows.Forms
                 {
                     if (!createdOK)
                     {
-                        _state &= (~States.Created);
+                        SetState(States.Created, false);
                     }
                 }
 
@@ -9827,6 +9827,9 @@ namespace System.Windows.Forms
                     // the call shouldn't fail.
                     // However, it could fail if this.CreateParams.Parent is changed outside our control.
                     CreateHandle();
+
+                    // DestroyHandle resets the state, but CreateHandle doesn't set the state back.
+                    SetState(States.Created, true);
                 }
                 catch (Exception)
                 {

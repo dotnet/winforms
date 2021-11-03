@@ -730,7 +730,7 @@ namespace System.Windows.Forms.Tests
             using Button button1 = new();
             using Button button2 = new();
             using Button button3 = new();
-            control.Controls.AddRange(new Button[] { button1, button2, button3});
+            control.Controls.AddRange(new Button[] { button1, button2, button3 });
             Control nextControl1 = control.GetNextControl(button1, forward: true);
             Control nextControl2 = control.GetNextControl(button2, forward: true);
             Control nextControl3 = control.GetNextControl(button3, forward: true);
@@ -972,6 +972,62 @@ namespace System.Windows.Forms.Tests
             Assert.True(form.IsHandleCreated);
             Assert.True(toolStrip1.IsHandleCreated);
             Assert.True(toolStrip2.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void Control_RecreateHandleCore_invokes_OnParentHandleRecreated_for_children()
+        {
+            using Form form = new();
+            SubCheckedListBox checkedListBox1 = new();
+            SubButton button1 = new();
+            SubListBox listBox1 = new();
+            SubListView listView1 = new();
+
+            checkedListBox1.Items.AddRange(new object[] { "Foo", "Foo", "Foo" });
+            checkedListBox1.Location = new Point(10, 10);
+            checkedListBox1.Size = new Size(103, 64);
+
+            button1.Location = new Point(12, 166);
+            button1.Size = new Size(213, 20);
+
+            listBox1.Items.AddRange(new object[] { "Foo", "Foo", "Foo" });
+            listBox1.Location = new Point(12, 80);
+            listBox1.Size = new Size(101, 69);
+
+            listView1.Items.AddRange(new ListViewItem[] { new("Foo"), new("Foo"), new("Foo") });
+            listView1.Location = new Point(130, 10);
+            listView1.Size = new Size(121, 64);
+            listView1.View = View.List;
+
+            form.Controls.Add(checkedListBox1);
+            form.Controls.Add(button1);
+            form.Controls.Add(listBox1);
+            form.Controls.Add(listView1);
+
+            form.Show();
+
+            // This will recreate the handle.
+            form.ShowInTaskbar = false;
+
+            try
+            {
+                AssertHandler(button1);
+                AssertHandler(listView1);
+                AssertHandler(checkedListBox1);
+                AssertHandler(listBox1);
+            }
+            finally
+            {
+                form.Close();
+            }
+
+            return;
+
+            static void AssertHandler(IParentHandleRecreationHandler handler)
+            {
+                Assert.Equal(1, handler.OnParentHandleRecreatedCalled);
+                Assert.Equal(1, handler.OnParentHandleRecreatingCalled);
+            }
         }
 
         private class SubControl : Control
@@ -1300,6 +1356,84 @@ namespace System.Windows.Forms.Tests
             public new void UpdateZOrder() => base.UpdateZOrder();
 
             public new void WndProc(ref Message m) => base.WndProc(ref m);
+        }
+
+        private class SubCheckedListBox : CheckedListBox, IParentHandleRecreationHandler
+        {
+            public int OnParentHandleRecreatedCalled { get; private set; }
+            public int OnParentHandleRecreatingCalled { get; private set; }
+
+            internal override void OnParentHandleRecreated()
+            {
+                OnParentHandleRecreatedCalled++;
+                base.OnParentHandleRecreated();
+            }
+
+            internal override void OnParentHandleRecreating()
+            {
+                OnParentHandleRecreatingCalled++;
+                base.OnParentHandleRecreating();
+            }
+        }
+
+        private class SubListBox : ListBox, IParentHandleRecreationHandler
+        {
+            public int OnParentHandleRecreatedCalled { get; private set; }
+            public int OnParentHandleRecreatingCalled { get; private set; }
+
+            internal override void OnParentHandleRecreated()
+            {
+                OnParentHandleRecreatedCalled++;
+                base.OnParentHandleRecreated();
+            }
+
+            internal override void OnParentHandleRecreating()
+            {
+                OnParentHandleRecreatingCalled++;
+                base.OnParentHandleRecreating();
+            }
+        }
+
+        private class SubButton : Button, IParentHandleRecreationHandler
+        {
+            public int OnParentHandleRecreatedCalled { get; private set; }
+            public int OnParentHandleRecreatingCalled { get; private set; }
+
+            internal override void OnParentHandleRecreated()
+            {
+                OnParentHandleRecreatedCalled++;
+                base.OnParentHandleRecreated();
+            }
+
+            internal override void OnParentHandleRecreating()
+            {
+                OnParentHandleRecreatingCalled++;
+                base.OnParentHandleRecreating();
+            }
+        }
+
+        private class SubListView : ListView, IParentHandleRecreationHandler
+        {
+            public int OnParentHandleRecreatedCalled { get; private set; }
+            public int OnParentHandleRecreatingCalled { get; private set; }
+
+            internal override void OnParentHandleRecreated()
+            {
+                OnParentHandleRecreatedCalled++;
+                base.OnParentHandleRecreated();
+            }
+
+            internal override void OnParentHandleRecreating()
+            {
+                OnParentHandleRecreatingCalled++;
+                base.OnParentHandleRecreating();
+            }
+        }
+
+        private interface IParentHandleRecreationHandler
+        {
+            int OnParentHandleRecreatedCalled { get; }
+            int OnParentHandleRecreatingCalled { get; }
         }
     }
 }
