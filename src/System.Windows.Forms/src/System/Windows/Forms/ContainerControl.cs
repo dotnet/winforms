@@ -830,7 +830,7 @@ namespace System.Windows.Forms
             // ResumeLayout(false), so this seems to be the most opportune place
             // for this.
 
-            // Skip Scale() when AutoscaleFactor is 100% (evaluated to 1.0F for both width and height).
+            // Skip Scale() when AutoscaleFactor is 100% (evaluated to 1.0F for both width and height) as it is a no-op.
             // It means the form is designed on the monitor that has same settings as the monitor that
             // it is being run.
             if (!_state[s_stateScalingChild]
