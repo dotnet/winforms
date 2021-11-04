@@ -676,8 +676,11 @@ namespace System.Windows.Forms.Layout
                     {
                         // parent was resized to fit its parent, or screen, we need to reuse old anchor info to prevent losing control beyond right edge
                         anchorInfo.Right = oldAnchorInfo.Right;
-                        // control might have been resized, update Left anchor
-                        anchorInfo.Left = oldAnchorInfo.Right - bounds.Width;
+                        if (!IsAnchored(anchor, AnchorStyles.Left))
+                        {
+                            // control might have been resized, update Left anchor
+                            anchorInfo.Left = oldAnchorInfo.Right - bounds.Width;
+                        }
                     }
                     else
                     {
@@ -701,8 +704,12 @@ namespace System.Windows.Forms.Layout
                     {
                         // parent was resized to fit its parent, or screen, we need to reuse old anchor info to prevent losing control beyond bottom edge
                         anchorInfo.Bottom = oldAnchorInfo.Bottom;
-                        // control might have been resized, update Top anchor
-                        anchorInfo.Top = oldAnchorInfo.Bottom - bounds.Height;
+
+                        if (!IsAnchored(anchor, AnchorStyles.Top))
+                        {
+                            // control might have been resized, update Top anchor
+                            anchorInfo.Top = oldAnchorInfo.Bottom - bounds.Height;
+                        }
                     }
                     else
                     {

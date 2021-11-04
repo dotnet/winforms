@@ -829,7 +829,11 @@ namespace System.Windows.Forms
             // generator always generates a PerformLayout() right after a
             // ResumeLayout(false), so this seems to be the most opportune place
             // for this.
-            if (!_state[s_stateScalingChild] && !performLayout && AutoScaleMode != AutoScaleMode.None && AutoScaleMode != AutoScaleMode.Inherit && _state[s_stateScalingNeededOnLayout])
+            if (!_state[s_stateScalingChild]
+                && !performLayout
+                && AutoScaleMode != AutoScaleMode.None && AutoScaleMode != AutoScaleMode.Inherit
+                && _state[s_stateScalingNeededOnLayout]
+                && (AutoScaleFactor.Width != 1.0F || AutoScaleFactor.Height != 1.0F))
             {
                 _state[s_stateScalingChild] = true;
                 try
