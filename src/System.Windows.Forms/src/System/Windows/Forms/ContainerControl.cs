@@ -689,7 +689,7 @@ namespace System.Windows.Forms
         {
             Control parentControl = Parent;
 
-            // Traverse thorugh parent hierarchy untill we get a ContainerControl whose AutoScaleMode is not Inherit.
+            // Traverse through parent hierarchy until we get a ContainerControl whose AutoScaleMode is not Inherit.
             // AutoscaleFactor from this parent is used to scale the child controls within its hierarchy.
             while (parentControl is not null
                 && (parentControl is not ContainerControl containerControl
