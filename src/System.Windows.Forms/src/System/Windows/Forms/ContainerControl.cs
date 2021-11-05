@@ -688,7 +688,12 @@ namespace System.Windows.Forms
         private SizeF GetParentAutoScaleFactor()
         {
             Control parentControl = Parent;
-            while (parentControl is not null and not ContainerControl)
+
+            // Traverse thorugh parent hierarchy untill we get a ContainerControl whose AutoScaleMode is not Inherit.
+            // AutoscaleFactor from this parent is used to scale the child controls within its hierarchy.
+            while (parentControl is not null
+                && (parentControl is not ContainerControl containerControl
+                    || containerControl.AutoScaleMode == AutoScaleMode.Inherit))
             {
                 parentControl = parentControl.Parent;
             }
