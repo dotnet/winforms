@@ -11,31 +11,31 @@ namespace System.Windows.Forms.Tests
     {
         public static IEnumerable<object[]> Ctor_Control_DataGridViewCellStyle_TestData()
         {
-            yield return new object[] { null, null };
-            yield return new object[] { new Button(), new DataGridViewCellStyle() };
+            yield return new object[] { null, new DataGridViewCellStyle() };
+            yield return new object[] { new Button(), null };
         }
 
         [WinFormsTheory]
         [MemberData(nameof(Ctor_Control_DataGridViewCellStyle_TestData))]
-        public void Ctor_Control_DataGridViewCellStyle(Control control, DataGridViewCellStyle cellStyle)
+        public void DataGridViewEditingControlShowingEventArgs_NullArg_ThrowsArgumentNullException(Control control, DataGridViewCellStyle cellStyle)
         {
-            var e = new DataGridViewEditingControlShowingEventArgs(control, cellStyle);
-            Assert.Equal(control, e.Control);
-            Assert.Equal(cellStyle, e.CellStyle);
+            Assert.Throws<ArgumentNullException>(() => new DataGridViewEditingControlShowingEventArgs(control, cellStyle));
         }
 
         [Fact]
-        public void CellStyle_SetNonNull_GetReturnsExpected()
+        public void Ctor_Control_DataGridViewCellStyle()
         {
-            var value = new DataGridViewCellStyle();
-            var e = new DataGridViewEditingControlShowingEventArgs(null, null) { CellStyle = value };
-            Assert.Equal(value, e.CellStyle);
+            using var button = new Button();
+            var cellStyle = new DataGridViewCellStyle();
+            var e = new DataGridViewEditingControlShowingEventArgs(button, cellStyle);
+            Assert.Equal(button, e.Control);
+            Assert.Equal(cellStyle, e.CellStyle);
         }
 
         [Fact]
         public void CellStyle_SetNull_ThrowsArgumentNullException()
         {
-            var e = new DataGridViewEditingControlShowingEventArgs(null, null);
+            var e = new DataGridViewEditingControlShowingEventArgs(new Button(), new DataGridViewCellStyle());
             Assert.Throws<ArgumentNullException>("value", () => e.CellStyle = null);
         }
     }

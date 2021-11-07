@@ -1923,10 +1923,10 @@ System.Windows.Forms.DataGridViewColumnStateChangedEventArgs.DataGridViewColumnS
 ~System.Windows.Forms.DataGridViewComboBoxColumn.ValueMember.set -> void
 ~System.Windows.Forms.DataGridViewDataErrorEventArgs.DataGridViewDataErrorEventArgs(System.Exception exception, int columnIndex, int rowIndex, System.Windows.Forms.DataGridViewDataErrorContexts context) -> void
 ~System.Windows.Forms.DataGridViewDataErrorEventArgs.Exception.get -> System.Exception
-~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle
-~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.CellStyle.set -> void
-~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.Control.get -> System.Windows.Forms.Control
-~System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.DataGridViewEditingControlShowingEventArgs(System.Windows.Forms.Control control, System.Windows.Forms.DataGridViewCellStyle cellStyle) -> void
+System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.CellStyle.get -> System.Windows.Forms.DataGridViewCellStyle!
+System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.CellStyle.set -> void
+System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.Control.get -> System.Windows.Forms.Control!
+System.Windows.Forms.DataGridViewEditingControlShowingEventArgs.DataGridViewEditingControlShowingEventArgs(System.Windows.Forms.Control! control, System.Windows.Forms.DataGridViewCellStyle! cellStyle) -> void
 ~System.Windows.Forms.DataGridViewImageCell.Description.get -> string
 ~System.Windows.Forms.DataGridViewImageCell.Description.set -> void
 ~System.Windows.Forms.DataGridViewImageColumn.Description.get -> string
