@@ -2887,12 +2887,12 @@ System.Windows.Forms.ToolStripItemRenderEventArgs.Graphics.get -> System.Drawing
 System.Windows.Forms.ToolStripItemRenderEventArgs.Item.get -> System.Windows.Forms.ToolStripItem?
 System.Windows.Forms.ToolStripItemRenderEventArgs.ToolStrip.get -> System.Windows.Forms.ToolStrip?
 System.Windows.Forms.ToolStripItemRenderEventArgs.ToolStripItemRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem? item) -> void
-~System.Windows.Forms.ToolStripItemTextRenderEventArgs.Text.get -> string
-~System.Windows.Forms.ToolStripItemTextRenderEventArgs.Text.set -> void
-~System.Windows.Forms.ToolStripItemTextRenderEventArgs.TextFont.get -> System.Drawing.Font
-~System.Windows.Forms.ToolStripItemTextRenderEventArgs.TextFont.set -> void
-~System.Windows.Forms.ToolStripItemTextRenderEventArgs.ToolStripItemTextRenderEventArgs(System.Drawing.Graphics g, System.Windows.Forms.ToolStripItem item, string text, System.Drawing.Rectangle textRectangle, System.Drawing.Color textColor, System.Drawing.Font textFont, System.Drawing.ContentAlignment textAlign) -> void
-~System.Windows.Forms.ToolStripItemTextRenderEventArgs.ToolStripItemTextRenderEventArgs(System.Drawing.Graphics g, System.Windows.Forms.ToolStripItem item, string text, System.Drawing.Rectangle textRectangle, System.Drawing.Color textColor, System.Drawing.Font textFont, System.Windows.Forms.TextFormatFlags format) -> void
+System.Windows.Forms.ToolStripItemTextRenderEventArgs.Text.get -> string?
+System.Windows.Forms.ToolStripItemTextRenderEventArgs.Text.set -> void
+System.Windows.Forms.ToolStripItemTextRenderEventArgs.TextFont.get -> System.Drawing.Font?
+System.Windows.Forms.ToolStripItemTextRenderEventArgs.TextFont.set -> void
+System.Windows.Forms.ToolStripItemTextRenderEventArgs.ToolStripItemTextRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem! item, string? text, System.Drawing.Rectangle textRectangle, System.Drawing.Color textColor, System.Drawing.Font? textFont, System.Drawing.ContentAlignment textAlign) -> void
+System.Windows.Forms.ToolStripItemTextRenderEventArgs.ToolStripItemTextRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem! item, string? text, System.Drawing.Rectangle textRectangle, System.Drawing.Color textColor, System.Drawing.Font? textFont, System.Windows.Forms.TextFormatFlags format) -> void
 ~System.Windows.Forms.ToolStripLabel.ToolStripLabel(string text) -> void
 ~System.Windows.Forms.ToolStripLabel.ToolStripLabel(string text, System.Drawing.Image image) -> void
 ~System.Windows.Forms.ToolStripLabel.ToolStripLabel(string text, System.Drawing.Image image, bool isLink) -> void
