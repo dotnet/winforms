@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -16,7 +14,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
 
         /// <summary>
         ///  Returns true if this class is supported for the current OS and user/application settings,
@@ -31,7 +29,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.ArrowButton.LeftNormal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -41,7 +39,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.ThumbButtonHorizontal.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -51,7 +49,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.ThumbButtonVertical.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -61,7 +59,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.GripperHorizontal.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -71,7 +69,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.GripperVertical.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -81,7 +79,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.RightTrackHorizontal.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -91,7 +89,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.LeftTrackHorizontal.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -101,7 +99,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.UpperTrackVertical.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -111,7 +109,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.LowerTrackVertical.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -121,7 +119,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.SizeBox.LeftAlign, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -131,7 +129,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.GripperHorizontal.Normal, (int)state);
 
-            return visualStyleRenderer.GetPartSize(g, ThemeSizeType.True);
+            return t_visualStyleRenderer!.GetPartSize(g, ThemeSizeType.True);
         }
 
         /// <summary>
@@ -141,18 +139,18 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.ScrollBar.SizeBox.LeftAlign, (int)state);
 
-            return visualStyleRenderer.GetPartSize(g, ThemeSizeType.True);
+            return t_visualStyleRenderer!.GetPartSize(g, ThemeSizeType.True);
         }
 
         private static void InitializeRenderer(VisualStyleElement element, int state)
         {
-            if (visualStyleRenderer is null)
+            if (t_visualStyleRenderer is null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(element.ClassName, element.Part, state);
+                t_visualStyleRenderer = new VisualStyleRenderer(element.ClassName, element.Part, state);
             }
             else
             {
-                visualStyleRenderer.SetParameters(element.ClassName, element.Part, state);
+                t_visualStyleRenderer.SetParameters(element.ClassName, element.Part, state);
             }
         }
     }
