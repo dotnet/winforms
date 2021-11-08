@@ -18,6 +18,9 @@ namespace System.Windows.Forms.ButtonInternal
         // SystemInformation.Border3DSize + 2 pixels for focus rect
         protected const int ButtonBorderSize = 4;
 
+        // Coefficient for darkening the border color of the "Popup" and "Standard" buttons
+        protected const float ButtonBorderDarkerOffset = 0.8f;
+
         internal ButtonBaseAdapter(ButtonBase control) =>
             Control = control.OrThrowIfNull();
 
@@ -290,15 +293,16 @@ namespace System.Windows.Forms.ButtonInternal
             Point p2 = new Point(r.Left, r.Top);                // Upper left
             Point p3 = new Point(r.Left, r.Bottom - 1);         // Bottom inner left
             Point p4 = new Point(r.Right - 1, r.Bottom - 1);    // Inner bottom right
+            Color darkColor = ControlPaint.Darker(colors.ButtonShadow, ButtonBorderDarkerOffset);
 
             // Top, left
-            using var topLeftPen = new Gdi32.CreatePenScope(up ? colors.Highlight : colors.ButtonShadow);
+            using var topLeftPen = new Gdi32.CreatePenScope(up ? colors.Highlight : darkColor);
 
             hdc.DrawLine(topLeftPen, p1, p2);                   // top  (right-left)
             hdc.DrawLine(topLeftPen, p2, p3);                   // left (top-down)
 
             // Bottom, right
-            using var bottomRightPen = new Gdi32.CreatePenScope(up ? colors.ButtonShadow : colors.Highlight);
+            using var bottomRightPen = new Gdi32.CreatePenScope(up ? darkColor : colors.Highlight);
 
             p1.Offset(0, -1);                                   // Need to paint last pixel too.
             hdc.DrawLine(bottomRightPen, p3, p4);               // Bottom (left-right)
