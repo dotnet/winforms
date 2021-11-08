@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Windows.Forms.Layout;
@@ -12,7 +10,10 @@ namespace System.Windows.Forms.ButtonInternal
 {
     internal class CheckBoxPopupAdapter : CheckBoxBaseAdapter
     {
-        internal CheckBoxPopupAdapter(ButtonBase control) : base(control) { }
+        internal CheckBoxPopupAdapter(ButtonBase control)
+            : base(control)
+        {
+        }
 
         internal override void PaintUp(PaintEventArgs e, CheckState state)
         {
@@ -73,7 +74,7 @@ namespace System.Windows.Forms.ButtonInternal
                 DrawPopupBorder(e, layout.CheckBounds, colors);
                 DrawCheckOnly(e, layout, colors, colors.WindowText);
 
-                Region originalClip = null;
+                Region? originalClip = null;
                 if (!string.IsNullOrEmpty(Control.Text))
                 {
                     originalClip = e.GraphicsInternal.Clip;
@@ -142,7 +143,7 @@ namespace System.Windows.Forms.ButtonInternal
             bool enabled,
             ContentAlignment textAlign,
             RightToLeft rtl,
-            Control control = null)
+            Control? control = null)
         {
             LayoutOptions layout = CommonLayout(clientRectangle, padding, isDefault, font, text, enabled, textAlign, rtl);
             layout.ShadowedText = false;

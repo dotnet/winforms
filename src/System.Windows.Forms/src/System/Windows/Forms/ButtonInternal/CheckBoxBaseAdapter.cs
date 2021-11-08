@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -15,16 +13,19 @@ namespace System.Windows.Forms.ButtonInternal
         protected const int FlatCheckSize = 11;
 
         [ThreadStatic]
-        private static Bitmap t_checkImageChecked = null;
+        private static Bitmap? t_checkImageChecked = null;
         [ThreadStatic]
         private static Color t_checkImageCheckedBackColor = Color.Empty;
 
         [ThreadStatic]
-        private static Bitmap t_checkImageIndeterminate = null;
+        private static Bitmap? t_checkImageIndeterminate = null;
         [ThreadStatic]
         private static Color t_checkImageIndeterminateBackColor = Color.Empty;
 
-        internal CheckBoxBaseAdapter(ButtonBase control) : base(control) { }
+        internal CheckBoxBaseAdapter(ButtonBase control)
+            : base(control)
+        {
+        }
 
         protected new CheckBox Control
         {
@@ -306,7 +307,7 @@ namespace System.Windows.Forms.ButtonInternal
 
         #endregion
 
-        private static Bitmap GetCheckBoxImage(Color checkColor, Rectangle fullSize, ref Color cacheCheckColor, ref Bitmap cacheCheckImage)
+        private static Bitmap GetCheckBoxImage(Color checkColor, Rectangle fullSize, ref Color cacheCheckColor, ref Bitmap? cacheCheckImage)
         {
             if (cacheCheckImage is not null &&
                 cacheCheckColor.Equals(checkColor) &&
