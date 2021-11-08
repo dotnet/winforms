@@ -182,8 +182,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // return the default IE Color
-                    return LinkUtilities.IELinkColor;
+                    // return the default IE Color when cell is not selected
+                    return Selected ? Color.White : LinkUtilities.IELinkColor;
                 }
             }
             set
