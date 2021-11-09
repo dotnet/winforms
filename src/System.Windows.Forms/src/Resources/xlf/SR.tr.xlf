@@ -6293,7 +6293,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ListViewCannotAddGroupsToVirtualListView">
         <source>You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</source>
-        <target state="new">You cannot add groups to the ListView groups collection when the ListView is in virtual mode.</target>
+        <target state="translated">ListView sanal moddayken ListView grupları koleksiyonuna grup ekleyemezsiniz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewCantAccessCheckedItemsCollectionWhenInVirtualMode">
@@ -7353,7 +7353,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="PBRSDocCommentPaneTitle">
         <source>Description</source>
-        <target state="translated">Açıklama</target>
+        <target state="new">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PBRSErrorInvalidPropertyValue">
@@ -7948,7 +7948,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripBorderDescr">
         <source>Border color to use on the top edge of the StatusStrip.</source>
-        <target state="new">Border color to use on the top edge of the StatusStrip.</target>
+        <target state="translated">StatusStrip’in üst kenarı üzerinde kullanmak için kenar rengi</target>
         <note />
       </trans-unit>
       <trans-unit id="ProfessionalColorsStatusStripGradientBeginDescr">
@@ -8183,7 +8183,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="PropertyGridDocCommentAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="translated">{0} Açıklaması</target>
+        <target state="new">{0} Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridDropDownButtonAccessibleName">
