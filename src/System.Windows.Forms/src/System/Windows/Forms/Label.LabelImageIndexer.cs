@@ -48,11 +48,11 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_useIntegerIndex)
+                    if (_useIntegerIndex && ImageList is not null)
                     {
                         // The behavior of label is to return the last item in the Images collection
                         // if the index is currently set higher than the count.
-                        return (Index < ImageList!.Images.Count) ? Index : ImageList!.Images.Count - 1;
+                        return (Index < ImageList.Images.Count) ? Index : ImageList.Images.Count - 1;
                     }
                     else if (ImageList is not null)
                     {
