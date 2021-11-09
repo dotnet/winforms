@@ -1361,18 +1361,18 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~static System.Windows.Forms.Screen.GetBounds(System.Windows.Forms.Control ctl) -> System.Drawing.Rectangle
 ~static System.Windows.Forms.Screen.GetWorkingArea(System.Windows.Forms.Control ctl) -> System.Drawing.Rectangle
 ~static System.Windows.Forms.Screen.PrimaryScreen.get -> System.Windows.Forms.Screen
-~static System.Windows.Forms.ScrollBarRenderer.DrawArrowButton(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarArrowButtonState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawHorizontalThumb(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawHorizontalThumbGrip(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawLeftHorizontalTrack(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawLowerVerticalTrack(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawRightHorizontalTrack(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawSizeBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarSizeBoxState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawUpperVerticalTrack(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawVerticalThumb(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.DrawVerticalThumbGrip(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
-~static System.Windows.Forms.ScrollBarRenderer.GetSizeBoxSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
-~static System.Windows.Forms.ScrollBarRenderer.GetThumbGripSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
+static System.Windows.Forms.ScrollBarRenderer.DrawArrowButton(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarArrowButtonState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawHorizontalThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawHorizontalThumbGrip(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawLeftHorizontalTrack(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawLowerVerticalTrack(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawRightHorizontalTrack(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawSizeBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarSizeBoxState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawUpperVerticalTrack(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawVerticalThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.DrawVerticalThumbGrip(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
+static System.Windows.Forms.ScrollBarRenderer.GetSizeBoxSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
+static System.Windows.Forms.ScrollBarRenderer.GetThumbGripSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
 ~static System.Windows.Forms.SendKeys.Send(string keys) -> void
 ~static System.Windows.Forms.SendKeys.SendWait(string keys) -> void
 ~static System.Windows.Forms.SystemInformation.ComputerName.get -> string
