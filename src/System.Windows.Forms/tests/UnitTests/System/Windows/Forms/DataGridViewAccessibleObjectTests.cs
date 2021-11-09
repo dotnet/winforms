@@ -251,11 +251,21 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.IsGridPatternAvailablePropertyId)]
         [InlineData((int)UiaCore.UIA.IsTablePatternAvailablePropertyId)]
-        public void DataGridViewAccessibleObject_Pattern_IsAvailable(int propertyId)
+        public void DataGridViewAccessibleObject_Pattern_IsAvailable_IfDGVIsNotEmpty(int propertyId)
+        {
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
+            AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
+            Assert.True((bool)accessibilityObject.GetPropertyValue((UiaCore.UIA)propertyId));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_TablePattern_IsNotAvailable_IfDGVIsEmpty()
         {
             using DataGridView dataGridView = new();
             AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
-            Assert.True((bool)accessibilityObject.GetPropertyValue((UiaCore.UIA)propertyId));
+            Assert.False((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsTablePatternAvailablePropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -290,11 +300,21 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.TablePatternId)]
         [InlineData((int)UiaCore.UIA.GridPatternId)]
-        public void DataGridViewAccessibleObject_IsPatternSupported(int patternId)
+        public void DataGridViewAccessibleObject_IsPatternSupported_IfDGVIsNotEmpty(int patternId)
         {
             using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_TablePattern_IsNotSupported_IfDGVIsEmpty()
+        {
+            using DataGridView dataGridView = new();
+            AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
+            Assert.False(accessibilityObject.IsPatternSupported(UiaCore.UIA.IsTablePatternAvailablePropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
         }
 
         [WinFormsTheory]
