@@ -9629,6 +9629,9 @@ namespace System.Windows.Forms
                     // the call shouldn't fail.
                     // However, it could fail if this.CreateParams.Parent is changed outside our control.
                     CreateHandle();
+
+                    // DestroyHandle resets the state, but CreateHandle doesn't set the state back.
+                    SetState(States.Created, true);
                 }
                 catch (Exception)
                 {
