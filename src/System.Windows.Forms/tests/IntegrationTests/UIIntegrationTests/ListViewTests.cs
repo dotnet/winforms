@@ -101,7 +101,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(listView =>
             {
-                InitializeItems(listView, View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
                 InitializeTileList(listView, columnCount: 2, subItemsCount: 2, tileSize: new Size(150, 150));
 
                 Application.DoEvents();
@@ -119,7 +118,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(listView =>
             {
-                InitializeItems(listView, View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
                 InitializeTileList(listView, columnCount: 1, subItemsCount: 0, tileSize: new Size(150, 150));
 
                 Application.DoEvents();
@@ -136,7 +134,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(listView =>
             {
-                InitializeItems(listView, View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
                 InitializeTileList(listView, columnCount: 1, subItemsCount: 2, tileSize: new Size(150, 150));
 
                 Application.DoEvents();
@@ -170,13 +167,12 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(listView =>
             {
-                InitializeItems(listView, View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
                 InitializeTileList(listView, columnCount: 4, subItemsCount: 3, tileSize: new Size(150, 150));
 
                 Application.DoEvents();
 
                 AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
-                IRawElementProviderFragment? actualAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.FirstChild);
+                IRawElementProviderFragment? actualAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.LastChild);
                 AccessibleObject expectedAccessibleObject = listView.Items[0].SubItems[3].AccessibilityObject;
 
                 Assert.Equal(actualAccessibleObject, expectedAccessibleObject);
@@ -188,8 +184,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(listView =>
             {
-                InitializeItems(listView, View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
-
                 InitializeTileList(listView, columnCount: 4, subItemsCount: 1, tileSize: new Size(150, 150));
 
                 Application.DoEvents();
@@ -207,8 +201,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(listView =>
             {
-                InitializeItems(listView, View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
-
                 InitializeTileList(listView, columnCount: 2, subItemsCount: 5, tileSize: new Size(150, 150));
 
                 Application.DoEvents();
@@ -226,7 +218,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(listView =>
             {
-                InitializeItems(listView, View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
                 InitializeTileList(listView, columnCount: 1, subItemsCount: 2, tileSize: new Size(150, 150));
 
                 Application.DoEvents();
@@ -243,7 +234,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(listView =>
             {
-                InitializeItems(listView, View.Tile, virtualModeEnabled: false, checkBoxesEnabled: false);
                 InitializeTileList(listView, columnCount: 10, subItemsCount: 10, tileSize: new Size(100, 100));
 
                 Application.DoEvents();
@@ -253,6 +243,505 @@ namespace System.Windows.Forms.UI.IntegrationTests
                 AccessibleObject expectedAccessibleObject = listView.Items[0].SubItems[5].AccessibilityObject;
 
                 Assert.Equal(actualAccessibleObject, expectedAccessibleObject);
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_SubItem_FragmentNavigate_NextSibling_ReturnsExpected()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 4, tileSize: new Size(100, 100));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject1 = listView.Items[0].SubItems[1].AccessibilityObject;
+                AccessibleObject? accessibleObject2 = (AccessibleObject?)accessibleObject1.FragmentNavigate(NavigateDirection.NextSibling)!;
+                AccessibleObject? accessibleObject3 = (AccessibleObject?)accessibleObject2.FragmentNavigate(NavigateDirection.NextSibling)!;
+                AccessibleObject? accessibleObject4 = (AccessibleObject?)accessibleObject3.FragmentNavigate(NavigateDirection.NextSibling)!;
+
+                Assert.Equal(accessibleObject2, listView.Items[0].SubItems[2].AccessibilityObject);
+
+                Assert.Equal(accessibleObject3, listView.Items[0].SubItems[3].AccessibilityObject);
+
+                Assert.Null(accessibleObject4);
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_SubItem_FragmentNavigate_Sibling_ReturnsNull_For_Single_SubItem()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 1, tileSize: new Size(100, 100));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
+                IRawElementProviderFragment? nextAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.NextSibling);
+                IRawElementProviderFragment? previousAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling);
+
+                Assert.Null(nextAccessibleObject);
+
+                Assert.Null(previousAccessibleObject);
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_SubItem_FragmentNavigate_Sibling_ReturnsNull_For_Single_Column()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 2, subItemsCount: 3, tileSize: new Size(100, 100));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
+                IRawElementProviderFragment? nextAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.NextSibling);
+                IRawElementProviderFragment? previousAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling);
+
+                Assert.Null(nextAccessibleObject);
+
+                Assert.Null(previousAccessibleObject);
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_SubItem_FragmentNavigate_Sibling_ReturnsNull_For_SmallSize()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 5, subItemsCount: 5, tileSize: new Size(50, 40));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].SubItems[1].AccessibilityObject;
+                IRawElementProviderFragment? nextAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.NextSibling);
+                IRawElementProviderFragment? previousAccessibleObject = accessibleObject.FragmentNavigate(NavigateDirection.PreviousSibling);
+
+                Assert.Null(nextAccessibleObject);
+
+                Assert.Null(previousAccessibleObject);
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_SubItem_FragmentNavigate_Child_ReturnsNull()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 5, subItemsCount: 5, tileSize: new Size(50, 40));
+
+                Application.DoEvents();
+
+                AccessibleObject? accessibleObject = (AccessibleObject?)listView.Items[0].AccessibilityObject.FragmentNavigate(NavigateDirection.FirstChild);
+
+                Assert.Null(accessibleObject!.FragmentNavigate(NavigateDirection.FirstChild));
+
+                Assert.Null(accessibleObject.FragmentNavigate(NavigateDirection.LastChild));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_SubItem_HitTest_ReturnExpected()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 3, subItemsCount: 2, tileSize: new Size(100, 100));
+
+                Application.DoEvents();
+
+                AccessibleObject expectedAccessibleItem1 = listView.Items[0].SubItems[1].AccessibilityObject;
+                AccessibleObject expectedAccessibleItem2 = listView.Items[0].SubItems[2].AccessibilityObject;
+                AccessibleObject actualAccessibleItem1 = HitTest(GetSubItemLocation(0, 1));
+                AccessibleObject actualAccessibleItem2 = HitTest(GetSubItemLocation(0, 2));
+
+                Assert.Equal(actualAccessibleItem1, expectedAccessibleItem1);
+
+                Assert.Equal(actualAccessibleItem2, expectedAccessibleItem2);
+
+                AccessibleObject HitTest(Point point) =>
+                listView.AccessibilityObject.HitTest(point.X, point.Y)!;
+
+                Point GetSubItemLocation(int itemIndex, int subItemIndex) =>
+                    listView.PointToScreen(listView.GetSubItemRect(itemIndex, subItemIndex, ItemBoundsPortion.Label).Location);
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildCount_ReturnsExpected()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 3, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                Assert.Equal(3, listView.Items[0].AccessibilityObject.GetChildCount());
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildCount_ReturnsZero_WithoutSubItems()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 0, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                Assert.Equal(0, listView.Items[0].AccessibilityObject.GetChildCount());
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildCount_ReturnsExpected_ColumnsMoreThanSubItems()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 1, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                Assert.Equal(1, listView.Items[0].AccessibilityObject.GetChildCount());
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildCount_ReturnsExpected_SubItemsMoreThanColumns()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 2, subItemsCount: 5, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                Assert.Equal(1, listView.Items[0].AccessibilityObject.GetChildCount());
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildCount_ReturnsZero_For_Single_Column()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 1, subItemsCount: 2, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                Assert.Equal(0, listView.Items[0].AccessibilityObject.GetChildCount());
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildCount_ReturnsZero_For_SmallSize()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 2, subItemsCount: 1, tileSize: new Size(10, 10));
+
+                Application.DoEvents();
+
+                Assert.Equal(0, listView.Items[0].AccessibilityObject.GetChildCount());
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildCount_ReturnsExpected_For_BigSize()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 10, subItemsCount: 10, tileSize: new Size(100, 100));
+
+                Application.DoEvents();
+
+                Assert.Equal(5, listView.Items[0].AccessibilityObject.GetChildCount());
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChild_ReturnsExpected()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 3, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Null(accessibleObject.GetChild(-1));
+
+                Assert.Equal(accessibleObject.GetChild(0), listView.Items[0].SubItems[1].AccessibilityObject);
+
+                Assert.Equal(accessibleObject.GetChild(1), listView.Items[0].SubItems[2].AccessibilityObject);
+
+                Assert.Equal(accessibleObject.GetChild(2), listView.Items[0].SubItems[3].AccessibilityObject);
+
+                Assert.Null(accessibleObject.GetChild(3));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChild_ReturnsNull_WithoutSubItems()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 0, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Null(accessibleObject.GetChild(-1));
+
+                Assert.Null(accessibleObject.GetChild(0));
+
+                Assert.Null(accessibleObject.GetChild(1));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChild_ReturnsExpected_ColumnsMoreThanSubItems()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 1, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Null(accessibleObject.GetChild(-1));
+
+                Assert.Equal(accessibleObject.GetChild(0), listView.Items[0].SubItems[1].AccessibilityObject);
+
+                Assert.Null(accessibleObject.GetChild(1));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChild_ReturnsExpected_SubItemsMoreThanColumns()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 2, subItemsCount: 5, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Null(accessibleObject.GetChild(-1));
+
+                Assert.Equal(accessibleObject.GetChild(0), listView.Items[0].SubItems[1].AccessibilityObject);
+
+                Assert.Null(accessibleObject.GetChild(1));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChild_ReturnsNull_For_Single_Column()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 1, subItemsCount: 2, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Null(accessibleObject.GetChild(-1));
+
+                Assert.Null(accessibleObject.GetChild(0));
+
+                Assert.Null(accessibleObject.GetChild(1));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChild_ReturnsNull_For_SmallSize()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 2, subItemsCount: 1, tileSize: new Size(10, 10));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Null(accessibleObject.GetChild(-1));
+
+                Assert.Null(accessibleObject.GetChild(0));
+
+                Assert.Null(accessibleObject.GetChild(1));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChild_ReturnsExpected_For_BigSize()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 10, subItemsCount: 10, tileSize: new Size(100, 100));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Null(accessibleObject.GetChild(-1));
+
+                Assert.Equal(accessibleObject.GetChild(0), listView.Items[0].SubItems[1].AccessibilityObject);
+
+                Assert.Equal(accessibleObject.GetChild(1), listView.Items[0].SubItems[2].AccessibilityObject);
+
+                Assert.Equal(accessibleObject.GetChild(2), listView.Items[0].SubItems[3].AccessibilityObject);
+
+                Assert.Equal(accessibleObject.GetChild(3), listView.Items[0].SubItems[4].AccessibilityObject);
+
+                Assert.Equal(accessibleObject.GetChild(4), listView.Items[0].SubItems[5].AccessibilityObject);
+
+                Assert.Null(accessibleObject.GetChild(5));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildIndex_ReturnsExpected()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 3, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+
+                Assert.Equal(1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[1].AccessibilityObject));
+
+                Assert.Equal(2, accessibleObject.GetChildIndex(listView.Items[0].SubItems[2].AccessibilityObject));
+
+                Assert.Equal(3, accessibleObject.GetChildIndex(listView.Items[0].SubItems[3].AccessibilityObject));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildIndex_ReturnsExpected_ColumnsMoreThanSubItems()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 1, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+
+                Assert.Equal(1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[1].AccessibilityObject));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildIndex_ReturnsExpected_SubItemsMoreThanColumns()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 2, subItemsCount: 5, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+
+                Assert.Equal(1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[1].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[2].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[3].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[4].AccessibilityObject));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildIndex_ReturnsMinusOne_For_Single_Column()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 1, subItemsCount: 2, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[1].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[2].AccessibilityObject));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildIndex_ReturnsMinusOne_For_SmallSize()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 2, subItemsCount: 1, tileSize: new Size(10, 10));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[1].AccessibilityObject));
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_GetChildIndex_ReturnsExpected_For_BigSize()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 10, subItemsCount: 10, tileSize: new Size(100, 100));
+
+                Application.DoEvents();
+
+                AccessibleObject accessibleObject = listView.Items[0].AccessibilityObject;
+
+                Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[0].AccessibilityObject));
+
+                for (int i = 1; i <= 5; i++)
+                {
+                    Assert.Equal(i, accessibleObject.GetChildIndex(listView.Items[0].SubItems[i].AccessibilityObject));
+                }
+
+                for (int i = 6; i <= 10; i++)
+                {
+                    Assert.Equal(-1, accessibleObject.GetChildIndex(listView.Items[0].SubItems[i].AccessibilityObject));
+                }
+            });
+        }
+
+        [StaFact]
+        public void ListView_Tile_ColumnProperty_ReturnsMinusOne()
+        {
+            RunTest(listView =>
+            {
+                InitializeTileList(listView, columnCount: 4, subItemsCount: 3, tileSize: new Size(150, 150));
+
+                Application.DoEvents();
+
+                Assert.Equal(-1, listView.Items[0].SubItems[0].AccessibilityObject.Column);
+
+                Assert.Equal(-1, listView.Items[0].SubItems[1].AccessibilityObject.Column);
+
+                Assert.Equal(-1, listView.Items[0].SubItems[2].AccessibilityObject.Column);
+
+                Assert.Equal(-1, listView.Items[0].SubItems[2].AccessibilityObject.Column);
             });
         }
 
@@ -283,11 +772,7 @@ namespace System.Windows.Forms.UI.IntegrationTests
 
         private void InitializeTileList(ListView listView, int columnCount, int subItemsCount, Size tileSize)
         {
-            listView.VirtualListSize = 0;
-            listView.Columns.Clear();
-            listView.Items.Clear();
-            listView.VirtualMode = false;
-            listView.CheckBoxes = false;
+            listView.View = View.Tile;
             listView.TileSize = tileSize;
 
             for (int i = 0; i < columnCount; i++)
@@ -307,11 +792,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
 
         private void InitializeItems(ListView listView, View view, bool virtualModeEnabled, bool checkBoxesEnabled)
         {
-            listView.VirtualListSize = 0;
-            listView.Columns.Clear();
-            listView.VirtualMode = false;
-            listView.CheckBoxes = false;
-
             var columnHeader1 = new ColumnHeader { Text = "ColumnHeader1", Width = 140 };
             var columnHeader2 = new ColumnHeader { Text = "ColumnHeader2", Width = 140 };
             var columnHeader3 = new ColumnHeader { Text = "ColumnHeader3", Width = 140 };
@@ -332,7 +812,6 @@ namespace System.Windows.Forms.UI.IntegrationTests
                 };
             };
 
-            listView.Items.Clear();
             listView.CheckBoxes = checkBoxesEnabled;
             listView.FullRowSelect = true;
             listView.View = view;

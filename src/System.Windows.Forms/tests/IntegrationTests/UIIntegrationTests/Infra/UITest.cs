@@ -92,6 +92,7 @@ namespace System.Windows.Forms.UI.IntegrationTests.Infra
                     }
 
                     Assert.True(form.Controls.Contains(control));
+                    Application.EnableVisualStyles();
                     Application.Run(form);
                 },
                 runTestAsync: form => runTestAsync(control!));
