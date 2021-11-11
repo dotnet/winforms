@@ -29,11 +29,8 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsFact]
         public unsafe void AccessibleObject_IAccessibleExGetRuntimeId_Invoke_ReturnsExpected()
         {
-            using (new NoAssertContext())
-            {
-                var o = new AccessibleObject();
-                AssertSuccess(Test_IAccessibleExGetRuntimeId(o, null));
-            }
+            var o = new AccessibleObject();
+            AssertSuccess(Test_IAccessibleExGetRuntimeId(o));
         }
 
         [WinFormsTheory]
@@ -180,11 +177,8 @@ namespace System.Windows.Forms.InteropTests
         [WinFormsFact]
         public unsafe void AccessibleObject_IRawElementProviderFragmentGetRuntimeId_Invoke_ReturnsExpected()
         {
-            using (new NoAssertContext())
-            {
-                var o = new AccessibleObject();
-                AssertSuccess(Test_IRawElementProviderFragmentGetRuntimeId(o, null));
-            }
+            var o = new AccessibleObject();
+            AssertSuccess(Test_IRawElementProviderFragmentGetRuntimeId(o));
         }
 
         [WinFormsTheory]
@@ -697,8 +691,7 @@ namespace System.Windows.Forms.InteropTests
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
         private unsafe static extern string Test_IAccessibleExGetRuntimeId(
-            [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-            int* expected);
+            [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
         private unsafe static extern string Test_IAccessibleExGetObjectForChild(
@@ -781,8 +774,7 @@ namespace System.Windows.Forms.InteropTests
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
         private unsafe static extern string Test_IRawElementProviderFragmentGetRuntimeId(
-            [MarshalAs(UnmanagedType.IUnknown)] object pUnk,
-            int* expected);
+            [MarshalAs(UnmanagedType.IUnknown)] object pUnk);
 
         [DllImport(NativeTests, ExactSpelling = true, CharSet = CharSet.Unicode)]
         private static extern string Test_IRawElementProviderFragmentNavigate(

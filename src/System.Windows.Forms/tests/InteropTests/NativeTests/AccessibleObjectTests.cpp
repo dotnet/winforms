@@ -8,8 +8,6 @@
 #include <atlbase.h>
 using namespace ATL;
 
-#define COR_E_NOTSUPPORTED 0x80131515
-
 TEST const WCHAR* WINAPI Test_IAccessibleExConvertReturnedElement(IUnknown* pUnknown)
 {
     return RunTest([&](std::wstringstream& output)
@@ -85,7 +83,7 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetIAccessiblePair(IUnknown* pUnknown
     });
 }
 
-TEST const WCHAR* WINAPI Test_IAccessibleExGetRuntimeId(IUnknown* pUnknown, int* expected)
+TEST const WCHAR* WINAPI Test_IAccessibleExGetRuntimeId(IUnknown* pUnknown)
 {
     return RunTest([&](std::wstringstream& output)
     {
@@ -97,12 +95,13 @@ TEST const WCHAR* WINAPI Test_IAccessibleExGetRuntimeId(IUnknown* pUnknown, int*
 
         SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
         hr = pAccessibleEx->GetRuntimeId(&result);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(S_OK, hr);
+        assertNotNull(result);
         SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pAccessibleEx->GetRuntimeId(NULL);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(S_OK, hr);
 
         return S_OK;
     });
@@ -342,7 +341,7 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetEmbeddedFragmentRoot
     });
 }
 
-TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetRuntimeId(IUnknown* pUnknown, int* expected)
+TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetRuntimeId(IUnknown* pUnknown)
 {
     return RunTest([&](std::wstringstream& output)
     {
@@ -354,12 +353,13 @@ TEST const WCHAR* WINAPI Test_IRawElementProviderFragmentGetRuntimeId(IUnknown* 
 
         SAFEARRAY *result = (SAFEARRAY*)(long)0xdeadbeef;
         hr = pRawElementProviderFragment->GetRuntimeId(&result);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(S_OK, hr);
+        assertNotNull(result);
         SafeArrayDestroy(result);
 
         // Negative tests.
         hr = pRawElementProviderFragment->GetRuntimeId(NULL);
-        assertEqualHr(COR_E_NOTSUPPORTED, hr);
+        assertEqualHr(S_OK, hr);
 
         return S_OK;
     });
