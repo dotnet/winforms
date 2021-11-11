@@ -217,11 +217,6 @@
         <target state="translated">Odpowiadający element interfejsu użytkownika nie jest regionem dynamicznym.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
-        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0} nie obsługuje właściwości {1}. Musi zostać zastąpiona w klasie pochodnej.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Formanty utworzone w jednym wątku nie mogą być nadrzędne w stosunku do formantów w innym wątku.</target>

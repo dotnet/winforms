@@ -217,11 +217,6 @@
         <target state="translated">Das entsprechende Element der Benutzeroberfläche ist kein dynamischer Bereich.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
-        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0} unterstützt {1} Eigenschaft nicht. Sie muss in der abgeleiteten Klasse überschrieben werden.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Steuerelemente, die für einen Thread erstellt wurden, können nicht einem Steuerelement in einem anderen Thread übergeordnet werden.</target>

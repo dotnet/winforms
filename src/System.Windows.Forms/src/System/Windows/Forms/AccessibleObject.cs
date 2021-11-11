@@ -350,17 +350,7 @@ namespace System.Windows.Forms
             return false;
         }
 
-        internal virtual int[] RuntimeId
-        {
-            get
-            {
-                string message = string.Format(SR.AccessibleObjectRuntimeIdNotSupported, nameof(AccessibleObject), nameof(RuntimeId));
-
-                Debug.Fail(message);
-
-                throw new NotSupportedException(message);
-            }
-        }
+        internal virtual int[] RuntimeId => Array.Empty<int>();
 
         internal virtual int ProviderOptions
             => (int)(UiaCore.ProviderOptions.ServerSideProvider | UiaCore.ProviderOptions.UseComThreading);

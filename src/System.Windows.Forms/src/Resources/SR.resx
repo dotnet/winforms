@@ -6850,9 +6850,6 @@ Stack trace where the illegal operation occurred was:
   <data name="ControlsCollectionShouldNotBeEmptyInGetNextControl" xml:space="preserve">
     <value>{0} collection shouldn't be empty for {1}.</value>
   </data>
-  <data name="AccessibleObjectRuntimeIdNotSupported" xml:space="preserve">
-    <value>{0} doesn't support {1} property. It must be overriden in the derived class.</value>
-  </data>
   <data name="ListViewGroupCollapsedStateName" xml:space="preserve">
     <value>{0}, group, collapsed</value>
   </data>

@@ -217,11 +217,6 @@
         <target state="translated">O elemento de interface do usuário correspondente não é uma região dinâmica.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
-        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0} não dá suporte à propriedade {1}. Ele deve ser substituído na classe derivada.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Os controles criados em um thread não podem ser controles pai de um controle em um outro thread.</target>

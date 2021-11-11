@@ -217,11 +217,6 @@
         <target state="translated">對應的 UI 元素不是即時區域。</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
-        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0} 不支援 {1} 屬性。必須在衍生類別中加以覆寫。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">不可以在不同執行緒上建立控制項的父項。</target>

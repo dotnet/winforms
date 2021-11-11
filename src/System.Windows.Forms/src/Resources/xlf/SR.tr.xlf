@@ -217,11 +217,6 @@
         <target state="translated">Karşılık gelen kullanıcı arabirimi öğesi canlı bir bölge değil.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
-        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0}, {1} özelliğini desteklemez. Türetilmiş sınıfta geçersiz kılınmalıdır.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Bir iş parçacığında oluşturulan denetimler, farklı bir iş parçacığındaki denetimin üst öğesi yapılamaz.</target>

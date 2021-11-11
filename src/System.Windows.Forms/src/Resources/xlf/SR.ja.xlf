@@ -217,11 +217,6 @@
         <target state="translated">対応する UI 要素が、ライブ リージョンではありません。</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
-        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0} は {1} プロパティをサポートしていません。派生クラスでオーバーライドする必要があります。</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">あるスレッドで作成されたコントロールに対して、別のスレッドのコントロールを親にすることはできません。</target>

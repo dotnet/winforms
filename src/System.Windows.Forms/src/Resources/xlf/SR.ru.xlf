@@ -217,11 +217,6 @@
         <target state="translated">Соответствующий элемент пользовательского интерфейса не является динамической областью.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
-        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0} не поддерживает свойство {1}. Его необходимо переопределить в производном классе.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Элементы управления, созданные в одном потоке, не могут быть родительскими для элемента управления в другом потоке.</target>

@@ -217,11 +217,6 @@
         <target state="translated">Odpovídající prvek uživatelského rozhraní není aktivní oblast.</target>
         <note />
       </trans-unit>
-      <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
-        <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0} nepodporuje vlastnost {1}. Musí to být přepsáno v odvozené třídě.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="AddDifferentThreads">
         <source>Controls created on one thread cannot be parented to a control on a different thread.</source>
         <target state="translated">Ovládací prvky vytvořené v jednom vlákně nelze nadřadit ovládacím prvkům v jiném vlákně.</target>
