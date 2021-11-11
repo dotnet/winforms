@@ -112,13 +112,12 @@ namespace System.Windows.Forms.UI.IntegrationTests
             RunTest(calendar =>
             {
                 DateTime newDate = DateTime.Today.AddDays(1);
+                void SendClick(MonthCalendar c) => MouseHelper.SendClick(GetCellPositionByDate(c, newDate));
                 (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(calendar, SendClick);
 
                 Assert.Equal(newDate.Date, testData.SelectedDate.Date);
                 Assert.NotEqual(0, testData.CallDateSelectedCount);
                 Assert.NotEqual(0, testData.CallDateChangedCount);
-
-                void SendClick(MonthCalendar c) => MouseHelper.SendClick(GetCellPositionByDate(c, newDate));
             });
         }
 
@@ -128,23 +127,39 @@ namespace System.Windows.Forms.UI.IntegrationTests
             RunTest(calendar =>
             {
                 DateTime newDate = DateTime.Today.AddDays(-1);
+                void SendClick(MonthCalendar c) => MouseHelper.SendClick(GetCellPositionByDate(c, newDate));
                 (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(calendar, SendClick);
 
                 Assert.Equal(newDate.Date, testData.SelectedDate.Date);
                 Assert.NotEqual(0, testData.CallDateSelectedCount);
                 Assert.NotEqual(0, testData.CallDateChangedCount);
-
-                void SendClick(MonthCalendar c) => MouseHelper.SendClick(GetCellPositionByDate(c, newDate));
             });
         }
 
-        private Point GetCellPositionByDate(MonthCalendar calendar, DateTime dateTime)
+        [StaFact]
+        public void MonthCalendar_Click_MaximumDate_InvokeEvents()
+        {
+            RunTest(calendar =>
+            {
+                DateTime newDate = DateTime.Today.AddDays(2);
+                void SendClick(MonthCalendar c) => MouseHelper.SendClick(GetCellPositionByDate(c, newDate));
+                (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData = MonthCalendar_MinimumMaximum_Action(calendar, SendClick);
+
+                Assert.NotEqual(0, testData.CallDateSelectedCount);
+
+                Assert.NotEqual(0, testData.CallDateChangedCount);
+
+                Assert.Equal(testData.SelectedDate.Date, newDate.Date);
+            });
+        }
+
+        private static Point GetCellPositionByDate(MonthCalendar calendar, DateTime dateTime)
         {
             MonthCalendarAccessibleObject accessibleObject = (MonthCalendarAccessibleObject)calendar.AccessibilityObject;
             return accessibleObject.TestAccessor().Dynamic.GetCellByDate(dateTime.Date).Bounds.Location;
         }
 
-        private (int callDateSelectedCount, int callDateChangedCount, DateTime selectedDate) MonthCalendar_MinimumMaximum_Action(MonthCalendar calendar, Action<MonthCalendar> action)
+        private static (int callDateSelectedCount, int callDateChangedCount, DateTime selectedDate) MonthCalendar_MinimumMaximum_Action(MonthCalendar calendar, Action<MonthCalendar> action)
         {
             int callDateSelectedCount = 0;
             int callDateChangedCount = 0;
