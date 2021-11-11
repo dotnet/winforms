@@ -1,7 +1,8 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Globalization;
 using System.Text.RegularExpressions;
 
 namespace System.Windows.Forms.Analyzers
@@ -32,7 +33,7 @@ namespace System.Windows.Forms.Analyzers
                     ? "Control.DefaultFont.FontFamily"
                     : $"new FontFamily(\"{name}\")";
 
-                return $"new Font({fontFamily}, {Size}f, (FontStyle){(int)Style}, (GraphicsUnit){(int)Unit})";
+                return $"new Font({fontFamily}, {Size.ToString(CultureInfo.InvariantCulture)}f, (FontStyle){(int)Style}, (GraphicsUnit){(int)Unit})";
             }
         }
     }
