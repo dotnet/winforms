@@ -127,10 +127,10 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        // Width should fill the entire bounds.
+                        // Height should fill the entire bounds.
                         result.Height = bounds.Height;
 
-                        // Preserve the aspect ratio by multiplying the xRatio by the height, adding .5 to round to
+                        // Preserve the aspect ratio by multiplying the yRatio by the width, adding .5 to round to
                         // the nearest pixel.
                         result.Width = (int)((imageSize.Width * yRatio) + .5);
                         if (bounds.X >= 0)
