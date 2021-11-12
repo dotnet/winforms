@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Globalization;
 using Xunit;
 using Xunit.Abstractions;
 using static System.Windows.Forms.Analyzers.ApplicationConfig;
@@ -45,6 +46,26 @@ namespace System.Windows.Forms.Analyzers.Tests
 
                 _output.WriteLine(descriptor.ToString());
                 Assert.Equal(expected, descriptor.ToString());
+            }
+
+            [Theory]
+            [InlineData("ar-SA")]
+            [InlineData("en-US")]
+            [InlineData("es-ES")]
+            [InlineData("fr-FR")]
+            [InlineData("hi-IN")]
+            [InlineData("ja-JP")]
+            [InlineData("ru-RU")]
+            [InlineData("tr-TR")]
+            [InlineData("zh-CN")]
+            public void FontDescriptor_ToString_culture_agnostic(string cultureName)
+            {
+                Thread.CurrentThread.CurrentCulture = new CultureInfo(cultureName);
+
+                FontDescriptor descriptor = new("Microsoft Sans Serif", 8.25f, FontStyle.Bold | FontStyle.Italic, GraphicsUnit.Point);
+
+                _output.WriteLine(descriptor.ToString());
+                Assert.Equal("new Font(new FontFamily(\"Microsoft Sans Serif\"), 8.25f, (FontStyle)3, (GraphicsUnit)3)", descriptor.ToString());
             }
         }
     }
