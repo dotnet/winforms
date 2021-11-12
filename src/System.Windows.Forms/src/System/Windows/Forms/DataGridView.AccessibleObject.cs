@@ -239,7 +239,9 @@ namespace System.Windows.Forms
                     case UiaCore.UIA.NamePropertyId:
                         return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
-                        return false; // Only inner cell should be announced as focused by Narrator but not entire DGV.
+                        // If no inner cell entire DGV should be announced as focused by Narrator.
+                        // Else only inner cell should be announced as focused by Narrator but not entire DGV.
+                        return RowCount == 0;
                     case UiaCore.UIA.IsKeyboardFocusablePropertyId:
                         return _ownerDataGridView.CanFocus;
                     case UiaCore.UIA.IsEnabledPropertyId:
@@ -284,13 +286,9 @@ namespace System.Windows.Forms
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
             {
-                if (patternId == UiaCore.UIA.TablePatternId ||
-                    patternId == UiaCore.UIA.GridPatternId)
-                {
-                    return true;
-                }
-
-                return base.IsPatternSupported(patternId);
+                return (patternId == UiaCore.UIA.TablePatternId && RowCount > 0) ||
+                    patternId == UiaCore.UIA.GridPatternId ||
+                    base.IsPatternSupported(patternId);
             }
 
             internal override UiaCore.IRawElementProviderSimple[]? GetRowHeaders()

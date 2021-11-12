@@ -16,7 +16,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_Ctor_Default()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
 
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.NotNull(accessibleObject);
@@ -26,10 +26,12 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_ItemStatus_ReturnsAsSorted()
         {
-            using DataGridView dataGridView = new DataGridView();
-            DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
-            column.SortMode = DataGridViewColumnSortMode.Programmatic;
-            column.HeaderText = "Some column";
+            using DataGridView dataGridView = new();
+            DataGridViewTextBoxColumn column = new()
+            {
+                SortMode = DataGridViewColumnSortMode.Programmatic,
+                HeaderText = "Some column"
+            };
 
             dataGridView.Columns.Add(column);
             dataGridView.Sort(dataGridView.Columns[0], ListSortDirection.Ascending);
@@ -42,7 +44,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_EmptyGrid_GetChildCount_ReturnsCorrectValue()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.Equal(0, accessibleObject.GetChildCount()); // dataGridView doesn't have items
         }
@@ -50,7 +52,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_GridWithFirstRowOnly_GetChildCount_ReturnsCorrectValue()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.ColumnHeadersVisible = false;
@@ -60,7 +62,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_GridWithColumnHeadersAndFirstRow_GetChildCount_ReturnsCorrectValue()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             Assert.Equal(2, accessibleObject.GetChildCount()); // Column headers and a first Row
@@ -69,7 +71,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_EmptyGrid_GetChild_ReturnsCorrectValue()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.Equal(0, accessibleObject.GetChildCount()); // dataGridView doesn't have an item
             Assert.Null(accessibleObject.GetChild(0)); // GetChild method should not throw an exception
@@ -78,7 +80,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_GridWithFirstRowOnly_GetChild_ReturnsCorrectValue()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.ColumnHeadersVisible = false;
@@ -89,7 +91,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_GridWithColumnHeadersAndFirstRow_GetChild_ReturnsCorrectValue()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             Assert.NotNull(accessibleObject.GetChild(0)); // dataGridView column headers
@@ -99,7 +101,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_Bounds_ReturnsCorrectValue_IfHandleIsCreated()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.CreateControl();
             dataGridView.Size = new Size(500, 300);
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
@@ -122,7 +124,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_Bounds_ReturnsCorrectValue_IfHandleIsNotCreated()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.Size = new Size(500, 300);
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
 
@@ -142,7 +144,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_ControlType_IsDataGrid_IfAccessibleRoleIsDefault()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             object actual = accessibleObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
             UiaCore.UIA expected = UiaCore.UIA.DataGridControlTypeId;
@@ -152,7 +154,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_GetFocused_ReturnsCorrectFocusedCell()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             User32.SetFocus(new HandleRef(dataGridView, dataGridView.Handle));
@@ -171,7 +173,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_GetItem_ReturnsCorrectValue()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             dataGridView.Rows.Add();
@@ -190,8 +192,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_ItemStatus_IsCorrectWhenSorted()
         {
-            using DataGridView dataGridView = new DataGridView();
-            using DataGridViewTextBoxColumn column = new DataGridViewTextBoxColumn();
+            using DataGridView dataGridView = new();
+            using DataGridViewTextBoxColumn column = new();
             column.SortMode = DataGridViewColumnSortMode.Programmatic;
             column.HeaderText = "Some column";
 
@@ -208,7 +210,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(false, AccessibleStates.None)]
         public void DataGridViewAccessibleObject_State_IsFocusable(bool createControl, AccessibleStates expectedAccessibleStates)
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             if (createControl)
             {
                 dataGridView.CreateControl();
@@ -223,7 +225,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_Ctor_NullOwnerParameter_ThrowsArgumentNullException()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             Type type = dataGridView.AccessibilityObject.GetType();
             ConstructorInfo ctor = type.GetConstructor(new Type[] { typeof(DataGridView) });
             Assert.NotNull(ctor);
@@ -233,7 +235,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_FirstAndLastChildren_AreNotNull()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
 
@@ -249,11 +251,21 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.IsGridPatternAvailablePropertyId)]
         [InlineData((int)UiaCore.UIA.IsTablePatternAvailablePropertyId)]
-        public void DataGridViewAccessibleObject_Pattern_IsAvailable(int propertyId)
+        public void DataGridViewAccessibleObject_Pattern_IsAvailable_IfDGVIsNotEmpty(int propertyId)
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
             Assert.True((bool)accessibilityObject.GetPropertyValue((UiaCore.UIA)propertyId));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_TablePattern_IsNotAvailable_IfDGVIsEmpty()
+        {
+            using DataGridView dataGridView = new();
+            AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
+            Assert.False((bool)accessibilityObject.GetPropertyValue(UiaCore.UIA.IsTablePatternAvailablePropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -261,7 +273,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(false)]
         public void DataGridViewAccessibleObject_Cell_IsOffscreen_ReturnsCorrectValue(bool createControl)
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
 
             if (createControl)
             {
@@ -288,11 +300,21 @@ namespace System.Windows.Forms.Tests
         [WinFormsTheory]
         [InlineData((int)UiaCore.UIA.TablePatternId)]
         [InlineData((int)UiaCore.UIA.GridPatternId)]
-        public void DataGridViewAccessibleObject_IsPatternSupported(int patternId)
+        public void DataGridViewAccessibleObject_IsPatternSupported_IfDGVIsNotEmpty(int patternId)
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
+            dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.True(accessibleObject.IsPatternSupported((UiaCore.UIA)patternId));
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_TablePattern_IsNotSupported_IfDGVIsEmpty()
+        {
+            using DataGridView dataGridView = new();
+            AccessibleObject accessibilityObject = dataGridView.AccessibilityObject;
+            Assert.False(accessibilityObject.IsPatternSupported(UiaCore.UIA.IsTablePatternAvailablePropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
         }
 
         [WinFormsTheory]
@@ -300,7 +322,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(false)]
         public void DataGridViewAccessibleObject_Cell_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
 
             dataGridView.Rows[0].Cells[0].ReadOnly = isReadOnly;
@@ -323,7 +345,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(false)]
         public void DataGridViewAccessibleObject_Row_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
 
             dataGridView.Rows[0].ReadOnly = isReadOnly;
@@ -346,7 +368,7 @@ namespace System.Windows.Forms.Tests
         [InlineData(false)]
         public void DataGridViewAccessibleObject_Grid_IsReadOnly_ReturnsCorrectValue(bool isReadOnly)
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.Columns.Add(new DataGridViewTextBoxColumn());
 
             dataGridView.ReadOnly = isReadOnly;
@@ -367,7 +389,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_Owner_IsNotNull()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             Control.ControlAccessibleObject accessibleObject = (Control.ControlAccessibleObject)dataGridView.AccessibilityObject;
             Assert.NotNull(accessibleObject.Owner);
         }
@@ -375,7 +397,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_Parent_IsNotNull_IfHandleIsCreated()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.CreateControl();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.NotNull(accessibleObject.Parent);
@@ -385,7 +407,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewAccessibleObject_Parent_IsNotNull_IfHandleIsNotCreated()
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             AccessibleObject accessibleObject = dataGridView.AccessibilityObject;
             Assert.Null(accessibleObject.Parent);
             Assert.False(dataGridView.IsHandleCreated);
@@ -410,13 +432,46 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(DataGridViewAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole_TestData))]
         public void DataGridViewAccessibleObject_GetPropertyValue_ControlType_IsExpected_ForCustomRole(AccessibleRole role)
         {
-            using DataGridView dataGridView = new DataGridView();
+            using DataGridView dataGridView = new();
             dataGridView.AccessibleRole = role;
 
             object actual = dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
             UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
 
             Assert.Equal(expected, actual);
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForEmptyDGV()
+        {
+            using DataGridView dataGridView = new();
+
+            Assert.True((bool)dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForNotEmptyDGV()
+        {
+            using DataGridView dataGridView = new();
+
+            dataGridView.Columns.Add(new DataGridViewButtonColumn());
+
+            Assert.False((bool)dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewAccessibleObject_GetPropertyValue_HasKeyboardFocus_IsExpected_ForNonEditableDGV()
+        {
+            using DataGridView dataGridView = new()
+            {
+                ReadOnly = true,
+                AllowUserToAddRows = false
+            };
+
+            Assert.True((bool)dataGridView.AccessibilityObject.GetPropertyValue(UiaCore.UIA.HasKeyboardFocusPropertyId));
             Assert.False(dataGridView.IsHandleCreated);
         }
     }
