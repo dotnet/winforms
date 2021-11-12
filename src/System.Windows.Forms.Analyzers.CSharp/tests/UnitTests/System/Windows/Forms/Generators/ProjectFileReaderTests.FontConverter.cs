@@ -14,38 +14,55 @@ namespace System.Windows.Forms.Generators.Tests
     {
         public class FontConverterTest
         {
-            private static readonly char s_separator = CultureInfo.CurrentCulture.TextInfo.ListSeparator[0];
+            private static readonly string[] s_locales = new[]
+            {
+                "ar-SA",
+                "en-US",
+                "es-ES",
+                "fr-FR",
+                "hi-IN",
+                "ja-JP",
+                "ru-RU",
+                "tr-TR",
+                "zh-CN"
+            };
 
-            public static TheoryData<string, string, float, /*GraphicsUnit*/int, /*FontStyle*/int> TestConvertFormData()
-                => new()
+            public static IEnumerable<object[]> TestConvertFormData()
+            {
+                foreach (string cultureName in s_locales)
                 {
-                    { $"Courier New", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular },
-                    { $"Courier New{s_separator} 11", "Courier New", 11f, (int)GraphicsUnit.Point, (int)FontStyle.Regular },
-                    { $"Arial{s_separator} 11px", "Arial", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular },
-                    { $"Courier New{s_separator} 11 px", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular },
-                    { $"Courier New{s_separator} 11 px{s_separator} style=Regular", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular },
-                    { $"Courier New{s_separator} style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold },
-                    { $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic) },
-                    { $"Courier New{s_separator} 11 px{s_separator} style=Regular, Italic", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Regular | FontStyle.Italic) },
-                    { $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic{s_separator} Strikeout", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout) },
-                    { $"Arial{s_separator} 11 px{s_separator} style=Bold, Italic, Strikeout", "Arial", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout) },
-                    { $"arIAL{s_separator} 10{s_separator} style=bold", "arIAL", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Bold },
-                    { $"Arial{s_separator} 10{s_separator}", "Arial", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Regular },
-                    { $"Arial{s_separator}", "Arial", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular },
-                    { $"Arial{s_separator} 10{s_separator} style=12", "Arial", 10f, (int)GraphicsUnit.Point, (int)(FontStyle.Underline | FontStyle.Strikeout) },
-                    { $"Courier New{s_separator} Style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold }, // FullFramework style keyword is case sensitive.
-                    { $"{s_separator} 10{s_separator} style=bold", "", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Bold },
+                    CultureInfo culture = new CultureInfo(cultureName);
+
+                    yield return new object[] { culture, $"Courier New", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular };
+                    yield return new object[] { culture, $"Courier New{s_separator} 11", "Courier New", 11f, (int)GraphicsUnit.Point, (int)FontStyle.Regular };
+                    yield return new object[] { culture, $"Arial{s_separator} 11px", "Arial", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular };
+                    yield return new object[] { culture, $"Courier New{s_separator} 11 px", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular };
+                    yield return new object[] { culture, $"Courier New{s_separator} 11 px{s_separator} style=Regular", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)FontStyle.Regular };
+                    yield return new object[] { culture, $"Courier New{s_separator} style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold };
+                    yield return new object[] { culture, $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic) };
+                    yield return new object[] { culture, $"Courier New{s_separator} 11 px{s_separator} style=Regular, Italic", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Regular | FontStyle.Italic) };
+                    yield return new object[] { culture, $"Courier New{s_separator} 11 px{s_separator} style=Bold{s_separator} Italic{s_separator} Strikeout", "Courier New", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout) };
+                    yield return new object[] { culture, $"Arial{s_separator} 11 px{s_separator} style=Bold, Italic, Strikeout", "Arial", 11f, (int)GraphicsUnit.Pixel, (int)(FontStyle.Bold | FontStyle.Italic | FontStyle.Strikeout) };
+                    yield return new object[] { culture, $"arIAL{s_separator} 10{s_separator} style=bold", "arIAL", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Bold };
+                    yield return new object[] { culture, $"Arial{s_separator} 10{s_separator}", "Arial", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Regular };
+                    yield return new object[] { culture, $"Arial{s_separator}", "Arial", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular };
+                    yield return new object[] { culture, $"Arial{s_separator} 10{s_separator} style=12", "Arial", 10f, (int)GraphicsUnit.Point, (int)(FontStyle.Underline | FontStyle.Strikeout) };
+                    yield return new object[] { culture, $"Courier New{s_separator} Style=Bold", "Courier New", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold }; // FullFramework style keyword is case sensitive.
+                    yield return new object[] { culture, $"{s_separator} 10{s_separator} style=bold", "", 10f, (int)GraphicsUnit.Point, (int)FontStyle.Bold };
 
                     // NOTE: in .NET runtime these tests will result in FontName='', but the implementation relies on GDI+, which we don't have...
-                    { $"11px{s_separator} Style=Bold", $"11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold },
-                    { $"11px", "11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular },
-                    { $"Style=Bold", "Style=Bold", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular },
-                };
+                    yield return new object[] { culture, $"11px{s_separator} Style=Bold", $"11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Bold };
+                    yield return new object[] { culture, $"11px", "11px", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular };
+                    yield return new object[] { culture, $"Style=Bold", "Style=Bold", PropertyDefaultValue.FontSize, (int)GraphicsUnit.Point, (int)FontStyle.Regular };
+                }
+            }
 
             [Theory]
             [MemberData(nameof(TestConvertFormData))]
-            internal void TestConvertFrom(string input, string expectedName, float expectedSize, GraphicsUnit expectedUnits, FontStyle expectedFontStyle)
+            internal void TestConvertFrom(CultureInfo culture, string input, string expectedName, float expectedSize, GraphicsUnit expectedUnits, FontStyle expectedFontStyle)
             {
+                Thread.CurrentThread.CurrentCulture = culture;
+
                 FontDescriptor font = FontConverter.ConvertFrom(input)!;
 
                 Assert.Equal(expectedName, font.Name);
