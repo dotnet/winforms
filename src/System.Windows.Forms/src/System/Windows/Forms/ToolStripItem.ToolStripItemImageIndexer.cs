@@ -14,12 +14,13 @@ namespace System.Windows.Forms
 
             public ToolStripItemImageIndexer(ToolStripItem item)
             {
+                Debug.Assert(item is not null, $"{nameof(item)} should not be null.");
                 _item = item;
             }
 
             public override ImageList? ImageList
             {
-                get => _item?.Owner?.ImageList;
+                get => _item.Owner?.ImageList;
                 set => Debug.Assert(false, "We should never set the image list");
             }
         }

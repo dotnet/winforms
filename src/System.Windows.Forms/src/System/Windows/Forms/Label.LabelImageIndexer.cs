@@ -16,11 +16,15 @@ namespace System.Windows.Forms
             private readonly Label _owner;
             private bool _useIntegerIndex = true;
 
-            public LabelImageIndexer(Label owner) => _owner = owner;
+            public LabelImageIndexer(Label owner)
+            {
+                Debug.Assert(owner is not null, $"{nameof(owner)} should not be null.");
+                _owner = owner;
+            }
 
             public override ImageList? ImageList
             {
-                get { return _owner?.ImageList; }
+                get { return _owner.ImageList; }
                 set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
             }
 
@@ -48,18 +52,19 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (_useIntegerIndex && ImageList is not null)
+                    if (ImageList is null)
+                    {
+                        return -1;
+                    }
+
+                    if (_useIntegerIndex)
                     {
                         // The behavior of label is to return the last item in the Images collection
                         // if the index is currently set higher than the count.
                         return (Index < ImageList.Images.Count) ? Index : ImageList.Images.Count - 1;
                     }
-                    else if (ImageList is not null)
-                    {
-                        return ImageList.Images.IndexOfKey(Key);
-                    }
 
-                    return -1;
+                    return ImageList.Images.IndexOfKey(Key);
                 }
             }
         }

@@ -18,7 +18,8 @@ namespace System.Windows.Forms
 
             public TreeNodeImageIndexer(TreeNode node, ImageListType imageListType)
             {
-                _owner = node.OrThrowIfNull();
+                Debug.Assert(node is not null, $"{nameof(node)} should not be null.");
+                _owner = node;
                 _imageListType = imageListType;
             }
 
