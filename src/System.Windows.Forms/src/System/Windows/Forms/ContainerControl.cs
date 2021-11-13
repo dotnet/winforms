@@ -82,6 +82,11 @@ namespace System.Windows.Forms
         private const string FontMeasureString = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         /// <summary>
+        /// True if the container needs scaling as a result of <see cref="DpiChangedEventHandler"/>, irrespective of Font status (explicit set or inherited Font).
+        /// </summary>
+        internal bool _needsDpiChangeScaling;
+
+        /// <summary>
         /// Child Container control that inherit <see cref="AutoScaleMode"/> (and does not store their own) would need
         /// <see cref="AutoScaleFactor"/> from parent to scale them during Dpi changed events. We can not use
         /// <see cref="AutoScaleFactor"/> property as it get computed with already updated Font and Dpi of their parent.
