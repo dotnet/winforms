@@ -1490,6 +1490,16 @@ namespace System.Windows.Forms.PropertyGridInternal
                 _dropDownHolder.ResizeUp = false;
             }
 
+            var gridEntry = GetGridEntryFromRow(_selectedRow);
+            if (gridEntry is not null && IsAccessibilityObjectCreated)
+            {
+                gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    UiaCore.ExpandCollapseState.Collapsed,
+                    UiaCore.ExpandCollapseState.Expanded);
+            }
+
             // Control is a top level window. Standard way of setting parent on the control is prohibited for top-level controls.
             // It is unknown why this control was created as a top-level control. Windows does not recommend this way of setting parent.
             // We are not touching this for this release. We may revisit it in next release.
@@ -1501,16 +1511,6 @@ namespace System.Windows.Forms.PropertyGridInternal
             _dropDownHolder.Visible = true;
             _dropDownHolder.FocusComponent();
             EditTextBox.SelectAll();
-
-            var gridEntry = GetGridEntryFromRow(_selectedRow);
-            if (gridEntry is not null && IsAccessibilityObjectCreated)
-            {
-                gridEntry.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
-                gridEntry.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
-                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
-                    UiaCore.ExpandCollapseState.Collapsed,
-                    UiaCore.ExpandCollapseState.Expanded);
-            }
 
             try
             {
