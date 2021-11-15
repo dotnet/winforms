@@ -22,8 +22,8 @@ namespace System.Windows.Forms.IntegrationTests.MauiTests
         {
             this.BringToForeground();
 
-            _domainUpDown = new DomainUpDown();
-            _propertyGrid = new PropertyGrid();
+            _domainUpDown = new();
+            _propertyGrid = new();
             _propertyGrid.Size = new Size(223, 244);
             ClientSize = new Size(508, 367);
             Controls.Add(_propertyGrid);

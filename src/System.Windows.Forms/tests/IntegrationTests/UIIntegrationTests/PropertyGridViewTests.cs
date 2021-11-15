@@ -27,7 +27,7 @@ namespace System.Windows.Forms.UI.IntegrationTests
 
                 Application.DoEvents();
 
-                PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.ActiveControl;
+                PropertyGridView propertyGridView = (PropertyGridView)propertyGrid.Controls[2];
 
                 foreach (GridEntry entry in entries)
                 {
