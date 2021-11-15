@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -18,11 +16,15 @@ namespace System.Windows.Forms
             private readonly Label _owner;
             private bool _useIntegerIndex = true;
 
-            public LabelImageIndexer(Label owner) => _owner = owner;
-
-            public override ImageList ImageList
+            public LabelImageIndexer(Label owner)
             {
-                get { return _owner?.ImageList; }
+                Debug.Assert(owner is not null, $"{nameof(owner)} should not be null.");
+                _owner = owner;
+            }
+
+            public override ImageList? ImageList
+            {
+                get { return _owner.ImageList; }
                 set { Debug.Assert(false, "Setting the image list in this class is not supported"); }
             }
 
@@ -50,18 +52,19 @@ namespace System.Windows.Forms
             {
                 get
                 {
+                    if (ImageList is null)
+                    {
+                        return -1;
+                    }
+
                     if (_useIntegerIndex)
                     {
                         // The behavior of label is to return the last item in the Images collection
                         // if the index is currently set higher than the count.
                         return (Index < ImageList.Images.Count) ? Index : ImageList.Images.Count - 1;
                     }
-                    else if (ImageList is not null)
-                    {
-                        return ImageList.Images.IndexOfKey(Key);
-                    }
 
-                    return -1;
+                    return ImageList.Images.IndexOfKey(Key);
                 }
             }
         }

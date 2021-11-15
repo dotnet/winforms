@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -14,29 +12,30 @@ namespace System.Windows.Forms
         // list for indexing purposes.
         internal partial class TreeNodeImageIndexer : ImageList.Indexer
         {
-            private readonly TreeNode owner;
+            private readonly TreeNode _owner;
 
-            private readonly ImageListType imageListType;
+            private readonly ImageListType _imageListType;
 
             public TreeNodeImageIndexer(TreeNode node, ImageListType imageListType)
             {
-                owner = node;
-                this.imageListType = imageListType;
+                Debug.Assert(node is not null, $"{nameof(node)} should not be null.");
+                _owner = node;
+                _imageListType = imageListType;
             }
 
-            public override ImageList ImageList
+            public override ImageList? ImageList
             {
                 get
                 {
-                    if (owner.TreeView is not null)
+                    if (_owner.TreeView is not null)
                     {
-                        if (imageListType == ImageListType.State)
+                        if (_imageListType == ImageListType.State)
                         {
-                            return owner.TreeView.StateImageList;
+                            return _owner.TreeView.StateImageList;
                         }
                         else
                         {
-                            return owner.TreeView.ImageList;
+                            return _owner.TreeView.ImageList;
                         }
                     }
                     else
