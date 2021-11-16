@@ -95,6 +95,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 // To announce expanded collapsed state control type should be appropriate:
                 // https://docs.microsoft.com/en-us/windows/win32/winauto/uiauto-controlpatternmapping
                 UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
+                UiaCore.UIA.LocalizedControlTypePropertyId => SR.CategoryPropertyGridLocalizedControlType,
                 _ => base.GetPropertyValue(propertyID),
             };
 

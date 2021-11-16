@@ -822,6 +822,11 @@
         <target state="translated">窗口样式</target>
         <note />
       </trans-unit>
+      <trans-unit id="CategoryPropertyGridLocalizedControlType">
+        <source>PropertyGrid category</source>
+        <target state="new">PropertyGrid category</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
         <source>Controls the appearance of the check box.</source>
         <target state="translated">控制复选框的外观。</target>

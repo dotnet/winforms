@@ -822,6 +822,11 @@
         <target state="translated">창 스타일</target>
         <note />
       </trans-unit>
+      <trans-unit id="CategoryPropertyGridLocalizedControlType">
+        <source>PropertyGrid category</source>
+        <target state="new">PropertyGrid category</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
         <source>Controls the appearance of the check box.</source>
         <target state="translated">확인란의 모양을 제어합니다.</target>

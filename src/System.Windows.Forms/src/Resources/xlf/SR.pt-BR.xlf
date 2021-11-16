@@ -822,6 +822,11 @@
         <target state="translated">Estilo de Janela</target>
         <note />
       </trans-unit>
+      <trans-unit id="CategoryPropertyGridLocalizedControlType">
+        <source>PropertyGrid category</source>
+        <target state="new">PropertyGrid category</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
         <source>Controls the appearance of the check box.</source>
         <target state="translated">Controla a aparência da caixa de seleção.</target>
