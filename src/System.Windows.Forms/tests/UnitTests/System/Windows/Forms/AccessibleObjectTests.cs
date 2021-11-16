@@ -2635,6 +2635,15 @@ namespace System.Windows.Forms.Tests
             Assert.Null(pAcc);
         }
 
+        [WinFormsFact]
+        public void AccessibleObject_SystemWrapper_RuntimeId_IsValid()
+        {
+            AccessibleObject accessibleObject =
+                (AccessibleObject)Activator.CreateInstance(typeof(AccessibleObject), BindingFlags.NonPublic | BindingFlags.Instance, null, new object[] { null }, null);
+
+            Assert.NotEmpty(accessibleObject.TestAccessor().Dynamic.RuntimeId);
+        }
+
         private class SubAccessibleObject : AccessibleObject
         {
             public new void UseStdAccessibleObjects(IntPtr handle) => base.UseStdAccessibleObjects(handle);
