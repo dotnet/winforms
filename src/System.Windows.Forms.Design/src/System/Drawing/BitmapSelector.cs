@@ -183,7 +183,9 @@ namespace System.Drawing
                     {
                         AssemblyName assemblyName = assembly.GetName();
                         assemblyName.Name += Suffix;
+#pragma warning disable SYSLIB0037 // Type or member is obsolete
                         assemblyName.ProcessorArchitecture = ProcessorArchitecture.None;
+#pragma warning restore SYSLIB0037 // Type or member is obsolete
                         Assembly satellite = Assembly.Load(assemblyName);
                         if (satellite != null)
                         {
