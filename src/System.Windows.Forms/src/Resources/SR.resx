@@ -6859,4 +6859,7 @@ Stack trace where the illegal operation occurred was:
   <data name="ListViewGroupExpandedStateName" xml:space="preserve">
     <value>{0}, group, expanded</value>
   </data>
+  <data name="CategoryPropertyGridLocalizedControlType" xml:space="preserve">
+    <value>PropertyGrid category</value>
+  </data>
 </root>

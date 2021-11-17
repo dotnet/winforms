@@ -146,5 +146,16 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
             Assert.False(button.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void CategoryGridEntryAccessibleObject_LocalizedControlType_ReturnsExpected()
+        {
+            using NoAssertContext context = new();
+            var accessibilityObject = new CategoryGridEntryAccessibleObject(null);
+
+            string expected = SR.CategoryPropertyGridLocalizedControlType;
+
+            Assert.Equal(expected, accessibilityObject.GetPropertyValue(UiaCore.UIA.LocalizedControlTypePropertyId));
+        }
     }
 }
