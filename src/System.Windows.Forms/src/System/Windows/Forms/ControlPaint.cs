@@ -71,6 +71,8 @@ namespace System.Windows.Forms
         // Otherwise, we will recolor intermediate shades and the icon will look inconsistent (too bold).
         private const int MaximumLuminosityDifference = 20;
 
+        private const double ExpectedColorContrast = 3.001;
+
         internal static Rectangle CalculateBackgroundImageRectangle(Rectangle bounds, Image backgroundImage, ImageLayout imageLayout)
         {
             Rectangle result = bounds;
@@ -310,6 +312,11 @@ namespace System.Windows.Forms
 
         internal static Color Darker(Color color, float offset)
             => Color.FromArgb(color.A, (int)(color.R* offset), (int) (color.G* offset), (int) (color.B* offset));
+
+        internal static Color Lighter(Color color, float percentLighter)
+        {
+            return new HLSColor(color, false).Lighter(percentLighter);
+        }
 
         /// <summary>
         ///  Creates a Win32 HBITMAP out of the image. You are responsible for deleting the HBITMAP. If the image uses
@@ -1179,6 +1186,43 @@ namespace System.Windows.Forms
                     bottomRightPen,
                     bounds.X + bounds.Width - 2, bounds.Y + 1, bounds.X + bounds.Width - 2, bounds.Y + bounds.Height - 2);
             }
+        }
+
+        /// <summary>
+        ///  Getting color contrast ratio.
+        ///  Based on https://www.w3.org/TR/2008/REC-WCAG20-20081211/#contrast-ratiodef documentation.
+        /// </summary>
+        internal static double GetColorContrastRatio(Color color1, Color color2)
+            => GetColorContrastRatio(GetLuminance(color1), GetLuminance(color2));
+
+        /// <summary>
+        ///  Getting luminance for a color. Based on https://www.w3.org/TR/WCAG20/#relativeluminancedef documentation.
+        /// </summary>
+        private static double GetColorContrastRatio(double luminance1, double luminance2)
+        {
+            double brightest = Math.Max(luminance1, luminance2);
+            double darkest = Math.Min(luminance1, luminance2);
+            return (brightest + 0.05) / (darkest + 0.05);
+        }
+
+        /// <summary>
+        ///  Getting luminance for a color. Based on https://www.w3.org/TR/WCAG20/#relativeluminancedef documentation.
+        /// </summary>
+        private static double GetLuminance(Color color)
+            => GetColorComponentCoefficient(color.R) * 0.2126
+                + GetColorComponentCoefficient(color.G) * 0.7152
+                + GetColorComponentCoefficient(color.B) * 0.0722;
+
+        /// <summary>
+        ///  Getting the coefficient for the color component.
+        ///  Based on https://www.w3.org/TR/WCAG20/#relativeluminancedef documentation.
+        /// </summary>
+        private static double GetColorComponentCoefficient(int colorComponent)
+        {
+            double coefficient = (double)colorComponent / 255;
+            return coefficient <= 0.03928
+                ? coefficient / 12.92
+                : Math.Pow((coefficient + 0.055) / 1.055, 2.4);
         }
 
         internal static void DrawBorderSimple(
@@ -2493,6 +2537,57 @@ namespace System.Windows.Forms
             }
         }
 
+        internal static Color GetRequiredColor(Color color, Color backgroundColor)
+        {
+            double luminance1 = GetLuminance(color);
+            double luminance2 = GetLuminance(backgroundColor);
+            if (ControlPaint.GetColorContrastRatio(luminance1, luminance2) >= ExpectedColorContrast)
+            {
+                return color;
+            }
+
+            double expectedLuminance = GetExpectedLuminance(luminance2, ExpectedColorContrast);
+            int attempt = 0;
+
+            while (attempt < 20)
+            {
+                Color oldColor = color;
+                if (expectedLuminance < luminance1)
+                {
+                    color = ControlPaint.Darker(color, 0.7f);
+                    if (GetLuminance(color) <= expectedLuminance)
+                    {
+                        return color;
+                    }
+                }
+                else
+                {
+                    color = ControlPaint.Lighter(color, 0.3f);
+                    if (GetLuminance(color) >= expectedLuminance)
+                    {
+                        return color;
+                    }
+                }
+
+                if (color == oldColor)
+                {
+                    break;
+                }
+
+                attempt++;
+            }
+
+            return color;
+        }
+
+        private static double GetExpectedLuminance(double lum, double expectedColorContrast)
+        {
+            double expected = (lum + 0.05) / expectedColorContrast - 0.05;
+            return expected = expected > 1 || expected < 0
+                                ? expectedColorContrast * (lum + 0.05) - 0.05
+                                : expected;
+        }
+
         internal static void PaintTableCellBorder(TableLayoutPanelCellBorderStyle borderStyle, Graphics g, Rectangle bound)
         {
             // Paint the cell border
@@ -2564,6 +2659,74 @@ namespace System.Windows.Forms
                         }
                     }
                 }
+            }
+        }
+
+        internal static void DarkerForeColorIfNeeded(Bitmap bitmap, Color backgroundColor, ref Color borderColor)
+        {
+            int backgroundColorLuminosity = GetLuminosity(backgroundColor);
+
+            for (int y = 0; y < bitmap.Height; ++y)
+            {
+                for (int x = 0; x < bitmap.Width; ++x)
+                {
+                    var pixel = bitmap.GetPixel(x, y);
+                    if (pixel.ToArgb() != backgroundColor.ToArgb())
+                    {
+                        int pixelLuminosity = GetLuminosity(pixel);
+                        if (Math.Abs(pixelLuminosity - backgroundColorLuminosity) > MaximumLuminosityDifference)
+                        {
+                            if (borderColor.IsEmpty)
+                            {
+                                borderColor = GetRequiredColor(pixel, SystemColors.Control);
+                            }
+
+                            bitmap.SetPixel(x, y, borderColor);
+                        }
+                    }
+                }
+            }
+        }
+
+        private static int GetLuminosity(Color color)
+        {
+            // calculate lightness
+            int HLSMax = 240;
+            int RGBMax = 250;
+            int max = Math.Max(Math.Max(color.R, color.G), color.B);
+            int min = Math.Min(Math.Min(color.R, color.G), color.B);
+            int sum = max + min;
+
+            return ((sum * HLSMax) + RGBMax) / (2 * RGBMax);
+        }
+
+        internal unsafe static void RedrawElement(
+            Graphics graphics,
+            Rectangle rectangle,
+            Color backgroundColor,
+            Action<Gdi32.HDC> drawAction,
+            Action<Bitmap> updateAction)
+        {
+            using var compatibleDC = new Gdi32.CreateDcScope(default);
+
+            int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
+            int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
+            Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
+            try
+            {
+                using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
+                using var brush = new Gdi32.CreateBrushScope(backgroundColor);
+                compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
+                drawAction(compatibleDC);
+
+                using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
+                updateAction(bitmap);
+                graphics.DrawImage(bitmap, rectangle, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
+            }
+            finally
+            {
+                // As we're throwing out, we can't return this and need to delete it.
+                Gdi32.DeleteObject(compatibleBitmap);
             }
         }
 

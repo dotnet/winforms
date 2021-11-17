@@ -16,6 +16,8 @@ namespace System.Windows.Forms.ButtonInternal
 
         internal ButtonStandardAdapter(ButtonBase control) : base(control) { }
 
+        private static Color _borderColor = Color.Empty;
+
         private PushButtonState DetermineState(bool up)
         {
             PushButtonState state = PushButtonState.Normal;
@@ -65,19 +67,37 @@ namespace System.Windows.Forms.ButtonInternal
                 ButtonRenderer.DrawParentBackground(e, bounds, Control);
             }
 
-            ButtonRenderer.DrawButtonForHandle(
-                e,
-                Control.ClientRectangle,
-                false,
-                pbState,
-                DpiHelper.IsScalingRequirementMet ? Control.HandleInternal : IntPtr.Zero);
-
-            if (!SystemInformation.HighContrast && pbState == PushButtonState.Normal)
+            if (!SystemInformation.HighContrast
+                && ButtonRenderer.RenderWithVisualStyles
+                && !Control.Focused
+                && pbState == PushButtonState.Normal
+                && Control.BackColor == SystemColors.Control)
             {
-                ControlPaint.DrawBorderSimple(
-                    e.GraphicsInternal,
-                    Rectangle.Inflate(bounds, -1, -1),
-                    ControlPaint.Darker(SystemColors.ButtonShadow, ButtonBorderDarkerOffset));
+                if (OsVersion.IsWindows11_OrGreater)
+                {
+                    ControlPaint.RedrawElement(
+                        e.GraphicsInternal,
+                        bounds,
+                        Control.BackColor,
+                        (compatibleDC) => ButtonRenderer.DrawButtonWithVisualStyles(compatibleDC, bounds, pbState, DpiHelper.IsScalingRequirementMet ? Control.HandleInternal : IntPtr.Zero),
+                        (bitmap) => ControlPaint.DarkerForeColorIfNeeded(bitmap, Control.BackColor, ref _borderColor));
+                }
+                else
+                {
+                    ControlPaint.DrawBorderSimple(
+                        e.GraphicsInternal,
+                        Rectangle.Inflate(bounds, -1, -1),
+                        ControlPaint.Darker(SystemColors.ButtonShadow, ButtonBorderDarkerOffset));
+                }
+            }
+            else
+            {
+                ButtonRenderer.DrawButtonForHandle(
+                    e,
+                    Control.ClientRectangle,
+                    false,
+                    pbState,
+                    DpiHelper.IsScalingRequirementMet ? Control.HandleInternal : IntPtr.Zero);
             }
 
             // Now overlay the background image or backcolor (the former overrides the latter), leaving a margin.

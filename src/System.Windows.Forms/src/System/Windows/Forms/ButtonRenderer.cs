@@ -5,6 +5,7 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
+using static Interop;
 
 namespace System.Windows.Forms
 {
@@ -26,7 +27,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool RenderMatchingApplicationState { get; set; } = true;
 
-        private static bool RenderWithVisualStyles
+        internal static bool RenderWithVisualStyles
         {
             get
             {
@@ -88,6 +89,20 @@ namespace System.Windows.Forms
                     ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
                 }
             }
+        }
+
+        /// <summary>
+        ///  Method for drawing a button using the VisualStyleRenderer.
+        ///  Should only be used when RenderWithVisualStyles == true
+        /// </summary>
+        internal static void DrawButtonWithVisualStyles(
+            Gdi32.HDC hdc,
+            Rectangle bounds,
+            PushButtonState state,
+            IntPtr hwnd)
+        {
+            InitializeRenderer((int)state);
+            t_visualStyleRenderer.DrawBackground(hdc, bounds, hwnd);
         }
 
         /// <summary>

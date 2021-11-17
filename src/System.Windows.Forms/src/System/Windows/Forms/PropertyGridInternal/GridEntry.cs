@@ -1627,37 +1627,21 @@ namespace System.Windows.Forms.PropertyGridInternal
                         ? VisualStyleElement.ExplorerTreeView.Glyph.Opened
                         : VisualStyleElement.ExplorerTreeView.Glyph.Closed;
 
+                    Color backgroundColor = ColorInversionNeededInHighContrast ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
                     VisualStyleRenderer explorerTreeRenderer = new(element);
-                    RedrawExplorerTreeViewClosedGlyph(g, explorerTreeRenderer, outline, handle);
+
+                    ControlPaint.RedrawElement(
+                        g,
+                        outline,
+                        backgroundColor,
+                        (compatibleDC) => explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, outline.Width, outline.Height), handle),
+                        (bitmap) => ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor));
                 }
                 else
                 {
                     using var hdc = new DeviceContextHdcScope(g);
                     VisualStyleRenderer explorerTreeRenderer = new(VisualStyleElement.ExplorerTreeView.Glyph.Opened);
                     explorerTreeRenderer.DrawBackground(hdc, outline, handle);
-                }
-
-                unsafe void RedrawExplorerTreeViewClosedGlyph(
-                    Graphics graphics,
-                    VisualStyleRenderer explorerTreeRenderer,
-                    Rectangle rectangle,
-                    IntPtr handle)
-                {
-                    Color backgroundColor = ColorInversionNeededInHighContrast ? InvertColor(OwnerGrid.LineColor) : OwnerGrid.LineColor;
-                    using var compatibleDC = new Gdi32.CreateDcScope(default);
-
-                    int planes = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.PLANES);
-                    int bitsPixel = Gdi32.GetDeviceCaps(compatibleDC, Gdi32.DeviceCapability.BITSPIXEL);
-                    Gdi32.HBITMAP compatibleBitmap = Gdi32.CreateBitmap(rectangle.Width, rectangle.Height, (uint)planes, (uint)bitsPixel, lpvBits: null);
-                    using var targetBitmapSelection = new Gdi32.SelectObjectScope(compatibleDC, compatibleBitmap);
-
-                    using var brush = new Gdi32.CreateBrushScope(backgroundColor);
-                    compatibleDC.HDC.FillRectangle(new Rectangle(0, 0, rectangle.Width, rectangle.Height), brush);
-                    explorerTreeRenderer.DrawBackground(compatibleDC, new Rectangle(0, 0, rectangle.Width, rectangle.Height), handle);
-
-                    using Bitmap bitmap = Image.FromHbitmap(compatibleBitmap.Handle);
-                    ControlPaint.InvertForeColorIfNeeded(bitmap, backgroundColor);
-                    graphics.DrawImage(bitmap, rectangle, 0, 0, bitmap.Width, bitmap.Height, GraphicsUnit.Pixel);
                 }
             }
 

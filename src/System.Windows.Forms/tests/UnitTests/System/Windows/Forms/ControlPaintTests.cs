@@ -2273,5 +2273,32 @@ namespace System.Windows.Forms.Tests
             // Call again to test caching.
             Assert.Equal(expected, ControlPaint.LightLight(baseColor));
         }
+
+        public static IEnumerable<object[]> ControlPaint_GetRequiredColor_ReturnsExpected_Data()
+        {
+            List<Color> colors = new();
+            foreach (KnownColor knownColor in Enum.GetValues(typeof(KnownColor)))
+            {
+                colors.Add(Color.FromKnownColor((KnownColor)knownColor));
+            }
+
+            foreach (var color1 in colors)
+            {
+                foreach (var color2 in colors)
+                {
+                    yield return new object[] { color1, color2 };
+                }
+            }
+        }
+
+        [WinFormsTheory(Skip = "Designed for manual run")]
+        [MemberData(nameof(ControlPaint_GetRequiredColor_ReturnsExpected_Data))]
+        public void ControlPaint_GetRequiredColor_ReturnsExpected(Color color1, Color color2)
+        {
+            Color сolor = ControlPaint.GetRequiredColor(color1, color2);
+            double contrast = ControlPaint.GetColorContrastRatio(сolor, color2);
+
+            Assert.True(contrast >= 3);
+        }
     }
 }

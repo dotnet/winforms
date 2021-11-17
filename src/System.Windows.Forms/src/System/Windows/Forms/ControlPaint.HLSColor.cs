@@ -25,6 +25,11 @@ namespace System.Windows.Forms
             private readonly int _saturation;
             private readonly bool _isSystemColors_Control;
 
+            public HLSColor(Color color, bool isSystemColors) : this(color)
+            {
+                _isSystemColors_Control = isSystemColors;
+            }
+
             public HLSColor(Color color)
             {
                 _isSystemColors_Control = color.ToKnownColor() == SystemColors.Control.ToKnownColor();
