@@ -10,8 +10,7 @@
     <ProjectReference Include="..\MauiTests\MauiComboBoxTests\MauiComboBoxTests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiLabelTests\MauiLabelTests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiListViewTests\MauiListViewTests.csproj" />
-    <ProjectReference Include="..\MauiTests\MauiMDITests\MauiMDITests.csproj" />    
-    <ProjectReference Include="..\MauiTests\MauiMonthCalendarTests\MauiMonthCalendarTests.csproj" />
+    <ProjectReference Include="..\MauiTests\MauiMDITests\MauiMDITests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiPrintPreviewDialogTests\MauiPrintPreviewDialogTests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiPropertyGridViewTests\MauiPropertyGridViewTests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiRichTextBoxTests\MauiRichTextBoxTests.csproj" />

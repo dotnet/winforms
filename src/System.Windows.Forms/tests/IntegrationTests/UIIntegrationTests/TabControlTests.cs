@@ -79,6 +79,7 @@ namespace System.Windows.Forms.UITests
         private async Task RunTestAsync(Func<Form, TabControl, Task> runTest)
         {
             await RunSingleControlTestAsync(
+                testDriverAsync: runTest,
                 createControl: () =>
                 {
                     TabControl tabControl = new()
@@ -92,8 +93,7 @@ namespace System.Windows.Forms.UITests
                     tabControl.TabPages.Add(tabPage2);
 
                     return tabControl;
-                },
-                testDriverAsync: runTest);
+                });
         }
     }
 }

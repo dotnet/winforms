@@ -163,13 +163,22 @@ namespace System.Windows.Forms.UITests
                 testDriverAsync);
         }
 
-        protected async Task RunSingleControlTestAsync<T>(Func<T> createControl, Func<Form, T, Task> testDriverAsync)
+        protected async Task RunSingleControlTestAsync<T>(Func<Form, T, Task> testDriverAsync, Func<T> createControl, Func<Form>? createForm = null)
             where T : Control, new()
         {
             await RunFormAsync(
                 () =>
                 {
-                    Form form = new();
+                    Form form;
+                    if (createForm is null)
+                    {
+                        form = new();
+                    }
+                    else
+                    {
+                        form = createForm();
+                    }
+
                     form.TopMost = true;
 
                     T control = createControl();
