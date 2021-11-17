@@ -14,13 +14,13 @@ namespace System.Windows.Forms.UI.IntegrationTests
     {
         private const int NumItems = 200;
 
-        private RandomUtil randomUtil;
+        private RandomUtil _randomUtil;
 
-        private int numEvents;
+        private int _numEvents;
 
         public ComboBoxTests()
         {
-            randomUtil = new();
+            _randomUtil = new();
         }
 
         private bool InitializeItems(ComboBox comboBox)
@@ -29,11 +29,14 @@ namespace System.Windows.Forms.UI.IntegrationTests
             return AddItems(comboBox, szItems, NumItems);
         }
 
-        string[] CreateItems(int numItems)
+        private string[] CreateItems(int numItems)
         {
             var items = new string[numItems];
             for (var i = 0; i < numItems; i++)
+            {
                 items[i] = "item" + i;
+            }
+
             return items;
         }
 
@@ -72,21 +75,29 @@ namespace System.Windows.Forms.UI.IntegrationTests
             for (var i = 0; i < numToRemove; i++)
             {
                 var count = comboBox.Items.Count;
-                var index = randomUtil.GetRange(0, count - 1);
+                var index = _randomUtil.GetRange(0, count - 1);
                 var item = (string)((index < count - 1) ? comboBox.Items[index + 1] : comboBox.Items[index]);
 
                 if (isByIndex)
+                {
                     comboBox.Items.RemoveAt(index);
+                }
                 else
+                {
                     comboBox.Items.Remove(comboBox.Items[index]);
+                }
 
                 if (comboBox.Items.Count != count - 1)
+                {
                     return false;
+                }
 
                 if (index < count - 1)
                 {
                     if (!item.Equals(comboBox.Items[index]))
+                    {
                         return false;
+                    }
                 }
             }
 
@@ -96,7 +107,7 @@ namespace System.Windows.Forms.UI.IntegrationTests
         bool FindItem(ComboBox comboBox, bool isExactMatch)
         {
             var count = comboBox.Items.Count;
-            var index = randomUtil.GetRange(0, count - 1);
+            var index = _randomUtil.GetRange(0, count - 1);
             var expectedMatchingIndex = -1;
             var expectedValue = comboBox.Items[index].ToString();
 
@@ -126,8 +137,8 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             var selectedIndex = (key.Equals("{DOWN}")) ? 0 : comboBox.Items.Count - 1;
             comboBox.SelectedIndex = (key.Equals("{DOWN}")) ? 0 : comboBox.Items.Count - 1;
-            numEvents = 0;
-            comboBox.SelectedIndexChanged += (x, y) => numEvents++;
+            _numEvents = 0;
+            comboBox.SelectedIndexChanged += (x, y) => _numEvents++;
             for (var i = 0; i < numKeyPresses; i++)
             {
                 if (key.Equals("{DOWN}"))
@@ -154,20 +165,20 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(comboBox =>
             {
-            InitializeItems(comboBox);
+                InitializeItems(comboBox);
 
-            //add 5 items by index
-            for (var i = 0; i < 5; i++)
-            {
-                var count = comboBox.Items.Count;
-                var index = randomUtil.GetRange(0, count - 1);
-                var item = "new item" + i;
+                //add 5 items by index
+                for (var i = 0; i < 5; i++)
+                {
+                    var count = comboBox.Items.Count;
+                    var index = _randomUtil.GetRange(0, count - 1);
+                    var item = "new item" + i;
 
-                comboBox.Items.Insert(index, item);
-                bool result = item.Equals(comboBox.Items[index]) && comboBox.Items.Count == ++count;
+                    comboBox.Items.Insert(index, item);
+                    bool result = item.Equals(comboBox.Items[index]) && comboBox.Items.Count == ++count;
 
-                Assert.True(result);
-            }
+                    Assert.True(result);
+                }
             });
         }
 
@@ -176,12 +187,12 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(comboBox =>
             {
-            InitializeItems(comboBox);
+                InitializeItems(comboBox);
 
-            //remove 5 items by index
-            bool result = RemoveItems(comboBox, true, 5);
+                //remove 5 items by index
+                bool result = RemoveItems(comboBox, true, 5);
 
-            Assert.True(result);
+                Assert.True(result);
             });
         }
 
@@ -204,23 +215,23 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(comboBox =>
             {
-            var items = new string[NumItems];
-            // all the items are between a - z
-            for (var j = 0; j < NumItems; j++)
-            {
-                var item = (randomUtil.GetInt(true) % 26 + 97).ToString();
-                items[j] = item;
-                comboBox.Items.Add(item);
-            }
+                var items = new string[NumItems];
+                // all the items are between a - z
+                for (var j = 0; j < NumItems; j++)
+                {
+                    var item = (_randomUtil.GetInt(true) % 26 + 97).ToString();
+                    items[j] = item;
+                    comboBox.Items.Add(item);
+                }
 
-            comboBox.Sorted = true;
-            Array.Sort(items);
+                comboBox.Sorted = true;
+                Array.Sort(items);
 
-            for (int i = 0; i < NumItems; i++)
-            {
-                bool result = items[i].Equals(comboBox.Items[i]);
-                Assert.True(result);
-            }
+                for (int i = 0; i < NumItems; i++)
+                {
+                    bool result = items[i].Equals(comboBox.Items[i]);
+                    Assert.True(result);
+                }
             });
         }
 
@@ -233,14 +244,14 @@ namespace System.Windows.Forms.UI.IntegrationTests
 
                 comboBox.Sorted = false;
                 int numEventsExpected = 0;
-                numEvents = 0;
-                comboBox.SelectedIndexChanged += (x, y) => numEvents++;
+                _numEvents = 0;
+                comboBox.SelectedIndexChanged += (x, y) => _numEvents++;
 
                 //change SelectedIndex 10 times
                 for (var i = 0; i < 10; i++)
                 {
                     int selectedIndex = comboBox.SelectedIndex;
-                    int index = randomUtil.GetRange(0, NumItems - 1);
+                    int index = _randomUtil.GetRange(0, NumItems - 1);
 
                     comboBox.SelectedIndex = index;
                     Assert.True(comboBox.SelectedIndex == index);
@@ -251,7 +262,7 @@ namespace System.Windows.Forms.UI.IntegrationTests
                     Assert.True(comboBox.Items[comboBox.SelectedIndex].Equals(comboBox.SelectedItem));
                 }
 
-                Assert.True(numEvents == numEventsExpected);
+                Assert.True(_numEvents == numEventsExpected);
             });
         }
 
@@ -282,20 +293,20 @@ namespace System.Windows.Forms.UI.IntegrationTests
         {
             RunTest(comboBox =>
             {
-                var numKeyPresses = randomUtil.GetRange(1, comboBox.Items.Count);
+                var numKeyPresses = _randomUtil.GetRange(1, comboBox.Items.Count);
                 var szItems = CreateItems(NumItems);
-                comboBox.SelectedIndexChanged += (x, y) => numEvents++;
+                comboBox.SelectedIndexChanged += (x, y) => _numEvents++;
 
                 Assert.True(AddItems(comboBox, szItems, NumItems));
 
                 //scroll items using the down arrow key
                 Assert.True(SelectItemWithKeyboard(comboBox, "{DOWN}", numKeyPresses));
 
-                Assert.True(numEvents == numKeyPresses);
+                Assert.True(_numEvents == numKeyPresses);
 
                 //scroll items using the up arrow key
                 Assert.True(SelectItemWithKeyboard(comboBox, "{UP}", numKeyPresses));
-                Assert.True(numEvents == numKeyPresses);
+                Assert.True(_numEvents == numKeyPresses);
             });
         }
 
@@ -306,9 +317,9 @@ namespace System.Windows.Forms.UI.IntegrationTests
             {
                 derivedComboBox.Items.AddRange(new object[]
                 {
-                "One",
-                "Two",
-                "Three"
+                    "One",
+                    "Two",
+                    "Three"
                 });
                 derivedComboBox.Location = new Point(0, 50);
 
