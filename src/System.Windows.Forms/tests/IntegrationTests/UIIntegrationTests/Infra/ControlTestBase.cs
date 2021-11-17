@@ -110,7 +110,7 @@ namespace System.Windows.Forms.UITests
             await MoveMouseAsync(control.FindForm(), centerOnScreen);
         }
 
-        protected async Task MoveMouseAsync(Form window, Point point)
+        protected async Task MoveMouseAsync(Form window, Point point, bool assertCorrectLocation = true)
         {
             TestOutputHelper.WriteLine($"Moving mouse to ({point.X}, {point.Y}).");
             int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
@@ -140,7 +140,10 @@ namespace System.Windows.Forms.UITests
                 }
             }
 
-            Assert.Equal(point, new Point(actualPoint.X, actualPoint.Y));
+            if (assertCorrectLocation)
+            {
+                Assert.Equal(point, new Point(actualPoint.X, actualPoint.Y));
+            }
         }
 
         protected async Task RunSingleControlTestAsync<T>(Func<Form, T, Task> testDriverAsync)
@@ -153,6 +156,25 @@ namespace System.Windows.Forms.UITests
                     form.TopMost = true;
 
                     var control = new T();
+                    form.Controls.Add(control);
+
+                    return (form, control);
+                },
+                testDriverAsync);
+        }
+
+        protected async Task RunSingleControlTestAsync<T>(Func<T> createControl, Func<Form, T, Task> testDriverAsync)
+            where T : Control, new()
+        {
+            await RunFormAsync(
+                () =>
+                {
+                    Form form = new();
+                    form.TopMost = true;
+
+                    T control = createControl();
+                    Assert.NotNull(control);
+
                     form.Controls.Add(control);
 
                     return (form, control);
