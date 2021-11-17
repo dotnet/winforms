@@ -12295,11 +12295,7 @@ namespace System.Windows.Forms
                     // and, thus, neither scaled nor updated its AutoscaleFactor value.
                     // Mark the containers as required scaling, so they are scaled when their parents update AutoscaleFactor value and ready to scale.
                     bool raiseOnFontChangedEvent = container is null || container.AutoScaleMode != AutoScaleMode.Inherit;
-                    SetFont(scaledFont, raiseOnFontChangedEvent);
-                }
-                else
-                {
-                    ScaledControlFont = scaledFont;
+                    SetFont(ScaledControlFont, raiseOnFontChangedEvent);
                 }
 
                 // Mark the container as needing to rescale when its parent is scaled.
