@@ -624,19 +624,17 @@ namespace System.Windows.Forms
 
         UiaCore.IAccessibleEx? UiaCore.IAccessibleEx.GetObjectForChild(int idChild) => null;
 
-        // This method is never called
         unsafe HRESULT UiaCore.IAccessibleEx.GetIAccessiblePair(out object? ppAcc, int* pidChild)
         {
             if (pidChild is null)
             {
                 ppAcc = null;
-                return HRESULT.E_POINTER;
+                return HRESULT.E_INVALIDARG;
             }
 
-            // No need to implement this for patterns and properties
-            ppAcc = null;
-            *pidChild = 0;
-            return HRESULT.E_POINTER;
+            ppAcc = this;
+            *pidChild = NativeMethods.CHILDID_SELF;
+            return HRESULT.S_OK;
         }
 
         int[]? UiaCore.IAccessibleEx.GetRuntimeId() => RuntimeId;
