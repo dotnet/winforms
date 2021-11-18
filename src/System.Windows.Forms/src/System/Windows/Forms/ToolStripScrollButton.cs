@@ -16,6 +16,8 @@ namespace System.Windows.Forms
     {
         private readonly bool up = true;
 
+        private static readonly Size defaultBitmapSize = new(16, 16);
+
         [ThreadStatic]
         private static Bitmap upScrollImage;
 
@@ -68,7 +70,7 @@ namespace System.Windows.Forms
             {
                 if (downScrollImage is null)
                 {
-                    downScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown");
+                    downScrollImage = DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonDown", defaultBitmapSize);
                 }
 
                 return downScrollImage;
@@ -89,7 +91,7 @@ namespace System.Windows.Forms
             {
                 if (upScrollImage is null)
                 {
-                    upScrollImage = DpiHelper.GetBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp");
+                    upScrollImage = DpiHelper.GetScaledBitmapFromIcon(typeof(ToolStripScrollButton), "ScrollButtonUp", defaultBitmapSize);
                 }
 
                 return upScrollImage;
