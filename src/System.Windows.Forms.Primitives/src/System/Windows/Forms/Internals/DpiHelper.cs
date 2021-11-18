@@ -317,7 +317,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Creates a new bitmap scaled to the closest size from the icon set according to the current DPI mode
+        ///  Creates a new bitmap scaled to the closest size from the icon set according to the current DPI mode.
         /// </summary>
         /// <param name="type">Resource type</param>
         /// <param name="name">Resource name</param>
