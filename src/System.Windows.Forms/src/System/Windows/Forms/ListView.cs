@@ -6402,7 +6402,9 @@ namespace System.Windows.Forms
                     targetGroup.CollapsedState = targetGroup.CollapsedState == ListViewGroupCollapsedState.Expanded
                                                 ? ListViewGroupCollapsedState.Collapsed
                                                 : ListViewGroupCollapsedState.Expanded;
+
                     OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(i));
+
                     break;
                 }
             }
@@ -6925,6 +6927,31 @@ namespace System.Windows.Forms
                 case User32.WM.REFLECT_NOTIFY:
                     WmReflectNotify(ref m);
                     break;
+
+                case User32.WM.KEYUP:
+                    int key = (int)m.WParamInternal;
+
+                    if ((key == User32.VK.LEFT || key == User32.VK.RIGHT) && SelectedItems.Count > 0)
+                    {
+                        ListViewGroup group = SelectedItems[0].Group;
+                        ListViewGroupCollapsedState groupCollapsedState = group.CollapsedState;
+
+                        if (group is null || groupCollapsedState == ListViewGroupCollapsedState.Default
+                            || (key == User32.VK.LEFT && groupCollapsedState == ListViewGroupCollapsedState.Collapsed)
+                            || (key == User32.VK.RIGHT && groupCollapsedState == ListViewGroupCollapsedState.Expanded))
+                        {
+                            break;
+                        }
+
+                        group.SetCollapsedStateInternal(group.CollapsedState == ListViewGroupCollapsedState.Expanded
+                                                ? ListViewGroupCollapsedState.Collapsed
+                                                : ListViewGroupCollapsedState.Expanded);
+
+                        OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                    }
+
+                    break;
+
                 case User32.WM.LBUTTONDBLCLK:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set

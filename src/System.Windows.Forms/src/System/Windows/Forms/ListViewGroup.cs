@@ -404,6 +404,20 @@ namespace System.Windows.Forms
             }
         }
 
+        // Should be used for the cases when sending the message `LVM.SETGROUPINFO` isn't required
+        // (for example, collapsing/expanding groups with keyboard is performed inside the native control already, so this message isn't needed)
+        internal void SetCollapsedStateInternal(ListViewGroupCollapsedState state)
+        {
+            SourceGenerated.EnumValidator.Validate(state);
+
+            if (_collapsedState == state)
+            {
+                return;
+            }
+
+            _collapsedState = state;
+        }
+
         public override string ToString() => Header;
 
         private void UpdateListView()
