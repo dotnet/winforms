@@ -330,9 +330,7 @@ namespace System.Windows.Forms
         private UICuesStates _uiCuesState;
 
         // Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
-        // Dpi changed events and explicit Font change/assignment. Caching Font values for each Dpi is complex.
-        // ToDo: Look into caching Dpi and control bounds for each Dpi to improve perf.
-        // https://github.com/dotnet/winforms/issues/5047
+        // Dpi changed events and explicit Font change/assignment.
         private Font _scaledControlFont;
         private FontHandleWrapper _scaledFontWrapper;
 
@@ -341,7 +339,7 @@ namespace System.Windows.Forms
         internal bool _doNotScaleChildren;
 
         // Holds Fonts for various Dpi values of the control in PermonV2 mode.
-        internal Dictionary<int, Font> FontsForDpi = new Dictionary<int, Font>();
+        internal readonly Dictionary<int, Font> DpiFontsCache = new Dictionary<int, Font>();
 #if DEBUG
         internal int LayoutSuspendCount
         {
@@ -2117,11 +2115,11 @@ namespace System.Windows.Forms
 
                 if (localChanged)
                 {
-                    Font resolved = Font;
-                    // Store new local value
+                    // If Font bing assigned is equal to the current default Font, we just set the property bag no need to raise OnFontChangedEvent.
+                    Font currentDefaultFont = Font;
                     Properties.SetObject(s_fontProperty, value);
 
-                    if (!resolved.Equals(value))
+                    if (!currentDefaultFont.Equals(value))
                     {
                         // Cleanup any local fonts and handle wrappers...
                         DisposeFontHandle();
@@ -2131,7 +2129,7 @@ namespace System.Windows.Forms
                             // Reset ScaledControlFont when Font is being set explicitly, in order to keep it
                             // in sync when application moved between different Dpi monitors.
                             ScaledControlFont = null;
-                            DisposeStoredDpiFonts();
+                            ClearDpiFontsCache();
                         }
 
                         if (Properties.ContainsInteger(s_fontHeightProperty))
@@ -2159,14 +2157,14 @@ namespace System.Windows.Forms
             }
         }
 
-        private void DisposeStoredDpiFonts()
+        private void ClearDpiFontsCache()
         {
-            foreach (Font font in FontsForDpi.Values)
+            foreach (Font font in DpiFontsCache.Values)
             {
                 font?.Dispose();
             }
 
-            FontsForDpi.Clear();
+            DpiFontsCache.Clear();
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -7842,10 +7840,10 @@ namespace System.Windows.Forms
                             // Dpi change requires font to be recalculated in order to get controls scaled with right dpi.
                             var factor = (float)_deviceDpi / fontDpi;
 
-                            if(!FontsForDpi.TryGetValue(_deviceDpi, out Font fontForDpi))
+                            if(!DpiFontsCache.TryGetValue(_deviceDpi, out Font fontForDpi))
                             {
                                 fontForDpi = localFont.WithSize(localFont.Size * factor);
-                                FontsForDpi.Add(_deviceDpi, fontForDpi);
+                                DpiFontsCache.Add(_deviceDpi, fontForDpi);
                             }
 
                             ScaledControlFont = fontForDpi;
@@ -11459,12 +11457,12 @@ namespace System.Windows.Forms
             // Store new scaled value
             Properties.SetObject(s_fontProperty, scaledFont);
 
-            // Cleanup any local fonts and handle wrappers...
+            // Dispose old FontHandle.
             DisposeFontHandle();
 
             if (Properties.ContainsInteger(s_fontHeightProperty))
             {
-                Properties.SetInteger(s_fontHeightProperty, (scaledFont is null) ? -1 : scaledFont.Height);
+                Properties.SetInteger(s_fontHeightProperty, scaledFont.Height);
             }
 
             if (!raiseOnFontChangedEvent)
@@ -12321,10 +12319,10 @@ namespace System.Windows.Forms
 
             var factor = (float)_deviceDpi / fontDpi;
 
-            if (!FontsForDpi.TryGetValue(_deviceDpi, out Font fontForDpi))
+            if (!DpiFontsCache.TryGetValue(_deviceDpi, out Font fontForDpi))
             {
                 fontForDpi = localFont.WithSize(localFont.Size * factor);
-                FontsForDpi.Add(_deviceDpi, fontForDpi);
+                DpiFontsCache.Add(_deviceDpi, fontForDpi);
             }
 
             // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
