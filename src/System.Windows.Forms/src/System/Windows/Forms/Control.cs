@@ -3322,7 +3322,7 @@ namespace System.Windows.Forms
                 _scaledControlFont = value;
                 if (Properties.ContainsInteger(s_fontHeightProperty))
                 {
-                    Properties.SetInteger(s_fontHeightProperty, _scaledControlFont.Height);
+                    Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
                 }
             }
         }
