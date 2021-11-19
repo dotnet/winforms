@@ -454,21 +454,5 @@ namespace System.Windows.Forms.Tests
 
             Assert.True(wasChanged);
         }
-
-        [WinFormsTheory]
-        [InlineData(10.0f)]
-        [InlineData(0.1f)]
-        [InlineData(float.Epsilon)]
-        public void Control_ScaleFont(float expected)
-        {
-            using var control = new Control
-            {
-                Font = new Font(new FontFamily(Drawing.Text.GenericFontFamilies.Serif), 1.0f)
-            };
-
-            control.ScaleFont(expected);
-
-            Assert.Equal(expected, control.Font.Size);
-        }
     }
 }
