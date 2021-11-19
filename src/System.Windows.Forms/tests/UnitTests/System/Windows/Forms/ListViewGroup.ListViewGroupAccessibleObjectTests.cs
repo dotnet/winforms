@@ -673,6 +673,62 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(createHandle, listView.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ListViewGroupAccessibleObject_ExpandCollapseStateFromKeyboard_ReturnsExpected()
+        {
+            using ListView listView = new() { ShowGroups = true };
+
+            ListViewGroup listViewGroup = new()
+            {
+                Header = "CollapsibleGroup",
+                CollapsedState = ListViewGroupCollapsedState.Expanded
+            };
+
+            listView.Groups.Add(listViewGroup);
+            listView.Items.Add(new ListViewItem("Group Item", listViewGroup));
+            listView.CreateControl();
+            listViewGroup.Items[0].Selected = true;
+            listViewGroup.Items[0].Focused = true;
+            AccessibleObject accessibleObject = listView.SelectedItems[0].AccessibilityObject;
+            ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)
+                accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+
+            groupAccObj.SetFocus();
+
+            Assert.True(listView.IsHandleCreated);
+            Assert.NotEqual(IntPtr.Zero, listView.Handle);
+
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
+            // The MSDN page tells us what bits of lParam to use for each of the parameters.
+            // All we need to do is some bit shifting to assemble lParam
+            // lParam = repeatCount | (scanCode << 16)
+            nint keyCode = (nint)Keys.Left;
+            nint lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+
+            Assert.Equal(ExpandCollapseState.Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
+
+            keyCode = (nint)Keys.Left;
+            lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+
+            // The second left key pressing should not change Collapsed state
+            Assert.Equal(ExpandCollapseState.Collapsed, listViewGroup.AccessibilityObject.ExpandCollapseState);
+
+            keyCode = (nint)Keys.Right;
+            lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+
+            Assert.Equal(ExpandCollapseState.Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
+
+            keyCode = (nint)Keys.Right;
+            lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+
+            // The second right key pressing should not change Expanded state
+            Assert.Equal(ExpandCollapseState.Expanded, listViewGroup.AccessibilityObject.ExpandCollapseState);
+        }
+
         [WinFormsTheory]
         [InlineData(View.Details)]
         [InlineData(View.LargeIcon)]

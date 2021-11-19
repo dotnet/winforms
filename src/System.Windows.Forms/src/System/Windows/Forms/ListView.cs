@@ -94,6 +94,7 @@ namespace System.Windows.Forms
         private const int LISTVIEWSTATE1_useCompatibleStateImageBehavior = 0x00000008;
         private const int LISTVIEWSTATE1_selectedIndexChangedSkipped = 0x00000010;
 
+        private const int LVLABELEDITTIMER = 0x2A;
         private const int LVTOOLTIPTRACKING = 0x30;
         private const int MAXTILECOLUMNS = 20;
 
@@ -176,6 +177,8 @@ namespace System.Windows.Forms
         private IComparer listItemSorter;
 
         private ListViewItem prevHoveredItem;
+
+        private bool _blockLabelEdit;
 
         // Background image stuff
         // Because we have to create a temporary file and the OS does not clean up the temporary files from the machine
@@ -2422,6 +2425,21 @@ namespace System.Windows.Forms
                 {
                     savedSelectedItems.Remove(lvi);
                 }
+            }
+        }
+
+        private void CancelPendingLabelEdit()
+        {
+            // Invoke the timer that was already set, this will cause label editing to start (LVN.BEGINLABELEDITW will be sent).
+            // Using _blockLabelEdit will cancel label editing in LVN.BEGINLABELEDITW handler.
+            _blockLabelEdit = true;
+            try
+            {
+                User32.SendMessageW(this, User32.WM.TIMER, LVLABELEDITTIMER);
+            }
+            finally
+            {
+                _blockLabelEdit = false;
             }
         }
 
@@ -6384,7 +6402,9 @@ namespace System.Windows.Forms
                     targetGroup.CollapsedState = targetGroup.CollapsedState == ListViewGroupCollapsedState.Expanded
                                                 ? ListViewGroupCollapsedState.Collapsed
                                                 : ListViewGroupCollapsedState.Expanded;
+
                     OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(i));
+
                     break;
                 }
             }
@@ -6417,11 +6437,21 @@ namespace System.Windows.Forms
 
                 case (int)LVN.BEGINLABELEDITW:
                     {
-                        NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParamInternal;
-                        LabelEditEventArgs e = new LabelEditEventArgs(dispInfo->item.iItem);
-                        OnBeforeLabelEdit(e);
-                        m.ResultInternal = e.CancelEdit ? 1 : 0;
-                        listViewState[LISTVIEWSTATE_inLabelEdit] = !e.CancelEdit;
+                        bool cancelEdit;
+                        if (_blockLabelEdit)
+                        {
+                            cancelEdit = true;
+                        }
+                        else
+                        {
+                            NMLVDISPINFO* dispInfo = (NMLVDISPINFO*)m.LParamInternal;
+                            LabelEditEventArgs e = new(dispInfo->item.iItem);
+                            OnBeforeLabelEdit(e);
+                            cancelEdit = e.CancelEdit;
+                        }
+
+                        m.ResultInternal = cancelEdit ? 1 : 0;
+                        listViewState[LISTVIEWSTATE_inLabelEdit] = !cancelEdit;
                         break;
                     }
 
@@ -6897,6 +6927,31 @@ namespace System.Windows.Forms
                 case User32.WM.REFLECT_NOTIFY:
                     WmReflectNotify(ref m);
                     break;
+
+                case User32.WM.KEYUP:
+                    int key = (int)m.WParamInternal;
+
+                    if ((key == User32.VK.LEFT || key == User32.VK.RIGHT) && SelectedItems.Count > 0)
+                    {
+                        ListViewGroup group = SelectedItems[0].Group;
+                        ListViewGroupCollapsedState groupCollapsedState = group.CollapsedState;
+
+                        if (group is null || groupCollapsedState == ListViewGroupCollapsedState.Default
+                            || (key == User32.VK.LEFT && groupCollapsedState == ListViewGroupCollapsedState.Collapsed)
+                            || (key == User32.VK.RIGHT && groupCollapsedState == ListViewGroupCollapsedState.Expanded))
+                        {
+                            break;
+                        }
+
+                        group.SetCollapsedStateInternal(group.CollapsedState == ListViewGroupCollapsedState.Expanded
+                                                ? ListViewGroupCollapsedState.Collapsed
+                                                : ListViewGroupCollapsedState.Expanded);
+
+                        OnGroupCollapsedStateChanged(new ListViewGroupEventArgs(Groups.IndexOf(group)));
+                    }
+
+                    break;
+
                 case User32.WM.LBUTTONDBLCLK:
 
                     // Ensure that the itemCollectionChangedInMouseDown is not set
@@ -6909,10 +6964,23 @@ namespace System.Windows.Forms
 
                 case User32.WM.LBUTTONDOWN:
 
+                    // Check that before click was handled by the ListView code
+                    // because otherwise item will always be selected.
+                    bool cancelLabelEdit =
+                        LabelEdit &&
+                        View == View.Details &&
+                        HitTest(PARAM.ToPoint(m.LParamInternal)) is { SubItem.Index: > 0, Item.Selected: true };
+
                     // Ensure that the itemCollectionChangedInMouseDown is not set
                     // before processing the mousedown event.
                     ItemCollectionChangedInMouseDown = false;
                     WmMouseDown(ref m, MouseButtons.Left, 1);
+
+                    if (cancelLabelEdit)
+                    {
+                        CancelPendingLabelEdit();
+                    }
+
                     downButton = MouseButtons.Left;
                     break;
 

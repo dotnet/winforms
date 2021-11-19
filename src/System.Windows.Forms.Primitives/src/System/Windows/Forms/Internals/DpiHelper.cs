@@ -317,6 +317,27 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Creates a new bitmap scaled to the closest size from the icon set according to the current DPI mode.
+        /// </summary>
+        /// <param name="type">Resource type</param>
+        /// <param name="name">Resource name</param>
+        /// <param name="defaultSize">Default size for 100% DPI</param>
+        /// <returns>New scaled bitmap</returns>
+        internal static Bitmap GetScaledBitmapFromIcon(Type type, string name, Size defaultSize)
+        {
+            using Icon icon = new(type, name);
+            Size scaledSize = LogicalToDeviceUnits(defaultSize);
+            Size deltaSize = icon.Size - scaledSize;
+            if (Math.Abs(deltaSize.Height) <= 2 && Math.Abs(deltaSize.Width) <= 2)
+            {
+                return icon.ToBitmap();
+            }
+
+            using Icon scaledIcon = new(icon, scaledSize);
+            return scaledIcon.ToBitmap();
+        }
+
+        /// <summary>
         ///  Create a new bitmap scaled for the device units.
         ///  When displayed on the device, the scaled image will have same size as the original image would have when displayed at 96dpi.
         /// </summary>

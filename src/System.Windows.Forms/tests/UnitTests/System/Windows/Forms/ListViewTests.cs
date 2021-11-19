@@ -11,6 +11,7 @@ using Xunit;
 using static System.Windows.Forms.ListViewItem;
 using static Interop;
 using static Interop.ComCtl32;
+using System.Runtime.InteropServices;
 
 namespace System.Windows.Forms.Tests
 {
@@ -5319,6 +5320,53 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expectedCount, accessibleObject.RaiseAutomationNotificationCallCount);
             Assert.Equal(createControl, listView.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(0, true)]
+        [InlineData(1, false)]
+        [InlineData(2, false)]
+        public void ListView_OnMouseClick_EditLabel_AsExpected(int subItemIndex, bool labelEditShouldStart)
+        {
+            using ListView listView = new()
+            {
+                Size = new Size(300, 200),
+                View = View.Details,
+                LabelEdit = true,
+                FullRowSelect = true
+            };
+
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 1", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 2", Width = 100 });
+            listView.Columns.Add(new ColumnHeader() { Text = "Column 3", Width = 100 });
+
+            ListViewItem item = new("Test");
+            item.SubItems.Add("Sub1");
+            item.SubItems.Add("Sub2");
+            listView.Items.Add(item);
+
+            listView.CreateControl();
+
+            User32.SetFocus(new HandleRef(listView, listView.Handle));
+            listView.Items[0].Selected = true;
+
+            // Add a pixel both to x and y as the left-upper corner is not a part of subitem
+            Point subItemLocation = listView.Items[0].SubItems[subItemIndex].Bounds.Location + new Size(1, 1);
+            // The mouse down handler will wait for mouse up event, so we need to put it on the message queue before invoking mouse down
+            User32.PostMessageW(listView, User32.WM.LBUTTONUP, 0, PARAM.FromPoint(subItemLocation));
+            User32.SendMessageW(listView, User32.WM.LBUTTONDOWN, 1, PARAM.FromPoint(subItemLocation));
+            // Start editing immediately (if it was queued)
+            User32.SendMessageW(listView, User32.WM.TIMER, (nint)listView.TestAccessor().Dynamic.LVLABELEDITTIMER);
+
+            nint editControlHandle = User32.SendMessageW(listView, (User32.WM)LVM.GETEDITCONTROL);
+            if (labelEditShouldStart)
+            {
+                Assert.NotEqual(0, editControlHandle);
+            }
+            else
+            {
+                Assert.Equal(0, editControlHandle);
+            }
         }
 
         private class SubListViewItem : ListViewItem
