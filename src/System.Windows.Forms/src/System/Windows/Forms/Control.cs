@@ -2157,7 +2157,7 @@ namespace System.Windows.Forms
         private protected void AddToFontsDpiCache(int dpi, Font font)
         {
             if (!DpiHelper.IsPerMonitorV2Awareness
-                || User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+                || !User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
             {
                 throw new InvalidOperationException(SR.CacheFontsOnlyInPermonitorV2Mode);
             }
@@ -2169,7 +2169,7 @@ namespace System.Windows.Forms
         private protected bool TryGetDpiFont(int dpi, out Font font)
         {
             if (!DpiHelper.IsPerMonitorV2Awareness
-                || User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+                || !User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
             {
                 throw new InvalidOperationException(SR.CacheFontsOnlyInPermonitorV2Mode);
             }
@@ -2180,18 +2180,17 @@ namespace System.Windows.Forms
 
         private void ClearDpiFontsCache()
         {
-            if (!DpiHelper.IsPerMonitorV2Awareness
-                || User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            if(_dpiFontsCache is null)
             {
-                throw new InvalidOperationException(SR.CacheFontsOnlyInPermonitorV2Mode);
+                return;
             }
 
-            foreach (Font font in _dpiFontsCache?.Values)
+            foreach (Font font in _dpiFontsCache.Values)
             {
                 font?.Dispose();
             }
 
-            _dpiFontsCache?.Clear();
+            _dpiFontsCache.Clear();
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
