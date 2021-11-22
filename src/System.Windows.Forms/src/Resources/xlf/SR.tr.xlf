@@ -682,6 +682,11 @@
         <target state="translated">İşlenmemiş VT: {0}.</target>
         <note />
       </trans-unit>
+      <trans-unit id="CacheFontsOnlyInPermonitorV2Mode">
+        <source>Fonts need to be cached only in PermonitorV2 ode applications</source>
+        <target state="new">Fonts need to be cached only in PermonitorV2 ode applications</target>
+        <note />
+      </trans-unit>
       <trans-unit id="CalendarNextButtonAccessibleObjectDescription">
         <source>Go to next time frame</source>
         <target state="translated">Sonraki zaman dilimine git</target>

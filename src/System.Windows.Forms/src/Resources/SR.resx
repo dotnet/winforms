@@ -6862,4 +6862,7 @@ Stack trace where the illegal operation occurred was:
   <data name="CategoryPropertyGridLocalizedControlType" xml:space="preserve">
     <value>PropertyGrid category</value>
   </data>
+  <data name="CacheFontsOnlyInPermonitorV2Mode" xml:space="preserve">
+    <value>Fonts need to be cached only in PermonitorV2 ode applications</value>
+  </data>
 </root>

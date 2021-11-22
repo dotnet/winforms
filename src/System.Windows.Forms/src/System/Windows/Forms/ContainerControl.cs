@@ -1442,18 +1442,22 @@ namespace System.Windows.Forms
 
                 // Factor is used only to scale Font. After that AutoscaleFactor kicks in to scale controls.
                 var factor = ((float)deviceDpiNew) / deviceDpiOld;
-                if (TryGetExplicitlySetFont(out Font localFont))
+
+                // DpiFontscache is availble only in PermonitorV2 mode applications.
+                if (!TryGetDpiFont(deviceDpiNew, out Font fontForDpi))
                 {
-                    Font = localFont.WithSize(localFont.Size * factor);
+                    Font currentFont = Font;
+                    fontForDpi = currentFont.WithSize(currentFont.Size * factor);
+                    AddToFontsDpiCache(deviceDpiNew, fontForDpi);
+                }
+
+                ScaledControlFont = fontForDpi;
+                if (IsFontSet())
+                {
+                    SetScaledFont(fontForDpi);
                 }
                 else
                 {
-                    // Scale Font and cache it locally. Propertybag is not updated.
-                    // If Font was not explicitly assigned, it should remain that way.
-                    // Need to make sure this holds true at the time of designer serialization.
-                    // https://github.com/dotnet/winforms/issues/5047
-                    ScaleFont(factor);
-
                     using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
                     {
                         OnFontChanged(EventArgs.Empty);
