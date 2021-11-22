@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Drawing.Drawing2D;
+using System.Windows.Forms.Primitives.Resources;
 using Microsoft.Win32;
 using static Interop;
 
@@ -389,11 +390,6 @@ namespace System.Windows.Forms
                     return HighDpiMode.PerMonitorV2;
                 }
 
-                if (User32.AreDpiAwarenessContextsEqual(dpiAwareness, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE))
-                {
-                    return HighDpiMode.PerMonitor;
-                }
-
                 if (User32.AreDpiAwarenessContextsEqual(dpiAwareness, User32.DPI_AWARENESS_CONTEXT.UNAWARE_GDISCALED))
                 {
                     return HighDpiMode.DpiUnawareGdiScaled;
@@ -409,7 +405,7 @@ namespace System.Windows.Forms
                     case SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE:
                         return HighDpiMode.SystemAware;
                     case SHCore.PROCESS_DPI_AWARENESS.PER_MONITOR_AWARE:
-                        return HighDpiMode.PerMonitor;
+                        throw new InvalidOperationException(SR.PermonitorModeNotSupported);
                 }
             }
             else
@@ -438,9 +434,6 @@ namespace System.Windows.Forms
                 {
                     case HighDpiMode.SystemAware:
                         rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.SYSTEM_AWARE;
-                        break;
-                    case HighDpiMode.PerMonitor:
-                        rs2AndAboveDpiFlag = User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE;
                         break;
                     case HighDpiMode.PerMonitorV2:
                         // Necessary for RS1, since this SetProcessIntPtr IS available here.
@@ -474,7 +467,6 @@ namespace System.Windows.Forms
                     case HighDpiMode.SystemAware:
                         dpiFlag = SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE;
                         break;
-                    case HighDpiMode.PerMonitor:
                     case HighDpiMode.PerMonitorV2:
                         dpiFlag = SHCore.PROCESS_DPI_AWARENESS.PER_MONITOR_AWARE;
                         break;
@@ -496,7 +488,6 @@ namespace System.Windows.Forms
                         // We can return, there is nothing to set if we assume we're already in DpiUnaware.
                         return true;
                     case HighDpiMode.SystemAware:
-                    case HighDpiMode.PerMonitor:
                     case HighDpiMode.PerMonitorV2:
                         dpiFlag = SHCore.PROCESS_DPI_AWARENESS.SYSTEM_AWARE;
                         break;

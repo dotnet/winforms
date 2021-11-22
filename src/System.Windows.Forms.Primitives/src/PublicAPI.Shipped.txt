@@ -56,9 +56,8 @@ System.Windows.Forms.FileDialogCustomPlacesCollection.Add(System.Guid knownFolde
 System.Windows.Forms.FileDialogCustomPlacesCollection.FileDialogCustomPlacesCollection() -> void
 System.Windows.Forms.HighDpiMode
 System.Windows.Forms.HighDpiMode.DpiUnaware = 0 -> System.Windows.Forms.HighDpiMode
-System.Windows.Forms.HighDpiMode.DpiUnawareGdiScaled = 4 -> System.Windows.Forms.HighDpiMode
-System.Windows.Forms.HighDpiMode.PerMonitor = 2 -> System.Windows.Forms.HighDpiMode
-System.Windows.Forms.HighDpiMode.PerMonitorV2 = 3 -> System.Windows.Forms.HighDpiMode
+System.Windows.Forms.HighDpiMode.DpiUnawareGdiScaled = 3 -> System.Windows.Forms.HighDpiMode
+System.Windows.Forms.HighDpiMode.PerMonitorV2 = 2 -> System.Windows.Forms.HighDpiMode
 System.Windows.Forms.HighDpiMode.SystemAware = 1 -> System.Windows.Forms.HighDpiMode
 System.Windows.Forms.Message
 System.Windows.Forms.Message.GetLParam(System.Type! cls) -> object?

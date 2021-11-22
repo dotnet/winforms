@@ -39,11 +39,6 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The window checks for DPI when it's created and adjusts scale factor when the DPI changes.
         /// </summary>
-        PerMonitor,
-
-        /// <summary>
-        ///  Similar to <see cref="PerMonitor"/>, but enables child window DPI change notification, improved scaling of comctl32 controls and dialog scaling.
-        /// </summary>
         PerMonitorV2,
 
         /// <summary>

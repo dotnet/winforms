@@ -12,6 +12,11 @@
         <target state="translated">Der Dienst "{0}" muss installiert sein, damit diese Funktion funktioniert. Stellen Sie sicher, dass der Dienst verfügbar ist.</target>
         <note />
       </trans-unit>
+      <trans-unit id="PermonitorModeNotSupported">
+        <source>Winforms applications do not support Permonitor mode. Use PermonitorV2 mode instead, on Windows 10 or latest OS</source>
+        <target state="new">Winforms applications do not support Permonitor mode. Use PermonitorV2 mode instead, on Windows 10 or latest OS</target>
+        <note />
+      </trans-unit>
       <trans-unit id="PropertyValueInvalidEntry">
         <source>One or more entries are not valid in the IDictionary parameter. Verify that all values match up to the object's properties.</source>
         <target state="translated">Mindestens ein Eintrag im IDictionary-Parameter ist ungültig. Stellen Sie sicher, dass alle Werte den Eigenschaften des Objekts entsprechen.</target>
