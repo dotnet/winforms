@@ -12673,9 +12673,46 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void Control_WndProc_InvokeDpiChangedAfterParentWithoutHandle_Success()
         {
-            using (new NoAssertContext())
+            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            {
+                using (new NoAssertContext())
+                {
+                    using var control = new SubControl();
+                    int callCount = 0;
+                    control.DpiChangedAfterParent += (sender, e) =>
+                    {
+                        Assert.Same(control, sender);
+                        Assert.Same(EventArgs.Empty, e);
+                        callCount++;
+                    };
+                    var m = new Message
+                    {
+                        Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
+                        WParam = PARAM.FromLowHigh(192, 192),
+                        Result = (IntPtr)250
+                    };
+                    control.WndProc(ref m);
+                    Assert.Equal(IntPtr.Zero, m.Result);
+                    Assert.Equal(1, callCount);
+                    Assert.False(control.IsHandleCreated);
+                }
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeDpiChangedAfterParentWithHandle_Success()
+        {
+            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
             {
                 using var control = new SubControl();
+                Assert.NotEqual(IntPtr.Zero, control.Handle);
+                int invalidatedCallCount = 0;
+                control.Invalidated += (sender, e) => invalidatedCallCount++;
+                int styleChangedCallCount = 0;
+                control.StyleChanged += (sender, e) => styleChangedCallCount++;
+                int createdCallCount = 0;
+                control.HandleCreated += (sender, e) => createdCallCount++;
+
                 int callCount = 0;
                 control.DpiChangedAfterParent += (sender, e) =>
                 {
@@ -12692,50 +12729,56 @@ namespace System.Windows.Forms.Tests
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
                 Assert.Equal(1, callCount);
-                Assert.False(control.IsHandleCreated);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
             }
-        }
-
-        [WinFormsFact]
-        public void Control_WndProc_InvokeDpiChangedAfterParentWithHandle_Success()
-        {
-            using var control = new SubControl();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
-
-            int callCount = 0;
-            control.DpiChangedAfterParent += (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(EventArgs.Empty, e);
-                callCount++;
-            };
-            var m = new Message
-            {
-                Msg = (int)User32.WM.DPICHANGED_AFTERPARENT,
-                WParam = PARAM.FromLowHigh(192, 192),
-                Result = (IntPtr)250
-            };
-            control.WndProc(ref m);
-            Assert.Equal(IntPtr.Zero, m.Result);
-            Assert.Equal(1, callCount);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
         }
 
         [WinFormsFact]
         public void Control_WndProc_InvokeDpiChangedBeforeParentWithoutHandle_Success()
         {
-            using (new NoAssertContext())
+            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            {
+                using (new NoAssertContext())
+                {
+                    using var control = new SubControl();
+                    int callCount = 0;
+                    control.DpiChangedBeforeParent += (sender, e) =>
+                    {
+                        Assert.Same(control, sender);
+                        Assert.Same(EventArgs.Empty, e);
+                        callCount++;
+                    };
+                    var m = new Message
+                    {
+                        Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
+                        WParam = PARAM.FromLowHigh(192, 192),
+                        Result = (IntPtr)250
+                    };
+                    control.WndProc(ref m);
+                    Assert.Equal(IntPtr.Zero, m.Result);
+                    Assert.Equal(1, callCount);
+                    Assert.False(control.IsHandleCreated);
+                }
+            }
+        }
+
+        [WinFormsFact]
+        public void Control_WndProc_InvokeDpiChangedBeforeParentWithHandle_Success()
+        {
+            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
             {
                 using var control = new SubControl();
+                Assert.NotEqual(IntPtr.Zero, control.Handle);
+                int invalidatedCallCount = 0;
+                control.Invalidated += (sender, e) => invalidatedCallCount++;
+                int styleChangedCallCount = 0;
+                control.StyleChanged += (sender, e) => styleChangedCallCount++;
+                int createdCallCount = 0;
+                control.HandleCreated += (sender, e) => createdCallCount++;
+
                 int callCount = 0;
                 control.DpiChangedBeforeParent += (sender, e) =>
                 {
@@ -12752,42 +12795,11 @@ namespace System.Windows.Forms.Tests
                 control.WndProc(ref m);
                 Assert.Equal(IntPtr.Zero, m.Result);
                 Assert.Equal(1, callCount);
-                Assert.False(control.IsHandleCreated);
+                Assert.True(control.IsHandleCreated);
+                Assert.Equal(0, invalidatedCallCount);
+                Assert.Equal(0, styleChangedCallCount);
+                Assert.Equal(0, createdCallCount);
             }
-        }
-
-        [WinFormsFact]
-        public void Control_WndProc_InvokeDpiChangedBeforeParentWithHandle_Success()
-        {
-            using var control = new SubControl();
-            Assert.NotEqual(IntPtr.Zero, control.Handle);
-            int invalidatedCallCount = 0;
-            control.Invalidated += (sender, e) => invalidatedCallCount++;
-            int styleChangedCallCount = 0;
-            control.StyleChanged += (sender, e) => styleChangedCallCount++;
-            int createdCallCount = 0;
-            control.HandleCreated += (sender, e) => createdCallCount++;
-
-            int callCount = 0;
-            control.DpiChangedBeforeParent += (sender, e) =>
-            {
-                Assert.Same(control, sender);
-                Assert.Same(EventArgs.Empty, e);
-                callCount++;
-            };
-            var m = new Message
-            {
-                Msg = (int)User32.WM.DPICHANGED_BEFOREPARENT,
-                WParam = PARAM.FromLowHigh(192, 192),
-                Result = (IntPtr)250
-            };
-            control.WndProc(ref m);
-            Assert.Equal(IntPtr.Zero, m.Result);
-            Assert.Equal(1, callCount);
-            Assert.True(control.IsHandleCreated);
-            Assert.Equal(0, invalidatedCallCount);
-            Assert.Equal(0, styleChangedCallCount);
-            Assert.Equal(0, createdCallCount);
         }
 
         public static IEnumerable<object[]> WndProc_EraseBkgndWithoutHandleWithoutWParam_TestData()

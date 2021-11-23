@@ -2159,7 +2159,8 @@ namespace System.Windows.Forms
             if (!DpiHelper.IsPerMonitorV2Awareness
                 || !User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
             {
-                throw new InvalidOperationException(SR.CacheFontsOnlyInPermonitorV2Mode);
+                Debug.Assert(false, "Fonts need to be cached only for PermonitorV2 mode applications");
+                return;
             }
 
             _dpiFontsCache ??= new Dictionary<int, Font>();
@@ -2168,13 +2169,14 @@ namespace System.Windows.Forms
 
         private protected bool TryGetDpiFont(int dpi, out Font font)
         {
+            font = null;
             if (!DpiHelper.IsPerMonitorV2Awareness
                 || !User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
             {
-                throw new InvalidOperationException(SR.CacheFontsOnlyInPermonitorV2Mode);
+                Debug.Assert(false, "Fonts need to be cached only for PermonitorV2 mode applications");
+                return false;
             }
 
-            font = null;
             return _dpiFontsCache?.TryGetValue(dpi, out font) ?? false;
         }
 
