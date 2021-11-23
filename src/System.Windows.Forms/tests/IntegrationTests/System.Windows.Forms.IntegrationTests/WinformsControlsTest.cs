@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+//#define MAUI
+
 using System.Diagnostics;
 using System.Windows.Forms.IntegrationTests.Common;
 using Xunit;
@@ -18,7 +20,9 @@ namespace System.Windows.Forms.IntegrationTests
             _exePath = TestHelpers.GetExePath(ProjectName);
         }
 
+#if MAUI
         [Fact]
+#endif
         public void WinformsControlsTest_OpenAndClose()
         {
             Process process = TestHelpers.StartProcess(_exePath);
@@ -33,6 +37,7 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
+#if MAUI
         [Theory]
         [InlineData(MainFormControlsTabOrder.ButtonsButton)]
         [InlineData(MainFormControlsTabOrder.CalendarButton)]
@@ -55,6 +60,7 @@ namespace System.Windows.Forms.IntegrationTests
         [InlineData(MainFormControlsTabOrder.PictureBoxesButton)]
         [InlineData(MainFormControlsTabOrder.FormBorderStylesButton)]
         [InlineData(MainFormControlsTabOrder.ToggleIconButton)]
+#endif
         public void WinformsControlsTest_InnerForms_OpenAndClose(MainFormControlsTabOrder tabOrder)
         {
             Process process = TestHelpers.StartProcess(_exePath);
@@ -68,7 +74,9 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
+#if MAUI
         [Fact]
+#endif
         public void WinformsControlsTest_CalendarTest()
         {
             Process process = TestHelpers.StartProcess(_exePath);
@@ -84,7 +92,9 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
+#if MAUI
         [Fact]
+#endif
         public void WinformsControlsTest_ThreadExceptionDialogTest()
         {
             Process process = TestHelpers.StartProcess(_exePath);
@@ -103,7 +113,9 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
+#if MAUI
         [Fact]
+#endif
         public void WinformsControlsTest_PropertyGrid_CollectionEditorTest()
         {
             Process process = TestHelpers.StartProcess(_exePath);
@@ -123,7 +135,9 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
+#if MAUI
         [Fact]
+#endif
         public void WinformsControlsTest_FileDialogTest()
         {
             Process process = TestHelpers.StartProcess(_exePath);
@@ -164,7 +178,9 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
+#if MAUI
         [Fact]
+#endif
         public void WinformsControlsTest_OpenFolderBrowserDialogTest()
         {
             Process process = TestHelpers.StartProcess(_exePath);
@@ -184,7 +200,9 @@ namespace System.Windows.Forms.IntegrationTests
             Assert.True(process.HasExited);
         }
 
+#if MAUI
         [Fact]
+#endif
         public void DataBindings_remove_should_unsubscribe_INotifyPropertyChanged_PropertyChanged_event()
         {
             var mainObject = new Mocks.MainObject();
