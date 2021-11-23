@@ -29,13 +29,16 @@ namespace System.Windows.Forms.Generators
 
                 code.AppendLine($"{indent}Application.SetCompatibleTextRenderingDefault({projectConfig.UseCompatibleTextRendering.ToString().ToLowerInvariant()});");
 
+                code.AppendLine($"{indent}Application.SetHighDpiMode(HighDpiMode.{projectConfig.HighDpiMode});");
+
+                // Note: we need to set the font _after_ we set the DPI scaling, as it affects how we scale the font.
                 if (!string.IsNullOrWhiteSpace(defaultFont))
                 {
                     code.AppendLine($"{indent}Application.SetDefaultFont({defaultFont});");
                 }
 
                 // Don't append line as we don't need the trailing \r\n!
-                code.Append($"{indent}Application.SetHighDpiMode(HighDpiMode.{projectConfig.HighDpiMode});");
+                code.Remove(code.Length - Environment.NewLine.Length, Environment.NewLine.Length);
 
                 return code.ToString();
             }
