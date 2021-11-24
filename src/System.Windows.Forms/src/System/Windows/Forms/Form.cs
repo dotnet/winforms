@@ -4251,7 +4251,7 @@ namespace System.Windows.Forms
 
                 if (!e.Cancel)
                 {
-                    ScaleContainer(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
+                    ScaleContainerForDpi(e.DeviceDpiNew, e.DeviceDpiOld, e.SuggestedRectangle);
                 }
             }
         }

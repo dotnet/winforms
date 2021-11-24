@@ -20,9 +20,7 @@ namespace System.Windows.Forms.Tests.Dpi
                 return;
             }
 
-            // Set thread awareness context to PermonitorV2(PMv2).
             IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
-
             try
             {
                 using var form = new Form();
