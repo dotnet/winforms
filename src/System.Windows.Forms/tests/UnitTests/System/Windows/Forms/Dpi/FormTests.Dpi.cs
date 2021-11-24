@@ -20,7 +20,8 @@ namespace System.Windows.Forms.Tests.Dpi
                 return;
             }
 
-            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+            try
             {
                 using var form = new Form();
                 form.AutoScaleMode = AutoScaleMode.Dpi;
@@ -37,6 +38,11 @@ namespace System.Windows.Forms.Tests.Dpi
                 Assert.NotEqual(initialBounds.Height, form.Bounds.Height);
                 Assert.NotEqual(initialFontSize, form.Font.Size);
                 form.Close();
+            }
+            finally
+            {
+                // Reset back to original awareness context.
+                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
             }
         }
     }

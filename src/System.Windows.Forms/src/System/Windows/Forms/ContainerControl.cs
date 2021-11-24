@@ -1413,7 +1413,7 @@ namespace System.Windows.Forms
             }
         }
 
-        internal void ScaleContainer(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
+        internal void ScaleContainerForDpi(int deviceDpiNew, int deviceDpiOld, Rectangle suggestedRectangle)
         {
             CommonProperties.xClearAllPreferredSizeCaches(this);
             SuspendAllLayout(this);
@@ -1448,7 +1448,7 @@ namespace System.Windows.Forms
                 {
                     Font currentFont = Font;
                     fontForDpi = currentFont.WithSize(currentFont.Size * factor);
-                    AddToFontsDpiCache(deviceDpiNew, fontForDpi);
+                    AddToDpiFonts(deviceDpiNew, fontForDpi);
                 }
 
                 ScaledControlFont = fontForDpi;

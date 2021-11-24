@@ -22,7 +22,9 @@ namespace System.Windows.Forms.Tests.Dpi
             }
 
             // Set thread awareness context to PermonitorV2(PMv2).
-            using (DpiHelper.EnterDpiAwarenessScope(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            IntPtr originalAwarenessContext = User32.SetThreadDpiAwarenessContext(User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2);
+
+            try
             {
                 int clientWidth = 800;
                 using var form = new Form();
@@ -45,6 +47,11 @@ namespace System.Windows.Forms.Tests.Dpi
 
                 Assert.Equal((float)initialFont.Size * factor, toolStrip.Font.Size);
                 form.Close();
+            }
+            finally
+            {
+                // Reset back to original awareness context.
+                User32.SetThreadDpiAwarenessContext(originalAwarenessContext);
             }
         }
     }

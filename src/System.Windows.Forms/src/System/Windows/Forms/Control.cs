@@ -339,7 +339,7 @@ namespace System.Windows.Forms
         internal bool _doNotScaleChildren;
 
         // Contains a collection of calculated fonts for various Dpi values of the control in the PerMonV2 mode.
-        private Dictionary<int, Font> _dpiFontsCache;
+        private Dictionary<int, Font> _dpiFonts;
 
 #if DEBUG
         internal int LayoutSuspendCount
@@ -2100,7 +2100,7 @@ namespace System.Windows.Forms
             set
             {
                 var local = (Font)Properties.GetObject(s_fontProperty);
-                bool localChanged = false;
+                bool localChanged;
                 if (value is null)
                 {
                     localChanged = local is not null;
@@ -2126,7 +2126,7 @@ namespace System.Windows.Forms
                             // Reset the ScaledControlFont value when the font is being set explicitly, in order to keep it
                             // in sync when the application is moved between monitors with different Dpi settings.
                             ScaledControlFont = null;
-                            ClearDpiFontsCache();
+                            ClearDpiFonts();
                         }
 
                         if (Properties.ContainsInteger(s_fontHeightProperty))
@@ -2154,45 +2154,43 @@ namespace System.Windows.Forms
             }
         }
 
-        private protected void AddToFontsDpiCache(int dpi, Font font)
+        private protected void AddToDpiFonts(int dpi, Font font)
         {
-            if (!DpiHelper.IsPerMonitorV2Awareness
-                || !User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            if (!User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
             {
-                Debug.Assert(false, "Fonts need to be cached only for PermonitorV2 mode applications");
+                Debug.Assert(false, "Fonts need to be cached only for PerMonitorV2 mode applications");
                 return;
             }
 
-            _dpiFontsCache ??= new Dictionary<int, Font>();
-            _dpiFontsCache.Add(dpi, font);
+            _dpiFonts ??= new Dictionary<int, Font>();
+            _dpiFonts.Add(dpi, font);
         }
 
         private protected bool TryGetDpiFont(int dpi, out Font font)
         {
             font = null;
-            if (!DpiHelper.IsPerMonitorV2Awareness
-                || !User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
+            if (!User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
             {
-                Debug.Assert(false, "Fonts need to be cached only for PermonitorV2 mode applications");
+                Debug.Assert(false, $"Fonts need to be cached only for PermonitorV2 mode applications : {DpiHelper.IsPerMonitorV2Awareness} : {DpiAwarenessContext}");
                 return false;
             }
 
-            return _dpiFontsCache?.TryGetValue(dpi, out font) ?? false;
+            return _dpiFonts?.TryGetValue(dpi, out font) ?? false;
         }
 
-        private void ClearDpiFontsCache()
+        private void ClearDpiFonts()
         {
-            if(_dpiFontsCache is null)
+            if(_dpiFonts is null)
             {
                 return;
             }
 
-            foreach (Font font in _dpiFontsCache.Values)
+            foreach (Font font in _dpiFonts.Values)
             {
                 font?.Dispose();
             }
 
-            _dpiFontsCache.Clear();
+            _dpiFonts.Clear();
         }
 
         [SRCategory(nameof(SR.CatPropertyChanged))]
@@ -7855,7 +7853,7 @@ namespace System.Windows.Forms
                     SetWindowFont();
                 }
 
-                if (DpiHelper.IsPerMonitorV2Awareness)
+                if (User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
                 {
                     int old = _deviceDpi;
                     Font localFont = GetCurrentFontAndDpi(out int fontDpi);
@@ -7871,7 +7869,7 @@ namespace System.Windows.Forms
                             if (!TryGetDpiFont(_deviceDpi, out Font fontForDpi))
                             {
                                 fontForDpi = localFont.WithSize(localFont.Size * factor);
-                                AddToFontsDpiCache(_deviceDpi, fontForDpi);
+                                AddToDpiFonts(_deviceDpi, fontForDpi);
                             }
 
                             ScaledControlFont = fontForDpi;
@@ -12350,7 +12348,7 @@ namespace System.Windows.Forms
             if (!TryGetDpiFont(_deviceDpi, out Font fontForDpi))
             {
                 fontForDpi = localFont.WithSize(localFont.Size * factor);
-                AddToFontsDpiCache(_deviceDpi, fontForDpi);
+                AddToDpiFonts(_deviceDpi, fontForDpi);
             }
 
             // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
