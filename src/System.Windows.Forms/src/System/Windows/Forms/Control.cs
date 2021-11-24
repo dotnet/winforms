@@ -385,6 +385,7 @@ namespace System.Windows.Forms
             // Initialize Dpi to the value on the primary screen, we will have the correct value when the Handle is created.
             _deviceDpi = _oldDeviceDpi = DpiHelper.DeviceDpi;
             _window = new ControlNativeWindow(this);
+            DpiAwarenessContext = _window.DpiAwarenessContext;
             RequiredScalingEnabled = true;
             RequiredScaling = BoundsSpecified.All;
             _tabIndex = -1;
@@ -482,7 +483,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets control Dpi awareness context value.
         /// </summary>
-        internal IntPtr DpiAwarenessContext => _window.DpiAwarenessContext;
+        internal readonly IntPtr DpiAwarenessContext;
 
         /// <summary>
         ///  The Accessibility Object for this Control

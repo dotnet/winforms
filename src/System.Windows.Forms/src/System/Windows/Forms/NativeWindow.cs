@@ -69,12 +69,15 @@ namespace System.Windows.Forms
         public NativeWindow()
         {
             _weakThisPtr = new WeakReference(this);
+
+            // Set DpiAwarenessContext of the control. Control handle will be created with this DpiAwarenessContext.
+            DpiAwarenessContext = User32.GetThreadDpiAwarenessContext();
         }
 
         /// <summary>
         /// Cache window DpiContext awareness information that helps to create handle with right context at the later time.
         /// </summary>
-        internal IntPtr DpiAwarenessContext { get; } = User32.GetThreadDpiAwarenessContext();
+        internal readonly IntPtr DpiAwarenessContext;
 
         /// <summary>
         ///  Override's the base object's finalize method.
