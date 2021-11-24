@@ -2180,7 +2180,7 @@ namespace System.Windows.Forms
 
         private void ClearDpiFonts()
         {
-            if(_dpiFonts is null)
+            if (_dpiFonts is null)
             {
                 return;
             }
