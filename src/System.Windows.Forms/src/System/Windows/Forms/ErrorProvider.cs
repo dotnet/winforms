@@ -804,5 +804,16 @@ namespace System.Windows.Forms
         }
 
         private bool ShouldSerializeIcon() => Icon != DefaultIcon;
+
+        /// <summary>
+        /// Determine if the controls that are linked to this ErrorProvider currently have errors.
+        /// </summary>
+        public bool HasErrors
+        {
+            get
+            {
+                return _items.Count > 0;
+            }
+        }
     }
 }
