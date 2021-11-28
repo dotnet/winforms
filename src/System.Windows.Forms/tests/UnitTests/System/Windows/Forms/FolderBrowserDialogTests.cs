@@ -14,17 +14,40 @@ namespace System.Windows.Forms.Tests
         public void FolderBrowserDialog_Ctor_Default()
         {
             using var dialog = new FolderBrowserDialog();
+            Assert.True(dialog.AddToRecent);
             Assert.True(dialog.AutoUpgradeEnabled);
             Assert.Null(dialog.Container);
             Assert.Empty(dialog.Description);
             Assert.Equal(Environment.SpecialFolder.Desktop, dialog.RootFolder);
             Assert.Empty(dialog.InitialDirectory);
+            Assert.False(dialog.OkRequiresInteraction);
             Assert.Empty(dialog.SelectedPath);
+            Assert.False(dialog.ShowHiddenFiles);
+            Assert.True(dialog.ShowPinnedPlaces);
             Assert.True(dialog.ShowNewFolderButton);
             Assert.Null(dialog.Site);
             Assert.Null(dialog.Tag);
             Assert.False(dialog.UseDescriptionForTitle);
             Assert.Null(dialog.ClientGuid);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void FolderBrowserDialog_AddToRecent_Set_GetReturnsExpected(bool value)
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                AddToRecent = value
+            };
+            Assert.Equal(value, dialog.AddToRecent);
+
+            // Set same.
+            dialog.AddToRecent = value;
+            Assert.Equal(value, dialog.AddToRecent);
+
+            // Set different.
+            dialog.AddToRecent = !value;
+            Assert.Equal(!value, dialog.AddToRecent);
         }
 
         [WinFormsTheory]
@@ -59,6 +82,25 @@ namespace System.Windows.Forms.Tests
             // Set same.
             dialog.Description = value;
             Assert.Equal(value ?? string.Empty, dialog.Description);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void FolderBrowserDialog_OkRequiresInteraction_Set_GetReturnsExpected(bool value)
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                OkRequiresInteraction = value
+            };
+            Assert.Equal(value, dialog.OkRequiresInteraction);
+
+            // Set same.
+            dialog.OkRequiresInteraction = value;
+            Assert.Equal(value, dialog.OkRequiresInteraction);
+
+            // Set different.
+            dialog.OkRequiresInteraction = !value;
+            Assert.Equal(!value, dialog.OkRequiresInteraction);
         }
 
         [WinFormsTheory]
@@ -117,6 +159,44 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void FolderBrowserDialog_ShowHiddenFiles_Set_GetReturnsExpected(bool value)
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                ShowHiddenFiles = value
+            };
+            Assert.Equal(value, dialog.ShowHiddenFiles);
+
+            // Set same.
+            dialog.ShowHiddenFiles = value;
+            Assert.Equal(value, dialog.ShowHiddenFiles);
+
+            // Set different.
+            dialog.ShowHiddenFiles = !value;
+            Assert.Equal(!value, dialog.ShowHiddenFiles);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void FileDialog_ShowPinnedPlaces_Set_GetReturnsExpected(bool value)
+        {
+            using var dialog = new FolderBrowserDialog
+            {
+                ShowPinnedPlaces = value
+            };
+            Assert.Equal(value, dialog.ShowPinnedPlaces);
+
+            // Set same.
+            dialog.ShowPinnedPlaces = value;
+            Assert.Equal(value, dialog.ShowPinnedPlaces);
+
+            // Set different.
+            dialog.ShowPinnedPlaces = !value;
+            Assert.Equal(!value, dialog.ShowPinnedPlaces);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
         public void FolderBrowserDialog_ShowNewFolderButton_Set_GetReturnsExpected(bool value)
         {
             using var dialog = new FolderBrowserDialog
@@ -158,11 +238,15 @@ namespace System.Windows.Forms.Tests
         {
             using var dialog = new FolderBrowserDialog
             {
+                AddToRecent = false,
                 AutoUpgradeEnabled = false,
                 Description = "A description",
                 RootFolder = Environment.SpecialFolder.CommonAdminTools,
                 InitialDirectory = @"C:\",
+                OkRequiresInteraction = true,
                 SelectedPath = @"C:\",
+                ShowHiddenFiles = true,
+                ShowPinnedPlaces = false,
                 ShowNewFolderButton = false,
                 UseDescriptionForTitle = true,
                 ClientGuid = new Guid("ad6e2857-4659-4791-aa59-efffa61d4594"),
@@ -170,12 +254,16 @@ namespace System.Windows.Forms.Tests
 
             dialog.Reset();
 
+            Assert.True(dialog.AddToRecent);
             Assert.False(dialog.AutoUpgradeEnabled);
             Assert.Null(dialog.Container);
             Assert.Empty(dialog.Description);
             Assert.Equal(Environment.SpecialFolder.Desktop, dialog.RootFolder);
             Assert.Empty(dialog.InitialDirectory);
+            Assert.False(dialog.OkRequiresInteraction);
             Assert.Empty(dialog.SelectedPath);
+            Assert.False(dialog.ShowHiddenFiles);
+            Assert.True(dialog.ShowPinnedPlaces);
             Assert.True(dialog.ShowNewFolderButton);
             Assert.Null(dialog.Site);
             Assert.Null(dialog.Tag);
