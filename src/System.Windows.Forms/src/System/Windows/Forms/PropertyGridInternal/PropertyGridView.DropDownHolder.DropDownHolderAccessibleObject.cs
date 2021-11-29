@@ -29,6 +29,12 @@ namespace System.Windows.Forms.PropertyGridInternal
                             ? _owningDropDownHolder._gridView?.EditAccessibleObject
                             : null,
                         UiaCore.NavigateDirection.PreviousSibling => null,
+                        UiaCore.NavigateDirection.FirstChild or UiaCore.NavigateDirection.LastChild
+                            => ExistsInAccessibleTree
+                                && _owningDropDownHolder._gridView?.SelectedGridEntry?.Enumerable == true
+                                && _owningDropDownHolder.Component == _owningDropDownHolder._gridView.DropDownListBox
+                                ? _owningDropDownHolder._gridView?.DropDownListBoxAccessibleObject
+                                : null,
                         _ => base.FragmentNavigate(direction),
                     };
 

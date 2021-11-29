@@ -36,14 +36,11 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
-                if (direction == UiaCore.NavigateDirection.Parent && _owningPropertyGridView.SelectedGridEntry is not null)
+                if (direction == UiaCore.NavigateDirection.Parent
+                    && _owningPropertyGridView.SelectedGridEntry is not null
+                    && _owningPropertyGridView.DropDownVisible)
                 {
-                    return _owningPropertyGridView.SelectedGridEntry.AccessibilityObject;
-                }
-
-                if (direction == UiaCore.NavigateDirection.NextSibling)
-                {
-                    return _owningPropertyGridView.EditTextBox.AccessibilityObject;
+                    return _owningPropertyGridView.DropDownControlHolder.AccessibilityObject;
                 }
 
                 return base.FragmentNavigate(direction);

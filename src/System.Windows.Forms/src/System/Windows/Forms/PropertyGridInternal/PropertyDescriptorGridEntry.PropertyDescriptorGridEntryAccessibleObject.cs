@@ -153,13 +153,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 GridEntry selectedGridEntry = propertyGridView.SelectedGridEntry;
                 if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
                 {
-                    if (selectedGridEntry.Enumerable &&
-                        propertyGridView.DropDownVisible &&
-                        propertyGridView.DropDownControlHolder?.Component == propertyGridView.DropDownListBox)
-                    {
-                        return propertyGridView.DropDownListBoxAccessibleObject;
-                    }
-
                     if (propertyGridView.DropDownVisible && propertyGridView.DropDownControlHolder is not null)
                     {
                         return propertyGridView.DropDownControlHolder.AccessibilityObject;
