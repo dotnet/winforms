@@ -161,7 +161,7 @@ namespace System.Windows.Forms
             return LinkBehavior.AlwaysUnderline;
         }
 
-        public static void EnsureLinkFonts(Font baseFont, LinkBehavior link, ref Font linkFont, ref Font hoverLinkFont)
+        public static void EnsureLinkFonts(Font baseFont, LinkBehavior link, ref Font linkFont, ref Font hoverLinkFont, bool isActive = false)
         {
             if (linkFont is not null && hoverLinkFont is not null)
             {
@@ -207,6 +207,15 @@ namespace System.Windows.Forms
                 else
                 {
                     style &= ~FontStyle.Underline;
+                }
+
+                if (isActive)
+                {
+                    style |= FontStyle.Bold;
+                }
+                else
+                {
+                    style &= ~FontStyle.Bold;
                 }
 
                 hoverLinkFont = new Font(f, style);

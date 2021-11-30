@@ -59,8 +59,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // return the default IE Color
-                    return LinkUtilities.IEActiveLinkColor;
+                    // return the default IE Color if cell is not not selected
+                    return Selected ? SystemColors.HighlightText : LinkUtilities.IEActiveLinkColor;
                 }
             }
             set
@@ -183,7 +183,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // return the default IE Color when cell is not selected
-                    return Selected ? Color.White : LinkUtilities.IELinkColor;
+                    return Selected ? SystemColors.HighlightText : LinkUtilities.IELinkColor;
                 }
             }
             set
@@ -379,8 +379,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    // return the default IE Color
-                    return LinkUtilities.IEVisitedLinkColor;
+                    // return the default IE Color if cell is not not selected
+                    return Selected ? SystemColors.HighlightText : LinkUtilities.IEVisitedLinkColor;
                 }
             }
             set
@@ -1019,8 +1019,9 @@ namespace System.Windows.Forms
 
                 Font getLinkFont = null;
                 Font getHoverFont = null;
+                bool isActive = (LinkState & LinkState.Active) == LinkState.Active;
 
-                LinkUtilities.EnsureLinkFonts(cellStyle.Font, LinkBehavior, ref getLinkFont, ref getHoverFont);
+                LinkUtilities.EnsureLinkFonts(cellStyle.Font, LinkBehavior, ref getLinkFont, ref getHoverFont, isActive);
                 TextFormatFlags flags = DataGridViewUtilities.ComputeTextFormatFlagsForCellStyleAlignment(
                     DataGridView.RightToLeftInternal,
                     cellStyle.Alignment,
