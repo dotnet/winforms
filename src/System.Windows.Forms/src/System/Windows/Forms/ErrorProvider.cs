@@ -815,6 +815,5 @@ namespace System.Windows.Forms
         }
 
         private bool ShouldSerializeIcon() => Icon != DefaultIcon;
-
     }
 }
