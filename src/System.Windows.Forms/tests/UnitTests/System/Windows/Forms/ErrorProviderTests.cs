@@ -1238,8 +1238,10 @@ namespace System.Windows.Forms.Tests
             using var control1 = new Control();
 
             provider.SetError(control1, String.Empty);
-
             Assert.True(provider.HasErrors);
+
+            provider.Clear();
+            Assert.False(provider.HasErrors);
         }
 
         private class SubErrorProvider : ErrorProvider
