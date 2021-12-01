@@ -193,6 +193,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Determine if the controls that are linked to this ErrorProvider currently have errors.
+        /// </summary>
+        public bool HasErrors
+        {
+            get
+            {
+                return _items.Count > 0;
+            }
+        }
+
+        /// <summary>
         ///  This is used for international applications where the language is written from RightToLeft.
         ///  When this property is true, text will be from right to left.
         /// </summary>
@@ -805,15 +816,5 @@ namespace System.Windows.Forms
 
         private bool ShouldSerializeIcon() => Icon != DefaultIcon;
 
-        /// <summary>
-        /// Determine if the controls that are linked to this ErrorProvider currently have errors.
-        /// </summary>
-        public bool HasErrors
-        {
-            get
-            {
-                return _items.Count > 0;
-            }
-        }
     }
 }
