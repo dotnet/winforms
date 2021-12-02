@@ -14,10 +14,7 @@ internal partial class Interop
 
             public ShellItemWrapper(IntPtr wrappedInstance)
             {
-                if (wrappedInstance == IntPtr.Zero)
-                {
-                    throw new ArgumentNullException(nameof(wrappedInstance));
-                }
+                ArgumentNullException.ThrowIfNull(wrappedInstance);
 
                 _wrappedInstance = wrappedInstance;
             }
@@ -31,57 +28,59 @@ internal partial class Interop
             HRESULT Shell32.IShellItem.BindToHandler(IntPtr pbc, ref Guid bhid, ref Guid riid, out IntPtr ppv)
             {
                 int retVal;
-                fixed (Guid* local_1 = &bhid)
-                fixed (Guid* local_2 = &riid)
-                fixed (IntPtr* local_3 = &ppv)
+                fixed (Guid* bhid_local = &bhid)
+                fixed (Guid* riid_local = &riid)
+                fixed (IntPtr* ppv_local = &ppv)
                 retVal = ((delegate* unmanaged<IntPtr, IntPtr, Guid*, Guid*, IntPtr*, int>)(*(*(void***)_wrappedInstance + 3)))
-                    (_wrappedInstance, pbc, local_1, local_2, local_3);
+                    (_wrappedInstance, pbc, bhid_local, riid_local, ppv_local);
                 return (HRESULT)retVal;
             }
 
             HRESULT Shell32.IShellItem.GetParent(out Shell32.IShellItem ppsi)
             {
-                IntPtr local_0;
+                IntPtr ppsi_local;
                 int retVal;
                 retVal = ((delegate* unmanaged<IntPtr, IntPtr*, int>)(*(*(void***)_wrappedInstance + 4)))
-                    (_wrappedInstance, &local_0);
-                ppsi = local_0 == IntPtr.Zero ? null! : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(local_0, CreateObjectFlags.Unwrap);
+                    (_wrappedInstance, &ppsi_local);
+                ppsi = ppsi_local == IntPtr.Zero ? null! : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
                 return (HRESULT)retVal;
             }
 
             HRESULT Shell32.IShellItem.GetDisplayName(Shell32.SIGDN sigdnName, out string ppszName)
             {
-                IntPtr local_1;
+                IntPtr ppszName_local;
                 int retVal;
                 retVal = ((delegate* unmanaged<IntPtr, int, IntPtr*, int>)(*(*(void***)_wrappedInstance + 5)))
-                    (_wrappedInstance, (int)sigdnName, &local_1);
-                ppszName = Marshal.PtrToStringUni(local_1)!;
+                    (_wrappedInstance, (int)sigdnName, &ppszName_local);
+                ppszName = Marshal.PtrToStringUni(ppszName_local)!;
+                Marshal.FreeCoTaskMem(ppszName_local);
                 return (HRESULT)retVal;
             }
 
             HRESULT Shell32.IShellItem.GetAttributes(Shell32.SFGAOF sfgaoMask, out Shell32.SFGAOF psfgaoAttribs)
             {
-                int local_1;
+                Shell32.SFGAOF psfgaoAttribs_local;
                 int retVal;
-                retVal = ((delegate* unmanaged<IntPtr, int, int*, int>)(*(*(void***)_wrappedInstance + 6)))
-                    (_wrappedInstance, (int)sfgaoMask, &local_1);
-                psfgaoAttribs = (Shell32.SFGAOF)local_1;
+                retVal = ((delegate* unmanaged<IntPtr, Shell32.SFGAOF, Shell32.SFGAOF*, int>)(*(*(void***)_wrappedInstance + 6)))
+                    (_wrappedInstance, sfgaoMask, &psfgaoAttribs_local);
+                psfgaoAttribs = psfgaoAttribs_local;
                 return (HRESULT)retVal;
             }
 
             HRESULT Shell32.IShellItem.Compare(Shell32.IShellItem psi, uint hint, out int piOrder)
             {
                 int result;
-                IntPtr local_0;
+                IntPtr ppv_local;
                 if (psi == null)
                 {
-                    local_0 = IntPtr.Zero;
+                    ppv_local = IntPtr.Zero;
                 }
                 else
                 {
-                    var local_0_unk = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(psi, CreateComInterfaceFlags.None);
+                    var pUnk_local = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(psi, CreateComInterfaceFlags.None);
                     var local_psi_IID = IID.IShellItem;
-                    result = Marshal.QueryInterface(local_0_unk, ref local_psi_IID, out local_0);
+                    result = Marshal.QueryInterface(pUnk_local, ref local_psi_IID, out ppv_local);
+                    Marshal.Release(pUnk_local);
                     if (result != 0)
                     {
                         Marshal.ThrowExceptionForHR(result);
@@ -89,9 +88,9 @@ internal partial class Interop
                 }
 
                 int retVal;
-                fixed (int* local_2 = &piOrder)
+                fixed (int* piOrder_local = &piOrder)
                 retVal = ((delegate* unmanaged<IntPtr, IntPtr, uint, int*, int>)(*(*(void***)_wrappedInstance + 7)))
-                    (_wrappedInstance, local_0, hint, local_2);
+                    (_wrappedInstance, ppv_local, hint, piOrder_local);
                 return (HRESULT)retVal;
             }
         }

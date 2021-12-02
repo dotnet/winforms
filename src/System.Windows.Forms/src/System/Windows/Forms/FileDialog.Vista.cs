@@ -203,13 +203,24 @@ namespace System.Windows.Forms
         private void SetFileTypes(IFileDialog dialog)
         {
             COMDLG_FILTERSPEC[] filterItems = FilterItems;
-            HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
-            ThrowIfFailed(hr);
-
-            if (filterItems.Length > 0)
+            try
             {
-                hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
+                HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
                 ThrowIfFailed(hr);
+
+                if (filterItems.Length > 0)
+                {
+                    hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
+                    ThrowIfFailed(hr);
+                }
+            }
+            finally
+            {
+                foreach (var item in filterItems)
+                {
+                    Marshal.FreeCoTaskMem(item.pszName);
+                    Marshal.FreeCoTaskMem(item.pszSpec);
+                }
             }
         }
 
@@ -231,8 +242,8 @@ namespace System.Windows.Forms
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
                         COMDLG_FILTERSPEC extension;
-                        extension.pszSpec = tokens[i]; // This may be a semicolon delimited list of extensions (that's ok)
-                        extension.pszName = tokens[i - 1];
+                        extension.pszSpec = Marshal.StringToCoTaskMemUni(tokens[i]);// This may be a semicolon delimited list of extensions (that's ok)
+                        extension.pszName = Marshal.StringToCoTaskMemUni(tokens[i - 1]);
                         extensions.Add(extension);
                     }
                 }

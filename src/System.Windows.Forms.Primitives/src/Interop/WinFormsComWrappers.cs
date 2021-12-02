@@ -53,6 +53,7 @@ internal partial class Interop
             int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr pictureComObject);
             if (hr == S_OK)
             {
+                Marshal.Release(externalComObject);
                 return new PictureWrapper(pictureComObject);
             }
 
@@ -60,6 +61,7 @@ internal partial class Interop
             hr = Marshal.QueryInterface(externalComObject, ref fileOpenDialogIID, out IntPtr fileOpenDialogComObject);
             if (hr == S_OK)
             {
+                Marshal.Release(externalComObject);
                 return new FileOpenDialogWrapper(fileOpenDialogComObject);
             }
 
@@ -67,6 +69,7 @@ internal partial class Interop
             hr = Marshal.QueryInterface(externalComObject, ref shellItemIID, out IntPtr shellItemComObject);
             if (hr == S_OK)
             {
+                Marshal.Release(externalComObject);
                 return new ShellItemWrapper(shellItemComObject);
             }
 
