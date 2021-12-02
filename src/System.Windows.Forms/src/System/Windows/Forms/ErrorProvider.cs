@@ -193,7 +193,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Determine if the controls that are linked to this ErrorProvider currently have errors.
+        /// Gets a value that indicates if this <see cref="ErrorProvider"/> has any errors for any of the associated controls.
         /// </summary>
         public bool HasErrors
         {
