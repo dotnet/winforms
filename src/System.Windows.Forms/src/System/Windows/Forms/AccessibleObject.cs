@@ -354,6 +354,11 @@ namespace System.Windows.Forms
         {
             get
             {
+                if (systemWrapper)
+                {
+                    return new int[] { RuntimeIDFirstItem, GetHashCode() };
+                }
+
                 string message = string.Format(SR.AccessibleObjectRuntimeIdNotSupported, nameof(AccessibleObject), nameof(RuntimeId));
 
                 Debug.Fail(message);
