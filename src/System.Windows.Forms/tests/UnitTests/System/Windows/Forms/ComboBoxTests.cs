@@ -2098,6 +2098,209 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(2, ((CustomComboBoxAccessibleObject)comboBox.AccessibilityObject).RaiseAutomationCallCount);
         }
 
+        [WinFormsFact]
+        public void ComboBox_Add_Items_By_Index()
+        {
+            using ComboBox comboBox = new();
+            Random rand = new();
+            InitializeItems(comboBox, 10);
+
+            // Add 5 items by index
+            for (var i = 0; i < 5; i++)
+            {
+                var count = comboBox.Items.Count;
+                var index = rand.Next(0, count - 1);
+                var item = "new item" + i;
+                comboBox.Items.Insert(index, item);
+
+                Assert.True(item.Equals(comboBox.Items[index]));
+                Assert.Equal(comboBox.Items.Count, ++count);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(10, 0, 5)]
+        [InlineData(10, 2, 4)]
+        public void ComboBox_Remove_Items_By_Index(int numberOfItems, int index, int numberOfItemsToRemove)
+        {
+            using ComboBox comboBox = new();
+            InitializeItems(comboBox, numberOfItems);
+
+            int count = comboBox.Items.Count;
+            for (int i = 0; i < numberOfItemsToRemove; i++)
+            {
+                comboBox.Items.RemoveAt(index);
+            }
+
+            Assert.Equal(count - numberOfItemsToRemove, comboBox.Items.Count);
+        }
+
+        [WinFormsTheory]
+        [InlineData(10, 0, 5)]
+        [InlineData(10, 2, 4)]
+        public void ComboBox_Remove_Items_By_Object(int numberOfItems, int index, int number)
+        {
+            using ComboBox comboBox = new();
+            InitializeItems(comboBox, numberOfItems);
+
+            int count = comboBox.Items.Count;
+            for (int i = 0; i < number; i++)
+            {
+                comboBox.Items.Remove(comboBox.Items[index]);
+            }
+
+            Assert.Equal(count - number, comboBox.Items.Count);
+        }
+
+        [WinFormsFact]
+        public void ComboBox_Sorted_Sorts_By_Ascending()
+        {
+            using ComboBox comboBox = new();
+            int numItems = 200;
+            Random random = new();
+
+            var items = new string[numItems];
+
+            // All the items are between a - z
+            for (var j = 0; j < numItems; j++)
+            {
+                var item = (random.Next() % 26 + (char)'a').ToString();
+                items[j] = item;
+                comboBox.Items.Add(item);
+            }
+
+            comboBox.Sorted = true;
+            Array.Sort(items);
+
+            for (int i = 0; i < numItems; i++)
+            {
+                Assert.Equal(items[i], comboBox.Items[i]);
+            }
+        }
+
+        [WinFormsTheory]
+        [InlineData(1)]
+        [InlineData(5)]
+        public void ComboBox_SelectedIndexDoesNotChangeSelectedItemAndDoesNotFireOnSelectedIndexChanged(int index)
+        {
+            using ComboBox comboBox = new();
+            InitializeItems(comboBox, 10);
+
+            comboBox.SelectedIndex = index;
+            int numEvents = 0;
+            comboBox.SelectedIndexChanged += (x, y) => numEvents++;
+            comboBox.Sorted = false;
+            int selectedIndex = comboBox.SelectedIndex;
+            comboBox.SelectedIndex = index;
+
+            Assert.Equal(index, comboBox.SelectedIndex);
+            Assert.True(comboBox.Items[comboBox.SelectedIndex].Equals(comboBox.SelectedItem));
+        }
+
+        [WinFormsTheory]
+        [InlineData(1)]
+        [InlineData(5)]
+        [InlineData(9)]
+        public void ComboBox_SelectedIndexChangesSelectedItemAndFiresOnSelectedIndexChanged(int index)
+        {
+            using ComboBox comboBox = new();
+            InitializeItems(comboBox, 10);
+
+            int numEvents = 0;
+            comboBox.SelectedIndexChanged += (x, y) => numEvents++;
+            comboBox.Sorted = false;
+            int numEventsExpected = 0;
+            numEvents = 0;
+            int selectedIndex = comboBox.SelectedIndex;
+            comboBox.SelectedIndex = index;
+            numEventsExpected++;
+
+            Assert.Equal(index, comboBox.SelectedIndex);
+            Assert.True(comboBox.Items[comboBox.SelectedIndex].Equals(comboBox.SelectedItem));
+            Assert.Equal(numEventsExpected, numEvents);
+        }
+
+        [WinFormsTheory]
+        [InlineData("item0", 0, 0, false)]
+        [InlineData("item1", 0, 1, false)]
+        [InlineData("item1", 1, 1, false)]
+        [InlineData("item1", 2, 1, false)]
+        [InlineData("item7", 2, 7, false)]
+        [InlineData("item7", 9, 7, false)]
+        [InlineData("item9", 0, 9, false)]
+        [InlineData("item9", 9, 9, false)]
+        [InlineData("Item9", 9, -1, false)]
+        [InlineData("item1984", 9, -1, false)]
+        [InlineData("item0", 0, 0, true)]
+        [InlineData("ITEM1", 0, 1, true)]
+        [InlineData("itEm1", 1, 1, true)]
+        [InlineData("item1", 2, 1, true)]
+        [InlineData("item7", 2, 7, true)]
+        [InlineData("item7", 9, 7, true)]
+        [InlineData("item9", 0, 9, true)]
+        [InlineData("item9", 9, 9, true)]
+        [InlineData("Item9", 9, 9, true)]
+        [InlineData("item1984", 9, -1, true)]
+        public void ComboBox_FindString(string value, int index, int expected, bool isExact)
+        {
+            using ComboBox comboBox = new();
+            InitializeItems(comboBox, 10);
+
+            int actual = comboBox.FindStringExact(value, index, isExact);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [WinFormsFact]
+        public void DerivedComboBox_Verify_OnMeasureItem_Receives_Correct_Arguments()
+        {
+            using DerivedComboBox derivedComboBox = new();
+            derivedComboBox.CreateControl();
+            derivedComboBox.Items.AddRange(new object[]
+            {
+                "One",
+                "Two",
+                "Three"
+            });
+            derivedComboBox.Location = new Point(0, 50);
+            Assert.Equal(3, derivedComboBox.MeasureItemEventArgs.Count);
+
+            for (int i = 0; i < 3; i++)
+            {
+                MeasureItemEventArgs e = derivedComboBox.MeasureItemEventArgs[i];
+                Assert.NotNull(e.Graphics);
+                Assert.Equal(e.Index, i);
+                Assert.Equal(18, e.ItemHeight);
+                Assert.Equal(0, e.ItemWidth);
+            }
+        }
+
+        private void InitializeItems(ComboBox comboBox, int numItems)
+        {
+            for (int i = 0; i < numItems; i++)
+            {
+                comboBox.Items.Add("item" + i);
+            }
+
+            Assert.Equal(numItems, comboBox.Items.Count);
+        }
+
+        private class DerivedComboBox : ComboBox
+        {
+            public DerivedComboBox()
+            {
+                DrawMode = DrawMode.OwnerDrawVariable;
+                FormattingEnabled = true;
+            }
+
+            public List<MeasureItemEventArgs> MeasureItemEventArgs { get; } = new List<MeasureItemEventArgs>();
+
+            protected override void OnMeasureItem(MeasureItemEventArgs e)
+            {
+                MeasureItemEventArgs.Add(e);
+            }
+        }
+
         private class CustomComboBox : ComboBox
         {
             protected override AccessibleObject CreateAccessibilityInstance()
