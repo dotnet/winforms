@@ -283,38 +283,24 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
-        [WinFormsFact]
-        public void Label_AutoSize_Does_Not_Change_Size_When_False()
+        [WinFormsTheory]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        public void Label_AutoSize_BehavesExpected(bool autoSize, bool expected)
         {
             using Form form = new Form();
-            form.Show();
-            using Label label = new();
-            label.Parent = form;
-            label.AutoSize = false;
-            label.Size = new Size(10, 10);
-            label.Text = "Hello";
+            using Label label = new()
+            {
+                AutoSize = autoSize,
+                Size = new(10, 10),
+                Text = "Hello",
+            };
             Size oldSize = label.Size;
+            form.Controls.Add(label);
+            form.Show();
             label.Text = "Say Hello";
             Size newSize = label.Size;
-
-            Assert.Equal(newSize, oldSize);
-        }
-
-        [WinFormsFact]
-        public void Label_AutoSize_Changes_Size_When_True()
-        {
-            using Form form = new Form();
-            form.Show();
-            using Label label = new();
-            label.Parent = form;
-            label.AutoSize = true;
-            label.Size = new Size(10, 10);
-            label.Text = "Hello";
-            Size oldSize = label.Size;
-            label.Text = "Say Hello";
-            Size newSize = label.Size;
-
-            Assert.NotEqual(newSize, oldSize);
+            Assert.Equal(expected, newSize == oldSize);
         }
 
         public class SubLabel : Label

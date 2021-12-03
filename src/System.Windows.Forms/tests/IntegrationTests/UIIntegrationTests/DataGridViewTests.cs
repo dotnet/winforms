@@ -28,24 +28,15 @@ namespace System.Windows.Forms.UITests
                 dataGridView.DataSource = dataTable;
                 Point point = dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false).Location;
 
-                // Move mouse cursor over any cell of the first row.
+                // Move mouse cursor over any cell of the first row to trigger a tooltip.
                 await InputSimulator.SendAsync(
-                            form,
-                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(point.X, point.Y));
+                    form,
+                    inputSimulator => inputSimulator.Mouse.MoveMouseTo(point.X, point.Y));
 
-                // We need to close the form and then check whether dataTable works fine or it doesn't
+                // Close the form to verify no exceptions thrown while showing the tooltip.
+                // Regression test for https://github.com/dotnet/winforms/issues/5496
                 form.Close();
-                var exceptionThrown = false;
-                try
-                {
-                    dataTable.AcceptChanges();
-                }
-                catch
-                {
-                    exceptionThrown = true;
-                }
-
-                Assert.False(exceptionThrown);
+                dataTable.AcceptChanges();
             });
         }
 

@@ -148,19 +148,6 @@ namespace System.Windows.Forms.UITests
             }
         }
 
-        protected async Task RunFormTestAsync(Func<Form, Task> testDriverAsync)
-        {
-            await RunFormWithoutControlAsync(
-                () =>
-                {
-                    var form = new Form();
-                    form.TopMost = true;
-
-                    return (PrintPreviewDialog)form;
-                },
-                testDriverAsync);
-        }
-
         protected async Task RunSingleControlTestAsync<T>(Func<Form, T, Task> testDriverAsync)
             where T : Control, new()
         {
@@ -265,9 +252,10 @@ namespace System.Windows.Forms.UITests
             await test.JoinAsync();
         }
 
-        protected async Task RunFormWithoutControlAsync(Func<PrintPreviewDialog> createForm, Func<PrintPreviewDialog, Task> testDriverAsync)
+        protected async Task RunFormWithoutControlAsync<TForm>(Func<TForm> createForm, Func<TForm, Task> testDriverAsync)
+            where TForm : Form
         {
-            PrintPreviewDialog? dialog = null;
+            TForm? dialog = null;
 
             TaskCompletionSource<VoidResult> gate = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
             JoinableTask test = JoinableTaskFactory.RunAsync(async () =>
@@ -282,6 +270,8 @@ namespace System.Windows.Forms.UITests
                 finally
                 {
                     dialog!.Close();
+                    dialog.Dispose();
+                    dialog = null;
                 }
             });
 
