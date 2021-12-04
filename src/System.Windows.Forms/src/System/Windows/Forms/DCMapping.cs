@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using static Interop;
@@ -35,13 +33,11 @@ namespace System.Windows.Forms
         {
             ArgumentNullException.ThrowIfNull(hdc);
 
-            bool success;
-
             _hdc = hdc;
             _savedState = Gdi32.SaveDC(hdc);
 
             // Retrieve the x-coordinates and y-coordinates of the viewport origin for the specified device context.
-            success = Gdi32.GetViewportOrgEx(hdc, out Point viewportOrg).IsTrue();
+            bool success = Gdi32.GetViewportOrgEx(hdc, out Point viewportOrg).IsTrue();
             Debug.Assert(success, "GetViewportOrgEx() failed.");
 
             // Create a new rectangular clipping region based off of the bounds specified, shifted over by the x & y specified in the viewport origin.
