@@ -2,10 +2,9 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing.Design;
 using System.Runtime.InteropServices;
 using static Interop;
@@ -27,14 +26,14 @@ namespace System.Windows.Forms
 
         private protected int _options;
 
-        private string _title;
-        private string _initialDirectory;
-        private string _defaultExt;
-        private string[] _fileNames;
-        private string _filter;
+        private string? _title;
+        private string? _initialDirectory;
+        private string? _defaultExt;
+        private string[]? _fileNames;
+        private string? _filter;
         private bool _ignoreSecondFileOkNotification;
         private int _okNotificationCount;
-        private UnicodeCharBuffer _charBuffer;
+        private UnicodeCharBuffer? _charBuffer;
         private IntPtr _dialogHWnd;
 
         /// <summary>
@@ -122,6 +121,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue("")]
         [SRDescription(nameof(SR.FDdefaultExtDescr))]
+        [AllowNull]
         public string DefaultExt
         {
             get => _defaultExt ?? string.Empty;
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
                     }
                     else if (value.Length == 0)
                     {
-                        value = null;
+                        value = null!;
                     }
                 }
 
@@ -165,6 +165,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue("")]
         [SRDescription(nameof(SR.FDfileNameDescr))]
+        [AllowNull]
         public string FileName
         {
             get
@@ -185,6 +186,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.FDFileNamesDescr))]
+        [AllowNull]
         public string[] FileNames
         {
             get => _fileNames is not null ? (string[])_fileNames.Clone() : Array.Empty<string>();
@@ -198,6 +200,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [Localizable(true)]
         [SRDescription(nameof(SR.FDfilterDescr))]
+        [AllowNull]
         public string Filter
         {
             get => _filter ?? string.Empty;
@@ -215,7 +218,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        value = null;
+                        value = null!;
                     }
 
                     _filter = value;
@@ -232,7 +235,7 @@ namespace System.Windows.Forms
         {
             get
             {
-                string filter = _filter;
+                string? filter = _filter;
                 List<string> extensions = new List<string>();
 
                 // First extension is the default one. It's not expected that DefaultExt
@@ -284,6 +287,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [Editor("System.Windows.Forms.Design.InitialDirectoryEditor, System.Windows.Forms.Design, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089", typeof(UITypeEditor))]
         [SRDescription(nameof(SR.FDinitialDirDescr))]
+        [AllowNull]
         public string InitialDirectory
         {
             get => _initialDirectory ?? string.Empty;
@@ -366,6 +370,7 @@ namespace System.Windows.Forms
         [DefaultValue("")]
         [Localizable(true)]
         [SRDescription(nameof(SR.FDtitleDescr))]
+        [AllowNull]
         public string Title
         {
             get => _title ?? string.Empty;
@@ -404,17 +409,17 @@ namespace System.Windows.Forms
         /// </summary>
         private bool DoFileOk(IntPtr lpOFN)
         {
-            NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(lpOFN);
+            NativeMethods.OPENFILENAME_I? ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(lpOFN);
             int saveOptions = _options;
             int saveFilterIndex = FilterIndex;
-            string[] saveFileNames = _fileNames;
+            string[]? saveFileNames = _fileNames;
             bool ok = false;
             try
             {
                 _options = _options & ~(int)Comdlg32.OFN.READONLY |
-                          ofn.Flags & (int)Comdlg32.OFN.READONLY;
+                          ofn!.Flags & (int)Comdlg32.OFN.READONLY;
                 FilterIndex = ofn.nFilterIndex;
-                _charBuffer.PutCoTaskMem(ofn.lpstrFile);
+                _charBuffer!.PutCoTaskMem(ofn.lpstrFile);
 
                 Thread.MemoryBarrier();
 
@@ -534,11 +539,11 @@ namespace System.Windows.Forms
                             MoveToScreenCenter(_dialogHWnd);
                             break;
                         case -602: /* CDN_SELCHANGE */
-                            NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN);
+                            NativeMethods.OPENFILENAME_I? ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN);
 
                             // Get the buffer size required to store the selected file names.
                             int sizeNeeded = (int)User32.SendMessageW(_dialogHWnd, (User32.WM)1124 /*CDM_GETSPEC*/);
-                            if (sizeNeeded > ofn.nMaxFile)
+                            if (ofn is not null && sizeNeeded > ofn.nMaxFile)
                             {
                                 // A bigger buffer is required.
                                 try
@@ -614,7 +619,7 @@ namespace System.Windows.Forms
         ///  Converts the given filter string to the format required in an OPENFILENAME_I
         ///  structure.
         /// </summary>
-        private static string MakeFilterString(string s, bool dereferenceLinks)
+        private static string? MakeFilterString(string? s, bool dereferenceLinks)
         {
             if (string.IsNullOrEmpty(s))
             {
@@ -648,7 +653,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected void OnFileOk(CancelEventArgs e)
         {
-            CancelEventHandler handler = (CancelEventHandler)Events[EventFileOk];
+            CancelEventHandler? handler = (CancelEventHandler?)Events[EventFileOk];
             handler?.Invoke(this, e);
         }
 
@@ -662,7 +667,7 @@ namespace System.Windows.Forms
             if ((_options & (int)Comdlg32.OFN.NOVALIDATE) == 0)
             {
                 string[] extensions = FilterExtensions;
-                for (int i = 0; i < _fileNames.Length; i++)
+                for (int i = 0; i < _fileNames!.Length; i++)
                 {
                     string fileName = _fileNames[i];
                     if ((_options & AddExtensionOption) != 0 && !Path.HasExtension(fileName))
