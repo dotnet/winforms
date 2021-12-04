@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -41,7 +39,7 @@ namespace System.Windows.Forms
         {
             if (Application.OleRequired() != ApartmentState.STA)
             {
-                throw new Threading.ThreadStateException(SR.ThreadMustBeSTA);
+                throw new ThreadStateException(SR.ThreadMustBeSTA);
             }
 
             ArgumentNullException.ThrowIfNull(data);
@@ -56,8 +54,8 @@ namespace System.Windows.Forms
                 throw new ArgumentOutOfRangeException(nameof(retryDelay), retryDelay, string.Format(SR.InvalidLowBoundArgumentEx, nameof(retryDelay), retryDelay, 0));
             }
 
-            DataObject dataObject = null;
-            if (!(data is IComDataObject))
+            DataObject? dataObject = null;
+            if (data is not IComDataObject)
             {
                 dataObject = new DataObject(data);
             }
@@ -112,7 +110,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the data that is currently on the system <see cref='Clipboard'/>.
         /// </summary>
-        public static IDataObject GetDataObject()
+        public static IDataObject? GetDataObject()
         {
             if (Application.OleRequired() != ApartmentState.STA)
             {
@@ -138,9 +136,9 @@ namespace System.Windows.Forms
         /// <remarks>
         ///  Private method to help accessing clipBoard for know retries before failing.
         /// </remarks>
-        private static IDataObject GetDataObject(int retryTimes, int retryDelay)
+        private static IDataObject? GetDataObject(int retryTimes, int retryDelay)
         {
-            IComDataObject dataObject = null;
+            IComDataObject? dataObject = null;
             HRESULT hr;
             int retry = retryTimes;
             do
@@ -174,12 +172,12 @@ namespace System.Windows.Forms
 
         public static void Clear()
         {
-            Clipboard.SetDataObject(new DataObject());
+            SetDataObject(new DataObject());
         }
 
         public static bool ContainsAudio()
         {
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.WaveAudio, false);
@@ -188,14 +186,14 @@ namespace System.Windows.Forms
             return false;
         }
 
-        public static bool ContainsData(string format)
+        public static bool ContainsData(string? format)
         {
             if (string.IsNullOrWhiteSpace(format))
             {
                 return false;
             }
 
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(format, false);
@@ -206,7 +204,7 @@ namespace System.Windows.Forms
 
         public static bool ContainsFileDropList()
         {
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.FileDrop, true);
@@ -217,7 +215,7 @@ namespace System.Windows.Forms
 
         public static bool ContainsImage()
         {
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(DataFormats.Bitmap, true);
@@ -232,7 +230,7 @@ namespace System.Windows.Forms
         {
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 return dataObject.GetDataPresent(ConvertToDataFormats(format), false);
@@ -241,9 +239,9 @@ namespace System.Windows.Forms
             return false;
         }
 
-        public static Stream GetAudioStream()
+        public static Stream? GetAudioStream()
         {
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 return dataObject.GetData(DataFormats.WaveAudio, false) as Stream;
@@ -252,14 +250,14 @@ namespace System.Windows.Forms
             return null;
         }
 
-        public static object GetData(string format)
+        public static object? GetData(string format)
         {
             if (string.IsNullOrWhiteSpace(format))
             {
                 return null;
             }
 
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 return dataObject.GetData(format);
@@ -270,7 +268,7 @@ namespace System.Windows.Forms
 
         public static StringCollection GetFileDropList()
         {
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             StringCollection retVal = new StringCollection();
 
             if (dataObject is not null)
@@ -284,9 +282,9 @@ namespace System.Windows.Forms
             return retVal;
         }
 
-        public static Image GetImage()
+        public static Image? GetImage()
         {
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 return dataObject.GetData(DataFormats.Bitmap, true) as Image;
@@ -301,7 +299,7 @@ namespace System.Windows.Forms
         {
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
-            IDataObject dataObject = Clipboard.GetDataObject();
+            IDataObject? dataObject = GetDataObject();
             if (dataObject is not null)
             {
                 if (dataObject.GetData(ConvertToDataFormats(format), false) is string text)
@@ -326,7 +324,7 @@ namespace System.Windows.Forms
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.WaveAudio, false, audioStream);
-            Clipboard.SetDataObject(dataObject, true);
+            SetDataObject(dataObject, true);
         }
 
         public static void SetData(string format, object data)
@@ -340,7 +338,7 @@ namespace System.Windows.Forms
             // Note: We delegate argument checking to IDataObject.SetData, if it wants to do so.
             IDataObject dataObject = new DataObject();
             dataObject.SetData(format, data);
-            Clipboard.SetDataObject(dataObject, true);
+            SetDataObject(dataObject, true);
         }
 
         public static void SetFileDropList(StringCollection filePaths)
@@ -353,11 +351,11 @@ namespace System.Windows.Forms
             }
 
             // Validate the paths to make sure they don't contain invalid characters
-            foreach (string path in filePaths)
+            foreach (string? path in filePaths)
             {
                 try
                 {
-                    Path.GetFullPath(path);
+                    Path.GetFullPath(path!);
                 }
                 catch (Exception e) when (!ClientUtils.IsCriticalException(e))
                 {
@@ -371,7 +369,7 @@ namespace System.Windows.Forms
                 string[] strings = new string[filePaths.Count];
                 filePaths.CopyTo(strings, 0);
                 dataObject.SetData(DataFormats.FileDrop, true, strings);
-                Clipboard.SetDataObject(dataObject, true);
+                SetDataObject(dataObject, true);
             }
         }
 
@@ -381,7 +379,7 @@ namespace System.Windows.Forms
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(DataFormats.Bitmap, true, image);
-            Clipboard.SetDataObject(dataObject, true);
+            SetDataObject(dataObject, true);
         }
 
         public static void SetText(string text) => SetText(text, TextDataFormat.UnicodeText);
@@ -393,7 +391,7 @@ namespace System.Windows.Forms
 
             IDataObject dataObject = new DataObject();
             dataObject.SetData(ConvertToDataFormats(format), false, text);
-            Clipboard.SetDataObject(dataObject, true);
+            SetDataObject(dataObject, true);
         }
 
         private static string ConvertToDataFormats(TextDataFormat format)

@@ -10,6 +10,6 @@ internal static partial class Interop
     internal static partial class Ole32
     {
         [DllImport(Libraries.Ole32, ExactSpelling = true)]
-        public static extern HRESULT OleSetClipboard(IDataObject pDataObj);
+        public static extern HRESULT OleSetClipboard(IDataObject? pDataObj);
     }
 }
