@@ -86,7 +86,7 @@ override System.Windows.Forms.ColumnHeader.ToString() -> string!
 ~override System.Windows.Forms.ColumnHeaderConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
 ~override System.Windows.Forms.ComboBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ComboBox.BackgroundImage.set -> void
-~override System.Windows.Forms.ComboBox.ChildAccessibleObject.Name.get -> string
+override System.Windows.Forms.ComboBox.ChildAccessibleObject.Name.get -> string?
 ~override System.Windows.Forms.ComboBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ComboBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.ComboBox.OnBackColorChanged(System.EventArgs e) -> void
@@ -1631,7 +1631,7 @@ System.Windows.Forms.ColumnReorderedEventArgs.ColumnReorderedEventArgs(int oldDi
 System.Windows.Forms.ColumnReorderedEventArgs.Header.get -> System.Windows.Forms.ColumnHeader?
 ~System.Windows.Forms.ComboBox.AutoCompleteCustomSource.get -> System.Windows.Forms.AutoCompleteStringCollection
 ~System.Windows.Forms.ComboBox.AutoCompleteCustomSource.set -> void
-~System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox owner, System.IntPtr handle) -> void
+System.Windows.Forms.ComboBox.ChildAccessibleObject.ChildAccessibleObject(System.Windows.Forms.ComboBox! owner, System.IntPtr handle) -> void
 ~System.Windows.Forms.ComboBox.DataSource.get -> object
 ~System.Windows.Forms.ComboBox.DataSource.set -> void
 ~System.Windows.Forms.ComboBox.FindString(string s) -> int

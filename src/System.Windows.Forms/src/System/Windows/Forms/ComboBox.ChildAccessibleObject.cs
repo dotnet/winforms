@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 
 namespace System.Windows.Forms
@@ -16,17 +14,17 @@ namespace System.Windows.Forms
 
             public ChildAccessibleObject(ComboBox owner, IntPtr handle)
             {
-                Debug.Assert(owner?.IsHandleCreated is true, "ComboBox's handle hasn't been created");
+                _owner = owner.OrThrowIfNull();
 
-                _owner = owner;
+                Debug.Assert(owner.IsHandleCreated, "ComboBox's handle hasn't been created");
 
-                if (owner?.IsHandleCreated is true)
+                if (owner.IsHandleCreated)
                 {
                     UseStdAccessibleObjects(handle);
                 }
             }
 
-            public override string Name
+            public override string? Name
             {
                 get
                 {
