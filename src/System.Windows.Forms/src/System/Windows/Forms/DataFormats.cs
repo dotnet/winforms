@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -139,7 +138,7 @@ namespace System.Windows.Forms
         ///  objects.
         ///  This <see langword="static"/> field is read-only.
         /// </summary>
-        public static readonly string StringFormat = typeof(string).FullName;
+        public static readonly string StringFormat = typeof(string).FullName!;
 
         /// <summary>
         ///  Specifies a format that encapsulates any type of WinForms object.
@@ -147,7 +146,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static readonly string Serializable = Application.WindowsFormsVersion + "PersistentObject";
 
-        private static Format[] s_formatList;
+        private static Format[]? s_formatList;
         private static int s_formatCount;
 
         private static readonly object s_internalSyncObject = new object();
@@ -221,7 +220,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                string name = User32.GetClipboardFormatNameW(clampedId);
+                string? name = User32.GetClipboardFormatNameW(clampedId);
                 if (name is null)
                 {
                     // This can happen if windows adds a standard format that we don't know about,
@@ -238,6 +237,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Ensures that we have enough room in our format list
         /// </summary>
+        [MemberNotNull(nameof(s_formatList))]
         private static void EnsureFormatSpace(int size)
         {
             if (s_formatList is null || s_formatList.Length <= s_formatCount + size)
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
                 Format[] newList = new Format[newSize];
                 for (int n = 0; n < s_formatCount; n++)
                 {
-                    newList[n] = s_formatList[n];
+                    newList[n] = s_formatList![n];
                 }
 
                 s_formatList = newList;
@@ -258,6 +258,7 @@ namespace System.Windows.Forms
         ///  Ensures that the Win32 predefined formats are setup in our format list.
         ///  This is called anytime we need to search the list
         /// </summary>
+        [MemberNotNull(nameof(s_formatList))]
         private static void EnsurePredefined()
         {
             if (s_formatCount == 0)
@@ -284,6 +285,10 @@ namespace System.Windows.Forms
                 };
 
                 s_formatCount = s_formatList.Length;
+            }
+            else if (s_formatList is null)
+            {
+                s_formatList = Array.Empty<Format>();
             }
         }
     }
