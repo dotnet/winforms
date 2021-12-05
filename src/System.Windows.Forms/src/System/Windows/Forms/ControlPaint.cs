@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Buffers;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -22,13 +20,13 @@ namespace System.Windows.Forms
     public static partial class ControlPaint
     {
         [ThreadStatic]
-        private static Bitmap t_checkImage;         // image used to render checkmarks
+        private static Bitmap? t_checkImage;         // image used to render checkmarks
 
         [ThreadStatic]
-        private static Pen t_focusPen;              // pen used to draw a focus rectangle
+        private static Pen? t_focusPen;              // pen used to draw a focus rectangle
 
         [ThreadStatic]
-        private static Pen t_focusPenInvert;        // pen used to draw a focus rectangle
+        private static Pen? t_focusPenInvert;        // pen used to draw a focus rectangle
 
         [ThreadStatic]
         private static Color t_focusPenColor;       // the last background color the focus pen was created with
@@ -36,29 +34,29 @@ namespace System.Windows.Forms
         [ThreadStatic]
         private static bool t_hcFocusPen;           // cached focus pen intended for high contrast mode
 
-        private static Pen s_grabPenPrimary;        // pen used for primary grab handles
-        private static Pen s_grabPenSecondary;      // pen used for secondary grab handles
-        private static Brush s_grabBrushPrimary;    // brush used for primary grab handles
-        private static Brush s_grabBrushSecondary;  // brush used for secondary grab handles
+        private static Pen? s_grabPenPrimary;        // pen used for primary grab handles
+        private static Pen? s_grabPenSecondary;      // pen used for secondary grab handles
+        private static Brush? s_grabBrushPrimary;    // brush used for primary grab handles
+        private static Brush? s_grabBrushSecondary;  // brush used for secondary grab handles
 
         [ThreadStatic]
-        private static Brush t_frameBrushActive;    // brush used for the active selection frame
+        private static Brush? t_frameBrushActive;    // brush used for the active selection frame
 
         private static Color s_frameColorActive;    // color of active frame brush
 
         [ThreadStatic]
-        private static Brush t_frameBrushSelected;  // brush used for the inactive selection frame
+        private static Brush? t_frameBrushSelected;  // brush used for the inactive selection frame
 
         private static Color s_frameColorSelected;  // color of selected frame brush
 
         [ThreadStatic]
-        private static Brush t_gridBrush;           // brush used to draw a grid
+        private static Brush? t_gridBrush;           // brush used to draw a grid
 
         private static Size s_gridSize;             // the dimensions of the grid dots
         private static bool s_gridInvert;           // true if the grid color is inverted
 
         [ThreadStatic]
-        private static ImageAttributes t_disabledImageAttr; // ImageAttributes used to render disabled images
+        private static ImageAttributes? t_disabledImageAttr; // ImageAttributes used to render disabled images
 
         private const ContentAlignment AnyRight
             = ContentAlignment.TopRight | ContentAlignment.MiddleRight | ContentAlignment.BottomRight;
@@ -160,6 +158,8 @@ namespace System.Windows.Forms
         /// </summary>
         public unsafe static IntPtr CreateHBitmap16Bit(Bitmap bitmap, Color background)
         {
+            ArgumentNullException.ThrowIfNull(bitmap);
+
             Gdi32.HBITMAP hbitmap;
             Size size = bitmap.Size;
 
@@ -308,15 +308,17 @@ namespace System.Windows.Forms
             }
         }
 
-    internal static Color Darker(Color color, float offset)
-        => Color.FromArgb(color.A, (int)(color.R* offset), (int) (color.G* offset), (int) (color.B* offset));
+        internal static Color Darker(Color color, float offset)
+            => Color.FromArgb(color.A, (int)(color.R* offset), (int) (color.G* offset), (int) (color.B* offset));
 
-    /// <summary>
-    ///  Creates a Win32 HBITMAP out of the image. You are responsible for deleting the HBITMAP. If the image uses
-    ///  transparency, the background will be filled with the specified color.
-    /// </summary>
-    public static IntPtr CreateHBitmapColorMask(Bitmap bitmap, IntPtr monochromeMask)
+        /// <summary>
+        ///  Creates a Win32 HBITMAP out of the image. You are responsible for deleting the HBITMAP. If the image uses
+        ///  transparency, the background will be filled with the specified color.
+        /// </summary>
+        public static IntPtr CreateHBitmapColorMask(Bitmap bitmap, IntPtr monochromeMask)
         {
+            ArgumentNullException.ThrowIfNull(bitmap);
+
             Size size = bitmap.Size;
 
             Gdi32.HBITMAP colorMask = (Gdi32.HBITMAP)bitmap.GetHbitmap();
@@ -755,8 +757,10 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Graphics graphics = deviceContext.TryGetGraphics(create: true);
-                            using var pen = topColor.CreateStaticPen(
+                            Graphics? graphics = deviceContext.TryGetGraphics(create: true);
+                            if (graphics is not null)
+                            {
+                                using var pen = topColor.CreateStaticPen(
                                 topStyle switch
                                 {
                                     ButtonBorderStyle.Dotted => DashStyle.Dot,
@@ -764,9 +768,10 @@ namespace System.Windows.Forms
                                     _ => DashStyle.Solid,
                                 });
 
-                            for (int i = 0; i < topWidth; i++)
-                            {
-                                graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
+                                for (int i = 0; i < topWidth; i++)
+                                {
+                                    graphics.DrawLine(pen, topLineLefts[i], bounds.Y + i, topLineRights[i], bounds.Y + i);
+                                }
                             }
                         }
 
@@ -814,18 +819,21 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Graphics graphics = deviceContext.TryGetGraphics(create: true);
-                            using var pen = leftColor.CreateStaticPen(
-                                leftStyle switch
-                                {
-                                    ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                    ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                    _ => DashStyle.Solid,
-                                });
-
-                            for (int i = 0; i < leftWidth; i++)
+                            Graphics? graphics = deviceContext.TryGetGraphics(create: true);
+                            if (graphics is not null)
                             {
-                                graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
+                                using var pen = leftColor.CreateStaticPen(
+                                   leftStyle switch
+                                   {
+                                       ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                       ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                       _ => DashStyle.Solid,
+                                   });
+
+                                for (int i = 0; i < leftWidth; i++)
+                                {
+                                    graphics.DrawLine(pen, bounds.X + i, leftLineTops[i], bounds.X + i, leftLineBottoms[i]);
+                                }
                             }
                         }
 
@@ -878,23 +886,26 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Graphics graphics = deviceContext.TryGetGraphics(create: true);
-                            using var pen = bottomColor.CreateStaticPen(
-                                bottomStyle switch
-                                {
-                                    ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                    ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                    _ => DashStyle.Solid,
-                                });
-
-                            for (int i = 0; i < bottomWidth; i++)
+                            Graphics? graphics = deviceContext.TryGetGraphics(create: true);
+                            if (graphics is not null)
                             {
-                                graphics.DrawLine(
-                                    pen,
-                                    bottomLineLefts[i],
-                                    bounds.Y + bounds.Height - 1 - i,
-                                    bottomLineRights[i],
-                                    bounds.Y + bounds.Height - 1 - i);
+                                using var pen = bottomColor.CreateStaticPen(
+                                   bottomStyle switch
+                                   {
+                                       ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                       ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                       _ => DashStyle.Solid,
+                                   });
+
+                                for (int i = 0; i < bottomWidth; i++)
+                                {
+                                    graphics.DrawLine(
+                                        pen,
+                                        bottomLineLefts[i],
+                                        bounds.Y + bounds.Height - 1 - i,
+                                        bottomLineRights[i],
+                                        bounds.Y + bounds.Height - 1 - i);
+                                }
                             }
                         }
 
@@ -952,23 +963,26 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Graphics graphics = deviceContext.TryGetGraphics(create: true);
-                            using var pen = rightColor.CreateStaticPen(
-                                rightStyle switch
-                                {
-                                    ButtonBorderStyle.Dotted => DashStyle.Dot,
-                                    ButtonBorderStyle.Dashed => DashStyle.Dash,
-                                    _ => DashStyle.Solid,
-                                });
-
-                            for (int i = 0; i < rightWidth; i++)
+                            Graphics? graphics = deviceContext.TryGetGraphics(create: true);
+                            if (graphics is not null)
                             {
-                                graphics.DrawLine(
-                                    pen,
-                                    bounds.X + bounds.Width - 1 - i,
-                                    rightLineTops[i],
-                                    bounds.X + bounds.Width - 1 - i,
-                                    rightLineBottoms[i]);
+                                using var pen = rightColor.CreateStaticPen(
+                                                                rightStyle switch
+                                                                {
+                                                                    ButtonBorderStyle.Dotted => DashStyle.Dot,
+                                                                    ButtonBorderStyle.Dashed => DashStyle.Dash,
+                                                                    _ => DashStyle.Solid,
+                                                                });
+
+                                for (int i = 0; i < rightWidth; i++)
+                                {
+                                    graphics.DrawLine(
+                                        pen,
+                                        bounds.X + bounds.Width - 1 - i,
+                                        rightLineTops[i],
+                                        bounds.X + bounds.Width - 1 - i,
+                                        rightLineBottoms[i]);
+                                }
                             }
                         }
 
@@ -1180,7 +1194,7 @@ namespace System.Windows.Forms
                 // GDI+ right and bottom DrawRectangle border are 1 greater than GDI
                 bounds = new Rectangle(bounds.X, bounds.Y, bounds.Width - 1, bounds.Height - 1);
 
-                Graphics graphics = context.TryGetGraphics(create: true);
+                Graphics? graphics = context.TryGetGraphics(create: true);
                 if (graphics is not null)
                 {
                     if (style == ButtonBorderStyle.Solid)
@@ -2263,7 +2277,7 @@ namespace System.Windows.Forms
                 {
                     t_focusPen.Dispose();
                     t_focusPen = null;
-                    t_focusPenInvert.Dispose();
+                    t_focusPenInvert?.Dispose();
                     t_focusPenInvert = null;
                 }
 
@@ -2327,7 +2341,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            return odds ? t_focusPen : t_focusPenInvert;
+            return odds ? t_focusPen : t_focusPenInvert!;
         }
 
         /// <summary>
