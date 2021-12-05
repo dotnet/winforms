@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -14,7 +13,7 @@ namespace System.Windows.Forms
         private class DataGridViewComboBoxCellRenderer
         {
             [ThreadStatic]
-            private static VisualStyleRenderer t_visualStyleRenderer;
+            private static VisualStyleRenderer? t_visualStyleRenderer;
             private static readonly VisualStyleElement s_comboBoxBorder = VisualStyleElement.ComboBox.Border.Normal;
             private static readonly VisualStyleElement s_comboBoxDropDownButtonRight = VisualStyleElement.ComboBox.DropDownButtonRight.Normal;
             private static readonly VisualStyleElement s_comboBoxDropDownButtonLeft = VisualStyleElement.ComboBox.DropDownButtonLeft.Normal;
@@ -66,25 +65,11 @@ namespace System.Windows.Forms
             {
                 if (rightToLeft)
                 {
-                    if (t_visualStyleRenderer is null)
-                    {
-                        t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxDropDownButtonLeft.ClassName, s_comboBoxDropDownButtonLeft.Part, (int)state);
-                    }
-                    else
-                    {
-                        t_visualStyleRenderer.SetParameters(s_comboBoxDropDownButtonLeft.ClassName, s_comboBoxDropDownButtonLeft.Part, (int)state);
-                    }
+                    InitializeRenderer(s_comboBoxDropDownButtonLeft, (int)state);
                 }
                 else
                 {
-                    if (t_visualStyleRenderer is null)
-                    {
-                        t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxDropDownButtonRight.ClassName, s_comboBoxDropDownButtonRight.Part, (int)state);
-                    }
-                    else
-                    {
-                        t_visualStyleRenderer.SetParameters(s_comboBoxDropDownButtonRight.ClassName, s_comboBoxDropDownButtonRight.Part, (int)state);
-                    }
+                    InitializeRenderer(s_comboBoxDropDownButtonRight, (int)state);
                 }
 
                 t_visualStyleRenderer.DrawBackground(g, bounds);
@@ -92,16 +77,22 @@ namespace System.Windows.Forms
 
             public static void DrawReadOnlyButton(Graphics g, Rectangle bounds, ComboBoxState state)
             {
+                InitializeRenderer(s_comboBoxReadOnlyButton, (int)state);
+
+                t_visualStyleRenderer.DrawBackground(g, bounds);
+            }
+
+            [MemberNotNull(nameof(t_visualStyleRenderer))]
+            private static void InitializeRenderer(VisualStyleElement visualStyleElement, int state)
+            {
                 if (t_visualStyleRenderer is null)
                 {
-                    t_visualStyleRenderer = new VisualStyleRenderer(s_comboBoxReadOnlyButton.ClassName, s_comboBoxReadOnlyButton.Part, (int)state);
+                    t_visualStyleRenderer = new VisualStyleRenderer(visualStyleElement.ClassName, visualStyleElement.Part, state);
                 }
                 else
                 {
-                    t_visualStyleRenderer.SetParameters(s_comboBoxReadOnlyButton.ClassName, s_comboBoxReadOnlyButton.Part, (int)state);
+                    t_visualStyleRenderer.SetParameters(visualStyleElement.ClassName, visualStyleElement.Part, state);
                 }
-
-                t_visualStyleRenderer.DrawBackground(g, bounds);
             }
         }
     }
