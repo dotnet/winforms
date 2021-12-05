@@ -1229,12 +1229,12 @@ static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.R
 ~static System.Windows.Forms.Clipboard.SetImage(System.Drawing.Image image) -> void
 ~static System.Windows.Forms.Clipboard.SetText(string text) -> void
 ~static System.Windows.Forms.Clipboard.SetText(string text, System.Windows.Forms.TextDataFormat format) -> void
-~static System.Windows.Forms.ComboBoxRenderer.DrawDropDownButton(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
-~static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string comboBoxText, System.Drawing.Font font, System.Drawing.Rectangle textBounds, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
-~static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string comboBoxText, System.Drawing.Font font, System.Drawing.Rectangle textBounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
-~static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string comboBoxText, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
-~static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string comboBoxText, System.Drawing.Font font, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
-~static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
+static System.Windows.Forms.ComboBoxRenderer.DrawDropDownButton(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
+static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? comboBoxText, System.Drawing.Font? font, System.Drawing.Rectangle textBounds, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
+static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? comboBoxText, System.Drawing.Font? font, System.Drawing.Rectangle textBounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
+static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? comboBoxText, System.Drawing.Font? font, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
+static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? comboBoxText, System.Drawing.Font? font, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
+static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
 ~static System.Windows.Forms.Control.DefaultFont.get -> System.Drawing.Font
 ~static System.Windows.Forms.Control.FromChildHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(System.IntPtr handle) -> System.Windows.Forms.Control
