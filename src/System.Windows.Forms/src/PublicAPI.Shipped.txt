@@ -1410,20 +1410,20 @@ static System.Windows.Forms.ScrollBarRenderer.GetThumbGripSize(System.Drawing.Gr
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
 ~static System.Windows.Forms.ToolStripRenderer.CreateDisabledImage(System.Drawing.Image normalImage) -> System.Drawing.Image
-~static System.Windows.Forms.TrackBarRenderer.DrawBottomPointingThumb(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawHorizontalThumb(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawHorizontalTicks(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, int numTicks, System.Windows.Forms.VisualStyles.EdgeStyle edgeStyle) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawHorizontalTrack(System.Drawing.Graphics g, System.Drawing.Rectangle bounds) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawLeftPointingThumb(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawRightPointingThumb(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawTopPointingThumb(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawVerticalThumb(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawVerticalTicks(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, int numTicks, System.Windows.Forms.VisualStyles.EdgeStyle edgeStyle) -> void
-~static System.Windows.Forms.TrackBarRenderer.DrawVerticalTrack(System.Drawing.Graphics g, System.Drawing.Rectangle bounds) -> void
-~static System.Windows.Forms.TrackBarRenderer.GetBottomPointingThumbSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
-~static System.Windows.Forms.TrackBarRenderer.GetLeftPointingThumbSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
-~static System.Windows.Forms.TrackBarRenderer.GetRightPointingThumbSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
-~static System.Windows.Forms.TrackBarRenderer.GetTopPointingThumbSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
+static System.Windows.Forms.TrackBarRenderer.DrawBottomPointingThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawHorizontalThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawHorizontalTicks(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, int numTicks, System.Windows.Forms.VisualStyles.EdgeStyle edgeStyle) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawHorizontalTrack(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawLeftPointingThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawRightPointingThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawTopPointingThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawVerticalThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawVerticalTicks(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, int numTicks, System.Windows.Forms.VisualStyles.EdgeStyle edgeStyle) -> void
+static System.Windows.Forms.TrackBarRenderer.DrawVerticalTrack(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.TrackBarRenderer.GetBottomPointingThumbSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
+static System.Windows.Forms.TrackBarRenderer.GetLeftPointingThumbSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
+static System.Windows.Forms.TrackBarRenderer.GetRightPointingThumbSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
+static System.Windows.Forms.TrackBarRenderer.GetTopPointingThumbSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> System.Drawing.Size
 ~static System.Windows.Forms.TreeNode.FromHandle(System.Windows.Forms.TreeView tree, System.IntPtr handle) -> System.Windows.Forms.TreeNode
 ~System.Drawing.Design.IPropertyValueUIService.AddPropertyValueUIHandler(System.Drawing.Design.PropertyValueUIHandler newHandler) -> void
 ~System.Drawing.Design.IPropertyValueUIService.GetPropertyUIValueItems(System.ComponentModel.ITypeDescriptorContext context, System.ComponentModel.PropertyDescriptor propDesc) -> System.Drawing.Design.PropertyValueUIItem[]
