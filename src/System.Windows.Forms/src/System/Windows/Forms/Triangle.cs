@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     using System;
@@ -18,8 +16,15 @@ namespace System.Windows.Forms
         private const double TRI_HEIGHT_RATIO = 2.5;
         private const double TRI_WIDTH_RATIO = 0.8;
 
-        public static void Paint(Graphics g, Rectangle bounds, TriangleDirection dir, Brush backBr,
-                                 Pen backPen1, Pen backPen2, Pen backPen3, bool opaque)
+        public static void Paint(
+            Graphics g,
+            Rectangle bounds,
+            TriangleDirection dir,
+            Brush backBr,
+            Pen backPen1,
+            Pen backPen2,
+            Pen backPen3,
+            bool opaque)
         {
             // build an equilateral triangle centered on the midpoint of the rect.
             Point[] points = BuildTrianglePoints(dir, bounds);
@@ -34,8 +39,9 @@ namespace System.Windows.Forms
             g.DrawLine(backPen3, points[2], points[0]);
         }
 
-        private static Point[] BuildTrianglePoints(TriangleDirection dir,
-                                                    Rectangle bounds)
+        private static Point[] BuildTrianglePoints(
+            TriangleDirection dir,
+            Rectangle bounds)
         {
             Point[] points = new Point[3];
 
