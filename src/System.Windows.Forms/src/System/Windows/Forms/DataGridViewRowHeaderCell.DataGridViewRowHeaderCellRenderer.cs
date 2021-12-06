@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -13,7 +11,7 @@ namespace System.Windows.Forms
     {
         private class DataGridViewRowHeaderCellRenderer
         {
-            private static VisualStyleRenderer visualStyleRenderer;
+            private static VisualStyleRenderer? s_visualStyleRenderer;
 
             private DataGridViewRowHeaderCellRenderer()
             {
@@ -23,12 +21,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (visualStyleRenderer is null)
+                    if (s_visualStyleRenderer is null)
                     {
-                        visualStyleRenderer = new VisualStyleRenderer(s_headerElement);
+                        s_visualStyleRenderer = new VisualStyleRenderer(s_headerElement);
                     }
 
-                    return visualStyleRenderer;
+                    return s_visualStyleRenderer;
                 }
             }
 
