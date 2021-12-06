@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Runtime.InteropServices;
@@ -27,7 +25,7 @@ namespace System.Windows.Forms
         private static IntPtr s_processWinStation = IntPtr.Zero;
         private static bool s_isUserInteractive;
 
-        private static PowerStatus s_powerStatus;
+        private static PowerStatus? s_powerStatus;
 
         /// <summary>
         ///  Gets a value indicating whether the user has enabled full window drag.
