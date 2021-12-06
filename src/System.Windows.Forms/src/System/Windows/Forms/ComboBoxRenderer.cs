@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -17,7 +16,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
         private static readonly VisualStyleElement ComboBoxElement = VisualStyleElement.ComboBox.DropDownButton.Normal;
         private static readonly VisualStyleElement TextBoxElement = VisualStyleElement.TextBox.TextEdit.Normal;
 
@@ -29,15 +28,16 @@ namespace System.Windows.Forms
 
         private static void DrawBackground(Graphics g, Rectangle bounds, ComboBoxState state)
         {
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer!.DrawBackground(g, bounds);
+
             //for disabled comboboxes, comctl does not use the window backcolor, so
             // we don't refill here in that case.
             if (state != ComboBoxState.Disabled)
             {
-                Color windowColor = visualStyleRenderer.GetColor(ColorProperty.FillColor);
+                Color windowColor = t_visualStyleRenderer.GetColor(ColorProperty.FillColor);
                 if (windowColor != SystemColors.Window)
                 {
-                    Rectangle fillRect = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+                    Rectangle fillRect = t_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
                     fillRect.Inflate(-2, -2);
                     //then we need to re-fill the background.
                     g.FillRectangle(SystemBrushes.Window, fillRect);
@@ -50,14 +50,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void DrawTextBox(Graphics g, Rectangle bounds, ComboBoxState state)
         {
-            if (visualStyleRenderer is null)
-            {
-                visualStyleRenderer = new VisualStyleRenderer(TextBoxElement.ClassName, TextBoxElement.Part, (int)state);
-            }
-            else
-            {
-                visualStyleRenderer.SetParameters(TextBoxElement.ClassName, TextBoxElement.Part, (int)state);
-            }
+            InitializeRenderer(TextBoxElement, (int)state);
 
             DrawBackground(g, bounds, state);
         }
@@ -65,7 +58,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders the textbox part of a ComboBox control.
         /// </summary>
-        public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, ComboBoxState state)
+        public static void DrawTextBox(Graphics g, Rectangle bounds, string? comboBoxText, Font? font, ComboBoxState state)
         {
             DrawTextBox(g, bounds, comboBoxText, font, TextFormatFlags.TextBoxControl, state);
         }
@@ -73,7 +66,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders the textbox part of a ComboBox control.
         /// </summary>
-        public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, Rectangle textBounds, ComboBoxState state)
+        public static void DrawTextBox(Graphics g, Rectangle bounds, string? comboBoxText, Font? font, Rectangle textBounds, ComboBoxState state)
         {
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, TextFormatFlags.TextBoxControl, state);
         }
@@ -81,18 +74,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders the textbox part of a ComboBox control.
         /// </summary>
-        public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, TextFormatFlags flags, ComboBoxState state)
+        public static void DrawTextBox(Graphics g, Rectangle bounds, string? comboBoxText, Font? font, TextFormatFlags flags, ComboBoxState state)
         {
-            if (visualStyleRenderer is null)
-            {
-                visualStyleRenderer = new VisualStyleRenderer(TextBoxElement.ClassName, TextBoxElement.Part, (int)state);
-            }
-            else
-            {
-                visualStyleRenderer.SetParameters(TextBoxElement.ClassName, TextBoxElement.Part, (int)state);
-            }
+            InitializeRenderer(TextBoxElement, (int)state);
 
-            Rectangle textBounds = visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
+            Rectangle textBounds = t_visualStyleRenderer.GetBackgroundContentRectangle(g, bounds);
             textBounds.Inflate(-2, -2);
             DrawTextBox(g, bounds, comboBoxText, font, textBounds, flags, state);
         }
@@ -100,19 +86,12 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders the textbox part of a ComboBox control.
         /// </summary>
-        public static void DrawTextBox(Graphics g, Rectangle bounds, string comboBoxText, Font font, Rectangle textBounds, TextFormatFlags flags, ComboBoxState state)
+        public static void DrawTextBox(Graphics g, Rectangle bounds, string? comboBoxText, Font? font, Rectangle textBounds, TextFormatFlags flags, ComboBoxState state)
         {
-            if (visualStyleRenderer is null)
-            {
-                visualStyleRenderer = new VisualStyleRenderer(TextBoxElement.ClassName, TextBoxElement.Part, (int)state);
-            }
-            else
-            {
-                visualStyleRenderer.SetParameters(TextBoxElement.ClassName, TextBoxElement.Part, (int)state);
-            }
+            InitializeRenderer(TextBoxElement, (int)state);
 
             DrawBackground(g, bounds, state);
-            Color textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+            Color textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             TextRenderer.DrawText(g, comboBoxText, font, textBounds, textColor, flags);
         }
 
@@ -134,16 +113,22 @@ namespace System.Windows.Forms
         /// <param name="handle"> handle of the control</param>
         internal static void DrawDropDownButtonForHandle(Gdi32.HDC hdc, Rectangle bounds, ComboBoxState state, IntPtr handle)
         {
-            if (visualStyleRenderer is null)
+            InitializeRenderer(ComboBoxElement, (int)state);
+
+            t_visualStyleRenderer.DrawBackground(hdc, bounds, handle);
+        }
+
+        [MemberNotNull(nameof(t_visualStyleRenderer))]
+        private static void InitializeRenderer(VisualStyleElement visualStyleElement, int state)
+        {
+            if (t_visualStyleRenderer is null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(ComboBoxElement.ClassName, ComboBoxElement.Part, (int)state);
+                t_visualStyleRenderer = new VisualStyleRenderer(visualStyleElement.ClassName, visualStyleElement.Part, state);
             }
             else
             {
-                visualStyleRenderer.SetParameters(ComboBoxElement.ClassName, ComboBoxElement.Part, (int)state);
+                t_visualStyleRenderer.SetParameters(visualStyleElement.ClassName, visualStyleElement.Part, state);
             }
-
-            visualStyleRenderer.DrawBackground(hdc, bounds, handle);
         }
     }
 }
