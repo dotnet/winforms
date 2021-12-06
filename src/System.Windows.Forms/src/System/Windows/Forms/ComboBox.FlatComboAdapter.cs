@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Windows.Forms.Layout;
 using static Interop;
@@ -195,7 +193,7 @@ namespace System.Windows.Forms
             /// </summary>
             public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
             {
-                if (comboBox is not null)
+                if (comboBox is null)
                 {
                     return;
                 }
