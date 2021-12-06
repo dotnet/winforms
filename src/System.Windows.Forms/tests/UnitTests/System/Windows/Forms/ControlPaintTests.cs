@@ -81,9 +81,9 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ControlPaint_CreateHBitmap16Bit_NullBitmap_ThrowsNullReferenceException()
+        public void ControlPaint_CreateHBitmap16Bit_NullBitmap_ThrowsArgumentNullException()
         {
-            Assert.Throws<NullReferenceException>(() => ControlPaint.CreateHBitmap16Bit(null, Color.Red));
+            Assert.Throws<ArgumentNullException>(() => ControlPaint.CreateHBitmap16Bit(null, Color.Red));
         }
 
         public static IEnumerable<object[]> CreateHBitmapColorMask_TestData()
@@ -192,9 +192,9 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ControlPaint_CreateHBitmapColorMask_NullBitmap_ThrowsNullReferenceException()
+        public void ControlPaint_CreateHBitmapColorMask_NullBitmap_ThrowsArgumentNullException()
         {
-            Assert.Throws<NullReferenceException>(() => ControlPaint.CreateHBitmapColorMask(null, IntPtr.Zero));
+            Assert.Throws<ArgumentNullException>(() => ControlPaint.CreateHBitmapColorMask(null, IntPtr.Zero));
         }
 
         public static IEnumerable<object[]> CreateHBitmapTransparencyMask_TestData()

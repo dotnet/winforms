@@ -1239,48 +1239,48 @@ static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics
 ~static System.Windows.Forms.Control.FromChildHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.FromHandle(System.IntPtr handle) -> System.Windows.Forms.Control
 ~static System.Windows.Forms.Control.IsMnemonic(char charCode, string text) -> bool
-~static System.Windows.Forms.ControlPaint.CreateHBitmap16Bit(System.Drawing.Bitmap bitmap, System.Drawing.Color background) -> System.IntPtr
-~static System.Windows.Forms.ControlPaint.CreateHBitmapColorMask(System.Drawing.Bitmap bitmap, System.IntPtr monochromeMask) -> System.IntPtr
-~static System.Windows.Forms.ControlPaint.CreateHBitmapTransparencyMask(System.Drawing.Bitmap bitmap) -> System.IntPtr
-~static System.Windows.Forms.ControlPaint.DrawBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds, System.Drawing.Color color, System.Windows.Forms.ButtonBorderStyle style) -> void
-~static System.Windows.Forms.ControlPaint.DrawBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds, System.Drawing.Color leftColor, int leftWidth, System.Windows.Forms.ButtonBorderStyle leftStyle, System.Drawing.Color topColor, int topWidth, System.Windows.Forms.ButtonBorderStyle topStyle, System.Drawing.Color rightColor, int rightWidth, System.Windows.Forms.ButtonBorderStyle rightStyle, System.Drawing.Color bottomColor, int bottomWidth, System.Windows.Forms.ButtonBorderStyle bottomStyle) -> void
-~static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics graphics, int x, int y, int width, int height) -> void
-~static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.Border3DStyle style) -> void
-~static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.Border3DStyle style, System.Windows.Forms.Border3DSide sides) -> void
-~static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle) -> void
-~static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.Border3DStyle style) -> void
-~static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.Border3DStyle style, System.Windows.Forms.Border3DSide sides) -> void
-~static System.Windows.Forms.ControlPaint.DrawButton(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawButton(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawCaptionButton(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.CaptionButton button, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawCaptionButton(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.CaptionButton button, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawCheckBox(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawCheckBox(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawComboButton(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawComboButton(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawContainerGrabHandle(System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds) -> void
-~static System.Windows.Forms.ControlPaint.DrawFocusRectangle(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle) -> void
-~static System.Windows.Forms.ControlPaint.DrawFocusRectangle(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
-~static System.Windows.Forms.ControlPaint.DrawGrabHandle(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, bool primary, bool enabled) -> void
-~static System.Windows.Forms.ControlPaint.DrawGrid(System.Drawing.Graphics graphics, System.Drawing.Rectangle area, System.Drawing.Size pixelsBetweenDots, System.Drawing.Color backColor) -> void
-~static System.Windows.Forms.ControlPaint.DrawImageDisabled(System.Drawing.Graphics graphics, System.Drawing.Image image, int x, int y, System.Drawing.Color background) -> void
-~static System.Windows.Forms.ControlPaint.DrawLockedFrame(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, bool primary) -> void
-~static System.Windows.Forms.ControlPaint.DrawMenuGlyph(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.MenuGlyph glyph) -> void
-~static System.Windows.Forms.ControlPaint.DrawMenuGlyph(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.MenuGlyph glyph, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
-~static System.Windows.Forms.ControlPaint.DrawMenuGlyph(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.MenuGlyph glyph) -> void
-~static System.Windows.Forms.ControlPaint.DrawMenuGlyph(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.MenuGlyph glyph, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
-~static System.Windows.Forms.ControlPaint.DrawMixedCheckBox(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawMixedCheckBox(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawRadioButton(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawRadioButton(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawScrollButton(System.Drawing.Graphics graphics, int x, int y, int width, int height, System.Windows.Forms.ScrollButton button, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawScrollButton(System.Drawing.Graphics graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ScrollButton button, System.Windows.Forms.ButtonState state) -> void
-~static System.Windows.Forms.ControlPaint.DrawSelectionFrame(System.Drawing.Graphics graphics, bool active, System.Drawing.Rectangle outsideRect, System.Drawing.Rectangle insideRect, System.Drawing.Color backColor) -> void
-~static System.Windows.Forms.ControlPaint.DrawSizeGrip(System.Drawing.Graphics graphics, System.Drawing.Color backColor, int x, int y, int width, int height) -> void
-~static System.Windows.Forms.ControlPaint.DrawSizeGrip(System.Drawing.Graphics graphics, System.Drawing.Color backColor, System.Drawing.Rectangle bounds) -> void
-~static System.Windows.Forms.ControlPaint.DrawStringDisabled(System.Drawing.Graphics graphics, string s, System.Drawing.Font font, System.Drawing.Color color, System.Drawing.RectangleF layoutRectangle, System.Drawing.StringFormat format) -> void
-~static System.Windows.Forms.ControlPaint.DrawStringDisabled(System.Drawing.IDeviceContext dc, string s, System.Drawing.Font font, System.Drawing.Color color, System.Drawing.Rectangle layoutRectangle, System.Windows.Forms.TextFormatFlags format) -> void
-~static System.Windows.Forms.ControlPaint.DrawVisualStyleBorder(System.Drawing.Graphics graphics, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.ControlPaint.CreateHBitmap16Bit(System.Drawing.Bitmap! bitmap, System.Drawing.Color background) -> System.IntPtr
+static System.Windows.Forms.ControlPaint.CreateHBitmapColorMask(System.Drawing.Bitmap! bitmap, System.IntPtr monochromeMask) -> System.IntPtr
+static System.Windows.Forms.ControlPaint.CreateHBitmapTransparencyMask(System.Drawing.Bitmap! bitmap) -> System.IntPtr
+static System.Windows.Forms.ControlPaint.DrawBorder(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, System.Drawing.Color color, System.Windows.Forms.ButtonBorderStyle style) -> void
+static System.Windows.Forms.ControlPaint.DrawBorder(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds, System.Drawing.Color leftColor, int leftWidth, System.Windows.Forms.ButtonBorderStyle leftStyle, System.Drawing.Color topColor, int topWidth, System.Windows.Forms.ButtonBorderStyle topStyle, System.Drawing.Color rightColor, int rightWidth, System.Windows.Forms.ButtonBorderStyle rightStyle, System.Drawing.Color bottomColor, int bottomWidth, System.Windows.Forms.ButtonBorderStyle bottomStyle) -> void
+static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics! graphics, int x, int y, int width, int height) -> void
+static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.Border3DStyle style) -> void
+static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.Border3DStyle style, System.Windows.Forms.Border3DSide sides) -> void
+static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle) -> void
+static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.Border3DStyle style) -> void
+static System.Windows.Forms.ControlPaint.DrawBorder3D(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.Border3DStyle style, System.Windows.Forms.Border3DSide sides) -> void
+static System.Windows.Forms.ControlPaint.DrawButton(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawButton(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawCaptionButton(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.CaptionButton button, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawCaptionButton(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.CaptionButton button, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawCheckBox(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawCheckBox(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawComboButton(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawComboButton(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawContainerGrabHandle(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.ControlPaint.DrawFocusRectangle(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle) -> void
+static System.Windows.Forms.ControlPaint.DrawFocusRectangle(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.ControlPaint.DrawGrabHandle(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, bool primary, bool enabled) -> void
+static System.Windows.Forms.ControlPaint.DrawGrid(System.Drawing.Graphics! graphics, System.Drawing.Rectangle area, System.Drawing.Size pixelsBetweenDots, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.ControlPaint.DrawImageDisabled(System.Drawing.Graphics! graphics, System.Drawing.Image! image, int x, int y, System.Drawing.Color background) -> void
+static System.Windows.Forms.ControlPaint.DrawLockedFrame(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, bool primary) -> void
+static System.Windows.Forms.ControlPaint.DrawMenuGlyph(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.MenuGlyph glyph) -> void
+static System.Windows.Forms.ControlPaint.DrawMenuGlyph(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.MenuGlyph glyph, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.ControlPaint.DrawMenuGlyph(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.MenuGlyph glyph) -> void
+static System.Windows.Forms.ControlPaint.DrawMenuGlyph(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.MenuGlyph glyph, System.Drawing.Color foreColor, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.ControlPaint.DrawMixedCheckBox(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawMixedCheckBox(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawRadioButton(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawRadioButton(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawScrollButton(System.Drawing.Graphics! graphics, int x, int y, int width, int height, System.Windows.Forms.ScrollButton button, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawScrollButton(System.Drawing.Graphics! graphics, System.Drawing.Rectangle rectangle, System.Windows.Forms.ScrollButton button, System.Windows.Forms.ButtonState state) -> void
+static System.Windows.Forms.ControlPaint.DrawSelectionFrame(System.Drawing.Graphics! graphics, bool active, System.Drawing.Rectangle outsideRect, System.Drawing.Rectangle insideRect, System.Drawing.Color backColor) -> void
+static System.Windows.Forms.ControlPaint.DrawSizeGrip(System.Drawing.Graphics! graphics, System.Drawing.Color backColor, int x, int y, int width, int height) -> void
+static System.Windows.Forms.ControlPaint.DrawSizeGrip(System.Drawing.Graphics! graphics, System.Drawing.Color backColor, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.ControlPaint.DrawStringDisabled(System.Drawing.Graphics! graphics, string! s, System.Drawing.Font! font, System.Drawing.Color color, System.Drawing.RectangleF layoutRectangle, System.Drawing.StringFormat! format) -> void
+static System.Windows.Forms.ControlPaint.DrawStringDisabled(System.Drawing.IDeviceContext! dc, string! s, System.Drawing.Font! font, System.Drawing.Color color, System.Drawing.Rectangle layoutRectangle, System.Windows.Forms.TextFormatFlags format) -> void
+static System.Windows.Forms.ControlPaint.DrawVisualStyleBorder(System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds) -> void
 ~static System.Windows.Forms.DataFormats.GetFormat(int id) -> System.Windows.Forms.DataFormats.Format
 ~static System.Windows.Forms.DataFormats.GetFormat(string format) -> System.Windows.Forms.DataFormats.Format
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextHeight(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxWidth, System.Windows.Forms.TextFormatFlags flags) -> int

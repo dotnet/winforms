@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -35,18 +33,16 @@ namespace System.Windows.Forms
                 int r = argb.R;
                 int g = argb.G;
                 int b = argb.B;
-                int max, min;
-                int sum, dif;
                 int Rdelta, Gdelta, Bdelta;  // intermediate value: % of spread from max
 
                 // calculate lightness
-                max = Math.Max(Math.Max(r, g), b);
-                min = Math.Min(Math.Min(r, g), b);
-                sum = max + min;
+                int max = Math.Max(Math.Max(r, g), b);
+                int min = Math.Min(Math.Min(r, g), b);
+                int sum = max + min;
 
                 Luminosity = ((sum * HLSMax) + RGBMax) / (2 * RGBMax);
 
-                dif = max - min;
+                int dif = max - min;
                 if (dif == 0)
                 {
                     // r=g=b --> achromatic case
@@ -124,14 +120,14 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override bool Equals(object o)
+            public override bool Equals(object? o)
             {
-                if (!(o is HLSColor))
+                if (o is not HLSColor hlsColor)
                 {
                     return false;
                 }
 
-                HLSColor c = (HLSColor)o;
+                HLSColor c = hlsColor;
                 return _hue == c._hue &&
                        _saturation == c._saturation &&
                        Luminosity == c.Luminosity &&
