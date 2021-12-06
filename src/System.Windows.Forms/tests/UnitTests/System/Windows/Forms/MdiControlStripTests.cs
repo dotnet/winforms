@@ -5,6 +5,7 @@
 using System.ComponentModel;
 using System.Drawing;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -189,6 +190,96 @@ namespace System.Windows.Forms.Tests
             {
                 Assert.NotNull(item.Image);
             }
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void MdiControlStrip_MaximizedChildWindow_NextSibling_ReturnsControlBoxButtonsAsExpected(RightToLeft rightToLeft)
+        {
+            using ToolStripMenuItem toolStripMenuItem1 = new() { Text = "&Test1" };
+            using ToolStripMenuItem toolStripMenuItem2 = new() { Text = "&Test2" };
+            using MenuStrip menuStrip = new() { RightToLeft = rightToLeft };
+            menuStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2 });
+            using Form mdiParent = new()
+            {
+                IsMdiContainer = true,
+                MainMenuStrip = menuStrip
+            };
+
+            mdiParent.Controls.Add(menuStrip);
+            using Form mdiChild = new()
+            {
+                MdiParent = mdiParent,
+                WindowState = FormWindowState.Maximized
+            };
+
+            mdiParent.Show();
+            mdiChild.Show();
+            AccessibleObject accessibleObject = mdiParent.MainMenuStrip.AccessibilityObject;
+            ToolStripItem.ToolStripItemAccessibleObject systemItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor().Dynamic.FragmentNavigate(UiaCore.NavigateDirection.FirstChild);
+            ToolStripItem.ToolStripItemAccessibleObject test1Item = (ToolStripItem.ToolStripItemAccessibleObject)systemItem.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            ToolStripItem.ToolStripItemAccessibleObject test2Item = (ToolStripItem.ToolStripItemAccessibleObject)test1Item.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            ToolStripItem.ToolStripItemAccessibleObject minimizeItem = (ToolStripItem.ToolStripItemAccessibleObject)test2Item.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            ToolStripItem.ToolStripItemAccessibleObject restoreItem = (ToolStripItem.ToolStripItemAccessibleObject)minimizeItem.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            ToolStripItem.ToolStripItemAccessibleObject closeItem = (ToolStripItem.ToolStripItemAccessibleObject)restoreItem.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+            ToolStripItem.ToolStripItemAccessibleObject nullItem = (ToolStripItem.ToolStripItemAccessibleObject)closeItem.FragmentNavigate(UiaCore.NavigateDirection.NextSibling);
+
+            Assert.Equal("System", systemItem.Name);
+            Assert.Equal("Test1", test1Item.Name);
+            Assert.Equal("Test2", test2Item.Name);
+            Assert.Equal("Minimize", minimizeItem.Name);
+            Assert.Equal("Restore", restoreItem.Name);
+            Assert.Equal("Close", closeItem.Name);
+            Assert.Null(nullItem);
+            Assert.True(mdiChild.IsHandleCreated);
+            Assert.True(mdiParent.IsHandleCreated);
+            Assert.True(menuStrip.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void MdiControlStrip_MaximizedChildWindow_PreviousSibling_ReturnsControlBoxButtonsAsExpected(RightToLeft rightToLeft)
+        {
+            using ToolStripMenuItem toolStripMenuItem1 = new() { Text = "&Test1" };
+            using ToolStripMenuItem toolStripMenuItem2 = new() { Text = "&Test2" };
+            using MenuStrip menuStrip = new() { RightToLeft = rightToLeft };
+            menuStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2 });
+            using Form mdiParent = new()
+            {
+                IsMdiContainer = true,
+                MainMenuStrip = menuStrip
+            };
+
+            mdiParent.Controls.Add(menuStrip);
+            using Form mdiChild = new()
+            {
+                MdiParent = mdiParent,
+                WindowState = FormWindowState.Maximized
+            };
+
+            mdiParent.Show();
+            mdiChild.Show();
+            AccessibleObject accessibleObject = mdiParent.MainMenuStrip.AccessibilityObject;
+            ToolStripItem.ToolStripItemAccessibleObject closeItem = (ToolStripItem.ToolStripItemAccessibleObject)accessibleObject.TestAccessor().Dynamic.FragmentNavigate(UiaCore.NavigateDirection.LastChild);
+            ToolStripItem.ToolStripItemAccessibleObject restoreItem = (ToolStripItem.ToolStripItemAccessibleObject)closeItem.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            ToolStripItem.ToolStripItemAccessibleObject minimizeItem = (ToolStripItem.ToolStripItemAccessibleObject)restoreItem.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            ToolStripItem.ToolStripItemAccessibleObject test2Item = (ToolStripItem.ToolStripItemAccessibleObject)minimizeItem.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            ToolStripItem.ToolStripItemAccessibleObject test1Item = (ToolStripItem.ToolStripItemAccessibleObject)test2Item.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            ToolStripItem.ToolStripItemAccessibleObject systemItem = (ToolStripItem.ToolStripItemAccessibleObject)test1Item.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+            ToolStripItem.ToolStripItemAccessibleObject nullItem = (ToolStripItem.ToolStripItemAccessibleObject)systemItem.FragmentNavigate(UiaCore.NavigateDirection.PreviousSibling);
+
+            Assert.Equal("Close", closeItem.Name);
+            Assert.Equal("Restore", restoreItem.Name);
+            Assert.Equal("Minimize", minimizeItem.Name);
+            Assert.Equal("Test2", test2Item.Name);
+            Assert.Equal("Test1", test1Item.Name);
+            Assert.Equal("System", systemItem.Name);
+            Assert.Null(nullItem);
+            Assert.True(mdiChild.IsHandleCreated);
+            Assert.True(mdiParent.IsHandleCreated);
+            Assert.True(menuStrip.IsHandleCreated);
         }
 
         private class SubMdiControlStrip : MdiControlStrip

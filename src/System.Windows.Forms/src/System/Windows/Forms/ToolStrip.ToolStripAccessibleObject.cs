@@ -183,11 +183,20 @@ namespace System.Windows.Forms
                     }
                 }
 
-                items = _owningToolStrip.Items;
-
-                if (fragmentIndex < items.Count)
+                List<ToolStripItem> orderedItems = new();
+                for (int i = 0, current = 0; i < _owningToolStrip.Items.Count; i++)
                 {
-                    ToolStripItem item = items[fragmentIndex];
+                    ToolStripItem item = _owningToolStrip.Items[i];
+                    orderedItems.Insert(current, item);
+                    if (item.Alignment == ToolStripItemAlignment.Left)
+                    {
+                        current++;
+                    }
+                }
+
+                if (fragmentIndex < orderedItems.Count)
+                {
+                    ToolStripItem item = orderedItems[fragmentIndex];
                     if (item.Available && item.Alignment == ToolStripItemAlignment.Right)
                     {
                         return GetItemAccessibleObject(item);
