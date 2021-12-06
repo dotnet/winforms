@@ -1409,7 +1409,7 @@ static System.Windows.Forms.SystemInformation.UserName.get -> string!
 ~static System.Windows.Forms.ToolStripManager.RevertMerge(System.Windows.Forms.ToolStrip targetToolStrip, System.Windows.Forms.ToolStrip sourceToolStrip) -> bool
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm) -> void
 ~static System.Windows.Forms.ToolStripManager.SaveSettings(System.Windows.Forms.Form sourceForm, string key) -> void
-~static System.Windows.Forms.ToolStripRenderer.CreateDisabledImage(System.Drawing.Image normalImage) -> System.Drawing.Image
+static System.Windows.Forms.ToolStripRenderer.CreateDisabledImage(System.Drawing.Image! normalImage) -> System.Drawing.Image!
 static System.Windows.Forms.TrackBarRenderer.DrawBottomPointingThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
 static System.Windows.Forms.TrackBarRenderer.DrawHorizontalThumb(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.TrackBarThumbState state) -> void
 static System.Windows.Forms.TrackBarRenderer.DrawHorizontalTicks(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, int numTicks, System.Windows.Forms.VisualStyles.EdgeStyle edgeStyle) -> void
@@ -2939,26 +2939,26 @@ System.Windows.Forms.ToolStripItemTextRenderEventArgs.ToolStripItemTextRenderEve
 ~System.Windows.Forms.ToolStripProfessionalRenderer.ToolStripProfessionalRenderer(System.Windows.Forms.ProfessionalColorTable professionalColorTable) -> void
 ~System.Windows.Forms.ToolStripProgressBar.ProgressBar.get -> System.Windows.Forms.ProgressBar
 ~System.Windows.Forms.ToolStripProgressBar.ToolStripProgressBar(string name) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawArrow(System.Windows.Forms.ToolStripArrowRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawDropDownButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawGrip(System.Windows.Forms.ToolStripGripRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawImageMargin(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawItemCheck(System.Windows.Forms.ToolStripItemImageRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawItemImage(System.Windows.Forms.ToolStripItemImageRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawItemText(System.Windows.Forms.ToolStripItemTextRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawMenuItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawOverflowButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawSeparator(System.Windows.Forms.ToolStripSeparatorRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawSplitButton(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawStatusStripSizingGrip(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawToolStripBackground(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawToolStripBorder(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawToolStripContentPanelBackground(System.Windows.Forms.ToolStripContentPanelRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawToolStripPanelBackground(System.Windows.Forms.ToolStripPanelRenderEventArgs e) -> void
-~System.Windows.Forms.ToolStripRenderer.DrawToolStripStatusLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawArrow(System.Windows.Forms.ToolStripArrowRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawDropDownButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawGrip(System.Windows.Forms.ToolStripGripRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawImageMargin(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawItemCheck(System.Windows.Forms.ToolStripItemImageRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawItemImage(System.Windows.Forms.ToolStripItemImageRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawItemText(System.Windows.Forms.ToolStripItemTextRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawMenuItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawOverflowButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawSeparator(System.Windows.Forms.ToolStripSeparatorRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawSplitButton(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawStatusStripSizingGrip(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawToolStripBackground(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawToolStripBorder(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawToolStripContentPanelBackground(System.Windows.Forms.ToolStripContentPanelRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawToolStripPanelBackground(System.Windows.Forms.ToolStripPanelRenderEventArgs! e) -> void
+System.Windows.Forms.ToolStripRenderer.DrawToolStripStatusLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
 System.Windows.Forms.ToolStripRenderEventArgs.Graphics.get -> System.Drawing.Graphics!
 System.Windows.Forms.ToolStripRenderEventArgs.ToolStrip.get -> System.Windows.Forms.ToolStrip?
 System.Windows.Forms.ToolStripRenderEventArgs.ToolStripRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStrip? toolStrip) -> void
@@ -3851,30 +3851,30 @@ virtual System.Windows.Forms.Timer.OnTick(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnControlRemoved(System.Windows.Forms.Control control, int index) -> void
 ~virtual System.Windows.Forms.ToolStripPanelRow.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripProgressBar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.Initialize(System.Windows.Forms.ToolStrip toolStrip) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.InitializeContentPanel(System.Windows.Forms.ToolStripContentPanel contentPanel) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.InitializeItem(System.Windows.Forms.ToolStripItem item) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.InitializePanel(System.Windows.Forms.ToolStripPanel toolStripPanel) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderArrow(System.Windows.Forms.ToolStripArrowRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderDropDownButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderGrip(System.Windows.Forms.ToolStripGripRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderImageMargin(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderItemCheck(System.Windows.Forms.ToolStripItemImageRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderItemImage(System.Windows.Forms.ToolStripItemImageRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderItemText(System.Windows.Forms.ToolStripItemTextRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderMenuItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderOverflowButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderSeparator(System.Windows.Forms.ToolStripSeparatorRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderSplitButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderStatusStripSizingGrip(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripBackground(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripBorder(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripContentPanelBackground(System.Windows.Forms.ToolStripContentPanelRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripPanelBackground(System.Windows.Forms.ToolStripPanelRenderEventArgs e) -> void
-~virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripStatusLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.Initialize(System.Windows.Forms.ToolStrip! toolStrip) -> void
+virtual System.Windows.Forms.ToolStripRenderer.InitializeContentPanel(System.Windows.Forms.ToolStripContentPanel! contentPanel) -> void
+virtual System.Windows.Forms.ToolStripRenderer.InitializeItem(System.Windows.Forms.ToolStripItem! item) -> void
+virtual System.Windows.Forms.ToolStripRenderer.InitializePanel(System.Windows.Forms.ToolStripPanel! toolStripPanel) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderArrow(System.Windows.Forms.ToolStripArrowRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderDropDownButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderGrip(System.Windows.Forms.ToolStripGripRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderImageMargin(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderItemCheck(System.Windows.Forms.ToolStripItemImageRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderItemImage(System.Windows.Forms.ToolStripItemImageRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderItemText(System.Windows.Forms.ToolStripItemTextRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderMenuItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderOverflowButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderSeparator(System.Windows.Forms.ToolStripSeparatorRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderSplitButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderStatusStripSizingGrip(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripBackground(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripBorder(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripContentPanelBackground(System.Windows.Forms.ToolStripContentPanelRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripPanelBackground(System.Windows.Forms.ToolStripPanelRenderEventArgs! e) -> void
+virtual System.Windows.Forms.ToolStripRenderer.OnRenderToolStripStatusLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnButtonClick(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnButtonDoubleClick(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.ToolStripSplitButton.OnDefaultItemChanged(System.EventArgs e) -> void
@@ -11719,26 +11719,26 @@ System.Windows.Forms.ToolStripProgressBar.Validating -> System.ComponentModel.Ca
 System.Windows.Forms.ToolStripProgressBar.Value.get -> int
 System.Windows.Forms.ToolStripProgressBar.Value.set -> void
 System.Windows.Forms.ToolStripRenderer
-System.Windows.Forms.ToolStripRenderer.RenderArrow -> System.Windows.Forms.ToolStripArrowRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderButtonBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderDropDownButtonBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderGrip -> System.Windows.Forms.ToolStripGripRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderImageMargin -> System.Windows.Forms.ToolStripRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderItemBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderItemCheck -> System.Windows.Forms.ToolStripItemImageRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderItemImage -> System.Windows.Forms.ToolStripItemImageRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderItemText -> System.Windows.Forms.ToolStripItemTextRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderLabelBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderMenuItemBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderOverflowButtonBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderSeparator -> System.Windows.Forms.ToolStripSeparatorRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderSplitButtonBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderStatusStripSizingGrip -> System.Windows.Forms.ToolStripRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderToolStripBackground -> System.Windows.Forms.ToolStripRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderToolStripBorder -> System.Windows.Forms.ToolStripRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderToolStripContentPanelBackground -> System.Windows.Forms.ToolStripContentPanelRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderToolStripPanelBackground -> System.Windows.Forms.ToolStripPanelRenderEventHandler
-System.Windows.Forms.ToolStripRenderer.RenderToolStripStatusLabelBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler
+System.Windows.Forms.ToolStripRenderer.RenderArrow -> System.Windows.Forms.ToolStripArrowRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderButtonBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderDropDownButtonBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderGrip -> System.Windows.Forms.ToolStripGripRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderImageMargin -> System.Windows.Forms.ToolStripRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderItemBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderItemCheck -> System.Windows.Forms.ToolStripItemImageRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderItemImage -> System.Windows.Forms.ToolStripItemImageRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderItemText -> System.Windows.Forms.ToolStripItemTextRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderLabelBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderMenuItemBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderOverflowButtonBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderSeparator -> System.Windows.Forms.ToolStripSeparatorRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderSplitButtonBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderStatusStripSizingGrip -> System.Windows.Forms.ToolStripRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderToolStripBackground -> System.Windows.Forms.ToolStripRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderToolStripBorder -> System.Windows.Forms.ToolStripRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderToolStripContentPanelBackground -> System.Windows.Forms.ToolStripContentPanelRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderToolStripPanelBackground -> System.Windows.Forms.ToolStripPanelRenderEventHandler!
+System.Windows.Forms.ToolStripRenderer.RenderToolStripStatusLabelBackground -> System.Windows.Forms.ToolStripItemRenderEventHandler!
 System.Windows.Forms.ToolStripRenderer.ToolStripRenderer() -> void
 System.Windows.Forms.ToolStripRenderEventArgs
 System.Windows.Forms.ToolStripRenderEventArgs.AffectedBounds.get -> System.Drawing.Rectangle
