@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -17,7 +16,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer t_visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
         private static readonly VisualStyleElement s_buttonElement = VisualStyleElement.Button.PushButton.Normal;
 
         /// <summary>
@@ -83,8 +82,11 @@ namespace System.Windows.Forms
             }
             else
             {
-                Graphics graphics = deviceContext.TryGetGraphics(create: true);
-                ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
+                Graphics? graphics = deviceContext.TryGetGraphics(create: true);
+                if (graphics is not null)
+                {
+                    ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
+                }
             }
         }
 
@@ -101,8 +103,6 @@ namespace System.Windows.Forms
         {
             Rectangle contentBounds;
 
-            Graphics g = deviceContext.TryGetGraphics(create: true);
-
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
@@ -113,15 +113,22 @@ namespace System.Windows.Forms
             }
             else
             {
-                Graphics graphics = deviceContext.TryGetGraphics(create: true);
-                ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
+                Graphics? graphics = deviceContext.TryGetGraphics(create: true);
+                if (graphics is not null)
+                {
+                    ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
+                }
+
                 contentBounds = Rectangle.Inflate(bounds, -3, -3);
             }
 
             if (focused)
             {
-                Graphics graphics = deviceContext.TryGetGraphics(create: true);
-                ControlPaint.DrawFocusRectangle(graphics, contentBounds);
+                Graphics? graphics = deviceContext.TryGetGraphics(create: true);
+                if (graphics is not null)
+                {
+                    ControlPaint.DrawFocusRectangle(graphics, contentBounds);
+                }
             }
         }
 
@@ -134,7 +141,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a Button control.
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, bool focused, PushButtonState state)
+        public static void DrawButton(Graphics g, Rectangle bounds, string? buttonText, Font? font, bool focused, PushButtonState state)
         {
             DrawButton(
                 g,
@@ -149,7 +156,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a Button control.
         /// </summary>
-        public static void DrawButton(Graphics g, Rectangle bounds, string buttonText, Font font, TextFormatFlags flags, bool focused, PushButtonState state)
+        public static void DrawButton(Graphics g, Rectangle bounds, string? buttonText, Font? font, TextFormatFlags flags, bool focused, PushButtonState state)
         {
             Rectangle contentBounds;
             Color textColor;
@@ -211,8 +218,8 @@ namespace System.Windows.Forms
         public static void DrawButton(
             Graphics g,
             Rectangle bounds,
-            string buttonText,
-            Font font,
+            string? buttonText,
+            Font? font,
             Image image,
             Rectangle imageBounds,
             bool focused,
@@ -236,8 +243,8 @@ namespace System.Windows.Forms
         public static void DrawButton(
             Graphics g,
             Rectangle bounds,
-            string buttonText,
-            Font font,
+            string? buttonText,
+            Font? font,
             TextFormatFlags flags,
             Image image,
             Rectangle imageBounds,
@@ -248,8 +255,8 @@ namespace System.Windows.Forms
         internal static void DrawButton(
             IDeviceContext deviceContext,
             Rectangle bounds,
-            string buttonText,
-            Font font,
+            string? buttonText,
+            Font? font,
             TextFormatFlags flags,
             Image image,
             Rectangle imageBounds,
@@ -259,28 +266,36 @@ namespace System.Windows.Forms
             Rectangle contentBounds;
             Color textColor;
 
-            Graphics graphics = deviceContext.TryGetGraphics(create: true);
+            Graphics? graphics = deviceContext.TryGetGraphics(create: true);
 
             if (RenderWithVisualStyles)
             {
                 InitializeRenderer((int)state);
 
                 t_visualStyleRenderer.DrawBackground(deviceContext, bounds);
-                t_visualStyleRenderer.DrawImage(graphics, imageBounds, image);
+                if (graphics is not null)
+                {
+                    t_visualStyleRenderer.DrawImage(graphics, imageBounds, image);
+                }
+
                 contentBounds = t_visualStyleRenderer.GetBackgroundContentRectangle(deviceContext, bounds);
                 textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             }
             else
             {
-                ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
-                graphics.DrawImage(image, imageBounds);
+                if (graphics is not null)
+                {
+                    ControlPaint.DrawButton(graphics, bounds, ConvertToButtonState(state));
+                    graphics.DrawImage(image, imageBounds);
+                }
+
                 contentBounds = Rectangle.Inflate(bounds, -3, -3);
                 textColor = SystemColors.ControlText;
             }
 
             TextRenderer.DrawText(deviceContext, buttonText, font, contentBounds, textColor, flags);
 
-            if (focused)
+            if (focused && graphics is not null)
             {
                 ControlPaint.DrawFocusRectangle(graphics, contentBounds);
             }
@@ -293,6 +308,7 @@ namespace System.Windows.Forms
             _ => ButtonState.Normal,
         };
 
+        [MemberNotNull(nameof(t_visualStyleRenderer))]
         private static void InitializeRenderer(int state)
         {
             if (t_visualStyleRenderer is null)
