@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
 
                 private static bool UseBaseAdapter(ComboBox comboBox)
                 {
-                    ToolStripComboBoxControl toolStripComboBox = comboBox as ToolStripComboBoxControl;
+                    ToolStripComboBoxControl? toolStripComboBox = comboBox as ToolStripComboBoxControl;
                     if (toolStripComboBox is null || !(toolStripComboBox.Owner.Renderer is ToolStripProfessionalRenderer))
                     {
                         Debug.Assert(toolStripComboBox is not null, "Why are we here and not a toolstrip combo?");
@@ -32,7 +30,7 @@ namespace System.Windows.Forms
                     return false;
                 }
 
-                private static ProfessionalColorTable GetColorTable(ToolStripComboBoxControl toolStripComboBoxControl)
+                private static ProfessionalColorTable GetColorTable(ToolStripComboBoxControl? toolStripComboBoxControl)
                 {
                     if (toolStripComboBoxControl is not null)
                     {
@@ -83,7 +81,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        ToolStripComboBoxControl toolStripComboBox = comboBox as ToolStripComboBoxControl;
+                        ToolStripComboBoxControl? toolStripComboBox = comboBox as ToolStripComboBoxControl;
                         ProfessionalColorTable colorTable = GetColorTable(toolStripComboBox);
 
                         if (!comboBox.DroppedDown)
@@ -99,7 +97,7 @@ namespace System.Windows.Forms
 
                                 g.FillRectangle(b, dropDownRect);
                             }
-                            else if (toolStripComboBox.Owner.IsOnOverflow)
+                            else if (toolStripComboBox is not null && toolStripComboBox.Owner.IsOnOverflow)
                             {
                                 using var b = colorTable.ComboBoxButtonOnOverflow.GetCachedSolidBrushScope();
                                 g.FillRectangle(b, dropDownRect);
