@@ -6,7 +6,9 @@
     <AssemblyName>AccessibilityTests</AssemblyName>
     <!--<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>-->
     <ApplicationManifest>app1.manifest</ApplicationManifest>
-    <UsingToolXliff>false</UsingToolXliff>
+
+    <EnableXlfLocalization>false</EnableXlfLocalization>
+    <UpdateXlfOnBuild>false</UpdateXlfOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
