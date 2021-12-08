@@ -9,6 +9,12 @@ namespace System.Windows.Forms.Tests
     public class ComboBox_ChildAccessibleObjectTests : IClassFixture<ThreadExceptionFixture>
     {
         [WinFormsFact]
+        public void ChildAccessibleObject_Ctor_NullOwner_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new ComboBox.ChildAccessibleObject(null, IntPtr.Zero));
+        }
+
+        [WinFormsFact]
         public void ChildAccessibleObject_Ctor_Default()
         {
             using var control = new ComboBox();
