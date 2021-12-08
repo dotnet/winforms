@@ -851,7 +851,7 @@ override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object? ob
 ~override System.Windows.Forms.TextBoxBase.Text.get -> string
 ~override System.Windows.Forms.TextBoxBase.Text.set -> void
 ~override System.Windows.Forms.TextBoxBase.ToString() -> string
-~override System.Windows.Forms.Timer.ToString() -> string
+override System.Windows.Forms.Timer.ToString() -> string!
 ~override System.Windows.Forms.ToolStrip.BindingContext.get -> System.Windows.Forms.BindingContext
 ~override System.Windows.Forms.ToolStrip.BindingContext.set -> void
 ~override System.Windows.Forms.ToolStrip.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
@@ -2750,9 +2750,9 @@ System.Windows.Forms.SelectedGridItemChangedEventArgs.SelectedGridItemChangedEve
 ~System.Windows.Forms.TextBoxBase.Lines.get -> string[]
 ~System.Windows.Forms.TextBoxBase.Lines.set -> void
 ~System.Windows.Forms.ThreadExceptionDialog.ThreadExceptionDialog(System.Exception t) -> void
-~System.Windows.Forms.Timer.Tag.get -> object
-~System.Windows.Forms.Timer.Tag.set -> void
-~System.Windows.Forms.Timer.Timer(System.ComponentModel.IContainer container) -> void
+System.Windows.Forms.Timer.Tag.get -> object?
+System.Windows.Forms.Timer.Tag.set -> void
+System.Windows.Forms.Timer.Timer(System.ComponentModel.IContainer! container) -> void
 ~System.Windows.Forms.ToolStrip.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point point) -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStrip.GetChildAtPoint(System.Drawing.Point pt, System.Windows.Forms.GetChildAtPointSkip skipValue) -> System.Windows.Forms.Control
@@ -3749,7 +3749,7 @@ virtual System.Windows.Forms.Layout.ArrangedElementCollection.GetEnumerator() ->
 ~virtual System.Windows.Forms.TextBox.PlaceholderText.set -> void
 ~virtual System.Windows.Forms.TextBoxBase.SelectedText.get -> string
 ~virtual System.Windows.Forms.TextBoxBase.SelectedText.set -> void
-~virtual System.Windows.Forms.Timer.OnTick(System.EventArgs e) -> void
+virtual System.Windows.Forms.Timer.OnTick(System.EventArgs! e) -> void
 ~virtual System.Windows.Forms.ToolStrip.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~virtual System.Windows.Forms.ToolStrip.CreateLayoutSettings(System.Windows.Forms.ToolStripLayoutStyle layoutStyle) -> System.Windows.Forms.LayoutSettings
 ~virtual System.Windows.Forms.ToolStrip.DisplayedItems.get -> System.Windows.Forms.ToolStripItemCollection
@@ -11145,7 +11145,7 @@ System.Windows.Forms.Timer.Interval.get -> int
 System.Windows.Forms.Timer.Interval.set -> void
 System.Windows.Forms.Timer.Start() -> void
 System.Windows.Forms.Timer.Stop() -> void
-System.Windows.Forms.Timer.Tick -> System.EventHandler
+System.Windows.Forms.Timer.Tick -> System.EventHandler!
 System.Windows.Forms.Timer.Timer() -> void
 System.Windows.Forms.ToolStrip
 System.Windows.Forms.ToolStrip.AllowItemReorder.get -> bool

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -25,12 +23,12 @@ namespace System.Windows.Forms
 
         private bool _enabled;
 
-        private protected EventHandler _onTimer;
+        private protected EventHandler? _onTimer;
 
         private GCHandle _timerRoot;
 
         // Holder for the HWND that handles our Timer messages.
-        private TimerNativeWindow _timerWindow;
+        private TimerNativeWindow? _timerWindow;
 
         private readonly object _syncObj = new object();
 
@@ -57,7 +55,7 @@ namespace System.Windows.Forms
         [SRDescription(nameof(SR.ControlTagDescr))]
         [DefaultValue(null)]
         [TypeConverter(typeof(StringConverter))]
-        public object Tag { get; set; }
+        public object? Tag { get; set; }
 
         /// <summary>
         ///  Occurs when the specified timer interval has elapsed and the timer is enabled.
