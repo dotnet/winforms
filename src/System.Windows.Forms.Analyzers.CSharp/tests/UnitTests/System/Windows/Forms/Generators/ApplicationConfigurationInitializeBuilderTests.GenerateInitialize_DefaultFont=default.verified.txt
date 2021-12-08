@@ -16,15 +16,15 @@ internal static partial class ApplicationConfiguration
     ///  <code>
     ///  Application.EnableVisualStyles();
     ///  Application.SetCompatibleTextRenderingDefault(true);
-    ///  Application.SetDefaultFont(new Font(Control.DefaultFont.FontFamily, 12f, (FontStyle)3, (GraphicsUnit)6));
     ///  Application.SetHighDpiMode(HighDpiMode.SystemAware);
+    ///  Application.SetDefaultFont(new Font(Control.DefaultFont.FontFamily, 12f, (FontStyle)3, (GraphicsUnit)6));
     /// </code>
     /// </summary>
     public static void Initialize()
     {
         Application.EnableVisualStyles();
         Application.SetCompatibleTextRenderingDefault(true);
-        Application.SetDefaultFont(new Font(Control.DefaultFont.FontFamily, 12f, (FontStyle)3, (GraphicsUnit)6));
         Application.SetHighDpiMode(HighDpiMode.SystemAware);
+        Application.SetDefaultFont(new Font(Control.DefaultFont.FontFamily, 12f, (FontStyle)3, (GraphicsUnit)6));
     }
 }
