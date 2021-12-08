@@ -1375,12 +1375,12 @@ static System.Windows.Forms.ScrollBarRenderer.GetSizeBoxSize(System.Drawing.Grap
 static System.Windows.Forms.ScrollBarRenderer.GetThumbGripSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
 ~static System.Windows.Forms.SendKeys.Send(string keys) -> void
 ~static System.Windows.Forms.SendKeys.SendWait(string keys) -> void
-~static System.Windows.Forms.SystemInformation.ComputerName.get -> string
-~static System.Windows.Forms.SystemInformation.GetMenuFontForDpi(int dpi) -> System.Drawing.Font
-~static System.Windows.Forms.SystemInformation.MenuFont.get -> System.Drawing.Font
-~static System.Windows.Forms.SystemInformation.PowerStatus.get -> System.Windows.Forms.PowerStatus
-~static System.Windows.Forms.SystemInformation.UserDomainName.get -> string
-~static System.Windows.Forms.SystemInformation.UserName.get -> string
+static System.Windows.Forms.SystemInformation.ComputerName.get -> string!
+static System.Windows.Forms.SystemInformation.GetMenuFontForDpi(int dpi) -> System.Drawing.Font!
+static System.Windows.Forms.SystemInformation.MenuFont.get -> System.Drawing.Font!
+static System.Windows.Forms.SystemInformation.PowerStatus.get -> System.Windows.Forms.PowerStatus!
+static System.Windows.Forms.SystemInformation.UserDomainName.get -> string!
+static System.Windows.Forms.SystemInformation.UserName.get -> string!
 ~static System.Windows.Forms.TabPage.GetTabPageOfComponent(object comp) -> System.Windows.Forms.TabPage
 ~static System.Windows.Forms.TabRenderer.DrawTabItem(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, bool focused, System.Windows.Forms.VisualStyles.TabItemState state) -> void
 ~static System.Windows.Forms.TabRenderer.DrawTabItem(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string tabItemText, System.Drawing.Font font, bool focused, System.Windows.Forms.VisualStyles.TabItemState state) -> void
