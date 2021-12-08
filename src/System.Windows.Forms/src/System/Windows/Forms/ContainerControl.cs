@@ -347,6 +347,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Gets or sets whether the container needs to be scaled when <see cref="DpiChangedEventHandler" />, irrespective whether the font was inherited or set explicitly.
+        /// </summary>
+        internal bool IsDpiChangeScalingRequired { get; set; }
+
+        /// <summary>
         ///  Indicates the form that the scrollable control is assigned to. This property is read-only.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]

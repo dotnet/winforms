@@ -2132,50 +2132,7 @@ namespace System.Windows.Forms
             [param: MarshalAs(UnmanagedType.CustomMarshaler, MarshalTypeRef = typeof(ActiveXFontMarshaler))]
             set
             {
-                Font local = (Font)Properties.GetObject(s_fontProperty);
-                bool localChanged = false;
-                if (value is null)
-                {
-                    if (local is not null)
-                    {
-                        localChanged = true;
-                    }
-                }
-                else
-                {
-                    if (local is null)
-                    {
-                        localChanged = true;
-                    }
-                    else
-                    {
-                        localChanged = !value.Equals(local);
-                    }
-                }
-
-                if (localChanged)
-                {
-                    // Store new local value
-                    Properties.SetObject(s_fontProperty, value);
-
-                    // Cleanup any font handle wrapper...
-                    DisposeFontHandle();
-
-                    ScaledControlFont = value;
-
-                    if (Properties.ContainsInteger(s_fontHeightProperty))
-                    {
-                        Properties.SetInteger(s_fontHeightProperty, (value is null) ? -1 : value.Height);
-                    }
-
-                    // Font is an ambient property.  We need to layout our parent because Font may
-                    // change our size.  We need to layout ourselves because our children may change
-                    // size by inheriting the new value.
-                    using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
-                    {
-                        OnFontChanged(EventArgs.Empty);
-                    }
-                }
+                SetFont(value);
             }
         }
 
@@ -7512,9 +7469,23 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnParentFontChanged(EventArgs e)
         {
-            if (!IsFontSet())
+            // Container controls that were marked IsDpiChangeScalingRequired had to go through OnFontChanged event
+            // Irrespective of the Font status (explicit set or inherit Font). See "WmDpiChangedBeforeParent" for more info.
+            var container = this as ContainerControl;
+
+            try
             {
-                OnFontChanged(e);
+                if (!IsFontSet() || (container is not null && container.IsDpiChangeScalingRequired))
+                {
+                    OnFontChanged(e);
+                }
+            }
+            finally
+            {
+                if (container is not null)
+                {
+                    container.IsDpiChangeScalingRequired = false;
+                }
             }
         }
 
@@ -11427,6 +11398,57 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Sets the new font value with the option to control whether <see cref="OnFontChanged(EventArgs)"/> event is raised.
+        /// </summary>
+        /// <param name="font">The <see cref="Font"/> value to be set.</param>
+        /// <param name="raiseOnFontChangedEvent">Indicates whether to raise <see cref="OnFontChanged(EventArgs)"/> event.</param>
+        private void SetFont(Font font, bool raiseOnFontChangedEvent = true)
+        {
+            var local = (Font)Properties.GetObject(s_fontProperty);
+            bool localChanged = false;
+            if (font is null)
+            {
+                if (local is not null)
+                {
+                    localChanged = true;
+                }
+            }
+            else
+            {
+                localChanged = local is null ? true : !font.Equals(local);
+            }
+
+            if (localChanged)
+            {
+                // Store new local value
+                Properties.SetObject(s_fontProperty, font);
+
+                // Cleanup any font handle wrapper...
+                DisposeFontHandle();
+
+                ScaledControlFont = font;
+
+                if (Properties.ContainsInteger(s_fontHeightProperty))
+                {
+                    Properties.SetInteger(s_fontHeightProperty, (font is null) ? -1 : font.Height);
+                }
+
+                if (!raiseOnFontChangedEvent)
+                {
+                    return;
+                }
+
+                // Font is an ambient property.  We need to layout our parent because Font may
+                // change our size.  We need to layout ourselves because our children may change
+                // size by inheriting the new value.
+                using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                {
+                    OnFontChanged(EventArgs.Empty);
+                }
+            }
+        }
+
+        /// <summary>
         ///  Stops listening for the mouse leave event.
         /// </summary>
         private void UnhookMouseEvent()
@@ -12287,15 +12309,30 @@ namespace System.Windows.Forms
                     // If it is a container control that inherit Font and is scaled by parent, we simply scale Font
                     // and wait for OnFontChangedEvent caused by its parent. Otherwise, we scale Font and trigger
                     // 'OnFontChanged' event explicitly. ex: winforms designer in VS.
-                    if (TryGetExplicitlySetFont(out Font local) || this is not ContainerControl || !IsScaledByParent(this))
+
+                    var container = this as ContainerControl;
+                    if (TryGetExplicitlySetFont(out Font local) || container is null || !IsScaledByParent(this))
                     {
                         if (local is not null)
                         {
-                            Font = scaledFont;
+                            // Container controls with the font set explicitly have their fonts scaled according to the current dpi (i.e. set to ScaledFont).
+                            // For container control with  AutoscaleMode=Inherit we'd like to avoid raising OnFontChanged event that would trigger
+                            // PerformAutoscale with the parent's AutoscaleFactor. This is because the parent control is yet to receive DpiChanged event
+                            // and, thus, neither scaled nor updated its AutoscaleFactor value.
+                            // Mark the containers as required scaling, so they are scaled when their parents update AutoscaleFactor value and ready to scale.
+                            bool raiseOnFontChangedEvent = container is null || container.AutoScaleMode != AutoScaleMode.Inherit;
+                            SetFont(scaledFont, raiseOnFontChangedEvent);
                         }
                         else
                         {
                             ScaledControlFont = scaledFont;
+                        }
+
+                        // Mark the container as needing to rescale when its parent is scaled.
+                        // This flag is reset when scaling is done on Container in "OnParentFontChanged".
+                        if (container is not null)
+                        {
+                            container.IsDpiChangeScalingRequired = true;
                         }
 
                         RescaleConstantsForDpi(_oldDeviceDpi, _deviceDpi);
