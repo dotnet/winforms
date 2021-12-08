@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using System.Windows.Forms.VisualStyles;
 
@@ -16,7 +15,7 @@ namespace System.Windows.Forms
     {
         //Make this per-thread, so that different threads can safely use these methods.
         [ThreadStatic]
-        private static VisualStyleRenderer visualStyleRenderer = null;
+        private static VisualStyleRenderer? t_visualStyleRenderer = null;
 
         /// <summary>
         ///  Returns true if this class is supported for the current OS and user/application settings,
@@ -31,7 +30,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.Tab.TabItem.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
         }
 
         /// <summary>
@@ -41,7 +40,7 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.Tab.TabItem.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
 
             // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
             Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
@@ -54,7 +53,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a Tab item.
         /// </summary>
-        public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, TabItemState state)
+        public static void DrawTabItem(Graphics g, Rectangle bounds, string? tabItemText, Font? font, TabItemState state)
         {
             DrawTabItem(g, bounds, tabItemText, font, false, state);
         }
@@ -62,7 +61,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a Tab item.
         /// </summary>
-        public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, bool focused, TabItemState state)
+        public static void DrawTabItem(Graphics g, Rectangle bounds, string? tabItemText, Font? font, bool focused, TabItemState state)
         {
             DrawTabItem(g, bounds, tabItemText, font,
                         TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
@@ -72,14 +71,14 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a Tab item.
         /// </summary>
-        public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, TextFormatFlags flags, bool focused, TabItemState state)
+        public static void DrawTabItem(Graphics g, Rectangle bounds, string? tabItemText, Font? font, TextFormatFlags flags, bool focused, TabItemState state)
         {
             InitializeRenderer(VisualStyleElement.Tab.TabItem.Normal, (int)state);
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
 
             // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
             Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
-            Color textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+            Color textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             TextRenderer.DrawText(g, tabItemText, font, contentBounds, textColor, flags);
 
             if (focused)
@@ -95,12 +94,12 @@ namespace System.Windows.Forms
         {
             InitializeRenderer(VisualStyleElement.Tab.TabItem.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
 
             // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
             Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
 
-            visualStyleRenderer.DrawImage(g, imageRectangle, image);
+            t_visualStyleRenderer.DrawImage(g, imageRectangle, image);
 
             if (focused)
             {
@@ -111,7 +110,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a Tab item.
         /// </summary>
-        public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, Image image, Rectangle imageRectangle, bool focused, TabItemState state)
+        public static void DrawTabItem(Graphics g, Rectangle bounds, string? tabItemText, Font? font, Image image, Rectangle imageRectangle, bool focused, TabItemState state)
         {
             DrawTabItem(g, bounds, tabItemText, font,
                         TextFormatFlags.HorizontalCenter | TextFormatFlags.VerticalCenter | TextFormatFlags.SingleLine,
@@ -121,16 +120,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Renders a Tab item.
         /// </summary>
-        public static void DrawTabItem(Graphics g, Rectangle bounds, string tabItemText, Font font, TextFormatFlags flags, Image image, Rectangle imageRectangle, bool focused, TabItemState state)
+        public static void DrawTabItem(Graphics g, Rectangle bounds, string? tabItemText, Font? font, TextFormatFlags flags, Image image, Rectangle imageRectangle, bool focused, TabItemState state)
         {
             InitializeRenderer(VisualStyleElement.Tab.TabItem.Normal, (int)state);
 
-            visualStyleRenderer.DrawBackground(g, bounds);
+            t_visualStyleRenderer.DrawBackground(g, bounds);
 
             // GetBackgroundContentRectangle() returns same rectangle as bounds for this control!
             Rectangle contentBounds = Rectangle.Inflate(bounds, -3, -3);
-            visualStyleRenderer.DrawImage(g, imageRectangle, image);
-            Color textColor = visualStyleRenderer.GetColor(ColorProperty.TextColor);
+            t_visualStyleRenderer.DrawImage(g, imageRectangle, image);
+            Color textColor = t_visualStyleRenderer.GetColor(ColorProperty.TextColor);
             TextRenderer.DrawText(g, tabItemText, font, contentBounds, textColor, flags);
 
             if (focused)
@@ -148,18 +147,19 @@ namespace System.Windows.Forms
         internal static void DrawTabPage(IDeviceContext deviceContext, Rectangle bounds)
         {
             InitializeRenderer(VisualStyleElement.Tab.Pane.Normal, 0);
-            visualStyleRenderer.DrawBackground(deviceContext, bounds);
+            t_visualStyleRenderer.DrawBackground(deviceContext, bounds);
         }
 
+        [MemberNotNull(nameof(t_visualStyleRenderer))]
         private static void InitializeRenderer(VisualStyleElement element, int state)
         {
-            if (visualStyleRenderer is null)
+            if (t_visualStyleRenderer is null)
             {
-                visualStyleRenderer = new VisualStyleRenderer(element.ClassName, element.Part, state);
+                t_visualStyleRenderer = new VisualStyleRenderer(element.ClassName, element.Part, state);
             }
             else
             {
-                visualStyleRenderer.SetParameters(element.ClassName, element.Part, state);
+                t_visualStyleRenderer.SetParameters(element.ClassName, element.Part, state);
             }
         }
     }
