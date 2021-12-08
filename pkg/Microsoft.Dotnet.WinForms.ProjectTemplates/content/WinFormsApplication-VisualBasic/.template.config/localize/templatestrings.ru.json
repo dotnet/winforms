@@ -1,4 +1,4 @@
-﻿{
+{
   "author": "Майкрософт",
   "name": "Приложение Windows Forms",
   "description": "Шаблон проекта для создания приложения .NET Windows Forms (WinForms).",
@@ -7,11 +7,11 @@
   "symbols/UseAppFramework/description": "Приложение должно использовать платформу приложений Visual Basic",
   "symbols/Framework/description": "Целевая платформа для проекта.",
   "symbols/Framework/choices/netcoreapp3.1/description": "Целевая платформа: netcoreapp3.1",
-  "symbols/Framework/choices/netcoreapp3.1/displayName": ".NET Core 3.1",
+  "symbols/Framework/choices/netcoreapp3.1/displayName": ".NET Core\u00A03.1",
   "symbols/Framework/choices/net5.0/description": "Целевая платформа: net5.0",
-  "symbols/Framework/choices/net5.0/displayName": ".NET 5.0",
+  "symbols/Framework/choices/net5.0/displayName": ".NET\u00A05.0",
   "symbols/Framework/choices/net6.0/description": "Целевая платформа: net6.0",
-  "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
+  "symbols/Framework/choices/net6.0/displayName": ".NET\u00A06.0",
   "symbols/Framework/displayName": "Платформа",
   "symbols/langVersion/description": "Задает свойство langVersion в созданном файле проекта",
   "symbols/langVersion/displayName": "Версия языка",
