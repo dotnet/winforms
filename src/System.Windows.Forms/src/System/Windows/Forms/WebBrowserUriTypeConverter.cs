@@ -2,19 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
 {
     class WebBrowserUriTypeConverter : UriTypeConverter
     {
-        public override object ConvertFrom(ITypeDescriptorContext context, Globalization.CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, Globalization.CultureInfo? culture, object value)
         {
             //The UriTypeConverter gives back a relative Uri for things like "www.microsoft.com".  If
             //the Uri is relative, we'll try sticking "http://" on the front to see whether that fixes it up.
-            Uri uri = base.ConvertFrom(context, culture, value) as Uri;
+            Uri? uri = base.ConvertFrom(context, culture, value) as Uri;
             if (uri is not null && !string.IsNullOrEmpty(uri.OriginalString) && !uri.IsAbsoluteUri)
             {
                 try
