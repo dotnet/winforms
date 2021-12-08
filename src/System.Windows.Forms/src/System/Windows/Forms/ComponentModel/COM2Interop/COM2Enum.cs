@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Globalization;
 
 namespace System.Windows.Forms.ComponentModel.Com2Interop
@@ -36,7 +34,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Our cached array of value.ToString()'s
         /// </summary>
-        private string[] _stringValues = Array.Empty<string>();
+        private string?[] _stringValues = Array.Empty<string>();
 
         /// <summary>
         ///  Retrieve a copy of the value array
@@ -92,7 +90,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Retrieves the string name of a given value.
         /// </summary>
-        public virtual string ToString(object value)
+        public virtual string ToString(object? value)
         {
             if (value is null)
             {
@@ -113,7 +111,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             // We have to do this to compensate for small discrepancies in a lot of objects in COM2
             // (DWORD -> VT_IU4, value we get is VT_I4, which convert to Int32, UInt32 respectively)
-            string stringValue = value.ToString();
+            if (value?.ToString() is not string stringValue)
+            {
+                return string.Empty;
+            }
+
             for (int i = 0; i < _values.Length; i++)
             {
                 if (string.Compare(_stringValues[i], stringValue, true, CultureInfo.InvariantCulture) == 0)
