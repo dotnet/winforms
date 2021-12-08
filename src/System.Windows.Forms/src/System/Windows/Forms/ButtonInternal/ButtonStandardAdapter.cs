@@ -177,7 +177,7 @@ namespace System.Windows.Forms.ButtonInternal
             PaintImage(e, layout);
 
             // Inflate the focus rectangle to be consistent with the behavior of Win32 app
-            if (Application.RenderWithVisualStyles)
+            if (Application.RenderWithVisualStyles && Control.FlatStyle != FlatStyle.Standard)
             {
                 layout.Focus.Inflate(1, 1);
             }
