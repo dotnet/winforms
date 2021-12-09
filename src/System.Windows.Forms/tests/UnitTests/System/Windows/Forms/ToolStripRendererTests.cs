@@ -845,16 +845,6 @@ namespace System.Windows.Forms.Tests
             Assert.Throws<ArgumentNullException>("e", () => renderer.OnRenderItemImage(null));
         }
 
-        [WinFormsFact]
-        public void ToolStripRenderer_OnRenderItemImage_NullEItem_ThrowsNullReferenceException()
-        {
-            var renderer = new SubToolStripRenderer();
-            using var image = new Bitmap(10, 10);
-            Graphics graphics = Graphics.FromImage(image);
-            var e = new ToolStripItemImageRenderEventArgs(graphics, null, image, new Rectangle(1, 2, 3, 4));
-            Assert.Throws<NullReferenceException>(() => renderer.OnRenderItemImage(e));
-        }
-
         [WinFormsTheory]
         [MemberData(nameof(ToolStripItemTextRenderEventArgs_TestData))]
         public void ToolStripRenderer_OnRenderItemText_Invoke_Nop(ToolStripItem item, string text, Rectangle textRectangle, Color textColor, Font textFont, TextFormatFlags format)
