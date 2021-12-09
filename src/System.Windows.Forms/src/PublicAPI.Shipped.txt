@@ -1211,24 +1211,24 @@ static System.Windows.Forms.CheckBoxRenderer.DrawCheckBox(System.Drawing.Graphic
 static System.Windows.Forms.CheckBoxRenderer.DrawCheckBox(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Windows.Forms.VisualStyles.CheckBoxState state) -> void
 static System.Windows.Forms.CheckBoxRenderer.DrawParentBackground(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.Control! childControl) -> void
 static System.Windows.Forms.CheckBoxRenderer.GetGlyphSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.CheckBoxState state) -> System.Drawing.Size
-~static System.Windows.Forms.Clipboard.ContainsData(string format) -> bool
-~static System.Windows.Forms.Clipboard.GetAudioStream() -> System.IO.Stream
-~static System.Windows.Forms.Clipboard.GetData(string format) -> object
-~static System.Windows.Forms.Clipboard.GetDataObject() -> System.Windows.Forms.IDataObject
-~static System.Windows.Forms.Clipboard.GetFileDropList() -> System.Collections.Specialized.StringCollection
-~static System.Windows.Forms.Clipboard.GetImage() -> System.Drawing.Image
-~static System.Windows.Forms.Clipboard.GetText() -> string
-~static System.Windows.Forms.Clipboard.GetText(System.Windows.Forms.TextDataFormat format) -> string
-~static System.Windows.Forms.Clipboard.SetAudio(byte[] audioBytes) -> void
-~static System.Windows.Forms.Clipboard.SetAudio(System.IO.Stream audioStream) -> void
-~static System.Windows.Forms.Clipboard.SetData(string format, object data) -> void
-~static System.Windows.Forms.Clipboard.SetDataObject(object data) -> void
-~static System.Windows.Forms.Clipboard.SetDataObject(object data, bool copy) -> void
-~static System.Windows.Forms.Clipboard.SetDataObject(object data, bool copy, int retryTimes, int retryDelay) -> void
-~static System.Windows.Forms.Clipboard.SetFileDropList(System.Collections.Specialized.StringCollection filePaths) -> void
-~static System.Windows.Forms.Clipboard.SetImage(System.Drawing.Image image) -> void
-~static System.Windows.Forms.Clipboard.SetText(string text) -> void
-~static System.Windows.Forms.Clipboard.SetText(string text, System.Windows.Forms.TextDataFormat format) -> void
+static System.Windows.Forms.Clipboard.ContainsData(string? format) -> bool
+static System.Windows.Forms.Clipboard.GetAudioStream() -> System.IO.Stream?
+static System.Windows.Forms.Clipboard.GetData(string! format) -> object?
+static System.Windows.Forms.Clipboard.GetDataObject() -> System.Windows.Forms.IDataObject?
+static System.Windows.Forms.Clipboard.GetFileDropList() -> System.Collections.Specialized.StringCollection!
+static System.Windows.Forms.Clipboard.GetImage() -> System.Drawing.Image?
+static System.Windows.Forms.Clipboard.GetText() -> string!
+static System.Windows.Forms.Clipboard.GetText(System.Windows.Forms.TextDataFormat format) -> string!
+static System.Windows.Forms.Clipboard.SetAudio(byte[]! audioBytes) -> void
+static System.Windows.Forms.Clipboard.SetAudio(System.IO.Stream! audioStream) -> void
+static System.Windows.Forms.Clipboard.SetData(string! format, object! data) -> void
+static System.Windows.Forms.Clipboard.SetDataObject(object! data) -> void
+static System.Windows.Forms.Clipboard.SetDataObject(object! data, bool copy) -> void
+static System.Windows.Forms.Clipboard.SetDataObject(object! data, bool copy, int retryTimes, int retryDelay) -> void
+static System.Windows.Forms.Clipboard.SetFileDropList(System.Collections.Specialized.StringCollection! filePaths) -> void
+static System.Windows.Forms.Clipboard.SetImage(System.Drawing.Image! image) -> void
+static System.Windows.Forms.Clipboard.SetText(string! text) -> void
+static System.Windows.Forms.Clipboard.SetText(string! text, System.Windows.Forms.TextDataFormat format) -> void
 static System.Windows.Forms.ComboBoxRenderer.DrawDropDownButton(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
 static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? comboBoxText, System.Drawing.Font? font, System.Drawing.Rectangle textBounds, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
 static System.Windows.Forms.ComboBoxRenderer.DrawTextBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? comboBoxText, System.Drawing.Font? font, System.Drawing.Rectangle textBounds, System.Windows.Forms.VisualStyles.ComboBoxState state) -> void
