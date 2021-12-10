@@ -15,98 +15,87 @@ namespace System.Windows.Forms.UITests
         }
 
         [WinFormsFact]
-        public async Task Hotkey_Ctrl_1Async()
+        public async Task PrintPreviewDialog_Hotkey_Ctrl_1Async()
         {
-            await RunTestAsync((form, textBox) =>
+            await RunTestAsync(printPreviewDialog =>
             {
-                PrintPreviewDialog printPreviewDialog = new();
                 printPreviewDialog.Show();
                 SendKeys.SendWait("^1");
 
                 Assert.Equal(1, printPreviewDialog.PrintPreviewControl.Rows);
-
                 Assert.Equal(1, printPreviewDialog.PrintPreviewControl.Columns);
+
                 return Task.CompletedTask;
             });
         }
 
         [WinFormsFact]
-        public async Task Hotkey_Ctrl_2Async()
+        public async Task PrintPreviewDialog_Hotkey_Ctrl_2Async()
         {
-            await RunTestAsync((form, textBox) =>
+            await RunTestAsync(printPreviewDialog =>
             {
-                PrintPreviewDialog printPreviewDialog = new();
                 printPreviewDialog.Show();
                 SendKeys.SendWait("^2");
 
                 Assert.Equal(1, printPreviewDialog.PrintPreviewControl.Rows);
-
                 Assert.Equal(2, printPreviewDialog.PrintPreviewControl.Columns);
+
                 return Task.CompletedTask;
             });
         }
 
         [WinFormsFact]
-        public async Task Hotkey_Ctrl_3Async()
+        public async Task PrintPreviewDialog_Hotkey_Ctrl_3Async()
         {
-            await RunTestAsync((form, textBox) =>
+            await RunTestAsync(printPreviewDialog =>
             {
-                PrintPreviewDialog printPreviewDialog = new();
                 printPreviewDialog.Show();
                 SendKeys.SendWait("^3");
 
                 Assert.Equal(1, printPreviewDialog.PrintPreviewControl.Rows);
-
                 Assert.Equal(3, printPreviewDialog.PrintPreviewControl.Columns);
+
                 return Task.CompletedTask;
             });
         }
 
         [WinFormsFact]
-        public async Task Hotkey_Ctrl_4Async()
+        public async Task PrintPreviewDialog_Hotkey_Ctrl_4Async()
         {
-            await RunTestAsync((form, textBox) =>
+            await RunTestAsync(printPreviewDialog =>
             {
-                PrintPreviewDialog printPreviewDialog = new();
                 printPreviewDialog.Show();
                 SendKeys.SendWait("^4");
 
                 Assert.Equal(2, printPreviewDialog.PrintPreviewControl.Rows);
-
                 Assert.Equal(2, printPreviewDialog.PrintPreviewControl.Columns);
+
                 return Task.CompletedTask;
             });
         }
 
         [WinFormsFact]
-        public async Task Hotkey_Ctrl_5Async()
+        public async Task PrintPreviewDialog_Hotkey_Ctrl_5Async()
         {
-            await RunTestAsync((form, textBox) =>
+            await RunTestAsync(printPreviewDialog =>
             {
-                PrintPreviewDialog printPreviewDialog = new();
                 printPreviewDialog.Show();
                 SendKeys.SendWait("^5");
 
                 Assert.Equal(2, printPreviewDialog.PrintPreviewControl.Rows);
-
                 Assert.Equal(3, printPreviewDialog.PrintPreviewControl.Columns);
+
                 return Task.CompletedTask;
             });
         }
 
-        private async Task RunTestAsync(Func<Form, TextBox, Task> runTest)
+        private async Task RunTestAsync(Func<PrintPreviewDialog, Task> runTest)
         {
-            await RunSingleControlTestAsync(
+            await RunFormWithoutControlAsync(
                 testDriverAsync: runTest,
-                createControl: () =>
-                {
-                    TextBox control = new();
-
-                    return control;
-                },
                 createForm: () =>
                 {
-                    return new()
+                    return new PrintPreviewDialog()
                     {
                         Size = new(500, 300),
                     };

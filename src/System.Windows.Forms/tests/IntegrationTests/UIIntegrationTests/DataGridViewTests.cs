@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Data;
+using System.Drawing;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -20,7 +21,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task DataGridView_ToolTip_DoesNot_ThrowExceptionAsync()
         {
-            await RunTestAsync((form, dataGridView) =>
+            await RunTestAsync(async (form, dataGridView) =>
             {
                 using DataTable dataTable = new();
                 dataTable.Columns.Add(columnName: "name");
@@ -30,20 +31,13 @@ namespace System.Windows.Forms.UITests
                 dataGridView.ShowCellToolTips = true;
                 dataGridView.DataSource = dataTable;
 
-                // Create form and add dataGridView.
-                using Form dialog = new();
-                dialog.Controls.Add(dataGridView);
+                Point point = dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false).Location;
 
-                dialog.Shown += (sender, args) =>
-                {
-                    // Move mouse cursor over any cell of the first row.
-                    Cursor.Position = dataGridView.PointToScreen(dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false).Location);
-
-                    // Close the dialog after a short delay.
-                    _ = Task.Delay(millisecondsDelay: 100).ContinueWith((t) => dialog.Close(), TaskScheduler.FromCurrentSynchronizationContext());
-                };
-
-                dialog.ShowDialog();
+                // Move mouse cursor over any cell of the first row.
+                await InputSimulator.SendAsync(
+                            form,
+                            inputSimulator => inputSimulator.Mouse.MoveMouseTo(point.X, point.Y));
+                form.Close();
 
                 var exceptionThrown = false;
 
@@ -57,7 +51,6 @@ namespace System.Windows.Forms.UITests
                 }
 
                 Assert.False(exceptionThrown);
-                return Task.CompletedTask;
             });
         }
 

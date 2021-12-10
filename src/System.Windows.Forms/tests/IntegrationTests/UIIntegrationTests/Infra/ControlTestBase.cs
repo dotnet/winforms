@@ -148,6 +148,19 @@ namespace System.Windows.Forms.UITests
             }
         }
 
+        protected async Task RunFormTestAsync(Func<Form, Task> testDriverAsync)
+        {
+            await RunFormWithoutControlAsync(
+                () =>
+                {
+                    var form = new Form();
+                    form.TopMost = true;
+
+                    return (PrintPreviewDialog)form;
+                },
+                testDriverAsync);
+        }
+
         protected async Task RunSingleControlTestAsync<T>(Func<Form, T, Task> testDriverAsync)
             where T : Control, new()
         {
@@ -245,6 +258,37 @@ namespace System.Windows.Forms.UITests
 
             Assert.NotNull(dialog);
             Assert.NotNull(control);
+
+            dialog.Activated += (sender, e) => gate.TrySetResult(default);
+            dialog.ShowDialog();
+
+            await test.JoinAsync();
+        }
+
+        protected async Task RunFormWithoutControlAsync(Func<PrintPreviewDialog> createForm, Func<PrintPreviewDialog, Task> testDriverAsync)
+        {
+            PrintPreviewDialog? dialog = null;
+
+            TaskCompletionSource<VoidResult> gate = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            JoinableTask test = JoinableTaskFactory.RunAsync(async () =>
+            {
+                await gate.Task;
+                await JoinableTaskFactory.SwitchToMainThreadAsync();
+                await WaitForIdleAsync();
+                try
+                {
+                    await testDriverAsync(dialog!);
+                }
+                finally
+                {
+                    dialog!.Close();
+                }
+            });
+
+            await JoinableTaskFactory.SwitchToMainThreadAsync();
+            dialog = createForm();
+
+            Assert.NotNull(dialog);
 
             dialog.Activated += (sender, e) => gate.TrySetResult(default);
             dialog.ShowDialog();
