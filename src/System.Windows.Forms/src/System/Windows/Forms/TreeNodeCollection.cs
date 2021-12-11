@@ -699,7 +699,14 @@ namespace System.Windows.Forms
 
         public IEnumerator GetEnumerator()
         {
-            return new ArraySubsetEnumerator(owner.children, owner.childCount);
+            if (owner.children is not null)
+            {
+                return new ArraySubsetEnumerator(owner.children, owner.childCount);
+            }
+            else
+            {
+                return Array.Empty<TreeNode>().GetEnumerator();
+            }
         }
     }
 }
