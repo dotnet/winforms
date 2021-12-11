@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using static Interop;
 
@@ -14,10 +12,10 @@ namespace System.Windows.Forms
         private class AxSourcingSite : ISite
         {
             private readonly Ole32.IOleClientSite _clientSite;
-            private string _name;
-            private HtmlShimManager _shimManager;
+            private string? _name;
+            private HtmlShimManager? _shimManager;
 
-            internal AxSourcingSite(IComponent component, Ole32.IOleClientSite clientSite, string name)
+            internal AxSourcingSite(IComponent component, Ole32.IOleClientSite clientSite, string? name)
             {
                 Component = component;
                 _clientSite = clientSite;
@@ -32,9 +30,9 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The container in which the component is sited.
             /// </summary>
-            public IContainer Container => null;
+            public IContainer? Container => null;
 
-            public object GetService(Type service)
+            public object? GetService(Type service)
             {
                 if (service == typeof(HtmlDocument))
                 {
@@ -60,7 +58,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  The name of the component.
             /// </summary>
-            public string Name
+            public string? Name
             {
                 get => _name;
                 set
