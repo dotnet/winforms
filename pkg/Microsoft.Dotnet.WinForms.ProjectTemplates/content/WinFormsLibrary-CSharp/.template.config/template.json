@@ -6,8 +6,8 @@
   "generatorVersions": "[1.0.0.0-*)",
   "description": "A project template for creating a class library that targets .NET Windows Forms (WinForms).",
   "groupIdentity": "Microsoft.Common.WinForms.Library",
-  "precedence": "6000",
-  "identity": "Microsoft.Common.WinForms.Library.CSharp.6.0",
+  "precedence": "7000",
+  "identity": "Microsoft.Common.WinForms.Library.CSharp.7.0",
   "shortName": "winformslib",
   "tags": {
     "language": "C#",
@@ -43,11 +43,16 @@
           "choice": "net6.0",
           "description": "Target net6.0",
           "displayName": ".NET 6.0"
+        },
+        {
+          "choice": "net7.0",
+          "description": "Target net7.0",
+          "displayName": ".NET 7.0"
         }
       ],
       "replaces": "FrameworkParameter",
-      "defaultValue": "net6.0",
-      "displayName": "Framework"
+      "defaultValue": "net7.0",
+      "displayName": ".NET 7.0"
     },
     "langVersion": {
       "type": "parameter",
@@ -86,11 +91,11 @@
     },
     "csharpFeature_ImplicitUsings": {
       "type": "computed",
-      "value": "Framework == \"net6.0\" && csharp10orLater == \"true\""
+      "value": "(Framework == \"net7.0\" || Framework == \"net6.0\") && csharp10orLater == \"true\""
     },
     "csharpFeature_FileScopedNamespaces": {
       "type": "computed",
-      "value": "(Framework == \"net6.0\" || langVersion != \"\") && csharp10orLater == \"true\""
+      "value": "(Framework == \"net7.0\" || Framework == \"net6.0\" || langVersion != \"\") && csharp10orLater == \"true\""
     }
   },
   "primaryOutputs": [
@@ -112,7 +117,7 @@
       "target": "./"
     },
     {
-      "condition": "Framework == \"net6.0\"",
+      "condition": "(Framework == \"net7.0\" || Framework == \"net6.0\")",
       "source": "./net6.0",
       "target": "./"
     }
