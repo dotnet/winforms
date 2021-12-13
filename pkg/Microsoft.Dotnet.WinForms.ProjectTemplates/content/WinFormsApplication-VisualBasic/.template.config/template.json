@@ -50,7 +50,7 @@
           "description": "Target net6.0",
           "displayName": ".NET 6.0"
         },
-		{
+        {
           "choice": "net7.0",
           "description": "Target net7.0",
           "displayName": ".NET 7.0"
