@@ -13,7 +13,6 @@
     <ProjectReference Include="..\MauiTests\MauiMDITests\MauiMDITests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiPrintPreviewDialogTests\MauiPrintPreviewDialogTests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiPropertyGridViewTests\MauiPropertyGridViewTests.csproj" />
-    <ProjectReference Include="..\MauiTests\MauiRichTextBoxTests\MauiRichTextBoxTests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiTestsHelper\MauiTestsHelper.csproj" />
     <ProjectReference Include="..\MauiTests\MauiToolStripTests\MauiToolStripTests.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
