@@ -117,7 +117,7 @@
       "target": "./"
     },
     {
-      "condition": "(Framework == \"net6.0\" || Framework == \"net7.0\")",
+      "condition": "(Framework == \"net7.0\" || Framework == \"net6.0\")",
       "source": "./net6.0",
       "target": "./"
     }

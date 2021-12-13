@@ -44,7 +44,7 @@
           "description": "Target net6.0",
           "displayName": ".NET 6.0"
         },
-		{
+        {
           "choice": "net7.0",
           "description": "Target net7.0",
           "displayName": ".NET 7.0"
@@ -120,7 +120,7 @@
     },
     {
       "exclude": [ "**/[Bb]in/**", "**/[Oo]bj/**", ".template.config/**/*", "**/*.filelist", "**/*.lock.json" ],
-      "condition": "(Framework == \"net6.0\" || Framework == \"net7.0\")",
+      "condition": "(Framework == \"net7.0\" || Framework == \"net6.0\")",
       "source": "./net6.0",
       "target": "./"
     }
