@@ -2382,7 +2382,6 @@ namespace System.Windows.Forms
 
                 if (IsHandleCreated && Visible)
                 {
-                    IntPtr hWnd = Handle;
                     switch (value)
                     {
                         case FormWindowState.Normal:
@@ -5931,12 +5930,15 @@ namespace System.Windows.Forms
                         SuspendLayoutForMinimize();
                     }
 
-                    _restoredWindowBounds.Size = ClientSize;
-                    _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 1;
-                    _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 1;
-                    _restoredWindowBoundsSpecified = BoundsSpecified.Size;
-                    _restoredWindowBounds.Location = Location;
-                    _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
+                    if (!OsVersion.IsWindows11_OrGreater)
+                    {
+                        _restoredWindowBounds.Size = ClientSize;
+                        _formStateEx[FormStateExWindowBoundsWidthIsClientSize] = 1;
+                        _formStateEx[FormStateExWindowBoundsHeightIsClientSize] = 1;
+                        _restoredWindowBoundsSpecified = BoundsSpecified.Size;
+                        _restoredWindowBounds.Location = Location;
+                        _restoredWindowBoundsSpecified |= BoundsSpecified.Location;
+                    }
 
                     // stash off restoreBounds As well...
                     _restoreBounds.Size = Size;
