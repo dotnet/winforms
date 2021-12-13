@@ -11,6 +11,8 @@
   "symbols/Framework/choices/net5.0/displayName": ".NET 5.0",
   "symbols/Framework/choices/net6.0/description": "Hedef net6.0",
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
+  "symbols/Framework/choices/net7.0/description": "Target net7.0",
+  "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
   "symbols/Framework/displayName": "Çerçeve",
   "symbols/langVersion/description": "Oluşturulan proje dosyasında langVersion'ı ayarlar",
   "symbols/langVersion/displayName": "Dil Sürümü",
