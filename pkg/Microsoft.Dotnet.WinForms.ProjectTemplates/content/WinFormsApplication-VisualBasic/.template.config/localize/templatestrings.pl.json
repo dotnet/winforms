@@ -12,6 +12,8 @@
   "symbols/Framework/choices/net5.0/displayName": ".NET 5.0",
   "symbols/Framework/choices/net6.0/description": "Docelowy net6.0",
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
+  "symbols/Framework/choices/net7.0/description": "Target net7.0",
+  "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
   "symbols/Framework/displayName": "Platforma",
   "symbols/langVersion/description": "Ustawia langVersion w\u00A0utworzonym pliku projektu",
   "symbols/langVersion/displayName": "Wersja języka",

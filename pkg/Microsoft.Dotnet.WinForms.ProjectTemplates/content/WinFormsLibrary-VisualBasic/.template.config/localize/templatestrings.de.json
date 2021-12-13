@@ -11,6 +11,8 @@
   "symbols/Framework/choices/net5.0/displayName": ".NET 5.0",
   "symbols/Framework/choices/net6.0/description": "Auf „net6.0“ abzielen",
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
+  "symbols/Framework/choices/net7.0/description": "Target net7.0",
+  "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
   "symbols/Framework/displayName": "Framework",
   "symbols/langVersion/description": "Legt „langVersion“ in der erstellten Projektdatei fest",
   "symbols/langVersion/displayName": "Sprachversion",
