@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using System.Drawing;
+using System.Globalization;
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio.Threading;
 using Xunit;
@@ -22,6 +23,8 @@ namespace System.Windows.Forms.UITests
         protected ControlTestBase(ITestOutputHelper testOutputHelper)
         {
             TestOutputHelper = testOutputHelper;
+            Thread.CurrentThread.CurrentCulture =
+                Thread.CurrentThread.CurrentUICulture = new("en-US");
 
             Application.EnableVisualStyles();
 
