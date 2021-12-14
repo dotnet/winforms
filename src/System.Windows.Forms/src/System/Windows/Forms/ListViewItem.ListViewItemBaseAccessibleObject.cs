@@ -167,20 +167,15 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                     UiaCore.UIA.AutomationIdPropertyId => AutomationId,
-                    UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
                     UiaCore.UIA.FrameworkIdPropertyId => NativeMethods.WinFormFrameworkId,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ListItemControlTypeId,
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => OwningListItemFocused,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => _owningListView.Enabled,
                     UiaCore.UIA.IsOffscreenPropertyId => OwningGroup?.CollapsedState == ListViewGroupCollapsedState.Collapsed
-                                                        || (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
+                                                        || (bool)(base.GetPropertyValue(UiaCore.UIA.IsOffscreenPropertyId) ?? false),
                     UiaCore.UIA.NativeWindowHandlePropertyId => _owningListView.IsHandleCreated ? _owningListView.Handle : IntPtr.Zero,
-                    UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.SelectionItemPatternId),
-                    UiaCore.UIA.IsScrollItemPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ScrollItemPatternId),
                     UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.InvokePatternId),
                     _ => base.GetPropertyValue(propertyID)
                 };

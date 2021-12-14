@@ -83,16 +83,9 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                     UiaCore.UIA.AutomationIdPropertyId => _owningTabPage.Name,
-                    UiaCore.UIA.IsEnabledPropertyId => _owningTabPage.Enabled,
-                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningTabPage.Focused,
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.AccessKeyPropertyId => KeyboardShortcut,
-                    UiaCore.UIA.NativeWindowHandlePropertyId => _owningTabPage.InternalHandle,
-                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
-                    UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId),
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

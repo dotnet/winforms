@@ -136,14 +136,8 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.RuntimeIdPropertyId:
-                        return RuntimeId;
-                    case UiaCore.UIA.BoundingRectanglePropertyId:
-                        return Bounds;
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.ListControlTypeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return string.Empty;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
@@ -154,8 +148,6 @@ namespace System.Windows.Forms
                         return _owningComboBox.Enabled;
                     case UiaCore.UIA.AutomationIdPropertyId:
                         return COMBO_BOX_LIST_AUTOMATION_ID;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
                     case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
                     case UiaCore.UIA.NativeWindowHandlePropertyId:

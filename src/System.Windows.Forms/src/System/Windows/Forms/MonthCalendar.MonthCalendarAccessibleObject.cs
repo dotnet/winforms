@@ -401,12 +401,7 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => _owningMonthCalendar.AccessibleRole == AccessibleRole.Default
                         ? UiaCore.UIA.CalendarControlTypeId
                         : base.GetPropertyValue(propertyID),
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => IsEnabled,
-                    UiaCore.UIA.IsGridPatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.GridPatternId),
-                    UiaCore.UIA.IsTablePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.TablePatternId),
-                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
-                    UiaCore.UIA.IsEnabledPropertyId => _owningMonthCalendar.Enabled,
                     UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
                     _ => base.GetPropertyValue(propertyID)
                 };

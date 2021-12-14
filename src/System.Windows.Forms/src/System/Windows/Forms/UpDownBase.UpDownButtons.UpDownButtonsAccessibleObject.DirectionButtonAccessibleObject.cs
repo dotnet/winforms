@@ -76,14 +76,10 @@ namespace System.Windows.Forms
 
                     internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                     {
-                        UiaCore.UIA.NamePropertyId => Name,
-                        UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
-                        UiaCore.UIA.BoundingRectanglePropertyId => Bounds,
                         UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
                         UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
-                        UiaCore.UIA.LegacyIAccessiblePatternId => IsPatternSupported(propertyID),
-                        UiaCore.UIA.InvokePatternId => IsPatternSupported(propertyID),
+                        UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.InvokePatternId),
                         _ => base.GetPropertyValue(propertyID),
                     };
 

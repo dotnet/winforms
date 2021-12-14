@@ -478,5 +478,45 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedKeyboardShortcut, accessibleObject.GetPropertyValue(UIA.AccessKeyPropertyId));
             Assert.Equal(createControl, tabPage.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void TabPageAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        {
+            const string name = "Test name";
+            using TabPage tabPage = new()
+            {
+                AccessibleName = name
+            };
+
+            object actual = tabPage.AccessibilityObject.GetPropertyValue(UIA.NamePropertyId);
+
+            Assert.Equal(name, actual);
+            Assert.False(tabPage.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(false, ((int)UIA.IsExpandCollapsePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsGridItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsGridPatternAvailablePropertyId))]
+        [InlineData(true, ((int)UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsMultipleViewPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsScrollItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsScrollPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsSelectionItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsSelectionPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTableItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTablePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTextPattern2AvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTextPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTogglePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsValuePatternAvailablePropertyId))]
+        public void TabPageAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
+        {
+            using TabPage tabPage = new();
+            TabPageAccessibleObject accessibleObject = (TabPageAccessibleObject)tabPage.AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA)propertyId) ?? false);
+            Assert.False(tabPage.IsHandleCreated);
+        }
     }
 }

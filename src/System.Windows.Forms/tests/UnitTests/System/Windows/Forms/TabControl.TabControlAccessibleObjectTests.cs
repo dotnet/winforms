@@ -701,5 +701,72 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expectedKeyboardShortcut, accessibleObject.GetPropertyValue(UIA.AccessKeyPropertyId));
             Assert.Equal(createControl, tabControl.IsHandleCreated);
         }
+
+        [WinFormsFact]
+        public void TabControlAccessibleObject_GetPropertyValue_RuntimeId_ReturnsExpected()
+        {
+            using TabControl tabControl = new();
+
+            object actual = tabControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId);
+
+            Assert.Equal(tabControl.AccessibilityObject.RuntimeId, actual);
+            Assert.False(tabControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void TabControlAccessibleObject_GetPropertyValue_IsEnabled_ReturnsExpected(bool enabled)
+        {
+            using TabControl tabControl = new()
+            {
+                Enabled = enabled
+            };
+
+            object actual = tabControl.AccessibilityObject.GetPropertyValue(UIA.IsEnabledPropertyId);
+
+            Assert.Equal(tabControl.Enabled, actual);
+            Assert.False(tabControl.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void TabControlAccessibleObject_GetPropertyValue_Name_ReturnsExpected()
+        {
+            const string name = "Test name";
+            using TabControl tabControl = new()
+            {
+                AccessibleName = name
+            };
+
+            object actual = tabControl.AccessibilityObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
+
+            Assert.Equal(name, actual);
+            Assert.False(tabControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(false, ((int)UIA.IsExpandCollapsePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsGridItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsGridPatternAvailablePropertyId))]
+        [InlineData(true, ((int)UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsMultipleViewPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsScrollItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsScrollPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsSelectionItemPatternAvailablePropertyId))]
+        [InlineData(true, ((int)UIA.IsSelectionPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTableItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTablePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTextPattern2AvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTextPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTogglePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsValuePatternAvailablePropertyId))]
+        public void TabControlAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
+        {
+            using TabControl tabControl = new();
+            TabControlAccessibleObject accessibleObject = (TabControlAccessibleObject)tabControl.AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.GetPropertyValue((UIA)propertyId) ?? false);
+            Assert.False(tabControl.IsHandleCreated);
+        }
     }
 }

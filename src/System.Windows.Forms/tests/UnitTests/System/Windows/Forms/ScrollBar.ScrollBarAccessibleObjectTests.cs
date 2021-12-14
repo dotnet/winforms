@@ -98,6 +98,58 @@ namespace System.Windows.Forms.Tests
             Assert.False(scrollBar.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void ScrollBarAccessibleObject_GetPropertyValue_RuntimeId_ReturnsExpected()
+        {
+            using SubScrollBar scrollBar = new();
+
+            object actual = scrollBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.RuntimeIdPropertyId);
+
+            Assert.Equal(scrollBar.AccessibilityObject.RuntimeId, actual);
+            Assert.False(scrollBar.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true)]
+        [InlineData(false)]
+        public void ScrollBarAccessibleObject_GetPropertyValue_IsEnabled_ReturnsExpected(bool enabled)
+        {
+            using SubScrollBar scrollBar = new()
+            {
+                Enabled = enabled
+            };
+
+            object actual = scrollBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.IsEnabledPropertyId);
+
+            Assert.Equal(scrollBar.Enabled, actual);
+            Assert.False(scrollBar.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [InlineData(false, ((int)UIA.IsExpandCollapsePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsGridItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsGridPatternAvailablePropertyId))]
+        [InlineData(true, ((int)UIA.IsLegacyIAccessiblePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsMultipleViewPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsScrollItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsScrollPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsSelectionItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsSelectionPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTableItemPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTablePatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTextPattern2AvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTextPatternAvailablePropertyId))]
+        [InlineData(false, ((int)UIA.IsTogglePatternAvailablePropertyId))]
+        [InlineData(true, ((int)UIA.IsValuePatternAvailablePropertyId))]
+        public void ScrollBarAccessibleObject_GetPropertyValue_Pattern_ReturnsExpected(bool expected, int propertyId)
+        {
+            using SubScrollBar scrollBar = new() { Enabled = true };
+            ScrollBar.ScrollBarAccessibleObject accessibleObject = (ScrollBar.ScrollBarAccessibleObject)scrollBar.AccessibilityObject;
+
+            Assert.Equal(expected, accessibleObject.GetPropertyValue((UiaCore.UIA)propertyId) ?? false);
+            Assert.False(scrollBar.IsHandleCreated);
+        }
+
         private class SubScrollBar : ScrollBar
         {
             public SubScrollBar() : base()

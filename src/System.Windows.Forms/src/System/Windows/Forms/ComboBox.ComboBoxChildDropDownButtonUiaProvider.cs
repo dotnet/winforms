@@ -121,14 +121,10 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.RuntimeIdPropertyId:
-                        return RuntimeId;
                     case UiaCore.UIA.BoundingRectanglePropertyId:
                         return BoundingRectangle;
                     case UiaCore.UIA.ControlTypePropertyId:
                         return UiaCore.UIA.ButtonControlTypeId;
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.AccessKeyPropertyId:
                         return KeyboardShortcut;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
@@ -137,12 +133,8 @@ namespace System.Windows.Forms
                         return (State & AccessibleStates.Focusable) == AccessibleStates.Focusable;
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _owner.Enabled;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
                     case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case UiaCore.UIA.IsOffscreenPropertyId:
-                        return (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen;
                     default:
                         return base.GetPropertyValue(propertyID);
                 }

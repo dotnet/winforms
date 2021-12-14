@@ -235,13 +235,6 @@ namespace System.Windows.Forms
 
                 return -1;
             }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID) =>
-                propertyID switch
-                {
-                    UiaCore.UIA.NamePropertyId => Name,
-                    _ => base.GetPropertyValue(propertyID),
-                };
         }
     }
 }

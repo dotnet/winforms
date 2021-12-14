@@ -113,8 +113,6 @@ namespace System.Windows.Forms
                     // See: docs/accessibility/accessible-role-controltype.md
                     case UiaCore.UIA.ControlTypePropertyId:
                         return AccessibleRoleControlTypeMap.GetControlType(Role);
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
                         return (object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
                     case UiaCore.UIA.IsEnabledPropertyId:
@@ -129,8 +127,6 @@ namespace System.Windows.Forms
                         return KeyboardShortcut;
                     case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case UiaCore.UIA.HelpTextPropertyId:
-                        return Help ?? string.Empty;
                 }
 
                 return base.GetPropertyValue(propertyID);

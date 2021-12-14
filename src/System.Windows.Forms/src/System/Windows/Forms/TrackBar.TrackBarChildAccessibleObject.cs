@@ -71,13 +71,9 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
                     UiaCore.UIA.IsEnabledPropertyId => OwningTrackBar.Enabled,
-                    UiaCore.UIA.NamePropertyId => Name,
-                    UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
                     UiaCore.UIA.IsPasswordPropertyId => false,
-                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => false,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
                     UiaCore.UIA.AccessKeyPropertyId => string.Empty,

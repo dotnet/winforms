@@ -35,8 +35,6 @@ namespace System.Windows.Forms
             {
                 switch (propertyID)
                 {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.ControlTypePropertyId:
                         // If we don't set a default role for the accessible object
                         // it will be retrieved from Windows.

@@ -20,11 +20,6 @@ namespace System.Windows.Forms
 
                 internal override object GetPropertyValue(UiaCore.UIA propertyID)
                 {
-                    if (propertyID == UiaCore.UIA.NamePropertyId)
-                    {
-                        return Name;
-                    }
-
                     // If we don't set a default role for the accessible object
                     // it will be retrieved from Windows.
                     // And we don't have a 100% guarantee it will be correct, hence set it ourselves.

@@ -88,15 +88,10 @@ namespace System.Windows.Forms
                     => propertyID switch
                     {
                         UiaCore.UIA.IsEnabledPropertyId => _owningLinkLabel.Enabled,
-                        UiaCore.UIA.NamePropertyId => Name,
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.HyperlinkControlTypeId,
-                        UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                         UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                         UiaCore.UIA.HasKeyboardFocusPropertyId => _owningLinkLabel.FocusLink == _owningLink,
-                        UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
-                        UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
-                        UiaCore.UIA.LegacyIAccessiblePatternId => IsPatternSupported(propertyID),
-                        UiaCore.UIA.InvokePatternId => IsPatternSupported(propertyID),
+                        UiaCore.UIA.IsInvokePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.InvokePatternId),
                         _ => base.GetPropertyValue(propertyID)
                     };
 

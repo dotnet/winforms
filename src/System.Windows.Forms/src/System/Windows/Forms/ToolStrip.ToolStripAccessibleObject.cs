@@ -458,17 +458,6 @@ namespace System.Windows.Forms
 
                 return base.FragmentNavigate(direction);
             }
-
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
-                }
-
-                return base.GetPropertyValue(propertyID);
-            }
         }
     }
 }

@@ -26,10 +26,8 @@ namespace System.Windows.Forms
                     UiaCore.UIA.HasKeyboardFocusPropertyId => HasKeyboardFocus,
                     UiaCore.UIA.IsEnabledPropertyId => IsEnabled,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => false,
-                    UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.LegacyIAccessiblePatternId),
                     UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
                     UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
-                    UiaCore.UIA.NamePropertyId => Name,
                     _ => base.GetPropertyValue(propertyID)
                 };
 

@@ -207,17 +207,8 @@ namespace System.Windows.Forms
                         return _owningComboBox.AccessibleRole == AccessibleRole.Default
                                ? UiaCore.UIA.ComboBoxControlTypeId
                                : base.GetPropertyValue(propertyID);
-                    case UiaCore.UIA.NamePropertyId:
-                        return Name;
                     case UiaCore.UIA.HasKeyboardFocusPropertyId:
                         return _owningComboBox.Focused;
-                    case UiaCore.UIA.NativeWindowHandlePropertyId:
-                        return _owningComboBox.InternalHandle;
-                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
-                    case UiaCore.UIA.IsValuePatternAvailablePropertyId:
-                        return IsPatternSupported(UiaCore.UIA.ValuePatternId);
-
                     default:
                         return base.GetPropertyValue(propertyID);
                 }

@@ -328,23 +328,18 @@ namespace System.Windows.Forms.PropertyGridInternal
             {
                 return propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId => Name,
-
                     // The accessible hierarchy is changed so we cannot use Button type
                     // for the grid items to not break automation logic that searches for the first
                     // button in the PropertyGridView to show dialog/drop-down. In Level < 3 action
                     // button is one of the first children of PropertyGridView.
 
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TreeItemControlTypeId,
-                    UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId),
                     UiaCore.UIA.AccessKeyPropertyId => string.Empty,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningGridEntry.HasFocus,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,
                     UiaCore.UIA.IsEnabledPropertyId => true,
                     UiaCore.UIA.AutomationIdPropertyId => GetHashCode().ToString(),
-                    UiaCore.UIA.HelpTextPropertyId => Help ?? string.Empty,
                     UiaCore.UIA.IsPasswordPropertyId => false,
-                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.IsGridItemPatternAvailablePropertyId or UiaCore.UIA.IsTableItemPatternAvailablePropertyId => true,
                     UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
                     UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId => DefaultAction,

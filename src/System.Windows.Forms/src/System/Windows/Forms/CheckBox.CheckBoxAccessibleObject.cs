@@ -70,12 +70,8 @@ namespace System.Windows.Forms
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 => propertyID switch
                 {
-                    UiaCore.UIA.NamePropertyId
-                        => Name,
                     UiaCore.UIA.AutomationIdPropertyId
                         => Owner.Name,
-                    UiaCore.UIA.IsTogglePatternAvailablePropertyId
-                        => IsPatternSupported(UiaCore.UIA.TogglePatternId),
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         =>
                         // This is necessary for compatibility with MSAA proxy:

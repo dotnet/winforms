@@ -156,14 +156,8 @@ namespace System.Windows.Forms
                     UiaCore.UIA.ControlTypePropertyId => _owningTrackBar.AccessibleRole == AccessibleRole.Default
                                                             ? UiaCore.UIA.SliderControlTypeId
                                                             : base.GetPropertyValue(propertyID),
-                    UiaCore.UIA.RuntimeIdPropertyId => RuntimeId,
                     UiaCore.UIA.AutomationIdPropertyId => _owningTrackBar.Name,
-                    UiaCore.UIA.IsEnabledPropertyId => _owningTrackBar.Enabled,
-                    UiaCore.UIA.IsOffscreenPropertyId => (State & AccessibleStates.Offscreen) == AccessibleStates.Offscreen,
                     UiaCore.UIA.HasKeyboardFocusPropertyId => _owningTrackBar.Focused,
-                    UiaCore.UIA.NamePropertyId => Name,
-                    UiaCore.UIA.NativeWindowHandlePropertyId => _owningTrackBar.InternalHandle,
-                    UiaCore.UIA.IsValuePatternAvailablePropertyId => IsPatternSupported(UiaCore.UIA.ValuePatternId),
                     UiaCore.UIA.IsKeyboardFocusablePropertyId
                         // This is necessary for compatibility with MSAA proxy:
                         // IsKeyboardFocusable = true regardless the control is enabled/disabled.

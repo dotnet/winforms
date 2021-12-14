@@ -89,7 +89,6 @@ namespace System.Windows.Forms.PropertyGridInternal
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.TableControlTypeId,
-                    UiaCore.UIA.NamePropertyId => Name,
                     UiaCore.UIA.IsTablePatternAvailablePropertyId => true,
                     UiaCore.UIA.IsGridPatternAvailablePropertyId => true,
                     _ => base.GetPropertyValue(propertyID)
