@@ -280,7 +280,7 @@ namespace System.Windows.Forms
         /// </remarks>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
-        [SRDescription(nameof(SR.FDokRequiresInteractionDescr))]
+        [SRDescription(nameof(SR.FileDialogOkRequiresInteractionDescr))]
         public bool OkRequiresInteraction
         {
             get => GetOption((int)FOS.OKBUTTONNEEDSINTERACTION);
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
-        [SRDescription(nameof(SR.FDshowPinnedPlacesDescr))]
+        [SRDescription(nameof(SR.FileDialogShowPinnedPlacesDescr))]
         public bool ShowPinnedPlaces
         {
             get => !GetOption((int)FOS.HIDEPINNEDPLACES);

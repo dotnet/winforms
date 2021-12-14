@@ -4872,11 +4872,6 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">Определяет, добавляются ли расширения к именам файлов автоматически.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FDaddToRecentDescr">
-        <source>Controls whether to add the file being opened or saved to the recent list.</source>
-        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FDcheckFileExistsDescr">
         <source>Checks that the specified file exists before returning from the dialog.</source>
         <target state="translated">Перед возвратом из диалогового окна проверяет, что заданный файл существует.</target>
@@ -4922,11 +4917,6 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">Исходный каталог диалогового окна.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FDokRequiresInteractionDescr">
-        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FDrestoreDirectoryDescr">
         <source>Controls whether the dialog box restores the current directory before closing.</source>
         <target state="translated">Определяет, восстанавливает ли диалоговое окно текущий каталог перед закрытием.</target>
@@ -4935,16 +4925,6 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FDshowHelpDescr">
         <source>Enables the Help button.</source>
         <target state="translated">Активирует кнопку 'Справка'.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FDshowHiddenFilesDescr">
-        <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FDshowPinnedPlacesDescr">
-        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FDsupportMultiDottedExtensionsDescr">
@@ -4960,6 +4940,11 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FDvalidateNamesDescr">
         <source>Controls whether the dialog box ensures that file names do not contain invalid characters or sequences.</source>
         <target state="translated">Определяет, проверяет ли диалоговое окно имена файлов на наличие недопустимых символов или последовательностей.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
@@ -4996,11 +4981,26 @@ Verify that the correct file name was given.</source>
         <target state="translated">Недопустимый индекс фильтра.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">Файл {0} уже существует.
 Заменить его?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -7372,16 +7372,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Состояние доступного только для чтения флажка проверки в данном диалоговом окне.</target>
         <note />
       </trans-unit>
-      <trans-unit id="OFDselectReadOnlyDescr">
-        <source>Controls whether the dialog box allows to select read-only files.</source>
-        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="OFDshowPreviewDescr">
-        <source>Controls whether the dialog box shows a preview for selected files.</source>
-        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="OFDshowReadOnlyDescr">
         <source>Controls whether to show the read-only check box in the dialog.</source>
         <target state="translated">Задает, отображается ли доступный только для чтения флажок проверки в данном диалоговом окне.</target>
@@ -7405,6 +7395,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OnlyOneControl">
         <source>Cannot add or insert the item '{0}' in more than one place. You must first remove it from its current location or clone it.</source>
         <target state="translated">Невозможно добавить или вставить элемент '{0}' в несколько позиций. Сначала удалите его из текущей позиции или создайте его клон.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">

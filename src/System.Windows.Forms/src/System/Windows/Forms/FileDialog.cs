@@ -65,7 +65,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
-        [SRDescription(nameof(SR.FDaddToRecentDescr))]
+        [SRDescription(nameof(SR.FileDialogAddToRecentDescr))]
         public bool AddToRecent
         {
             get => !GetOption((int)Comdlg32.OFN.DONTADDTORECENT);
@@ -344,7 +344,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
-        [SRDescription(nameof(SR.FDshowHiddenFilesDescr))]
+        [SRDescription(nameof(SR.FileDialogShowHiddenFilesDescr))]
         public bool ShowHiddenFiles
         {
             get => GetOption((int)Comdlg32.OFN.FORCESHOWHIDDEN);

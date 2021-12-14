@@ -4871,11 +4871,6 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
         <target state="translated">Určuje, zda jsou k názvům souborů automaticky přidávány přípony.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FDaddToRecentDescr">
-        <source>Controls whether to add the file being opened or saved to the recent list.</source>
-        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FDcheckFileExistsDescr">
         <source>Checks that the specified file exists before returning from the dialog.</source>
         <target state="translated">Před návratem z tohoto dialogového okna zkontroluje, zda zadaný soubor existuje.</target>
@@ -4921,11 +4916,6 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
         <target state="translated">Počáteční adresář dialogového okna</target>
         <note />
       </trans-unit>
-      <trans-unit id="FDokRequiresInteractionDescr">
-        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FDrestoreDirectoryDescr">
         <source>Controls whether the dialog box restores the current directory before closing.</source>
         <target state="translated">Určuje, zda dialogové okno před zavřením obnoví aktuální adresář.</target>
@@ -4934,16 +4924,6 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
       <trans-unit id="FDshowHelpDescr">
         <source>Enables the Help button.</source>
         <target state="translated">Povolí tlačítko Nápověda.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FDshowHiddenFilesDescr">
-        <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FDshowPinnedPlacesDescr">
-        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FDsupportMultiDottedExtensionsDescr">
@@ -4959,6 +4939,11 @@ Pokud kliknete na Pokračovat, aplikace bude tuto chybu ignorovat a pokusí se p
       <trans-unit id="FDvalidateNamesDescr">
         <source>Controls whether the dialog box ensures that file names do not contain invalid characters or sequences.</source>
         <target state="translated">Určuje, zda dialogové okno zajišťuje, že názvy souborů neobsahují neplatné znaky nebo posloupnosti.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
@@ -4995,11 +4980,26 @@ Ověřte, zda byl zadán správný název souboru.</target>
         <target state="translated">Index filtru je neplatný.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">Soubor {0} již existuje.
 Chcete jej nahradit?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -7371,16 +7371,6 @@ Trasování zásobníku, kde došlo k neplatné operaci:
         <target state="translated">Stav zaškrtávacího políčka Jen pro čtení v dialogovém okně.</target>
         <note />
       </trans-unit>
-      <trans-unit id="OFDselectReadOnlyDescr">
-        <source>Controls whether the dialog box allows to select read-only files.</source>
-        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="OFDshowPreviewDescr">
-        <source>Controls whether the dialog box shows a preview for selected files.</source>
-        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="OFDshowReadOnlyDescr">
         <source>Controls whether to show the read-only check box in the dialog.</source>
         <target state="translated">Určuje, zda má být v dialogovém okně zobrazeno zaškrtávací políčko Jen pro čtení.</target>
@@ -7404,6 +7394,16 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       <trans-unit id="OnlyOneControl">
         <source>Cannot add or insert the item '{0}' in more than one place. You must first remove it from its current location or clone it.</source>
         <target state="translated">Položku {0} nelze přidat nebo vložit na více než jedno místo. Musíte ji nejprve odebrat z aktuálního umístění nebo vytvořit její klon.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">

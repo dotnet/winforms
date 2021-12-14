@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
-        [SRDescription(nameof(SR.OFDselectReadOnlyDescr))]
+        [SRDescription(nameof(SR.OpenFileDialogSelectReadOnlyDescr))]
         public bool SelectReadOnly
         {
             get => !GetOption((int)Comdlg32.OFN.NOREADONLYRETURN);
@@ -74,7 +74,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(false)]
-        [SRDescription(nameof(SR.OFDshowPreviewDescr))]
+        [SRDescription(nameof(SR.OpenFileDialogShowPreviewDescr))]
         public bool ShowPreview
         {
             get => GetOption((int)FOS.FORCEPREVIEWPANEON);

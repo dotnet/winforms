@@ -4871,11 +4871,6 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">파일 이름에 자동으로 확장명을 추가할지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FDaddToRecentDescr">
-        <source>Controls whether to add the file being opened or saved to the recent list.</source>
-        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FDcheckFileExistsDescr">
         <source>Checks that the specified file exists before returning from the dialog.</source>
         <target state="translated">대화 상자에서 반환하기 전에 지정한 파일이 있는지 확인합니다.</target>
@@ -4921,11 +4916,6 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">대화 상자의 초기 디렉터리입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="FDokRequiresInteractionDescr">
-        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="FDrestoreDirectoryDescr">
         <source>Controls whether the dialog box restores the current directory before closing.</source>
         <target state="translated">대화 상자를 닫기 전에 현재 디렉터리를 복원할지 여부를 제어합니다.</target>
@@ -4934,16 +4924,6 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FDshowHelpDescr">
         <source>Enables the Help button.</source>
         <target state="translated">[도움말] 단추를 사용합니다.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FDshowHiddenFilesDescr">
-        <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="FDshowPinnedPlacesDescr">
-        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FDsupportMultiDottedExtensionsDescr">
@@ -4959,6 +4939,11 @@ If you click Continue, the application will ignore this error and attempt to con
       <trans-unit id="FDvalidateNamesDescr">
         <source>Controls whether the dialog box ensures that file names do not contain invalid characters or sequences.</source>
         <target state="translated">대화 상자에서 파일 이름에 잘못된 문자나 시퀀스가 없는지 확인할지 여부를 제어합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
@@ -4995,11 +4980,26 @@ Verify that the correct file name was given.</source>
         <target state="translated">필터 인덱스가 잘못되었습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">{0} 파일이 이미 있습니다.
 바꾸시겠습니까?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -7371,16 +7371,6 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">대화 상자에서 읽기 전용 확인란의 상태입니다.</target>
         <note />
       </trans-unit>
-      <trans-unit id="OFDselectReadOnlyDescr">
-        <source>Controls whether the dialog box allows to select read-only files.</source>
-        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
-        <note />
-      </trans-unit>
-      <trans-unit id="OFDshowPreviewDescr">
-        <source>Controls whether the dialog box shows a preview for selected files.</source>
-        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
-        <note />
-      </trans-unit>
       <trans-unit id="OFDshowReadOnlyDescr">
         <source>Controls whether to show the read-only check box in the dialog.</source>
         <target state="translated">대화 상자의 읽기 전용 확인란을 표시할지 여부를 제어합니다.</target>
@@ -7404,6 +7394,16 @@ Stack trace where the illegal operation occurred was:
       <trans-unit id="OnlyOneControl">
         <source>Cannot add or insert the item '{0}' in more than one place. You must first remove it from its current location or clone it.</source>
         <target state="translated">두 개 이상의 위치에 '{0}' 항목을 추가하거나 삽입할 수 없습니다. 먼저 항목의 현재 위치에서 항목을 제거하거나 복제해야 합니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
