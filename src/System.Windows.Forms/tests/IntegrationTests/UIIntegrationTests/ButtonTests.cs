@@ -164,7 +164,7 @@ namespace System.Windows.Forms.UITests
                 var originalFormSize = form.DisplayRectangle.Size;
                 var originalButtonPosition = button.DisplayRectangle;
 
-                var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Right, form.DisplayRectangle.Top + form.DisplayRectangle.Height / 2 + 1);
+                var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Right, form.DisplayRectangle.Top + form.DisplayRectangle.Height / 2);
                 await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
                 await InputSimulator.SendAsync(
@@ -262,7 +262,7 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1)
+                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
                         .LeftButtonUp());
 
                 Assert.Equal(0, control1ClickCount);
@@ -298,8 +298,8 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1)
-                        .MoveMouseTo(virtualPoint1.X + 1, virtualPoint1.Y + 1)
+                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
+                        .MoveMouseTo(virtualPoint1.X, virtualPoint1.Y)
                         .LeftButtonUp());
 
                 Assert.Equal(1, control1ClickCount);
@@ -348,6 +348,7 @@ namespace System.Windows.Forms.UITests
         {
             await RunTestAsync(async (form, button) =>
             {
+                Assert.True(InputLanguage.CurrentInputLanguage.LayoutName == "US", "Please, switch to the US input language");
                 bool wasClicked = false;
 
                 button.Text = "&Click";
