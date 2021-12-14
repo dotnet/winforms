@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "Knihovna ovládacích prvků Windows Forms",
   "description": "Šablona projektu pro vytvoření knihovny ovládacích prvků, která cílí na .NET Windows Forms (WinForms).",
@@ -13,7 +13,7 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "Target net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
-  "symbols/Framework/displayName": "Framework",
+  "symbols/Framework/displayName": ".NET 7.0",
   "symbols/langVersion/description": "Nastaví langVersion ve vytvořeném souboru projektu.",
   "symbols/langVersion/displayName": "Verze jazyka",
   "symbols/skipRestore/description": "Pokud se tato možnost zadá, přeskočí automatické obnovení projektu při vytvoření.",

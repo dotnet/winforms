@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "Bibliothèque de contrôles Windows Forms",
   "description": "Modèle de projet pour créer une bibliothèque de contrôles ciblant .NET Windows Forms (WinForms).",
@@ -6,14 +6,14 @@
   "symbols/TargetFrameworkOverride/displayName": "Remplacement de l’infrastructure cible",
   "symbols/Framework/description": "Framework cible du projet.",
   "symbols/Framework/choices/netcoreapp3.1/description": "netcoreapp3.1 cible",
-  "symbols/Framework/choices/netcoreapp3.1/displayName": ".NET Core\u00A03.1",
+  "symbols/Framework/choices/netcoreapp3.1/displayName": ".NET Core 3.1",
   "symbols/Framework/choices/net5.0/description": "net5.0 cible",
   "symbols/Framework/choices/net5.0/displayName": ".NET 5.0",
   "symbols/Framework/choices/net6.0/description": "net6.0 cible",
-  "symbols/Framework/choices/net6.0/displayName": ".NET\u00A06.0",
+  "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "Target net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
-  "symbols/Framework/displayName": "Framework",
+  "symbols/Framework/displayName": ".NET 7.0",
   "symbols/langVersion/description": "Définit langVersion dans le fichier projet créé",
   "symbols/langVersion/displayName": "Version du Langage",
   "symbols/skipRestore/description": "S’il est spécifié, ignore la restauration automatique du projet lors de la création.",
