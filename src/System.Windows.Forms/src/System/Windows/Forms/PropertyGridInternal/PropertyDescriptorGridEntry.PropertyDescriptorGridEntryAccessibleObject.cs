@@ -2,13 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics;
 using static Interop;
 
 namespace System.Windows.Forms.PropertyGridInternal
 {
     internal partial class PropertyDescriptorGridEntry
     {
-        protected class PropertyDescriptorGridEntryAccessibleObject : GridEntryAccessibleObject
+        internal class PropertyDescriptorGridEntryAccessibleObject : GridEntryAccessibleObject
         {
             private readonly PropertyDescriptorGridEntry _owningPropertyDescriptorGridEntry;
 
@@ -38,6 +39,109 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
+            public override AccessibleObject? GetChild(int index)
+            {
+                Debug.Assert(index >= 0);
+
+                // Child controls exist in tree only when the entry is selected.
+                if (GetPropertyGridView() is { } propertyGridView && propertyGridView.SelectedGridEntry == _owningPropertyDescriptorGridEntry)
+                {
+                    // DropDownControlHolder exists in the tree if the drop-down holder is visible.
+                    if (propertyGridView.DropDownVisible)
+                    {
+                        if (index == 0)
+                        {
+                            return propertyGridView.DropDownControlHolder.AccessibilityObject;
+                        }
+
+                        index--;
+                    }
+
+                    // TextBox exists in the tree if it's created.
+                    if (propertyGridView.IsEditTextBoxCreated)
+                    {
+                        if (index == 0)
+                        {
+                            return propertyGridView.EditAccessibleObject;
+                        }
+
+                        index--;
+                    }
+
+                    // DropDownButton exists in the tree if the drop-down button is visible.
+                    if (propertyGridView.DropDownButton is { Visible: true } dropDownButton)
+                    {
+                        if (index == 0)
+                        {
+                            return dropDownButton.AccessibilityObject;
+                        }
+
+                        index--;
+                    } // DialogButton exists in the tree if the ellipsis button is visible.
+                    else if (propertyGridView.DialogButton is { Visible: true } dialogButton)
+                    {
+                        if (index == 0)
+                        {
+                            return dialogButton.AccessibilityObject;
+                        }
+
+                        index--;
+                    }
+                }
+
+                // Child entries exist in the tree if the entry has child entries and is expanded.
+                if (_owningPropertyDescriptorGridEntry is { ChildCount: > 0, Expanded: true })
+                {
+                    if (index < _owningPropertyDescriptorGridEntry.ChildCount)
+                    {
+                        return _owningPropertyDescriptorGridEntry.Children[index].AccessibilityObject;
+                    }
+
+                    // Uncomment the following line in case there will be another children going after the child entries:
+                    // index -= _owningPropertyDescriptorGridEntry.ChildCount;
+                }
+
+                return null;
+            }
+
+            public override int GetChildCount()
+            {
+                int count = 0;
+                // Child controls exist in tree only when the entry is selected.
+                if (GetPropertyGridView() is { } propertyGridView && propertyGridView.SelectedGridEntry == _owningPropertyDescriptorGridEntry)
+                {
+                    // DropDownControlHolder exists in the tree if the drop-down holder is visible.
+                    if (propertyGridView.DropDownVisible)
+                    {
+                        count++;
+                    }
+
+                    // TextBox exists in the tree if it's created.
+                    if (propertyGridView.IsEditTextBoxCreated)
+                    {
+                        count++;
+                    }
+
+                    // DropDownButton exists in the tree if the drop-down button is visible.
+                    if (propertyGridView.DropDownButton.Visible)
+                    {
+                        count++;
+                    } // DialogButton exists in the tree if the ellipsis button is visible.
+                    else if (propertyGridView.DialogButton.Visible)
+                    {
+                        count++;
+                    }
+                }
+
+                // Child entries exist in the tree if the entry has child entries and is expanded.
+                if (_owningPropertyDescriptorGridEntry.Expanded)
+                {
+                    count += _owningPropertyDescriptorGridEntry.ChildCount;
+                }
+
+                return count;
+            }
+
             internal override void Collapse()
             {
                 if (ExpandCollapseState == UiaCore.ExpandCollapseState.Expanded)
@@ -60,24 +164,114 @@ namespace System.Windows.Forms.PropertyGridInternal
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
             internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
-            {
-                switch (direction)
+                => direction switch
                 {
-                    case UiaCore.NavigateDirection.NextSibling:
-                        var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject?)Parent;
-                        var propertyGridView = propertyGridViewAccessibleObject?.Owner as PropertyGridView;
-                        return propertyGridViewAccessibleObject?.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView?.TopLevelGridEntries, out _);
-                    case UiaCore.NavigateDirection.PreviousSibling:
-                        propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject?)Parent;
-                        propertyGridView = propertyGridViewAccessibleObject?.Owner as PropertyGridView;
-                        return propertyGridViewAccessibleObject?.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView?.TopLevelGridEntries, out _);
-                    case UiaCore.NavigateDirection.FirstChild:
-                        return GetFirstChild();
-                    case UiaCore.NavigateDirection.LastChild:
-                        return GetLastChild();
+                    UiaCore.NavigateDirection.NextSibling => GetNextSibling(),
+                    UiaCore.NavigateDirection.PreviousSibling => GetPreviousSibling(),
+                    UiaCore.NavigateDirection.FirstChild => GetFirstChild(),
+                    UiaCore.NavigateDirection.LastChild => GetLastChild(),
+                    _ => base.FragmentNavigate(direction),
+                };
+
+            internal override int GetChildIndex(AccessibleObject? child)
+            {
+                Debug.Assert(child is not null);
+
+                int index = 0;
+                // Child controls exist in tree only when the entry is selected.
+                if (GetPropertyGridView() is { } propertyGridView && propertyGridView.SelectedGridEntry == _owningPropertyDescriptorGridEntry)
+                {
+                    // DropDownControlHolder exists in the tree if the drop-down holder is visible.
+                    if (propertyGridView.DropDownVisible)
+                    {
+                        if (child == propertyGridView.DropDownControlHolder.AccessibilityObject)
+                        {
+                            return index;
+                        }
+
+                        index++;
+                    }
+
+                    // TextBox exists in the tree if it's created.
+                    if (propertyGridView.IsEditTextBoxCreated)
+                    {
+                        if (child == propertyGridView.EditAccessibleObject)
+                        {
+                            return index;
+                        }
+
+                        index++;
+                    }
+
+                    // DropDownButton exists in the tree if the drop-down button is visible.
+                    if (propertyGridView.DropDownButton is { Visible: true } dropDownButton)
+                    {
+                        if (child == dropDownButton.AccessibilityObject)
+                        {
+                            return index;
+                        }
+
+                        index++;
+                    } // DialogButton exists in the tree if the ellipsis button is visible.
+                    else if (propertyGridView.DialogButton is { Visible: true } dialogButton)
+                    {
+                        if (child == dialogButton.AccessibilityObject)
+                        {
+                            return index;
+                        }
+
+                        index++;
+                    }
                 }
 
-                return base.FragmentNavigate(direction);
+                // Child entries exist in the tree if the entry has child entries and is expanded.
+                if (_owningPropertyDescriptorGridEntry is { ChildCount: > 0, Expanded: true })
+                {
+                    foreach (GridEntry childEntry in _owningPropertyDescriptorGridEntry.Children)
+                    {
+                        if (child == childEntry.AccessibilityObject)
+                        {
+                            return index;
+                        }
+
+                        index++;
+                    }
+                }
+
+                return -1;
+            }
+
+            internal AccessibleObject? GetNextChild(AccessibleObject child)
+            {
+                Debug.Assert(child is not null);
+
+                int index = GetChildIndex(child);
+                int lastChildIndex = GetChildCount() - 1;
+
+                Debug.Assert(index <= lastChildIndex);
+
+                // Ensure that it is a valid child and not the last child.
+                if (index == -1 || index == lastChildIndex)
+                {
+                    return null;
+                }
+
+                return GetChild(index + 1);
+            }
+
+            internal AccessibleObject? GetPreviousChild(AccessibleObject child)
+            {
+                Debug.Assert(child is not null);
+
+                int index = GetChildIndex(child);
+
+                // Ensure that it is a valid child and not the first child.
+                if (index == -1 || index == 0)
+                {
+                    return null;
+                }
+
+                return GetChild(index - 1);
             }
 
             internal override object? GetPropertyValue(UiaCore.UIA propertyID)
@@ -130,81 +324,32 @@ namespace System.Windows.Forms.PropertyGridInternal
                 }
             }
 
-            private UiaCore.IRawElementProviderFragment? GetFirstChild()
+            private UiaCore.IRawElementProviderFragment? GetFirstChild() => GetChildCount() > 0 ? GetChild(0) : null;
+
+            private UiaCore.IRawElementProviderFragment? GetLastChild() => GetChildCount() is int count and > 0 ? GetChild(count - 1) : null;
+
+            private UiaCore.IRawElementProviderFragment? GetNextSibling()
             {
-                if (_owningPropertyDescriptorGridEntry is null)
+                if (_owningPropertyDescriptorGridEntry.ParentGridEntry?.AccessibilityObject is PropertyDescriptorGridEntryAccessibleObject parent)
                 {
-                    return null;
+                    return parent.GetNextChild(this);
                 }
 
-                if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
-                {
-                    return _owningPropertyDescriptorGridEntry.Children[0].AccessibilityObject;
-                }
-
-                PropertyGridView? propertyGridView = GetPropertyGridView();
-                if (propertyGridView is null)
-                {
-                    return null;
-                }
-
-                GridEntry selectedGridEntry = propertyGridView.SelectedGridEntry;
-                if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
-                {
-                    if (selectedGridEntry.Enumerable &&
-                        propertyGridView.DropDownVisible &&
-                        propertyGridView.DropDownControlHolder?.Component == propertyGridView.DropDownListBox)
-                    {
-                        return propertyGridView.DropDownListBoxAccessibleObject;
-                    }
-
-                    if (propertyGridView.DropDownVisible && propertyGridView.DropDownControlHolder is not null)
-                    {
-                        return propertyGridView.DropDownControlHolder.AccessibilityObject;
-                    }
-
-                    if (propertyGridView.IsEditTextBoxCreated)
-                    {
-                        return propertyGridView.EditAccessibleObject;
-                    }
-                }
-
-                return null;
+                var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject?)Parent;
+                var propertyGridView = propertyGridViewAccessibleObject?.Owner as PropertyGridView;
+                return propertyGridViewAccessibleObject?.GetNextGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView?.TopLevelGridEntries, out _);
             }
 
-            private UiaCore.IRawElementProviderFragment? GetLastChild()
+            private UiaCore.IRawElementProviderFragment? GetPreviousSibling()
             {
-                if (_owningPropertyDescriptorGridEntry is null)
+                if (_owningPropertyDescriptorGridEntry.ParentGridEntry?.AccessibilityObject is PropertyDescriptorGridEntryAccessibleObject parent)
                 {
-                    return null;
+                    return parent.GetPreviousChild(this);
                 }
 
-                if (_owningPropertyDescriptorGridEntry.ChildCount > 0)
-                {
-                    return _owningPropertyDescriptorGridEntry.Children[_owningPropertyDescriptorGridEntry.ChildCount - 1].AccessibilityObject;
-                }
-
-                PropertyGridView? propertyGridView = GetPropertyGridView();
-                if (propertyGridView is null)
-                {
-                    return null;
-                }
-
-                GridEntry selectedGridEntry = propertyGridView.SelectedGridEntry;
-                if (_owningPropertyDescriptorGridEntry == selectedGridEntry)
-                {
-                    if (selectedGridEntry.Enumerable && propertyGridView.DropDownButton.Visible)
-                    {
-                        return propertyGridView.DropDownButton.AccessibilityObject;
-                    }
-
-                    if (propertyGridView.IsEditTextBoxCreated)
-                    {
-                        return propertyGridView.EditAccessibleObject;
-                    }
-                }
-
-                return null;
+                var propertyGridViewAccessibleObject = (PropertyGridView.PropertyGridViewAccessibleObject?)Parent;
+                var propertyGridView = propertyGridViewAccessibleObject?.Owner as PropertyGridView;
+                return propertyGridViewAccessibleObject?.GetPreviousGridEntry(_owningPropertyDescriptorGridEntry, propertyGridView?.TopLevelGridEntries, out _);
             }
 
             private PropertyGridView? GetPropertyGridView()

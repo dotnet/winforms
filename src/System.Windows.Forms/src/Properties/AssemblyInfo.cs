@@ -7,6 +7,7 @@ using System.Runtime.CompilerServices;
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 
 [assembly: InternalsVisibleTo("System.Windows.Forms.Tests, PublicKey=00000000000000000400000000000000")]
+[assembly: InternalsVisibleTo("System.Windows.Forms.TestUtilities, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.Primitives.TestUtilities, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("System.Windows.Forms.UI.IntegrationTests, PublicKey=00000000000000000400000000000000")]
 [assembly: InternalsVisibleTo("MauiImageListTests, PublicKey=00000000000000000400000000000000")]

@@ -242,7 +242,7 @@ namespace System.Windows.Forms.PropertyGridInternal
         ///   the selected row's <see cref="GridEntry"/>.
         ///  </para>
         /// </remarks>
-        private Button DialogButton
+        internal Button DialogButton
         {
             get
             {
