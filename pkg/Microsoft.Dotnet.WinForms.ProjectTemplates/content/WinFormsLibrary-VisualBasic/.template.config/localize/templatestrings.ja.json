@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "Windows フォーム クラス ライブラリ",
   "description": ".NET Windows フォーム (WinForms) を対象とするクラス ライブラリを作成するためのプロジェクト テンプレート。",
@@ -13,7 +13,7 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "Target net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
-  "symbols/Framework/displayName": "フレームワーク",
+  "symbols/Framework/displayName": ".NET 7.0",
   "symbols/langVersion/description": "作成されたプロジェクト ファイルで langVersion を設定します",
   "symbols/langVersion/displayName": "言語バージョン",
   "symbols/skipRestore/description": "指定した場合、作成時にプロジェクトの自動復元がスキップされます。",

@@ -219,7 +219,7 @@
       </trans-unit>
       <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
         <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0} nepodporuje vlastnost {1}. Musí to být přepsáno v odvozené třídě.</target>
+        <target state="new">{0} doesn't support {1} property. It must be overriden in the derived class.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -2074,12 +2074,12 @@
       </trans-unit>
       <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
         <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="translated">Kolekce {0} by pro {1} neměla být prázdná.</target>
+        <target state="new">{0} collection shouldn't be empty for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlsPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="translated">Vlastnost {0} by měla být nastavena na {1}.</target>
+        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
@@ -6443,7 +6443,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateName">
         <source>{0}, group, collapsed</source>
-        <target state="translated">{0}, skupina, sbaleno</target>
+        <target state="new">{0}, group, collapsed</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6463,7 +6463,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ListViewGroupExpandedStateName">
         <source>{0}, group, expanded</source>
-        <target state="translated">{0}, skupina, rozbaleno</target>
+        <target state="new">{0}, group, expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -7568,7 +7568,7 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="ParentPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="translated">Vlastnost {0} by měla být nastavena na {1}.</target>
+        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
@@ -8253,12 +8253,12 @@ Trasování zásobníku, kde došlo k neplatné operaci:
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="translated">Popis pro {0}</target>
+        <target state="new">{0} Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneTitle">
         <source>Description</source>
-        <target state="translated">Popis</target>
+        <target state="new">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">

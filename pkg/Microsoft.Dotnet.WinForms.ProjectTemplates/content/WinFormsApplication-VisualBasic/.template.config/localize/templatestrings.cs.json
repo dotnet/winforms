@@ -1,4 +1,4 @@
-{
+﻿{
   "author": "Microsoft",
   "name": "Aplikace Windows Forms",
   "description": "Šablona projektu pro vytvoření aplikace .NET Windows Forms (WinForms)",
@@ -14,7 +14,7 @@
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
   "symbols/Framework/choices/net7.0/description": "Target net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
-  "symbols/Framework/displayName": "Framework",
+  "symbols/Framework/displayName": ".NET 7.0",
   "symbols/langVersion/description": "Nastaví langVersion ve vytvořeném souboru projektu.",
   "symbols/langVersion/displayName": "Verze jazyka",
   "symbols/skipRestore/description": "Pokud se tato možnost zadá, přeskočí automatické obnovení projektu při vytvoření.",

@@ -219,7 +219,7 @@
       </trans-unit>
       <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
         <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="translated">{0}에서 {1} 속성을 지원하지 않습니다. 파생 클래스에서 재정의해야 합니다.</target>
+        <target state="new">{0} doesn't support {1} property. It must be overriden in the derived class.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -2074,12 +2074,12 @@
       </trans-unit>
       <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
         <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="translated">{0} 컬렉션은 {1}에 대해 비어있을 수 없습니다.</target>
+        <target state="new">{0} collection shouldn't be empty for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlsPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="translated">{0} 속성은 {1}에 대해 설정해야 합니다.</target>
+        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
@@ -6443,7 +6443,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateName">
         <source>{0}, group, collapsed</source>
-        <target state="translated">{0}, 그룹, 축소됨</target>
+        <target state="new">{0}, group, collapsed</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6463,7 +6463,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupExpandedStateName">
         <source>{0}, group, expanded</source>
-        <target state="translated">{0}, 그룹, 확장됨</target>
+        <target state="new">{0}, group, expanded</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -7568,7 +7568,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ParentPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="translated">{0} 속성은 {1}에 대해 설정해야 합니다.</target>
+        <target state="new">{0} property should be set for {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
@@ -8253,12 +8253,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="translated">{0} 설명</target>
+        <target state="new">{0} Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneTitle">
         <source>Description</source>
-        <target state="translated">설명</target>
+        <target state="new">Description</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
