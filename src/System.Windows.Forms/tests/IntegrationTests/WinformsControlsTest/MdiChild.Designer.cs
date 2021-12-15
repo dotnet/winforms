@@ -39,11 +39,13 @@ namespace WinformsControlsTest
             this.chkAddParentMenustrip = new System.Windows.Forms.CheckBox();
             this.chkAddMenustrip = new System.Windows.Forms.CheckBox();
             this.chkChildAlign = new System.Windows.Forms.CheckBox();
+            this.chkRightToLeft = new System.Windows.Forms.CheckBox();
             this.panel1.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
-            // 
+            //
+            this.panel1.Controls.Add(this.chkRightToLeft);
             this.panel1.Controls.Add(this.chkChildAlign);
             this.panel1.Controls.Add(this.chkAddMenustrip);
             this.panel1.Controls.Add(this.chkAddParentMenustrip);
@@ -67,6 +69,17 @@ namespace WinformsControlsTest
             this.chkChildAlign.Text = "Top align minimized child";
             this.chkChildAlign.UseVisualStyleBackColor = true;
             this.chkChildAlign.CheckedChanged += new System.EventHandler(this.chkChildAlign_CheckedChanged);
+            // 
+            // chkRightToLeft
+            // 
+            this.chkRightToLeft.AutoSize = true;
+            this.chkRightToLeft.Location = new System.Drawing.Point(228, 121);
+            this.chkRightToLeft.Name = "chkRightToLeft";
+            this.chkRightToLeft.Size = new System.Drawing.Size(162, 17);
+            this.chkRightToLeft.TabIndex = 4;
+            this.chkRightToLeft.Text = "Right to left mode";
+            this.chkRightToLeft.UseVisualStyleBackColor = true;
+            this.chkRightToLeft.CheckedChanged += new System.EventHandler(this.chkRightToLeft_CheckedChanged);
             // 
             // btnOpenChild
             // 
@@ -146,5 +159,6 @@ namespace WinformsControlsTest
         private System.Windows.Forms.CheckBox chkSetMenustrip;
         private System.Windows.Forms.CheckBox chkSetParentMenustrip;
         private System.Windows.Forms.CheckBox chkChildAlign;
+        private System.Windows.Forms.CheckBox chkRightToLeft;
     }
 }

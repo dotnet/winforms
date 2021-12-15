@@ -15,7 +15,12 @@ namespace WinformsControlsTest
             InitializeComponent();
 
             _menuStrip = new MenuStrip();
-            _menuStrip.Items.Add(new ToolStripMenuItem { Text = "Child" });
+            _menuStrip.Items.Add(new ToolStripMenuItem { Text = "Child1" });
+            _menuStrip.Items.Add(new ToolStripMenuItem
+            {
+                Alignment = ToolStripItemAlignment.Right,
+                Text = "Child2",
+            });
         }
 
         private MdiParent MyParent => (MdiParent)MdiParent;
@@ -84,6 +89,14 @@ namespace WinformsControlsTest
         private void chkChildAlign_CheckedChanged(object sender, EventArgs e)
         {
             MyParent.MdiChildrenMinimizedAnchorBottom = !chkChildAlign.Checked;
+        }
+
+        private void chkRightToLeft_CheckedChanged(object sender, EventArgs e)
+        {
+            if (MyParent.MainMenuStrip != null)
+            {
+                MyParent.MainMenuStrip.RightToLeft = chkRightToLeft.Checked ? RightToLeft.Yes : RightToLeft.No;
+            }
         }
     }
 }

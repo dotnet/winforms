@@ -28,6 +28,16 @@ namespace WinformsControlsTest
 
             _menuStrip = new MenuStrip();
             _menuStrip.Items.Add(menu);
+
+            for (int i = 1; i < 7; i++)
+            {
+                ToolStripMenuItem item = new()
+                {
+                    Alignment = i < 4 ? ToolStripItemAlignment.Left : ToolStripItemAlignment.Right,
+                    Text = $"Item{i}"
+                };
+                _menuStrip.Items.Add(item);
+            }
         }
 
         public MenuStrip MainMenu => _menuStrip;
