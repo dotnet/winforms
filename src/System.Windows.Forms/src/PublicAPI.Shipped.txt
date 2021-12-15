@@ -8071,7 +8071,6 @@ System.Windows.Forms.ErrorProvider.BlinkStyle.get -> System.Windows.Forms.ErrorB
 System.Windows.Forms.ErrorProvider.BlinkStyle.set -> void
 System.Windows.Forms.ErrorProvider.Clear() -> void
 System.Windows.Forms.ErrorProvider.ErrorProvider() -> void
-System.Windows.Forms.ErrorProvider.HasErrors.get -> bool
 System.Windows.Forms.ErrorProvider.RightToLeftChanged -> System.EventHandler
 System.Windows.Forms.ErrorProvider.UpdateBinding() -> void
 System.Windows.Forms.FeatureSupport

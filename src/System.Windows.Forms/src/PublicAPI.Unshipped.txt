@@ -2,3 +2,4 @@
 *REMOVED*override System.Windows.Forms.MonthCalendar.Dispose(bool disposing) -> void
 ~override System.Windows.Forms.ContainerControl.OnResize(System.EventArgs e) -> void
 ~override System.Windows.Forms.ContainerControl.OnMove(System.EventArgs e) -> void
+System.Windows.Forms.ErrorProvider.HasErrors.get -> bool
