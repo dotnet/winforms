@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Globalization;
@@ -16,29 +14,29 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     /// </summary>
     internal class Com2ExtendedTypeConverter : TypeConverter
     {
-        private readonly TypeConverter innerConverter;
+        private readonly TypeConverter? _innerConverter;
 
-        public Com2ExtendedTypeConverter(TypeConverter innerConverter)
+        public Com2ExtendedTypeConverter(TypeConverter? innerConverter)
         {
-            this.innerConverter = innerConverter;
+            _innerConverter = innerConverter;
         }
 
         public Com2ExtendedTypeConverter(Type baseType)
         {
-            innerConverter = TypeDescriptor.GetConverter(baseType);
+            _innerConverter = TypeDescriptor.GetConverter(baseType);
         }
 
-        public TypeConverter InnerConverter
+        public TypeConverter? InnerConverter
         {
             get
             {
-                return innerConverter;
+                return _innerConverter;
             }
         }
 
-        public TypeConverter GetWrappedConverter(Type t)
+        public TypeConverter? GetWrappedConverter(Type t)
         {
-            TypeConverter converter = innerConverter;
+            TypeConverter? converter = _innerConverter;
 
             while (converter is not null)
             {
@@ -47,9 +45,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     return converter;
                 }
 
-                if (converter is Com2ExtendedTypeConverter)
+                if (converter is Com2ExtendedTypeConverter com2ExtendedTypeConverter)
                 {
-                    converter = ((Com2ExtendedTypeConverter)converter).InnerConverter;
+                    converter = com2ExtendedTypeConverter.InnerConverter;
                 }
                 else
                 {
@@ -64,11 +62,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Determines if this converter can convert an object in the given source
         ///  type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.CanConvertFrom(context, sourceType);
+                return _innerConverter.CanConvertFrom(context, sourceType);
             }
 
             return base.CanConvertFrom(context, sourceType);
@@ -78,11 +76,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Determines if this converter can convert an object to the given destination
         ///  type.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.CanConvertTo(context, destinationType);
+                return _innerConverter.CanConvertTo(context, destinationType);
             }
 
             return base.CanConvertTo(context, destinationType);
@@ -91,11 +89,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.ConvertFrom(context, culture, value);
+                return _innerConverter.ConvertFrom(context, culture, value);
             }
 
             return base.ConvertFrom(context, culture, value);
@@ -108,11 +106,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.ConvertTo(context, culture, value, destinationType);
+                return _innerConverter.ConvertTo(context, culture, value, destinationType);
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
@@ -123,11 +121,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  for the object.  This is useful for objects that are immutable, but still
         ///  want to provide changable properties.
         /// </summary>
-        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
+        public override object? CreateInstance(ITypeDescriptorContext? context, IDictionary propertyValues)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.CreateInstance(context, propertyValues);
+                return _innerConverter.CreateInstance(context, propertyValues);
             }
 
             return base.CreateInstance(context, propertyValues);
@@ -137,11 +135,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Determines if changing a value on this object should require a call to
         ///  CreateInstance to create a new value.
         /// </summary>
-        public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
+        public override bool GetCreateInstanceSupported(ITypeDescriptorContext? context)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.GetCreateInstanceSupported(context);
+                return _innerConverter.GetCreateInstanceSupported(context);
             }
 
             return base.GetCreateInstanceSupported(context);
@@ -152,11 +150,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  does not return any properties.  An easy implementation of this method
         ///  can just call TypeDescriptor.GetProperties for the correct data type.
         /// </summary>
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        public override PropertyDescriptorCollection? GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.GetProperties(context, value, attributes);
+                return _innerConverter.GetProperties(context, value, attributes);
             }
 
             return base.GetProperties(context, value, attributes);
@@ -166,11 +164,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Determines if this object supports properties.  By default, this
         ///  is false.
         /// </summary>
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+        public override bool GetPropertiesSupported(ITypeDescriptorContext? context)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.GetPropertiesSupported(context);
+                return _innerConverter.GetPropertiesSupported(context);
             }
 
             return base.GetPropertiesSupported(context);
@@ -182,11 +180,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  will return null if the data type does not support a
         ///  standard set of values.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection? GetStandardValues(ITypeDescriptorContext? context)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.GetStandardValues(context);
+                return _innerConverter.GetStandardValues(context);
             }
 
             return base.GetStandardValues(context);
@@ -200,11 +198,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  then there are other valid values besides the list of
         ///  standard values GetStandardValues provides.
         /// </summary>
-        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.GetStandardValuesExclusive(context);
+                return _innerConverter.GetStandardValuesExclusive(context);
             }
 
             return base.GetStandardValuesExclusive(context);
@@ -214,11 +212,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         ///  Determines if this object supports a standard set of values
         ///  that can be picked from a list.
         /// </summary>
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.GetStandardValuesSupported(context);
+                return _innerConverter.GetStandardValuesSupported(context);
             }
 
             return base.GetStandardValuesSupported(context);
@@ -227,11 +225,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         /// <summary>
         ///  Determines if the given object value is valid for this type.
         /// </summary>
-        public override bool IsValid(ITypeDescriptorContext context, object value)
+        public override bool IsValid(ITypeDescriptorContext? context, object? value)
         {
-            if (innerConverter is not null)
+            if (_innerConverter is not null)
             {
-                return innerConverter.IsValid(context, value);
+                return _innerConverter.IsValid(context, value);
             }
 
             return base.IsValid(context, value);
