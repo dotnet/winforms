@@ -1212,6 +1212,38 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsFact]
+        public void ErrorProvider_HasErrors_NoControl_Set()
+        {
+            using var provider = new ErrorProvider();
+
+            Assert.False(provider.HasErrors);
+        }
+
+        [WinFormsFact]
+        public void ErrorProvider_HasErrors_SomeControlsSet()
+        {
+            using var provider = new ErrorProvider();
+            using var control1 = new Control();
+
+            provider.SetError(control1, "error");
+
+            Assert.True(provider.HasErrors);
+        }
+
+        [WinFormsFact]
+        public void ErrorProvider_HasErrors_ControlErrorReset()
+        {
+            using var provider = new ErrorProvider();
+            using var control1 = new Control();
+
+            provider.SetError(control1, String.Empty);
+            Assert.True(provider.HasErrors);
+
+            provider.Clear();
+            Assert.False(provider.HasErrors);
+        }
+
         private class SubErrorProvider : ErrorProvider
         {
             public SubErrorProvider() : base()

@@ -193,6 +193,17 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Gets a value that indicates if this <see cref="ErrorProvider"/> has any errors for any of the associated controls.
+        /// </summary>
+        public bool HasErrors
+        {
+            get
+            {
+                return _items.Count > 0;
+            }
+        }
+
+        /// <summary>
         ///  This is used for international applications where the language is written from RightToLeft.
         ///  When this property is true, text will be from right to left.
         /// </summary>
