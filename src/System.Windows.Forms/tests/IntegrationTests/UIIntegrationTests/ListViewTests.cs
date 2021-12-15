@@ -507,14 +507,17 @@ namespace System.Windows.Forms.UITests
                 {
                     ListView control = new()
                     {
-                        Size = new Size(400, 100)
+                        Dock = DockStyle.Fill
                     };
 
                     return control;
                 },
                 createForm: () =>
                 {
-                    return new();
+                    return new()
+                    {
+                        Size = new Size(500, 400)
+                    };
                 });
         }
     }
