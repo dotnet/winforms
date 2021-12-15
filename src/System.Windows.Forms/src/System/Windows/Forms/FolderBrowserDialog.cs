@@ -36,12 +36,27 @@ namespace System.Windows.Forms
         // Initial folder.
         private string _initialDirectory;
 
+        // Win32 file dialog FOS_* option flags.
+        private int _options;
+
         /// <summary>
         ///  Initializes a new instance of the <see cref='FolderBrowserDialog'/> class.
         /// </summary>
         public FolderBrowserDialog()
         {
             Reset();
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box adds the folder being selected to the recent list.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FolderBrowserDialogAddToRecent))]
+        public bool AddToRecent
+        {
+            get => !GetOption((int)FOS.DONTADDTORECENT);
+            set => SetOption((int)FOS.DONTADDTORECENT, !value);
         }
 
         /// <summary>
@@ -56,6 +71,49 @@ namespace System.Windows.Forms
         {
             add => base.HelpRequest += value;
             remove => base.HelpRequest -= value;
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the OK button of the dialog box is
+        ///  disabled until the user navigates the view or edits the filename (if applicable).
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///  Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.
+        ///  </para>
+        /// </remarks>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FolderBrowserDialogOkRequiresInteraction))]
+        public bool OkRequiresInteraction
+        {
+            get => GetOption((int)FOS.OKBUTTONNEEDSINTERACTION);
+            set => SetOption((int)FOS.OKBUTTONNEEDSINTERACTION, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box displays hidden and system files.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FolderBrowserDialogShowHiddenFiles))]
+        public bool ShowHiddenFiles
+        {
+            get => GetOption((int)FOS.FORCESHOWHIDDEN);
+            set => SetOption((int)FOS.FORCESHOWHIDDEN, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the items shown by default in the view's
+        ///  navigation pane are shown.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FolderBrowserDialogShowPinnedPlaces))]
+        public bool ShowPinnedPlaces
+        {
+            get => !GetOption((int)FOS.HIDEPINNEDPLACES);
+            set => SetOption((int)FOS.HIDEPINNEDPLACES, !value);
         }
 
         /// <summary>
@@ -177,6 +235,7 @@ namespace System.Windows.Forms
         /// </summary>
         public override void Reset()
         {
+            _options = (int)(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
             _rootFolder = Environment.SpecialFolder.Desktop;
             _descriptionText = string.Empty;
             _selectedPath = string.Empty;
@@ -279,7 +338,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            dialog.SetOptions(FOS.PICKFOLDERS | FOS.FORCEFILESYSTEM | FOS.FILEMUSTEXIST);
+            dialog.SetOptions((FOS)_options);
 
             if (!string.IsNullOrEmpty(_initialDirectory))
             {
@@ -321,6 +380,23 @@ namespace System.Windows.Forms
             }
 
             return (IShellItem)item;
+        }
+
+        private bool GetOption(int option) => (_options & option) != 0;
+
+        /// <summary>
+        ///  Sets the given option to the given boolean value.
+        /// </summary>
+        private void SetOption(int option, bool value)
+        {
+            if (value)
+            {
+                _options |= option;
+            }
+            else
+            {
+                _options &= ~option;
+            }
         }
 
         private void GetResult(IFileDialog dialog)

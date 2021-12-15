@@ -60,6 +60,19 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box adds the file being opened
+        ///  or saved to the recent list.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FileDialogAddToRecentDescr))]
+        public bool AddToRecent
+        {
+            get => !GetOption((int)Comdlg32.OFN.DONTADDTORECENT);
+            set => SetOption((int)Comdlg32.OFN.DONTADDTORECENT, !value);
+        }
+
+        /// <summary>
         ///  Gets or sets a value indicating whether the dialog box displays a warning
         ///  if the user specifies a file name that does not exist.
         /// </summary>
@@ -283,16 +296,20 @@ namespace System.Windows.Forms
         protected virtual IntPtr Instance => Kernel32.GetModuleHandleW(null);
 
         /// <summary>
-        ///  Gets the Win32 common Open File Dialog OFN_* option flags.
+        ///  Gets the Win32 common Open File Dialog OFN_* and FOS_* option flags.
         /// </summary>
         protected int Options
         {
             get
             {
-                return _options & (int)(Comdlg32.OFN.READONLY | Comdlg32.OFN.HIDEREADONLY |
+                return _options & ((int)(Comdlg32.OFN.READONLY | Comdlg32.OFN.HIDEREADONLY |
                                   Comdlg32.OFN.NOCHANGEDIR | Comdlg32.OFN.SHOWHELP | Comdlg32.OFN.NOVALIDATE |
                                   Comdlg32.OFN.ALLOWMULTISELECT | Comdlg32.OFN.PATHMUSTEXIST |
-                                  Comdlg32.OFN.NODEREFERENCELINKS);
+                                  Comdlg32.OFN.NODEREFERENCELINKS | Comdlg32.OFN.DONTADDTORECENT |
+                                  Comdlg32.OFN.NOREADONLYRETURN | Comdlg32.OFN.NOTESTFILECREATE |
+                                  Comdlg32.OFN.FORCESHOWHIDDEN) | (int)(Shell32.FOS.OKBUTTONNEEDSINTERACTION |
+                                  Shell32.FOS.HIDEPINNEDPLACES | Shell32.FOS.DEFAULTNOMINIMODE |
+                                  Shell32.FOS.FORCEPREVIEWPANEON));
             }
         }
 
@@ -320,6 +337,18 @@ namespace System.Windows.Forms
         {
             get => GetOption((int)Comdlg32.OFN.SHOWHELP);
             set => SetOption((int)Comdlg32.OFN.SHOWHELP, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box displays hidden and system files.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FileDialogShowHiddenFilesDescr))]
+        public bool ShowHiddenFiles
+        {
+            get => GetOption((int)Comdlg32.OFN.FORCESHOWHIDDEN);
+            set => SetOption((int)Comdlg32.OFN.FORCESHOWHIDDEN, value);
         }
 
         /// <summary>

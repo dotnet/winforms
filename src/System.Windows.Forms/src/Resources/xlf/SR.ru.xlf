@@ -4942,6 +4942,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">Определяет, проверяет ли диалоговое окно имена файлов на наличие недопустимых символов или последовательностей.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
         <source>Too many files selected. Select fewer files and try again.</source>
         <target state="translated">Выбрано слишком много файлов. Выберите меньшее число файлов и повторите попытку.</target>
@@ -4976,11 +4981,26 @@ Verify that the correct file name was given.</source>
         <target state="translated">Недопустимый индекс фильтра.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">Файл {0} уже существует.
 Заменить его?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5088,6 +5108,11 @@ Do you want to replace it?</source>
         <target state="translated">Определяет, отображать ли кнопку 'Справка'.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogAddToRecent">
+        <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
+        <target state="new">Controls whether the dialog box adds the folder being selected to the recent list.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
         <source>The string that is displayed above the tree view control in the dialog box. This string can be used to specify instructions to the user.</source>
         <target state="translated">Строка, отображаемая над иерархическим представлением структуры дерева в данном диалоговом окне. Эта строка служит для задания инструкций для пользователя.</target>
@@ -5096,6 +5121,11 @@ Do you want to replace it?</source>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
         <target state="translated">Не удалось извлечь корневую папку.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5108,9 +5138,19 @@ Do you want to replace it?</source>
         <target state="translated">Путь к папке, которая первой выбрана в данном диалоговом окне, или к последней папке, выбранной пользователем.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowHiddenFiles">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
         <source>Include the New Folder button in the dialog box.</source>
         <target state="translated">Отображать кнопку 'Создать папку' в диалоговом окне.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -7357,6 +7397,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">Невозможно добавить или вставить элемент '{0}' в несколько позиций. Сначала удалите его из текущей позиции или создайте его клон.</target>
         <note />
       </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
         <source>This operation requires an IBindingList.</source>
         <target state="translated">Для данной операции нужен IBindingList.</target>
@@ -8712,9 +8762,19 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">{1} - {0} - {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SaveFileDialogCheckWriteAccess">
+        <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
+        <target state="new">Controls whether the dialog box verifies if the creation of the specified file will be successful.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
         <source>Controls whether to prompt the user when a new file is about to be created. It is only applicable if 'ValidateNames' is set to true.</source>
         <target state="translated">Определяет, получает ли пользователь запрос перед созданием нового файла. Действует только в том случае, если ValidateNames имеет значение true (истина).</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SaveFileDialogExpandedMode">
+        <source>Controls whether the dialog box is always opened in the expanded mode.</source>
+        <target state="new">Controls whether the dialog box is always opened in the expanded mode.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">

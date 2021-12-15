@@ -58,6 +58,30 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
+        /// Gets or sets a value indicating whether the dialog box allows to select read-only files.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.OpenFileDialogSelectReadOnlyDescr))]
+        public bool SelectReadOnly
+        {
+            get => !GetOption((int)Comdlg32.OFN.NOREADONLYRETURN);
+            set => SetOption((int)Comdlg32.OFN.NOREADONLYRETURN, !value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box shows a preview for selected files.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.OpenFileDialogShowPreviewDescr))]
+        public bool ShowPreview
+        {
+            get => GetOption((int)FOS.FORCEPREVIEWPANEON);
+            set => SetOption((int)FOS.FORCEPREVIEWPANEON, value);
+        }
+
+        /// <summary>
         ///  Gets or sets a value indicating whether the dialog contains a read-only check box.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]

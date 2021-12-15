@@ -6862,4 +6862,40 @@ Stack trace where the illegal operation occurred was:
   <data name="CategoryPropertyGridLocalizedControlType" xml:space="preserve">
     <value>PropertyGrid category</value>
   </data>
+  <data name="FileDialogAddToRecentDescr" xml:space="preserve">
+    <value>Controls whether to add the file being opened or saved to the recent list.</value>
+  </data>
+  <data name="FileDialogShowHiddenFilesDescr" xml:space="preserve">
+    <value>Controls whether the dialog box displays hidden and system files.</value>
+  </data>
+  <data name="SaveFileDialogCheckWriteAccess" xml:space="preserve">
+    <value>Controls whether the dialog box verifies if the creation of the specified file will be successful.</value>
+  </data>
+  <data name="SaveFileDialogExpandedMode" xml:space="preserve">
+    <value>Controls whether the dialog box is always opened in the expanded mode.</value>
+  </data>
+  <data name="FileDialogOkRequiresInteractionDescr" xml:space="preserve">
+    <value>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</value>
+  </data>
+  <data name="OpenFileDialogSelectReadOnlyDescr" xml:space="preserve">
+    <value>Controls whether the dialog box allows to select read-only files.</value>
+  </data>
+  <data name="FileDialogShowPinnedPlacesDescr" xml:space="preserve">
+    <value>Controls whether the items shown by default in the view's navigation pane are shown.</value>
+  </data>
+  <data name="OpenFileDialogShowPreviewDescr" xml:space="preserve">
+    <value>Controls whether the dialog box shows a preview for selected files.</value>
+  </data>
+  <data name="FolderBrowserDialogAddToRecent" xml:space="preserve">
+    <value>Controls whether the dialog box adds the folder being selected to the recent list.</value>
+  </data>
+  <data name="FolderBrowserDialogOkRequiresInteraction" xml:space="preserve">
+    <value>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</value>
+  </data>
+  <data name="FolderBrowserDialogShowHiddenFiles" xml:space="preserve">
+    <value>Controls whether the dialog box displays hidden and system files.</value>
+  </data>
+  <data name="FolderBrowserDialogShowPinnedPlaces" xml:space="preserve">
+    <value>Controls whether the items shown by default in the view's navigation pane are shown.</value>
+  </data>
 </root>

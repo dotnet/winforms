@@ -17,6 +17,7 @@ namespace System.Windows.Forms.Tests
         {
             using var dialog = new SubFileDialog();
             Assert.True(dialog.AddExtension);
+            Assert.True(dialog.AddToRecent);
             Assert.True(dialog.AutoUpgradeEnabled);
             Assert.True(dialog.CanRaiseEvents);
             Assert.False(dialog.CheckFileExists);
@@ -35,10 +36,13 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, dialog.FilterIndex);
             Assert.Empty(dialog.InitialDirectory);
             Assert.NotEqual(IntPtr.Zero, dialog.Instance);
+            Assert.False(dialog.OkRequiresInteraction);
             Assert.Equal(2052, dialog.Options);
             Assert.False(dialog.RestoreDirectory);
             Assert.False(dialog.ShowHelp);
+            Assert.False(dialog.ShowHiddenFiles);
             Assert.False(dialog.SupportMultiDottedExtensions);
+            Assert.True(dialog.ShowPinnedPlaces);
             Assert.Null(dialog.Site);
             Assert.Null(dialog.Tag);
             Assert.Empty(dialog.Title);
@@ -51,6 +55,7 @@ namespace System.Windows.Forms.Tests
         {
             using var dialog = new EmptyResetFileDialog();
             Assert.False(dialog.AddExtension);
+            Assert.True(dialog.AddToRecent);
             Assert.True(dialog.AutoUpgradeEnabled);
             Assert.True(dialog.CanRaiseEvents);
             Assert.False(dialog.CheckFileExists);
@@ -69,9 +74,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, dialog.FilterIndex);
             Assert.Empty(dialog.InitialDirectory);
             Assert.NotEqual(IntPtr.Zero, dialog.Instance);
+            Assert.False(dialog.OkRequiresInteraction);
             Assert.Equal(0, dialog.Options);
             Assert.False(dialog.RestoreDirectory);
             Assert.False(dialog.ShowHelp);
+            Assert.False(dialog.ShowHiddenFiles);
+            Assert.True(dialog.ShowPinnedPlaces);
             Assert.False(dialog.SupportMultiDottedExtensions);
             Assert.Null(dialog.Site);
             Assert.Null(dialog.Tag);
@@ -107,6 +115,29 @@ namespace System.Windows.Forms.Tests
             dialog.AddExtension = !value;
             Assert.Equal(!value, dialog.AddExtension);
             Assert.Equal(2052, dialog.Options);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 2052, 33556484)]
+        [InlineData(false, 33556484, 2052)]
+        public void FileDialog_AddToRecent_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
+        {
+            using var dialog = new SubFileDialog
+            {
+                AddToRecent = value
+            };
+            Assert.Equal(value, dialog.AddToRecent);
+            Assert.Equal(expectedOptions, dialog.Options);
+
+            // Set same.
+            dialog.AddToRecent = value;
+            Assert.Equal(value, dialog.AddToRecent);
+            Assert.Equal(expectedOptions, dialog.Options);
+
+            // Set different.
+            dialog.AddToRecent = !value;
+            Assert.Equal(!value, dialog.AddToRecent);
+            Assert.Equal(expectedOptionsAfter, dialog.Options);
         }
 
         [WinFormsTheory]
@@ -340,6 +371,29 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(true, 2099204, 2052)]
+        [InlineData(false, 2052, 2099204)]
+        public void FileDialog_OkRequiresInteraction_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
+        {
+            using var dialog = new SubFileDialog
+            {
+                OkRequiresInteraction = value
+            };
+            Assert.Equal(value, dialog.OkRequiresInteraction);
+            Assert.Equal(expectedOptions, dialog.Options);
+
+            // Set same.
+            dialog.OkRequiresInteraction = value;
+            Assert.Equal(value, dialog.OkRequiresInteraction);
+            Assert.Equal(expectedOptions, dialog.Options);
+
+            // Set different.
+            dialog.OkRequiresInteraction = !value;
+            Assert.Equal(!value, dialog.OkRequiresInteraction);
+            Assert.Equal(expectedOptionsAfter, dialog.Options);
+        }
+
+        [WinFormsTheory]
         [InlineData(true, 2060, 2052)]
         [InlineData(false, 2052, 2060)]
         public void FileDialog_RestoreDirectory_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
@@ -382,6 +436,52 @@ namespace System.Windows.Forms.Tests
             // Set different.
             dialog.ShowHelp = !value;
             Assert.Equal(!value, dialog.ShowHelp);
+            Assert.Equal(expectedOptionsAfter, dialog.Options);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 268437508, 2052)]
+        [InlineData(false, 2052, 268437508)]
+        public void FileDialog_ShowHiddenFiles_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
+        {
+            using var dialog = new SubFileDialog
+            {
+                ShowHiddenFiles = value
+            };
+            Assert.Equal(value, dialog.ShowHiddenFiles);
+            Assert.Equal(expectedOptions, dialog.Options);
+
+            // Set same.
+            dialog.ShowHiddenFiles = value;
+            Assert.Equal(value, dialog.ShowHiddenFiles);
+            Assert.Equal(expectedOptions, dialog.Options);
+
+            // Set different.
+            dialog.ShowHiddenFiles = !value;
+            Assert.Equal(!value, dialog.ShowHiddenFiles);
+            Assert.Equal(expectedOptionsAfter, dialog.Options);
+        }
+
+        [WinFormsTheory]
+        [InlineData(true, 2052, 264196)]
+        [InlineData(false, 264196, 2052)]
+        public void FileDialog_ShowPinnedPlaces_Set_GetReturnsExpected(bool value, int expectedOptions, int expectedOptionsAfter)
+        {
+            using var dialog = new SubFileDialog
+            {
+                ShowPinnedPlaces = value
+            };
+            Assert.Equal(value, dialog.ShowPinnedPlaces);
+            Assert.Equal(expectedOptions, dialog.Options);
+
+            // Set same.
+            dialog.ShowPinnedPlaces = value;
+            Assert.Equal(value, dialog.ShowPinnedPlaces);
+            Assert.Equal(expectedOptions, dialog.Options);
+
+            // Set different.
+            dialog.ShowPinnedPlaces = !value;
+            Assert.Equal(!value, dialog.ShowPinnedPlaces);
             Assert.Equal(expectedOptionsAfter, dialog.Options);
         }
 
@@ -487,6 +587,7 @@ namespace System.Windows.Forms.Tests
             using var dialog = new SubFileDialog
             {
                 AddExtension = false,
+                AddToRecent = false,
                 AutoUpgradeEnabled = false,
                 CheckFileExists = true,
                 CheckPathExists = false,
@@ -496,8 +597,11 @@ namespace System.Windows.Forms.Tests
                 FileName = "FileName",
                 FilterIndex = 2,
                 InitialDirectory = "InitialDirectory",
+                OkRequiresInteraction = true,
                 RestoreDirectory = true,
                 ShowHelp = true,
+                ShowHiddenFiles = true,
+                ShowPinnedPlaces = false,
                 SupportMultiDottedExtensions = true,
                 Tag = "Tag",
                 Title = "Title",
@@ -507,6 +611,7 @@ namespace System.Windows.Forms.Tests
 
             dialog.Reset();
             Assert.True(dialog.AddExtension);
+            Assert.True(dialog.AddToRecent);
             Assert.False(dialog.AutoUpgradeEnabled);
             Assert.True(dialog.CanRaiseEvents);
             Assert.False(dialog.CheckFileExists);
@@ -525,9 +630,12 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, dialog.FilterIndex);
             Assert.Empty(dialog.InitialDirectory);
             Assert.NotEqual(IntPtr.Zero, dialog.Instance);
+            Assert.False(dialog.OkRequiresInteraction);
             Assert.Equal(2052, dialog.Options);
             Assert.False(dialog.RestoreDirectory);
             Assert.False(dialog.ShowHelp);
+            Assert.False(dialog.ShowHiddenFiles);
+            Assert.True(dialog.ShowPinnedPlaces);
             Assert.False(dialog.SupportMultiDottedExtensions);
             Assert.Null(dialog.Site);
             Assert.Equal("Tag", dialog.Tag);
@@ -581,6 +689,7 @@ namespace System.Windows.Forms.Tests
             using var dialog = new SubFileDialog
             {
                 AddExtension = result,
+                AddToRecent = false,
                 AutoUpgradeEnabled = false,
                 CheckFileExists = true,
                 CheckPathExists = false,
@@ -589,8 +698,11 @@ namespace System.Windows.Forms.Tests
                 FileName = "FileName",
                 FilterIndex = 2,
                 InitialDirectory = "InitialDirectory",
+                OkRequiresInteraction = true,
                 RestoreDirectory = true,
                 ShowHelp = true,
+                ShowHiddenFiles = true,
+                ShowPinnedPlaces = false,
                 SupportMultiDottedExtensions = true,
                 Tag = "Tag",
                 Title = "Title",
@@ -611,7 +723,7 @@ namespace System.Windows.Forms.Tests
                 Assert.Equal(260, o.nMaxFileTitle);
                 Assert.Equal("InitialDirectory", o.lpstrInitialDir);
                 Assert.Equal("Title", o.lpstrTitle);
-                Assert.Equal(9961788, o.Flags);
+                Assert.Equal(314310972, o.Flags);
                 Assert.Equal(0, o.nFileOffset);
                 Assert.Equal(0, o.nFileExtension);
                 Assert.Equal(result ? "DefaultExt" : null, o.lpstrDefExt);

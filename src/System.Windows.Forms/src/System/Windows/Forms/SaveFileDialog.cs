@@ -16,12 +16,23 @@ namespace System.Windows.Forms
     ///  a common dialog box that allows the user to specify options for saving a
     ///  file. This class cannot be inherited.
     /// </summary>
-    [
-    Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign)]
-    [SRDescription(nameof(SR.DescriptionSaveFileDialog))
-    ]
+    [Designer("System.Windows.Forms.Design.SaveFileDialogDesigner, " + AssemblyRef.SystemDesign)]
+    [SRDescription(nameof(SR.DescriptionSaveFileDialog))]
     public sealed partial class SaveFileDialog : FileDialog
     {
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box verifies if the creation of the specified file will be successful.
+        ///  If this flag is not set, the calling application must handle errors, such as denial of access, discovered when the item is created.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.SaveFileDialogCheckWriteAccess))]
+        public bool CheckWriteAccess
+        {
+            get => !GetOption((int)Comdlg32.OFN.NOTESTFILECREATE);
+            set => SetOption((int)Comdlg32.OFN.NOTESTFILECREATE, !value);
+        }
+
         /// <summary>
         ///  Gets or sets a value indicating whether the dialog box prompts the user for
         ///  permission to create a file if the user specifies a file that does not exist.
@@ -33,6 +44,18 @@ namespace System.Windows.Forms
         {
             get => GetOption((int)Comdlg32.OFN.CREATEPROMPT);
             set => SetOption((int)Comdlg32.OFN.CREATEPROMPT, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the dialog box is always opened in the expanded mode.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.SaveFileDialogExpandedMode))]
+        public bool ExpandedMode
+        {
+            get => GetOption((int)FOS.DEFAULTNOMINIMODE);
+            set => SetOption((int)FOS.DEFAULTNOMINIMODE, value);
         }
 
         /// <summary>
@@ -120,6 +143,7 @@ namespace System.Windows.Forms
         public override void Reset()
         {
             base.Reset();
+            SetOption((int)FOS.DEFAULTNOMINIMODE, true);
             SetOption((int)Comdlg32.OFN.OVERWRITEPROMPT, true);
         }
 

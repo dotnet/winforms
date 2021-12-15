@@ -4941,6 +4941,11 @@ Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye
         <target state="translated">İletişim kutusunun dosya adlarında geçersiz karakterler ve sıralar içermediğinden emin olup olmayacağını denetler.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
         <source>Too many files selected. Select fewer files and try again.</source>
         <target state="translated">Çok fazla dosya seçildi. Daha az dosya seçin ve yeniden deneyin.</target>
@@ -4975,11 +4980,26 @@ Doğru dosya adının verildiğinden emin olun.</target>
         <target state="translated">Filtre dizini geçerli değil.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">{0} dosyası zaten var.
 Bunu değiştirmek istiyor musunuz?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5087,6 +5107,11 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">Yardım düğmesinin gösterilip gösterilmeyeceğini denetler.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogAddToRecent">
+        <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
+        <target state="new">Controls whether the dialog box adds the folder being selected to the recent list.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
         <source>The string that is displayed above the tree view control in the dialog box. This string can be used to specify instructions to the user.</source>
         <target state="translated">İletişim kutusundaki ağaç görünümü denetiminin üstünde görüntülenen dize. Bu dize kullanıcıya yönergeleri bildirmek için kullanılabilir.</target>
@@ -5095,6 +5120,11 @@ Bunu değiştirmek istiyor musunuz?</target>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
         <target state="translated">Kök klasör alınamıyor.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5107,9 +5137,19 @@ Bunu değiştirmek istiyor musunuz?</target>
         <target state="translated">İletişim kutusunda ilk seçili olan klasörün veya kullanıcı tarafından son seçilen klasörün yolu.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowHiddenFiles">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
         <source>Include the New Folder button in the dialog box.</source>
         <target state="translated">İletişim kutusuna Yeni Klasör düğmesini ekle.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -7356,6 +7396,16 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">'{0}' öğesi birden fazla yere eklenemez. Öğeyi önce bulunduğu yerden kaldırmalı veya kopyasını oluşturmalısınız.</target>
         <note />
       </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
         <source>This operation requires an IBindingList.</source>
         <target state="translated">Bu işlem bir IBindingList gerektiriyor.</target>
@@ -8711,9 +8761,19 @@ Geçersiz işlemin gerçekleştiği yığın izi:
         <target state="translated">{1} - {0} - {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SaveFileDialogCheckWriteAccess">
+        <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
+        <target state="new">Controls whether the dialog box verifies if the creation of the specified file will be successful.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
         <source>Controls whether to prompt the user when a new file is about to be created. It is only applicable if 'ValidateNames' is set to true.</source>
         <target state="translated">Yeni bir dosya oluşturulmak üzere olduğunda kullanıcıya sorulup sorulmayacağını denetler. Bu yalnızca 'ValidateNames' True olarak ayarlanmışsa geçerlidir.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SaveFileDialogExpandedMode">
+        <source>Controls whether the dialog box is always opened in the expanded mode.</source>
+        <target state="new">Controls whether the dialog box is always opened in the expanded mode.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">

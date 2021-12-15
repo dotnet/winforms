@@ -106,7 +106,15 @@ namespace System.Windows.Forms
               | FOS.PATHMUSTEXIST
               | FOS.FILEMUSTEXIST
               | FOS.CREATEPROMPT
-              | FOS.NODEREFERENCELINKS;
+              | FOS.NODEREFERENCELINKS
+              | FOS.DONTADDTORECENT
+              | FOS.NOREADONLYRETURN
+              | FOS.NOTESTFILECREATE
+              | FOS.FORCESHOWHIDDEN
+              | FOS.DEFAULTNOMINIMODE
+              | FOS.OKBUTTONNEEDSINTERACTION
+              | FOS.HIDEPINNEDPLACES
+              | FOS.FORCEPREVIEWPANEON;
 
             const int UnexpectedOptions =
                 (int)(Comdlg32.OFN.SHOWHELP // If ShowHelp is true, we don't use the Vista Dialog
@@ -117,9 +125,6 @@ namespace System.Windows.Forms
             Debug.Assert((UnexpectedOptions & _options) == 0, "Unexpected FileDialog options");
 
             FOS ret = (FOS)_options & BlittableOptions;
-
-            // Force no mini mode for the SaveFileDialog
-            ret |= FOS.DEFAULTNOMINIMODE;
 
             // Make sure that the Open dialog allows the user to specify
             // non-file system locations. This flag will cause the dialog to copy the resource
@@ -263,5 +268,36 @@ namespace System.Windows.Forms
         /// </summary>
         [DefaultValue(true)]
         public bool AutoUpgradeEnabled { get; set; } = true;
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the OK button of the dialog box is
+        ///  disabled until the user navigates the view or edits the filename (if applicable).
+        /// </summary>
+        /// <remarks>
+        ///  <para>
+        ///  Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.
+        ///  </para>
+        /// </remarks>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(false)]
+        [SRDescription(nameof(SR.FileDialogOkRequiresInteractionDescr))]
+        public bool OkRequiresInteraction
+        {
+            get => GetOption((int)FOS.OKBUTTONNEEDSINTERACTION);
+            set => SetOption((int)FOS.OKBUTTONNEEDSINTERACTION, value);
+        }
+
+        /// <summary>
+        ///  Gets or sets a value indicating whether the items shown by default in the view's
+        ///  navigation pane are shown.
+        /// </summary>
+        [SRCategory(nameof(SR.CatBehavior))]
+        [DefaultValue(true)]
+        [SRDescription(nameof(SR.FileDialogShowPinnedPlacesDescr))]
+        public bool ShowPinnedPlaces
+        {
+            get => !GetOption((int)FOS.HIDEPINNEDPLACES);
+            set => SetOption((int)FOS.HIDEPINNEDPLACES, !value);
+        }
     }
 }

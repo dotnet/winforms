@@ -4941,6 +4941,11 @@ If you click Continue, the application will ignore this error and attempt to con
         <target state="translated">대화 상자에서 파일 이름에 잘못된 문자나 시퀀스가 없는지 확인할지 여부를 제어합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogAddToRecentDescr">
+        <source>Controls whether to add the file being opened or saved to the recent list.</source>
+        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
         <source>Too many files selected. Select fewer files and try again.</source>
         <target state="translated">파일을 너무 많이 선택했습니다. 현재 선택한 파일에서 몇 개를 빼고 다시 시도하십시오.</target>
@@ -4975,11 +4980,26 @@ Verify that the correct file name was given.</source>
         <target state="translated">필터 인덱스가 잘못되었습니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FileDialogOkRequiresInteractionDescr">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
         <source>File {0} already exists.
 Do you want to replace it?</source>
         <target state="translated">{0} 파일이 이미 있습니다.
 바꾸시겠습니까?</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowHiddenFilesDescr">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FileDialogShowPinnedPlacesDescr">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5087,6 +5107,11 @@ Do you want to replace it?</source>
         <target state="translated">[도움말] 단추의 표시 여부를 제어합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogAddToRecent">
+        <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
+        <target state="new">Controls whether the dialog box adds the folder being selected to the recent list.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
         <source>The string that is displayed above the tree view control in the dialog box. This string can be used to specify instructions to the user.</source>
         <target state="translated">대화 상자의 tree view 컨트롤 위에 표시되는 문자열입니다. 이 문자열을 사용하여 사용자에게 표시될 지시 사항을 지정할 수 있습니다.</target>
@@ -5095,6 +5120,11 @@ Do you want to replace it?</source>
       <trans-unit id="FolderBrowserDialogNoRootFolder">
         <source>Unable to retrieve the root folder.</source>
         <target state="translated">루트 폴더를 검색할 수 없습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
+        <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
+        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5107,9 +5137,19 @@ Do you want to replace it?</source>
         <target state="translated">대화 상자에 처음 선택되어 있거나 사용자가 마지막에 선택한 폴더의 경로입니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowHiddenFiles">
+        <source>Controls whether the dialog box displays hidden and system files.</source>
+        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
         <source>Include the New Folder button in the dialog box.</source>
         <target state="translated">대화 상자에 새 폴더 단추를 넣습니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
+        <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
+        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -7356,6 +7396,16 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">두 개 이상의 위치에 '{0}' 항목을 추가하거나 삽입할 수 없습니다. 먼저 항목의 현재 위치에서 항목을 제거하거나 복제해야 합니다.</target>
         <note />
       </trans-unit>
+      <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
+        <source>Controls whether the dialog box allows to select read-only files.</source>
+        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="OpenFileDialogShowPreviewDescr">
+        <source>Controls whether the dialog box shows a preview for selected files.</source>
+        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
         <source>This operation requires an IBindingList.</source>
         <target state="translated">이 작업을 수행하려면 IBindingList가 필요합니다.</target>
@@ -8711,9 +8761,19 @@ Stack trace where the illegal operation occurred was:
         <target state="translated">{1} - {0} - {2}</target>
         <note />
       </trans-unit>
+      <trans-unit id="SaveFileDialogCheckWriteAccess">
+        <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
+        <target state="new">Controls whether the dialog box verifies if the creation of the specified file will be successful.</target>
+        <note />
+      </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
         <source>Controls whether to prompt the user when a new file is about to be created. It is only applicable if 'ValidateNames' is set to true.</source>
         <target state="translated">새 파일을 만들려고 할 때 사용자에게 프롬프트를 표시할지 여부를 제어합니다. 'ValidateNames'를 true로 설정한 경우에만 적용됩니다.</target>
+        <note />
+      </trans-unit>
+      <trans-unit id="SaveFileDialogExpandedMode">
+        <source>Controls whether the dialog box is always opened in the expanded mode.</source>
+        <target state="new">Controls whether the dialog box is always opened in the expanded mode.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">
