@@ -16,8 +16,6 @@ namespace System.Windows.Forms.UITests
         {
         }
 
-        // This test is rather specific: there should be a separate Form to reproduce the issue.
-        // We need to show this Form ourselves, the issue won't reproduce with ReflectBase-inherited Form which is shown automatically while scenarios is being run.
         [WinFormsFact]
         public async Task DataGridView_ToolTip_DoesNot_ThrowExceptionAsync()
         {
@@ -26,21 +24,18 @@ namespace System.Windows.Forms.UITests
                 using DataTable dataTable = new();
                 dataTable.Columns.Add(columnName: "name");
                 dataTable.Rows.Add(values: "name1");
-
-                // Create DataGridView with DataSource set to dataTable.
                 dataGridView.ShowCellToolTips = true;
                 dataGridView.DataSource = dataTable;
-
                 Point point = dataGridView.GetCellDisplayRectangle(columnIndex: 0, rowIndex: 0, cutOverflow: false).Location;
 
                 // Move mouse cursor over any cell of the first row.
                 await InputSimulator.SendAsync(
                             form,
                             inputSimulator => inputSimulator.Mouse.MoveMouseTo(point.X, point.Y));
+
+                // We need to close the form and then check whether dataTable works fine or it doesn't
                 form.Close();
-
                 var exceptionThrown = false;
-
                 try
                 {
                     dataTable.AcceptChanges();
