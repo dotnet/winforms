@@ -242,7 +242,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_Mouse_Press_With_Drag_Off_Button_Does_Not_Cause_Button_ClickAsync()
         {
-            await RunControlPairTestAsync<Button>(async (form, controls) =>
+            await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
             {
                 (Button control1, Button control2) = controls;
                 int control1ClickCount = 0;
@@ -273,7 +273,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_Mouse_Press_With_Drag_Off_Button_And_Back_Does_Cause_Button_ClickAsync()
         {
-            await RunControlPairTestAsync<Button>(async (form, controls) =>
+            await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
             {
                 (Button control1, Button control2) = controls;
                 int control1ClickCount = 0;
@@ -382,7 +382,7 @@ namespace System.Windows.Forms.UITests
             });
         }
 
-        public static Point GetCenter(Rectangle rect)
+        private static Point GetCenter(Rectangle rect)
         {
             int x = rect.Left + ((rect.Right - rect.Left) / 2);
             int y = rect.Top + ((rect.Bottom - rect.Top) / 2);
