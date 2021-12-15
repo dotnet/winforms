@@ -233,6 +233,8 @@ namespace System.Windows.Forms.UITests
                 finally
                 {
                     dialog!.Close();
+                    dialog.Dispose();
+                    dialog = null;
                 }
             });
 
