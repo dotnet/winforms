@@ -468,7 +468,7 @@ namespace System.Windows.Forms
                             throw new NotSupportedException(SR.ListViewCheckBoxesNotSupportedInTileView);
                         }
 
-                        if (CheckBoxes)
+                        if (CheckBoxes && !VirtualMode)
                         {
                             // Save away the checked items just in case we re-activate checkboxes
                             //
@@ -515,7 +515,7 @@ namespace System.Windows.Forms
                             throw new NotSupportedException(SR.ListViewCheckBoxesNotSupportedInTileView);
                         }
 
-                        if (CheckBoxes)
+                        if (CheckBoxes && !VirtualMode)
                         {
                             // Save away the checked items just in case we re-activate checkboxes
                             //
