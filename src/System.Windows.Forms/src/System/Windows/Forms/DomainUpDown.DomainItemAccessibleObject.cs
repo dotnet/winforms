@@ -2,32 +2,30 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public partial class DomainUpDown
     {
         public class DomainItemAccessibleObject : AccessibleObject
         {
-            private string name;
-            private readonly DomainItemListAccessibleObject parent;
+            private string? _name;
+            private readonly DomainItemListAccessibleObject _parent;
 
-            public DomainItemAccessibleObject(string name, AccessibleObject parent) : base()
+            public DomainItemAccessibleObject(string? name, AccessibleObject parent) : base()
             {
-                this.name = name;
-                this.parent = (DomainItemListAccessibleObject)parent;
+                _name = name;
+                _parent = (DomainItemListAccessibleObject)parent.OrThrowIfNull();
             }
 
-            public override string Name
+            public override string? Name
             {
                 get
                 {
-                    return name;
+                    return _name;
                 }
                 set
                 {
-                    name = value;
+                    _name = value;
                 }
             }
 
@@ -35,7 +33,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return parent;
+                    return _parent;
                 }
             }
 
@@ -55,11 +53,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Value
+            public override string? Value
             {
                 get
                 {
-                    return name;
+                    return _name;
                 }
             }
 
