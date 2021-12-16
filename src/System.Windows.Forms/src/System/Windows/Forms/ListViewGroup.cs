@@ -78,17 +78,7 @@ namespace System.Windows.Forms
         }
 
         internal AccessibleObject AccessibilityObject
-        {
-            get
-            {
-                if (_accessibilityObject is null)
-                {
-                    _accessibilityObject = new ListViewGroupAccessibleObject(this, ListView?.Groups.Contains(this) == false);
-                }
-
-                return _accessibilityObject;
-            }
-        }
+            => _accessibilityObject ??= new ListViewGroupAccessibleObject(this, ListView?.Groups.Contains(this) == false);
 
         /// <summary>
         ///  The text displayed in the group header.
