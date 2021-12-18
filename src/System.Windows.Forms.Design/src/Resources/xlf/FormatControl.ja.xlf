@@ -49,7 +49,7 @@
       </trans-unit>
       <trans-unit id="secondRowLabel.Text">
         <source>&amp;Decimal places</source>
-        <target state="translated">小数点以下表示桁数(&amp;D)</target>
+        <target state="translated">小数点以下の桁数(&amp;D)</target>
         <note />
       </trans-unit>
       <trans-unit id="thirdRowLabel.Text">

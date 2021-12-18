@@ -1544,7 +1544,7 @@ Per accettare testo premere CTRL+INVIO.</target>
       </trans-unit>
       <trans-unit id="StandardMenuHelp">
         <source>&amp;Help</source>
-        <target state="translated">&amp;?</target>
+        <target state="translated">&amp;Guida</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuIndex">

@@ -49,7 +49,7 @@
       </trans-unit>
       <trans-unit id="secondRowLabel.Text">
         <source>&amp;Decimal places</source>
-        <target state="translated">Nb de &amp;décimales</target>
+        <target state="translated">Nombre de &amp;décimales</target>
         <note />
       </trans-unit>
       <trans-unit id="thirdRowLabel.Text">
