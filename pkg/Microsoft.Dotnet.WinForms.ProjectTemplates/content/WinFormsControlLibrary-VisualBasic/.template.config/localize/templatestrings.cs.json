@@ -11,7 +11,7 @@
   "symbols/Framework/choices/net5.0/displayName": ".NET 5.0",
   "symbols/Framework/choices/net6.0/description": "Cílit na net6.0",
   "symbols/Framework/choices/net6.0/displayName": ".NET 6.0",
-  "symbols/Framework/choices/net7.0/description": "Target net7.0",
+  "symbols/Framework/choices/net7.0/description": "Cílový net7.0",
   "symbols/Framework/choices/net7.0/displayName": ".NET 7.0",
   "symbols/Framework/displayName": ".NET 7.0",
   "symbols/langVersion/description": "Nastaví langVersion ve vytvořeném souboru projektu.",
