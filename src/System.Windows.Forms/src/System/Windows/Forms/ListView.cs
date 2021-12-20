@@ -6931,14 +6931,13 @@ namespace System.Windows.Forms
                 case User32.WM.KEYUP:
                     int key = (int)m.WParamInternal;
 
-                    if ((key == User32.VK.LEFT || key == User32.VK.RIGHT) && SelectedItems.Count > 0)
+                    if (GroupsDisplayed && (key is User32.VK.LEFT or User32.VK.RIGHT) && SelectedItems.Count > 0)
                     {
                         ListViewGroup group = SelectedItems[0].Group;
-                        ListViewGroupCollapsedState groupCollapsedState = group.CollapsedState;
 
-                        if (group is null || groupCollapsedState == ListViewGroupCollapsedState.Default
-                            || (key == User32.VK.LEFT && groupCollapsedState == ListViewGroupCollapsedState.Collapsed)
-                            || (key == User32.VK.RIGHT && groupCollapsedState == ListViewGroupCollapsedState.Expanded))
+                        if (group is null || group.CollapsedState is ListViewGroupCollapsedState.Default
+                            || (key == User32.VK.LEFT && group.CollapsedState is ListViewGroupCollapsedState.Collapsed)
+                            || (key == User32.VK.RIGHT && group.CollapsedState is ListViewGroupCollapsedState.Expanded))
                         {
                             break;
                         }

@@ -5369,6 +5369,28 @@ namespace System.Windows.Forms.Tests
             }
         }
 
+        [WinFormsTheory]
+        [InlineData(Keys.Right)]
+        [InlineData(Keys.Left)]
+        public void ListView_LeftRightArrow_DoesNotThrowException(Keys key)
+        {
+            using ListView listView = new() { ShowGroups = true };
+            listView.Items.Add(new ListViewItem("Group Item 0"));
+            listView.CreateControl();
+            listView.Items[0].Selected = true;
+            listView.Items[0].Focused = true;
+
+            // https://docs.microsoft.com/windows/win32/inputdev/wm-keyup
+            // The MSDN page tells us what bits of lParam to use for each of the parameters.
+            // All we need to do is some bit shifting to assemble lParam
+            // lParam = repeatCount | (scanCode << 16)
+            nint keyCode = (nint)key;
+            nint lParam = 0x00000001 | keyCode << 16;
+            User32.SendMessageW(listView, User32.WM.KEYUP, keyCode, lParam);
+
+            Assert.True(listView.IsHandleCreated);
+        }
+
         private class SubListViewItem : ListViewItem
         {
             public AccessibleObject CustomAccessibleObject { get; set; }
