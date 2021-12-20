@@ -19,7 +19,7 @@
       </trans-unit>
       <trans-unit id="noneCheckBox.Text">
         <source>&amp;None</source>
-        <target state="translated">&amp;Yok</target>
+        <target state="translated">&amp;Hiçbiri</target>
         <note />
       </trans-unit>
       <trans-unit id="rightCheckBox.Text">
