@@ -1354,7 +1354,7 @@ namespace System.Windows.Forms
                 Properties.SetObject(PropMainMenuStrip, value);
                 if (IsHandleCreated)
                 {
-                    UpdateMenuHandles();
+                    UpdateMenuHandles(recreateMenu: true);
                 }
             }
         }
@@ -5540,7 +5540,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateMenuHandles()
+        private void UpdateMenuHandles(bool recreateMenu = false)
         {
             if (!IsHandleCreated)
             {
@@ -5567,7 +5567,7 @@ namespace System.Windows.Forms
                     // an ole menu is being removed.
                     // Make MDI forget the mdi item position.
                     IntPtr? dummyMenu = Properties.GetObject(PropDummyMdiMenu) as IntPtr?;
-                    if (!dummyMenu.HasValue || dummyMenu.Value == IntPtr.Zero)
+                    if (!dummyMenu.HasValue || dummyMenu.Value == IntPtr.Zero || recreateMenu)
                     {
                         dummyMenu = User32.CreateMenu();
                         Properties.SetObject(PropDummyMdiMenu, dummyMenu);

@@ -282,6 +282,34 @@ namespace System.Windows.Forms.Tests
             Assert.True(menuStrip.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No)]
+        [InlineData(RightToLeft.Yes)]
+        public void MdiControlStrip_MaximizedChildWindow_ControlbBoxButtons_AreNotCloned(RightToLeft rightToLeft)
+        {
+            using ToolStripMenuItem toolStripMenuItem1 = new() { Text = "&Test1" };
+            using ToolStripMenuItem toolStripMenuItem2 = new() { Text = "&Test2" };
+            using MenuStrip menuStrip = new() { RightToLeft = rightToLeft };
+            menuStrip.Items.AddRange(new ToolStripItem[] { toolStripMenuItem1, toolStripMenuItem2 });
+            using Form mdiParent = new() { IsMdiContainer = true };
+            using Form mdiChild = new()
+            {
+                MdiParent = mdiParent,
+                WindowState = FormWindowState.Maximized
+            };
+
+            mdiParent.Show();
+            mdiChild.Show();
+            mdiParent.MainMenuStrip = menuStrip;
+            mdiParent.MainMenuStrip = null;
+            mdiParent.MainMenuStrip = menuStrip;
+            mdiParent.MainMenuStrip = null;
+            IntPtr menuHandle = User32.GetMenu(mdiParent.Handle);
+            int menuItemCount = User32.GetMenuItemCount(menuHandle);
+            // Four buttons: System, Minimize, Maximize, Close
+            Assert.True(menuItemCount == 4);
+        }
+
         private class SubMdiControlStrip : MdiControlStrip
         {
             public new const int ScrollStateAutoScrolling = MenuStrip.ScrollStateAutoScrolling;
