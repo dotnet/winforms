@@ -1624,7 +1624,7 @@ Appuyez sur Ctrl+Entrée pour valider le texte.</target>
       </trans-unit>
       <trans-unit id="StandardToolHelp">
         <source>He&amp;lp</source>
-        <target state="translated">&amp;?</target>
+        <target state="translated">Ai&amp;de</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripActionList_Dock">

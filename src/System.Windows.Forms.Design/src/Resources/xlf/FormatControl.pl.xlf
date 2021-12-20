@@ -49,7 +49,7 @@
       </trans-unit>
       <trans-unit id="secondRowLabel.Text">
         <source>&amp;Decimal places</source>
-        <target state="translated">&amp;Miejsca dziesiętne</target>
+        <target state="translated">Miejsca &amp;dziesiętne</target>
         <note />
       </trans-unit>
       <trans-unit id="thirdRowLabel.Text">

@@ -1544,7 +1544,7 @@ Stisknutím kombinace kláves Ctrl+Enter text přijměte.</target>
       </trans-unit>
       <trans-unit id="StandardMenuHelp">
         <source>&amp;Help</source>
-        <target state="translated">&amp;Nápověda</target>
+        <target state="translated">Nápo&amp;věda</target>
         <note />
       </trans-unit>
       <trans-unit id="StandardMenuIndex">

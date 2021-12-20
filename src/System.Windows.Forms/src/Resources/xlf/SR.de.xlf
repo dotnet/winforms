@@ -219,7 +219,7 @@
       </trans-unit>
       <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
         <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="new">{0} doesn't support {1} property. It must be overriden in the derived class.</target>
+        <target state="translated">{0} unterstützt {1} Eigenschaft nicht. Sie muss in der abgeleiteten Klasse überschrieben werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -774,7 +774,7 @@
       </trans-unit>
       <trans-unit id="CatDragDrop">
         <source>Drag Drop</source>
-        <target state="translated">Drag &amp; Drop</target>
+        <target state="translated">Drag &amp;amp; Drop</target>
         <note />
       </trans-unit>
       <trans-unit id="CatFocus">
@@ -824,7 +824,7 @@
       </trans-unit>
       <trans-unit id="CategoryPropertyGridLocalizedControlType">
         <source>PropertyGrid category</source>
-        <target state="new">PropertyGrid category</target>
+        <target state="translated">Kategorie „PropertyGrid“</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
@@ -1684,7 +1684,7 @@
       </trans-unit>
       <trans-unit id="ControlOnDragDropDescr">
         <source>Occurs when a drag-and-drop operation is completed.</source>
-        <target state="translated">Tritt auf, wenn ein Drag &amp; Drop-Vorgang abgeschlossen wurde.</target>
+        <target state="translated">Tritt auf, wenn ein Drag &amp;amp; Drop-Vorgang abgeschlossen wurde.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnDragEnterDescr">
@@ -1864,7 +1864,7 @@
       </trans-unit>
       <trans-unit id="ControlOnQueryContinueDragDescr">
         <source>Occurs when the mouse drags an item. The system requests whether the drag-and-drop operation should be allowed to continue.</source>
-        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp; Drop-Vorgang fortgeführt werden darf.</target>
+        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp;amp; Drop-Vorgang fortgeführt werden darf.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlOnResizeBeginDescr">
@@ -2074,12 +2074,12 @@
       </trans-unit>
       <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
         <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="new">{0} collection shouldn't be empty for {1}.</target>
+        <target state="translated">{0} Sammlung sollte für {1} nicht leer sein.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlsPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">{0} Eigenschaft sollte für {1} festgelegt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
@@ -4943,7 +4943,7 @@ Wenn Sie auf "Weiter" klicken, ignoriert die Anwendung den Fehler und setzt den 
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
-        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
+        <target state="translated">Steuert, ob die Datei, die geöffnet oder gespeichert wird, zur Liste zuletzt verwendeten Elemente hinzugefügt wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
@@ -4982,7 +4982,7 @@ Verify that the correct file name was given.</source>
       </trans-unit>
       <trans-unit id="FileDialogOkRequiresInteractionDescr">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <target state="translated">Steuert, ob die Schaltfläche „OK“ des Dialogfelds deaktiviert ist, bis der Benutzer in der Ansicht navigiert oder den Dateinamen bearbeitet (falls zutreffend). Hinweis: Das Deaktivieren der Schaltfläche „OK“ verhindert nicht, dass das Dialogfeld mit der EINGABETASTE übermittelt wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
@@ -4994,12 +4994,12 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FileDialogShowHiddenFilesDescr">
         <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <target state="translated">Steuert, ob ausgeblendete und Systemdateien im Dialogfeld angezeigt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogShowPinnedPlacesDescr">
         <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
+        <target state="translated">Steuert, ob die standardmäßig im Navigationsbereich der Ansicht angezeigten Elemente angezeigt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5109,7 +5109,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogAddToRecent">
         <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
-        <target state="new">Controls whether the dialog box adds the folder being selected to the recent list.</target>
+        <target state="translated">Steuert, ob das Dialogfeld den ausgewählten Ordner zur Liste der zuletzt verwendeten Elemente hinzufügt.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
@@ -5124,7 +5124,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <target state="translated">Steuert, ob die Schaltfläche „OK“ des Dialogfelds deaktiviert ist, bis der Benutzer in der Ansicht navigiert oder den Dateinamen bearbeitet (falls zutreffend). Hinweis: Das Deaktivieren der Schaltfläche „OK“ verhindert nicht, dass das Dialogfeld mit der EINGABETASTE übermittelt wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5139,7 +5139,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
         <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <target state="translated">Steuert, ob ausgeblendete und Systemdateien im Dialogfeld angezeigt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
@@ -5149,7 +5149,7 @@ Möchten Sie sie ersetzen?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
         <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
+        <target state="translated">Steuert, ob die standardmäßig im Navigationsbereich der Ansicht angezeigten Elemente angezeigt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -6483,7 +6483,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateName">
         <source>{0}, group, collapsed</source>
-        <target state="new">{0}, group, collapsed</target>
+        <target state="translated">{0}, gruppe, reduziert</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6503,7 +6503,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ListViewGroupExpandedStateName">
         <source>{0}, group, expanded</source>
-        <target state="new">{0}, group, expanded</target>
+        <target state="translated">{0}, gruppe, erweitert</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -7398,12 +7398,12 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
         <source>Controls whether the dialog box allows to select read-only files.</source>
-        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <target state="translated">Steuert, ob das Dialogfeld die Auswahl schreibgeschützter Dateien erlaubt.</target>
         <note />
       </trans-unit>
       <trans-unit id="OpenFileDialogShowPreviewDescr">
         <source>Controls whether the dialog box shows a preview for selected files.</source>
-        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
+        <target state="translated">Steuert, ob im Dialogfeld eine Vorschau ausgewählter Dateien angezeigt wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
@@ -7618,7 +7618,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ParentPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">{0} Eigenschaft sollte für {1} festgelegt werden.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
@@ -8303,12 +8303,12 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="new">{0} Description</target>
+        <target state="translated">{0}-Beschreibung</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneTitle">
         <source>Description</source>
-        <target state="new">Description</target>
+        <target state="translated">Beschreibung</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
@@ -8583,7 +8583,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="RichTextBoxEnableAutoDragDrop">
         <source>Enable drag/drop of text, pictures, and other data</source>
-        <target state="translated">Aktiviert Drag&amp;Drop für Text, Bilder und andere Daten.</target>
+        <target state="translated">Aktiviert Drag/Drop für Text, Bilder und andere Daten.</target>
         <note />
       </trans-unit>
       <trans-unit id="RichTextBoxHScroll">
@@ -8733,7 +8733,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="RichTextBox_IDDragDrop">
         <source>Drag and Drop</source>
-        <target state="translated">Drag &amp; Drop</target>
+        <target state="translated">Drag &amp;amp; Drop</target>
         <note />
       </trans-unit>
       <trans-unit id="RichTextBox_IDPaste">
@@ -8763,7 +8763,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="SaveFileDialogCheckWriteAccess">
         <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
-        <target state="new">Controls whether the dialog box verifies if the creation of the specified file will be successful.</target>
+        <target state="translated">Steuert, ob das Dialogfeld überprüft, ob die angegebene Datei erfolgreich erstellt werden wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
@@ -8773,7 +8773,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="SaveFileDialogExpandedMode">
         <source>Controls whether the dialog box is always opened in the expanded mode.</source>
-        <target state="new">Controls whether the dialog box is always opened in the expanded mode.</target>
+        <target state="translated">Steuert, ob das Dialogfeld immer im erweiterten Modus geöffnet wird.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">
@@ -10083,7 +10083,7 @@ Stapelüberwachung, in der der unzulässige Vorgang auftrat:
       </trans-unit>
       <trans-unit id="ToolStripItemOnQueryContinueDragDescr">
         <source>Occurs when the mouse drags an item. The system requests whether the drag-and-drop operation should be allowed to continue.</source>
-        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp; Drop-Vorgang fortgeführt werden darf.</target>
+        <target state="translated">Tritt ein, wenn die Maus ein Element zieht. Das System bestimmt, ob der Drag &amp;amp; Drop-Vorgang fortgeführt werden darf.</target>
         <note />
       </trans-unit>
       <trans-unit id="ToolStripItemOnRightToLeftChangedDescr">

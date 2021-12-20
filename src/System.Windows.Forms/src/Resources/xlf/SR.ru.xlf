@@ -219,7 +219,7 @@
       </trans-unit>
       <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
         <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="new">{0} doesn't support {1} property. It must be overriden in the derived class.</target>
+        <target state="translated">{0} не поддерживает свойство {1}. Его необходимо переопределить в производном классе.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -824,7 +824,7 @@
       </trans-unit>
       <trans-unit id="CategoryPropertyGridLocalizedControlType">
         <source>PropertyGrid category</source>
-        <target state="new">PropertyGrid category</target>
+        <target state="translated">Категория PropertyGrid</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
@@ -2074,12 +2074,12 @@
       </trans-unit>
       <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
         <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="new">{0} collection shouldn't be empty for {1}.</target>
+        <target state="translated">Коллекция {0} не может быть пустой для элемента {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlsPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">Необходимо задать свойство {0} для элемента {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
@@ -4944,7 +4944,7 @@ If you click Continue, the application will ignore this error and attempt to con
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
-        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
+        <target state="translated">Определяет, следует ли добавлять открываемый или сохраненный файл в список "Последние".</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
@@ -4983,7 +4983,7 @@ Verify that the correct file name was given.</source>
       </trans-unit>
       <trans-unit id="FileDialogOkRequiresInteractionDescr">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <target state="translated">Определяет, отключена ли кнопка "ОК" в диалоговом окне, пока пользователь не перейдет в представление или не изменит имя файла (если применимо). Примечание. Отключение кнопки "ОК" не блокирует отправку сообщения из диалогового окна при нажатии клавиши ВВОД.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
@@ -4995,12 +4995,12 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FileDialogShowHiddenFilesDescr">
         <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <target state="translated">Определяет, отображаются ли скрытые и системные файлы в диалоговом окне.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogShowPinnedPlacesDescr">
         <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
+        <target state="translated">Определяет, можно ли просмотреть элементы, отображаемые по умолчанию в области навигации представления.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5110,7 +5110,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogAddToRecent">
         <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
-        <target state="new">Controls whether the dialog box adds the folder being selected to the recent list.</target>
+        <target state="translated">Определяет, добавляет ли диалоговое окно выбранную папку в список "Последние".</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
@@ -5125,7 +5125,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <target state="translated">Определяет, отключена ли кнопка "ОК" в диалоговом окне, пока пользователь не перейдет в представление или не изменит имя файла (если применимо). Примечание. Отключение кнопки "ОК" не блокирует отправку сообщения из диалогового окна при нажатии клавиши ВВОД.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5140,7 +5140,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
         <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <target state="translated">Определяет, отображаются ли скрытые и системные файлы в диалоговом окне.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
@@ -5150,7 +5150,7 @@ Do you want to replace it?</source>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
         <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
+        <target state="translated">Определяет, можно ли просмотреть элементы, отображаемые по умолчанию в области навигации представления.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -6484,7 +6484,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateName">
         <source>{0}, group, collapsed</source>
-        <target state="new">{0}, group, collapsed</target>
+        <target state="translated">{0}, группа, свернуто</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6504,7 +6504,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ListViewGroupExpandedStateName">
         <source>{0}, group, expanded</source>
-        <target state="new">{0}, group, expanded</target>
+        <target state="translated">{0}, группа, развернуто</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -7399,12 +7399,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
         <source>Controls whether the dialog box allows to select read-only files.</source>
-        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <target state="translated">Определяет, разрешено ли в диалоговом окне выбирать файлы, доступные только для чтения.</target>
         <note />
       </trans-unit>
       <trans-unit id="OpenFileDialogShowPreviewDescr">
         <source>Controls whether the dialog box shows a preview for selected files.</source>
-        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
+        <target state="translated">Определяет, доступен ли в диалоговом окне предварительный просмотр выбранных файлов.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
@@ -7619,7 +7619,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="ParentPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">Необходимо задать свойство {0} для элемента {1}.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
@@ -8304,12 +8304,12 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="new">{0} Description</target>
+        <target state="translated">{0}: описание</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneTitle">
         <source>Description</source>
-        <target state="new">Description</target>
+        <target state="translated">Описание</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
@@ -8764,7 +8764,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="SaveFileDialogCheckWriteAccess">
         <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
-        <target state="new">Controls whether the dialog box verifies if the creation of the specified file will be successful.</target>
+        <target state="translated">Определяет, выполняется ли в диалоговом окне проверка успешности создания указанного файла.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
@@ -8774,7 +8774,7 @@ Stack trace where the illegal operation occurred was:
       </trans-unit>
       <trans-unit id="SaveFileDialogExpandedMode">
         <source>Controls whether the dialog box is always opened in the expanded mode.</source>
-        <target state="new">Controls whether the dialog box is always opened in the expanded mode.</target>
+        <target state="translated">Определяет, всегда ли диалоговое окно открыто в развернутом режиме.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">

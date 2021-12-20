@@ -219,7 +219,7 @@
       </trans-unit>
       <trans-unit id="AccessibleObjectRuntimeIdNotSupported">
         <source>{0} doesn't support {1} property. It must be overriden in the derived class.</source>
-        <target state="new">{0} doesn't support {1} property. It must be overriden in the derived class.</target>
+        <target state="translated">{0}, {1} özelliğini desteklemez. Türetilmiş sınıfta geçersiz kılınmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="AddDifferentThreads">
@@ -824,7 +824,7 @@
       </trans-unit>
       <trans-unit id="CategoryPropertyGridLocalizedControlType">
         <source>PropertyGrid category</source>
-        <target state="new">PropertyGrid category</target>
+        <target state="translated">PropertyGrid kategorisi</target>
         <note />
       </trans-unit>
       <trans-unit id="CheckBoxAppearanceDescr">
@@ -974,7 +974,7 @@
       </trans-unit>
       <trans-unit id="CombinationOfAccessibilitySwitchesNotSupported">
         <source>Desktop applications are required to opt in to all earlier accessibility improvements to get the later improvements. To do this, ensure that if the AppContext switch 'Switch.UseLegacyAccessibilityFeatures.N' is set to 'false', then 'Switch.UseLegacyAccessibilityFeatures' and all 'Switch.UseLegacyAccessibilityFeatures.M' switches, when M &lt; N, evaluate to false as well. Note that, if a switch for a particular set of accessibility improvements is not present, its value is determined by the target framework version. You can remedy this by adding these switches and setting their value to false.</source>
-        <target state="translated">Masaüstü uygulamalarının sonraki geliştirmeleri alabilmesi için önceki tüm erken erişilebilirlik geliştirmelerinin kabul edilmesi gerekir. Bunu yapmak için, 'Switch.UseLegacyAccessibilityFeatures.N' AppContext anahtarı 'false' olarak ayarlandıysa, M &lt; N durumunda 'Switch.UseLegacyAccessibilityFeatures' ve tüm 'Switch.UseLegacyAccessibilityFeatures.M' anahtarlarının da false olarak değerlendirildiğinden emin olun. Belirli bir erişilebilirlik geliştirmeleri kümesi için bir anahtarın mevcut olmaması durumunda, değerinin hedef çerçeve sürümü tarafından belirlendiğini unutmayın. Bu sorunu, bu anahtarları ekleyip değerlerini false olarak ayarlayarak düzeltebilirsiniz.</target>
+        <target state="translated">Masaüstü uygulamalarının sonraki geliştirmeleri alabilmesi için önceki tüm erken erişilebilirlik geliştirmelerinin kabul edilmesi gerekir. Bunu yapmak için, 'Switch.UseLegacyAccessibilityFeatures.N' AppContext anahtarı 'false' olarak ayarlandıysa, M &lt;N durumunda 'Switch.UseLegacyAccessibilityFeatures' ve tüm 'Switch.UseLegacyAccessibilityFeatures.M' anahtarlarının da false olarak değerlendirildiğinden emin olun. Belirli bir erişilebilirlik geliştirmeleri kümesi için bir anahtarın mevcut olmaması durumunda, değerinin hedef çerçeve sürümü tarafından belirlendiğini unutmayın. Bu sorunu, bu anahtarları ekleyip değerlerini false olarak ayarlayarak düzeltebilirsiniz.</target>
         <note />
       </trans-unit>
       <trans-unit id="ComboBoxAutoCompleteCustomSourceDescr">
@@ -2074,12 +2074,12 @@
       </trans-unit>
       <trans-unit id="ControlsCollectionShouldNotBeEmptyInGetNextControl">
         <source>{0} collection shouldn't be empty for {1}.</source>
-        <target state="new">{0} collection shouldn't be empty for {1}.</target>
+        <target state="translated">{1} için {0} koleksiyonu boş olmamalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="ControlsPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">{1} için {0} özelliği ayarlanmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="CurrencyManagerCantAddNew">
@@ -4943,7 +4943,7 @@ Devam'a tıkladığınızda uygulama bu hatayı yoksayar ve işlemi sürdürmeye
       </trans-unit>
       <trans-unit id="FileDialogAddToRecentDescr">
         <source>Controls whether to add the file being opened or saved to the recent list.</source>
-        <target state="new">Controls whether to add the file being opened or saved to the recent list.</target>
+        <target state="translated">Açılmakta olan veya kaydedilen dosyanın son listeye eklenip eklenmeyeceğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogBufferTooSmall">
@@ -4982,7 +4982,7 @@ Doğru dosya adının verildiğinden emin olun.</target>
       </trans-unit>
       <trans-unit id="FileDialogOkRequiresInteractionDescr">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <target state="translated">Kullanıcı görünümde gezinene veya dosya adını düzenleyene (yapabiliyorsa) kadar iletişim kutusunun Tamam düğmesinin devre dışı bırakılıp bırakılmadığını kontrol eder. Not: Tamam düğmesinin devre dışı bırakılması, iletişim kutusunun Enter tuşuyla gönderilmesini engellemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogOverwritePrompt">
@@ -4994,12 +4994,12 @@ Bunu değiştirmek istiyor musunuz?</target>
       </trans-unit>
       <trans-unit id="FileDialogShowHiddenFilesDescr">
         <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <target state="translated">İletişim kutusunun gizli ve sistem dosyalarını gösterip göstermediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogShowPinnedPlacesDescr">
         <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
+        <target state="translated">Görünümün gezinme bölmesinde varsayılan olarak gösterilen öğelerin gösterilip gösterilmediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FileDialogSubLassFailure">
@@ -5109,7 +5109,7 @@ Bunu değiştirmek istiyor musunuz?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogAddToRecent">
         <source>Controls whether the dialog box adds the folder being selected to the recent list.</source>
-        <target state="new">Controls whether the dialog box adds the folder being selected to the recent list.</target>
+        <target state="translated">İletişim kutusunun seçilen klasörü son kullanılan listeye ekleyip eklemediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogDescription">
@@ -5124,7 +5124,7 @@ Bunu değiştirmek istiyor musunuz?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogOkRequiresInteraction">
         <source>Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</source>
-        <target state="new">Controls whether the OK button of the dialog box is disabled until the user navigates the view or edits the filename (if applicable). Note: Disabling of the OK button does not prevent the dialog from being submitted by the Enter key.</target>
+        <target state="translated">Kullanıcı görünümde gezinene veya dosya adını düzenleyene (yapabiliyorsa) kadar iletişim kutusunun Tamam düğmesinin devre dışı bırakılıp bırakılmadığını kontrol eder. Not: Tamam düğmesinin devre dışı bırakılması, iletişim kutusunun Enter tuşuyla gönderilmesini engellemez.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogRootFolder">
@@ -5139,7 +5139,7 @@ Bunu değiştirmek istiyor musunuz?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowHiddenFiles">
         <source>Controls whether the dialog box displays hidden and system files.</source>
-        <target state="new">Controls whether the dialog box displays hidden and system files.</target>
+        <target state="translated">İletişim kutusunun gizli ve sistem dosyalarını gösterip göstermediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowNewFolderButton">
@@ -5149,7 +5149,7 @@ Bunu değiştirmek istiyor musunuz?</target>
       </trans-unit>
       <trans-unit id="FolderBrowserDialogShowPinnedPlaces">
         <source>Controls whether the items shown by default in the view's navigation pane are shown.</source>
-        <target state="new">Controls whether the items shown by default in the view's navigation pane are shown.</target>
+        <target state="translated">Görünümün gezinme bölmesinde varsayılan olarak gösterilen öğelerin gösterilip gösterilmediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="FolderBrowserDialogUseDescriptionForTitle">
@@ -6483,7 +6483,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ListViewGroupCollapsedStateName">
         <source>{0}, group, collapsed</source>
-        <target state="new">{0}, group, collapsed</target>
+        <target state="translated">{0}, grup, daraltılmış</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupCollectionBadListViewGroup">
@@ -6503,7 +6503,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ListViewGroupExpandedStateName">
         <source>{0}, group, expanded</source>
-        <target state="new">{0}, group, expanded</target>
+        <target state="translated">{0}, grup, genişletilmiş</target>
         <note />
       </trans-unit>
       <trans-unit id="ListViewGroupImageListDescr">
@@ -7398,12 +7398,12 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="OpenFileDialogSelectReadOnlyDescr">
         <source>Controls whether the dialog box allows to select read-only files.</source>
-        <target state="new">Controls whether the dialog box allows to select read-only files.</target>
+        <target state="translated">İletişim kutusunun salt okunur dosyaları seçmeye izin verip vermediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="OpenFileDialogShowPreviewDescr">
         <source>Controls whether the dialog box shows a preview for selected files.</source>
-        <target state="new">Controls whether the dialog box shows a preview for selected files.</target>
+        <target state="translated">İletişim kutusunun seçili dosyalar için bir önizleme gösterip göstermediğini kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="OperationRequiresIBindingList">
@@ -7618,7 +7618,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="ParentPropertyNotSetInGetNextControl">
         <source>{0} property should be set for {1}.</source>
-        <target state="new">{0} property should be set for {1}.</target>
+        <target state="translated">{1} için {0} özelliği ayarlanmalıdır.</target>
         <note />
       </trans-unit>
       <trans-unit id="PictureBoxBorderStyleDescr">
@@ -8303,12 +8303,12 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneAccessibleNameTemplate">
         <source>{0} Description</source>
-        <target state="new">{0} Description</target>
+        <target state="translated">{0} Açıklaması</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpPaneTitle">
         <source>Description</source>
-        <target state="new">Description</target>
+        <target state="translated">Açıklama</target>
         <note />
       </trans-unit>
       <trans-unit id="PropertyGridHelpVisibleDesc">
@@ -8763,7 +8763,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="SaveFileDialogCheckWriteAccess">
         <source>Controls whether the dialog box verifies if the creation of the specified file will be successful.</source>
-        <target state="new">Controls whether the dialog box verifies if the creation of the specified file will be successful.</target>
+        <target state="translated">İletişim kutusunun, belirtilen dosyanın oluşturulmasının başarılı olup olmayacağını doğrulayıp doğrulamadığını kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogCreatePrompt">
@@ -8773,7 +8773,7 @@ Geçersiz işlemin gerçekleştiği yığın izi:
       </trans-unit>
       <trans-unit id="SaveFileDialogExpandedMode">
         <source>Controls whether the dialog box is always opened in the expanded mode.</source>
-        <target state="new">Controls whether the dialog box is always opened in the expanded mode.</target>
+        <target state="translated">İletişim kutusunun her zaman genişletilmiş modda açılıp açılmadığını kontrol eder.</target>
         <note />
       </trans-unit>
       <trans-unit id="SaveFileDialogOverWritePrompt">
