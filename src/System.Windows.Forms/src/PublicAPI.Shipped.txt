@@ -121,7 +121,7 @@ override System.Windows.Forms.ComboBox.ChildAccessibleObject.Name.get -> string?
 ~override System.Windows.Forms.ContainerControl.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ContainerControl.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 ~override System.Windows.Forms.ContainerControl.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.Control.ControlCollection.GetEnumerator() -> System.Collections.IEnumerator
+override System.Windows.Forms.Control.ControlCollection.GetEnumerator() -> System.Collections.IEnumerator!
 ~override System.Windows.Forms.Control.Site.get -> System.ComponentModel.ISite
 ~override System.Windows.Forms.Control.Site.set -> void
 ~override System.Windows.Forms.ControlBindingsCollection.AddCore(System.Windows.Forms.Binding dataBinding) -> void
@@ -1679,12 +1679,12 @@ System.Windows.Forms.CommonDialog.Tag.set -> void
 ~System.Windows.Forms.Control.Control(string text, int left, int top, int width, int height) -> void
 ~System.Windows.Forms.Control.Control(System.Windows.Forms.Control parent, string text) -> void
 ~System.Windows.Forms.Control.Control(System.Windows.Forms.Control parent, string text, int left, int top, int width, int height) -> void
-~System.Windows.Forms.Control.ControlCollection.Contains(System.Windows.Forms.Control control) -> bool
-~System.Windows.Forms.Control.ControlCollection.ControlCollection(System.Windows.Forms.Control owner) -> void
-~System.Windows.Forms.Control.ControlCollection.Find(string key, bool searchAllChildren) -> System.Windows.Forms.Control[]
-~System.Windows.Forms.Control.ControlCollection.GetChildIndex(System.Windows.Forms.Control child) -> int
-~System.Windows.Forms.Control.ControlCollection.IndexOf(System.Windows.Forms.Control control) -> int
-~System.Windows.Forms.Control.ControlCollection.Owner.get -> System.Windows.Forms.Control
+System.Windows.Forms.Control.ControlCollection.Contains(System.Windows.Forms.Control? control) -> bool
+System.Windows.Forms.Control.ControlCollection.ControlCollection(System.Windows.Forms.Control! owner) -> void
+System.Windows.Forms.Control.ControlCollection.Find(string! key, bool searchAllChildren) -> System.Windows.Forms.Control![]!
+System.Windows.Forms.Control.ControlCollection.GetChildIndex(System.Windows.Forms.Control! child) -> int
+System.Windows.Forms.Control.ControlCollection.IndexOf(System.Windows.Forms.Control? control) -> int
+System.Windows.Forms.Control.ControlCollection.Owner.get -> System.Windows.Forms.Control!
 ~System.Windows.Forms.Control.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.Control.CreateGraphics() -> System.Drawing.Graphics
 ~System.Windows.Forms.Control.DataBindings.get -> System.Windows.Forms.ControlBindingsCollection
@@ -3172,16 +3172,16 @@ virtual System.Windows.Forms.CommonDialog.OnHelpRequest(System.EventArgs! e) -> 
 ~virtual System.Windows.Forms.Control.BindingContext.set -> void
 ~virtual System.Windows.Forms.Control.ContextMenuStrip.get -> System.Windows.Forms.ContextMenuStrip
 ~virtual System.Windows.Forms.Control.ContextMenuStrip.set -> void
-~virtual System.Windows.Forms.Control.ControlCollection.Add(System.Windows.Forms.Control value) -> void
-~virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control[] controls) -> void
-~virtual System.Windows.Forms.Control.ControlCollection.ContainsKey(string key) -> bool
-~virtual System.Windows.Forms.Control.ControlCollection.GetChildIndex(System.Windows.Forms.Control child, bool throwException) -> int
-~virtual System.Windows.Forms.Control.ControlCollection.IndexOfKey(string key) -> int
-~virtual System.Windows.Forms.Control.ControlCollection.Remove(System.Windows.Forms.Control value) -> void
-~virtual System.Windows.Forms.Control.ControlCollection.RemoveByKey(string key) -> void
-~virtual System.Windows.Forms.Control.ControlCollection.SetChildIndex(System.Windows.Forms.Control child, int newIndex) -> void
-~virtual System.Windows.Forms.Control.ControlCollection.this[int index].get -> System.Windows.Forms.Control
-~virtual System.Windows.Forms.Control.ControlCollection.this[string key].get -> System.Windows.Forms.Control
+virtual System.Windows.Forms.Control.ControlCollection.Add(System.Windows.Forms.Control? value) -> void
+virtual System.Windows.Forms.Control.ControlCollection.AddRange(System.Windows.Forms.Control![]! controls) -> void
+virtual System.Windows.Forms.Control.ControlCollection.ContainsKey(string? key) -> bool
+virtual System.Windows.Forms.Control.ControlCollection.GetChildIndex(System.Windows.Forms.Control! child, bool throwException) -> int
+virtual System.Windows.Forms.Control.ControlCollection.IndexOfKey(string? key) -> int
+virtual System.Windows.Forms.Control.ControlCollection.Remove(System.Windows.Forms.Control? value) -> void
+virtual System.Windows.Forms.Control.ControlCollection.RemoveByKey(string? key) -> void
+virtual System.Windows.Forms.Control.ControlCollection.SetChildIndex(System.Windows.Forms.Control! child, int newIndex) -> void
+virtual System.Windows.Forms.Control.ControlCollection.this[int index].get -> System.Windows.Forms.Control!
+virtual System.Windows.Forms.Control.ControlCollection.this[string? key].get -> System.Windows.Forms.Control?
 ~virtual System.Windows.Forms.Control.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~virtual System.Windows.Forms.Control.CreateControlsInstance() -> System.Windows.Forms.Control.ControlCollection
 ~virtual System.Windows.Forms.Control.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -4678,7 +4678,7 @@ override System.Windows.Forms.TabPage.MaximumSize.set -> void
 override System.Windows.Forms.TabPage.MinimumSize.get -> System.Drawing.Size
 override System.Windows.Forms.TabPage.MinimumSize.set -> void
 override System.Windows.Forms.TabPage.SetBoundsCore(int x, int y, int width, int height, System.Windows.Forms.BoundsSpecified specified) -> void
-override System.Windows.Forms.TabPage.TabPageControlCollection.Add(System.Windows.Forms.Control! value) -> void
+override System.Windows.Forms.TabPage.TabPageControlCollection.Add(System.Windows.Forms.Control? value) -> void
 override System.Windows.Forms.TaskDialogButton.Equals(object? obj) -> bool
 override System.Windows.Forms.TaskDialogButton.GetHashCode() -> int
 override System.Windows.Forms.TaskDialogButton.ToString() -> string!
