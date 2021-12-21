@@ -32,7 +32,7 @@ namespace System.Windows.Forms
                 _formats.AddRange(source._formats);
             }
 
-            public FormatEnumerator(IDataObject parent, string[] formats)
+            public FormatEnumerator(IDataObject parent, string[]? formats)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"FormatEnumerator: Constructed: {parent}, string[{(formats?.Length ?? 0)}]");
 
@@ -76,7 +76,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            public int Next(int celt, FORMATETC[] rgelt, int[] pceltFetched)
+            public int Next(int celt, FORMATETC[] rgelt, int[]? pceltFetched)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Next");
                 if (_current < _formats.Count && celt > 0)

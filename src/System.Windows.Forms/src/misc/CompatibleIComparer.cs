@@ -4,8 +4,6 @@
 
 namespace System.Collections.Specialized
 {
-    using System.Collections;
-
     internal class BackCompatibleStringComparer : IEqualityComparer
     {
         static internal IEqualityComparer Default = new BackCompatibleStringComparer();

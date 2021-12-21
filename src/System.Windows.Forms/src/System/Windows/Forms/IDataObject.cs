@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -15,17 +13,17 @@ namespace System.Windows.Forms
         ///  Retrieves the data associated with the specified data format, using
         ///  autoConvert to determine whether to convert the data to the  format.
         /// </summary>
-        object GetData(string format, bool autoConvert);
+        object? GetData(string format, bool autoConvert);
 
         /// <summary>
         ///  Retrieves the data associated with the specified data format.
         /// </summary>
-        object GetData(string format);
+        object? GetData(string format);
 
         /// <summary>
         ///  Retrieves the data associated with the specified class type format.
         /// </summary>
-        object GetData(Type format);
+        object? GetData(Type format);
 
         /// <summary>
         ///  Stores the specified data and its associated format in  this instance,

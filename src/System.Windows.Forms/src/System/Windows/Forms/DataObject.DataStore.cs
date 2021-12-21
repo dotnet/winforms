@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -20,24 +18,24 @@ namespace System.Windows.Forms
         {
             private class DataStoreEntry
             {
-                public object data;
-                public bool autoConvert;
+                public object Data { get; }
+                public bool AutoConvert { get; }
 
                 public DataStoreEntry(object data, bool autoConvert)
                 {
-                    this.data = data;
-                    this.autoConvert = autoConvert;
+                    Data = data;
+                    AutoConvert = autoConvert;
                 }
             }
 
-            private readonly Hashtable data = new Hashtable(BackCompatibleStringComparer.Default);
+            private readonly Hashtable _data = new Hashtable(BackCompatibleStringComparer.Default);
 
             public DataStore()
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: Constructed DataStore");
             }
 
-            public virtual object GetData(string format, bool autoConvert)
+            public virtual object? GetData(string format, bool autoConvert)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetData: " + format + ", " + autoConvert.ToString());
                 if (string.IsNullOrWhiteSpace(format))
@@ -45,33 +43,33 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                DataStoreEntry dse = (DataStoreEntry)data[format];
-                object baseVar = null;
+                DataStoreEntry? dse = (DataStoreEntry?)_data[format];
+                object? baseVar = null;
                 if (dse is not null)
                 {
-                    baseVar = dse.data;
+                    baseVar = dse.Data;
                 }
 
-                object original = baseVar;
+                object? original = baseVar;
 
                 if (autoConvert
-                    && (dse is null || dse.autoConvert)
+                    && (dse is null || dse.AutoConvert)
                     && (baseVar is null || baseVar is MemoryStream))
                 {
-                    string[] mappedFormats = GetMappedFormats(format);
+                    string[]? mappedFormats = GetMappedFormats(format);
                     if (mappedFormats is not null)
                     {
                         for (int i = 0; i < mappedFormats.Length; i++)
                         {
                             if (!format.Equals(mappedFormats[i]))
                             {
-                                DataStoreEntry found = (DataStoreEntry)data[mappedFormats[i]];
+                                DataStoreEntry? found = (DataStoreEntry?)_data[mappedFormats[i]];
                                 if (found is not null)
                                 {
-                                    baseVar = found.data;
+                                    baseVar = found.Data;
                                 }
 
-                                if (baseVar is not null && !(baseVar is MemoryStream))
+                                if (baseVar is not null && baseVar is not MemoryStream)
                                 {
                                     original = null;
                                     break;
@@ -91,16 +89,16 @@ namespace System.Windows.Forms
                 }
             }
 
-            public virtual object GetData(string format)
+            public virtual object? GetData(string format)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetData: " + format);
                 return GetData(format, true);
             }
 
-            public virtual object GetData(Type format)
+            public virtual object? GetData(Type format)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetData: " + format.FullName);
-                return GetData(format.FullName);
+                return GetData(format.FullName!);
             }
 
             public virtual void SetData(string format, bool autoConvert, object data)
@@ -129,13 +127,13 @@ namespace System.Windows.Forms
                     }
                 }
 
-                this.data[format] = new DataStoreEntry(data, autoConvert);
+                _data[format] = new DataStoreEntry(data!, autoConvert);
             }
 
             public virtual void SetData(string format, object data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + data?.ToString() ?? "(null)");
-                SetData(format, true, data);
+                SetData(format, true, data!);
             }
 
             public virtual void SetData(Type format, object data)
@@ -143,7 +141,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
                 ArgumentNullException.ThrowIfNull(format);
 
-                SetData(format.FullName, data);
+                SetData(format.FullName!, data!);
             }
 
             public virtual void SetData(object data)
@@ -152,7 +150,7 @@ namespace System.Windows.Forms
                 ArgumentNullException.ThrowIfNull(data);
 
                 if (data is ISerializable
-                    && !this.data.ContainsKey(DataFormats.Serializable))
+                    && !_data.ContainsKey(DataFormats.Serializable))
                 {
                     SetData(DataFormats.Serializable, data);
                 }
@@ -163,7 +161,7 @@ namespace System.Windows.Forms
             public virtual bool GetDataPresent(Type format)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetDataPresent: " + format.FullName);
-                return GetDataPresent(format.FullName);
+                return GetDataPresent(format.FullName!);
             }
 
             public virtual bool GetDataPresent(string format, bool autoConvert)
@@ -176,8 +174,8 @@ namespace System.Windows.Forms
 
                 if (!autoConvert)
                 {
-                    Debug.Assert(data is not null, "data must be non-null");
-                    return data.ContainsKey(format);
+                    Debug.Assert(_data is not null, "data must be non-null");
+                    return _data.ContainsKey(format);
                 }
                 else
                 {
@@ -208,11 +206,11 @@ namespace System.Windows.Forms
             public virtual string[] GetFormats(bool autoConvert)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: GetFormats: " + autoConvert.ToString());
-                Debug.Assert(data is not null, "data collection can't be null");
-                Debug.Assert(data.Keys is not null, "data Keys collection can't be null");
+                Debug.Assert(_data is not null, "data collection can't be null");
+                Debug.Assert(_data.Keys is not null, "data Keys collection can't be null");
 
-                string[] baseVar = new string[data.Keys.Count];
-                data.Keys.CopyTo(baseVar, 0);
+                string[] baseVar = new string[_data.Keys.Count];
+                _data.Keys.CopyTo(baseVar, 0);
                 Debug.Assert(baseVar is not null, "Collections should never return NULL arrays!!!");
                 if (autoConvert)
                 {
@@ -223,10 +221,10 @@ namespace System.Windows.Forms
                     HashSet<string> distinctFormats = new HashSet<string>(baseVarLength);
                     for (int i = 0; i < baseVarLength; i++)
                     {
-                        Debug.Assert(data[baseVar[i]] is not null, "Null item in data collection with key '" + baseVar[i] + "'");
-                        if (((DataStoreEntry)data[baseVar[i]]).autoConvert)
+                        Debug.Assert(_data[baseVar[i]] is not null, "Null item in data collection with key '" + baseVar[i] + "'");
+                        if (((DataStoreEntry)_data[baseVar[i]]!).AutoConvert)
                         {
-                            string[] cur = GetMappedFormats(baseVar[i]);
+                            string[] cur = GetMappedFormats(baseVar[i])!;
                             Debug.Assert(cur is not null, "GetMappedFormats returned null for '" + baseVar[i] + "'");
                             for (int j = 0; j < cur.Length; j++)
                             {
