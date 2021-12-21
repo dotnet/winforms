@@ -34,7 +34,7 @@
       </trans-unit>
       <trans-unit id="propertiesLabel.Text">
         <source>&amp;Properties:</source>
-        <target state="translated">Ö&amp;zellikler:</target>
+        <target state="translated">&amp;Özellikler:</target>
         <note />
       </trans-unit>
       <trans-unit id="removeButton.Text">
