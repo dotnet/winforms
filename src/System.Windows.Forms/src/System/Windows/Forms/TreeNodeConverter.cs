@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Globalization;
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether this converter can
         ///  convert an object to the given destination type using the context.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor))
             {
@@ -39,15 +37,14 @@ namespace System.Windows.Forms
         ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 
-            if (destinationType == typeof(InstanceDescriptor) && value is TreeNode)
+            if (destinationType == typeof(InstanceDescriptor) && value is TreeNode node)
             {
-                TreeNode node = (TreeNode)value;
-                MemberInfo info = null;
-                object[] args = null;
+                MemberInfo? info;
+                object[]? args;
 
                 if (node.ImageIndex == -1 || node.SelectedImageIndex == -1)
                 {

@@ -1061,8 +1061,8 @@ override System.Windows.Forms.Timer.ToString() -> string!
 ~override System.Windows.Forms.TrackBar.Text.set -> void
 ~override System.Windows.Forms.TrackBar.ToString() -> string
 ~override System.Windows.Forms.TreeNode.ToString() -> string
-~override System.Windows.Forms.TreeNodeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.TreeNodeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.TreeNodeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.TreeNodeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
 ~override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.CreateParams
