@@ -28,7 +28,7 @@ namespace System.Windows.Forms
     [Docking(DockingBehavior.Ask)]
     [Designer("System.Windows.Forms.Design.TreeViewDesigner, " + AssemblyRef.SystemDesign)]
     [SRDescription(nameof(SR.DescriptionTreeView))]
-    public class TreeView : Control
+    public partial class TreeView : Control
     {
         private const int MaxIndent = 32000;      // Maximum allowable TreeView indent
         private const string backSlash = "\\";
@@ -1593,6 +1593,15 @@ namespace System.Windows.Forms
             root.Collapse();
         }
 
+        /// <summary>
+        ///  Creates the new instance of AccessibleObject for this TreeView control.
+        /// </summary>
+        /// <returns>
+        ///  The AccessibleObject for this TreeView instance.
+        /// </returns>
+        protected override AccessibleObject CreateAccessibilityInstance()
+            => new TreeViewAccessibleObject(this);
+
         protected override void CreateHandle()
         {
             if (!RecreatingHandle)
@@ -2186,6 +2195,13 @@ namespace System.Windows.Forms
         protected virtual void OnAfterLabelEdit(NodeLabelEditEventArgs e)
         {
             onAfterLabelEdit?.Invoke(this, e);
+
+            // Raise an event to highlight & announce the edited node
+            // if editing hasn't been canceled.
+            if (IsAccessibilityObjectCreated && !e.CancelEdit)
+            {
+                e.Node.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         /// <summary>
@@ -2202,6 +2218,21 @@ namespace System.Windows.Forms
         protected virtual void OnAfterCheck(TreeViewEventArgs e)
         {
             onAfterCheck?.Invoke(this, e);
+
+            // Raise an event to announce a toggle state change.
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibleObject nodeAccessibleObject = e.Node.AccessibilityObject;
+                UiaCore.ToggleState newState = nodeAccessibleObject.ToggleState;
+                UiaCore.ToggleState oldState = newState == UiaCore.ToggleState.On
+                    ? UiaCore.ToggleState.Off
+                    : UiaCore.ToggleState.On;
+
+                nodeAccessibleObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ToggleToggleStatePropertyId,
+                    oldValue: oldState,
+                    newValue: newState);
+            }
         }
 
         /// <summary>
@@ -2218,6 +2249,15 @@ namespace System.Windows.Forms
         protected internal virtual void OnAfterCollapse(TreeViewEventArgs e)
         {
             onAfterCollapse?.Invoke(this, e);
+
+            // Raise an event to announce the expand-collapse state change.
+            if (IsAccessibilityObjectCreated)
+            {
+                e.Node.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    oldValue: UiaCore.ExpandCollapseState.Expanded,
+                    newValue: UiaCore.ExpandCollapseState.Collapsed);
+            }
         }
 
         /// <summary>
@@ -2234,6 +2274,15 @@ namespace System.Windows.Forms
         protected virtual void OnAfterExpand(TreeViewEventArgs e)
         {
             onAfterExpand?.Invoke(this, e);
+
+            // Raise anevent to announce the expand-collapse state change.
+            if (IsAccessibilityObjectCreated)
+            {
+                e.Node.AccessibilityObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.ExpandCollapseExpandCollapseStatePropertyId,
+                    oldValue: UiaCore.ExpandCollapseState.Collapsed,
+                    newValue: UiaCore.ExpandCollapseState.Expanded);
+            }
         }
 
         /// <summary>
@@ -2266,6 +2315,20 @@ namespace System.Windows.Forms
         protected virtual void OnAfterSelect(TreeViewEventArgs e)
         {
             onAfterSelect?.Invoke(this, e);
+
+            // Raise an event to highlight & announce the selected node.
+            if (IsAccessibilityObjectCreated)
+            {
+                AccessibleObject nodeAccessibleObject = e.Node.AccessibilityObject;
+                nodeAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+                nodeAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.SelectionItem_ElementSelectedEventId);
+
+                // Raise to say "Selected" after announcing the node.
+                nodeAccessibleObject.RaiseAutomationPropertyChangedEvent(
+                    UiaCore.UIA.SelectionItemIsSelectedPropertyId,
+                    oldValue: !nodeAccessibleObject.IsItemSelected,
+                    newValue: nodeAccessibleObject.IsItemSelected);
+            }
         }
 
         /// <summary>
@@ -2442,6 +2505,8 @@ namespace System.Windows.Forms
             Sorted = true;
             RefreshNodes();
         }
+
+        internal override bool SupportsUiaProviders => true;
 
         /// <summary>
         ///  Returns a string representation for this control.
@@ -3103,6 +3168,12 @@ namespace System.Windows.Forms
         {
             base.OnGotFocus(e);
             NotifyAboutGotFocus(SelectedNode);
+
+            // Raise an event to highlight & announce the selected node.
+            if (IsAccessibilityObjectCreated)
+            {
+                SelectedNode?.AccessibilityObject.RaiseAutomationEvent(UiaCore.UIA.AutomationFocusChangedEventId);
+            }
         }
 
         protected override void OnLostFocus(EventArgs e)
