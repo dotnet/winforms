@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     internal class HelpInfo
@@ -52,7 +50,7 @@ namespace System.Windows.Forms
 
         public HelpNavigator Navigator { get; }
 
-        public object Param { get; }
+        public object? Param { get; }
 
         public override string ToString()
         {
