@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing.Design;
@@ -22,7 +20,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
+        public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
         {
             if (propDesc is null)
             {
@@ -51,7 +49,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return Guid.Empty;
         }
 
-        internal static string GetDisplayString(Oleaut32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
+        internal static string? GetDisplayString(Oleaut32.IPerPropertyBrowsing ppb, Ole32.DispatchID dispid, ref bool success)
         {
             HRESULT hr = ppb.GetDisplayString(dispid, out string strVal);
             if (hr != HRESULT.S_OK)
@@ -102,7 +100,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     bool success = true;
 
-                    string displayString = GetDisplayString((Oleaut32.IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
+                    string? displayString = GetDisplayString((Oleaut32.IPerPropertyBrowsing)sender.TargetObject, sender.DISPID, ref success);
 
                     if (success)
                     {
@@ -146,7 +144,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             if (hr == HRESULT.S_OK)
             {
-                string[] names = caStrings.ConvertAndFree();
+                string?[] names = caStrings.ConvertAndFree();
                 uint[] cookies = caCookies.ConvertAndFree();
 
                 if (names.Length > 0 && cookies.Length > 0)

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Diagnostics;
 using System.Globalization;
@@ -17,7 +15,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
     {
         public override Type Interface => typeof(VSSDK.IVSMDPerPropertyBrowsing);
 
-        public override void SetupPropertyHandlers(Com2PropertyDescriptor[] propDesc)
+        public override void SetupPropertyHandlers(Com2PropertyDescriptor[]? propDesc)
         {
             if (propDesc is null)
             {
@@ -38,9 +36,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
         {
             object target = sender.TargetObject;
 
-            if (target is VSSDK.IVSMDPerPropertyBrowsing)
+            if (target is VSSDK.IVSMDPerPropertyBrowsing browsing)
             {
-                Attribute[] attrs = GetComponentAttributes((VSSDK.IVSMDPerPropertyBrowsing)target, sender.DISPID);
+                Attribute[] attrs = GetComponentAttributes(browsing, sender.DISPID);
                 if (attrs is not null)
                 {
                     for (int i = 0; i < attrs.Length; i++)
@@ -65,8 +63,8 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             ArrayList attrs = new ArrayList();
 
-            string[] attrTypeNames = GetStringsFromPtr(pbstrs, cItems);
-            object[] varParams = GetVariantsFromPtr(pvars, cItems);
+            string?[] attrTypeNames = GetStringsFromPtr(pbstrs, cItems);
+            object?[] varParams = GetVariantsFromPtr(pvars, cItems);
 
             Debug.Assert(attrTypeNames.Length == varParams.Length, "Mismatched parameter and attribute name length");
             if (attrTypeNames.Length != varParams.Length)
@@ -78,18 +76,23 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             Type[] types = new Type[attrTypeNames.Length];
             for (int i = 0; i < attrTypeNames.Length; i++)
             {
-                string attrName = attrTypeNames[i];
+                string? attrName = attrTypeNames[i];
 
                 // try the name first
-                Type t = Type.GetType(attrName);
-                Assembly a = null;
+                Type? t = null;
+                if (attrName is not null)
+                {
+                    t = Type.GetType(attrName);
+                }
+
+                Assembly? a = null;
 
                 if (t is not null)
                 {
                     a = t.Assembly;
                 }
 
-                if (t is null)
+                if (t is null && attrName is not null)
                 {
                     // check for an assembly name.
                     //
@@ -140,12 +143,12 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
                     if (t is not null)
                     {
-                        FieldInfo fi = t.GetField(fieldName);
+                        FieldInfo? fi = t.GetField(fieldName);
 
                         // only if it's static
                         if (fi is not null && fi.IsStatic)
                         {
-                            object fieldValue = fi.GetValue(null);
+                            object? fieldValue = fi.GetValue(null);
                             if (fieldValue is Attribute)
                             {
                                 // add it to the list
@@ -166,7 +169,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     continue;
                 }
 
-                Attribute attr = null;
+                Attribute? attr = null;
 
                 // okay, if we got here, we need to build the attribute...
                 // get the initializer value if we've got a one item ctor
@@ -177,13 +180,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     for (int c = 0; c < ctors.Length; c++)
                     {
                         ParameterInfo[] pis = ctors[c].GetParameters();
-                        if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParams[i].GetType()))
+                        if (pis.Length == 1 && pis[0].ParameterType.IsAssignableFrom(varParams[i]!.GetType()))
                         {
                             // found a one-parameter ctor, use it
                             // try to construct a default one
                             try
                             {
-                                attr = (Attribute)Activator.CreateInstance(t, new object[] { varParams[i] });
+                                attr = (Attribute?)Activator.CreateInstance(t, new object[] { varParams[i]! });
                                 attrs.Add(attr);
                             }
                             catch
@@ -200,7 +203,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     // try to construct a default one
                     try
                     {
-                        attr = (Attribute)Activator.CreateInstance(t);
+                        attr = (Attribute?)Activator.CreateInstance(t);
                         attrs.Add(attr);
                     }
                     catch
@@ -217,11 +220,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return temp;
         }
 
-        private static string[] GetStringsFromPtr(IntPtr ptr, uint cStrings)
+        private static string?[] GetStringsFromPtr(IntPtr ptr, uint cStrings)
         {
             if (ptr != IntPtr.Zero)
             {
-                string[] strs = new string[cStrings];
+                string?[] strs = new string[cStrings];
                 IntPtr bstr;
                 for (int i = 0; i < cStrings; i++)
                 {
@@ -261,9 +264,9 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
         }
 
-        private unsafe static object[] GetVariantsFromPtr(Oleaut32.VARIANT* ptr, uint cVariants)
+        private unsafe static object?[] GetVariantsFromPtr(Oleaut32.VARIANT* ptr, uint cVariants)
         {
-            var objects = new object[cVariants];
+            var objects = new object?[cVariants];
             for (int i = 0; i < cVariants; i++)
             {
                 try
