@@ -3443,22 +3443,11 @@ namespace System.Windows.Forms
 
                     case EN.PROTECTED:
                         {
-                            NativeMethods.ENPROTECTED enprotected;
-
-                            //On 64-bit, we do some custom marshalling to get this to work. The richedit control
-                            //unfortunately does not respect IA64 struct alignment conventions.
-                            if (IntPtr.Size == 8)
-                            {
-                                enprotected = ConvertFromENPROTECTED64((NativeMethods.ENPROTECTED64)m.GetLParam(typeof(NativeMethods.ENPROTECTED64)));
-                            }
-                            else
-                            {
-                                enprotected = (NativeMethods.ENPROTECTED)m.GetLParam(typeof(NativeMethods.ENPROTECTED));
-                            }
+                            ENPROTECTED enprotected = (ENPROTECTED)m.GetLParam(typeof(ENPROTECTED));
 
                             switch (enprotected.msg)
                             {
-                                case (int)EM.SETCHARFORMAT:
+                                case (uint)EM.SETCHARFORMAT:
                                     // Allow change of protected style
                                     CHARFORMAT2W* charFormat = (CHARFORMAT2W*)enprotected.lParam;
                                     if ((charFormat->dwMask & CFM.PROTECTED) != 0)
@@ -3471,11 +3460,11 @@ namespace System.Windows.Forms
 
                                 // Throw an exception for the following
                                 //
-                                case (int)EM.SETPARAFORMAT:
-                                case (int)User32.EM.REPLACESEL:
+                                case (uint)EM.SETPARAFORMAT:
+                                case (uint)User32.EM.REPLACESEL:
                                     break;
 
-                                case (int)EM.STREAMIN:
+                                case (uint)EM.STREAMIN:
                                     // Don't allow STREAMIN to replace protected selection
                                     if ((unchecked((SF)(long)enprotected.wParam) & SF.F_SELECTION) != 0)
                                     {
@@ -3486,9 +3475,9 @@ namespace System.Windows.Forms
                                     return;
 
                                 // Allow the following
-                                case (int)User32.WM.COPY:
-                                case (int)User32.WM.SETTEXT:
-                                case (int)EM.EXLIMITTEXT:
+                                case (uint)User32.WM.COPY:
+                                case (uint)User32.WM.SETTEXT:
+                                case (uint)EM.EXLIMITTEXT:
                                     m.ResultInternal = 0;
                                     return;
 
@@ -3512,28 +3501,6 @@ namespace System.Windows.Forms
             {
                 base.WndProc(ref m);
             }
-        }
-
-        private unsafe NativeMethods.ENPROTECTED ConvertFromENPROTECTED64(NativeMethods.ENPROTECTED64 es64)
-        {
-            NativeMethods.ENPROTECTED es = new NativeMethods.ENPROTECTED();
-
-            fixed (byte* es64p = &es64.contents[0])
-            {
-                es.nmhdr = new User32.NMHDR();
-                es.chrg = new Richedit.CHARRANGE();
-
-                es.nmhdr.hwndFrom = Marshal.ReadIntPtr((IntPtr)es64p);
-                es.nmhdr.idFrom = Marshal.ReadIntPtr((IntPtr)(es64p + 8));
-                es.nmhdr.code = Marshal.ReadInt32((IntPtr)(es64p + 16));
-                es.msg = Marshal.ReadInt32((IntPtr)(es64p + 24));
-                es.wParam = Marshal.ReadIntPtr((IntPtr)(es64p + 28));
-                es.lParam = Marshal.ReadIntPtr((IntPtr)(es64p + 36));
-                es.chrg.cpMin = Marshal.ReadInt32((IntPtr)(es64p + 44));
-                es.chrg.cpMax = Marshal.ReadInt32((IntPtr)(es64p + 48));
-            }
-
-            return es;
         }
 
         private static unsafe NativeMethods.ENLINK ConvertFromENLINK64(NativeMethods.ENLINK64 es64)
