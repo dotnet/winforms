@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 
@@ -32,24 +30,28 @@ namespace System.Windows.Forms
         /// </summary>
         protected override string GetLocalizedString(string value)
         {
-            string localizedValue = base.GetLocalizedString(value);
+            string? localizedValue = base.GetLocalizedString(value);
             if (localizedValue is null)
             {
-                localizedValue = (string)GetSRObject("WinFormsCategory" + value);
+                localizedValue = (string?)GetSRObject("WinFormsCategory" + value);
             }
 
             // This attribute is internal, and we should never have a missing resource string.
-            //
             Debug.Assert(localizedValue is not null, "All Windows Forms category attributes should have localized strings.  Category '" + value + "' not found.");
             return localizedValue;
         }
 
-        private static object GetSRObject(string name)
+        private static object? GetSRObject(string name)
         {
-            object resourceObject = null;
+            object? resourceObject = null;
             try
-            { resourceObject = SR.ResourceManager.GetObject(name); }
-            catch (Resources.MissingManifestResourceException) { }
+            {
+                resourceObject = SR.ResourceManager.GetObject(name);
+            }
+            catch (Resources.MissingManifestResourceException)
+            {
+            }
+
             return resourceObject;
         }
     }
