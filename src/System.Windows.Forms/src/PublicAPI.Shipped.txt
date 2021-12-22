@@ -635,9 +635,9 @@ override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object? ob
 ~override System.Windows.Forms.NumericUpDown.Text.get -> string
 ~override System.Windows.Forms.NumericUpDown.Text.set -> void
 ~override System.Windows.Forms.NumericUpDown.ToString() -> string
-~override System.Windows.Forms.OpacityConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.OpacityConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.OpacityConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.OpacityConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.OpacityConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.OpacityConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.OSFeature.GetVersionPresent(object feature) -> System.Version
 ~override System.Windows.Forms.Panel.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.Panel.OnResize(System.EventArgs eventargs) -> void
