@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using static Interop;
 
@@ -31,7 +29,7 @@ namespace System.Windows.Forms
         public static IntPtr WriteAutomationText(string text)
         {
             IntPtr fileId = IntPtr.Zero;
-            string fullFileName = GenerateLogFileName(ref fileId);
+            string? fullFileName = GenerateLogFileName(ref fileId);
 
             if (fullFileName is not null)
             {
@@ -57,15 +55,15 @@ namespace System.Windows.Forms
         ///  %TEMP%\"Maui.[file id].log", where 'file id' is a unique id sent to this window.
         ///  This is to support MAUI interaction with the PropertyGrid control and MAUI should create/delete this file.
         /// </summary>
-        public static string ReadAutomationText(IntPtr fileId)
+        public static string? ReadAutomationText(IntPtr fileId)
         {
             Debug.Assert(fileId != IntPtr.Zero, "Invalid file Id");
 
-            string text = null;
+            string? text = null;
 
             if (fileId != IntPtr.Zero)
             {
-                string fullFileName = GenerateLogFileName(ref fileId);
+                string? fullFileName = GenerateLogFileName(ref fileId);
                 Debug.Assert(File.Exists(fullFileName), "Automation log file does not exist");
 
                 if (File.Exists(fullFileName))
@@ -91,11 +89,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Generate log file from id.
         /// </summary>
-        private static string GenerateLogFileName(ref IntPtr fileId)
+        private static string? GenerateLogFileName(ref IntPtr fileId)
         {
-            string fullFileName = null;
+            string? fullFileName = null;
 
-            string filePath = System.Environment.GetEnvironmentVariable("TEMP");
+            string? filePath = System.Environment.GetEnvironmentVariable("TEMP");
             Debug.Assert(filePath is not null, "Could not get value of the TEMP environment variable");
 
             if (filePath is not null)
