@@ -1141,12 +1141,12 @@ static System.Windows.Forms.DataFormats.GetFormat(string! format) -> System.Wind
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
 static System.Windows.Forms.Form.ActiveForm.get -> System.Windows.Forms.Form?
 static System.Windows.Forms.Form.GetAutoScaleSize(System.Drawing.Font! font) -> System.Drawing.SizeF
-~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
-~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
-~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
-~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
-~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
-~static System.Windows.Forms.GroupBoxRenderer.DrawParentBackground(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.Control childControl) -> void
+static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? groupBoxText, System.Drawing.Font? font, System.Drawing.Color textColor, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
+static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? groupBoxText, System.Drawing.Font? font, System.Drawing.Color textColor, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
+static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? groupBoxText, System.Drawing.Font? font, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
+static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, string? groupBoxText, System.Drawing.Font? font, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
+static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
+static System.Windows.Forms.GroupBoxRenderer.DrawParentBackground(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.Control! childControl) -> void
 ~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url) -> void
 ~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url, string keyword) -> void
 ~static System.Windows.Forms.Help.ShowHelp(System.Windows.Forms.Control parent, string url, System.Windows.Forms.HelpNavigator command, object parameter) -> void
