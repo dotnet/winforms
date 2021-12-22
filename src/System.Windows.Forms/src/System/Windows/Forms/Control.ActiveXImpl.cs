@@ -628,7 +628,7 @@ namespace System.Windows.Forms
             {
                 if (_accelCount == -1)
                 {
-                    ArrayList mnemonicList = new ArrayList();
+                    List<char> mnemonicList = new();
                     GetMnemonicList(_control, mnemonicList);
 
                     _accelCount = (short)mnemonicList.Count;
@@ -733,7 +733,7 @@ namespace System.Windows.Forms
             ///  the mnemonics for each control to mnemonicList.  Each mnemonic
             ///  is added as a char to the list.
             /// </summary>
-            private void GetMnemonicList(Control control, ArrayList mnemonicList)
+            private void GetMnemonicList(Control control, List<char> mnemonicList)
             {
                 // Get the mnemonic for our control
                 char mnemonic = WindowsFormsUtils.GetMnemonic(control.Text, true);
