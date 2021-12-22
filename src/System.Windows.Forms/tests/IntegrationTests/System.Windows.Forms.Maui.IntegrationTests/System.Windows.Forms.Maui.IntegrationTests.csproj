@@ -6,7 +6,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\MauiTests\MauiComboBoxTests\MauiComboBoxTests.csproj" />
-    <ProjectReference Include="..\MauiTests\MauiMDITests\MauiMDITests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiPropertyGridViewTests\MauiPropertyGridViewTests.csproj" />
     <ProjectReference Include="..\MauiTests\MauiTestsHelper\MauiTestsHelper.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Primitives\src\System.Windows.Forms.Primitives.csproj" />
