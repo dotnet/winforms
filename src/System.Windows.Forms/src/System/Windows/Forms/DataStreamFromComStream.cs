@@ -2,19 +2,17 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
 {
     internal class DataStreamFromComStream : Stream
     {
-        private Ole32.IStream comStream;
+        private Ole32.IStream _comStream;
 
         public DataStreamFromComStream(Ole32.IStream comStream) : base()
         {
-            this.comStream = comStream;
+            _comStream = comStream;
         }
 
         public override long Position
@@ -100,7 +98,7 @@ namespace System.Windows.Forms
             {
                 fixed (byte* ch = &buffer[0])
                 {
-                    comStream.Read(ch, (uint)buffer.Length, &bytesRead);
+                    _comStream.Read(ch, (uint)buffer.Length, &bytesRead);
                 }
             }
 
@@ -109,13 +107,13 @@ namespace System.Windows.Forms
 
         public override void SetLength(long value)
         {
-            comStream.SetSize((ulong)value);
+            _comStream.SetSize((ulong)value);
         }
 
         public unsafe override long Seek(long offset, SeekOrigin origin)
         {
             ulong newPosition = 0;
-            comStream.Seek(offset, origin, &newPosition);
+            _comStream.Seek(offset, origin, &newPosition);
             return (long)newPosition;
         }
 
@@ -158,7 +156,7 @@ namespace System.Windows.Forms
             {
                 fixed (byte* b = &buffer[0])
                 {
-                    comStream.Write(b, (uint)buffer.Length, &bytesWritten);
+                    _comStream.Write(b, (uint)buffer.Length, &bytesWritten);
                 }
             }
             catch
@@ -175,11 +173,11 @@ namespace System.Windows.Forms
         {
             try
             {
-                if (disposing && comStream is not null)
+                if (disposing && _comStream is not null)
                 {
                     try
                     {
-                        comStream.Commit(Ole32.STGC.DEFAULT);
+                        _comStream.Commit(Ole32.STGC.DEFAULT);
                     }
                     catch (Exception)
                     {
@@ -187,7 +185,7 @@ namespace System.Windows.Forms
                 }
 
                 // Can't release a COM stream from the finalizer thread.
-                comStream = null;
+                _comStream = null!;
             }
             finally
             {
