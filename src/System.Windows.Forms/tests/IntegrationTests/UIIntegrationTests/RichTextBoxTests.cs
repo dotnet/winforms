@@ -35,7 +35,7 @@ namespace System.Windows.Forms.UITests
 \pard\sa200\sl276\slmult1\f0\fs22\lang9  for more information.\par
 }";
 
-                Point previousPosition = new Point();
+                Point previousPosition = new();
                 BOOL setOldCursorPos = GetPhysicalCursorPos(ref previousPosition);
 
                 LinkClickedEventArgs? result = null;
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.UITests
 
                     if (setOldCursorPos.IsTrue())
                     {
-                        // Move cursor to old position
+                        // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
                             inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
@@ -111,7 +111,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 MakeLink(richTextBox, "#link2#custom link");
                 MakeLink(richTextBox, "#link3#custom link");
 
-                Point previousPosition = new Point();
+                Point previousPosition = new();
                 BOOL setOldCursorPos = GetPhysicalCursorPos(ref previousPosition);
 
                 LinkClickedEventArgs? result = null;
@@ -142,7 +142,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
 
                     if (setOldCursorPos.IsTrue())
                     {
-                        // Move cursor to old position
+                        // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
                             inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
@@ -187,7 +187,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                 MakeLink(richTextBox, "custom link#link2#");
                 MakeLink(richTextBox, "custom link#link3#");
 
-                Point previousPosition = new Point();
+                Point previousPosition = new();
                 BOOL setOldCursorPos = GetPhysicalCursorPos(ref previousPosition);
 
                 LinkClickedEventArgs? result = null;
@@ -218,7 +218,7 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
 
                     if (setOldCursorPos.IsTrue())
                     {
-                        // Move cursor to old position
+                        // Move cursor to the old position.
                         await InputSimulator.SendAsync(
                             form,
                             inputSimulator => inputSimulator.Mouse.MoveMouseTo(previousPosition.X, previousPosition.Y));
@@ -322,7 +322,6 @@ This is hidden text preceeding a \v #link3#\v0 custom link.\par
                     {
                         Size = new Size(439, 103),
                         DetectUrls = false,
-                        // Dock = DockStyle.Fill,
                     };
 
                     return control;

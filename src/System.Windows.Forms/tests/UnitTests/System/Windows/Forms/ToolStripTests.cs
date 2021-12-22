@@ -7176,6 +7176,67 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsFact]
+        public void ToolStrip_KeyboardAccelerators_ReturnsExpected()
+        {
+            using SubToolStripDropDown toolStrip = new();
+            bool result = true;
+
+            // it needs for correct work of Control.CanProcessMnemonic method
+            toolStrip.Enabled = true;
+            toolStrip.Visible = true;
+
+            result &= !toolStrip.ProcessDialogChar('F');
+            toolStrip.DisplayedItems.Add("&First item");
+            toolStrip.DisplayedItems.Add("&Second item");
+            toolStrip.DisplayedItems.Add("Third item");
+
+            // it needs for correct work of Control.CanProcessMnemonic method
+            toolStrip.Visible = true;
+            result &= toolStrip.ProcessDialogChar('F');
+            result &= toolStrip.ProcessDialogChar('S');
+            result &= !toolStrip.ProcessDialogChar('T');
+
+            Assert.True(result);
+        }
+
+        [WinFormsTheory]
+        [InlineData("ScrollButtonDown", 96, 16)]
+        [InlineData("ScrollButtonDown", 120, 24)]
+        [InlineData("ScrollButtonDown", 144, 24)]
+        [InlineData("ScrollButtonDown", 168, 32)]
+        [InlineData("ScrollButtonDown", 288, 48)]
+        [InlineData("ScrollButtonUp", 96, 16)]
+        [InlineData("ScrollButtonUp", 120, 24)]
+        [InlineData("ScrollButtonUp", 144, 24)]
+        [InlineData("ScrollButtonUp", 168, 32)]
+        [InlineData("ScrollButtonUp", 288, 48)]
+        public void ToolStripScrollButton_Arrows_Size_ReturnsExpected(string resourceName, int dpi, int expectedSide)
+        {
+            Type toolStripScrollButtonType = typeof(ToolStripScrollButton);
+            var accessor = typeof(DpiHelper).TestAccessor();
+            Size defaultSize = new(16, 16);
+            int oldDeviceDpi = DpiHelper.DeviceDpi;
+            DpiTestData dpiTestData = new()
+            {
+                ResourceName = resourceName,
+                Dpi = dpi,
+                ExpectedSide = expectedSide,
+            };
+
+            try
+            {
+                accessor.Dynamic.DeviceDpi = dpiTestData.Dpi;
+                Bitmap bitmap = DpiHelper.GetScaledBitmapFromIcon(toolStripScrollButtonType, dpiTestData.ResourceName, defaultSize);
+                Assert.Equal(dpiTestData.ExpectedSide, bitmap.Width);
+                Assert.Equal(dpiTestData.ExpectedSide, bitmap.Height);
+            }
+            finally
+            {
+                accessor.Dynamic.DeviceDpi = oldDeviceDpi;
+            }
+        }
+
         private class SubAxHost : AxHost
         {
             public SubAxHost(string clsid) : base(clsid)
@@ -7203,6 +7264,22 @@ namespace System.Windows.Forms.Tests
                 Layout?.Invoke(this, e);
                 base.OnLayout(e);
             }
+        }
+
+        private class DpiTestData
+        {
+            public string ResourceName { get; set; }
+
+            public int Dpi { get; set; }
+
+            public int ExpectedSide { get; set; }
+        }
+
+        private class SubToolStripDropDown : ToolStripDropDown
+        {
+            public new ToolStripItemCollection DisplayedItems => base.DisplayedItems;
+
+            public new bool ProcessDialogChar(char charCode) => base.ProcessDialogChar(charCode);
         }
 
         private class SubToolStrip : ToolStrip
