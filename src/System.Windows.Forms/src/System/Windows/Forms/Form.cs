@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -5640,7 +5639,7 @@ namespace System.Windows.Forms
             // try to merge each one of the MDI Child toolstrip with the first toolstrip
             // in the parent form that has the same type NOTE: THESE LISTS ARE ORDERED (See ToolstripManager)
             ToolStrip thisToolstrip = MainMenuStrip;
-            ArrayList childrenToolStrips = ToolStripManager.FindMergeableToolStrips(ActiveMdiChildInternal);
+            List<ToolStrip> childrenToolStrips = ToolStripManager.FindMergeableToolStrips(ActiveMdiChildInternal);
 
             // revert any previous merge
             if (thisToolstrip is not null)
