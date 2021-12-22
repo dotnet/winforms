@@ -84,8 +84,8 @@ namespace System.Windows.Forms
                         }
                         else
                         {
-                            Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
-                            return (ListViewItem)owner.listItemsArray[displayIndex];
+                            Debug.Assert(owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");
+                            return owner._listViewItems[displayIndex];
                         }
                     }
                 }
@@ -265,7 +265,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
+                    Debug.Assert(owner._listViewItems is null, "listItemsArray not null, even though handle created");
 
                     User32.SendMessageW(owner, (User32.WM)LVM.DELETEALLITEMS);
 
@@ -298,8 +298,8 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
-                    owner.listItemsArray.Clear();
+                    Debug.Assert(owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");
+                    owner._listViewItems.Clear();
                 }
 
                 owner.listItemsTable.Clear();
@@ -325,8 +325,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
-                    return owner.listItemsArray.Contains(item);
+                    Debug.Assert(owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");
+                    return owner._listViewItems.Contains(item);
                 }
             }
 
@@ -431,7 +431,7 @@ namespace System.Windows.Forms
 
                 if (owner.IsHandleCreated)
                 {
-                    Debug.Assert(owner.listItemsArray is null, "listItemsArray not null, even though handle created");
+                    Debug.Assert(owner._listViewItems is null, "listItemsArray not null, even though handle created");
                     if (User32.SendMessageW(owner, (User32.WM)LVM.DELETEITEM, index) == 0)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
@@ -439,8 +439,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    Debug.Assert(owner.listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
-                    owner.listItemsArray.RemoveAt(index);
+                    Debug.Assert(owner._listViewItems is not null, "listItemsArray is null, but the handle isn't created");
+                    owner._listViewItems.RemoveAt(index);
                 }
 
                 owner.itemCount--;
