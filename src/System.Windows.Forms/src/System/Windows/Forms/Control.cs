@@ -3898,7 +3898,7 @@ namespace System.Windows.Forms
         private unsafe void WaitForWaitHandle(WaitHandle waitHandle)
         {
             uint threadId = CreateThreadId;
-            Application.ThreadContext ctx = Application.ThreadContext.FromId(threadId);
+            Application.ThreadContext? ctx = Application.ThreadContext.FromId(threadId);
             if (ctx is null)
             {
                 // Couldn't find the thread context, so we don't know the state.  We shouldn't throw.

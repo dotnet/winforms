@@ -2,15 +2,13 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     public sealed partial class Application
     {
         private class ModalApplicationContext : ApplicationContext
         {
-            private ThreadContext _parentWindowContext;
+            private ThreadContext? _parentWindowContext;
 
             private delegate void ThreadWindowCallback(ThreadContext context, bool onlyWinForms);
 
@@ -20,7 +18,7 @@ namespace System.Windows.Forms
 
             public void DisableThreadWindows(bool disable, bool onlyWinForms)
             {
-                Control parentControl = null;
+                Control? parentControl = null;
 
                 // Get ahold of the parent HWND -- if it's a different thread we need to do the disable
                 // over there too.  Note we only do this if we're parented by a Windows Forms parent.
@@ -33,16 +31,17 @@ namespace System.Windows.Forms
                     parentControl = Control.FromHandle(parentHandle);
 
                     _parentWindowContext = parentControl is not null && parentControl.InvokeRequired
-                        ? GetContextForHandle(parentControl) : null;
+                        ? GetContextForHandle(parentControl)
+                        : null;
                 }
 
                 // If we got a thread context, that means our parent is in a different thread, make the call on that thread.
                 if (_parentWindowContext is not null)
                 {
                     // In case we've already torn down, ask the context for this.
-                    parentControl ??= _parentWindowContext.ApplicationContext.MainForm;
+                    parentControl ??= _parentWindowContext.ApplicationContext!.MainForm;
 
-                    parentControl.Invoke(
+                    parentControl!.Invoke(
                         disable ? new ThreadWindowCallback(DisableThreadWindowsCallback) : new ThreadWindowCallback(EnableThreadWindowsCallback),
                         new object[] { _parentWindowContext, onlyWinForms });
                 }
