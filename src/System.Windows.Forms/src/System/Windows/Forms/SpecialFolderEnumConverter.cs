@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
         ///  Personal appears twice in type editor because its numeric value matches with MyDocuments.
         ///  This code filters out the duplicate value.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             StandardValuesCollection values = base.GetStandardValues(context);
             var list = new ArrayList();
@@ -27,8 +25,8 @@ namespace System.Windows.Forms
             bool personalSeen = false;
             for (int i = 0; i < count; i++)
             {
-                if (values[i] is Environment.SpecialFolder &&
-                   values[i].Equals(Environment.SpecialFolder.Personal))
+                if (values[i] is Environment.SpecialFolder specialFolder &&
+                    specialFolder.Equals(Environment.SpecialFolder.Personal))
                 {
                     if (!personalSeen)
                     {
@@ -51,9 +49,9 @@ namespace System.Windows.Forms
         {
             public static readonly SpecialFolderEnumComparer Default = new SpecialFolderEnumComparer();
 
-            public int Compare(object a, object b)
+            public int Compare(object? a, object? b)
             {
-                return string.Compare(a.ToString(), b.ToString(), StringComparison.InvariantCulture);
+                return string.Compare(a?.ToString(), b?.ToString(), StringComparison.InvariantCulture);
             }
         }
     }
