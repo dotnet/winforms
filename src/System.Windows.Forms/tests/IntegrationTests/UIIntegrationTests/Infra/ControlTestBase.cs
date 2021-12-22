@@ -193,8 +193,9 @@ namespace System.Windows.Forms.UITests
                 testDriverAsync);
         }
 
-        protected async Task RunControlPairTestAsync<T>(Func<Form, (T control1, T control2), Task> testDriverAsync)
-            where T : Control, new()
+        protected async Task RunControlPairTestAsync<T1, T2>(Func<Form, (T1 control1, T2 control2), Task> testDriverAsync)
+            where T1 : Control, new()
+            where T2 : Control, new()
         {
             await RunFormAsync(
                 () =>
@@ -202,8 +203,8 @@ namespace System.Windows.Forms.UITests
                     var form = new Form();
                     form.TopMost = true;
 
-                    var control1 = new T();
-                    var control2 = new T();
+                    var control1 = new T1();
+                    var control2 = new T2();
 
                     var tableLayout = new TableLayoutPanel();
                     tableLayout.ColumnCount = 2;
