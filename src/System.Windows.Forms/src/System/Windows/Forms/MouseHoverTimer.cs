@@ -2,16 +2,14 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     internal class MouseHoverTimer : IDisposable
     {
-        private Timer _mouseHoverTimer = new Timer();
+        private Timer? _mouseHoverTimer = new Timer();
 
         // Consider - weak reference?
-        private ToolStripItem _currentItem;
+        private ToolStripItem? _currentItem;
 
         public MouseHoverTimer()
         {
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
             _mouseHoverTimer.Tick += new EventHandler(OnTick);
         }
 
-        public void Start(ToolStripItem item)
+        public void Start(ToolStripItem? item)
         {
             if (item != _currentItem)
             {
@@ -27,7 +25,7 @@ namespace System.Windows.Forms
             }
 
             _currentItem = item;
-            if (_currentItem is not null)
+            if (_currentItem is not null && _mouseHoverTimer is not null)
             {
                 _mouseHoverTimer.Enabled = true;
             }
@@ -35,14 +33,18 @@ namespace System.Windows.Forms
 
         public void Cancel()
         {
-            _mouseHoverTimer.Enabled = false;
+            if (_mouseHoverTimer is not null)
+            {
+                _mouseHoverTimer.Enabled = false;
+            }
+
             _currentItem = null;
         }
 
         /// <summary> cancels if and only if this item was the one that
         ///  requested the timer
         /// </summary>
-        public void Cancel(ToolStripItem item)
+        public void Cancel(ToolStripItem? item)
         {
             if (item == _currentItem)
             {
@@ -60,9 +62,13 @@ namespace System.Windows.Forms
             }
         }
 
-        private void OnTick(object sender, EventArgs e)
+        private void OnTick(object? sender, EventArgs e)
         {
-            _mouseHoverTimer.Enabled = false;
+            if (_mouseHoverTimer is not null)
+            {
+                _mouseHoverTimer.Enabled = false;
+            }
+
             if (_currentItem is not null && !_currentItem.IsDisposed)
             {
                 _currentItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseHover);
