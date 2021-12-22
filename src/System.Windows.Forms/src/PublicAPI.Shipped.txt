@@ -940,16 +940,16 @@ override System.Windows.Forms.Timer.ToString() -> string!
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Description.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.GetHelpTopic(out string fileName) -> int
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Help.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.KeyboardShortcut.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Name.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Name.set -> void
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToString() -> string
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Description.get -> string?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.GetHelpTopic(out string? fileName) -> int
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Help.get -> string?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.KeyboardShortcut.get -> string!
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Name.get -> string?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Name.set -> void
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToString() -> string!
 ~override System.Windows.Forms.ToolStripItem.ToString() -> string
 ~override System.Windows.Forms.ToolStripLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripLabel.OnFontChanged(System.EventArgs e) -> void
@@ -2859,7 +2859,7 @@ System.Windows.Forms.ToolStripGripRenderEventArgs.ToolStripGripRenderEventArgs(S
 ~System.Windows.Forms.ToolStripItem.Tag.set -> void
 ~System.Windows.Forms.ToolStripItem.ToolStripItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
 ~System.Windows.Forms.ToolStripItem.ToolStripItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToolStripItemAccessibleObject(System.Windows.Forms.ToolStripItem ownerItem) -> void
+System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToolStripItemAccessibleObject(System.Windows.Forms.ToolStripItem! ownerItem) -> void
 ~System.Windows.Forms.ToolStripItem.ToolTipText.get -> string
 ~System.Windows.Forms.ToolStripItem.ToolTipText.set -> void
 System.Windows.Forms.ToolStripItemClickedEventArgs.ClickedItem.get -> System.Windows.Forms.ToolStripItem?
