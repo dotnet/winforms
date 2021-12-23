@@ -95,9 +95,6 @@ namespace System.Windows.Forms
                 // See "How to Handle WM_GETOBJECT" in MSDN
                 if ((int)m.LParamInternal == OBJID.CLIENT)
                 {
-                    // Get the IAccessible GUID
-                    Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
-
                     // Get an Lresult for the accessibility Object for this control
                     try
                     {
@@ -106,7 +103,7 @@ namespace System.Windows.Forms
 
                         try
                         {
-                            m.ResultInternal = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
+                            m.ResultInternal = Oleacc.LresultFromObject(ref IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
                         }
                         finally
                         {

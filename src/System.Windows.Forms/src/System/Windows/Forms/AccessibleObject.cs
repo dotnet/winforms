@@ -1686,13 +1686,11 @@ namespace System.Windows.Forms
 
         protected void UseStdAccessibleObjects(IntPtr handle, int objid)
         {
-            // Get a standard accessible Object
-            Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
             object? acc = null;
             int result = UnsafeNativeMethods.CreateStdAccessibleObject(
                             new HandleRef(this, handle),
                             objid,
-                            ref IID_IAccessible,
+                            ref IID.IAccessible,
                             ref acc);
 
             // Get the IEnumVariant interface
