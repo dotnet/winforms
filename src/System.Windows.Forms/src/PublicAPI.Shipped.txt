@@ -1187,7 +1187,19 @@ override System.Windows.Forms.Button.ToString() -> string!
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, string keyword) -> System.Windows.Forms.DialogResult
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator) -> System.Windows.Forms.DialogResult
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator, object param) -> System.Windows.Forms.DialogResult
-~static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> System.Windows.Forms.NativeWindow
+static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> System.Windows.Forms.NativeWindow?
+static System.Windows.Forms.OSFeature.Feature.get -> System.Windows.Forms.OSFeature!
+static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalBar(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalChunks(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.ProgressBarRenderer.DrawVerticalBar(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.ProgressBarRenderer.DrawVerticalChunks(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawParentBackground(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.Control! childControl) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string? radioButtonText, System.Drawing.Font? font, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string? radioButtonText, System.Drawing.Font? font, System.Drawing.Image! image, System.Drawing.Rectangle imageBounds, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string? radioButtonText, System.Drawing.Font? font, System.Windows.Forms.TextFormatFlags flags, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string? radioButtonText, System.Drawing.Font? font, System.Windows.Forms.TextFormatFlags flags, System.Drawing.Image! image, System.Drawing.Rectangle imageBounds, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.GetGlyphSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.RadioButtonState state) -> System.Drawing.Size
 ~static System.Windows.Forms.Screen.AllScreens.get -> System.Windows.Forms.Screen[]
 ~static System.Windows.Forms.Screen.FromControl(System.Windows.Forms.Control control) -> System.Windows.Forms.Screen
 ~static System.Windows.Forms.Screen.FromHandle(System.IntPtr hwnd) -> System.Windows.Forms.Screen
@@ -3280,8 +3292,8 @@ override System.Windows.Forms.Button.ToString() -> string!
 ~virtual System.Windows.Forms.MonthCalendar.OnDateChanged(System.Windows.Forms.DateRangeEventArgs drevent) -> void
 ~virtual System.Windows.Forms.MonthCalendar.OnDateSelected(System.Windows.Forms.DateRangeEventArgs drevent) -> void
 ~virtual System.Windows.Forms.MonthCalendar.OnRightToLeftLayoutChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.NativeWindow.CreateHandle(System.Windows.Forms.CreateParams cp) -> void
-~virtual System.Windows.Forms.NativeWindow.OnThreadException(System.Exception e) -> void
+virtual System.Windows.Forms.NativeWindow.CreateHandle(System.Windows.Forms.CreateParams! cp) -> void
+virtual System.Windows.Forms.NativeWindow.OnThreadException(System.Exception! e) -> void
 ~virtual System.Windows.Forms.NumericUpDown.OnValueChanged(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadCompleted(System.ComponentModel.AsyncCompletedEventArgs e) -> void
 ~virtual System.Windows.Forms.PictureBox.OnLoadProgressChanged(System.ComponentModel.ProgressChangedEventArgs e) -> void

@@ -12,7 +12,7 @@ internal static partial class Interop
         public unsafe static extern IntPtr CreateWindowExW(
             WS_EX dwExStyle,
             char* lpClassName,
-            string lpWindowName,
+            string? lpWindowName,
             WS dwStyle,
             int X,
             int Y,
@@ -21,12 +21,12 @@ internal static partial class Interop
             IntPtr hWndParent,
             IntPtr hMenu,
             IntPtr hInst,
-            [MarshalAs(UnmanagedType.AsAny)] object lpParam);
+            [MarshalAs(UnmanagedType.AsAny)] object? lpParam);
 
         public unsafe static IntPtr CreateWindowExW(
             WS_EX dwExStyle,
-            string lpClassName,
-            string lpWindowName,
+            string? lpClassName,
+            string? lpWindowName,
             WS dwStyle,
             int X,
             int Y,
@@ -35,7 +35,7 @@ internal static partial class Interop
             IntPtr hWndParent,
             IntPtr hMenu,
             IntPtr hInst,
-            object lpParam)
+            object? lpParam)
         {
             fixed (char* c = lpClassName)
             {

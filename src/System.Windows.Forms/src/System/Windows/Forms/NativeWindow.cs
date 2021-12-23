@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Globalization;
@@ -35,6 +33,7 @@ namespace System.Windows.Forms
 
         [ThreadStatic]
         private static byte t_wndProcFlags = 0;
+
         [ThreadStatic]
         private static byte t_userSetProcFlags = 0;
         private static byte s_userSetProcFlagsForApp;
@@ -47,7 +46,7 @@ namespace System.Windows.Forms
         private static readonly object s_createWindowSyncObject = new object();
 
         // Our window procedure delegate
-        private User32.WNDPROC _windowProc;
+        private User32.WNDPROC? _windowProc;
 
         // The native handle for our delegate
         private IntPtr _windowProcHandle;
@@ -58,7 +57,7 @@ namespace System.Windows.Forms
         private IntPtr _priorWindowProcHandle;
         private bool _suppressedGC;
         private bool _ownHandle;
-        private NativeWindow _nextWindow;
+        private NativeWindow? _nextWindow;
         private readonly WeakReference _weakThisPtr;
 
         static NativeWindow()
@@ -156,7 +155,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This returns the prior NativeWindow created with the same native handle, if any.
         /// </summary>
-        internal NativeWindow PreviousWindow { get; private set; }
+        internal NativeWindow? PreviousWindow { get; private set; }
 
         /// <summary>
         ///  Address of the Windows default WNDPROC (DefWindowProcW).
@@ -433,7 +432,7 @@ namespace System.Windows.Forms
                     IntPtr createResult = IntPtr.Zero;
                     int lastWin32Error = 0;
 
-                    NativeWindow prevTargetWindow = windowClass._targetWindow;
+                    NativeWindow? prevTargetWindow = windowClass._targetWindow;
                     try
                     {
                         windowClass._targetWindow = this;
@@ -551,18 +550,18 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the window associated with the specified <paramref name="handle"/>.
         /// </summary>
-        public static NativeWindow FromHandle(IntPtr handle)
+        public static NativeWindow? FromHandle(IntPtr handle)
             => handle != IntPtr.Zero ? GetWindowFromTable(handle) : null;
 
         /// <summary>
         ///  Returns the native window for the given handle, or null if
         ///  the handle is not in our hash table.
         /// </summary>
-        private static NativeWindow GetWindowFromTable(IntPtr handle)
+        private static NativeWindow? GetWindowFromTable(IntPtr handle)
         {
             if (s_windowHandles.TryGetValue(handle, out GCHandle value) && value.IsAllocated)
             {
-                return (NativeWindow)value.Target;
+                return (NativeWindow?)value.Target;
             }
 
             return null;
@@ -601,7 +600,7 @@ namespace System.Windows.Forms
 #pragma warning disable SYSLIB0004 // Type or member is obsolete
         [PrePrepareMethod]
 #pragma warning restore SYSLIB0004 // Type or member is obsolete
-        private static void OnShutdown(object sender, EventArgs e)
+        private static void OnShutdown(object? sender, EventArgs e)
         {
             // If we still have windows allocated, we must sling them to userDefWindowProc
             // or else they will AV if they get a message after the managed code has been
@@ -629,7 +628,7 @@ namespace System.Windows.Forms
                             // way the rest of WinForms won't think the handle is still valid here.
                             if (entry.Value.IsAllocated)
                             {
-                                NativeWindow w = (NativeWindow)entry.Value.Target;
+                                NativeWindow? w = (NativeWindow?)entry.Value.Target;
                                 if (w is not null)
                                 {
                                     w.Handle = IntPtr.Zero;
@@ -844,7 +843,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void UnSubclass()
         {
-            bool finalizing = (!_weakThisPtr.IsAlive || _weakThisPtr.Target is null);
+            bool finalizing = !_weakThisPtr.IsAlive || _weakThisPtr.Target is null;
 
             // Don't touch if the current window proc is not ours.
 
@@ -874,7 +873,7 @@ namespace System.Windows.Forms
                         // Here we are not finalizing so we use the windowProc for our previous window.  This may
                         // DIFFER from the value we are currently storing in defWindowProc because someone may
                         // have re-subclassed.
-                        User32.SetWindowLong(this, User32.GWL.WNDPROC, PreviousWindow._windowProc);
+                        User32.SetWindowLong(this, User32.GWL.WNDPROC, PreviousWindow._windowProc!);
                     }
                 }
             }
