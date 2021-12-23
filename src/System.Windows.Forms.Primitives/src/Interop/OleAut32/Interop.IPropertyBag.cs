@@ -16,8 +16,8 @@ internal partial class Interop
             [PreserveSig]
             HRESULT Read(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszPropName,
-                ref object pVar,
-                IErrorLog pErrorLog);
+                ref object? pVar,
+                IErrorLog? pErrorLog);
 
             [PreserveSig]
             HRESULT Write(
