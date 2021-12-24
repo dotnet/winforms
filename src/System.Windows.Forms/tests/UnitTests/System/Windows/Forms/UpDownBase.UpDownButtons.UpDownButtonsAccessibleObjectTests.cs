@@ -143,6 +143,22 @@ namespace System.Windows.Forms.Tests
             Assert.False(upDownBase.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+        [InlineData((int)UiaCore.UIA.ValueValuePropertyId, null)]
+        public void UpDownButtonsAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
+        {
+            using TrackBar trackBar = new();
+            using SubUpDownBase upDownBase = new();
+            UpDownButtons upDownButtons = upDownBase.UpDownButtonsInternal;
+            UpDownButtonsAccessibleObject accessibleObject = (UpDownButtonsAccessibleObject)upDownButtons.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+
+            Assert.Equal(expected, actual);
+            Assert.False(upDownBase.IsHandleCreated);
+        }
+
         private class SubUpDownBase : UpDownBase
         {
             protected override void UpdateEditText() => throw new NotImplementedException();

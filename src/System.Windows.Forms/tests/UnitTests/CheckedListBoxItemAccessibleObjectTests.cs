@@ -5,6 +5,7 @@
 using Xunit;
 using static System.Windows.Forms.CheckedListBox;
 using static Interop;
+using System.Windows.Forms.TestUtilities;
 
 namespace System.Windows.Forms.Tests.AccessibleObjects
 {
@@ -193,6 +194,19 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
         }
 
         [WinFormsTheory]
+        [MemberData(nameof(CheckedListBoxItemAccessibleObject_DefaultAction_ControlType_IfHandleIsCreated_ReturnsExpected_TestData))]
+        public void CheckedListBoxItemAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(bool isChecked, string expected)
+        {
+            using CheckedListBox checkedListBox = new();
+            checkedListBox.Items.Add("A");
+            checkedListBox.SetItemChecked(0, isChecked);
+            checkedListBox.CreateControl();
+
+            Assert.Equal(expected, checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.True(checkedListBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void CheckedListBoxItemAccessibleObject_Value_ReturnsExpected(bool isChecked)
@@ -286,6 +300,29 @@ namespace System.Windows.Forms.Tests.AccessibleObjects
 
             Assert.Equal(!isChecked, checkedListBox.GetItemChecked(0));
             Assert.True(checkedListBox.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void CheckedListBoxItemAccessibleObject_GetPropertyValue_IsInvokePatternAvailablePropertyId_ReturnsExpected()
+        {
+            using CheckedListBox checkedListBox = new();
+            checkedListBox.Items.Add("A");
+
+            Assert.True((bool)checkedListBox.AccessibilityObject.GetChild(0).GetPropertyValue(UiaCore.UIA.IsInvokePatternAvailablePropertyId));
+            Assert.False(checkedListBox.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetBoolTheoryData))]
+        public void CheckedListBoxItemAccessibleObject_GetPropertyValue_ValueValuePropertyId_ReturnsExpected(bool isChecked)
+        {
+            using CheckedListBox checkedListBox = new();
+            checkedListBox.Items.Add("A");
+            checkedListBox.SetItemChecked(0, isChecked);
+
+            AccessibleObject accessibleObject = checkedListBox.AccessibilityObject.GetChild(0);
+            Assert.Equal(isChecked, bool.Parse(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId).ToString()));
+            Assert.False(checkedListBox.IsHandleCreated);
         }
     }
 }

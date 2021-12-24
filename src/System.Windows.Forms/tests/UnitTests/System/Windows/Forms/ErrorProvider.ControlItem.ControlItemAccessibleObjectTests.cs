@@ -166,6 +166,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ControlItemAccessibleObjectTests_GetPropertyValue_ReturnsExpected()
+        {
+            Type type = typeof(ControlItem)
+               .GetNestedType("ControlItemAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
+            var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null, null, null, null });
+
+            Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.Equal(AccessibleStates.ReadOnly | AccessibleStates.HasPopup, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleStatePropertyId));
+        }
+
+        [WinFormsFact]
         public void ControlItemAccessibleObjectTests_GetChildId_ReturnsExpected()
         {
             using Control control = new();

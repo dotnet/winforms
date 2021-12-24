@@ -320,6 +320,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData("Test Description")]
+        [InlineData(null)]
+        public void TrackBarAccessibilityObject_GetProperyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnExpected(string defaultAction)
+        {
+            using TrackBar trackBar = new();
+            trackBar.AccessibleDefaultActionDescription = defaultAction;
+
+            Assert.Equal(defaultAction, trackBar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.False(trackBar.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(typeof(TrackBarTestHelper), nameof(TrackBarTestHelper.TrackBarAccessibleObject_ButtonsAreDisplayed_TestData))]
         public void TrackBarAccessibilityObject_FragmentNavigate_Child_ReturnsExpected_ButtonsAreDisplayed(Orientation orientation, RightToLeft rightToLeft, bool rightToLeftLayout, int minimum, int maximum, int value)
         {

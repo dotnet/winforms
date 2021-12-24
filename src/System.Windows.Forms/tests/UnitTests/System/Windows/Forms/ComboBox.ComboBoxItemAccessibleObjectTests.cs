@@ -210,7 +210,7 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
-        public void ComboBoxItemAccessibleObject_GetPropertyValue_ScrollItemPattern_IsAvailable()
+        public void ComboBoxItemAccessibleObject_GetPropertyValue_Pattern_IsAvailable()
         {
             using ComboBox comboBox = new ComboBox();
             comboBox.Items.AddRange(new[] { "0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "10" });
@@ -219,12 +219,14 @@ namespace System.Windows.Forms.Tests
             ComboBoxAccessibleObject comboBoxAccessibleObject = (ComboBoxAccessibleObject)comboBox.AccessibilityObject;
             ComboBoxItemAccessibleObjectCollection itemsCollection = comboBoxAccessibleObject.ItemAccessibleObjects;
 
-            // Check that all items support ScrollItemPattern
+            // Check that all items support Pattern
             foreach (Entry itemEntry in comboBox.Items.InnerList)
             {
                 ComboBoxItemAccessibleObject itemAccessibleObject = itemsCollection.GetComboBoxItemAccessibleObject(itemEntry);
 
                 Assert.True((bool)itemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsScrollItemPatternAvailablePropertyId));
+                Assert.True((bool)itemAccessibleObject.GetPropertyValue(UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId));
+                Assert.Null(itemAccessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
             }
         }
 

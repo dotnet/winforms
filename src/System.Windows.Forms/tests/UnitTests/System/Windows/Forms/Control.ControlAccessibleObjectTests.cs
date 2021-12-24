@@ -188,6 +188,19 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
+        public void ControlAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(string accessibleDefaultActionDescription)
+        {
+            using var ownerControl = new Control
+            {
+                AccessibleDefaultActionDescription = accessibleDefaultActionDescription
+            };
+            var accessibleObject = new Control.ControlAccessibleObject(ownerControl);
+            Assert.Equal(!string.IsNullOrEmpty(accessibleDefaultActionDescription) ? accessibleDefaultActionDescription :
+                null, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+        }
+
+        [WinFormsTheory]
+        [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetStringWithNullTheoryData))]
         public void ControlAccessibleObject_Description_GetWithAccessibleDescription_ReturnsExpected(string accessibleDescription)
         {
             using var ownerControl = new Control
@@ -1289,9 +1302,8 @@ namespace System.Windows.Forms.Tests
             control.Name = "Name1";
             control.AccessibleName = "Test Name";
 
-            var accessibleName = controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId);
-
-            Assert.Equal("Test Name", accessibleName);
+            Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+            Assert.Equal("Test Name", controlAccessibleObject.GetPropertyValue(UiaCore.UIA.NamePropertyId));
         }
 
         public static IEnumerable<object[]> ControlAccessibleObject_DefaultName_TestData()

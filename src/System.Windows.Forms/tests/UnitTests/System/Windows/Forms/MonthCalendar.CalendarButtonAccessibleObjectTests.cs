@@ -34,6 +34,17 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void CalendarButtonAccessibleObject_GetPropertyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected()
+        {
+            using MonthCalendar control = new();
+            MonthCalendarAccessibleObject controlAccessibleObject = (MonthCalendarAccessibleObject)control.AccessibilityObject;
+            CalendarButtonAccessibleObject buttonAccessibleObject = new SubCalendarButtonAccessibleObject(controlAccessibleObject);
+
+            Assert.Equal(SR.AccessibleActionClick, buttonAccessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.False(control.IsHandleCreated);
+        }
+
+        [WinFormsFact]
         public void CalendarButtonAccessibleObject_ControlType_IsButton()
         {
             using MonthCalendar control = new();

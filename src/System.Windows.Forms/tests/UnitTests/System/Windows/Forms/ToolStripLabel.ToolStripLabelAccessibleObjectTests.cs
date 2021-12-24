@@ -69,10 +69,19 @@ namespace System.Windows.Forms.Tests
             using ToolStripLabel toolStripLabel = new ToolStripLabel();
             toolStripLabel.AccessibleRole = role;
 
-            object actual = toolStripLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId);
-            UiaCore.UIA expected = AccessibleRoleControlTypeMap.GetControlType(role);
+            Assert.Equal(AccessibleRoleControlTypeMap.GetControlType(role), toolStripLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ControlTypePropertyId));
+            Assert.Null(toolStripLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        }
 
-            Assert.Equal(expected, actual);
+        [WinFormsTheory]
+        [InlineData(true, AccessibleStates.ReadOnly | AccessibleStates.Focusable)]
+        [InlineData(false, AccessibleStates.ReadOnly)]
+        public void ToolStripLabelAccessibleObject_GetPropertyValue_LegacyIAccessibleStatePropertyId_ReturnsExpected(bool isLink, AccessibleStates expectedState)
+        {
+            using ToolStripLabel toolStripLabel = new ToolStripLabel() { IsLink = isLink };
+            object actual = toolStripLabel.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleStatePropertyId);
+
+            Assert.Equal(expectedState, actual);
         }
     }
 }

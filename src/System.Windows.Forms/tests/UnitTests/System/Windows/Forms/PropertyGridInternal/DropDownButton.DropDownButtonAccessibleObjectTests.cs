@@ -32,6 +32,20 @@ namespace System.Windows.Forms.PropertyGridInternal.Tests
             Assert.False(dropDownButton.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId, true)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.PushButton)]
+        [InlineData((int)UiaCore.UIA.ValueValuePropertyId, null)]
+        public void DomainUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
+        {
+            using DropDownButton dropDownButton = new DropDownButton();
+            AccessibleObject accessibleObject = dropDownButton.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+
+            Assert.Equal(expected, actual);
+            Assert.False(dropDownButton.IsHandleCreated);
+        }
+
         [WinFormsFact]
         public void DropDownButtonAccessibleObject_Role_IsPushButton_ByDefault()
         {

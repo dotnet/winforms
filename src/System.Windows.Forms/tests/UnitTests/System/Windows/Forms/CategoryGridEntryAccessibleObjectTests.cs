@@ -157,5 +157,33 @@ namespace System.Windows.Forms.Tests
 
             Assert.Equal(expected, accessibilityObject.GetPropertyValue(UiaCore.UIA.LocalizedControlTypePropertyId));
         }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.ButtonDropDownGrid)]
+        [InlineData((int)UiaCore.UIA.IsGridItemPatternAvailablePropertyId, true)]
+        [InlineData((int)UiaCore.UIA.IsTableItemPatternAvailablePropertyId, true)]
+        public void CategoryGridEntryAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
+        {
+            using NoAssertContext context = new();
+            CategoryGridEntryAccessibleObject accessibleObject = new(null);
+            object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+
+            Assert.Equal(expected, actual);
+        }
+
+        [WinFormsFact]
+        public void CategoryGridEntryAccessibleObjectWithControl_GetPropertyValue_ReturnsExpected()
+        {
+            using PropertyGrid control = new();
+            using Button button = new();
+            control.SelectedObject = button;
+            PropertyGridView gridView = control.TestAccessor().Dynamic._gridView;
+            var category = (CategoryGridEntry)gridView.TopLevelGridEntries[0];
+            var gridViewAccessibilityObject = (PropertyGridViewAccessibleObject)gridView.AccessibilityObject;
+            AccessibleObject accessibilityObject = category.AccessibilityObject;
+
+            Assert.Equal("Collapse", accessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.Null(accessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+        }
     }
 }

@@ -3,6 +3,7 @@
 // See the LICENSE file in the project root for more information.
 
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -1229,6 +1230,20 @@ namespace System.Windows.Forms.Tests
             AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
 
             Assert.Equal(0, topRowAccessibleObject.GetChildCount());
+            Assert.False(dataGridView.IsHandleCreated);
+        }
+
+        [WinFormsFact]
+        public void DataGridViewTopRowAccessibleObject_GetPropertyValue_ReturnsExpected()
+        {
+            using DataGridView dataGridView = new DataGridView();
+            AccessibleObject topRowAccessibleObject = dataGridView.AccessibilityObject.TestAccessor().Dynamic.TopRowAccessibilityObject;
+
+            Assert.True((bool)topRowAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.IsLegacyIAccessiblePatternAvailablePropertyId));
+            Assert.Equal(string.Empty, topRowAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.HelpTextPropertyId));
+            Assert.Equal(SR.DataGridView_AccTopRow, topRowAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.NamePropertyId));
+            Assert.Equal(SR.DataGridView_AccTopRow, topRowAccessibleObject.GetPropertyValue(Interop.UiaCore.UIA.LegacyIAccessibleNamePropertyId));
+            Assert.Equal("Top Row", topRowAccessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
             Assert.False(dataGridView.IsHandleCreated);
         }
     }

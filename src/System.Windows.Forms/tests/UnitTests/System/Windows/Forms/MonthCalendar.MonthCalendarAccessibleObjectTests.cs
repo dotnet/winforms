@@ -76,6 +76,18 @@ namespace System.Windows.Forms.Tests
             Assert.False(monthCalendar.IsHandleCreated);
         }
 
+        [WinFormsFact]
+        public void MonthCalendarAccessibleObject_GetPropertyValue_ReturnsExpected()
+        {
+            using MonthCalendar monthCalendar = new MonthCalendar();
+            DateTime dt = new DateTime(2000, 1, 1);
+            monthCalendar.SetDate(dt);
+
+            Assert.Equal(dt.ToLongDateString(), monthCalendar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.Equal(AccessibleStates.None, monthCalendar.AccessibilityObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleStatePropertyId));
+            Assert.False(monthCalendar.IsHandleCreated);
+        }
+
         [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]

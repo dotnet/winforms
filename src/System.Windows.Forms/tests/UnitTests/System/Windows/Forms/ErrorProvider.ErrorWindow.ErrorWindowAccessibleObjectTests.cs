@@ -64,6 +64,18 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsFact]
+        public void ErrorWindowAccessibleObject_GetPropertyValue_ReturnsExpected()
+        {
+            Type type = typeof(ErrorWindow)
+                .GetNestedType("ErrorWindowAccessibleObject", BindingFlags.NonPublic | BindingFlags.Instance);
+            var accessibleObject = (AccessibleObject)Activator.CreateInstance(type, new object[] { null });
+
+            Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.ValueValuePropertyId));
+            Assert.Null(accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.Equal(AccessibleStates.ReadOnly, accessibleObject.GetPropertyValue(UiaCore.UIA.LegacyIAccessibleStatePropertyId));
+        }
+
+        [WinFormsFact]
         public void ErrorWindowAccessibleObject_FragmentRoot_ReturnsExpected()
         {
             Type type = typeof(ErrorWindow)

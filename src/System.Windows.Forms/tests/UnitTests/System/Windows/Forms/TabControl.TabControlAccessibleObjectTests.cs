@@ -593,6 +593,21 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData("Test")]
+        [InlineData("")]
+        [InlineData(null)]
+        public void TabControlAccessibleObject_GetProperyValue_LegacyIAccessibleDefaultActionPropertyId_ReturnsExpected(string accessibleDefaultActionDescription)
+        {
+            using TabControl tabControl = new();
+            tabControl.AccessibleDefaultActionDescription = accessibleDefaultActionDescription;
+            TabControlAccessibleObject accessibleObject = Assert.IsType<TabControlAccessibleObject>(tabControl.AccessibilityObject);
+
+            Assert.Equal(!string.IsNullOrEmpty(accessibleDefaultActionDescription) ? accessibleDefaultActionDescription : null,
+                accessibleObject.GetPropertyValue(UIA.LegacyIAccessibleDefaultActionPropertyId));
+            Assert.False(tabControl.IsHandleCreated);
+        }
+
+        [WinFormsTheory]
         [InlineData(true)]
         [InlineData(false)]
         public void TabControlAccessibleObject_RuntimeId_ReturnsExpected(bool createControl)

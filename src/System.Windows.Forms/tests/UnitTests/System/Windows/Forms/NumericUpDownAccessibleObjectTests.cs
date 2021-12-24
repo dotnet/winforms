@@ -91,5 +91,18 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(expected, actual);
             Assert.False(numericUpDown.IsHandleCreated);
         }
+
+        [WinFormsTheory]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessibleRolePropertyId, AccessibleRole.SpinButton)]
+        [InlineData((int)UiaCore.UIA.LegacyIAccessibleStatePropertyId, AccessibleStates.None)]
+        public void NumericUpDownAccessibleObject_GetPropertyValue_ReturnsExpected(int property, object expected)
+        {
+            using NumericUpDown numericUpDown = new NumericUpDown();
+            AccessibleObject accessibleObject = numericUpDown.AccessibilityObject;
+            object actual = accessibleObject.GetPropertyValue((UiaCore.UIA)property);
+
+            Assert.Equal(expected, actual);
+            Assert.False(numericUpDown.IsHandleCreated);
+        }
     }
 }
