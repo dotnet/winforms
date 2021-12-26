@@ -279,14 +279,12 @@ namespace System.Windows.Forms.Tests
                 CheckState = value
             };
             Assert.Equal(value, control.CheckState);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            //Assert.False(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
 
             // Set same.
             control.CheckState = value;
             Assert.Equal(value, control.CheckState);
-            // TODO: ControlAccessibleObject shouldn't force handle creation, tracked in https://github.com/dotnet/winforms/issues/3062
-            //Assert.False(control.IsHandleCreated);
+            Assert.False(control.IsHandleCreated);
         }
 
         [WinFormsTheory]
