@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -13,9 +11,9 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </summary>
-        public ToolStripPanelRenderEventArgs(Graphics g, ToolStripPanel toolStripPanel)
+        public ToolStripPanelRenderEventArgs(Graphics g, ToolStripPanel? toolStripPanel)
         {
-            Graphics = g;
+            Graphics = g.OrThrowIfNull();
             ToolStripPanel = toolStripPanel;
         }
 
@@ -27,7 +25,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents which toolStrip was affected by the click
         /// </summary>
-        public ToolStripPanel ToolStripPanel { get; }
+        public ToolStripPanel? ToolStripPanel { get; }
 
         public bool Handled { get; set; }
     }

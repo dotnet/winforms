@@ -12,7 +12,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ToolStripContentPanelRenderEventArgs_NullGraphics_ThrowsArgumentNullException()
         {
-            Assert.Throws<ArgumentNullException>(() => new ToolStripContentPanelRenderEventArgs(null, null));
+            using var toolStripContentPanel = new ToolStripContentPanel();
+            Assert.Throws<ArgumentNullException>(() => new ToolStripContentPanelRenderEventArgs(null, toolStripContentPanel));
         }
 
         public static IEnumerable<object[]> Ctor_Graphics_ToolStripContentPanel_TestData()

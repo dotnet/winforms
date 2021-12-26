@@ -605,7 +605,6 @@ namespace System.Windows.Forms.Tests
         public static IEnumerable<object[]> ToolStripPanelRenderEventArgs_TestData()
         {
             yield return new object[] { null };
-            yield return new object[] { new ToolStripPanelRenderEventArgs(null, null) };
 
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
