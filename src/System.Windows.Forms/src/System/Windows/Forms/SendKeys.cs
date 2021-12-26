@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 using System.Security;
@@ -81,12 +79,12 @@ namespace System.Windows.Forms
 
         private static bool s_stopHook;
         private static IntPtr s_hhook;
-        private static User32.HOOKPROC s_hook;
+        private static User32.HOOKPROC? s_hook;
 
         /// <summary>
         ///  Vector of events that we have yet to post to the journaling hook.
         /// </summary>
-        private static Queue<SKEvent> s_events;
+        private static Queue<SKEvent>? s_events;
 
         private static object s_lock = new object();
         private static bool s_startNewChar;
@@ -276,7 +274,7 @@ namespace System.Windows.Forms
                 try
                 {
                     // Read SendKeys value from config file, not case sensitive.
-                    string value = Configuration.ConfigurationManager.AppSettings.Get("SendKeys");
+                    string? value = Configuration.ConfigurationManager.AppSettings.Get("SendKeys");
 
                     if (string.IsNullOrEmpty(value))
                     {
@@ -369,7 +367,7 @@ namespace System.Windows.Forms
         ///  This event is raised from Application when each window thread terminates. It gives us a chance to
         ///  uninstall our journal hook if we had one installed.
         /// </summary>
-        private static void OnThreadExit(object sender, EventArgs e)
+        private static void OnThreadExit(object? sender, EventArgs e)
         {
             try
             {
@@ -631,7 +629,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Uses User32 SendInput to send keystrokes.
         /// </summary>
-        private unsafe static void SendInput(ReadOnlySpan<byte> oldKeyboardState, SKEvent[] previousEvents)
+        private unsafe static void SendInput(ReadOnlySpan<byte> oldKeyboardState, SKEvent[]? previousEvents)
         {
             // Should be a no-op most of the time
             AddCancelModifiersForPreviousEvents(previousEvents);
@@ -674,12 +672,12 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    eventsTotal = s_events.Count;
+                    eventsTotal = s_events!.Count;
                     ClearGlobalKeys();
 
                     for (int i = 0; i < eventsTotal; i++)
                     {
-                        SKEvent skEvent = (SKEvent)s_events.Dequeue();
+                        SKEvent skEvent = s_events.Dequeue();
 
                         currentInput[0].inputUnion.ki.dwFlags = 0;
 
@@ -755,7 +753,7 @@ namespace System.Windows.Forms
         ///  of the keyboard modifiers (alt, ctrl, shift). We must send a KeyUp for those, JournalHook doesn't
         ///  permanently set the state so it's ok.
         /// </summary>
-        private static void AddCancelModifiersForPreviousEvents(SKEvent[] previousEvents)
+        private static void AddCancelModifiersForPreviousEvents(SKEvent[]? previousEvents)
         {
             if (previousEvents is null)
             {
@@ -906,7 +904,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static void Send(string keys) => Send(keys, null, false);
 
-        private static void Send(string keys, Control control, bool wait)
+        private static void Send(string keys, Control? control, bool wait)
         {
             if (string.IsNullOrEmpty(keys))
             {
@@ -920,7 +918,7 @@ namespace System.Windows.Forms
             }
 
             // For SendInput only, see AddCancelModifiersForPreviousEvents for details.
-            SKEvent[] previousEvents = null;
+            SKEvent[]? previousEvents = null;
             if ((s_events is not null) && (s_events.Count != 0))
             {
                 previousEvents = s_events.ToArray();
@@ -940,7 +938,7 @@ namespace System.Windows.Forms
             Span<byte> oldState = stackalloc byte[256];
             GetKeyboardState(oldState);
 
-            if (s_sendMethod.Value != SendMethodTypes.SendInput)
+            if (s_sendMethod!.Value != SendMethodTypes.SendInput)
             {
                 if (!s_hookSupported.HasValue && s_sendMethod.Value == SendMethodTypes.Default)
                 {
@@ -950,7 +948,7 @@ namespace System.Windows.Forms
                     TestHook();
                 }
 
-                if (s_sendMethod.Value == SendMethodTypes.JournalHook || s_hookSupported.Value)
+                if (s_sendMethod.Value == SendMethodTypes.JournalHook || s_hookSupported!.Value)
                 {
                     ClearKeyboardState();
                     InstallHook();
@@ -959,7 +957,7 @@ namespace System.Windows.Forms
             }
 
             if (s_sendMethod.Value == SendMethodTypes.SendInput ||
-                (s_sendMethod.Value == SendMethodTypes.Default && !s_hookSupported.Value))
+                (s_sendMethod.Value == SendMethodTypes.Default && !s_hookSupported!.Value))
             {
                 // Either SendInput is configured or JournalHooks failed by default, call SendInput
                 SendInput(oldState, previousEvents);
@@ -983,7 +981,7 @@ namespace System.Windows.Forms
         ///  WARNING: this method will never work if control is not null, because while Windows journaling *looks* like it
         ///  can be directed to a specific HWND, it can't.
         /// </remarks>
-        private static void SendWait(string keys, Control control)
+        private static void SendWait(string keys, Control? control)
         {
             Send(keys, control, true);
         }
