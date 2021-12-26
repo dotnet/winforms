@@ -419,7 +419,7 @@ override System.Windows.Forms.Design.EventsTab.HelpKeyword.get -> string!
 override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object obj) -> bool
 ~override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component) -> bool
-~override System.Windows.Forms.DockingAttribute.Equals(object obj) -> bool
+override System.Windows.Forms.DockingAttribute.Equals(object? obj) -> bool
 ~override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string
 ~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
@@ -1149,7 +1149,7 @@ override System.Windows.Forms.TreeNodeConverter.ConvertTo(System.ComponentModel.
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Default -> System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute
-~static readonly System.Windows.Forms.DockingAttribute.Default -> System.Windows.Forms.DockingAttribute
+static readonly System.Windows.Forms.DockingAttribute.Default -> System.Windows.Forms.DockingAttribute!
 ~static readonly System.Windows.Forms.FontDialog.EventApply -> object
 ~static readonly System.Windows.Forms.OSFeature.LayeredWindows -> object
 ~static readonly System.Windows.Forms.OSFeature.Themes -> object
