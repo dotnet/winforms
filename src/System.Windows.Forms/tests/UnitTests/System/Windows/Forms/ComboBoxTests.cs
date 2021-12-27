@@ -1929,6 +1929,30 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(1, comboBoxChildEditUiaProvider.RaiseAutomationCallCount);
         }
 
+        [WinFormsTheory]
+        [InlineData(0)]
+        [InlineData(1)]
+        [InlineData(2)]
+        public void Combox_SelectedItem_HandlesItemRemoval(int selectedIndex)
+        {
+            using ComboBox comboBox = new();
+            for (int i = 0; i < 3; i++)
+            {
+                comboBox.Items.Add(i.ToString());
+            }
+
+            comboBox.SelectedItem = comboBox.Items[selectedIndex];
+            Assert.Equal(selectedIndex, comboBox.SelectedIndex);
+            Assert.Equal(selectedIndex.ToString(), comboBox.SelectedItem);
+            Assert.Equal(selectedIndex.ToString(), comboBox.Text);
+
+            comboBox.Items.RemoveAt(selectedIndex);
+            Assert.Equal(-1, comboBox.SelectedIndex);
+            Assert.Null(comboBox.SelectedItem);
+            Assert.Empty(comboBox.Text);
+            Assert.False(comboBox.IsHandleCreated);
+        }
+
         [WinFormsFact]
         public void ComboBox_SelectedItem_Set_DoesNotInvoke_RaiseAutomationEvent_AccessibilityObjectIsCreated()
         {
