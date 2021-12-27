@@ -136,7 +136,7 @@ namespace System.Windows.Forms
         // We do not try to sort listItemsArray as items are added, but during a handle recreate
         // we will make sure we get the items in the same order the ListView displays them.
         private readonly Hashtable listItemsTable = new Hashtable(); // elements are ListViewItem's
-        private ArrayList listItemsArray = new ArrayList(); // elements are ListViewItem's
+        private List<ListViewItem> _listViewItems = new();
 
         private Size tileSize = Size.Empty;
 
@@ -3492,12 +3492,12 @@ namespace System.Windows.Forms
             {
                 // PERF: The only reason we should ever call this before the handle is created
                 // is if the user calls ListViewItem.Index.
-                Debug.Assert(listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
+                Debug.Assert(_listViewItems is not null, "listItemsArray is null, but the handle isn't created");
 
                 int index = 0;
-                foreach (object o in listItemsArray)
+                foreach (ListViewItem listViewItem in _listViewItems)
                 {
-                    if (o == item)
+                    if (listViewItem == item)
                     {
                         return index;
                     }
@@ -4127,8 +4127,8 @@ namespace System.Windows.Forms
                 //
                 if (!IsHandleCreated)
                 {
-                    Debug.Assert(listItemsArray is not null, "listItemsArray is null, but the handle isn't created");
-                    listItemsArray.Insert(displayIndex + i, item);
+                    Debug.Assert(_listViewItems is not null, "listItemsArray is null, but the handle isn't created");
+                    _listViewItems.Insert(displayIndex + i, item);
                 }
             }
 
@@ -4653,10 +4653,10 @@ namespace System.Windows.Forms
 
             // Use a copy of the list items array so that we can maintain the (handle created || listItemsArray is not null) invariant
             ListViewItem[] listViewItemsToAdd = null;
-            if (listItemsArray is not null)
+            if (_listViewItems is not null)
             {
-                listViewItemsToAdd = (ListViewItem[])listItemsArray.ToArray(typeof(ListViewItem));
-                listItemsArray = null;
+                listViewItemsToAdd = _listViewItems.ToArray();
+                _listViewItems = null;
             }
 
             int columnCount = columnHeaders is null ? 0 : columnHeaders.Length;
@@ -4745,7 +4745,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                Debug.Assert(listItemsArray is null, "listItemsArray not null, even though handle created");
+                Debug.Assert(_listViewItems is null, "listItemsArray not null, even though handle created");
                 ListViewItem[] items = null;
                 ListViewItemCollection tempItems = Items;
 
@@ -4757,8 +4757,8 @@ namespace System.Windows.Forms
 
                 if (items is not null)
                 {
-                    listItemsArray = new ArrayList(items.Length);
-                    listItemsArray.AddRange(items);
+                    _listViewItems = new List<ListViewItem>(items.Length);
+                    _listViewItems.AddRange(items);
                 }
 
                 ListViewHandleDestroyed = true;
@@ -5611,12 +5611,12 @@ namespace System.Windows.Forms
         {
             string s = base.ToString();
 
-            if (listItemsArray is not null)
+            if (_listViewItems is not null)
             {
-                s += ", Items.Count: " + listItemsArray.Count.ToString(CultureInfo.CurrentCulture);
-                if (listItemsArray.Count > 0)
+                s += ", Items.Count: " + _listViewItems.Count.ToString(CultureInfo.CurrentCulture);
+                if (_listViewItems.Count > 0)
                 {
-                    string z = listItemsArray[0].ToString();
+                    string z = _listViewItems[0].ToString();
                     string txt = (z.Length > 40) ? z.Substring(0, 40) : z;
                     s += ", Items[0]: " + txt;
                 }
