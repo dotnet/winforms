@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using Microsoft.Win32;
 
 namespace System.Windows.Forms
@@ -115,7 +113,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///event handler for change in display setting
         /// </summary>
-        private static void DisplaySettingsChanging(object obj, EventArgs ea)
+        private static void DisplaySettingsChanging(object? obj, EventArgs ea)
         {
             s_highContrastSettingValid = false;
             s_lowResSettingValid = false;
