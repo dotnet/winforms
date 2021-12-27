@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms
@@ -46,7 +44,7 @@ namespace System.Windows.Forms
         ///  Returns the tool owner's native window.
         ///  The tool can return its own native window if it exists.
         /// </summary>
-        IWin32Window GetOwnerWindow();
+        IWin32Window? GetOwnerWindow();
 
         /// <summary>
         ///  Notifies this tool that it was hooked to a keyboard ToolTip
