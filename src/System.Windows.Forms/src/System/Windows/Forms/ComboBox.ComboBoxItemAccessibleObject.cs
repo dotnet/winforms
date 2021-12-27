@@ -135,8 +135,6 @@ namespace System.Windows.Forms
                         return true;
                     case UiaCore.UIA.IsPasswordPropertyId:
                         return false;
-                    case UiaCore.UIA.IsSelectionItemPatternAvailablePropertyId:
-                        return true;
                     case UiaCore.UIA.SelectionItemIsSelectedPropertyId:
                         return (State & AccessibleStates.Selected) != 0;
                     case UiaCore.UIA.SelectionItemSelectionContainerPropertyId:

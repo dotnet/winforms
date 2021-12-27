@@ -41,19 +41,6 @@ namespace System.Windows.Forms
                 return 2;
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                        return State;
-                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                        return Role;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-
             public override AccessibleRole Role
             {
                 get

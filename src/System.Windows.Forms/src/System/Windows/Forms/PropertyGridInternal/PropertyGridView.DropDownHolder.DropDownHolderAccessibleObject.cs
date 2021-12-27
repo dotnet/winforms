@@ -35,10 +35,7 @@ namespace System.Windows.Forms.PropertyGridInternal
                 internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot =>
                     _owningDropDownHolder._gridView?.OwnerGrid?.AccessibilityObject;
 
-                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-                    => propertyID == UiaCore.UIA.NamePropertyId
-                        ? SR.PropertyGridViewDropDownControlHolderAccessibleName
-                        : base.GetPropertyValue(propertyID);
+                public override string? Name => SR.PropertyGridViewDropDownControlHolderAccessibleName;
 
                 private bool ExistsInAccessibleTree
                     => _owningDropDownHolder.IsHandleCreated && _owningDropDownHolder.Visible;

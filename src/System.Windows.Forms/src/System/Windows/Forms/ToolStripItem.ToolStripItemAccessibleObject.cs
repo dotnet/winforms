@@ -111,8 +111,6 @@ namespace System.Windows.Forms
                     // See: docs/accessibility/accessible-role-controltype.md
                     case UiaCore.UIA.ControlTypePropertyId:
                         return AccessibleRoleControlTypeMap.GetControlType(Role);
-                    case UiaCore.UIA.IsExpandCollapsePatternAvailablePropertyId:
-                        return (object)IsPatternSupported(UiaCore.UIA.ExpandCollapsePatternId);
                     case UiaCore.UIA.IsEnabledPropertyId:
                         return _ownerItem.Enabled;
                     case UiaCore.UIA.IsOffscreenPropertyId:

@@ -20,19 +20,6 @@ namespace System.Windows.Forms
                 _owningDomainUpDown = owner;
             }
 
-            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
-            {
-                switch (propertyID)
-                {
-                    case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                        return State;
-                    case UiaCore.UIA.LegacyIAccessibleRolePropertyId:
-                        return Role;
-                    default:
-                        return base.GetPropertyValue(propertyID);
-                }
-            }
-
             private DomainItemListAccessibleObject ItemList
             {
                 get

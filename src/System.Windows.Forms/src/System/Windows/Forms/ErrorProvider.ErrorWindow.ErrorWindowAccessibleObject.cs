@@ -82,8 +82,6 @@ namespace System.Windows.Forms
                     {
                         case UiaCore.UIA.ControlTypePropertyId:
                             return UiaCore.UIA.GroupControlTypeId;
-                        case UiaCore.UIA.LegacyIAccessibleStatePropertyId:
-                            return State;
                         case UiaCore.UIA.NativeWindowHandlePropertyId:
                             return _owner.Handle;
                         default:
