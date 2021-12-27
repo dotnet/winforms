@@ -421,11 +421,11 @@ override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component) -> bool
 ~override System.Windows.Forms.DockingAttribute.Equals(object obj) -> bool
 ~override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
-~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Value.get -> string
-~override System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string?
+override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
+override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Value.get -> string?
+override System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Add(object item) -> int
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Insert(int index, object item) -> void
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Remove(object item) -> void
@@ -2005,8 +2005,8 @@ System.Windows.Forms.Design.EventsTab.EventsTab(System.IServiceProvider? sp) -> 
 System.Windows.Forms.Design.IWindowsFormsEditorService.DropDownControl(System.Windows.Forms.Control? control) -> void
 System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows.Forms.Form! dialog) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(object component, System.Windows.Forms.IWin32Window owner) -> bool
-~System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject(string name, System.Windows.Forms.AccessibleObject parent) -> void
-~System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void
+System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject(string? name, System.Windows.Forms.AccessibleObject! parent) -> void
+System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown! owner) -> void
 ~System.Windows.Forms.DomainUpDown.Items.get -> System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection
 ~System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object source, System.EventArgs e) -> void
 ~System.Windows.Forms.DomainUpDown.SelectedItem.get -> object

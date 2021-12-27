@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -12,7 +10,7 @@ namespace System.Windows.Forms
     {
         public class DomainUpDownAccessibleObject : ControlAccessibleObject
         {
-            private DomainItemListAccessibleObject _domainItemList;
+            private DomainItemListAccessibleObject? _domainItemList;
             private readonly UpDownBase _owningDomainUpDown;
 
             /// <summary>
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
                 _owningDomainUpDown = owner;
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -65,7 +63,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             /// </summary>
-            public override AccessibleObject GetChild(int index)
+            public override AccessibleObject? GetChild(int index)
             {
                 switch (index)
                 {

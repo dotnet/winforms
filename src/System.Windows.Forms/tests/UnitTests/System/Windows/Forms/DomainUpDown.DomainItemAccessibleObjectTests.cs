@@ -10,11 +10,19 @@ namespace System.Windows.Forms.Tests
     public class DomainUpDown_DomainItemAccessibleObjectTests
     {
         [WinFormsFact]
+        public void DomainItemAccessibleObject_Ctor_NullParent_ThrowsArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => new DomainItemAccessibleObject(string.Empty, null));
+        }
+
+        [WinFormsFact]
         public void DomainItemAccessibleObject_Ctor_Default()
         {
             string testName = "Some test name";
-            var accessibleObject = new DomainItemAccessibleObject(testName, null);
-            Assert.Null(accessibleObject.Parent);
+            using var domainUpDown = new DomainUpDown();
+            var parent = new DomainItemListAccessibleObject(new DomainUpDownAccessibleObject(domainUpDown));
+            var accessibleObject = new DomainItemAccessibleObject(testName, parent);
+            Assert.Equal(parent, accessibleObject.Parent);
             Assert.Equal(testName, accessibleObject.Name);
             Assert.Equal(AccessibleRole.ListItem, accessibleObject.Role);
         }
@@ -25,7 +33,8 @@ namespace System.Windows.Forms.Tests
         [InlineData(null)]
         public void DomainItemAccessibleObject_Name_Set_ReturnsExpected(string testValue)
         {
-            var accessibleObject = new DomainItemAccessibleObject(null, null);
+            using var domainUpDown = new DomainUpDown();
+            var accessibleObject = new DomainItemAccessibleObject(null, new DomainItemListAccessibleObject(new DomainUpDownAccessibleObject(domainUpDown)));
             accessibleObject.Name = testValue;
             Assert.Equal(testValue, accessibleObject.Name);
         }
@@ -33,7 +42,8 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DomainItemAccessibleObject_State_Default_ReturnsExpected()
         {
-            var accessibleObject = new DomainItemAccessibleObject(null, null);
+            using var domainUpDown = new DomainUpDown();
+            var accessibleObject = new DomainItemAccessibleObject(null, new DomainItemListAccessibleObject(new DomainUpDownAccessibleObject(domainUpDown)));
             Assert.Equal(AccessibleStates.Selectable, accessibleObject.State);
         }
 
@@ -41,7 +51,8 @@ namespace System.Windows.Forms.Tests
         public void DomainItemAccessibleObject_Value_Default_ReturnsExpected()
         {
             string testName = "Some test name";
-            var accessibleObject = new DomainItemAccessibleObject(testName, null);
+            using var domainUpDown = new DomainUpDown();
+            var accessibleObject = new DomainItemAccessibleObject(testName, new DomainItemListAccessibleObject(new DomainUpDownAccessibleObject(domainUpDown)));
             Assert.Equal(testName, accessibleObject.Value);
         }
     }
