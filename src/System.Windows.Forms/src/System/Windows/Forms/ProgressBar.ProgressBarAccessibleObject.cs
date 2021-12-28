@@ -14,7 +14,7 @@ namespace System.Windows.Forms
             {
             }
 
-            private ProgressBar? OwningProgressBar => Owner as ProgressBar;
+            private ProgressBar OwningProgressBar => (ProgressBar)Owner;
 
             internal override bool IsIAccessibleExSupported() => true;
 
@@ -63,13 +63,13 @@ namespace System.Windows.Forms
 
             internal override double LargeChange => double.NaN;
 
-            internal override double Maximum => OwningProgressBar?.Maximum ?? double.NaN;
+            internal override double Maximum => OwningProgressBar.Maximum;
 
-            internal override double Minimum => OwningProgressBar?.Minimum ?? double.NaN;
+            internal override double Minimum => OwningProgressBar.Minimum;
 
             internal override double SmallChange => double.NaN;
 
-            internal override double RangeValue => OwningProgressBar?.Value ?? double.NaN;
+            internal override double RangeValue => OwningProgressBar.Value;
 
             internal override bool IsReadOnly => true;
         }
