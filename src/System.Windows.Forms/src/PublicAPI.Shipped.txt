@@ -421,11 +421,11 @@ override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component) -> bool
 ~override System.Windows.Forms.DockingAttribute.Equals(object obj) -> bool
 ~override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string
-~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
-~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Value.get -> string
-~override System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string?
+override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
+override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Value.get -> string?
+override System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Add(object item) -> int
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Insert(int index, object item) -> void
 ~override System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection.Remove(object item) -> void
@@ -635,9 +635,9 @@ override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object? ob
 ~override System.Windows.Forms.NumericUpDown.Text.get -> string
 ~override System.Windows.Forms.NumericUpDown.Text.set -> void
 ~override System.Windows.Forms.NumericUpDown.ToString() -> string
-~override System.Windows.Forms.OpacityConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.OpacityConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.OpacityConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.OpacityConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.OpacityConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.OpacityConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.OSFeature.GetVersionPresent(object feature) -> System.Version
 ~override System.Windows.Forms.Panel.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.Panel.OnResize(System.EventArgs eventargs) -> void
@@ -940,16 +940,16 @@ override System.Windows.Forms.Timer.ToString() -> string!
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnLayout(System.Windows.Forms.LayoutEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.DefaultAction.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Description.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.GetHelpTopic(out string fileName) -> int
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Help.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.KeyboardShortcut.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Name.get -> string
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Name.set -> void
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToString() -> string
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.DefaultAction.get -> string!
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Description.get -> string?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.GetHelpTopic(out string? fileName) -> int
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Help.get -> string?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.KeyboardShortcut.get -> string!
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Name.get -> string?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Name.set -> void
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Navigate(System.Windows.Forms.AccessibleNavigation navigationDirection) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.Parent.get -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToString() -> string!
 ~override System.Windows.Forms.ToolStripItem.ToString() -> string
 ~override System.Windows.Forms.ToolStripLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripLabel.OnFontChanged(System.EventArgs e) -> void
@@ -1061,8 +1061,8 @@ override System.Windows.Forms.Timer.ToString() -> string!
 ~override System.Windows.Forms.TrackBar.Text.set -> void
 ~override System.Windows.Forms.TrackBar.ToString() -> string
 ~override System.Windows.Forms.TreeNode.ToString() -> string
-~override System.Windows.Forms.TreeNodeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.TreeNodeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.TreeNodeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.TreeNodeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.TreeView.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.TreeView.BackgroundImage.set -> void
 ~override System.Windows.Forms.TreeView.CreateParams.get -> System.Windows.Forms.CreateParams
@@ -1346,13 +1346,13 @@ static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalBar(System.Drawing
 static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalChunks(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
 static System.Windows.Forms.ProgressBarRenderer.DrawVerticalBar(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
 static System.Windows.Forms.ProgressBarRenderer.DrawVerticalChunks(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
-~static System.Windows.Forms.RadioButtonRenderer.DrawParentBackground(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, System.Windows.Forms.Control childControl) -> void
-~static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string radioButtonText, System.Drawing.Font font, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
-~static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string radioButtonText, System.Drawing.Font font, System.Drawing.Image image, System.Drawing.Rectangle imageBounds, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
-~static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string radioButtonText, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
-~static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string radioButtonText, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags, System.Drawing.Image image, System.Drawing.Rectangle imageBounds, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
-~static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics g, System.Drawing.Point glyphLocation, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
-~static System.Windows.Forms.RadioButtonRenderer.GetGlyphSize(System.Drawing.Graphics g, System.Windows.Forms.VisualStyles.RadioButtonState state) -> System.Drawing.Size
+static System.Windows.Forms.RadioButtonRenderer.DrawParentBackground(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.Control! childControl) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string? radioButtonText, System.Drawing.Font? font, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string? radioButtonText, System.Drawing.Font? font, System.Drawing.Image! image, System.Drawing.Rectangle imageBounds, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string? radioButtonText, System.Drawing.Font? font, System.Windows.Forms.TextFormatFlags flags, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Drawing.Rectangle textBounds, string? radioButtonText, System.Drawing.Font? font, System.Windows.Forms.TextFormatFlags flags, System.Drawing.Image! image, System.Drawing.Rectangle imageBounds, bool focused, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.DrawRadioButton(System.Drawing.Graphics! g, System.Drawing.Point glyphLocation, System.Windows.Forms.VisualStyles.RadioButtonState state) -> void
+static System.Windows.Forms.RadioButtonRenderer.GetGlyphSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.RadioButtonState state) -> System.Drawing.Size
 ~static System.Windows.Forms.Screen.AllScreens.get -> System.Windows.Forms.Screen[]
 ~static System.Windows.Forms.Screen.FromControl(System.Windows.Forms.Control control) -> System.Windows.Forms.Screen
 ~static System.Windows.Forms.Screen.FromHandle(System.IntPtr hwnd) -> System.Windows.Forms.Screen
@@ -2005,8 +2005,8 @@ System.Windows.Forms.Design.EventsTab.EventsTab(System.IServiceProvider? sp) -> 
 System.Windows.Forms.Design.IWindowsFormsEditorService.DropDownControl(System.Windows.Forms.Control? control) -> void
 System.Windows.Forms.Design.IWindowsFormsEditorService.ShowDialog(System.Windows.Forms.Form! dialog) -> System.Windows.Forms.DialogResult
 ~System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(object component, System.Windows.Forms.IWin32Window owner) -> bool
-~System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject(string name, System.Windows.Forms.AccessibleObject parent) -> void
-~System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown owner) -> void
+System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.DomainItemAccessibleObject(string? name, System.Windows.Forms.AccessibleObject! parent) -> void
+System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAccessibleObject(System.Windows.Forms.DomainUpDown! owner) -> void
 ~System.Windows.Forms.DomainUpDown.Items.get -> System.Windows.Forms.DomainUpDown.DomainUpDownItemCollection
 ~System.Windows.Forms.DomainUpDown.OnSelectedItemChanged(object source, System.EventArgs e) -> void
 ~System.Windows.Forms.DomainUpDown.SelectedItem.get -> object
@@ -2859,7 +2859,7 @@ System.Windows.Forms.ToolStripGripRenderEventArgs.ToolStripGripRenderEventArgs(S
 ~System.Windows.Forms.ToolStripItem.Tag.set -> void
 ~System.Windows.Forms.ToolStripItem.ToolStripItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
 ~System.Windows.Forms.ToolStripItem.ToolStripItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToolStripItemAccessibleObject(System.Windows.Forms.ToolStripItem ownerItem) -> void
+System.Windows.Forms.ToolStripItem.ToolStripItemAccessibleObject.ToolStripItemAccessibleObject(System.Windows.Forms.ToolStripItem! ownerItem) -> void
 ~System.Windows.Forms.ToolStripItem.ToolTipText.get -> string
 ~System.Windows.Forms.ToolStripItem.ToolTipText.set -> void
 System.Windows.Forms.ToolStripItemClickedEventArgs.ClickedItem.get -> System.Windows.Forms.ToolStripItem?

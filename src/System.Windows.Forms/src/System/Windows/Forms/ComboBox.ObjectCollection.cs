@@ -388,9 +388,17 @@ namespace System.Windows.Forms
                 OwnerComboBoxAccessibleObject?.ItemAccessibleObjects.Remove(InnerList[index]);
                 InnerList.RemoveAt(index);
 
-                if (!_owner.IsHandleCreated && index < _owner._selectedIndex)
+                if (!_owner.IsHandleCreated)
                 {
-                    _owner._selectedIndex--;
+                    if (index < _owner._selectedIndex)
+                    {
+                        _owner._selectedIndex--;
+                    }
+                    else if (index == _owner._selectedIndex)
+                    {
+                        _owner._selectedIndex = -1;
+                        _owner.UpdateText();
+                    }
                 }
 
                 if (_owner.AutoCompleteSource == AutoCompleteSource.ListItems)

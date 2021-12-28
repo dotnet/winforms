@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices.ComTypes;
@@ -83,7 +81,7 @@ namespace System.Windows.Forms
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "FormatEnumerator: Next");
                 if (_current < _formats.Count && celt > 0)
                 {
-                    FORMATETC current = (FORMATETC)_formats[_current];
+                    FORMATETC current = _formats[_current];
                     rgelt[0].cfFormat = current.cfFormat;
                     rgelt[0].tymed = current.tymed;
                     rgelt[0].dwAspect = DVASPECT.DVASPECT_CONTENT;

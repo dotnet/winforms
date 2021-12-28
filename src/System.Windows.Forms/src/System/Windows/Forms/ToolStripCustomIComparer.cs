@@ -4,13 +4,11 @@
 
 #nullable disable
 
-using System.Collections;
-
 namespace System.Windows.Forms
 {
-    internal class ToolStripCustomIComparer : IComparer
+    internal class ToolStripCustomIComparer : IComparer<ToolStrip>
     {
-        int IComparer.Compare(object x, object y)
+        public int Compare(ToolStrip x, ToolStrip y)
         {
             if (x.GetType() == y.GetType())
             {

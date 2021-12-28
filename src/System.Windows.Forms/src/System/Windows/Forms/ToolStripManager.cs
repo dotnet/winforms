@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Collections.Concurrent;
 using System.Diagnostics;
 using System.Drawing;
@@ -1160,9 +1159,9 @@ namespace System.Windows.Forms
             return result;
         }
 
-        internal static ArrayList FindMergeableToolStrips(ContainerControl container)
+        internal static List<ToolStrip> FindMergeableToolStrips(ContainerControl container)
         {
-            ArrayList result = new ArrayList();
+            List<ToolStrip> result = new();
             if (container is not null)
             {
                 for (int i = 0; i < ToolStrips.Count; i++)

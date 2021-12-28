@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
 using System.Drawing;
 using System.Globalization;
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
 
             private AccessibleStates _additionalState = AccessibleStates.None; // Test hook for the designer
 
-            private int[] _runtimeId;
+            private int[]? _runtimeId;
 
             public ToolStripItemAccessibleObject(ToolStripItem ownerItem)
             {
@@ -33,7 +31,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    string defaultAction = _ownerItem.AccessibleDefaultActionDescription;
+                    string? defaultAction = _ownerItem.AccessibleDefaultActionDescription;
                     if (defaultAction is not null)
                     {
                         return defaultAction;
@@ -43,11 +41,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Description
+            public override string? Description
             {
                 get
                 {
-                    string description = _ownerItem.AccessibleDescription;
+                    string? description = _ownerItem.AccessibleDescription;
                     if (description is not null)
                     {
                         return description;
@@ -57,11 +55,11 @@ namespace System.Windows.Forms
                 }
             }
 
-            public override string Help
+            public override string? Help
             {
                 get
                 {
-                    QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
+                    QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
                     if (handler is not null)
                     {
                         QueryAccessibilityHelpEventArgs args = new QueryAccessibilityHelpEventArgs();
@@ -105,7 +103,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -132,7 +130,7 @@ namespace System.Windows.Forms
                 return base.GetPropertyValue(propertyID);
             }
 
-            public override string Name
+            public override string? Name
             {
                 get
                 {
@@ -142,10 +140,10 @@ namespace System.Windows.Forms
                         return name;
                     }
 
-                    string baseName = base.Name;
+                    string? baseName = base.Name;
                     if (string.IsNullOrEmpty(baseName))
                     {
-                        return WindowsFormsUtils.TextWithoutMnemonics(_ownerItem.Text);
+                        return WindowsFormsUtils.TextWithoutMnemonics(_ownerItem.Text)!;
                     }
 
                     return baseName;
@@ -214,15 +212,15 @@ namespace System.Windows.Forms
             {
                 if (Owner is not null)
                 {
-                    ((ToolStripItem)Owner).PerformClick();
+                    Owner.PerformClick();
                 }
             }
 
-            public override int GetHelpTopic(out string fileName)
+            public override int GetHelpTopic(out string? fileName)
             {
                 int topic = 0;
 
-                QueryAccessibilityHelpEventHandler handler = (QueryAccessibilityHelpEventHandler)Owner.Events[ToolStripItem.s_queryAccessibilityHelpEvent];
+                QueryAccessibilityHelpEventHandler? handler = (QueryAccessibilityHelpEventHandler?)Owner.Events[s_queryAccessibilityHelpEvent];
 
                 if (handler is not null)
                 {
@@ -239,9 +237,9 @@ namespace System.Windows.Forms
                 return base.GetHelpTopic(out fileName);
             }
 
-            public override AccessibleObject Navigate(AccessibleNavigation navigationDirection)
+            public override AccessibleObject? Navigate(AccessibleNavigation navigationDirection)
             {
-                ToolStripItem nextItem = null;
+                ToolStripItem? nextItem = null;
 
                 if (Owner is not null)
                 {
@@ -251,7 +249,6 @@ namespace System.Windows.Forms
                         return null;
                     }
 
-                    bool forwardInCollection = (parent.RightToLeft == RightToLeft.No);
                     switch (navigationDirection)
                     {
                         case AccessibleNavigation.FirstChild:
@@ -325,7 +322,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  When overridden in a derived class, gets or sets the parent of an accessible object.
             /// </summary>
-            public override AccessibleObject Parent
+            public override AccessibleObject? Parent
             {
                 get
                 {
@@ -343,7 +340,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the top level element.
             /// </summary>
-            internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot
+            internal override UiaCore.IRawElementProviderFragmentRoot? FragmentRoot
                 => _ownerItem.RootToolStrip?.AccessibilityObject;
 
             /// <summary>
@@ -351,7 +348,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 switch (direction)
                 {
@@ -367,7 +364,7 @@ namespace System.Windows.Forms
                         }
 
                         int increment = direction == UiaCore.NavigateDirection.NextSibling ? 1 : -1;
-                        AccessibleObject sibling = null;
+                        AccessibleObject? sibling = null;
 
                         index += increment;
                         int itemsCount = GetChildFragmentCount();
@@ -382,7 +379,7 @@ namespace System.Windows.Forms
                 return base.FragmentNavigate(direction);
             }
 
-            private AccessibleObject GetChildFragment(int index, UiaCore.NavigateDirection direction)
+            private AccessibleObject? GetChildFragment(int index, UiaCore.NavigateDirection direction)
             {
                 if (Parent is ToolStrip.ToolStripAccessibleObject toolStripParent)
                 {

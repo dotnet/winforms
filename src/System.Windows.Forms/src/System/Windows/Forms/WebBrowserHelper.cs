@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -94,17 +92,15 @@ namespace System.Windows.Forms
         }
 
         // Gets the selection service from the control's site
-        internal static ISelectionService GetSelectionService(Control ctl)
+        internal static ISelectionService? GetSelectionService(Control ctl)
         {
-            ISite site = ctl.Site;
+            ISite? site = ctl.Site;
             if (site is not null)
             {
-                object o = site.GetService(typeof(ISelectionService));
-                Debug.Assert(o is null || o is ISelectionService, "service must implement ISelectionService");
-                if (o is ISelectionService)
-                {
-                    return (ISelectionService)o;
-                }
+                ISelectionService? selectionService = site.GetService<ISelectionService>();
+                Debug.Assert(selectionService is not null, "service must implement ISelectionService");
+
+                return selectionService;
             }
 
             return null;

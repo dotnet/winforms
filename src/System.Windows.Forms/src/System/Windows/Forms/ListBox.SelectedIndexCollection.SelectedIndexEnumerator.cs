@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 
 namespace System.Windows.Forms
@@ -18,16 +16,16 @@ namespace System.Windows.Forms
             /// </summary>
             private class SelectedIndexEnumerator : IEnumerator
             {
-                private readonly SelectedIndexCollection items;
-                private int current;
+                private readonly SelectedIndexCollection _items;
+                private int _current;
 
                 /// <summary>
                 ///  Creates a new enumerator that will enumerate over the given state.
                 /// </summary>
                 public SelectedIndexEnumerator(SelectedIndexCollection items)
                 {
-                    this.items = items;
-                    current = -1;
+                    _items = items;
+                    _current = -1;
                 }
 
                 /// <summary>
@@ -35,14 +33,14 @@ namespace System.Windows.Forms
                 /// </summary>
                 bool IEnumerator.MoveNext()
                 {
-                    if (current < items.Count - 1)
+                    if (_current < _items.Count - 1)
                     {
-                        current++;
+                        _current++;
                         return true;
                     }
                     else
                     {
-                        current = items.Count;
+                        _current = _items.Count;
                         return false;
                     }
                 }
@@ -52,7 +50,7 @@ namespace System.Windows.Forms
                 /// </summary>
                 void IEnumerator.Reset()
                 {
-                    current = -1;
+                    _current = -1;
                 }
 
                 /// <summary>
@@ -62,12 +60,12 @@ namespace System.Windows.Forms
                 {
                     get
                     {
-                        if (current == -1 || current == items.Count)
+                        if (_current == -1 || _current == _items.Count)
                         {
                             throw new InvalidOperationException(SR.ListEnumCurrentOutOfRange);
                         }
 
-                        return items[current];
+                        return _items[_current];
                     }
                 }
             }

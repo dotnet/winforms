@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Globalization;
 
@@ -19,7 +17,7 @@ namespace System.Windows.Forms
         ///  Determines if this converter can convert an object in the given source
         ///  type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             if (sourceType == typeof(string))
             {
@@ -32,7 +30,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             if (value is string valueString)
             {
@@ -45,10 +43,10 @@ namespace System.Windows.Forms
                     text = val.ToString(CultureInfo.CurrentCulture);
                 }
 
-                double percent = 1.0;
+                double percent;
                 try
                 {
-                    percent = (double)TypeDescriptor.GetConverter(typeof(double)).ConvertFrom(context, culture, text);
+                    percent = (double)TypeDescriptor.GetConverter(typeof(double)).ConvertFrom(context, culture, text)!;
 
                     // Assume they meant a percentage if it is > 1.0, else they actually
                     // typed the correct double.
@@ -59,21 +57,23 @@ namespace System.Windows.Forms
                 }
                 catch (FormatException e)
                 {
-                    throw new FormatException(string.Format(SR.InvalidBoundArgument,
-                                                                    "Opacity",
-                                                                    text,
-                                                                    "0%",
-                                                                    "100%"), e);
+                    throw new FormatException(
+                        string.Format(SR.InvalidBoundArgument,
+                            "Opacity",
+                            text,
+                            "0%",
+                            "100%"), e);
                 }
 
                 // Now check to see if it is within our bounds.
                 if (percent < 0.0 || percent > 1.0)
                 {
-                    throw new FormatException(string.Format(SR.InvalidBoundArgument,
-                                                                    "Opacity",
-                                                                    text,
-                                                                    "0%",
-                                                                    "100%"));
+                    throw new FormatException(
+                        string.Format(SR.InvalidBoundArgument,
+                            "Opacity",
+                            text,
+                            "0%",
+                            "100%"));
                 }
 
                 return percent;
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         ///  type is string. If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             if (value is double val && destinationType == typeof(string))
             {

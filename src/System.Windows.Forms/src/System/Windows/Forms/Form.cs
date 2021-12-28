@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design;
@@ -1354,7 +1353,7 @@ namespace System.Windows.Forms
                 Properties.SetObject(PropMainMenuStrip, value);
                 if (IsHandleCreated)
                 {
-                    UpdateMenuHandles();
+                    UpdateMenuHandles(recreateMenu: true);
                 }
             }
         }
@@ -5540,7 +5539,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private void UpdateMenuHandles()
+        private void UpdateMenuHandles(bool recreateMenu = false)
         {
             if (!IsHandleCreated)
             {
@@ -5567,7 +5566,7 @@ namespace System.Windows.Forms
                     // an ole menu is being removed.
                     // Make MDI forget the mdi item position.
                     IntPtr? dummyMenu = Properties.GetObject(PropDummyMdiMenu) as IntPtr?;
-                    if (!dummyMenu.HasValue || dummyMenu.Value == IntPtr.Zero)
+                    if (!dummyMenu.HasValue || dummyMenu.Value == IntPtr.Zero || recreateMenu)
                     {
                         dummyMenu = User32.CreateMenu();
                         Properties.SetObject(PropDummyMdiMenu, dummyMenu);
@@ -5640,7 +5639,7 @@ namespace System.Windows.Forms
             // try to merge each one of the MDI Child toolstrip with the first toolstrip
             // in the parent form that has the same type NOTE: THESE LISTS ARE ORDERED (See ToolstripManager)
             ToolStrip thisToolstrip = MainMenuStrip;
-            ArrayList childrenToolStrips = ToolStripManager.FindMergeableToolStrips(ActiveMdiChildInternal);
+            List<ToolStrip> childrenToolStrips = ToolStripManager.FindMergeableToolStrips(ActiveMdiChildInternal);
 
             // revert any previous merge
             if (thisToolstrip is not null)

@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using System.Globalization;
 using Microsoft.Win32;
@@ -29,13 +27,12 @@ namespace System.Windows.Forms
         /// </summary>
         private static Color GetIEColor(string name)
         {
-            RegistryKey key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
+            RegistryKey? key = Registry.CurrentUser.OpenSubKey(IESettingsRegPath);
 
             if (key is not null)
             {
                 // Since this comes from the registry, be very careful about its contents.
-                //
-                string s = (string)key.GetValue(name);
+                string? s = (string?)key.GetValue(name);
                 key.Close();
 
                 if (s is not null)
@@ -45,7 +42,7 @@ namespace System.Windows.Forms
 
                     int nMax = Math.Min(rgb.Length, rgbs.Length);
 
-                    //NOTE: if we can't parse rgbs[i], rgb[i] will be set to 0.
+                    // NOTE: if we can't parse rgbs[i], rgb[i] will be set to 0.
                     for (int i = 0; i < nMax; i++)
                     {
                         int.TryParse(rgbs[i], out rgb[i]);
@@ -127,7 +124,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static LinkBehavior GetIELinkBehavior()
         {
-            RegistryKey key = null;
+            RegistryKey? key = null;
             try
             {
                 key = Registry.CurrentUser.OpenSubKey(IEMainRegPath);
@@ -140,7 +137,7 @@ namespace System.Windows.Forms
 
             if (key is not null)
             {
-                string s = (string)key.GetValue("Anchor Underline");
+                string? s = (string?)key.GetValue("Anchor Underline");
                 key.Close();
 
                 if (s is not null && string.Compare(s, "no", true, CultureInfo.InvariantCulture) == 0)
