@@ -142,7 +142,9 @@ namespace System.Windows.Forms.UITests
 
             if (assertCorrectLocation)
             {
-                Assert.Equal(point, new Point(actualPoint.X, actualPoint.Y));
+                // Allow for rounding errors (observed in certain scenarios)
+                Assert.InRange(point.X, actualPoint.X - 1, actualPoint.X + 1);
+                Assert.InRange(point.Y, actualPoint.Y - 1, actualPoint.Y + 1);
             }
         }
 
