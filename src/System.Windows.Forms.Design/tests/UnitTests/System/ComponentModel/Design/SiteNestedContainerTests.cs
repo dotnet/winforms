@@ -1095,7 +1095,7 @@ namespace System.ComponentModel.Design.Tests
         [Designer(typeof(RootDesigner), typeof(IRootDesigner))]
         private class RootExtenderProviderDesignerComponent : Component, IExtenderProvider
         {
-            public bool CanExtend(object extendee) => throw new NotImplementedException();
+            public bool CanExtend(object extendee) => false;
         }
 
         private class NonInitializingDesigner : RootDesigner
