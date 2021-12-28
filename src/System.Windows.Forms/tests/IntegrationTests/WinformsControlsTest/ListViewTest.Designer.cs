@@ -36,6 +36,10 @@ namespace WinformsControlsTest
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ListViewTest));
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
             this.listView1 = new System.Windows.Forms.ListView();
+            this.listView1_Group1 = new System.Windows.Forms.ListViewGroup();
+            this.listView1_Item1 = new System.Windows.Forms.ListViewItem();
+            this.listView1_Item2 = new System.Windows.Forms.ListViewItem();
+            this.listView1_Item3 = new System.Windows.Forms.ListViewItem();
             this.columnHeader1 = (System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader());
             this.columnHeader2 = (System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader());
             this.imageList2 = new System.Windows.Forms.ImageList(this.components);
@@ -68,12 +72,12 @@ namespace WinformsControlsTest
             this.columnHeader1,
             this.columnHeader2});
             this.listView1.Groups.AddRange(new System.Windows.Forms.ListViewGroup[] {
-            (System.Windows.Forms.ListViewGroup)(resources.GetObject("listView1.Groups"))});
+            this.listView1_Group1});
             this.listView1.HideSelection = false;
             this.listView1.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            (System.Windows.Forms.ListViewItem)(resources.GetObject("listView1.Items")),
-            (System.Windows.Forms.ListViewItem)(resources.GetObject("listView1.Items1")),
-            (System.Windows.Forms.ListViewItem)(resources.GetObject("listView1.Items2"))});
+            this.listView1_Item1,
+            this.listView1_Item2,
+            this.listView1_Item3});
             this.listView1.LargeImageList = this.imageList2;
             resources.ApplyResources(this.listView1, "listView1");
             this.listView1.Location = new System.Drawing.Point(12, 33);
@@ -82,6 +86,33 @@ namespace WinformsControlsTest
             this.listView1.SmallImageList = this.imageList1;
             this.listView1.TabIndex = 0;
             this.listView1.UseCompatibleStateImageBehavior = false;
+            //
+            // listView1_Group1
+            //
+            this.listView1_Group1.Header = "ListViewGroup";
+            this.listView1_Group1.Name = "listViewGroup1";
+            this.listView1_Group1.Tag = "group tag";
+            //
+            // listView1_Item1
+            //
+            this.listView1_Item1.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listView1_Item1.Group = listView1_Group1;
+            this.listView1_Item1.ImageIndex = 0;
+            this.listView1_Item1.SubItems.Add(new System.Windows.Forms.ListViewItem.ListViewSubItem(listView1_Item1, "subitem1"));
+            this.listView1_Item1.Text = "Item1";
+            //
+            // listView1_Item2
+            //
+            this.listView1_Item2.Checked = true;
+            this.listView1_Item2.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listView1_Item2.Group = listView1_Group1;
+            this.listView1_Item2.ImageIndex = 1;
+            this.listView1_Item2.Text = "Item2";
+            //
+            // listView1_Item3
+            //
+            this.listView1_Item3.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.listView1_Item3.Text = "Item3";
             // 
             // imageList2
             // 
@@ -157,5 +188,9 @@ namespace WinformsControlsTest
         private System.Windows.Forms.Button btnLoadImagesListView1;
         private System.Windows.Forms.Button btnReplaceImageListView1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.ListViewGroup listView1_Group1;
+        private System.Windows.Forms.ListViewItem listView1_Item1;
+        private System.Windows.Forms.ListViewItem listView1_Item2;
+        private System.Windows.Forms.ListViewItem listView1_Item3;
     }
 }
