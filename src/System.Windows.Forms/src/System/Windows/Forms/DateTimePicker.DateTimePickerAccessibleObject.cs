@@ -116,10 +116,34 @@ namespace System.Windows.Forms
                 };
 
             internal override bool IsPatternSupported(UiaCore.UIA patternId)
-                => (patternId == UiaCore.UIA.TogglePatternId && ((DateTimePicker)Owner).ShowCheckBox) ||
-                    patternId == UiaCore.UIA.ExpandCollapsePatternId ||
-                    patternId == UiaCore.UIA.ValuePatternId ||
-                    base.IsPatternSupported(patternId);
+                => patternId switch
+                {
+                    UiaCore.UIA.TogglePatternId when ((DateTimePicker)Owner).ShowCheckBox => true,
+                    UiaCore.UIA.ExpandCollapsePatternId => true,
+                    UiaCore.UIA.ValuePatternId => true,
+                    _ => base.IsPatternSupported(patternId)
+                };
+
+            public override string DefaultAction
+                => ExpandCollapseState switch
+                {
+                    UiaCore.ExpandCollapseState.Collapsed => SR.AccessibleActionExpand,
+                    UiaCore.ExpandCollapseState.Expanded => SR.AccessibleActionCollapse,
+                    _ => string.Empty
+                };
+
+            public override void DoDefaultAction()
+            {
+                switch (ExpandCollapseState)
+                {
+                    case UiaCore.ExpandCollapseState.Collapsed:
+                        Expand();
+                        break;
+                    case UiaCore.ExpandCollapseState.Expanded:
+                        Collapse();
+                        break;
+                }
+            }
 
             #region Toggle Pattern
 
