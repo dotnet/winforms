@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -613,7 +612,7 @@ namespace System.Windows.Forms
             get
             {
                 string text = Text;
-                ArrayList list = new ArrayList();
+                List<string> list = new();
 
                 int lineStart = 0;
                 while (lineStart < text.Length)
@@ -648,10 +647,10 @@ namespace System.Windows.Forms
                 // Corner case -- last character in Text is a new line; need to add blank line to list
                 if (text.Length > 0 && (text[text.Length - 1] == '\r' || text[text.Length - 1] == '\n'))
                 {
-                    list.Add("");
+                    list.Add(string.Empty);
                 }
 
-                return (string[])list.ToArray(typeof(string));
+                return list.ToArray();
             }
             set
             {
