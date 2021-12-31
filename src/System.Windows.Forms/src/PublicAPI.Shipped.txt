@@ -452,13 +452,13 @@ override System.Windows.Forms.ImageKeyConverter.GetStandardValues(System.Compone
 override System.Windows.Forms.ImageKeyConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 override System.Windows.Forms.ImageKeyConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 ~override System.Windows.Forms.ImageList.ToString() -> string
-~override System.Windows.Forms.KeysConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.KeysConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.KeysConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.KeysConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.KeysConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
-~override System.Windows.Forms.KeysConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.KeysConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.KeysConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.KeysConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.KeysConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.KeysConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.KeysConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
+override System.Windows.Forms.KeysConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.KeysConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 override System.Windows.Forms.Label.BackgroundImage.get -> System.Drawing.Image?
 override System.Windows.Forms.Label.BackgroundImage.set -> void
 override System.Windows.Forms.Label.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
@@ -1957,7 +1957,7 @@ System.Windows.Forms.IDataObject.SetData(System.Type! format, object? data) -> v
 ~System.Windows.Forms.ImageList.Tag.get -> object
 ~System.Windows.Forms.ImageList.Tag.set -> void
 ~System.Windows.Forms.ImageListStreamer.GetObjectData(System.Runtime.Serialization.SerializationInfo si, System.Runtime.Serialization.StreamingContext context) -> void
-~System.Windows.Forms.KeysConverter.Compare(object a, object b) -> int
+System.Windows.Forms.KeysConverter.Compare(object? a, object? b) -> int
 System.Windows.Forms.Label.CalcImageRenderBounds(System.Drawing.Image! image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> System.Drawing.Rectangle
 System.Windows.Forms.Label.DrawImage(System.Drawing.Graphics! g, System.Drawing.Image! image, System.Drawing.Rectangle r, System.Drawing.ContentAlignment align) -> void
 System.Windows.Forms.Label.Image.get -> System.Drawing.Image?

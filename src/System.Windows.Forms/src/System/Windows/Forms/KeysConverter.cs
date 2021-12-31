@@ -2,11 +2,10 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Text;
 
@@ -18,20 +17,22 @@ namespace System.Windows.Forms
     /// </summary>
     public class KeysConverter : TypeConverter, IComparer
     {
-        private IDictionary keyNames;
-        private List<string> displayOrder;
-        private StandardValuesCollection values;
+        private IDictionary? _keyNames;
+        private List<string>? _displayOrder;
+        private StandardValuesCollection? _values;
 
         private void AddKey(string key, Keys value)
         {
-            keyNames[key] = value;
-            displayOrder.Add(key);
+            _keyNames![key] = value;
+            _displayOrder!.Add(key);
         }
 
+        [MemberNotNull(nameof(_keyNames))]
+        [MemberNotNull(nameof(_displayOrder))]
         private void Initialize()
         {
-            keyNames = new Hashtable(34);
-            displayOrder = new List<string>(34);
+            _keyNames = new Hashtable(34);
+            _displayOrder = new List<string>(34);
 
             AddKey(SR.toStringEnter, Keys.Return);
             AddKey("F12", Keys.F12);
@@ -80,13 +81,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (keyNames is null)
+                if (_keyNames is null)
                 {
-                    Debug.Assert(displayOrder is null);
+                    Debug.Assert(_displayOrder is null);
                     Initialize();
                 }
 
-                return keyNames;
+                return _keyNames;
             }
         }
 
@@ -94,13 +95,13 @@ namespace System.Windows.Forms
         {
             get
             {
-                if (displayOrder is null)
+                if (_displayOrder is null)
                 {
-                    Debug.Assert(keyNames is null);
+                    Debug.Assert(_keyNames is null);
                     Initialize();
                 }
 
-                return displayOrder;
+                return _displayOrder;
             }
         }
 
@@ -108,7 +109,7 @@ namespace System.Windows.Forms
         ///  Determines if this converter can convert an object in the given source
         ///  type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             if (sourceType == typeof(string) || sourceType == typeof(Enum[]))
             {
@@ -122,7 +123,7 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether this converter can
         ///  convert an object to the given destination type using the context.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(Enum[]))
             {
@@ -135,7 +136,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Compares two key values for equivalence.
         /// </summary>
-        public int Compare(object a, object b)
+        public int Compare(object? a, object? b)
         {
             return string.Compare(ConvertToString(a), ConvertToString(b), false, CultureInfo.InvariantCulture);
         }
@@ -143,7 +144,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
             if (value is string)
             {
@@ -156,7 +157,6 @@ namespace System.Windows.Forms
                 else
                 {
                     // Parse an array of key tokens.
-                    //
                     string[] tokens = text.Split(new char[] { '+' });
                     for (int i = 0; i < tokens.Length; i++)
                     {
@@ -164,19 +164,17 @@ namespace System.Windows.Forms
                     }
 
                     // Now lookup each key token in our key hashtable.
-                    //
                     Keys key = (Keys)0;
                     bool foundKeyCode = false;
 
                     for (int i = 0; i < tokens.Length; i++)
                     {
-                        object obj = KeyNames[tokens[i]];
+                        object obj = KeyNames[tokens[i]]!;
 
                         if (obj is null)
                         {
                             // Key was not found in our table.  See if it is a valid value in
                             // the Keys enum.
-                            //
                             obj = Enum.Parse(typeof(Keys), tokens[i]);
                         }
 
@@ -190,7 +188,6 @@ namespace System.Windows.Forms
                                 // key code, then check to see that this guy
                                 // isn't a key code (it is illegal to have, say,
                                 // "A + B"
-                                //
                                 if (foundKeyCode)
                                 {
                                     throw new FormatException(SR.KeysConverterInvalidKeyCombination);
@@ -200,13 +197,11 @@ namespace System.Windows.Forms
                             }
 
                             // Now OR the key into our current key
-                            //
                             key |= currentKey;
                         }
                         else
                         {
                             // We did not match this key.  Report this as an error too.
-                            //
                             throw new FormatException(string.Format(SR.KeysConverterInvalidKeyName, tokens[i]));
                         }
                     }
@@ -214,10 +209,10 @@ namespace System.Windows.Forms
                     return (object)key;
                 }
             }
-            else if (value is Enum[])
+            else if (value is Enum[] valueAsEnumArray)
             {
                 long finalValue = 0;
-                foreach (Enum e in (Enum[])value)
+                foreach (Enum e in valueAsEnumArray)
                 {
                     finalValue |= Convert.ToInt64(e, CultureInfo.InvariantCulture);
                 }
@@ -235,7 +230,7 @@ namespace System.Windows.Forms
         ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 
@@ -260,8 +255,8 @@ namespace System.Windows.Forms
                     //
                     for (int i = 0; i < DisplayOrder.Count; i++)
                     {
-                        string keyString = (string)DisplayOrder[i];
-                        Keys keyValue = (Keys)keyNames[keyString];
+                        string keyString = DisplayOrder[i];
+                        Keys keyValue = (Keys)_keyNames![keyString]!;
                         if (((int)(keyValue) & (int)modifiers) != 0)
                         {
                             if (asString)
@@ -271,7 +266,7 @@ namespace System.Windows.Forms
                                     terms.Add("+");
                                 }
 
-                                terms.Add((string)keyString);
+                                terms.Add(keyString);
                             }
                             else
                             {
@@ -284,7 +279,6 @@ namespace System.Windows.Forms
 
                     // Now reset and do the key values.  Here, we quit if
                     // we find a match.
-                    //
                     Keys keyOnly = (key & Keys.KeyCode);
                     bool foundKey = false;
 
@@ -295,13 +289,13 @@ namespace System.Windows.Forms
 
                     for (int i = 0; i < DisplayOrder.Count; i++)
                     {
-                        string keyString = (string)DisplayOrder[i];
-                        Keys keyValue = (Keys)keyNames[keyString];
+                        string keyString = DisplayOrder[i];
+                        Keys keyValue = (Keys)_keyNames![keyString]!;
                         if (keyValue.Equals(keyOnly))
                         {
                             if (asString)
                             {
-                                terms.Add((string)keyString);
+                                terms.Add(keyString);
                             }
                             else
                             {
@@ -317,7 +311,6 @@ namespace System.Windows.Forms
                     // Finally, if the key wasn't in our list, add it to
                     // the end anyway.  Here we just pull the key value out
                     // of the enum.
-                    //
                     if (!foundKey && Enum.IsDefined(typeof(Keys), (int)keyOnly))
                     {
                         if (asString)
@@ -356,9 +349,9 @@ namespace System.Windows.Forms
         ///  will return null if the data type does not support a
         ///  standard set of values.
         /// </summary>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
-            if (values is null)
+            if (_values is null)
             {
                 ArrayList list = new ArrayList();
 
@@ -371,10 +364,10 @@ namespace System.Windows.Forms
 
                 list.Sort(this);
 
-                values = new StandardValuesCollection(list.ToArray());
+                _values = new StandardValuesCollection(list.ToArray());
             }
 
-            return values;
+            return _values;
         }
 
         /// <summary>
@@ -385,7 +378,7 @@ namespace System.Windows.Forms
         ///  then there are other valid values besides the list of
         ///  standard values GetStandardValues provides.
         /// </summary>
-        public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)
+        public override bool GetStandardValuesExclusive(ITypeDescriptorContext? context)
         {
             return false;
         }
@@ -394,7 +387,7 @@ namespace System.Windows.Forms
         ///  Determines if this object supports a standard set of values
         ///  that can be picked from a list.
         /// </summary>
-        public override bool GetStandardValuesSupported(ITypeDescriptorContext context)
+        public override bool GetStandardValuesSupported(ITypeDescriptorContext? context)
         {
             return true;
         }
