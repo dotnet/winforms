@@ -754,15 +754,15 @@ override System.Windows.Forms.OpacityConverter.ConvertTo(System.ComponentModel.I
 ~override System.Windows.Forms.ScrollableControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.Windows.Forms.ScrollableControl.OnRightToLeftChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.SelectionRange.ToString() -> string
-~override System.Windows.Forms.SelectionRangeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.SelectionRangeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.SelectionRangeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.SelectionRangeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.SelectionRangeConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues) -> object
-~override System.Windows.Forms.SelectionRangeConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.SelectionRangeConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.SelectionRangeConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.SelectionRange.ToString() -> string!
+override System.Windows.Forms.SelectionRangeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.SelectionRangeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.SelectionRangeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.SelectionRangeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.SelectionRangeConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary! propertyValues) -> object!
+override System.Windows.Forms.SelectionRangeConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.SelectionRangeConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! value, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+override System.Windows.Forms.SelectionRangeConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 ~override System.Windows.Forms.SplitContainer.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.SplitContainer.BackgroundImage.set -> void
 ~override System.Windows.Forms.SplitContainer.BindingContext.get -> System.Windows.Forms.BindingContext
@@ -2648,7 +2648,7 @@ System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.set -> void
 System.Windows.Forms.SelectedGridItemChangedEventArgs.NewSelection.get -> System.Windows.Forms.GridItem?
 System.Windows.Forms.SelectedGridItemChangedEventArgs.OldSelection.get -> System.Windows.Forms.GridItem?
 System.Windows.Forms.SelectedGridItemChangedEventArgs.SelectedGridItemChangedEventArgs(System.Windows.Forms.GridItem? oldSel, System.Windows.Forms.GridItem? newSel) -> void
-~System.Windows.Forms.SelectionRange.SelectionRange(System.Windows.Forms.SelectionRange range) -> void
+System.Windows.Forms.SelectionRange.SelectionRange(System.Windows.Forms.SelectionRange! range) -> void
 ~System.Windows.Forms.SplitContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.SplitContainer.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs e) -> void
 ~System.Windows.Forms.SplitContainer.OnSplitterMoving(System.Windows.Forms.SplitterCancelEventArgs e) -> void
