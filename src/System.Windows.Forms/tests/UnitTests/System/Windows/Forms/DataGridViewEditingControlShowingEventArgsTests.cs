@@ -35,7 +35,8 @@ namespace System.Windows.Forms.Tests
         [Fact]
         public void CellStyle_SetNull_ThrowsArgumentNullException()
         {
-            var e = new DataGridViewEditingControlShowingEventArgs(new Button(), new DataGridViewCellStyle());
+            using var button = new Button();
+            var e = new DataGridViewEditingControlShowingEventArgs(button, new DataGridViewCellStyle());
             Assert.Throws<ArgumentNullException>("value", () => e.CellStyle = null);
         }
     }
