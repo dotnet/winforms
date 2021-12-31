@@ -509,10 +509,10 @@ override System.Windows.Forms.Button.ToString() -> string!
 ~override System.Windows.Forms.LinkLabel.OnTextChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.LinkLabel.Text.get -> string
 ~override System.Windows.Forms.LinkLabel.Text.set -> void
-~override System.Windows.Forms.ListBindingConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.ListBindingConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.ListBindingConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues) -> object
-~override System.Windows.Forms.ListBindingConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.ListBindingConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.ListBindingConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.ListBindingConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary! propertyValues) -> object!
+override System.Windows.Forms.ListBindingConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 ~override System.Windows.Forms.ListBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ListBox.BackgroundImage.set -> void
 ~override System.Windows.Forms.ListBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
