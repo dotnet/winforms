@@ -592,7 +592,7 @@ override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object? ob
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
 ~override System.Windows.Forms.ListViewItemConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.ListViewItemConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.ListViewItemStateImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
+override System.Windows.Forms.ListViewItemStateImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
 ~override System.Windows.Forms.MaskedTextBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.MaskedTextBox.OnBackColorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.MaskedTextBox.OnHandleCreated(System.EventArgs e) -> void
