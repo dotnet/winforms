@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
@@ -60,7 +58,7 @@ namespace System.Drawing.Design
         /// </summary>
         /// <param name="provider">An <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
         /// <param name="value">The object to edit.</param>
-        public object EditValue(IServiceProvider provider, object value) => EditValue(null, provider, value);
+        public object? EditValue(IServiceProvider provider, object? value) => EditValue(null, provider, value);
 
         /// <summary>
         ///  Edits the specified value using the editor style provided by <see cref='UITypeEditor.GetEditStyle()'/>.
@@ -68,7 +66,7 @@ namespace System.Drawing.Design
         /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
         /// <param name="provider">The <see cref="IServiceProvider" /> that this editor can use to obtain services.</param>
         /// <param name="value">The object to edit.</param>
-        public virtual object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value) => value;
+        public virtual object? EditValue(ITypeDescriptorContext? context, IServiceProvider provider, object? value) => value;
 
         /// <summary>
         ///  Gets the <see cref='UITypeEditorEditStyle'/> of the Edit method.
@@ -84,13 +82,13 @@ namespace System.Drawing.Design
         ///  Gets a value indicating whether this editor supports painting a representation of an object's value.
         /// </summary>
         /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
-        public virtual bool GetPaintValueSupported(ITypeDescriptorContext context) => false;
+        public virtual bool GetPaintValueSupported(ITypeDescriptorContext? context) => false;
 
         /// <summary>
         ///  Gets the editing style of the Edit method.
         /// </summary>
         /// <param name="context">The <see cref="ITypeDescriptorContext" /> that can be used to gain additional context information.</param>
-        public virtual UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext context) => UITypeEditorEditStyle.None;
+        public virtual UITypeEditorEditStyle GetEditStyle(ITypeDescriptorContext? context) => UITypeEditorEditStyle.None;
 
         /// <summary>
         ///  Paints a representative value of the specified object to the specified canvas.
@@ -98,7 +96,7 @@ namespace System.Drawing.Design
         /// <param name="value">The object whose value this type editor will display. </param>
         /// <param name="canvas">A drawing canvas on which to paint the representation of the object's value. </param>
         /// <param name="rectangle">A <see cref="Rectangle" /> within whose boundaries to paint the value. </param>
-        public void PaintValue(object value, Graphics canvas, Rectangle rectangle)
+        public void PaintValue(object? value, Graphics canvas, Rectangle rectangle)
             => PaintValue(new PaintValueEventArgs(null, value, canvas, rectangle));
 
         /// <summary>

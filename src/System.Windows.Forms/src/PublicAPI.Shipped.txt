@@ -1433,8 +1433,8 @@ System.Drawing.Design.PaintValueEventArgs.Graphics.get -> System.Drawing.Graphic
 System.Drawing.Design.PaintValueEventArgs.PaintValueEventArgs(System.ComponentModel.ITypeDescriptorContext? context, object? value, System.Drawing.Graphics! graphics, System.Drawing.Rectangle bounds) -> void
 System.Drawing.Design.PaintValueEventArgs.Value.get -> object?
 ~System.Drawing.Design.PropertyValueUIItem.PropertyValueUIItem(System.Drawing.Image uiItemImage, System.Drawing.Design.PropertyValueUIItemInvokeHandler handler, string tooltip) -> void
-~System.Drawing.Design.UITypeEditor.EditValue(System.IServiceProvider provider, object value) -> object
-~System.Drawing.Design.UITypeEditor.PaintValue(object value, System.Drawing.Graphics canvas, System.Drawing.Rectangle rectangle) -> void
+System.Drawing.Design.UITypeEditor.EditValue(System.IServiceProvider! provider, object? value) -> object?
+System.Drawing.Design.UITypeEditor.PaintValue(object? value, System.Drawing.Graphics! canvas, System.Drawing.Rectangle rectangle) -> void
 ~System.Resources.ResXDataNode.Comment.get -> string
 ~System.Resources.ResXDataNode.Comment.set -> void
 ~System.Resources.ResXDataNode.FileRef.get -> System.Resources.ResXFileRef
@@ -3102,10 +3102,10 @@ System.Windows.Forms.WebBrowserNavigatingEventArgs.WebBrowserNavigatingEventArgs
 ~virtual System.Drawing.Design.PropertyValueUIItem.Image.get -> System.Drawing.Image
 ~virtual System.Drawing.Design.PropertyValueUIItem.InvokeHandler.get -> System.Drawing.Design.PropertyValueUIItemInvokeHandler
 ~virtual System.Drawing.Design.PropertyValueUIItem.ToolTip.get -> string
-~virtual System.Drawing.Design.UITypeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext context, System.IServiceProvider provider, object value) -> object
-~virtual System.Drawing.Design.UITypeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext context) -> System.Drawing.Design.UITypeEditorEditStyle
-~virtual System.Drawing.Design.UITypeEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~virtual System.Drawing.Design.UITypeEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs e) -> void
+virtual System.Drawing.Design.UITypeEditor.EditValue(System.ComponentModel.ITypeDescriptorContext? context, System.IServiceProvider! provider, object? value) -> object?
+virtual System.Drawing.Design.UITypeEditor.GetEditStyle(System.ComponentModel.ITypeDescriptorContext? context) -> System.Drawing.Design.UITypeEditorEditStyle
+virtual System.Drawing.Design.UITypeEditor.GetPaintValueSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+virtual System.Drawing.Design.UITypeEditor.PaintValue(System.Drawing.Design.PaintValueEventArgs! e) -> void
 ~virtual System.Resources.ResXResourceWriter.AddAlias(string aliasName, System.Reflection.AssemblyName assemblyName) -> void
 ~virtual System.Windows.Forms.AxHost.CreateInstanceCore(System.Guid clsid) -> object
 ~virtual System.Windows.Forms.BaseCollection.List.get -> System.Collections.ArrayList
