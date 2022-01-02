@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design;
 using System.ComponentModel.Design.Serialization;
@@ -321,7 +320,7 @@ namespace System.Windows.Forms
         private User32.TRACKMOUSEEVENT _trackMouseEvent;
         private short _updateCount;
         private LayoutEventArgs _cachedLayoutEventArgs;
-        private Queue _threadCallbackList;
+        private Queue<ThreadMethodEntry> _threadCallbackList;
         internal int _deviceDpi;
         internal int _oldDeviceDpi;
 
@@ -3944,7 +3943,7 @@ namespace System.Windows.Forms
                         Exception ex = new ObjectDisposedException(GetType().Name);
                         while (_threadCallbackList.Count > 0)
                         {
-                            ThreadMethodEntry entry = (ThreadMethodEntry)_threadCallbackList.Dequeue();
+                            ThreadMethodEntry entry = _threadCallbackList.Dequeue();
                             entry._exception = ex;
                             entry.Complete();
                         }
@@ -5151,7 +5150,7 @@ namespace System.Windows.Forms
 
                         while (_threadCallbackList.Count > 0)
                         {
-                            ThreadMethodEntry entry = (ThreadMethodEntry)_threadCallbackList.Dequeue();
+                            ThreadMethodEntry entry = _threadCallbackList.Dequeue();
                             entry._exception = ex;
                             entry.Complete();
                         }
@@ -6614,7 +6613,7 @@ namespace System.Windows.Forms
             {
                 if (_threadCallbackList.Count > 0)
                 {
-                    current = (ThreadMethodEntry)_threadCallbackList.Dequeue();
+                    current = _threadCallbackList.Dequeue();
                 }
             }
 
@@ -6663,7 +6662,7 @@ namespace System.Windows.Forms
                 {
                     if (_threadCallbackList.Count > 0)
                     {
-                        current = (ThreadMethodEntry)_threadCallbackList.Dequeue();
+                        current = _threadCallbackList.Dequeue();
                     }
                     else
                     {
@@ -7006,7 +7005,7 @@ namespace System.Windows.Forms
             {
                 if (_threadCallbackList is null)
                 {
-                    _threadCallbackList = new Queue();
+                    _threadCallbackList = new Queue<ThreadMethodEntry>();
                 }
             }
 
