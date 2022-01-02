@@ -4,7 +4,6 @@
 
 #nullable disable
 
-using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Diagnostics;
@@ -49,7 +48,7 @@ namespace System.Windows.Forms
         // lists are lossy. At runtime, we delay handle creation as long as possible, and store
         // away the original images until handle creation (and hope no one disposes of the images!). At design time, we keep the originals around indefinitely.
         // This variable will become null when the original images are lost.
-        private IList _originals = new ArrayList();
+        private List<Original> _originals = new List<Original>();
         private EventHandler _recreateHandler;
         private EventHandler _changeHandler;
 
@@ -300,9 +299,9 @@ namespace System.Windows.Forms
             {
                 bitmap = (Bitmap)original._image;
             }
-            else if (original._image is Icon)
+            else if (original._image is Icon originalIcon)
             {
-                bitmap = ((Icon)original._image).ToBitmap();
+                bitmap = originalIcon.ToBitmap();
                 ownsBitmap = true;
             }
             else
@@ -467,10 +466,10 @@ namespace System.Windows.Forms
             Debug.Assert(_originals is not null, "Handle not yet created, yet original images are gone");
             for (int i = 0; i < _originals.Count; i++)
             {
-                Original original = (Original)_originals[i];
-                if (original._image is Icon)
+                Original original = _originals[i];
+                if (original._image is Icon originalIcon)
                 {
-                    AddIconToHandle(original, (Icon)original._image);
+                    AddIconToHandle(original, originalIcon);
                     // NOTE: if we own the icon (it's been created by us) this WILL dispose the icon to avoid a GDI leak
                     // **** original.image is NOT LONGER VALID AFTER THIS POINT ***
                 }
@@ -495,7 +494,7 @@ namespace System.Windows.Forms
             {
                 _nativeImageList.Dispose();
                 _nativeImageList = null;
-                _originals = new ArrayList();
+                _originals = new List<Original>();
             }
         }
 
@@ -779,7 +778,7 @@ namespace System.Windows.Forms
             if (_originals is null || Images.Empty)
             {
                 // spoof it into thinking this is the first CreateHandle
-                _originals = new ArrayList();
+                _originals = new List<Original>();
             }
 
             DestroyHandle();

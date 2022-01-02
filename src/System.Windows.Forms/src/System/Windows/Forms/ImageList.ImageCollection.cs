@@ -318,7 +318,8 @@ namespace System.Windows.Forms
                 {
                     if (_owner._originals is not null)
                     {
-                        index = _owner._originals.Add(original);
+                        _owner._originals.Add(original);
+                        index = _owner._originals.Count - 1;
                     }
 
                     if (_owner.HandleCreated)
@@ -331,16 +332,17 @@ namespace System.Windows.Forms
                         }
                     }
                 }
-                else if (original._image is Icon)
+                else if (original._image is Icon originalIcon)
                 {
                     if (_owner._originals is not null)
                     {
-                        index = _owner._originals.Add(original);
+                        _owner._originals.Add(original);
+                        index = _owner._originals.Count - 1;
                     }
 
                     if (_owner.HandleCreated)
                     {
-                        index = _owner.AddIconToHandle(original, (Icon)original._image);
+                        index = _owner.AddIconToHandle(original, originalIcon);
                         // NOTE: if we own the icon (it's been created by us) this WILL dispose the icon to avoid a GDI leak
                         // **** original.image is NOT LONGER VALID AFTER THIS POINT ***
                     }
