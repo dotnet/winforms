@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using static Interop;
 
 namespace System.Windows.Forms
@@ -16,7 +14,7 @@ namespace System.Windows.Forms
             {
             }
 
-            private ProgressBar OwningProgressBar => Owner as ProgressBar;
+            private ProgressBar OwningProgressBar => (ProgressBar)Owner;
 
             internal override bool IsIAccessibleExSupported() => true;
 
@@ -31,7 +29,7 @@ namespace System.Windows.Forms
                 return base.IsPatternSupported(patternId);
             }
 
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -65,13 +63,13 @@ namespace System.Windows.Forms
 
             internal override double LargeChange => double.NaN;
 
-            internal override double Maximum => OwningProgressBar?.Maximum ?? double.NaN;
+            internal override double Maximum => OwningProgressBar.Maximum;
 
-            internal override double Minimum => OwningProgressBar?.Minimum ?? double.NaN;
+            internal override double Minimum => OwningProgressBar.Minimum;
 
             internal override double SmallChange => double.NaN;
 
-            internal override double RangeValue => OwningProgressBar?.Value ?? double.NaN;
+            internal override double RangeValue => OwningProgressBar.Value;
 
             internal override bool IsReadOnly => true;
         }
