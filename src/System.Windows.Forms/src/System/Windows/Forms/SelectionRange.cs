@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -11,9 +9,7 @@ namespace System.Windows.Forms
     /// <summary>
     ///  This is a class that represents the date selection range of a MonthCalendar control.
     /// </summary>
-    [
-    TypeConverter(typeof(SelectionRangeConverter))
-    ]
+    [TypeConverter(typeof(SelectionRangeConverter))]
     public sealed class SelectionRange
     {
         /// <summary>
@@ -43,7 +39,6 @@ namespace System.Windows.Forms
             //                normalized ranges.
 
             // We use lower.Date and upper.Date to remove any time component
-            //
             if (lower < upper)
             {
                 start = lower.Date;
