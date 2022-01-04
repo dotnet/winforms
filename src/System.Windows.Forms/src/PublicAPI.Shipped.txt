@@ -1373,8 +1373,8 @@ static System.Windows.Forms.ScrollBarRenderer.DrawVerticalThumb(System.Drawing.G
 static System.Windows.Forms.ScrollBarRenderer.DrawVerticalThumbGrip(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
 static System.Windows.Forms.ScrollBarRenderer.GetSizeBoxSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
 static System.Windows.Forms.ScrollBarRenderer.GetThumbGripSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
-~static System.Windows.Forms.SendKeys.Send(string keys) -> void
-~static System.Windows.Forms.SendKeys.SendWait(string keys) -> void
+static System.Windows.Forms.SendKeys.Send(string! keys) -> void
+static System.Windows.Forms.SendKeys.SendWait(string! keys) -> void
 static System.Windows.Forms.SystemInformation.ComputerName.get -> string!
 static System.Windows.Forms.SystemInformation.GetMenuFontForDpi(int dpi) -> System.Drawing.Font!
 static System.Windows.Forms.SystemInformation.MenuFont.get -> System.Drawing.Font!
