@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -27,7 +25,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool IsPresent(string featureClassName, string featureConstName, Version minimumVersion)
         {
-            Type c = null;
+            Type? c = null;
             try
             {
                 c = Type.GetType(featureClassName);
@@ -36,22 +34,22 @@ namespace System.Windows.Forms
             {
             }
 
-            object featureId = c?.GetField(featureConstName)?.GetValue(null);
+            object? featureId = c?.GetField(featureConstName)?.GetValue(null);
             if (featureId is null || !typeof(IFeatureSupport).IsAssignableFrom(c))
             {
                 return false;
             }
 
-            IFeatureSupport featureSupport = (IFeatureSupport)Activator.CreateInstance(c);
-            return featureSupport.IsPresent(featureId, minimumVersion);
+            IFeatureSupport? featureSupport = (IFeatureSupport?)Activator.CreateInstance(c);
+            return featureSupport is not null && featureSupport.IsPresent(featureId, minimumVersion);
         }
 
         /// <summary>
         ///  Gets the version of the specified feature that is available on the system.
         /// </summary>
-        public static Version GetVersionPresent(string featureClassName, string featureConstName)
+        public static Version? GetVersionPresent(string featureClassName, string featureConstName)
         {
-            Type c = null;
+            Type? c = null;
             try
             {
                 c = Type.GetType(featureClassName);
@@ -60,14 +58,14 @@ namespace System.Windows.Forms
             {
             }
 
-            object featureId = c?.GetField(featureConstName)?.GetValue(null);
+            object? featureId = c?.GetField(featureConstName)?.GetValue(null);
             if (featureId is null || !typeof(IFeatureSupport).IsAssignableFrom(c))
             {
                 return null;
             }
 
-            IFeatureSupport featureSupport = (IFeatureSupport)Activator.CreateInstance(c);
-            return featureSupport.GetVersionPresent(featureId);
+            IFeatureSupport? featureSupport = (IFeatureSupport?)Activator.CreateInstance(c);
+            return featureSupport?.GetVersionPresent(featureId);
         }
 
         /// <summary>
@@ -81,7 +79,7 @@ namespace System.Windows.Forms
         /// </summary>
         public virtual bool IsPresent(object feature, Version minimumVersion)
         {
-            Version ver = GetVersionPresent(feature);
+            Version? ver = GetVersionPresent(feature);
             if (ver is null)
             {
                 return false;
@@ -94,6 +92,6 @@ namespace System.Windows.Forms
         ///  When overridden in a derived class, gets the version of the specified feature that
         ///  is available on the system.
         /// </summary>
-        public abstract Version GetVersionPresent(object feature);
+        public abstract Version? GetVersionPresent(object feature);
     }
 }
