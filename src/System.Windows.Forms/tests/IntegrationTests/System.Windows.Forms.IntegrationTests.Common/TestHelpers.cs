@@ -31,7 +31,18 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ///  Should always match the TargetFramework in the .csproj
         /// </summary>
         private static string TargetFramework
-            => "net6.0";
+        {
+            get
+            {
+                var frameworkAttribute = (Runtime.Versioning.TargetFrameworkAttribute)Assembly.GetExecutingAssembly()
+                    .GetCustomAttributes(typeof(Runtime.Versioning.TargetFrameworkAttribute), false)
+                    .SingleOrDefault();
+
+                var etractTokens = frameworkAttribute.FrameworkName.Split("=v"); // "NetcoreApp, Version=v7.0"
+
+                return $"net{etractTokens[1]}";
+            }
+        }
 
         /// <summary>
         ///  Get the output exe path for a specified project.
