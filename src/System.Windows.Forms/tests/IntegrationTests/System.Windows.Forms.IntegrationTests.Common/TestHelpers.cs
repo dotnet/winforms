@@ -28,7 +28,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         }
 
         /// <summary>
-        ///  Should always match the TargetFramework in the .csproj
+        /// Should always match the TargetFramework in the .csproj
         /// </summary>
         private static string TargetFramework
         {
@@ -38,9 +38,9 @@ namespace System.Windows.Forms.IntegrationTests.Common
                     .GetCustomAttributes(typeof(Runtime.Versioning.TargetFrameworkAttribute), false)
                     .SingleOrDefault();
 
-                var etractTokens = frameworkAttribute.FrameworkName.Split("=v"); // "NetcoreApp, Version=v7.0"
+                string[] etractedTokens = frameworkAttribute.FrameworkName.Split("=v"); // "NetcoreApp, Version=v7.0"
 
-                return $"net{etractTokens[1]}";
+                return $"net{etractedTokens[1]}";
             }
         }
 
