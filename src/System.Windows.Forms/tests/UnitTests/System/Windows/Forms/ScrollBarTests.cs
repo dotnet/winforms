@@ -2961,6 +2961,220 @@ namespace System.Windows.Forms.Tests
             Assert.Equal(0, createdCallCount);
         }
 
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, 0)]
+        [InlineData(RightToLeft.Yes, 50)]
+        [InlineData(RightToLeft.No, 50)]
+        [InlineData(RightToLeft.No, 100)]
+        public void HScrollBarFirstPageButtonAccessibleObject_Bounds_ReturnRectangle(RightToLeft rightToLeft, int value)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum: 100, value);
+
+            Assert.True(HFirstPageButton(hScrollBar).Bounds.Width > 0);
+            Assert.True(HFirstPageButton(hScrollBar).Bounds.Height > 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.Yes, 100, 100)]
+        [InlineData(RightToLeft.No, 0, 0)]
+        [InlineData(RightToLeft.Yes, 0, 0)]
+        [InlineData(RightToLeft.No, 100, 0)]
+        public void HScrollBarFirstPageButtonAccessibleObject_Bounds_ReturnEmptyRectangle(RightToLeft rightToLeft, int maximum, int value)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.True(HFirstPageButton(hScrollBar).Bounds.Width == 0 || HFirstPageButton(hScrollBar).Bounds.Height == 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.No, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 100, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 0, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 100, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.No, 0, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 0, 0, AccessibleStates.Invisible)]
+        public void HScrollBarFirstPageButtonAccessibleObject_State_ReturnExpected(RightToLeft rightToLeft, int maximum, int value, AccessibleStates accessibleState)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.Equal(accessibleState, HFirstPageButton(hScrollBar).State);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 0)]
+        [InlineData(RightToLeft.No, 50)]
+        [InlineData(RightToLeft.Yes, 100)]
+        [InlineData(RightToLeft.Yes, 50)]
+        public void HScrollBarLastPageButtonAccessibleObject_Bounds_ReturnRectangle(RightToLeft rightToLeft, int value)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum: 100, value);
+
+            Assert.True(HLastPageButton(hScrollBar).Bounds.Width > 0);
+            Assert.True(HLastPageButton(hScrollBar).Bounds.Height > 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 100)]
+        [InlineData(RightToLeft.Yes, 100, 0)]
+        [InlineData(RightToLeft.No, 0, 0)]
+        [InlineData(RightToLeft.Yes, 0, 0)]
+        public void HScrollBarLastPageButtonAccessibleObject_Bounds_ReturnEmptyRectangle(RightToLeft rightToLeft, int maximum, int value)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.True(HLastPageButton(hScrollBar).Bounds.Width == 0 || HLastPageButton(hScrollBar).Bounds.Height == 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 100, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 100, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 100, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 0, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 0, 0, AccessibleStates.Invisible)]
+        public void HScrollBarLastPageButtonAccessibleObject_State_ReturnExpected(RightToLeft rightToLeft, int maximum, int value, AccessibleStates accessibleState)
+        {
+            using HScrollBar hScrollBar = new();
+            SetHScrollBar(hScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.Equal(accessibleState, HLastPageButton(hScrollBar).State);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0)]
+        [InlineData(RightToLeft.Yes, 100, 0)]
+        [InlineData(RightToLeft.No, 0, 0)]
+        [InlineData(RightToLeft.Yes, 0, 0)]
+        public void VScrollBarFirstPageButtonAccessibleObject_Bounds_ReturnEmptyRectangle(RightToLeft rightToLeft, int maximum, int value)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.True(VFirstPageButton(vScrollBar).Bounds.Width == 0 || VFirstPageButton(vScrollBar).Bounds.Height == 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 0)]
+        [InlineData(RightToLeft.No, 50)]
+        [InlineData(RightToLeft.Yes, 0)]
+        [InlineData(RightToLeft.Yes, 50)]
+        public void VScrollBarLastPageButtonAccessibleObject_Bounds_ReturnRectangle(RightToLeft rightToLeft, int value)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum: 100, value);
+
+            Assert.True(VLastPageButton(vScrollBar).Bounds.Width > 0);
+            Assert.True(VLastPageButton(vScrollBar).Bounds.Height > 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 100)]
+        [InlineData(RightToLeft.Yes, 100, 100)]
+        [InlineData(RightToLeft.No, 0, 0)]
+        [InlineData(RightToLeft.Yes, 0, 0)]
+        public void VScrollBarLastPageButtonAccessibleObject_Bounds_ReturnEmptyRectangle(RightToLeft rightToLeft, int maximum, int value)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.True(VLastPageButton(vScrollBar).Bounds.Width == 0 || VLastPageButton(vScrollBar).Bounds.Height == 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 100, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 100, 0, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 100, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.No, 0, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 0, 0, AccessibleStates.Invisible)]
+        public void VScrollBarLastPageButtonAccessibleObject_State_ReturnsExpected(RightToLeft rightToLeft, int maximum, int value, AccessibleStates accessibleState)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.Equal(accessibleState, VLastPageButton(vScrollBar).State);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 50)]
+        [InlineData(RightToLeft.Yes, 50)]
+        [InlineData(RightToLeft.No, 100)]
+        [InlineData(RightToLeft.Yes, 100)]
+        public void VScrollBarFirstPageButtonAccessibleObject_Bounds_ReturnRectangle(RightToLeft rightToLeft, int value)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum: 100, value);
+
+            Assert.True(VFirstPageButton(vScrollBar).Bounds.Width > 0);
+            Assert.True(VFirstPageButton(vScrollBar).Bounds.Height > 0);
+        }
+
+        [WinFormsTheory]
+        [InlineData(RightToLeft.No, 100, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.No, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 100, 100, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 100, 50, AccessibleStates.None)]
+        [InlineData(RightToLeft.Yes, 100, 100, AccessibleStates.None)]
+        [InlineData(RightToLeft.No, 0, 0, AccessibleStates.Invisible)]
+        [InlineData(RightToLeft.Yes, 0, 0, AccessibleStates.Invisible)]
+        public void VScrollBarFirstPageButtonAccessibleObject_State_ReturnsExpected(RightToLeft rightToLeft, int maximum, int value, AccessibleStates accessibleState)
+        {
+            using VScrollBar vScrollBar = new();
+            SetVScrollBar(vScrollBar, rightToLeft, minimum: 0, maximum, value);
+
+            Assert.Equal(accessibleState, VFirstPageButton(vScrollBar).State);
+        }
+
+        private void SetVScrollBar(VScrollBar vScrollBar, RightToLeft rightToLeft, int minimum, int maximum, int value)
+        {
+            Form form = new();
+            form.Show();
+            vScrollBar.RightToLeft = rightToLeft;
+            vScrollBar.Minimum = minimum;
+            vScrollBar.Maximum = maximum;
+            vScrollBar.Value = value;
+            vScrollBar.Size = new(50, 200);
+            vScrollBar.Parent = form;
+            Application.DoEvents();
+        }
+
+        private ScrollBar.ScrollBarFirstPageButtonAccessibleObject VFirstPageButton(VScrollBar vScrollBar)
+            => ((VScrollBar.ScrollBarAccessibleObject)vScrollBar.AccessibilityObject).FirstPageButtonAccessibleObject;
+
+        private ScrollBar.ScrollBarLastPageButtonAccessibleObject VLastPageButton(VScrollBar vScrollBar)
+            => ((VScrollBar.ScrollBarAccessibleObject)vScrollBar.AccessibilityObject).LastPageButtonAccessibleObject;
+
+        private void SetHScrollBar(HScrollBar hScrollBar, RightToLeft rightToLeft, int minimum, int maximum, int value)
+        {
+            Form form = new();
+            form.Show();
+            hScrollBar.RightToLeft = rightToLeft;
+            hScrollBar.Minimum = minimum;
+            hScrollBar.Maximum = maximum;
+            hScrollBar.Value = value;
+            hScrollBar.Size = new(200, 50);
+            hScrollBar.Parent = form;
+            Application.DoEvents();
+        }
+
+        private ScrollBar.ScrollBarFirstPageButtonAccessibleObject HFirstPageButton(HScrollBar hScrollBar)
+            => ((VScrollBar.ScrollBarAccessibleObject)hScrollBar.AccessibilityObject).FirstPageButtonAccessibleObject;
+
+        private ScrollBar.ScrollBarLastPageButtonAccessibleObject HLastPageButton(HScrollBar hScrollBar)
+            => ((VScrollBar.ScrollBarAccessibleObject)hScrollBar.AccessibilityObject).LastPageButtonAccessibleObject;
+
         private class VerticalScrollBar : ScrollBar
         {
             protected override CreateParams CreateParams

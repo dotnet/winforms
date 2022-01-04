@@ -4421,24 +4421,28 @@ namespace System.Windows.Forms.Tests
 
                 foreach (bool showGroups in new[] { true, false })
                 {
-                    yield return new object[] { view, showGroups };
+                    foreach(bool useCompatibleStateImageBehavior in new[] { true, false })
+                    {
+                        yield return new object[] { view, showGroups, useCompatibleStateImageBehavior };
+                    }
                 }
             }
         }
 
         [WinFormsTheory]
         [MemberData(nameof(ListView_Checkboxes_VirtualMode_Disabling_TestData))]
-        public void ListView_Checkboxes_VirtualMode_Disabling_ThrowException(View view, bool showGroups)
+        public void ListView_Checkboxes_VirtualMode_Disabling_Succeeds(View view, bool showGroups, bool useCompatibleStateImageBehavior)
         {
             using var listView = new SubListView
             {
                 View = view,
                 VirtualMode = true,
-                ShowGroups = showGroups
+                ShowGroups = showGroups,
+                UseCompatibleStateImageBehavior = useCompatibleStateImageBehavior
             };
 
             listView.CheckBoxes = true;
-            Assert.Throws<InvalidOperationException>(() => listView.CheckBoxes = false);
+            listView.CheckBoxes = false; // This would throw an InvalidOperationException prior to fix of #4042
         }
 
         [WinFormsFact]

@@ -419,7 +419,7 @@ override System.Windows.Forms.Design.EventsTab.HelpKeyword.get -> string!
 override System.Windows.Forms.Design.EventsTab.TabName.get -> string!
 ~override System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Equals(object obj) -> bool
 ~override System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component) -> bool
-~override System.Windows.Forms.DockingAttribute.Equals(object obj) -> bool
+override System.Windows.Forms.DockingAttribute.Equals(object? obj) -> bool
 ~override System.Windows.Forms.DomainUpDown.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.get -> string?
 override System.Windows.Forms.DomainUpDown.DomainItemAccessibleObject.Name.set -> void
@@ -471,11 +471,11 @@ override System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.GetChild
 ~override System.Windows.Forms.HtmlDocument.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlElement.Equals(object obj) -> bool
 ~override System.Windows.Forms.HtmlWindow.Equals(object obj) -> bool
-~override System.Windows.Forms.ImageIndexConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.ImageIndexConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.ImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
-~override System.Windows.Forms.ImageIndexConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.ImageIndexConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.ImageIndexConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.ImageIndexConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.ImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
+override System.Windows.Forms.ImageIndexConverter.GetStandardValuesExclusive(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.ImageIndexConverter.GetStandardValuesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 ~override System.Windows.Forms.ImageKeyConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Windows.Forms.ImageKeyConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
 ~override System.Windows.Forms.ImageKeyConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
@@ -523,10 +523,10 @@ override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object? ob
 ~override System.Windows.Forms.LinkArea.LinkAreaConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
 ~override System.Windows.Forms.LinkArea.LinkAreaConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
 ~override System.Windows.Forms.LinkArea.ToString() -> string
-~override System.Windows.Forms.LinkConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.LinkConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.LinkConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.LinkConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
+override System.Windows.Forms.LinkConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.LinkConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.LinkConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.LinkConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
 ~override System.Windows.Forms.LinkLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.LinkLabel.OnAutoSizeChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.LinkLabel.OnEnabledChanged(System.EventArgs e) -> void
@@ -592,7 +592,7 @@ override System.Windows.Forms.Layout.ArrangedElementCollection.Equals(object? ob
 ~override System.Windows.Forms.ListViewItem.ToString() -> string
 ~override System.Windows.Forms.ListViewItemConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Windows.Forms.ListViewItemConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.ListViewItemStateImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext context) -> System.ComponentModel.TypeConverter.StandardValuesCollection
+override System.Windows.Forms.ListViewItemStateImageIndexConverter.GetStandardValues(System.ComponentModel.ITypeDescriptorContext? context) -> System.ComponentModel.TypeConverter.StandardValuesCollection!
 ~override System.Windows.Forms.MaskedTextBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.MaskedTextBox.OnBackColorChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.MaskedTextBox.OnHandleCreated(System.EventArgs e) -> void
@@ -754,15 +754,15 @@ override System.Windows.Forms.OpacityConverter.ConvertTo(System.ComponentModel.I
 ~override System.Windows.Forms.ScrollableControl.OnPaintBackground(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.Windows.Forms.ScrollableControl.OnRightToLeftChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.SelectionRange.ToString() -> string
-~override System.Windows.Forms.SelectionRangeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
-~override System.Windows.Forms.SelectionRangeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
-~override System.Windows.Forms.SelectionRangeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
-~override System.Windows.Forms.SelectionRangeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value, System.Type destinationType) -> object
-~override System.Windows.Forms.SelectionRangeConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext context, System.Collections.IDictionary propertyValues) -> object
-~override System.Windows.Forms.SelectionRangeConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
-~override System.Windows.Forms.SelectionRangeConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext context, object value, System.Attribute[] attributes) -> System.ComponentModel.PropertyDescriptorCollection
-~override System.Windows.Forms.SelectionRangeConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext context) -> bool
+override System.Windows.Forms.SelectionRange.ToString() -> string!
+override System.Windows.Forms.SelectionRangeConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
+override System.Windows.Forms.SelectionRangeConverter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Type? destinationType) -> bool
+override System.Windows.Forms.SelectionRangeConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
+override System.Windows.Forms.SelectionRangeConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
+override System.Windows.Forms.SelectionRangeConverter.CreateInstance(System.ComponentModel.ITypeDescriptorContext? context, System.Collections.IDictionary! propertyValues) -> object!
+override System.Windows.Forms.SelectionRangeConverter.GetCreateInstanceSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
+override System.Windows.Forms.SelectionRangeConverter.GetProperties(System.ComponentModel.ITypeDescriptorContext? context, object! value, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
+override System.Windows.Forms.SelectionRangeConverter.GetPropertiesSupported(System.ComponentModel.ITypeDescriptorContext? context) -> bool
 ~override System.Windows.Forms.SplitContainer.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.SplitContainer.BackgroundImage.set -> void
 ~override System.Windows.Forms.SplitContainer.BindingContext.get -> System.Windows.Forms.BindingContext
@@ -1149,7 +1149,7 @@ override System.Windows.Forms.TreeNodeConverter.ConvertTo(System.ComponentModel.
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.No -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute.Yes -> System.Windows.Forms.DataGridViewColumnDesignTimeVisibleAttribute
 ~static readonly System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Default -> System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute
-~static readonly System.Windows.Forms.DockingAttribute.Default -> System.Windows.Forms.DockingAttribute
+static readonly System.Windows.Forms.DockingAttribute.Default -> System.Windows.Forms.DockingAttribute!
 ~static readonly System.Windows.Forms.FontDialog.EventApply -> object
 ~static readonly System.Windows.Forms.OSFeature.LayeredWindows -> object
 ~static readonly System.Windows.Forms.OSFeature.Themes -> object
@@ -1373,8 +1373,8 @@ static System.Windows.Forms.ScrollBarRenderer.DrawVerticalThumb(System.Drawing.G
 static System.Windows.Forms.ScrollBarRenderer.DrawVerticalThumbGrip(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds, System.Windows.Forms.VisualStyles.ScrollBarState state) -> void
 static System.Windows.Forms.ScrollBarRenderer.GetSizeBoxSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
 static System.Windows.Forms.ScrollBarRenderer.GetThumbGripSize(System.Drawing.Graphics! g, System.Windows.Forms.VisualStyles.ScrollBarState state) -> System.Drawing.Size
-~static System.Windows.Forms.SendKeys.Send(string keys) -> void
-~static System.Windows.Forms.SendKeys.SendWait(string keys) -> void
+static System.Windows.Forms.SendKeys.Send(string! keys) -> void
+static System.Windows.Forms.SendKeys.SendWait(string! keys) -> void
 static System.Windows.Forms.SystemInformation.ComputerName.get -> string!
 static System.Windows.Forms.SystemInformation.GetMenuFontForDpi(int dpi) -> System.Drawing.Font!
 static System.Windows.Forms.SystemInformation.MenuFont.get -> System.Drawing.Font!
@@ -2648,7 +2648,7 @@ System.Windows.Forms.RetrieveVirtualItemEventArgs.Item.set -> void
 System.Windows.Forms.SelectedGridItemChangedEventArgs.NewSelection.get -> System.Windows.Forms.GridItem?
 System.Windows.Forms.SelectedGridItemChangedEventArgs.OldSelection.get -> System.Windows.Forms.GridItem?
 System.Windows.Forms.SelectedGridItemChangedEventArgs.SelectedGridItemChangedEventArgs(System.Windows.Forms.GridItem? oldSel, System.Windows.Forms.GridItem? newSel) -> void
-~System.Windows.Forms.SelectionRange.SelectionRange(System.Windows.Forms.SelectionRange range) -> void
+System.Windows.Forms.SelectionRange.SelectionRange(System.Windows.Forms.SelectionRange! range) -> void
 ~System.Windows.Forms.SplitContainer.Controls.get -> System.Windows.Forms.Control.ControlCollection
 ~System.Windows.Forms.SplitContainer.OnSplitterMoved(System.Windows.Forms.SplitterEventArgs e) -> void
 ~System.Windows.Forms.SplitContainer.OnSplitterMoving(System.Windows.Forms.SplitterCancelEventArgs e) -> void

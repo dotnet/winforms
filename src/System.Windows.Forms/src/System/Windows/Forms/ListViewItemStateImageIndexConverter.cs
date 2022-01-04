@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 
 namespace System.Windows.Forms
@@ -42,30 +40,30 @@ namespace System.Windows.Forms
         ///  this collection contains a single object with a value of -1. This method returns<see langword="null" />
         ///  if the data type doesn't support a standard set of values.
         /// </returns>
-        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext context)
+        public override StandardValuesCollection GetStandardValues(ITypeDescriptorContext? context)
         {
             if (context is not null && context.Instance is not null)
             {
                 object instance = context.Instance;
 
-                ImageList imageList = null;
+                ImageList? imageList = null;
 
                 PropertyDescriptorCollection listViewItemProps = TypeDescriptor.GetProperties(instance);
-                PropertyDescriptor listViewProp = listViewItemProps["ListView"];
+                PropertyDescriptor? listViewProp = listViewItemProps["ListView"];
 
                 if (listViewProp is not null)
                 {
                     // Grab the ListView property off of the TreeNode.
-                    object listViewInstance = listViewProp.GetValue(instance);
+                    object? listViewInstance = listViewProp.GetValue(instance);
 
                     if (listViewInstance is not null)
                     {
                         // Get the ImageList property from the ListView and set it to be the currentImageList.
                         PropertyDescriptorCollection listViewProps = TypeDescriptor.GetProperties(listViewInstance);
-                        PropertyDescriptor listViewImageListProperty = listViewProps["StateImageList"];
+                        PropertyDescriptor? listViewImageListProperty = listViewProps["StateImageList"];
                         if (listViewImageListProperty is not null)
                         {
-                            imageList = (ImageList)listViewImageListProperty.GetValue(listViewInstance);
+                            imageList = (ImageList?)listViewImageListProperty.GetValue(listViewInstance);
                         }
                     }
                 }

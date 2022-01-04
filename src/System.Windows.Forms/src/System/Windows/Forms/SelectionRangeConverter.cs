@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
@@ -23,7 +21,7 @@ namespace System.Windows.Forms
         ///  Determines if this converter can convert an object in the given source
         ///  type to the native type of the converter.
         /// </summary>
-        public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
+        public override bool CanConvertFrom(ITypeDescriptorContext? context, Type sourceType)
         {
             if (sourceType == typeof(string) || sourceType == typeof(DateTime))
             {
@@ -37,7 +35,7 @@ namespace System.Windows.Forms
         ///  Gets a value indicating whether this converter can
         ///  convert an object to the given destination type using the context.
         /// </summary>
-        public override bool CanConvertTo(ITypeDescriptorContext context, Type destinationType)
+        public override bool CanConvertTo(ITypeDescriptorContext? context, Type? destinationType)
         {
             if (destinationType == typeof(InstanceDescriptor) || destinationType == typeof(DateTime))
             {
@@ -50,18 +48,17 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Converts the given object to the converter's native type.
         /// </summary>
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+        public override object? ConvertFrom(ITypeDescriptorContext? context, CultureInfo? culture, object value)
         {
-            if (value is string)
+            if (value is string valueAsString)
             {
-                string text = ((string)value).Trim();
+                string text = valueAsString.Trim();
                 if (text.Length == 0)
                 {
                     return new SelectionRange(DateTime.Now.Date, DateTime.Now.Date);
                 }
 
                 // Separate the string into the two dates, and parse each one
-                //
                 if (culture is null)
                 {
                     culture = CultureInfo.CurrentCulture;
@@ -73,8 +70,8 @@ namespace System.Windows.Forms
                 if (tokens.Length == 2)
                 {
                     TypeConverter dateTimeConverter = TypeDescriptor.GetConverter(typeof(DateTime));
-                    DateTime start = (DateTime)dateTimeConverter.ConvertFromString(context, culture, tokens[0]);
-                    DateTime end = (DateTime)dateTimeConverter.ConvertFromString(context, culture, tokens[1]);
+                    DateTime start = (DateTime)dateTimeConverter.ConvertFromString(context, culture, tokens[0])!;
+                    DateTime end = (DateTime)dateTimeConverter.ConvertFromString(context, culture, tokens[1])!;
                     return new SelectionRange(start, end);
                 }
                 else
@@ -99,7 +96,7 @@ namespace System.Windows.Forms
         ///  type is string.  If this cannot convert to the destination type, this will
         ///  throw a NotSupportedException.
         /// </summary>
-        public override object ConvertTo(ITypeDescriptorContext context, CultureInfo culture, object value, Type destinationType)
+        public override object? ConvertTo(ITypeDescriptorContext? context, CultureInfo? culture, object? value, Type destinationType)
         {
             ArgumentNullException.ThrowIfNull(destinationType);
 
@@ -113,12 +110,12 @@ namespace System.Windows.Forms
                     }
 
                     string sep = culture.TextInfo.ListSeparator + " ";
-                    PropertyDescriptorCollection props = GetProperties(value);
-                    string[] args = new string[props.Count];
+                    PropertyDescriptorCollection props = GetProperties(value)!;
+                    string?[] args = new string[props.Count];
 
                     for (int i = 0; i < props.Count; i++)
                     {
-                        object propValue = props[i].GetValue(value);
+                        object propValue = props[i].GetValue(value)!;
                         args[i] = TypeDescriptor.GetConverter(propValue).ConvertToString(context, culture, propValue);
                     }
 
@@ -132,7 +129,7 @@ namespace System.Windows.Forms
 
                 if (destinationType == typeof(InstanceDescriptor))
                 {
-                    ConstructorInfo ctor = typeof(SelectionRange).GetConstructor(new Type[]
+                    ConstructorInfo? ctor = typeof(SelectionRange).GetConstructor(new Type[]
                     {
                         typeof(DateTime), typeof(DateTime)
                     });
@@ -151,12 +148,12 @@ namespace System.Windows.Forms
         ///  for the object.  This is useful for objects that are immutable, but still
         ///  want to provide changable properties.
         /// </summary>
-        public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
+        public override object CreateInstance(ITypeDescriptorContext? context, IDictionary propertyValues)
         {
             try
             {
-                return new SelectionRange((DateTime)propertyValues["Start"],
-                                          (DateTime)propertyValues["End"]);
+                return new SelectionRange((DateTime)propertyValues["Start"]!,
+                                          (DateTime)propertyValues["End"]!);
             }
             catch (InvalidCastException invalidCast)
             {
@@ -172,7 +169,7 @@ namespace System.Windows.Forms
         ///  Determines if changing a value on this object should require a call to
         ///  CreateInstance to create a new value.
         /// </summary>
-        public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
+        public override bool GetCreateInstanceSupported(ITypeDescriptorContext? context)
         {
             return true;
         }
@@ -182,7 +179,7 @@ namespace System.Windows.Forms
         ///  does not return any properties.  An easy implementation of this method
         ///  can just call TypeDescriptor.GetProperties for the correct data type.
         /// </summary>
-        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext context, object value, Attribute[] attributes)
+        public override PropertyDescriptorCollection GetProperties(ITypeDescriptorContext? context, object value, Attribute[]? attributes)
         {
             PropertyDescriptorCollection props = TypeDescriptor.GetProperties(typeof(SelectionRange), attributes);
             return props.Sort(new string[] { "Start", "End" });
@@ -192,7 +189,7 @@ namespace System.Windows.Forms
         ///  Determines if this object supports properties.  By default, this
         ///  is false.
         /// </summary>
-        public override bool GetPropertiesSupported(ITypeDescriptorContext context)
+        public override bool GetPropertiesSupported(ITypeDescriptorContext? context)
         {
             return true;
         }
