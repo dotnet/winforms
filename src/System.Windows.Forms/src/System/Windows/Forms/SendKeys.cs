@@ -672,7 +672,12 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    eventsTotal = s_events!.Count;
+                    if (s_events is null)
+                    {
+                        return;
+                    }
+
+                    eventsTotal = s_events.Count;
                     ClearGlobalKeys();
 
                     for (int i = 0; i < eventsTotal; i++)
