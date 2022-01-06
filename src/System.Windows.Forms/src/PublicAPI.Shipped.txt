@@ -5,7 +5,7 @@ abstract System.Windows.Forms.BindingManagerBase.OnCurrentChanged(System.EventAr
 abstract System.Windows.Forms.BindingManagerBase.OnCurrentItemChanged(System.EventArgs! e) -> void
 abstract System.Windows.Forms.Design.PropertyTab.GetProperties(object! component, System.Attribute![]? attributes) -> System.ComponentModel.PropertyDescriptorCollection!
 abstract System.Windows.Forms.Design.PropertyTab.TabName.get -> string?
-~abstract System.Windows.Forms.FeatureSupport.GetVersionPresent(object feature) -> System.Version
+abstract System.Windows.Forms.FeatureSupport.GetVersionPresent(object! feature) -> System.Version?
 ~abstract System.Windows.Forms.ListControl.SetItemsCore(System.Collections.IList items) -> void
 ~override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Resources.ResXFileRef.Converter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
@@ -1288,9 +1288,9 @@ static System.Windows.Forms.ControlPaint.DrawVisualStyleBorder(System.Drawing.Gr
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextPreferredSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, float maxRatio, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextSize(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, System.Windows.Forms.TextFormatFlags flags) -> System.Drawing.Size
 ~static System.Windows.Forms.DataGridViewCell.MeasureTextWidth(System.Drawing.Graphics graphics, string text, System.Drawing.Font font, int maxHeight, System.Windows.Forms.TextFormatFlags flags) -> int
-~static System.Windows.Forms.FeatureSupport.GetVersionPresent(string featureClassName, string featureConstName) -> System.Version
-~static System.Windows.Forms.FeatureSupport.IsPresent(string featureClassName, string featureConstName) -> bool
-~static System.Windows.Forms.FeatureSupport.IsPresent(string featureClassName, string featureConstName, System.Version minimumVersion) -> bool
+static System.Windows.Forms.FeatureSupport.GetVersionPresent(string! featureClassName, string! featureConstName) -> System.Version?
+static System.Windows.Forms.FeatureSupport.IsPresent(string! featureClassName, string! featureConstName) -> bool
+static System.Windows.Forms.FeatureSupport.IsPresent(string! featureClassName, string! featureConstName, System.Version! minimumVersion) -> bool
 ~static System.Windows.Forms.Form.ActiveForm.get -> System.Windows.Forms.Form
 ~static System.Windows.Forms.Form.GetAutoScaleSize(System.Drawing.Font font) -> System.Drawing.SizeF
 ~static System.Windows.Forms.GroupBoxRenderer.DrawGroupBox(System.Drawing.Graphics g, System.Drawing.Rectangle bounds, string groupBoxText, System.Drawing.Font font, System.Drawing.Color textColor, System.Windows.Forms.TextFormatFlags flags, System.Windows.Forms.VisualStyles.GroupBoxState state) -> void
@@ -2211,9 +2211,9 @@ System.Windows.Forms.DomainUpDown.DomainUpDownAccessibleObject.DomainUpDownAcces
 ~System.Windows.Forms.IDropTarget.OnDragEnter(System.Windows.Forms.DragEventArgs e) -> void
 ~System.Windows.Forms.IDropTarget.OnDragLeave(System.EventArgs e) -> void
 ~System.Windows.Forms.IDropTarget.OnDragOver(System.Windows.Forms.DragEventArgs e) -> void
-~System.Windows.Forms.IFeatureSupport.GetVersionPresent(object feature) -> System.Version
-~System.Windows.Forms.IFeatureSupport.IsPresent(object feature) -> bool
-~System.Windows.Forms.IFeatureSupport.IsPresent(object feature, System.Version minimumVersion) -> bool
+System.Windows.Forms.IFeatureSupport.GetVersionPresent(object! feature) -> System.Version?
+System.Windows.Forms.IFeatureSupport.IsPresent(object! feature) -> bool
+System.Windows.Forms.IFeatureSupport.IsPresent(object! feature, System.Version! minimumVersion) -> bool
 ~System.Windows.Forms.IFileReaderService.OpenFileFromSource(string relativePath) -> System.IO.Stream
 ~System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics g, int x, int y, int index) -> void
 ~System.Windows.Forms.ImageList.Draw(System.Drawing.Graphics g, int x, int y, int width, int height, int index) -> void
@@ -3558,8 +3558,8 @@ virtual System.Windows.Forms.Design.PropertyTab.HelpKeyword.get -> string?
 ~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.EditComponent(System.ComponentModel.ITypeDescriptorContext context, object component, System.Windows.Forms.IWin32Window owner) -> bool
 ~virtual System.Windows.Forms.Design.WindowsFormsComponentEditor.GetComponentEditorPages() -> System.Type[]
 ~virtual System.Windows.Forms.ErrorProvider.OnRightToLeftChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.FeatureSupport.IsPresent(object feature) -> bool
-~virtual System.Windows.Forms.FeatureSupport.IsPresent(object feature, System.Version minimumVersion) -> bool
+virtual System.Windows.Forms.FeatureSupport.IsPresent(object! feature) -> bool
+virtual System.Windows.Forms.FeatureSupport.IsPresent(object! feature, System.Version! minimumVersion) -> bool
 ~virtual System.Windows.Forms.FontDialog.OnApply(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Form.OnActivated(System.EventArgs e) -> void
 ~virtual System.Windows.Forms.Form.OnClosed(System.EventArgs e) -> void
