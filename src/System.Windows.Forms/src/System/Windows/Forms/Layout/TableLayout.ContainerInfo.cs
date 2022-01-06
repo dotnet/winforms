@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Drawing;
@@ -21,23 +19,23 @@ namespace System.Windows.Forms.Layout
         /// </summary>
         internal sealed class ContainerInfo
         {
-            private static readonly Strip[] emptyStrip = Array.Empty<Strip>();
+            private static readonly Strip[] s_emptyStrip = Array.Empty<Strip>();
 
-            private static readonly int stateValid = BitVector32.CreateMask();
-            private static readonly int stateChildInfoValid = BitVector32.CreateMask(stateValid);
-            private static readonly int stateChildHasColumnSpan = BitVector32.CreateMask(stateChildInfoValid);
-            private static readonly int stateChildHasRowSpan = BitVector32.CreateMask(stateChildHasColumnSpan);
+            private static readonly int s_stateValid = BitVector32.CreateMask();
+            private static readonly int s_stateChildInfoValid = BitVector32.CreateMask(s_stateValid);
+            private static readonly int s_stateChildHasColumnSpan = BitVector32.CreateMask(s_stateChildInfoValid);
+            private static readonly int s_stateChildHasRowSpan = BitVector32.CreateMask(s_stateChildHasColumnSpan);
 
             private int _cellBorderWidth;  //the width for the cell border
-            private Strip[] _cols = emptyStrip;
-            private Strip[] _rows = emptyStrip;
+            private Strip[] _cols = s_emptyStrip;
+            private Strip[] _rows = s_emptyStrip;
             private int _maxRows;
             private int _maxColumns;
-            private TableLayoutRowStyleCollection _rowStyles;
-            private TableLayoutColumnStyleCollection _colStyles;
+            private TableLayoutRowStyleCollection? _rowStyles;
+            private TableLayoutColumnStyleCollection? _colStyles;
             private TableLayoutPanelGrowStyle _growStyle;
             private readonly IArrangedElement _container;
-            private LayoutInfo[] _childInfo;
+            private LayoutInfo[]? _childInfo;
             private int _countFixedChildren;
             private int _minRowsAndColumns; // The minimum space required to put all the controls without overlapping
             private int _minColumns; // The minimum number of columns required in order to put all absolutely positioned control on the table
@@ -240,7 +238,7 @@ namespace System.Windows.Forms.Layout
             {
                 get
                 {
-                    if (!_state[stateChildInfoValid])
+                    if (!_state[s_stateChildInfoValid])
                     {
                         _countFixedChildren = 0;
 
@@ -289,7 +287,7 @@ namespace System.Windows.Forms.Layout
                             _childInfo = childInfo;
                         }
 
-                        _state[stateChildInfoValid] = true;
+                        _state[s_stateChildInfoValid] = true;
                     }
 
                     return _childInfo ?? (Array.Empty<LayoutInfo>());
@@ -298,7 +296,7 @@ namespace System.Windows.Forms.Layout
 
             public bool ChildInfoValid
             {
-                get { return _state[stateChildInfoValid]; }
+                get { return _state[s_stateChildInfoValid]; }
             }
 
             public LayoutInfo[] FixedChildrenInfo
@@ -308,7 +306,7 @@ namespace System.Windows.Forms.Layout
                     Debug.Assert(ChildInfoValid, "Fetched invalid information");
                     // we only get this in a cached scenario - so we don't have to worry about caching it.
                     LayoutInfo[] fixedChildren = new LayoutInfo[_countFixedChildren];
-                    if (HasChildWithAbsolutePositioning)
+                    if (HasChildWithAbsolutePositioning && _childInfo is not null)
                     {
                         int index = 0;
                         for (int i = 0; i < _childInfo.Length; i++)
@@ -328,13 +326,13 @@ namespace System.Windows.Forms.Layout
 
             public bool Valid
             {
-                get { return _state[stateValid]; }
+                get { return _state[s_stateValid]; }
                 set
                 {
-                    _state[stateValid] = value;
-                    if (!_state[stateValid])
+                    _state[s_stateValid] = value;
+                    if (!_state[s_stateValid])
                     {
-                        _state[stateChildInfoValid] = false;
+                        _state[s_stateChildInfoValid] = false;
                     }
                 }
             }
@@ -371,14 +369,14 @@ namespace System.Windows.Forms.Layout
 
             public bool ChildHasColumnSpan
             {
-                get { return _state[stateChildHasColumnSpan]; }
-                set { _state[stateChildHasColumnSpan] = value; }
+                get { return _state[s_stateChildHasColumnSpan]; }
+                set { _state[s_stateChildHasColumnSpan] = value; }
             }
 
             public bool ChildHasRowSpan
             {
-                get { return _state[stateChildHasRowSpan]; }
-                set { _state[stateChildHasRowSpan] = value; }
+                get { return _state[s_stateChildHasRowSpan]; }
+                set { _state[s_stateChildHasRowSpan] = value; }
             }
 
             public Size GetCachedPreferredSize(Size proposedConstraints, out bool isValid)
