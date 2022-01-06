@@ -2976,7 +2976,7 @@ System.Windows.Forms.ToolStripSeparatorRenderEventArgs.ToolStripSeparatorRenderE
 ~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
 ~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
 ~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(System.Drawing.Image image) -> void
-~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButtonAccessibleObject.ToolStripSplitButtonAccessibleObject(System.Windows.Forms.ToolStripSplitButton item) -> void
+System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButtonAccessibleObject.ToolStripSplitButtonAccessibleObject(System.Windows.Forms.ToolStripSplitButton! item) -> void
 ~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text) -> void
 ~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text, System.Drawing.Image image) -> void
 ~System.Windows.Forms.ToolStripStatusLabel.ToolStripStatusLabel(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
