@@ -12077,9 +12077,6 @@ namespace System.Windows.Forms
                 return;
             }
 
-            // Get the IAccessible GUID.
-            Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
-
             // Get an Lresult for the accessibility Object for this control.
             try
             {
@@ -12088,7 +12085,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    m.ResultInternal = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParamInternal, new HandleRef(accessibleObject, pUnknown));
+                    m.ResultInternal = Oleacc.LresultFromObject(ref IID.IAccessible, m.WParamInternal, new HandleRef(accessibleObject, pUnknown));
                     Debug.WriteLineIf(CompModSwitches.MSAA.TraceInfo, $"LresultFromObject returned {m.ResultInternal}");
                 }
                 finally

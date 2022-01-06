@@ -1836,9 +1836,7 @@ namespace System.Windows.Forms.Design
                     // See "How to Handle WM_GETOBJECT" in MSDN
                     if (m.LParamInternal == User32.OBJID.CLIENT)
                     {
-                        Guid IID_IAccessible = new Guid(NativeMethods.uuid_IAccessible);
                         // Get an Lresult for the accessibility Object for this control
-                        IntPtr punkAcc;
                         IAccessible iacc = AccessibilityObject;
                         if (iacc is null)
                         {
@@ -1848,10 +1846,10 @@ namespace System.Windows.Forms.Design
                         else
                         {
                             // Obtain the Lresult
-                            punkAcc = Marshal.GetIUnknownForObject(iacc);
+                            IntPtr punkAcc = Marshal.GetIUnknownForObject(iacc);
                             try
                             {
-                                m.ResultInternal = Oleacc.LresultFromObject(ref IID_IAccessible, m.WParamInternal, punkAcc);
+                                m.ResultInternal = Oleacc.LresultFromObject(ref IID.IAccessible, m.WParamInternal, punkAcc);
                             }
                             finally
                             {
