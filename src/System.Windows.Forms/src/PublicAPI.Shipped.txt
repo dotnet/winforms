@@ -33,24 +33,24 @@ override System.Windows.Forms.Button.OnMouseLeave(System.EventArgs! e) -> void
 override System.Windows.Forms.Button.OnMouseUp(System.Windows.Forms.MouseEventArgs! mevent) -> void
 override System.Windows.Forms.Button.OnTextChanged(System.EventArgs! e) -> void
 override System.Windows.Forms.Button.ToString() -> string!
-~override System.Windows.Forms.ButtonBase.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ButtonBase.CreateParams.get -> System.Windows.Forms.CreateParams
-~override System.Windows.Forms.ButtonBase.OnEnabledChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ButtonBase.OnGotFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.ButtonBase.OnKeyDown(System.Windows.Forms.KeyEventArgs kevent) -> void
-~override System.Windows.Forms.ButtonBase.OnKeyUp(System.Windows.Forms.KeyEventArgs kevent) -> void
-~override System.Windows.Forms.ButtonBase.OnLostFocus(System.EventArgs e) -> void
-~override System.Windows.Forms.ButtonBase.OnMouseDown(System.Windows.Forms.MouseEventArgs mevent) -> void
-~override System.Windows.Forms.ButtonBase.OnMouseEnter(System.EventArgs eventargs) -> void
-~override System.Windows.Forms.ButtonBase.OnMouseLeave(System.EventArgs eventargs) -> void
-~override System.Windows.Forms.ButtonBase.OnMouseMove(System.Windows.Forms.MouseEventArgs mevent) -> void
-~override System.Windows.Forms.ButtonBase.OnMouseUp(System.Windows.Forms.MouseEventArgs mevent) -> void
-~override System.Windows.Forms.ButtonBase.OnPaint(System.Windows.Forms.PaintEventArgs pevent) -> void
-~override System.Windows.Forms.ButtonBase.OnParentChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ButtonBase.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ButtonBase.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ButtonBase.Text.get -> string
-~override System.Windows.Forms.ButtonBase.Text.set -> void
+override System.Windows.Forms.ButtonBase.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject!
+override System.Windows.Forms.ButtonBase.CreateParams.get -> System.Windows.Forms.CreateParams!
+override System.Windows.Forms.ButtonBase.OnEnabledChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ButtonBase.OnGotFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.ButtonBase.OnKeyDown(System.Windows.Forms.KeyEventArgs! kevent) -> void
+override System.Windows.Forms.ButtonBase.OnKeyUp(System.Windows.Forms.KeyEventArgs! kevent) -> void
+override System.Windows.Forms.ButtonBase.OnLostFocus(System.EventArgs! e) -> void
+override System.Windows.Forms.ButtonBase.OnMouseDown(System.Windows.Forms.MouseEventArgs! mevent) -> void
+override System.Windows.Forms.ButtonBase.OnMouseEnter(System.EventArgs! eventargs) -> void
+override System.Windows.Forms.ButtonBase.OnMouseLeave(System.EventArgs! eventargs) -> void
+override System.Windows.Forms.ButtonBase.OnMouseMove(System.Windows.Forms.MouseEventArgs! mevent) -> void
+override System.Windows.Forms.ButtonBase.OnMouseUp(System.Windows.Forms.MouseEventArgs! mevent) -> void
+override System.Windows.Forms.ButtonBase.OnPaint(System.Windows.Forms.PaintEventArgs! pevent) -> void
+override System.Windows.Forms.ButtonBase.OnParentChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ButtonBase.OnTextChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ButtonBase.OnVisibleChanged(System.EventArgs! e) -> void
+override System.Windows.Forms.ButtonBase.Text.get -> string!
+override System.Windows.Forms.ButtonBase.Text.set -> void
 ~override System.Windows.Forms.CheckBox.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.CheckBox.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.CheckBox.OnClick(System.EventArgs e) -> void
@@ -1364,13 +1364,13 @@ static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> Sys
 ~System.Windows.Forms.BindingSource.List.get -> System.Collections.IList
 ~System.Windows.Forms.BindingSource.Sort.get -> string
 ~System.Windows.Forms.BindingSource.Sort.set -> void
-~System.Windows.Forms.ButtonBase.FlatAppearance.get -> System.Windows.Forms.FlatButtonAppearance
-~System.Windows.Forms.ButtonBase.Image.get -> System.Drawing.Image
-~System.Windows.Forms.ButtonBase.Image.set -> void
-~System.Windows.Forms.ButtonBase.ImageKey.get -> string
-~System.Windows.Forms.ButtonBase.ImageKey.set -> void
-~System.Windows.Forms.ButtonBase.ImageList.get -> System.Windows.Forms.ImageList
-~System.Windows.Forms.ButtonBase.ImageList.set -> void
+System.Windows.Forms.ButtonBase.FlatAppearance.get -> System.Windows.Forms.FlatButtonAppearance!
+System.Windows.Forms.ButtonBase.Image.get -> System.Drawing.Image?
+System.Windows.Forms.ButtonBase.Image.set -> void
+System.Windows.Forms.ButtonBase.ImageKey.get -> string!
+System.Windows.Forms.ButtonBase.ImageKey.set -> void
+System.Windows.Forms.ButtonBase.ImageList.get -> System.Windows.Forms.ImageList?
+System.Windows.Forms.ButtonBase.ImageList.set -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.CopyTo(System.Array dest, int index) -> void
 ~System.Windows.Forms.CheckedListBox.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.CheckedListBox.CheckedIndices.get -> System.Windows.Forms.CheckedListBox.CheckedIndexCollection
@@ -6096,7 +6096,7 @@ System.Windows.Forms.Button.PerformClick() -> void
 System.Windows.Forms.ButtonBase
 System.Windows.Forms.ButtonBase.AutoEllipsis.get -> bool
 System.Windows.Forms.ButtonBase.AutoEllipsis.set -> void
-System.Windows.Forms.ButtonBase.AutoSizeChanged -> System.EventHandler
+System.Windows.Forms.ButtonBase.AutoSizeChanged -> System.EventHandler?
 System.Windows.Forms.ButtonBase.ButtonBase() -> void
 System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject
 System.Windows.Forms.ButtonBase.ButtonBaseAccessibleObject.ButtonBaseAccessibleObject(System.Windows.Forms.Control! owner) -> void
@@ -6108,7 +6108,7 @@ System.Windows.Forms.ButtonBase.ImageIndex.get -> int
 System.Windows.Forms.ButtonBase.ImageIndex.set -> void
 System.Windows.Forms.ButtonBase.ImeMode.get -> System.Windows.Forms.ImeMode
 System.Windows.Forms.ButtonBase.ImeMode.set -> void
-System.Windows.Forms.ButtonBase.ImeModeChanged -> System.EventHandler
+System.Windows.Forms.ButtonBase.ImeModeChanged -> System.EventHandler?
 System.Windows.Forms.ButtonBase.IsDefault.get -> bool
 System.Windows.Forms.ButtonBase.IsDefault.set -> void
 System.Windows.Forms.ButtonBase.ResetFlagsandPaint() -> void
