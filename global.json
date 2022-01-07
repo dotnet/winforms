@@ -18,7 +18,7 @@
     "Microsoft.DotNet.CMake.Sdk": "6.0.0-beta.21609.4",
     "Microsoft.DotNet.Helix.Sdk": "6.0.0-beta.21609.4",
     "FIX-85B6-MERGE-9C38-CONFLICT": "1.0.0",
-    "Microsoft.NET.Sdk.IL": "6.0.2-servicing.22056.4"
+    "Microsoft.NET.Sdk.IL": "6.0.2-servicing.22056.7"
   },
   "native-tools": {
     "cmake": "3.17.3"
