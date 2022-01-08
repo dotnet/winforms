@@ -9,10 +9,21 @@ namespace System.Windows.Forms.Tests
 {
     public class ToolStripGripRenderEventArgsTests : IClassFixture<ThreadExceptionFixture>
     {
-        [WinFormsFact]
-        public void ToolStripGripRenderEventArgs_NullGraphics_ThrowsArgumentNullException()
+        public static IEnumerable<object[]> Ctor_Null_Graphics_ToolStrip_TestData()
         {
-            Assert.Throws<ArgumentNullException>(() => new ToolStripGripRenderEventArgs(null, null));
+            var image = new Bitmap(10, 10);
+            Graphics graphics = Graphics.FromImage(image);
+
+            yield return new object[] { null, null };
+            yield return new object[] { null, new ToolStrip() };
+            yield return new object[] { graphics, null };
+        }
+
+        [WinFormsTheory]
+        [MemberData(nameof(Ctor_Null_Graphics_ToolStrip_TestData))]
+        public void ToolStripGripRenderEventArgs_NullParameter_ThrowsArgumentNullException(Graphics g, ToolStrip toolStrip)
+        {
+            Assert.Throws<ArgumentNullException>(() => new ToolStripGripRenderEventArgs(g, toolStrip));
         }
 
         public static IEnumerable<object[]> Ctor_Graphics_ToolStrip_TestData()

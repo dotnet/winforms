@@ -13,8 +13,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </summary>
-        public ToolStripRenderEventArgs(Graphics g, ToolStrip? toolStrip)
-            : this(g, toolStrip, new Rectangle(Point.Empty, toolStrip?.Size ?? Size.Empty), Color.Empty)
+        public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
+            : this(g, toolStrip, new Rectangle(Point.Empty, toolStrip?.Size ?? throw new ArgumentNullException(nameof(toolStrip))), Color.Empty)
         {
         }
 
@@ -23,13 +23,13 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripRenderEventArgs(
             Graphics g,
-            ToolStrip? toolStrip,
+            ToolStrip toolStrip,
             Rectangle affectedBounds,
             Color backColor)
         {
             Graphics = g.OrThrowIfNull();
+            ToolStrip = toolStrip.OrThrowIfNull();
             AffectedBounds = affectedBounds;
-            ToolStrip = toolStrip;
             _backColor = backColor;
         }
 
@@ -46,7 +46,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents which toolStrip was affected by the click
         /// </summary>
-        public ToolStrip? ToolStrip { get; }
+        public ToolStrip ToolStrip { get; }
 
         /// <summary>
         ///  The back color to draw with.
