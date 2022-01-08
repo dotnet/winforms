@@ -11,10 +11,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </summary>
-        public ToolStripPanelRenderEventArgs(Graphics g, ToolStripPanel? toolStripPanel)
+        public ToolStripPanelRenderEventArgs(Graphics g, ToolStripPanel toolStripPanel)
         {
             Graphics = g.OrThrowIfNull();
-            ToolStripPanel = toolStripPanel;
+            ToolStripPanel = toolStripPanel.OrThrowIfNull();
         }
 
         /// <summary>
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Represents which toolStrip was affected by the click
         /// </summary>
-        public ToolStripPanel? ToolStripPanel { get; }
+        public ToolStripPanel ToolStripPanel { get; }
 
         public bool Handled { get; set; }
     }

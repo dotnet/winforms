@@ -608,7 +608,6 @@ namespace System.Windows.Forms.Tests
 
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
-            yield return new object[] { new ToolStripPanelRenderEventArgs(graphics, null) };
             yield return new object[] { new ToolStripPanelRenderEventArgs(graphics, new ToolStripPanel()) };
         }
 

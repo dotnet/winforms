@@ -2928,8 +2928,8 @@ System.Windows.Forms.ToolStripItemTextRenderEventArgs.ToolStripItemTextRenderEve
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.ToolStripPanelRowCollection(System.Windows.Forms.ToolStripPanel owner) -> void
 ~System.Windows.Forms.ToolStripPanel.ToolStripPanelRowCollection.ToolStripPanelRowCollection(System.Windows.Forms.ToolStripPanel owner, System.Windows.Forms.ToolStripPanelRow[] value) -> void
 System.Windows.Forms.ToolStripPanelRenderEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.ToolStripPanelRenderEventArgs.ToolStripPanel.get -> System.Windows.Forms.ToolStripPanel?
-System.Windows.Forms.ToolStripPanelRenderEventArgs.ToolStripPanelRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripPanel? toolStripPanel) -> void
+System.Windows.Forms.ToolStripPanelRenderEventArgs.ToolStripPanel.get -> System.Windows.Forms.ToolStripPanel!
+System.Windows.Forms.ToolStripPanelRenderEventArgs.ToolStripPanelRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripPanel! toolStripPanel) -> void
 ~System.Windows.Forms.ToolStripPanelRow.CanMove(System.Windows.Forms.ToolStrip toolStripToDrag) -> bool
 ~System.Windows.Forms.ToolStripPanelRow.Controls.get -> System.Windows.Forms.Control[]
 ~System.Windows.Forms.ToolStripPanelRow.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
