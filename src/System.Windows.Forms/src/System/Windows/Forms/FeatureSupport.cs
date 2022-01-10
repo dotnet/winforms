@@ -40,8 +40,8 @@ namespace System.Windows.Forms
                 return false;
             }
 
-            IFeatureSupport? featureSupport = (IFeatureSupport?)Activator.CreateInstance(c);
-            return featureSupport is not null && featureSupport.IsPresent(featureId, minimumVersion);
+            IFeatureSupport featureSupport = (IFeatureSupport)Activator.CreateInstance(c)!;
+            return featureSupport.IsPresent(featureId, minimumVersion);
         }
 
         /// <summary>
@@ -64,8 +64,8 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            IFeatureSupport? featureSupport = (IFeatureSupport?)Activator.CreateInstance(c);
-            return featureSupport?.GetVersionPresent(featureId);
+            IFeatureSupport featureSupport = (IFeatureSupport)Activator.CreateInstance(c)!;
+            return featureSupport.GetVersionPresent(featureId);
         }
 
         /// <summary>

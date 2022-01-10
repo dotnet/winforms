@@ -638,7 +638,7 @@ override System.Windows.Forms.ListViewItemStateImageIndexConverter.GetStandardVa
 override System.Windows.Forms.OpacityConverter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Type! sourceType) -> bool
 override System.Windows.Forms.OpacityConverter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object! value) -> object?
 override System.Windows.Forms.OpacityConverter.ConvertTo(System.ComponentModel.ITypeDescriptorContext? context, System.Globalization.CultureInfo? culture, object? value, System.Type! destinationType) -> object?
-~override System.Windows.Forms.OSFeature.GetVersionPresent(object feature) -> System.Version
+override System.Windows.Forms.OSFeature.GetVersionPresent(object! feature) -> System.Version?
 ~override System.Windows.Forms.Panel.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.Panel.OnResize(System.EventArgs eventargs) -> void
 ~override System.Windows.Forms.Panel.Text.get -> string
@@ -1151,8 +1151,8 @@ override System.Windows.Forms.TreeNodeConverter.ConvertTo(System.ComponentModel.
 ~static readonly System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute.Default -> System.Windows.Forms.Design.ToolStripItemDesignerAvailabilityAttribute
 static readonly System.Windows.Forms.DockingAttribute.Default -> System.Windows.Forms.DockingAttribute!
 ~static readonly System.Windows.Forms.FontDialog.EventApply -> object
-~static readonly System.Windows.Forms.OSFeature.LayeredWindows -> object
-~static readonly System.Windows.Forms.OSFeature.Themes -> object
+static readonly System.Windows.Forms.OSFeature.LayeredWindows -> object!
+static readonly System.Windows.Forms.OSFeature.Themes -> object!
 static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Commands -> System.ComponentModel.Design.CommandID!
 static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Description -> System.ComponentModel.Design.CommandID!
 static readonly System.Windows.Forms.PropertyGridInternal.PropertyGridCommands.Hide -> System.ComponentModel.Design.CommandID!
@@ -1341,7 +1341,7 @@ static System.Windows.Forms.FeatureSupport.IsPresent(string! featureClassName, s
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator) -> System.Windows.Forms.DialogResult
 ~static System.Windows.Forms.MessageBox.Show(System.Windows.Forms.IWin32Window owner, string text, string caption, System.Windows.Forms.MessageBoxButtons buttons, System.Windows.Forms.MessageBoxIcon icon, System.Windows.Forms.MessageBoxDefaultButton defaultButton, System.Windows.Forms.MessageBoxOptions options, string helpFilePath, System.Windows.Forms.HelpNavigator navigator, object param) -> System.Windows.Forms.DialogResult
 ~static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> System.Windows.Forms.NativeWindow
-~static System.Windows.Forms.OSFeature.Feature.get -> System.Windows.Forms.OSFeature
+static System.Windows.Forms.OSFeature.Feature.get -> System.Windows.Forms.OSFeature!
 static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalBar(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
 static System.Windows.Forms.ProgressBarRenderer.DrawHorizontalChunks(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void
 static System.Windows.Forms.ProgressBarRenderer.DrawVerticalBar(System.Drawing.Graphics! g, System.Drawing.Rectangle bounds) -> void

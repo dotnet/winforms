@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 namespace System.Windows.Forms
 {
     /// <summary>
@@ -22,7 +20,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static readonly object Themes = new object();
 
-        private static OSFeature _feature;
+        private static OSFeature? _feature;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref='OSFeature'/> class.
@@ -40,7 +38,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Retrieves the version of the specified feature currently available on the system.
         /// </summary>
-        public override Version GetVersionPresent(object feature)
+        public override Version? GetVersionPresent(object feature)
         {
             // These are always supported on platforms that .NET Core supports.
             if (feature == LayeredWindows || feature == Themes)
