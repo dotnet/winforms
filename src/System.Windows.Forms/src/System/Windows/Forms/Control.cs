@@ -9806,9 +9806,6 @@ namespace System.Windows.Forms
                     // the call shouldn't fail.
                     // However, it could fail if this.CreateParams.Parent is changed outside our control.
                     CreateHandle();
-
-                    // DestroyHandle resets the state, but CreateHandle doesn't set the state back.
-                    SetState(States.Created, true);
                 }
                 catch (Exception)
                 {
@@ -9838,7 +9835,7 @@ namespace System.Windows.Forms
                     // - or -
                     // CreateHandle is successful.
                     //      We will move the child controls to the new parent.
-                    if (controlSnapshot is not null && GetState(States.Created))
+                    if (controlSnapshot is not null && IsHandleCreated)
                     {
                         for (int i = 0; i < controlSnapshot.Length; i++)
                         {
