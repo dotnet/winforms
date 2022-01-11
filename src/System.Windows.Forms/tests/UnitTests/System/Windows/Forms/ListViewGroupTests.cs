@@ -116,6 +116,26 @@ namespace System.Windows.Forms.Tests
         }
 
         [WinFormsTheory]
+        [InlineData(ListViewGroupCollapsedState.Default)]
+        [InlineData(ListViewGroupCollapsedState.Collapsed)]
+        [InlineData(ListViewGroupCollapsedState.Expanded)]
+        public void ListViewGroup_GetNativeCollapsedState_Succeeds(ListViewGroupCollapsedState collapsedState)
+        {
+            using var listView = new ListView();
+            var group = new ListViewGroup() { CollapsedState = collapsedState };
+            listView.Groups.Add(group);
+
+            Assert.Equal(collapsedState, group.GetNativeCollapsedState());
+        }
+
+        [WinFormsFact]
+        public void ListViewGroup_GetNativeCollapsedState_NoListView_Throws()
+        {
+            var group = new ListViewGroup();
+            Assert.Throws<InvalidOperationException>(() => group.GetNativeCollapsedState());
+        }
+
+        [WinFormsTheory]
         [CommonMemberData(typeof(CommonTestHelper), nameof(CommonTestHelper.GetNonNegativeIntTheoryData))]
         [InlineData(-1)]
         public void ListViewGroup_TitleImageIndex_SetWithoutListView_GetReturnsExpected(int value)
