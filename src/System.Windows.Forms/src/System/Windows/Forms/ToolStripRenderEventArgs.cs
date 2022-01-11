@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         ///  This class represents all the information to render the toolStrip
         /// </summary>
         public ToolStripRenderEventArgs(Graphics g, ToolStrip toolStrip)
-            : this(g, toolStrip, new Rectangle(Point.Empty, toolStrip?.Size ?? throw new ArgumentNullException(nameof(toolStrip))), Color.Empty)
+            : this(g, toolStrip, new Rectangle(Point.Empty, toolStrip.OrThrowIfNull().Size), Color.Empty)
         {
         }
 
