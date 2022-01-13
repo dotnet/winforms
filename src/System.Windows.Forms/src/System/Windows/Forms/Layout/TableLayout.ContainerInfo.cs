@@ -290,7 +290,7 @@ namespace System.Windows.Forms.Layout
                         _state[s_stateChildInfoValid] = true;
                     }
 
-                    return _childInfo ?? (Array.Empty<LayoutInfo>());
+                    return _childInfo ?? Array.Empty<LayoutInfo>();
                 }
             }
 
@@ -306,10 +306,10 @@ namespace System.Windows.Forms.Layout
                     Debug.Assert(ChildInfoValid, "Fetched invalid information");
                     // we only get this in a cached scenario - so we don't have to worry about caching it.
                     LayoutInfo[] fixedChildren = new LayoutInfo[_countFixedChildren];
-                    if (HasChildWithAbsolutePositioning && _childInfo is not null)
+                    if (HasChildWithAbsolutePositioning)
                     {
                         int index = 0;
-                        for (int i = 0; i < _childInfo.Length; i++)
+                        for (int i = 0; i < _childInfo!.Length; i++)
                         {
                             if (_childInfo[i].IsAbsolutelyPositioned)
                             {
