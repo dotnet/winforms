@@ -21,6 +21,9 @@ namespace System.Windows.Forms.ButtonInternal
         // Coefficient for darkening the border color of the "Popup" and "Standard" buttons
         protected const float ButtonBorderDarkerOffset = 0.8f;
 
+        // This coefficient was added to simulate the original gradient as in Windows 11.
+        protected const float ButtonBottomBorderDarkerOffset = 0.7f;
+
         internal ButtonBaseAdapter(ButtonBase control) =>
             Control = control.OrThrowIfNull();
 

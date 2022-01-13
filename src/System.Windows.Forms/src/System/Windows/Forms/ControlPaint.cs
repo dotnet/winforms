@@ -150,6 +150,40 @@ namespace System.Windows.Forms
         public static Color ContrastControlDark
             => SystemInformation.HighContrast ? SystemColors.WindowFrame : SystemColors.ControlDark;
 
+        internal static void DrawRoundedBorder(this Graphics graphics, Pen pen, Rectangle bounds, int cornerRadius)
+        {
+            using GraphicsPath path = new GraphicsPath();
+
+            if (cornerRadius == 0)
+            {
+                path.AddRectangle(bounds);
+                graphics.DrawPath(pen, path);
+                return;
+            }
+
+            int diameter = cornerRadius * 2;
+            Size size = new(diameter, diameter);
+            Rectangle cornerBounds = new(bounds.Location, size);
+
+            // top left arc
+            path.AddArc(cornerBounds, startAngle: 180, sweepAngle: 90);
+
+            // top right arc
+            cornerBounds.X = bounds.Right - diameter;
+            path.AddArc(cornerBounds, startAngle: 270, sweepAngle: 90);
+
+            // bottom right arc
+            cornerBounds.Y = bounds.Bottom - diameter;
+            path.AddArc(cornerBounds, startAngle: 0, sweepAngle: 90);
+
+            // bottom left arc
+            cornerBounds.X = bounds.Left;
+            path.AddArc(cornerBounds, startAngle: 90, sweepAngle: 90);
+
+            path.CloseFigure();
+            graphics.DrawPath(pen, path);
+        }
+
         /// <summary>
         ///  Creates a 16-bit color bitmap.
         ///  Sadly, this must be public for the designer to get at it.

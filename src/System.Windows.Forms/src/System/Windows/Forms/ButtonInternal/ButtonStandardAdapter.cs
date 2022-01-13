@@ -4,6 +4,7 @@
 
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Windows.Forms.Layout;
 using System.Windows.Forms.VisualStyles;
 using static Interop;
@@ -72,12 +73,38 @@ namespace System.Windows.Forms.ButtonInternal
                 pbState,
                 DpiHelper.IsScalingRequirementMet ? Control.HandleInternal : IntPtr.Zero);
 
-            if (!SystemInformation.HighContrast && pbState == PushButtonState.Normal)
+            if (!SystemInformation.HighContrast
+                && ButtonRenderer.RenderWithVisualStyles
+                && !Control.Focused
+                && pbState == PushButtonState.Normal
+                && Control.BackColor == SystemColors.Control)
             {
-                ControlPaint.DrawBorderSimple(
-                    e.GraphicsInternal,
-                    Rectangle.Inflate(bounds, -1, -1),
-                    ControlPaint.Darker(SystemColors.ButtonShadow, ButtonBorderDarkerOffset));
+                if (OsVersion.IsWindows11_OrGreater)
+                {
+                    int radius = 3;
+                    Rectangle rectangle = Rectangle.Inflate(bounds, -1, -1);
+                    rectangle.Height -= 1;
+                    rectangle.Width -= 1;
+
+                    using (Pen pen = ControlPaint.Darker(SystemColors.ButtonShadow, ButtonBorderDarkerOffset).CreateStaticPen(DashStyle.Solid))
+                    {
+                        ControlPaint.DrawRoundedBorder(e.Graphics, pen, rectangle, radius);
+                    }
+
+                    using (Pen pen = ControlPaint.Darker(SystemColors.ButtonShadow, ButtonBottomBorderDarkerOffset).CreateStaticPen(DashStyle.Solid))
+                    {
+                        Point startPoint = new Point(rectangle.X + radius, rectangle.Y + rectangle.Height);
+                        Point endPoint = new Point(rectangle.X + rectangle.Width - radius, rectangle.Y + rectangle.Height);
+                        e.GraphicsInternal.DrawLine(pen, startPoint, endPoint);
+                    }
+                }
+                else
+                {
+                    ControlPaint.DrawBorderSimple(
+                        e.GraphicsInternal,
+                        Rectangle.Inflate(bounds, -1, -1),
+                        ControlPaint.Darker(SystemColors.ButtonShadow, ButtonBorderDarkerOffset));
+                }
             }
 
             // Now overlay the background image or backcolor (the former overrides the latter), leaving a margin.

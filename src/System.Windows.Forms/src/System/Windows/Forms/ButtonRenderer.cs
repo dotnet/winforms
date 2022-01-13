@@ -26,7 +26,7 @@ namespace System.Windows.Forms
         /// </summary>
         public static bool RenderMatchingApplicationState { get; set; } = true;
 
-        private static bool RenderWithVisualStyles
+        internal static bool RenderWithVisualStyles
         {
             get
             {
