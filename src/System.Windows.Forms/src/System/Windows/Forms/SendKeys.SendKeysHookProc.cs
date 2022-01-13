@@ -35,12 +35,12 @@ namespace System.Windows.Forms
                     case User32.HC.SKIP:
                         if (_gotNextEvent)
                         {
-                            if (s_events is not null && s_events.Count > 0)
+                            if (s_events.Count > 0)
                             {
                                 s_events.Dequeue();
                             }
 
-                            s_stopHook = s_events is null || s_events.Count == 0;
+                            s_stopHook = s_events.Count == 0;
                             break;
                         }
 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
                         _gotNextEvent = true;
 
                         Debug.Assert(
-                            s_events is not null && s_events.Count > 0 && !s_stopHook,
+                            s_events.Count > 0 && !s_stopHook,
                             "HC_GETNEXT when queue is empty!");
 
                         SKEvent @event = s_events.Peek();
