@@ -17,6 +17,17 @@ namespace System.Windows.Forms
             {
             }
 
+            /// <summary>
+            ///  Returns the index of a column, taking into account DisplayIndex properties
+            ///  and the invisibility of other columns
+            /// </summary>
+            private int VisibleIndex
+                => Owner?.DataGridView is not null && Owner.OwningColumn is not null
+                    ? Owner.DataGridView.RowHeadersVisible
+                        ? Owner.DataGridView.Columns.GetVisibleIndex(Owner.OwningColumn) + 1
+                        : Owner.DataGridView.Columns.GetVisibleIndex(Owner.OwningColumn)
+                    : -1;
+
             public override Rectangle Bounds => Owner is null
                 ? throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet)
                 : (Owner.DataGridView?.IsHandleCreated == true) ? GetAccessibleObjectBounds(Parent) : Rectangle.Empty;
@@ -147,13 +158,6 @@ namespace System.Windows.Forms
                         return Owner.DataGridView.RightToLeft == RightToLeft.No ? NavigateBackward() : NavigateForward();
                     case AccessibleNavigation.Previous:
                         return NavigateBackward();
-                    case AccessibleNavigation.FirstChild:
-                        // return the top left header cell accessible object
-                        return Parent?.GetChild(0);
-                    case AccessibleNavigation.LastChild:
-                        // return the last column header cell in the top row header accessible object
-                        AccessibleObject? topRowHeaderAccessibleObject = Parent;
-                        return topRowHeaderAccessibleObject?.GetChild(topRowHeaderAccessibleObject.GetChildCount() - 1);
                     default:
                         return null;
                 }
@@ -176,13 +180,8 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    int previousVisibleColumnIndex = Owner.DataGridView.Columns.GetPreviousColumn(Owner.OwningColumn,
-                                                                                                  DataGridViewElementStates.Visible,
-                                                                                                  DataGridViewElementStates.None).Index;
-                    int actualDisplayIndex = Owner.DataGridView.Columns.ColumnIndexToActualDisplayIndex(previousVisibleColumnIndex,
-                                                                                                  DataGridViewElementStates.Visible);
-
-                    return Owner.DataGridView.RowHeadersVisible ? Parent?.GetChild(actualDisplayIndex + 1) : Parent?.GetChild(actualDisplayIndex);
+                    // Subtract 1 because the top header row accessible object has the top left header cell accessible object at the beginning
+                    return Parent?.GetChild(VisibleIndex - 1);
                 }
             }
 
@@ -199,15 +198,9 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                int nextVisibleColumnIndex = Owner.DataGridView.Columns.GetNextColumn(Owner.OwningColumn,
-                                                                                      DataGridViewElementStates.Visible,
-                                                                                      DataGridViewElementStates.None).Index;
-
-                int actualDisplayIndex = Owner.DataGridView.Columns.ColumnIndexToActualDisplayIndex(nextVisibleColumnIndex,
-                                                                                      DataGridViewElementStates.Visible);
-
                 // Add 1 because the top header row accessible object has the top left header cell accessible object at the beginning
-                return Owner.DataGridView.RowHeadersVisible ? Parent?.GetChild(actualDisplayIndex + 1) : Parent?.GetChild(actualDisplayIndex);
+                int visibleIndex = VisibleIndex;
+                return visibleIndex < 0 ? null : Parent?.GetChild(visibleIndex + 1);
             }
 
             public override void Select(AccessibleSelection flags)

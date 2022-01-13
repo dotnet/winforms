@@ -29,6 +29,16 @@ namespace System.Windows.Forms
                 this.owner = owner;
             }
 
+            /// <summary>
+            ///  Returns the index of the row, taking into account the invisibility of other rows.
+            /// </summary>
+            private int VisibleIndex
+                => owner?.DataGridView is not null
+                    ? owner.DataGridView.ColumnHeadersVisible
+                        ? owner.DataGridView.Rows.GetVisibleIndex(owner) + 1
+                        : owner.DataGridView.Rows.GetVisibleIndex(owner)
+                    : -1;
+
             public override Rectangle Bounds
             {
                 get
@@ -87,7 +97,11 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                     }
 
-                    return string.Format(SR.DataGridView_AccRowName, owner.Index.ToString(CultureInfo.CurrentCulture));
+                    int index = owner is { Visible: true, DataGridView: { } }
+                            ? owner.DataGridView.Rows.GetVisibleIndex(owner)
+                            : -1;
+
+                    return string.Format(SR.DataGridView_AccRowName, index.ToString(CultureInfo.CurrentCulture));
                 }
             }
 
@@ -245,7 +259,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.DataGridViewRowAccessibleObject_OwnerNotSet);
                 }
 
-                if (owner.DataGridView is null)
+                if (owner.DataGridView is null || index > GetChildCount() - 1)
                 {
                     return null;
                 }
@@ -330,16 +344,10 @@ namespace System.Windows.Forms
                     case AccessibleNavigation.Next:
                         if (owner.Index != owner.DataGridView.Rows.GetLastRow(DataGridViewElementStates.Visible))
                         {
-                            int nextVisibleRow = owner.DataGridView.Rows.GetNextRow(owner.Index, DataGridViewElementStates.Visible);
-                            int actualDisplayIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, nextVisibleRow);
-                            if (owner.DataGridView.ColumnHeadersVisible)
-                            {
-                                return owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex + 1);
-                            }
-                            else
-                            {
-                                return owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex);
-                            }
+                            int visibleIndex = VisibleIndex;
+                            return visibleIndex < 0
+                                ? null
+                                : owner.DataGridView.AccessibilityObject.GetChild(visibleIndex + 1);
                         }
                         else
                         {
@@ -350,16 +358,7 @@ namespace System.Windows.Forms
                     case AccessibleNavigation.Previous:
                         if (owner.Index != owner.DataGridView.Rows.GetFirstRow(DataGridViewElementStates.Visible))
                         {
-                            int previousVisibleRow = owner.DataGridView.Rows.GetPreviousRow(owner.Index, DataGridViewElementStates.Visible);
-                            int actualDisplayIndex = owner.DataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible, 0, previousVisibleRow);
-                            if (owner.DataGridView.ColumnHeadersVisible)
-                            {
-                                return owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex + 1);
-                            }
-                            else
-                            {
-                                return owner.DataGridView.AccessibilityObject.GetChild(actualDisplayIndex);
-                            }
+                            return owner.DataGridView.AccessibilityObject.GetChild(VisibleIndex - 1);
                         }
                         else if (owner.DataGridView.ColumnHeadersVisible)
                         {

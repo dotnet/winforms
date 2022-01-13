@@ -65,6 +65,11 @@ namespace System.Windows.Forms
 
             public override AccessibleObject? GetChild(int index)
             {
+                if (index < 0)
+                {
+                    return null;
+                }
+
                 if (_ownerDataGridView.Columns.Count == 0)
                 {
                     Diagnostics.Debug.Assert(GetChildCount() == 0);
@@ -248,9 +253,10 @@ namespace System.Windows.Forms
                         // Whether the _ownerDataGridView DataGridView can be sorted by some column.
                         // If so, provide not-sorted/sorted-by item status.
                         bool canSort = false;
-                        for (int i = 0; i < _ownerDataGridView.Columns.Count; i++)
+                        for (int i = 0; i < ColumnCount; i++)
                         {
-                            if (_ownerDataGridView.IsSortable(_ownerDataGridView.Columns[i]))
+                            int columnIndex = _ownerDataGridView.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
+                            if (_ownerDataGridView.IsSortable(_ownerDataGridView.Columns[columnIndex]))
                             {
                                 canSort = true;
                                 break;
@@ -270,7 +276,7 @@ namespace System.Windows.Forms
                             }
                         }
 
-                        break;
+                        return SR.NotSortedAccessibleStatus;
                 }
 
                 return base.GetPropertyValue(propertyID);
@@ -290,10 +296,11 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[_ownerDataGridView.Rows.Count];
-                for (int i = 0; i < _ownerDataGridView.Rows.Count; i++)
+                UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[RowCount];
+                for (int i = 0; i < RowCount; i++)
                 {
-                    result[i] = _ownerDataGridView.Rows[i].HeaderCell.AccessibilityObject;
+                    int rowIndex = _ownerDataGridView.Rows.DisplayIndexToRowIndex(i);
+                    result[i] = _ownerDataGridView.Rows[rowIndex].HeaderCell.AccessibilityObject;
                 }
 
                 return result;
@@ -306,10 +313,11 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[_ownerDataGridView.Columns.Count];
-                for (int i = 0; i < _ownerDataGridView.Columns.Count; i++)
+                UiaCore.IRawElementProviderSimple[] result = new UiaCore.IRawElementProviderSimple[ColumnCount];
+                for (int i = 0; i < ColumnCount; i++)
                 {
-                    result[i] = _ownerDataGridView.Columns[i].HeaderCell.AccessibilityObject;
+                    int columnIndex = _ownerDataGridView.Columns.ActualDisplayIndexToColumnIndex(i, DataGridViewElementStates.Visible);
+                    result[i] = _ownerDataGridView.Columns[columnIndex].HeaderCell.AccessibilityObject;
                 }
 
                 return result;
@@ -325,9 +333,11 @@ namespace System.Windows.Forms
 
             internal override UiaCore.IRawElementProviderSimple? GetItem(int row, int column)
             {
-                if (row >= 0 && row < _ownerDataGridView.Rows.Count &&
-                    column >= 0 && column < _ownerDataGridView.Columns.Count)
+                if (row >= 0 && row < RowCount &&
+                    column >= 0 && column < ColumnCount)
                 {
+                    row = _ownerDataGridView.Rows.DisplayIndexToRowIndex(row);
+                    column = _ownerDataGridView.Columns.ActualDisplayIndexToColumnIndex(column, DataGridViewElementStates.Visible);
                     return _ownerDataGridView.Rows[row].Cells[column].AccessibilityObject;
                 }
 
@@ -338,7 +348,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _ownerDataGridView.RowCount;
+                    return _ownerDataGridView.Rows.GetRowCount(DataGridViewElementStates.Visible);
                 }
             }
 
@@ -346,7 +356,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return _ownerDataGridView.ColumnCount;
+                    return _ownerDataGridView.Columns.GetColumnCount(DataGridViewElementStates.Visible);
                 }
             }
 

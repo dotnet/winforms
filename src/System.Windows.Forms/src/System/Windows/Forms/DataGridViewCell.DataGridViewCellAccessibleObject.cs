@@ -50,12 +50,16 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.DataGridViewCellAccessibleObject_OwnerNotSet);
                     }
 
-                    if (_owner.OwningColumn is null)
+                    if (_owner.OwningColumn is null || _owner.OwningRow is null)
                     {
                         return string.Empty;
                     }
 
-                    string name = string.Format(SR.DataGridView_AccDataGridViewCellName, _owner.OwningColumn.HeaderText, _owner.OwningRow.Index);
+                    int rowIndex = _owner.DataGridView is null
+                        ? -1
+                        : _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow);
+
+                    string name = string.Format(SR.DataGridView_AccDataGridViewCellName, _owner.OwningColumn.HeaderText, rowIndex);
 
                     if (_owner.OwningColumn.SortMode != DataGridViewColumnSortMode.NotSortable)
                     {
@@ -728,9 +732,15 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            internal override int Row => _owner?.OwningRow is not null ? _owner.OwningRow.Index : -1;
+            internal override int Row
+                => _owner?.OwningRow?.Visible is true && _owner.DataGridView is not null
+                    ? _owner.DataGridView.Rows.GetVisibleIndex(_owner.OwningRow)
+                    : -1;
 
-            internal override int Column => _owner?.OwningColumn is not null ? _owner.OwningColumn.Index : -1;
+            internal override int Column
+                => _owner?.OwningColumn?.Visible is true && _owner.DataGridView is not null
+                    ? _owner.DataGridView.Columns.GetVisibleIndex(_owner.OwningColumn)
+                    : -1;
 
             internal override UiaCore.IRawElementProviderSimple? ContainingGrid => _owner?.DataGridView?.AccessibilityObject;
 

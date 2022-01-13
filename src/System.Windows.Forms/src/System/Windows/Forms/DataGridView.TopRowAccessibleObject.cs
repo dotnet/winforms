@@ -118,6 +118,11 @@ namespace System.Windows.Forms
                     throw new ArgumentOutOfRangeException(nameof(index));
                 }
 
+                if (index > GetChildCount() - 1)
+                {
+                    return null;
+                }
+
                 if (index == 0 && _ownerDataGridView.RowHeadersVisible)
                 {
                     return _ownerDataGridView.TopLeftHeaderCell.AccessibilityObject;
@@ -180,9 +185,14 @@ namespace System.Windows.Forms
                         }
 
                     case AccessibleNavigation.FirstChild:
-                        return GetChild(0);
+                        return GetChildCount() > 0
+                            ? GetChild(0)
+                            : null;
                     case AccessibleNavigation.LastChild:
-                        return GetChild(GetChildCount() - 1);
+                        int childCount = GetChildCount();
+                        return childCount > 0
+                            ? GetChild(childCount - 1)
+                            : null;
                     default:
                         return null;
                 }
