@@ -866,6 +866,29 @@ namespace System.Windows.Forms.Tests
                 Times.Once);
         }
 
+        [WinFormsFact]
+        public void ToolTip_SetToolTip_TabControl_DoesNotAddToolForTabControlItself()
+        {
+            // We need a Form because tooltips don't work on controls without a valid parent.
+            using Form form = new();
+            using ToolTip toolTip = new();
+            using TabControl tabControl = new() { ShowToolTips = true };
+            using TabPage tabPage1 = new();
+            using TabPage tabPage2 = new();
+
+            toolTip.SetToolTip(tabControl, "Test");
+            tabControl.Controls.Add(tabPage1);
+            tabControl.Controls.Add(tabPage2);
+            form.Controls.Add(tabControl);
+            form.Show();
+
+            Assert.NotEqual(IntPtr.Zero, tabControl.InternalHandle);
+            Assert.True(toolTip.GetHandleCreated());
+
+            // Only tools for TabPages were added.
+            Assert.Equal(tabControl.TabCount, User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.GETTOOLCOUNT));
+        }
+
         private class SubToolTip : ToolTip
         {
             public SubToolTip() : base()

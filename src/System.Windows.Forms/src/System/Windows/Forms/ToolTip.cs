@@ -842,6 +842,17 @@ namespace System.Windows.Forms
 
         private void SetToolInfo(Control control, string caption)
         {
+            // Don't add a tool for the TabControl itself. It's not needed because:
+            // 1. TabControl already relays all mouse events to its tooltip:
+            // https://docs.microsoft.com/windows/win32/controls/tab-controls#default-tab-control-message-processing
+            // 2. Hit-testing against TabControl detects only TabPages which are separate tools added by TabControl.
+            // This prevents a bug when a TabPage tool is placed before the TabControl tool after reordering caused by a tool deletion.
+            // Also prevents double handling of mouse messages which is caused by subclassing altogether with the message relaying from the TabControl internals.
+            if (control is TabControl)
+            {
+                return;
+            }
+
             IntPtr result = GetTOOLINFO(control, caption).SendMessage(this, (User32.WM)TTM.ADDTOOLW);
 
             if ((control is TreeView tv && tv.ShowNodeToolTips)
