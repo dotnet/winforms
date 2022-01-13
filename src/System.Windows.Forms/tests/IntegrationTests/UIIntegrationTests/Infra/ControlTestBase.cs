@@ -252,6 +252,40 @@ namespace System.Windows.Forms.UITests
             await test.JoinAsync();
         }
 
+        protected async Task RunFormWithoutControlAsync<TForm>(Func<TForm> createForm, Func<TForm, Task> testDriverAsync)
+            where TForm : Form
+        {
+            TForm? dialog = null;
+
+            TaskCompletionSource<VoidResult> gate = new TaskCompletionSource<VoidResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            JoinableTask test = JoinableTaskFactory.RunAsync(async () =>
+            {
+                await gate.Task;
+                await JoinableTaskFactory.SwitchToMainThreadAsync();
+                await WaitForIdleAsync();
+                try
+                {
+                    await testDriverAsync(dialog!);
+                }
+                finally
+                {
+                    dialog!.Close();
+                    dialog.Dispose();
+                    dialog = null;
+                }
+            });
+
+            await JoinableTaskFactory.SwitchToMainThreadAsync();
+            dialog = createForm();
+
+            Assert.NotNull(dialog);
+
+            dialog.Activated += (sender, e) => gate.TrySetResult(default);
+            dialog.ShowDialog();
+
+            await test.JoinAsync();
+        }
+
         internal struct VoidResult
         {
         }

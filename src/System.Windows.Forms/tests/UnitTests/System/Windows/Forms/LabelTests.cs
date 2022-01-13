@@ -283,6 +283,26 @@ namespace System.Windows.Forms.Tests
             Assert.False(control.IsHandleCreated);
         }
 
+        [WinFormsTheory]
+        [InlineData(false, true)]
+        [InlineData(true, false)]
+        public void Label_AutoSize_BehavesExpected(bool autoSize, bool expected)
+        {
+            using Form form = new Form();
+            using Label label = new()
+            {
+                AutoSize = autoSize,
+                Size = new(10, 10),
+                Text = "Hello",
+            };
+            Size oldSize = label.Size;
+            form.Controls.Add(label);
+            form.Show();
+            label.Text = "Say Hello";
+            Size newSize = label.Size;
+            Assert.Equal(expected, newSize == oldSize);
+        }
+
         public class SubLabel : Label
         {
             public new bool CanEnableIme => base.CanEnableIme;
