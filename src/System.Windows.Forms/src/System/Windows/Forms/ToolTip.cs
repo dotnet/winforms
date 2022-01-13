@@ -642,7 +642,7 @@ namespace System.Windows.Forms
                 return;
             }
 
-            tool.AccessibilityObject.RaiseAutomationNotification(
+            tool.AccessibilityObject.InternalRaiseAutomationNotification(
                 Automation.AutomationNotificationKind.ActionCompleted,
                 Automation.AutomationNotificationProcessing.All,
                 $"{ToolTipTitle} {text}");
@@ -2073,7 +2073,9 @@ namespace System.Windows.Forms
 
             if (!e.Cancel)
             {
-                AnnounceText(toolControl, GetCaptionForTool(toolControl));
+                // Use GetWindowText instead of GetCaptionForTool to retrieve the actual caption.
+                // GetCaptionForTool doesn't work correctly when the text for a tool is retrieved by TTN_NEEDTEXT notification (e.g. TabPages of TabControl).
+                AnnounceText(toolControl, User32.GetWindowText(this));
             }
 
             // We need to re-get the rectangle of the tooltip here because

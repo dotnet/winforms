@@ -5,8 +5,11 @@
 using System.ComponentModel;
 using System.Drawing;
 using Moq;
+using Moq.Protected;
+using System.Windows.Forms.Automation;
 using System.Windows.Forms.TestUtilities;
 using Xunit;
+using static Interop;
 
 namespace System.Windows.Forms.Tests
 {
@@ -815,6 +818,52 @@ namespace System.Windows.Forms.Tests
             toolTip.RemoveAll();
 
             Assert.Equal(1, control.InvokeRemoveCount);
+        }
+
+        [WinFormsFact]
+        public void ToolTip_WmShow_Invokes_AnnounceText_WithExpectedText_ForTabControlTabs()
+        {
+            Mock<TabControl> mockTabControl = new() { CallBase = true, Object = { ShowToolTips = true } };
+            Mock<Control.ControlAccessibleObject> mockAccessibleObject = new(MockBehavior.Strict, mockTabControl.Object);
+            mockAccessibleObject
+                .Setup(a => a.InternalRaiseAutomationNotification(
+                    It.IsAny<AutomationNotificationKind>(),
+                    It.IsAny<AutomationNotificationProcessing>(),
+                    It.IsAny<string>()))
+                .Returns(true);
+            mockTabControl.Protected().Setup<AccessibleObject>("CreateAccessibilityInstance").Returns(mockAccessibleObject.Object);
+
+            // We need a Form because tooltips don't work on controls without a valid parent.
+            using Form form = new();
+            using ToolTip toolTip = new();
+            using TabControl tabControl = mockTabControl.Object;
+            using TabPage tabPage = new() { ToolTipText = "TabPage" };
+
+            toolTip.SetToolTip(tabControl, "TabControl");
+            tabControl.Controls.Add(tabPage);
+            form.Controls.Add(tabControl);
+            form.Show();
+
+            Assert.NotEqual(IntPtr.Zero, tabControl.InternalHandle);
+            Assert.True(toolTip.GetHandleCreated());
+
+            // Enforce AccessibilityObject creation.
+            Assert.Equal(mockAccessibleObject.Object, tabControl.AccessibilityObject);
+
+            // Post MOUSEMOVE to the tooltip queue and then just remove it from the queue without handling.
+            // This will update the point returned by GetMessagePos which is used by TTM.POPUP to determine the tool to display.
+            Assert.True(User32.PostMessageW(toolTip, User32.WM.MOUSEMOVE, lParam: PARAM.FromPoint(tabPage.GetToolNativeScreenRectangle().Location)).IsTrue());
+            User32.MSG msg = default;
+            Assert.True(User32.PeekMessageW(ref msg, toolTip, User32.WM.MOUSEMOVE, User32.WM.MOUSEMOVE, User32.PM.REMOVE).IsTrue());
+
+            // Show the tooltip.
+            User32.SendMessageW(toolTip, (User32.WM)ComCtl32.TTM.POPUP);
+
+            mockAccessibleObject.Verify(a => a.InternalRaiseAutomationNotification(
+                AutomationNotificationKind.ActionCompleted,
+                AutomationNotificationProcessing.All,
+                $" {tabPage.ToolTipText}"),
+                Times.Once);
         }
 
         private class SubToolTip : ToolTip
