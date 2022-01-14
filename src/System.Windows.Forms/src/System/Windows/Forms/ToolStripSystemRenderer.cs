@@ -187,11 +187,11 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnRenderToolStripBackground(ToolStripRenderEventArgs e)
         {
-            ToolStrip? toolStrip = e.ToolStrip;
+            ToolStrip toolStrip = e.ToolStrip;
             Graphics g = e.Graphics;
             Rectangle bounds = e.AffectedBounds;
 
-            if (toolStrip is not null && !ShouldPaintBackground(toolStrip))
+            if (!ShouldPaintBackground(toolStrip))
             {
                 return;
             }
@@ -210,7 +210,7 @@ namespace System.Windows.Forms
                 {
                     FillBackground(g, bounds, (toolStrip is ToolStripDropDown) ? SystemColors.ControlLight : e.BackColor);
                 }
-                else if (toolStrip is not null && toolStrip.IsDropDown)
+                else if (toolStrip.IsDropDown)
                 {
                     FillBackground(g, bounds, (!ToolStripManager.VisualStylesEnabled) ?
                                          e.BackColor : SystemColors.Menu);
@@ -222,12 +222,9 @@ namespace System.Windows.Forms
                 }
                 else if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Band.Normal))
                 {
-                    VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
-                    if (vsRenderer is not null)
-                    {
-                        vsRenderer.SetParameters(VisualStyleElement.ToolBar.Bar.Normal);
-                        vsRenderer.DrawBackground(g, bounds);
-                    }
+                    VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
+                    vsRenderer.SetParameters(VisualStyleElement.ToolBar.Bar.Normal);
+                    vsRenderer.DrawBackground(g, bounds);
                 }
                 else
                 {
@@ -242,12 +239,8 @@ namespace System.Windows.Forms
         /// </summary>
         protected override void OnRenderToolStripBorder(ToolStripRenderEventArgs e)
         {
-            ToolStrip? toolStrip = e.ToolStrip;
-            Rectangle bounds = Rectangle.Empty;
-            if (toolStrip is not null)
-            {
-                bounds = toolStrip.ClientRectangle;
-            }
+            ToolStrip toolStrip = e.ToolStrip;
+            Rectangle bounds = toolStrip.ClientRectangle;
 
             if (toolStrip is StatusStrip)
             {
@@ -295,30 +288,27 @@ namespace System.Windows.Forms
 
             if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Gripper.Normal))
             {
-                VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
 
                 if (verticalGrip)
                 {
-                    vsRenderer?.SetParameters(VisualStyleElement.Rebar.Gripper.Normal);
+                    vsRenderer.SetParameters(VisualStyleElement.Rebar.Gripper.Normal);
 
                     bounds.Height = ((bounds.Height - 2/*number of pixels for border*/) / 4) * 4; // make sure height is an even interval of 4.
                     bounds.Y = Math.Max(0, (e.GripBounds.Height - bounds.Height - 2/*number of pixels for border*/) / 2);
                 }
                 else
                 {
-                    vsRenderer?.SetParameters(VisualStyleElement.Rebar.GripperVertical.Normal);
+                    vsRenderer.SetParameters(VisualStyleElement.Rebar.GripperVertical.Normal);
                 }
 
-                vsRenderer?.DrawBackground(g, bounds);
+                vsRenderer.DrawBackground(g, bounds);
             }
             else
             {
                 // do some fixup so that we don't paint from end to end.
-                if (e.ToolStrip is not null)
-                {
-                    Color backColor = e.ToolStrip.BackColor;
-                    FillBackground(g, bounds, backColor);
-                }
+                Color backColor = e.ToolStrip.BackColor;
+                FillBackground(g, bounds, backColor);
 
                 if (verticalGrip)
                 {
@@ -339,7 +329,7 @@ namespace System.Windows.Forms
                     bounds.Height = 3;
                 }
 
-                RenderSmall3DBorderInternal(g, bounds, ToolBarState.Hot, e.ToolStrip is not null && e.ToolStrip.RightToLeft == RightToLeft.Yes);
+                RenderSmall3DBorderInternal(g, bounds, ToolBarState.Hot, e.ToolStrip.RightToLeft == RightToLeft.Yes);
             }
         }
 
@@ -400,14 +390,11 @@ namespace System.Windows.Forms
             if (ToolStripManager.VisualStylesEnabled && VisualStyleRenderer.IsElementDefined(VisualStyleElement.Rebar.Chevron.Normal))
             {
                 VisualStyleElement chevronElement = VisualStyleElement.Rebar.Chevron.Normal;
-                VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
-                if (vsRenderer is not null)
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
+                vsRenderer.SetParameters(chevronElement.ClassName, chevronElement.Part, GetItemState(item));
+                if (item is not null)
                 {
-                    vsRenderer.SetParameters(chevronElement.ClassName, chevronElement.Part, GetItemState(item));
-                    if (item is not null)
-                    {
-                        vsRenderer.DrawBackground(g, new Rectangle(Point.Empty, item.Size));
-                    }
+                    vsRenderer.DrawBackground(g, new Rectangle(Point.Empty, item.Size));
                 }
             }
             else
@@ -441,8 +428,6 @@ namespace System.Windows.Forms
             {
                 return; // no highlights are painted behind a system menu item
             }
-
-            //
 
             if (item is not null)
             {
@@ -566,10 +551,10 @@ namespace System.Windows.Forms
                 && VisualStyleRenderer.IsElementDefined(splitButtonDropDownPart)
                 && VisualStyleRenderer.IsElementDefined(splitButtonPart))
             {
-                VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
 
                 // Draw the SplitButton Button portion of it.
-                vsRenderer?.SetParameters(splitButtonPart.ClassName, splitButtonPart.Part, GetSplitButtonItemState(splitButton));
+                vsRenderer.SetParameters(splitButtonPart.ClassName, splitButtonPart.Part, GetSplitButtonItemState(splitButton));
 
                 // the lovely Windows theming for split button comes in three pieces:
                 //  SplitButtonDropDown: [ v |
@@ -584,17 +569,14 @@ namespace System.Windows.Forms
                     splitButtonBounds.Inflate(2, 0);
                 }
 
-                if (vsRenderer is not null)
-                {
-                    // Draw the button portion of it.
-                    vsRenderer.DrawBackground(g, splitButtonBounds);
+                // Draw the button portion of it.
+                vsRenderer.DrawBackground(g, splitButtonBounds);
 
-                    // Draw the SplitButton DropDownButton portion of it.
-                    vsRenderer.SetParameters(splitButtonDropDownPart.ClassName, splitButtonDropDownPart.Part, GetSplitButtonDropDownItemState(splitButton));
+                // Draw the SplitButton DropDownButton portion of it.
+                vsRenderer.SetParameters(splitButtonDropDownPart.ClassName, splitButtonDropDownPart.Part, GetSplitButtonDropDownItemState(splitButton));
 
-                    // Draw the drop down button portion
-                    vsRenderer.DrawBackground(g, splitButton.DropDownButtonBounds);
-                }
+                // Draw the drop down button portion
+                vsRenderer.DrawBackground(g, splitButton.DropDownButtonBounds);
 
                 // fill in the background image
                 Rectangle fillRect = splitButton.ContentRectangle;
@@ -684,14 +666,11 @@ namespace System.Windows.Forms
             if (ToolStripManager.VisualStylesEnabled
                 && (VisualStyleRenderer.IsElementDefined(toolBarElement)))
             {
-                VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
-                if (vsRenderer is not null)
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
+                vsRenderer.SetParameters(toolBarElement.ClassName, toolBarElement.Part, (int)state);
+                if (item is not null)
                 {
-                    vsRenderer.SetParameters(toolBarElement.ClassName, toolBarElement.Part, (int)state);
-                    if (item is not null)
-                    {
-                        vsRenderer.DrawBackground(g, new Rectangle(Point.Empty, item.Size));
-                    }
+                    vsRenderer.DrawBackground(g, new Rectangle(Point.Empty, item.Size));
                 }
 
                 if (!SystemInformation.HighContrast &&
@@ -741,12 +720,9 @@ namespace System.Windows.Forms
             if (ToolStripManager.VisualStylesEnabled
                 && (VisualStyleRenderer.IsElementDefined(separator)))
             {
-                VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
-                if (vsRenderer is not null)
-                {
-                    vsRenderer.SetParameters(separator.ClassName, separator.Part, GetItemState(item));
-                    vsRenderer.DrawBackground(g, bounds);
-                }
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
+                vsRenderer.SetParameters(separator.ClassName, separator.Part, GetItemState(item));
+                vsRenderer.DrawBackground(g, bounds);
             }
             else
             {
@@ -810,7 +786,7 @@ namespace System.Windows.Forms
 
         private void RenderStatusStripBorder(ToolStripRenderEventArgs e)
         {
-            if (!Application.RenderWithVisualStyles && e.ToolStrip is not null)
+            if (!Application.RenderWithVisualStyles)
             {
                 e.Graphics.DrawLine(SystemPens.ButtonHighlight, 0, 0, e.ToolStrip.Width, 0);
             }
@@ -820,15 +796,9 @@ namespace System.Windows.Forms
         {
             if (Application.RenderWithVisualStyles)
             {
-                VisualStyleRenderer? vsRenderer = VisualStyleRenderer;
-                if (vsRenderer is not null)
-                {
-                    vsRenderer.SetParameters(VisualStyleElement.Status.Bar.Normal);
-                    if (e.ToolStrip is not null)
-                    {
-                        vsRenderer.DrawBackground(e.Graphics, new Rectangle(0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1));
-                    }
-                }
+                VisualStyleRenderer vsRenderer = VisualStyleRenderer!;
+                vsRenderer.SetParameters(VisualStyleElement.Status.Bar.Normal);
+                vsRenderer.DrawBackground(e.Graphics, new Rectangle(0, 0, e.ToolStrip.Width - 1, e.ToolStrip.Height - 1));
             }
             else
             {
