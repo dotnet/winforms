@@ -11,7 +11,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the toolStrip
         /// </summary>
-        public ToolStripGripRenderEventArgs(Graphics g, ToolStrip? toolStrip)
+        public ToolStripGripRenderEventArgs(Graphics g, ToolStrip toolStrip)
             : base(g, toolStrip)
         {
         }
@@ -19,16 +19,16 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The graphics object to draw with
         /// </summary>
-        public Rectangle GripBounds => ToolStrip?.GripRectangle ?? default;
+        public Rectangle GripBounds => ToolStrip.GripRectangle;
 
         /// <summary>
         ///  Vertical or horizontal
         /// </summary>
-        public ToolStripGripDisplayStyle GripDisplayStyle => ToolStrip?.GripDisplayStyle ?? default;
+        public ToolStripGripDisplayStyle GripDisplayStyle => ToolStrip.GripDisplayStyle;
 
         /// <summary>
         ///  Visible or hidden
         /// </summary>
-        public ToolStripGripStyle GripStyle => ToolStrip?.GripStyle ?? default;
+        public ToolStripGripStyle GripStyle => ToolStrip.GripStyle;
     }
 }
