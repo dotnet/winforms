@@ -3915,8 +3915,6 @@ namespace System.Windows.Forms
                         RECT updateRegionBoundingRect = default;
                         Gdi32.GetRgnBox(windowRegion, ref updateRegionBoundingRect);
 
-                        FlatComboBoxAdapter.ValidateOwnerDrawRegions(this, updateRegionBoundingRect);
-
                         // Call the base class to do its painting (with a clipped DC).
                         bool useBeginPaint = m.WParamInternal == 0;
                         using var paintScope = useBeginPaint ? new BeginPaintScope(Handle) : default;
