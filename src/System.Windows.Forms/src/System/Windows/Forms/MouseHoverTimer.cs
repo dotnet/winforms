@@ -6,7 +6,7 @@ namespace System.Windows.Forms
 {
     internal class MouseHoverTimer : IDisposable
     {
-        private Timer? _mouseHoverTimer = new Timer();
+        private Timer _mouseHoverTimer = new Timer();
 
         // Consider - weak reference?
         private ToolStripItem? _currentItem;
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
             }
 
             _currentItem = item;
-            if (_currentItem is not null && _mouseHoverTimer is not null)
+            if (_currentItem is not null)
             {
                 _mouseHoverTimer.Enabled = true;
             }
@@ -33,11 +33,7 @@ namespace System.Windows.Forms
 
         public void Cancel()
         {
-            if (_mouseHoverTimer is not null)
-            {
-                _mouseHoverTimer.Enabled = false;
-            }
-
+            _mouseHoverTimer.Enabled = false;
             _currentItem = null;
         }
 
@@ -54,21 +50,13 @@ namespace System.Windows.Forms
 
         public void Dispose()
         {
-            if (_mouseHoverTimer is not null)
-            {
-                Cancel();
-                _mouseHoverTimer.Dispose();
-                _mouseHoverTimer = null;
-            }
+            Cancel();
+            _mouseHoverTimer.Dispose();
         }
 
         private void OnTick(object? sender, EventArgs e)
         {
-            if (_mouseHoverTimer is not null)
-            {
-                _mouseHoverTimer.Enabled = false;
-            }
-
+            _mouseHoverTimer.Enabled = false;
             if (_currentItem is not null && !_currentItem.IsDisposed)
             {
                 _currentItem.FireEvent(EventArgs.Empty, ToolStripItemEventType.MouseHover);
