@@ -84,7 +84,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Vector of events that we have yet to post to the journaling hook.
         /// </summary>
-        private static Queue<SKEvent>? s_events;
+        private static readonly Queue<SKEvent> s_events = new Queue<SKEvent>();
 
         private static object s_lock = new object();
         private static bool s_startNewChar;
@@ -120,7 +120,6 @@ namespace System.Windows.Forms
         /// </summary>
         private static void AddEvent(SKEvent skevent)
         {
-            s_events ??= new Queue<SKEvent>();
             s_events.Enqueue(skevent);
         }
 
@@ -302,10 +301,7 @@ namespace System.Windows.Forms
             if (s_hhook != IntPtr.Zero)
             {
                 s_stopHook = false;
-                if (s_events is not null)
-                {
-                    s_events.Clear();
-                }
+                s_events.Clear();
 
                 s_hhook = IntPtr.Zero;
             }
@@ -672,7 +668,7 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    eventsTotal = s_events!.Count;
+                    eventsTotal = s_events.Count;
                     ClearGlobalKeys();
 
                     for (int i = 0; i < eventsTotal; i++)
@@ -919,7 +915,7 @@ namespace System.Windows.Forms
 
             // For SendInput only, see AddCancelModifiersForPreviousEvents for details.
             SKEvent[]? previousEvents = null;
-            if ((s_events is not null) && (s_events.Count != 0))
+            if (s_events.Count != 0)
             {
                 previousEvents = s_events.ToArray();
             }
@@ -928,7 +924,7 @@ namespace System.Windows.Forms
             ParseKeys(keys, (control is not null) ? control.Handle : IntPtr.Zero);
 
             // If there weren't any events posted as a result, we're done!
-            if (s_events is null)
+            if (s_events.Count == 0)
             {
                 return;
             }
@@ -992,7 +988,7 @@ namespace System.Windows.Forms
         public static void Flush()
         {
             Application.DoEvents();
-            while (s_events is not null && s_events.Count > 0)
+            while (s_events.Count > 0)
             {
                 Application.DoEvents();
             }
@@ -1006,7 +1002,7 @@ namespace System.Windows.Forms
             if (s_hhook != IntPtr.Zero)
             {
                 s_stopHook = false;
-                s_events?.Clear();
+                s_events.Clear();
 
                 User32.UnhookWindowsHookEx(s_hhook);
                 s_hhook = IntPtr.Zero;
