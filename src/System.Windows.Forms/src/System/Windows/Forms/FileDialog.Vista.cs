@@ -202,7 +202,7 @@ namespace System.Windows.Forms
 
         private void SetFileTypes(IFileDialog dialog)
         {
-            COMDLG_FILTERSPEC[] filterItems = FilterItems;
+            COMDLG_FILTERSPEC[] filterItems = GetFilterItems(_filter);
             try
             {
                 HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
@@ -223,8 +223,6 @@ namespace System.Windows.Forms
                 }
             }
         }
-
-        private COMDLG_FILTERSPEC[] FilterItems => GetFilterItems(_filter);
 
         private static COMDLG_FILTERSPEC[] GetFilterItems(string filter)
         {
