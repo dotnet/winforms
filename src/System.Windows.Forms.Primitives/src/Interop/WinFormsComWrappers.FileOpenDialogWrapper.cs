@@ -157,8 +157,11 @@ internal partial class Interop
             {
                 int retVal;
                 fixed (Shell32.COMDLG_FILTERSPEC* rgFilterSpec_local = rgFilterSpec)
-                retVal = ((delegate* unmanaged<IntPtr, uint, Shell32.COMDLG_FILTERSPEC*, int>)(*(*(void***)_wrappedInstance + 4)))
-                    (_wrappedInstance, cFileTypes, rgFilterSpec_local);
+                {
+                    retVal = ((delegate* unmanaged<IntPtr, uint, Shell32.COMDLG_FILTERSPEC*, int>)(*(*(void***)_wrappedInstance + 4)))
+                        (_wrappedInstance, cFileTypes, rgFilterSpec_local);
+                }
+
                 return (HRESULT)retVal;
             }
 
@@ -174,8 +177,11 @@ internal partial class Interop
             {
                 int result;
                 fixed (uint* piFileType_local = &piFileType)
-                result = ((delegate* unmanaged<IntPtr, uint*, int>)(*(*(void***)_wrappedInstance + 6)))
-                    (_wrappedInstance, piFileType_local);
+                {
+                    result = ((delegate* unmanaged<IntPtr, uint*, int>)(*(*(void***)_wrappedInstance + 6)))
+                        (_wrappedInstance, piFileType_local);
+                }
+
                 if (result != 0)
                 {
                     Marshal.ThrowExceptionForHR(result);
@@ -203,8 +209,11 @@ internal partial class Interop
                 }
 
                 fixed (uint* pdwCookie_local = &pdwCookie)
-                result = ((delegate* unmanaged<IntPtr, IntPtr, uint*, int>)(*(*(void***)_wrappedInstance + 7)))
-                    (_wrappedInstance, pfde_local, pdwCookie_local);
+                {
+                    result = ((delegate* unmanaged<IntPtr, IntPtr, uint*, int>)(*(*(void***)_wrappedInstance + 7)))
+                        (_wrappedInstance, pfde_local, pdwCookie_local);
+                }
+
                 if (result != 0)
                 {
                     Marshal.ThrowExceptionForHR(result);
@@ -328,8 +337,11 @@ internal partial class Interop
             {
                 int result;
                 fixed (char* pszName_local = pszName)
-                result = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 15)))
-                    (_wrappedInstance, pszName_local);
+                {
+                    result = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 15)))
+                        (_wrappedInstance, pszName_local);
+                }
+
                 if (result != 0)
                 {
                     Marshal.ThrowExceptionForHR(result);
@@ -354,8 +366,11 @@ internal partial class Interop
             {
                 int result;
                 fixed (char* pszTitle_local = pszTitle)
-                result = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 17)))
-                    (_wrappedInstance, pszTitle_local);
+                {
+                    result = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 17)))
+                        (_wrappedInstance, pszTitle_local);
+                }
+
                 if (result != 0)
                 {
                     Marshal.ThrowExceptionForHR(result);
@@ -366,8 +381,11 @@ internal partial class Interop
             {
                 int retVal;
                 fixed (char* pszText_local = pszText)
-                retVal = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 18)))
-                    (_wrappedInstance, pszText_local);
+                {
+                    retVal = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 18)))
+                        (_wrappedInstance, pszText_local);
+                }
+
                 return (HRESULT)retVal;
             }
 
@@ -375,8 +393,11 @@ internal partial class Interop
             {
                 int retVal;
                 fixed (char* pszLabel_local = pszLabel)
-                retVal = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 19)))
-                    (_wrappedInstance, pszLabel_local);
+                {
+                    retVal = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 19)))
+                        (_wrappedInstance, pszLabel_local);
+                }
+
                 return (HRESULT)retVal;
             }
 
@@ -424,8 +445,11 @@ internal partial class Interop
             {
                 int result;
                 fixed (char* pszDefaultExtension_local = pszDefaultExtension)
-                result = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 22)))
-                    (_wrappedInstance, pszDefaultExtension_local);
+                {
+                    result = ((delegate* unmanaged<IntPtr, char*, int>)(*(*(void***)_wrappedInstance + 22)))
+                        (_wrappedInstance, pszDefaultExtension_local);
+                }
+
                 if (result != 0)
                 {
                     Marshal.ThrowExceptionForHR(result);
@@ -446,8 +470,11 @@ internal partial class Interop
             {
                 int result;
                 fixed (Guid* guid_local = &guid)
-                result = ((delegate* unmanaged<IntPtr, Guid*, int>)(*(*(void***)_wrappedInstance + 24)))
-                    (_wrappedInstance, guid_local);
+                {
+                    result = ((delegate* unmanaged<IntPtr, Guid*, int>)(*(*(void***)_wrappedInstance + 24)))
+                        (_wrappedInstance, guid_local);
+                }
+
                 if (result != 0)
                 {
                     Marshal.ThrowExceptionForHR(result);

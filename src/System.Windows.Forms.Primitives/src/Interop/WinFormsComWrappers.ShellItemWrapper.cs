@@ -31,8 +31,11 @@ internal partial class Interop
                 fixed (Guid* bhid_local = &bhid)
                 fixed (Guid* riid_local = &riid)
                 fixed (IntPtr* ppv_local = &ppv)
-                retVal = ((delegate* unmanaged<IntPtr, IntPtr, Guid*, Guid*, IntPtr*, int>)(*(*(void***)_wrappedInstance + 3)))
-                    (_wrappedInstance, pbc, bhid_local, riid_local, ppv_local);
+                {
+                    retVal = ((delegate* unmanaged<IntPtr, IntPtr, Guid*, Guid*, IntPtr*, int>)(*(*(void***)_wrappedInstance + 3)))
+                        (_wrappedInstance, pbc, bhid_local, riid_local, ppv_local);
+                }
+
                 return (HRESULT)retVal;
             }
 
@@ -89,8 +92,11 @@ internal partial class Interop
 
                 int retVal;
                 fixed (int* piOrder_local = &piOrder)
-                retVal = ((delegate* unmanaged<IntPtr, IntPtr, uint, int*, int>)(*(*(void***)_wrappedInstance + 7)))
-                    (_wrappedInstance, ppv_local, hint, piOrder_local);
+                {
+                    retVal = ((delegate* unmanaged<IntPtr, IntPtr, uint, int*, int>)(*(*(void***)_wrappedInstance + 7)))
+                        (_wrappedInstance, ppv_local, hint, piOrder_local);
+                }
+
                 return (HRESULT)retVal;
             }
         }
