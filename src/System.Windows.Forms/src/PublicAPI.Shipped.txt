@@ -2807,8 +2807,8 @@ System.Windows.Forms.ToolStripArrowRenderEventArgs.ToolStripArrowRenderEventArgs
 ~System.Windows.Forms.ToolStripContentPanel.Renderer.get -> System.Windows.Forms.ToolStripRenderer
 ~System.Windows.Forms.ToolStripContentPanel.Renderer.set -> void
 System.Windows.Forms.ToolStripContentPanelRenderEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanel.get -> System.Windows.Forms.ToolStripContentPanel?
-System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanelRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripContentPanel? contentPanel) -> void
+System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanel.get -> System.Windows.Forms.ToolStripContentPanel!
+System.Windows.Forms.ToolStripContentPanelRenderEventArgs.ToolStripContentPanelRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripContentPanel! contentPanel) -> void
 ~System.Windows.Forms.ToolStripControlHost.Control.get -> System.Windows.Forms.Control
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c) -> void
 ~System.Windows.Forms.ToolStripControlHost.ToolStripControlHost(System.Windows.Forms.Control c, string name) -> void
