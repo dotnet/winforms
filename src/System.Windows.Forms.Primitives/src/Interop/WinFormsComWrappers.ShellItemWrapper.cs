@@ -27,52 +27,52 @@ internal partial class Interop
 
             HRESULT Shell32.IShellItem.BindToHandler(IntPtr pbc, ref Guid bhid, ref Guid riid, out IntPtr ppv)
             {
-                int retVal;
+                HRESULT retVal;
                 fixed (Guid* bhid_local = &bhid)
                 fixed (Guid* riid_local = &riid)
                 fixed (IntPtr* ppv_local = &ppv)
                 {
-                    retVal = ((delegate* unmanaged<IntPtr, IntPtr, Guid*, Guid*, IntPtr*, int>)(*(*(void***)_wrappedInstance + 3)))
+                    retVal = ((delegate* unmanaged<IntPtr, IntPtr, Guid*, Guid*, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 3)))
                         (_wrappedInstance, pbc, bhid_local, riid_local, ppv_local);
                 }
 
-                return (HRESULT)retVal;
+                return retVal;
             }
 
             HRESULT Shell32.IShellItem.GetParent(out Shell32.IShellItem ppsi)
             {
                 IntPtr ppsi_local;
-                int retVal;
-                retVal = ((delegate* unmanaged<IntPtr, IntPtr*, int>)(*(*(void***)_wrappedInstance + 4)))
+                HRESULT retVal;
+                retVal = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 4)))
                     (_wrappedInstance, &ppsi_local);
                 ppsi = ppsi_local == IntPtr.Zero ? null! : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
-                return (HRESULT)retVal;
+                return retVal;
             }
 
             HRESULT Shell32.IShellItem.GetDisplayName(Shell32.SIGDN sigdnName, out string ppszName)
             {
                 IntPtr ppszName_local;
-                int retVal;
-                retVal = ((delegate* unmanaged<IntPtr, int, IntPtr*, int>)(*(*(void***)_wrappedInstance + 5)))
+                HRESULT retVal;
+                retVal = ((delegate* unmanaged<IntPtr, int, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 5)))
                     (_wrappedInstance, (int)sigdnName, &ppszName_local);
                 ppszName = Marshal.PtrToStringUni(ppszName_local)!;
                 Marshal.FreeCoTaskMem(ppszName_local);
-                return (HRESULT)retVal;
+                return retVal;
             }
 
             HRESULT Shell32.IShellItem.GetAttributes(Shell32.SFGAOF sfgaoMask, out Shell32.SFGAOF psfgaoAttribs)
             {
                 Shell32.SFGAOF psfgaoAttribs_local;
-                int retVal;
-                retVal = ((delegate* unmanaged<IntPtr, Shell32.SFGAOF, Shell32.SFGAOF*, int>)(*(*(void***)_wrappedInstance + 6)))
+                HRESULT retVal;
+                retVal = ((delegate* unmanaged<IntPtr, Shell32.SFGAOF, Shell32.SFGAOF*, HRESULT>)(*(*(void***)_wrappedInstance + 6)))
                     (_wrappedInstance, sfgaoMask, &psfgaoAttribs_local);
                 psfgaoAttribs = psfgaoAttribs_local;
-                return (HRESULT)retVal;
+                return retVal;
             }
 
             HRESULT Shell32.IShellItem.Compare(Shell32.IShellItem psi, uint hint, out int piOrder)
             {
-                int result;
+                HRESULT result;
                 IntPtr ppv_local;
                 if (psi == null)
                 {
@@ -82,22 +82,22 @@ internal partial class Interop
                 {
                     var pUnk_local = WinFormsComWrappers.Instance.GetOrCreateComInterfaceForObject(psi, CreateComInterfaceFlags.None);
                     var local_psi_IID = IID.IShellItem;
-                    result = Marshal.QueryInterface(pUnk_local, ref local_psi_IID, out ppv_local);
+                    result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_psi_IID, out ppv_local);
                     Marshal.Release(pUnk_local);
-                    if (result != 0)
+                    if (result.Failed())
                     {
-                        Marshal.ThrowExceptionForHR(result);
+                        Marshal.ThrowExceptionForHR((int)result);
                     }
                 }
 
-                int retVal;
+                HRESULT retVal;
                 fixed (int* piOrder_local = &piOrder)
                 {
-                    retVal = ((delegate* unmanaged<IntPtr, IntPtr, uint, int*, int>)(*(*(void***)_wrappedInstance + 7)))
+                    retVal = ((delegate* unmanaged<IntPtr, IntPtr, uint, int*, HRESULT>)(*(*(void***)_wrappedInstance + 7)))
                         (_wrappedInstance, ppv_local, hint, piOrder_local);
                 }
 
-                return (HRESULT)retVal;
+                return retVal;
             }
         }
     }
