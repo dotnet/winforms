@@ -9,10 +9,10 @@ namespace System.Windows.Forms
 {
     public class ToolStripItemImageRenderEventArgs : ToolStripItemRenderEventArgs
     {
-        public ToolStripItemImageRenderEventArgs(Graphics g, ToolStripItem? item, Rectangle imageRectangle)
+        public ToolStripItemImageRenderEventArgs(Graphics g, ToolStripItem item, Rectangle imageRectangle)
             : base(g, item)
         {
-            Image = (item is not null && item.RightToLeftAutoMirrorImage && item.RightToLeft == RightToLeft.Yes) ? item.MirroredImage : item?.Image;
+            Image = (item.RightToLeftAutoMirrorImage && item.RightToLeft == RightToLeft.Yes) ? item.MirroredImage : item.Image;
             ImageRectangle = imageRectangle;
         }
 
@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         /// </summary>
         public ToolStripItemImageRenderEventArgs(
             Graphics g,
-            ToolStripItem? item,
+            ToolStripItem item,
             Image? image,
             Rectangle imageRectangle)
             : base(g, item)

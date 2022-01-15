@@ -21,7 +21,7 @@ namespace System.Windows.Forms.Tests
 
         [WinFormsTheory]
         [MemberData(nameof(Ctor_Null_Graphics_ToolStrip_TestData))]
-        public void ToolStripRenderEventArgs_NullParameters_ThrowsArgumentNullException(Graphics g, ToolStrip toolStrip)
+        public void ToolStripRenderEventArgs_Null_Graphics_ToolStrip_ThrowsArgumentNullException(Graphics g, ToolStrip toolStrip)
         {
             Assert.Throws<ArgumentNullException>(() => new ToolStripRenderEventArgs(g, toolStrip));
         }

@@ -2881,12 +2881,12 @@ System.Windows.Forms.ToolStripItemClickedEventArgs.ToolStripItemClickedEventArgs
 System.Windows.Forms.ToolStripItemEventArgs.Item.get -> System.Windows.Forms.ToolStripItem?
 System.Windows.Forms.ToolStripItemEventArgs.ToolStripItemEventArgs(System.Windows.Forms.ToolStripItem? item) -> void
 System.Windows.Forms.ToolStripItemImageRenderEventArgs.Image.get -> System.Drawing.Image?
-System.Windows.Forms.ToolStripItemImageRenderEventArgs.ToolStripItemImageRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem? item, System.Drawing.Image? image, System.Drawing.Rectangle imageRectangle) -> void
-System.Windows.Forms.ToolStripItemImageRenderEventArgs.ToolStripItemImageRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem? item, System.Drawing.Rectangle imageRectangle) -> void
+System.Windows.Forms.ToolStripItemImageRenderEventArgs.ToolStripItemImageRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem! item, System.Drawing.Image? image, System.Drawing.Rectangle imageRectangle) -> void
+System.Windows.Forms.ToolStripItemImageRenderEventArgs.ToolStripItemImageRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem! item, System.Drawing.Rectangle imageRectangle) -> void
 System.Windows.Forms.ToolStripItemRenderEventArgs.Graphics.get -> System.Drawing.Graphics!
-System.Windows.Forms.ToolStripItemRenderEventArgs.Item.get -> System.Windows.Forms.ToolStripItem?
+System.Windows.Forms.ToolStripItemRenderEventArgs.Item.get -> System.Windows.Forms.ToolStripItem!
 System.Windows.Forms.ToolStripItemRenderEventArgs.ToolStrip.get -> System.Windows.Forms.ToolStrip?
-System.Windows.Forms.ToolStripItemRenderEventArgs.ToolStripItemRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem? item) -> void
+System.Windows.Forms.ToolStripItemRenderEventArgs.ToolStripItemRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripItem! item) -> void
 System.Windows.Forms.ToolStripItemTextRenderEventArgs.Text.get -> string?
 System.Windows.Forms.ToolStripItemTextRenderEventArgs.Text.set -> void
 System.Windows.Forms.ToolStripItemTextRenderEventArgs.TextFont.get -> System.Drawing.Font?
@@ -2967,7 +2967,7 @@ System.Windows.Forms.ToolStripRenderEventArgs.ToolStripRenderEventArgs(System.Dr
 ~System.Windows.Forms.ToolStripSeparator.ImageKey.set -> void
 ~System.Windows.Forms.ToolStripSeparator.ToolTipText.get -> string
 ~System.Windows.Forms.ToolStripSeparator.ToolTipText.set -> void
-System.Windows.Forms.ToolStripSeparatorRenderEventArgs.ToolStripSeparatorRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripSeparator? separator, bool vertical) -> void
+System.Windows.Forms.ToolStripSeparatorRenderEventArgs.ToolStripSeparatorRenderEventArgs(System.Drawing.Graphics! g, System.Windows.Forms.ToolStripSeparator! separator, bool vertical) -> void
 ~System.Windows.Forms.ToolStripSplitButton.DefaultItem.get -> System.Windows.Forms.ToolStripItem
 ~System.Windows.Forms.ToolStripSplitButton.DefaultItem.set -> void
 ~System.Windows.Forms.ToolStripSplitButton.ToolStripSplitButton(string text) -> void

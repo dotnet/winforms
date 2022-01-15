@@ -11,10 +11,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  This class represents all the information to render the ToolStrip
         /// </summary>
-        public ToolStripItemRenderEventArgs(Graphics g, ToolStripItem? item)
+        public ToolStripItemRenderEventArgs(Graphics g, ToolStripItem item)
         {
             Graphics = g.OrThrowIfNull();
-            Item = item;
+            Item = item.OrThrowIfNull();
         }
 
         /// <summary>
@@ -25,11 +25,11 @@ namespace System.Windows.Forms
         /// <summary>
         ///  The item to draw
         /// </summary>
-        public ToolStripItem? Item { get; }
+        public ToolStripItem Item { get; }
 
         /// <summary>
         ///  The toolstrip the item is currently parented to
         /// </summary>
-        public ToolStrip? ToolStrip => Item?.ParentInternal;
+        public ToolStrip? ToolStrip => Item.ParentInternal;
     }
 }
