@@ -696,8 +696,7 @@ namespace System.Windows.Forms
                 cellStyle,
                 advancedBorderStyle,
                 paintParts,
-                false /*computeContentBounds*/
-                                              ,
+                false, /*computeContentBounds*/
                 false /*computeErrorIconBounds*/,
                 true /*paint*/);
         }

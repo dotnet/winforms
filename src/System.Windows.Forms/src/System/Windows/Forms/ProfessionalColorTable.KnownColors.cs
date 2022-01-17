@@ -219,8 +219,8 @@ namespace System.Windows.Forms
             msocbvcrWPTitleTextInactive,
             msocbvcrXLFormulaBarBkgd,
             ButtonSelectedHighlight, // not actually from MSO tables
-            ButtonPressedHighlight,// not actually from MSO tables
-            ButtonCheckedHighlight,// not actually from MSO tables
+            ButtonPressedHighlight, // not actually from MSO tables
+            ButtonCheckedHighlight, // not actually from MSO tables
             lastKnownColor = ButtonCheckedHighlight
         }
     }

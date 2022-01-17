@@ -5702,7 +5702,7 @@ namespace System.Windows.Forms
                         }
 #endif
 
-                        ToolStripManager.RevertMergeInternal(mdiControlStrip.MergedMenu, mdiControlStrip,/*revertMDIStuff*/true);
+                        ToolStripManager.RevertMergeInternal(mdiControlStrip.MergedMenu, mdiControlStrip, /*revertMDIStuff*/true);
 
 #if DEBUG
                         // double check that RevertMerge doesnt accidentally revert more than it should.
@@ -5755,7 +5755,7 @@ namespace System.Windows.Forms
             {
                 if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null)
                 {
-                    ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip,/*revertMdiStuff*/true);
+                    ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip, /*revertMdiStuff*/true);
                 }
 
                 MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);

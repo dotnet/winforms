@@ -4137,7 +4137,7 @@ namespace System.Windows.Forms
                         new Point[]
                         {
                             new Point(start, _lastInsertionMarkRect.Bottom-1), new Point(start + widthOfBeam-1, _lastInsertionMarkRect.Bottom-1), //bottom line
-                            new Point(start+1, _lastInsertionMarkRect.Bottom -2), new Point(start + widthOfBeam-2, _lastInsertionMarkRect.Bottom-2),//bottom second line
+                            new Point(start+1, _lastInsertionMarkRect.Bottom -2), new Point(start + widthOfBeam-2, _lastInsertionMarkRect.Bottom-2), //bottom second line
                         });
                     // then two bottom horizontal
                     g.DrawLines(SystemPens.ControlText,

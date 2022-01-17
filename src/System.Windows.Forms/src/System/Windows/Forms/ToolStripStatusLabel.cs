@@ -49,12 +49,12 @@ namespace System.Windows.Forms
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text, Image image, EventHandler onClick) : base(text, image,/*isLink=*/false, onClick, null)
+        public ToolStripStatusLabel(string text, Image image, EventHandler onClick) : base(text, image, /*isLink=*/false, onClick, null)
         {
             Initialize();
         }
 
-        public ToolStripStatusLabel(string text, Image image, EventHandler onClick, string name) : base(text, image,/*isLink=*/false, onClick, name)
+        public ToolStripStatusLabel(string text, Image image, EventHandler onClick, string name) : base(text, image, /*isLink=*/false, onClick, name)
         {
             Initialize();
         }

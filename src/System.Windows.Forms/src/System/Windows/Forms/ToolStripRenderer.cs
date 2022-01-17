@@ -56,12 +56,12 @@ namespace System.Windows.Forms
         // status strip sizing grip.
         private static readonly Rectangle[] baseSizeGripRectangles = new Rectangle[]
         {
-            new Rectangle(8,0,2,2),
-            new Rectangle(8,4,2,2),
-            new Rectangle(8,8,2,2),
-            new Rectangle(4,4,2,2),
-            new Rectangle(4,8,2,2),
-            new Rectangle(0,8,2,2)
+            new Rectangle(8, 0, 2, 2),
+            new Rectangle(8, 4, 2, 2),
+            new Rectangle(8, 8, 2, 2),
+            new Rectangle(4, 4, 2, 2),
+            new Rectangle(4, 8, 2, 2),
+            new Rectangle(0, 8, 2, 2)
         };
 
         protected ToolStripRenderer()

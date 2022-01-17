@@ -255,7 +255,7 @@ namespace System.Windows.Forms
                             nextItem = parent.GetNextItem(null, ArrowDirection.Right, /*RTLAware=*/true);
                             break;
                         case AccessibleNavigation.LastChild:
-                            nextItem = parent.GetNextItem(null, ArrowDirection.Left,/*RTLAware=*/true);
+                            nextItem = parent.GetNextItem(null, ArrowDirection.Left, /*RTLAware=*/true);
                             break;
                         case AccessibleNavigation.Previous:
                         case AccessibleNavigation.Left:

@@ -179,7 +179,7 @@ namespace System.Windows.Forms.Layout
                     int row = GetAttributeValue(controlXmlNode, "Row",       /*default*/-1);
                     int rowSpan = GetAttributeValue(controlXmlNode, "RowSpan",   /*default*/1);
                     int column = GetAttributeValue(controlXmlNode, "Column",    /*default*/-1);
-                    int columnSpan = GetAttributeValue(controlXmlNode, "ColumnSpan",/*default*/1);
+                    int columnSpan = GetAttributeValue(controlXmlNode, "ColumnSpan", /*default*/1);
 
                     settings.SetRow(name, row);
                     settings.SetColumn(name, column);
