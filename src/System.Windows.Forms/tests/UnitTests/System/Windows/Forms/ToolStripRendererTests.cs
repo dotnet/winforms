@@ -81,7 +81,6 @@ namespace System.Windows.Forms.Tests
 
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
-            yield return new object[] { new ToolStripItemRenderEventArgs(graphics, null) };
             yield return new object[] { new ToolStripItemRenderEventArgs(graphics, new SubToolStripItem()) };
         }
 
@@ -194,7 +193,6 @@ namespace System.Windows.Forms.Tests
         {
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
-            yield return new object[] { graphics, null, new Bitmap(10, 10), Rectangle.Empty };
             yield return new object[] { graphics, new SubToolStripItem(), new Bitmap(10, 10), new Rectangle(1, 2, 3, 4) };
             yield return new object[] { graphics, new SubToolStripItem { Enabled = false }, new Bitmap(10, 10), new Rectangle(1, 2, 3, 4) };
 
@@ -423,8 +421,6 @@ namespace System.Windows.Forms.Tests
 
             var image = new Bitmap(10, 10);
             Graphics graphics = Graphics.FromImage(image);
-            yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, null, true) };
-            yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, null, false) };
             yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, new ToolStripSeparator(), true) };
             yield return new object[] { new ToolStripSeparatorRenderEventArgs(graphics, new ToolStripSeparator(), false) };
         }
