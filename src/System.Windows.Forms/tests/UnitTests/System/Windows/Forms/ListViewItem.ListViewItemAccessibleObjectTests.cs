@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms.Tests
             {
                 foreach (View newView in Enum.GetValues(typeof(View)))
                 {
-                    if(oldView != newView)
+                    if (oldView != newView)
                     {
                         yield return new object[] { oldView, newView };
                     }

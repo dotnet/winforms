@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms.Tests
                 listView.CreateControl();
             }
 
-            Assert.Throws<InvalidOperationException>(() => listView.Groups.AddRange(new ListViewGroup[] { new(), new () }));
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.AddRange(new ListViewGroup[] { new(), new() }));
             Assert.Equal(createControl, listView.IsHandleCreated);
         }
 

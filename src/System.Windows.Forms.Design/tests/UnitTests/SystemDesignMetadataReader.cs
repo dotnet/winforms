@@ -15,7 +15,7 @@ namespace System.Windows.Forms.Design.Editors.Tests
         public IReadOnlyList<string> GetExportedTypeNames()
         {
             // Force load System.Design into the appdomain
-            DesignSurface designSurface = new ();
+            DesignSurface designSurface = new();
             IDesigner designer = designSurface.CreateDesigner(new Control(), true);
             Assert.NotNull(designer);
 
