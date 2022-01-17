@@ -6941,7 +6941,7 @@ namespace System.Windows.Forms
                             break;
                         }
 
-                        var nativeState = group.GetNativeCollapsedState();
+                        ListViewGroupCollapsedState nativeState = group.GetNativeCollapsedState();
                         if (nativeState != group.CollapsedState)
                         {
                             group.SetCollapsedStateInternal(nativeState);

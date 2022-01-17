@@ -408,13 +408,13 @@ namespace System.Windows.Forms
 
         internal ListViewGroupCollapsedState GetNativeCollapsedState()
         {
-            if(ListView is null)
+            if (ListView is null)
             {
-                throw new InvalidOperationException();
+                throw new InvalidOperationException(nameof(ListView));
             }
 
             LVGS state = (LVGS)User32.SendMessageW(ListView, (User32.WM)LVM.GETGROUPSTATE, ID, (nint)(LVGS.COLLAPSIBLE | LVGS.COLLAPSED));
-            if(!state.HasFlag(LVGS.COLLAPSIBLE))
+            if (!state.HasFlag(LVGS.COLLAPSIBLE))
             {
                 return ListViewGroupCollapsedState.Default;
             }
