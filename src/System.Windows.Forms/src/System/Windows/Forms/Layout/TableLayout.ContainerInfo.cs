@@ -4,6 +4,7 @@
 
 using System.Collections.Specialized;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout
@@ -309,7 +310,7 @@ namespace System.Windows.Forms.Layout
                     if (HasChildWithAbsolutePositioning)
                     {
                         int index = 0;
-                        for (int i = 0; i < _childInfo!.Length; i++)
+                        for (int i = 0; i < _childInfo.Length; i++)
                         {
                             if (_childInfo[i].IsAbsolutelyPositioned)
                             {
@@ -337,6 +338,7 @@ namespace System.Windows.Forms.Layout
                 }
             }
 
+            [MemberNotNullWhen(true, nameof(_childInfo))]
             public bool HasChildWithAbsolutePositioning
             {
                 get { return _countFixedChildren > 0; }
