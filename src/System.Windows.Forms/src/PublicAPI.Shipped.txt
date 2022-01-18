@@ -6090,8 +6090,8 @@ System.Windows.Forms.Button
 System.Windows.Forms.Button.AutoSizeMode.get -> System.Windows.Forms.AutoSizeMode
 System.Windows.Forms.Button.AutoSizeMode.set -> void
 System.Windows.Forms.Button.Button() -> void
-System.Windows.Forms.Button.DoubleClick -> System.EventHandler!
-System.Windows.Forms.Button.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler!
+System.Windows.Forms.Button.DoubleClick -> System.EventHandler?
+System.Windows.Forms.Button.MouseDoubleClick -> System.Windows.Forms.MouseEventHandler?
 System.Windows.Forms.Button.PerformClick() -> void
 System.Windows.Forms.ButtonBase
 System.Windows.Forms.ButtonBase.AutoEllipsis.get -> bool
