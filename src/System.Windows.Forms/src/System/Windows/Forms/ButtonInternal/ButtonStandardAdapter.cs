@@ -72,14 +72,6 @@ namespace System.Windows.Forms.ButtonInternal
                 pbState,
                 DpiHelper.IsScalingRequirementMet ? Control.HandleInternal : IntPtr.Zero);
 
-            if (!SystemInformation.HighContrast && pbState == PushButtonState.Normal)
-            {
-                ControlPaint.DrawBorderSimple(
-                    e.GraphicsInternal,
-                    Rectangle.Inflate(bounds, -1, -1),
-                    ControlPaint.Darker(SystemColors.ButtonShadow, ButtonBorderDarkerOffset));
-            }
-
             // Now overlay the background image or backcolor (the former overrides the latter), leaving a margin.
             // We hardcode this margin for now since GetThemeMargins returns 0 all the time.
             //
