@@ -10886,7 +10886,7 @@ namespace System.Windows.Forms
                     // LayoutEngine which manages your layout, so we call into the parent's
                     // LayoutEngine.
                     ParentInternal.LayoutEngine.InitLayout(this, specified);
-                    ParentInternal.ResumeLayout( /* performLayout = */ true);
+                    ParentInternal.ResumeLayout(/* performLayout = */ true);
 #if DEBUG
                     Debug.Assert(ParentInternal.LayoutSuspendCount == suspendCount, "Suspend/Resume layout mismatch!");
 #endif

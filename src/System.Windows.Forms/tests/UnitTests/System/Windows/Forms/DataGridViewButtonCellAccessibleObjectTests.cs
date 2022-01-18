@@ -48,7 +48,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void DataGridViewButtonCellAccessibleObject_DoDefaultAction_ThrowsException_IfOwnerIsNull()
         {
-            Assert.Throws <InvalidOperationException> (()
+            Assert.Throws <InvalidOperationException>(()
                 => new DataGridViewButtonCellAccessibleObject(null).DoDefaultAction());
         }
 
