@@ -313,7 +313,7 @@ internal partial class Interop
                 }
 
                 pszName = Marshal.PtrToStringUni(pszName_local)!;
-                Marshal.FreeCoTaskMem(ppszName_local);
+                Marshal.FreeCoTaskMem(pszName_local);
             }
 
             void Shell32.IFileOpenDialog.SetTitle(string pszTitle)
