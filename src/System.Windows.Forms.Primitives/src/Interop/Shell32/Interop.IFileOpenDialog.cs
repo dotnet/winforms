@@ -50,11 +50,11 @@ internal static partial class Interop
                 IShellItem psi);
 
             void GetFolder(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             [PreserveSig]
             HRESULT GetCurrentSelection(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             void SetFileName(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszName);
@@ -74,7 +74,7 @@ internal static partial class Interop
                 [MarshalAs(UnmanagedType.LPWStr)] string pszLabel);
 
             void GetResult(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             [PreserveSig]
             HRESULT AddPlace(
@@ -98,11 +98,11 @@ internal static partial class Interop
                 IntPtr pFilter);
 
             void GetResults(
-                out IShellItemArray ppenum);
+                out IShellItemArray? ppenum);
 
             [PreserveSig]
             HRESULT GetSelectedItems(
-                out IShellItemArray ppsai);
+                out IShellItemArray? ppsai);
         }
 #pragma warning restore CS0108
     }

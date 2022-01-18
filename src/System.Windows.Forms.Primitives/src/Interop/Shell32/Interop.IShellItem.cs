@@ -22,7 +22,7 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT GetParent(
-                out IShellItem ppsi);
+                out IShellItem? ppsi);
 
             [PreserveSig]
             HRESULT GetDisplayName(
