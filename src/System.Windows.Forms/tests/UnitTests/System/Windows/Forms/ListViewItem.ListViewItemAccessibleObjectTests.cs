@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms.Tests
 
             if (!virtualMode && groupsEnabled)
             {
-                ListViewGroup listViewGroup = new("Test") { CollapsedState = state};
+                ListViewGroup listViewGroup = new("Test") { CollapsedState = state };
                 listView.Groups.Add(listViewGroup);
                 if (itemsInGroup)
                 {

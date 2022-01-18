@@ -1150,8 +1150,8 @@ namespace System.Windows.Forms.Tests
             listView.CreateControl();
             listView.Columns.Add(new ColumnHeader("Column 1") { Width = 70 });
             listView.Columns.Add(new ColumnHeader("Column 2") { Width = 70 });
-            listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1"}));
-            listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1"}));
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1" }));
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1", "SubItem 1" }));
 
             Assert.NotNull(HitTest(listView, GetItemLocation(0)));
             Assert.NotNull(HitTest(listView, GetItemLocation(1)));
@@ -1219,8 +1219,8 @@ namespace System.Windows.Forms.Tests
             listView.Columns.Add(new ColumnHeader("Column 1") { Width = 70 });
             listView.Columns.Add(new ColumnHeader("Column 2") { Width = 70 });
             listView.Columns.Add(new ColumnHeader("Column 3") { Width = 70 });
-            listView.Items.Add(new ListViewItem(new string[] { "Item 1"}));
-            listView.Items.Add(new ListViewItem(new string[] { "Item 2"}));
+            listView.Items.Add(new ListViewItem(new string[] { "Item 1" }));
+            listView.Items.Add(new ListViewItem(new string[] { "Item 2" }));
 
             Assert.Same(GetDetailsSubItemOrFake(0, 1), HitTest(listView, GetDetailsSubItemOrFake(0, 1).Bounds.Location));
             Assert.Same(GetDetailsSubItemOrFake(0, 2), HitTest(listView, GetDetailsSubItemOrFake(0, 2).Bounds.Location));

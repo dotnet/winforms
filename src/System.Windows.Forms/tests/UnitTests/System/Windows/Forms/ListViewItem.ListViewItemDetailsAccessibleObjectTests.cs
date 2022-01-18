@@ -19,7 +19,7 @@ namespace System.Windows.Forms.Tests
         [WinFormsFact]
         public void ListViewItemDetailsAccessibleObject_FragmentNavigate_FirstChild_ReturnsExpected()
         {
-            using ListView control = new() { View = View.Details};
+            using ListView control = new() { View = View.Details };
             ListViewItem item = new();
             control.Columns.Add(new ColumnHeader());
             control.Items.Add(item);

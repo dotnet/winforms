@@ -119,8 +119,8 @@ namespace System.Windows.Forms.Tests
             using ToolStripProgressBarControl control = new();
             using ToolStripProgressBar item = new();
             using ToolStrip toolStrip = new() { Size = new Drawing.Size(500, 25) };
-            using ToolStripLabel label = new() { Text = "Label"};
-            using ToolStripButton button = new() { Text = "Button"};
+            using ToolStripLabel label = new() { Text = "Label" };
+            using ToolStripButton button = new() { Text = "Button" };
 
             toolStrip.CreateControl();
             control.Owner = item;
