@@ -455,8 +455,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
-        public Control(string text, int left, int top, int width, int height) :
-                    this(null, text, left, top, width, height)
+        public Control(string text, int left, int top, int width, int height) : this(null, text, left, top, width, height)
         {
         }
 

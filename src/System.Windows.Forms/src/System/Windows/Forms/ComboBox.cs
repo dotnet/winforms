@@ -2958,7 +2958,7 @@ namespace System.Windows.Forms
                 base.OnTextChanged(e);
             }
 
-            if (IsAccessibilityObjectCreated &&_childEdit is not null)
+            if (IsAccessibilityObjectCreated && _childEdit is not null)
             {
                 ChildEditAccessibleObject.RaiseAutomationEvent(UiaCore.UIA.Text_TextChangedEventId);
             }

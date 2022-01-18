@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design
             object instance = context.Instance;
 
             // We would not know what to do in this case anyway (i.e. multiple selection of objects)
-            if (instance is object[] ||(index < 0 && key == null))
+            if (instance is object[] || (index < 0 && key == null))
             {
                 return null;
             }

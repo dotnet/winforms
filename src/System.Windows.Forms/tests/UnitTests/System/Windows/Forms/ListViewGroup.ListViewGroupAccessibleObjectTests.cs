@@ -690,8 +690,7 @@ namespace System.Windows.Forms.Tests
             listViewGroup.Items[0].Selected = true;
             listViewGroup.Items[0].Focused = true;
             AccessibleObject accessibleObject = listView.SelectedItems[0].AccessibilityObject;
-            ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)
-                accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
+            ListViewGroupAccessibleObject groupAccObj = (ListViewGroupAccessibleObject)accessibleObject.FragmentNavigate(UiaCore.NavigateDirection.Parent);
 
             groupAccObj.SetFocus();
 

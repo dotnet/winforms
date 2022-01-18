@@ -14,8 +14,7 @@ namespace System.Windows.Forms.Design.Behavior
         private readonly DesignerActionUIService _daUISvc;
         private static readonly Guid s_vSStandardCommandSet97 = new Guid("{5efc7975-14bc-11cf-9b2b-00aa00573819}");
 
-        public DesignerActionKeyboardBehavior(DesignerActionPanel panel, IServiceProvider serviceProvider, BehaviorService behaviorService) :
-            base(true, behaviorService)
+        public DesignerActionKeyboardBehavior(DesignerActionPanel panel, IServiceProvider serviceProvider, BehaviorService behaviorService) : base(true, behaviorService)
         {
             _panel = panel;
             if (serviceProvider != null)

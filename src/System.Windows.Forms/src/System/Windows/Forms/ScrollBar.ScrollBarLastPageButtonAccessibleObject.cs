@@ -44,7 +44,7 @@ namespace System.Windows.Forms
 
                 return direction switch
                 {
-                    NavigateDirection.PreviousSibling => IsDisplayed ? ParentInternal.ThumbAccessibleObject: null,
+                    NavigateDirection.PreviousSibling => IsDisplayed ? ParentInternal.ThumbAccessibleObject : null,
                     NavigateDirection.NextSibling => IsDisplayed ? ParentInternal.LastLineButtonAccessibleObject : null,
                     _ => base.FragmentNavigate(direction)
                 };

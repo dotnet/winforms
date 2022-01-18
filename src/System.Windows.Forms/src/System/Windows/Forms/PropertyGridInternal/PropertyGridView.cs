@@ -353,7 +353,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
         internal DropDownHolder DropDownControlHolder => _dropDownHolder;
 
-        internal bool DropDownVisible=> _dropDownHolder is not null && _dropDownHolder.Visible;
+        internal bool DropDownVisible => _dropDownHolder is not null && _dropDownHolder.Visible;
 
         public bool FocusInside => ContainsFocus || DropDownVisible;
 

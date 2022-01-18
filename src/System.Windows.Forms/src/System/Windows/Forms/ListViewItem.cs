@@ -150,8 +150,7 @@ namespace System.Windows.Forms
             Group = group;
         }
 
-        public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group) :
-            this(items, imageIndex, foreColor, backColor, font)
+        public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group) : this(items, imageIndex, foreColor, backColor, font)
         {
             Group = group;
         }
@@ -214,8 +213,7 @@ namespace System.Windows.Forms
             Group = group;
         }
 
-        public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group) :
-            this(items, imageKey, foreColor, backColor, font)
+        public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group) : this(items, imageKey, foreColor, backColor, font)
         {
             Group = group;
         }

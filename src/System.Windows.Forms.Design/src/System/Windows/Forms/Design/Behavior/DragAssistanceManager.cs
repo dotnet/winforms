@@ -375,7 +375,7 @@ namespace System.Windows.Forms.Design.Behavior
         {
             if (!(comp is Control control) || //has to be a control to get snaplines
                (dragComponents != null && dragComponents.Contains(comp) && !_ctrlDrag) || //cannot be something that we are dragging, unless we are in a ctrlDrag
-               IsChildOfParent(control, targetControl) ||//cannot be a child of the control we will drag
+               IsChildOfParent(control, targetControl) || //cannot be a child of the control we will drag
                !clipBounds.IntersectsWith(control.Bounds) || //has to be partially visible on the rootcomp's surface
                control.Parent is null || // control must have a parent.
                !control.Visible)

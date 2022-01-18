@@ -245,9 +245,9 @@ namespace System.Windows.Forms.Design.Behavior
                 new SnapLine(SnapLineType.Right, r.Right),
                 new SnapLine(SnapLineType.Bottom, r.Bottom),
                 new SnapLine(SnapLineType.Top, r.Top),
-                new SnapLine(SnapLineType.Horizontal, r.Top -4, SnapLine.MarginTop, SnapLinePriority.Always),
+                new SnapLine(SnapLineType.Horizontal, r.Top - 4, SnapLine.MarginTop, SnapLinePriority.Always),
                 new SnapLine(SnapLineType.Horizontal, r.Bottom + 3, SnapLine.MarginBottom, SnapLinePriority.Always),
-                new SnapLine(SnapLineType.Vertical, r.Left -4, SnapLine.MarginLeft, SnapLinePriority.Always),
+                new SnapLine(SnapLineType.Vertical, r.Left - 4, SnapLine.MarginLeft, SnapLinePriority.Always),
                 new SnapLine(SnapLineType.Vertical, r.Right + 3, SnapLine.MarginRight, SnapLinePriority.Always)
             };
         }

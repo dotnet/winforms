@@ -277,7 +277,7 @@ namespace System.Windows.Forms.Tests
             ListViewItem item = new();
             control.Items.Add(item);
 
-            Assert.True(item.AccessibilityObject.IsPatternSupported((UiaCore.UIA) patternId));
+            Assert.True(item.AccessibilityObject.IsPatternSupported((UiaCore.UIA)patternId));
             Assert.False(control.IsHandleCreated);
         }
 

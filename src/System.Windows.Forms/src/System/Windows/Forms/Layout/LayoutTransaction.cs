@@ -32,8 +32,7 @@ namespace System.Windows.Forms.Layout
 #if DEBUG
         readonly int _layoutSuspendCount;
 #endif
-        public LayoutTransaction(Control? controlToLayout, IArrangedElement? controlCausingLayout, string? property) :
-            this(controlToLayout, controlCausingLayout, property, true)
+        public LayoutTransaction(Control? controlToLayout, IArrangedElement? controlCausingLayout, string? property) : this(controlToLayout, controlCausingLayout, property, true)
         {
         }
 
