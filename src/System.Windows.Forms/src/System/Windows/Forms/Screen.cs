@@ -36,11 +36,11 @@ namespace System.Windows.Forms
 
         readonly int bitDepth;
 
-        private static readonly object syncLock = new object();//used to lock this class before syncing to SystemEvents
+        private static readonly object syncLock = new object(); //used to lock this class before syncing to SystemEvents
 
-        private static int desktopChangedCount = -1;//static counter of desktop size changes
+        private static int desktopChangedCount = -1; //static counter of desktop size changes
 
-        private int currentDesktopChangedCount = -1;//instance-based counter used to invalidate WorkingArea
+        private int currentDesktopChangedCount = -1; //instance-based counter used to invalidate WorkingArea
 
         // This identifier is just for us, so that we don't try to call the multimon
         // functions if we just need the primary monitor... this is safer for

@@ -51,9 +51,9 @@ namespace System.Windows.Forms.Design
         private const string CF_DESIGNER = "CF_DESIGNERCOMPONENTS_V2"; // See VSWhidbey #172531
 
         //these are used for snapping control via keyboard movement
-        protected DragAssistanceManager dragManager;//point to the snapline engine (only valid between keydown and timer expiration)
-        private Timer snapLineTimer;//used to track the time from when a snapline is rendered until it should expire
-        private BehaviorService behaviorService;//demand created pointer to the behaviorservice
+        protected DragAssistanceManager dragManager; //point to the snapline engine (only valid between keydown and timer expiration)
+        private Timer snapLineTimer; //used to track the time from when a snapline is rendered until it should expire
+        private BehaviorService behaviorService; //demand created pointer to the behaviorservice
         private StatusCommandUI statusCommandUI; //Used to update the statusBar Information.
         private readonly IUIService uiService;
 

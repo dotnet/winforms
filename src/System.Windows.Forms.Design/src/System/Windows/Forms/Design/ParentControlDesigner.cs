@@ -381,8 +381,8 @@ namespace System.Windows.Forms.Design
 
             //the display rectangle should be the client area combined with the padding value
             Rectangle displayRectangle = Control.DisplayRectangle;
-            displayRectangle.X += offset.X;//offset for non-client area
-            displayRectangle.Y += offset.Y;//offset for non-client area
+            displayRectangle.X += offset.X; //offset for non-client area
+            displayRectangle.Y += offset.Y; //offset for non-client area
 
             //add the four paddings of our control
 

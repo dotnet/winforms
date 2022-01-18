@@ -584,7 +584,7 @@ namespace System.Windows.Forms.Design.Behavior
                 }
                 else
                 {
-                    _dragManager.OnMouseMove(new Rectangle(-100, -100, 0, 0));/*just an invalid rect - so we won't snap*///);
+                    _dragManager.OnMouseMove(new Rectangle(-100, -100, 0, 0)); /*just an invalid rect - so we won't snap*///);
                 }
 
                 // If there's a line to snap to, the offset will come back non-zero. In that case we should adjust the mouse position with the offset such that the size calculation below takes that offset into account. If there's no line, then the offset is 0, and there's no harm in adding the offset.

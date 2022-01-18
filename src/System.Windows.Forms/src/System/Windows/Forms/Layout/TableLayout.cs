@@ -275,11 +275,11 @@ namespace System.Windows.Forms.Layout
             }
             else if (growStyle == TableLayoutPanelGrowStyle.AddRows)
             {
-                numRows = 0;//indicates that columns are specified and rows should grow
+                numRows = 0; //indicates that columns are specified and rows should grow
             }
             else
             {//must be addcolumns
-                numCols = 0;//indicates that rows are specified and columns should grow
+                numCols = 0; //indicates that rows are specified and columns should grow
             }
 
             if (numCols > 0)

@@ -22021,7 +22021,7 @@ namespace System.Windows.Forms
             // changes in a cell should be commited.
             // Therefore, commitRow should be always true, and useless here.
 
-            bool moved = false, ret = true;//, commitRow = true;
+            bool moved = false, ret = true; //, commitRow = true;
             if ((keyData & Keys.Control) == 0)
             {
                 // Enter behaves like down arrow - it commits the potential editing and goes down one cell.

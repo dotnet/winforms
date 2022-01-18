@@ -117,7 +117,7 @@ namespace System.Windows.Forms
         public RichTextBox()
         {
             InConstructor = true;
-            richTextBoxFlags[autoWordSelectionSection] = 0;// This is false by default
+            richTextBoxFlags[autoWordSelectionSection] = 0; // This is false by default
             DetectUrls = true;
             ScrollBars = RichTextBoxScrollBars.Both;
             RichTextShortcutsEnabled = true;

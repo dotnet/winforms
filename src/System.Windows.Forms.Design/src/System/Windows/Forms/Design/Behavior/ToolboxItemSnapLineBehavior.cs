@@ -16,14 +16,14 @@ namespace System.Windows.Forms.Design.Behavior
     /// </summary>
     internal class ToolboxItemSnapLineBehavior : Behavior
     {
-        private readonly IServiceProvider serviceProvider;//used for snaplines
-        private readonly BehaviorService behaviorService;//pointer to our big & bad service
-        private readonly ControlDesigner designer;//used for snaplines as well
-        private bool isPushed;//used to track if this is currently on the stack or not
-        private Rectangle lastRectangle;//cache the last mouse loc - so we can ignore when mouse doesn't move
-        private Point lastOffset;//cache the last snap so we know where to create our control if dropped
+        private readonly IServiceProvider serviceProvider; //used for snaplines
+        private readonly BehaviorService behaviorService; //pointer to our big & bad service
+        private readonly ControlDesigner designer; //used for snaplines as well
+        private bool isPushed; //used to track if this is currently on the stack or not
+        private Rectangle lastRectangle; //cache the last mouse loc - so we can ignore when mouse doesn't move
+        private Point lastOffset; //cache the last snap so we know where to create our control if dropped
         private DragAssistanceManager dragManager; //used to apply snaplines when dragging a new tool rect on the designer's surface
-        private readonly bool targetAllowsSnapLines;//indicates if the drop target allows snaplines (flowpanels don't for ex)
+        private readonly bool targetAllowsSnapLines; //indicates if the drop target allows snaplines (flowpanels don't for ex)
         private readonly StatusCommandUI statusCommandUI; //used to update the StatusBar Information.
         private readonly bool targetAllowsDragBox;    //indicates if the drop target allows the generic drag box to be drawn
 
