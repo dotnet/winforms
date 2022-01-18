@@ -174,7 +174,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Implements the <see cref='ShortcutsEnabled'/> property.
+        ///  Implements the <see cref="ShortcutsEnabled"/> property.
         /// </summary>
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {

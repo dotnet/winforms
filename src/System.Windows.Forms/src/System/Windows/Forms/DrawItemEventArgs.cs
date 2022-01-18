@@ -82,7 +82,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the <see cref='Drawing.Graphics'/> object used to paint.
+        ///  Gets the <see cref="Drawing.Graphics"/> object used to paint.
         /// </summary>
         public Graphics Graphics => _event.Graphics;
 

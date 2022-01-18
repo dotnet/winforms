@@ -22,7 +22,7 @@ namespace System.ComponentModel.Design
         private object _originalValue;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='InheritedPropertyDescriptor'/> class.
+        ///  Initializes a new instance of the <see cref="InheritedPropertyDescriptor"/> class.
         /// </summary>
         public InheritedPropertyDescriptor(PropertyDescriptor propertyDescriptor, object component) : base(propertyDescriptor, Array.Empty<Attribute>())
         {

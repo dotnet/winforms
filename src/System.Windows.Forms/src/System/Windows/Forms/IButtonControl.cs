@@ -24,7 +24,7 @@ namespace System.Windows.Forms
         void NotifyDefault(bool value);
 
         /// <summary>
-        ///  Generates a <see cref='Control.Click'/> event for the control.
+        ///  Generates a <see cref="Control.Click"/> event for the control.
         /// </summary>
         void PerformClick();
     }

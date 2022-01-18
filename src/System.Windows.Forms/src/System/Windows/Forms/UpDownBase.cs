@@ -45,7 +45,7 @@ namespace System.Windows.Forms
         internal int _defaultButtonsWidth = DefaultButtonsWidth;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='UpDownBase'/> class.
+        ///  Initializes a new instance of the <see cref="UpDownBase"/> class.
         /// </summary>
         public UpDownBase()
         {
@@ -573,7 +573,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.KeyDown'/> event.
+        ///  Raises the <see cref="Control.KeyDown"/> event.
         /// </summary>
         protected virtual void OnTextBoxKeyDown(object source, KeyEventArgs e)
         {
@@ -603,13 +603,13 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.KeyPress'/> event.
+        ///  Raises the <see cref="Control.KeyPress"/> event.
         /// </summary>
         protected virtual void OnTextBoxKeyPress(object source, KeyPressEventArgs e)
             => OnKeyPress(e);
 
         /// <summary>
-        ///  Raises the <see cref='Control.LostFocus'/> event.
+        ///  Raises the <see cref="Control.LostFocus"/> event.
         /// </summary>
         protected virtual void OnTextBoxLostFocus(object source, EventArgs e)
         {
@@ -620,7 +620,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.Resize'/> event.
+        ///  Raises the <see cref="Control.Resize"/> event.
         /// </summary>
         protected virtual void OnTextBoxResize(object source, EventArgs e)
         {
@@ -660,7 +660,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseDown'/> event.
+        ///  Raises the <see cref="Control.OnMouseDown"/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -673,7 +673,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseUp'/> event.
+        ///  Raises the <see cref="Control.OnMouseUp"/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -702,7 +702,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseWheel'/> event.
+        ///  Raises the <see cref="Control.OnMouseWheel"/> event.
         /// </summary>
         protected override void OnMouseWheel(MouseEventArgs e)
         {

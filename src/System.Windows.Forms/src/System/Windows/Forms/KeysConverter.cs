@@ -13,7 +13,7 @@ using System.Text;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides a type converter to convert <see cref='Keys'/> objects to and from various
+    ///  Provides a type converter to convert <see cref="Keys"/> objects to and from various
     ///  other representations.
     /// </summary>
     public class KeysConverter : TypeConverter, IComparer

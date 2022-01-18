@@ -7,8 +7,8 @@ using System.ComponentModel;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='TabControl.OnDeselecting'/>,
-    /// <see cref='TabControl.OnDeselected'/> event.
+    ///  Provides data for the <see cref="TabControl.OnDeselecting"/>,
+    /// <see cref="TabControl.OnDeselected"/> event.
     /// </summary>
     public class TabControlCancelEventArgs : CancelEventArgs
     {

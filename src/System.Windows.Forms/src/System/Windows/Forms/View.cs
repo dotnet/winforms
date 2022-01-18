@@ -7,7 +7,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Specifies how list items are displayed in a <see cref='ListView'/> control.
+    ///  Specifies how list items are displayed in a <see cref="ListView"/> control.
     /// </summary>
     public enum View
     {

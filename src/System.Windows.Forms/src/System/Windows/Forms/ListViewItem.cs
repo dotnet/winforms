@@ -17,7 +17,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Implements an item of a <see cref='Forms.ListView'/>.
+    ///  Implements an item of a <see cref="Forms.ListView"/>.
     /// </summary>
     [TypeConverter(typeof(ListViewItemConverter))]
     [ToolboxItem(false)]

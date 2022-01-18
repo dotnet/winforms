@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Image'/> displayed on a label control.
+        ///  Gets or sets the <see cref="Forms.ImageList"/> that contains the <see cref="Image"/> displayed on a label control.
         /// </summary>
         [DefaultValue(null)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -2831,7 +2831,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Image'/> displayed on a label control
+        ///  Gets or sets the <see cref="Forms.ImageList"/> that contains the <see cref="Image"/> displayed on a label control
         /// </summary>
         private void ImageListRecreateHandle(object sender, EventArgs e)
         {

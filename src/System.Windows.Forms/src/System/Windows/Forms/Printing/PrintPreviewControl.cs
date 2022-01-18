@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         bool exceptionPrinting;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='PrintPreviewControl'/> class.
+        ///  Initializes a new instance of the <see cref="PrintPreviewControl"/> class.
         /// </summary>
         public PrintPreviewControl()
         {
@@ -944,7 +944,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Control.BackColor'/> property should be persisted.
+        ///  Indicates whether the <see cref="Control.BackColor"/> property should be persisted.
         /// </summary>
         internal override bool ShouldSerializeBackColor()
         {
@@ -952,7 +952,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Control.ForeColor'/> property should be persisted.
+        ///  Indicates whether the <see cref="Control.ForeColor"/> property should be persisted.
         /// </summary>
         internal override bool ShouldSerializeForeColor()
         {

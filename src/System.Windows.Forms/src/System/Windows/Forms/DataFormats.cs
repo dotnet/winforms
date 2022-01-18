@@ -11,139 +11,139 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Translates between WinForms text-based <see cref='Clipboard'/>
+    ///  Translates between WinForms text-based <see cref="Clipboard"/>
     ///  formats and Win32 32-bit signed integer-based clipboard
-    ///  formats. Provides <see langword='static'/> methods to create new
-    /// <see cref='Clipboard'/> formats and add them to the Windows Registry.
+    ///  formats. Provides <see langword="static"/> methods to create new
+    /// <see cref="Clipboard"/> formats and add them to the Windows Registry.
     /// </summary>
     public static partial class DataFormats
     {
         /// <summary>
-        ///  Specifies the standard ANSI text format. This <see langword='static'/>
+        ///  Specifies the standard ANSI text format. This <see langword="static"/>
         ///  field is read-only.
         /// </summary>
         public static readonly string Text = "Text";
 
         /// <summary>
         ///  Specifies the standard Windows Unicode text format.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string UnicodeText = "UnicodeText";
 
         /// <summary>
         ///  Specifies the Windows Device Independent Bitmap (DIB) format.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Dib = "DeviceIndependentBitmap";
 
         /// <summary>
         ///  Specifies a Windows bitmap format.
-        ///  This <see langword='static'/> field is read-only. </summary>
+        ///  This <see langword="static"/> field is read-only. </summary>
         public static readonly string Bitmap = "Bitmap";
 
         /// <summary>
         ///  Specifies the Windows enhanced metafile format.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string EnhancedMetafile = "EnhancedMetafile";
 
         /// <summary>
         ///  Specifies the Windows metafile format, which WinForms does not directly use.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string MetafilePict = "MetaFilePict";
 
         /// <summary>
         ///  Specifies the Windows symbolic link format, which WinForms does not directly use.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string SymbolicLink = "SymbolicLink";
 
         /// <summary>
         ///  Specifies the Windows data interchange format, which WinForms does not directly use.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Dif = "DataInterchangeFormat";
 
         /// <summary>
         ///  Specifies the Tagged Image File Format (TIFF), which WinForms does not directly use.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Tiff = "TaggedImageFileFormat";
 
         /// <summary>
         ///  Specifies the standard Windows original equipment manufacturer (OEM) text format.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string OemText = "OEMText";
 
         /// <summary>
         ///  Specifies the Windows palette format.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Palette = "Palette";
 
         /// <summary>
         ///  Specifies the Windows pen data format, which consists of pen strokes for handwriting
         ///  software; Win Formsdoes not use this format.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string PenData = "PenData";
 
         /// <summary>
         ///  Specifies the Resource Interchange File Format (RIFF) audio format, which WinForms
         ///  does not directly use.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Riff = "RiffAudio";
 
         /// <summary>
         ///  Specifies the wave audio format, which Win Forms does not
-        ///  directly use. This <see langword='static'/> field is read-only.
+        ///  directly use. This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string WaveAudio = "WaveAudio";
 
         /// <summary>
         ///  Specifies the Windows file drop format, which WinForms does not directly use.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string FileDrop = "FileDrop";
 
         /// <summary>
         ///  Specifies the Windows culture format, which WinForms does not directly use.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Locale = "Locale";
 
         /// <summary>
         ///  Specifies text consisting of HTML data.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Html = "HTML Format";
 
         /// <summary>
         ///  Specifies text consisting of Rich Text Format (RTF) data.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Rtf = "Rich Text Format";
 
         /// <summary>
         ///  Specifies a comma-separated value (CSV) format, which is a common interchange format
         ///  used by spreadsheets. This format is not used directly by WinForms.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string CommaSeparatedValue = "Csv";
 
         /// <summary>
         ///  Specifies the Win Forms string class format, which WinForms uses to store string
         ///  objects.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string StringFormat = typeof(string).FullName;
 
         /// <summary>
         ///  Specifies a format that encapsulates any type of WinForms object.
-        ///  This <see langword='static'/> field is read-only.
+        ///  This <see langword="static"/> field is read-only.
         /// </summary>
         public static readonly string Serializable = Application.WindowsFormsVersion + "PersistentObject";
 
@@ -153,7 +153,7 @@ namespace System.Windows.Forms
         private static readonly object s_internalSyncObject = new object();
 
         /// <summary>
-        ///  Gets a <see cref='Format'/> with the Windows
+        ///  Gets a <see cref="Format"/> with the Windows
         ///  Clipboard numeric ID and name for the specified format.
         /// </summary>
         public static Format GetFormat(string format)
@@ -199,7 +199,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a <see cref='Format'/> with the Windows
+        ///  Gets a <see cref="Format"/> with the Windows
         ///  Clipboard numeric ID and name for the specified ID.
         /// </summary>
         public static Format GetFormat(int id)

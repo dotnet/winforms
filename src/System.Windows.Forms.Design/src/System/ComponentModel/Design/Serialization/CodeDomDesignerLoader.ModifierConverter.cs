@@ -42,7 +42,7 @@ namespace System.ComponentModel.Design.Serialization
                 => GetConverter(context).ConvertTo(context, culture, value, destinationType);
 
             /// <summary>
-            /// <para>Re-creates an <see cref='object'/> given a set of property values for the
+            /// <para>Re-creates an <see cref="object"/> given a set of property values for the
             ///  object.</para>
             /// </summary>
             public override object CreateInstance(ITypeDescriptorContext context, IDictionary propertyValues)
@@ -76,7 +76,7 @@ namespace System.ComponentModel.Design.Serialization
 
             /// <summary>
             ///  <para>Gets a value indicating whether changing a value on this object requires a
-            ///  call to <see cref='TypeConverter.CreateInstance(IDictionary)'/> to create a new value,
+            ///  call to <see cref="TypeConverter.CreateInstance(IDictionary)"/> to create a new value,
             ///  using the specified context.</para>
             /// </summary>
             public override bool GetCreateInstanceSupported(ITypeDescriptorContext context)
@@ -141,7 +141,7 @@ namespace System.ComponentModel.Design.Serialization
 
             /// <summary>
             ///  <para>Gets a value indicating whether the collection of standard values returned from
-            ///  <see cref='TypeConverter.GetStandardValues()'/> is an exclusive
+            ///  <see cref="TypeConverter.GetStandardValues()"/> is an exclusive
             ///  list of possible values, using the specified context.</para>
             /// </summary>
             public override bool GetStandardValuesExclusive(ITypeDescriptorContext context)

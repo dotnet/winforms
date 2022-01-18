@@ -2999,7 +2999,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.Resize'/> event.
+        ///  Raises the <see cref="Control.Resize"/> event.
         /// </summary>
         protected override void OnResize(EventArgs e)
         {

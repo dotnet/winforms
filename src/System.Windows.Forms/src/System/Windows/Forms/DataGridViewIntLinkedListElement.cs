@@ -7,7 +7,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents an element in a <see cref='DataGridViewIntLinkedList'/> linked list.
+    ///  Represents an element in a <see cref="DataGridViewIntLinkedList"/> linked list.
     /// </summary>
     internal class DataGridViewIntLinkedListElement
     {

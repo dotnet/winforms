@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private bool _scaleScrollBarForDpiChange = true;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ScrollBar'/> class.
+        ///  Initializes a new instance of the <see cref="ScrollBar"/> class.
         /// </summary>
         public ScrollBar() : base()
         {
@@ -189,7 +189,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value to be added or subtracted to the <see cref='Value'/>
+        ///  Gets or sets a value to be added or subtracted to the <see cref="Value"/>
         ///  property when the scroll box is moved a large distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -282,7 +282,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the value to be added or subtracted to the <see cref='Value'/>
+        ///  Gets or sets the value to be added or subtracted to the <see cref="Value"/>
         ///  property when the scroll box is moved a small distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -456,8 +456,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Occurs when the <see cref='Value'/> property has
-        ///  changed, either by a <see cref='OnScroll'/> event
+        ///  Occurs when the <see cref="Value"/> property has
+        ///  changed, either by a <see cref="OnScroll"/> event
         ///  or programmatically.
         /// </summary>
         [SRCategory(nameof(SR.CatAction))]
@@ -513,7 +513,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ValueChanged'/> event.
+        ///  Raises the <see cref="ValueChanged"/> event.
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
             => ((ScrollEventHandler?)Events[s_scrollEvent])?.Invoke(this, se);
@@ -567,7 +567,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ValueChanged'/> event.
+        ///  Raises the <see cref="ValueChanged"/> event.
         /// </summary>
         protected virtual void OnValueChanged(EventArgs e)
             => ((EventHandler?)Events[s_valueChangedEvent])?.Invoke(this, e);
@@ -747,11 +747,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a new AccessibleObject for this <see cref='ScrollBar'/> instance.
+        ///  Creates a new AccessibleObject for this <see cref="ScrollBar"/> instance.
         ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
         /// </summary>
         /// <returns>
-        ///  AccessibleObject for this <see cref='ScrollBar'/> instance.
+        ///  AccessibleObject for this <see cref="ScrollBar"/> instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
             => new ScrollBarAccessibleObject(this);

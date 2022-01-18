@@ -13,8 +13,8 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a collection of <see cref='DataGridViewRow'/> objects in the
-    ///  <see cref='DataGridView'/> control.
+    ///  Represents a collection of <see cref="DataGridViewRow"/> objects in the
+    ///  <see cref="DataGridView"/> control.
     /// </summary>
     [ListBindable(false)]
     [DesignerSerializer("System.Windows.Forms.Design.DataGridViewRowCollectionCodeDomSerializer, " + AssemblyRef.SystemDesign,
@@ -387,7 +387,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Adds a <see cref='DataGridViewRow'/> to this collection.
+        ///  Adds a <see cref="DataGridViewRow"/> to this collection.
         /// </summary>
         public virtual int Add(DataGridViewRow dataGridViewRow)
         {
@@ -1444,7 +1444,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inserts a <see cref='DataGridViewRow'/> to this collection.
+        ///  Inserts a <see cref="DataGridViewRow"/> to this collection.
         /// </summary>
         public virtual void Insert(int rowIndex, DataGridViewRow dataGridViewRow)
         {
@@ -1816,7 +1816,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inserts a range of <see cref='DataGridViewRow'/> to this collection.
+        ///  Inserts a range of <see cref="DataGridViewRow"/> to this collection.
         /// </summary>
         public virtual void InsertRange(int rowIndex, params DataGridViewRow[] dataGridViewRows)
         {

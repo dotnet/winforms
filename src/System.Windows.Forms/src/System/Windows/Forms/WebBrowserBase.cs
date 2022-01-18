@@ -122,7 +122,7 @@ namespace System.Windows.Forms
         //
         /// <summary>
         ///  Returns an object that will be set as the site for the native ActiveX control.
-        ///  Implementors of the site can derive from <see cref='WebBrowserSiteBase'/> class.
+        ///  Implementors of the site can derive from <see cref="WebBrowserSiteBase"/> class.
         /// </summary>
         protected virtual WebBrowserSiteBase CreateWebBrowserSiteBase()
         {

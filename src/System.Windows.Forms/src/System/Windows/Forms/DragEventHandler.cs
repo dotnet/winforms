@@ -5,9 +5,9 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a method that will handle the <see cref='Control.DragDrop'/>,
-    /// <see cref='Control.DragEnter'/>, or <see cref='Control.DragOver'/>
-    ///  event of a <see cref='Control'/>.
+    ///  Represents a method that will handle the <see cref="Control.DragDrop"/>,
+    /// <see cref="Control.DragEnter"/>, or <see cref="Control.DragOver"/>
+    ///  event of a <see cref="Control"/>.
     /// </summary>
     public delegate void DragEventHandler(object? sender, DragEventArgs e);
 }

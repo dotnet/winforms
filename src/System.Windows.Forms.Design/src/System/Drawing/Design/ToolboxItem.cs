@@ -126,7 +126,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///  Gets or sets the company name for this <see cref='ToolboxItem'/>.
+        ///  Gets or sets the company name for this <see cref="ToolboxItem"/>.
         ///  This defaults to the companyname attribute retrieved from type.Assembly, if set.
         /// </summary>
         public string Company
@@ -169,7 +169,7 @@ namespace System.Drawing.Design
         }
 
         /// <summary>
-        ///  Gets or sets the display name for this <see cref='ToolboxItem'/>.
+        ///  Gets or sets the display name for this <see cref="ToolboxItem"/>.
         /// </summary>
         public string DisplayName
         {
@@ -857,7 +857,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         ///  Raises the OnComponentsCreated event. This
-        ///  will be called when this <see cref='ToolboxItem'/> creates a component.
+        ///  will be called when this <see cref="ToolboxItem"/> creates a component.
         /// </summary>
         protected virtual void OnComponentsCreated(ToolboxComponentsCreatedEventArgs args)
         {
@@ -866,7 +866,7 @@ namespace System.Drawing.Design
 
         /// <summary>
         ///  Raises the OnCreateComponentsInvoked event. This
-        ///  will be called before this <see cref='ToolboxItem'/> creates a component.
+        ///  will be called before this <see cref="ToolboxItem"/> creates a component.
         /// </summary>
         protected virtual void OnComponentsCreating(ToolboxComponentsCreatingEventArgs args)
         {

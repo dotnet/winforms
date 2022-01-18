@@ -113,7 +113,7 @@ namespace System.Windows.Forms.Design
 
         /// <summary>
         ///  Disposes of the resources (other than memory) used by
-        ///  the <see cref='ComponentDocumentDesigner' />.
+        ///  the <see cref="ComponentDocumentDesigner"/>.
         /// </summary>
         protected override void Dispose(bool disposing)
         {

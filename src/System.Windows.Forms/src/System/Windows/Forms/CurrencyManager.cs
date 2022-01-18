@@ -569,7 +569,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a <see cref='PropertyDescriptor'/> for a CurrencyManager.
+        ///  Gets a <see cref="PropertyDescriptor"/> for a CurrencyManager.
         /// </summary>
         internal PropertyDescriptor GetSortProperty()
         {
@@ -657,7 +657,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the <see cref='PropertyDescriptorCollection'/> for the list.
+        ///  Gets the <see cref="PropertyDescriptorCollection"/> for the list.
         /// </summary>
         public override PropertyDescriptorCollection GetItemProperties()
         {
@@ -665,7 +665,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the <see cref='PropertyDescriptorCollection'/> for the specified list.
+        ///  Gets the <see cref="PropertyDescriptorCollection"/> for the specified list.
         /// </summary>
         private void List_ListChanged(object sender, ListChangedEventArgs e)
         {

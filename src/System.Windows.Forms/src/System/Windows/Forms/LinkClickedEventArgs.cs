@@ -5,18 +5,18 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='RichTextBox.LinkClicked'/> event.
+    ///  Provides data for the <see cref="RichTextBox.LinkClicked"/> event.
     /// </summary>
     public class LinkClickedEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='LinkClickedEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="LinkClickedEventArgs"/> class.
         /// </summary>
         /// <param name="linkText">The text of the link being clicked.</param>
         public LinkClickedEventArgs(string? linkText) : this(linkText, 0, 0) { }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='LinkClickedEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="LinkClickedEventArgs"/> class.
         /// </summary>
         /// <param name="linkText">The text of the link being clicked.</param>
         /// <param name="linkStart">The start of the link span being clicked.</param>

@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='TreeView.OnNodeMouseHover'/> event.
+    ///  Provides data for the <see cref="TreeView.OnNodeMouseHover"/> event.
     /// </summary>
     public class TreeNodeMouseHoverEventArgs : EventArgs
     {

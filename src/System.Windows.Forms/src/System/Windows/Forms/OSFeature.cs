@@ -10,7 +10,7 @@ namespace System.Windows.Forms
     public class OSFeature : FeatureSupport
     {
         /// <summary>
-        ///  Represents the layered, top-level windows feature. This <see langword='static'/> field
+        ///  Represents the layered, top-level windows feature. This <see langword="static"/> field
         ///  is read-only.
         /// </summary>
         public static readonly object LayeredWindows = new object();
@@ -23,14 +23,14 @@ namespace System.Windows.Forms
         private static OSFeature? _feature;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='OSFeature'/> class.
+        ///  Initializes a new instance of the <see cref="OSFeature"/> class.
         /// </summary>
         protected OSFeature()
         {
         }
 
         /// <summary>
-        ///  Represents the <see langword='static'/> instance of <see cref='OSFeature'/>
+        ///  Represents the <see langword="static"/> instance of <see cref="OSFeature"/>
         ///  to use for feature queries. This property is read-only.
         /// </summary>
         public static OSFeature Feature => _feature ?? (_feature = new OSFeature());

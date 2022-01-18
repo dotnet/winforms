@@ -5,12 +5,12 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='WebBrowser.OnNavigated'/> event.
+    ///  Provides data for the <see cref="WebBrowser.OnNavigated"/> event.
     /// </summary>
     public class WebBrowserNavigatedEventArgs : EventArgs
     {
         /// <summary>
-        ///  Creates an instance of the <see cref='WebBrowserNavigatedEventArgs'/> class.
+        ///  Creates an instance of the <see cref="WebBrowserNavigatedEventArgs"/> class.
         /// </summary>
         public WebBrowserNavigatedEventArgs(Uri? url)
         {

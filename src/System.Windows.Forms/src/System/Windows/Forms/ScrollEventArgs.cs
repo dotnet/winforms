@@ -5,13 +5,13 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='ScrollBar.Scroll'/>
+    ///  Provides data for the <see cref="ScrollBar.Scroll"/>
     ///  event.
     /// </summary>
     public class ScrollEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ScrollEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="ScrollEventArgs"/> class.
         /// </summary>
         public ScrollEventArgs(ScrollEventType type, int newValue)
         {
@@ -21,7 +21,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ScrollEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="ScrollEventArgs"/> class.
         /// </summary>
         public ScrollEventArgs(ScrollEventType type, int newValue, ScrollOrientation scroll)
         {

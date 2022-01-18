@@ -388,7 +388,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
+        ///  Gets or sets the image that is displayed on a <see cref="Label"/>.
         /// </summary>
         [Localizable(true)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -991,7 +991,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
+        ///  Gets or sets the image that is displayed on a <see cref="Label"/>.
         /// </summary>
         [Localizable(true)]
         [SRCategory(nameof(SR.CatAppearance))]
@@ -2636,7 +2636,7 @@ namespace System.Windows.Forms
         protected virtual void OnAvailableChanged(EventArgs e) => RaiseEvent(s_availableChangedEvent, e);
 
         /// <summary>
-        ///  Raises the <see cref='ToolStripItem.DragEnter'/> event.
+        ///  Raises the <see cref="ToolStripItem.DragEnter"/> event.
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.OnEnter to send this event to any registered event listeners.
         /// </summary>
@@ -3214,45 +3214,45 @@ namespace System.Windows.Forms
         internal virtual bool ShouldSerializeFont() => TryGetExplicitlySetFont(out _);
 
         /// <summary>
-        ///  Determines if the <see cref='Padding'/> property needs to be persisted.
+        ///  Determines if the <see cref="Padding"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializePadding() => Padding != DefaultPadding;
 
         /// <summary>
-        ///  Determines if the <see cref='Margin'/> property needs to be persisted.
+        ///  Determines if the <see cref="Margin"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeMargin() => Margin != DefaultMargin;
 
         /// <summary>
-        ///  Determines if the <see cref='Visible'/> property needs to be persisted.
+        ///  Determines if the <see cref="Visible"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeVisible() => !_state[s_stateVisible];
 
         /// <summary>
-        ///  Determines if the <see cref='Image'/> property needs to be persisted.
+        ///  Determines if the <see cref="Image"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeImage() => Image is not null && ImageIndexer.ActualIndex < 0;
 
         /// <summary>
-        ///  Determines if the <see cref='Image'/> property needs to be persisted.
+        ///  Determines if the <see cref="Image"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeImageKey()
             => Image is not null && ImageIndexer.ActualIndex >= 0 && !string.IsNullOrEmpty(ImageIndexer.Key);
 
         /// <summary>
-        ///  Determines if the <see cref='Image'/> property needs to be persisted.
+        ///  Determines if the <see cref="Image"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private bool ShouldSerializeImageIndex()
             => Image is not null && ImageIndexer.ActualIndex >= 0 && ImageIndexer.Index != ImageList.Indexer.DefaultIndex;
 
         /// <summary>
-        ///  Determines if the <see cref='RightToLeft'/> property needs to be persisted.
+        ///  Determines if the <see cref="RightToLeft"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeRightToLeft()

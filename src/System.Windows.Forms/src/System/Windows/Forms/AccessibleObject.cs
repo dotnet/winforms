@@ -48,14 +48,14 @@ namespace System.Windows.Forms
         UiaCore.ITextProvider2
     {
         /// <summary>
-        ///  Specifies the <see cref='IAccessible'/> interface used by this <see cref='AccessibleObject'/>.
+        ///  Specifies the <see cref="IAccessible"/> interface used by this <see cref="AccessibleObject"/>.
         /// </summary>
         private SystemIAccessibleWrapper systemIAccessible = new SystemIAccessibleWrapper(
             null /* Prevents throwing exception when call to null-value system IAccessible */);
 
         /// <summary>
-        ///  Specifies the <see cref='Oleaut32.IEnumVariant'/> used by this
-        /// <see cref='AccessibleObject'/> .
+        ///  Specifies the <see cref="Oleaut32.IEnumVariant"/> used by this
+        /// <see cref="AccessibleObject"/> .
         /// </summary>
         private Oleaut32.IEnumVariant? systemIEnumVariant;
         private Oleaut32.IEnumVariant? enumVariant;

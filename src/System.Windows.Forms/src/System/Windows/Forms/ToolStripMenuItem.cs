@@ -433,7 +433,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Occurs when the
-        ///  value of the <see cref='CheckBox.Checked'/>
+        ///  value of the <see cref="CheckBox.Checked"/>
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
@@ -445,7 +445,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Occurs when the
-        ///  value of the <see cref='CheckBox.CheckState'/>
+        ///  value of the <see cref="CheckBox.CheckState"/>
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
@@ -923,7 +923,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='CheckedChanged'/>
+        ///  Raises the <see cref="CheckedChanged"/>
         ///  event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
@@ -932,7 +932,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='CheckStateChanged'/> event.
+        ///  Raises the <see cref="CheckStateChanged"/> event.
         /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e)
         {

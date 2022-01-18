@@ -47,7 +47,7 @@ namespace System.Windows.Forms
         private BindingCompleteEventHandler _onComplete;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Binding'/> class
+        ///  Initializes a new instance of the <see cref="Binding"/> class
         ///  that binds a property on the owning control to a property on a data source.
         /// </summary>
         public Binding(string propertyName, object dataSource, string dataMember) : this(propertyName, dataSource, dataMember, false, 0, null, string.Empty, null)
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Binding'/> class.
+        ///  Initializes a new instance of the <see cref="Binding"/> class.
         /// </summary>
         private Binding()
         {
@@ -167,7 +167,7 @@ namespace System.Windows.Forms
         public bool IsBinding { get; private set; }
 
         /// <summary>
-        ///  Gets the <see cref='Forms.BindingManagerBase'/> of this binding that
+        ///  Gets the <see cref="Forms.BindingManagerBase"/> of this binding that
         ///  allows enumeration of a set of bindings.
         /// </summary>
         public BindingManagerBase BindingManagerBase

@@ -74,7 +74,7 @@ namespace System.Windows.Forms
         private bool detailsVisible;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ThreadExceptionDialog'/> class.
+        ///  Initializes a new instance of the <see cref="ThreadExceptionDialog"/> class.
         /// </summary>
         public ThreadExceptionDialog(Exception t)
         {

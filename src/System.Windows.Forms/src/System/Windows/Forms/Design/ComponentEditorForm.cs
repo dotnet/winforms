@@ -12,7 +12,7 @@ using System.Drawing;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Provides a user interface for <see cref='WindowsFormsComponentEditor'/>.
+    ///  Provides a user interface for <see cref="WindowsFormsComponentEditor"/>.
     /// </summary>
     [ToolboxItem(false)]
     public partial class ComponentEditorForm : Form
@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
         private const int STRIP_HEIGHT = 4;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ComponentEditorForm'/> class.
+        ///  Initializes a new instance of the <see cref="ComponentEditorForm"/> class.
         /// </summary>
         public ComponentEditorForm(object component, Type[] pageTypes) : base()
         {

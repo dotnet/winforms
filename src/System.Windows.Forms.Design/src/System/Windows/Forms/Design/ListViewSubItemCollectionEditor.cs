@@ -17,7 +17,7 @@ namespace System.Windows.Forms.Design
         private ListViewItem.ListViewSubItem _firstSubItem;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ListViewSubItemCollectionEditor'/> class.
+        ///  Initializes a new instance of the <see cref="ListViewSubItemCollectionEditor"/> class.
         /// </summary>
         public ListViewSubItemCollectionEditor(Type type) : base(type)
         { }

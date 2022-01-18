@@ -19,12 +19,12 @@ namespace System.Windows.Forms.Design
         }
 
         /// <summary>
-        ///  When implemented by a class, gets the component associated with the <see cref='ISite'/>.
+        ///  When implemented by a class, gets the component associated with the <see cref="ISite"/>.
         /// </summary>
         public IComponent Component { get => _comp; }
 
         /// <summary>
-        /// When implemented by a class, gets the container associated with the <see cref='ISite'/>.
+        /// When implemented by a class, gets the container associated with the <see cref="ISite"/>.
         /// </summary>
         public IContainer Container { get => null; }
 
@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design
         public bool DesignMode { get => false; }
 
         /// <summary>
-        ///  When implemented by a class, gets or sets the name of the component associated with the <see cref='ISite'/>.
+        ///  When implemented by a class, gets or sets the name of the component associated with the <see cref="ISite"/>.
         /// </summary>
         public string Name { get; set; }
 

@@ -19,7 +19,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Implements a node of a <see cref='Forms.TreeView'/>.
+    ///  Implements a node of a <see cref="Forms.TreeView"/>.
     /// </summary>
     [TypeConverterAttribute(typeof(TreeNodeConverter))]
     [Serializable]  // This class participates in resx serialization.

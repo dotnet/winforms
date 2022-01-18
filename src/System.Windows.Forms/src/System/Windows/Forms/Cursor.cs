@@ -41,7 +41,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Cursor'/> class with the specified handle.
+        ///  Initializes a new instance of the <see cref="Cursor"/> class with the specified handle.
         /// </summary>
         public Cursor(IntPtr handle)
         {
@@ -55,7 +55,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Cursor'/>
+        ///  Initializes a new instance of the <see cref="Cursor"/>
         ///  class with the specified filename.
         /// </summary>
         public Cursor(string fileName)
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Cursor'/> class from the specified resource.
+        ///  Initializes a new instance of the <see cref="Cursor"/> class from the specified resource.
         /// </summary>
         public Cursor(Type type, string resource)
             : this((type.OrThrowIfNull()).Module.Assembly.GetManifestResourceStream(type, resource)!)
@@ -75,7 +75,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Cursor'/> class from the
+        ///  Initializes a new instance of the <see cref="Cursor"/> class from the
         ///  specified data stream.
         /// </summary>
         public Cursor(Stream stream)
@@ -91,8 +91,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a <see cref='Rectangle'/> that represents the current clipping
-        ///  rectangle for this <see cref='Cursor'/> in screen coordinates.
+        ///  Gets or sets a <see cref="Rectangle"/> that represents the current clipping
+        ///  rectangle for this <see cref="Cursor"/> in screen coordinates.
         /// </summary>
         public unsafe static Rectangle Clip
         {
@@ -116,7 +116,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a <see cref='Cursor'/> that represents the current mouse cursor.
+        ///  Gets or sets a <see cref="Cursor"/> that represents the current mouse cursor.
         ///  The value is <see langword="null"/> if the current mouse cursor is not visible.
         /// </summary>
         public static Cursor? Current
@@ -135,7 +135,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the Win32 handle for this <see cref='Cursor'/>.
+        ///  Gets the Win32 handle for this <see cref="Cursor"/>.
         /// </summary>
         public IntPtr Handle
         {
@@ -163,7 +163,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a <see cref='Point'/> that specifies the current cursor
+        ///  Gets or sets a <see cref="Point"/> that specifies the current cursor
         ///  position in screen coordinates.
         /// </summary>
         public static Point Position
@@ -177,7 +177,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the size of this <see cref='Cursor'/> object.
+        ///  Gets the size of this <see cref="Cursor"/> object.
         /// </summary>
         public Size Size
         {
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
         public object? Tag { get; set; }
 
         /// <summary>
-        ///  Duplicates this the Win32 handle of this <see cref='Cursor'/>.
+        ///  Duplicates this the Win32 handle of this <see cref="Cursor"/>.
         /// </summary>
         public IntPtr CopyHandle()
         {
@@ -350,7 +350,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws this <see cref='Cursor'/> to a <see cref='Graphics'/>.
+        ///  Draws this <see cref="Cursor"/> to a <see cref="Graphics"/>.
         /// </summary>
         public void Draw(Graphics g, Rectangle targetRect)
         {
@@ -358,7 +358,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws this <see cref='Cursor'/> to a <see cref='Graphics'/>.
+        ///  Draws this <see cref="Cursor"/> to a <see cref="Graphics"/>.
         /// </summary>
         public void DrawStretched(Graphics g, Rectangle targetRect)
         {
@@ -482,7 +482,7 @@ namespace System.Windows.Forms
         public static void Show() => User32.ShowCursor(BOOL.TRUE);
 
         /// <summary>
-        ///  Retrieves a human readable string representing this <see cref='Cursor'/>.
+        ///  Retrieves a human readable string representing this <see cref="Cursor"/>.
         /// </summary>
         public override string ToString()
         {

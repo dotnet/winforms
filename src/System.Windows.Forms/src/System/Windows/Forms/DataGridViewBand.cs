@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private int _minimumThickness;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataGridViewBand'/> class.
+        ///  Initializes a new instance of the <see cref="DataGridViewBand"/> class.
         /// </summary>
         internal DataGridViewBand()
         {

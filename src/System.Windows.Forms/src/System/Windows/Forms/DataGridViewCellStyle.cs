@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         private DataGridView dataGridView;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataGridViewCellStyle'/> class.
+        ///  Initializes a new instance of the <see cref="DataGridViewCellStyle"/> class.
         /// </summary>
         public DataGridViewCellStyle()
         {

@@ -12,7 +12,7 @@ namespace System.Windows.Forms
     public partial class DomainUpDown
     {
         /// <summary>
-        ///  Encapsulates a collection of objects for use by the <see cref='DomainUpDown'/>
+        ///  Encapsulates a collection of objects for use by the <see cref="DomainUpDown"/>
         ///  class.
         /// </summary>
         public class DomainUpDownItemCollection : ArrayList

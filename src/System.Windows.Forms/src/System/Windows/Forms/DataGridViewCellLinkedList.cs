@@ -10,7 +10,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a linked list of <see cref='DataGridViewCell'/> objects
+    ///  Represents a linked list of <see cref="DataGridViewCell"/> objects
     /// </summary>
     internal class DataGridViewCellLinkedList : IEnumerable
     {

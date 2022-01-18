@@ -627,7 +627,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnImeModeChanged'/>
+        ///  Raises the <see cref="OnImeModeChanged"/>
         ///  event.
         /// </summary>
         protected virtual void OnImeModeChanged(EventArgs e)

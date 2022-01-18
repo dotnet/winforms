@@ -1164,7 +1164,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnMouseLeave'/> event.
+        ///  Raises the <see cref="OnMouseLeave"/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -1178,7 +1178,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnMouseDown'/> event.
+        ///  Raises the <see cref="OnMouseDown"/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
         {
@@ -1218,7 +1218,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnMouseUp'/> event.
+        ///  Raises the <see cref="OnMouseUp"/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
         {

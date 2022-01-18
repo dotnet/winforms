@@ -51,7 +51,7 @@ namespace System.Windows.Forms
         // 8856f961-340a-11d0-a96b-00c04fd705a2 is the clsid for the native webbrowser control
         //
         /// <summary>
-        ///  Creates an instance of the <see cref='WebBrowser'/> control.
+        ///  Creates an instance of the <see cref="WebBrowser"/> control.
         /// </summary>
         public WebBrowser() : base("8856f961-340a-11d0-a96b-00c04fd705a2")
         {
@@ -1160,7 +1160,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='CanGoBackChanged'/> event.
+        ///  Raises the <see cref="CanGoBackChanged"/> event.
         /// </summary>
         //
         protected virtual void OnCanGoBackChanged(EventArgs e)
@@ -1169,7 +1169,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='CanGoForwardChanged'/> event.
+        ///  Raises the <see cref="CanGoForwardChanged"/> event.
         /// </summary>
         //
         protected virtual void OnCanGoForwardChanged(EventArgs e)
@@ -1178,7 +1178,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='DocumentCompleted'/> event.
+        ///  Raises the <see cref="DocumentCompleted"/> event.
         /// </summary>
         //
         protected virtual void OnDocumentCompleted(WebBrowserDocumentCompletedEventArgs e)
@@ -1188,7 +1188,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='DocumentTitleChanged'/> event.
+        ///  Raises the <see cref="DocumentTitleChanged"/> event.
         /// </summary>
         //
         protected virtual void OnDocumentTitleChanged(EventArgs e)
@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='EncryptionLevelChanged'/> event.
+        ///  Raises the <see cref="EncryptionLevelChanged"/> event.
         /// </summary>
         //
         protected virtual void OnEncryptionLevelChanged(EventArgs e)
@@ -1206,7 +1206,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='FileDownload'/> event.
+        ///  Raises the <see cref="FileDownload"/> event.
         /// </summary>
         //
         protected virtual void OnFileDownload(EventArgs e)
@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Navigated'/> event.
+        ///  Raises the <see cref="Navigated"/> event.
         /// </summary>
         //
         protected virtual void OnNavigated(WebBrowserNavigatedEventArgs e)
@@ -1224,7 +1224,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Navigating'/> event.
+        ///  Raises the <see cref="Navigating"/> event.
         /// </summary>
         //
         protected virtual void OnNavigating(WebBrowserNavigatingEventArgs e)
@@ -1233,7 +1233,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='NewWindow'/> event.
+        ///  Raises the <see cref="NewWindow"/> event.
         /// </summary>
         //
         protected virtual void OnNewWindow(CancelEventArgs e)
@@ -1242,7 +1242,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ProgressChanged'/> event.
+        ///  Raises the <see cref="ProgressChanged"/> event.
         /// </summary>
         //
         protected virtual void OnProgressChanged(WebBrowserProgressChangedEventArgs e)
@@ -1251,7 +1251,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='StatusTextChanged'/> event.
+        ///  Raises the <see cref="StatusTextChanged"/> event.
         /// </summary>
         //
         protected virtual void OnStatusTextChanged(EventArgs e)

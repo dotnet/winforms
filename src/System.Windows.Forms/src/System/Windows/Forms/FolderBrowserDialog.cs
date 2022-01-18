@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         private int _options;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='FolderBrowserDialog'/> class.
+        ///  Initializes a new instance of the <see cref="FolderBrowserDialog"/> class.
         /// </summary>
         public FolderBrowserDialog()
         {

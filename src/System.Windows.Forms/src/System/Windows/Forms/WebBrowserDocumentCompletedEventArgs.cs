@@ -5,12 +5,12 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='WebBrowser.OnDocumentCompleted'/> event.
+    ///  Provides data for the <see cref="WebBrowser.OnDocumentCompleted"/> event.
     /// </summary>
     public class WebBrowserDocumentCompletedEventArgs : EventArgs
     {
         /// <summary>
-        ///  Creates an instance of the <see cref='WebBrowserDocumentCompletedEventArgs'/> class.
+        ///  Creates an instance of the <see cref="WebBrowserDocumentCompletedEventArgs"/> class.
         /// </summary>
         public WebBrowserDocumentCompletedEventArgs(Uri? url)
         {

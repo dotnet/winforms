@@ -34,7 +34,7 @@ namespace System.Windows.Forms.Design
         private readonly IUIService _uiService;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DesignerFrame'/> class.
+        ///  Initializes a new instance of the <see cref="DesignerFrame"/> class.
         /// </summary>
         public DesignerFrame(ISite site)
         {

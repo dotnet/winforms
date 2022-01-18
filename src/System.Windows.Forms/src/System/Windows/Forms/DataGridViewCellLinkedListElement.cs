@@ -9,7 +9,7 @@ using System.Diagnostics;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents an element in a <see cref='DataGridViewCellLinkedList'/> linked list.
+    ///  Represents an element in a <see cref="DataGridViewCellLinkedList"/> linked list.
     /// </summary>
     internal class DataGridViewCellLinkedListElement
     {

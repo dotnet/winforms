@@ -60,7 +60,7 @@ namespace System.Windows.Forms
         private AutomationLiveSetting _liveSetting;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Label'/> class.
+        ///  Initializes a new instance of the <see cref="Label"/> class.
         /// </summary>
         public Label() : base()
         {
@@ -357,7 +357,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
+        ///  Gets or sets the image that is displayed on a <see cref="Label"/>.
         /// </summary>
         [Localizable(true)]
         [SRDescription(nameof(SR.ButtonImageDescr))]
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets the index value of the images displayed on the
-        ///  <see cref='Label'/>.
+        ///  <see cref="Label"/>.
         /// </summary>
         [TypeConverter(typeof(ImageIndexConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
@@ -453,7 +453,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Gets or sets the key accessor for the image list.  This specifies the image
         ///   from the image list to display on
-        ///  <see cref='Label'/>.
+        ///  <see cref="Label"/>.
         /// </summary>
         [TypeConverter(typeof(ImageKeyConverter))]
         [Editor("System.Windows.Forms.Design.ImageIndexEditor, " + AssemblyRef.SystemDesign, typeof(UITypeEditor))]
@@ -500,7 +500,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the images displayed in a <see cref='Label'/>.
+        ///  Gets or sets the images displayed in a <see cref="Label"/>.
         /// </summary>
         [DefaultValue(null)]
         [SRDescription(nameof(SR.ButtonImageListDescr))]
@@ -545,7 +545,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the alignment of the image on the <see cref='Label'/>.
+        ///  Gets or sets the alignment of the image on the <see cref="Label"/>.
         /// </summary>
         [DefaultValue(ContentAlignment.MiddleCenter)]
         [Localizable(true)]
@@ -667,7 +667,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Indicates whether
-        ///  the container control background is rendered on the <see cref='Label'/>.
+        ///  the container control background is rendered on the <see cref="Label"/>.
         /// </summary>
         [Obsolete("This property has been deprecated. Use BackColor instead.  https://go.microsoft.com/fwlink/?linkid=14202")]
         virtual new protected bool RenderTransparent
@@ -680,7 +680,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets a value indicating whether the user can tab to the
-        ///  <see cref='Label'/>.
+        ///  <see cref="Label"/>.
         /// </summary>
         [DefaultValue(false)]
         [Browsable(false)]
@@ -1021,7 +1021,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Draws an <see cref='Drawing.Image'/> within the specified bounds.
+        ///  Draws an <see cref="Drawing.Image"/> within the specified bounds.
         /// </summary>
         protected void DrawImage(Graphics g, Image image, Rectangle r, ContentAlignment align)
             => DrawImageInternal(g, image, r, align);
@@ -1193,7 +1193,7 @@ namespace System.Windows.Forms
         private bool IsOwnerDraw() => FlatStyle != FlatStyle.System;
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseEnter'/> event.
+        ///  Raises the <see cref="Control.OnMouseEnter"/> event.
         /// </summary>
         protected override void OnMouseEnter(EventArgs e)
         {
@@ -1214,7 +1214,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseLeave'/> event.
+        ///  Raises the <see cref="Control.OnMouseLeave"/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {

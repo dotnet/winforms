@@ -61,7 +61,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the image that is displayed on a <see cref='Label'/>.
+        ///  Gets or sets the image that is displayed on a <see cref="Label"/>.
         /// </summary>
         [Localizable(true)]
         [SRCategory(nameof(SR.CatAppearance))]

@@ -7,7 +7,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Specifies how items align in the <see cref='ListView'/>.
+    ///  Specifies how items align in the <see cref="ListView"/>.
     /// </summary>
     public enum ListViewAlignment
     {
@@ -17,12 +17,12 @@ namespace System.Windows.Forms
         Default = (int)LVA.DEFAULT,
 
         /// <summary>
-        ///  Items are aligned to the top of the <see cref='ListView'/> control.
+        ///  Items are aligned to the top of the <see cref="ListView"/> control.
         /// </summary>
         Top = (int)LVA.ALIGNTOP,
 
         /// <summary>
-        ///  Items are aligned to the left of the <see cref='ListView'/> control.
+        ///  Items are aligned to the left of the <see cref="ListView"/> control.
         /// </summary>
         Left = (int)LVA.ALIGNLEFT,
 

@@ -53,7 +53,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         /// Contains non-empty neighboring cells around the current cell.
-        /// Used in <see cref='IKeyboardToolTip.GetNeighboringToolsRectangles'/> method.
+        /// Used in <see cref="IKeyboardToolTip.GetNeighboringToolsRectangles"/> method.
         /// </summary>
         private readonly List<Rectangle> _nonEmptyNeighbors;
 
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
         private bool _useDefaultToolTipText;  //  The tooltip text of this cell has not been set by a customer yet.
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataGridViewCell'/> class.
+        ///  Initializes a new instance of the <see cref="DataGridViewCell"/> class.
         /// </summary>
         protected DataGridViewCell() : base()
         {
@@ -106,7 +106,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the Index of a column in the <see cref='DataGridView'/> control.
+        ///  Gets or sets the Index of a column in the <see cref="DataGridView"/> control.
         /// </summary>
         public int ColumnIndex => OwningColumn?.Index ?? -1;
 
@@ -398,7 +398,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  The method looks for 8 cells around the current cell to find the optimal tooltip position in
-        ///  <see cref='ToolTip.GetOptimalToolTipPosition'/> method. The optimal tooltip position is the position
+        ///  <see cref="ToolTip.GetOptimalToolTipPosition"/> method. The optimal tooltip position is the position
         ///  outside <see cref="DataGridView"/> or on top of an empty cell. This is done so that tooltips do not
         ///  overlap the text of other cells whenever possible.
         /// </summary>
@@ -636,7 +636,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the index of a row in the <see cref='DataGridView'/> control.
+        ///  Gets or sets the index of a row in the <see cref="DataGridView"/> control.
         /// </summary>
         [Browsable(false)]
         public int RowIndex => OwningRow?.Index ?? -1;

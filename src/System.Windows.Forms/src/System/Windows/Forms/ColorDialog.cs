@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         private Color _color;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ColorDialog'/> class.
+        ///  Initializes a new instance of the <see cref="ColorDialog"/> class.
         /// </summary>
         public ColorDialog()
         {
@@ -215,7 +215,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Color'/> property should be persisted.
+        ///  Indicates whether the <see cref="Color"/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeColor() => !Color.Equals(Color.Black);
 

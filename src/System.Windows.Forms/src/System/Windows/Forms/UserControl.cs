@@ -222,7 +222,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Validates all selectable child controls in the container, including descendants. This is
-        ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
+        ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref="ValidationConstraints.Selectable"/>
         ///  for details of exactly which child controls will be validated.
         /// </summary>
         [Browsable(true)]

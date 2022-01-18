@@ -364,7 +364,7 @@ namespace System.Windows.Forms
 #endif
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
         public Control() : this(true)
         {
@@ -446,14 +446,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
         public Control(string text) : this(null, text)
         {
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
         public Control(string text, int left, int top, int width, int height) :
                     this(null, text, left, top, width, height)
@@ -461,7 +461,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
         public Control(Control parent, string text) : this()
         {
@@ -470,7 +470,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Control'/> class.
+        ///  Initializes a new instance of the <see cref="Control"/> class.
         /// </summary>
         public Control(Control parent, string text, int left, int top, int width, int height) : this(parent, text)
         {
@@ -5034,7 +5034,7 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Forces the creation of the control. This includes the creation of the handle,
         ///  and any child controls.
-        /// <param name='fIgnoreVisible'>
+        /// <param name="fIgnoreVisible">
         ///  Determines whether we should create the handle after checking the Visible
         ///  property of the control or not.
         /// </param>
@@ -5172,7 +5172,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Disposes of the resources (other than memory) used by the
-        ///  <see cref='Control'/>.
+        ///  <see cref="Control"/>.
         /// </summary>
         protected override void Dispose(bool disposing)
         {
@@ -7123,7 +7123,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Click'/> event.
+        ///  Raises the <see cref="Click"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeOnClick(Control toInvoke, EventArgs e)
@@ -7316,7 +7316,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Enabled'/> event.
+        ///  Raises the <see cref="Enabled"/> event.
         ///
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.OnEnabled to send this event to any registered event listeners.
@@ -7709,7 +7709,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Visible'/> event.
+        ///  Raises the <see cref="Visible"/> event.
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.OnVisible to send this event to any registered event listeners.
         /// </summary>
@@ -7792,7 +7792,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Click'/>
+        ///  Raises the <see cref="Click"/>
         ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -7811,7 +7811,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ControlAdded'/> event.
+        ///  Raises the <see cref="ControlAdded"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlAdded(ControlEventArgs e)
@@ -7820,7 +7820,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ControlRemoved'/> event.
+        ///  Raises the <see cref="ControlRemoved"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnControlRemoved(ControlEventArgs e)
@@ -7999,7 +7999,7 @@ namespace System.Windows.Forms
         ///  Inheriting classes should override this method to find out when the
         ///  handle is about to be destroyed.
         ///  Call base.OnHandleDestroyed last.
-        ///  Raises the <see cref='HandleDestroyed'/> event.
+        ///  Raises the <see cref="HandleDestroyed"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnHandleDestroyed(EventArgs e)
@@ -8073,7 +8073,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='DoubleClick'/> event.
+        ///  Raises the <see cref="DoubleClick"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnDoubleClick(EventArgs e)
@@ -8082,7 +8082,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Enter'/> event.
+        ///  Raises the <see cref="Enter"/> event.
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.onEnter to send this event to any registered event listeners.
         /// </summary>
@@ -8143,7 +8143,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='GotFocus'/> event.
+        ///  Raises the <see cref="GotFocus"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected void InvokeGotFocus(Control toInvoke, EventArgs e)
@@ -8156,7 +8156,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='GotFocus'/> event.
+        ///  Raises the <see cref="GotFocus"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnGotFocus(EventArgs e)
@@ -8230,7 +8230,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='KeyDown'/> event.
+        ///  Raises the <see cref="KeyDown"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyDown(KeyEventArgs e)
@@ -8239,7 +8239,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='KeyPress'/> event.
+        ///  Raises the <see cref="KeyPress"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyPress(KeyPressEventArgs e)
@@ -8248,7 +8248,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='KeyUp'/> event.
+        ///  Raises the <see cref="KeyUp"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnKeyUp(KeyEventArgs e)
@@ -8266,7 +8266,7 @@ namespace System.Windows.Forms
         ///  Core layout logic. Inheriting controls should override this function to do any custom
         ///  layout logic. It is not necessary to call base.OnLayout, however for normal docking
         ///  an functions to work, base.OnLayout must be called.
-        ///  Raises the <see cref='Layout'/> event.
+        ///  Raises the <see cref="Layout"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLayout(LayoutEventArgs levent)
@@ -8305,7 +8305,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Leave'/> event.
+        ///  Raises the <see cref="Leave"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLeave(EventArgs e)
@@ -8324,7 +8324,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='LostFocus'/> event.
+        ///  Raises the <see cref="LostFocus"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnLostFocus(EventArgs e)
@@ -8343,7 +8343,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseDoubleClick'/> event.
+        ///  Raises the <see cref="MouseDoubleClick"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDoubleClick(MouseEventArgs e)
@@ -8352,7 +8352,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnMouseClick'/> event.
+        ///  Raises the <see cref="OnMouseClick"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseClick(MouseEventArgs e)
@@ -8361,7 +8361,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseCaptureChanged'/> event.
+        ///  Raises the <see cref="MouseCaptureChanged"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseCaptureChanged(EventArgs e)
@@ -8370,7 +8370,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseDown'/> event.
+        ///  Raises the <see cref="MouseDown"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseDown(MouseEventArgs e)
@@ -8379,7 +8379,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseEnter'/> event.
+        ///  Raises the <see cref="MouseEnter"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseEnter(EventArgs e)
@@ -8388,7 +8388,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseLeave'/> event.
+        ///  Raises the <see cref="MouseLeave"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseLeave(EventArgs e)
@@ -8397,7 +8397,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='DpiChangedBeforeParent'/> event.
+        ///  Raises the <see cref="DpiChangedBeforeParent"/> event.
         ///  Occurs when the form is moved to a monitor with a different resolution (number of dots per inch),
         ///  or when scaling level is changed in the windows setting by the user.
         ///  This message is not sent to the top level windows.
@@ -8410,7 +8410,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='DpiChangedAfterParent'/> event.
+        ///  Raises the <see cref="DpiChangedAfterParent"/> event.
         ///  Occurs when the form is moved to a monitor with a different resolution (number of dots per inch),
         ///  or when scaling level is changed in windows setting by the user.
         ///  This message is not sent to the top level windows.
@@ -8423,7 +8423,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseHover'/> event.
+        ///  Raises the <see cref="MouseHover"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseHover(EventArgs e)
@@ -8432,7 +8432,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseMove'/> event.
+        ///  Raises the <see cref="MouseMove"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseMove(MouseEventArgs e)
@@ -8441,7 +8441,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseUp'/> event.
+        ///  Raises the <see cref="MouseUp"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseUp(MouseEventArgs e)
@@ -8450,7 +8450,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseWheel'/> event.
+        ///  Raises the <see cref="MouseWheel"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMouseWheel(MouseEventArgs e)
@@ -8459,7 +8459,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Move'/> event.
+        ///  Raises the <see cref="Move"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMove(EventArgs e)
@@ -8543,7 +8543,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='RegionChanged'/> event when the Region property has changed.
+        ///  Raises the <see cref="RegionChanged"/> event when the Region property has changed.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnRegionChanged(EventArgs e)
@@ -8555,7 +8555,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Resize'/> event.
+        ///  Raises the <see cref="Resize"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnResize(EventArgs e)
@@ -8571,7 +8571,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='PreviewKeyDown'/> event.
+        ///  Raises the <see cref="PreviewKeyDown"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnPreviewKeyDown(PreviewKeyDownEventArgs e)
@@ -8591,7 +8591,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ChangeUICues'/> event.
+        ///  Raises the <see cref="ChangeUICues"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnChangeUICues(UICuesEventArgs e)
@@ -8600,7 +8600,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnStyleChanged'/> event.
+        ///  Raises the <see cref="OnStyleChanged"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnStyleChanged(EventArgs e)
@@ -8609,7 +8609,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='SystemColorsChanged'/> event.
+        ///  Raises the <see cref="SystemColorsChanged"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnSystemColorsChanged(EventArgs e)
@@ -8632,7 +8632,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Validating'/>
+        ///  Raises the <see cref="Validating"/>
         ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -8642,7 +8642,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Validated'/> event.
+        ///  Raises the <see cref="Validated"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnValidated(EventArgs e)
@@ -11419,7 +11419,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='Size'/> property needs to be persisted.
+        ///  Determines if the <see cref="Size"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeSize()
@@ -11431,7 +11431,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='Text'/> property needs to be persisted.
+        ///  Determines if the <see cref="Text"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeText()

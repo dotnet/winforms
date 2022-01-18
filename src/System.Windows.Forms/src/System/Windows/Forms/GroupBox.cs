@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         private FlatStyle _flatStyle = FlatStyle.Standard;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='GroupBox'/> class.
+        ///  Initializes a new instance of the <see cref="GroupBox"/> class.
         /// </summary>
         public GroupBox() : base()
         {
@@ -146,7 +146,7 @@ namespace System.Windows.Forms
         protected override Size DefaultSize => new Size(200, 100);
 
         /// <summary>
-        ///  Gets a rectangle that represents the dimensions of the <see cref='GroupBox'/>
+        ///  Gets a rectangle that represents the dimensions of the <see cref="GroupBox"/>
         /// </summary>
         public override Rectangle DisplayRectangle
         {
@@ -223,7 +223,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets a value indicating whether the user may press the TAB key to give the focus to the
-        ///  <see cref='GroupBox'/>.
+        ///  <see cref="GroupBox"/>.
         /// </summary>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]

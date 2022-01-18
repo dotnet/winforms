@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         private bool _inSort;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DomainUpDown'/> class.
+        ///  Initializes a new instance of the <see cref="DomainUpDown"/> class.
         /// </summary>
         public DomainUpDown() : base()
         {
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
         //
         //////////////////////////////////////////////////////////////
         /// <summary>
-        ///  Occurs when the <see cref='SelectedItem'/> property has
+        ///  Occurs when the <see cref="SelectedItem"/> property has
         ///  been changed.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -361,7 +361,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Handles the <see cref='Control.KeyPress'/>
+        ///  Handles the <see cref="Control.KeyPress"/>
         ///  event, using the input character to find the next matching item in our
         ///  item collection.
         /// </summary>
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='SelectedItemChanged'/> event.
+        ///  Raises the <see cref="SelectedItemChanged"/> event.
         /// </summary>
         protected void OnSelectedItemChanged(object source, EventArgs e)
         {

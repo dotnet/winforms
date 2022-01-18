@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         private static readonly byte[] serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IDataObject'/>.
+        ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="IDataObject"/>.
         /// </summary>
         internal DataObject(IDataObject data)
         {
@@ -60,7 +60,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataObject'/> class, with the specified <see cref='IComDataObject'/>.
+        ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="IComDataObject"/>.
         /// </summary>
         internal DataObject(IComDataObject data)
         {
@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataObject'/>
+        ///  Initializes a new instance of the <see cref="DataObject"/>
         ///  class, which can store arbitrary data.
         /// </summary>
         public DataObject()
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data.
+        ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data.
         /// </summary>
         public DataObject(object data)
         {
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataObject'/> class, containing the specified data and its
+        ///  Initializes a new instance of the <see cref="DataObject"/> class, containing the specified data and its
         ///  associated format.
         /// </summary>
         public DataObject(string format, object data) : this()

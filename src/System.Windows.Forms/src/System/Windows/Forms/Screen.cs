@@ -293,7 +293,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref='Screen'/>
+        ///  Retrieves a <see cref="Screen"/>
         ///  for the monitor that contains the specified point.
         /// </summary>
         public static Screen FromPoint(Point point)
@@ -309,7 +309,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref='Screen'/>
+        ///  Retrieves a <see cref="Screen"/>
         ///  for the monitor that contains the
         ///  largest region of the rectangle.
         /// </summary>
@@ -327,7 +327,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref='Screen'/> for the monitor that contains
+        ///  Retrieves a <see cref="Screen"/> for the monitor that contains
         ///  the largest region of the window of the control.
         /// </summary>
         public static Screen FromControl(Control control)
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref='Screen'/> for the monitor that contains
+        ///  Retrieves a <see cref="Screen"/> for the monitor that contains
         ///  the largest region of the window.
         /// </summary>
         public static Screen FromHandle(IntPtr hwnd)

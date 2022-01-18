@@ -5,13 +5,13 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.DragDrop'/>, <see cref='Control.DragEnter'/>,
-    ///  or <see cref='Control.DragOver'/> event.
+    ///  Provides data for the <see cref="Control.DragDrop"/>, <see cref="Control.DragEnter"/>,
+    ///  or <see cref="Control.DragOver"/> event.
     /// </summary>
     public class DragEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DragEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="DragEventArgs"/> class.
         /// </summary>
         public DragEventArgs(
             IDataObject? data,
@@ -30,7 +30,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  The <see cref='IDataObject'/> that contains the data associated
+        ///  The <see cref="IDataObject"/> that contains the data associated
         ///  with this event.
         /// </summary>
         public IDataObject? Data { get; }

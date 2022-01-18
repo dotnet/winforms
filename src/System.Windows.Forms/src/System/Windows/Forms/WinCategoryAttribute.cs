@@ -14,7 +14,7 @@ namespace System.Windows.Forms
     internal sealed class WinCategoryAttribute : CategoryAttribute
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='CategoryAttribute'/> class.
+        ///  Initializes a new instance of the <see cref="CategoryAttribute"/> class.
         /// </summary>
         public WinCategoryAttribute(string category) : base(category)
         {

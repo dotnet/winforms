@@ -5,10 +5,10 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='TreeView.OnAfterCheck'/>,
-    ///  <see cref='TreeView.AfterCollapse'/>,
-    ///  <see cref='TreeView.AfterExpand'/>,
-    ///  or <see cref='TreeView.AfterSelect'/> event.
+    ///  Provides data for the <see cref="TreeView.OnAfterCheck"/>,
+    ///  <see cref="TreeView.AfterCollapse"/>,
+    ///  <see cref="TreeView.AfterExpand"/>,
+    ///  or <see cref="TreeView.AfterSelect"/> event.
     /// </summary>
     public class TreeViewEventArgs : EventArgs
     {

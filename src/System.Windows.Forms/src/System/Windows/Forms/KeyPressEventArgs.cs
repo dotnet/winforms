@@ -5,12 +5,12 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.KeyPress'/> event.
+    ///  Provides data for the <see cref="Control.KeyPress"/> event.
     /// </summary>
     public class KeyPressEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='KeyPressEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="KeyPressEventArgs"/> class.
         /// </summary>
         public KeyPressEventArgs(char keyChar)
         {
@@ -23,7 +23,7 @@ namespace System.Windows.Forms
         public char KeyChar { get; set; }
 
         /// <summary>
-        ///  Gets or sets a value indicating whether the <see cref='Control.KeyPress'/> event was handled.
+        ///  Gets or sets a value indicating whether the <see cref="Control.KeyPress"/> event was handled.
         /// </summary>
         public bool Handled { get; set; }
     }

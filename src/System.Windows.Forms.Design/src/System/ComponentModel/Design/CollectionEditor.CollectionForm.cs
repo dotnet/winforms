@@ -11,7 +11,7 @@ namespace System.ComponentModel.Design
     public partial class CollectionEditor
     {
         /// <summary>
-        ///  The <see cref='CollectionForm'/> provides a modal dialog for editing the contents of a collection.
+        ///  The <see cref="CollectionForm"/> provides a modal dialog for editing the contents of a collection.
         /// </summary>
         protected abstract class CollectionForm : Form
         {
@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
             private const short EditableNo = 2;
 
             /// <summary>
-            ///  Initializes a new instance of the <see cref='CollectionForm'/> class.
+            ///  Initializes a new instance of the <see cref="CollectionForm"/> class.
             /// </summary>
             public CollectionForm(CollectionEditor editor)
             {
@@ -180,7 +180,7 @@ namespace System.ComponentModel.Design
             }
 
             /// <summary>
-            ///  This is called when the value property in the <see cref='CollectionForm'/> has changed.
+            ///  This is called when the value property in the <see cref="CollectionForm"/> has changed.
             /// </summary>
             protected abstract void OnEditValueChanged();
         }

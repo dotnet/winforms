@@ -73,7 +73,7 @@ namespace System.Windows.Forms
         private bool resetRTLHScrollValue;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ScrollableControl'/> class.
+        ///  Initializes a new instance of the <see cref="ScrollableControl"/> class.
         /// </summary>
         public ScrollableControl() : base()
         {
@@ -949,7 +949,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='System.Windows.Forms.ScrollBar.OnScroll'/> event.
+        ///  Raises the <see cref="System.Windows.Forms.ScrollBar.OnScroll"/> event.
         /// </summary>
         protected virtual void OnScroll(ScrollEventArgs se)
         {
@@ -1132,7 +1132,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='ScrollableControl.AutoScrollPosition'/> property should
+        ///  Indicates whether the <see cref="ScrollableControl.AutoScrollPosition"/> property should
         ///  be persisted.
         /// </summary>
         private bool ShouldSerializeAutoScrollPosition()
@@ -1150,12 +1150,12 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='ScrollableControl.AutoScrollMargin'/> property should be persisted.
+        ///  Indicates whether the <see cref="ScrollableControl.AutoScrollMargin"/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeAutoScrollMargin() => !AutoScrollMargin.Equals(Size.Empty);
 
         /// <summary>
-        ///  Indicates whether the <see cref='ScrollableControl.AutoScrollMinSize'/>
+        ///  Indicates whether the <see cref="ScrollableControl.AutoScrollMinSize"/>
         ///  property should be persisted.
         /// </summary>
         private bool ShouldSerializeAutoScrollMinSize() => !AutoScrollMinSize.Equals(Size.Empty);

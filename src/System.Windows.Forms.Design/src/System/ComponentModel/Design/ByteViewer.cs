@@ -53,7 +53,7 @@ namespace System.ComponentModel.Design
         private DisplayMode _realDisplayMode;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ByteViewer'/> class.
+        ///  Initializes a new instance of the <see cref="ByteViewer"/> class.
         /// </summary>
         public ByteViewer()
             : base()

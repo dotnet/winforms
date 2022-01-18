@@ -5,12 +5,12 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for <see cref='TabControl.Selecting'/> and <see cref='TabControl.Selected'/> events.
+    ///  Provides data for <see cref="TabControl.Selecting"/> and <see cref="TabControl.Selected"/> events.
     /// </summary>
     public class TabControlEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='TabControlEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="TabControlEventArgs"/> class.
         /// </summary>
         public TabControlEventArgs(TabPage? tabPage, int tabPageIndex, TabControlAction action)
         {
