@@ -83,21 +83,19 @@ internal partial class Interop
 
         internal IntPtr GetComPointer<T>(T obj, Guid iid) where T : class
         {
-            IntPtr pobj_local;
             if (obj is null)
             {
-                pobj_local = IntPtr.Zero;
+                return IntPtr.Zero;
             }
-            else
+
+            IntPtr pobj_local;
+            IntPtr pUnk_local = GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
+            Guid local_IID = iid;
+            HRESULT result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_IID, out pobj_local);
+            Marshal.Release(pUnk_local);
+            if (result.Failed())
             {
-                IntPtr pUnk_local = GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
-                Guid local_IID = iid;
-                HRESULT result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_IID, out pobj_local);
-                Marshal.Release(pUnk_local);
-                if (result.Failed())
-                {
-                    Marshal.ThrowExceptionForHR((int)result);
-                }
+                Marshal.ThrowExceptionForHR((int)result);
             }
 
             return pobj_local;
