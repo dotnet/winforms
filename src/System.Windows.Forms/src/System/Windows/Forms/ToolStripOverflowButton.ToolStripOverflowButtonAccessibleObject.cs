@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace System.Windows.Forms
 {
     public partial class ToolStripOverflowButton
@@ -12,7 +14,8 @@ namespace System.Windows.Forms
             {
             }
 
-            public override string? Name
+            [AllowNull]
+            public override string Name
             {
                 get => Owner.AccessibleName ?? SR.ToolStripOptions;
                 set => base.Name = value;
