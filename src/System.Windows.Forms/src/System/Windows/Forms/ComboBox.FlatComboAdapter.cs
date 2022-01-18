@@ -4,8 +4,6 @@
 
 using System.Drawing;
 using System.Windows.Forms.Layout;
-using static Interop;
-using static Interop.User32;
 
 namespace System.Windows.Forms
 {
@@ -185,48 +183,6 @@ namespace System.Windows.Forms
 
             protected virtual Color GetInnerBorderColor(ComboBox comboBox)
                 => comboBox.Enabled ? comboBox.BackColor : SystemColors.Control;
-
-            /// <summary>
-            ///  This eliminates flicker by removing the pieces we're going to paint ourselves from the update region.
-            ///  Note the UpdateRegionBox is the bounding box of the actual update region. This is here so we can
-            ///  quickly eliminate rectangles that aren't in the update region.
-            /// </summary>
-            public unsafe void ValidateOwnerDrawRegions(ComboBox comboBox, Rectangle updateRegionBox)
-            {
-                if (comboBox is null)
-                {
-                    return;
-                }
-
-                Rectangle topOwnerDrawArea = new Rectangle(0, 0, comboBox.Width, _innerBorder.Top);
-                Rectangle bottomOwnerDrawArea = new Rectangle(0, _innerBorder.Bottom, comboBox.Width, comboBox.Height - _innerBorder.Bottom);
-                Rectangle leftOwnerDrawArea = new Rectangle(0, 0, _innerBorder.Left, comboBox.Height);
-                Rectangle rightOwnerDrawArea = new Rectangle(_innerBorder.Right, 0, comboBox.Width - _innerBorder.Right, comboBox.Height);
-
-                if (topOwnerDrawArea.IntersectsWith(updateRegionBox))
-                {
-                    RECT validRect = new RECT(topOwnerDrawArea);
-                    ValidateRect(comboBox, &validRect);
-                }
-
-                if (bottomOwnerDrawArea.IntersectsWith(updateRegionBox))
-                {
-                    RECT validRect = new RECT(bottomOwnerDrawArea);
-                    ValidateRect(comboBox, &validRect);
-                }
-
-                if (leftOwnerDrawArea.IntersectsWith(updateRegionBox))
-                {
-                    RECT validRect = new RECT(leftOwnerDrawArea);
-                    ValidateRect(comboBox, &validRect);
-                }
-
-                if (rightOwnerDrawArea.IntersectsWith(updateRegionBox))
-                {
-                    RECT validRect = new RECT(rightOwnerDrawArea);
-                    ValidateRect(comboBox, &validRect);
-                }
-            }
         }
     }
 }
