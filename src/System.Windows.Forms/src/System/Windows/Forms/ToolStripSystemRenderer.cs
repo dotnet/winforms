@@ -496,8 +496,11 @@ namespace System.Windows.Forms
         protected override void OnRenderToolStripStatusLabelBackground(ToolStripItemRenderEventArgs e)
         {
             RenderLabelInternal(e);
-            ToolStripStatusLabel item = (e.Item as ToolStripStatusLabel)!;
-            ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0, 0, item.Width - 1, item.Height - 1), item.BorderStyle, (Border3DSide)item.BorderSides);
+            ToolStripStatusLabel? item = e.Item as ToolStripStatusLabel;
+            if (item is not null)
+            {
+                ControlPaint.DrawBorder3D(e.Graphics, new Rectangle(0, 0, item.Width - 1, item.Height - 1), item.BorderStyle, (Border3DSide)item.BorderSides);
+            }
         }
 
         /// <summary>
@@ -513,7 +516,12 @@ namespace System.Windows.Forms
                 return;
             }
 
-            ToolStripSplitButton splitButton = (e.Item as ToolStripSplitButton)!;
+            ToolStripSplitButton? splitButton = e.Item as ToolStripSplitButton;
+            if (splitButton is null)
+            {
+                return;
+            }
+
             Graphics g = e.Graphics;
 
             bool rightToLeft = splitButton.RightToLeft == RightToLeft.Yes;
