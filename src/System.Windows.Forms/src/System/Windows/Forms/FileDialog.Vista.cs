@@ -240,7 +240,7 @@ namespace System.Windows.Forms
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
                         COMDLG_FILTERSPEC extension;
-                        extension.pszSpec = Marshal.StringToCoTaskMemUni(tokens[i]);// This may be a semicolon delimited list of extensions (that's ok)
+                        extension.pszSpec = Marshal.StringToCoTaskMemUni(tokens[i]);        // This may be a semicolon delimited list of extensions (that's ok)
                         extension.pszName = Marshal.StringToCoTaskMemUni(tokens[i - 1]);
                         extensions.Add(extension);
                     }
