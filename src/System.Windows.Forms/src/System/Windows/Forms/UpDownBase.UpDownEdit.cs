@@ -96,7 +96,7 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  Raises the <see cref='Control.KeyUp'/> event.
+            ///  Raises the <see cref="Control.KeyUp"/> event.
             /// </summary>
             protected override void OnKeyUp(KeyEventArgs e)
             {

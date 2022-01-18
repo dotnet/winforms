@@ -2499,8 +2499,7 @@ namespace System.Windows.Forms.Tests
             Point ptScreen,
             [MarshalAs(UnmanagedType.Interface)]
             out object ppacc,
-            out object pvarChild
-        );
+            out object pvarChild);
 
         [WinFormsFact(Skip = "This test needs to be run manually as it depends on the form being unobstructed.")]
         public unsafe void TestAccessibleObjectFromPoint_Button()

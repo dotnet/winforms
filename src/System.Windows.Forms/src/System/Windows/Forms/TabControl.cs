@@ -1504,7 +1504,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnSelecting'/> event.
+        ///  Raises the <see cref="OnSelecting"/> event.
         /// </summary>
         protected virtual void OnSelecting(TabControlCancelEventArgs e)
         {
@@ -1512,7 +1512,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnSelected'/> event.
+        ///  Raises the <see cref="OnSelected"/> event.
         /// </summary>
         protected virtual void OnSelected(TabControlEventArgs e)
         {
@@ -1526,7 +1526,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnDeselecting'/> event.
+        ///  Raises the <see cref="OnDeselecting"/> event.
         /// </summary>
         protected virtual void OnDeselecting(TabControlCancelEventArgs e)
         {
@@ -1534,7 +1534,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnDeselected'/> event.
+        ///  Raises the <see cref="OnDeselected"/> event.
         /// </summary>
         protected virtual void OnDeselected(TabControlEventArgs e)
         {

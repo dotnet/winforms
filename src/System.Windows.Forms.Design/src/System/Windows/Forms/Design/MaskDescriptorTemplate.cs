@@ -17,8 +17,7 @@ namespace System.Windows.Forms.Design
         private readonly Type _type;
         private readonly CultureInfo _culture;
 
-        public MaskDescriptorTemplate(string mask, string name, string sample, Type validatingType, CultureInfo culture) :
-            this(mask, name, sample, validatingType, culture, false)
+        public MaskDescriptorTemplate(string mask, string name, string sample, Type validatingType, CultureInfo culture) : this(mask, name, sample, validatingType, culture, false)
         {
         }
 

@@ -1300,8 +1300,8 @@ namespace System.Windows.Forms.Tests
             // MonthCalendar has "Month" view by default and returns current date as AccessibleName
             var typeDefaultValues = new Dictionary<Type, string>
             {
-                { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName},
-                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview}
+                { typeof(DataGridViewTextBoxEditingControl), SR.DataGridView_AccEditingControlAccName },
+                { typeof(PrintPreviewDialog), SR.PrintPreviewDialog_PrintPreview }
             };
 
             foreach (Type type in ReflectionHelper.GetPublicNotAbstractClasses<Control>())

@@ -574,7 +574,7 @@ namespace System.Windows.Forms.Design
                         return false;
                     }
 
-                    throw ;
+                    throw;
                 }
                 catch (InvalidOperationException)
                 {

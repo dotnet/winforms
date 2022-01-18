@@ -39,7 +39,7 @@ namespace System.Windows.Forms
         private bool showNetwork;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='PrintDialog'/> class.
+        ///  Initializes a new instance of the <see cref="PrintDialog"/> class.
         /// </summary>
         public PrintDialog()
         {
@@ -94,7 +94,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating the <see cref='PrintDocument'/> used to obtain <see cref='Drawing.Printing.PrinterSettings'/>.
+        ///  Gets or sets a value indicating the <see cref="PrintDocument"/> used to obtain <see cref="Drawing.Printing.PrinterSettings"/>.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue(null)]
@@ -132,7 +132,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the <see cref='Drawing.Printing.PrinterSettings'/> the
+        ///  Gets or sets the <see cref="Drawing.Printing.PrinterSettings"/> the
         ///  dialog box will be modifying.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]

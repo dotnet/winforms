@@ -5,14 +5,14 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides <see langword='static'/> methods for retrieving feature information from the
+    ///  Provides <see langword="static"/> methods for retrieving feature information from the
     ///  current system.
     /// </summary>
     public abstract class FeatureSupport : IFeatureSupport
     {
         /// <summary>
         ///  Determines whether any version of the specified feature is installed in the system.
-        ///  This method is <see langword='static'/>.
+        ///  This method is <see langword="static"/>.
         /// </summary>
         public static bool IsPresent(string featureClassName, string featureConstName)
         {
@@ -21,7 +21,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Determines whether the specified or newer version of the specified feature is
-        ///  installed in the system. This method is <see langword='static'/>.
+        ///  installed in the system. This method is <see langword="static"/>.
         /// </summary>
         public static bool IsPresent(string featureClassName, string featureConstName, Version minimumVersion)
         {

@@ -14,7 +14,7 @@ namespace System.Windows.Forms
         private DataGridView? _dataGridView;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataGridViewElement'/> class.
+        ///  Initializes a new instance of the <see cref="DataGridViewElement"/> class.
         /// </summary>
         public DataGridViewElement()
         {

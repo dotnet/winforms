@@ -78,7 +78,7 @@ namespace System.Windows.Forms
         internal Gdi32.HDC HDC => IsStateClean ? default : _hdc;
 
         /// <summary>
-        ///  Gets the <see cref='Graphics'/> object used to paint.
+        ///  Gets the <see cref="Graphics"/> object used to paint.
         /// </summary>
         internal Graphics Graphics
         {

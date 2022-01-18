@@ -12,7 +12,7 @@ namespace System.Windows.Forms.Tests
         public void DataGridViewTopRowAccessibleObject_FragmentNavigate_ReturnsExpected_AllowUserToAddRowsEnabled()
         {
             using DataGridView dataGridView = new();
-            DataGridViewTextBoxColumn dataGridViewColumn = new(){Name = "Col 1", HeaderText = "Col 1" };
+            DataGridViewTextBoxColumn dataGridViewColumn = new() { Name = "Col 1", HeaderText = "Col 1" };
 
             dataGridView.Columns.Add(dataGridViewColumn);
 

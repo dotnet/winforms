@@ -89,8 +89,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     PointArray(times16, 11, 11, 11, 18),
                     State.Pen(16, ControlPaint.Light(Color.Gray), penStyle),
-                    State.Transform(oneSixteenth))
-                );
+                    State.Transform(oneSixteenth)));
         }
 
         [WinFormsFact]
@@ -165,8 +164,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     PointArray(times16, 18, 11, 18, 18),
                     State.Pen(16, SystemColors.ControlLight, penStyle),
-                    State.Transform(oneSixteenth))
-                );
+                    State.Transform(oneSixteenth)));
         }
 
         [WinFormsFact]
@@ -240,8 +238,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     PointArray(times16, 18, 11, 18, 18),
                     State.Pen(16, ControlPaint.Dark(Color.PeachPuff), penStyle),
-                    State.Transform(oneSixteenth))
-                );
+                    State.Transform(oneSixteenth)));
         }
 
         [WinFormsFact]
@@ -315,8 +312,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     PointArray(times16, 18, 11, 18, 18),
                     State.Pen(16, SystemColors.ControlDark, penStyle),
-                    State.Transform(oneSixteenth))
-                );
+                    State.Transform(oneSixteenth)));
         }
 
         [WinFormsFact]

@@ -56,9 +56,9 @@ namespace System.Windows.Forms.Design
         private Rectangle mouseDragWorkspace = Rectangle.Empty; // a temp work rectangle we cache for perf
         private ToolboxItem mouseDragTool; // the tool that's being dragged; only for drag/drop
         private Point mouseDropLocation = InvalidPoint; // where the tool was dropped
-        private bool showLargeIcons;// Show Large icons or not.
+        private bool showLargeIcons; // Show Large icons or not.
         private bool autoArrange; // allows for auto arranging icons.
-        private Point autoScrollPosBeforeDragging = Point.Empty;//Used to return the correct scroll pos. after a drag
+        private Point autoScrollPosBeforeDragging = Point.Empty; //Used to return the correct scroll pos. after a drag
 
         // Component Tray Context menu items...
         private readonly MenuCommand menucmdArrangeIcons;
@@ -66,7 +66,7 @@ namespace System.Windows.Forms.Design
         private readonly MenuCommand menucmdLargeIcons;
         private bool fResetAmbient;
         private bool fSelectionChanged;
-        private ComponentTrayGlyphManager glyphManager;//used to manage any glyphs added to the tray
+        private ComponentTrayGlyphManager glyphManager; //used to manage any glyphs added to the tray
 
         // Empty class for build time dependancy
 
@@ -1475,7 +1475,7 @@ namespace System.Windows.Forms.Design
             // Now, if we have a selection, paint it
             if (selectedObjects != null)
             {
-                bool first = true;//indicates the first iteration of our foreach loop
+                bool first = true; //indicates the first iteration of our foreach loop
                 HatchBrush selectionBorderBrush;
                 if (SystemInformation.HighContrast)
                 {
@@ -2649,7 +2649,7 @@ namespace System.Windows.Forms.Design
                             var pt1 = new Point();
                             pt1 = PointToClient(pt1);
                             pt.Offset(pt1.X, pt1.Y);
-                            pt.Offset(Location.X, Location.Y);//offset the loc of the traycontrol -so now we're in comptray coords
+                            pt.Offset(Location.X, Location.Y); //offset the loc of the traycontrol -so now we're in comptray coords
                             _tray.glyphManager.GetHitTest(pt);
                         }
 

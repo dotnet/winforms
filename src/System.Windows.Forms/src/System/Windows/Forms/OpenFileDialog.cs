@@ -95,7 +95,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Opens the file selected by the user with read-only permission.  The file
-        ///  attempted is specified by the <see cref='FileDialog.FileName'/> property.
+        ///  attempted is specified by the <see cref="FileDialog.FileName"/> property.
         /// </summary>
         public Stream OpenFile()
         {

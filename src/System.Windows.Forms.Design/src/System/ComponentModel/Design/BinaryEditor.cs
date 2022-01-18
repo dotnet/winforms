@@ -84,7 +84,7 @@ namespace System.ComponentModel.Design
             }
             else
             {
-                Debug.Fail($"No conversion from byte[] to { value?.GetType().FullName ?? "null" }");
+                Debug.Fail($"No conversion from byte[] to {value?.GetType().FullName ?? "null"}");
             }
         }
 

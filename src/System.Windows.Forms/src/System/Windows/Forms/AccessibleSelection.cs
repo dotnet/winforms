@@ -18,8 +18,8 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Assigns focus to an object and makes it the anchor, which is the
         ///  starting point for the selection. Can be combined with
-        /// <see cref='TakeSelection'/>, <see cref='ExtendSelection'/>,
-        /// <see cref='AddSelection'/>, or  <see cref='RemoveSelection'/>.
+        /// <see cref="TakeSelection"/>, <see cref="ExtendSelection"/>,
+        /// <see cref="AddSelection"/>, or  <see cref="RemoveSelection"/>.
         /// </summary>
         TakeFocus = 1,
 

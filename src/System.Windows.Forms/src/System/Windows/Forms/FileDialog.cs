@@ -38,7 +38,7 @@ namespace System.Windows.Forms
         private IntPtr _dialogHWnd;
 
         /// <summary>
-        ///  In an inherited class, initializes a new instance of the <see cref='FileDialog'/>
+        ///  In an inherited class, initializes a new instance of the <see cref="FileDialog"/>
         ///  class.
         /// </summary>
         internal FileDialog()
@@ -388,10 +388,10 @@ namespace System.Windows.Forms
         /// <summary>
         ///  Occurs when the user clicks on the Open or Save button on a file dialog
         ///  box.
-        /// <remarks>
-        ///  For information about handling events, see <see topic='cpconEventsOverview'/>.
-        /// </remarks>
         /// </summary>
+        /// <remarks>
+        ///  For information about handling events, see <see topic="cpconEventsOverview"/>.
+        /// </remarks>
         [SRDescription(nameof(SR.FDfileOkDescr))]
         public event CancelEventHandler FileOk
         {
@@ -644,7 +644,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='FileOk'/> event.
+        ///  Raises the <see cref="FileOk"/> event.
         /// </summary>
         protected void OnFileOk(CancelEventArgs e)
         {
@@ -707,7 +707,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Prompts the user with a <see cref='MessageBox'/> with the
+        ///  Prompts the user with a <see cref="MessageBox"/> with the
         ///  given parameters. It also ensures that the focus is set back on the window that
         ///  had the focus to begin with (before we displayed the MessageBox).
         /// </summary>
@@ -727,7 +727,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Prompts the user with a <see cref='MessageBox'/> when a
+        ///  Prompts the user with a <see cref="MessageBox"/> when a
         ///  file does not exist.
         /// </summary>
         private void PromptFileNotFound(string fileName)

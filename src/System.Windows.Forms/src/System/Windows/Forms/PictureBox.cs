@@ -287,7 +287,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves the Image that the <see cref='PictureBox'/> is currently displaying.
+        ///  Retrieves the Image that the <see cref="PictureBox"/> is currently displaying.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
         [Localizable(true)]

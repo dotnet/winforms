@@ -35,7 +35,7 @@ namespace System.Windows.Forms
         private Size _systemSize = new Size(InvalidDimensionValue, InvalidDimensionValue);
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Button'/>
+        ///  Initializes a new instance of the <see cref="Button"/>
         ///  class.
         /// </summary>
         public Button() : base()
@@ -184,7 +184,7 @@ namespace System.Windows.Forms
         internal override bool SupportsUiaProviders => true;
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseEnter'/> event.
+        ///  Raises the <see cref="Control.OnMouseEnter"/> event.
         /// </summary>
         protected override void OnMouseEnter(EventArgs e)
         {
@@ -192,7 +192,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseLeave'/> event.
+        ///  Raises the <see cref="Control.OnMouseLeave"/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
         {
@@ -218,7 +218,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Notifies the <see cref='Button'/>
+        ///  Notifies the <see cref="Button"/>
         ///  whether it is the default button so that it can adjust its appearance
         ///  accordingly.
         /// </summary>
@@ -267,7 +267,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ButtonBase.OnMouseUp'/> event.
+        ///  Raises the <see cref="ButtonBase.OnMouseUp"/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -325,7 +325,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Generates a <see cref='Control.Click'/> event for a
+        ///  Generates a <see cref="Control.Click"/> event for a
         ///  button.
         /// </summary>
         public void PerformClick()

@@ -1827,7 +1827,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.KeyDown'/> event.
+        ///  Raises the <see cref="Control.KeyDown"/> event.
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
         {
@@ -1939,7 +1939,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.KeyPress'/> event.
+        ///  Raises the <see cref="Control.KeyPress"/> event.
         /// </summary>
         protected override void OnKeyPress(KeyPressEventArgs e)
         {
@@ -2008,7 +2008,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.KeyUp'/> event.
+        ///  Raises the <see cref="Control.KeyUp"/> event.
         /// </summary>
         protected override void OnKeyUp(KeyEventArgs e)
         {

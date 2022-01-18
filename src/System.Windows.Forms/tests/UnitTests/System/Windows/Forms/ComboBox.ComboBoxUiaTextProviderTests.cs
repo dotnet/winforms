@@ -895,7 +895,7 @@ namespace System.Windows.Forms.Tests
         [MemberData(nameof(ComboBoxUiaTextProvider_RangeFromPoint_TestData))]
         public void ComboBoxUiaTextProvider_RangeFromPoint_DoesntThrowAnException(ComboBoxStyle dropDownStyle, Point point)
         {
-            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle } ;
+            using ComboBox comboBox = new ComboBox() { DropDownStyle = dropDownStyle };
             comboBox.CreateControl();
             ComboBox.ComboBoxUiaTextProvider provider = new ComboBox.ComboBoxUiaTextProvider(comboBox);
 

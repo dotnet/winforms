@@ -20,7 +20,7 @@ namespace System.Windows.Forms
         protected class WebBrowserSite : WebBrowserSiteBase, IDocHostUIHandler
         {
             /// <summary>
-            ///  Creates an instance of the <see cref='WebBrowserSite'/> class.
+            ///  Creates an instance of the <see cref="WebBrowserSite"/> class.
             /// </summary>
             public WebBrowserSite(WebBrowser host) : base(host)
             {

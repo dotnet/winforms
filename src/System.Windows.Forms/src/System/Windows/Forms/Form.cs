@@ -157,7 +157,7 @@ namespace System.Windows.Forms
         private VisualStyleRenderer sizeGripRenderer;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Form'/> class.
+        ///  Initializes a new instance of the <see cref="Form"/> class.
         /// </summary>
         public Form() : base()
         {
@@ -193,7 +193,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates the <see cref='Button'/> control on the form that is clicked when
+        ///  Indicates the <see cref="Button"/> control on the form that is clicked when
         ///  the user presses the ENTER key.
         /// </summary>
         [DefaultValue(null)]
@@ -1758,7 +1758,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets an array of <see cref='Form'/> objects that represent all forms that are owned by this form.
+        ///  Gets an array of <see cref="Form"/> objects that represent all forms that are owned by this form.
         /// </summary>
         [SRCategory(nameof(SR.CatWindowStyle))]
         [Browsable(false)]
@@ -4097,7 +4097,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='InputLanguageChanged'/>
+        ///  Raises the <see cref="InputLanguageChanged"/>
         ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4107,7 +4107,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='InputLanguageChanging'/>
+        ///  Raises the <see cref="InputLanguageChanging"/>
         ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -4150,7 +4150,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MdiChildActivate'/> event.
+        ///  Raises the <see cref="MdiChildActivate"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMdiChildActivate(EventArgs e)
@@ -4161,7 +4161,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MenuStart'/> event.
+        ///  Raises the <see cref="MenuStart"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected virtual void OnMenuStart(EventArgs e)
@@ -5316,7 +5316,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='AutoScaleBaseSize'/> property should be
+        ///  Indicates whether the <see cref="AutoScaleBaseSize"/> property should be
         ///  persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5331,7 +5331,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Icon'/> property should be persisted.
+        ///  Indicates whether the <see cref="Icon"/> property should be persisted.
         /// </summary>
         private bool ShouldSerializeIcon()
         {
@@ -5348,7 +5348,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Size'/> property should be persisted.
+        ///  Indicates whether the <see cref="Size"/> property should be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal override bool ShouldSerializeSize()
@@ -5357,7 +5357,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='TransparencyKey'/> property should be
+        ///  Indicates whether the <see cref="TransparencyKey"/> property should be
         ///  persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -5702,7 +5702,7 @@ namespace System.Windows.Forms
                         }
 #endif
 
-                        ToolStripManager.RevertMergeInternal(mdiControlStrip.MergedMenu, mdiControlStrip,/*revertMDIStuff*/true);
+                        ToolStripManager.RevertMergeInternal(mdiControlStrip.MergedMenu, mdiControlStrip, /*revertMDIStuff*/true);
 
 #if DEBUG
                         // double check that RevertMerge doesnt accidentally revert more than it should.
@@ -5755,7 +5755,7 @@ namespace System.Windows.Forms
             {
                 if (MdiWindowListStrip is not null && MdiWindowListStrip.MergedMenu is not null)
                 {
-                    ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip,/*revertMdiStuff*/true);
+                    ToolStripManager.RevertMergeInternal(MdiWindowListStrip.MergedMenu, MdiWindowListStrip, /*revertMdiStuff*/true);
                 }
 
                 MenuStrip sourceMenuStrip = ToolStripManager.GetMainMenuStrip(this);
@@ -5777,7 +5777,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ResizeBegin'/>
+        ///  Raises the <see cref="ResizeBegin"/>
         ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -5790,7 +5790,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ResizeEnd'/>
+        ///  Raises the <see cref="ResizeEnd"/>
         ///  event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
@@ -5962,7 +5962,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Validates all selectable child controls in the container, including descendants. This is
-        ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref='ValidationConstraints.Selectable'/>
+        ///  equivalent to calling ValidateChildren(ValidationConstraints.Selectable). See <see cref="ValidationConstraints.Selectable"/>
         ///  for details of exactly which child controls will be validated.
         /// </summary>
         [Browsable(true)]

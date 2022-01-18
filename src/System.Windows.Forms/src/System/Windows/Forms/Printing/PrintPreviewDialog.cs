@@ -12,7 +12,7 @@ namespace System.Windows.Forms
 {
     /// <summary>
     ///  Represents a
-    ///  dialog box form that contains a <see cref='Forms.PrintPreviewControl'/>.
+    ///  dialog box form that contains a <see cref="Forms.PrintPreviewControl"/>.
     /// </summary>
     [Designer("System.ComponentModel.Design.ComponentDesigner, " + AssemblyRef.SystemDesign)]
     [DesignTimeVisible(true)]
@@ -50,7 +50,7 @@ namespace System.Windows.Forms
         readonly ImageList imageList;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='PrintPreviewDialog'/> class.
+        ///  Initializes a new instance of the <see cref="PrintPreviewDialog"/> class.
         /// </summary>
         public PrintPreviewDialog()
         {
@@ -65,7 +65,7 @@ namespace System.Windows.Forms
         //subhag addition
         //-------------------------------------------------------------------------------------------------------------
         /// <summary>
-        ///  Indicates the <see cref='Button'/> control on the form that is clicked when
+        ///  Indicates the <see cref="Button"/> control on the form that is clicked when
         ///  the user presses the ENTER key.
         /// </summary>
         [Browsable(false)]
@@ -912,7 +912,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating the <see cref='Forms.PrintPreviewControl'/>
+        ///  Gets or sets a value indicating the <see cref="Forms.PrintPreviewControl"/>
         ///  contained in this form.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]

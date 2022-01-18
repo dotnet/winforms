@@ -43,7 +43,7 @@ namespace System.Windows.Forms
         private static readonly int s_propDataGridViewColumnValueType = PropertyStore.CreateKey();
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataGridViewColumn'/> class.
+        ///  Initializes a new instance of the <see cref="DataGridViewColumn"/> class.
         /// </summary>
         public DataGridViewColumn() : this((DataGridViewCell)null)
         {

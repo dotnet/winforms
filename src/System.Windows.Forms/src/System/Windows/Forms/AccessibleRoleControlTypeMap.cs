@@ -74,7 +74,7 @@ namespace System.Windows.Forms
             { AccessibleRole.StatusBar, UIA.StatusBarControlTypeId },
             { AccessibleRole.Table, UIA.TableControlTypeId },
             { AccessibleRole.Text, UIA.EditControlTypeId },
-            { AccessibleRole.TitleBar, UIA.TitleBarControlTypeId},
+            { AccessibleRole.TitleBar, UIA.TitleBarControlTypeId },
             { AccessibleRole.ToolBar, UIA.ToolBarControlTypeId },
             { AccessibleRole.ToolTip, UIA.ToolTipControlTypeId },
             { AccessibleRole.WhiteSpace, UIA.PaneControlTypeId },

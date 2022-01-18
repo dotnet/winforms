@@ -5,7 +5,7 @@
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.ChangeUICues'/> event.
+    ///  Provides data for the <see cref="Control.ChangeUICues"/> event.
     /// </summary>
     public class UICuesEventArgs : EventArgs
     {

@@ -569,7 +569,7 @@ namespace System.ComponentModel.Design
                     // We add the +4 is a fudge factor...
                     SizeF sizeW = g.MeasureString(maxC.ToString(CultureInfo.CurrentCulture), _listbox.Font);
 
-                    int charactersInNumber = ((int)(Math.Log(maxC) / s_log10) + 1);// Luckily, this is never called if count = 0
+                    int charactersInNumber = ((int)(Math.Log(maxC) / s_log10) + 1); // Luckily, this is never called if count = 0
                     int w = 4 + charactersInNumber * (Font.Height / 2);
 
                     w = Math.Max(w, (int)Math.Ceiling(sizeW.Width));

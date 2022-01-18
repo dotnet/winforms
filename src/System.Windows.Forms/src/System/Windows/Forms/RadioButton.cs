@@ -42,7 +42,7 @@ namespace System.Windows.Forms
         internal int flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='RadioButton'/>
+        ///  Initializes a new instance of the <see cref="RadioButton"/>
         ///  class.
         /// </summary>
         public RadioButton() : base()
@@ -62,7 +62,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating whether the <see cref='Checked'/>
+        ///  Gets or sets a value indicating whether the <see cref="Checked"/>
         ///  value and the appearance of
         ///  the control automatically change when the control is clicked.
         /// </summary>
@@ -361,7 +361,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Occurs when the
-        ///  value of the <see cref='Checked'/>
+        ///  value of the <see cref="Checked"/>
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.RadioButtonOnCheckedChangedDescr))]
@@ -391,7 +391,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='CheckBox.CheckedChanged'/>
+        ///  Raises the <see cref="CheckBox.CheckedChanged"/>
         ///  event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
@@ -541,7 +541,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ButtonBase.OnMouseUp'/> event.
+        ///  Raises the <see cref="ButtonBase.OnMouseUp"/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -568,7 +568,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Generates a <see cref='Control.Click'/> event for the
+        ///  Generates a <see cref="Control.Click"/> event for the
         ///  button, simulating a click by a user.
         /// </summary>
         public void PerformClick()

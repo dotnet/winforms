@@ -35,8 +35,7 @@ namespace System.Windows.Forms.Design.Behavior
         ///  push the original drag event info down to the base class and store off
         ///  our direction and offset.
         /// </summary>
-        public ToolboxSnapDragDropEventArgs(SnapDirection snapDirections, Point offset, DragEventArgs origArgs) :
-            base(origArgs.Data, origArgs.KeyState, origArgs.X, origArgs.Y, origArgs.AllowedEffect, origArgs.Effect)
+        public ToolboxSnapDragDropEventArgs(SnapDirection snapDirections, Point offset, DragEventArgs origArgs) : base(origArgs.Data, origArgs.KeyState, origArgs.X, origArgs.Y, origArgs.AllowedEffect, origArgs.Effect)
         {
             throw new NotImplementedException(SR.NotImplementedByDesign);
         }

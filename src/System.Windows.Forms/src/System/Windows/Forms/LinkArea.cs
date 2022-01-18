@@ -172,8 +172,7 @@ namespace System.Windows.Forms
                     {
                         return new InstanceDescriptor(
                             typeof(LinkArea).GetConstructor(new Type[] { typeof(int), typeof(int) }),
-                            new object[] { pt.Start, pt.Length }
-                        );
+                            new object[] { pt.Start, pt.Length });
                     }
                 }
 

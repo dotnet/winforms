@@ -29,7 +29,7 @@ namespace System.Windows.Forms
         private DataGridViewCellCollection _rowCells;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataGridViewRow'/> class.
+        ///  Initializes a new instance of the <see cref="DataGridViewRow"/> class.
         /// </summary>
         public DataGridViewRow() : base()
         {

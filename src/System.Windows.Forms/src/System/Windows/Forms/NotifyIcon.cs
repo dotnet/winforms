@@ -58,7 +58,7 @@ namespace System.Windows.Forms
         private bool visible;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='NotifyIcon'/> class.
+        ///  Initializes a new instance of the <see cref="NotifyIcon"/> class.
         /// </summary>
         public NotifyIcon()
         {
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='NotifyIcon'/> class.
+        ///  Initializes a new instance of the <see cref="NotifyIcon"/> class.
         /// </summary>
         public NotifyIcon(IContainer container) : this()
         {
@@ -484,7 +484,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='MouseDown'/> event.
+        ///  Raises the <see cref="MouseDown"/> event.
         ///  Inheriting classes should override this method to handle this event.
         ///  Call base.onMouseDown to send this event to any registered event listeners.
         /// </summary>

@@ -48,7 +48,7 @@ namespace System.Windows.Forms
         private bool _isEnableVisualStyleBackgroundSet;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ButtonBase'/> class.
+        ///  Initializes a new instance of the <see cref="ButtonBase"/> class.
         /// </summary>
         protected ButtonBase()
         {
@@ -476,7 +476,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the <see cref='Forms.ImageList'/> that contains the <see cref='Drawing.Image'/> displayed on a button control.
+        ///  Gets or sets the <see cref="Forms.ImageList"/> that contains the <see cref="Drawing.Image"/> displayed on a button control.
         /// </summary>
         [DefaultValue(null)]
         [SRDescription(nameof(SR.ButtonImageListDescr))]
@@ -815,7 +815,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnGotFocus'/> event.
+        ///  Raises the <see cref="OnGotFocus"/> event.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -824,7 +824,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnLostFocus'/> event.
+        ///  Raises the <see cref="OnLostFocus"/> event.
         /// </summary>
         protected override void OnLostFocus(EventArgs e)
         {
@@ -838,7 +838,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseEnter'/> event.
+        ///  Raises the <see cref="Control.OnMouseEnter"/> event.
         /// </summary>
         protected override void OnMouseEnter(EventArgs eventargs)
         {
@@ -855,7 +855,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseLeave'/> event.
+        ///  Raises the <see cref="Control.OnMouseLeave"/> event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs eventargs)
         {
@@ -872,7 +872,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseMove'/> event.
+        ///  Raises the <see cref="Control.OnMouseMove"/> event.
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs mevent)
         {
@@ -903,7 +903,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseDown'/> event.
+        ///  Raises the <see cref="Control.OnMouseDown"/> event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs mevent)
         {
@@ -920,7 +920,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnMouseUp'/> event.
+        ///  Raises the <see cref="OnMouseUp"/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {
@@ -1084,7 +1084,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnKeyDown'/> event.
+        ///  Raises the <see cref="OnKeyDown"/> event.
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs kevent)
         {
@@ -1114,7 +1114,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnKeyUp'/> event.
+        ///  Raises the <see cref="OnKeyUp"/> event.
         /// </summary>
         protected override void OnKeyUp(KeyEventArgs kevent)
         {
@@ -1147,7 +1147,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnPaint'/> event.
+        ///  Raises the <see cref="OnPaint"/> event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs pevent)
         {

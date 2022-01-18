@@ -328,7 +328,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds a <see cref='ISelectionService.SelectionChanged'/> event handler to the selection service.
+        ///  Adds a <see cref="ISelectionService.SelectionChanged"/> event handler to the selection service.
         /// </summary>
         event EventHandler ISelectionService.SelectionChanged
         {

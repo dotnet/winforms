@@ -601,7 +601,7 @@ namespace System.Windows.Forms.Design
                 //snap either up or down depending on offset
                 if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Top) != 0)
                 {
-                    newBounds.Y += e.Offset.Y;//snap to top - so move up our bounds
+                    newBounds.Y += e.Offset.Y; //snap to top - so move up our bounds
                 }
                 else if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Bottom) != 0)
                 {
@@ -613,7 +613,7 @@ namespace System.Windows.Forms.Design
                 {
                     if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Left) != 0)
                     {
-                        newBounds.X += e.Offset.X;//snap to left-
+                        newBounds.X += e.Offset.X; //snap to left-
                     }
                     else if ((e.SnapDirections & ToolboxSnapDragDropEventArgs.SnapDirection.Right) != 0)
                     {

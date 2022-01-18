@@ -36,11 +36,11 @@ namespace System.Windows.Forms
 
         readonly int bitDepth;
 
-        private static readonly object syncLock = new object();//used to lock this class before syncing to SystemEvents
+        private static readonly object syncLock = new object(); //used to lock this class before syncing to SystemEvents
 
-        private static int desktopChangedCount = -1;//static counter of desktop size changes
+        private static int desktopChangedCount = -1; //static counter of desktop size changes
 
-        private int currentDesktopChangedCount = -1;//instance-based counter used to invalidate WorkingArea
+        private int currentDesktopChangedCount = -1; //instance-based counter used to invalidate WorkingArea
 
         // This identifier is just for us, so that we don't try to call the multimon
         // functions if we just need the primary monitor... this is safer for
@@ -293,7 +293,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref='Screen'/>
+        ///  Retrieves a <see cref="Screen"/>
         ///  for the monitor that contains the specified point.
         /// </summary>
         public static Screen FromPoint(Point point)
@@ -309,7 +309,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref='Screen'/>
+        ///  Retrieves a <see cref="Screen"/>
         ///  for the monitor that contains the
         ///  largest region of the rectangle.
         /// </summary>
@@ -327,7 +327,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref='Screen'/> for the monitor that contains
+        ///  Retrieves a <see cref="Screen"/> for the monitor that contains
         ///  the largest region of the window of the control.
         /// </summary>
         public static Screen FromControl(Control control)
@@ -338,7 +338,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves a <see cref='Screen'/> for the monitor that contains
+        ///  Retrieves a <see cref="Screen"/> for the monitor that contains
         ///  the largest region of the window.
         /// </summary>
         public static Screen FromHandle(IntPtr hwnd)

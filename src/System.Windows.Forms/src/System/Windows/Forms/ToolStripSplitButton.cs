@@ -603,7 +603,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='ToolStripItem.Size'/> property needs to be persisted.
+        ///  Determines if the <see cref="ToolStripItem.Size"/> property needs to be persisted.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         internal virtual bool ShouldSerializeDropDownButtonWidth()

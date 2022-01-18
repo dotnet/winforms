@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         Label = (int)LVIR.LABEL,
 
         /// <summary>
-        ///  Both the icon and label portions. In Report view, this <see cref='Entire'/>.
+        ///  Both the icon and label portions. In Report view, this <see cref="Entire"/>.
         /// </summary>
         ItemOnly = (int)LVIR.SELECTBOUNDS,
     }

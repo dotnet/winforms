@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         private bool _rightToLeftLayout;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ProgressBar'/> class in its default state.
+        ///  Initializes a new instance of the <see cref="ProgressBar"/> class in its default state.
         /// </summary>
         public ProgressBar() : base()
         {
@@ -203,7 +203,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the marquee animation speed of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the marquee animation speed of the <see cref="ProgressBar"/>.
         ///  Sets the value to a positive number causes the progressBar to move, while setting it to 0
         ///  stops the ProgressBar.
         /// </summary>
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the maximum value of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the maximum value of the <see cref="ProgressBar"/>.
         /// </summary>
         [DefaultValue(100)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -288,7 +288,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the minimum value of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the minimum value of the <see cref="ProgressBar"/>.
         /// </summary>
         [DefaultValue(0)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -397,7 +397,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the amount that a call to <see cref='PerformStep'/> increases the progress
+        ///  Gets or sets the amount that a call to <see cref="PerformStep"/> increases the progress
         ///  bar's current position.
         /// </summary>
         [DefaultValue(10)]
@@ -450,7 +450,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets the current position of the <see cref='ProgressBar'/>.
+        ///  Gets or sets the current position of the <see cref="ProgressBar"/>.
         /// </summary>
         [DefaultValue(0)]
         [SRCategory(nameof(SR.CatBehavior))]
@@ -561,7 +561,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Advances the current position of the <see cref='ProgressBar'/> by the specified increment
+        ///  Advances the current position of the <see cref="ProgressBar"/> by the specified increment
         ///  and redraws the control to reflect the new position.
         /// </summary>
         public void Increment(int value)
@@ -632,8 +632,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Advances the current position of the <see cref='ProgressBar'/> by the amount of the
-        ///  <see cref='Step'/> property, and redraws the control to reflect the new position.
+        ///  Advances the current position of the <see cref="ProgressBar"/> by the amount of the
+        ///  <see cref="Step"/> property, and redraws the control to reflect the new position.
         /// </summary>
         public void PerformStep()
         {
@@ -673,7 +673,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Sends the underlying window a PBM_SETPOS message to update the current value of the
-        ///  <see cref='ProgressBar'/>.
+        ///  <see cref="ProgressBar"/>.
         /// </summary>
         private void UpdatePos()
         {
@@ -684,7 +684,7 @@ namespace System.Windows.Forms
         }
 
         /// <remarks>
-        ///  Note: <see cref='ProgressBar'/> doesn't work like other controls as far as setting ForeColor/BackColor.
+        ///  Note: <see cref="ProgressBar"/> doesn't work like other controls as far as setting ForeColor/BackColor.
         ///  You need to send messages to update the colors.
         /// </remarks>
         private void UserPreferenceChangedHandler(object o, UserPreferenceChangedEventArgs e)
@@ -697,11 +697,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a new AccessibleObject for this <see cref='ProgressBar'/> instance.
+        ///  Creates a new AccessibleObject for this <see cref="ProgressBar"/> instance.
         ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
         /// </summary>
         /// <returns>
-        ///  AccessibleObject for this <see cref='ProgressBar'/> instance.
+        ///  AccessibleObject for this <see cref="ProgressBar"/> instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
             => new ProgressBarAccessibleObject(this);

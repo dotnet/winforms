@@ -269,8 +269,7 @@ namespace System
             int dwOSMinorVersion,
             int dwSpMajorVersion,
             int dwSpMinorVersion,
-            out int pdwReturnedProductType
-        );
+            out int pdwReturnedProductType);
 
         [DllImport("ntdll.dll", ExactSpelling = true)]
         private static extern int RtlGetVersion(ref RTL_OSVERSIONINFOEX lpVersionInformation);

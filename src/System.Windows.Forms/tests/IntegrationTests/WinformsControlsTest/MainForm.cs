@@ -239,8 +239,7 @@ namespace WinformsControlsTest
             int padding = overarchingFlowLayoutPanel.Controls[0].Margin.All;
             ClientSize = new Size(
                 (biggestButton.Width + padding * 2) * 2 + padding * 2,
-                (int)((overarchingFlowLayoutPanel.Controls.Count + 1) / 2 * (biggestButton.Height + padding * 2) + padding * 2)
-                );
+                (int)((overarchingFlowLayoutPanel.Controls.Count + 1) / 2 * (biggestButton.Height + padding * 2) + padding * 2));
             MinimumSize = Size;
             Debug.WriteLine($"Minimum form size: {MinimumSize}", nameof(MainForm));
         }

@@ -123,8 +123,7 @@ namespace System.Windows.Forms
             {
                 return new InstanceDescriptor(
                     typeof(TableLayoutPanelCellPosition).GetConstructor(new Type[] { typeof(int), typeof(int) }),
-                    new object[] { cellPosition.Column, cellPosition.Row }
-                );
+                    new object[] { cellPosition.Column, cellPosition.Row });
             }
 
             return base.ConvertTo(context, culture, value, destinationType);
@@ -138,8 +137,7 @@ namespace System.Windows.Forms
             {
                 return new TableLayoutPanelCellPosition(
                     (int)propertyValues[nameof(TableLayoutPanelCellPosition.Column)],
-                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Row)]
-                );
+                    (int)propertyValues[nameof(TableLayoutPanelCellPosition.Row)]);
             }
             catch (InvalidCastException invalidCast)
             {

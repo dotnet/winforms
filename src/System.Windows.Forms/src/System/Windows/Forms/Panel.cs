@@ -13,7 +13,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Represents a <see cref='Panel'/> control.
+    ///  Represents a <see cref="Panel"/> control.
     /// </summary>
     [DefaultProperty(nameof(BorderStyle))]
     [DefaultEvent(nameof(Paint))]
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         private BorderStyle _borderStyle = BorderStyle.None;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='Panel'/> class.
+        ///  Initializes a new instance of the <see cref="Panel"/> class.
         /// </summary>
         public Panel() : base()
         {
@@ -242,11 +242,11 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Creates a new AccessibleObject for this <see cref='Panel'/> instance.
+        ///  Creates a new AccessibleObject for this <see cref="Panel"/> instance.
         ///  The AccessibleObject instance returned by this method supports ControlType UIA property.
         /// </summary>
         /// <returns>
-        ///  <see cref='AccessibleObject'/> for this <see cref='Panel'/> instance.
+        ///  <see cref="AccessibleObject"/> for this <see cref="Panel"/> instance.
         /// </returns>
         protected override AccessibleObject CreateAccessibilityInstance()
            => new PanelAccessibleObject(this);

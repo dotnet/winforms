@@ -40,8 +40,7 @@ internal static partial class Interop
                 hdcSrc,
                 x1,
                 y1,
-                rop
-            );
+                rop);
             GC.KeepAlive(hdc);
             return result;
         }
@@ -66,8 +65,7 @@ internal static partial class Interop
                 (HDC)hdcSrc.Handle,
                 x1,
                 y1,
-                rop
-            );
+                rop);
             GC.KeepAlive(hdcSrc);
             return result;
         }

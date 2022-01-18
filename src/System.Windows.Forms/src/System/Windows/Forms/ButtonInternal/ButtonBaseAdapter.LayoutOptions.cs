@@ -123,8 +123,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Composition vComposition = GetVerticalComposition();
                 return new Size(
                     xCompose(hComposition, checkSize.Width, imageSize.Width, textSize.Width),
-                    xCompose(vComposition, checkSize.Height, imageSize.Height, textSize.Height)
-                );
+                    xCompose(vComposition, checkSize.Height, imageSize.Height, textSize.Height));
 
                 static int xCompose(Composition composition, int checkSize, int imageSize, int textSize)
                 {
@@ -155,8 +154,7 @@ namespace System.Windows.Forms.ButtonInternal
                 Composition vComposition = GetVerticalComposition();
                 return new Size(
                     xDecompose(hComposition, checkSize.Width, imageSize.Width, proposedSize.Width),
-                    xDecompose(vComposition, checkSize.Height, imageSize.Height, proposedSize.Height)
-                );
+                    xDecompose(vComposition, checkSize.Height, imageSize.Height, proposedSize.Height));
 
                 static int xDecompose(Composition composition, int checkSize, int imageSize, int proposedSize)
                 {

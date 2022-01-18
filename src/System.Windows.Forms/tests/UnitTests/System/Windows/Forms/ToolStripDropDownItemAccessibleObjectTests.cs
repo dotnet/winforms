@@ -119,7 +119,7 @@ namespace System.Windows.Forms.Tests
             using SubToolStripDropDownItem control = new();
             using SubToolStripDropDownItem item1 = new() { Available = true };
             using SubToolStripDropDownItem item2 = new() { Available = true };
-            control.DropDown.Items.AddRange(new [] { item1, item2 });
+            control.DropDown.Items.AddRange(new[] { item1, item2 });
 
             var accessibleObject = (ToolStripDropDownItemAccessibleObject)control.AccessibilityObject;
 

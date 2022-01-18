@@ -58,15 +58,14 @@ namespace System.Windows.Forms
                         User32.EnableScrollBar(
                             _parent,
                             Orientation,
-                            value ? User32.ESB.ENABLE_BOTH : User32.ESB.DISABLE_BOTH
-                        );
+                            value ? User32.ESB.ENABLE_BOTH : User32.ESB.DISABLE_BOTH);
                     }
                 }
             }
         }
 
         /// <summary>
-        ///  Gets or sets a value to be added or subtracted to the <see cref='LargeChange'/>
+        ///  Gets or sets a value to be added or subtracted to the <see cref="LargeChange"/>
         ///  property when the scroll box is moved a large distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
@@ -184,7 +183,7 @@ namespace System.Windows.Forms
         private protected abstract int GetVerticalDisplayPosition(ScrollableControl parent);
 
         /// <summary>
-        ///  Gets or sets the value to be added or subtracted to the <see cref='ScrollBar.Value'/>
+        ///  Gets or sets the value to be added or subtracted to the <see cref="ScrollBar.Value"/>
         ///  property when the scroll box is moved a small distance.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]

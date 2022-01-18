@@ -72,27 +72,27 @@ namespace System.Windows.Forms.Design
             // build the static menu items structure.
             string[][] menuItemNames = new string[][]
             {
-                new string[]{SR.StandardMenuFile, SR.StandardMenuNew, SR.StandardMenuOpen, "-", SR.StandardMenuSave, SR.StandardMenuSaveAs, "-", SR.StandardMenuPrint, SR.StandardMenuPrintPreview, "-", SR.StandardMenuExit},
-                new string[]{SR.StandardMenuEdit, SR.StandardMenuUndo, SR.StandardMenuRedo, "-", SR.StandardMenuCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardMenuSelectAll},
-                new string[]{SR.StandardMenuTools, SR.StandardMenuCustomize, SR.StandardMenuOptions},
-                new string[]{SR.StandardMenuHelp, SR.StandardMenuContents, SR.StandardMenuIndex, SR.StandardMenuSearch, "-", SR.StandardMenuAbout }
+                new string[] { SR.StandardMenuFile, SR.StandardMenuNew, SR.StandardMenuOpen, "-", SR.StandardMenuSave, SR.StandardMenuSaveAs, "-", SR.StandardMenuPrint, SR.StandardMenuPrintPreview, "-", SR.StandardMenuExit },
+                new string[] { SR.StandardMenuEdit, SR.StandardMenuUndo, SR.StandardMenuRedo, "-", SR.StandardMenuCut, SR.StandardMenuCopy, SR.StandardMenuPaste, "-", SR.StandardMenuSelectAll },
+                new string[] { SR.StandardMenuTools, SR.StandardMenuCustomize, SR.StandardMenuOptions },
+                new string[] { SR.StandardMenuHelp, SR.StandardMenuContents, SR.StandardMenuIndex, SR.StandardMenuSearch, "-", SR.StandardMenuAbout }
             };
 
             // build the static menu items image list that maps one-one with above menuItems structure. this is required so that the in LOCALIZED build we don't use the Localized item string.
             string[][] menuItemImageNames = new string[][]
             {
-                new string[]{"","new", "open", "-", "save", "", "-", "print", "printPreview", "-", ""},
-                new string[]{"", "", "", "-", "cut", "copy", "paste", "-", ""},
-                new string[]{"", "", ""},
-                new string[]{"", "", "", "", "-", ""}
+                new string[] { "", "new", "open", "-", "save", "", "-", "print", "printPreview", "-", "" },
+                new string[] { "", "", "", "-", "cut", "copy", "paste", "-", "" },
+                new string[] { "", "", "" },
+                new string[] { "", "", "", "", "-", "" }
             };
 
             Keys[][] menuItemShortcuts = new Keys[][]
             {
-                new Keys[]{/*File*/Keys.None, /*New*/Keys.Control | Keys.N, /*Open*/Keys.Control | Keys.O, /*Separator*/ Keys.None, /*Save*/ Keys.Control | Keys.S, /*SaveAs*/Keys.None, Keys.None, /*Print*/ Keys.Control | Keys.P, /*PrintPreview*/ Keys.None, /*Separator*/Keys.None, /*Exit*/ Keys.None},
-                new Keys[]{/*Edit*/Keys.None, /*Undo*/Keys.Control | Keys.Z, /*Redo*/Keys.Control | Keys.Y, /*Separator*/Keys.None, /*Cut*/ Keys.Control | Keys.X, /*Copy*/ Keys.Control | Keys.C, /*Paste*/Keys.Control | Keys.V, /*Separator*/ Keys.None, /*SelectAll*/Keys.None},
-                new Keys[]{/*Tools*/Keys.None, /*Customize*/Keys.None, /*Options*/Keys.None},
-                new Keys[]{/*Help*/Keys.None, /*Contents*/Keys.None, /*Index*/Keys.None, /*Search*/Keys.None,/*Separator*/Keys.None , /*About*/Keys.None}
+                new Keys[] { /*File*/Keys.None, /*New*/Keys.Control | Keys.N, /*Open*/Keys.Control | Keys.O, /*Separator*/ Keys.None, /*Save*/ Keys.Control | Keys.S, /*SaveAs*/Keys.None, Keys.None, /*Print*/ Keys.Control | Keys.P, /*PrintPreview*/ Keys.None, /*Separator*/Keys.None, /*Exit*/ Keys.None },
+                new Keys[] { /*Edit*/Keys.None, /*Undo*/Keys.Control | Keys.Z, /*Redo*/Keys.Control | Keys.Y, /*Separator*/Keys.None, /*Cut*/ Keys.Control | Keys.X, /*Copy*/ Keys.Control | Keys.C, /*Paste*/Keys.Control | Keys.V, /*Separator*/ Keys.None, /*SelectAll*/Keys.None },
+                new Keys[] { /*Tools*/Keys.None, /*Customize*/Keys.None, /*Options*/Keys.None },
+                new Keys[] { /*Help*/Keys.None, /*Contents*/Keys.None, /*Index*/Keys.None, /*Search*/Keys.None, /*Separator*/Keys.None, /*About*/Keys.None }
             };
 
             Debug.Assert(host != null, "can't create standard menu without designer _host.");

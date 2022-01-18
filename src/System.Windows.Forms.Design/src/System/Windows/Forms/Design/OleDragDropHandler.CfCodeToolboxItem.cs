@@ -44,7 +44,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// <para>Saves the state of this <see cref='ToolboxItem'/> to
+            /// <para>Saves the state of this <see cref="ToolboxItem"/> to
             ///  the specified serialization info.</para>
             /// </summary>
             protected override void Serialize(SerializationInfo info, StreamingContext context)
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.Design
             }
 
             /// <summary>
-            /// <para>Loads the state of this <see cref='ToolboxItem'/>
+            /// <para>Loads the state of this <see cref="ToolboxItem"/>
             /// from the stream.</para>
             /// </summary>
             protected override void Deserialize(SerializationInfo info, StreamingContext context)

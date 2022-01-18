@@ -1599,8 +1599,7 @@ namespace System.Windows.Forms
             {
                 throw new InvalidOperationException(string.Format(
                     SR.BindingSourceBindingListWrapperNeedToSetAllowNew,
-                    _itemType is null ? "(null)" : _itemType.FullName
-                    ));
+                    _itemType is null ? "(null)" : _itemType.FullName));
             }
 
             // Remember this since EndEdit() below will clear it
@@ -1639,8 +1638,7 @@ namespace System.Windows.Forms
                 {
                     throw new InvalidOperationException(string.Format(
                         SR.BindingSourceBindingListWrapperNeedAParameterlessConstructor,
-                        _itemType is null ? "(null)" : _itemType.FullName
-                        ));
+                        _itemType is null ? "(null)" : _itemType.FullName));
                 }
 
                 // Create new item using default ctor for current item type

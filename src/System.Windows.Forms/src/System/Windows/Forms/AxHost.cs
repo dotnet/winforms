@@ -70,7 +70,7 @@ namespace System.Windows.Forms
         private const int OC_LOADED = 1;  // handler, but no server   [ocx created]
         private const int OC_RUNNING = 2; // server running, invisible [iqa & depersistance]
         private const int OC_INPLACE = 4; // server in-place active [inplace]
-        private const int OC_UIACTIVE = 8;// server is UI active [uiactive]
+        private const int OC_UIACTIVE = 8; // server is UI active [uiactive]
         private const int OC_OPEN = 16;    // server is being open edited [not used]
 
         private const int EDITM_NONE = 0;   // object not being edited
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.LostFocus'/> event.
+        ///  Raises the <see cref="Control.LostFocus"/> event.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override void OnLostFocus(EventArgs e)

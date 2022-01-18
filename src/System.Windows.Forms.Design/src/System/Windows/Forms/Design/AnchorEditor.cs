@@ -8,7 +8,7 @@ using System.Drawing.Design;
 namespace System.Windows.Forms.Design
 {
     /// <summary>
-    ///  Provides a design-time editor for specifying the <see cref='Control.Anchor' /> property.
+    ///  Provides a design-time editor for specifying the <see cref="Control.Anchor"/> property.
     /// </summary>
     [CLSCompliant(false)]
     public sealed partial class AnchorEditor : UITypeEditor

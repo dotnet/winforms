@@ -43,7 +43,7 @@ namespace System.Windows.Forms.Design
         private bool _currentVisible = true; // Change Visibility
         private ToolStripActionList _actionLists; // Action List on Chrome...
         private ToolStripAdornerWindowService _toolStripAdornerWindowService; // Add the Adorner Service for OverFlow DropDown...
-        private IDesignerHost _host;//get private copy of the DesignerHost
+        private IDesignerHost _host; //get private copy of the DesignerHost
         private IComponentChangeService _componentChangeSvc;
         private bool _undoingCalled;
         private IToolboxService _toolboxService;

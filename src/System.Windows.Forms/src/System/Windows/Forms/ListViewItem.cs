@@ -17,7 +17,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Implements an item of a <see cref='Forms.ListView'/>.
+    ///  Implements an item of a <see cref="Forms.ListView"/>.
     /// </summary>
     [TypeConverter(typeof(ListViewItemConverter))]
     [ToolboxItem(false)]
@@ -150,8 +150,7 @@ namespace System.Windows.Forms
             Group = group;
         }
 
-        public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group) :
-            this(items, imageIndex, foreColor, backColor, font)
+        public ListViewItem(string[] items, int imageIndex, Color foreColor, Color backColor, Font font, ListViewGroup group) : this(items, imageIndex, foreColor, backColor, font)
         {
             Group = group;
         }
@@ -214,8 +213,7 @@ namespace System.Windows.Forms
             Group = group;
         }
 
-        public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group) :
-            this(items, imageKey, foreColor, backColor, font)
+        public ListViewItem(string[] items, string imageKey, Color foreColor, Color backColor, Font font, ListViewGroup group) : this(items, imageKey, foreColor, backColor, font)
         {
             Group = group;
         }

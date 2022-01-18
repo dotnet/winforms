@@ -110,7 +110,7 @@ namespace System.Windows.Forms
         private bool _rightToLeftLayout;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DateTimePicker'/> class.
+        ///  Initializes a new instance of the <see cref="DateTimePicker"/> class.
         /// </summary>
         public DateTimePicker() : base()
         {
@@ -328,7 +328,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Value'/> property has been set.
+        ///  Indicates whether the <see cref="Value"/> property has been set.
         /// </summary>
         [SRCategory(nameof(SR.CatBehavior))]
         [DefaultValue(true)]
@@ -1064,7 +1064,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='CloseUp'/> event.
+        ///  Raises the <see cref="CloseUp"/> event.
         /// </summary>
         protected virtual void OnCloseUp(EventArgs eventargs)
         {
@@ -1078,7 +1078,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='DropDown'/> event.
+        ///  Raises the <see cref="DropDown"/> event.
         /// </summary>
         protected virtual void OnDropDown(EventArgs eventargs)
         {
@@ -1127,7 +1127,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ValueChanged'/> event.
+        ///  Raises the <see cref="ValueChanged"/> event.
         /// </summary>
         protected virtual void OnValueChanged(EventArgs eventargs)
         {
@@ -1197,7 +1197,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Resets the <see cref='Format'/> property to its default value.
+        ///  Resets the <see cref="Format"/> property to its default value.
         /// </summary>
         private void ResetFormat()
         {
@@ -1205,7 +1205,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Resets the <see cref='MaxDate'/> property to its default value.
+        ///  Resets the <see cref="MaxDate"/> property to its default value.
         /// </summary>
         private void ResetMaxDate()
         {
@@ -1213,7 +1213,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Resets the <see cref='MinDate'/> property to its default value.
+        ///  Resets the <see cref="MinDate"/> property to its default value.
         /// </summary>
         private void ResetMinDate()
         {
@@ -1221,7 +1221,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Resets the <see cref='Value'/> property to its default value.
+        ///  Resets the <see cref="Value"/> property to its default value.
         /// </summary>
         private void ResetValue()
         {
@@ -1331,7 +1331,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='CalendarForeColor'/> property needs to be persisted.
+        ///  Determines if the <see cref="CalendarForeColor"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeCalendarForeColor()
         {
@@ -1339,7 +1339,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='CalendarFont'/> property needs to be persisted.
+        ///  Determines if the <see cref="CalendarFont"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeCalendarFont()
         {
@@ -1347,7 +1347,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='CalendarTitleBackColor'/> property needs to be persisted.
+        ///  Determines if the <see cref="CalendarTitleBackColor"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeCalendarTitleBackColor()
         {
@@ -1355,7 +1355,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='CalendarTitleForeColor'/> property needs to be persisted.
+        ///  Determines if the <see cref="CalendarTitleForeColor"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeCalendarTitleForeColor()
         {
@@ -1363,7 +1363,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='CalendarTrailingForeColor'/> property needs to be persisted.
+        ///  Determines if the <see cref="CalendarTrailingForeColor"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeCalendarTrailingForeColor()
         {
@@ -1371,7 +1371,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='CalendarMonthBackground'/> property needs to be persisted.
+        ///  Determines if the <see cref="CalendarMonthBackground"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeCalendarMonthBackground()
         {
@@ -1379,7 +1379,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='MaxDate'/> property needs to be persisted.
+        ///  Determines if the <see cref="MaxDate"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeMaxDate()
         {
@@ -1387,7 +1387,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='MinDate'/> property needs to be persisted.
+        ///  Determines if the <see cref="MinDate"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeMinDate()
         {
@@ -1395,7 +1395,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='Value'/> property needs to be persisted.
+        ///  Determines if the <see cref="Value"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeValue()
         {
@@ -1403,7 +1403,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Determines if the <see cref='Format'/> property needs to be persisted.
+        ///  Determines if the <see cref="Format"/> property needs to be persisted.
         /// </summary>
         private bool ShouldSerializeFormat()
         {

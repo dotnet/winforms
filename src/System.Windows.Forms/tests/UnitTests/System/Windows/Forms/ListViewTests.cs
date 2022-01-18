@@ -4421,7 +4421,7 @@ namespace System.Windows.Forms.Tests
 
                 foreach (bool showGroups in new[] { true, false })
                 {
-                    foreach(bool useCompatibleStateImageBehavior in new[] { true, false })
+                    foreach (bool useCompatibleStateImageBehavior in new[] { true, false })
                     {
                         yield return new object[] { view, showGroups, useCompatibleStateImageBehavior };
                     }
@@ -5314,7 +5314,7 @@ namespace System.Windows.Forms.Tests
             int groupId)
         {
             using SubListView listView = GetSubListViewWithData(view, virtualMode, showGroups, withinGroup, createControl);
-            SubListViewAccessibleObject accessibleObject = new (listView);
+            SubListViewAccessibleObject accessibleObject = new(listView);
             int accessibilityProperty = listView.TestAccessor().Dynamic.s_accessibilityProperty;
             listView.Properties.SetObject(accessibilityProperty, accessibleObject);
 

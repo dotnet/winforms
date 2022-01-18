@@ -37,7 +37,7 @@ namespace System.Windows.Forms
         private bool usingDefaultIndirectColor;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='FontDialog'/>
+        ///  Initializes a new instance of the <see cref="FontDialog"/>
         ///  class.
         /// </summary>
         public FontDialog()
@@ -400,7 +400,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Apply'/> event.
+        ///  Raises the <see cref="Apply"/> event.
         /// </summary>
         protected virtual void OnApply(EventArgs e)
         {
@@ -495,7 +495,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='Font'/> property should be
+        ///  Indicates whether the <see cref="Font"/> property should be
         ///  persisted.
         /// </summary>
         private bool ShouldSerializeFont()

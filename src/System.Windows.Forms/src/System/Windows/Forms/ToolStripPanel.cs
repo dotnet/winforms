@@ -408,7 +408,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Disposes of the resources (other than memory) used by
-        ///  the <see cref='ContainerControl'/>
+        ///  the <see cref="ContainerControl"/>
         ///  .
         /// </summary>
         protected override void Dispose(bool disposing)

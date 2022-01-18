@@ -7,7 +7,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Specifies the type of action used to raise the <see cref='ScrollBar.Scroll'/> event.
+    ///  Specifies the type of action used to raise the <see cref="ScrollBar.Scroll"/> event.
     /// </summary>
     public enum ScrollEventType
     {
@@ -50,13 +50,13 @@ namespace System.Windows.Forms
         ThumbTrack = User32.SBH.THUMBTRACK,
 
         /// <summary>
-        ///  The scroll box was moved to the <see cref='ScrollBar.Minimum'/>
+        ///  The scroll box was moved to the <see cref="ScrollBar.Minimum"/>
         ///  position.
         /// </summary>
         First = User32.SBH.LEFT,
 
         /// <summary>
-        ///  The scroll box was moved to the <see cref='ScrollBar.Maximum'/>
+        ///  The scroll box was moved to the <see cref="ScrollBar.Maximum"/>
         ///  position.
         /// </summary>
         Last = User32.SBH.RIGHT,

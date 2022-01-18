@@ -3999,8 +3999,7 @@ namespace System.Windows.Forms
             Debug.Assert(
                  (
                   (EditingControl is not null && ((IDataGridViewEditingControl)EditingControl).EditingControlValueChanged) ||
-                  (_dataGridViewState1[State1_CurrentCellInEditMode] && ((IDataGridViewEditingCell)CurrentCellInternal).EditingCellValueChanged)
-                 ) == IsCurrentCellDirty ||
+                  (_dataGridViewState1[State1_CurrentCellInEditMode] && ((IDataGridViewEditingCell)CurrentCellInternal).EditingCellValueChanged)) == IsCurrentCellDirty ||
                  _dataGridViewState1[State1_IgnoringEditingChanges]);
 
             if (IsCurrentCellDirty)
@@ -4957,9 +4956,7 @@ namespace System.Windows.Forms
                 while (firstDisplayedScrollingRow < nRows &&
                     (
                     (Rows.GetRowState(firstDisplayedScrollingRow) & DataGridViewElementStates.Frozen) != 0 ||
-                    (Rows.GetRowState(firstDisplayedScrollingRow) & DataGridViewElementStates.Visible) == 0
-                    )
-                    )
+                    (Rows.GetRowState(firstDisplayedScrollingRow) & DataGridViewElementStates.Visible) == 0))
                 {
                     firstDisplayedScrollingRow++;
                 }
@@ -8302,8 +8299,7 @@ namespace System.Windows.Forms
             }
 
             for (dataGridViewColumn = Columns.GetFirstColumn(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
-                dataGridViewColumn is not null && !columnFound;
-                )
+                dataGridViewColumn is not null && !columnFound;)
             {
                 if ((RightToLeftInternal && cx < data.X) ||
                     (!RightToLeftInternal && cx > data.Right))
@@ -8335,8 +8331,7 @@ namespace System.Windows.Forms
             if (!columnFound && DisplayedBandsInfo.FirstDisplayedScrollingCol >= 0)
             {
                 for (dataGridViewColumn = Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol];
-                    dataGridViewColumn is not null && !columnFound;
-                    )
+                    dataGridViewColumn is not null && !columnFound;)
                 {
                     if ((RightToLeftInternal && cx < data.X) ||
                         (!RightToLeftInternal && cx > data.Right))
@@ -8948,11 +8943,9 @@ namespace System.Windows.Forms
                         (
                          (_ptAnchorCell.Y != -1 && (Rows.GetRowState(_ptAnchorCell.Y) & DataGridViewElementStates.Frozen) == 0)
                          ||
-                         (_ptCurrentCell.Y != -1 && (Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Frozen) == 0)
-                        )
+                         (_ptCurrentCell.Y != -1 && (Rows.GetRowState(_ptCurrentCell.Y) & DataGridViewElementStates.Frozen) == 0))
                         &&
-                        VerticalScrollingOffset != 0
-                       )
+                        VerticalScrollingOffset != 0)
                     {
                         // Up scrolling is required - the anchor's row is unfrozen
                         Debug.Assert(DisplayedBandsInfo.FirstDisplayedScrollingRow >= 0);
@@ -9008,13 +9001,11 @@ namespace System.Windows.Forms
                         (
                          (_ptAnchorCell.X != -1 && !Columns[_ptAnchorCell.X].Frozen)
                          ||
-                         (_ptCurrentCell.X != -1 && !Columns[_ptCurrentCell.X].Frozen)
-                        )
+                         (_ptCurrentCell.X != -1 && !Columns[_ptCurrentCell.X].Frozen))
                         &&
                         DisplayedBandsInfo.FirstDisplayedScrollingCol >= 0 &&
                         (FirstDisplayedScrollingColumnHiddenWidth > 0 ||
-                         Columns.GetPreviousColumn(Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol], DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen) is not null)
-                       )
+                         Columns.GetPreviousColumn(Columns[DisplayedBandsInfo.FirstDisplayedScrollingCol], DataGridViewElementStates.Visible, DataGridViewElementStates.Frozen) is not null))
                     {
                         // xOffset strictly negative
                         if (RightToLeftInternal)
@@ -9195,8 +9186,7 @@ namespace System.Windows.Forms
             bool rowFound = false;
             int indexTmp;
             for (indexTmp = Rows.GetFirstRow(DataGridViewElementStates.Visible | DataGridViewElementStates.Frozen);
-                indexTmp != -1 && !rowFound;
-                )
+                indexTmp != -1 && !rowFound;)
             {
                 if (cy > data.Bottom)
                 {
@@ -9217,8 +9207,7 @@ namespace System.Windows.Forms
             if (!rowFound && DisplayedBandsInfo.FirstDisplayedScrollingRow >= 0)
             {
                 for (indexTmp = DisplayedBandsInfo.FirstDisplayedScrollingRow;
-                    indexTmp != -1 && !rowFound;
-                    )
+                    indexTmp != -1 && !rowFound;)
                 {
                     if (cy > data.Bottom)
                     {
@@ -22021,7 +22010,7 @@ namespace System.Windows.Forms
             // changes in a cell should be commited.
             // Therefore, commitRow should be always true, and useless here.
 
-            bool moved = false, ret = true;//, commitRow = true;
+            bool moved = false, ret = true; //, commitRow = true;
             if ((keyData & Keys.Control) == 0)
             {
                 // Enter behaves like down arrow - it commits the potential editing and goes down one cell.

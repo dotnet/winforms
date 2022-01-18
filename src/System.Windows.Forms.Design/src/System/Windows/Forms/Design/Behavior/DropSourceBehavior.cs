@@ -27,40 +27,40 @@ namespace System.Windows.Forms.Design.Behavior
 
         private readonly DragComponent[] dragComponents;
         private ArrayList dragObjects; // used to initialize the DragAssistanceManager
-        private readonly BehaviorDataObject data;//drag data that represents the controls we're dragging & the effect/action
-        private readonly DragDropEffects allowedEffects;//initial allowed effects for the drag operation
-        private DragDropEffects lastEffect;//the last effect we saw (used for determining a valid drop)
+        private readonly BehaviorDataObject data; //drag data that represents the controls we're dragging & the effect/action
+        private readonly DragDropEffects allowedEffects; //initial allowed effects for the drag operation
+        private DragDropEffects lastEffect; //the last effect we saw (used for determining a valid drop)
 
-        private bool targetAllowsSnapLines;//indicates if the drop target allows snaplines (flowpanels don't for ex)
-        private IComponent lastDropTarget;//indicates the drop target on the last 'give feedback' event
-        private Point lastSnapOffset;//the last snapoffset we used.
+        private bool targetAllowsSnapLines; //indicates if the drop target allows snaplines (flowpanels don't for ex)
+        private IComponent lastDropTarget; //indicates the drop target on the last 'give feedback' event
+        private Point lastSnapOffset; //the last snapoffset we used.
         // These 2 could be different (e.g. if dropping between forms)
-        private readonly BehaviorService behaviorServiceSource;//ptr back to the BehaviorService in the drop source
-        private BehaviorService behaviorServiceTarget;//ptr back to the BehaviorService in the drop target
+        private readonly BehaviorService behaviorServiceSource; //ptr back to the BehaviorService in the drop source
+        private BehaviorService behaviorServiceTarget; //ptr back to the BehaviorService in the drop target
 
         //this object will integrate SnapLines into the drag
         private DragAssistanceManager dragAssistanceManager;
 
-        private Graphics graphicsTarget;//graphics object of the adornerwindows (via BehaviorService) in drop target
+        private Graphics graphicsTarget; //graphics object of the adornerwindows (via BehaviorService) in drop target
 
         private readonly IServiceProvider serviceProviderSource;
         private IServiceProvider serviceProviderTarget;
 
-        private Point initialMouseLoc;//original mouse location in screen coordinates
+        private Point initialMouseLoc; //original mouse location in screen coordinates
 
-        private Image dragImage;//A single image of the controls we are actually dragging around
-        private Rectangle dragImageRect;//Rectangle of the dragImage -- in SOURCE AdornerWindow coordinates
+        private Image dragImage; //A single image of the controls we are actually dragging around
+        private Rectangle dragImageRect; //Rectangle of the dragImage -- in SOURCE AdornerWindow coordinates
         private Rectangle clearDragImageRect; //Rectangle used to remember the last dragimage rect we cleared
         private Point originalDragImageLocation; //original location of the drag image
         private Region dragImageRegion;
 
         private Point lastFeedbackLocation; // the last position we got feedback at
-        private Control suspendedParent;//pointer to the parent that we suspended @ the beginning of the drag
+        private Control suspendedParent; //pointer to the parent that we suspended @ the beginning of the drag
         private Size parentGridSize; //used to snap around to grid dots if layoutmode == SnapToGrid
-        private Point parentLocation;//location of parent on AdornerWindow - used for grid snap calculations
-        private bool shareParent = true;//do dragged components share the parent
+        private Point parentLocation; //location of parent on AdornerWindow - used for grid snap calculations
+        private bool shareParent = true; //do dragged components share the parent
         private bool cleanedUpDrag;
-        private StatusCommandUI statusCommandUITarget;// UI for setting the StatusBar Information in the drop target
+        private StatusCommandUI statusCommandUITarget; // UI for setting the StatusBar Information in the drop target
 
         private readonly IDesignerHost srcHost;
         private IDesignerHost destHost;
@@ -767,7 +767,7 @@ namespace System.Windows.Forms.Design.Behavior
                     }
                     else
                     {
-                        dragAssistanceManager.OnMouseMove(new Rectangle(-100, -100, 0, 0));/*just an invalid rect - so we won't snap*///);
+                        dragAssistanceManager.OnMouseMove(new Rectangle(-100, -100, 0, 0)); /*just an invalid rect - so we won't snap*///);
                     }
                 }
 

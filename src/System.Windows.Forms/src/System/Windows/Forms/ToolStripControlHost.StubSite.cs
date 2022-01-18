@@ -33,12 +33,12 @@ namespace System.Windows.Forms
             }
 
             /// <summary>
-            ///  When implemented by a class, gets the component associated with the <see cref='ISite'/>.
+            ///  When implemented by a class, gets the component associated with the <see cref="ISite"/>.
             /// </summary>
             IComponent ISite.Component => _comp;
 
             /// <summary>
-            ///  When implemented by a class, gets the container associated with the <see cref='ISite'/>.
+            ///  When implemented by a class, gets the container associated with the <see cref="ISite"/>.
             /// </summary>
             IContainer ISite.Container => _owner.Site.Container;
 
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
 
             /// <summary>
             ///  When implemented by a class, gets or sets the name of
-            ///  the component associated with the <see cref='ISite'/>.
+            ///  the component associated with the <see cref="ISite"/>.
             /// </summary>
             string ISite.Name
             {

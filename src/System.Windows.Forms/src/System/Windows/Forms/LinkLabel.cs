@@ -52,7 +52,7 @@ namespace System.Windows.Forms
         private LinkBehavior _linkBehavior = LinkBehavior.SystemDefault;
 
         /// <summary>
-        ///  Initializes a new default instance of the <see cref='LinkLabel'/> class.
+        ///  Initializes a new default instance of the <see cref="LinkLabel"/> class.
         /// </summary>
         public LinkLabel() : base()
         {
@@ -319,7 +319,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the collection of links used in a <see cref='LinkLabel'/>.
+        ///  Gets the collection of links used in a <see cref="LinkLabel"/>.
         /// </summary>
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
@@ -915,7 +915,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.GotFocus'/> event.
+        ///  Raises the <see cref="Control.GotFocus"/> event.
         /// </summary>
         protected override void OnGotFocus(EventArgs e)
         {
@@ -950,7 +950,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.LostFocus'/>
+        ///  Raises the <see cref="Control.LostFocus"/>
         ///  event.
         /// </summary>
         protected override void OnLostFocus(EventArgs e)
@@ -964,7 +964,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnKeyDown'/>
+        ///  Raises the <see cref="Control.OnKeyDown"/>
         ///  event.
         /// </summary>
         protected override void OnKeyDown(KeyEventArgs e)
@@ -981,7 +981,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseLeave'/>
+        ///  Raises the <see cref="Control.OnMouseLeave"/>
         ///  event.
         /// </summary>
         protected override void OnMouseLeave(EventArgs e)
@@ -1011,7 +1011,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseDown'/>
+        ///  Raises the <see cref="Control.OnMouseDown"/>
         ///  event.
         /// </summary>
         protected override void OnMouseDown(MouseEventArgs e)
@@ -1044,7 +1044,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseUp'/>
+        ///  Raises the <see cref="Control.OnMouseUp"/>
         ///  event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs e)
@@ -1082,7 +1082,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnMouseMove'/>
+        ///  Raises the <see cref="Control.OnMouseMove"/>
         ///  event.
         /// </summary>
         protected override void OnMouseMove(MouseEventArgs e)
@@ -1142,7 +1142,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='OnLinkClicked'/> event.
+        ///  Raises the <see cref="OnLinkClicked"/> event.
         /// </summary>
         protected virtual void OnLinkClicked(LinkLabelLinkClickedEventArgs e)
         {
@@ -1156,7 +1156,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='Control.OnPaint'/>
+        ///  Raises the <see cref="Control.OnPaint"/>
         ///  event.
         /// </summary>
         protected override void OnPaint(PaintEventArgs e)
@@ -1498,6 +1498,8 @@ namespace System.Windows.Forms
                         brushColor = g.FindNearestColor(brushColor);
 
                         Rectangle clientRectWithPadding = ClientRectWithPadding;
+
+#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
                         TextRenderer.DrawText(
                             g,
                             Text,
@@ -1510,6 +1512,7 @@ namespace System.Windows.Forms
                             | TextRenderer.SkipAssertFlag
 #endif
                             );
+#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
                     }
 
                     if (Focused && ShowFocusCues && FocusLink == link)

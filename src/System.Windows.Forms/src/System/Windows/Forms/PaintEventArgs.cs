@@ -11,7 +11,7 @@ using static Interop;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.Paint'/> event.
+    ///  Provides data for the <see cref="Control.Paint"/> event.
     /// </summary>
     /// <remarks>
     ///  Please keep this class consistent with <see cref="PrintPageEventArgs"/>.
@@ -77,12 +77,12 @@ namespace System.Windows.Forms
         public Rectangle ClipRectangle => _event.ClipRectangle;
 
         /// <summary>
-        ///  Gets the <see cref='Drawing.Graphics'/> object used to paint.
+        ///  Gets the <see cref="Drawing.Graphics"/> object used to paint.
         /// </summary>
         public Graphics Graphics => _event.Graphics;
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='PaintEventArgs'/>.
+        ///  Disposes of the resources (other than memory) used by the <see cref="PaintEventArgs"/>.
         /// </summary>
         public void Dispose()
         {

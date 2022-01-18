@@ -10,7 +10,7 @@ namespace System.Windows.Forms.Design
     internal class ColumnHeaderCollectionEditor : CollectionEditor
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref='ImageCollectionEditor'/> class.
+        /// Initializes a new instance of the <see cref="ImageCollectionEditor"/> class.
         /// </summary>
         public ColumnHeaderCollectionEditor(Type type) : base(type)
         {

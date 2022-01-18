@@ -27,7 +27,7 @@ namespace System.Windows.Forms
         private IntPtr _defaultControlHwnd;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='CommonDialog'/> class.
+        ///  Initializes a new instance of the <see cref="CommonDialog"/> class.
         /// </summary>
         public CommonDialog()
         {
@@ -103,7 +103,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='HelpRequest'/> event.
+        ///  Raises the <see cref="HelpRequest"/> event.
         /// </summary>
         protected virtual void OnHelpRequest(EventArgs e)
         {

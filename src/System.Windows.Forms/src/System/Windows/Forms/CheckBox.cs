@@ -40,7 +40,7 @@ namespace System.Windows.Forms
         internal int _flatSystemStyleMinimumHeight = FlatSystemStyleMinimumHeight;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='CheckBox'/> class.
+        ///  Initializes a new instance of the <see cref="CheckBox"/> class.
         /// </summary>
         public CheckBox() : base()
         {
@@ -112,7 +112,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating whether the <see cref='Checked'/> or <see cref='CheckState'/>
+        ///  Gets or sets a value indicating whether the <see cref="Checked"/> or <see cref="CheckState"/>
         ///  value and the check box's appearance are automatically
         ///  changed when it is clicked.
         /// </summary>
@@ -247,7 +247,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets the information used to create the handle for the
-        ///  <see cref='CheckBox'/>
+        ///  <see cref="CheckBox"/>
         ///  control.
         /// </summary>
         protected override CreateParams CreateParams
@@ -396,7 +396,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Occurs when the
-        ///  value of the <see cref='Checked'/>
+        ///  value of the <see cref="Checked"/>
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckedChangedDescr))]
@@ -408,7 +408,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Occurs when the
-        ///  value of the <see cref='CheckState'/>
+        ///  value of the <see cref="CheckState"/>
         ///  property changes.
         /// </summary>
         [SRDescription(nameof(SR.CheckBoxOnCheckStateChangedDescr))]
@@ -436,7 +436,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='CheckedChanged'/>
+        ///  Raises the <see cref="CheckedChanged"/>
         ///  event.
         /// </summary>
         protected virtual void OnCheckedChanged(EventArgs e)
@@ -467,7 +467,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='CheckStateChanged'/> event.
+        ///  Raises the <see cref="CheckStateChanged"/> event.
         /// </summary>
         protected virtual void OnCheckStateChanged(EventArgs e)
         {
@@ -537,7 +537,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Raises the <see cref='ButtonBase.OnMouseUp'/> event.
+        ///  Raises the <see cref="ButtonBase.OnMouseUp"/> event.
         /// </summary>
         protected override void OnMouseUp(MouseEventArgs mevent)
         {

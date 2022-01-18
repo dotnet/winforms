@@ -1079,7 +1079,7 @@ namespace System.Windows.Forms.Tests
                 listView.CreateControl();
             }
 
-            Assert.Throws<InvalidOperationException>(() => listView.Groups.Add(key: "key", headerText: "text" ));
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.Add(key: "key", headerText: "text"));
             Assert.Equal(createControl, listView.IsHandleCreated);
         }
 
@@ -1095,7 +1095,7 @@ namespace System.Windows.Forms.Tests
                 listView.CreateControl();
             }
 
-            Assert.Throws<InvalidOperationException>(() => listView.Groups.AddRange(new ListViewGroup[] { new(), new () }));
+            Assert.Throws<InvalidOperationException>(() => listView.Groups.AddRange(new ListViewGroup[] { new(), new() }));
             Assert.Equal(createControl, listView.IsHandleCreated);
         }
 
@@ -1107,7 +1107,7 @@ namespace System.Windows.Forms.Tests
             using var listView = new ListView() { VirtualMode = true };
             using var listViewSource = new ListView();
             ListViewGroupCollection sourceGroup = new(listViewSource);
-            sourceGroup.AddRange(new ListViewGroup[] { new(), new() } );
+            sourceGroup.AddRange(new ListViewGroup[] { new(), new() });
 
             if (createControl)
             {

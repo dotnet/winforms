@@ -81,7 +81,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets the <see cref='LParam'/> value, and converts the value to an object.
+        ///  Gets the <see cref="LParam"/> value, and converts the value to an object.
         /// </summary>
         public object? GetLParam(Type cls) => Marshal.PtrToStructure(LParamInternal, cls);
 

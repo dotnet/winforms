@@ -22,7 +22,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Represents the entry at the specified index of the <see cref='AutoCompleteStringCollection'/>.
+        ///  Represents the entry at the specified index of the <see cref="AutoCompleteStringCollection"/>.
         /// </summary>
         public string this[int index]
         {
@@ -40,7 +40,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets the number of strings in the
-        ///  <see cref='AutoCompleteStringCollection'/> .
+        ///  <see cref="AutoCompleteStringCollection"/> .
         /// </summary>
         public int Count
         {
@@ -79,7 +79,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Adds a string with the specified value to the
-        ///  <see cref='AutoCompleteStringCollection'/> .
+        ///  <see cref="AutoCompleteStringCollection"/> .
         /// </summary>
         public int Add(string value)
         {
@@ -89,7 +89,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Copies the elements of a string array to the end of the <see cref='AutoCompleteStringCollection'/>.
+        ///  Copies the elements of a string array to the end of the <see cref="AutoCompleteStringCollection"/>.
         /// </summary>
         public void AddRange(string[] value)
         {
@@ -101,7 +101,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Removes all the strings from the
-        ///  <see cref='AutoCompleteStringCollection'/> .
+        ///  <see cref="AutoCompleteStringCollection"/> .
         /// </summary>
         public void Clear()
         {
@@ -111,7 +111,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets a value indicating whether the
-        ///  <see cref='AutoCompleteStringCollection'/> contains a string with the specified
+        ///  <see cref="AutoCompleteStringCollection"/> contains a string with the specified
         ///  value.
         /// </summary>
         public bool Contains(string value)
@@ -120,7 +120,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Copies the <see cref='AutoCompleteStringCollection'/> values to a one-dimensional <see cref='Array'/> instance at the
+        ///  Copies the <see cref="AutoCompleteStringCollection"/> values to a one-dimensional <see cref="Array"/> instance at the
         ///  specified index.
         /// </summary>
         public void CopyTo(string[] array, int index)
@@ -130,7 +130,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Returns the index of the first occurrence of a string in
-        ///  the <see cref='AutoCompleteStringCollection'/> .
+        ///  the <see cref="AutoCompleteStringCollection"/> .
         /// </summary>
         public int IndexOf(string value)
         {
@@ -138,7 +138,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Inserts a string into the <see cref='AutoCompleteStringCollection'/> at the specified
+        ///  Inserts a string into the <see cref="AutoCompleteStringCollection"/> at the specified
         ///  index.
         /// </summary>
         public void Insert(int index, string value)
@@ -148,7 +148,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a value indicating whether the <see cref='AutoCompleteStringCollection'/> is read-only.
+        ///  Gets a value indicating whether the <see cref="AutoCompleteStringCollection"/> is read-only.
         /// </summary>
         public bool IsReadOnly
         {
@@ -159,7 +159,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets a value indicating whether access to the <see cref='AutoCompleteStringCollection'/>
+        ///  Gets a value indicating whether access to the <see cref="AutoCompleteStringCollection"/>
         ///  is synchronized (thread-safe).
         /// </summary>
         public bool IsSynchronized
@@ -171,7 +171,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Removes a specific string from the <see cref='AutoCompleteStringCollection'/> .
+        ///  Removes a specific string from the <see cref="AutoCompleteStringCollection"/> .
         /// </summary>
         public void Remove(string value)
         {
@@ -180,7 +180,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Removes the string at the specified index of the <see cref='AutoCompleteStringCollection'/>.
+        ///  Removes the string at the specified index of the <see cref="AutoCompleteStringCollection"/>.
         /// </summary>
         public void RemoveAt(int index)
         {
@@ -190,7 +190,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets an object that can be used to synchronize access to the <see cref='AutoCompleteStringCollection'/>.
+        ///  Gets an object that can be used to synchronize access to the <see cref="AutoCompleteStringCollection"/>.
         /// </summary>
         public object SyncRoot => this;
 

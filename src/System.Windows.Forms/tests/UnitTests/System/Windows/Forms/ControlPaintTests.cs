@@ -600,8 +600,7 @@ namespace System.Windows.Forms.Tests
             Color leftColor, int leftWidth, ButtonBorderStyle leftStyle,
             Color topColor, int topWidth, ButtonBorderStyle topStyle,
             Color rightColor, int rightWidth, ButtonBorderStyle rightStyle,
-            Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle
-        )
+            Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle)
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);
@@ -643,8 +642,7 @@ namespace System.Windows.Forms.Tests
             Color leftColor, int leftWidth, ButtonBorderStyle leftStyle,
             Color topColor, int topWidth, ButtonBorderStyle topStyle,
             Color rightColor, int rightWidth, ButtonBorderStyle rightStyle,
-            Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle
-        )
+            Color bottomColor, int bottomWidth, ButtonBorderStyle bottomStyle)
         {
             using var image = new Bitmap(10, 10);
             using Graphics graphics = Graphics.FromImage(image);

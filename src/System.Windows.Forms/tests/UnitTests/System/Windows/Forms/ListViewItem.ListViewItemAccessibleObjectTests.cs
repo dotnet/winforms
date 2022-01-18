@@ -1215,7 +1215,7 @@ namespace System.Windows.Forms.Tests
 
             if (!virtualMode && groupsEnabled)
             {
-                ListViewGroup listViewGroup = new("Test") { CollapsedState = state};
+                ListViewGroup listViewGroup = new("Test") { CollapsedState = state };
                 listView.Groups.Add(listViewGroup);
                 if (itemsInGroup)
                 {
@@ -1671,7 +1671,7 @@ namespace System.Windows.Forms.Tests
             {
                 foreach (View newView in Enum.GetValues(typeof(View)))
                 {
-                    if(oldView != newView)
+                    if (oldView != newView)
                     {
                         yield return new object[] { oldView, newView };
                     }

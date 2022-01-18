@@ -677,7 +677,7 @@ namespace System.Windows.Forms
                 => propertyID switch
                 {
                     UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.DataItemControlTypeId,
-                    UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused,// Announce the cell when focusing.
+                    UiaCore.UIA.HasKeyboardFocusPropertyId => (State & AccessibleStates.Focused) == AccessibleStates.Focused, // Announce the cell when focusing.
                     UiaCore.UIA.IsEnabledPropertyId => _owner?.DataGridView?.Enabled ?? false,
                     UiaCore.UIA.AutomationIdPropertyId => AutomationId,
                     UiaCore.UIA.IsKeyboardFocusablePropertyId => (State & AccessibleStates.Focusable) == AccessibleStates.Focusable,

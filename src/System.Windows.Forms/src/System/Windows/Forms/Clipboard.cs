@@ -16,7 +16,7 @@ namespace System.Windows.Forms
     public static class Clipboard
     {
         /// <summary>
-        ///  Places nonpersistent data on the system <see cref='Clipboard'/>.
+        ///  Places nonpersistent data on the system <see cref="Clipboard"/>.
         /// </summary>
         public static void SetDataObject(object data)
         {
@@ -32,8 +32,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Places data on the system <see cref='Clipboard'/> and uses copy to specify whether the data
-        ///  should remain on the <see cref='Clipboard'/> after the application exits.
+        ///  Places data on the system <see cref="Clipboard"/> and uses copy to specify whether the data
+        ///  should remain on the <see cref="Clipboard"/> after the application exits.
         /// </summary>
         public static void SetDataObject(object data, bool copy, int retryTimes, int retryDelay)
         {
@@ -108,7 +108,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves the data that is currently on the system <see cref='Clipboard'/>.
+        ///  Retrieves the data that is currently on the system <see cref="Clipboard"/>.
         /// </summary>
         public static IDataObject? GetDataObject()
         {

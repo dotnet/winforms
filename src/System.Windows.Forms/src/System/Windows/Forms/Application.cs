@@ -20,7 +20,7 @@ using Directory = System.IO.Directory;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides <see langword='static'/> methods and properties to manage an application, such as methods to run and quit an application,
+    ///  Provides <see langword="static"/> methods and properties to manage an application, such as methods to run and quit an application,
     ///  to process Windows messages, and properties to get information about an application.
     ///  This class cannot be inherited.
     /// </summary>
@@ -1088,7 +1088,7 @@ namespace System.Windows.Forms
             => ThreadContext.FromCurrent().OleRequired();
 
         /// <summary>
-        ///  Raises the <see cref='ThreadException'/> event.
+        ///  Raises the <see cref="ThreadException"/> event.
         /// </summary>
         public static void OnThreadException(Exception t)
             => ThreadContext.FromCurrent().OnThreadException(t);

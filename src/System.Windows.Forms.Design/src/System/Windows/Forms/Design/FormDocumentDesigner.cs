@@ -200,7 +200,7 @@ namespace System.Windows.Forms.Design
 
                             if (paddingsFound == 4)
                             {
-                                break;//we adjusted all of our paddings
+                                break; //we adjusted all of our paddings
                             }
                         }
                     }

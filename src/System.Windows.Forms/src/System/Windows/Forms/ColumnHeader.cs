@@ -10,7 +10,7 @@ using static Interop.ComCtl32;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Displays a single column header in a <see cref='Forms.ListView'/> control.
+    ///  Displays a single column header in a <see cref="Forms.ListView"/> control.
     /// </summary>
     [ToolboxItem(false)]
     [DesignTimeVisible(false)]

@@ -24,7 +24,7 @@ namespace System.ComponentModel.Design
         private InheritanceAttribute _addingAttribute;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='InheritanceService'/> class.
+        ///  Initializes a new instance of the <see cref="InheritanceService"/> class.
         /// </summary>
         public InheritanceService()
         {
@@ -32,7 +32,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Disposes of the resources (other than memory) used by the <see cref='InheritanceService'/>.
+        ///  Disposes of the resources (other than memory) used by the <see cref="InheritanceService"/>.
         /// </summary>
         public void Dispose()
         {
@@ -49,7 +49,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds inherited components to the <see cref='InheritanceService'/>.
+        ///  Adds inherited components to the <see cref="InheritanceService"/>.
         /// </summary>
         public void AddInheritedComponents(IComponent component, IContainer container)
         {
@@ -57,7 +57,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Adds inherited components to the <see cref='InheritanceService'/>.
+        ///  Adds inherited components to the <see cref="InheritanceService"/>.
         /// </summary>
         protected virtual void AddInheritedComponents(Type type, IComponent component, IContainer container)
         {

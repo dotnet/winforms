@@ -86,7 +86,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets a value indicating whether pressing ENTER in a multiline <see cref='TextBox'/>
+        ///  Gets or sets a value indicating whether pressing ENTER in a multiline <see cref="TextBox"/>
         ///  control creates a new line of text in the control or activates the default button
         ///  for the form.
         /// </summary>
@@ -372,7 +372,7 @@ namespace System.Windows.Forms
 
         /// <summary>
         ///  Gets or sets which scroll bars should
-        ///  appear in a multiline <see cref='TextBox'/>
+        ///  appear in a multiline <see cref="TextBox"/>
         ///  control.
         /// </summary>
         [SRCategory(nameof(SR.CatAppearance))]
@@ -433,7 +433,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Gets or sets how text is aligned in a <see cref='TextBox'/> control.
+        ///  Gets or sets how text is aligned in a <see cref="TextBox"/> control.
         ///  Note: This code is duplicated in MaskedTextBox for simplicity.
         /// </summary>
         [Localizable(true)]

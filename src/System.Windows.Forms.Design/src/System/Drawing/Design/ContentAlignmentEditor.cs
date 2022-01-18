@@ -8,7 +8,7 @@ using System.Windows.Forms.Design;
 namespace System.Drawing.Design
 {
     /// <summary>
-    ///  Provides a <see cref='UITypeEditor'/> for visually editing content alignment.
+    ///  Provides a <see cref="UITypeEditor"/> for visually editing content alignment.
     /// </summary>
     public partial class ContentAlignmentEditor : UITypeEditor
     {

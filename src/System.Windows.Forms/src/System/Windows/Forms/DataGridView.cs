@@ -377,7 +377,7 @@ namespace System.Windows.Forms
 #pragma warning restore 0414
 #endif
         /// <summary>
-        ///  Initializes a new instance of the <see cref='DataGridView'/> class.
+        ///  Initializes a new instance of the <see cref="DataGridView"/> class.
         /// </summary>
         public DataGridView()
         {

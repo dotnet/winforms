@@ -7,13 +7,13 @@ using System.Drawing;
 namespace System.Windows.Forms
 {
     /// <summary>
-    ///  Provides data for the <see cref='Control.MouseUp'/>, <see cref='Control.MouseDown'/> and
-    /// <see cref='Control.MouseMove'/> events.
+    ///  Provides data for the <see cref="Control.MouseUp"/>, <see cref="Control.MouseDown"/> and
+    /// <see cref="Control.MouseMove"/> events.
     /// </summary>
     public class MouseEventArgs : EventArgs
     {
         /// <summary>
-        ///  Initializes a new instance of the <see cref='MouseEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="MouseEventArgs"/> class.
         /// </summary>
         public MouseEventArgs(MouseButtons button, int clicks, int x, int y, int delta)
         {
@@ -25,7 +25,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='MouseEventArgs'/> class.
+        ///  Initializes a new instance of the <see cref="MouseEventArgs"/> class.
         /// </summary>
         internal MouseEventArgs(MouseButtons button, int clicks, Point location, int delta = 0)
         {

@@ -100,7 +100,7 @@ namespace System.Windows.Forms
 
         // PERF: take all the bools and put them into a state variable
         private Collections.Specialized.BitVector32 listViewState; // see LISTVIEWSTATE_ consts above
-        private Collections.Specialized.BitVector32 listViewState1;// see LISTVIEWSTATE1_ consts above
+        private Collections.Specialized.BitVector32 listViewState1; // see LISTVIEWSTATE1_ consts above
 
         // Ownerdraw data caches...  Only valid inside WM_PAINT.
         //

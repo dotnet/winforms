@@ -28,7 +28,7 @@ namespace System.Windows.Forms
         private Margins _minMargins;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='PageSetupDialog'/> class.
+        ///  Initializes a new instance of the <see cref="PageSetupDialog"/> class.
         /// </summary>
         public PageSetupDialog() => Reset();
 
@@ -67,7 +67,7 @@ namespace System.Windows.Forms
         public bool AllowPrinter { get; set; }
 
         /// <summary>
-        ///  Gets or sets a value indicating the <see cref='PrintDocument'/> to get page settings from.
+        ///  Gets or sets a value indicating the <see cref="PrintDocument"/> to get page settings from.
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue(null)]
@@ -232,7 +232,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Indicates whether the <see cref='MinMargins'/>
+        ///  Indicates whether the <see cref="MinMargins"/>
         ///  property should be
         ///  persisted.
         /// </summary>

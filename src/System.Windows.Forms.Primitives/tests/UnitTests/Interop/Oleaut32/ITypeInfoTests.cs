@@ -398,8 +398,7 @@ namespace System.Windows.Forms.Primitives.Tests.Interop.Oleaut32
                 &dispParams,
                 varResult,
                 &excepInfo,
-                &argErr
-            );
+                &argErr);
             Assert.Equal(HRESULT.DISP_E_MEMBERNOTFOUND, hr);
             Assert.Null(varResult[0]);
             Assert.Equal(0u, argErr);

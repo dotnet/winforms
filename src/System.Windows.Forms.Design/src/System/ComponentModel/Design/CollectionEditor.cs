@@ -23,7 +23,7 @@ namespace System.ComponentModel.Design
         private bool _ignoreChangingEvents;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='CollectionEditor'/> class using the specified collection type.
+        ///  Initializes a new instance of the <see cref="CollectionEditor"/> class using the specified collection type.
         /// </summary>
         public CollectionEditor(Type type) => CollectionType = type;
 
@@ -206,7 +206,7 @@ namespace System.ComponentModel.Design
         }
 
         /// <summary>
-        ///  Edits the specified object value using the editor style  provided by <see cref='GetEditStyle'/>.
+        ///  Edits the specified object value using the editor style  provided by <see cref="GetEditStyle"/>.
         /// </summary>
         public override object EditValue(ITypeDescriptorContext context, IServiceProvider provider, object value)
         {

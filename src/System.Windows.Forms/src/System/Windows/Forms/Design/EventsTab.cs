@@ -18,7 +18,7 @@ namespace System.Windows.Forms.Design
         private bool _hookedDesignerChanged;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='EventsTab'/> class.
+        ///  Initializes a new instance of the <see cref="EventsTab"/> class.
         /// </summary>
         public EventsTab(IServiceProvider? sp) => _serviceProvider = sp;
 

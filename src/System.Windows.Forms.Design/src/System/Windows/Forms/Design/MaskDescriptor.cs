@@ -161,8 +161,7 @@ namespace System.Windows.Forms.Design
                 GetType(),
                 Name != null ? Name : "null",
                 Mask != null ? Mask : "null",
-                ValidatingType != null ? ValidatingType.ToString() : "null"
-                );
+                ValidatingType != null ? ValidatingType.ToString() : "null");
         }
     }
 }

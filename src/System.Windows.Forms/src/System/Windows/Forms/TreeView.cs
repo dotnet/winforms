@@ -3122,7 +3122,7 @@ namespace System.Windows.Forms
 
                 // Need to send TVM_SELECTITEM to highlight the node while the contextMenuStrip is being shown.
                 User32.PostMessageW(this, (User32.WM)TVM.SELECTITEM, (nint)TVGN.DROPHILITE, treeNode.Handle);
-                menu.ShowInternal(this, PointToClient(MousePosition),/*keyboardActivated*/false);
+                menu.ShowInternal(this, PointToClient(MousePosition), /*keyboardActivated*/false);
                 menu.Closing += new ToolStripDropDownClosingEventHandler(ContextMenuStripClosing);
             }
         }

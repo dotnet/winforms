@@ -22,7 +22,7 @@ namespace System.Windows.Forms.Design
         protected string _imageListPropertyName;
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref='ImageIndexEditor'/> class.
+        ///  Initializes a new instance of the <see cref="ImageIndexEditor"/> class.
         /// </summary>
         public ImageIndexEditor()
         {
@@ -42,7 +42,7 @@ namespace System.Windows.Forms.Design
             object instance = context.Instance;
 
             // We would not know what to do in this case anyway (i.e. multiple selection of objects)
-            if (instance is object[] ||(index < 0 && key == null))
+            if (instance is object[] || (index < 0 && key == null))
             {
                 return null;
             }

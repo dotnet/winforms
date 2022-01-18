@@ -1460,7 +1460,7 @@ namespace System.Windows.Forms.Design
                         }
                         else if (!requiredParent.Equals(control.Parent))
                         {
-                            continue;//mixed selection of different parents - don't add this
+                            continue; //mixed selection of different parents - don't add this
                         }
 
                         if (_host.GetDesigner(comp) is ControlDesigner des && (des.SelectionRules & SelectionRules.Moveable) != 0)

@@ -353,7 +353,7 @@ namespace System.Windows.Forms
 
                     if (Row.Cells.Count == 1)
                     {
-                        cell = GetNextVisibleCell(index,/*forward*/true);
+                        cell = GetNextVisibleCell(index, /*forward*/true);
                         if (cell is not null)
                         {
                             cellMargin = cell.Margin;
