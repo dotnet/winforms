@@ -58,8 +58,7 @@ namespace System.Windows.Forms
                         User32.EnableScrollBar(
                             _parent,
                             Orientation,
-                            value ? User32.ESB.ENABLE_BOTH : User32.ESB.DISABLE_BOTH
-                        );
+                            value ? User32.ESB.ENABLE_BOTH : User32.ESB.DISABLE_BOTH);
                     }
                 }
             }

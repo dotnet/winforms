@@ -357,8 +357,7 @@ namespace System.Windows.Forms.Layout
         {
             Size stretchedSize = new Size(
                 (anchorStyles & HorizontalAnchorStyles) == HorizontalAnchorStyles ? withinThis.Width : stretchThis.Width,
-                (anchorStyles & VerticalAnchorStyles) == VerticalAnchorStyles ? withinThis.Height : stretchThis.Height
-            );
+                (anchorStyles & VerticalAnchorStyles) == VerticalAnchorStyles ? withinThis.Height : stretchThis.Height);
             if (stretchedSize.Width > withinThis.Width)
             {
                 stretchedSize.Width = withinThis.Width;

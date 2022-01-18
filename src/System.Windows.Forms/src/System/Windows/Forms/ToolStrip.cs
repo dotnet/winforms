@@ -4144,7 +4144,7 @@ namespace System.Windows.Forms
                          new Point[]
                          {
                              new Point(start, _lastInsertionMarkRect.Y), new Point(start + widthOfBeam - 1, _lastInsertionMarkRect.Y), //top line
-                             new Point(start + 1, _lastInsertionMarkRect.Y + 1), new Point(start + widthOfBeam - 2, _lastInsertionMarkRect.Y + 1)//top second line
+                             new Point(start + 1, _lastInsertionMarkRect.Y + 1), new Point(start + widthOfBeam - 2, _lastInsertionMarkRect.Y + 1) //top second line
                          });
                 }
                 else

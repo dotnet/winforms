@@ -118,7 +118,7 @@ namespace System.Windows.Forms.Tests
             using NoAssertContext noAssertContext = new();
             using ToolStripProgressBarControl control = new();
             using ToolStripProgressBar item = new();
-            using ToolStrip toolStrip = new() { Size = new Drawing.Size(500, 25)};
+            using ToolStrip toolStrip = new() { Size = new Drawing.Size(500, 25) };
             using ToolStripLabel label = new() { Text = "Label"};
             using ToolStripButton button = new() { Text = "Button"};
 

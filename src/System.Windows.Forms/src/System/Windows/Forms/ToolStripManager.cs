@@ -1199,9 +1199,7 @@ namespace System.Windows.Forms
             bool canMerge = IsSpecialMDIStrip(sourceToolStrip);
             canMerge = (canMerge || (sourceToolStrip.AllowMerge &&
                                       targetToolStrip.AllowMerge &&
-                                      (sourceToolStrip.GetType().IsAssignableFrom(targetToolStrip.GetType()) || targetToolStrip.GetType().IsAssignableFrom(sourceToolStrip.GetType()))
-                                    )
-                        );
+                                      (sourceToolStrip.GetType().IsAssignableFrom(targetToolStrip.GetType()) || targetToolStrip.GetType().IsAssignableFrom(sourceToolStrip.GetType()))));
             MergeHistory mergeHistory = null;
             if (canMerge)
             {

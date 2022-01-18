@@ -697,7 +697,9 @@ namespace System.ComponentModel.Design.Serialization
                 }
 
                 CultureInfo culture = ReadCulture;
+#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
                 for (; ; )
+#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
                 {
                     Debug.Assert(culture.Parent != culture, "should have exited loop when culture = InvariantCulture");
                     culture = culture.Parent;
@@ -1323,7 +1325,9 @@ namespace System.ComponentModel.Design.Serialization
                 string resourceName = nameBase;
                 int count = 1;
 
+#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
                 for (; ; )
+#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
                 {
                     if (appendCount)
                     {

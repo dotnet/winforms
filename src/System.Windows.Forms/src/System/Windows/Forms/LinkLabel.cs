@@ -1498,6 +1498,8 @@ namespace System.Windows.Forms
                         brushColor = g.FindNearestColor(brushColor);
 
                         Rectangle clientRectWithPadding = ClientRectWithPadding;
+
+#pragma warning disable SA1009 // Closing parenthesis should be spaced correctly
                         TextRenderer.DrawText(
                             g,
                             Text,
@@ -1510,6 +1512,7 @@ namespace System.Windows.Forms
                             | TextRenderer.SkipAssertFlag
 #endif
                             );
+#pragma warning restore SA1009 // Closing parenthesis should be spaced correctly
                     }
 
                     if (Focused && ShowFocusCues && FocusLink == link)

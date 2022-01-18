@@ -67,8 +67,7 @@ namespace System.Windows.Forms.Generators
         {
             var syntaxProvider = context.SyntaxProvider.CreateSyntaxProvider(
                 predicate: (syntaxNode, _) => IsSupportedSyntaxNode(syntaxNode),
-                transform: (generatorSyntaxContext, _) => generatorSyntaxContext.Node
-                );
+                transform: (generatorSyntaxContext, _) => generatorSyntaxContext.Node);
 
             var globalConfig = ProjectFileReader.ReadApplicationConfig(context.AnalyzerConfigOptionsProvider);
 

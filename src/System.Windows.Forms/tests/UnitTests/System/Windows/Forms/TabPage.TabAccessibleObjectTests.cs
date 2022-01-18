@@ -109,7 +109,7 @@ namespace System.Windows.Forms.Tests
         {
             using TabControl tabControl = new() { Enabled = tabControlEnabled };
             TabPageCollection pages = tabControl.TabPages;
-            pages.AddRange(new TabPage[] { new() { Enabled = tabPageEnabled }, new() { Enabled = tabPageEnabled } } );
+            pages.AddRange(new TabPage[] { new() { Enabled = tabPageEnabled }, new() { Enabled = tabPageEnabled } });
             tabControl.CreateControl();
 
             TabAccessibleObject accessibleObject1 = Assert.IsType<TabAccessibleObject>(pages[0].TabAccessibilityObject);
@@ -596,7 +596,7 @@ namespace System.Windows.Forms.Tests
             using TabControl tabControl = new();
             TabPageCollection pages = tabControl.TabPages;
             tabControl.CreateControl();
-            pages.AddRange(new TabPage[] { new(), new() { Enabled = tabPageEnabled } } );
+            pages.AddRange(new TabPage[] { new(), new() { Enabled = tabPageEnabled } });
 
             SubTabAccessibleObject tabAccessibleObject = new(pages[1]);
             pages[1].TestAccessor().Dynamic._tabAccessibilityObject = tabAccessibleObject;

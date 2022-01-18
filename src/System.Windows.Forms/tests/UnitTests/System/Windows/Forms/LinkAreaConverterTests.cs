@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -122,8 +122,7 @@ namespace System.Windows.Forms.Tests
                 {
                     {nameof(LinkArea.Start), 1},
                     {nameof(LinkArea.Length), 2}
-                })
-            );
+                }));
             Assert.Equal(new LinkArea(1, 2), area);
         }
 
@@ -140,7 +139,7 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(LinkArea.Start), new object()},
+                    {nameof(LinkArea.Start), new object() },
                     {nameof(LinkArea.Length), 2},
                 }
             };
@@ -165,7 +164,7 @@ namespace System.Windows.Forms.Tests
                 new Dictionary<string, object>
                 {
                     {nameof(LinkArea.Start), 1},
-                    {nameof(LinkArea.Length), new object()}
+                    {nameof(LinkArea.Length), new object() }
                 }
             };
             yield return new object[]

@@ -34,8 +34,7 @@ namespace System.Windows.Forms.Tests
 
             emf.Validate(
                 state,
-                 Validate.TextOut("Hello")
-                );
+                 Validate.TextOut("Hello"));
         }
 
         [WinFormsFact]
@@ -61,8 +60,7 @@ namespace System.Windows.Forms.Tests
                Validate.Polygon16(
                     bounds: null,
                     points: null,
-                    State.Brush(Color.Blue, Gdi32.BS.SOLID))
-              );
+                    State.Brush(Color.Blue, Gdi32.BS.SOLID)));
         }
 
         [WinFormsFact]
@@ -88,8 +86,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     points: null,
                     State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.SkipType(Gdi32.EMR.POLYGON16)
-              );
+               Validate.SkipType(Gdi32.EMR.POLYGON16));
         }
 
         [WinFormsFact]
@@ -115,8 +112,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     points: null,
                     State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.SkipType(Gdi32.EMR.POLYGON16)
-              );
+               Validate.SkipType(Gdi32.EMR.POLYGON16));
         }
 
         [WinFormsFact]
@@ -142,8 +138,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     points: null,
                     State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 2)
-              );
+               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 2));
         }
 
         [WinFormsFact]
@@ -169,8 +164,7 @@ namespace System.Windows.Forms.Tests
                     bounds: null,
                     points: null,
                     State.Brush(SystemColors.Highlight, Gdi32.BS.SOLID)),
-               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 3)
-              );
+               Validate.Repeat(Validate.SkipType(Gdi32.EMR.POLYGON16), 3));
         }
 
         private class ToolStripSystemHighContrastRenderer : ToolStripSystemRenderer

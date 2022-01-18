@@ -1,4 +1,4 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -151,8 +151,7 @@ namespace System.Windows.Forms.Tests
                     {nameof(Padding.Top), 2},
                     {nameof(Padding.Right), 3},
                     {nameof(Padding.Bottom), 4}
-                })
-            );
+                }));
             Assert.Equal(result, padding);
         }
 
@@ -169,8 +168,7 @@ namespace System.Windows.Forms.Tests
                     {nameof(Padding.Top), expected.Top},
                     {nameof(Padding.Right), expected.Right},
                     {nameof(Padding.Bottom), expected.Bottom}
-                })
-            );
+                }));
             Assert.Equal(expected, padding);
         }
 
@@ -187,7 +185,7 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(Padding.All), new object()},
+                    {nameof(Padding.All), new object() },
                     {nameof(Padding.Left), 2},
                     {nameof(Padding.Top), 2},
                     {nameof(Padding.Right), 3},
@@ -221,7 +219,7 @@ namespace System.Windows.Forms.Tests
                 new Dictionary<string, object>
                 {
                     {nameof(Padding.All), 1},
-                    {nameof(Padding.Left), new object()},
+                    {nameof(Padding.Left), new object() },
                     {nameof(Padding.Top), 2},
                     {nameof(Padding.Right), 3},
                     {nameof(Padding.Bottom), 4}
@@ -255,7 +253,7 @@ namespace System.Windows.Forms.Tests
                 {
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), 2},
-                    {nameof(Padding.Top), new object()},
+                    {nameof(Padding.Top), new object() },
                     {nameof(Padding.Right), 3},
                     {nameof(Padding.Bottom), 4}
                 }
@@ -289,7 +287,7 @@ namespace System.Windows.Forms.Tests
                     {nameof(Padding.All), 1},
                     {nameof(Padding.Left), 2},
                     {nameof(Padding.Top), 2},
-                    {nameof(Padding.Right), new object()},
+                    {nameof(Padding.Right), new object() },
                     {nameof(Padding.Bottom), 4}
                 }
             };
@@ -323,7 +321,7 @@ namespace System.Windows.Forms.Tests
                     {nameof(Padding.Left), 2},
                     {nameof(Padding.Top), 2},
                     {nameof(Padding.Right), 3},
-                    {nameof(Padding.Bottom), new object()}
+                    {nameof(Padding.Bottom), new object() }
                 }
             };
             yield return new object[]

@@ -117,15 +117,13 @@ namespace System.Windows.Forms
                         return new InstanceDescriptor(
                             typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int) }),
                             new object[] { link.Start, link.Length },
-                            true
-                        );
+                            true);
                     }
 
                     return new InstanceDescriptor(
                         typeof(LinkLabel.Link).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(object) }),
                         new object[] { link.Start, link.Length, link.LinkData },
-                        true
-                    );
+                        true);
                 }
             }
 

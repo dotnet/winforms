@@ -104,15 +104,13 @@ namespace System.Windows.Forms
                     {
                         return new InstanceDescriptor(
                             typeof(Padding).GetConstructor(new Type[] { typeof(int) }),
-                            new object[] { padding.All }
-                        );
+                            new object[] { padding.All });
                     }
                     else
                     {
                         return new InstanceDescriptor(
                             typeof(Padding).GetConstructor(new Type[] { typeof(int), typeof(int), typeof(int), typeof(int) }),
-                            new object[] { padding.Left, padding.Top, padding.Right, padding.Bottom }
-                        );
+                            new object[] { padding.Left, padding.Top, padding.Right, padding.Bottom });
                     }
                 }
             }
@@ -148,8 +146,7 @@ namespace System.Windows.Forms
                     (int)propertyValues[nameof(Padding.Left)]!,
                     (int)propertyValues[nameof(Padding.Top)]!,
                     (int)propertyValues[nameof(Padding.Right)]!,
-                    (int)propertyValues[nameof(Padding.Bottom)]!
-                );
+                    (int)propertyValues[nameof(Padding.Bottom)]!);
             }
             catch (InvalidCastException invalidCast)
             {

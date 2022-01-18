@@ -229,7 +229,7 @@ namespace System.Windows.Forms.Tests
             {
                 new Dictionary<string, object>
                 {
-                    {nameof(TableLayoutPanelCellPosition.Row), new object()},
+                    {nameof(TableLayoutPanelCellPosition.Row), new object() },
                     {nameof(TableLayoutPanelCellPosition.Column), 2},
                 }
             };
@@ -254,7 +254,7 @@ namespace System.Windows.Forms.Tests
                 new Dictionary<string, object>
                 {
                     {nameof(TableLayoutPanelCellPosition.Row), 1},
-                    {nameof(TableLayoutPanelCellPosition.Column), new object()}
+                    {nameof(TableLayoutPanelCellPosition.Column), new object() }
                 }
             };
             yield return new object[]

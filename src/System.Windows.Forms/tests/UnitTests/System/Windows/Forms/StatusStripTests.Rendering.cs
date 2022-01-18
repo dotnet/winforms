@@ -45,8 +45,7 @@ namespace System.Windows.Forms.Tests
             emf.Validate(
                state,
                Validate.BitBltValidator(bitBltBounds, State.BrushColor(Color.Blue)),
-               Validate.Polyline16(polylineBounds, null, State.Pen(16, Color.Green, penStyle))
-               );
+               Validate.Polyline16(polylineBounds, null, State.Pen(16, Color.Green, penStyle)));
 
             var details = emf.RecordsToString();
         }
