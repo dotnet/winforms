@@ -230,12 +230,11 @@ internal partial class Interop
                 Shell32.FOS pfos_local;
                 HRESULT result = ((delegate* unmanaged<IntPtr, Shell32.FOS*, HRESULT>)(*(*(void***)_wrappedInstance + 10)))
                     (_wrappedInstance, &pfos_local);
+                pfos = pfos_local;
                 if (result.Failed())
                 {
                     Marshal.ThrowExceptionForHR((int)result);
                 }
-
-                pfos = pfos_local;
             }
 
             void Shell32.IFileOpenDialog.SetDefaultFolder(Shell32.IShellItem psi)
@@ -268,12 +267,11 @@ internal partial class Interop
                 IntPtr ppsi_local;
                 result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 13)))
                     (_wrappedInstance, &ppsi_local);
+                ppsi = ppsi_local == IntPtr.Zero ? null : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
                 if (result.Failed())
                 {
                     Marshal.ThrowExceptionForHR((int)result);
                 }
-
-                ppsi = ppsi_local == IntPtr.Zero ? null : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
             }
 
             HRESULT Shell32.IFileOpenDialog.GetCurrentSelection(out Shell32.IShellItem? ppsi)
@@ -307,13 +305,12 @@ internal partial class Interop
                 IntPtr pszName_local;
                 result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 16)))
                     (_wrappedInstance, &pszName_local);
+                pszName = Marshal.PtrToStringUni(pszName_local)!;
+                Marshal.FreeCoTaskMem(pszName_local);
                 if (result.Failed())
                 {
                     Marshal.ThrowExceptionForHR((int)result);
                 }
-
-                pszName = Marshal.PtrToStringUni(pszName_local)!;
-                Marshal.FreeCoTaskMem(pszName_local);
             }
 
             void Shell32.IFileOpenDialog.SetTitle(string pszTitle)
@@ -361,12 +358,11 @@ internal partial class Interop
                 IntPtr ppsi_local;
                 result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 20)))
                     (_wrappedInstance, &ppsi_local);
+                ppsi = ppsi_local == IntPtr.Zero ? null : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
                 if (result.Failed())
                 {
                     Marshal.ThrowExceptionForHR((int)result);
                 }
-
-                ppsi = ppsi_local == IntPtr.Zero ? null : (Shell32.IShellItem)WinFormsComWrappers.Instance.GetOrCreateObjectForComInstance(ppsi_local, CreateObjectFlags.Unwrap);
             }
 
             HRESULT Shell32.IFileOpenDialog.AddPlace(Shell32.IShellItem psi, Shell32.FDAP fdap)
@@ -440,12 +436,11 @@ internal partial class Interop
                 IntPtr ppenum_local;
                 result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 27)))
                     (_wrappedInstance, &ppenum_local);
+                ppenum = ppenum_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)Marshal.GetObjectForIUnknown(ppenum_local);
                 if (result.Failed())
                 {
                     Marshal.ThrowExceptionForHR((int)result);
                 }
-
-                ppenum = ppenum_local == IntPtr.Zero ? null : (Shell32.IShellItemArray)Marshal.GetObjectForIUnknown(ppenum_local);
             }
 
             HRESULT Shell32.IFileOpenDialog.GetSelectedItems(out Shell32.IShellItemArray? ppsai)
