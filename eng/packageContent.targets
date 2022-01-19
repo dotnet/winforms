@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <_DotnetApiDocsPackageName>Microsoft.Private.Intellisense</_DotnetApiDocsPackageName>
-    <!-- Using ToLower in line below unlock Linux build, event if it's unsupported. -->
+    <!-- Using ToLower below to unlock Linux build, even if it's unsupported. -->
     <_DotnetApiDocsFilesRoot>$([MSBuild]::NormalizeDirectory('$(NuGetPackageRoot)', '$(_DotnetApiDocsPackageName.ToLower())', '$(MicrosoftPrivateIntellisenseVersion)', 'IntellisenseFiles', 'windowsdesktop'))</_DotnetApiDocsFilesRoot>
     <_IntellisenseXmlDir>$([MSBuild]::NormalizeDirectory('$(ArtifactsBinDir)', 'docs'))</_IntellisenseXmlDir>
   </PropertyGroup>
