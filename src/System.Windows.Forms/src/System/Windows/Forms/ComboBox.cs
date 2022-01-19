@@ -3903,7 +3903,7 @@ namespace System.Windows.Forms
                     break;
 
                 case WM.PAINT:
-                    if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup))
+                    if (GetStyle(ControlStyles.UserPaint) == false && (FlatStyle == FlatStyle.Flat || FlatStyle == FlatStyle.Popup) && !DisplayInformation.HighContrast)
                     {
                         using var dropDownRegion = new Gdi32.RegionScope(FlatComboBoxAdapter._dropDownRect);
                         using var windowRegion = new Gdi32.RegionScope(Bounds);
