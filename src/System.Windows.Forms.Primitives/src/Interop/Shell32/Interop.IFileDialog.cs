@@ -59,7 +59,7 @@ internal static partial class Interop
                 [MarshalAs(UnmanagedType.LPWStr)] string pszName);
 
             void GetFileName(
-                [MarshalAs(UnmanagedType.LPWStr)] out string pszName);
+                [MarshalAs(UnmanagedType.LPWStr)] out string? pszName);
 
             void SetTitle(
                 [MarshalAs(UnmanagedType.LPWStr)] string pszTitle);

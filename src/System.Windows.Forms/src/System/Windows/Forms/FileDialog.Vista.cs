@@ -250,9 +250,9 @@ namespace System.Windows.Forms
             return extensions.ToArray();
         }
 
-        private protected static string GetFilePathFromShellItem(IShellItem item)
+        private protected static string? GetFilePathFromShellItem(IShellItem item)
         {
-            HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string filename);
+            HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string? filename);
             ThrowIfFailed(hr);
             return filename;
         }

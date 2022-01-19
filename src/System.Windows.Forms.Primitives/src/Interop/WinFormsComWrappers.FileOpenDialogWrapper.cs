@@ -91,7 +91,7 @@ internal partial class Interop
                 ((Shell32.IFileOpenDialog)this).SetFileName(pszName);
             }
 
-            void Shell32.IFileDialog.GetFileName(out string pszName)
+            void Shell32.IFileDialog.GetFileName(out string? pszName)
             {
                 ((Shell32.IFileOpenDialog)this).GetFileName(out pszName);
             }
@@ -299,13 +299,13 @@ internal partial class Interop
                 }
             }
 
-            void Shell32.IFileOpenDialog.GetFileName(out string pszName)
+            void Shell32.IFileOpenDialog.GetFileName(out string? pszName)
             {
                 HRESULT result;
                 IntPtr pszName_local;
                 result = ((delegate* unmanaged<IntPtr, IntPtr*, HRESULT>)(*(*(void***)_wrappedInstance + 16)))
                     (_wrappedInstance, &pszName_local);
-                pszName = Marshal.PtrToStringUni(pszName_local)!;
+                pszName = Marshal.PtrToStringUni(pszName_local);
                 Marshal.FreeCoTaskMem(pszName_local);
                 if (result.Failed())
                 {
