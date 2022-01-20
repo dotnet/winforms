@@ -18,7 +18,7 @@ namespace System.Windows.Forms.ButtonInternal
         // SystemInformation.Border3DSize + 2 pixels for focus rect
         protected const int ButtonBorderSize = 4;
 
-        // Coefficient for darkening the border color of the "Popup" and "Standard" buttons
+        // Coefficient for darkening the border color of the "Popup" button
         protected const float ButtonBorderDarkerOffset = 0.8f;
 
         internal ButtonBaseAdapter(ButtonBase control) =>
