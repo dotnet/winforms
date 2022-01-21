@@ -157,7 +157,10 @@ internal partial class Interop
             HRESULT Shell32.IFileOpenDialog.SetFileTypes(uint cFileTypes, Shell32.COMDLG_FILTERSPEC[] rgFilterSpec)
             {
                 HRESULT retVal;
-                fixed (Shell32.COMDLG_FILTERSPEC* rgFilterSpec_local = rgFilterSpec)
+                ref Shell32.COMDLG_FILTERSPEC rgFilterSpecRef = ref rgFilterSpec == null
+                    ? ref *(Shell32.COMDLG_FILTERSPEC*)0
+                    : ref MemoryMarshal.GetArrayDataReference(rgFilterSpec);
+                fixed (Shell32.COMDLG_FILTERSPEC* rgFilterSpec_local = &rgFilterSpecRef)
                 {
                     retVal = ((delegate* unmanaged<IntPtr, uint, Shell32.COMDLG_FILTERSPEC*, HRESULT>)(*(*(void***)_wrappedInstance + 4)))
                         (_wrappedInstance, cFileTypes, rgFilterSpec_local);
