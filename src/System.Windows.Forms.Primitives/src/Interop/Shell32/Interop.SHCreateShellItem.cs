@@ -11,6 +11,9 @@ internal static partial class Interop
         [DllImport(Libraries.Shell32, ExactSpelling = true)]
         public static extern HRESULT SHCreateShellItem(IntPtr pidlParent, IntPtr psfParent, IntPtr pidl, out IShellItem ppsi);
 
+        [DllImport(Libraries.Shell32, EntryPoint = "SHCreateShellItem", ExactSpelling = true)]
+        public static extern HRESULT SHCreateShellItemViaComWrappers(IntPtr pidlParent, IntPtr psfParent, IntPtr pidl, out IntPtr ppsi);
+
         public static IShellItem GetShellItemForPath(string path)
         {
             if (SHParseDisplayName(path, IntPtr.Zero, out IntPtr pidl, 0, out uint _).Succeeded())
@@ -19,6 +22,22 @@ internal static partial class Interop
                 if (SHCreateShellItem(IntPtr.Zero, IntPtr.Zero, pidl, out IShellItem ret).Succeeded())
                 {
                     return ret;
+                }
+            }
+
+            throw new FileNotFoundException();
+        }
+
+        public static IShellItem GetShellItemForPathViaComWrappers(string path)
+        {
+            if (SHParseDisplayName(path, IntPtr.Zero, out IntPtr pidl, 0, out uint _).Succeeded())
+            {
+                // No parent specified
+                if (SHCreateShellItemViaComWrappers(IntPtr.Zero, IntPtr.Zero, pidl, out IntPtr ret).Succeeded())
+                {
+                    var obj = WinFormsComWrappers.Instance
+                        .GetOrCreateObjectForComInstance(ret, CreateObjectFlags.None);
+                    return (IShellItem)obj;
                 }
             }
 

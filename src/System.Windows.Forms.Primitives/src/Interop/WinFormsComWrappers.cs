@@ -47,7 +47,7 @@ internal partial class Interop
 
         protected override object CreateObject(IntPtr externalComObject, CreateObjectFlags flags)
         {
-            Debug.Assert(flags == CreateObjectFlags.UniqueInstance);
+            Debug.Assert(flags == CreateObjectFlags.UniqueInstance || flags == CreateObjectFlags.None || flags == CreateObjectFlags.Unwrap);
 
             Guid pictureIID = IID.IPicture;
             int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr pictureComObject);
@@ -89,7 +89,7 @@ internal partial class Interop
             }
 
             IntPtr pobj_local;
-            IntPtr pUnk_local = GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None);
+            IntPtr pUnk_local = GetOrCreateComInterfaceForObject(obj);
             Guid local_IID = iid;
             HRESULT result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_IID, out pobj_local);
             Marshal.Release(pUnk_local);
@@ -99,6 +99,16 @@ internal partial class Interop
             }
 
             return pobj_local;
+        }
+
+        private IntPtr GetOrCreateComInterfaceForObject(object obj)
+        {
+            return obj switch
+            {
+                ShellItemWrapper siw => siw.Instance,
+                FileOpenDialogWrapper fodw => fodw.Instance,
+                _ => GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None),
+            };
         }
     }
 }

@@ -343,7 +343,7 @@ namespace System.Windows.Forms
             {
                 try
                 {
-                    IShellItem initialDirectory = GetShellItemForPath(_initialDirectory);
+                    IShellItem initialDirectory = GetShellItemForPathViaComWrappers(_initialDirectory);
 
                     dialog.SetDefaultFolder(initialDirectory);
                     dialog.SetFolder(initialDirectory);

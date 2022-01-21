@@ -16,9 +16,9 @@ internal partial class Interop
             public ShellItemWrapper(IntPtr wrappedInstance)
             {
                 _wrappedInstance = wrappedInstance.OrThrowIfZero();
-
-                _wrappedInstance = wrappedInstance;
             }
+
+            internal IntPtr Instance => _wrappedInstance;
 
             public void Dispose()
             {

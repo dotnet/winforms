@@ -15,10 +15,10 @@ internal partial class Interop
 
             public FileOpenDialogWrapper(IntPtr wrappedInstance)
             {
-                wrappedInstance.OrThrowIfZero();
-
-                _wrappedInstance = wrappedInstance;
+                _wrappedInstance = wrappedInstance.OrThrowIfZero();
             }
+
+            internal IntPtr Instance => _wrappedInstance;
 
             public void Dispose()
             {
