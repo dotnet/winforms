@@ -199,7 +199,7 @@ namespace System.Windows.Forms
                 flags |= Comdlg32.PSD.MINMARGINS;
             }
 
-            if (_pageSettings!.Margins is not null)
+            if (_pageSettings?.Margins is not null)
             {
                 flags |= Comdlg32.PSD.MARGINS;
             }
@@ -236,10 +236,11 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeMinMargins()
         {
-            return _minMargins!.Left != 0
+            return _minMargins is not null
+                && (_minMargins.Left != 0
                 || _minMargins.Right != 0
                 || _minMargins.Top != 0
-                || _minMargins.Bottom != 0;
+                || _minMargins.Bottom != 0);
         }
 
         private static void UpdateSettings(
