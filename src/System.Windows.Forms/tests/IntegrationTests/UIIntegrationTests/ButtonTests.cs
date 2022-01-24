@@ -217,7 +217,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_Click_DragAfterMouseDownAsync()
         {
-            await RunControlPairTestAsync<Button>(async (form, controls) =>
+            await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
             {
                 (Button control1, Button control2) = controls;
 

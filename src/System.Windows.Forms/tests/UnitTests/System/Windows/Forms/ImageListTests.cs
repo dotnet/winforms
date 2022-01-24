@@ -10,9 +10,6 @@ using Xunit;
 
 namespace System.Windows.Forms.Tests
 {
-    using Point = System.Drawing.Point;
-    using Size = System.Drawing.Size;
-
     [Collection("Sequential")] // ImageList doesn't appear to behave well under stress in multi-threaded env
     public class ImageListTests : IClassFixture<ThreadExceptionFixture>
     {
