@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,7 +11,7 @@ namespace System.Windows.Forms.UITests
     public class PrintPreviewDialogTests : ControlTestBase
     {
         // This value may need to be adjusted if tests fail in CI/different environment.
-        private const int DelayMS = 100;
+        private const int DelayMS = 10000;
 
         public PrintPreviewDialogTests(ITestOutputHelper testOutputHelper)
             : base(testOutputHelper)
