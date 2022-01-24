@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing.Printing;
 using System.Globalization;
@@ -21,11 +19,11 @@ namespace System.Windows.Forms
     public sealed class PageSetupDialog : CommonDialog
     {
         // If PrintDocument is not null, pageSettings == printDocument.PageSettings
-        private PrintDocument _printDocument;
-        private PageSettings _pageSettings;
-        private PrinterSettings _printerSettings;
+        private PrintDocument? _printDocument;
+        private PageSettings? _pageSettings;
+        private PrinterSettings? _printerSettings;
 
-        private Margins _minMargins;
+        private Margins? _minMargins;
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="PageSetupDialog"/> class.
@@ -72,7 +70,7 @@ namespace System.Windows.Forms
         [SRCategory(nameof(SR.CatData))]
         [DefaultValue(null)]
         [SRDescription(nameof(SR.PDdocumentDescr))]
-        public PrintDocument Document
+        public PrintDocument? Document
         {
             get => _printDocument;
             set
@@ -102,7 +100,7 @@ namespace System.Windows.Forms
         /// </summary>
         [SRCategory(nameof(SR.CatData))]
         [SRDescription(nameof(SR.PSDminMarginsDescr))]
-        public Margins MinMargins
+        public Margins? MinMargins
         {
             get => _minMargins;
             set => _minMargins = value ?? new Margins(0, 0, 0, 0);
@@ -116,7 +114,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.PSDpageSettingsDescr))]
-        public PageSettings PageSettings
+        public PageSettings? PageSettings
         {
             get => _pageSettings;
             set
@@ -136,7 +134,7 @@ namespace System.Windows.Forms
         [Browsable(false)]
         [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
         [SRDescription(nameof(SR.PSDprinterSettingsDescr))]
-        public PrinterSettings PrinterSettings
+        public PrinterSettings? PrinterSettings
         {
             get => _printerSettings;
             set
@@ -201,7 +199,7 @@ namespace System.Windows.Forms
                 flags |= Comdlg32.PSD.MINMARGINS;
             }
 
-            if (_pageSettings.Margins is not null)
+            if (_pageSettings?.Margins is not null)
             {
                 flags |= Comdlg32.PSD.MARGINS;
             }
@@ -238,14 +236,17 @@ namespace System.Windows.Forms
         /// </summary>
         private bool ShouldSerializeMinMargins()
         {
-            return _minMargins.Left != 0
+            return _minMargins is not null
+                && (_minMargins.Left != 0
                 || _minMargins.Right != 0
                 || _minMargins.Top != 0
-                || _minMargins.Bottom != 0;
+                || _minMargins.Bottom != 0);
         }
 
-        private static void UpdateSettings(Comdlg32.PAGESETUPDLGW data, PageSettings pageSettings,
-                                           PrinterSettings printerSettings)
+        private static void UpdateSettings(
+            Comdlg32.PAGESETUPDLGW data,
+            PageSettings pageSettings,
+            PrinterSettings? printerSettings)
         {
             pageSettings.SetHdevmode(data.hDevMode);
             if (printerSettings is not null)
