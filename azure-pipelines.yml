@@ -126,7 +126,8 @@ stages:
       parameters:
         publishUsingPipelines: true
         pool:
-          vmImage: windows-2019
+          name: NetCore1ESPool-Internal
+          demands: ImageOverride -equals Build.Server.Amd64.VS2019
 
 
 # Copied from the arcade repo and modified for winforms
