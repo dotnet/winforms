@@ -1281,6 +1281,15 @@
             "parameters": {
               "action": "created"
             }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "name": "isCloseAndComment",
+                "parameters": {}
+              }
+            ]
           }
         ]
       },
@@ -1322,6 +1331,15 @@
             "parameters": {
               "action": "created"
             }
+          },
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "name": "isCloseAndComment",
+                "parameters": {}
+              }
+            ]
           }
         ]
       },
