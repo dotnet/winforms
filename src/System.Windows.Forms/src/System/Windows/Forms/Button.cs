@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms.ButtonInternal;
@@ -111,11 +109,9 @@ namespace System.Windows.Forms
 
             if (_systemSize.Width == InvalidDimensionValue)
             {
-                Size requiredSize;
                 // Note: The result from the BCM_GETIDEALSIZE message isn't accurate if the font has been
                 // changed, because this method is called before the font is set into the device context.
-
-                requiredSize = TextRenderer.MeasureText(Text, Font);
+                Size requiredSize = TextRenderer.MeasureText(Text, Font);
                 requiredSize = SizeFromClientSize(requiredSize);
 
                 // This padding makes FlatStyle.System about the same size as FlatStyle.Standard
@@ -202,7 +198,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event EventHandler DoubleClick
+        public new event EventHandler? DoubleClick
         {
             add => base.DoubleClick += value;
             remove => base.DoubleClick -= value;
@@ -211,7 +207,7 @@ namespace System.Windows.Forms
         /// <hideinheritance/>
         [Browsable(false)]
         [EditorBrowsable(EditorBrowsableState.Advanced)]
-        public new event MouseEventHandler MouseDoubleClick
+        public new event MouseEventHandler? MouseDoubleClick
         {
             add => base.MouseDoubleClick += value;
             remove => base.MouseDoubleClick -= value;
@@ -246,7 +242,6 @@ namespace System.Windows.Forms
             }
 
             // accessibility stuff
-            //
             AccessibilityNotifyClients(AccessibleEvents.StateChange, -1);
             AccessibilityNotifyClients(AccessibleEvents.NameChange, -1);
 
@@ -336,7 +331,6 @@ namespace System.Windows.Forms
                 if (!ValidationCancelled && (validate || validatedControlAllowsFocusChange))
                 {
                     //Paint in raised state...
-                    //
                     ResetFlagsandPaint();
                     OnClick(EventArgs.Empty);
                 }
