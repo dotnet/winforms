@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -20,25 +18,25 @@ namespace System.Windows.Forms
         /// </summary>
         private class WindowClass
         {
-            internal static WindowClass s_cache;
+            internal static WindowClass? s_cache;
 
-            internal WindowClass _next;
-            internal string _className;
-            internal string _windowClassName;
-            internal NativeWindow _targetWindow;
+            internal WindowClass? _next;
+            internal string? _className;
+            internal string? _windowClassName;
+            internal NativeWindow? _targetWindow;
 
             private readonly User32.CS _classStyle;
             private IntPtr _defaultWindProc;
 
             // This needs to be a field so the GC doesn't collect the managed callback
-            private User32.WNDPROC _windProc;
+            private User32.WNDPROC? _windProc;
 
             // There is only ever one AppDomain
             private static readonly string s_currentAppDomainHash = Convert.ToString(AppDomain.CurrentDomain.GetHashCode(), 16);
 
             private static readonly object s_wcInternalSyncObject = new object();
 
-            internal WindowClass(string className, User32.CS classStyle)
+            internal WindowClass(string? className, User32.CS classStyle)
             {
                 _className = className;
                 _classStyle = classStyle;
@@ -51,8 +49,8 @@ namespace System.Windows.Forms
 
                 // Set the window procedure to the default window procedure
                 User32.SetWindowLong(hWnd, User32.GWL.WNDPROC, _defaultWindProc);
-                _targetWindow.AssignHandle(hWnd);
-                return _targetWindow.Callback(hWnd, msg, wparam, lparam);
+                _targetWindow!.AssignHandle(hWnd);
+                return _targetWindow!.Callback(hWnd, msg, wparam, lparam);
             }
 
             /// <summary>
@@ -60,11 +58,11 @@ namespace System.Windows.Forms
             ///  object if there is no such class/style available, or return a
             ///  cached object if one exists.
             /// </summary>
-            internal static WindowClass Create(string className, User32.CS classStyle)
+            internal static WindowClass Create(string? className, User32.CS classStyle)
             {
                 lock (s_wcInternalSyncObject)
                 {
-                    WindowClass wc = s_cache;
+                    WindowClass? wc = s_cache;
                     if (className is null)
                     {
                         // If we weren't given a class name, look for a window
@@ -134,7 +132,7 @@ namespace System.Windows.Forms
             {
                 User32.WNDCLASS windowClass = new User32.WNDCLASS();
 
-                string localClassName = _className;
+                string? localClassName = _className;
 
                 if (localClassName is null)
                 {
@@ -151,7 +149,7 @@ namespace System.Windows.Forms
                 else
                 {
                     // A system defined Window class was specified, get its info.
-                    if (User32.GetClassInfoW(NativeMethods.NullHandleRef, _className, ref windowClass).IsFalse())
+                    if (User32.GetClassInfoW(NativeMethods.NullHandleRef, localClassName, ref windowClass).IsFalse())
                     {
                         throw new Win32Exception(Marshal.GetLastWin32Error(), SR.InvalidWndClsName);
                     }
@@ -160,7 +158,7 @@ namespace System.Windows.Forms
                     _defaultWindProc = windowClass.lpfnWndProc;
                 }
 
-                _windowClassName = GetFullClassName(localClassName);
+                _windowClassName = GetFullClassName(localClassName!);
                 _windProc = new User32.WNDPROC(Callback);
                 windowClass.lpfnWndProc = Marshal.GetFunctionPointerForDelegate(_windProc);
                 windowClass.hInstance = Kernel32.GetModuleHandleW(null);
