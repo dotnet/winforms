@@ -15,12 +15,10 @@ namespace System.Windows.Forms
     {
         public class ConnectionPointCookie
         {
-            private Ole32.IConnectionPoint connectionPoint;
-            private uint cookie;
-            internal int threadId;
-#if DEBUG
-            private readonly string callStack;
-#endif
+            private Ole32.IConnectionPoint _connectionPoint;
+            private uint _cookie;
+            internal int _threadId;
+
             /// <summary>
             ///  Creates a connection point to of the given interface type.
             ///  which will call on a managed code sink that implements that interface.
@@ -37,17 +35,17 @@ namespace System.Windows.Forms
                     try
                     {
                         Guid tmp = eventInterface.GUID;
-                        if (cpc.FindConnectionPoint(&tmp, out connectionPoint) != HRESULT.S_OK)
+                        if (cpc.FindConnectionPoint(&tmp, out _connectionPoint) != HRESULT.S_OK)
                         {
-                            connectionPoint = null;
+                            _connectionPoint = null;
                         }
                     }
                     catch
                     {
-                        connectionPoint = null;
+                        _connectionPoint = null;
                     }
 
-                    if (connectionPoint is null)
+                    if (_connectionPoint is null)
                     {
                         if (throwException)
                         {
@@ -64,17 +62,17 @@ namespace System.Windows.Forms
                     else
                     {
                         uint tempCookie = 0;
-                        HRESULT hr = connectionPoint.Advise(sink, &tempCookie);
+                        HRESULT hr = _connectionPoint.Advise(sink, &tempCookie);
                         if (hr == HRESULT.S_OK)
                         {
-                            cookie = tempCookie;
-                            threadId = Thread.CurrentThread.ManagedThreadId;
+                            _cookie = tempCookie;
+                            _threadId = Environment.CurrentManagedThreadId;
                         }
                         else
                         {
-                            cookie = 0;
-                            Marshal.ReleaseComObject(connectionPoint);
-                            connectionPoint = null;
+                            _cookie = 0;
+                            Marshal.ReleaseComObject(_connectionPoint);
+                            _connectionPoint = null;
                             if (throwException)
                             {
                                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, string.Format(SR.AXNoSinkAdvise, eventInterface.Name), hr));
@@ -90,11 +88,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                if (connectionPoint is null || cookie == 0)
+                if (_connectionPoint is null || _cookie == 0)
                 {
-                    if (connectionPoint is not null)
+                    if (_connectionPoint is not null)
                     {
-                        Marshal.ReleaseComObject(connectionPoint);
+                        Marshal.ReleaseComObject(_connectionPoint);
                     }
 
                     if (throwException)
@@ -102,9 +100,6 @@ namespace System.Windows.Forms
                         throw new ArgumentException(string.Format(SR.AXNoConnectionPoint, eventInterface.Name));
                     }
                 }
-#if DEBUG
-                callStack = Environment.StackTrace;
-#endif
             }
 
             /// <summary>
@@ -113,37 +108,37 @@ namespace System.Windows.Forms
             /// </summary>
             public void Disconnect()
             {
-                if (connectionPoint is not null && cookie != 0)
+                if (_connectionPoint is not null && _cookie != 0)
                 {
                     try
                     {
-                        connectionPoint.Unadvise(cookie);
+                        _connectionPoint.Unadvise(_cookie);
                     }
                     catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                     {
                     }
                     finally
                     {
-                        cookie = 0;
+                        _cookie = 0;
                     }
 
                     try
                     {
-                        Marshal.ReleaseComObject(connectionPoint);
+                        Marshal.ReleaseComObject(_connectionPoint);
                     }
                     catch (Exception ex) when (!ClientUtils.IsCriticalException(ex))
                     {
                     }
                     finally
                     {
-                        connectionPoint = null;
+                        _connectionPoint = null;
                     }
                 }
             }
 
             ~ConnectionPointCookie()
             {
-                if (connectionPoint is not null && cookie != 0)
+                if (_connectionPoint is not null && _cookie != 0)
                 {
                     if (!AppDomain.CurrentDomain.IsFinalizingForUnload())
                     {
@@ -155,7 +150,7 @@ namespace System.Windows.Forms
 
             void AttemptDisconnect(object trash)
             {
-                if (threadId == Thread.CurrentThread.ManagedThreadId)
+                if (_threadId == Environment.CurrentManagedThreadId)
                 {
                     Disconnect();
                 }
@@ -165,13 +160,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            internal bool Connected
-            {
-                get
-                {
-                    return connectionPoint is not null && cookie != 0;
-                }
-            }
+            internal bool Connected => _connectionPoint is not null && _cookie != 0;
         }
     }
 }

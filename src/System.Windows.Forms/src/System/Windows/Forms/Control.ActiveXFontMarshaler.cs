@@ -46,7 +46,7 @@ namespace System.Windows.Forms
                     fStrikethrough = font.Strikeout.ToBOOL(),
                 };
                 Guid iid = typeof(Ole32.IFont).GUID;
-                Ole32.IFont oleFont = Oleaut32.OleCreateFontIndirect(ref fontDesc, ref iid);
+                Ole32.IFont oleFont = Oleaut32.OleCreateFontIndirect(ref fontDesc, in iid);
                 IntPtr pFont = Marshal.GetIUnknownForObject(oleFont);
 
                 int hr = Marshal.QueryInterface(pFont, ref iid, out IntPtr pIFont);

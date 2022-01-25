@@ -92,7 +92,7 @@ namespace System.Windows.Forms
                         for (int i = 0; i < _names.Length; i++)
                         {
                             cookie = _cookies[i];
-                            if (_names[i] is null || !(_names[i] is string))
+                            if (_names[i] is null)
                             {
                                 Debug.Fail($"Bad IPerPropertyBrowsing item [{i}], name={_names?[i] ?? "(unknown)"}");
                                 continue;

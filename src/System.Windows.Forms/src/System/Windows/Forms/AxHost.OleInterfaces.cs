@@ -33,12 +33,12 @@ namespace System.Windows.Forms
             IReflect,
             IDisposable
         {
-            private readonly AxHost host;
-            private ConnectionPointCookie connectionPoint;
+            private readonly AxHost _host;
+            private ConnectionPointCookie _connectionPoint;
 
             internal OleInterfaces(AxHost host)
             {
-                this.host = host.OrThrowIfNull();
+                _host = host.OrThrowIfNull();
             }
 
             private void Dispose(bool disposing)
@@ -68,7 +68,7 @@ namespace System.Windows.Forms
 
             internal AxHost GetAxHost()
             {
-                return host;
+                return _host;
             }
 
             internal void OnOcxCreate()
@@ -78,16 +78,16 @@ namespace System.Windows.Forms
 
             internal void StartEvents()
             {
-                if (connectionPoint is not null)
+                if (_connectionPoint is not null)
                 {
                     return;
                 }
 
-                object nativeObject = host.GetOcx();
+                object nativeObject = _host.GetOcx();
 
                 try
                 {
-                    connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink));
+                    _connectionPoint = new ConnectionPointCookie(nativeObject, this, typeof(IPropertyNotifySink));
                 }
                 catch
                 {
@@ -96,12 +96,12 @@ namespace System.Windows.Forms
 
             void AttemptStopEvents(object trash)
             {
-                if (connectionPoint is null)
+                if (_connectionPoint is null)
                 {
                     return;
                 }
 
-                if (connectionPoint.threadId == Thread.CurrentThread.ManagedThreadId)
+                if (_connectionPoint._threadId == Environment.CurrentManagedThreadId)
                 {
                     StopEvents();
                 }
@@ -113,24 +113,24 @@ namespace System.Windows.Forms
 
             internal void StopEvents()
             {
-                if (connectionPoint is not null)
+                if (_connectionPoint is not null)
                 {
-                    connectionPoint.Disconnect();
-                    connectionPoint = null;
+                    _connectionPoint.Disconnect();
+                    _connectionPoint = null;
                 }
             }
 
             // IGetVBAObject methods:
             unsafe HRESULT IGetVBAObject.GetObject(Guid* riid, IVBFormat[] rval, uint dwReserved)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetObject");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetObject");
 
                 if (rval is null || riid is null)
                 {
                     return HRESULT.E_INVALIDARG;
                 }
 
-                if (!riid->Equals(ivbformat_Guid))
+                if (!riid->Equals(s_ivbformat_Guid))
                 {
                     rval[0] = null;
                     return HRESULT.E_NOINTERFACE;
@@ -144,8 +144,8 @@ namespace System.Windows.Forms
 
             unsafe HRESULT IVBGetControl.EnumControls(OLECONTF dwOleContF, GC_WCH dwWhich, out IEnumUnknown ppenum)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in EnumControls");
-                ppenum = host.GetParentContainer().EnumControls(host, dwOleContF, dwWhich);
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in EnumControls");
+                ppenum = _host.GetParentContainer().EnumControls(_host, dwOleContF, dwWhich);
                 return HRESULT.S_OK;
             }
 
@@ -192,7 +192,13 @@ namespace System.Windows.Forms
                 return null;
             }
 
-            PropertyInfo IReflect.GetProperty(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
+            PropertyInfo IReflect.GetProperty(
+                string name,
+                BindingFlags bindingAttr,
+                Binder binder,
+                Type returnType,
+                Type[] types,
+                ParameterModifier[] modifiers)
             {
                 return null;
             }
@@ -212,20 +218,28 @@ namespace System.Windows.Forms
                 return Array.Empty<MemberInfo>();
             }
 
-            object IReflect.InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
+            object IReflect.InvokeMember(
+                string name,
+                BindingFlags invokeAttr,
+                Binder binder,
+                object target,
+                object[] args,
+                ParameterModifier[] modifiers,
+                CultureInfo culture,
+                string[] namedParameters)
             {
                 if (name.StartsWith("[DISPID="))
                 {
                     int endIndex = name.IndexOf(']');
                     DispatchID dispid = (DispatchID)int.Parse(name.Substring(8, endIndex - 8), CultureInfo.InvariantCulture);
-                    object ambient = host.GetAmbientProperty(dispid);
+                    object ambient = _host.GetAmbientProperty(dispid);
                     if (ambient is not null)
                     {
                         return ambient;
                     }
                 }
 
-                throw E_FAIL;
+                throw s_unknownErrorException;
             }
 
             Type IReflect.UnderlyingSystemType
@@ -239,25 +253,25 @@ namespace System.Windows.Forms
             // IOleControlSite methods:
             HRESULT IOleControlSite.OnControlInfoChanged()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnControlInfoChanged");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnControlInfoChanged");
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleControlSite.LockInPlaceActive(BOOL fLock)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in LockInPlaceActive");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in LockInPlaceActive");
                 return HRESULT.E_NOTIMPL;
             }
 
             unsafe HRESULT IOleControlSite.GetExtendedControl(IntPtr* ppDisp)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetExtendedControl " + host.ToString());
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in GetExtendedControl {_host}");
                 if (ppDisp is null)
                 {
                     return HRESULT.E_POINTER;
                 }
 
-                object proxy = host.GetParentContainer().GetProxyForControl(host);
+                object proxy = _host.GetParentContainer().GetProxyForControl(_host);
                 if (proxy is null)
                 {
                     return HRESULT.E_NOTIMPL;
@@ -284,17 +298,17 @@ namespace System.Windows.Forms
                 {
                     if ((dwFlags & XFORMCOORDS.SIZE) != 0)
                     {
-                        pPtfContainer->X = (float)host.HM2Pix(pPtlHimetric->X, logPixelsX);
-                        pPtfContainer->Y = (float)host.HM2Pix(pPtlHimetric->Y, logPixelsY);
+                        pPtfContainer->X = _host.HM2Pix(pPtlHimetric->X, s_logPixelsX);
+                        pPtfContainer->Y = _host.HM2Pix(pPtlHimetric->Y, s_logPixelsY);
                     }
                     else if ((dwFlags & XFORMCOORDS.POSITION) != 0)
                     {
-                        pPtfContainer->X = (float)host.HM2Pix(pPtlHimetric->X, logPixelsX);
-                        pPtfContainer->Y = (float)host.HM2Pix(pPtlHimetric->Y, logPixelsY);
+                        pPtfContainer->X = _host.HM2Pix(pPtlHimetric->X, s_logPixelsX);
+                        pPtfContainer->Y = _host.HM2Pix(pPtlHimetric->Y, s_logPixelsY);
                     }
                     else
                     {
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t dwFlags not supported: " + dwFlags);
+                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t dwFlags not supported: {dwFlags}");
                         return HRESULT.E_INVALIDARG;
                     }
                 }
@@ -302,23 +316,23 @@ namespace System.Windows.Forms
                 {
                     if ((dwFlags & XFORMCOORDS.SIZE) != 0)
                     {
-                        pPtlHimetric->X = host.Pix2HM((int)pPtfContainer->X, logPixelsX);
-                        pPtlHimetric->Y = host.Pix2HM((int)pPtfContainer->Y, logPixelsY);
+                        pPtlHimetric->X = _host.Pix2HM((int)pPtfContainer->X, s_logPixelsX);
+                        pPtlHimetric->Y = _host.Pix2HM((int)pPtfContainer->Y, s_logPixelsY);
                     }
                     else if ((dwFlags & XFORMCOORDS.POSITION) != 0)
                     {
-                        pPtlHimetric->X = host.Pix2HM((int)pPtfContainer->X, logPixelsX);
-                        pPtlHimetric->Y = host.Pix2HM((int)pPtfContainer->Y, logPixelsY);
+                        pPtlHimetric->X = _host.Pix2HM((int)pPtfContainer->X, s_logPixelsX);
+                        pPtlHimetric->Y = _host.Pix2HM((int)pPtfContainer->Y, s_logPixelsY);
                     }
                     else
                     {
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t dwFlags not supported: " + dwFlags);
+                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t dwFlags not supported: {dwFlags}");
                         return HRESULT.E_INVALIDARG;
                     }
                 }
                 else
                 {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "\t dwFlags not supported: " + dwFlags);
+                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"\t dwFlags not supported: {dwFlags}");
                     return HRESULT.E_INVALIDARG;
                 }
 
@@ -332,18 +346,18 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                Debug.Assert(!host.GetAxState(AxHost.siteProcessedInputKey), "Re-entering IOleControlSite.TranslateAccelerator!!!");
-                host.SetAxState(AxHost.siteProcessedInputKey, true);
+                Debug.Assert(!_host.GetAxState(s_siteProcessedInputKey), "Re-entering IOleControlSite.TranslateAccelerator!!!");
+                _host.SetAxState(s_siteProcessedInputKey, true);
 
                 Message msg = *pMsg;
                 try
                 {
-                    bool f = ((Control)host).PreProcessMessage(ref msg);
+                    bool f = _host.PreProcessMessage(ref msg);
                     return f ? HRESULT.S_OK : HRESULT.S_FALSE;
                 }
                 finally
                 {
-                    host.SetAxState(AxHost.siteProcessedInputKey, false);
+                    _host.SetAxState(s_siteProcessedInputKey, false);
                 }
             }
 
@@ -351,9 +365,9 @@ namespace System.Windows.Forms
 
             HRESULT IOleControlSite.ShowPropertyFrame()
             {
-                if (host.CanShowPropertyPages())
+                if (_host.CanShowPropertyPages())
                 {
-                    host.ShowPropertyPages();
+                    _host.ShowPropertyPages();
                     return HRESULT.S_OK;
                 }
 
@@ -363,7 +377,7 @@ namespace System.Windows.Forms
             // IOleClientSite methods:
             HRESULT IOleClientSite.SaveObject()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in SaveObject");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in SaveObject");
                 return HRESULT.E_NOTIMPL;
             }
 
@@ -381,53 +395,53 @@ namespace System.Windows.Forms
 
             IOleContainer IOleClientSite.GetContainer()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in getContainer");
-                return host.GetParentContainer();
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in getContainer");
+                return _host.GetParentContainer();
             }
 
             unsafe HRESULT IOleClientSite.ShowObject()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ShowObject");
-                if (host.GetAxState(AxHost.fOwnWindow))
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in ShowObject");
+                if (_host.GetAxState(s_fOwnWindow))
                 {
                     Debug.Fail("we can't be in showobject if we own our window...");
                     return HRESULT.S_OK;
                 }
 
-                if (host.GetAxState(AxHost.fFakingWindow))
+                if (_host.GetAxState(s_fFakingWindow))
                 {
                     // we really should not be here...
                     // this means that the ctl inplace deactivated and didn't call on inplace activate before calling showobject
                     // so we need to destroy our fake window first...
-                    host.DestroyFakeWindow();
+                    _host.DestroyFakeWindow();
 
                     // The fact that we have a fake window means that the OCX inplace deactivated when we hid it. It means
                     // that we have to bring it back from RUNNING to INPLACE so that it can re-create its handle properly.
                     //
-                    host.TransitionDownTo(OC_LOADED);
-                    host.TransitionUpTo(OC_INPLACE);
+                    _host.TransitionDownTo(OC_LOADED);
+                    _host.TransitionUpTo(OC_INPLACE);
                 }
 
-                if (host.GetOcState() < OC_INPLACE)
+                if (_host.GetOcState() < OC_INPLACE)
                 {
                     return HRESULT.S_OK;
                 }
 
                 IntPtr hwnd = IntPtr.Zero;
-                if (host.GetInPlaceObject().GetWindow(&hwnd).Succeeded())
+                if (_host.GetInPlaceObject().GetWindow(&hwnd).Succeeded())
                 {
-                    if (host.GetHandleNoCreate() != hwnd)
+                    if (_host.GetHandleNoCreate() != hwnd)
                     {
-                        host.DetachWindow();
+                        _host.DetachWindow();
                         if (hwnd != IntPtr.Zero)
                         {
-                            host.AttachWindow(hwnd);
+                            _host.AttachWindow(hwnd);
                         }
                     }
                 }
-                else if (host.GetInPlaceObject() is IOleInPlaceObjectWindowless)
+                else if (_host.GetInPlaceObject() is IOleInPlaceObjectWindowless)
                 {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Windowless control.");
+                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Windowless control.");
                     throw new InvalidOperationException(SR.AXWindowlessControl);
                 }
 
@@ -436,13 +450,13 @@ namespace System.Windows.Forms
 
             HRESULT IOleClientSite.OnShowWindow(BOOL fShow)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnShowWindow");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnShowWindow");
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleClientSite.RequestNewObjectLayout()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in RequestNewObjectLayout");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in RequestNewObjectLayout");
                 return HRESULT.E_NOTIMPL;
             }
 
@@ -455,38 +469,38 @@ namespace System.Windows.Forms
                     return HRESULT.E_POINTER;
                 }
 
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in GetWindow");
-                Control parent = host.ParentInternal;
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in GetWindow");
+                Control parent = _host.ParentInternal;
                 *phwnd = parent is not null ? parent.Handle : IntPtr.Zero;
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleInPlaceSite.ContextSensitiveHelp(BOOL fEnterMode)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in ContextSensitiveHelp");
                 return HRESULT.E_NOTIMPL;
             }
 
             HRESULT IOleInPlaceSite.CanInPlaceActivate()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in CanInPlaceActivate");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in CanInPlaceActivate");
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleInPlaceSite.OnInPlaceActivate()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnInPlaceActivate");
-                host.SetAxState(AxHost.ownDisposing, false);
-                host.SetAxState(AxHost.rejectSelection, false);
-                host.SetOcState(OC_INPLACE);
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnInPlaceActivate");
+                _host.SetAxState(s_ownDisposing, false);
+                _host.SetAxState(s_rejectSelection, false);
+                _host.SetOcState(OC_INPLACE);
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleInPlaceSite.OnUIActivate()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnUIActivate for " + host.ToString());
-                host.SetOcState(OC_UIACTIVE);
-                host.GetParentContainer().OnUIActivate(host);
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in OnUIActivate for {_host}");
+                _host.SetOcState(OC_UIACTIVE);
+                _host.GetParentContainer().OnUIActivate(_host);
                 return HRESULT.S_OK;
             }
 
@@ -498,14 +512,14 @@ namespace System.Windows.Forms
                 OLEINPLACEFRAMEINFO* lpFrameInfo)
             {
                 ppDoc = null;
-                ppFrame = host.GetParentContainer();
+                ppFrame = _host.GetParentContainer();
 
                 if (lprcPosRect is null || lprcClipRect is null)
                 {
                     return HRESULT.E_POINTER;
                 }
 
-                *lprcPosRect = host.Bounds;
+                *lprcPosRect = _host.Bounds;
                 *lprcClipRect = WebBrowserHelper.GetClipRect();
                 if (lpFrameInfo is not null)
                 {
@@ -513,7 +527,7 @@ namespace System.Windows.Forms
                     lpFrameInfo->fMDIApp = BOOL.FALSE;
                     lpFrameInfo->hAccel = IntPtr.Zero;
                     lpFrameInfo->cAccelEntries = 0;
-                    lpFrameInfo->hwndFrame = host.ParentInternal.Handle;
+                    lpFrameInfo->hwndFrame = _host.ParentInternal.Handle;
                 }
 
                 return HRESULT.S_OK;
@@ -523,11 +537,11 @@ namespace System.Windows.Forms
 
             HRESULT IOleInPlaceSite.OnUIDeactivate(BOOL fUndoable)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnUIDeactivate for " + host.ToString());
-                host.GetParentContainer().OnUIDeactivate(host);
-                if (host.GetOcState() > OC_INPLACE)
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in OnUIDeactivate for {_host}");
+                _host.GetParentContainer().OnUIDeactivate(_host);
+                if (_host.GetOcState() > OC_INPLACE)
                 {
-                    host.SetOcState(OC_INPLACE);
+                    _host.SetOcState(OC_INPLACE);
                 }
 
                 return HRESULT.S_OK;
@@ -535,28 +549,28 @@ namespace System.Windows.Forms
 
             HRESULT IOleInPlaceSite.OnInPlaceDeactivate()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnInPlaceDeactivate");
-                if (host.GetOcState() == OC_UIACTIVE)
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnInPlaceDeactivate");
+                if (_host.GetOcState() == OC_UIACTIVE)
                 {
                     ((IOleInPlaceSite)this).OnUIDeactivate(0);
                 }
 
-                host.GetParentContainer().OnInPlaceDeactivate(host);
-                host.DetachWindow();
-                host.SetOcState(OC_RUNNING);
+                _host.GetParentContainer().OnInPlaceDeactivate(_host);
+                _host.DetachWindow();
+                _host.SetOcState(OC_RUNNING);
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleInPlaceSite.DiscardUndoState()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in DiscardUndoState");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in DiscardUndoState");
                 return HRESULT.S_OK;
             }
 
             HRESULT IOleInPlaceSite.DeactivateAndUndo()
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in DeactivateAndUndo for " + host.ToString());
-                return host.GetInPlaceObject().UIDeactivate();
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in DeactivateAndUndo for {_host}");
+                return _host.GetInPlaceObject().UIDeactivate();
             }
 
             unsafe HRESULT IOleInPlaceSite.OnPosRectChange(RECT* lprcPosRect)
@@ -572,21 +586,21 @@ namespace System.Windows.Forms
                 // visual basic6 does the same.
                 //
                 bool useRect = true;
-                if (AxHost.windowsMediaPlayer_Clsid.Equals(host.clsid))
+                if (s_windowsMediaPlayer_Clsid.Equals(_host._clsid))
                 {
-                    useRect = host.GetAxState(AxHost.handlePosRectChanged);
+                    useRect = _host.GetAxState(s_handlePosRectChanged);
                 }
 
                 if (useRect)
                 {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnPosRectChange" + lprcPosRect->ToString());
+                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in OnPosRectChange{lprcPosRect->ToString()}");
                     RECT clipRect = WebBrowserHelper.GetClipRect();
-                    host.GetInPlaceObject().SetObjectRects(lprcPosRect, &clipRect);
-                    host.MakeDirty();
+                    _host.GetInPlaceObject().SetObjectRects(lprcPosRect, &clipRect);
+                    _host.MakeDirty();
                 }
                 else
                 {
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Control directly called OnPosRectChange... ignoring the new size");
+                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Control directly called OnPosRectChange... ignoring the new size");
                 }
 
                 return HRESULT.S_OK;
@@ -598,24 +612,24 @@ namespace System.Windows.Forms
             {
                 // Some controls fire OnChanged() notifications when getting values of some properties.
                 // To prevent this kind of recursion, we check to see if we are already inside a OnChanged() call.
-                if (host.NoComponentChangeEvents != 0)
+                if (_host.NoComponentChangeEvents != 0)
                 {
                     return HRESULT.S_OK;
                 }
 
-                host.NoComponentChangeEvents++;
+                _host.NoComponentChangeEvents++;
                 try
                 {
                     AxPropertyDescriptor prop = null;
 
-                    Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnChanged");
+                    Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in OnChanged");
 
                     if (dispid != DispatchID.UNKNOWN)
                     {
-                        prop = host.GetPropertyDescriptorFromDispid(dispid);
+                        prop = _host.GetPropertyDescriptorFromDispid(dispid);
                         if (prop is not null)
                         {
-                            prop.OnValueChanged(host);
+                            prop.OnValueChanged(_host);
                             if (!prop.SettingValue)
                             {
                                 prop.UpdateTypeConverterAndTypeEditor(true);
@@ -625,7 +639,7 @@ namespace System.Windows.Forms
                     else
                     {
                         // update them all for DISPID_UNKNOWN.
-                        PropertyDescriptorCollection props = ((ICustomTypeDescriptor)host).GetProperties();
+                        PropertyDescriptorCollection props = ((ICustomTypeDescriptor)_host).GetProperties();
                         foreach (PropertyDescriptor p in props)
                         {
                             prop = p as AxPropertyDescriptor;
@@ -636,11 +650,11 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    if (host.Site.TryGetService(out IComponentChangeService changeService))
+                    if (_host.Site.TryGetService(out IComponentChangeService changeService))
                     {
                         try
                         {
-                            changeService.OnComponentChanging(host, prop);
+                            changeService.OnComponentChanging(_host, prop);
                         }
                         catch (CheckoutException e) when (e == CheckoutException.Canceled)
                         {
@@ -648,7 +662,7 @@ namespace System.Windows.Forms
                         }
 
                         // Now notify the change service that the change was successful.
-                        changeService.OnComponentChanged(host, prop, oldValue: null, prop?.GetValue(host));
+                        changeService.OnComponentChanged(_host, prop, oldValue: null, prop?.GetValue(_host));
                     }
                 }
                 catch (Exception t)
@@ -658,7 +672,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    host.NoComponentChangeEvents--;
+                    _host.NoComponentChangeEvents--;
                 }
 
                 return HRESULT.S_OK;
@@ -666,7 +680,7 @@ namespace System.Windows.Forms
 
             HRESULT IPropertyNotifySink.OnRequestEdit(DispatchID dispid)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in OnRequestEdit for " + host.ToString());
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"in OnRequestEdit for {_host}");
                 return HRESULT.S_OK;
             }
         }

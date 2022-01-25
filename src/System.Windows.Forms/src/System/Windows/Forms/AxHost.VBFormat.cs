@@ -22,7 +22,7 @@ namespace System.Windows.Forms
                 Ole32.VarFormatFirstWeekOfYear sFirstWeekOfYear,
                 ushort* rcb)
             {
-                Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in Format");
+                Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in Format");
                 if (rcb is null)
                 {
                     return HRESULT.E_INVALIDARG;

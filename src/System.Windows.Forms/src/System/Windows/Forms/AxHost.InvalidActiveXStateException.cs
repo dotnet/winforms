@@ -21,20 +21,13 @@ namespace System.Windows.Forms
             {
             }
 
-            public override string ToString()
+            public override string ToString() => _kind switch
             {
-                switch (_kind)
-                {
-                    case ActiveXInvokeKind.MethodInvoke:
-                        return string.Format(SR.AXInvalidMethodInvoke, _name);
-                    case ActiveXInvokeKind.PropertyGet:
-                        return string.Format(SR.AXInvalidPropertyGet, _name);
-                    case ActiveXInvokeKind.PropertySet:
-                        return string.Format(SR.AXInvalidPropertySet, _name);
-                    default:
-                        return base.ToString();
-                }
-            }
+                ActiveXInvokeKind.MethodInvoke => string.Format(SR.AXInvalidMethodInvoke, _name),
+                ActiveXInvokeKind.PropertyGet => string.Format(SR.AXInvalidPropertyGet, _name),
+                ActiveXInvokeKind.PropertySet => string.Format(SR.AXInvalidPropertySet, _name),
+                _ => base.ToString(),
+            };
         }
     }
 }

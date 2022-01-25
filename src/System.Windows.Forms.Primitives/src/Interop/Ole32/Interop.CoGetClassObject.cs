@@ -13,7 +13,7 @@ internal static partial class Interop
             ref Guid rclsid,
             CLSCTX dwContext,
             IntPtr pvReserved,
-            ref Guid riid,
+            in Guid riid,
             [MarshalAs(UnmanagedType.Interface)] out IClassFactory2 ppv);
     }
 }

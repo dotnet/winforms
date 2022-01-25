@@ -129,7 +129,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 }
 
                 Guid iid = typeof(IPicture).GUID;
-                IPicture pict = (IPicture)OleCreatePictureIndirect(ref pictdesc, ref iid, own);
+                IPicture pict = (IPicture)OleCreatePictureIndirect(ref pictdesc, in iid, own);
                 _lastManaged = managedValue;
                 _lastNativeHandle = (IntPtr)pict.Handle;
                 _pictureRef = new WeakReference(pict);

@@ -8,9 +8,6 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Drawing;
-#if DEBUG
-using System.Globalization;
-#endif
 using System.Runtime.InteropServices;
 using System.Runtime.InteropServices.ComTypes;
 using System.Runtime.Serialization;
@@ -32,22 +29,22 @@ namespace System.Windows.Forms
 
         private const int DATA_S_SAMEFORMATETC = 0x00040130;
 
-        private static readonly TYMED[] ALLOWED_TYMEDS =
-        new TYMED[]
-        {
-            TYMED.TYMED_HGLOBAL,
-            TYMED.TYMED_ISTREAM,
-            TYMED.TYMED_GDI
-        };
+        private static readonly TYMED[] s_allowedTymeds =
+            new TYMED[]
+            {
+                TYMED.TYMED_HGLOBAL,
+                TYMED.TYMED_ISTREAM,
+                TYMED.TYMED_GDI
+            };
 
-        private readonly IDataObject innerData;
+        private readonly IDataObject _innerData;
 
         // We use this to identify that a stream is actually a serialized object.  On read,
         // we don't know if the contents of a stream were saved "raw" or if the stream is really
         // pointing to a serialized object.  If we saved an object, we prefix it with this
         // guid.
-        //
-        private static readonly byte[] serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
+
+        private static readonly byte[] s_serializedObjectID = new Guid("FD9EA796-3B13-4370-A679-56106BB288FB").ToByteArray();
 
         /// <summary>
         ///  Initializes a new instance of the <see cref="DataObject"/> class, with the specified <see cref="IDataObject"/>.
@@ -55,8 +52,8 @@ namespace System.Windows.Forms
         internal DataObject(IDataObject data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IDataObject");
-            innerData = data;
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+            _innerData = data;
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -66,26 +63,25 @@ namespace System.Windows.Forms
         {
             if (data is DataObject)
             {
-                innerData = data as IDataObject;
+                _innerData = data as IDataObject;
             }
             else
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject based on IComDataObject");
-                innerData = new OleConverter(data);
+                _innerData = new OleConverter(data);
             }
 
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
-        ///  Initializes a new instance of the <see cref="DataObject"/>
-        ///  class, which can store arbitrary data.
+        ///  Initializes a new instance of the <see cref="DataObject"/> class, which can store arbitrary data.
         /// </summary>
         public DataObject()
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject standalone");
-            innerData = new DataStore();
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+            _innerData = new DataStore();
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -93,22 +89,22 @@ namespace System.Windows.Forms
         /// </summary>
         public DataObject(object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Constructed DataObject base on Object: " + data.ToString());
-            if (data is IDataObject && !Marshal.IsComObject(data))
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Constructed DataObject base on Object: {data}");
+            if (data is IDataObject dataObject && !Marshal.IsComObject(data))
             {
-                innerData = (IDataObject)data;
+                _innerData = dataObject;
             }
-            else if (data is IComDataObject)
+            else if (data is IComDataObject comDataObject)
             {
-                innerData = new OleConverter((IComDataObject)data);
+                _innerData = new OleConverter(comDataObject);
             }
             else
             {
-                innerData = new DataStore();
+                _innerData = new DataStore();
                 SetData(data);
             }
 
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         /// <summary>
@@ -118,7 +114,7 @@ namespace System.Windows.Forms
         public DataObject(string format, object data) : this()
         {
             SetData(format, data);
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
         }
 
         private Gdi32.HBITMAP GetCompatibleBitmap(Bitmap bm)
@@ -155,99 +151,86 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Retrieves the data associated with the specified data
-        ///  format, using an automated conversion parameter to determine whether to convert
-        ///  the data to the format.
+        ///  Retrieves the data associated with the specified data format, using an automated conversion parameter to
+        ///  determine whether to convert the data to the format.
         /// </summary>
         public virtual object GetData(string format, bool autoConvert)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format + ", " + autoConvert.ToString());
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
-            return innerData.GetData(format, autoConvert);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Request data: {format}, {autoConvert}");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
+            return _innerData.GetData(format, autoConvert);
         }
 
         /// <summary>
-        ///  Retrieves the data associated with the specified data
-        ///  format.
+        ///  Retrieves the data associated with the specified data format.
         /// </summary>
         public virtual object GetData(string format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Request data: {format}");
             return GetData(format, true);
         }
 
         /// <summary>
-        ///  Retrieves the data associated with the specified class
-        ///  type format.
+        ///  Retrieves the data associated with the specified class type format.
         /// </summary>
         public virtual object GetData(Type format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Request data: " + format?.FullName ?? "(null)");
-            if (format is null)
-            {
-                return null;
-            }
-
-            return GetData(format.FullName);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Request data: {format?.FullName ?? "(null)"}");
+            return format is null ? null : GetData(format.FullName);
         }
 
         /// <summary>
-        ///  Determines whether data stored in this instance is
-        ///  associated with, or can be converted to, the specified
-        ///  format.
+        ///  Determines whether data stored in this instance is associated with, or can be converted to,
+        ///  the specified format.
         /// </summary>
         public virtual bool GetDataPresent(Type format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format?.FullName ?? "(null)");
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Check data: {format?.FullName ?? "(null)"}");
             if (format is null)
             {
                 return false;
             }
 
-            bool b = GetDataPresent(format.FullName);
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "  ret: " + b.ToString());
-            return b;
+            bool present = GetDataPresent(format.FullName);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  ret: {present}");
+            return present;
         }
 
         /// <summary>
-        ///  Determines whether data stored in this instance is
-        ///  associated with the specified format, using an automatic conversion
-        ///  parameter to determine whether to convert the data to the format.
+        ///  Determines whether data stored in this instance is associated with the specified format, using an
+        ///  automatic conversion parameter to determine whether to convert the data to the format.
         /// </summary>
         public virtual bool GetDataPresent(string format, bool autoConvert)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format + ", " + autoConvert.ToString());
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
-            bool b = innerData.GetDataPresent(format, autoConvert);
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "  ret: " + b.ToString());
-            return b;
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Check data: {format}, {autoConvert}");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
+            bool present = _innerData.GetDataPresent(format, autoConvert);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  ret: {present}");
+            return present;
         }
 
         /// <summary>
-        ///  Determines whether data stored in this instance is
-        ///  associated with, or can be converted to, the specified
-        ///  format.
+        ///  Determines whether data stored in this instance is associated with, or can be converted to,
+        ///  the specified format.
         /// </summary>
         public virtual bool GetDataPresent(string format)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check data: " + format);
-            bool b = GetDataPresent(format, true);
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "  ret: " + b.ToString());
-            return b;
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Check data: {format}");
+            bool present = GetDataPresent(format, autoConvert: true);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"  ret: {present}");
+            return present;
         }
 
         /// <summary>
-        ///  Gets a list of all formats that data stored in this
-        ///  instance is associated with or can be converted to, using an automatic
-        ///  conversion parameter <paramref name="autoConvert"/> to
-        ///  determine whether to retrieve all formats that the data can be converted to or
-        ///  only native data formats.
+        ///  Gets a list of all formats that data stored in this instance is associated with or can be converted to,
+        ///  using an automatic conversion parameter <paramref name="autoConvert"/> to determine whether to retrieve
+        ///  all formats that the data can be converted to or only native data formats.
         /// </summary>
         public virtual string[] GetFormats(bool autoConvert)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check formats: " + autoConvert.ToString());
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
-            return innerData.GetFormats(autoConvert);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Check formats: {autoConvert}");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
+            return _innerData.GetFormats(autoConvert);
         }
 
         /// <summary>
@@ -257,24 +240,24 @@ namespace System.Windows.Forms
         public virtual string[] GetFormats()
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Check formats:");
-            return GetFormats(true);
+            return GetFormats(autoConvert: true);
         }
 
         // <-- WHIDBEY ADDITIONS
 
         public virtual bool ContainsAudio()
         {
-            return GetDataPresent(DataFormats.WaveAudio, false);
+            return GetDataPresent(DataFormats.WaveAudio, autoConvert: false);
         }
 
         public virtual bool ContainsFileDropList()
         {
-            return GetDataPresent(DataFormats.FileDrop, true);
+            return GetDataPresent(DataFormats.FileDrop, autoConvert: true);
         }
 
         public virtual bool ContainsImage()
         {
-            return GetDataPresent(DataFormats.Bitmap, true);
+            return GetDataPresent(DataFormats.Bitmap, autoConvert: true);
         }
 
         public virtual bool ContainsText()
@@ -287,7 +270,7 @@ namespace System.Windows.Forms
             //valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
-            return GetDataPresent(ConvertToDataFormats(format), false);
+            return GetDataPresent(ConvertToDataFormats(format), autoConvert: false);
         }
 
         public virtual Stream GetAudioStream()
@@ -297,13 +280,13 @@ namespace System.Windows.Forms
 
         public virtual StringCollection GetFileDropList()
         {
-            StringCollection retVal = new StringCollection();
+            StringCollection dropList = new StringCollection();
             if (GetData(DataFormats.FileDrop, true) is string[] strings)
             {
-                retVal.AddRange(strings);
+                dropList.AddRange(strings);
             }
 
-            return retVal;
+            return dropList;
         }
 
         public virtual Image GetImage()
@@ -318,7 +301,7 @@ namespace System.Windows.Forms
 
         public virtual string GetText(TextDataFormat format)
         {
-            //valid values are 0x0 to 0x4
+            // Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             if (GetData(ConvertToDataFormats(format), false) is string text)
@@ -368,31 +351,20 @@ namespace System.Windows.Forms
         {
             textData.ThrowIfNullOrEmpty();
 
-            //valid values are 0x0 to 0x4
+            // Valid values are 0x0 to 0x4
             SourceGenerated.EnumValidator.Validate(format, nameof(format));
 
             SetData(ConvertToDataFormats(format), false, textData);
         }
 
-        private static string ConvertToDataFormats(TextDataFormat format)
+        private static string ConvertToDataFormats(TextDataFormat format) => format switch
         {
-            switch (format)
-            {
-                case TextDataFormat.UnicodeText:
-                    return DataFormats.UnicodeText;
-
-                case TextDataFormat.Rtf:
-                    return DataFormats.Rtf;
-
-                case TextDataFormat.Html:
-                    return DataFormats.Html;
-
-                case TextDataFormat.CommaSeparatedValue:
-                    return DataFormats.CommaSeparatedValue;
-            }
-
-            return DataFormats.UnicodeText;
-        }
+            TextDataFormat.UnicodeText => DataFormats.UnicodeText,
+            TextDataFormat.Rtf => DataFormats.Rtf,
+            TextDataFormat.Html => DataFormats.Html,
+            TextDataFormat.CommaSeparatedValue => DataFormats.CommaSeparatedValue,
+            _ => DataFormats.UnicodeText,
+        };
 
         // END - WHIDBEY ADDITIONS -->
 
@@ -448,9 +420,9 @@ namespace System.Windows.Forms
         /// </summary>
         private bool GetTymedUseable(TYMED tymed)
         {
-            for (int i = 0; i < ALLOWED_TYMEDS.Length; i++)
+            for (int i = 0; i < s_allowedTymeds.Length; i++)
             {
-                if ((tymed & ALLOWED_TYMEDS[i]) != 0)
+                if ((tymed & s_allowedTymeds[i]) != 0)
                 {
                     return true;
                 }
@@ -463,42 +435,37 @@ namespace System.Windows.Forms
         ///  Populates Ole datastructes from a WinForms dataObject. This is the core
         ///  of WinForms to OLE conversion.
         /// </summary>
-        private void GetDataIntoOleStructs(ref FORMATETC formatetc,
-                                           ref STGMEDIUM medium)
+        private void GetDataIntoOleStructs(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
-            if (GetTymedUseable(formatetc.tymed) && GetTymedUseable(medium.tymed))
+            if (!GetTymedUseable(formatetc.tymed) || !GetTymedUseable(medium.tymed))
             {
-                string format = DataFormats.GetFormat(formatetc.cfFormat).Name;
+                Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
+            }
 
-                if (GetDataPresent(format))
+            string format = DataFormats.GetFormat(formatetc.cfFormat).Name;
+
+            if (!GetDataPresent(format))
+            {
+                Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_FORMATETC);
+            }
+
+            object data = GetData(format);
+
+            if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
+            {
+                HRESULT hr = SaveDataToHandle(data, format, ref medium);
+                if (hr.Failed())
                 {
-                    object data = GetData(format);
-
-                    if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
-                    {
-                        HRESULT hr = SaveDataToHandle(data, format, ref medium);
-                        if (hr.Failed())
-                        {
-                            Marshal.ThrowExceptionForHR((int)hr);
-                        }
-                    }
-                    else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
-                    {
-                        if (format.Equals(DataFormats.Bitmap) && data is Bitmap bm
-                            && bm is not null)
-                        {
-                            // save bitmap
-                            medium.unionmember = (IntPtr)GetCompatibleBitmap(bm);
-                        }
-                    }
-                    else
-                    {
-                        Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
-                    }
+                    Marshal.ThrowExceptionForHR((int)hr);
                 }
-                else
+            }
+            else if ((formatetc.tymed & TYMED.TYMED_GDI) != 0)
+            {
+                if (format.Equals(DataFormats.Bitmap) && data is Bitmap bm
+                    && bm is not null)
                 {
-                    Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_FORMATETC);
+                    // Save bitmap
+                    medium.unionmember = (IntPtr)GetCompatibleBitmap(bm);
                 }
             }
             else
@@ -508,14 +475,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         int IComDataObject.DAdvise(ref FORMATETC pFormatetc, ADVF advf, IAdviseSink pAdvSink, out int pdwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DAdvise");
-            if (innerData is OleConverter)
+            if (_innerData is OleConverter converter)
             {
-                return ((OleConverter)innerData).OleDataObject.DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
+                return converter.OleDataObject.DAdvise(ref pFormatetc, advf, pAdvSink, out pdwConnection);
             }
 
             pdwConnection = 0;
@@ -523,14 +490,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         void IComDataObject.DUnadvise(int dwConnection)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DUnadvise");
-            if (innerData is OleConverter)
+            if (_innerData is OleConverter converter)
             {
-                ((OleConverter)innerData).OleDataObject.DUnadvise(dwConnection);
+                converter.OleDataObject.DUnadvise(dwConnection);
                 return;
             }
 
@@ -538,14 +505,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         int IComDataObject.EnumDAdvise(out IEnumSTATDATA enumAdvise)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumDAdvise");
-            if (innerData is OleConverter)
+            if (_innerData is OleConverter converter)
             {
-                return ((OleConverter)innerData).OleDataObject.EnumDAdvise(out enumAdvise);
+                return converter.OleDataObject.EnumDAdvise(out enumAdvise);
             }
 
             enumAdvise = null;
@@ -553,14 +520,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         IEnumFORMATETC IComDataObject.EnumFormatEtc(DATADIR dwDirection)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "EnumFormatEtc: " + dwDirection.ToString());
-            if (innerData is OleConverter innerDataOleConverter)
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"EnumFormatEtc: {dwDirection}");
+            if (_innerData is OleConverter converter)
             {
-                return innerDataOleConverter.OleDataObject.EnumFormatEtc(dwDirection);
+                return converter.OleDataObject.EnumFormatEtc(dwDirection);
             }
 
             if (dwDirection == DATADIR.DATADIR_GET)
@@ -572,14 +539,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        /// Part of IComDataObject, used to interop with OLE.
         /// </summary>
         int IComDataObject.GetCanonicalFormatEtc(ref FORMATETC pformatetcIn, out FORMATETC pformatetcOut)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetCanonicalFormatEtc");
-            if (innerData is OleConverter innerDataOleConverter)
+            if (_innerData is OleConverter converter)
             {
-                return innerDataOleConverter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
+                return converter.OleDataObject.GetCanonicalFormatEtc(ref pformatetcIn, out pformatetcOut);
             }
 
             pformatetcOut = new FORMATETC();
@@ -587,64 +554,62 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         void IComDataObject.GetData(ref FORMATETC formatetc, out STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetData");
-            if (innerData is OleConverter)
+            if (_innerData is OleConverter converter)
             {
-                ((OleConverter)innerData).OleDataObject.GetData(ref formatetc, out medium);
+                converter.OleDataObject.GetData(ref formatetc, out medium);
                 return;
             }
 
             medium = new STGMEDIUM();
 
-            if (GetTymedUseable(formatetc.tymed))
+            if (!GetTymedUseable(formatetc.tymed))
             {
-                if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
-                {
-                    medium.tymed = TYMED.TYMED_HGLOBAL;
-                    medium.unionmember = Kernel32.GlobalAlloc(
-                        Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
-                        1);
-                    if (medium.unionmember == IntPtr.Zero)
-                    {
-                        throw new OutOfMemoryException();
-                    }
+                Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
+            }
 
-                    try
-                    {
-                        ((IComDataObject)this).GetDataHere(ref formatetc, ref medium);
-                    }
-                    catch
-                    {
-                        Kernel32.GlobalFree(medium.unionmember);
-                        medium.unionmember = IntPtr.Zero;
-                        throw;
-                    }
-                }
-                else
+            if ((formatetc.tymed & TYMED.TYMED_HGLOBAL) != 0)
+            {
+                medium.tymed = TYMED.TYMED_HGLOBAL;
+                medium.unionmember = Kernel32.GlobalAlloc(
+                    Kernel32.GMEM.MOVEABLE | Kernel32.GMEM.DDESHARE | Kernel32.GMEM.ZEROINIT,
+                    1);
+                if (medium.unionmember == IntPtr.Zero)
                 {
-                    medium.tymed = formatetc.tymed;
+                    throw new OutOfMemoryException();
+                }
+
+                try
+                {
                     ((IComDataObject)this).GetDataHere(ref formatetc, ref medium);
+                }
+                catch
+                {
+                    Kernel32.GlobalFree(medium.unionmember);
+                    medium.unionmember = IntPtr.Zero;
+                    throw;
                 }
             }
             else
             {
-                Marshal.ThrowExceptionForHR((int)HRESULT.DV_E_TYMED);
+                medium.tymed = formatetc.tymed;
+                ((IComDataObject)this).GetDataHere(ref formatetc, ref medium);
             }
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         void IComDataObject.GetDataHere(ref FORMATETC formatetc, ref STGMEDIUM medium)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "GetDataHere");
-            if (innerData is OleConverter)
+            if (_innerData is OleConverter converter)
             {
-                ((OleConverter)innerData).OleDataObject.GetDataHere(ref formatetc, ref medium);
+                converter.OleDataObject.GetDataHere(ref formatetc, ref medium);
             }
             else
             {
@@ -653,14 +618,14 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         int IComDataObject.QueryGetData(ref FORMATETC formatetc)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData");
-            if (innerData is OleConverter)
+            if (_innerData is OleConverter converter)
             {
-                return ((OleConverter)innerData).OleDataObject.QueryGetData(ref formatetc);
+                return converter.OleDataObject.QueryGetData(ref formatetc);
             }
 
             if (formatetc.dwAspect == DVASPECT.DVASPECT_CONTENT)
@@ -669,7 +634,9 @@ namespace System.Windows.Forms
                 {
                     if (formatetc.cfFormat == 0)
                     {
-                        Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData::returning S_FALSE because cfFormat == 0");
+                        Debug.WriteLineIf(
+                            CompModSwitches.DataObject.TraceVerbose,
+                            "QueryGetData::returning S_FALSE because cfFormat == 0");
                         return (int)HRESULT.S_FALSE;
                     }
                     else if (!GetDataPresent(DataFormats.GetFormat(formatetc.cfFormat).Name))
@@ -686,22 +653,23 @@ namespace System.Windows.Forms
             {
                 return (int)HRESULT.DV_E_DVASPECT;
             }
-#if DEBUG
-            int format = unchecked((ushort)formatetc.cfFormat);
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "QueryGetData::cfFormat " + format.ToString(CultureInfo.InvariantCulture) + " found");
-#endif
+
+            Debug.WriteLineIf(
+                CompModSwitches.DataObject.TraceVerbose,
+                $"QueryGetData::cfFormat {(ushort)formatetc.cfFormat} found");
+
             return (int)HRESULT.S_OK;
         }
 
         /// <summary>
-        ///     Part of IComDataObject, used to interop with OLE.
+        ///  Part of IComDataObject, used to interop with OLE.
         /// </summary>
         void IComDataObject.SetData(ref FORMATETC pFormatetcIn, ref STGMEDIUM pmedium, bool fRelease)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "SetData");
-            if (innerData is OleConverter)
+            if (_innerData is OleConverter converter)
             {
-                ((OleConverter)innerData).OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
+                converter.OleDataObject.SetData(ref pFormatetcIn, ref pmedium, fRelease);
                 return;
             }
 
@@ -715,21 +683,21 @@ namespace System.Windows.Forms
         /// <returns>true - serialize only safe types, strings or bitmaps.</returns>
         private static bool RestrictDeserializationToSafeTypes(string format)
         {
-            return (format.Equals(DataFormats.StringFormat) ||
-                    format.Equals(typeof(Bitmap).FullName) ||
-                    format.Equals(DataFormats.CommaSeparatedValue) ||
-                    format.Equals(DataFormats.Dib) ||
-                    format.Equals(DataFormats.Dif) ||
-                    format.Equals(DataFormats.Locale) ||
-                    format.Equals(DataFormats.PenData) ||
-                    format.Equals(DataFormats.Riff) ||
-                    format.Equals(DataFormats.SymbolicLink) ||
-                    format.Equals(DataFormats.Tiff) ||
-                    format.Equals(DataFormats.WaveAudio) ||
-                    format.Equals(DataFormats.Bitmap) ||
-                    format.Equals(DataFormats.EnhancedMetafile) ||
-                    format.Equals(DataFormats.Palette) ||
-                    format.Equals(DataFormats.MetafilePict));
+            return format.Equals(DataFormats.StringFormat)
+                || format.Equals(typeof(Bitmap).FullName)
+                || format.Equals(DataFormats.CommaSeparatedValue)
+                || format.Equals(DataFormats.Dib)
+                || format.Equals(DataFormats.Dif)
+                || format.Equals(DataFormats.Locale)
+                || format.Equals(DataFormats.PenData)
+                || format.Equals(DataFormats.Riff)
+                || format.Equals(DataFormats.SymbolicLink)
+                || format.Equals(DataFormats.Tiff)
+                || format.Equals(DataFormats.WaveAudio)
+                || format.Equals(DataFormats.Bitmap)
+                || format.Equals(DataFormats.EnhancedMetafile)
+                || format.Equals(DataFormats.Palette)
+                || format.Equals(DataFormats.MetafilePict);
         }
 
         private HRESULT SaveDataToHandle(object data, string format, ref STGMEDIUM medium)
@@ -740,8 +708,8 @@ namespace System.Windows.Forms
                 hr = SaveStreamToHandle(ref medium.unionmember, dataStream);
             }
             else if (format.Equals(DataFormats.Text)
-                     || format.Equals(DataFormats.Rtf)
-                     || format.Equals(DataFormats.OemText))
+                || format.Equals(DataFormats.Rtf)
+                || format.Equals(DataFormats.OemText))
             {
                 hr = SaveStringToHandle(medium.unionmember, data.ToString(), false);
             }
@@ -774,10 +742,10 @@ namespace System.Windows.Forms
                 hr = HRESULT.DV_E_TYMED;
             }
             else if (format.Equals(DataFormats.Serializable)
-                     || data is ISerializable
-                     || (data is not null && data.GetType().IsSerializable))
+                || data is ISerializable
+                || (data is not null && data.GetType().IsSerializable))
             {
-                hr = SaveObjectToHandle(ref medium.unionmember, data, DataObject.RestrictDeserializationToSafeTypes(format));
+                hr = SaveObjectToHandle(ref medium.unionmember, data, RestrictDeserializationToSafeTypes(format));
             }
 
             return hr;
@@ -787,7 +755,7 @@ namespace System.Windows.Forms
         {
             Stream stream = new MemoryStream();
             BinaryWriter bw = new BinaryWriter(stream);
-            bw.Write(serializedObjectID);
+            bw.Write(s_serializedObjectID);
             SaveObjectToHandleSerializer(stream, data, restrictSerialization);
             return SaveStreamToHandle(ref handle, stream);
         }
@@ -919,8 +887,8 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Save string to handle. If unicode is set to true
-        ///  then the string is saved as Unicode, else it is saves as DBCS.
+        ///  Save string to handle. If unicode is set to true then the string is saved as Unicode,
+        ///  else it is saves as DBCS.
         /// </summary>
         private unsafe HRESULT SaveStringToHandle(IntPtr handle, string str, bool unicode)
         {
@@ -1019,50 +987,48 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        ///  Stores the specified data and its associated format in
-        ///  this instance, using the automatic conversion parameter
-        ///  to specify whether the
-        ///  data can be converted to another format.
+        ///  Stores the specified data and its associated format in this instance, using the automatic conversion
+        ///  parameter to specify whether the data can be converted to another format.
         /// </summary>
         public virtual void SetData(string format, bool autoConvert, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
-            innerData.SetData(format, autoConvert, data);
+            Debug.WriteLineIf(
+                CompModSwitches.DataObject.TraceVerbose,
+                $"Set data: {format}, {autoConvert}, {data ?? "(null)"}");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
+            _innerData.SetData(format, autoConvert, data);
         }
 
         /// <summary>
-        ///  Stores the specified data and its associated format in this
-        ///  instance.
+        ///  Stores the specified data and its associated format in this instance.
         /// </summary>
         public virtual void SetData(string format, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
-            innerData.SetData(format, data);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Set data: {format}, {data ?? "(null)"}");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
+            _innerData.SetData(format, data);
         }
 
         /// <summary>
-        ///  Stores the specified data and
-        ///  its
-        ///  associated class type in this instance.
+        ///  Stores the specified data and its associated class type in this instance.
         /// </summary>
         public virtual void SetData(Type format, object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
-            innerData.SetData(format, data);
+            Debug.WriteLineIf(
+                CompModSwitches.DataObject.TraceVerbose,
+                $"Set data: {format?.FullName ?? "(null)"}, {data ?? "(null)"}");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
+            _innerData.SetData(format, data);
         }
 
         /// <summary>
-        ///  Stores the specified data in
-        ///  this instance, using the class of the data for the format.
+        ///  Stores the specified data in this instance, using the class of the data for the format.
         /// </summary>
         public virtual void SetData(object data)
         {
-            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "Set data: " + data?.ToString() ?? "(null)");
-            Debug.Assert(innerData is not null, "You must have an innerData on all DataObjects");
-            innerData.SetData(data);
+            Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Set data: {data ?? "(null)"}");
+            Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
+            _innerData.SetData(data);
         }
     }
 }
