@@ -15,6 +15,10 @@ namespace System.Windows.Forms.UITests
 {
     public class MonthCalendarTests : ControlTestBase
     {
+        private static readonly DateTime CurrentDate = new(2021, 12, 1);
+        private static readonly DateTime MaxDate = new(2021, 12, 3, 18, 0, 0);
+        private static readonly DateTime MinDate = new(2021, 11, 30, 17, 0, 0);
+
         public MonthCalendarTests(ITestOutputHelper testOutputHelper)
             : base(testOutputHelper)
         {
@@ -25,10 +29,6 @@ namespace System.Windows.Forms.UITests
         {
             await RunTestAsync(async (form, calendar) =>
             {
-                calendar.MinDate = new DateTime(2020, 4, 9);
-                calendar.MaxDate = new DateTime(2020, 4, 27);
-                calendar.SetDate(new DateTime(2020, 4, 14));
-
                 await MoveMouseToControlAsync(calendar);
                 await InputSimulator.SendAsync(
                     form,
@@ -41,10 +41,6 @@ namespace System.Windows.Forms.UITests
         {
             await RunTestAsync(async (form, calendar) =>
             {
-                calendar.MinDate = new DateTime(2020, 4, 9);
-                calendar.MaxDate = new DateTime(2020, 4, 27);
-                calendar.SetDate(new DateTime(2020, 4, 14));
-
                 await InputSimulator.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Keyboard
@@ -58,10 +54,6 @@ namespace System.Windows.Forms.UITests
         {
             await RunTestAsync(async (form, calendar) =>
             {
-                calendar.MinDate = new DateTime(2020, 4, 9);
-                calendar.MaxDate = new DateTime(2020, 4, 27);
-                calendar.SetDate(new DateTime(2020, 4, 14));
-
                 await InputSimulator.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Keyboard
@@ -91,44 +83,46 @@ namespace System.Windows.Forms.UITests
         }
 
         [WinFormsTheory]
-        [InlineData(-1)]
+        [InlineData(-1)] // Min date
         [InlineData(1)]
-        [InlineData(2)]
+        [InlineData(2)] // Max date
         public async Task MonthCalendar_Click_Date_InvokeEventsAsync(int delta)
         {
-            await RunTestAsync(async (form, calendar) =>
+            await RunClickTestAsync(async (form, calendar) =>
             {
-                DateTime newDate = DateTime.Today.AddDays(delta);
-                (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData
-                    = await InvokeActionWithMinimumMaximumAsync(calendar, (calendar) => ClickOnDateAsync(form, calendar, newDate));
+                calendar.SetDate(CurrentDate);
+                DateTime newDate = CurrentDate.Date.AddDays(delta);
+                int callDateSelectedCount = 0;
+                int callDateChangedCount = 0;
+                calendar.DateSelected += (object? sender, DateRangeEventArgs e) => callDateSelectedCount++;
+                calendar.DateChanged += (object? sender, DateRangeEventArgs e) => callDateChangedCount++;
+                await ClickOnDateAsync(form, calendar, newDate);
 
-                Assert.Equal(newDate.Date, testData.SelectedDate.Date);
-                Assert.NotEqual(0, testData.CallDateSelectedCount);
-                Assert.NotEqual(0, testData.CallDateChangedCount);
+                Assert.Equal(newDate.Date, calendar.SelectionStart.Date);
+                Assert.NotEqual(0, callDateSelectedCount);
+                Assert.NotEqual(0, callDateChangedCount);
             });
         }
 
         [WinFormsTheory]
-        [InlineData(-1)]
+        [InlineData(-1)] // Min date
         [InlineData(1)]
-        [InlineData(2)]
+        [InlineData(2)] // Max date
         public async Task MonthCalendar_DoubleClick_Date_InvokeEventsAsync(int delta)
         {
-            await RunTestAsync(async (form, calendar) =>
+            await RunClickTestAsync(async (form, calendar) =>
             {
-                calendar.CalendarDimensions = new Size(2, 1);
-                calendar.Size = new Size(500, 150);
-                DateTime newDate = DateTime.Today.AddDays(delta);
+                calendar.SetDate(CurrentDate);
+                DateTime newDate = CurrentDate.Date.AddDays(delta);
+                int callDateSelectedCount = 0;
+                int callDateChangedCount = 0;
+                calendar.DateSelected += (object? sender, DateRangeEventArgs e) => callDateSelectedCount++;
+                calendar.DateChanged += (object? sender, DateRangeEventArgs e) => callDateChangedCount++;
+                await ClickOnDateTwiceAsync(form, calendar, newDate);
 
-                (int CallDateSelectedCount, int CallDateChangedCount, DateTime SelectedDate) testData
-                   = await InvokeActionWithMinimumMaximumAsync(calendar, (calendar) => ClickOnDateTwiceAsync(form, calendar, newDate));
-
-                // For some reasons double click for previous month's date raise only one DateSelected event.
-                int expected = calendar.MinDate == newDate && DateTime.Today.Month != newDate.Month ? 1 : 2;
-
-                Assert.Equal(expected, testData.CallDateSelectedCount);
-                Assert.Equal(1, testData.CallDateChangedCount);
-                Assert.Equal(testData.SelectedDate.Date, newDate.Date);
+                Assert.Equal(newDate.Date, calendar.SelectionStart.Date);
+                Assert.NotEqual(0, callDateSelectedCount);
+                Assert.NotEqual(0, callDateChangedCount);
             });
         }
 
@@ -189,26 +183,6 @@ namespace System.Windows.Forms.UITests
             return accessibleObject.TestAccessor().Dynamic.GetCellByDate(dateTime.Date).Bounds.Location;
         }
 
-        private async Task<(int callDateSelectedCount, int callDateChangedCount, DateTime selectedDate)> InvokeActionWithMinimumMaximumAsync(
-            MonthCalendar calendar,
-            Func<MonthCalendar, Task> actionAsync)
-        {
-            int callDateSelectedCount = 0;
-            int callDateChangedCount = 0;
-
-            calendar.MinDate = DateTime.Now.AddDays(-1);
-            calendar.MaxDate = DateTime.Now.AddDays(2);
-            calendar.DateSelected += calendar_DateSelected;
-            calendar.DateChanged += calendar_DateChanged;
-
-            await actionAsync(calendar);
-
-            return (callDateSelectedCount, callDateChangedCount, calendar.SelectionStart.Date);
-
-            void calendar_DateSelected(object? sender, DateRangeEventArgs e) => callDateSelectedCount++;
-            void calendar_DateChanged(object? sender, DateRangeEventArgs e) => callDateChangedCount++;
-        }
-
         private async Task ClickOnDateAsync(Form form, MonthCalendar calendar, DateTime date)
         {
             await MoveMouseAsync(form, GetCellPositionByDate(calendar, date));
@@ -226,6 +200,30 @@ namespace System.Windows.Forms.UITests
                                                 .LeftButtonClick()
                                                 .Sleep(500)
                                                 .LeftButtonClick());
+        }
+
+        private async Task RunClickTestAsync(Func<Form, MonthCalendar, Task> runTest)
+        {
+            await RunSingleControlTestAsync(
+                testDriverAsync: runTest,
+                createControl: () =>
+                {
+                    MonthCalendar control = new()
+                    {
+                        Location = new Point(0, 0),
+                        MinDate = MinDate,
+                        MaxDate = MaxDate
+                    };
+
+                    return control;
+                },
+                createForm: () =>
+                {
+                    return new()
+                    {
+                        Size = new(500, 300),
+                    };
+                });
         }
 
         private async Task RunTestAsync(Func<Form, MonthCalendar, Task> runTest)

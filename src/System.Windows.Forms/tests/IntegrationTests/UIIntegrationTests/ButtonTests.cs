@@ -30,7 +30,7 @@ namespace System.Windows.Forms.UITests
         [InlineData(DialogResult.None)]
         public async Task Button_DialogResult_ClickDefaultButtonToCloseFormAsync(DialogResult dialogResult)
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 Assert.Equal(DialogResult.None, button.DialogResult);
 
@@ -57,7 +57,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_DialogResult_SpaceToClickFocusedButtonAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 button.DialogResult = DialogResult.OK;
 
@@ -75,7 +75,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_DialogResult_EscapeDoesNotClickFocusedButtonAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 button.DialogResult = DialogResult.OK;
 
@@ -93,7 +93,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_CancelButton_EscapeClicksCancelButtonAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 form.CancelButton = button;
 
@@ -109,7 +109,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_AchorNone_NoResizeOnWindowSizeWiderAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 var originalFormSize = form.DisplayRectangle.Size;
                 var originalButtonPosition = button.DisplayRectangle;
@@ -133,12 +133,12 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_AchorNone_NoResizeOnWindowSizeTallerAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 var originalFormSize = form.DisplayRectangle.Size;
                 var originalButtonPosition = button.DisplayRectangle;
 
-                var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom + 1);
+                var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom);
                 await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
                 await InputSimulator.SendAsync(
@@ -157,7 +157,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_Anchor_ResizeOnWindowSizeWiderAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 button.Anchor = AnchorStyles.Left | AnchorStyles.Right;
 
@@ -187,14 +187,14 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_Anchor_ResizeOnWindowSizeTallerAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 button.Anchor = AnchorStyles.Top | AnchorStyles.Bottom;
 
                 var originalFormSize = form.DisplayRectangle.Size;
                 var originalButtonPosition = button.DisplayRectangle;
 
-                var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom + 1);
+                var mouseDragHandleOnForm = new Point(form.DisplayRectangle.Left + form.DisplayRectangle.Width / 2, form.DisplayRectangle.Bottom);
                 await MoveMouseAsync(form, form.PointToScreen(mouseDragHandleOnForm));
 
                 await InputSimulator.SendAsync(
@@ -215,34 +215,44 @@ namespace System.Windows.Forms.UITests
         }
 
         [WinFormsFact]
-        public async Task Button_Click_DragAfterMouseDownAsync()
+        public async Task Button_Mouse_Press_Without_Moving_Causes_Button_ClickAsync()
         {
             await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
             {
                 (Button control1, Button control2) = controls;
-
                 int control1ClickCount = 0;
                 int control2ClickCount = 0;
                 control1.Click += (sender, e) => control1ClickCount++;
                 control2.Click += (sender, e) => control2ClickCount++;
 
-                // Verify mouse press without moving causes a button click
                 await MoveMouseToControlAsync(control1);
                 await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().LeftButtonUp());
+
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(0, control2ClickCount);
 
-                // Verify mouse press without moving causes a button click
                 await MoveMouseToControlAsync(control2);
                 await InputSimulator.SendAsync(form, inputSimulator => inputSimulator.Mouse.LeftButtonDown().LeftButtonUp());
+
                 Assert.Equal(1, control1ClickCount);
                 Assert.Equal(1, control2ClickCount);
+            });
+        }
 
-                // Verify that mouse press and then drag off the button does not cause a button click of either button
+        [WinFormsFact]
+        public async Task Button_Mouse_Press_With_Drag_Off_Button_Does_Not_Cause_Button_ClickAsync()
+        {
+            await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
+            {
+                (Button control1, Button control2) = controls;
+                int control1ClickCount = 0;
+                int control2ClickCount = 0;
+                control1.Click += (sender, e) => control1ClickCount++;
+                control2.Click += (sender, e) => control2ClickCount++;
+
                 await MoveMouseToControlAsync(control1);
-
                 Rectangle rect = control2.DisplayRectangle;
-                Point centerOfRect = new Point(rect.Left, rect.Top) + new Size(rect.Width / 2, rect.Height / 2);
+                Point centerOfRect = GetCenter(rect);
                 Point centerOnScreen = control2.PointToScreen(centerOfRect);
                 int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
                 int verticalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
@@ -252,45 +262,55 @@ namespace System.Windows.Forms.UITests
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1)
+                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
                         .LeftButtonUp());
 
-                ////Assert.False(control1.MouseIsOver);
-                ////Assert.True(control2.MouseIsOver);
+                Assert.Equal(0, control1ClickCount);
+                Assert.Equal(0, control2ClickCount);
+            });
+        }
 
-                Assert.Equal(1, control1ClickCount);
-                Assert.Equal(1, control2ClickCount);
+        [WinFormsFact]
+        public async Task Button_Mouse_Press_With_Drag_Off_Button_And_Back_Does_Cause_Button_ClickAsync()
+        {
+            await RunControlPairTestAsync<Button, Button>(async (form, controls) =>
+            {
+                (Button control1, Button control2) = controls;
+                int control1ClickCount = 0;
+                int control2ClickCount = 0;
+                control1.Click += (sender, e) => control1ClickCount++;
+                control2.Click += (sender, e) => control2ClickCount++;
 
-                // Verify that mouse press and then drag off the button and back causes a button click
                 await MoveMouseToControlAsync(control1);
-
+                Rectangle rect = control2.DisplayRectangle;
+                Point centerOfRect = GetCenter(rect);
+                Point centerOnScreen = control2.PointToScreen(centerOfRect);
                 Rectangle rect1 = control1.DisplayRectangle;
                 Point centerOfRect1 = new Point(rect1.Left, rect1.Top) + new Size(rect1.Width / 2, rect1.Height / 2);
                 Point centerOnScreen1 = control1.PointToScreen(centerOfRect1);
+                int horizontalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
+                int verticalResolution = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
+                var virtualPoint = new Point((int)Math.Round(65535.0 / horizontalResolution * centerOnScreen.X), (int)Math.Round(65535.0 / verticalResolution * centerOnScreen.Y));
                 int horizontalResolution1 = User32.GetSystemMetrics(User32.SystemMetric.SM_CXSCREEN);
                 int verticalResolution1 = User32.GetSystemMetrics(User32.SystemMetric.SM_CYSCREEN);
                 var virtualPoint1 = new Point((int)Math.Round(65535.0 / horizontalResolution1 * centerOnScreen1.X), (int)Math.Round(65535.0 / verticalResolution1 * centerOnScreen1.Y));
-
                 await InputSimulator.SendAsync(
                     form,
                     inputSimulator => inputSimulator.Mouse
                         .LeftButtonDown()
-                        .MoveMouseTo(virtualPoint.X + 1, virtualPoint.Y + 1)
-                        .MoveMouseTo(virtualPoint1.X + 1, virtualPoint1.Y + 1)
+                        .MoveMouseTo(virtualPoint.X, virtualPoint.Y)
+                        .MoveMouseTo(virtualPoint1.X, virtualPoint1.Y)
                         .LeftButtonUp());
 
-                ////Assert.False(control1.MouseIsOver);
-                ////Assert.True(control2.MouseIsOver);
-
-                Assert.Equal(2, control1ClickCount);
-                Assert.Equal(1, control2ClickCount);
+                Assert.Equal(1, control1ClickCount);
+                Assert.Equal(0, control2ClickCount);
             });
         }
 
         [WinFormsFact]
         public async Task Button_PerformClick_Fires_OnClickAsync()
         {
-            await RunSingleControlTestAsync<Button>((form, button) =>
+            await RunTestAsync((form, button) =>
             {
                 bool wasClicked = false;
                 button.Click += (x, y) => wasClicked = true;
@@ -304,10 +324,31 @@ namespace System.Windows.Forms.UITests
         }
 
         [WinFormsFact]
+        public async Task Button_Press_Enter_Fires_OnClickAsync()
+        {
+            await RunTestAsync(async (form, button) =>
+            {
+                bool wasClicked = false;
+
+                button.Text = "&Click";
+                button.Click += (x, y) => wasClicked = true;
+                await MoveMouseToControlAsync(button);
+
+                // Send the Enter press
+                await InputSimulator.SendAsync(
+                    form,
+                    inputSimulator => inputSimulator.Keyboard.KeyPress(VirtualKeyCode.RETURN));
+
+                Assert.True(wasClicked);
+            });
+        }
+
+        [WinFormsFact]
         public async Task Button_Hotkey_Fires_OnClickAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
+                Assert.True(InputLanguage.CurrentInputLanguage.LayoutName == "US", "Please, switch to the US input language");
                 bool wasClicked = false;
 
                 button.Text = "&Click";
@@ -325,7 +366,7 @@ namespace System.Windows.Forms.UITests
         [WinFormsFact]
         public async Task Button_Hotkey_DoesNotFire_OnClickAsync()
         {
-            await RunSingleControlTestAsync<Button>(async (form, button) =>
+            await RunTestAsync(async (form, button) =>
             {
                 bool wasClicked = false;
 
@@ -339,6 +380,35 @@ namespace System.Windows.Forms.UITests
 
                 Assert.False(wasClicked);
             });
+        }
+
+        private static Point GetCenter(Rectangle rect)
+        {
+            int x = rect.Left + ((rect.Right - rect.Left) / 2);
+            int y = rect.Top + ((rect.Bottom - rect.Top) / 2);
+            return new Point(x, y);
+        }
+
+        private async Task RunTestAsync(Func<Form, Button, Task> runTest)
+        {
+            await RunSingleControlTestAsync(
+                testDriverAsync: runTest,
+                createControl: () =>
+                {
+                    Button control = new()
+                    {
+                        Location = new Point(0, 0),
+                    };
+
+                    return control;
+                },
+                createForm: () =>
+                {
+                    return new()
+                    {
+                        Size = new(500, 300),
+                    };
+                });
         }
     }
 }
