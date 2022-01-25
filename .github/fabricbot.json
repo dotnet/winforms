@@ -1257,5 +1257,193 @@
         }
       ]
     }
+  },
+  {
+    "taskType": "trigger",
+    "capabilityId": "IssueResponder",
+    "subCapability": "IssueCommentResponder",
+    "version": "1.0",
+    "config": {
+      "conditions": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "name": "isOpen",
+                "parameters": {}
+              }
+            ]
+          },
+          {
+            "name": "isAction",
+            "parameters": {
+              "action": "created"
+            }
+          }
+        ]
+      },
+      "eventType": "issue",
+      "eventNames": [
+        "issue_comment"
+      ],
+      "actions": [
+        {
+          "name": "addReply",
+          "parameters": {
+            "comment": "Hi @${contextualAuthor}, it looks like you just commented on a closed issue. The team will most probably miss it. \nIf you have a question - consider opening a new discussion thread. Alternatively, you'd like to bring something important up to their attention, consider filing a new issue and add enough details to build context."
+          }
+        }
+      ],
+      "taskName": "Respond to a comment on closed issue"
+    }
+  },
+  {
+    "taskType": "trigger",
+    "capabilityId": "IssueResponder",
+    "subCapability": "PullRequestCommentResponder",
+    "version": "1.0",
+    "config": {
+      "conditions": {
+        "operator": "and",
+        "operands": [
+          {
+            "operator": "not",
+            "operands": [
+              {
+                "name": "isOpen",
+                "parameters": {}
+              }
+            ]
+          },
+          {
+            "name": "isAction",
+            "parameters": {
+              "action": "created"
+            }
+          }
+        ]
+      },
+      "eventType": "pull_request",
+      "eventNames": [
+        "issue_comment"
+      ],
+      "taskName": "Respond to a comment on closed PR",
+      "actions": [
+        {
+          "name": "addReply",
+          "parameters": {
+            "comment": "Hi @${contextualAuthor}, it looks like you just commented on a closed PR. The team will most probably miss it. \nIf you have a question - consider opening a new discussion thread. Alternatively, you'd like to bring something important up to their attention, consider filing a new issue and add enough details to build context."
+          }
+        }
+      ]
+    }
+  },
+  {
+    "taskType": "scheduled",
+    "capabilityId": "ScheduledSearch",
+    "subCapability": "ScheduledSearch",
+    "version": "1.1",
+    "config": {
+      "frequency": [
+        {
+          "weekDay": 0,
+          "hours": [
+            1,
+            7,
+            13,
+            19
+          ],
+          "timezoneOffset": 0
+        },
+        {
+          "weekDay": 1,
+          "hours": [
+            1,
+            7,
+            13,
+            19
+          ],
+          "timezoneOffset": 0
+        },
+        {
+          "weekDay": 2,
+          "hours": [
+            1,
+            7,
+            13,
+            19
+          ],
+          "timezoneOffset": 0
+        },
+        {
+          "weekDay": 3,
+          "hours": [
+            1,
+            7,
+            13,
+            19
+          ],
+          "timezoneOffset": 0
+        },
+        {
+          "weekDay": 4,
+          "hours": [
+            1,
+            7,
+            13,
+            19
+          ],
+          "timezoneOffset": 0
+        },
+        {
+          "weekDay": 5,
+          "hours": [
+            1,
+            7,
+            13,
+            19
+          ],
+          "timezoneOffset": 0
+        },
+        {
+          "weekDay": 6,
+          "hours": [
+            1,
+            7,
+            13,
+            19
+          ],
+          "timezoneOffset": 0
+        }
+      ],
+      "searchTerms": [
+        {
+          "name": "isClosed",
+          "parameters": {}
+        },
+        {
+          "name": "noActivitySince",
+          "parameters": {
+            "days": 30
+          }
+        },
+        {
+          "name": "isUnlocked",
+          "parameters": {}
+        }
+      ],
+      "actions": [
+        {
+          "name": "lockIssue",
+          "parameters": {
+            "reason": "resolved",
+            "label": "will_lock_this"
+          }
+        }
+      ],
+      "taskName": "Lock stale issues and PRs"
+    }
   }
 ]
