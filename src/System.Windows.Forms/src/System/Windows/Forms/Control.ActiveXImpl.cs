@@ -147,8 +147,8 @@ namespace System.Windows.Forms
                         {
                             try
                             {
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj!.GetType().FullName);
                                 Debug.Assert(obj is not null, "GetAmbientProperty failed");
+                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj!.GetType().FullName);
                                 IFont ifont = (IFont)obj;
                                 prop.Value = Font.FromHfont(ifont.hFont);
                             }
