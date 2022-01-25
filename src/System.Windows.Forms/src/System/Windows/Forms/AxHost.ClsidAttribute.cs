@@ -11,20 +11,12 @@ namespace System.Windows.Forms
         [AttributeUsage(AttributeTargets.Class, Inherited = false)]
         public sealed class ClsidAttribute : Attribute
         {
-            private readonly string val;
-
             public ClsidAttribute(string clsid)
             {
-                val = clsid;
+                Value = clsid;
             }
 
-            public string Value
-            {
-                get
-                {
-                    return val;
-                }
-            }
+            public string Value { get; }
         }
     }
 }

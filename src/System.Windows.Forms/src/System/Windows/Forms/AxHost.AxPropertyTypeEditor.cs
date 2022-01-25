@@ -14,13 +14,13 @@ namespace System.Windows.Forms
     {
         private class AxPropertyTypeEditor : UITypeEditor
         {
-            private readonly AxPropertyDescriptor propDesc;
-            private Guid guid;
+            private readonly AxPropertyDescriptor _propertyDescriptor;
+            private readonly Guid _guid;
 
             public AxPropertyTypeEditor(AxPropertyDescriptor pd, Guid guid)
             {
-                propDesc = pd;
-                this.guid = guid;
+                _propertyDescriptor = pd;
+                _guid = guid;
             }
 
             /// <summary>
@@ -35,7 +35,7 @@ namespace System.Windows.Forms
                 try
                 {
                     object instance = context.Instance;
-                    propDesc._owner.ShowPropertyPageForDispid(propDesc.Dispid, guid);
+                    _propertyDescriptor._owner.ShowPropertyPageForDispid(_propertyDescriptor.Dispid, _guid);
                 }
                 catch (Exception ex1)
                 {

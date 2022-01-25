@@ -326,12 +326,12 @@ namespace System.Windows.Forms
                     // bytes for the guid serializedObjectID at the front
                     // of the stream.  Check for that here.
                     //
-                    if (size > serializedObjectID.Length)
+                    if (size > s_serializedObjectID.Length)
                     {
                         isSerializedObject = true;
-                        for (int i = 0; i < serializedObjectID.Length; i++)
+                        for (int i = 0; i < s_serializedObjectID.Length; i++)
                         {
-                            if (serializedObjectID[i] != bytes[i])
+                            if (s_serializedObjectID[i] != bytes[i])
                             {
                                 isSerializedObject = false;
                                 break;
@@ -342,7 +342,7 @@ namespace System.Windows.Forms
                         //
                         if (isSerializedObject)
                         {
-                            index = serializedObjectID.Length;
+                            index = s_serializedObjectID.Length;
                         }
                     }
                     else
@@ -559,9 +559,9 @@ namespace System.Windows.Forms
                     lindex = -1
                 };
 
-                for (int i = 0; i < ALLOWED_TYMEDS.Length; i++)
+                for (int i = 0; i < s_allowedTymeds.Length; i++)
                 {
-                    formatetc.tymed |= ALLOWED_TYMEDS[i];
+                    formatetc.tymed |= s_allowedTymeds[i];
                 }
 
                 int hr = QueryGetDataUnsafe(ref formatetc);

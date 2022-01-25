@@ -6,7 +6,6 @@
 
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Globalization;
 using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using static Interop;
@@ -24,148 +23,137 @@ namespace System.Windows.Forms
         [Serializable] // This exchanges with the native code.
         public class State : ISerializable
         {
-            private readonly int VERSION = 1;
-            private int length;
-            private byte[] buffer;
-            internal int type;
-            private MemoryStream ms;
-            private Ole32.IStorage storage;
-            private Ole32.ILockBytes iLockBytes;
-            private bool manualUpdate;
-            private string licenseKey;
-#pragma warning disable IDE1006
-            private readonly PropertyBagStream PropertyBagBinary; // Do NOT rename (binary serialization).
-#pragma warning restore IDE1006
+            private const int VERSION = 1;
+            private int _length;
+            private byte[] _buffer;
+            private MemoryStream _memoryStream;
+            private Ole32.IStorage _storage;
+            private Ole32.ILockBytes _iLockBytes;
+            private bool _manualUpdate;
+            private string _licenseKey;
+            private readonly PropertyBagStream _propertyBag;
+            private const string PropertyBagSerializationName = "PropertyBagBinary";
+            private const string DataSerializationName = "Data";
 
             // create on save from ipersist stream
-            internal State(MemoryStream ms, int storageType, AxHost ctl, PropertyBagStream propBag)
+            internal State(MemoryStream memoryStream, int storageType, AxHost control, PropertyBagStream propertyBag)
             {
-                type = storageType;
-                PropertyBagBinary = propBag;
+                Type = storageType;
+                _propertyBag = propertyBag;
                 // dangerous?
-                length = (int)ms.Length;
-                this.ms = ms;
-                manualUpdate = ctl.GetAxState(AxHost.manualUpdate);
-                licenseKey = ctl.GetLicenseKey();
+                _length = (int)memoryStream.Length;
+                _memoryStream = memoryStream;
+                _manualUpdate = control.GetAxState(s_manualUpdate);
+                _licenseKey = control.GetLicenseKey();
             }
 
-            internal State(PropertyBagStream propBag)
+            internal State(PropertyBagStream propertyBag)
             {
-                PropertyBagBinary = propBag;
+                _propertyBag = propertyBag;
             }
 
-            internal State(MemoryStream ms)
+            internal State(MemoryStream memoryStream)
             {
-                this.ms = ms;
-                length = (int)ms.Length;
-                InitializeFromStream(ms);
+                _memoryStream = memoryStream;
+                _length = (int)memoryStream.Length;
+                InitializeFromStream(memoryStream);
             }
 
             // create on init new w/ storage...
-            internal State(AxHost ctl)
+            internal State(AxHost control)
             {
                 CreateStorage();
-                manualUpdate = ctl.GetAxState(AxHost.manualUpdate);
-                licenseKey = ctl.GetLicenseKey();
-                type = STG_STORAGE;
+                _manualUpdate = control.GetAxState(s_manualUpdate);
+                _licenseKey = control.GetLicenseKey();
+                Type = STG_STORAGE;
             }
 
             public State(Stream ms, int storageType, bool manualUpdate, string licKey)
             {
-                type = storageType;
+                Type = storageType;
                 // dangerous?
-                length = (int)ms.Length;
-                this.manualUpdate = manualUpdate;
-                licenseKey = licKey;
+                _length = (int)ms.Length;
+                _manualUpdate = manualUpdate;
+                _licenseKey = licKey;
 
                 InitializeBufferFromStream(ms);
             }
 
-            /**
-             * Constructor used in deserialization
-             */
+            /// <summary>
+            ///  Constructor used in deserialization.
+            /// </summary>
             protected State(SerializationInfo info, StreamingContext context)
             {
-                SerializationInfoEnumerator sie = info.GetEnumerator();
-                if (sie is null)
+                SerializationInfoEnumerator enumerator = info.GetEnumerator();
+                if (enumerator is null)
                 {
                     return;
                 }
 
-                for (; sie.MoveNext();)
+                for (; enumerator.MoveNext();)
                 {
-                    if (string.Compare(sie.Name, "Data", true, CultureInfo.InvariantCulture) == 0)
+                    if (string.Equals(enumerator.Name, DataSerializationName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         try
                         {
-                            byte[] dat = (byte[])sie.Value;
-                            if (dat is not null)
+                            byte[] data = (byte[])enumerator.Value;
+                            if (data is not null)
                             {
-                                using var datMemoryStream = new MemoryStream(dat);
+                                using var datMemoryStream = new MemoryStream(data);
                                 InitializeFromStream(datMemoryStream);
                             }
                         }
                         catch (Exception e)
                         {
-                            Debug.Fail("failure: " + e.ToString());
+                            Debug.Fail($"failure: {e}");
                         }
                     }
-                    else if (string.Compare(sie.Name, nameof(PropertyBagBinary), true, CultureInfo.InvariantCulture) == 0)
+                    else if (string.Equals(enumerator.Name, PropertyBagSerializationName, StringComparison.InvariantCultureIgnoreCase))
                     {
                         try
                         {
-                            Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Loading up property bag from stream...");
-                            byte[] dat = (byte[])sie.Value;
-                            if (dat is not null)
+                            Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "Loading up property bag from stream...");
+                            byte[] data = (byte[])enumerator.Value;
+                            if (data is not null)
                             {
-                                PropertyBagBinary = new PropertyBagStream();
-                                using var datMemoryStream = new MemoryStream(dat);
-                                PropertyBagBinary.Read(datMemoryStream);
+                                _propertyBag = new PropertyBagStream();
+                                using var datMemoryStream = new MemoryStream(data);
+                                _propertyBag.Read(datMemoryStream);
                             }
                         }
                         catch (Exception e)
                         {
-                            Debug.Fail("failure: " + e.ToString());
+                            Debug.Fail($"failure: {e}");
                         }
                     }
                 }
             }
 
-            internal int Type
-            {
-                get
-                {
-                    return type;
-                }
-                set
-                {
-                    type = value;
-                }
-            }
+            internal int Type { get; set; }
 
             internal bool _GetManualUpdate()
             {
-                return manualUpdate;
+                return _manualUpdate;
             }
 
             internal string _GetLicenseKey()
             {
-                return licenseKey;
+                return _licenseKey;
             }
 
             private void CreateStorage()
             {
-                Debug.Assert(storage is null, "but we already have a storage!!!");
+                Debug.Assert(_storage is null, "but we already have a storage!");
                 IntPtr hglobal = IntPtr.Zero;
-                if (buffer is not null)
+                if (_buffer is not null)
                 {
-                    hglobal = Kernel32.GlobalAlloc(Kernel32.GMEM.MOVEABLE, (uint)length);
+                    hglobal = Kernel32.GlobalAlloc(Kernel32.GMEM.MOVEABLE, (uint)_length);
                     IntPtr pointer = Kernel32.GlobalLock(hglobal);
                     try
                     {
                         if (pointer != IntPtr.Zero)
                         {
-                            Marshal.Copy(buffer, 0, pointer, length);
+                            Marshal.Copy(_buffer, 0, pointer, _length);
                         }
                     }
                     finally
@@ -176,18 +164,18 @@ namespace System.Windows.Forms
 
                 try
                 {
-                    iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, BOOL.TRUE);
-                    if (buffer is null)
+                    _iLockBytes = Ole32.CreateILockBytesOnHGlobal(hglobal, BOOL.TRUE);
+                    if (_buffer is null)
                     {
-                        storage = Ole32.StgCreateDocfileOnILockBytes(
-                            iLockBytes,
+                        _storage = Ole32.StgCreateDocfileOnILockBytes(
+                            _iLockBytes,
                             Ole32.STGM.CREATE | Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE,
                             0);
                     }
                     else
                     {
-                        storage = Ole32.StgOpenStorageOnILockBytes(
-                            iLockBytes,
+                        _storage = Ole32.StgOpenStorageOnILockBytes(
+                            _iLockBytes,
                             null,
                             Ole32.STGM.READWRITE | Ole32.STGM.SHARE_EXCLUSIVE,
                             IntPtr.Zero,
@@ -196,65 +184,65 @@ namespace System.Windows.Forms
                 }
                 catch (Exception)
                 {
-                    if (iLockBytes is null && hglobal != IntPtr.Zero)
+                    if (_iLockBytes is null && hglobal != IntPtr.Zero)
                     {
                         Kernel32.GlobalFree(hglobal);
                     }
                     else
                     {
-                        iLockBytes = null;
+                        _iLockBytes = null;
                     }
 
-                    storage = null;
+                    _storage = null;
                 }
             }
 
             internal Oleaut32.IPropertyBag GetPropBag()
             {
-                return PropertyBagBinary;
+                return _propertyBag;
             }
 
             internal Ole32.IStorage GetStorage()
             {
-                if (storage is null)
+                if (_storage is null)
                 {
                     CreateStorage();
                 }
 
-                return storage;
+                return _storage;
             }
 
             internal Ole32.IStream GetStream()
             {
-                if (ms is null)
+                if (_memoryStream is null)
                 {
-                    Debug.Assert(buffer is not null, "gotta have the buffer already...");
-                    if (buffer is null)
+                    Debug.Assert(_buffer is not null, "gotta have the buffer already...");
+                    if (_buffer is null)
                     {
                         return null;
                     }
 
-                    ms = new MemoryStream(buffer);
+                    _memoryStream = new MemoryStream(_buffer);
                 }
                 else
                 {
-                    ms.Seek(0, SeekOrigin.Begin);
+                    _memoryStream.Seek(0, SeekOrigin.Begin);
                 }
 
-                return new Ole32.GPStream(ms);
+                return new Ole32.GPStream(_memoryStream);
             }
 
             private void InitializeFromStream(Stream ids)
             {
                 using var br = new BinaryReader(ids);
 
-                type = br.ReadInt32();
+                Type = br.ReadInt32();
                 int version = br.ReadInt32();
-                manualUpdate = br.ReadBoolean();
+                _manualUpdate = br.ReadBoolean();
                 int cc = br.ReadInt32();
                 if (cc != 0)
                 {
-                    licenseKey = new string(br.ReadChars(cc));
+                    _licenseKey = new string(br.ReadChars(cc));
                 }
 
                 for (int skipUnits = br.ReadInt32(); skipUnits > 0; skipUnits--)
@@ -263,10 +251,10 @@ namespace System.Windows.Forms
                     ids.Position += len;
                 }
 
-                length = br.ReadInt32();
-                if (length > 0)
+                _length = br.ReadInt32();
+                if (_length > 0)
                 {
-                    buffer = br.ReadBytes(length);
+                    _buffer = br.ReadBytes(_length);
                 }
             }
 
@@ -274,44 +262,44 @@ namespace System.Windows.Forms
             {
                 using var br = new BinaryReader(ids);
 
-                length = br.ReadInt32();
-                if (length > 0)
+                _length = br.ReadInt32();
+                if (_length > 0)
                 {
-                    buffer = br.ReadBytes(length);
+                    _buffer = br.ReadBytes(_length);
                 }
             }
 
             internal State RefreshStorage(Ole32.IPersistStorage iPersistStorage)
             {
-                Debug.Assert(storage is not null, "how can we not have a storage object?");
-                Debug.Assert(iLockBytes is not null, "how can we have a storage w/o ILockBytes?");
-                if (storage is null || iLockBytes is null)
+                Debug.Assert(_storage is not null, "how can we not have a storage object?");
+                Debug.Assert(_iLockBytes is not null, "how can we have a storage w/o ILockBytes?");
+                if (_storage is null || _iLockBytes is null)
                 {
                     return null;
                 }
 
-                iPersistStorage.Save(storage, BOOL.TRUE);
-                storage.Commit(0);
+                iPersistStorage.Save(_storage, BOOL.TRUE);
+                _storage.Commit(0);
                 iPersistStorage.HandsOffStorage();
                 try
                 {
-                    buffer = null;
-                    ms = null;
-                    iLockBytes.Stat(out Ole32.STATSTG stat, Ole32.STATFLAG.NONAME);
-                    length = (int)stat.cbSize;
-                    buffer = new byte[length];
-                    IntPtr hglobal = Ole32.GetHGlobalFromILockBytes(iLockBytes);
+                    _buffer = null;
+                    _memoryStream = null;
+                    _iLockBytes.Stat(out Ole32.STATSTG stat, Ole32.STATFLAG.NONAME);
+                    _length = (int)stat.cbSize;
+                    _buffer = new byte[_length];
+                    IntPtr hglobal = Ole32.GetHGlobalFromILockBytes(_iLockBytes);
                     IntPtr pointer = Kernel32.GlobalLock(hglobal);
                     try
                     {
                         if (pointer != IntPtr.Zero)
                         {
-                            Marshal.Copy(pointer, buffer, 0, length);
+                            Marshal.Copy(pointer, _buffer, 0, _length);
                         }
                         else
                         {
-                            length = 0;
-                            buffer = null;
+                            _length = 0;
+                            _buffer = null;
                         }
                     }
                     finally
@@ -321,7 +309,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    iPersistStorage.SaveCompleted(storage);
+                    iPersistStorage.SaveCompleted(_storage);
                 }
 
                 return this;
@@ -331,33 +319,33 @@ namespace System.Windows.Forms
             {
                 using var bw = new BinaryWriter(stream);
 
-                bw.Write(type);
+                bw.Write(Type);
                 bw.Write(VERSION);
-                bw.Write(manualUpdate);
-                if (licenseKey is not null)
+                bw.Write(_manualUpdate);
+                if (_licenseKey is not null)
                 {
-                    bw.Write(licenseKey.Length);
-                    bw.Write(licenseKey.ToCharArray());
+                    bw.Write(_licenseKey.Length);
+                    bw.Write(_licenseKey.ToCharArray());
                 }
                 else
                 {
-                    bw.Write((int)0);
+                    bw.Write(0);
                 }
 
-                bw.Write((int)0); // skip units
-                bw.Write(length);
-                if (buffer is not null)
+                bw.Write(0); // skip units
+                bw.Write(_length);
+                if (_buffer is not null)
                 {
-                    bw.Write(buffer);
+                    bw.Write(_buffer);
                 }
-                else if (ms is not null)
+                else if (_memoryStream is not null)
                 {
-                    ms.Position = 0;
-                    ms.WriteTo(stream);
+                    _memoryStream.Position = 0;
+                    _memoryStream.WriteTo(stream);
                 }
                 else
                 {
-                    Debug.Assert(length == 0, "if we have no data, then our length has to be 0");
+                    Debug.Assert(_length == 0, "if we have no data, then our length has to be 0");
                 }
             }
 
@@ -369,19 +357,19 @@ namespace System.Windows.Forms
                 using var stream = new MemoryStream();
                 Save(stream);
 
-                si.AddValue("Data", stream.ToArray());
+                si.AddValue(DataSerializationName, stream.ToArray());
 
-                if (PropertyBagBinary is not null)
+                if (_propertyBag is not null)
                 {
                     try
                     {
                         using var propertyBagBinaryStream = new MemoryStream();
-                        PropertyBagBinary.Write(propertyBagBinaryStream);
-                        si.AddValue(nameof(PropertyBagBinary), propertyBagBinaryStream.ToArray());
+                        _propertyBag.Write(propertyBagBinaryStream);
+                        si.AddValue(PropertyBagSerializationName, propertyBagBinaryStream.ToArray());
                     }
                     catch (Exception e)
                     {
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "Failed to serialize the property bag into ResX : " + e.ToString());
+                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Failed to serialize the property bag into ResX : {e}");
                     }
                 }
             }

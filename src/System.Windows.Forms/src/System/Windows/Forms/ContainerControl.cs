@@ -21,14 +21,14 @@ namespace System.Windows.Forms
     {
         private Control _activeControl;
 
-        /// <remarks>
-        ///  The current focused control. Do not directly edit this value.
-        /// </remarks>
+        /// <summary>
+        ///   The current focused control. Do not directly edit this value.
+        /// </summary>
         private Control _focusedControl;
 
-        /// <remarks>
+        /// <summary>
         ///  The last control that requires validation. Do not directly edit this value.
-        /// </remarks>
+        /// </summary>
         private Control _unvalidatedControl;
 
         /// <summary>
@@ -273,7 +273,9 @@ namespace System.Windows.Forms
                 // Note: If overriding this property make sure to copy the Debug code and call this method.
 
                 Debug.Indent();
-                Debug.WriteLineIf(CompModSwitches.ImeMode.Level >= TraceLevel.Info, "Inside get_CanEnableIme(), value = false" + ", this = " + this);
+                Debug.WriteLineIf(
+                    CompModSwitches.ImeMode.Level >= TraceLevel.Info,
+                    $"Inside get_CanEnableIme(), value = false, this = {this}");
                 Debug.Unindent();
 
                 return false;
@@ -391,7 +393,9 @@ namespace System.Windows.Forms
 
         internal bool ActivateControl(Control control, bool originator)
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::ActivateControl(" + (control is null ? "null" : control.Name) + "," + originator.ToString() + ") - " + Name);
+            Debug.WriteLineIf(
+                s_focusTracing.TraceVerbose,
+                $"ContainerControl::ActivateControl({control?.Name ?? "null"},{originator}) - {Name}");
 
             // Recursive function that makes sure that the chain of active controls is coherent.
             bool ret = true;
@@ -465,7 +469,7 @@ namespace System.Windows.Forms
         {
             ContainerControl cc;
             Debug.Assert(control is not null);
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::AfterControlRemoved(" + control.Name + ") - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"ContainerControl::AfterControlRemoved({control.Name}) - {Name}");
             if (control == _activeControl || control.Contains(_activeControl))
             {
                 bool selected = SelectNextControl(control, true, true, true, true);
@@ -539,7 +543,9 @@ namespace System.Windows.Forms
             }
 #endif
 
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::AssignActiveControlInternal(" + (value is null ? "null" : value.Name) + ") - " + Name);
+            Debug.WriteLineIf(
+                s_focusTracing.TraceVerbose,
+                $"ContainerControl::AssignActiveControlInternal({value?.Name ?? "null"}) - {Name}");
             if (_activeControl != value)
             {
                 try
@@ -648,7 +654,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void FocusActiveControlInternal()
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::FocusActiveControlInternal() - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"ContainerControl::FocusActiveControlInternal() - {Name}");
 #if DEBUG
             // Things really get ugly if you try to pop up an assert dialog here
             if (_activeControl is not null && !Contains(_activeControl))
@@ -661,7 +667,7 @@ namespace System.Windows.Forms
             {
                 // Avoid focus loops, especially with ComboBoxes.
                 IntPtr focusHandle = User32.GetFocus();
-                if (focusHandle == IntPtr.Zero || Control.FromChildHandle(focusHandle) != _activeControl)
+                if (focusHandle == IntPtr.Zero || FromChildHandle(focusHandle) != _activeControl)
                 {
                     User32.SetFocus(new HandleRef(_activeControl, _activeControl.Handle));
                 }
@@ -1190,10 +1196,10 @@ namespace System.Windows.Forms
         [EditorBrowsable(EditorBrowsableState.Advanced)]
         protected override bool ProcessDialogChar(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogChar [" + charCode.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"ContainerControl.ProcessDialogChar [{charCode}]");
 
             // If we're the top-level form or control, we need to do the mnemonic handling
-            if (GetContainerControl() is ContainerControl parent && charCode != ' ' && ProcessMnemonic(charCode))
+            if (GetContainerControl() is ContainerControl && charCode != ' ' && ProcessMnemonic(charCode))
             {
                 return true;
             }
@@ -1209,7 +1215,7 @@ namespace System.Windows.Forms
         /// </summary>
         protected override bool ProcessDialogKey(Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessDialogKey [" + keyData.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"ContainerControl.ProcessDialogKey [{keyData}]");
 
             LastKeyData = keyData;
             if ((keyData & (Keys.Alt | Keys.Control)) == Keys.None)
@@ -1243,7 +1249,7 @@ namespace System.Windows.Forms
 
         protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessCmdKey " + msg.ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"ContainerControl.ProcessCmdKey {msg}");
 
             if (base.ProcessCmdKey(ref msg, keyData))
             {
@@ -1266,9 +1272,9 @@ namespace System.Windows.Forms
 
         protected internal override bool ProcessMnemonic(char charCode)
         {
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "ContainerControl.ProcessMnemonic [" + charCode.ToString() + "]");
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"ContainerControl.ProcessMnemonic [{charCode}]");
             Debug.Indent();
-            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "this == " + ToString());
+            Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"this == {this}");
 
             if (!CanProcessMnemonic())
             {
@@ -1282,7 +1288,6 @@ namespace System.Windows.Forms
             }
 
             // Start with the active control.
-            //
             Control start = ActiveControl;
 
 #if DEBUG
@@ -1301,7 +1306,7 @@ namespace System.Windows.Forms
                 bool wrapped = false;
 
                 Control ctl = start;
-                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "Check starting at '" + ((start is not null) ? start.ToString() : "<null>") + "'");
+                Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"Check starting at '{start?.ToString() ?? "<null>"}'");
 
                 do
                 {
@@ -1318,16 +1323,18 @@ namespace System.Windows.Forms
                     if (ctl is not null)
                     {
 #if DEBUG
-                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "  ...checking for mnemonics on " + ctl.ToString());
+                        Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, $"  ...checking for mnemonics on {ctl}");
                         // Control.TraceMnemonicProcessing.Enabled disables CanProcessMnemonic consistency check.
-                        bool canProcess = s_traceMnemonicProcessing.Enabled ? true : ctl.CanProcessMnemonic(); // Processing the mnemonic can change the value of CanProcessMnemonic.
+                        bool canProcess = s_traceMnemonicProcessing.Enabled || ctl.CanProcessMnemonic(); // Processing the mnemonic can change the value of CanProcessMnemonic.
 #endif
                         // Processing the mnemonic can change the value of CanProcessMnemonic.
                         if (ctl.ProcessMnemonic(charCode))
                         {
 #if DEBUG
                             Debug.WriteLineIf(s_controlKeyboardRouting.TraceVerbose, "  ...mnemonics found");
-                            Debug.Assert((s_traceMnemonicProcessing.Enabled || canProcess), "ProcessMnemonic returned true, even though CanProcessMnemonic() is false. Someone probably overrode ProcessMnemonic and forgot to test CanSelect or CanProcessMnemonic().");
+                            Debug.Assert(
+                                s_traceMnemonicProcessing.Enabled || canProcess,
+                                "ProcessMnemonic returned true, even though CanProcessMnemonic() is false. Someone probably overrode ProcessMnemonic and forgot to test CanSelect or CanProcessMnemonic().");
                             Debug.Unindent();
 #endif
                             processed = true;
@@ -1367,7 +1374,7 @@ namespace System.Windows.Forms
         private ScrollableControl FindScrollableParent(Control ctl)
         {
             Control current = ctl.ParentInternal;
-            while (current is not null && !(current is ScrollableControl))
+            while (current is not null && current is not ScrollableControl)
             {
                 current = current.ParentInternal;
             }
@@ -1385,7 +1392,6 @@ namespace System.Windows.Forms
                 while (scrollParent is not null)
                 {
                     scrollParent.ScrollControlIntoView(_activeControl);
-                    last = scrollParent;
                     scrollParent = FindScrollableParent(scrollParent);
                 }
             }
@@ -1496,7 +1502,7 @@ namespace System.Windows.Forms
         /// </summary>
         internal void SetActiveControl(Control value)
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"ContainerControl::SetActiveControl({(value is null ? "null" : value.Name)}) - {Name}");
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"ContainerControl::SetActiveControl({value?.Name ?? "null"}) - {Name}");
 
             if (_activeControl == value && (value is null || value.Focused))
             {
@@ -1709,7 +1715,8 @@ namespace System.Windows.Forms
             }
 
 #if DEBUG
-            if (_activeControl is null || (_activeControl is not null && _activeControl.ParentInternal is not null && !_activeControl.ParentInternal.IsContainerControl))
+            if (_activeControl is null
+                || (_activeControl?.ParentInternal is not null && !_activeControl.ParentInternal.IsContainerControl))
             {
                 Debug.Assert(_activeControl is null || _activeControl.ParentInternal.GetContainerControl() == this);
             }
@@ -1822,9 +1829,11 @@ namespace System.Windows.Forms
         ///  This version always performs validation, regardless of the AutoValidate setting of the control's parent.
         /// </summary>
         /// <remarks>
-        ///  This version is intended for user code that wants to force validation, even
-        ///  while auto-validation is turned off. When adding any explicit Validate() calls to our code, consider using
-        ///  Validate(true) rather than Validate(), so that you will be sensitive to the current auto-validation setting.
+        ///  <para>
+        ///   This version is intended for user code that wants to force validation, even while auto-validation is
+        ///   turned off. When adding any explicit Validate() calls to our code, consider using Validate(true) rather
+        ///   than Validate(), so that you will be sensitive to the current auto-validation setting.
+        ///  </para>
         /// </remarks>
         public bool Validate() => Validate(checkAutoValidate: false);
 
@@ -1835,7 +1844,7 @@ namespace System.Windows.Forms
         /// </summary>
         public bool Validate(bool checkAutoValidate)
         {
-            return ValidateInternal(checkAutoValidate, out bool validatedControlAllowsFocusChange);
+            return ValidateInternal(checkAutoValidate, out _);
         }
 
         internal bool ValidateInternal(bool checkAutoValidate, out bool validatedControlAllowsFocusChange)
@@ -1847,9 +1856,9 @@ namespace System.Windows.Forms
             {
                 if (_unvalidatedControl is null)
                 {
-                    if (_focusedControl is ContainerControl && _focusedControl.CausesValidation)
+                    if (_focusedControl is ContainerControl control && _focusedControl.CausesValidation)
                     {
-                        ContainerControl c = (ContainerControl)_focusedControl;
+                        ContainerControl c = control;
                         if (!c.ValidateInternal(checkAutoValidate, out validatedControlAllowsFocusChange))
                         {
                             return false;
@@ -2052,7 +2061,7 @@ namespace System.Windows.Forms
         /// </summary>
         private void WmSetFocus(ref Message m)
         {
-            Debug.WriteLineIf(s_focusTracing.TraceVerbose, "ContainerControl::WmSetFocus() - " + Name);
+            Debug.WriteLineIf(s_focusTracing.TraceVerbose, $"ContainerControl::WmSetFocus() - {Name}");
             if (!HostedInWin32DialogManager)
             {
                 if (ActiveControl is not null)
@@ -2073,7 +2082,7 @@ namespace System.Windows.Forms
                         IContainerControl c = ParentInternal.GetContainerControl();
                         if (c is not null)
                         {
-                            bool succeeded = false;
+                            bool succeeded;
 
                             if (c is ContainerControl knowncontainer)
                             {

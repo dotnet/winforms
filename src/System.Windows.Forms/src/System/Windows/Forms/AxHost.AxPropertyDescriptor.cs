@@ -23,9 +23,9 @@ namespace System.Windows.Forms
             private readonly DispIdAttribute _dispid;
 
             private TypeConverter _converter;
-            private UITypeEditor editor;
-            private readonly ArrayList updateAttrs = new ArrayList();
-            private int flags;
+            private UITypeEditor _editor;
+            private readonly ArrayList _updateAttributes = new();
+            private int _flags;
 
             private const int FlagUpdatedEditorAndConverter = 0x00000001;
             private const int FlagCheckGetter = 0x00000002;
@@ -49,7 +49,7 @@ namespace System.Windows.Forms
                         Guid g = GetPropertyPage((Ole32.DispatchID)_dispid.Value);
                         if (!Guid.Empty.Equals(g))
                         {
-                            Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, $"Making property: {Name} browsable because we found an property page.");
+                            Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"Making property: {Name} browsable because we found an property page.");
                             AddAttribute(new BrowsableAttribute(true));
                         }
                     }
@@ -63,7 +63,7 @@ namespace System.Windows.Forms
 
                     // Check to see if this a DataSource property.
                     // If it is, we can always get and set the value of this property.
-                    if (PropertyType.GUID.Equals(dataSource_Guid))
+                    if (PropertyType.GUID.Equals(s_dataSource_Guid))
                     {
                         SetFlag(FlagIgnoreCanAccessProperties, true);
                     }
@@ -104,7 +104,7 @@ namespace System.Windows.Forms
 
             private void AddAttribute(Attribute attr)
             {
-                updateAttrs.Add(attr);
+                _updateAttributes.Add(attr);
             }
 
             public override bool CanResetValue(object o)
@@ -121,9 +121,9 @@ namespace System.Windows.Forms
                     UpdateTypeConverterAndTypeEditorInternal(false, (Ole32.DispatchID)_dispid.Value);
                 }
 
-                if (editorBaseType.Equals(typeof(UITypeEditor)) && editor is not null)
+                if (editorBaseType.Equals(typeof(UITypeEditor)) && _editor is not null)
                 {
-                    return editor;
+                    return _editor;
                 }
 
                 return base.GetEditor(editorBaseType);
@@ -131,7 +131,7 @@ namespace System.Windows.Forms
 
             private bool GetFlag(int flagValue)
             {
-                return ((flags & flagValue) == flagValue);
+                return ((_flags & flagValue) == flagValue);
             }
 
             private unsafe Guid GetPropertyPage(Ole32.DispatchID dispid)
@@ -180,7 +180,9 @@ namespace System.Windows.Forms
                 {
                     if (!GetFlag(FlagCheckGetter))
                     {
-                        Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, "Get failed for : " + Name + " with exception: " + e.Message + " .Making property non-browsable.");
+                        Debug.WriteLineIf(
+                            s_axPropTraceSwitch.TraceVerbose,
+                            $"Get failed for : {Name} with exception: {e.Message}. Making property non-browsable.");
                         SetFlag(FlagCheckGetter, true);
                         AddAttribute(new BrowsableAttribute(false));
                         _owner.RefreshAllProperties = true;
@@ -209,11 +211,11 @@ namespace System.Windows.Forms
             {
                 if (value)
                 {
-                    flags |= flagValue;
+                    _flags |= flagValue;
                 }
                 else
                 {
-                    flags &= ~flagValue;
+                    _flags &= ~flagValue;
                 }
             }
 
@@ -246,7 +248,7 @@ namespace System.Windows.Forms
                 OnValueChanged(component);
                 if (_owner == component)
                 {
-                    _owner.SetAxState(AxHost.valueChanged, true);
+                    _owner.SetAxState(AxHost.s_valueChanged, true);
                 }
             }
 
@@ -257,13 +259,13 @@ namespace System.Windows.Forms
 
             internal void UpdateAttributes()
             {
-                if (updateAttrs.Count == 0)
+                if (_updateAttributes.Count == 0)
                 {
                     return;
                 }
 
                 ArrayList attributes = new ArrayList(AttributeArray);
-                foreach (Attribute attr in updateAttrs)
+                foreach (Attribute attr in _updateAttributes)
                 {
                     attributes.Add(attr);
                 }
@@ -272,7 +274,7 @@ namespace System.Windows.Forms
                 attributes.CopyTo(temp, 0);
                 AttributeArray = temp;
 
-                updateAttrs.Clear();
+                _updateAttributes.Clear();
             }
 
             /// <summary>
@@ -370,13 +372,13 @@ namespace System.Windows.Forms
 
                                 if (!Guid.Empty.Equals(g))
                                 {
-                                    editor = new AxPropertyTypeEditor(this, g);
+                                    _editor = new AxPropertyTypeEditor(this, g);
 
                                     // Show any non-browsable property that has an editor through a property page.
                                     if (!IsBrowsable)
                                     {
                                         Debug.WriteLineIf(
-                                            AxPropTraceSwitch.TraceVerbose,
+                                            s_axPropTraceSwitch.TraceVerbose,
                                             $"Making property: {Name} browsable because we found an editor.");
 
                                         AddAttribute(new BrowsableAttribute(true));
@@ -390,7 +392,7 @@ namespace System.Windows.Forms
                 }
                 catch (Exception e)
                 {
-                    Debug.WriteLineIf(AxPropTraceSwitch.TraceVerbose, $"could not get the type editor for property: {Name} Exception: {e}");
+                    Debug.WriteLineIf(s_axPropTraceSwitch.TraceVerbose, $"could not get the type editor for property: {Name} Exception: {e}");
                 }
             }
         }

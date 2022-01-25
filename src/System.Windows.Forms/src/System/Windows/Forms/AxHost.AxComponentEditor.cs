@@ -15,14 +15,16 @@ namespace System.Windows.Forms
     {
         public class AxComponentEditor : WindowsFormsComponentEditor
         {
+#pragma warning disable CA1725 // Parameter names should match base declaration - "obj" and "parent" is how this is documented
             public override bool EditComponent(ITypeDescriptorContext context, object obj, IWin32Window parent)
+#pragma warning restore CA1725
             {
                 if (obj is AxHost host)
                 {
                     try
                     {
-                        Debug.WriteLineIf(AxHTraceSwitch.TraceVerbose, "in AxComponentEditor.EditComponent");
-                        ((Ole32.IOleControlSite)host.oleSite).ShowPropertyFrame();
+                        Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, "in AxComponentEditor.EditComponent");
+                        ((Ole32.IOleControlSite)host._oleSite).ShowPropertyFrame();
                         return true;
                     }
                     catch (Exception t)
