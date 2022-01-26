@@ -2477,7 +2477,7 @@ namespace System.Windows.Forms.Tests
             using Button button = new Button();
             button.CreateControl();
             var accessibleObject = button.AccessibilityObject;
-            var wrapper = accessibleObject.TestAccessor().Dynamic.systemIAccessible;
+            var wrapper = accessibleObject.TestAccessor().Dynamic._systemIAccessible;
             Assert.NotSame(wrapper, accessibleObject.GetSystemIAccessibleInternal());
         }
 
@@ -2487,7 +2487,7 @@ namespace System.Windows.Forms.Tests
             using Button button = new Button();
             button.CreateControl();
             var accessibleObject = button.AccessibilityObject;
-            var wrapper = accessibleObject.TestAccessor().Dynamic.systemIAccessible;
+            var wrapper = accessibleObject.TestAccessor().Dynamic._systemIAccessible;
             var wrapIAccessibleResult = accessibleObject.TestAccessor().Dynamic.WrapIAccessible(accessibleObject.GetSystemIAccessibleInternal());
 
             Assert.Same(accessibleObject, wrapIAccessibleResult);
