@@ -3182,8 +3182,8 @@ static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> Sys
 ~virtual System.Windows.Forms.HelpProvider.SetHelpString(System.Windows.Forms.Control ctl, string helpString) -> void
 ~virtual System.Windows.Forms.HelpProvider.SetShowHelp(System.Windows.Forms.Control ctl, bool value) -> void
 ~virtual System.Windows.Forms.Label.OnTextAlignChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.Layout.LayoutEngine.InitLayout(object child, System.Windows.Forms.BoundsSpecified specified) -> void
-~virtual System.Windows.Forms.Layout.LayoutEngine.Layout(object container, System.Windows.Forms.LayoutEventArgs layoutEventArgs) -> bool
+virtual System.Windows.Forms.Layout.LayoutEngine.InitLayout(object! child, System.Windows.Forms.BoundsSpecified specified) -> void
+virtual System.Windows.Forms.Layout.LayoutEngine.Layout(object! container, System.Windows.Forms.LayoutEventArgs! layoutEventArgs) -> bool
 ~virtual System.Windows.Forms.LayoutSettings.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.LinkLabel.LinkCollection.IndexOfKey(string key) -> int
