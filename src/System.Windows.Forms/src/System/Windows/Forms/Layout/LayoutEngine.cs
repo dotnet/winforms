@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 
 namespace System.Windows.Forms.Layout
@@ -12,7 +10,7 @@ namespace System.Windows.Forms.Layout
     {
         internal IArrangedElement CastToArrangedElement(object obj)
         {
-            if (!(obj is IArrangedElement element))
+            if (obj is not IArrangedElement element)
             {
                 throw new NotSupportedException(string.Format(SR.LayoutEngineUnsupportedType, obj.GetType()));
             }
