@@ -8,11 +8,11 @@ internal partial class Interop
 {
     internal static partial class Shell32
     {
-        [StructLayout(LayoutKind.Sequential, CharSet = CharSet.Unicode)]
+        [StructLayout(LayoutKind.Sequential)]
         public struct COMDLG_FILTERSPEC
         {
-            public string? pszName;
-            public string? pszSpec;
+            public IntPtr pszName;
+            public IntPtr pszSpec;
         }
     }
 }

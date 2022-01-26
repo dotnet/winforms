@@ -202,18 +202,27 @@ namespace System.Windows.Forms
 
         private void SetFileTypes(IFileDialog dialog)
         {
-            COMDLG_FILTERSPEC[] filterItems = FilterItems;
-            HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
-            ThrowIfFailed(hr);
-
-            if (filterItems.Length > 0)
+            COMDLG_FILTERSPEC[] filterItems = GetFilterItems(_filter);
+            try
             {
-                hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
+                HRESULT hr = dialog.SetFileTypes((uint)filterItems.Length, filterItems);
                 ThrowIfFailed(hr);
+
+                if (filterItems.Length > 0)
+                {
+                    hr = dialog.SetFileTypeIndex(unchecked((uint)FilterIndex));
+                    ThrowIfFailed(hr);
+                }
+            }
+            finally
+            {
+                foreach (var item in filterItems)
+                {
+                    Marshal.FreeCoTaskMem(item.pszName);
+                    Marshal.FreeCoTaskMem(item.pszSpec);
+                }
             }
         }
-
-        private COMDLG_FILTERSPEC[] FilterItems => GetFilterItems(_filter);
 
         private static COMDLG_FILTERSPEC[] GetFilterItems(string filter)
         {
@@ -231,8 +240,8 @@ namespace System.Windows.Forms
                     for (int i = 1; i < tokens.Length; i += 2)
                     {
                         COMDLG_FILTERSPEC extension;
-                        extension.pszSpec = tokens[i]; // This may be a semicolon delimited list of extensions (that's ok)
-                        extension.pszName = tokens[i - 1];
+                        extension.pszSpec = Marshal.StringToCoTaskMemUni(tokens[i]);        // This may be a semicolon delimited list of extensions (that's ok)
+                        extension.pszName = Marshal.StringToCoTaskMemUni(tokens[i - 1]);
                         extensions.Add(extension);
                     }
                 }
@@ -241,9 +250,9 @@ namespace System.Windows.Forms
             return extensions.ToArray();
         }
 
-        private protected static string GetFilePathFromShellItem(IShellItem item)
+        private protected static string? GetFilePathFromShellItem(IShellItem item)
         {
-            HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string filename);
+            HRESULT hr = item.GetDisplayName(SIGDN.DESKTOPABSOLUTEPARSING, out string? filename);
             ThrowIfFailed(hr);
             return filename;
         }

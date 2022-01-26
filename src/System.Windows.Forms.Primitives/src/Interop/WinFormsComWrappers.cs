@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -47,13 +47,30 @@ internal partial class Interop
 
         protected override object CreateObject(IntPtr externalComObject, CreateObjectFlags flags)
         {
-            Debug.Assert(flags == CreateObjectFlags.UniqueInstance);
+            Debug.Assert(flags == CreateObjectFlags.UniqueInstance || flags == CreateObjectFlags.None || flags == CreateObjectFlags.Unwrap);
 
             Guid pictureIID = IID.IPicture;
-            int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr comObject);
+            int hr = Marshal.QueryInterface(externalComObject, ref pictureIID, out IntPtr pictureComObject);
             if (hr == S_OK)
             {
-                return new PictureWrapper(comObject);
+                Marshal.Release(externalComObject);
+                return new PictureWrapper(pictureComObject);
+            }
+
+            Guid fileOpenDialogIID = IID.IFileOpenDialog;
+            hr = Marshal.QueryInterface(externalComObject, ref fileOpenDialogIID, out IntPtr fileOpenDialogComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new FileOpenDialogWrapper(fileOpenDialogComObject);
+            }
+
+            Guid shellItemIID = IID.IShellItem;
+            hr = Marshal.QueryInterface(externalComObject, ref shellItemIID, out IntPtr shellItemComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new ShellItemWrapper(shellItemComObject);
             }
 
             throw new NotImplementedException();
@@ -62,6 +79,36 @@ internal partial class Interop
         protected override void ReleaseObjects(IEnumerable objects)
         {
             throw new NotImplementedException();
+        }
+
+        internal IntPtr GetComPointer<T>(T obj, Guid iid) where T : class
+        {
+            if (obj is null)
+            {
+                return IntPtr.Zero;
+            }
+
+            IntPtr pobj_local;
+            IntPtr pUnk_local = GetOrCreateComInterfaceForObject(obj);
+            Guid local_IID = iid;
+            HRESULT result = (HRESULT)Marshal.QueryInterface(pUnk_local, ref local_IID, out pobj_local);
+            Marshal.Release(pUnk_local);
+            if (result.Failed())
+            {
+                Marshal.ThrowExceptionForHR((int)result);
+            }
+
+            return pobj_local;
+        }
+
+        private IntPtr GetOrCreateComInterfaceForObject(object obj)
+        {
+            return obj switch
+            {
+                ShellItemWrapper siw => siw.Instance,
+                FileOpenDialogWrapper fodw => fodw.Instance,
+                _ => GetOrCreateComInterfaceForObject(obj, CreateComInterfaceFlags.None),
+            };
         }
     }
 }
