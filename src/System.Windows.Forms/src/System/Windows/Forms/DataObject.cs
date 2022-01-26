@@ -271,9 +271,9 @@ namespace System.Windows.Forms
             return GetDataPresent(ConvertToDataFormats(format), autoConvert: false);
         }
 
-        public virtual Stream GetAudioStream()
+        public virtual Stream? GetAudioStream()
         {
-            return (GetData(DataFormats.WaveAudio, false) as Stream)!;
+            return GetData(DataFormats.WaveAudio, false) as Stream;
         }
 
         public virtual StringCollection GetFileDropList()
@@ -287,9 +287,9 @@ namespace System.Windows.Forms
             return dropList;
         }
 
-        public virtual Image GetImage()
+        public virtual Image? GetImage()
         {
-            return (GetData(DataFormats.Bitmap, true) as Image)!;
+            return GetData(DataFormats.Bitmap, true) as Image;
         }
 
         public virtual string GetText()
@@ -988,45 +988,45 @@ namespace System.Windows.Forms
         ///  Stores the specified data and its associated format in this instance, using the automatic conversion
         ///  parameter to specify whether the data can be converted to another format.
         /// </summary>
-        public virtual void SetData(string format, bool autoConvert, object data)
+        public virtual void SetData(string format, bool autoConvert, object? data)
         {
             Debug.WriteLineIf(
                 CompModSwitches.DataObject.TraceVerbose,
                 $"Set data: {format}, {autoConvert}, {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
-            _innerData.SetData(format, autoConvert, data!);
+            _innerData.SetData(format, autoConvert, data);
         }
 
         /// <summary>
         ///  Stores the specified data and its associated format in this instance.
         /// </summary>
-        public virtual void SetData(string format, object data)
+        public virtual void SetData(string format, object? data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Set data: {format}, {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
-            _innerData.SetData(format, data!);
+            _innerData.SetData(format, data);
         }
 
         /// <summary>
         ///  Stores the specified data and its associated class type in this instance.
         /// </summary>
-        public virtual void SetData(Type format, object data)
+        public virtual void SetData(Type format, object? data)
         {
             Debug.WriteLineIf(
                 CompModSwitches.DataObject.TraceVerbose,
                 $"Set data: {format?.FullName ?? "(null)"}, {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
-            _innerData.SetData(format!, data!);
+            _innerData.SetData(format!, data);
         }
 
         /// <summary>
         ///  Stores the specified data in this instance, using the class of the data for the format.
         /// </summary>
-        public virtual void SetData(object data)
+        public virtual void SetData(object? data)
         {
             Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, $"Set data: {data ?? "(null)"}");
             Debug.Assert(_innerData is not null, "You must have an innerData on all DataObjects");
-            _innerData.SetData(data!);
+            _innerData.SetData(data);
         }
     }
 }

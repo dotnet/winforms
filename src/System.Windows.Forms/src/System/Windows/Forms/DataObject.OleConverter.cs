@@ -505,21 +505,21 @@ namespace System.Windows.Forms
                 return GetData(format.FullName!);
             }
 
-            public virtual void SetData(string format, bool autoConvert, object data)
+            public virtual void SetData(string format, bool autoConvert, object? data)
             {
             }
 
-            public virtual void SetData(string format, object data)
+            public virtual void SetData(string format, object? data)
             {
                 SetData(format, true, data);
             }
 
-            public virtual void SetData(Type format, object data)
+            public virtual void SetData(Type format, object? data)
             {
                 SetData(format.FullName!, data);
             }
 
-            public virtual void SetData(object data)
+            public virtual void SetData(object? data)
             {
                 if (data is ISerializable)
                 {
@@ -527,7 +527,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    SetData(data.GetType(), data);
+                    SetData(data!.GetType(), data);
                 }
             }
 

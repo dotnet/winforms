@@ -2,7 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Diagnostics;
@@ -18,17 +17,17 @@ namespace System.Windows.Forms
         {
             private class DataStoreEntry
             {
-                public object Data { get; }
+                public object? Data { get; }
                 public bool AutoConvert { get; }
 
-                public DataStoreEntry(object data, bool autoConvert)
+                public DataStoreEntry(object? data, bool autoConvert)
                 {
                     Data = data;
                     AutoConvert = autoConvert;
                 }
             }
 
-            private readonly Hashtable _data = new Hashtable(BackCompatibleStringComparer.Default);
+            private readonly Dictionary<string, DataStoreEntry> _data = new Dictionary<string, DataStoreEntry>(BackCompatibleStringComparer.Default);
 
             public DataStore()
             {
@@ -43,9 +42,8 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                DataStoreEntry? dse = (DataStoreEntry?)_data[format];
                 object? baseVar = null;
-                if (dse is not null)
+                if (_data.TryGetValue(format, out DataStoreEntry? dse))
                 {
                     baseVar = dse.Data;
                 }
@@ -63,8 +61,7 @@ namespace System.Windows.Forms
                         {
                             if (!format.Equals(mappedFormats[i]))
                             {
-                                DataStoreEntry? found = (DataStoreEntry?)_data[mappedFormats[i]];
-                                if (found is not null)
+                                if (_data.TryGetValue(mappedFormats[i], out DataStoreEntry? found))
                                 {
                                     baseVar = found.Data;
                                 }
@@ -101,7 +98,7 @@ namespace System.Windows.Forms
                 return GetData(format.FullName!);
             }
 
-            public virtual void SetData(string format, bool autoConvert, object data)
+            public virtual void SetData(string format, bool autoConvert, object? data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + autoConvert.ToString() + ", " + data?.ToString() ?? "(null)");
                 if (string.IsNullOrWhiteSpace(format))
@@ -114,7 +111,6 @@ namespace System.Windows.Forms
                 // We do not have proper support for Dibs, so if the user explicitly asked
                 // for Dib and provided a Bitmap object we can't convert.  Instead, publish as an HBITMAP
                 // and let the system provide the conversion for us.
-                //
                 if (data is Bitmap && format.Equals(DataFormats.Dib))
                 {
                     if (autoConvert)
@@ -127,24 +123,24 @@ namespace System.Windows.Forms
                     }
                 }
 
-                _data[format] = new DataStoreEntry(data!, autoConvert);
+                _data[format] = new DataStoreEntry(data, autoConvert);
             }
 
-            public virtual void SetData(string format, object data)
+            public virtual void SetData(string format, object? data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format + ", " + data?.ToString() ?? "(null)");
-                SetData(format, true, data!);
+                SetData(format, true, data);
             }
 
-            public virtual void SetData(Type format, object data)
+            public virtual void SetData(Type format, object? data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + format?.FullName ?? "(null)" + ", " + data?.ToString() ?? "(null)");
                 ArgumentNullException.ThrowIfNull(format);
 
-                SetData(format.FullName!, data!);
+                SetData(format.FullName!, data);
             }
 
-            public virtual void SetData(object data)
+            public virtual void SetData(object? data)
             {
                 Debug.WriteLineIf(CompModSwitches.DataObject.TraceVerbose, "DataStore: SetData: " + data?.ToString() ?? "(null)");
                 ArgumentNullException.ThrowIfNull(data);
@@ -222,7 +218,7 @@ namespace System.Windows.Forms
                     for (int i = 0; i < baseVarLength; i++)
                     {
                         Debug.Assert(_data[baseVar[i]] is not null, "Null item in data collection with key '" + baseVar[i] + "'");
-                        if (((DataStoreEntry)_data[baseVar[i]]!).AutoConvert)
+                        if (_data[baseVar[i]]!.AutoConvert)
                         {
                             string[] cur = GetMappedFormats(baseVar[i])!;
                             Debug.Assert(cur is not null, "GetMappedFormats returned null for '" + baseVar[i] + "'");

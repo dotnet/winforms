@@ -30,24 +30,24 @@ namespace System.Windows.Forms
         ///  using autoConvert to specify whether the data can be converted to
         ///  another format.
         /// </summary>
-        void SetData(string format, bool autoConvert, object data);
+        void SetData(string format, bool autoConvert, object? data);
 
         /// <summary>
         ///  Stores the specified data and its associated format in this instance.
         /// </summary>
-        void SetData(string format, object data);
+        void SetData(string format, object? data);
 
         /// <summary>
         ///  Stores the specified data and its associated class type in this
         ///  instance.
         /// </summary>
-        void SetData(Type format, object data);
+        void SetData(Type format, object? data);
 
         /// <summary>
         ///  Stores the specified data in this instance, using the class of the
         ///  data for the format.
         /// </summary>
-        void SetData(object data);
+        void SetData(object? data);
 
         /// <summary>
         ///  Determines whether data stored in this instance is  associated with the

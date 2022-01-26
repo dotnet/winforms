@@ -2,18 +2,20 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
+using System.Diagnostics.CodeAnalysis;
+
 namespace System.Collections.Specialized
 {
-    internal class BackCompatibleStringComparer : IEqualityComparer
+    internal class BackCompatibleStringComparer : IEqualityComparer<string>
     {
-        static internal IEqualityComparer Default = new BackCompatibleStringComparer();
+        static internal IEqualityComparer<string> Default = new BackCompatibleStringComparer();
 
         internal BackCompatibleStringComparer()
         {
         }
 
         //For backcompat
-        public static int GetHashCode(string? obj)
+        public int GetHashCode([DisallowNull] string obj)
         {
             unsafe
             {
@@ -34,9 +36,9 @@ namespace System.Collections.Specialized
             }
         }
 
-        bool IEqualityComparer.Equals(object? a, object? b)
+        public bool Equals(string? x, string? y)
         {
-            return Object.Equals(a, b);
+            return object.Equals(x, y);
         }
 
         public virtual int GetHashCode(object o)
@@ -46,7 +48,7 @@ namespace System.Collections.Specialized
                 return o.GetHashCode();
             }
 
-            return BackCompatibleStringComparer.GetHashCode(obj);
+            return GetHashCode(obj);
         }
     }
 }
