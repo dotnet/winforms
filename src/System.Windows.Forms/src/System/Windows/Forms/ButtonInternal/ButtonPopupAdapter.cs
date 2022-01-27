@@ -135,7 +135,7 @@ namespace System.Windows.Forms.ButtonInternal
 
             r.Inflate(1, 1);
             DrawDefaultBorder(e, r, colors.Options.HighContrast ? colors.WindowText : colors.WindowFrame, Control.IsDefault);
-            ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : colors.ButtonShadow);
+            ControlPaint.DrawBorderSimple(e, r, colors.Options.HighContrast ? colors.WindowText : ControlPaint.Darker(colors.ButtonShadow, ButtonBorderDarkerOffset));
         }
 
         #region Layout
