@@ -10,11 +10,11 @@ If you do not want to modify your local SDK, you may with to perform technique 2
 
 Copy the resulting assembly(-ies) from your local build.
 
-- They are located at `[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net6.0`
+- They are located at `[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net7.0`
 - And need to be copied to the system dotnet folder `[Drive]:\Program Files\dotnet\shared\Microsoft.WindowsDesktop.App\[Version]`
 
 :warning: If you have updated any public APIs, you'll need to overwrite the ref assemblies too (since that's what VS uses when resolving types):
-- The ref assemblies compile to `[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net6.0\ref`
+- The ref assemblies compile to `[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net7.0\ref`
 - These need to be copied to `[Drive]:\Program Files\dotnet\packs\Microsoft.WindowsDesktop.App.Ref\[Version]`
 
 where:
@@ -32,8 +32,8 @@ Add references to the binary(-ies) to your project ported to .NET. For example, 
 
 ```xml
 <ItemGroup>
-    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net6.0\System.Windows.Forms.dll" />
-    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net6.0\System.Windows.Forms.Primitives.dll" />
+    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net7.0\System.Windows.Forms.dll" />
+    <Reference Include="[Drive]:[Path-to-repo]\winforms\artifacts\bin\System.Windows.Forms\Debug\net7.0\System.Windows.Forms.Primitives.dll" />
 </ItemGroup>
 ```
 
