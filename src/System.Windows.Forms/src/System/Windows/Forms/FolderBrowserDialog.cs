@@ -269,10 +269,10 @@ namespace System.Windows.Forms
                 // Creating the Vista dialog can fail on Windows Server Core, even if the
                 // Server Core App Compatibility FOD is installed.
                 HRESULT hr = Ole32.CoCreateInstance(
-                    ref CLSID.FileOpenDialog,
+                    in CLSID.FileOpenDialog,
                     IntPtr.Zero,
                     Ole32.CLSCTX.INPROC_SERVER | Ole32.CLSCTX.LOCAL_SERVER | Ole32.CLSCTX.REMOTE_SERVER,
-                    ref NativeMethods.ActiveX.IID_IUnknown,
+                    in NativeMethods.ActiveX.IID_IUnknown,
                     out IntPtr lpDialogUnknownPtr);
                 if (!hr.Succeeded())
                 {
