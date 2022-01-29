@@ -35,6 +35,7 @@ namespace System.Windows.Forms.IntegrationTests.Common
         ToolStripsButton,
         TrackBarsButton,
         ScrollBarsButton,
-        ToolTipsButton
+        ToolTipsButton,
+        DragAndDrop
     }
 }

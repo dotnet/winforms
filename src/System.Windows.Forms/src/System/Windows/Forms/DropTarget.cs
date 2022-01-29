@@ -14,6 +14,7 @@ namespace System.Windows.Forms
     {
         private IDataObject? _lastDataObject;
         private DragDropEffects _lastEffect = DragDropEffects.None;
+        private DropIconType _lastDropIcon = DropIconType.Invalid;
         private readonly IDropTarget _owner;
 
         public DropTarget(IDropTarget owner)
@@ -70,6 +71,21 @@ namespace System.Windows.Forms
                 _owner.OnDragEnter(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
+                _lastDropIcon = drgevent.DropIcon;
+
+                if (drgevent.DropIcon is > DropIconType.Invalid
+                    && _owner is Control control
+                    && drgevent.Data is not null
+                    && drgevent.Data is IComDataObject comDataObject)
+                {
+                    DragDropHelper.SetDropDescription(
+                        comDataObject,
+                        drgevent.DropIcon,
+                        drgevent.Message,
+                        drgevent.Insert);
+
+                    DragDropHelper.DragEnter(control.Handle, comDataObject, ref pt, pdwEffect);
+                }
             }
             else
             {
@@ -89,6 +105,11 @@ namespace System.Windows.Forms
                 _owner.OnDragOver(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
                 _lastEffect = drgevent.Effect;
+
+                if (_lastDropIcon is > DropIconType.Invalid)
+                {
+                    DragDropHelper.DragOver(ref pt, pdwEffect);
+                }
             }
             else
             {
@@ -102,6 +123,12 @@ namespace System.Windows.Forms
         {
             Debug.WriteLineIf(CompModSwitches.DragDrop.TraceInfo, "OleDragLeave received");
             _owner.OnDragLeave(EventArgs.Empty);
+
+            if (_lastDropIcon is > DropIconType.Invalid)
+            {
+                DragDropHelper.DragLeave();
+            }
+
             return HRESULT.S_OK;
         }
 
@@ -115,12 +142,20 @@ namespace System.Windows.Forms
             {
                 _owner.OnDragDrop(drgevent);
                 pdwEffect = (uint)drgevent.Effect;
+
+                if (_lastDropIcon is > DropIconType.Invalid
+                    && drgevent.Data is not null
+                    && drgevent.Data is IComDataObject comDataObject)
+                {
+                    DragDropHelper.Drop(comDataObject, ref pt, pdwEffect);
+                }
             }
             else
             {
                 pdwEffect = (uint)DragDropEffects.None;
             }
 
+            _lastDropIcon = DropIconType.Invalid;
             _lastEffect = DragDropEffects.None;
             _lastDataObject = null;
             return HRESULT.S_OK;

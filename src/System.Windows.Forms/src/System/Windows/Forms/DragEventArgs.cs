@@ -27,6 +27,9 @@ namespace System.Windows.Forms
             Y = y;
             AllowedEffect = allowedEffect;
             Effect = effect;
+            DropIcon = DropIconType.Invalid;
+            Message = string.Empty;
+            Insert = string.Empty;
         }
 
         /// <summary>
@@ -60,5 +63,26 @@ namespace System.Windows.Forms
         ///  Gets or sets which drag-and-drop operations are allowed by the target of the drag event.
         /// </summary>
         public DragDropEffects Effect { get; set; }
+
+        /// <summary>
+        /// Gets or sets the drop description icon type.
+        /// </summary>
+        public DropIconType DropIcon { get; set; }
+
+        /// <summary>
+        /// Gets or sets the drop description text such as "Move to %1".
+        /// </summary>
+        /// <remarks>
+        /// <para>UI coloring is applied to the text in Insert if used by specifying %1 in Message.</para>
+        /// </remarks>
+        public string Message { get; set; }
+
+        /// <summary>
+        /// Gets or sets the drop description text such as "Documents" when %1 is specified in Message.
+        /// </summary>
+        /// <remarks>
+        /// <para>UI coloring is applied to the text in Insert if used by specifying %1 in Message.</para>
+        /// </remarks>
+        public string Insert { get; set; }
     }
 }

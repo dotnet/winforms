@@ -174,6 +174,10 @@ namespace WinformsControlsTest
             {
                 MainFormControlsTabOrder.ToolTipsButton,
                 new InitInfo("ToolTips", (obj, e) => new ToolTipTests().Show(this))
+            },
+            {
+                MainFormControlsTabOrder.DragAndDrop,
+                new InitInfo("Drag and Drop", (obj, e) => new DragDrop().Show(this))
             }
         };
 

@@ -1,4 +1,4 @@
-// Licensed to the .NET Foundation under one or more agreements.
+﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
@@ -11,5 +11,8 @@ internal partial class Interop
 
         // DC1C5A9C-E88A-4DDE-A5A1-60F82A20AEF7
         internal static Guid FileOpenDialog = new Guid(0xDC1C5A9C, 0xE88A, 0x4DDE, 0xA5, 0xA1, 0x60, 0xF8, 0x2A, 0x20, 0xAE, 0xF7);
+
+        // 4657278A-411B-11D2-839A-00C04FD918D0
+        internal static Guid DragDropHelper = new Guid(0x4657278A, 0x411B, 0x11D2, 0x83, 0x9A, 0x0, 0xC0, 0x4F, 0xD9, 0x18, 0xD0);
     }
 }

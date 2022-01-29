@@ -17,6 +17,16 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\DragDrop\DragAccept.rtf" />
+    <None Remove="Data\DragDrop\nyancat1.bmp" />
+    <None Remove="Data\DragDrop\nyancat2.bmp" />
+    <None Remove="Data\DragDrop\nyancat3.bmp" />
+    <None Remove="Data\DragDrop\nyancat4.bmp" />
+    <None Remove="Data\DragDrop\nyancat5.bmp" />
+    <None Remove="Data\DragDrop\nyancatascii_width_301.bmp" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\..\System.Design\src\System.Design.Facade.csproj" />
     <ProjectReference Include="..\..\..\..\System.Windows.Forms.Design\src\System.Windows.Forms.Design.csproj" />
     <ProjectReference Include="..\..\..\src\System.Windows.Forms.csproj" />
@@ -24,6 +34,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Data\DragDrop\DragAccept.rtf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\DragDrop\NyanCat1.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\DragDrop\NyanCat2.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\DragDrop\NyanCat3.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\DragDrop\NyanCat4.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\DragDrop\NyanCat5.bmp">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
     <EmbeddedResource Include="Images\SmallA.bmp">
       <LogicalName>WinformsControlsTest.SmallA.bmp</LogicalName>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

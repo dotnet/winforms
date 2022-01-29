@@ -1,1 +1,16 @@
 ~override System.Windows.Forms.SplitContainer.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
+System.Windows.Forms.DragEventArgs.DropIcon.get -> System.Windows.Forms.DropIconType
+System.Windows.Forms.DragEventArgs.DropIcon.set -> void
+System.Windows.Forms.DragEventArgs.Insert.get -> string!
+System.Windows.Forms.DragEventArgs.Insert.set -> void
+System.Windows.Forms.DragEventArgs.Message.get -> string!
+System.Windows.Forms.DragEventArgs.Message.set -> void
+System.Windows.Forms.DropIconType
+System.Windows.Forms.DropIconType.Copy = 1 -> System.Windows.Forms.DropIconType
+System.Windows.Forms.DropIconType.Invalid = -1 -> System.Windows.Forms.DropIconType
+System.Windows.Forms.DropIconType.Label = 6 -> System.Windows.Forms.DropIconType
+System.Windows.Forms.DropIconType.Link = 4 -> System.Windows.Forms.DropIconType
+System.Windows.Forms.DropIconType.Move = 2 -> System.Windows.Forms.DropIconType
+System.Windows.Forms.DropIconType.NoImage = 8 -> System.Windows.Forms.DropIconType
+System.Windows.Forms.DropIconType.None = 0 -> System.Windows.Forms.DropIconType
+System.Windows.Forms.DropIconType.Warning = 7 -> System.Windows.Forms.DropIconType
