@@ -46,16 +46,13 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    if (_array is not null)
+                    for (; _location < _size && fetched < celt; ++_location)
                     {
-                        for (; _location < _size && fetched < celt; ++_location)
+                        if (_array![_location] is not null)
                         {
-                            if (_array[_location] is not null)
-                            {
-                                Marshal.WriteIntPtr(rgelt, Marshal.GetIUnknownForObject(_array[_location]));
-                                rgelt = (IntPtr)((long)rgelt + (long)sizeof(IntPtr));
-                                ++fetched;
-                            }
+                            Marshal.WriteIntPtr(rgelt, Marshal.GetIUnknownForObject(_array[_location]));
+                            rgelt = (IntPtr)((long)rgelt + sizeof(IntPtr));
+                            ++fetched;
                         }
                     }
                 }
