@@ -1408,7 +1408,7 @@ namespace System.Windows.Forms
 
             // Check if font is inherited from parent and is not being scaled by Parent (e.g. Winforms designer
             // in Visual Studio). In this case we need to scale Control explicitly with respect to new scaled Font.
-            if (TryGetExplicitlySetFont(out _))
+            if (TryGetExplicitlySetFont(out _) && GetCurrentFontAutoScale() == FontAutoScale.SystemOnly)
             {
                 return;
             }

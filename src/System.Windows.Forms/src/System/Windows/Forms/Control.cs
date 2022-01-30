@@ -331,7 +331,9 @@ namespace System.Windows.Forms
         // Stores scaled font from Dpi changed values. This is required to distinguish the Font change from
         // Dpi changed events and explicit Font change/assignment.
         private Font _scaledControlFont;
+        private Font _scaledExplicitControlFont;
         private FontHandleWrapper _scaledFontWrapper;
+        private FontAutoScale _fontAutoScale = FontAutoScale.Inherit;
 
         // ContainerControls like 'PropertyGrid' scale their children when they resize.
         // no explicit scaling of children required in such cases. They have specific logic.
@@ -2152,6 +2154,80 @@ namespace System.Windows.Forms
             }
         }
 
+        /// <summary>
+        /// Gets the Font that was explicitly set on control by the application. null if the font was not explicitly set.
+        /// </summary>
+        [Browsable(false)]
+        [DispId((int)Ole32.DispatchID.FONT)]
+        public Font ExplicitFont
+        {
+            get
+            {
+                TryGetExplicitlySetFont(out Font font);
+                return font;
+            }
+        }
+
+        /// <summary>
+        ///  Determines the font auto scaling mode of this control.
+        /// </summary>
+        [SRCategory(nameof(SR.CatAppearance))]
+        [Localizable(true)]
+        public FontAutoScale FontAutoScale
+        {
+            get => _fontAutoScale;
+            set
+            {
+                var curFontAutoScale = GetCurrentFontAutoScale();
+                _fontAutoScale = value;
+                var newFontAutoScale = GetCurrentFontAutoScale();
+                if (newFontAutoScale == curFontAutoScale)
+                    return;
+
+                bool needUpdateFont = false;
+                if (newFontAutoScale == FontAutoScale.SystemOnly)
+                {
+                    if (_scaledExplicitControlFont is not null)
+                    {
+                        _scaledExplicitControlFont.Dispose();
+                        _scaledExplicitControlFont = null;
+                        needUpdateFont = true;
+                    }
+                }
+                else if (DpiHelper.GetTextScaleFactor() > DpiHelper.MinTextScaleFactorValue) // FontAutoScale.SystemAndExplicit
+                {
+                    needUpdateFont = true;
+                }
+
+                if (needUpdateFont)
+                {
+                    using (new LayoutTransaction(ParentInternal, this, PropertyNames.Font))
+                    {
+                        OnFontChanged(EventArgs.Empty);
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Get current font auto scaling mode that control is using.
+        /// </summary>
+        /// <returns><see cref="FontAutoScale.SystemOnly"/> or <see cref="FontAutoScale.SystemAndExplicit"/></returns>
+        private protected FontAutoScale GetCurrentFontAutoScale()
+        {
+            if (FontAutoScale != FontAutoScale.Inherit)
+                return FontAutoScale;
+
+            Control parentControl = Parent;
+
+            while (parentControl?.FontAutoScale == FontAutoScale.Inherit)
+            {
+                parentControl = parentControl.Parent;
+            }
+
+            return parentControl?.FontAutoScale ?? FontAutoScale.SystemOnly;
+        }
+
         private protected void AddToDpiFonts(int dpi, Font font)
         {
             if (!User32.AreDpiAwarenessContextsEqual(DpiAwarenessContext, User32.DPI_AWARENESS_CONTEXT.PER_MONITOR_AWARE_V2))
@@ -2219,7 +2295,12 @@ namespace System.Windows.Forms
                     FontHandleWrapper fontHandle = (FontHandleWrapper)Properties.GetObject(s_fontHandleWrapperProperty);
                     if (fontHandle is null)
                     {
-                        fontHandle = new FontHandleWrapper(font);
+                        if (GetCurrentFontAutoScale() == FontAutoScale.SystemAndExplicit)
+                        {
+                            ScaleFont(font, DpiHelper.GetTextScaleFactor());
+                        }
+
+                        fontHandle = new FontHandleWrapper(_scaledExplicitControlFont ?? font);
 
                         Properties.SetObject(s_fontHandleWrapperProperty, fontHandle);
                     }
@@ -2277,7 +2358,12 @@ namespace System.Windows.Forms
                 {
                     if (TryGetExplicitlySetFont(out Font font))
                     {
-                        fontHeight = font.Height;
+                        if (GetCurrentFontAutoScale() == FontAutoScale.SystemAndExplicit)
+                        {
+                            ScaleFont(font, DpiHelper.GetTextScaleFactor());
+                        }
+
+                        fontHeight = (_scaledExplicitControlFont ?? font).Height;
                         Properties.SetInteger(s_fontHeightProperty, fontHeight);
                         return fontHeight;
                     }
@@ -5961,7 +6047,12 @@ namespace System.Windows.Forms
 
             if (TryGetExplicitlySetFont(out Font font))
             {
-                return font;
+                if (GetCurrentFontAutoScale() == FontAutoScale.SystemAndExplicit)
+                {
+                    ScaleFont(font, DpiHelper.GetTextScaleFactor());
+                }
+
+                return _scaledExplicitControlFont ?? font;
             }
 
             font = GetParentFont(out fontDpi);
@@ -5986,6 +6077,32 @@ namespace System.Windows.Forms
             }
 
             return DefaultFont;
+        }
+
+        /// <summary>
+        /// Scale given font as per the Settings display text scale settings.
+        /// </summary>
+        /// <param name="font">The font to scale.</param>
+        /// <param name="textScaleFactor">The scaling factor in the range [1.0, 2.25].</param>
+        private void ScaleFont(Font font, float textScaleFactor)
+        {
+            if (font is null || !OsVersion.IsWindows10_1507OrGreater)
+            {
+                return;
+            }
+
+            if (_scaledExplicitControlFont is not null)
+            {
+                _scaledExplicitControlFont.Dispose();
+                _scaledExplicitControlFont = null;
+            }
+
+            // Restore the text scale if it isn't the default value in the valid text scale factor value
+            textScaleFactor = Math.Min(DpiHelper.MaxTextScaleFactorValue, textScaleFactor);
+            if (textScaleFactor > DpiHelper.MinTextScaleFactorValue)
+            {
+                _scaledExplicitControlFont = font.WithSize(font.Size * textScaleFactor);
+            }
         }
 
         private protected virtual IList<Rectangle> GetNeighboringToolsRectangles()
@@ -11451,7 +11568,7 @@ namespace System.Windows.Forms
         }
 
         /// <summary>
-        /// Retrieve Font from propertybag. This is the FOnt that was explicitly set on control by the application.
+        /// Retrieve Font from propertybag. This is the Font that was explicitly set on control by the application.
         /// </summary>
         internal bool TryGetExplicitlySetFont(out Font localFont)
         {
