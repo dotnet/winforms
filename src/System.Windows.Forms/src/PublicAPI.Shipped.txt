@@ -830,8 +830,8 @@ override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArg
 ~override System.Windows.Forms.ToolStrip.OnScroll(System.Windows.Forms.ScrollEventArgs se) -> void
 ~override System.Windows.Forms.ToolStrip.OnTabStopChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStrip.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
-~override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
+override System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.HitTest(int x, int y) -> System.Windows.Forms.AccessibleObject?
 ~override System.Windows.Forms.ToolStrip.ToString() -> string
 ~override System.Windows.Forms.ToolStripButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripButton.OnClick(System.EventArgs e) -> void
@@ -873,8 +873,8 @@ override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArg
 ~override System.Windows.Forms.ToolStripDropDown.OnMouseUp(System.Windows.Forms.MouseEventArgs mea) -> void
 ~override System.Windows.Forms.ToolStripDropDown.OnParentChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStripDropDown.OnVisibleChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject.Name.get -> string
-~override System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject.Name.set -> void
+override System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject.Name.get -> string?
+override System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject.Name.set -> void
 ~override System.Windows.Forms.ToolStripDropDownButton.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripDropDownButton.CreateDefaultDropDown() -> System.Windows.Forms.ToolStripDropDown
 ~override System.Windows.Forms.ToolStripDropDownButton.OnMouseDown(System.Windows.Forms.MouseEventArgs e) -> void
@@ -884,7 +884,7 @@ override System.Windows.Forms.ScrollableControl.OnVisibleChanged(System.EventArg
 ~override System.Windows.Forms.ToolStripDropDownItem.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripDropDownItem.OnFontChanged(System.EventArgs e) -> void
 ~override System.Windows.Forms.ToolStripDropDownItem.OnRightToLeftChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripDropDownItemAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject
+override System.Windows.Forms.ToolStripDropDownItemAccessibleObject.GetChild(int index) -> System.Windows.Forms.AccessibleObject?
 ~override System.Windows.Forms.ToolStripDropDownMenu.CreateDefaultItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> System.Windows.Forms.ToolStripItem
 ~override System.Windows.Forms.ToolStripDropDownMenu.LayoutEngine.get -> System.Windows.Forms.Layout.LayoutEngine
 ~override System.Windows.Forms.ToolStripDropDownMenu.OnFontChanged(System.EventArgs e) -> void
@@ -2440,7 +2440,7 @@ System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Form
 ~System.Windows.Forms.ToolStrip.Renderer.set -> void
 ~System.Windows.Forms.ToolStrip.SetItemLocation(System.Windows.Forms.ToolStripItem item, System.Drawing.Point location) -> void
 ~System.Windows.Forms.ToolStrip.ToolStrip(params System.Windows.Forms.ToolStripItem[] items) -> void
-~System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.ToolStripAccessibleObject(System.Windows.Forms.ToolStrip owner) -> void
+System.Windows.Forms.ToolStrip.ToolStripAccessibleObject.ToolStripAccessibleObject(System.Windows.Forms.ToolStrip! owner) -> void
 ~System.Windows.Forms.ToolStrip.VerticalScroll.get -> System.Windows.Forms.VScrollProperties
 ~System.Windows.Forms.ToolStripButton.ToolStripButton(string text) -> void
 ~System.Windows.Forms.ToolStripButton.ToolStripButton(string text, System.Drawing.Image image) -> void
@@ -2488,7 +2488,7 @@ System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Form
 ~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, int x, int y) -> void
 ~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, System.Drawing.Point position) -> void
 ~System.Windows.Forms.ToolStripDropDown.Show(System.Windows.Forms.Control control, System.Drawing.Point position, System.Windows.Forms.ToolStripDropDownDirection direction) -> void
-~System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject.ToolStripDropDownAccessibleObject(System.Windows.Forms.ToolStripDropDown owner) -> void
+System.Windows.Forms.ToolStripDropDown.ToolStripDropDownAccessibleObject.ToolStripDropDownAccessibleObject(System.Windows.Forms.ToolStripDropDown! owner) -> void
 ~System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string text) -> void
 ~System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string text, System.Drawing.Image image) -> void
 ~System.Windows.Forms.ToolStripDropDownButton.ToolStripDropDownButton(string text, System.Drawing.Image image, params System.Windows.Forms.ToolStripItem[] dropDownItems) -> void
@@ -2501,7 +2501,7 @@ System.Windows.Forms.ScrollableControl.VerticalScroll.get -> System.Windows.Form
 ~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, params System.Windows.Forms.ToolStripItem[] dropDownItems) -> void
 ~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, System.EventHandler onClick) -> void
 ~System.Windows.Forms.ToolStripDropDownItem.ToolStripDropDownItem(string text, System.Drawing.Image image, System.EventHandler onClick, string name) -> void
-~System.Windows.Forms.ToolStripDropDownItemAccessibleObject.ToolStripDropDownItemAccessibleObject(System.Windows.Forms.ToolStripDropDownItem item) -> void
+System.Windows.Forms.ToolStripDropDownItemAccessibleObject.ToolStripDropDownItemAccessibleObject(System.Windows.Forms.ToolStripDropDownItem! item) -> void
 ~System.Windows.Forms.ToolStripItem.AccessibilityObject.get -> System.Windows.Forms.AccessibleObject
 ~System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.get -> string
 ~System.Windows.Forms.ToolStripItem.AccessibleDefaultActionDescription.set -> void
