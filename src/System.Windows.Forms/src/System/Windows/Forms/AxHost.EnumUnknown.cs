@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -13,18 +11,18 @@ namespace System.Windows.Forms
     {
         internal class EnumUnknown : Ole32.IEnumUnknown
         {
-            private readonly object[] _array;
+            private readonly object[]? _array;
             private int _location;
             private readonly int _size;
 
-            internal EnumUnknown(object[] array)
+            internal EnumUnknown(object[]? array)
             {
                 _array = array;
                 _location = 0;
                 _size = (array is null) ? 0 : array.Length;
             }
 
-            private EnumUnknown(object[] array, int location) : this(array)
+            private EnumUnknown(object[]? array, int location) : this(array)
             {
                 _location = location;
             }
@@ -50,7 +48,7 @@ namespace System.Windows.Forms
                 {
                     for (; _location < _size && fetched < celt; ++_location)
                     {
-                        if (_array[_location] is not null)
+                        if (_array![_location] is not null)
                         {
                             Marshal.WriteIntPtr(rgelt, Marshal.GetIUnknownForObject(_array[_location]));
                             rgelt = (IntPtr)((long)rgelt + sizeof(IntPtr));
