@@ -1640,7 +1640,8 @@ namespace System.Windows.Forms
                     /// <summary>
                     ///  Helper function to load a COM v-table from a com object pointer.
                     /// </summary>
-                    protected V? LoadVtable<V>()
+                    protected V LoadVtable<V>()
+                        where V : struct
                     {
                         IntPtr vtblptr = Marshal.ReadIntPtr(handle, 0);
                         return Marshal.PtrToStructure<V>(vtblptr);
@@ -1660,10 +1661,9 @@ namespace System.Windows.Forms
                         _vtbl = LoadVtable<VTABLE>();
                     }
 
-                    private readonly VTABLE? _vtbl;
+                    private readonly VTABLE _vtbl;
 
-                    [StructLayout(LayoutKind.Sequential)]
-                    private class VTABLE
+                    private struct VTABLE
                     {
                         public IntPtr QueryInterfacePtr;
                         public IntPtr AddRefPtr;
@@ -1707,7 +1707,7 @@ namespace System.Windows.Forms
                     }
 
                     [StructLayout(LayoutKind.Sequential)]
-                    private class VTABLE
+                    private struct VTABLE
                     {
                         public IntPtr QueryInterfacePtr;
                         public IntPtr AddRefPtr;
@@ -1719,14 +1719,14 @@ namespace System.Windows.Forms
                         public IntPtr EnumConnectionsPtr;
                     }
 
-                    private readonly VTABLE? _vtbl;
+                    private readonly VTABLE _vtbl;
 
                     /// <summary>
                     ///  Call IConnectionPoint.Advise using Delegate.Invoke on the v-table slot.
                     /// </summary>
                     public bool Advise(IntPtr punkEventSink, out uint pdwCookie)
                     {
-                        AdviseD advise = (AdviseD)Marshal.GetDelegateForFunctionPointer(_vtbl!.AdvisePtr, typeof(AdviseD));
+                        AdviseD advise = (AdviseD)Marshal.GetDelegateForFunctionPointer(_vtbl.AdvisePtr, typeof(AdviseD));
                         if (advise.Invoke(handle, punkEventSink, out pdwCookie) == 0)
                         {
                             return true;
