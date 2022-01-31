@@ -95,7 +95,7 @@ namespace System.Windows.Forms
                     if (prop.Empty)
                     {
                         object? obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_BACKCOLOR, ref obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_BACKCOLOR, out obj))
                         {
                             if (obj is not null)
                             {
@@ -143,7 +143,7 @@ namespace System.Windows.Forms
                     if (prop.Empty)
                     {
                         object? obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_FONT, ref obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_FONT, out obj))
                         {
                             try
                             {
@@ -179,7 +179,7 @@ namespace System.Windows.Forms
                     if (prop.Empty)
                     {
                         object? obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_FORECOLOR, ref obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_FORECOLOR, out obj))
                         {
                             if (obj is not null)
                             {
@@ -581,7 +581,7 @@ namespace System.Windows.Forms
             ///  Helper function to retrieve an ambient property.  Returns false if the
             ///  property wasn't found.
             /// </summary>
-            private bool GetAmbientProperty(DispatchID dispid, ref object? obj)
+            private bool GetAmbientProperty(DispatchID dispid, out object? obj)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
                 Debug.Indent();
@@ -614,6 +614,9 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Unindent();
+
+                obj = null;
+
                 return false;
             }
 
@@ -1309,7 +1312,7 @@ namespace System.Windows.Forms
                     switch (dispID)
                     {
                         case DispatchID.AMBIENT_UIDEAD:
-                            if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, ref obj))
+                            if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out obj))
                             {
                                 _activeXState[s_uiDead] = (bool)obj!;
                             }
@@ -1317,7 +1320,7 @@ namespace System.Windows.Forms
                             break;
 
                         case DispatchID.AMBIENT_DISPLAYASDEFAULT:
-                            if (_control is IButtonControl ibuttonControl && GetAmbientProperty(DispatchID.AMBIENT_DISPLAYASDEFAULT, ref obj))
+                            if (_control is IButtonControl ibuttonControl && GetAmbientProperty(DispatchID.AMBIENT_DISPLAYASDEFAULT, out obj))
                             {
                                 ibuttonControl.NotifyDefault((bool)obj!);
                             }
@@ -1931,12 +1934,12 @@ namespace System.Windows.Forms
 
                 // Get the ambient properties that effect us.
                 object? obj = null;
-                if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, ref obj))
+                if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out obj))
                 {
                     _activeXState[s_uiDead] = (bool)obj!;
                 }
 
-                if (_control is IButtonControl buttonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
+                if (_control is IButtonControl buttonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, out obj))
                 {
                     buttonControl.NotifyDefault((bool)obj!);
                 }
