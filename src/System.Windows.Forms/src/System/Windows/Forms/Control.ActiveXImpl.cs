@@ -1304,7 +1304,7 @@ namespace System.Windows.Forms
                     }
 
                     // Special properties that we care about
-                    object? obj = new object();
+                    object? obj = null;
 
                     switch (dispID)
                     {
@@ -1930,7 +1930,7 @@ namespace System.Windows.Forms
                 }
 
                 // Get the ambient properties that effect us.
-                object? obj = new object();
+                object? obj = null;
                 if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, ref obj))
                 {
                     _activeXState[s_uiDead] = (bool)obj!;
