@@ -310,6 +310,29 @@ namespace System.Windows.Forms.Tests
             Assert.True(menuItemCount == 4);
         }
 
+        [WinFormsFact]
+        public void MdiControlStrip_MaximizedChildWindow_RecreatesOnSizeChanged()
+        {
+            using var mdiParent = new Form() { IsMdiContainer = true, Text = "Parent" };
+            using var mdiChild = new Form() { MdiParent = mdiParent, Text = "Child" };
+            using var menuStrip = new MenuStrip();
+
+            mdiParent.Controls.Add(menuStrip);
+            mdiParent.MainMenuStrip = menuStrip;
+
+            mdiParent.Show();
+            mdiChild.Show();
+            mdiChild.WindowState = FormWindowState.Maximized;
+
+            Reflection.PropertyInfo mdiControlStripProperty = typeof(Form).GetProperty("MdiControlStrip", Reflection.BindingFlags.NonPublic | Reflection.BindingFlags.Instance);
+            MdiControlStrip originalMdiControlStrip = (MdiControlStrip)mdiControlStripProperty.GetValue(mdiParent);
+
+            mdiChild.Icon = Icon.FromHandle(new Bitmap(256, 256).GetHicon()); // Force size change with large icon
+
+            MdiControlStrip currentMdiControlStrip = (MdiControlStrip)mdiControlStripProperty.GetValue(mdiParent);
+            Assert.NotEqual(originalMdiControlStrip, currentMdiControlStrip);
+        }
+
         private class SubMdiControlStrip : MdiControlStrip
         {
             public new const int ScrollStateAutoScrolling = MenuStrip.ScrollStateAutoScrolling;
