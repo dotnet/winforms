@@ -1849,7 +1849,7 @@ namespace System.Windows.Forms.Design
                             IntPtr punkAcc = Marshal.GetIUnknownForObject(iacc);
                             try
                             {
-                                m.ResultInternal = Oleacc.LresultFromObject(ref IID.IAccessible, m.WParamInternal, punkAcc);
+                                m.ResultInternal = Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, punkAcc);
                             }
                             finally
                             {

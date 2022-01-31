@@ -103,7 +103,7 @@ namespace System.Windows.Forms
 
                         try
                         {
-                            m.ResultInternal = Oleacc.LresultFromObject(ref IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
+                            m.ResultInternal = Oleacc.LresultFromObject(in IID.IAccessible, m.WParamInternal, new HandleRef(this, pUnknown));
                         }
                         finally
                         {
