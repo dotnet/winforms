@@ -1,5 +1,5 @@
 #nullable enable
-~abstract System.Windows.Forms.ListControl.SetItemsCore(System.Collections.IList items) -> void
+abstract System.Windows.Forms.ListControl.SetItemsCore(System.Collections.IList! items) -> void
 ~override System.Resources.ResXFileRef.Converter.CanConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Type sourceType) -> bool
 ~override System.Resources.ResXFileRef.Converter.CanConvertTo(System.ComponentModel.ITypeDescriptorContext context, System.Type destinationType) -> bool
 ~override System.Resources.ResXFileRef.Converter.ConvertFrom(System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value) -> object
@@ -535,7 +535,7 @@ override System.Windows.Forms.Button.ToString() -> string!
 ~override System.Windows.Forms.ListBox.Text.get -> string
 ~override System.Windows.Forms.ListBox.Text.set -> void
 ~override System.Windows.Forms.ListBox.ToString() -> string
-~override System.Windows.Forms.ListControl.OnBindingContextChanged(System.EventArgs e) -> void
+override System.Windows.Forms.ListControl.OnBindingContextChanged(System.EventArgs! e) -> void
 ~override System.Windows.Forms.ListView.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ListView.CreateParams.get -> System.Windows.Forms.CreateParams
 ~override System.Windows.Forms.ListView.OnBackgroundImageChanged(System.EventArgs e) -> void
@@ -2013,22 +2013,22 @@ static System.Windows.Forms.NativeWindow.FromHandle(System.IntPtr handle) -> Sys
 ~System.Windows.Forms.ListBox.SelectedObjectCollection.SelectedObjectCollection(System.Windows.Forms.ListBox owner) -> void
 ~System.Windows.Forms.ListBox.SelectedObjectCollection.this[int index].get -> object
 ~System.Windows.Forms.ListBox.SelectedObjectCollection.this[int index].set -> void
-~System.Windows.Forms.ListControl.DataManager.get -> System.Windows.Forms.CurrencyManager
-~System.Windows.Forms.ListControl.DataSource.get -> object
-~System.Windows.Forms.ListControl.DataSource.set -> void
-~System.Windows.Forms.ListControl.DisplayMember.get -> string
-~System.Windows.Forms.ListControl.DisplayMember.set -> void
-~System.Windows.Forms.ListControl.FilterItemOnProperty(object item) -> object
-~System.Windows.Forms.ListControl.FilterItemOnProperty(object item, string field) -> object
-~System.Windows.Forms.ListControl.FormatInfo.get -> System.IFormatProvider
-~System.Windows.Forms.ListControl.FormatInfo.set -> void
-~System.Windows.Forms.ListControl.FormatString.get -> string
-~System.Windows.Forms.ListControl.FormatString.set -> void
-~System.Windows.Forms.ListControl.GetItemText(object item) -> string
-~System.Windows.Forms.ListControl.SelectedValue.get -> object
-~System.Windows.Forms.ListControl.SelectedValue.set -> void
-~System.Windows.Forms.ListControl.ValueMember.get -> string
-~System.Windows.Forms.ListControl.ValueMember.set -> void
+System.Windows.Forms.ListControl.DataManager.get -> System.Windows.Forms.CurrencyManager?
+System.Windows.Forms.ListControl.DataSource.get -> object?
+System.Windows.Forms.ListControl.DataSource.set -> void
+System.Windows.Forms.ListControl.DisplayMember.get -> string!
+System.Windows.Forms.ListControl.DisplayMember.set -> void
+System.Windows.Forms.ListControl.FilterItemOnProperty(object? item) -> object?
+System.Windows.Forms.ListControl.FilterItemOnProperty(object? item, string? field) -> object?
+System.Windows.Forms.ListControl.FormatInfo.get -> System.IFormatProvider?
+System.Windows.Forms.ListControl.FormatInfo.set -> void
+System.Windows.Forms.ListControl.FormatString.get -> string!
+System.Windows.Forms.ListControl.FormatString.set -> void
+System.Windows.Forms.ListControl.GetItemText(object? item) -> string?
+System.Windows.Forms.ListControl.SelectedValue.get -> object?
+System.Windows.Forms.ListControl.SelectedValue.set -> void
+System.Windows.Forms.ListControl.ValueMember.get -> string!
+System.Windows.Forms.ListControl.ValueMember.set -> void
 ~System.Windows.Forms.ListView.CheckedIndexCollection.CheckedIndexCollection(System.Windows.Forms.ListView owner) -> void
 ~System.Windows.Forms.ListView.CheckedIndexCollection.GetEnumerator() -> System.Collections.IEnumerator
 ~System.Windows.Forms.ListView.CheckedIndices.get -> System.Windows.Forms.ListView.CheckedIndexCollection
@@ -3196,16 +3196,16 @@ virtual System.Windows.Forms.Layout.LayoutEngine.Layout(object! container, Syste
 ~virtual System.Windows.Forms.ListBox.CreateItemCollection() -> System.Windows.Forms.ListBox.ObjectCollection
 ~virtual System.Windows.Forms.ListBox.OnDrawItem(System.Windows.Forms.DrawItemEventArgs e) -> void
 ~virtual System.Windows.Forms.ListBox.OnMeasureItem(System.Windows.Forms.MeasureItemEventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnDataSourceChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnDisplayMemberChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnFormat(System.Windows.Forms.ListControlConvertEventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnFormatInfoChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnFormatStringChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnFormattingEnabledChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnSelectedIndexChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnSelectedValueChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.OnValueMemberChanged(System.EventArgs e) -> void
-~virtual System.Windows.Forms.ListControl.SetItemCore(int index, object value) -> void
+virtual System.Windows.Forms.ListControl.OnDataSourceChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.OnDisplayMemberChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.OnFormat(System.Windows.Forms.ListControlConvertEventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.OnFormatInfoChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.OnFormatStringChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.OnFormattingEnabledChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.OnSelectedIndexChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.OnSelectedValueChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.OnValueMemberChanged(System.EventArgs! e) -> void
+virtual System.Windows.Forms.ListControl.SetItemCore(int index, object! value) -> void
 ~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.ContainsKey(string key) -> bool
 ~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.IndexOfKey(string key) -> int
 ~virtual System.Windows.Forms.ListView.CheckedListViewItemCollection.this[string key].get -> System.Windows.Forms.ListViewItem
@@ -8951,17 +8951,17 @@ System.Windows.Forms.ListBox.UseCustomTabOffsets.set -> void
 System.Windows.Forms.ListBox.UseTabStops.get -> bool
 System.Windows.Forms.ListBox.UseTabStops.set -> void
 System.Windows.Forms.ListControl
-System.Windows.Forms.ListControl.DataSourceChanged -> System.EventHandler
-System.Windows.Forms.ListControl.DisplayMemberChanged -> System.EventHandler
-System.Windows.Forms.ListControl.Format -> System.Windows.Forms.ListControlConvertEventHandler
-System.Windows.Forms.ListControl.FormatInfoChanged -> System.EventHandler
-System.Windows.Forms.ListControl.FormatStringChanged -> System.EventHandler
+System.Windows.Forms.ListControl.DataSourceChanged -> System.EventHandler?
+System.Windows.Forms.ListControl.DisplayMemberChanged -> System.EventHandler?
+System.Windows.Forms.ListControl.Format -> System.Windows.Forms.ListControlConvertEventHandler?
+System.Windows.Forms.ListControl.FormatInfoChanged -> System.EventHandler?
+System.Windows.Forms.ListControl.FormatStringChanged -> System.EventHandler?
 System.Windows.Forms.ListControl.FormattingEnabled.get -> bool
 System.Windows.Forms.ListControl.FormattingEnabled.set -> void
-System.Windows.Forms.ListControl.FormattingEnabledChanged -> System.EventHandler
+System.Windows.Forms.ListControl.FormattingEnabledChanged -> System.EventHandler?
 System.Windows.Forms.ListControl.ListControl() -> void
-System.Windows.Forms.ListControl.SelectedValueChanged -> System.EventHandler
-System.Windows.Forms.ListControl.ValueMemberChanged -> System.EventHandler
+System.Windows.Forms.ListControl.SelectedValueChanged -> System.EventHandler?
+System.Windows.Forms.ListControl.ValueMemberChanged -> System.EventHandler?
 System.Windows.Forms.ListControlConvertEventArgs
 System.Windows.Forms.ListControlConvertEventArgs.ListControlConvertEventArgs(object? value, System.Type? desiredType, object? listItem) -> void
 System.Windows.Forms.ListControlConvertEventArgs.ListItem.get -> object?

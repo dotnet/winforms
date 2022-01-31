@@ -315,8 +315,8 @@ namespace System.Windows.Forms
                 return 1; //item2 is null, so item 1 is greater
             }
 
-            string itemName1 = _listControl.GetItemText(entry1.Item);
-            string itemName2 = _listControl.GetItemText(entry2.Item);
+            string? itemName1 = _listControl.GetItemText(entry1.Item);
+            string? itemName2 = _listControl.GetItemText(entry2.Item);
 
             CompareInfo compInfo = Application.CurrentCulture.CompareInfo;
             return compInfo.Compare(itemName1, itemName2, CompareOptions.StringSort);
