@@ -969,19 +969,19 @@ override System.Windows.Forms.Button.ToString() -> string!
 ~override System.Windows.Forms.ToolStripStatusLabel.CreateAccessibilityInstance() -> System.Windows.Forms.AccessibleObject
 ~override System.Windows.Forms.ToolStripStatusLabel.OnPaint(System.Windows.Forms.PaintEventArgs e) -> void
 ~override System.Windows.Forms.ToolStripStatusLabel.OnTextChanged(System.EventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderDropDownButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderGrip(System.Windows.Forms.ToolStripGripRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderImageMargin(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderMenuItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderOverflowButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderSeparator(System.Windows.Forms.ToolStripSeparatorRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderSplitButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripBackground(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripBorder(System.Windows.Forms.ToolStripRenderEventArgs e) -> void
-~override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripStatusLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderDropDownButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderGrip(System.Windows.Forms.ToolStripGripRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderImageMargin(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderMenuItemBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderOverflowButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderSeparator(System.Windows.Forms.ToolStripSeparatorRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderSplitButtonBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripBackground(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripBorder(System.Windows.Forms.ToolStripRenderEventArgs! e) -> void
+override System.Windows.Forms.ToolStripSystemRenderer.OnRenderToolStripStatusLabelBackground(System.Windows.Forms.ToolStripItemRenderEventArgs! e) -> void
 ~override System.Windows.Forms.ToolStripTextBox.BackgroundImage.get -> System.Drawing.Image
 ~override System.Windows.Forms.ToolStripTextBox.BackgroundImage.set -> void
 ~override System.Windows.Forms.ToolStripTextBox.OnSubscribeControlEvents(System.Windows.Forms.Control control) -> void
