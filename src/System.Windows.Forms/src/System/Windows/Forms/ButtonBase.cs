@@ -471,7 +471,7 @@ namespace System.Windows.Forms
                 }
 
                 // If they were previously using indexes - this should clear out the image index field.
-                _imageIndex.Key = value!;
+                _imageIndex.Key = value;
                 Invalidate();
             }
         }
