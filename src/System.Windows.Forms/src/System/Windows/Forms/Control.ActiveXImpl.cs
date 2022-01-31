@@ -94,8 +94,7 @@ namespace System.Windows.Forms
 
                     if (prop.Empty)
                     {
-                        object? obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_BACKCOLOR, out obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_BACKCOLOR, out object? obj))
                         {
                             if (obj is not null)
                             {
@@ -142,8 +141,7 @@ namespace System.Windows.Forms
 
                     if (prop.Empty)
                     {
-                        object? obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_FONT, out obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_FONT, out object? obj))
                         {
                             try
                             {
@@ -178,8 +176,7 @@ namespace System.Windows.Forms
 
                     if (prop.Empty)
                     {
-                        object? obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_FORECOLOR, out obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_FORECOLOR, out object? obj))
                         {
                             if (obj is not null)
                             {
@@ -1104,8 +1101,7 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        object? obj = null;
-                        HRESULT hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
+                        HRESULT hr = pPropBag.Read(props[i].Name, out object? obj, pErrorLog);
                         if (hr.Succeeded() && obj is not null)
                         {
                             Debug.Indent();
@@ -1307,12 +1303,10 @@ namespace System.Windows.Forms
                     }
 
                     // Special properties that we care about
-                    object? obj = null;
-
                     switch (dispID)
                     {
                         case DispatchID.AMBIENT_UIDEAD:
-                            if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out obj))
+                            if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out object? obj))
                             {
                                 _activeXState[s_uiDead] = (bool)obj!;
                             }
@@ -1668,11 +1662,13 @@ namespace System.Windows.Forms
 
                     private struct VTABLE
                     {
+#pragma warning disable CS0649
                         public IntPtr QueryInterfacePtr;
                         public IntPtr AddRefPtr;
                         public IntPtr ReleasePtr;
                         public IntPtr EnumConnectionPointsPtr;
                         public IntPtr FindConnectionPointPtr;
+#pragma warning restore CS0649
                     }
 
                     /// <summary>
@@ -1933,8 +1929,7 @@ namespace System.Windows.Forms
                 }
 
                 // Get the ambient properties that effect us.
-                object? obj = null;
-                if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out obj))
+                if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out object? obj))
                 {
                     _activeXState[s_uiDead] = (bool)obj!;
                 }
@@ -2518,10 +2513,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, ref object? pVar, Oleaut32.IErrorLog? pErrorLog)
+                HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, out object? pVar, Oleaut32.IErrorLog? pErrorLog)
                 {
                     if (!_bag.Contains(pszPropName))
                     {
+                        pVar = null;
                         return HRESULT.E_INVALIDARG;
                     }
 

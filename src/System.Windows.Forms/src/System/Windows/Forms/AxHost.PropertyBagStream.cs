@@ -33,12 +33,13 @@ namespace System.Windows.Forms
                 }
             }
 
-            HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, ref object pVar, Oleaut32.IErrorLog pErrorLog)
+            HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, out object pVar, Oleaut32.IErrorLog pErrorLog)
             {
                 Debug.WriteLineIf(s_axHTraceSwitch.TraceVerbose, $"Reading property {pszPropName} from OCXState propertybag.");
 
                 if (!_bag.Contains(pszPropName))
                 {
+                    pVar = null;
                     return HRESULT.E_INVALIDARG;
                 }
 
