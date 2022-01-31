@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -15,8 +14,8 @@ namespace System.Windows.Forms
         {
             internal partial class UpDownButtonsAccessibleObject : ControlAccessibleObject
             {
-                private DirectionButtonAccessibleObject upButton;
-                private DirectionButtonAccessibleObject downButton;
+                private DirectionButtonAccessibleObject? _upButton;
+                private DirectionButtonAccessibleObject? _downButton;
 
                 private UpDownButtons _owner;
 
@@ -25,9 +24,9 @@ namespace System.Windows.Forms
                     _owner = owner;
                 }
 
-                internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+                internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
                 {
-                    AccessibleObject element = HitTest((int)x, (int)y);
+                    AccessibleObject? element = HitTest((int)x, (int)y);
 
                     if (element is not null)
                     {
@@ -37,7 +36,7 @@ namespace System.Windows.Forms
                     return base.ElementProviderFromPoint(x, y);
                 }
 
-                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(
+                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
                     UiaCore.NavigateDirection direction) => direction switch
                     {
                         UiaCore.NavigateDirection.FirstChild => GetChild(0),
@@ -48,12 +47,12 @@ namespace System.Windows.Forms
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
                 private DirectionButtonAccessibleObject UpButton
-                    => upButton ??= new DirectionButtonAccessibleObject(this, true);
+                    => _upButton ??= new DirectionButtonAccessibleObject(this, true);
 
                 private DirectionButtonAccessibleObject DownButton
-                    => downButton ??= new DirectionButtonAccessibleObject(this, false);
+                    => _downButton ??= new DirectionButtonAccessibleObject(this, false);
 
-                public override AccessibleObject GetChild(int index) => index switch
+                public override AccessibleObject? GetChild(int index) => index switch
                 {
                     0 => UpButton,
                     1 => DownButton,
@@ -62,14 +61,14 @@ namespace System.Windows.Forms
 
                 public override int GetChildCount() => 2;
 
-                internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+                internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                 {
                     UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
                     UiaCore.UIA.LegacyIAccessibleRolePropertyId => Role,
                     _ => base.GetPropertyValue(propertyID),
                 };
 
-                public override AccessibleObject HitTest(int x, int y)
+                public override AccessibleObject? HitTest(int x, int y)
                 {
                     if (UpButton.Bounds.Contains(x, y))
                     {
@@ -84,7 +83,7 @@ namespace System.Windows.Forms
                     return null;
                 }
 
-                internal override UiaCore.IRawElementProviderSimple HostRawElementProvider
+                internal override UiaCore.IRawElementProviderSimple? HostRawElementProvider
                 {
                     get
                     {
@@ -98,11 +97,12 @@ namespace System.Windows.Forms
                     }
                 }
 
+                [AllowNull]
                 public override string Name
                 {
                     get
                     {
-                        string baseName = base.Name;
+                        string? baseName = base.Name;
                         if (string.IsNullOrEmpty(baseName))
                         {
                             return SR.DefaultUpDownButtonsAccessibleName;

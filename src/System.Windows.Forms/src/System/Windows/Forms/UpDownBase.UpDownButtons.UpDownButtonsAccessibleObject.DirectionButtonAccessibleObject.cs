@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using static Interop;
 
@@ -63,7 +62,7 @@ namespace System.Windows.Forms
                         ownerControl.OnUpDown(new UpDownEventArgs(buttonId));
                     }
 
-                    internal override UiaCore.IRawElementProviderFragment FragmentNavigate(
+                    internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(
                         UiaCore.NavigateDirection direction) => direction switch
                         {
                             UiaCore.NavigateDirection.Parent => Parent,
@@ -74,7 +73,7 @@ namespace System.Windows.Forms
 
                     internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => Parent;
 
-                    internal override object GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
+                    internal override object? GetPropertyValue(UiaCore.UIA propertyID) => propertyID switch
                     {
                         UiaCore.UIA.ControlTypePropertyId => UiaCore.UIA.ButtonControlTypeId,
                         UiaCore.UIA.LegacyIAccessibleStatePropertyId => State,
@@ -90,6 +89,7 @@ namespace System.Windows.Forms
                             base.IsPatternSupported(patternId);
                     }
 
+                    [AllowNull]
                     public override string Name
                     {
                         get => _up ? SR.UpDownBaseUpButtonAccName : SR.UpDownBaseDownButtonAccName;
