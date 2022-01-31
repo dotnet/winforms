@@ -1662,15 +1662,14 @@ namespace System.Windows.Forms
 
                     private readonly VTABLE _vtbl;
 
+                    [StructLayout(LayoutKind.Sequential)]
                     private struct VTABLE
                     {
-#pragma warning disable CS0649
                         public IntPtr QueryInterfacePtr;
                         public IntPtr AddRefPtr;
                         public IntPtr ReleasePtr;
                         public IntPtr EnumConnectionPointsPtr;
                         public IntPtr FindConnectionPointPtr;
-#pragma warning restore CS0649
                     }
 
                     /// <summary>
