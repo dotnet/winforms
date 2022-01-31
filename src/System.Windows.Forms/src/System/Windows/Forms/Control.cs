@@ -6979,15 +6979,7 @@ namespace System.Windows.Forms
 
             // We don't want to wait if we're on the same thread, or else we'll deadlock.
             // It is important that syncSameThread always be false for asynchronous calls.
-            bool syncSameThread = false;
-
-            if (User32.GetWindowThreadProcessId(this, out _) == Kernel32.GetCurrentThreadId())
-            {
-                if (synchronous)
-                {
-                    syncSameThread = true;
-                }
-            }
+            bool syncSameThread = synchronous && User32.GetWindowThreadProcessId(this, out _) == Kernel32.GetCurrentThreadId();
 
             // Store the compressed stack information from the thread that is calling the Invoke()
             // so we can assign the same security context to the thread that will actually execute
