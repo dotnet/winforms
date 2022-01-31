@@ -285,6 +285,9 @@ namespace System.Windows.Forms.Tests
                 Rectangle expectedBounds = groupRect;
                 Assert.Equal(expectedBounds, actualBounds);
             });
+
+            // verify the remote process succeeded
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         public static IEnumerable<object[]> ListViewGroupAccessibleObject_TestData()

@@ -224,7 +224,7 @@ namespace System.Windows.Forms.Tests
             });
 
             // verify the remote process succeeded
-            Assert.Equal(0, invokerHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
@@ -364,7 +364,7 @@ namespace System.Windows.Forms.Tests
             });
 
             // verify the remote process succeeded
-            Assert.Equal(0, invokerHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -504,7 +504,7 @@ namespace System.Windows.Forms.Tests
             });
 
             // verify the remote process succeeded
-            Assert.Equal(0, invokerHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -616,7 +616,7 @@ namespace System.Windows.Forms.Tests
             });
 
             // verify the remote process succeeded
-            Assert.Equal(0, invokerHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         public static IEnumerable<object[]> Alignment_Set_TestData()
@@ -876,7 +876,7 @@ namespace System.Windows.Forms.Tests
             });
 
             // verify the remote process succeeded
-            Assert.Equal(0, invokerHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -1142,7 +1142,7 @@ namespace System.Windows.Forms.Tests
             });
 
             // verify the remote process succeeded
-            Assert.Equal(0, invokerHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]
@@ -1279,7 +1279,7 @@ namespace System.Windows.Forms.Tests
             });
 
             // Verify the remote process succeeded.
-            Assert.Equal(0, invokerHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsTheory]

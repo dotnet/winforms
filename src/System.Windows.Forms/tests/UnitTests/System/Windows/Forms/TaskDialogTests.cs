@@ -13,7 +13,7 @@ namespace System.Windows.Forms.Tests
         public void TaskDialog_ShowDialog_SetProperty_SameThread_Success()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokeHandle = RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Application.EnableVisualStyles();
                 Control.CheckForIllegalCrossThreadCalls = true;
@@ -30,14 +30,14 @@ namespace System.Windows.Forms.Tests
             });
 
             // verify the remote process succeeded
-            Assert.Equal(0, invokeHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
 
         [WinFormsFact]
         public void TaskDialog_ShowDialog_SetProperty_DifferentThread_ThrowsInvalidOperationException()
         {
             // Run this from another thread as we call Application.EnableVisualStyles.
-            using RemoteInvokeHandle invokeHandle = RemoteExecutor.Invoke(() =>
+            using RemoteInvokeHandle invokerHandle = RemoteExecutor.Invoke(() =>
             {
                 Application.EnableVisualStyles();
                 Control.CheckForIllegalCrossThreadCalls = true;
@@ -56,7 +56,7 @@ namespace System.Windows.Forms.Tests
             });
 
             // verify the remote process succeeded
-            Assert.Equal(0, invokeHandle.ExitCode);
+            Assert.Equal(RemoteExecutor.SuccessExitCode, invokerHandle.ExitCode);
         }
     }
 }
