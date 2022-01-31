@@ -1302,11 +1302,13 @@ namespace System.Windows.Forms
                         }
                     }
 
+                    object? obj;
+
                     // Special properties that we care about
                     switch (dispID)
                     {
                         case DispatchID.AMBIENT_UIDEAD:
-                            if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out object? obj))
+                            if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out obj))
                             {
                                 _activeXState[s_uiDead] = (bool)obj!;
                             }
