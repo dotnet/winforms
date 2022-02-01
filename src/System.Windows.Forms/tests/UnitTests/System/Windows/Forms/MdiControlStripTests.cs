@@ -327,7 +327,11 @@ namespace System.Windows.Forms.Tests
             Reflection.PropertyInfo mdiControlStripProperty = typeof(Form).GetProperty("MdiControlStrip", Reflection.BindingFlags.NonPublic | Reflection.BindingFlags.Instance);
             MdiControlStrip originalMdiControlStrip = (MdiControlStrip)mdiControlStripProperty.GetValue(mdiParent);
 
-            mdiChild.Icon = Icon.FromHandle(new Bitmap(256, 256).GetHicon()); // Force size change with large icon
+            // Force size change with large icon
+            IntPtr hicon = new Bitmap(256, 256).GetHicon();
+            Icon largeIcon = (Icon)Icon.FromHandle(hicon).Clone();
+            User32.DestroyIcon(hicon);
+            mdiChild.Icon = largeIcon;
 
             MdiControlStrip currentMdiControlStrip = (MdiControlStrip)mdiControlStripProperty.GetValue(mdiParent);
             Assert.NotEqual(originalMdiControlStrip, currentMdiControlStrip);

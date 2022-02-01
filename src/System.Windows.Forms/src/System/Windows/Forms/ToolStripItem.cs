@@ -2328,10 +2328,10 @@ namespace System.Windows.Forms
             if (Owner is not null)
             {
                 LayoutTransaction.DoLayout(Owner, this, affectedProperty);
-                /* DoLayout may cause the ToolStrip size to change. If the ToolStrip is an MdiControlStrip, the
-                 * active Mdi child is maximized, and DoLayout causes the size to change then Form.MdiControlStrip
-                 * (Owner) will be disposed and replaced with a new one. This means the current ToolStripItem will
-                 * also be disposed and have no owner on the next line. See issue #6535 */
+                // DoLayout may cause the ToolStrip size to change. If the ToolStrip is an MdiControlStrip, the
+                // active Mdi child is maximized, and DoLayout causes the size to change then Form.MdiControlStrip
+                // (Owner) will be disposed and replaced with a new one. This means the current ToolStripItem will
+                // also be disposed and have no owner on the next line. See https://github.com/dotnet/winforms/issues/6535
                 Owner?.Invalidate();
             }
         }
