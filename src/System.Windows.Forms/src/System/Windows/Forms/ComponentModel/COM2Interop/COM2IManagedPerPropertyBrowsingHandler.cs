@@ -63,7 +63,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
 
             ArrayList attrs = new ArrayList();
 
-            string?[] attrTypeNames = GetStringsFromPtr(pbstrs, cItems);
+            string[] attrTypeNames = GetStringsFromPtr(pbstrs, cItems);
             object?[] varParams = GetVariantsFromPtr(pvars, cItems);
 
             Debug.Assert(attrTypeNames.Length == varParams.Length, "Mismatched parameter and attribute name length");
@@ -73,14 +73,13 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             }
 
             // get the types
-            Type[] types = new Type[attrTypeNames.Length];
             for (int i = 0; i < attrTypeNames.Length; i++)
             {
-                string? attrName = attrTypeNames[i];
+                string attrName = attrTypeNames[i];
 
                 // try the name first
                 Type? t = null;
-                if (attrName is not null)
+                if (attrName.Length > 0)
                 {
                     t = Type.GetType(attrName);
                 }
@@ -95,7 +94,6 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                 if (t is null && attrName is not null)
                 {
                     // check for an assembly name.
-                    //
                     string assemblyName = string.Empty;
 
                     int comma = attrName.LastIndexOf(',');
@@ -169,7 +167,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                     continue;
                 }
 
-                Attribute? attr = null;
+                Attribute? attr;
 
                 // okay, if we got here, we need to build the attribute...
                 // get the initializer value if we've got a one item ctor
@@ -220,11 +218,11 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
             return temp;
         }
 
-        private static string?[] GetStringsFromPtr(IntPtr ptr, uint cStrings)
+        private static string[] GetStringsFromPtr(IntPtr ptr, uint cStrings)
         {
             if (ptr != IntPtr.Zero)
             {
-                string?[] strs = new string[cStrings];
+                string[] strs = new string[cStrings];
                 IntPtr bstr;
                 for (int i = 0; i < cStrings; i++)
                 {
@@ -233,7 +231,7 @@ namespace System.Windows.Forms.ComponentModel.Com2Interop
                         bstr = Marshal.ReadIntPtr(ptr, i * 4);
                         if (bstr != IntPtr.Zero)
                         {
-                            strs[i] = Marshal.PtrToStringUni(bstr);
+                            strs[i] = Marshal.PtrToStringUni(bstr)!;
                             Oleaut32.SysFreeString(bstr);
                         }
                         else
