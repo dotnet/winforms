@@ -30,8 +30,8 @@ namespace System.Windows.Forms
 
                 internal override Rectangle BoundingRectangle => Bounds;
 
-                public override Rectangle Bounds =>
-                    _control.IsHandleCreated
+                public override Rectangle Bounds
+                    => _control.IsHandleCreated
                         ? _control.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
                         : Rectangle.Empty;
 
@@ -114,10 +114,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                internal override bool IsIAccessibleExSupported()
-                {
-                    return true;
-                }
+                internal override bool IsIAccessibleExSupported() => true;
 
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {

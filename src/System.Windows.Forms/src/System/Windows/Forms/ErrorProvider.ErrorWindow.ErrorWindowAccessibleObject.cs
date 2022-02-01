@@ -113,10 +113,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                internal override bool IsIAccessibleExSupported()
-                {
-                    return true;
-                }
+                internal override bool IsIAccessibleExSupported() => true;
 
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
