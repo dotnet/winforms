@@ -184,7 +184,7 @@ namespace System.Windows.Forms
             {
                 case UiaCore.NavigateDirection.NextSibling:
                 case UiaCore.NavigateDirection.PreviousSibling:
-                    if (!(_owner.Owner is ToolStripDropDown dropDown))
+                    if (_owner.Owner is not ToolStripDropDown dropDown)
                     {
                         break;
                     }
