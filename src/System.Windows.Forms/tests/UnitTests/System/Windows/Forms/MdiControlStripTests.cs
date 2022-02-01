@@ -324,8 +324,7 @@ namespace System.Windows.Forms.Tests
             mdiChild.Show();
             mdiChild.WindowState = FormWindowState.Maximized;
 
-            Reflection.PropertyInfo mdiControlStripProperty = typeof(Form).GetProperty("MdiControlStrip", Reflection.BindingFlags.NonPublic | Reflection.BindingFlags.Instance);
-            MdiControlStrip originalMdiControlStrip = (MdiControlStrip)mdiControlStripProperty.GetValue(mdiParent);
+            MdiControlStrip originalMdiControlStrip = mdiParent.TestAccessor().Dynamic.MdiControlStrip;
 
             // Force size change with large icon
             IntPtr hicon = new Bitmap(256, 256).GetHicon();
@@ -333,7 +332,7 @@ namespace System.Windows.Forms.Tests
             User32.DestroyIcon(hicon);
             mdiChild.Icon = largeIcon;
 
-            MdiControlStrip currentMdiControlStrip = (MdiControlStrip)mdiControlStripProperty.GetValue(mdiParent);
+            MdiControlStrip currentMdiControlStrip = mdiParent.TestAccessor().Dynamic.MdiControlStrip;
             Assert.NotEqual(originalMdiControlStrip, currentMdiControlStrip);
         }
 
