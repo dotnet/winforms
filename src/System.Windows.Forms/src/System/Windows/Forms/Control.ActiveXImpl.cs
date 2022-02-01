@@ -1677,7 +1677,7 @@ namespace System.Windows.Forms
                     /// </summary>
                     public ComConnectionPoint FindConnectionPoint(Type eventInterface)
                     {
-                        FindConnectionPointD findConnectionPoint = (FindConnectionPointD)Marshal.GetDelegateForFunctionPointer(_vtbl!.FindConnectionPointPtr, typeof(FindConnectionPointD));
+                        FindConnectionPointD findConnectionPoint = (FindConnectionPointD)Marshal.GetDelegateForFunctionPointer(_vtbl.FindConnectionPointPtr, typeof(FindConnectionPointD));
 
                         Guid iid = eventInterface.GUID;
                         int hresult = findConnectionPoint.Invoke(handle, ref iid, out IntPtr result);
