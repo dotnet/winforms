@@ -11,7 +11,7 @@ namespace System.Windows.Forms
             private string? _name;
             private readonly DomainItemListAccessibleObject _parent;
 
-            public DomainItemAccessibleObject(string? name, AccessibleObject parent) : base()
+            public DomainItemAccessibleObject(string? name, AccessibleObject parent)
             {
                 _name = name;
                 _parent = (DomainItemListAccessibleObject)parent.OrThrowIfNull();
