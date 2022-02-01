@@ -50,7 +50,7 @@ namespace System.Windows.Forms
             private IOleClientSite? _clientSite;
             private IOleInPlaceUIWindow? _inPlaceUiWindow;
             private IOleInPlaceFrame? _inPlaceFrame;
-            private readonly ArrayList _adviseList;
+            private readonly List<IAdviseSink> _adviseList;
             private IAdviseSink? _viewAdviseSink;
             private BitVector32 _activeXState;
             private readonly AmbientProperty[] _ambientProperties;
@@ -70,7 +70,7 @@ namespace System.Windows.Forms
                 _controlWindowTarget = control.WindowTarget;
                 control.WindowTarget = this;
 
-                _adviseList = new ArrayList();
+                _adviseList = new List<IAdviseSink>();
                 _activeXState = new BitVector32();
                 _ambientProperties = new AmbientProperty[]
                 {
@@ -1868,7 +1868,7 @@ namespace System.Windows.Forms
                 int cnt = _adviseList.Count;
                 for (int i = 0; i < cnt; i++)
                 {
-                    IAdviseSink s = (IAdviseSink)_adviseList[i]!;
+                    IAdviseSink s = _adviseList[i];
                     Debug.Assert(s is not null, "NULL in our advise list");
                     s.OnSave();
                 }
@@ -2308,9 +2308,9 @@ namespace System.Windows.Forms
                     return HRESULT.OLE_E_NOCONNECTION;
                 }
 
-                IAdviseSink? sink = (IAdviseSink?)_adviseList[(int)dwConnection - 1];
+                IAdviseSink sink = _adviseList[(int)dwConnection - 1];
                 _adviseList.RemoveAt((int)dwConnection - 1);
-                if (sink is not null && Marshal.IsComObject(sink))
+                if (Marshal.IsComObject(sink))
                 {
                     Marshal.ReleaseComObject(sink);
                 }
