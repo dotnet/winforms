@@ -17,7 +17,7 @@ namespace System.Windows.Forms
                 private readonly Link _owningLink;
                 private readonly LinkLabel _owningLinkLabel;
 
-                public LinkAccessibleObject(Link link, LinkLabel owner) : base()
+                public LinkAccessibleObject(Link link, LinkLabel owner)
                 {
                     _owningLink = link.OrThrowIfNull();
                     _owningLinkLabel = owner.OrThrowIfNull();

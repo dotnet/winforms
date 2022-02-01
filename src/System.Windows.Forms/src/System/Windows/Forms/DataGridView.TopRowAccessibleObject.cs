@@ -16,7 +16,7 @@ namespace System.Windows.Forms
             private int[]? runtimeId;
             private DataGridView? _ownerDataGridView;
 
-            public DataGridViewTopRowAccessibleObject() : base()
+            public DataGridViewTopRowAccessibleObject()
             {
             }
 

@@ -19,7 +19,7 @@ namespace System.Windows.Forms.PropertyGridInternal
 
             private delegate void SelectDelegate(AccessibleSelection flags);
 
-            public GridEntryAccessibleObject(GridEntry owner) : base()
+            public GridEntryAccessibleObject(GridEntry owner)
             {
                 Debug.Assert(owner is not null, "GridEntryAccessibleObject must have a valid owner GridEntry");
                 _owningGridEntry = owner;

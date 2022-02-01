@@ -11,7 +11,7 @@ namespace System.Windows.Forms
             const string DefaultName = "Items";
             private readonly DomainUpDownAccessibleObject _parent;
 
-            public DomainItemListAccessibleObject(DomainUpDownAccessibleObject parent) : base()
+            public DomainItemListAccessibleObject(DomainUpDownAccessibleObject parent)
             {
                 _parent = parent;
             }
