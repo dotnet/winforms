@@ -2,9 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Drawing;
 using static Interop;
 
@@ -31,8 +30,10 @@ namespace System.Windows.Forms
 
                 internal override Rectangle BoundingRectangle => Bounds;
 
-                public override Rectangle Bounds => _control.IsHandleCreated ?
-                                                    _control.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size)) : Rectangle.Empty;
+                public override Rectangle Bounds
+                    => _control.IsHandleCreated
+                        ? _control.RectangleToScreen(_controlItem.GetIconBounds(_provider.Region.Size))
+                        : Rectangle.Empty;
 
                 private int ControlItemsCount => _window.ControlItems.Count;
 
@@ -43,7 +44,7 @@ namespace System.Windows.Forms
                 /// </summary>
                 /// <param name="direction">Indicates the direction in which to navigate.</param>
                 /// <returns>Returns the element in the specified direction.</returns>
-                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
                     switch (direction)
                     {
@@ -65,7 +66,7 @@ namespace System.Windows.Forms
                     return CurrentIndex + 1;
                 }
 
-                private AccessibleObject GetNextSibling()
+                private AccessibleObject? GetNextSibling()
                 {
                     int currentIndex = CurrentIndex;
 
@@ -78,7 +79,7 @@ namespace System.Windows.Forms
                     return _window.ControlItems[currentIndex + 1].AccessibilityObject;
                 }
 
-                private AccessibleObject GetPreviousSibling()
+                private AccessibleObject? GetPreviousSibling()
                 {
                     int currentIndex = CurrentIndex;
 
@@ -96,7 +97,7 @@ namespace System.Windows.Forms
                 /// </summary>
                 /// <param name="propertyID">The accessible property ID.</param>
                 /// <returns>The accessible property value.</returns>
-                internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 {
                     switch (propertyID)
                     {
@@ -113,15 +114,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                internal override bool IsIAccessibleExSupported()
-                {
-                    if (_controlItem is not null)
-                    {
-                        return true;
-                    }
-
-                    return base.IsIAccessibleExSupported();
-                }
+                internal override bool IsIAccessibleExSupported() => true;
 
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
@@ -135,6 +128,7 @@ namespace System.Windows.Forms
 
                 internal override bool IsReadOnly => true;
 
+                [AllowNull]
                 public override string Name
                 {
                     get => string.IsNullOrEmpty(base.Name) ? _controlItem.Error : base.Name;

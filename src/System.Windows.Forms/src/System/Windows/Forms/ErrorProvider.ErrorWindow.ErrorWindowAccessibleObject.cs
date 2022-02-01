@@ -2,8 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
+using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -28,9 +27,9 @@ namespace System.Windows.Forms
                 /// <param name="x">X coordinate.</param>
                 /// <param name="y">Y coordinate.</param>
                 /// <returns>The accessible object of corresponding element in the provided coordinates.</returns>
-                internal override UiaCore.IRawElementProviderFragment ElementProviderFromPoint(double x, double y)
+                internal override UiaCore.IRawElementProviderFragment? ElementProviderFromPoint(double x, double y)
                 {
-                    AccessibleObject element = HitTest((int)x, (int)y);
+                    AccessibleObject? element = HitTest((int)x, (int)y);
 
                     if (element is not null)
                     {
@@ -45,7 +44,7 @@ namespace System.Windows.Forms
                 /// </summary>
                 /// <param name="direction">Indicates the direction in which to navigate.</param>
                 /// <returns>Returns the element in the specified direction.</returns>
-                internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+                internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
                 {
                     switch (direction)
                     {
@@ -60,7 +59,7 @@ namespace System.Windows.Forms
 
                 internal override UiaCore.IRawElementProviderFragmentRoot FragmentRoot => this;
 
-                public override AccessibleObject GetChild(int index)
+                public override AccessibleObject? GetChild(int index)
                 {
                     if (index >= 0 && index <= GetChildCount() - 1)
                     {
@@ -77,7 +76,7 @@ namespace System.Windows.Forms
                 /// </summary>
                 /// <param name="propertyID">The accessible property ID.</param>
                 /// <returns>The accessible property value.</returns>
-                internal override object GetPropertyValue(UiaCore.UIA propertyID)
+                internal override object? GetPropertyValue(UiaCore.UIA propertyID)
                 {
                     switch (propertyID)
                     {
@@ -92,7 +91,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                public override AccessibleObject HitTest(int x, int y)
+                public override AccessibleObject? HitTest(int x, int y)
                 {
                     foreach (ControlItem control in _owner.ControlItems)
                     {
@@ -114,15 +113,7 @@ namespace System.Windows.Forms
                     }
                 }
 
-                internal override bool IsIAccessibleExSupported()
-                {
-                    if (_owner is not null)
-                    {
-                        return true;
-                    }
-
-                    return base.IsIAccessibleExSupported();
-                }
+                internal override bool IsIAccessibleExSupported() => true;
 
                 internal override bool IsPatternSupported(UiaCore.UIA patternId)
                 {
@@ -136,6 +127,7 @@ namespace System.Windows.Forms
 
                 internal override bool IsReadOnly => true;
 
+                [AllowNull]
                 public override string Name
                 {
                     get => string.IsNullOrEmpty(base.Name) ? SR.ErrorProviderDefaultAccessibleName : base.Name;
