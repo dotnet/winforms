@@ -410,7 +410,7 @@ namespace System.Windows.Forms
         /// </summary>
         private bool DoFileOk(IntPtr lpOFN)
         {
-            NativeMethods.OPENFILENAME_I? ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(lpOFN);
+            NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(lpOFN)!;
             int saveOptions = _options;
             int saveFilterIndex = FilterIndex;
             string[]? saveFileNames = _fileNames;
@@ -418,7 +418,7 @@ namespace System.Windows.Forms
             try
             {
                 _options = _options & ~(int)Comdlg32.OFN.READONLY |
-                          ofn!.Flags & (int)Comdlg32.OFN.READONLY;
+                          ofn.Flags & (int)Comdlg32.OFN.READONLY;
                 FilterIndex = ofn.nFilterIndex;
                 _charBuffer!.PutCoTaskMem(ofn.lpstrFile);
 
@@ -540,11 +540,11 @@ namespace System.Windows.Forms
                             MoveToScreenCenter(_dialogHWnd);
                             break;
                         case -602: /* CDN_SELCHANGE */
-                            NativeMethods.OPENFILENAME_I? ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN);
+                            NativeMethods.OPENFILENAME_I ofn = Marshal.PtrToStructure<NativeMethods.OPENFILENAME_I>(notify->lpOFN)!;
 
                             // Get the buffer size required to store the selected file names.
                             int sizeNeeded = (int)User32.SendMessageW(_dialogHWnd, (User32.WM)1124 /*CDM_GETSPEC*/);
-                            if (ofn is not null && sizeNeeded > ofn.nMaxFile)
+                            if (sizeNeeded > ofn.nMaxFile)
                             {
                                 // A bigger buffer is required.
                                 try
