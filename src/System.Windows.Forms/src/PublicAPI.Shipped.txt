@@ -2247,10 +2247,10 @@ System.Windows.Forms.ListControl.ValueMember.set -> void
 ~System.Windows.Forms.PictureBox.LoadAsync(string url) -> void
 ~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController) -> void
 ~System.Windows.Forms.PrintControllerWithStatusDialog.PrintControllerWithStatusDialog(System.Drawing.Printing.PrintController underlyingController, string dialogTitle) -> void
-~System.Windows.Forms.PrintDialog.Document.get -> System.Drawing.Printing.PrintDocument
-~System.Windows.Forms.PrintDialog.Document.set -> void
-~System.Windows.Forms.PrintDialog.PrinterSettings.get -> System.Drawing.Printing.PrinterSettings
-~System.Windows.Forms.PrintDialog.PrinterSettings.set -> void
+System.Windows.Forms.PrintDialog.Document.get -> System.Drawing.Printing.PrintDocument?
+System.Windows.Forms.PrintDialog.Document.set -> void
+System.Windows.Forms.PrintDialog.PrinterSettings.get -> System.Drawing.Printing.PrinterSettings!
+System.Windows.Forms.PrintDialog.PrinterSettings.set -> void
 ~System.Windows.Forms.PrintPreviewControl.Document.get -> System.Drawing.Printing.PrintDocument
 ~System.Windows.Forms.PrintPreviewControl.Document.set -> void
 ~System.Windows.Forms.PrintPreviewDialog.AcceptButton.get -> System.Windows.Forms.IButtonControl
