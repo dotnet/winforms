@@ -224,7 +224,7 @@ namespace System.Windows.Forms
             }
         }
 
-        private static COMDLG_FILTERSPEC[] GetFilterItems(string filter)
+        private static COMDLG_FILTERSPEC[] GetFilterItems(string? filter)
         {
             // Expected input types
             // "Text files (*.txt)|*.txt|All files (*.*)|*.*"
