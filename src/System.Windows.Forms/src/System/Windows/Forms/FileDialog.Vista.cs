@@ -89,7 +89,7 @@ namespace System.Windows.Forms
                 }
             }
 
-            dialog.SetTitle(Title!);
+            dialog.SetTitle(Title);
             dialog.SetOptions(GetOptions());
             SetFileTypes(dialog);
 
