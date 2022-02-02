@@ -127,19 +127,20 @@ namespace System.Windows.Forms
             get => _defaultExt ?? string.Empty;
             set
             {
-                if (value is not null)
+                string? defaultExt = value;
+                if (defaultExt is not null)
                 {
-                    if (value.StartsWith("."))
+                    if (defaultExt.StartsWith("."))
                     {
-                        value = value.Substring(1);
+                        defaultExt = defaultExt.Substring(1);
                     }
-                    else if (value.Length == 0)
+                    else if (defaultExt.Length == 0)
                     {
-                        value = null!;
+                        defaultExt = null;
                     }
                 }
 
-                _defaultExt = value;
+                _defaultExt = defaultExt;
             }
         }
 
