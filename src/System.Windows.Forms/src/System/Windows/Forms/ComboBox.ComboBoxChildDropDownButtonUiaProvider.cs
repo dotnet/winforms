@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Drawing;
 using static Interop;
 
@@ -58,7 +56,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the DropDown button default action.
             /// </summary>
-            public override string DefaultAction
+            public override string? DefaultAction
             {
                 get
                 {
@@ -72,7 +70,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (!_owner.IsHandleCreated)
                 {
@@ -117,7 +115,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
@@ -143,7 +141,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the help text.
             /// </summary>
-            public override string Help
+            public override string? Help
             {
                 get
                 {
@@ -155,7 +153,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Gets the keyboard shortcut.
             /// </summary>
-            public override string KeyboardShortcut
+            public override string? KeyboardShortcut
             {
                 get
                 {
