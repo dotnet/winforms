@@ -35,8 +35,8 @@ internal static partial class Interop
 
             [PreserveSig]
             HRESULT SetActiveObject(
-                IOleInPlaceActiveObject pActiveObject,
-                [MarshalAs(UnmanagedType.LPWStr)] string pszObjName);
+                IOleInPlaceActiveObject? pActiveObject,
+                [MarshalAs(UnmanagedType.LPWStr)] string? pszObjName);
 
             [PreserveSig]
             HRESULT InsertMenus(

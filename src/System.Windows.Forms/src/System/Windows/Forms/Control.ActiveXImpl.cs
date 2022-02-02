@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -43,17 +41,17 @@ namespace System.Windows.Forms
             private static readonly int s_adjustingRect = BitVector32.CreateMask(s_uiDead);
 
             private static Point s_logPixels = Point.Empty;
-            private static OLEVERB[] s_axVerbs;
+            private static OLEVERB[]? s_axVerbs;
 
             private readonly Control _control;
             private readonly IWindowTarget _controlWindowTarget;
             private Rectangle? _lastClipRect;
 
-            private IOleClientSite _clientSite;
-            private IOleInPlaceUIWindow _inPlaceUiWindow;
-            private IOleInPlaceFrame _inPlaceFrame;
-            private readonly ArrayList _adviseList;
-            private IAdviseSink _viewAdviseSink;
+            private IOleClientSite? _clientSite;
+            private IOleInPlaceUIWindow? _inPlaceUiWindow;
+            private IOleInPlaceFrame? _inPlaceFrame;
+            private readonly List<IAdviseSink> _adviseList;
+            private IAdviseSink? _viewAdviseSink;
             private BitVector32 _activeXState;
             private readonly AmbientProperty[] _ambientProperties;
             private IntPtr _accelTable;
@@ -72,7 +70,7 @@ namespace System.Windows.Forms
                 _controlWindowTarget = control.WindowTarget;
                 control.WindowTarget = this;
 
-                _adviseList = new ArrayList();
+                _adviseList = new List<IAdviseSink>();
                 _activeXState = new BitVector32();
                 _ambientProperties = new AmbientProperty[]
                 {
@@ -96,8 +94,7 @@ namespace System.Windows.Forms
 
                     if (prop.Empty)
                     {
-                        object obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_BACKCOLOR, ref obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_BACKCOLOR, out object? obj))
                         {
                             if (obj is not null)
                             {
@@ -136,7 +133,7 @@ namespace System.Windows.Forms
             [Browsable(false)]
             [EditorBrowsable(EditorBrowsableState.Advanced)]
             [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-            internal Font AmbientFont
+            internal Font? AmbientFont
             {
                 get
                 {
@@ -144,13 +141,12 @@ namespace System.Windows.Forms
 
                     if (prop.Empty)
                     {
-                        object obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_FONT, ref obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_FONT, out object? obj))
                         {
                             try
                             {
-                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj.GetType().FullName);
                                 Debug.Assert(obj is not null, "GetAmbientProperty failed");
+                                Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Object font type=" + obj.GetType().FullName);
                                 IFont ifont = (IFont)obj;
                                 prop.Value = Font.FromHfont(ifont.hFont);
                             }
@@ -162,7 +158,7 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    return (Font)prop.Value;
+                    return (Font?)prop.Value;
                 }
             }
 
@@ -180,8 +176,7 @@ namespace System.Windows.Forms
 
                     if (prop.Empty)
                     {
-                        object obj = null;
-                        if (GetAmbientProperty(DispatchID.AMBIENT_FORECOLOR, ref obj))
+                        if (GetAmbientProperty(DispatchID.AMBIENT_FORECOLOR, out object? obj))
                         {
                             if (obj is not null)
                             {
@@ -549,7 +544,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IViewObject2::GetAdvise.
             /// </summary>
-            internal unsafe HRESULT GetAdvise(DVASPECT* pAspects, ADVF* pAdvf, IAdviseSink[] ppAdvSink)
+            internal unsafe HRESULT GetAdvise(DVASPECT* pAspects, ADVF* pAdvf, IAdviseSink?[] ppAdvSink)
             {
                 if (pAspects is not null)
                 {
@@ -583,7 +578,7 @@ namespace System.Windows.Forms
             ///  Helper function to retrieve an ambient property.  Returns false if the
             ///  property wasn't found.
             /// </summary>
-            private bool GetAmbientProperty(DispatchID dispid, ref object obj)
+            private bool GetAmbientProperty(DispatchID dispid, out object? obj)
             {
                 Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "AxSource:GetAmbientProperty");
                 Debug.Indent();
@@ -616,13 +611,16 @@ namespace System.Windows.Forms
                 }
 
                 Debug.Unindent();
+
+                obj = null;
+
                 return false;
             }
 
             /// <summary>
             ///  Implements IOleObject::GetClientSite.
             /// </summary>
-            internal IOleClientSite GetClientSite() => _clientSite;
+            internal IOleClientSite? GetClientSite() => _clientSite;
 
             internal unsafe HRESULT GetControlInfo(CONTROLINFO* pCI)
             {
@@ -758,7 +756,7 @@ namespace System.Windows.Forms
             /// </summary>
             private string GetStreamName()
             {
-                string streamName = _control.GetType().FullName;
+                string streamName = _control.GetType().FullName!;
                 int len = streamName.Length;
                 if (len > 31)
                 {
@@ -1059,7 +1057,7 @@ namespace System.Windows.Forms
                     // For backward compatibility: We were earlier using GetType().FullName
                     // as the stream name in v1. Lets see if a stream by that name exists.
                     stream = stg.OpenStream(
-                        GetType().FullName,
+                        GetType().FullName!,
                         IntPtr.Zero,
                         STGM.READ | STGM.SHARE_EXCLUSIVE,
                         0);
@@ -1092,7 +1090,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IPersistPropertyBag::Load
             /// </summary>
-            internal unsafe void Load(Oleaut32.IPropertyBag pPropBag, Oleaut32.IErrorLog pErrorLog)
+            internal unsafe void Load(Oleaut32.IPropertyBag pPropBag, Oleaut32.IErrorLog? pErrorLog)
             {
                 PropertyDescriptorCollection props = TypeDescriptor.GetProperties(_control,
                     new Attribute[] { DesignerSerializationVisibilityAttribute.Visible });
@@ -1103,14 +1101,13 @@ namespace System.Windows.Forms
 
                     try
                     {
-                        object obj = null;
-                        HRESULT hr = pPropBag.Read(props[i].Name, ref obj, pErrorLog);
+                        HRESULT hr = pPropBag.Read(props[i].Name, out object? obj, pErrorLog);
                         if (hr.Succeeded() && obj is not null)
                         {
                             Debug.Indent();
                             Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Property was in bag");
 
-                            string errorString = null;
+                            string? errorString = null;
                             HRESULT errorCode = HRESULT.S_OK;
 
                             try
@@ -1128,7 +1125,7 @@ namespace System.Windows.Forms
 
                                     // Resource property.  We encode these as base 64 strings.  To load them, we convert
                                     // to a binary blob and then de-serialize.
-                                    byte[] bytes = Convert.FromBase64String(obj.ToString());
+                                    byte[] bytes = Convert.FromBase64String(obj.ToString()!);
                                     MemoryStream stream = new MemoryStream(bytes);
                                     BinaryFormatter formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
@@ -1149,16 +1146,15 @@ namespace System.Windows.Forms
                                     // use that as it is the best format for IPropertyBag.  Otherwise, check to see
                                     // if it can convert from a byte array.  If it can, get the string, decode it
                                     // to a byte array, and then set the value.
-                                    object value = null;
+                                    object? value = null;
 
                                     if (converter.CanConvertFrom(typeof(string)))
                                     {
-                                        value = converter.ConvertFromInvariantString(obj.ToString());
+                                        value = converter.ConvertFromInvariantString(obj.ToString()!);
                                     }
                                     else if (converter.CanConvertFrom(typeof(byte[])))
                                     {
-                                        string objString = obj.ToString();
-                                        value = converter.ConvertFrom(null, CultureInfo.InvariantCulture, FromBase64WrappedString(objString));
+                                        value = converter.ConvertFrom(null, CultureInfo.InvariantCulture, FromBase64WrappedString(obj.ToString()!));
                                     }
 
                                     Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Converter returned " + value);
@@ -1306,23 +1302,23 @@ namespace System.Windows.Forms
                         }
                     }
 
-                    // Special properties that we care about
-                    object obj = new object();
+                    object? obj;
 
+                    // Special properties that we care about
                     switch (dispID)
                     {
                         case DispatchID.AMBIENT_UIDEAD:
-                            if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, ref obj))
+                            if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out obj))
                             {
-                                _activeXState[s_uiDead] = (bool)obj;
+                                _activeXState[s_uiDead] = (bool)obj!;
                             }
 
                             break;
 
                         case DispatchID.AMBIENT_DISPLAYASDEFAULT:
-                            if (_control is IButtonControl ibuttonControl && GetAmbientProperty(DispatchID.AMBIENT_DISPLAYASDEFAULT, ref obj))
+                            if (_control is IButtonControl ibuttonControl && GetAmbientProperty(DispatchID.AMBIENT_DISPLAYASDEFAULT, out obj))
                             {
-                                ibuttonControl.NotifyDefault((bool)obj);
+                                ibuttonControl.NotifyDefault((bool)obj!);
                             }
 
                             break;
@@ -1445,7 +1441,7 @@ namespace System.Windows.Forms
                 if ((pQaContainer.pUnkEventSink is not null) && (_control is UserControl))
                 {
                     // Check if this control exposes events to COM.
-                    Type eventInterface = GetDefaultEventsInterface(_control.GetType());
+                    Type? eventInterface = GetDefaultEventsInterface(_control.GetType());
 
                     if (eventInterface is not null)
                     {
@@ -1644,6 +1640,7 @@ namespace System.Windows.Forms
                     ///  Helper function to load a COM v-table from a com object pointer.
                     /// </summary>
                     protected V LoadVtable<V>()
+                        where V : struct
                     {
                         IntPtr vtblptr = Marshal.ReadIntPtr(handle, 0);
                         return Marshal.PtrToStructure<V>(vtblptr);
@@ -1666,7 +1663,7 @@ namespace System.Windows.Forms
                     private readonly VTABLE _vtbl;
 
                     [StructLayout(LayoutKind.Sequential)]
-                    private class VTABLE
+                    private struct VTABLE
                     {
                         public IntPtr QueryInterfacePtr;
                         public IntPtr AddRefPtr;
@@ -1710,7 +1707,7 @@ namespace System.Windows.Forms
                     }
 
                     [StructLayout(LayoutKind.Sequential)]
-                    private class VTABLE
+                    private struct VTABLE
                     {
                         public IntPtr QueryInterfacePtr;
                         public IntPtr AddRefPtr;
@@ -1748,9 +1745,9 @@ namespace System.Windows.Forms
             ///  This looks for the ComSourceInterfacesAttribute and returns the .NET
             ///  interface type of the first interface declared.
             /// </summary>
-            private static Type GetDefaultEventsInterface(Type controlType)
+            private static Type? GetDefaultEventsInterface(Type controlType)
             {
-                Type eventInterface = null;
+                Type? eventInterface = null;
                 object[] custom = controlType.GetCustomAttributes(typeof(ComSourceInterfacesAttribute), false);
 
                 if (custom.Length > 0)
@@ -1814,7 +1811,7 @@ namespace System.Windows.Forms
                     {
                         Debug.WriteLineIf(CompModSwitches.ActiveX.TraceInfo, "Saving property " + props[i].Name);
 
-                        object propValue;
+                        object? propValue;
 
                         if (IsResourceProp(props[i]))
                         {
@@ -1822,7 +1819,7 @@ namespace System.Windows.Forms
                             MemoryStream stream = new MemoryStream();
                             BinaryFormatter formatter = new BinaryFormatter();
 #pragma warning disable SYSLIB0011 // Type or member is obsolete
-                            formatter.Serialize(stream, props[i].GetValue(_control));
+                            formatter.Serialize(stream, props[i].GetValue(_control)!);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                             byte[] bytes = new byte[(int)stream.Length];
                             stream.Position = 0;
@@ -1839,11 +1836,11 @@ namespace System.Windows.Forms
                             if (converter.CanConvertFrom(typeof(string)))
                             {
                                 propValue = converter.ConvertToInvariantString(props[i].GetValue(_control));
-                                pPropBag.Write(props[i].Name, ref propValue);
+                                pPropBag.Write(props[i].Name, ref propValue!);
                             }
                             else if (converter.CanConvertFrom(typeof(byte[])))
                             {
-                                byte[] data = (byte[])converter.ConvertTo(null, CultureInfo.InvariantCulture, props[i].GetValue(_control), typeof(byte[]));
+                                byte[] data = (byte[])converter.ConvertTo(null, CultureInfo.InvariantCulture, props[i].GetValue(_control), typeof(byte[]))!;
                                 propValue = Convert.ToBase64String(data);
                                 pPropBag.Write(props[i].Name, ref propValue);
                             }
@@ -1871,7 +1868,7 @@ namespace System.Windows.Forms
                 int cnt = _adviseList.Count;
                 for (int i = 0; i < cnt; i++)
                 {
-                    IAdviseSink s = (IAdviseSink)_adviseList[i];
+                    IAdviseSink s = _adviseList[i];
                     Debug.Assert(s is not null, "NULL in our advise list");
                     s.OnSave();
                 }
@@ -1911,7 +1908,7 @@ namespace System.Windows.Forms
             /// <summary>
             ///  Implements IOleObject::SetClientSite.
             /// </summary>
-            internal void SetClientSite(IOleClientSite value)
+            internal void SetClientSite(IOleClientSite? value)
             {
                 if (_clientSite is not null)
                 {
@@ -1933,15 +1930,14 @@ namespace System.Windows.Forms
                 }
 
                 // Get the ambient properties that effect us.
-                object obj = new object();
-                if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, ref obj))
+                if (GetAmbientProperty(DispatchID.AMBIENT_UIDEAD, out object? obj))
                 {
-                    _activeXState[s_uiDead] = (bool)obj;
+                    _activeXState[s_uiDead] = (bool)obj!;
                 }
 
-                if (_control is IButtonControl buttonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, ref obj))
+                if (_control is IButtonControl buttonControl && GetAmbientProperty(Ole32.DispatchID.AMBIENT_UIDEAD, out obj))
                 {
-                    buttonControl.NotifyDefault((bool)obj);
+                    buttonControl.NotifyDefault((bool)obj!);
                 }
 
                 if (_clientSite is null && _accelTable != IntPtr.Zero)
@@ -2312,9 +2308,9 @@ namespace System.Windows.Forms
                     return HRESULT.OLE_E_NOCONNECTION;
                 }
 
-                IAdviseSink sink = (IAdviseSink)_adviseList[(int)dwConnection - 1];
+                IAdviseSink sink = _adviseList[(int)dwConnection - 1];
                 _adviseList.RemoveAt((int)dwConnection - 1);
-                if (sink is not null && Marshal.IsComObject(sink))
+                if (Marshal.IsComObject(sink))
                 {
                     Marshal.ReleaseComObject(sink);
                 }
@@ -2518,10 +2514,11 @@ namespace System.Windows.Forms
                     }
                 }
 
-                HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, ref object pVar, Oleaut32.IErrorLog pErrorLog)
+                HRESULT Oleaut32.IPropertyBag.Read(string pszPropName, out object? pVar, Oleaut32.IErrorLog? pErrorLog)
                 {
                     if (!_bag.Contains(pszPropName))
                     {
+                        pVar = null;
                         return HRESULT.E_INVALIDARG;
                     }
 
