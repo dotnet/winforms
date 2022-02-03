@@ -85,6 +85,14 @@ internal partial class Interop
                 return new FileOpenDialogWrapper(fileOpenDialogComObject);
             }
 
+            Guid fileSaveDialogIID = IID.IFileSaveDialog;
+            hr = Marshal.QueryInterface(externalComObject, ref fileOpenDialogIID, out IntPtr fileSaveDialogComObject);
+            if (hr == S_OK)
+            {
+                Marshal.Release(externalComObject);
+                return new FileSaveDialogWrapper(fileSaveDialogComObject);
+            }
+
             Guid shellItemIID = IID.IShellItem;
             hr = Marshal.QueryInterface(externalComObject, ref shellItemIID, out IntPtr shellItemComObject);
             if (hr == S_OK)
