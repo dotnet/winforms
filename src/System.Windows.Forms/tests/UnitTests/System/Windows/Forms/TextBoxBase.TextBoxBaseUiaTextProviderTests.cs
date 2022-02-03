@@ -559,20 +559,6 @@ namespace System.Windows.Forms.Tests
             Assert.True(textBoxBase.IsHandleCreated);
         }
 
-        [WinFormsTheory]
-        [InlineData("")]
-        [InlineData("Text")]
-        [InlineData("Some test text")]
-        public void TextBoxBaseUiaTextProvider_TextLength_ReturnsMinusOne_WithoutHandle(string text)
-        {
-            using TextBoxBase textBoxBase = new SubTextBoxBase();
-            textBoxBase.Text = text;
-            TextBoxBaseUiaTextProvider provider = new TextBoxBaseUiaTextProvider(textBoxBase);
-
-            Assert.Equal(-1, provider.TextLength);
-            Assert.False(textBoxBase.IsHandleCreated);
-        }
-
         [WinFormsFact]
         public void TextBoxBaseUiaTextProvider_WindowExStyle_ReturnsCorrectValue()
         {

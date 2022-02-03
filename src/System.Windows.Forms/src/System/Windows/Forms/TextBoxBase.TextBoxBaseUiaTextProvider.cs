@@ -206,10 +206,7 @@ namespace System.Windows.Forms
                     ? _owningTextBoxBase.Text
                     : string.Empty;
 
-            public override int TextLength
-                => _owningTextBoxBase.IsHandleCreated
-                    ? (int)SendMessageW(_owningTextBoxBase, WM.GETTEXTLENGTH)
-                    : -1;
+            public override int TextLength => Text.Length;
 
             public override WS_EX WindowExStyle
                 => _owningTextBoxBase.IsHandleCreated
@@ -306,7 +303,15 @@ namespace System.Windows.Forms
                 Point ptStart = new Point(rectangle.X + 1, rectangle.Y + 1);
                 Point ptEnd = new Point(rectangle.Right - 1, rectangle.Bottom - 1);
 
-                visibleStart = _owningTextBoxBase.GetCharIndexFromPosition(ptStart);
+                if (IsMultiline)
+                {
+                    visibleStart = GetLineIndex(FirstVisibleLine);
+                }
+                else
+                {
+                    visibleStart = _owningTextBoxBase.GetCharIndexFromPosition(ptStart);
+                }
+
                 visibleEnd = _owningTextBoxBase.GetCharIndexFromPosition(ptEnd) + 1; // Add 1 to get a caret position after received character
 
                 return;

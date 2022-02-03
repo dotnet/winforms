@@ -276,11 +276,9 @@ namespace System.Windows.Forms.Automation
 
         double[] ITextRangeProvider.GetBoundingRectangles()
         {
-            Rectangle ownerBounds = Drawing.Rectangle.Empty;
-
-            if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is Rectangle boundsPropertyValue)
+            if (_enclosingElement.GetPropertyValue(UIA.BoundingRectanglePropertyId) is not Rectangle ownerBounds)
             {
-                ownerBounds = boundsPropertyValue;
+                return Array.Empty<double>();
             }
 
             // We accumulate rectangles onto a list.
@@ -597,9 +595,6 @@ namespace System.Windows.Forms.Automation
         /// </summary>
         private List<Rectangle> GetMultilineBoundingRectangles(string text, Point mapClientToScreen, Rectangle clippingRectangle)
         {
-            // Remember the line height.
-            int height = Math.Abs(_provider.Logfont.lfHeight);
-
             // Get the starting and ending lines for the range.
             int start = Start;
             int end = End;
@@ -623,31 +618,68 @@ namespace System.Windows.Forms.Automation
                 end = _provider.GetLineIndex(endLine) - 1;
             }
 
+            // Remember the line height.
+            int lineHeight = Math.Abs(_provider.Logfont.lfHeight);
+
             // Adding a rectangle for each line.
             List<Rectangle> rects = new List<Rectangle>();
-            int nextLineIndex = _provider.GetLineIndex(startLine);
 
-            for (int i = startLine; i <= endLine; i++)
+            for (int lineIndex = startLine; lineIndex <= endLine; lineIndex++)
             {
-                // Determine the starting coordinate on this line.
-                Point startPoint = _provider.GetPositionFromChar(i == startLine ? start : nextLineIndex);
+                // Get the left text position in the line.
+                int lineStartIndex = lineIndex == startLine ? start : _provider.GetLineIndex(lineIndex);
+                Point lineStartPoint = _provider.GetPositionFromChar(lineStartIndex);
 
-                // Determine the ending coordinate on this line.
-                Point endPoint;
+                // Get the right text position in the line.
+                int lineEndIndex = lineIndex == endLine
+                    // Just take the end of the range for the last line.
+                    // `end` is a caret position after the last character in the range,
+                    // so subtract 1 to get the last character index.
+                    ? end - 1
+                    // Or get the first index of the next line and take the previous character.
+                    // This is a workaround to get the last index of the line,
+                    // because Windows doesn't provide API for it.
+                    : _provider.GetLineIndex(lineIndex + 1) - 1;
+                Point lineEndPoint = _provider.GetPositionFromCharForUpperRightCorner(lineEndIndex, text);
 
-                if (i == endLine)
+                int lineTextLength = lineEndIndex - lineStartIndex + 1;
+
+                // If the line is long and takes up all the space,
+                // there is no space for the end of line rectangle. Adjust it.
+                if (lineEndPoint.X > clippingRectangle.Right
+                    // Or if the line is empty (just contains transition to the next line),
+                    // we need to offset the start point on end of line width (equals 2 px)
+                    // to show its rectangle in RTL mode. For LTR mode
+                    // `GetPositionFromCharForUpperRightCorner` do it for us.
+                    // Also, we have to check the line text length, because Windows may provide
+                    // incorrect endpoints for RTL TextBox, in this case we will catch an exception.
+                    || (_provider.IsReadingRTL && lineTextLength > 0
+                        && text.Substring(lineStartIndex, lineTextLength) == Environment.NewLine))
                 {
-                    endPoint = _provider.GetPositionFromCharForUpperRightCorner(end - 1, text);
-                }
-                else
-                {
-                    nextLineIndex = _provider.GetLineIndex(i + 1);
-                    endPoint = _provider.GetPositionFromChar(nextLineIndex - 1);
+                    lineStartPoint.X -= UiaTextProvider.EndOfLineWidth;
                 }
 
-                // Add a bounding rectangle for this line if it is nonempty.
-                // Add 2 to Y and 1 to Height to get a correct size of a rectangle around a range
-                Rectangle rect = new Rectangle(startPoint.X, startPoint.Y + 2, endPoint.X - startPoint.X, height + 1);
+                if (_provider.IsReadingRTL && lineEndPoint.X - lineStartPoint.X < 0)
+                {
+                    // TextBox in RTL mode may have incorrect character display order,
+                    // in this case the caret "jumps" between characters in the line
+                    // instead of direct moving through them. In this case Windows provides
+                    // incorrect characters indexes and their positions in the line.
+                    // This is a bug or the native control, because the caret "jums"
+                    // when selecting and the selected text is torn. Moreover, the caret position
+                    // is incorrect for some whitespaces, thereby Windows provides incorrect text range endpoints.
+                    // There are 2 ways to get rectangles:
+                    //    1) Go through all characters in the line and get min and max positions.
+                    //       (Low performance and will be useless when the native RTL TextBox is fixed)
+                    //    2) Take the owning control rectangle width for the line text range.
+                    //       (Fast and simple, won't be used when the native RTL TextBox is fixed)
+                    lineStartPoint.X = clippingRectangle.Left;
+                    lineEndPoint.X = clippingRectangle.Right;
+                }
+
+                // Add a bounding rectangle for a line, if it's nonempty.
+                // Increase Y by 2 to Y to get a correct size of the rectangle around a text range.
+                Rectangle rect = new(lineStartPoint.X, lineStartPoint.Y + 2, lineEndPoint.X - lineStartPoint.X, lineHeight);
                 rect.Intersect(clippingRectangle);
                 if (rect.Width > 0 && rect.Height > 0)
                 {

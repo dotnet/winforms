@@ -76,7 +76,7 @@ contains several
 lines
 with
 
-withspaces and
+withspaces,tabs     and
 numbers
 12345";
             // 
@@ -100,7 +100,7 @@ contains several
 lines
 with
 
-withspaces and
+withspaces,tabs     and
 numbers
 12345";
             // 
