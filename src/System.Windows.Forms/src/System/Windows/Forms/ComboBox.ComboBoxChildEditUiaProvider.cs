@@ -2,8 +2,6 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 // See the LICENSE file in the project root for more information.
 
-#nullable disable
-
 using System.Runtime.InteropServices;
 using static Interop;
 
@@ -40,7 +38,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="direction">Indicates the direction in which to navigate.</param>
             /// <returns>Returns the element in the specified direction.</returns>
-            internal override UiaCore.IRawElementProviderFragment FragmentNavigate(UiaCore.NavigateDirection direction)
+            internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
             {
                 if (!_owner.IsHandleCreated)
                 {
@@ -81,7 +79,7 @@ namespace System.Windows.Forms
             /// </summary>
             /// <param name="propertyID">The accessible property ID.</param>
             /// <returns>The accessible property value.</returns>
-            internal override object GetPropertyValue(UiaCore.UIA propertyID)
+            internal override object? GetPropertyValue(UiaCore.UIA propertyID)
             {
                 switch (propertyID)
                 {
