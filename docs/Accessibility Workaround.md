@@ -1,4 +1,4 @@
-# Working around accessibility issues in the WinForms Out of Process Designer for .NET Apps
+# Working around accessibility issues in the Windows Forms Out of Process Designer
 
 The introduction of Windows Forms (WinForms) to .NET Core 3.1 and beyond is enabling developers to migrate their  applications from .NET Framework to the more modern .NET versions. In order to support the designing of these applications within Visual Studio the team was required to create an entirely new Out of Process (OOP) Designer, which is currently still considered a preview feature. For more information on the technical reasons for this change, and the current status of the designer, see [our recent blog post](https://devblogs.microsoft.com/dotnet/state-of-the-windows-forms-designer-for-net-applications/).
 
