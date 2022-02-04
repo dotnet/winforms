@@ -14,27 +14,16 @@ It is straightforward to work around these current accessibility issues while th
 3.  In that file you will find the following entry, telling the compiler what
     .NET version to build against:
 
-```
-
-        <Project Sdk="Microsoft.NET.Sdk"\>
-
-        <PropertyGroup>
-
-            <OutputType>WinExe</OutputType>
-
-            <TargetFramework>net6.0-windows</TargetFramework>
-
-            <Nullable>enable</Nullable>
-
-            <UseWindowsForms>true</UseWindowsForms>
-
-            <ImplicitUsings>enable</ImplicitUsings>
-
-        </PropertyGroup>
-
-        </Project>
-
-```
+```xml
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWindowsForms>true</UseWindowsForms>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+</Project>
 
 4.  Change the ```<TargetFramework>net6.0-windows</TargetFramework>``` to the following: ```<TargetFrameworks>net472;net6.0-windows</TargetFrameworks>```
 
