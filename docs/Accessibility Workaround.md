@@ -31,6 +31,6 @@ It is straightforward to work around these current accessibility issues while th
 
 Once you’ve completed the above steps, you can build your application and interact with the forms directly as you have always done. When you build binaries, they will be built targeting both .NET 6 and .NET Framework 4.7.2. There are limitations around only using the features and types available in both .NET Framework 4.7.2 and .NET 6. If you want to use .NET 6 features, you will need to use C\# preprocessor directives.
 
-We will be communicating out as soon as full accessibility support is available in the WinForms .NET OOP-Designer so that you can remove the need to multi-target. In the meantime, this workaround should allow you to build your .NET WinForms  applications with the respective accessibility features supported.
+We will be communicating out as soon as full accessibility support is available in the WinForms .NET OOP designer so that you can remove the need to multi-target. In the meantime, this workaround should allow you to build your .NET Windows Forms  applications with the respective accessibility features supported at design time.
 
 Happy Coding!
