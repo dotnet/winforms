@@ -75,7 +75,7 @@ namespace System.Windows.Forms
 
         internal override void Collapse()
         {
-            if (_owner.DropDown is not null && _owner.DropDown.Visible)
+            if (_owner.DropDown.Visible)
             {
                 _owner.DropDown.Close();
             }
@@ -175,11 +175,6 @@ namespace System.Windows.Forms
 
         internal override UiaCore.IRawElementProviderFragment? FragmentNavigate(UiaCore.NavigateDirection direction)
         {
-            if (_owner.DropDown is null)
-            {
-                return null;
-            }
-
             switch (direction)
             {
                 case UiaCore.NavigateDirection.NextSibling:
