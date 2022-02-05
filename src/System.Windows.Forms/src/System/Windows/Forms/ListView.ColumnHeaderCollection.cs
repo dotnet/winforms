@@ -32,12 +32,12 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    if (owner.columnHeaders is null || index < 0 || index >= owner.columnHeaders.Length)
+                    if (owner._columnHeaders is null || index < 0 || index >= owner._columnHeaders.Length)
                     {
                         throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                     }
 
-                    return owner.columnHeaders[index];
+                    return owner._columnHeaders[index];
                 }
             }
 
@@ -87,7 +87,7 @@ namespace System.Windows.Forms
             {
                 get
                 {
-                    return owner.columnHeaders is null ? 0 : owner.columnHeaders.Length;
+                    return owner._columnHeaders is null ? 0 : owner._columnHeaders.Length;
                 }
             }
 
@@ -322,18 +322,18 @@ namespace System.Windows.Forms
             public virtual void Clear()
             {
                 // Delete the columns
-                if (owner.columnHeaders is not null)
+                if (owner._columnHeaders is not null)
                 {
                     if (owner.View == View.Tile)
                     {
                         // in Tile view our ListView uses the column header collection to update the Tile Information
-                        for (int colIdx = owner.columnHeaders.Length - 1; colIdx >= 0; colIdx--)
+                        for (int colIdx = owner._columnHeaders.Length - 1; colIdx >= 0; colIdx--)
                         {
-                            int w = owner.columnHeaders[colIdx].Width; // Update width before detaching from ListView
-                            owner.columnHeaders[colIdx].OwnerListview = null;
+                            int w = owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
+                            owner._columnHeaders[colIdx].OwnerListview = null;
                         }
 
-                        owner.columnHeaders = null;
+                        owner._columnHeaders = null;
                         if (owner.IsHandleCreated)
                         {
                             owner.RecreateHandleInternal();
@@ -341,18 +341,18 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        for (int colIdx = owner.columnHeaders.Length - 1; colIdx >= 0; colIdx--)
+                        for (int colIdx = owner._columnHeaders.Length - 1; colIdx >= 0; colIdx--)
                         {
-                            int w = owner.columnHeaders[colIdx].Width; // Update width before detaching from ListView
+                            int w = owner._columnHeaders[colIdx].Width; // Update width before detaching from ListView
                             if (owner.IsHandleCreated)
                             {
                                 User32.SendMessageW(owner, (User32.WM)LVM.DELETECOLUMN, colIdx);
                             }
 
-                            owner.columnHeaders[colIdx].OwnerListview = null;
+                            owner._columnHeaders[colIdx].OwnerListview = null;
                         }
 
-                        owner.columnHeaders = null;
+                        owner._columnHeaders = null;
                     }
                 }
             }
@@ -384,7 +384,7 @@ namespace System.Windows.Forms
             {
                 if (Count > 0)
                 {
-                    System.Array.Copy(owner.columnHeaders, 0, dest, index, Count);
+                    System.Array.Copy(owner._columnHeaders, 0, dest, index, Count);
                 }
             }
 
@@ -513,12 +513,12 @@ namespace System.Windows.Forms
             /// </summary>
             public virtual void RemoveAt(int index)
             {
-                if (owner.columnHeaders is null || index < 0 || index >= owner.columnHeaders.Length)
+                if (owner._columnHeaders is null || index < 0 || index >= owner._columnHeaders.Length)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
 
-                int w = owner.columnHeaders[index].Width; // Update width before detaching from ListView
+                int w = owner._columnHeaders[index].Width; // Update width before detaching from ListView
 
                 // in Tile view our ListView uses the column header collection to update the Tile Information
                 if (owner.IsHandleCreated && owner.View != View.Tile)
@@ -550,27 +550,27 @@ namespace System.Windows.Forms
 
                 removeHdr.DisplayIndexInternal = -1;
 
-                owner.columnHeaders[index].OwnerListview = null;
-                int columnCount = owner.columnHeaders.Length;
+                owner._columnHeaders[index].OwnerListview = null;
+                int columnCount = owner._columnHeaders.Length;
                 Debug.Assert(columnCount >= 1, "Column mismatch");
                 if (columnCount == 1)
                 {
-                    owner.columnHeaders = null;
+                    owner._columnHeaders = null;
                 }
                 else
                 {
                     ColumnHeader[] newHeaders = new ColumnHeader[--columnCount];
                     if (index > 0)
                     {
-                        System.Array.Copy(owner.columnHeaders, 0, newHeaders, 0, index);
+                        Array.Copy(owner._columnHeaders, 0, newHeaders, 0, index);
                     }
 
                     if (index < columnCount)
                     {
-                        System.Array.Copy(owner.columnHeaders, index + 1, newHeaders, index, columnCount - index);
+                        Array.Copy(owner._columnHeaders, index + 1, newHeaders, index, columnCount - index);
                     }
 
-                    owner.columnHeaders = newHeaders;
+                    owner._columnHeaders = newHeaders;
                 }
 
                 // in Tile view our ListView uses the column header collection to update the Tile Information
@@ -601,9 +601,9 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                if (owner.columnHeaders is not null)
+                if (owner._columnHeaders is not null)
                 {
-                    return owner.columnHeaders.GetEnumerator();
+                    return owner._columnHeaders.GetEnumerator();
                 }
                 else
                 {

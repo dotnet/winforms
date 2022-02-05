@@ -36,7 +36,7 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        return owner.itemCount;
+                        return owner._itemCount;
                     }
                 }
             }
@@ -73,14 +73,14 @@ namespace System.Windows.Forms
                     }
                     else
                     {
-                        if (displayIndex < 0 || displayIndex >= owner.itemCount)
+                        if (displayIndex < 0 || displayIndex >= owner._itemCount)
                         {
                             throw new ArgumentOutOfRangeException(nameof(displayIndex), displayIndex, string.Format(SR.InvalidArgument, nameof(displayIndex), displayIndex));
                         }
 
                         if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
                         {
-                            return (ListViewItem)owner.listItemsTable[DisplayIndexToID(displayIndex)];
+                            return (ListViewItem)owner._listItemsTable[DisplayIndexToID(displayIndex)];
                         }
                         else
                         {
@@ -97,7 +97,7 @@ namespace System.Windows.Forms
                         throw new InvalidOperationException(SR.ListViewCantModifyTheItemCollInAVirtualListView);
                     }
 
-                    if (displayIndex < 0 || displayIndex >= owner.itemCount)
+                    if (displayIndex < 0 || displayIndex >= owner._itemCount)
                     {
                         throw new ArgumentOutOfRangeException(nameof(displayIndex), displayIndex, string.Format(SR.InvalidArgument, nameof(displayIndex), displayIndex));
                     }
@@ -127,7 +127,7 @@ namespace System.Windows.Forms
                     // This saves a call into NativeListView to retrieve the real index.
                     bool valueChecked = value.Checked;
 
-                    owner.InsertItems(owner.itemCount, new ListViewItem[] { value }, true);
+                    owner.InsertItems(owner._itemCount, new ListViewItem[] { value }, true);
 
                     if (owner.IsHandleCreated && !owner.CheckBoxes && valueChecked)
                     {
@@ -152,8 +152,8 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewCantAddItemsToAVirtualListView);
                 }
 
-                IComparer comparer = owner.listItemSorter;
-                owner.listItemSorter = null;
+                IComparer comparer = owner._listItemSorter;
+                owner._listItemSorter = null;
 
                 Debug.Assert(!owner.FlipViewToLargeIconAndSmallIcon || Count == 0, "the FlipView... bit is turned off after adding 1 item.");
 
@@ -164,7 +164,6 @@ namespace System.Windows.Forms
                     // PERF.
                     // Cache the Checked bit before adding the item to the list view.
                     // This saves a bunch of calls to native list view when we want to UpdateSavedCheckedItems.
-                    //
                     checkedValues = new bool[values.Length];
                     for (int i = 0; i < values.Length; i++)
                     {
@@ -175,7 +174,7 @@ namespace System.Windows.Forms
                 try
                 {
                     owner.BeginUpdate();
-                    owner.InsertItems(owner.itemCount, values, true);
+                    owner.InsertItems(owner._itemCount, values, true);
 
                     if (owner.IsHandleCreated && !owner.CheckBoxes)
                     {
@@ -190,7 +189,7 @@ namespace System.Windows.Forms
                 }
                 finally
                 {
-                    owner.listItemSorter = comparer;
+                    owner._listItemSorter = comparer;
                     owner.EndUpdate();
                 }
 
@@ -229,7 +228,7 @@ namespace System.Windows.Forms
 
             public void Clear()
             {
-                if (owner.itemCount <= 0)
+                if (owner._itemCount <= 0)
                 {
                     return;
                 }
@@ -302,13 +301,13 @@ namespace System.Windows.Forms
                     owner._listViewItems.Clear();
                 }
 
-                owner.listItemsTable.Clear();
+                owner._listItemsTable.Clear();
                 if (owner.IsHandleCreated && !owner.CheckBoxes)
                 {
-                    owner.savedCheckedItems = null;
+                    owner._savedCheckedItems = null;
                 }
 
-                owner.itemCount = 0;
+                owner._itemCount = 0;
 
                 if (owner.ExpectingMouseUp)
                 {
@@ -321,7 +320,7 @@ namespace System.Windows.Forms
                 owner.ApplyUpdateCachedItems();
                 if (owner.IsHandleCreated && !owner.ListViewHandleDestroyed)
                 {
-                    return owner.listItemsTable[item.ID] == item;
+                    return owner._listItemsTable[item.ID] == item;
                 }
                 else
                 {
@@ -339,7 +338,7 @@ namespace System.Windows.Forms
                 }
                 else
                 {
-                    count = owner.itemCount;
+                    count = owner._itemCount;
                 }
 
                 if (index < 0 || index > count)
@@ -413,7 +412,7 @@ namespace System.Windows.Forms
                     throw new InvalidOperationException(SR.ListViewCantRemoveItemsFromAVirtualListView);
                 }
 
-                if (index < 0 || index >= owner.itemCount)
+                if (index < 0 || index >= owner._itemCount)
                 {
                     throw new ArgumentOutOfRangeException(nameof(index), index, string.Format(SR.InvalidArgument, nameof(index), index));
                 }
@@ -445,8 +444,8 @@ namespace System.Windows.Forms
                     owner._listViewItems.RemoveAt(index);
                 }
 
-                owner.itemCount--;
-                owner.listItemsTable.Remove(itemID);
+                owner._itemCount--;
+                owner._listItemsTable.Remove(itemID);
 
                 if (owner.ExpectingMouseUp)
                 {
@@ -456,7 +455,7 @@ namespace System.Windows.Forms
 
             public void CopyTo(Array dest, int index)
             {
-                if (owner.itemCount > 0)
+                if (owner._itemCount > 0)
                 {
                     for (int displayIndex = 0; displayIndex < Count; ++displayIndex)
                     {
@@ -467,7 +466,7 @@ namespace System.Windows.Forms
 
             public IEnumerator GetEnumerator()
             {
-                ListViewItem[] items = new ListViewItem[owner.itemCount];
+                ListViewItem[] items = new ListViewItem[owner._itemCount];
                 CopyTo(items, 0);
 
                 return items.GetEnumerator();
